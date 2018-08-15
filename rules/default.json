@@ -1,0 +1,144 @@
+{
+  "rules": [
+    {
+      "type": "truthy",
+      "name": "parameter-description",
+      "path": "$..paths.*.*.parameters",
+      "enabled": true,
+      "description": "parameter objects should have a description",
+      "truthy": "description"
+    },
+    {
+      "type": "pattern",
+      "name": "parameter-name-regex",
+      "path": "$..paths.*.*.parameters",
+      "enabled": false,
+      "description": "parameter names should match RFC6570",
+      "pattern": { "property": "name", "value": "" }
+    },
+    {
+      "type": "truthy",
+      "name": "operation-operationId",
+      "path": "$..paths.*.*",
+      "enabled": true,
+      "description": "operation should have an operationId",
+      "truthy": "operationId"
+    },
+    {
+      "type": "or",
+      "name": "operation-summary-or-description",
+      "path": "$..paths.*.*",
+      "enabled": true,
+      "description": "operation should have summary or description",
+      "or": ["summary", "description"]
+    },
+    {
+      "type": "truthy",
+      "name": "operation-tags",
+      "path": "$..paths.*.*",
+      "enabled": true,
+      "description": "operation should have non-empty tags array",
+      "truthy": "tags"
+    },
+    {
+      "type": "notEndWith",
+      "name": "path-keys-no-trailing-slash",
+      "path": "pathInfo<--This doesnt exist so this whole rule is broke",
+      "enabled": false,
+      "description": "path item keys should not end with a slash",
+      "notEndWith": { "property": "$key", "value": "/" }
+    },
+    {
+      "type": "notEndWith",
+      "name": "server-trailing-slash",
+      "path": "$.servers",
+      "enabled": true,
+      "description": "server url should not have a trailing slash",
+      "notEndWith": { "property": "url", "value": "/" }
+    },
+    {
+      "type": "truthy",
+      "name": "openapi-tags",
+      "path": "$.",
+      "enabled": true,
+      "description": "openapi object should have non-empty tags array",
+      "truthy": "tags"
+    },
+    {
+      "type": "alphabetical",
+      "name": "openapi-tags-alphabetical",
+      "path": "$.",
+      "enabled": true,
+      "description": "openapi object should have alphabetical tags",
+      "alphabetical": {
+        "properties": "tags",
+        "keyedBy": "name"
+      }
+    },
+    {
+      "type": "truthy",
+      "name": "reference-no-other-properties",
+      "path": "reference",
+      "enabled": true,
+      "description": "reference objects should only have a $ref property",
+      "truthy": "$ref",
+      "properties": 1
+    },
+    {
+      "type": "or",
+      "name": "pathItem-summary-or-description",
+      "path": "pathItem",
+      "enabled": false,
+      "description": "pathItem should have summary or description",
+      "or": ["summary", "description"]
+    },
+    {
+      "type": "xor",
+      "name": "example-value-or-externalValue",
+      "path": "$..example",
+      "enabled": true,
+      "description": "example should have either value or externalValue",
+      "xor": ["value", "externalValue"]
+    },
+    {
+      "type": "pattern",
+      "name": "reference-components-regex",
+      "path": "$..['$ref']",
+      "enabled": false,
+      "description": "reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+",
+      "pattern": { "omit": "#", "split": "/", "value": "^[a-zA-Z0-9\\.\\-_]+$" }
+    },
+    {
+      "type": "notContain",
+      "name": "no-script-tags-in-markdown",
+      "path": "$..*",
+      "enabled": true,
+      "description": "markdown descriptions should not contain <script> tags",
+      "notContain": { "properties": ["description"], "value": "<script" }
+    },
+    {
+      "type": "truthy",
+      "name": "info-contact",
+      "path": "$.info",
+      "enabled": true,
+      "description": "info object should contain contact object",
+      "truthy": "contact"
+    },
+    {
+      "type": "notContain",
+      "name": "license-apimatic-bug",
+      "path": "$.license",
+      "enabled": true,
+      "description": "license url should not point at gruntjs",
+      "notContain": { "properties": ["url"], "value": "gruntjs" }
+    },
+    {
+      "type": "notContain",
+      "name": "no-eval-in-descriptions",
+      "path": "$..*",
+      "enabled": true,
+      "description": "markdown descriptions should not contain 'eval('",
+      "notContain": { "properties": ["description", "title"], "value": "eval(" }
+    }
+  ]
+}
