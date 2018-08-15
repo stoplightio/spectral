@@ -23,6 +23,79 @@ project. Differences between this project and speccy include:
 
 - Ported to TypeScript.
 
+Things that speccy has, but spectral does not (though they would be easy to add):
+
+- A 'server' and CLI mode
+
+- The ability to add rules from file
+
+- The ability for rule files to specify a dependency on other rule files
+
+## Usage
+
+```js
+// an OAS specification
+var myOAS = {
+  [...]
+  responses: {
+    '401asdf': {
+      description: '',
+      schema: {
+        $ref: '#/definitions/error-response',
+      },
+    },
+  },
+  [...]
+};
+
+// create a new linter
+const linter = new lint.Linter();
+// register a rule
+linter.registerRules([
+  {
+    type: 'pattern',
+    name: 'all-responses-must-be-numeric',
+    path: '$..responses',
+    enabled: true,
+    description: 'responses should all be numeric, aka match the regex ^[0-9]+',
+    pattern: {
+      property: '*',
+      value: '^[0-9]+$',
+    }
+  }
+]);
+
+// lint!
+console.log(linter.lint(oas));
+
+//  {
+//   path: '$.responses',
+//   rule:
+//     { type: 'pattern',
+//       name: 'all-responses-must-be-numeric',
+//       path: '$..responses',
+//       enabled: true,
+//       description: 'reference components should all match regex ^[0-9]+',
+//       pattern: { property: '*', value: '^[0-9]+$' } },
+//     error:
+//       Error {
+//         operator: 'to be',
+//         expected: true,
+//         message: 'reference components should all match regex ^[0-9]+',
+//         showDiff: true,
+//         actual: false,
+//         stackStartFunction: [Function: assert],
+//         negate: false,
+//         assertion:
+//         Assertion {
+//           obj: false,
+//           anyOne: false,
+//           negate: false,
+//           params: [Object],
+//           onlyThis: undefined,
+//           light: false } } }
+```
+
 ## Helpful Links
 
 - [JSONPath Tester](https://jsonpath.curiousconcept.com/)
