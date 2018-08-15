@@ -19,8 +19,7 @@ const ensureRule = (
       throw error;
     }
 
-    const pointer = context && context.length > 0 ? context[context.length - 1] : null;
-    return { pointer, rule, error };
+    return { path: context.join('.'), rule, error };
   }
 };
 
@@ -178,7 +177,10 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
               if (omit) component = component.split(omit).join('');
               if (component) {
                 const res = ensureRule(r, path, () => {
-                  should(re.test(component)).be.exactly(true, r.description);
+                  should(re.test(component)).be.exactly(
+                    true,
+                    `${r.description}, but received: ${component}`
+                  );
                 });
                 if (res) {
                   results.push(res);

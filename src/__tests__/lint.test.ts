@@ -309,7 +309,7 @@ describe('linter', () => {
         expect(results[0].rule.name).toEqual('reference-components-regex');
       });
 
-      test('returns result if pattern is not matched (on object)', () => {
+      test.only('returns result if pattern is not matched (on object)', () => {
         var oas = {
           responses: {
             '401a': {

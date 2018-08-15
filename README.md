@@ -33,7 +33,7 @@ Things that speccy has, but spectral does not (though they would be easy to add)
 
 ## Usage
 
-```js
+```typescript
 // an OAS specification
 var myOAS = {
   [...]
@@ -68,7 +68,7 @@ linter.registerRules([
 // lint!
 console.log(linter.lint(oas));
 
-//  {
+//  [ {
 //   path: '$.responses',
 //   rule:
 //     { type: 'pattern',
@@ -93,7 +93,7 @@ console.log(linter.lint(oas));
 //           negate: false,
 //           params: [Object],
 //           onlyThis: undefined,
-//           light: false } } }
+//           light: false } } } ]
 ```
 
 ## Helpful Links

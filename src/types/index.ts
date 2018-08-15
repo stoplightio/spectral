@@ -20,7 +20,7 @@ export interface IRuleBase {
 
 export interface IRuleResult {
   // the path within the object being operated on
-  pointer: string | null;
+  path: string;
 
   // the rule triggering the result
   rule: Rule;
