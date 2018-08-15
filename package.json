@@ -11,12 +11,11 @@
   "author": "Stoplight, Inc. (support@stoplight.io)",
   "license": "MIT",
   "dependencies": {
-    "@types/jsonpath": "^0.2.0",
-    "@types/should": "^13.0.0",
     "jsonpath": "^1.0.0",
     "should": "^13.2.3"
   },
   "devDependencies": {
+    "@types/jsonpath": "^0.2.0",
     "@types/node": "^10.5.7",
     "@types/jest": "^23.3.1",
     "jest": "^23.4.2",
