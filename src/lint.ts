@@ -273,6 +273,9 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
 
 export class Linter {
   public rules: object = {};
+  // paths is an internal cache of rules keyed by their path element. This is
+  // used primarily to ensure that we only issue one JSON path query per unique
+  // path.
   private paths: object = {};
 
   public lint = (object: object): types.IRuleResult[] => {
