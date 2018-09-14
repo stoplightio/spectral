@@ -16,6 +16,9 @@ export interface IRuleBase {
 
   // JSON path (or paths) within the object with which this rule applies
   path: string;
+
+  // The severity of rule failure (warn or error)
+  severity?: string;
 }
 
 export interface IRuleResult {

@@ -271,12 +271,28 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
   }
 };
 
+interface Options {
+  defaultSeverity: 'warn' | 'error';
+}
+
 export class Linter {
+  public opts: Options;
+
   public rules: object = {};
   // paths is an internal cache of rules keyed by their path element. This is
   // used primarily to ensure that we only issue one JSON path query per unique
   // path.
   private paths: object = {};
+
+  constructor(opts?: Options) {
+    if (opts) {
+      this.opts = opts;
+    } else {
+      this.opts = {
+        defaultSeverity: 'warn',
+      };
+    }
+  }
 
   public lint = (object: object): types.IRuleResult[] => {
     const results: types.IRuleResult[] = [];
@@ -330,6 +346,10 @@ export class Linter {
   };
 
   public registerRule = (rule: types.Rule) => {
+    if (!rule.severity) {
+      rule.severity = this.opts.defaultSeverity;
+    }
+
     // update rules object
     this.rules[rule.name] = {
       rule: rule,
