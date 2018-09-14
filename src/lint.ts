@@ -281,6 +281,11 @@ export class Linter {
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
         const { rule, ruleFunc } = this.rules[ruleName];
+
+        if (!rule.enabled) {
+          continue;
+        }
+
         if (rule.path !== path) {
           console.warn(
             `Rule '${
@@ -322,8 +327,6 @@ export class Linter {
   };
 
   public registerRule = (rule: types.Rule) => {
-    if (!rule.enabled) return;
-
     // update rules object
     this.rules[rule.name] = {
       rule: rule,
