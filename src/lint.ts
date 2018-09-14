@@ -276,7 +276,7 @@ interface Options {
 }
 
 export class Linter {
-  public opts: Options;
+  readonly opts: Options;
 
   public rules: object = {};
   // paths is an internal cache of rules keyed by their path element. This is
