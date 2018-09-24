@@ -1,7 +1,6 @@
 {
   "require": "default",
-  "rules": [
-    {
+  "rules": [{
       "type": "truthy",
       "name": "contact-properties",
       "path": "$.info.contact",
@@ -23,7 +22,10 @@
       "path": "$.servers",
       "enabled": true,
       "description": "server url should not point at example.com",
-      "notContain": { "properties": ["url"], "value": "example.com" }
+      "notContain": {
+        "properties": ["url"],
+        "value": "example.com"
+      }
     },
     {
       "type": "truthy",

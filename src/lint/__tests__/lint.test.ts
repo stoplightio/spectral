@@ -1,11 +1,11 @@
-import lint = require('../lint');
+import lint = require('..');
 import * as types from '../types';
 // import * as fs from "fs";
 
 describe('linter', () => {
   test('load a single rule', () => {
     const linter = new lint.Linter();
-    const rule: types.Rule = {
+    const rule: types.LintRule = {
       type: 'truthy',
       name: 'parameter-description',
       path: 'parameter',
@@ -20,7 +20,7 @@ describe('linter', () => {
 
   test('load multiple rules at once', () => {
     const linter = new lint.Linter();
-    const ruleA: types.Rule = {
+    const ruleA: types.LintRule = {
       type: 'truthy',
       name: 'parameter-description',
       path: '$..parameters',
@@ -28,7 +28,7 @@ describe('linter', () => {
       description: 'parameter objects should have a description',
       truthy: 'description',
     };
-    const ruleB: types.Rule = {
+    const ruleB: types.LintRule = {
       type: 'pattern',
       name: 'parameter-name-regex',
       path: '$..parameters',
@@ -53,7 +53,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'truthy',
           name: 'info-description',
           path: '$.info',
@@ -61,7 +61,7 @@ describe('linter', () => {
           description: 'info objects should have a description',
           truthy: 'description',
         };
-        const ruleB: types.Rule = {
+        const ruleB: types.LintRule = {
           type: 'truthy',
           name: 'info-version',
           path: '$.info',
@@ -74,7 +74,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('info-description');
+        expect(results[0].ruleName).toEqual('info-description');
       });
 
       test('does not return result if value is present', () => {
@@ -87,7 +87,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'truthy',
           name: 'info-description',
           path: '$.info',
@@ -95,7 +95,7 @@ describe('linter', () => {
           description: 'info objects should have a description',
           truthy: 'description',
         };
-        const ruleB: types.Rule = {
+        const ruleB: types.LintRule = {
           type: 'truthy',
           name: 'info-version',
           path: '$.info',
@@ -117,7 +117,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'alphabetical',
           name: 'openapi-tags-alphabetical',
           path: '$',
@@ -133,7 +133,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('openapi-tags-alphabetical');
+        expect(results[0].ruleName).toEqual('openapi-tags-alphabetical');
       });
 
       test('does not return result if value is in alphabetical order', () => {
@@ -142,7 +142,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'alphabetical',
           name: 'openapi-tags-alphabetical',
           path: '$',
@@ -168,7 +168,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'or',
           name: 'pathItem-summary-or-description',
           path: '$',
@@ -181,7 +181,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('pathItem-summary-or-description');
+        expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
       });
 
       test('dont returns results if any properties are present', () => {
@@ -191,7 +191,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'or',
           name: 'pathItem-summary-or-description',
           path: '$',
@@ -214,7 +214,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'xor',
           name: 'pathItem-summary-or-description',
           path: '$',
@@ -227,7 +227,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('pathItem-summary-or-description');
+        expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
       });
 
       test('returns result if both properties are present', () => {
@@ -237,7 +237,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'xor',
           name: 'pathItem-summary-or-description',
           path: '$',
@@ -250,7 +250,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('pathItem-summary-or-description');
+        expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
       });
 
       test('dont returns results if one of the properties are present', () => {
@@ -260,7 +260,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'or',
           name: 'pathItem-summary-or-description',
           path: '$',
@@ -289,7 +289,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'pattern',
           name: 'reference-components-regex',
           path: "$..['$ref']",
@@ -306,7 +306,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('reference-components-regex');
+        expect(results[0].ruleName).toEqual('reference-components-regex');
       });
 
       test('returns result if pattern is not matched (on object)', () => {
@@ -322,7 +322,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'pattern',
           name: 'all-responses-must-be-numeric',
           path: '$..responses',
@@ -337,7 +337,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('all-responses-must-be-numeric');
+        expect(results[0].ruleName).toEqual('all-responses-must-be-numeric');
       });
 
       test('dont return result if pattern is matched', () => {
@@ -353,7 +353,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'pattern',
           name: 'reference-components-regex',
           path: "$..['$ref']",
@@ -385,7 +385,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'notContain',
           name: 'no-script-tags-in-markdown',
           path: '$..*',
@@ -397,7 +397,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('no-script-tags-in-markdown');
+        expect(results[0].ruleName).toEqual('no-script-tags-in-markdown');
       });
 
       test('dont return results if property doesnt contain value', () => {
@@ -412,7 +412,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'notContain',
           name: 'no-script-tags-in-markdown',
           path: '$..*',
@@ -447,7 +447,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'notEndWith',
           name: 'server-trailing-slash',
           path: '$.servers',
@@ -459,7 +459,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('server-trailing-slash');
+        expect(results[0].ruleName).toEqual('server-trailing-slash');
       });
 
       test('dont return result if property doesnt end with value', () => {
@@ -482,7 +482,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'notEndWith',
           name: 'server-trailing-slash',
           path: '$.servers',
@@ -510,7 +510,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'maxLength',
           name: 'short-summary',
           path: '$..summary',
@@ -524,7 +524,7 @@ describe('linter', () => {
 
         const results = linter.lint(oas);
         expect(results.length).toEqual(1);
-        expect(results[0].rule.name).toEqual('short-summary');
+        expect(results[0].ruleName).toEqual('short-summary');
       });
 
       test('dont return result if property is shorter than value', () => {
@@ -540,7 +540,7 @@ describe('linter', () => {
         };
 
         const linter = new lint.Linter();
-        const ruleA: types.Rule = {
+        const ruleA: types.LintRule = {
           type: 'maxLength',
           name: 'short-summary',
           path: '$..summary',

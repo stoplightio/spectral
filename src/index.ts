@@ -1,4 +1,3 @@
-import { Linter } from './lint';
-import * as types from './types';
+import { Linter, types as LintTypes } from './lint';
 
-export { Linter, types };
+export { Linter, LintTypes };

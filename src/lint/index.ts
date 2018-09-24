@@ -1,16 +1,14 @@
 import * as types from './types';
+import { IRuleResult } from '../types';
 
 import * as jp from 'jsonpath';
 import * as should from 'should';
+import { AssertionError } from 'assert';
 
 const regexFromString = (regex: string) =>
   new RegExp(regex.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'));
 
-const ensureRule = (
-  rule: types.Rule,
-  context: string[],
-  shouldAssertion: Function
-): void | types.IRuleResult => {
+const ensureRule = (shouldAssertion: Function): void | AssertionError => {
   try {
     shouldAssertion();
   } catch (error) {
@@ -19,20 +17,20 @@ const ensureRule = (
       throw error;
     }
 
-    return { path: context.join('.'), rule, error };
+    return error;
   }
 };
 
-const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IRuleResult[]) => {
+const generateRule = (r: types.LintRule): ((object: any) => AssertionError[]) => {
   switch (r.type) {
     case 'truthy':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
 
         if (!Array.isArray(r.truthy)) r.truthy = [r.truthy];
 
         for (const property of r.truthy) {
-          const res = ensureRule(r, path, () => {
+          const res = ensureRule(() => {
             object.should.have.property(property);
             object[property].should.not.be.empty();
           });
@@ -42,7 +40,7 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
         }
 
         if (r.properties) {
-          const res = ensureRule(r, path, () => {
+          const res = ensureRule(() => {
             // Ignore vendor extensions, for reasons like our the resolver adding x-miro
             const keys = Object.keys(object).filter(key => !key.startsWith('x-'));
             should(keys.length).be.exactly(r.properties);
@@ -56,8 +54,8 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'alphabetical':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
         if (r.alphabetical.properties && !Array.isArray(r.alphabetical.properties)) {
           r.alphabetical.properties = [r.alphabetical.properties];
         }
@@ -85,7 +83,7 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
             arrayCopy.sort();
           }
 
-          const res = ensureRule(r, path, () => {
+          const res = ensureRule(() => {
             object.should.have.property(property);
             object[property].should.be.deepEqual(arrayCopy);
           });
@@ -97,8 +95,8 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'or':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
 
         let found = false;
         for (const property of r.or) {
@@ -107,7 +105,7 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
             break;
           }
         }
-        const res = ensureRule(r, path, () => {
+        const res = ensureRule(() => {
           found.should.be.exactly(true, r.description);
         });
         if (res) {
@@ -117,14 +115,14 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'xor':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
 
         let found = false;
         for (const property of r.xor) {
           if (typeof object[property] !== 'undefined') {
             if (found) {
-              const res = ensureRule(r, path, () => {
+              const res = ensureRule(() => {
                 should.fail(true, false, r.description);
               });
               if (res) {
@@ -135,7 +133,7 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
           }
         }
 
-        const res = ensureRule(r, path, () => {
+        const res = ensureRule(() => {
           found.should.be.exactly(true, r.description);
         });
         if (res) {
@@ -146,8 +144,8 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'pattern':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
         const { omit, property, split, value } = r.pattern;
 
         // if the collected object is not an object/array, set our target to be
@@ -176,7 +174,7 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
             for (let component of components) {
               if (omit) component = component.split(omit).join('');
               if (component) {
-                const res = ensureRule(r, path, () => {
+                const res = ensureRule(() => {
                   should(re.test(component)).be.exactly(
                     true,
                     `${r.description}, but received: ${component}`
@@ -199,14 +197,14 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'notContain':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (obj: object): AssertionError[] => {
+        const results: AssertionError[] = [];
         const { value, properties } = r.notContain;
 
         for (const property of properties) {
-          if (object[property]) {
-            const res = ensureRule(r, path, () => {
-              object[property].should.be.a
+          if (Object.hasOwnProperty(property)) {
+            const res = ensureRule(() => {
+              obj[property].should.be.a
                 .String()
                 .and.not.match(regexFromString(value), r.description);
             });
@@ -219,17 +217,21 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'notEndWith':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
         const { value, property } = r.notEndWith;
         const process = (target: any) => {
-          const res = ensureRule(r, path, () => {
+          const res = ensureRule(() => {
             target.should.not.endWith(value);
           });
           if (res) {
             results.push(res);
           }
         };
+
+        if (property === '*') {
+          object = Object.keys(object);
+        }
 
         if (Array.isArray(object)) {
           object.forEach((obj: any) => {
@@ -244,8 +246,8 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
       };
       break;
     case 'maxLength':
-      return (path: string[], object: object): types.IRuleResult[] => {
-        const results: types.IRuleResult[] = [];
+      return (object: object): AssertionError[] => {
+        const results: AssertionError[] = [];
         const { value, property = undefined } = r.maxLength;
 
         let target: any;
@@ -258,7 +260,7 @@ const generateRule = (r: types.Rule): ((path: string[], object: any) => types.IR
         }
 
         if (target) {
-          const res = ensureRule(r, path, () => {
+          const res = ensureRule(() => {
             target.length.should.be.belowOrEqual(value);
           });
           if (res) {
@@ -275,7 +277,7 @@ interface Options {
   defaultSeverity: 'warn' | 'error';
 }
 
-export class Linter {
+class Linter {
   readonly opts: Options;
 
   public rules: object = {};
@@ -294,12 +296,12 @@ export class Linter {
     }
   }
 
-  public lint = (object: object): types.IRuleResult[] => {
-    const results: types.IRuleResult[] = [];
+  public lint = (object: object): IRuleResult[] => {
+    const results: IRuleResult[] = [];
 
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
-        const { rule, ruleFunc } = this.rules[ruleName];
+        const { rule, apply } = this.rules[ruleName];
 
         if (!rule.enabled) {
           continue;
@@ -322,10 +324,16 @@ export class Linter {
             const { path, value } = n;
 
             try {
-              const result: types.IRuleResult[] = ruleFunc(path, value);
-              if (result) {
-                results.push(...result);
-              }
+              const result: AssertionError[] = apply(value);
+              result.forEach(res => {
+                results.push({
+                  path,
+                  ruleName,
+                  type: 'lint',
+                  severity: rule.severity,
+                  message: rule.description + ' -> ' + res.message,
+                });
+              });
             } catch (e) {
               console.warn(
                 `Encountered error when running rule '${ruleName}' on node at path '${path}':\n${e}`
@@ -341,19 +349,25 @@ export class Linter {
     return results;
   };
 
-  public registerRules = (rules: types.Rule[]) => {
+  public registerRules = (rules: types.LintRule[]) => {
     rules.forEach(rule => this.registerRule(rule));
   };
 
-  public registerRule = (rule: types.Rule) => {
+  public registerRule = (rule: types.LintRule) => {
     if (!rule.severity) {
       rule.severity = this.opts.defaultSeverity;
+    }
+
+    try {
+      jp.parse(rule.path);
+    } catch (e) {
+      throw new SyntaxError(`Invalid JSON path for rule '${rule.name}': ${rule.path}\n\n${e}`);
     }
 
     // update rules object
     this.rules[rule.name] = {
       rule: rule,
-      ruleFunc: generateRule(rule),
+      apply: generateRule(rule),
     };
 
     // update paths object (ensure uniqueness)
@@ -372,3 +386,5 @@ export class Linter {
     }
   };
 }
+
+export { Linter, types };
