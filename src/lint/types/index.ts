@@ -1,6 +1,10 @@
+import * as types from '../../types';
+
 export interface IOptions {
   skip?: string[];
 }
+
+export type RuleFormat = 'oas2' | 'oas3';
 
 // JSON value
 export interface IRuleJSON {
@@ -16,8 +20,11 @@ export interface IRuleJSON {
   // JSON path (or paths) within the object with which this rule applies
   path: string;
 
+  // Format the rule applies to (oas2, oas3, etc)
+  format: RuleFormat | RuleFormat[];
+
   // The severity of rule failure (warn or error)
-  severity?: string;
+  severity?: types.RuleSeverity;
 }
 
 export interface IRuleParam {

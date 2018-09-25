@@ -9,6 +9,7 @@ describe('linter', () => {
       name: 'parameter-description',
       path: 'parameter',
       enabled: true,
+      format: 'oas3',
       description: 'parameter objects should have a description',
       truthy: 'description',
     };
@@ -24,6 +25,7 @@ describe('linter', () => {
       name: 'parameter-description',
       path: '$..parameters',
       enabled: true,
+      format: 'oas3',
       description: 'parameter objects should have a description',
       truthy: 'description',
     };
@@ -32,6 +34,7 @@ describe('linter', () => {
       name: 'parameter-name-regex',
       path: '$..parameters',
       enabled: true,
+      format: 'oas3',
       description: 'parameter names should match RFC6570',
       pattern: { property: 'name', value: '' },
     };
@@ -57,6 +60,7 @@ describe('linter', () => {
           name: 'info-description',
           path: '$.info',
           enabled: true,
+          format: 'oas3',
           description: 'info objects should have a description',
           truthy: 'description',
         };
@@ -65,13 +69,14 @@ describe('linter', () => {
           name: 'info-version',
           path: '$.info',
           enabled: true,
+          format: 'oas3',
           description: 'info objects should have a version',
           truthy: 'version',
         };
 
         linter.registerRules([ruleA, ruleB]);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('info-description');
       });
@@ -91,6 +96,7 @@ describe('linter', () => {
           name: 'info-description',
           path: '$.info',
           enabled: true,
+          format: 'oas3',
           description: 'info objects should have a description',
           truthy: 'description',
         };
@@ -99,13 +105,14 @@ describe('linter', () => {
           name: 'info-version',
           path: '$.info',
           enabled: true,
+          format: 'oas3',
           description: 'info objects should have a version',
           truthy: 'version',
         };
 
         linter.registerRules([ruleA, ruleB]);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -121,6 +128,7 @@ describe('linter', () => {
           name: 'openapi-tags-alphabetical',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'openapi object should have alphabetical tags',
           alphabetical: {
             properties: 'tags',
@@ -130,7 +138,7 @@ describe('linter', () => {
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('openapi-tags-alphabetical');
       });
@@ -146,6 +154,7 @@ describe('linter', () => {
           name: 'openapi-tags-alphabetical',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'openapi object should have alphabetical tags',
           alphabetical: {
             properties: 'tags',
@@ -155,7 +164,7 @@ describe('linter', () => {
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -172,13 +181,14 @@ describe('linter', () => {
           name: 'pathItem-summary-or-description',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'pathItem should have summary or description',
           or: ['summary', 'description'],
         };
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
       });
@@ -195,13 +205,14 @@ describe('linter', () => {
           name: 'pathItem-summary-or-description',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'pathItem should have summary or description',
           or: ['something-else', 'summary'],
         };
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -218,13 +229,14 @@ describe('linter', () => {
           name: 'pathItem-summary-or-description',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'pathItem should have summary or description',
           xor: ['summary', 'description'],
         };
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
       });
@@ -241,13 +253,14 @@ describe('linter', () => {
           name: 'pathItem-summary-or-description',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'pathItem should have summary or description',
           xor: ['summary', 'description'],
         };
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
       });
@@ -264,13 +277,14 @@ describe('linter', () => {
           name: 'pathItem-summary-or-description',
           path: '$',
           enabled: true,
+          format: 'oas3',
           description: 'pathItem should have summary or description',
           or: ['something-else', 'summary'],
         };
 
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -293,6 +307,7 @@ describe('linter', () => {
           name: 'reference-components-regex',
           path: "$..['$ref']",
           enabled: true,
+          format: 'oas3',
           description: 'reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+',
           pattern: {
             property: '$ref',
@@ -303,7 +318,7 @@ describe('linter', () => {
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('reference-components-regex');
       });
@@ -326,6 +341,7 @@ describe('linter', () => {
           name: 'all-responses-must-be-numeric',
           path: '$..responses',
           enabled: true,
+          format: 'oas3',
           description: 'reference components should all match regex ^[0-9]+',
           pattern: {
             property: '*',
@@ -334,7 +350,7 @@ describe('linter', () => {
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('all-responses-must-be-numeric');
       });
@@ -357,6 +373,7 @@ describe('linter', () => {
           name: 'reference-components-regex',
           path: "$..['$ref']",
           enabled: true,
+          format: 'oas3',
           description: 'reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+',
           pattern: {
             property: '$ref',
@@ -367,7 +384,7 @@ describe('linter', () => {
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -389,12 +406,13 @@ describe('linter', () => {
           name: 'no-script-tags-in-markdown',
           path: '$..*',
           enabled: true,
+          format: 'oas3',
           description: 'markdown descriptions should not contain <script> tags',
           notContain: { properties: ['description'], value: '<script' },
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('no-script-tags-in-markdown');
       });
@@ -416,12 +434,13 @@ describe('linter', () => {
           name: 'no-script-tags-in-markdown',
           path: '$..*',
           enabled: true,
+          format: 'oas3',
           description: 'markdown descriptions should not contain <script> tags',
           notContain: { properties: ['description'], value: '<script' },
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -451,12 +470,13 @@ describe('linter', () => {
           name: 'server-trailing-slash',
           path: '$.servers',
           enabled: true,
+          format: 'oas3',
           description: 'server url should not have a trailing slash',
           notEndWith: { property: 'url', value: '/' },
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('server-trailing-slash');
       });
@@ -486,12 +506,13 @@ describe('linter', () => {
           name: 'server-trailing-slash',
           path: '$.servers',
           enabled: true,
+          format: 'oas3',
           description: 'server url should not have a trailing slash',
           notEndWith: { property: 'url', value: '/' },
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });
@@ -514,6 +535,7 @@ describe('linter', () => {
           name: 'short-summary',
           path: '$..summary',
           enabled: true,
+          format: 'oas3',
           description: 'summary should be short (description can be long)',
           maxLength: {
             value: 20,
@@ -521,7 +543,7 @@ describe('linter', () => {
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(1);
         expect(results[0].ruleName).toEqual('short-summary');
       });
@@ -544,6 +566,7 @@ describe('linter', () => {
           name: 'short-summary',
           path: '$..summary',
           enabled: true,
+          format: 'oas3',
           description: 'summary should be short (description can be long)',
           maxLength: {
             value: 20,
@@ -551,7 +574,7 @@ describe('linter', () => {
         };
         linter.registerRule(ruleA);
 
-        const results = linter.lint(oas);
+        const results = linter.lint(oas, 'oas3');
         expect(results.length).toEqual(0);
       });
     });

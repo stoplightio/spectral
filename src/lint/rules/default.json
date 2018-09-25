@@ -4,6 +4,7 @@
       "name": "parameter-description",
       "path": "$..paths.*.*.parameters",
       "enabled": true,
+      "format": "oas3",
       "description": "parameter objects should have a description",
       "truthy": "description"
     },
@@ -12,6 +13,7 @@
       "name": "operation-operationId",
       "path": "$..paths.*[?( name() !== 'parameters')]",
       "enabled": true,
+      "format": "oas3",
       "description": "operation should have an operationId",
       "truthy": "operationId"
     },
@@ -20,6 +22,7 @@
       "name": "operation-summary-or-description",
       "path": "$..paths.*[?( name() !== 'parameters')]",
       "enabled": true,
+      "format": "oas3",
       "description": "operation should have summary or description",
       "or": ["summary", "description"]
     },
@@ -28,6 +31,7 @@
       "name": "operation-tags",
       "path": "$..paths.*[?( name() !== 'parameters')]",
       "enabled": true,
+      "format": "oas3",
       "description": "operation should have non-empty tags array",
       "truthy": "tags"
     },
@@ -36,6 +40,7 @@
       "name": "path-keys-no-trailing-slash",
       "path": "$..paths",
       "enabled": true,
+      "format": "oas3",
       "description": "path item keys should not end with a slash",
       "notEndWith": {
         "property": "*",
@@ -47,6 +52,7 @@
       "name": "server-trailing-slash",
       "path": "$.servers",
       "enabled": true,
+      "format": "oas3",
       "description": "server url should not have a trailing slash",
       "notEndWith": {
         "property": "url",
@@ -58,6 +64,7 @@
       "name": "openapi-tags",
       "path": "$",
       "enabled": true,
+      "format": "oas3",
       "description": "openapi object should have non-empty tags array",
       "truthy": "tags"
     },
@@ -66,6 +73,7 @@
       "name": "openapi-tags-alphabetical",
       "path": "$",
       "enabled": true,
+      "format": "oas3",
       "description": "openapi object should have alphabetical tags",
       "alphabetical": {
         "properties": "tags",
@@ -77,6 +85,7 @@
       "name": "reference-no-other-properties",
       "path": "reference",
       "enabled": true,
+      "format": "oas3",
       "description": "reference objects should only have a $ref property",
       "truthy": "$ref",
       "properties": 1
@@ -86,6 +95,7 @@
       "name": "pathItem-summary-or-description",
       "path": "pathItem",
       "enabled": false,
+      "format": "oas3",
       "description": "pathItem should have summary or description",
       "or": ["summary", "description"]
     },
@@ -94,6 +104,7 @@
       "name": "example-value-or-externalValue",
       "path": "$..example",
       "enabled": true,
+      "format": "oas3",
       "description": "example should have either a value or externalValue member",
       "xor": ["value", "externalValue"]
     },
@@ -102,6 +113,7 @@
       "name": "reference-components-regex",
       "path": "$..['$ref']",
       "enabled": false,
+      "format": "oas3",
       "description": "reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+",
       "pattern": {
         "omit": "#",
@@ -114,6 +126,7 @@
       "name": "no-script-tags-in-markdown",
       "path": "$..*",
       "enabled": true,
+      "format": "oas3",
       "description": "markdown descriptions should not contain <script> tags",
       "notContain": {
         "properties": ["description"],
@@ -125,6 +138,7 @@
       "name": "info-contact",
       "path": "$.info",
       "enabled": true,
+      "format": "oas3",
       "description": "info object should contain contact object",
       "truthy": "contact"
     },
@@ -133,6 +147,7 @@
       "name": "license-apimatic-bug",
       "path": "$.license",
       "enabled": true,
+      "format": "oas3",
       "description": "license url should not point at gruntjs",
       "notContain": {
         "properties": ["url"],
@@ -144,6 +159,7 @@
       "name": "no-eval-in-descriptions",
       "path": "$..*",
       "enabled": true,
+      "format": "oas3",
       "description": "markdown descriptions should not contain 'eval('",
       "notContain": {
         "properties": ["description", "title"],

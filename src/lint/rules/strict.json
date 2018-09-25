@@ -1,10 +1,10 @@
 {
-  "require": "default",
   "rules": [{
       "type": "truthy",
       "name": "contact-properties",
       "path": "$.info.contact",
       "enabled": true,
+      "format": "oas3",
       "description": "contact object should have name, url and email",
       "truthy": ["name", "url", "email"]
     },
@@ -13,6 +13,7 @@
       "name": "license-url",
       "path": "$.info.license",
       "enabled": true,
+      "format": "oas3",
       "description": "license object should include url",
       "truthy": "url"
     },
@@ -21,6 +22,7 @@
       "name": "server-not-example.com",
       "path": "$.servers",
       "enabled": true,
+      "format": "oas3",
       "description": "server url should not point at example.com",
       "notContain": {
         "properties": ["url"],
@@ -32,6 +34,7 @@
       "name": "tag-description",
       "path": "$.tags",
       "enabled": true,
+      "format": "oas3",
       "description": "tag object should have a description",
       "truthy": "description"
     }

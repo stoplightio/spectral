@@ -1,5 +1,5 @@
 import * as types from './types';
-import { IRuleResult } from '../types';
+import { IRuleResult, RuleSeverity } from '../types';
 
 import * as jp from 'jsonpath';
 import * as should from 'should';
@@ -277,10 +277,19 @@ interface Options {
   defaultSeverity: 'warn' | 'error';
 }
 
+interface IRuleEntry {
+  rule: types.LintRule;
+  apply: (object: any) => AssertionError[];
+}
+
+interface IRuleStore {
+  [index: string]: IRuleEntry;
+}
+
 class Linter {
   readonly opts: Options;
 
-  public rules: object = {};
+  public rules: IRuleStore = {};
   // paths is an internal cache of rules keyed by their path element. This is
   // used primarily to ensure that we only issue one JSON path query per unique
   // path.
@@ -296,7 +305,7 @@ class Linter {
     }
   }
 
-  public lint = (object: object): IRuleResult[] => {
+  public lint = (object: object, format: string): IRuleResult[] => {
     const results: IRuleResult[] = [];
 
     for (const path in this.paths) {
@@ -304,6 +313,13 @@ class Linter {
         const { rule, apply } = this.rules[ruleName];
 
         if (!rule.enabled) {
+          continue;
+        }
+
+        if (
+          (rule.format instanceof Array && rule.format.indexOf(format as types.RuleFormat) < 0) ||
+          rule.format !== format
+        ) {
           continue;
         }
 
@@ -330,7 +346,7 @@ class Linter {
                   path,
                   ruleName,
                   type: 'lint',
-                  severity: rule.severity,
+                  severity: rule.severity || this.opts.defaultSeverity,
                   message: rule.description + ' -> ' + res.message,
                 });
               });
