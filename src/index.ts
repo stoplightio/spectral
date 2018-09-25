@@ -1,6 +1,6 @@
 import { Linter } from './lint';
 import { Validator } from './validation';
-import { IRuleResult, RuleSeverity } from './types';
+import { IRuleResult } from './types';
 
 export class Spectral {
   private linter: Linter;
