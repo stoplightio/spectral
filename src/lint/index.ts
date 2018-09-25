@@ -202,7 +202,7 @@ const generateRule = (r: types.LintRule): ((object: any) => AssertionError[]) =>
         const { value, properties } = r.notContain;
 
         for (const property of properties) {
-          if (Object.hasOwnProperty(property)) {
+          if (obj && obj.hasOwnProperty(property)) {
             const res = ensureRule(() => {
               obj[property].should.be.a
                 .String()

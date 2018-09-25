@@ -1,6 +1,5 @@
 import lint = require('..');
 import * as types from '../types';
-// import * as fs from "fs";
 
 describe('linter', () => {
   test('load a single rule', () => {
