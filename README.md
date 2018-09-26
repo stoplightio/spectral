@@ -49,7 +49,7 @@ var myOAS = {
 };
 
 // create a new linter
-const linter = new lint.Linter();
+const spectral = new Spectral();
 // register a rule
 linter.registerRules([
   {

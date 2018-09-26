@@ -1,31 +1,4 @@
-import * as types from '../../types';
-
-export interface IOptions {
-  skip?: string[];
-}
-
-export type RuleFormat = 'oas2' | 'oas3';
-
-// JSON value
-export interface IRuleJSON {
-  // name of the rule
-  name: string;
-
-  // description of the rule's purpose
-  description: string;
-
-  // whether the rule is enabled or not
-  enabled: boolean;
-
-  // JSON path (or paths) within the object with which this rule applies
-  path: string;
-
-  // Format the rule applies to (oas2, oas3, etc)
-  format: RuleFormat | RuleFormat[];
-
-  // The severity of rule failure (warn or error)
-  severity?: types.RuleSeverity;
-}
+import { IRuleDefinitionBase } from './index';
 
 export interface IRuleParam {
   properties: string | string[];
@@ -59,27 +32,24 @@ export interface IRulePatternParam {
   split?: string;
 }
 
-export interface ITruthyRule extends IRuleJSON {
+export interface ITruthyRule extends IRuleDefinitionBase {
   type: 'truthy';
 
   // key(s) of object that should evaluate as 'truthy' (considered true in a
   // boolean context)
   truthy: string | string[];
 
-  // ???? - doesn't seem to be in use
-  skip?: string;
-
   properties?: number;
 }
 
-export interface IOrRule extends IRuleJSON {
+export interface IOrRule extends IRuleDefinitionBase {
   type: 'or';
 
   // test to verify if any of the provided keys are present in object
   or: string[];
 }
 
-export interface IXorRule extends IRuleJSON {
+export interface IXorRule extends IRuleDefinitionBase {
   type: 'xor';
 
   // test to verify if one (but not all) of the provided keys are present in
@@ -87,35 +57,35 @@ export interface IXorRule extends IRuleJSON {
   xor: string[];
 }
 
-export interface IMaxLengthRule extends IRuleJSON {
+export interface IMaxLengthRule extends IRuleDefinitionBase {
   type: 'maxLength';
 
   // verify property is under a specified number of characters
   maxLength: IRuleNumberParam;
 }
 
-export interface IAlphaRule extends IRuleJSON {
+export interface IAlphaRule extends IRuleDefinitionBase {
   type: 'alphabetical';
 
   // verify property is within alphabetical order
   alphabetical: IAlphaRuleParam;
 }
 
-export interface INotEndWithRule extends IRuleJSON {
+export interface INotEndWithRule extends IRuleDefinitionBase {
   type: 'notEndWith';
 
   // verify property does not end with string
   notEndWith: IRulePatternParam;
 }
 
-export interface INotContainRule extends IRuleJSON {
+export interface INotContainRule extends IRuleDefinitionBase {
   type: 'notContain';
 
   // verify property does not contain value
   notContain: IRuleStringParam;
 }
 
-export interface IPatternRule extends IRuleJSON {
+export interface IPatternRule extends IRuleDefinitionBase {
   type: 'pattern';
 
   // run regex match

@@ -1,11 +1,6 @@
-export type RuleType = 'lint' | 'validation';
+export type RuleCategory = 'lint' | 'validation';
 export type RuleSeverity = 'warn' | 'error';
 export type TargetFormat = 'oas2' | 'oas3';
-
-export interface IRuleOptions {
-  enabled: boolean;
-  severity: RuleSeverity;
-}
 
 export interface IRuleMetadata {
   /**
@@ -26,7 +21,7 @@ export interface IRuleMetadata {
   /**
    * The type of rule
    */
-  type: RuleType;
+  type: RuleCategory;
 
   /**
    * The JSON path within the format object (oas, etc) on which this rule
@@ -57,9 +52,9 @@ export abstract class AbstractRule {
 
 export interface IRuleResult {
   /**
-   * The type of rule that generated the result
+   * The category of the rule (ie, validation, lint)
    */
-  type: RuleType;
+  category: RuleCategory;
 
   /**
    * The relevant path within the object being operated on
@@ -69,7 +64,12 @@ export interface IRuleResult {
   /**
    * The rule emitting the result
    */
-  ruleName: string;
+  name: string;
+
+  /**
+   * The rule summary for the rule generating the result
+   */
+  description: string;
 
   /**
    * The rule emitting the result
@@ -77,12 +77,54 @@ export interface IRuleResult {
   severity: RuleSeverity;
 
   /**
-   * One-line message describing the error
+   * Message describing the error
    */
   message: string;
+}
+
+export interface IRuleConfig {
+  rules: IRuleStore;
+}
+
+export interface IRuleStore {
+  [formatRegex: string]: IRuleDeclaration;
+}
+
+export interface IRuleDeclaration {
+  [ruleName: string]: IRuleDefinitionBase;
+}
+
+export interface IRuleDefinitionBase {
+  /**
+   * The category this rule belongs to (ie, lint, validation)
+   */
+  category: RuleCategory;
 
   /**
-   * Detailed message regarding the result
+   * The type of rule this is (ie, schema, function, truthy)
    */
-  details?: string;
+  type: string;
+
+  /**
+   * The JSON path within the object this rule applies to
+   */
+  path: string;
+
+  /**
+   * A description of this rule
+   */
+  description: string;
+
+  /**
+   * Whether the rule should be enabled by default
+   */
+  enabled: boolean;
+
+  /**
+   * The severity of results this rule generates
+   */
+  severity?: boolean;
 }
+
+export * from './lintRules';
+export * from './validationRules';

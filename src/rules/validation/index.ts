@@ -1,4 +1,4 @@
-import { IRuleResult } from '../types';
+import { IRuleResult } from '../../types';
 
 import * as AJV from 'ajv';
 
@@ -7,31 +7,8 @@ const jsonSpecv4 = require('ajv/lib/refs/json-schema-draft-04.json');
 const OASv2Schema: object = require('./schemas/openapi_v2.json');
 const OASv3Schema: object = require('./schemas/openapi_v3.json');
 
-export abstract class ValidationRule {
-  private enabled: boolean;
-
-  constructor() {
-    this.enabled = true;
-  }
-
-  public isEnabled() {
-    return this.enabled;
-  }
-
-  public toggle() {
-    this.enabled = !this.enabled;
-  }
-
-  public abstract apply(source: any): IRuleResult[];
-}
-
-interface IValidations {
-  [index: string]: AJV.ValidateFunction;
-}
-
 export class Validator {
   private ajv: AJV.Ajv;
-  private schemas: object;
 
   constructor() {
     this.ajv = new AJV({
@@ -66,9 +43,9 @@ function transformErrors(errors: AJV.ErrorObject[]): IRuleResult[] {
     }
 
     transformed.push({
-      type: 'validation',
+      category: 'validation',
       path: e.dataPath.split('/').slice(1),
-      ruleName: e.keyword,
+      name: e.keyword,
       severity: 'error',
       message: e.message || '',
     });

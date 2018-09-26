@@ -23,7 +23,8 @@
     "emitDecoratorMetadata": true,
     "baseUrl": "src",
     "paths": {
-      "*": ["node_modules/*", "src/types/*"]
+      "*": ["node_modules/*"],
+      "spectral/*": ["*"]
     }
   },
   "include": ["src/**/*"]
