@@ -11,12 +11,12 @@
   "author": "Stoplight, Inc. (support@stoplight.io)",
   "license": "MIT",
   "dependencies": {
-    "@types/ajv": "^1.0.0",
     "ajv": "^6.5.3",
-    "jsonpath": "^1.0.0",
+    "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
     "should": "^13.2.3"
   },
   "devDependencies": {
+    "@types/ajv": "^1.0.0",
     "@types/jest": "^23.3.1",
     "@types/jsonpath": "^0.2.0",
     "@types/node": "^10.5.7",

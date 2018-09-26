@@ -1909,9 +1909,9 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jsonpath@^1.0.0:
+"jsonpath@git://github.com/stoplightio/jsonpath.git#fe90d42":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/jsonpath/-/jsonpath-1.0.0.tgz#45cd9d4c4d0d6825d90bd7e40f83f1182b13dd07"
+  resolved "git://github.com/stoplightio/jsonpath.git#fe90d42805afb6dcfa7ca75f2503aa71f62f9a06"
   dependencies:
     esprima "1.2.2"
     jison "0.4.13"
