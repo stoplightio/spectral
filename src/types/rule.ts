@@ -32,3 +32,7 @@ export interface IRuleDefinitionBase {
    */
   severity?: RuleSeverity;
 }
+
+export interface IRuleBase extends IRuleDefinitionBase {
+  name: string;
+}

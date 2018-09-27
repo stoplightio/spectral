@@ -1,9 +1,10 @@
 import { LintRule } from './lintRules';
-import { ValidationRule } from './validationRules';
+// import { ValidationRule } from './validationRules';
 import { RuleCategory, RuleSeverity } from './rule';
 
-export type TargetFormat = 'oas2' | 'oas3';
-export type Rule = ValidationRule | LintRule;
+export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
+export type Rule = LintRule;
+// export type Rule = ValidationRule | LintRule;
 
 export interface IRuleMetadata {
   /**
@@ -70,11 +71,19 @@ export interface IRuleConfig {
 }
 
 export interface IRuleStore {
-  [formatRegex: string]: IRuleDeclaration;
+  /**
+   * index is a simplified regex of the format(s) the rules apply to (ie,
+   * 'oas2', 'oas2|oas3', '*')
+   */
+  [index: string]: IRuleDeclaration;
 }
 
 export interface IRuleDeclaration {
-  [ruleName: string]: Rule;
+  /**
+   * Name of the rule with either a rule definition (when definining/overriding
+   * rules) or boolean (when enabling/disabling a default rule)
+   */
+  [ruleName: string]: LintRule | boolean;
 }
 
 export * from './lintRules';

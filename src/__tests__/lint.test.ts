@@ -1,557 +1,537 @@
-// import { Spectral } from 'spectral';
-import { generateRule } from 'spectral/rules';
-// import * as types from 'spectral/types';
-import { ITruthyRule } from 'spectral/types';
+import { IRuleResult, IRuleConfig, Rule } from '@spectral/types';
+import { Spectral } from '@spectral/index';
 
-// const defaults = require('../../rules/default.json');
-
-const oasSample: any = {
-  swagger: '2.0',
-  info: {
-    version: '1.0.0',
-    title: 'Swagger Petstore',
-    termsOfService: 'http://swagger.io/terms/',
-    contact: {
-      email: 'apiteam@swagger.io',
+const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
+  const cfg: IRuleConfig = {
+    rules: {
+      testing: {
+        'test-rule': r,
+      },
     },
-    license: {
-      name: 'Apache 2.0',
-      url: 'http://www.apache.org/licenses/LICENSE-2.0.html',
-    },
-  },
+  };
+  const s = new Spectral(cfg);
+  return s.apply(o, 'testing');
 };
 
 describe('lint', () => {
   describe('rules', () => {
     describe('truthy', () => {
-      test.only('returns result if value is not present', () => {
-        const truthyRule: ITruthyRule = {
-          category: 'lint',
-          type: 'truthy',
-          path: '$.info',
-          enabled: true,
-          description: 'info should have a description (just as a test)',
-          truthy: 'description',
-        };
-        const ruleFunc = generateRule(truthyRule);
-        const results = ruleFunc(oasSample);
-        expect(results.length).toEqual(1);
+      test('returns result if value is not present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'truthy',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              truthy: 'something-not-present',
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(1);
       });
 
-      test.only('doesnt return result if value is present', () => {
-        const truthyRule: ITruthyRule = {
-          category: 'lint',
-          type: 'truthy',
-          path: '$.info',
-          enabled: true,
-          description: 'info should have a title',
-          truthy: 'title',
-        };
-        const ruleFunc = generateRule(truthyRule);
-        const results = ruleFunc(oasSample);
-        console.log(results);
-        expect(results.length).toEqual(0);
+      test('doesnt return result if value is present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'truthy',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              truthy: 'version',
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('alphabetical', () => {
+      test('returns result if values are not alphabetized', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'alphabetical',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              alphabetical: {
+                properties: 'tags',
+                keyedBy: 'name',
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                tags: [{ name: 'Far', description: 'bar' }, { name: 'Boo', description: 'foo' }],
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont return result if values are alphabetized', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'alphabetical',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              alphabetical: {
+                properties: 'tags',
+                keyedBy: 'name',
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                tags: [{ name: 'Boo', description: 'bar' }, { name: 'Far', description: 'foo' }],
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('or', () => {
+      test('returns result if no properties are present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'or',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              or: ['something-not-present', 'something-else-not-present'],
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont returns results if any properties are present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'or',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              or: ['version', 'something-else-not-present'],
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+              },
+            }
+          ).length
+        ).toEqual(0);
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'or',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              or: ['version', 'title', 'termsOfService'],
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('xor', () => {
+      test('returns result if no properties are present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'xor',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              xor: ['yada-yada', 'whatever'],
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('returns result if both properties are present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'xor',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              xor: ['version', 'title'],
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont returns results if one of the properties are present', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'xor',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              xor: ['something', 'title'],
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('pattern', () => {
+      test('returns result if pattern is not matched (on string)', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'pattern',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              pattern: {
+                property: 'termsOfService',
+                value: '^orange.*$',
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('returns result if pattern is not matched (on object keys)', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'pattern',
+              path: '$.responses',
+              enabled: true,
+              description: '',
+              pattern: {
+                property: '*',
+                value: '^[0-9]+$',
+              },
+            },
+            {
+              responses: {
+                '123': {
+                  test: 'something',
+                },
+                '456avbas': {
+                  test: 'something',
+                },
+                '789': {
+                  test: 'something',
+                },
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont return result if pattern is matched (on string)', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'pattern',
+              path: '$.info',
+              enabled: true,
+              description: '',
+              pattern: {
+                property: 'termsOfService',
+                value: '^http.*$',
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+
+      test('dont return result if pattern is matched (on object keys)', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'pattern',
+              path: '$.responses',
+              enabled: true,
+              description: '',
+              pattern: {
+                property: '*',
+                value: '^[0-9]+$',
+              },
+            },
+            {
+              responses: {
+                '123': {
+                  test: 'something',
+                },
+                '456': {
+                  test: 'something',
+                },
+                '789': {
+                  test: 'something',
+                },
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('notContain', () => {
+      test('returns result if property contains value', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'notContain',
+              path: '$..*',
+              enabled: true,
+              description: '',
+              notContain: { properties: ['description'], value: '<script' },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0',
+                title: 'To-do Demo',
+                description:
+                  "### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.\n\n<script>console.log('sup homie');</script>",
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont return results if property doesnt contain value', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'notContain',
+              path: '$..*',
+              enabled: true,
+              description: '',
+              notContain: { properties: ['description'], value: '<script' },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0',
+                title: 'To-do Demo',
+                description:
+                  '### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.',
+              },
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('notEndWith', () => {
+      test('return result if property ends with value', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'notEndWith',
+              path: '$.servers',
+              enabled: true,
+              description: '',
+              notEndWith: { property: 'url', value: '/' },
+            },
+            {
+              swagger: '2.0',
+              servers: [
+                {
+                  url: 'http://localhost:5000/',
+                  description: 'Development server',
+                },
+                {
+                  url: 'https://rooms-staging.wework.com',
+                  description: 'Staging server',
+                },
+              ],
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont return result if property doesnt end with value', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'notEndWith',
+              path: '$.servers',
+              enabled: true,
+              description: '',
+              notEndWith: { property: 'url', value: '/' },
+            },
+            {
+              swagger: '2.0',
+              servers: [
+                {
+                  url: 'http://localhost:5000',
+                  description: 'Development server',
+                },
+                {
+                  url: 'https://rooms-staging.wework.com',
+                  description: 'Staging server',
+                },
+              ],
+            }
+          ).length
+        ).toEqual(0);
+      });
+    });
+
+    describe('maxLength', () => {
+      test('return result if property is longer than value', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'maxLength',
+              path: '$..summary',
+              enabled: true,
+              description: 'summary should be short (description can be long)',
+              maxLength: {
+                value: 20,
+              },
+            },
+            {
+              paths: {
+                '/rooms/{room_id}/reserve/': {
+                  post: {
+                    description: '',
+                    summary: 'Book Room Really fsdasddssdfgfdhdsafhsad fsad flong fjkdhfsds',
+                  },
+                },
+              },
+            }
+          ).length
+        ).toEqual(1);
+      });
+
+      test('dont return result if property is shorter than value', () => {
+        expect(
+          applyRuleToObject(
+            {
+              category: 'lint',
+              type: 'maxLength',
+              path: '$..summary',
+              enabled: true,
+              description: 'summary should be short (description can be long)',
+              maxLength: {
+                value: 20,
+              },
+            },
+            {
+              paths: {
+                '/rooms/{room_id}/reserve/': {
+                  post: {
+                    description: '',
+                    summary: 'Book',
+                  },
+                },
+              },
+            }
+          ).length
+        ).toEqual(0);
       });
     });
   });
 });
-
-//       test('does not return result if value is present', () => {
-//         var oas = {
-//           info: {
-//             version: '5.0',
-//             title: 'Some API',
-//             description: 'A description',
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'truthy',
-//           name: 'info-description',
-//           path: '$.info',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'info objects should have a description',
-//           truthy: 'description',
-//         };
-//         const ruleB: types.LintRule = {
-//           type: 'truthy',
-//           name: 'info-version',
-//           path: '$.info',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'info objects should have a version',
-//           truthy: 'version',
-//         };
-
-//         linter.registerRules([ruleA, ruleB]);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('alphabetical', () => {
-//       test('returns result if values are not alphabetized', () => {
-//         var oas = {
-//           tags: [{ name: 'Foo', description: 'bar' }, { name: 'Bar', description: 'foo' }],
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'alphabetical',
-//           name: 'openapi-tags-alphabetical',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'openapi object should have alphabetical tags',
-//           alphabetical: {
-//             properties: 'tags',
-//             keyedBy: 'name',
-//           },
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('openapi-tags-alphabetical');
-//       });
-
-//       test('does not return result if value is in alphabetical order', () => {
-//         var oas = {
-//           tags: [{ name: 'Bar', description: 'foo' }, { name: 'Foo', description: 'bar' }],
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'alphabetical',
-//           name: 'openapi-tags-alphabetical',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'openapi object should have alphabetical tags',
-//           alphabetical: {
-//             properties: 'tags',
-//             keyedBy: 'name',
-//           },
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('or', () => {
-//       test('returns result if no properties are present', () => {
-//         var oas = {
-//           description1: 'A description',
-//           summary1: 'Yada yada yada',
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'or',
-//           name: 'pathItem-summary-or-description',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'pathItem should have summary or description',
-//           or: ['summary', 'description'],
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
-//       });
-
-//       test('dont returns results if any properties are present', () => {
-//         var oas = {
-//           description: 'A description',
-//           summary: 'Yada yada yada',
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'or',
-//           name: 'pathItem-summary-or-description',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'pathItem should have summary or description',
-//           or: ['something-else', 'summary'],
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('xor', () => {
-//       test('returns result if no properties are present', () => {
-//         var oas = {
-//           description1: 'A description',
-//           summary1: 'Yada yada yada',
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'xor',
-//           name: 'pathItem-summary-or-description',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'pathItem should have summary or description',
-//           xor: ['summary', 'description'],
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
-//       });
-
-//       test('returns result if both properties are present', () => {
-//         var oas = {
-//           description: 'A description',
-//           summary: 'Yada yada yada',
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'xor',
-//           name: 'pathItem-summary-or-description',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'pathItem should have summary or description',
-//           xor: ['summary', 'description'],
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('pathItem-summary-or-description');
-//       });
-
-//       test('dont returns results if one of the properties are present', () => {
-//         var oas = {
-//           description: 'A description',
-//           summary: 'Yada yada yada',
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'or',
-//           name: 'pathItem-summary-or-description',
-//           path: '$',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'pathItem should have summary or description',
-//           or: ['something-else', 'summary'],
-//         };
-
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('pattern', () => {
-//       test('returns result if pattern is not matched (on string)', () => {
-//         var oas = {
-//           responses: {
-//             '401': {
-//               description: '',
-//               schema: {
-//                 $ref: '#/definition?????s/error-response',
-//               },
-//             },
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'pattern',
-//           name: 'reference-components-regex',
-//           path: "$..['$ref']",
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+',
-//           pattern: {
-//             property: '$ref',
-//             omit: '#',
-//             split: '/',
-//             value: '^[a-zA-Z0-9\\.\\-_]+$',
-//           },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('reference-components-regex');
-//       });
-
-//       test('returns result if pattern is not matched (on object)', () => {
-//         var oas = {
-//           responses: {
-//             '401a': {
-//               description: '',
-//               schema: {
-//                 $ref: '#/definitions/error-response',
-//               },
-//             },
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'pattern',
-//           name: 'all-responses-must-be-numeric',
-//           path: '$..responses',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'reference components should all match regex ^[0-9]+',
-//           pattern: {
-//             property: '*',
-//             value: '^[0-9]+$',
-//           },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('all-responses-must-be-numeric');
-//       });
-
-//       test('dont return result if pattern is matched', () => {
-//         var oas = {
-//           responses: {
-//             '401': {
-//               description: '',
-//               schema: {
-//                 $ref: '#/definitions/error-response',
-//               },
-//             },
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'pattern',
-//           name: 'reference-components-regex',
-//           path: "$..['$ref']",
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+',
-//           pattern: {
-//             property: '$ref',
-//             omit: '#',
-//             split: '/',
-//             value: '^[a-zA-Z0-9\\.\\-_]+$',
-//           },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('notContain', () => {
-//       test('returns result if property contains value', () => {
-//         var oas = {
-//           swagger: '2.0',
-//           info: {
-//             version: '1.0',
-//             title: 'To-do Demo',
-//             description:
-//               "### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.\n\n<script>console.log('sup homie');</script>",
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'notContain',
-//           name: 'no-script-tags-in-markdown',
-//           path: '$..*',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'markdown descriptions should not contain <script> tags',
-//           notContain: { properties: ['description'], value: '<script' },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('no-script-tags-in-markdown');
-//       });
-
-//       test('dont return results if property doesnt contain value', () => {
-//         var oas = {
-//           swagger: '2.0',
-//           info: {
-//             version: '1.0',
-//             title: 'To-do Demo',
-//             description:
-//               '### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.',
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'notContain',
-//           name: 'no-script-tags-in-markdown',
-//           path: '$..*',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'markdown descriptions should not contain <script> tags',
-//           notContain: { properties: ['description'], value: '<script' },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('notEndWith', () => {
-//       test('return result if property ends with value', () => {
-//         var oas = {
-//           openapi: '3.0.0',
-//           info: {
-//             version: '5.0',
-//             title: 'Rooms API',
-//           },
-//           servers: [
-//             {
-//               url: 'http://localhost:5000/',
-//               description: 'Development server',
-//             },
-//             {
-//               url: 'https://rooms-staging.wework.com',
-//               description: 'Staging server',
-//             },
-//           ],
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'notEndWith',
-//           name: 'server-trailing-slash',
-//           path: '$.servers',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'server url should not have a trailing slash',
-//           notEndWith: { property: 'url', value: '/' },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('server-trailing-slash');
-//       });
-
-//       test('dont return result if property doesnt end with value', () => {
-//         var oas = {
-//           openapi: '3.0.0',
-//           info: {
-//             version: '5.0',
-//             title: 'Rooms API',
-//           },
-//           servers: [
-//             {
-//               url: 'http://localhost:5000',
-//               description: 'Development server',
-//             },
-//             {
-//               url: 'https://rooms-staging.wework.com',
-//               description: 'Staging server',
-//             },
-//           ],
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'notEndWith',
-//           name: 'server-trailing-slash',
-//           path: '$.servers',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'server url should not have a trailing slash',
-//           notEndWith: { property: 'url', value: '/' },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//     describe('maxLength', () => {
-//       test('return result if property is longer than value', () => {
-//         var oas = {
-//           paths: {
-//             '/rooms/{room_id}/reserve/': {
-//               post: {
-//                 description: '',
-//                 summary: 'Book Room Really fsdasddssdfgfdhdsafhsad fsad flong fjkdhfsds',
-//               },
-//             },
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'maxLength',
-//           name: 'short-summary',
-//           path: '$..summary',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'summary should be short (description can be long)',
-//           maxLength: {
-//             value: 20,
-//           },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(1);
-//         expect(results[0].ruleName).toEqual('short-summary');
-//       });
-
-//       test('dont return result if property is shorter than value', () => {
-//         var oas = {
-//           paths: {
-//             '/rooms/{room_id}/reserve/': {
-//               post: {
-//                 description: '',
-//                 summary: 'Book Room Really',
-//               },
-//             },
-//           },
-//         };
-
-//         const s = new Spectral(defaults);
-//         const ruleA: types.LintRule = {
-//           type: 'maxLength',
-//           name: 'short-summary',
-//           path: '$..summary',
-//           enabled: true,
-//           format: 'oas3',
-//           description: 'summary should be short (description can be long)',
-//           maxLength: {
-//             value: 20,
-//           },
-//         };
-//         linter.registerRule(ruleA);
-
-//         const results = linter.lint(oas, 'oas3');
-//         expect(results.length).toEqual(0);
-//       });
-//     });
-//   });
-// });

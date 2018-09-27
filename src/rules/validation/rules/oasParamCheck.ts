@@ -1,4 +1,4 @@
-// import { IRuleMetadata, IRuleResult } from 'spectral/types';
+// import { IRuleMetadata, IRuleResult } from '@spectral/types';
 
 // export class Rule extends AbstractRule {
 //   public readonly metadata: IRuleMetadata = {

@@ -1,5 +1,5 @@
-import { INotEndWithRule } from 'spectral/types';
-import { ensureRule } from 'spectral/rules';
+import { INotEndWithRule } from '@spectral/types';
+import { ensureRule } from '@spectral/rules';
 
 import { AssertionError } from 'assert';
 

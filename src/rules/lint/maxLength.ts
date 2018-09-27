@@ -1,5 +1,5 @@
-import { IMaxLengthRule } from 'spectral/types';
-import { ensureRule } from 'spectral/rules';
+import { IMaxLengthRule } from '@spectral/types';
+import { ensureRule } from '@spectral/rules';
 
 import { AssertionError } from 'assert';
 

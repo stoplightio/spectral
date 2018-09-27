@@ -1,4 +1,4 @@
-import * as types from 'spectral/types';
+import * as types from '@spectral/types';
 import {
   alphabetical,
   truthy,
@@ -8,7 +8,7 @@ import {
   notContain,
   notEndWith,
   maxLength,
-} from 'spectral/rules/lint';
+} from '@spectral/rules/lint';
 
 // import * as jp from 'jsonpath';
 import { AssertionError } from 'assert';
@@ -26,7 +26,7 @@ export const ensureRule = (shouldAssertion: Function): void | AssertionError => 
   }
 };
 
-export const generateRule = (r: types.LintRule): ((object: any) => AssertionError[]) => {
+export const generateRule = (r: types.Rule): ((object: any) => AssertionError[]) => {
   switch (r.type) {
     case 'truthy':
       return truthy(r);

@@ -1,6 +1,5 @@
-import { Spectral } from 'spectral';
+import { Spectral } from '@spectral/index';
 
-// const defaults = require('../../rules/default.json');
 const spec = require('./fixtures/todos.partial-deref.oas2.json');
 
 describe('built-in rules', () => {

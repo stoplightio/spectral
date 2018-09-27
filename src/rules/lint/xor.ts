@@ -1,5 +1,5 @@
-import { IXorRule } from 'spectral/types';
-import { ensureRule } from 'spectral/rules';
+import { IXorRule } from '@spectral/types';
+import { ensureRule } from '@spectral/rules';
 
 import * as should from 'should';
 import { AssertionError } from 'assert';

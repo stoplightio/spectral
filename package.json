@@ -35,7 +35,7 @@
       "lib"
     ],
     "moduleNameMapper": {
-      "spectral/(.*)": "<rootDir>/src/$1"
+      "@spectral/(.*)": "<rootDir>/src/$1"
     },
     "moduleFileExtensions": [
       "ts",

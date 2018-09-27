@@ -1,5 +1,5 @@
-import { IAlphaRule } from 'spectral/types';
-import { ensureRule } from 'spectral/rules';
+import { IAlphaRule } from '@spectral/types';
+import { ensureRule } from '@spectral/rules';
 
 import { AssertionError } from 'assert';
 
