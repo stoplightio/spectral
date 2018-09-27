@@ -1,14 +1,12 @@
-import { INotContainRule } from '@spectral/types';
+import { INotContainRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
-
-import { AssertionError } from 'assert';
 
 const regexFromString = (regex: string) =>
   new RegExp(regex.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'));
 
-export const notContain = (r: INotContainRule): ((object: any) => AssertionError[]) => {
-  return (obj: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const notContain = (r: INotContainRule): ((object: any) => RawResult[]) => {
+  return (obj: object): RawResult[] => {
+    const results: RawResult[] = [];
     const { value, properties } = r.notContain;
 
     for (const property of properties) {

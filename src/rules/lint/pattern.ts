@@ -1,12 +1,11 @@
-import { IPatternRule } from '@spectral/types';
+import { IPatternRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
 
 import * as should from 'should';
-import { AssertionError } from 'assert';
 
-export const pattern = (r: IPatternRule): ((object: any) => AssertionError[]) => {
-  return (object: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const pattern = (r: IPatternRule): ((object: any) => RawResult[]) => {
+  return (object: object): RawResult[] => {
+    const results: RawResult[] = [];
     const { omit, property, split, value } = r.pattern;
 
     // if the collected object is not an object/array, set our target to be

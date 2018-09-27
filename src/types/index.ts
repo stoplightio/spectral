@@ -1,10 +1,14 @@
 import { LintRule } from './lintRules';
-// import { ValidationRule } from './validationRules';
+import { ValidationRule } from './validationRules';
 import { RuleCategory, RuleSeverity } from './rule';
 
+import { ErrorObject } from 'ajv';
+import { AssertionError } from 'assert';
+
 export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
-export type Rule = LintRule;
-// export type Rule = ValidationRule | LintRule;
+export type Rule = ValidationRule | LintRule;
+
+export type RawResult = ErrorObject | AssertionError;
 
 export interface IRuleMetadata {
   /**

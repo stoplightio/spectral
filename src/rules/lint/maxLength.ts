@@ -1,11 +1,9 @@
-import { IMaxLengthRule } from '@spectral/types';
+import { IMaxLengthRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
 
-import { AssertionError } from 'assert';
-
-export const maxLength = (r: IMaxLengthRule): ((object: any) => AssertionError[]) => {
-  return (object: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const maxLength = (r: IMaxLengthRule): ((object: any) => RawResult[]) => {
+  return (object: object): RawResult[] => {
+    const results: RawResult[] = [];
     const { value, property = undefined } = r.maxLength;
 
     let target: any;

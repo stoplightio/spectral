@@ -1,11 +1,9 @@
-import { IAlphaRule } from '@spectral/types';
+import { IAlphaRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
 
-import { AssertionError } from 'assert';
-
-export const alphabetical = (r: IAlphaRule): ((object: any) => AssertionError[]) => {
-  return (object: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const alphabetical = (r: IAlphaRule): ((object: any) => RawResult[]) => {
+  return (object: object): RawResult[] => {
+    const results: RawResult[] = [];
     if (r.alphabetical.properties && !Array.isArray(r.alphabetical.properties)) {
       r.alphabetical.properties = [r.alphabetical.properties];
     }

@@ -1,12 +1,11 @@
-import { IXorRule } from '@spectral/types';
+import { IXorRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
 
 import * as should from 'should';
-import { AssertionError } from 'assert';
 
-export const xor = (r: IXorRule): ((object: any) => AssertionError[]) => {
-  return (object: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const xor = (r: IXorRule): ((object: any) => RawResult[]) => {
+  return (object: object): RawResult[] => {
+    const results: RawResult[] = [];
 
     let found = false;
     for (const property of r.xor) {

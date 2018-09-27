@@ -169,21 +169,18 @@
       }
     },
     "oas2": {
-      "validation:oas-parameter-check": {
-        "category": "validation",
-        "type": "function",
-        "path": "$.paths"
-      },
       "validation:oas2-schema": {
-        "category": "validation",
         "type": "schema",
         "path": "$",
         "enabled": true,
         "description": "parameter objects should have a description",
-        "schema": {}
+        "schema": "oas2"
+      },
+      "validation:oas-parameter-check": {
+        "type": "function",
+        "path": "$.paths"
       },
       "validation:type-string": {
-        "category": "validation",
         "type": "schema",
         "path": "$",
         "enabled": true,
@@ -192,21 +189,18 @@
       }
     },
     "oas3": {
-      "validation:oas-parameter-check": {
-        "category": "validation",
-        "type": "function",
-        "path": "$.paths"
-      },
       "validation:oas3-schema": {
-        "category": "validation",
         "type": "schema",
         "path": "$",
         "enabled": true,
         "description": "parameter objects should have a description",
-        "schema": {}
+        "schema": "oas3"
+      },
+      "validation:oas-parameter-check": {
+        "type": "function",
+        "path": "$.paths"
       },
       "validation:type-string": {
-        "category": "validation",
         "type": "schema",
         "path": "$",
         "enabled": true,

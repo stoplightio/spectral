@@ -1,11 +1,9 @@
-import { INotEndWithRule } from '@spectral/types';
+import { INotEndWithRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
 
-import { AssertionError } from 'assert';
-
-export const notEndWith = (r: INotEndWithRule): ((object: any) => AssertionError[]) => {
-  return (object: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const notEndWith = (r: INotEndWithRule): ((object: any) => RawResult[]) => {
+  return (object: object): RawResult[] => {
+    const results: RawResult[] = [];
     const { value, property } = r.notEndWith;
     const process = (target: any) => {
       const res = ensureRule(() => {

@@ -1,12 +1,11 @@
-import { ITruthyRule } from '@spectral/types';
+import { ITruthyRule, RawResult } from '@spectral/types';
 import { ensureRule } from '@spectral/rules';
 
 import * as should from 'should';
-import { AssertionError } from 'assert';
 
-export const truthy = (rule: ITruthyRule): ((object: any) => AssertionError[]) => {
-  return (object: object): AssertionError[] => {
-    const results: AssertionError[] = [];
+export const truthy = (rule: ITruthyRule): ((object: any) => RawResult[]) => {
+  return (object: object): RawResult[] => {
+    const results: RawResult[] = [];
 
     if (!Array.isArray(rule.truthy)) rule.truthy = [rule.truthy];
 
