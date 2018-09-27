@@ -46,7 +46,7 @@ export class Spectral {
     let category: string = 'unknown';
     let nameParts = name.split(':');
     if (nameParts.length == 2) {
-      category = nameParts[1];
+      category = nameParts[0];
     }
 
     this.rules[name] = {

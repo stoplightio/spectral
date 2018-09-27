@@ -2,7 +2,6 @@
   "rules": {
     "oas2|oas3": {
       "lint:parameter-description": {
-        "category": "lint",
         "type": "truthy",
         "path": "$..paths.*.*.parameters",
         "enabled": true,
@@ -10,7 +9,6 @@
         "truthy": "description"
       },
       "lint:operation-operationID": {
-        "category": "lint",
         "type": "truthy",
         "path": "$..paths.*[?( name() !== 'parameters' )]",
         "enabled": true,
@@ -18,7 +16,6 @@
         "truthy": "operationId"
       },
       "lint:operation-summary-or-description": {
-        "category": "lint",
         "type": "or",
         "path": "$..paths.*[?( name() !== 'parameters')]",
         "enabled": true,
@@ -26,7 +23,6 @@
         "or": ["summary", "description"]
       },
       "lint:operation-tags": {
-        "category": "lint",
         "type": "truthy",
         "path": "$..paths.*[?( name() !== 'parameters')]",
         "enabled": true,
@@ -34,7 +30,6 @@
         "truthy": "tags"
       },
       "lint:path-keys-no-trailing-slash": {
-        "category": "lint",
         "type": "notEndWith",
         "path": "$..paths",
         "enabled": true,
@@ -45,7 +40,6 @@
         }
       },
       "lint:server-trailing-slash": {
-        "category": "lint",
         "type": "notEndWith",
         "path": "$.servers",
         "enabled": true,
@@ -56,7 +50,6 @@
         }
       },
       "lint:openapi-tags": {
-        "category": "lint",
         "type": "truthy",
         "path": "$",
         "enabled": false,
@@ -64,7 +57,6 @@
         "truthy": "tags"
       },
       "lint:openapi-tags-alphabetical": {
-        "category": "lint",
         "type": "alphabetical",
         "path": "$",
         "enabled": true,
@@ -75,7 +67,6 @@
         }
       },
       "lint:reference-no-other-properties": {
-        "category": "lint",
         "type": "truthy",
         "path": "reference",
         "enabled": true,
@@ -84,7 +75,6 @@
         "properties": 1
       },
       "lint:pathItem-summary-or-description": {
-        "category": "lint",
         "type": "or",
         "path": "pathItem",
         "enabled": false,
@@ -92,16 +82,13 @@
         "or": ["summary", "description"]
       },
       "lint:example-value-or-externalValue": {
-        "category": "lint",
         "type": "xor",
         "path": "$..example",
         "enabled": true,
-        "format": "oas3",
         "description": "example should have either a value or externalValue member",
         "xor": ["value", "externalValue"]
       },
       "lint:reference-components-regex": {
-        "category": "lint",
         "type": "pattern",
         "path": "$..['$ref']",
         "enabled": false,
@@ -113,7 +100,6 @@
         }
       },
       "lint:no-script-tags-in-markdown": {
-        "category": "lint",
         "type": "notContain",
         "path": "$..*",
         "enabled": true,
@@ -124,7 +110,6 @@
         }
       },
       "lint:info-contact": {
-        "category": "lint",
         "type": "truthy",
         "path": "$.info",
         "enabled": true,
@@ -132,7 +117,6 @@
         "truthy": "contact"
       },
       "lint:license-apimatic-bug": {
-        "category": "lint",
         "type": "notContain",
         "path": "$.license",
         "enabled": true,
@@ -143,11 +127,9 @@
         }
       },
       "lint:no-eval-in-descriptions": {
-        "category": "lint",
         "type": "notContain",
         "path": "$..*",
         "enabled": true,
-        "format": "oas3",
         "description": "markdown descriptions should not contain 'eval('",
         "notContain": {
           "properties": ["description", "title"],
@@ -155,7 +137,6 @@
         }
       },
       "lint:contact-properties": {
-        "category": "lint",
         "type": "truthy",
         "path": "$.info.contact",
         "enabled": false,
@@ -163,7 +144,6 @@
         "truthy": ["name", "url", "email"]
       },
       "lint:license-url": {
-        "category": "lint",
         "type": "truthy",
         "path": "$.info.license",
         "enabled": false,
@@ -171,7 +151,6 @@
         "truthy": "url"
       },
       "lint:server-not-example.com": {
-        "category": "lint",
         "type": "notContain",
         "path": "$.servers",
         "enabled": false,
@@ -182,7 +161,6 @@
         }
       },
       "lint:tag-description": {
-        "category": "lint",
         "type": "truthy",
         "path": "$.tags",
         "enabled": false,
