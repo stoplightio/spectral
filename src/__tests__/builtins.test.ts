@@ -1,13 +1,12 @@
-import lint = require('..');
+import { Spectral } from 'spectral';
 
-const rules = require('../rules/default.json');
+// const defaults = require('../../rules/default.json');
 const spec = require('./fixtures/todos.partial-deref.oas2.json');
 
 describe('built-in rules', () => {
   test('load and run the default rule set', () => {
-    const linter = new lint.Linter();
-    linter.registerRules(rules.rules);
-    const results = linter.lint(spec);
+    const s = new Spectral();
+    const results = s.apply(spec, 'oas2');
     expect(results.length).toBeGreaterThan(0);
   });
 });

@@ -24,6 +24,7 @@
     "baseUrl": "src",
     "paths": {
       "*": ["node_modules/*"],
+      "spectral": ["index"],
       "spectral/*": ["*"]
     }
   },
