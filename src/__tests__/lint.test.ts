@@ -20,7 +20,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'truthy',
               path: '$.info',
               enabled: true,
@@ -43,7 +42,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'truthy',
               path: '$.info',
               enabled: true,
@@ -68,7 +66,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'alphabetical',
               path: '$.info',
               enabled: true,
@@ -94,7 +91,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'alphabetical',
               path: '$.info',
               enabled: true,
@@ -122,7 +118,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'or',
               path: '$.info',
               enabled: true,
@@ -144,7 +139,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'or',
               path: '$.info',
               enabled: true,
@@ -163,7 +157,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'or',
               path: '$.info',
               enabled: true,
@@ -188,7 +181,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'xor',
               path: '$.info',
               enabled: true,
@@ -211,7 +203,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'xor',
               path: '$.info',
               enabled: true,
@@ -234,7 +225,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'xor',
               path: '$.info',
               enabled: true,
@@ -259,7 +249,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'pattern',
               path: '$.info',
               enabled: true,
@@ -285,7 +274,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'pattern',
               path: '$.responses',
               enabled: true,
@@ -316,7 +304,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'pattern',
               path: '$.info',
               enabled: true,
@@ -342,7 +329,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'pattern',
               path: '$.responses',
               enabled: true,
@@ -375,7 +361,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'notContain',
               path: '$..*',
               enabled: true,
@@ -399,7 +384,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'notContain',
               path: '$..*',
               enabled: true,
@@ -425,7 +409,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'notEndWith',
               path: '$.servers',
               enabled: true,
@@ -453,7 +436,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'notEndWith',
               path: '$.servers',
               enabled: true,
@@ -483,7 +465,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'maxLength',
               path: '$..summary',
               enabled: true,
@@ -510,7 +491,6 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              category: 'lint',
               type: 'maxLength',
               path: '$..summary',
               enabled: true,

@@ -1,4 +1,4 @@
-export type RuleCategory = 'lint' | 'validation';
+export type RuleCategory = 'lint' | 'validation' | 'unknown';
 export type RuleSeverity = 'warn' | 'error';
 
 export interface IRuleDefinitionBase {

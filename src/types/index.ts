@@ -38,7 +38,7 @@ export interface IRuleResult {
   /**
    * The category of the rule (ie, validation, lint)
    */
-  category: RuleCategory;
+  category: string;
 
   /**
    * The relevant path within the object being operated on

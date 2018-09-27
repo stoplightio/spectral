@@ -4,13 +4,24 @@ import { generateRule } from '@spectral/rules';
 import * as jp from 'jsonpath';
 import { AssertionError } from 'assert';
 
+interface IRuleStore {
+  [index: string]: IRuleEntry;
+}
+
+interface IRuleEntry {
+  category: string;
+  format: string;
+  rule: types.IRuleDefinitionBase;
+  apply: (object: any) => AssertionError[];
+}
+
 export class Spectral {
   // paths is an internal cache of rules keyed by their path element and format.
   // This is used primarily to ensure that we only issue one JSON path query per
   // unique path.
   private paths: object = {};
   // normalized object for holding rule definitions indexed by name
-  private rules: object = {};
+  private rules: IRuleStore = {};
 
   private ruleConfig: types.IRuleConfig;
 
@@ -39,9 +50,9 @@ export class Spectral {
     }
 
     this.rules[name] = {
-      category,
       format,
-      rule: rule,
+      rule,
+      category,
       apply: generateRule(rule as types.LintRule),
     };
 
@@ -68,14 +79,14 @@ export class Spectral {
         const r = formats[format][ruleName];
         if (typeof r === 'boolean') {
           // enabling/disabling rule
-          const rule = this.rules[ruleName];
-          if (!rule) {
+          const ruleEntry = this.rules[ruleName];
+          if (!ruleEntry) {
             console.warn(
               `Unable to find rule matching name '${ruleName}' under format ${format} - this entry has no effect`
             );
             continue;
           }
-          rule.enabled = r;
+          ruleEntry.rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
           this.parseRuleDefinition(ruleName, r, format);
@@ -90,7 +101,11 @@ export class Spectral {
 
   // public getRule(name: string);
 
-  public apply(data: object, format: string, rulesConfig?: types.IRuleConfig): types.IRuleResult[] {
+  public apply(
+    data: object,
+    dataFormat: string,
+    rulesConfig?: types.IRuleConfig
+  ): types.IRuleResult[] {
     const results: types.IRuleResult[] = [];
 
     if (!rulesConfig) {
@@ -102,18 +117,16 @@ export class Spectral {
 
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
-        const { rule, apply, category } = this.rules[ruleName];
+        const { rule, apply, category, format } = this.rules[ruleName];
 
-        if (!rule.enabled) {
+        if (!rule.enabled || format.indexOf(dataFormat) === -1) {
           continue;
         }
 
         if (ruleName)
           if (rule.path !== path) {
             console.warn(
-              `Rule '${
-                rule.name
-              } was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
+              `Rule '${ruleName} was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
                 rule.path
               }`
             );
