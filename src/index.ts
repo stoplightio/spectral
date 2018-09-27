@@ -25,19 +25,22 @@ export class Spectral {
     this.parseRuleConfig(this.ruleConfig);
   }
 
-  private parseRuleDefinition(name: string, rule: types.IRuleDefinitionBase) {
+  private parseRuleDefinition(name: string, rule: types.IRuleDefinitionBase, format: string) {
     try {
       jp.parse(rule.path);
     } catch (e) {
       throw new SyntaxError(`Invalid JSON path for rule '${name}': ${rule.path}\n\n${e}`);
     }
 
-    // const rule = {
-    //   name,
-    //   ...ruleDef,
-    // };
-    // update rules object
+    let category: string = 'unknown';
+    let nameParts = name.split(':');
+    if (nameParts.length == 2) {
+      category = nameParts[1];
+    }
+
     this.rules[name] = {
+      category,
+      format,
       rule: rule,
       apply: generateRule(rule as types.LintRule),
     };
@@ -75,7 +78,7 @@ export class Spectral {
           rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
-          this.parseRuleDefinition(ruleName, r);
+          this.parseRuleDefinition(ruleName, r, format);
         } else {
           throw new Error(`Unknown rule definition format: ${r}`);
         }
@@ -99,22 +102,23 @@ export class Spectral {
 
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
-        const { rule, apply } = this.rules[ruleName];
+        const { rule, apply, category } = this.rules[ruleName];
 
         if (!rule.enabled) {
           continue;
         }
 
-        if (rule.path !== path) {
-          console.warn(
-            `Rule '${
-              rule.name
-            } was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
-              rule.path
-            }`
-          );
-          continue;
-        }
+        if (ruleName)
+          if (rule.path !== path) {
+            console.warn(
+              `Rule '${
+                rule.name
+              } was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
+                rule.path
+              }`
+            );
+            continue;
+          }
 
         try {
           const nodes = jp.nodes(data, path);
@@ -126,10 +130,10 @@ export class Spectral {
               result.forEach(res => {
                 results.push({
                   path,
+                  category,
                   name: ruleName,
                   description: rule.description,
-                  category: 'lint',
-                  severity: rule.severity,
+                  severity: rule.severity ? rule.severity : 'warn',
                   message: rule.description + ' -> ' + res.message,
                 });
               });

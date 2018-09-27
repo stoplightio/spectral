@@ -3,11 +3,6 @@ export type RuleSeverity = 'warn' | 'error';
 
 export interface IRuleDefinitionBase {
   /**
-   * The category this rule belongs to (ie, lint, validation)
-   */
-  category: RuleCategory;
-
-  /**
    * The type of rule this is (ie, schema, function, truthy)
    */
   type: string;
