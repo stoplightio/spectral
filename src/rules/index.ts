@@ -11,9 +11,6 @@ import {
 } from '@spectral/rules/lint';
 import { schema } from '@spectral/rules/validation';
 
-// import * as jp from 'jsonpath';
-import { AssertionError } from 'assert';
-
 export const ensureRule = (shouldAssertion: Function): void | types.RawResult => {
   try {
     shouldAssertion();

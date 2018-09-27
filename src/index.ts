@@ -2,7 +2,6 @@ import * as types from '@spectral/types';
 import { generateRule } from '@spectral/rules';
 
 import * as jp from 'jsonpath';
-import { AssertionError } from 'assert';
 
 interface IRuleStore {
   [index: string]: IRuleEntry;
@@ -12,7 +11,7 @@ interface IRuleEntry {
   category: string;
   format: string;
   rule: types.IRuleDefinitionBase;
-  apply: (object: any) => AssertionError[];
+  apply: (object: any) => types.RawResult[];
 }
 
 export class Spectral {
@@ -139,7 +138,7 @@ export class Spectral {
             const { path, value } = n;
 
             try {
-              const result: AssertionError[] = apply(value);
+              const result: types.RawResult[] = apply(value);
               result.forEach(res => {
                 results.push({
                   path,
@@ -165,7 +164,3 @@ export class Spectral {
     return results;
   }
 }
-
-// const s = new Spectral(config);
-// const results = s.apply(data, 'oas2');
-// const results = s.apply(data, 'oas2', rulesConfig);

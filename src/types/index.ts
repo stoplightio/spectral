@@ -87,7 +87,7 @@ export interface IRuleDeclaration {
    * Name of the rule with either a rule definition (when definining/overriding
    * rules) or boolean (when enabling/disabling a default rule)
    */
-  [ruleName: string]: LintRule | boolean;
+  [ruleName: string]: Rule | boolean;
 }
 
 export * from './lintRules';

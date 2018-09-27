@@ -5,7 +5,7 @@ const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
   const cfg: IRuleConfig = {
     rules: {
       testing: {
-        'test-rule': r,
+        'test:rule': r,
       },
     },
   };
