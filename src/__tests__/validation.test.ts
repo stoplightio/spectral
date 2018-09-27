@@ -1,46 +1,102 @@
-// import validation = require('..');
+import { IRuleResult, IRuleConfig, Rule } from '@spectral/types';
+import { Spectral } from '@spectral/index';
 
-// const petstoreV2 = require('./fixtures/petstore.oas2.json');
-// const petstoreV3 = require('./fixtures/petstore.oas3.json');
+const petstoreV2 = require('./fixtures/petstore.oas2.json');
+const petstoreV3 = require('./fixtures/petstore.oas3.json');
 
-// const invalidV2 = require('./fixtures/todos.invalid.oas2.json');
+const invalidV2 = require('./fixtures/todos.invalid.oas2.json');
 
-// describe('validation', () => {
-//   test('validate a correct OASv2 spec', () => {
-//     const v = new validation.Validator();
-//     const results = v.validate(petstoreV2, 'oas2');
-//     expect(results.length).toEqual(0);
-//   });
+const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
+  const cfg: IRuleConfig = {
+    rules: {
+      testing: {
+        'test:rule': r,
+      },
+    },
+  };
+  const s = new Spectral(cfg);
+  return s.apply(o, 'testing');
+};
 
-//   test('return errors on invalid OASv2 spec', () => {
-//     const v = new validation.Validator();
-//     const results = v.validate(invalidV2, 'oas2');
-//     expect(results.length).toEqual(1);
-//     expect(results[0].path).toEqual(['info', 'license', 'name']);
-//     expect(results[0].message).toEqual('should be string');
-//   });
+describe('validation', () => {
+  test('validate a correct OASv2 spec', () => {
+    expect(
+      applyRuleToObject(
+        {
+          type: 'schema',
+          path: '$',
+          enabled: true,
+          description: 'parameter objects should have a description',
+          severity: 'error',
+          schema: 'oas2',
+        },
+        petstoreV2
+      ).length
+    ).toEqual(0);
+  });
 
-//   test('validate a correct OASv3 spec', () => {
-//     const v = new validation.Validator();
-//     const results = v.validate(petstoreV3, 'oas3');
-//     expect(results.length).toEqual(0);
-//   });
+  test('return errors on invalid OASv2 spec', () => {
+    const results = applyRuleToObject(
+      {
+        type: 'schema',
+        path: '$',
+        enabled: true,
+        description: 'validate structure of OpenAPIv2 specification',
+        severity: 'error',
+        schema: 'oas2',
+      },
+      invalidV2
+    );
+    expect(results.length).toEqual(1);
+    // expect(results[0].path).toEqual(['info', 'license', 'name']);
+    // expect(results[0].message).toEqual('should be string');
+  });
 
-//   test('validate multiple formats with same validator', () => {
-//     const v = new validation.Validator();
+  test('validate a correct OASv3 spec', () => {
+    expect(
+      applyRuleToObject(
+        {
+          type: 'schema',
+          path: '$',
+          enabled: true,
+          description: '',
+          severity: 'error',
+          schema: 'oas3',
+        },
+        petstoreV3
+      ).length
+    ).toEqual(0);
+  });
 
-//     let results = v.validate(petstoreV2, 'oas2');
-//     expect(results.length).toEqual(0);
+  test('validate multiple formats with same validator', () => {
+    const cfg: IRuleConfig = {
+      rules: {
+        oas2: {
+          'validate:oas2-schema': {
+            type: 'schema',
+            path: '$',
+            enabled: true,
+            description: '',
+            severity: 'error',
+            schema: 'oas2',
+          },
+        },
+        oas3: {
+          'validate:oas3-schema': {
+            type: 'schema',
+            path: '$',
+            enabled: true,
+            description: '',
+            schema: 'oas3',
+          },
+        },
+      },
+    };
+    const s = new Spectral(cfg);
+    let results = s.apply(petstoreV2, 'oas2');
+    expect(results.length).toEqual(0);
 
-//     results = v.validate(petstoreV3, 'oas3');
-//     expect(results.length).toEqual(0);
-//   });
-
-//   test('throw error on invalid spec format', () => {
-//     const v = new validation.Validator();
-//     const badFormat = 'banana';
-//     expect(() => {
-//       v.validate(petstoreV2, badFormat);
-//     }).toThrow(`no schema with key or ref "${badFormat}"`);
-//   });
-// });
+    results = s.apply(petstoreV3, 'oas3');
+    expect(results.length).toEqual(0);
+  });
+});

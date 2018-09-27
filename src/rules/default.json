@@ -173,7 +173,8 @@
         "type": "schema",
         "path": "$",
         "enabled": true,
-        "description": "parameter objects should have a description",
+        "severity": "error",
+        "description": "validate structure of OpenAPIv2 specification",
         "schema": "oas2"
       },
       "validation:oas-parameter-check": {
@@ -193,7 +194,8 @@
         "type": "schema",
         "path": "$",
         "enabled": true,
-        "description": "parameter objects should have a description",
+        "severity": "error",
+        "description": "validate structure of OpenAPIv3 specification",
         "schema": "oas3"
       },
       "validation:oas-parameter-check": {
