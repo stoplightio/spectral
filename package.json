@@ -34,6 +34,9 @@
     "modulePathIgnorePatterns": [
       "lib"
     ],
+    "moduleNameMapper": {
+      "spectral/(.*)": "<rootDir>/src/$1"
+    },
     "moduleFileExtensions": [
       "ts",
       "tsx",

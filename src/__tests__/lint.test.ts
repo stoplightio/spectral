@@ -1,5 +1,7 @@
-import { Spectral } from 'spectral';
-import * as types from 'spectral/types';
+// import { Spectral } from 'spectral';
+import { generateRule } from 'spectral/rules';
+// import * as types from 'spectral/types';
+import { ITruthyRule } from 'spectral/types';
 
 // const defaults = require('../../rules/default.json');
 
@@ -22,26 +24,33 @@ const oasSample: any = {
 describe('lint', () => {
   describe('rules', () => {
     describe('truthy', () => {
-      const truthyRuleConfig: types.IRuleConfig = {
-        rules: {
-          oas2: {
-            'lint:parameter-description': {
-              category: 'lint',
-              type: 'truthy',
-              path: '$..paths.*.*.parameters',
-              enabled: true,
-              description: 'parameter objects should have a description',
-              truthy: 'description',
-            },
-          },
-        },
-      };
-
       test.only('returns result if value is not present', () => {
-        const s = new Spectral(truthyRuleConfig);
-        const results = s.apply(oasSample, 'oas2');
+        const truthyRule: ITruthyRule = {
+          category: 'lint',
+          type: 'truthy',
+          path: '$.info',
+          enabled: true,
+          description: 'info should have a description (just as a test)',
+          truthy: 'description',
+        };
+        const ruleFunc = generateRule(truthyRule);
+        const results = ruleFunc(oasSample);
         expect(results.length).toEqual(1);
-        // expect(results[0].ruleName).toEqual('info-description');
+      });
+
+      test.only('doesnt return result if value is present', () => {
+        const truthyRule: ITruthyRule = {
+          category: 'lint',
+          type: 'truthy',
+          path: '$.info',
+          enabled: true,
+          description: 'info should have a title',
+          truthy: 'title',
+        };
+        const ruleFunc = generateRule(truthyRule);
+        const results = ruleFunc(oasSample);
+        console.log(results);
+        expect(results.length).toEqual(0);
       });
     });
   });
