@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleConfig, Rule } from '@spectral/types';
-import { Spectral } from '@spectral/index';
+import { IRuleResult, IRuleConfig, Rule } from '../types';
+import { Spectral } from '../index';
 
 const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
   const cfg: IRuleConfig = {

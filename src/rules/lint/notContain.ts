@@ -1,5 +1,5 @@
-import { INotContainRule, RawResult } from '@spectral/types';
-import { ensureRule } from '@spectral/rules';
+import { INotContainRule, RawResult } from '../../types';
+import { ensureRule } from '../index';
 
 const regexFromString = (regex: string) =>
   new RegExp(regex.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'));

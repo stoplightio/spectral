@@ -2,10 +2,11 @@ import { ISchemaRule, RawResult } from '../../types';
 
 import * as AJV from 'ajv';
 
-const jsonSpecv4 = require('ajv/lib/refs/json-schema-draft-04.json');
+import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 
-const OASv2Schema: object = require('./schemas/openapi_v2.json');
-const OASv3Schema: object = require('./schemas/openapi_v3.json');
+import * as OASv2Schema from './schemas/openapi_v2.json';
+
+import * as OASv3Schema from './schemas/openapi_v3.json';
 
 const ajv = new AJV({
   meta: false,

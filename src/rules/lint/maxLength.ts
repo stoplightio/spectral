@@ -1,5 +1,5 @@
-import { IMaxLengthRule, RawResult } from '@spectral/types';
-import { ensureRule } from '@spectral/rules';
+import { IMaxLengthRule, RawResult } from '../../types';
+import { ensureRule } from '../index';
 
 export const maxLength = (r: IMaxLengthRule): ((object: any) => RawResult[]) => {
   return (object: object): RawResult[] => {

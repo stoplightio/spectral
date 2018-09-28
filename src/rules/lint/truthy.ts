@@ -1,5 +1,5 @@
-import { ITruthyRule, RawResult } from '@spectral/types';
-import { ensureRule } from '@spectral/rules';
+import { ITruthyRule, RawResult } from '../../types';
+import { ensureRule } from '../index';
 
 import * as should from 'should';
 

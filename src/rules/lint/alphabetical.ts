@@ -1,5 +1,5 @@
-import { IAlphaRule, RawResult } from '@spectral/types';
-import { ensureRule } from '@spectral/rules';
+import { IAlphaRule, RawResult } from '../../types';
+import { ensureRule } from '../index';
 
 export const alphabetical = (r: IAlphaRule): ((object: any) => RawResult[]) => {
   return (object: object): RawResult[] => {
