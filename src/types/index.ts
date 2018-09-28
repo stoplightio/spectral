@@ -1,6 +1,6 @@
 import { LintRule } from './lintRules';
 import { ValidationRule } from './validationRules';
-import { RuleCategory, RuleSeverity } from './rule';
+import { RuleSeverity } from './rule';
 
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
@@ -9,34 +9,6 @@ export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
 export type Rule = ValidationRule | LintRule;
 
 export type RawResult = ErrorObject | AssertionError;
-
-export interface IRuleMetadata {
-  /**
-   * The kebab-case name of the rule.
-   */
-  name: string;
-
-  /**
-   * A short, one line description of what the rule does.
-   */
-  description: string;
-
-  /**
-   * The formats this rule applies to
-   */
-  formats: TargetFormat[];
-
-  /**
-   * The type of rule
-   */
-  type: RuleCategory;
-
-  /**
-   * The JSON path within the format object (oas, etc) on which this rule
-   * applies
-   */
-  objPath: string;
-}
 
 export interface IRuleResult {
   /**

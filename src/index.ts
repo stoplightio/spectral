@@ -21,8 +21,8 @@ export class Spectral {
   private paths: object = {};
   // normalized object for holding rule definitions indexed by name
   private rules: IRuleStore = {};
-
-  private ruleConfig: types.IRuleConfig;
+  // the initial rule config, set on initialization
+  private readonly ruleConfig: types.IRuleConfig;
 
   constructor(rules?: types.IRuleConfig) {
     if (rules) {
@@ -32,10 +32,14 @@ export class Spectral {
       // no rules configuration provided, fall back to the default
       this.ruleConfig = require('@spectral/rules/default.json');
     }
-    this.parseRuleConfig(this.ruleConfig);
+    this.rules = this.parseRuleConfig(this.ruleConfig);
   }
 
-  private parseRuleDefinition(name: string, rule: types.IRuleDefinitionBase, format: string) {
+  private parseRuleDefinition(
+    name: string,
+    rule: types.IRuleDefinitionBase,
+    format: string
+  ): IRuleEntry {
     try {
       jp.parse(rule.path);
     } catch (e) {
@@ -47,13 +51,6 @@ export class Spectral {
     if (nameParts.length == 2) {
       category = nameParts[0];
     }
-
-    this.rules[name] = {
-      format,
-      rule,
-      category,
-      apply: generateRule(rule as types.LintRule),
-    };
 
     // update paths object (ensure uniqueness)
     if (!this.paths[rule.path]) {
@@ -69,31 +66,41 @@ export class Spectral {
     if (!present) {
       this.paths[rule.path].push(name);
     }
+
+    return {
+      format,
+      rule,
+      category,
+      apply: generateRule(rule as types.LintRule),
+    };
   }
 
-  private parseRuleConfig(ruleConfig: types.IRuleConfig) {
+  private parseRuleConfig(ruleConfig: types.IRuleConfig): IRuleStore {
+    const rules: IRuleStore = { ...this.rules };
+
     const formats = ruleConfig.rules;
     for (const format in formats) {
       for (const ruleName in formats[format]) {
         const r = formats[format][ruleName];
         if (typeof r === 'boolean') {
           // enabling/disabling rule
-          const ruleEntry = this.rules[ruleName];
-          if (!ruleEntry) {
+          if (!rules[ruleName]) {
             console.warn(
               `Unable to find rule matching name '${ruleName}' under format ${format} - this entry has no effect`
             );
             continue;
           }
-          ruleEntry.rule.enabled = r;
+          rules[ruleName].rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
-          this.parseRuleDefinition(ruleName, r, format);
+          rules[ruleName] = this.parseRuleDefinition(ruleName, r, format);
         } else {
           throw new Error(`Unknown rule definition format: ${r}`);
         }
       }
     }
+
+    return rules;
   }
 
   // public getRules(format?: string);
@@ -107,16 +114,18 @@ export class Spectral {
   ): types.IRuleResult[] {
     const results: types.IRuleResult[] = [];
 
-    if (!rulesConfig) {
-      // no rules configuration was provided, use the rules provided at
-      // initialization time
+    // create copy of rule configuration for this run
+    let runRules: IRuleStore;
+    if (rulesConfig) {
+      runRules = this.parseRuleConfig(rulesConfig);
     } else {
-      // rules configuration was provided
+      runRules = { ...this.rules };
     }
+    console.log('rules', runRules);
 
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
-        const { rule, apply, category, format } = this.rules[ruleName];
+        const { rule, apply, category, format } = runRules[ruleName];
 
         if (!rule.enabled || format.indexOf(dataFormat) === -1) {
           continue;

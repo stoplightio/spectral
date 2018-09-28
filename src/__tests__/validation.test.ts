@@ -35,7 +35,7 @@ describe('validation', () => {
     ).toEqual(0);
   });
 
-  test('return errors on invalid OASv2 spec', () => {
+  test.only('return errors on invalid OASv2 spec', () => {
     const results = applyRuleToObject(
       {
         type: 'schema',
@@ -47,6 +47,7 @@ describe('validation', () => {
       },
       invalidV2
     );
+    console.log(results);
     expect(results.length).toEqual(1);
     // expect(results[0].path).toEqual(['info', 'license', 'name']);
     // expect(results[0].message).toEqual('should be string');
