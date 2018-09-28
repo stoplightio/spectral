@@ -47,8 +47,8 @@ describe('validation', () => {
       },
       invalidV2
     );
-    console.log(results);
     expect(results.length).toEqual(1);
+    // FIXME - add these back when validation results are fixed
     // expect(results[0].path).toEqual(['info', 'license', 'name']);
     // expect(results[0].message).toEqual('should be string');
   });
