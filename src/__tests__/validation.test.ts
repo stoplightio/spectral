@@ -35,7 +35,7 @@ describe('validation', () => {
     ).toEqual(0);
   });
 
-  test.only('return errors on invalid OASv2 spec', () => {
+  test('return errors on invalid OASv2 spec', () => {
     const results = applyRuleToObject(
       {
         type: 'schema',

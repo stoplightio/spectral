@@ -10,7 +10,7 @@ describe('spectral', () => {
     expect(results.length).toBeGreaterThan(0);
   });
 
-  test.only('be able to toggle rules on apply', () => {
+  test('be able to toggle rules on apply', () => {
     const spec = {
       something: 'something-else',
     };

@@ -121,7 +121,6 @@ export class Spectral {
     } else {
       runRules = { ...this.rules };
     }
-    console.log('rules', runRules);
 
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
@@ -155,7 +154,7 @@ export class Spectral {
                   name: ruleName,
                   description: rule.description,
                   severity: rule.severity ? rule.severity : 'warn',
-                  message: rule.description + ' -> ' + res.message,
+                  message: res.message ? res.message : '',
                 });
               });
             } catch (e) {
