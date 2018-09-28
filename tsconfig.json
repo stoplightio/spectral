@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "listFiles": true,
     "strictNullChecks": true,
     "strict": true,
     "pretty": true,
@@ -21,12 +22,9 @@
     "sourceMap": true,
     "suppressImplicitAnyIndexErrors": true,
     "emitDecoratorMetadata": true,
-    "baseUrl": "src",
-    "paths": {
-      "*": ["node_modules/*"],
-      "@spectral": ["index"],
-      "@spectral/*": ["*"]
-    }
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {}
   },
   "include": ["src/**/*"]
 }

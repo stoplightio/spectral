@@ -1,5 +1,5 @@
-import { Spectral } from '@spectral/index';
-import { IRuleConfig } from '@spectral/types';
+import { Spectral } from '../index';
+import { IRuleConfig } from '../types';
 
 const spec = require('./fixtures/todos.partial-deref.oas2.json');
 

@@ -1,5 +1,10 @@
-import * as types from '@spectral/types';
-import { generateRule } from '@spectral/rules';
+import * as types from './types';
+import { generateRule } from './rules';
+
+import * as rc from './rules/default.json';
+
+// TODO: figure out why rc cannot be used without the any typing
+const ruleConfig: any = rc;
 
 import * as jp from 'jsonpath';
 
@@ -30,7 +35,7 @@ export class Spectral {
       this.ruleConfig = rules;
     } else {
       // no rules configuration provided, fall back to the default
-      this.ruleConfig = require('@spectral/rules/default.json');
+      this.ruleConfig = ruleConfig;
     }
     this.rules = this.parseRuleConfig(this.ruleConfig);
   }

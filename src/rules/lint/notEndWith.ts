@@ -1,5 +1,5 @@
-import { INotEndWithRule, RawResult } from '@spectral/types';
-import { ensureRule } from '@spectral/rules';
+import { INotEndWithRule, RawResult } from '../../types';
+import { ensureRule } from '../index';
 
 export const notEndWith = (r: INotEndWithRule): ((object: any) => RawResult[]) => {
   return (object: object): RawResult[] => {

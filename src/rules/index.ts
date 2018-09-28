@@ -1,15 +1,6 @@
-import * as types from '@spectral/types';
-import {
-  alphabetical,
-  truthy,
-  or,
-  xor,
-  pattern,
-  notContain,
-  notEndWith,
-  maxLength,
-} from '@spectral/rules/lint';
-import { schema } from '@spectral/rules/validation';
+import * as types from '../types';
+import { alphabetical, truthy, or, xor, pattern, notContain, notEndWith, maxLength } from './lint';
+import { schema } from './validation';
 
 export const ensureRule = (shouldAssertion: Function): void | types.RawResult => {
   try {

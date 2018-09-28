@@ -1,8 +1,8 @@
-import { IRuleResult, IRuleConfig, Rule } from '@spectral/types';
-import { Spectral } from '@spectral/index';
+import { IRuleResult, IRuleConfig, Rule } from '../types';
+import { Spectral } from '../index';
 
-const petstoreV2 = require('./fixtures/petstore.oas2.json');
-const petstoreV3 = require('./fixtures/petstore.oas3.json');
+import * as petstoreV2 from './fixtures/petstore.oas2.json';
+import * as petstoreV3 from './fixtures/petstore.oas3.json';
 
 const invalidV2 = require('./fixtures/todos.invalid.oas2.json');
 

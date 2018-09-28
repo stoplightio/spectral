@@ -4,7 +4,7 @@
   "description": "Object specification analyzer and linter",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "test": "jest",
     "test.cover": "jest --coverage",
     "test.watch": "jest --watch"
@@ -35,9 +35,6 @@
     "modulePathIgnorePatterns": [
       "lib"
     ],
-    "moduleNameMapper": {
-      "@spectral/(.*)": "<rootDir>/src/$1"
-    },
     "moduleFileExtensions": [
       "ts",
       "tsx",
