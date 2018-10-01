@@ -76,7 +76,7 @@ export class Spectral {
       format,
       rule,
       category,
-      apply: generateRule(rule as types.LintRule),
+      apply: generateRule(rule as types.StyleRule),
     };
   }
 

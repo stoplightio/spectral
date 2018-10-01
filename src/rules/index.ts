@@ -1,5 +1,5 @@
 import * as types from '../types';
-import { alphabetical, truthy, or, xor, pattern, notContain, notEndWith, maxLength } from './lint';
+import { alphabetical, truthy, or, xor, pattern, notContain, notEndWith, maxLength } from './style';
 import { schema } from './validation';
 
 export const ensureRule = (shouldAssertion: Function): void | types.RawResult => {

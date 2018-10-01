@@ -1,12 +1,12 @@
-import { LintRule } from './lintRules';
-import { ValidationRule } from './validationRules';
+import { StyleRule } from './style';
+import { ValidationRule } from './validation';
 import { RuleSeverity } from './rule';
 
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
 
 export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
-export type Rule = ValidationRule | LintRule;
+export type Rule = ValidationRule | StyleRule;
 
 export type RawResult = ErrorObject | AssertionError;
 
@@ -62,6 +62,6 @@ export interface IRuleDeclaration {
   [ruleName: string]: Rule | boolean;
 }
 
-export * from './lintRules';
-export * from './validationRules';
+export * from './style';
+export * from './validation';
 export * from './rule';

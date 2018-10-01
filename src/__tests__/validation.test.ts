@@ -23,10 +23,12 @@ describe('validation', () => {
     expect(
       applyRuleToObject(
         {
+          category: 'validation',
           type: 'schema',
           path: '$',
           enabled: true,
           description: 'parameter objects should have a description',
+          summary: '',
           severity: 'error',
           schema: 'oas2',
         },
@@ -38,10 +40,12 @@ describe('validation', () => {
   test('return errors on invalid OASv2 spec', () => {
     const results = applyRuleToObject(
       {
+        category: 'validation',
         type: 'schema',
         path: '$',
         enabled: true,
         description: 'validate structure of OpenAPIv2 specification',
+        summary: '',
         severity: 'error',
         schema: 'oas2',
       },
@@ -57,10 +61,12 @@ describe('validation', () => {
     expect(
       applyRuleToObject(
         {
+          category: 'validation',
           type: 'schema',
           path: '$',
           enabled: true,
           description: '',
+          summary: '',
           severity: 'error',
           schema: 'oas3',
         },
@@ -74,20 +80,24 @@ describe('validation', () => {
       rules: {
         oas2: {
           'validate:oas2-schema': {
+            category: 'validation',
             type: 'schema',
             path: '$',
             enabled: true,
             description: '',
+            summary: '',
             severity: 'error',
             schema: 'oas2',
           },
         },
         oas3: {
           'validate:oas3-schema': {
+            category: 'validation',
             type: 'schema',
             path: '$',
             enabled: true,
             description: '',
+            summary: '',
             schema: 'oas3',
           },
         },

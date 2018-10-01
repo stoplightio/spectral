@@ -20,10 +20,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'truthy',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               truthy: 'something-not-present',
             },
             {
@@ -42,10 +44,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'truthy',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               truthy: 'version',
             },
             {
@@ -66,9 +70,11 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'alphabetical',
               path: '$.info',
               enabled: true,
+              summary: '',
               description: '',
               alphabetical: {
                 properties: 'tags',
@@ -91,10 +97,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'alphabetical',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               alphabetical: {
                 properties: 'tags',
                 keyedBy: 'name',
@@ -118,10 +126,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'or',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               or: ['something-not-present', 'something-else-not-present'],
             },
             {
@@ -139,10 +149,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'or',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               or: ['version', 'something-else-not-present'],
             },
             {
@@ -157,10 +169,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'or',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               or: ['version', 'title', 'termsOfService'],
             },
             {
@@ -181,10 +195,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'xor',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               xor: ['yada-yada', 'whatever'],
             },
             {
@@ -203,10 +219,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'xor',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               xor: ['version', 'title'],
             },
             {
@@ -225,10 +243,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'xor',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               xor: ['something', 'title'],
             },
             {
@@ -249,10 +269,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'pattern',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               pattern: {
                 property: 'termsOfService',
                 value: '^orange.*$',
@@ -274,10 +296,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'pattern',
               path: '$.responses',
               enabled: true,
               description: '',
+              summary: '',
               pattern: {
                 property: '*',
                 value: '^[0-9]+$',
@@ -304,10 +328,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'pattern',
               path: '$.info',
               enabled: true,
               description: '',
+              summary: '',
               pattern: {
                 property: 'termsOfService',
                 value: '^http.*$',
@@ -329,10 +355,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'pattern',
               path: '$.responses',
               enabled: true,
               description: '',
+              summary: '',
               pattern: {
                 property: '*',
                 value: '^[0-9]+$',
@@ -361,10 +389,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'notContain',
               path: '$..*',
               enabled: true,
               description: '',
+              summary: '',
               notContain: { properties: ['description'], value: '<script' },
             },
             {
@@ -384,10 +414,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'notContain',
               path: '$..*',
               enabled: true,
               description: '',
+              summary: '',
               notContain: { properties: ['description'], value: '<script' },
             },
             {
@@ -409,10 +441,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'notEndWith',
               path: '$.servers',
               enabled: true,
               description: '',
+              summary: '',
               notEndWith: { property: 'url', value: '/' },
             },
             {
@@ -436,10 +470,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'notEndWith',
               path: '$.servers',
               enabled: true,
               description: '',
+              summary: '',
               notEndWith: { property: 'url', value: '/' },
             },
             {
@@ -465,10 +501,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'maxLength',
               path: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
+              summary: '',
               maxLength: {
                 value: 20,
               },
@@ -491,10 +529,12 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
+              category: 'style',
               type: 'maxLength',
               path: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
+              summary: '',
               maxLength: {
                 value: 20,
               },

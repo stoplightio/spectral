@@ -92,7 +92,7 @@ export interface IPatternRule extends IRuleDefinitionBase {
   pattern: IRulePatternParam;
 }
 
-export type LintRule =
+export type StyleRule =
   | ITruthyRule
   | IOrRule
   | IXorRule

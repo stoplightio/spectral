@@ -1,7 +1,11 @@
-export type RuleCategory = 'lint' | 'validation' | 'unknown';
-export type RuleSeverity = 'warn' | 'error';
+export type RuleSeverity = 'warn' | 'error' | 'info';
 
 export interface IRuleDefinitionBase {
+  /**
+   * The high-level purpose of the rule (typically 'style' or 'validation')
+   */
+  category: string;
+
   /**
    * The type of rule this is (ie, schema, function, truthy)
    */
@@ -13,7 +17,12 @@ export interface IRuleDefinitionBase {
   path: string;
 
   /**
-   * A description of this rule
+   * A short summary of the rule and its intended purpose
+   */
+  summary: string;
+
+  /**
+   * A long-form description of the rule formatted in markdown
    */
   description: string;
 
@@ -26,8 +35,9 @@ export interface IRuleDefinitionBase {
    * The severity of results this rule generates
    */
   severity?: RuleSeverity;
-}
 
-export interface IRuleBase extends IRuleDefinitionBase {
-  name: string;
+  /**
+   * Tags attached to the rule, which can be used for organizational purposes
+   */
+  tags?: string[];
 }
