@@ -92,6 +92,12 @@ export interface IPatternRule extends IRuleDefinitionBase {
   pattern: IRulePatternParam;
 }
 
+export interface IFunctionRule extends IRuleDefinitionBase {
+  type: 'function';
+  function: string; // eventually allow js functions here? or references to one
+  args?: any; //need to think about this a little
+}
+
 export type LintRule =
   | ITruthyRule
   | IOrRule
@@ -100,4 +106,5 @@ export type LintRule =
   | IAlphaRule
   | INotEndWithRule
   | INotContainRule
-  | IPatternRule;
+  | IPatternRule
+  | IFunctionRule;
