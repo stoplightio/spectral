@@ -513,5 +513,33 @@ describe('lint', () => {
         ).toEqual(0);
       });
     });
+
+    describe('function', () => {
+      describe('rule1', () => {
+        test('custom', () => {
+          expect(
+            applyRuleToObject(
+              {
+                type: 'function',
+                path: '$..summary',
+                enabled: true,
+                description: 'summary should be short (description can be long)',
+                function: 'rule1',
+              },
+              {
+                paths: {
+                  '/rooms/{room_id}/reserve/': {
+                    post: {
+                      description: '',
+                      summary: 'Book Room Really fsdasddssdfgfdhdsafhsad fsad flong fjkdhfsds',
+                    },
+                  },
+                },
+              }
+            ).length
+          ).toEqual(1);
+        });
+      });
+    });
   });
 });

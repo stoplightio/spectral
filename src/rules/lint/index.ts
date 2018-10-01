@@ -6,3 +6,5 @@ export * from './pattern';
 export * from './notContain';
 export * from './notEndWith';
 export * from './maxLength';
+
+export * from './_custom';
