@@ -9,17 +9,18 @@ export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
 export type Rule = ValidationRule | StyleRule;
 
 export type RawResult = ErrorObject | AssertionError;
+export type Path = (string | number)[];
 
 export interface IRuleResult {
   /**
    * The category of the rule (ie, validation, lint)
    */
-  category: string;
+  type: string;
 
   /**
    * The relevant path within the object being operated on
    */
-  path: (string | number)[];
+  path: Path;
 
   /**
    * The rule emitting the result
@@ -29,7 +30,7 @@ export interface IRuleResult {
   /**
    * The rule summary for the rule generating the result
    */
-  description: string;
+  summary: string;
 
   /**
    * The rule emitting the result
@@ -40,6 +41,14 @@ export interface IRuleResult {
    * Message describing the error
    */
   message: string;
+}
+
+export interface IRuleMetadata {
+  path: Path;
+
+  rule: Rule;
+
+  name: string;
 }
 
 export interface IRuleConfig {

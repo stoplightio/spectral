@@ -1,12 +1,14 @@
-import { IPatternRule, RawResult } from '../../types';
+import { IPatternRule, IRuleResult, IRuleMetadata } from '../../types';
 import { ensureRule } from '../index';
 
 import * as should from 'should';
 
-export const pattern = (r: IPatternRule): ((object: any) => RawResult[]) => {
-  return (object: object): RawResult[] => {
-    const results: RawResult[] = [];
-    const { omit, property, split, value } = r.pattern;
+export const pattern = (
+  r: IPatternRule
+): ((object: any, ruleMeta: IRuleMetadata) => IRuleResult[]) => {
+  return (object: object, ruleMeta: IRuleMetadata): IRuleResult[] => {
+    const results: IRuleResult[] = [];
+    const { omit, property, split, value } = r.input.pattern;
 
     // if the collected object is not an object/array, set our target to be
     // the object itself
@@ -37,9 +39,9 @@ export const pattern = (r: IPatternRule): ((object: any) => RawResult[]) => {
             const res = ensureRule(() => {
               should(re.test(component)).be.exactly(
                 true,
-                `${r.description}, but received: ${component}`
+                `${r.summary}, but received: ${component}`
               );
-            });
+            }, ruleMeta);
             if (res) {
               results.push(res);
             }

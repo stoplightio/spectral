@@ -1,10 +1,12 @@
-import { IMaxLengthRule, RawResult } from '../../types';
+import { IMaxLengthRule, IRuleResult, IRuleMetadata } from '../../types';
 import { ensureRule } from '../index';
 
-export const maxLength = (r: IMaxLengthRule): ((object: any) => RawResult[]) => {
-  return (object: object): RawResult[] => {
-    const results: RawResult[] = [];
-    const { value, property = undefined } = r.maxLength;
+export const maxLength = (
+  r: IMaxLengthRule
+): ((object: any, meta: IRuleMetadata) => IRuleResult[]) => {
+  return (object: object, meta: IRuleMetadata): IRuleResult[] => {
+    const results: IRuleResult[] = [];
+    const { value, property = undefined } = r.input.maxLength;
 
     let target: any;
     if (property) {
@@ -18,7 +20,7 @@ export const maxLength = (r: IMaxLengthRule): ((object: any) => RawResult[]) => 
     if (target) {
       const res = ensureRule(() => {
         target.length.should.be.belowOrEqual(value);
-      });
+      }, meta);
       if (res) {
         results.push(res);
       }

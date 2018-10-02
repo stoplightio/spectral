@@ -33,63 +33,79 @@ export interface IRulePatternParam {
 }
 
 export interface ITruthyRule extends IRuleDefinitionBase {
-  type: 'truthy';
+  function: 'truthy';
 
-  // key(s) of object that should evaluate as 'truthy' (considered true in a
-  // boolean context)
-  truthy: string | string[];
+  input: {
+    // key(s) of object that should evaluate as 'truthy' (considered true in a
+    // boolean context)
+    truthy: string | string[];
 
-  properties?: number;
+    properties?: number;
+  };
 }
 
 export interface IOrRule extends IRuleDefinitionBase {
-  type: 'or';
+  function: 'or';
 
-  // test to verify if any of the provided keys are present in object
-  or: string[];
+  input: {
+    // test to verify if any of the provided keys are present in object
+    or: string[];
+  };
 }
 
 export interface IXorRule extends IRuleDefinitionBase {
-  type: 'xor';
+  function: 'xor';
 
-  // test to verify if one (but not all) of the provided keys are present in
-  // object
-  xor: string[];
+  input: {
+    // test to verify if one (but not all) of the provided keys are present in
+    // object
+    xor: string[];
+  };
 }
 
 export interface IMaxLengthRule extends IRuleDefinitionBase {
-  type: 'maxLength';
+  function: 'maxLength';
 
-  // verify property is under a specified number of characters
-  maxLength: IRuleNumberParam;
+  input: {
+    // verify property is under a specified number of characters
+    maxLength: IRuleNumberParam;
+  };
 }
 
 export interface IAlphaRule extends IRuleDefinitionBase {
-  type: 'alphabetical';
+  function: 'alphabetical';
 
-  // verify property is within alphabetical order
-  alphabetical: IAlphaRuleParam;
+  input: {
+    // verify property is within alphabetical order
+    alphabetical: IAlphaRuleParam;
+  };
 }
 
 export interface INotEndWithRule extends IRuleDefinitionBase {
-  type: 'notEndWith';
+  function: 'notEndWith';
 
-  // verify property does not end with string
-  notEndWith: IRulePatternParam;
+  input: {
+    // verify property does not end with string
+    notEndWith: IRulePatternParam;
+  };
 }
 
 export interface INotContainRule extends IRuleDefinitionBase {
-  type: 'notContain';
+  function: 'notContain';
 
-  // verify property does not contain value
-  notContain: IRuleStringParam;
+  input: {
+    // verify property does not contain value
+    notContain: IRuleStringParam;
+  };
 }
 
 export interface IPatternRule extends IRuleDefinitionBase {
-  type: 'pattern';
+  function: 'pattern';
 
-  // run regex match
-  pattern: IRulePatternParam;
+  input: {
+    // run regex match
+    pattern: IRulePatternParam;
+  };
 }
 
 export type StyleRule =

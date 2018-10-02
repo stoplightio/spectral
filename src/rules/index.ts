@@ -2,7 +2,10 @@ import * as types from '../types';
 import { alphabetical, truthy, or, xor, pattern, notContain, notEndWith, maxLength } from './style';
 import { schema } from './validation';
 
-export const ensureRule = (shouldAssertion: Function): void | types.RawResult => {
+export const ensureRule = (
+  shouldAssertion: Function,
+  ruleMeta: types.IRuleMetadata
+): void | types.IRuleResult => {
   try {
     shouldAssertion();
   } catch (error) {
@@ -11,12 +14,21 @@ export const ensureRule = (shouldAssertion: Function): void | types.RawResult =>
       throw error;
     }
 
-    return error;
+    return {
+      path: ruleMeta.path,
+      name: ruleMeta.name,
+      type: ruleMeta.rule.type,
+      summary: ruleMeta.rule.summary,
+      severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : 'warn',
+      message: error.message ? error.message : '',
+    };
   }
 };
 
-export const generateRule = (r: types.Rule): ((object: any) => types.RawResult[]) => {
-  switch (r.type) {
+export const generateRule = (
+  r: types.Rule
+): ((object: any, ruleMeta: types.IRuleMetadata) => types.IRuleResult[]) => {
+  switch (r.function) {
     case 'truthy':
       return truthy(r);
       break;

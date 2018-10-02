@@ -23,14 +23,14 @@ describe('validation', () => {
     expect(
       applyRuleToObject(
         {
-          category: 'validation',
-          type: 'schema',
+          type: 'validation',
+          function: 'schema',
           path: '$',
           enabled: true,
           description: 'parameter objects should have a description',
           summary: '',
           severity: 'error',
-          schema: 'oas2',
+          input: { schema: 'oas2' },
         },
         petstoreV2
       ).length
@@ -40,35 +40,34 @@ describe('validation', () => {
   test('return errors on invalid OASv2 spec', () => {
     const results = applyRuleToObject(
       {
-        category: 'validation',
-        type: 'schema',
+        type: 'validation',
+        function: 'schema',
         path: '$',
         enabled: true,
         description: 'validate structure of OpenAPIv2 specification',
         summary: '',
         severity: 'error',
-        schema: 'oas2',
+        input: { schema: 'oas2' },
       },
       invalidV2
     );
     expect(results.length).toEqual(1);
-    // FIXME - add these back when validation results are fixed
-    // expect(results[0].path).toEqual(['info', 'license', 'name']);
-    // expect(results[0].message).toEqual('should be string');
+    expect(results[0].path).toEqual(['info', 'license', 'name']);
+    expect(results[0].message).toEqual('should be string');
   });
 
   test('validate a correct OASv3 spec', () => {
     expect(
       applyRuleToObject(
         {
-          category: 'validation',
-          type: 'schema',
+          type: 'validation',
+          function: 'schema',
           path: '$',
           enabled: true,
           description: '',
           summary: '',
           severity: 'error',
-          schema: 'oas3',
+          input: { schema: 'oas3' },
         },
         petstoreV3
       ).length
@@ -80,25 +79,25 @@ describe('validation', () => {
       rules: {
         oas2: {
           'validate:oas2-schema': {
-            category: 'validation',
-            type: 'schema',
+            type: 'validation',
+            function: 'schema',
             path: '$',
             enabled: true,
             description: '',
             summary: '',
             severity: 'error',
-            schema: 'oas2',
+            input: { schema: 'oas2' },
           },
         },
         oas3: {
           'validate:oas3-schema': {
-            category: 'validation',
-            type: 'schema',
+            type: 'validation',
+            function: 'schema',
             path: '$',
             enabled: true,
             description: '',
             summary: '',
-            schema: 'oas3',
+            input: { schema: 'oas3' },
           },
         },
       },

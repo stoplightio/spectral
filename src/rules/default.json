@@ -1,213 +1,257 @@
 {
   "rules": {
     "oas2|oas3": {
-      "lint:parameter-description": {
-        "type": "truthy",
+      "parameter-description": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$..paths.*.*.parameters",
         "enabled": true,
         "description": "parameter objects should have a description",
-        "truthy": "description"
+        "input": {
+          "truthy": "description"
+        }
       },
-      "lint:operation-operationID": {
-        "type": "truthy",
+      "operation-operationID": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$..paths.*[?( name() !== 'parameters' )]",
         "enabled": true,
         "description": "operation should have an operationId",
-        "truthy": "operationId"
+        "input": {
+          "truthy": "operationId"
+        }
       },
-      "lint:operation-summary-or-description": {
-        "type": "or",
+      "operation-summary-or-description": {
+        "type": "lint",
+        "function": "or",
         "path": "$..paths.*[?( name() !== 'parameters')]",
         "enabled": true,
         "description": "operation should have summary or description",
-        "or": ["summary", "description"]
+        "input": {
+          "or": ["summary", "description"]
+        }
       },
-      "lint:operation-tags": {
-        "type": "truthy",
+      "operation-tags": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$..paths.*[?( name() !== 'parameters')]",
         "enabled": true,
         "description": "operation should have non-empty tags array",
-        "truthy": "tags"
+        "input": {
+          "truthy": "tags"
+        }
       },
-      "lint:path-keys-no-trailing-slash": {
-        "type": "notEndWith",
+      "path-keys-no-trailing-slash": {
+        "type": "lint",
+        "function": "notEndWith",
         "path": "$..paths",
         "enabled": true,
         "description": "path item keys should not end with a slash",
-        "notEndWith": {
-          "property": "*",
-          "value": "/"
+        "input": {
+          "notEndWith": {
+            "property": "*",
+            "value": "/"
+          }
         }
       },
-      "lint:server-trailing-slash": {
-        "type": "notEndWith",
+      "server-trailing-slash": {
+        "type": "lint",
+        "function": "notEndWith",
         "path": "$.servers",
         "enabled": true,
         "description": "server url should not have a trailing slash",
-        "notEndWith": {
-          "property": "url",
-          "value": "/"
+        "input": {
+          "notEndWith": {
+            "property": "url",
+            "value": "/"
+          }
         }
       },
-      "lint:openapi-tags": {
-        "type": "truthy",
+      "openapi-tags": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$",
         "enabled": false,
         "description": "openapi object should have non-empty tags array",
-        "truthy": "tags"
+        "input": {
+          "truthy": "tags"
+        }
       },
-      "lint:openapi-tags-alphabetical": {
-        "type": "alphabetical",
+      "openapi-tags-alphabetical": {
+        "type": "lint",
+        "function": "alphabetical",
         "path": "$",
         "enabled": true,
         "description": "openapi object should have alphabetical tags",
-        "alphabetical": {
-          "properties": "tags",
-          "keyedBy": "name"
+        "input": {
+          "alphabetical": {
+            "properties": "tags",
+            "keyedBy": "name"
+          }
         }
       },
-      "lint:reference-no-other-properties": {
-        "type": "truthy",
+      "reference-no-other-properties": {
+        "type": "lint",
+        "function": "truthy",
         "path": "reference",
         "enabled": true,
         "description": "reference objects should only have a $ref property",
-        "truthy": "$ref",
-        "properties": 1
+        "input": {
+          "truthy": "$ref",
+          "properties": 1
+        }
       },
-      "lint:pathItem-summary-or-description": {
-        "type": "or",
+      "pathItem-summary-or-description": {
+        "type": "lint",
+        "function": "or",
         "path": "pathItem",
         "enabled": false,
         "description": "pathItem should have summary or description",
-        "or": ["summary", "description"]
+        "input": {
+          "or": ["summary", "description"]
+        }
       },
-      "lint:example-value-or-externalValue": {
-        "type": "xor",
+      "example-value-or-externalValue": {
+        "type": "lint",
+        "function": "xor",
         "path": "$..example",
         "enabled": true,
         "description": "example should have either a value or externalValue member",
-        "xor": ["value", "externalValue"]
+        "input": {
+          "xor": ["value", "externalValue"]
+        }
       },
-      "lint:reference-components-regex": {
-        "type": "pattern",
+      "reference-components-regex": {
+        "type": "lint",
+        "function": "pattern",
         "path": "$..['$ref']",
         "enabled": false,
         "description": "reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+",
-        "pattern": {
-          "omit": "#",
-          "split": "/",
-          "value": "^[a-zA-Z0-9\\.\\-_]+$"
+        "input": {
+          "pattern": {
+            "omit": "#",
+            "split": "/",
+            "value": "^[a-zA-Z0-9\\.\\-_]+$"
+          }
         }
       },
-      "lint:no-script-tags-in-markdown": {
-        "type": "notContain",
+      "no-script-tags-in-markdown": {
+        "type": "lint",
+        "function": "notContain",
         "path": "$..*",
         "enabled": true,
         "description": "markdown descriptions should not contain <script> tags",
-        "notContain": {
-          "properties": ["description"],
-          "value": "<script"
+        "input": {
+          "notContain": {
+            "properties": ["description"],
+            "value": "<script"
+          }
         }
       },
-      "lint:info-contact": {
-        "type": "truthy",
+      "info-contact": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$.info",
         "enabled": true,
         "description": "info object should contain contact object",
-        "truthy": "contact"
+        "input": {
+          "truthy": "contact"
+        }
       },
-      "lint:license-apimatic-bug": {
-        "type": "notContain",
+      "license-apimatic-bug": {
+        "type": "lint",
+        "function": "notContain",
         "path": "$.license",
         "enabled": true,
         "description": "license url should not point at gruntjs",
-        "notContain": {
-          "properties": ["url"],
-          "value": "gruntjs"
+        "input": {
+          "notContain": {
+            "properties": ["url"],
+            "value": "gruntjs"
+          }
         }
       },
-      "lint:no-eval-in-descriptions": {
-        "type": "notContain",
+      "no-eval-in-descriptions": {
+        "type": "lint",
+        "function": "notContain",
         "path": "$..*",
         "enabled": true,
         "description": "markdown descriptions should not contain 'eval('",
-        "notContain": {
-          "properties": ["description", "title"],
-          "value": "eval("
+        "input": {
+          "notContain": {
+            "properties": ["description", "title"],
+            "value": "eval("
+          }
         }
       },
-      "lint:contact-properties": {
-        "type": "truthy",
+      "contact-properties": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$.info.contact",
         "enabled": false,
         "description": "contact object should have name, url and email",
-        "truthy": ["name", "url", "email"]
+        "input": {
+          "truthy": ["name", "url", "email"]
+        }
       },
-      "lint:license-url": {
-        "type": "truthy",
+      "license-url": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$.info.license",
         "enabled": false,
         "description": "license object should include url",
-        "truthy": "url"
+        "input": {
+          "truthy": "url"
+        }
       },
-      "lint:server-not-example.com": {
-        "type": "notContain",
+      "server-not-example.com": {
+        "type": "lint",
+        "function": "notContain",
         "path": "$.servers",
         "enabled": false,
         "description": "server url should not point at example.com",
-        "notContain": {
-          "properties": ["url"],
-          "value": "example.com"
+        "input": {
+          "notContain": {
+            "properties": ["url"],
+            "value": "example.com"
+          }
         }
       },
-      "lint:tag-description": {
-        "type": "truthy",
+      "tag-description": {
+        "type": "lint",
+        "function": "truthy",
         "path": "$.tags",
         "enabled": false,
         "description": "tag object should have a description",
-        "truthy": "description"
+        "input": {
+          "truthy": "description"
+        }
       }
     },
     "oas2": {
-      "validation:oas2-schema": {
-        "type": "schema",
+      "oas2-schema": {
+        "type": "validation",
+        "function": "schema",
         "path": "$",
         "enabled": true,
         "severity": "error",
         "description": "validate structure of OpenAPIv2 specification",
-        "schema": "oas2"
-      },
-      "validation:oas-parameter-check": {
-        "type": "function",
-        "path": "$.paths"
-      },
-      "validation:type-string": {
-        "type": "schema",
-        "path": "$",
-        "enabled": true,
-        "description": "parameter objects should have a description",
-        "schema": {}
+        "input": {
+          "schema": "oas2"
+        }
       }
     },
     "oas3": {
-      "validation:oas3-schema": {
-        "type": "schema",
+      "oas3-schema": {
+        "type": "validation",
+        "function": "schema",
         "path": "$",
         "enabled": true,
         "severity": "error",
         "description": "validate structure of OpenAPIv3 specification",
-        "schema": "oas3"
-      },
-      "validation:oas-parameter-check": {
-        "type": "function",
-        "path": "$.paths"
-      },
-      "validation:type-string": {
-        "type": "schema",
-        "path": "$",
-        "enabled": true,
-        "description": "parameter objects should have a description",
-        "schema": {}
+        "input": {
+          "schema": "oas3"
+        }
       }
     }
   }

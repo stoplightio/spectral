@@ -13,10 +13,9 @@ interface IRuleStore {
 }
 
 interface IRuleEntry {
-  category: string;
   format: string;
-  rule: types.IRuleDefinitionBase;
-  apply: (object: any) => types.RawResult[];
+  rule: types.Rule;
+  apply: (object: any, meta: types.IRuleMetadata) => types.IRuleResult[];
 }
 
 export class Spectral {
@@ -51,12 +50,6 @@ export class Spectral {
       throw new SyntaxError(`Invalid JSON path for rule '${name}': ${rule.path}\n\n${e}`);
     }
 
-    let category: string = 'unknown';
-    let nameParts = name.split(':');
-    if (nameParts.length == 2) {
-      category = nameParts[0];
-    }
-
     // update paths object (ensure uniqueness)
     if (!this.paths[rule.path]) {
       this.paths[rule.path] = [];
@@ -74,9 +67,8 @@ export class Spectral {
 
     return {
       format,
-      rule,
-      category,
-      apply: generateRule(rule as types.StyleRule),
+      rule: rule as types.Rule,
+      apply: generateRule(rule as types.Rule),
     };
   }
 
@@ -129,13 +121,13 @@ export class Spectral {
 
     for (const path in this.paths) {
       for (const ruleName of this.paths[path]) {
-        const { rule, apply, category, format } = runRules[ruleName];
+        const { rule, apply, format } = runRules[ruleName];
 
         if (!rule.enabled || format.indexOf(dataFormat) === -1) {
           continue;
         }
 
-        if (ruleName)
+        if (ruleName) {
           if (rule.path !== path) {
             console.warn(
               `Rule '${ruleName} was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
@@ -144,6 +136,7 @@ export class Spectral {
             );
             continue;
           }
+        }
 
         try {
           const nodes = jp.nodes(data, path);
@@ -151,18 +144,14 @@ export class Spectral {
             const { path, value } = n;
 
             try {
-              const result: types.RawResult[] = apply(value);
-              result.forEach(res => {
-                results.push({
-                  path,
-                  category,
-                  name: ruleName,
-                  description: rule.description,
-                  severity: rule.severity ? rule.severity : 'warn',
-                  message: res.message ? res.message : '',
-                });
+              const result: types.IRuleResult[] = apply(value, {
+                path,
+                name: ruleName,
+                rule,
               });
+              results.push(...result);
             } catch (e) {
+              console.log(apply);
               console.warn(
                 `Encountered error when running rule '${ruleName}' on node at path '${path}':\n${e}`
               );

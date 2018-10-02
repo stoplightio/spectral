@@ -2,14 +2,14 @@ export type RuleSeverity = 'warn' | 'error' | 'info';
 
 export interface IRuleDefinitionBase {
   /**
-   * The high-level purpose of the rule (typically 'style' or 'validation')
-   */
-  category: string;
-
-  /**
-   * The type of rule this is (ie, schema, function, truthy)
+   * The type of rule this is (ie, style, validation)
    */
   type: string;
+
+  /**
+   * The rule function
+   */
+  function: string;
 
   /**
    * The JSON path within the object this rule applies to
@@ -22,14 +22,19 @@ export interface IRuleDefinitionBase {
   summary: string;
 
   /**
-   * A long-form description of the rule formatted in markdown
+   * An optional long-form description of the rule formatted in markdown
    */
-  description: string;
+  description?: string;
 
   /**
    * Whether the rule should be enabled by default
    */
   enabled: boolean;
+
+  /**
+   * Input to the rule function
+   */
+  input: any;
 
   /**
    * The severity of results this rule generates

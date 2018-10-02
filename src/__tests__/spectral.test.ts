@@ -19,13 +19,15 @@ describe('spectral', () => {
       rules: {
         oas2: {
           'lint:test': {
-            category: 'style',
-            type: 'truthy',
+            type: 'style',
+            function: 'truthy',
             path: '$',
             enabled: false,
             description: 'this should return a result if enabled',
             summary: '',
-            truthy: 'something-not-present',
+            input: {
+              truthy: 'something-not-present',
+            },
           },
         },
       },
