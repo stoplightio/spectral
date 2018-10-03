@@ -1,7 +1,7 @@
 {
-  "name": "spectral",
+  "name": "@stoplight/spectral",
   "version": "0.0.1",
-  "description": "Object specification analyzer and linter",
+  "description": "An object linting framework",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Fetch dependencies
+          command: yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Run tests
+          command: yarn test
+      - run:
+          name: Run build
+          command: yarn build
