@@ -6,7 +6,7 @@ export const notEndWith = (
 ): ((object: any, ruleMeta: IRuleMetadata) => IRuleResult[]) => {
   return (object: object, ruleMeta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
-    const { value, property } = r.input.notEndWith;
+    const { value, property } = r.input;
     const process = (target: any) => {
       const res = ensureRule(() => {
         target.should.not.endWith(value);

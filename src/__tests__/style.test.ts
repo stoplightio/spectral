@@ -27,7 +27,7 @@ describe('lint', () => {
               description: '',
               summary: '',
               input: {
-                truthy: 'something-not-present',
+                properties: 'something-not-present',
               },
             },
             {
@@ -52,7 +52,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { truthy: 'version' },
+              input: { properties: 'version' },
             },
             {
               swagger: '2.0',
@@ -79,10 +79,8 @@ describe('lint', () => {
               summary: '',
               description: '',
               input: {
-                alphabetical: {
-                  properties: 'tags',
-                  keyedBy: 'name',
-                },
+                properties: 'tags',
+                keyedBy: 'name',
               },
             },
             {
@@ -108,10 +106,8 @@ describe('lint', () => {
               description: '',
               summary: '',
               input: {
-                alphabetical: {
-                  properties: 'tags',
-                  keyedBy: 'name',
-                },
+                properties: 'tags',
+                keyedBy: 'name',
               },
             },
             {
@@ -138,7 +134,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { or: ['something-not-present', 'something-else-not-present'] },
+              input: { properties: ['something-not-present', 'something-else-not-present'] },
             },
             {
               swagger: '2.0',
@@ -161,7 +157,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { or: ['version', 'something-else-not-present'] },
+              input: { properties: ['version', 'something-else-not-present'] },
             },
             {
               swagger: '2.0',
@@ -181,7 +177,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { or: ['version', 'title', 'termsOfService'] },
+              input: { properties: ['version', 'title', 'termsOfService'] },
             },
             {
               swagger: '2.0',
@@ -207,7 +203,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { xor: ['yada-yada', 'whatever'] },
+              input: { properties: ['yada-yada', 'whatever'] },
             },
             {
               swagger: '2.0',
@@ -231,7 +227,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { xor: ['version', 'title'] },
+              input: { properties: ['version', 'title'] },
             },
             {
               swagger: '2.0',
@@ -255,7 +251,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { xor: ['something', 'title'] },
+              input: { properties: ['something', 'title'] },
             },
             {
               swagger: '2.0',
@@ -282,10 +278,8 @@ describe('lint', () => {
               description: '',
               summary: '',
               input: {
-                pattern: {
-                  property: 'termsOfService',
-                  value: '^orange.*$',
-                },
+                property: 'termsOfService',
+                value: '^orange.*$',
               },
             },
             {
@@ -311,10 +305,8 @@ describe('lint', () => {
               description: '',
               summary: '',
               input: {
-                pattern: {
-                  property: '*',
-                  value: '^[0-9]+$',
-                },
+                property: '*',
+                value: '^[0-9]+$',
               },
             },
             {
@@ -345,10 +337,8 @@ describe('lint', () => {
               description: '',
               summary: '',
               input: {
-                pattern: {
-                  property: 'termsOfService',
-                  value: '^http.*$',
-                },
+                property: 'termsOfService',
+                value: '^http.*$',
               },
             },
             {
@@ -374,10 +364,8 @@ describe('lint', () => {
               description: '',
               summary: '',
               input: {
-                pattern: {
-                  property: '*',
-                  value: '^[0-9]+$',
-                },
+                property: '*',
+                value: '^[0-9]+$',
               },
             },
             {
@@ -409,7 +397,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { notContain: { properties: ['description'], value: '<script' } },
+              input: { properties: ['description'], value: '<script' },
             },
             {
               swagger: '2.0',
@@ -434,7 +422,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { notContain: { properties: ['description'], value: '<script' } },
+              input: { properties: ['description'], value: '<script' },
             },
             {
               swagger: '2.0',
@@ -461,7 +449,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { notEndWith: { property: 'url', value: '/' } },
+              input: { property: 'url', value: '/' },
             },
             {
               swagger: '2.0',
@@ -490,7 +478,7 @@ describe('lint', () => {
               enabled: true,
               description: '',
               summary: '',
-              input: { notEndWith: { property: 'url', value: '/' } },
+              input: { property: 'url', value: '/' },
             },
             {
               swagger: '2.0',
@@ -522,9 +510,7 @@ describe('lint', () => {
               description: 'summary should be short (description can be long)',
               summary: '',
               input: {
-                maxLength: {
-                  value: 20,
-                },
+                value: 20,
               },
             },
             {
@@ -552,9 +538,7 @@ describe('lint', () => {
               description: 'summary should be short (description can be long)',
               summary: '',
               input: {
-                maxLength: {
-                  value: 20,
-                },
+                value: 20,
               },
             },
             {

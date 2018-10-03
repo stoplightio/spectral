@@ -38,9 +38,9 @@ export interface ITruthyRule extends IRuleDefinitionBase {
   input: {
     // key(s) of object that should evaluate as 'truthy' (considered true in a
     // boolean context)
-    truthy: string | string[];
+    properties: string | string[];
 
-    properties?: number;
+    max?: number;
   };
 }
 
@@ -49,7 +49,7 @@ export interface IOrRule extends IRuleDefinitionBase {
 
   input: {
     // test to verify if any of the provided keys are present in object
-    or: string[];
+    properties: string[];
   };
 }
 
@@ -59,53 +59,43 @@ export interface IXorRule extends IRuleDefinitionBase {
   input: {
     // test to verify if one (but not all) of the provided keys are present in
     // object
-    xor: string[];
+    properties: string[];
   };
 }
 
 export interface IMaxLengthRule extends IRuleDefinitionBase {
   function: 'maxLength';
 
-  input: {
-    // verify property is under a specified number of characters
-    maxLength: IRuleNumberParam;
-  };
+  // verify property is under a specified number of characters
+  input: IRuleNumberParam;
 }
 
 export interface IAlphaRule extends IRuleDefinitionBase {
   function: 'alphabetical';
 
-  input: {
-    // verify property is within alphabetical order
-    alphabetical: IAlphaRuleParam;
-  };
+  // verify property is within alphabetical order
+  input: IAlphaRuleParam;
 }
 
 export interface INotEndWithRule extends IRuleDefinitionBase {
   function: 'notEndWith';
 
-  input: {
-    // verify property does not end with string
-    notEndWith: IRulePatternParam;
-  };
+  // verify property does not end with string
+  input: IRulePatternParam;
 }
 
 export interface INotContainRule extends IRuleDefinitionBase {
   function: 'notContain';
 
-  input: {
-    // verify property does not contain value
-    notContain: IRuleStringParam;
-  };
+  // verify property does not contain value
+  input: IRuleStringParam;
 }
 
 export interface IPatternRule extends IRuleDefinitionBase {
   function: 'pattern';
 
-  input: {
-    // run regex match
-    pattern: IRulePatternParam;
-  };
+  // run regex match
+  input: IRulePatternParam;
 }
 
 export type StyleRule =

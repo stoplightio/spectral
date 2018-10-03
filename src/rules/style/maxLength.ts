@@ -6,7 +6,7 @@ export const maxLength = (
 ): ((object: any, meta: IRuleMetadata) => IRuleResult[]) => {
   return (object: object, meta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
-    const { value, property = undefined } = r.input.maxLength;
+    const { value, property } = r.input;
 
     let target: any;
     if (property) {

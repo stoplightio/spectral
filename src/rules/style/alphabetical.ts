@@ -6,11 +6,15 @@ export const alphabetical = (
 ): ((object: any, ruleMeta: IRuleMetadata) => IRuleResult[]) => {
   return (object: object, ruleMeta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
-    if (r.input.alphabetical.properties && !Array.isArray(r.input.alphabetical.properties)) {
-      r.input.alphabetical.properties = [r.input.alphabetical.properties];
+
+    const { keyedBy, properties: inputProperties } = r.input;
+
+    let properties = inputProperties;
+    if (properties && !Array.isArray(properties)) {
+      properties = [properties];
     }
 
-    for (const property of r.input.alphabetical.properties) {
+    for (const property of properties) {
       if (!object[property] || object[property].length < 2) {
         continue;
       }
@@ -19,8 +23,7 @@ export const alphabetical = (
 
       // If we aren't expecting an object keyed by a specific property, then treat the
       // object as a simple array.
-      if (r.input.alphabetical.keyedBy) {
-        const keyedBy = r.input.alphabetical.keyedBy;
+      if (keyedBy) {
         arrayCopy.sort((a, b) => {
           if (a[keyedBy] < b[keyedBy]) {
             return -1;

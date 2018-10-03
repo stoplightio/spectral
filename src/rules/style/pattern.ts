@@ -8,7 +8,7 @@ export const pattern = (
 ): ((object: any, ruleMeta: IRuleMetadata) => IRuleResult[]) => {
   return (object: object, ruleMeta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
-    const { omit, property, split, value } = r.input.pattern;
+    const { omit, property, split, value } = r.input;
 
     // if the collected object is not an object/array, set our target to be
     // the object itself

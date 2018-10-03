@@ -26,7 +26,7 @@ describe('spectral', () => {
             description: 'this should return a result if enabled',
             summary: '',
             input: {
-              truthy: 'something-not-present',
+              properties: 'something-not-present',
             },
           },
         },

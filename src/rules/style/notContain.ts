@@ -9,7 +9,7 @@ export const notContain = (
 ): ((object: any, ruleMeta: IRuleMetadata) => IRuleResult[]) => {
   return (obj: object, meta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
-    const { value, properties } = r.input.notContain;
+    const { value, properties } = r.input;
 
     for (const property of properties) {
       if (obj && obj.hasOwnProperty(property)) {
