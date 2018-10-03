@@ -50,4 +50,52 @@ describe('spectral', () => {
     results = s.apply(spec, 'oas2', overrideConfig);
     expect(results.length).toEqual(1);
   });
+
+  test('getRules returns a flattened list of rules filtered by format', () => {
+    const initialConfig: IRuleConfig = {
+      rules: {
+        oas2: {
+          rule1: {
+            type: 'style',
+            function: 'truthy',
+            path: '$',
+            enabled: false,
+            summary: '',
+            input: {
+              truthy: 'something-not-present',
+            },
+          },
+        },
+        'oas2|oas3': {
+          rule2: {
+            type: 'style',
+            function: 'truthy',
+            path: '$',
+            enabled: false,
+            summary: '',
+            input: {
+              truthy: 'something-not-present',
+            },
+          },
+        },
+        oas3: {
+          rule3: {
+            type: 'style',
+            function: 'truthy',
+            path: '$',
+            enabled: false,
+            summary: '',
+            input: {
+              truthy: 'something-not-present',
+            },
+          },
+        },
+      },
+    };
+
+    const s = new Spectral(initialConfig);
+    const results = s.getRules('oas2');
+
+    expect(results.length).toBe(2);
+  });
 });

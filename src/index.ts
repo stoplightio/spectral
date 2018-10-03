@@ -100,7 +100,20 @@ export class Spectral {
     return rules;
   }
 
-  // public getRules(format?: string);
+  // TODO needs better pattern matching
+  public getRules(dataFormat: string = ''): any[] {
+    const rules = [];
+
+    for (const name in this.rules) {
+      const { rule, format } = this.rules[name];
+
+      if (format.indexOf(dataFormat) !== -1) {
+        rules.push({ name, format, ...rule });
+      }
+    }
+
+    return rules;
+  }
 
   // public getRule(name: string);
 
@@ -151,7 +164,6 @@ export class Spectral {
               });
               results.push(...result);
             } catch (e) {
-              console.log(apply);
               console.warn(
                 `Encountered error when running rule '${ruleName}' on node at path '${path}':\n${e}`
               );
