@@ -62,7 +62,7 @@ describe('spectral', () => {
             enabled: false,
             summary: '',
             input: {
-              truthy: 'something-not-present',
+              properties: 'something-not-present',
             },
           },
         },
@@ -74,7 +74,7 @@ describe('spectral', () => {
             enabled: false,
             summary: '',
             input: {
-              truthy: 'something-not-present',
+              properties: 'something-not-present',
             },
           },
         },
@@ -86,7 +86,7 @@ describe('spectral', () => {
             enabled: false,
             summary: '',
             input: {
-              truthy: 'something-not-present',
+              properties: 'something-not-present',
             },
           },
         },
