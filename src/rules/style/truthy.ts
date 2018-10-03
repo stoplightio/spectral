@@ -3,15 +3,16 @@ import { ensureRule } from '../index';
 
 import * as should from 'should';
 
-export const truthy = (
-  rule: ITruthyRule
-): ((object: any, meta: IRuleMetadata) => IRuleResult[]) => {
+export const truthy = (r: ITruthyRule): ((object: any, meta: IRuleMetadata) => IRuleResult[]) => {
   return (object: object, meta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
 
-    if (!Array.isArray(rule.input.truthy)) rule.input.truthy = [rule.input.truthy];
+    const { properties: inputProperties, max } = r.input;
 
-    for (const property of rule.input.truthy) {
+    let properties = inputProperties;
+    if (!Array.isArray(properties)) properties = [properties];
+
+    for (const property of properties) {
       const res = ensureRule(() => {
         object.should.have.property(property);
         object[property].should.not.be.empty();
@@ -21,11 +22,11 @@ export const truthy = (
       }
     }
 
-    if (rule.input.properties) {
+    if (max) {
       const res = ensureRule(() => {
         // Ignore vendor extensions, for reasons like our the resolver adding x-miro
         const keys = Object.keys(object).filter(key => !key.startsWith('x-'));
-        should(keys.length).be.exactly(rule.input.properties);
+        should(keys.length).be.exactly(max);
       }, meta);
       if (res) {
         results.push(res);

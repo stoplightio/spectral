@@ -23,8 +23,10 @@ export const schema = (r: ISchemaRule): ((object: any, meta: IRuleMetadata) => I
   return (object: object, meta: IRuleMetadata): IRuleResult[] => {
     const results: any = [];
 
-    if (typeof r.input.schema === 'string') {
-      if (!ajv.validate(r.input.schema, object) && ajv.errors) {
+    const { schema } = r.input;
+
+    if (typeof schema === 'string') {
+      if (!ajv.validate(schema, object) && ajv.errors) {
         ajv.errors.forEach((e: AJV.ErrorObject) => {
           // @ts-ignore
           if (e.params && e.params.additionalProperty) {

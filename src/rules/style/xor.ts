@@ -7,8 +7,10 @@ export const xor = (r: IXorRule): ((object: any, ruleMeta: IRuleMetadata) => IRu
   return (object: object, ruleMeta: IRuleMetadata): IRuleResult[] => {
     const results: IRuleResult[] = [];
 
+    const { properties } = r.input;
+
     let found = false;
-    for (const property of r.input.xor) {
+    for (const property of properties) {
       if (typeof object[property] !== 'undefined') {
         if (found) {
           const res = ensureRule(() => {

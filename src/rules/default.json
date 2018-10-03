@@ -1,257 +1,241 @@
 {
   "rules": {
-    "oas2|oas3": {
-      "parameter-description": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$..paths.*.*.parameters",
-        "enabled": true,
-        "description": "parameter objects should have a description",
-        "input": {
-          "truthy": "description"
-        }
-      },
-      "operation-operationID": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$..paths.*[?( name() !== 'parameters' )]",
-        "enabled": true,
-        "description": "operation should have an operationId",
-        "input": {
-          "truthy": "operationId"
-        }
-      },
-      "operation-summary-or-description": {
-        "type": "lint",
-        "function": "or",
-        "path": "$..paths.*[?( name() !== 'parameters')]",
-        "enabled": true,
-        "description": "operation should have summary or description",
-        "input": {
-          "or": ["summary", "description"]
-        }
-      },
-      "operation-tags": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$..paths.*[?( name() !== 'parameters')]",
-        "enabled": true,
-        "description": "operation should have non-empty tags array",
-        "input": {
-          "truthy": "tags"
-        }
-      },
-      "path-keys-no-trailing-slash": {
-        "type": "lint",
-        "function": "notEndWith",
-        "path": "$..paths",
-        "enabled": true,
-        "description": "path item keys should not end with a slash",
-        "input": {
-          "notEndWith": {
-            "property": "*",
-            "value": "/"
-          }
-        }
-      },
-      "server-trailing-slash": {
-        "type": "lint",
-        "function": "notEndWith",
-        "path": "$.servers",
-        "enabled": true,
-        "description": "server url should not have a trailing slash",
-        "input": {
-          "notEndWith": {
-            "property": "url",
-            "value": "/"
-          }
-        }
-      },
-      "openapi-tags": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$",
-        "enabled": false,
-        "description": "openapi object should have non-empty tags array",
-        "input": {
-          "truthy": "tags"
-        }
-      },
-      "openapi-tags-alphabetical": {
-        "type": "lint",
-        "function": "alphabetical",
-        "path": "$",
-        "enabled": true,
-        "description": "openapi object should have alphabetical tags",
-        "input": {
-          "alphabetical": {
-            "properties": "tags",
-            "keyedBy": "name"
-          }
-        }
-      },
-      "reference-no-other-properties": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "reference",
-        "enabled": true,
-        "description": "reference objects should only have a $ref property",
-        "input": {
-          "truthy": "$ref",
-          "properties": 1
-        }
-      },
-      "pathItem-summary-or-description": {
-        "type": "lint",
-        "function": "or",
-        "path": "pathItem",
-        "enabled": false,
-        "description": "pathItem should have summary or description",
-        "input": {
-          "or": ["summary", "description"]
-        }
-      },
-      "example-value-or-externalValue": {
-        "type": "lint",
-        "function": "xor",
-        "path": "$..example",
-        "enabled": true,
-        "description": "example should have either a value or externalValue member",
-        "input": {
-          "xor": ["value", "externalValue"]
-        }
-      },
-      "reference-components-regex": {
-        "type": "lint",
-        "function": "pattern",
-        "path": "$..['$ref']",
-        "enabled": false,
-        "description": "reference components should all match regex ^[a-zA-Z0-9\\.\\-_]+",
-        "input": {
-          "pattern": {
-            "omit": "#",
-            "split": "/",
-            "value": "^[a-zA-Z0-9\\.\\-_]+$"
-          }
-        }
-      },
-      "no-script-tags-in-markdown": {
-        "type": "lint",
-        "function": "notContain",
-        "path": "$..*",
-        "enabled": true,
-        "description": "markdown descriptions should not contain <script> tags",
-        "input": {
-          "notContain": {
-            "properties": ["description"],
-            "value": "<script"
-          }
-        }
-      },
-      "info-contact": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$.info",
-        "enabled": true,
-        "description": "info object should contain contact object",
-        "input": {
-          "truthy": "contact"
-        }
-      },
-      "license-apimatic-bug": {
-        "type": "lint",
-        "function": "notContain",
-        "path": "$.license",
-        "enabled": true,
-        "description": "license url should not point at gruntjs",
-        "input": {
-          "notContain": {
-            "properties": ["url"],
-            "value": "gruntjs"
-          }
-        }
-      },
-      "no-eval-in-descriptions": {
-        "type": "lint",
-        "function": "notContain",
-        "path": "$..*",
-        "enabled": true,
-        "description": "markdown descriptions should not contain 'eval('",
-        "input": {
-          "notContain": {
-            "properties": ["description", "title"],
-            "value": "eval("
-          }
-        }
-      },
-      "contact-properties": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$.info.contact",
-        "enabled": false,
-        "description": "contact object should have name, url and email",
-        "input": {
-          "truthy": ["name", "url", "email"]
-        }
-      },
-      "license-url": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$.info.license",
-        "enabled": false,
-        "description": "license object should include url",
-        "input": {
-          "truthy": "url"
-        }
-      },
-      "server-not-example.com": {
-        "type": "lint",
-        "function": "notContain",
-        "path": "$.servers",
-        "enabled": false,
-        "description": "server url should not point at example.com",
-        "input": {
-          "notContain": {
-            "properties": ["url"],
-            "value": "example.com"
-          }
-        }
-      },
-      "tag-description": {
-        "type": "lint",
-        "function": "truthy",
-        "path": "$.tags",
-        "enabled": false,
-        "description": "tag object should have a description",
-        "input": {
-          "truthy": "description"
-        }
-      }
-    },
     "oas2": {
       "oas2-schema": {
-        "type": "validation",
-        "function": "schema",
-        "path": "$",
         "enabled": true,
-        "severity": "error",
-        "description": "validate structure of OpenAPIv2 specification",
+        "function": "schema",
         "input": {
           "schema": "oas2"
-        }
+        },
+        "path": "$",
+        "severity": "error",
+        "summary": "Validate structure of OpenAPIv2 specification.",
+        "type": "validation"
       }
     },
     "oas3": {
       "oas3-schema": {
-        "type": "validation",
-        "function": "schema",
-        "path": "$",
         "enabled": true,
-        "severity": "error",
-        "description": "validate structure of OpenAPIv3 specification",
+        "function": "schema",
         "input": {
           "schema": "oas3"
-        }
+        },
+        "path": "$",
+        "severity": "error",
+        "summary": "Validate structure of OpenAPIv3 specification.",
+        "type": "validation"
+      }
+    },
+    "oas2|oas3": {
+      "contact-properties": {
+        "enabled": false,
+        "function": "truthy",
+        "input": {
+          "properties": ["email", "name", "url"]
+        },
+        "path": "$.info.contact",
+        "summary": "Contact object should have `name`, `url` and `email`.",
+        "type": "style"
+      },
+      "example-value-or-externalValue": {
+        "enabled": true,
+        "function": "xor",
+        "input": {
+          "properties": ["externalValue", "value"]
+        },
+        "path": "$..example",
+        "summary": "Example should have either a `value` or `externalValue` field.",
+        "type": "style"
+      },
+      "info-contact": {
+        "enabled": true,
+        "function": "truthy",
+        "input": {
+          "properties": "contact"
+        },
+        "path": "$.info",
+        "summary": "Info object should contain `contact` object.",
+        "type": "style"
+      },
+      "license-apimatic-bug": {
+        "enabled": true,
+        "function": "notContain",
+        "input": {
+          "properties": ["url"],
+          "value": "gruntjs"
+        },
+        "path": "$.license",
+        "summary": "License URL should not point at `gruntjs`.",
+        "type": "style"
+      },
+      "license-url": {
+        "enabled": false,
+        "function": "truthy",
+        "input": {
+          "properties": "url"
+        },
+        "path": "$.info.license",
+        "summary": "License object should include `url`.",
+        "type": "style"
+      },
+      "no-eval-in-descriptions": {
+        "enabled": true,
+        "function": "notContain",
+        "input": {
+          "properties": ["description", "title"],
+          "value": "eval("
+        },
+        "path": "$..*",
+        "summary": "Markdown descriptions should not contain `eval(`.",
+        "type": "style"
+      },
+      "no-script-tags-in-markdown": {
+        "enabled": true,
+        "function": "notContain",
+        "input": {
+          "properties": ["description"],
+          "value": "<script"
+        },
+        "path": "$..*",
+        "summary": "Markdown descriptions should not contain `<script>` tags.",
+        "type": "style"
+      },
+      "openapi-tags": {
+        "enabled": false,
+        "function": "truthy",
+        "input": {
+          "properties": "tags"
+        },
+        "path": "$",
+        "summary": "OpenAPI object should have non-empty `tags` array.",
+        "type": "style"
+      },
+      "openapi-tags-alphabetical": {
+        "enabled": true,
+        "function": "alphabetical",
+        "input": {
+          "keyedBy": "name",
+          "properties": "tags"
+        },
+        "path": "$",
+        "summary": "OpenAPI object should have alphabetical `tags`.",
+        "type": "style"
+      },
+      "operation-operationId": {
+        "enabled": true,
+        "function": "truthy",
+        "input": {
+          "properties": "operationId"
+        },
+        "path": "$..paths.*[?( name() !== 'parameters' )]",
+        "summary": "Operation should have an `operationId`.",
+        "type": "style"
+      },
+      "operation-summary-or-description": {
+        "enabled": true,
+        "function": "or",
+        "input": {
+          "properties": ["description", "summary"]
+        },
+        "path": "$..paths.*[?( name() !== 'parameters')]",
+        "summary": "Operation should have `summary` or `description`.",
+        "type": "style"
+      },
+      "operation-tags": {
+        "enabled": true,
+        "function": "truthy",
+        "input": {
+          "properties": "tags"
+        },
+        "path": "$..paths.*[?( name() !== 'parameters')]",
+        "summary": "Operation should have non-empty `tags` array.",
+        "type": "style"
+      },
+      "parameter-description": {
+        "enabled": true,
+        "function": "truthy",
+        "input": {
+          "properties": "description"
+        },
+        "path": "$..paths.*.*.parameters",
+        "summary": "Parameter objects should have a `description`.",
+        "type": "style"
+      },
+      "path-keys-no-trailing-slash": {
+        "enabled": true,
+        "function": "notEndWith",
+        "input": {
+          "property": "*",
+          "value": "/"
+        },
+        "path": "$..paths",
+        "summary": "Path keys should not end with a slash.",
+        "type": "style"
+      },
+      "pathItem-summary-or-description": {
+        "enabled": false,
+        "function": "or",
+        "input": {
+          "properties": ["description", "summary"]
+        },
+        "path": "pathItem",
+        "summary": "pathItem should have `summary` or `description`.",
+        "type": "style"
+      },
+      "reference-components-regex": {
+        "enabled": false,
+        "function": "pattern",
+        "input": {
+          "omit": "#",
+          "split": "/",
+          "value": "^[a-zA-Z0-9\\.\\-_]+$"
+        },
+        "path": "$..['$ref']",
+        "summary": "References should all match regex `^[a-zA-Z0-9\\.\\-_]+`.",
+        "type": "style"
+      },
+      "reference-no-other-properties": {
+        "enabled": true,
+        "function": "truthy",
+        "input": {
+          "properties": 1,
+          "truthy": "$ref"
+        },
+        "path": "reference",
+        "summary": "References objects should only have a `$ref` property.",
+        "type": "style"
+      },
+      "server-not-example.com": {
+        "enabled": false,
+        "function": "notContain",
+        "input": {
+          "properties": ["url"],
+          "value": "example.com"
+        },
+        "path": "$.servers",
+        "summary": "Server URL should not point at `example.com`.",
+        "type": "style"
+      },
+      "server-trailing-slash": {
+        "enabled": true,
+        "function": "notEndWith",
+        "input": {
+          "property": "url",
+          "value": "/"
+        },
+        "path": "$.servers",
+        "summary": "Server URL should not have a trailing slash.",
+        "type": "style"
+      },
+      "tag-description": {
+        "enabled": false,
+        "function": "truthy",
+        "input": {
+          "properties": "description"
+        },
+        "path": "$.tags",
+        "summary": "Tag object should have a `description`.",
+        "type": "style"
       }
     }
   }
