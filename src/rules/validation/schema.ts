@@ -19,33 +19,31 @@ ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/sc
 ajv.addSchema(OASv2Schema, 'oas2');
 ajv.addSchema(OASv3Schema, 'oas3');
 
-export const schema = (r: ISchemaRule): ((object: any, meta: IRuleMetadata) => IRuleResult[]) => {
-  return (object: object, meta: IRuleMetadata): IRuleResult[] => {
-    const results: any = [];
+export const schema = (object: any, r: ISchemaRule, meta: IRuleMetadata): IRuleResult[] => {
+  const results: any = [];
 
-    const { schema } = r.input;
+  const { schema } = r.input;
 
-    if (typeof schema === 'string') {
-      if (!ajv.validate(schema, object) && ajv.errors) {
-        ajv.errors.forEach((e: AJV.ErrorObject) => {
+  if (typeof schema === 'string') {
+    if (!ajv.validate(schema, object) && ajv.errors) {
+      ajv.errors.forEach((e: AJV.ErrorObject) => {
+        // @ts-ignore
+        if (e.params && e.params.additionalProperty) {
           // @ts-ignore
-          if (e.params && e.params.additionalProperty) {
-            // @ts-ignore
-            e.message = e.message + ': ' + e.params.additionalProperty;
-          }
+          e.message = e.message + ': ' + e.params.additionalProperty;
+        }
 
-          results.push({
-            type: meta.rule.type,
-            path: e.dataPath.split('/').slice(1), // FIXME - do we need to merge paths with meta path?
-            name: meta.name,
-            summary: r.summary,
-            severity: r.severity ? r.severity : 'error',
-            message: e.message ? e.message : '',
-          });
+        results.push({
+          type: meta.rule.type,
+          path: e.dataPath.split('/').slice(1), // FIXME - do we need to merge paths with meta path?
+          name: meta.name,
+          summary: r.summary,
+          severity: r.severity ? r.severity : 'error',
+          message: e.message ? e.message : '',
         });
-      }
+      });
     }
+  }
 
-    return results;
-  };
+  return results;
 };
