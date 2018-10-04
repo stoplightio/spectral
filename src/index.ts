@@ -15,7 +15,7 @@ interface IRuleStore {
 interface IRuleEntry {
   format: string;
   rule: types.Rule;
-  apply: (object: any, meta: types.IRuleMetadata) => types.IRuleResult[];
+  apply: (object: any, rule: types.Rule, meta: types.IRuleMetadata) => types.IRuleResult[];
 }
 
 export class Spectral {
@@ -157,7 +157,7 @@ export class Spectral {
             const { path, value } = n;
 
             try {
-              const result: types.IRuleResult[] = apply(value, {
+              const result: types.IRuleResult[] = apply(value, rule, {
                 path,
                 name: ruleName,
                 rule,

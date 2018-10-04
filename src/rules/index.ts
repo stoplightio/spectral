@@ -27,34 +27,34 @@ export const ensureRule = (
 
 export const generateRule = (
   r: types.Rule
-): ((object: any, ruleMeta: types.IRuleMetadata) => types.IRuleResult[]) => {
+): ((object: any, r: types.Rule, ruleMeta: types.IRuleMetadata) => types.IRuleResult[]) => {
   switch (r.function) {
     case 'truthy':
-      return truthy(r);
+      return truthy;
       break;
     case 'alphabetical':
-      return alphabetical(r);
+      return alphabetical;
       break;
     case 'or':
-      return or(r);
+      return or;
       break;
     case 'xor':
-      return xor(r);
+      return xor;
       break;
     case 'pattern':
-      return pattern(r);
+      return pattern;
       break;
     case 'notContain':
-      return notContain(r);
+      return notContain;
       break;
     case 'notEndWith':
-      return notEndWith(r);
+      return notEndWith;
       break;
     case 'maxLength':
-      return maxLength(r);
+      return maxLength;
       break;
     case 'schema':
-      return schema(r);
+      return schema;
       break;
   }
 };
