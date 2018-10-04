@@ -27,7 +27,7 @@ export const ensureRule = (
 
 export const generateRule = (
   r: types.Rule
-): ((object: any, r: types.Rule, ruleMeta: types.IRuleMetadata) => types.IRuleResult[]) => {
+): ((object: any, r: any, ruleMeta: types.IRuleMetadata) => types.IRuleResult[]) => {
   switch (r.function) {
     case 'truthy':
       return truthy;
