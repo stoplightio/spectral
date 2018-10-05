@@ -2,6 +2,7 @@ export type RuleType = 'validation' | 'style';
 export type RuleSeverity = 'warn' | 'error' | 'info';
 
 export type Rule =
+  | IRule
   | ITruthyRule
   | IOrRule
   | IXorRule
@@ -12,7 +13,7 @@ export type Rule =
   | IPatternRule
   | ISchemaRule;
 
-export interface IRuleDefinitionBase {
+export interface IRule {
   type: RuleType;
 
   // The JSON path within the object this rule applies to
@@ -72,7 +73,7 @@ export interface IRulePatternParam {
   split?: string;
 }
 
-export interface ITruthyRule extends IRuleDefinitionBase {
+export interface ITruthyRule extends IRule {
   function: 'truthy';
 
   input: {
@@ -84,7 +85,7 @@ export interface ITruthyRule extends IRuleDefinitionBase {
   };
 }
 
-export interface IOrRule extends IRuleDefinitionBase {
+export interface IOrRule extends IRule {
   function: 'or';
 
   input: {
@@ -93,7 +94,7 @@ export interface IOrRule extends IRuleDefinitionBase {
   };
 }
 
-export interface IXorRule extends IRuleDefinitionBase {
+export interface IXorRule extends IRule {
   function: 'xor';
 
   input: {
@@ -103,42 +104,42 @@ export interface IXorRule extends IRuleDefinitionBase {
   };
 }
 
-export interface IMaxLengthRule extends IRuleDefinitionBase {
+export interface IMaxLengthRule extends IRule {
   function: 'maxLength';
 
   // verify property is under a specified number of characters
   input: IRuleNumberParam;
 }
 
-export interface IAlphaRule extends IRuleDefinitionBase {
+export interface IAlphaRule extends IRule {
   function: 'alphabetical';
 
   // verify property is within alphabetical order
   input: IAlphaRuleParam;
 }
 
-export interface INotEndWithRule extends IRuleDefinitionBase {
+export interface INotEndWithRule extends IRule {
   function: 'notEndWith';
 
   // verify property does not end with string
   input: IRulePatternParam;
 }
 
-export interface INotContainRule extends IRuleDefinitionBase {
+export interface INotContainRule extends IRule {
   function: 'notContain';
 
   // verify property does not contain value
   input: IRuleStringParam;
 }
 
-export interface IPatternRule extends IRuleDefinitionBase {
+export interface IPatternRule extends IRule {
   function: 'pattern';
 
   // run regex match
   input: IRulePatternParam;
 }
 
-export interface ISchemaRule extends IRuleDefinitionBase {
+export interface ISchemaRule extends IRule {
   function: 'schema';
   input: {
     schema: object;

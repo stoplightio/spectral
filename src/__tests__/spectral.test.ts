@@ -1,5 +1,5 @@
 import { Spectral } from '../index';
-import { allPreset } from '../presets';
+import { allPreset } from '../rulesets';
 import { IRuleset } from '../types';
 
 const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');

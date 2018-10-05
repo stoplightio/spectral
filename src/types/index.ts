@@ -46,10 +46,11 @@ export interface IRuleMetadata {
 
 export interface IRuleset {
   rules: IRuleStore;
-}
-
-export interface IPreset extends IRuleset {
-  name: string;
+  name?: string;
+  functions?: {
+    // name is be the function name that will be used in rules
+    [name: string]: IRuleFunction;
+  };
 }
 
 export interface IRuleStore {

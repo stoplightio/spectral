@@ -1,13 +1,13 @@
 const merge = require('lodash.merge');
 
-import { IPreset } from '../../types';
-import { preset as commonOas } from '../oas';
+import { IRuleset } from '../../types';
+import { commonOasRuleset } from '../oas';
 import * as schema from './schemas/main.json';
 
-export const oas3Preset = (): IPreset => {
-  return {
+export const oas3Ruleset = (): IRuleset => {
+  return merge(commonOasRuleset(), {
     name: 'oas3',
-    rules: merge(commonOas().rules, {
+    rules: {
       oas3: {
         'oas3-schema': {
           type: 'validation',
@@ -21,6 +21,6 @@ export const oas3Preset = (): IPreset => {
           },
         },
       },
-    }),
-  };
+    },
+  });
 };

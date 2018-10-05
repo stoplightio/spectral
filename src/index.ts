@@ -4,6 +4,10 @@ import * as jp from 'jsonpath';
 import { functions } from './functions';
 import * as types from './types';
 
+interface IFunctionStore {
+  [name: string]: types.IRuleFunction;
+}
+
 interface IRuleStore {
   [index: string]: IRuleEntry;
 }
@@ -38,8 +42,11 @@ export class Spectral {
   // the initial rule config, set on initialization
   private readonly _rulesets: types.IRuleset[];
 
+  private readonly _functions: IFunctionStore;
+
   constructor(opts: ISpectralOpts) {
     this._rulesets = opts.rulesets;
+    this._functions = this._rulesetsToFunctions(this._rulesets);
     this._rules = this._rulesetsToRules(this._rulesets);
   }
 
@@ -120,11 +127,7 @@ export class Spectral {
     return results;
   }
 
-  private _parseRuleDefinition(
-    name: string,
-    rule: types.IRuleDefinitionBase,
-    format: string
-  ): IRuleEntry {
+  private _parseRuleDefinition(name: string, rule: types.Rule, format: string): IRuleEntry {
     try {
       jp.parse(rule.path);
     } catch (e) {
@@ -148,7 +151,7 @@ export class Spectral {
       this._paths[rule.path].push(name);
     }
 
-    const ruleFunc = functions[rule.function];
+    const ruleFunc = this._functions[rule.function];
     if (!ruleFunc) {
       throw new SyntaxError(`Function does not exist for rule '${name}': ${rule.function}`);
     }
@@ -200,5 +203,17 @@ export class Spectral {
     }
 
     return rules;
+  }
+
+  private _rulesetsToFunctions(rulesets: types.IRuleset[]): IFunctionStore {
+    let funcs = { ...functions };
+
+    for (const ruleset of rulesets) {
+      if (ruleset.functions) {
+        funcs = { ...funcs, ...ruleset.functions };
+      }
+    }
+
+    return funcs;
   }
 }

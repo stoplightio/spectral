@@ -1,10 +1,24 @@
-import { IPreset } from '../../types';
+import { IRuleset } from '../../types';
 
-export const preset = (): IPreset => {
+export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
+
+export const commonOasRuleset = (): IRuleset => {
   return {
     name: 'oas',
+    functions: {
+      oasPathParam: require('./functions/oasPathParam').oasPathParam,
+    },
     rules: {
       'oas2|oas3': {
+        'path-params': {
+          type: 'validation',
+          summary:
+            'Params defined in the path must have a corresponding property in the params object.',
+          enabled: false, // FIXME should be true when the function is actually implemented correctly
+          severity: 'error',
+          path: operationPath,
+          function: 'oasPathParam',
+        },
         'contact-properties': {
           enabled: false,
           function: 'truthy',
@@ -105,7 +119,7 @@ export const preset = (): IPreset => {
           input: {
             properties: 'operationId',
           },
-          path: "$..paths.*[?( name() !== 'parameters' )]",
+          path: operationPath,
           summary: 'Operation should have an `operationId`.',
           type: 'style',
         },
@@ -115,7 +129,7 @@ export const preset = (): IPreset => {
           input: {
             properties: ['description', 'summary'],
           },
-          path: "$..paths.*[?( name() !== 'parameters')]",
+          path: operationPath,
           summary: 'Operation should have `summary` or `description`.',
           type: 'style',
         },
@@ -125,7 +139,7 @@ export const preset = (): IPreset => {
           input: {
             properties: 'tags',
           },
-          path: "$..paths.*[?( name() !== 'parameters')]",
+          path: operationPath,
           summary: 'Operation should have non-empty `tags` array.',
           type: 'style',
         },
