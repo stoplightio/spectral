@@ -3,58 +3,51 @@ import { ensureRule } from '../index';
 
 import * as should from 'should';
 
-export const pattern = (
-  r: IPatternRule
-): ((object: any, ruleMeta: IRuleMetadata) => IRuleResult[]) => {
-  return (object: object, ruleMeta: IRuleMetadata): IRuleResult[] => {
-    const results: IRuleResult[] = [];
-    const { omit, property, split, value } = r.input;
+export const pattern = (object: any, r: IPatternRule, ruleMeta: IRuleMetadata): IRuleResult[] => {
+  const results: IRuleResult[] = [];
+  const { omit, property, split, value } = r.input;
 
-    // if the collected object is not an object/array, set our target to be
-    // the object itself
-    let target: any;
-    if (typeof object === 'object') {
-      if (property === '*') {
-        target = Object.keys(object);
-      } else {
-        target = object[property];
-      }
+  // if the collected object is not an object/array, set our target to be
+  // the object itself
+  let target: any;
+  if (typeof object === 'object') {
+    if (property === '*') {
+      target = Object.keys(object);
     } else {
-      target = object;
+      target = object[property];
     }
+  } else {
+    target = object;
+  }
 
-    if (target) {
-      const process = (target: any) => {
-        let components = [];
-        if (split) {
-          components = target.split(split);
-        } else {
-          components.push(target);
-        }
+  if (target) {
+    const process = (target: any) => {
+      let components = [];
+      if (split) {
+        components = target.split(split);
+      } else {
+        components.push(target);
+      }
 
-        const re = new RegExp(value);
-        for (let component of components) {
-          if (omit) component = component.split(omit).join('');
-          if (component) {
-            const res = ensureRule(() => {
-              should(re.test(component)).be.exactly(
-                true,
-                `${r.summary}, but received: ${component}`
-              );
-            }, ruleMeta);
-            if (res) {
-              results.push(res);
-            }
+      const re = new RegExp(value);
+      for (let component of components) {
+        if (omit) component = component.split(omit).join('');
+        if (component) {
+          const res = ensureRule(() => {
+            should(re.test(component)).be.exactly(true, `${r.summary}, but received: ${component}`);
+          }, ruleMeta);
+          if (res) {
+            results.push(res);
           }
         }
-      };
-
-      if (Array.isArray(target)) {
-        target.forEach(process);
-      } else {
-        process(target);
       }
+    };
+
+    if (Array.isArray(target)) {
+      target.forEach(process);
+    } else {
+      process(target);
     }
-    return results;
-  };
+  }
+  return results;
 };
