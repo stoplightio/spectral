@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleFunction, IPatternRule } from '../../types';
-import { ensureRule } from '../index';
+import { IPatternRule, IRuleFunction, IRuleResult } from '../types';
+import { ensureRule } from './utils/ensureRule';
 
 import * as should from 'should';
 
@@ -13,7 +13,7 @@ export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
   if (typeof object === 'object') {
     if (property === '*') {
       target = Object.keys(object);
-    } else {
+    } else if (property) {
       target = object[property];
     }
   } else {
@@ -21,12 +21,12 @@ export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
   }
 
   if (target) {
-    const process = (target: any) => {
+    const process = (processTarget: any) => {
       let components = [];
       if (split) {
-        components = target.split(split);
+        components = processTarget.split(split);
       } else {
-        components.push(target);
+        components.push(processTarget);
       }
 
       const re = new RegExp(value);
@@ -36,6 +36,7 @@ export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
           const res = ensureRule(() => {
             should(re.test(component)).be.exactly(true, `${r.summary}, but received: ${component}`);
           }, ruleMeta);
+
           if (res) {
             results.push(res);
           }

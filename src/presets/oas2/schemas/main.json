@@ -34,15 +34,19 @@
     },
     "consumes": {
       "description": "A list of MIME types accepted by the API.",
-      "allOf": [{
-        "$ref": "#/definitions/mediaTypeList"
-      }]
+      "allOf": [
+        {
+          "$ref": "#/definitions/mediaTypeList"
+        }
+      ]
     },
     "produces": {
       "description": "A list of MIME types the API can produce.",
-      "allOf": [{
-        "$ref": "#/definitions/mediaTypeList"
-      }]
+      "allOf": [
+        {
+          "$ref": "#/definitions/mediaTypeList"
+        }
+      ]
     },
     "paths": {
       "$ref": "#/definitions/paths"
@@ -252,15 +256,19 @@
         },
         "produces": {
           "description": "A list of MIME types the API can produce.",
-          "allOf": [{
-            "$ref": "#/definitions/mediaTypeList"
-          }]
+          "allOf": [
+            {
+              "$ref": "#/definitions/mediaTypeList"
+            }
+          ]
         },
         "consumes": {
           "description": "A list of MIME types the API can consume.",
-          "allOf": [{
-            "$ref": "#/definitions/mediaTypeList"
-          }]
+          "allOf": [
+            {
+              "$ref": "#/definitions/mediaTypeList"
+            }
+          ]
         },
         "parameters": {
           "$ref": "#/definitions/parametersList"
@@ -342,7 +350,8 @@
       }
     },
     "responseValue": {
-      "oneOf": [{
+      "oneOf": [
+        {
           "$ref": "#/definitions/response"
         },
         {
@@ -358,7 +367,8 @@
           "type": "string"
         },
         "schema": {
-          "oneOf": [{
+          "oneOf": [
+            {
               "$ref": "#/definitions/schema"
             },
             {
@@ -825,7 +835,8 @@
     "nonBodyParameter": {
       "type": "object",
       "required": ["name", "in", "type"],
-      "oneOf": [{
+      "oneOf": [
+        {
           "$ref": "#/definitions/headerParameterSubSchema"
         },
         {
@@ -840,7 +851,8 @@
       ]
     },
     "parameter": {
-      "oneOf": [{
+      "oneOf": [
+        {
           "$ref": "#/definitions/bodyParameter"
         },
         {
@@ -918,7 +930,8 @@
           "$ref": "http://json-schema.org/draft-04/schema#/properties/enum"
         },
         "additionalProperties": {
-          "anyOf": [{
+          "anyOf": [
+            {
               "$ref": "#/definitions/schema"
             },
             {
@@ -931,7 +944,8 @@
           "$ref": "http://json-schema.org/draft-04/schema#/properties/type"
         },
         "items": {
-          "anyOf": [{
+          "anyOf": [
+            {
               "$ref": "#/definitions/schema"
             },
             {
@@ -1147,7 +1161,8 @@
     "securityDefinitions": {
       "type": "object",
       "additionalProperties": {
-        "oneOf": [{
+        "oneOf": [
+          {
             "$ref": "#/definitions/basicAuthenticationSecurity"
           },
           {
@@ -1355,7 +1370,8 @@
       "description": "The parameters needed to send a valid API call.",
       "additionalItems": false,
       "items": {
-        "oneOf": [{
+        "oneOf": [
+          {
             "$ref": "#/definitions/parameter"
           },
           {

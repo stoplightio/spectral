@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleFunction, ITruthyRule } from '../../types';
-import { ensureRule } from '../index';
+import { IRuleFunction, IRuleResult, ITruthyRule } from '../types';
+import { ensureRule } from './utils/ensureRule';
 
 import * as should from 'should';
 
@@ -16,6 +16,7 @@ export const truthy: IRuleFunction<ITruthyRule> = (object, r, meta) => {
       object.should.have.property(property);
       object[property].should.not.be.empty();
     }, meta);
+
     if (res) {
       results.push(res);
     }
@@ -27,6 +28,7 @@ export const truthy: IRuleFunction<ITruthyRule> = (object, r, meta) => {
       const keys = Object.keys(object).filter(key => !key.startsWith('x-'));
       should(keys.length).be.exactly(max);
     }, meta);
+
     if (res) {
       results.push(res);
     }

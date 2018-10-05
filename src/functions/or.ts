@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleFunction, IOrRule } from '../../types';
-import { ensureRule } from '../index';
+import { IOrRule, IRuleFunction, IRuleResult } from '../types';
+import { ensureRule } from './utils/ensureRule';
 
 export const or: IRuleFunction<IOrRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
@@ -16,6 +16,7 @@ export const or: IRuleFunction<IOrRule> = (object, r, ruleMeta) => {
   const res = ensureRule(() => {
     found.should.be.exactly(true, r.description);
   }, ruleMeta);
+
   if (res) {
     results.push(res);
   }

@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleFunction, INotEndWithRule } from '../../types';
-import { ensureRule } from '../index';
+import { INotEndWithRule, IRuleFunction, IRuleResult } from '../types';
+import { ensureRule } from './utils/ensureRule';
 
 export const notEndWith: IRuleFunction<INotEndWithRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
@@ -8,6 +8,7 @@ export const notEndWith: IRuleFunction<INotEndWithRule> = (object, r, ruleMeta) 
     const res = ensureRule(() => {
       target.should.not.endWith(value);
     }, ruleMeta);
+
     if (res) {
       results.push(res);
     }
@@ -19,11 +20,11 @@ export const notEndWith: IRuleFunction<INotEndWithRule> = (object, r, ruleMeta) 
 
   if (Array.isArray(object)) {
     object.forEach((obj: any) => {
-      if (obj[property]) {
+      if (property && obj[property]) {
         process(obj[property]);
       }
     });
-  } else if (object[property]) {
+  } else if (property && object[property]) {
     process(object[property]);
   }
   return results;

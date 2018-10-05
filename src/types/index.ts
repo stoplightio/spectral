@@ -1,15 +1,11 @@
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
 
-import { StyleRule } from './style';
-import { ValidationRule } from './validation';
-import { RuleType, RuleSeverity } from './rule';
+import { Rule, RuleSeverity, RuleType } from './rule';
 
 export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
-export type Rule = ValidationRule | StyleRule;
-
 export type RawResult = ErrorObject | AssertionError;
-export type Path = (string | number)[];
+export type Path = Array<string | number>;
 
 export type IRuleFunction<I = Rule> = (object: any, r: I, ruleMeta: IRuleMetadata) => IRuleResult[];
 
@@ -48,8 +44,12 @@ export interface IRuleMetadata {
   name: string;
 }
 
-export interface IRuleConfig {
+export interface IRuleset {
   rules: IRuleStore;
+}
+
+export interface IPreset extends IRuleset {
+  name: string;
 }
 
 export interface IRuleStore {
@@ -68,6 +68,4 @@ export interface IRuleDeclaration {
   [ruleName: string]: Rule | boolean;
 }
 
-export * from './style';
-export * from './validation';
 export * from './rule';

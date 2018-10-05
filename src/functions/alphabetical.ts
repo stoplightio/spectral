@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleFunction, IAlphaRule } from '../../types';
-import { ensureRule } from '../index';
+import { IAlphaRule, IRuleFunction, IRuleResult } from '../types';
+import { ensureRule } from './utils/ensureRule';
 
 export const alphabetical: IRuleFunction<IAlphaRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
@@ -27,6 +27,7 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (object, r, ruleMeta) => 
         } else if (a[keyedBy] > b[keyedBy]) {
           return 1;
         }
+
         return 0;
       });
     } else {
@@ -37,9 +38,11 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (object, r, ruleMeta) => 
       object.should.have.property(property);
       object[property].should.be.deepEqual(arrayCopy);
     }, ruleMeta);
+
     if (res) {
       results.push(res);
     }
   }
+
   return results;
 };

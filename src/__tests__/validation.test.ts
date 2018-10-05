@@ -1,112 +1,43 @@
-import { IRuleResult, IRuleConfig, Rule } from '../types';
 import { Spectral } from '../index';
+import { oas2Preset } from '../presets/oas2';
+import { oas3Preset } from '../presets/oas3';
 
 import * as petstoreV2 from './fixtures/petstore.oas2.json';
 import * as petstoreV3 from './fixtures/petstore.oas3.json';
 
 const invalidV2 = require('./fixtures/todos.invalid.oas2.json');
 
-const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
-  const cfg: IRuleConfig = {
-    rules: {
-      testing: {
-        'test:rule': r,
-      },
-    },
-  };
-  const s = new Spectral(cfg);
-  return s.apply(o, 'testing');
-};
-
 describe('validation', () => {
   test('validate a correct OASv2 spec', () => {
-    expect(
-      applyRuleToObject(
-        {
-          type: 'validation',
-          function: 'schema',
-          path: '$',
-          enabled: true,
-          description: 'parameter objects should have a description',
-          summary: '',
-          severity: 'error',
-          input: { schema: 'oas2' },
-        },
-        petstoreV2
-      ).length
-    ).toEqual(0);
+    const s = new Spectral({ rulesets: [oas2Preset()] });
+    const results = s.run({ target: petstoreV2, spec: 'oas2', type: 'validation' });
+    expect(results.length).toEqual(0);
   });
 
   test('return errors on invalid OASv2 spec', () => {
-    const results = applyRuleToObject(
-      {
-        type: 'validation',
-        function: 'schema',
-        path: '$',
-        enabled: true,
-        description: 'validate structure of OpenAPIv2 specification',
-        summary: '',
-        severity: 'error',
-        input: { schema: 'oas2' },
-      },
-      invalidV2
-    );
+    const s = new Spectral({ rulesets: [oas2Preset()] });
+    const results = s.run({ target: invalidV2, spec: 'oas2', type: 'validation' });
     expect(results.length).toEqual(1);
     expect(results[0].path).toEqual(['info', 'license', 'name']);
     expect(results[0].message).toEqual('should be string');
   });
 
   test('validate a correct OASv3 spec', () => {
-    expect(
-      applyRuleToObject(
-        {
-          type: 'validation',
-          function: 'schema',
-          path: '$',
-          enabled: true,
-          description: '',
-          summary: '',
-          severity: 'error',
-          input: { schema: 'oas3' },
-        },
-        petstoreV3
-      ).length
-    ).toEqual(0);
+    const s = new Spectral({ rulesets: [oas3Preset()] });
+    const results = s.run({ target: petstoreV3, spec: 'oas3', type: 'validation' });
+    expect(results.length).toEqual(0);
   });
 
   test('validate multiple formats with same validator', () => {
-    const cfg: IRuleConfig = {
-      rules: {
-        oas2: {
-          'validate:oas2-schema': {
-            type: 'validation',
-            function: 'schema',
-            path: '$',
-            enabled: true,
-            description: '',
-            summary: '',
-            severity: 'error',
-            input: { schema: 'oas2' },
-          },
-        },
-        oas3: {
-          'validate:oas3-schema': {
-            type: 'validation',
-            function: 'schema',
-            path: '$',
-            enabled: true,
-            description: '',
-            summary: '',
-            input: { schema: 'oas3' },
-          },
-        },
-      },
-    };
-    const s = new Spectral(cfg);
-    let results = s.apply(petstoreV2, 'oas2');
+    const s = new Spectral({ rulesets: [oas2Preset(), oas3Preset()] });
+
+    let results = s.run({ target: petstoreV2, spec: 'oas2', type: 'validation' });
     expect(results.length).toEqual(0);
 
-    results = s.apply(petstoreV3, 'oas3');
+    results = s.run({ target: invalidV2, spec: 'oas2', type: 'validation' });
+    expect(results.length).toEqual(1);
+
+    results = s.run({ target: petstoreV3, spec: 'oas3', type: 'validation' });
     expect(results.length).toEqual(0);
   });
 });

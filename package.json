@@ -2,28 +2,35 @@
   "name": "@stoplight/spectral",
   "version": "0.0.1",
   "description": "An object linting framework",
+  "author": "Stoplight, Inc. (support@stoplight.io)",
+  "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "jest",
     "test.cover": "jest --coverage",
-    "test.watch": "jest --watch"
+    "test.watch": "jest --watch",
+    "format": "prettier --write \"src/**/*.{ts}\"",
+    "lint": "tslint src/**/*.{ts}"
   },
-  "author": "Stoplight, Inc. (support@stoplight.io)",
-  "license": "MIT",
   "dependencies": {
     "ajv": "6.5.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
+    "lodash.merge": "^4.6.1",
     "should": "13.2.x"
   },
   "devDependencies": {
     "@types/jest": "23.3.x",
     "@types/jsonpath": "0.2.x",
+    "@types/lodash.merge": "^4.6.4",
     "@types/node": "10.11.x",
     "jest": "23.6.x",
+    "prettier": "1.14.x",
     "ts-jest": "23.10.x",
     "tslib": "1.9.x",
     "tslint": "5.11.x",
+    "tslint-config-prettier": "1.15.x",
+    "tslint-plugin-prettier": "2.0.x",
     "typescript": "3.1.1"
   },
   "jest": {

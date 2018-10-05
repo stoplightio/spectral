@@ -1,5 +1,5 @@
-import { IRuleResult, IRuleFunction, IMaxLengthRule } from '../../types';
-import { ensureRule } from '../index';
+import { IMaxLengthRule, IRuleFunction, IRuleResult } from '../types';
+import { ensureRule } from './utils/ensureRule';
 
 export const maxLength: IRuleFunction<IMaxLengthRule> = (object, r, meta) => {
   const results: IRuleResult[] = [];
@@ -18,6 +18,7 @@ export const maxLength: IRuleFunction<IMaxLengthRule> = (object, r, meta) => {
     const res = ensureRule(() => {
       target.length.should.be.belowOrEqual(value);
     }, meta);
+
     if (res) {
       results.push(res);
     }

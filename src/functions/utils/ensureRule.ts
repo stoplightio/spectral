@@ -1,6 +1,4 @@
-import * as types from '../types';
-import * as StyleRules from './style';
-import * as ValidationRules from './validation';
+import * as types from '../../types';
 
 export const ensureRule = (
   shouldAssertion: Function,
@@ -23,8 +21,4 @@ export const ensureRule = (
       message: error.message ? error.message : '',
     };
   }
-};
-
-export const generateRule = (r: types.Rule): types.IRuleFunction<types.Rule> | undefined => {
-  return ValidationRules[r.function] || StyleRules[r.function];
 };

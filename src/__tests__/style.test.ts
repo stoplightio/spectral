@@ -1,16 +1,18 @@
-import { IRuleResult, IRuleConfig, Rule } from '../types';
 import { Spectral } from '../index';
+import { IRuleResult, IRuleset, Rule } from '../types';
 
 const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
-  const cfg: IRuleConfig = {
-    rules: {
-      testing: {
-        'test:rule': r,
+  const cfg: IRuleset[] = [
+    {
+      rules: {
+        testing: {
+          'test:rule': r,
+        },
       },
     },
-  };
-  const s = new Spectral(cfg);
-  return s.apply(o, 'testing');
+  ];
+  const s = new Spectral({ rulesets: cfg });
+  return s.run({ target: o, spec: 'testing' });
 };
 
 describe('lint', () => {
@@ -24,7 +26,6 @@ describe('lint', () => {
               function: 'truthy',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 properties: 'something-not-present',
@@ -50,7 +51,6 @@ describe('lint', () => {
               function: 'truthy',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: 'version' },
             },
@@ -77,7 +77,6 @@ describe('lint', () => {
               path: '$.info',
               enabled: true,
               summary: '',
-              description: '',
               input: {
                 properties: 'tags',
                 keyedBy: 'name',
@@ -103,7 +102,6 @@ describe('lint', () => {
               function: 'alphabetical',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 properties: 'tags',
@@ -132,7 +130,6 @@ describe('lint', () => {
               function: 'or',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['something-not-present', 'something-else-not-present'] },
             },
@@ -155,7 +152,6 @@ describe('lint', () => {
               function: 'or',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['version', 'something-else-not-present'] },
             },
@@ -175,7 +171,6 @@ describe('lint', () => {
               function: 'or',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['version', 'title', 'termsOfService'] },
             },
@@ -201,7 +196,6 @@ describe('lint', () => {
               function: 'xor',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['yada-yada', 'whatever'] },
             },
@@ -225,7 +219,6 @@ describe('lint', () => {
               function: 'xor',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['version', 'title'] },
             },
@@ -249,7 +242,6 @@ describe('lint', () => {
               function: 'xor',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['something', 'title'] },
             },
@@ -275,7 +267,6 @@ describe('lint', () => {
               function: 'pattern',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: 'termsOfService',
@@ -302,7 +293,6 @@ describe('lint', () => {
               function: 'pattern',
               path: '$.responses',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: '*',
@@ -334,7 +324,6 @@ describe('lint', () => {
               function: 'pattern',
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: 'termsOfService',
@@ -361,7 +350,6 @@ describe('lint', () => {
               function: 'pattern',
               path: '$.responses',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: '*',
@@ -395,7 +383,6 @@ describe('lint', () => {
               function: 'notContain',
               path: '$..*',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['description'], value: '<script' },
             },
@@ -420,7 +407,6 @@ describe('lint', () => {
               function: 'notContain',
               path: '$..*',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['description'], value: '<script' },
             },
@@ -447,7 +433,6 @@ describe('lint', () => {
               function: 'notEndWith',
               path: '$.servers',
               enabled: true,
-              description: '',
               summary: '',
               input: { property: 'url', value: '/' },
             },
@@ -476,7 +461,6 @@ describe('lint', () => {
               function: 'notEndWith',
               path: '$.servers',
               enabled: true,
-              description: '',
               summary: '',
               input: { property: 'url', value: '/' },
             },
@@ -517,7 +501,6 @@ describe('lint', () => {
               paths: {
                 '/rooms/{room_id}/reserve/': {
                   post: {
-                    description: '',
                     summary: 'Book Room Really fsdasddssdfgfdhdsafhsad fsad flong fjkdhfsds',
                   },
                 },
@@ -545,7 +528,6 @@ describe('lint', () => {
               paths: {
                 '/rooms/{room_id}/reserve/': {
                   post: {
-                    description: '',
                     summary: 'Book',
                   },
                 },
