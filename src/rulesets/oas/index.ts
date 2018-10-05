@@ -49,6 +49,27 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'Info object should contain `contact` object.',
           type: RuleType.STYLE,
         },
+        'info-description': {
+          summary: 'API `description` must be present and non-empty string.',
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+
+          input: {
+            properties: 'description',
+          },
+          path: '$.info',
+          type: RuleType.STYLE,
+        },
+        'info-license': {
+          summary: 'API `license` must be present and non-empty string.',
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+          input: {
+            properties: 'license',
+          },
+          path: '$.info',
+          type: RuleType.STYLE,
+        },
         'license-apimatic-bug': {
           enabled: true,
           function: RuleFunction.NOT_CONTAIN,
@@ -68,6 +89,16 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$.info.license',
           summary: 'License object should include `url`.',
+          type: RuleType.STYLE,
+        },
+        'model-examples': {
+          summary: 'Definition `description` must be present and non-empty string.',
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+          input: {
+            properties: 'description',
+          },
+          path: '$..definitions.*',
           type: RuleType.STYLE,
         },
         'no-eval-in-descriptions': {
@@ -92,6 +123,16 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'Markdown descriptions should not contain `<script>` tags.',
           type: RuleType.STYLE,
         },
+        'only-local-references': {
+          summary: 'References should start with `#/`.',
+          enabled: true,
+          function: RuleFunction.PATTERN,
+          input: {
+            value: '^#\\/',
+          },
+          path: "$..['$ref']",
+          type: RuleType.STYLE,
+        },
         'openapi-tags': {
           enabled: false,
           function: RuleFunction.TRUTHY,
@@ -113,6 +154,26 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'OpenAPI object should have alphabetical `tags`.',
           type: RuleType.STYLE,
         },
+        'operation-default-response': {
+          summary: 'Operation must have a default response.',
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+          input: {
+            properties: 'default',
+          },
+          path: '$..paths.*.*.responses',
+          type: RuleType.STYLE,
+        },
+        'operation-description': {
+          summary: 'Operation `description` must be present and non-empty string.',
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+          input: {
+            properties: 'description',
+          },
+          path: "$..paths.*[?( name() !== 'parameters' )]",
+          type: RuleType.STYLE,
+        },
         'operation-operationId': {
           enabled: true,
           function: RuleFunction.TRUTHY,
@@ -121,6 +182,33 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: operationPath,
           summary: 'Operation should have an `operationId`.',
+          type: RuleType.STYLE,
+        },
+        'operation-singular-tag': {
+          summary: 'Operation must have one and only one tag.',
+          enabled: true,
+          function: RuleFunction.SCHEMA,
+          input: {
+            schema: {
+              items: {
+                type: 'number',
+              },
+              maxItems: 1,
+              minItems: 1,
+              type: 'array',
+            },
+          },
+          path: "$..paths.*[?( name() !== 'parameters' )].tags",
+          type: RuleType.STYLE,
+        },
+        'operation-summary-formatted': {
+          summary: 'Operation `summary` should start with upper case and end with a dot.',
+          enabled: true,
+          function: RuleFunction.PATTERN,
+          input: {
+            value: '^[A-Z].*\\.$',
+          },
+          path: "$..paths.*[?( name() !== 'parameters' )].summary",
           type: RuleType.STYLE,
         },
         'operation-summary-or-description': {
@@ -153,6 +241,17 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'Parameter objects should have a `description`.',
           type: RuleType.STYLE,
         },
+        'path-declarations-must-exist': {
+          summary: 'Path declarations cannot be empty, ex.`/path/{}` is invalid.',
+          enabled: true,
+          function: RuleFunction.NOT_CONTAIN,
+          input: {
+            properties: '*',
+            value: '{}',
+          },
+          path: '$..paths',
+          type: RuleType.STYLE,
+        },
         'path-keys-no-trailing-slash': {
           enabled: true,
           function: RuleFunction.NOT_END_WITH,
@@ -162,6 +261,17 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$..paths',
           summary: 'Path keys should not end with a slash.',
+          type: RuleType.STYLE,
+        },
+        'path-not-include-query': {
+          summary: 'Path keys should not include a query string.',
+          enabled: true,
+          function: RuleFunction.NOT_CONTAIN,
+          input: {
+            properties: '*',
+            value: '\\?',
+          },
+          path: '$..paths',
           type: RuleType.STYLE,
         },
         'pathItem-summary-or-description': {
@@ -196,6 +306,18 @@ export const commonOasRuleset = (): IRuleset => {
           path: 'reference',
           summary: 'References objects should only have a `$ref` property.',
           type: RuleType.STYLE,
+        },
+        'schema-items-is-object': {
+          summary: 'Schema containing `items` requires the items property to be an object.',
+          enabled: true,
+          function: RuleFunction.SCHEMA,
+          input: {
+            schema: {
+              function: 'object',
+            },
+          },
+          path: '$..schema.items',
+          type: RuleType.VALIDATION,
         },
         'server-not-example.com': {
           enabled: false,
