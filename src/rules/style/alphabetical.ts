@@ -1,7 +1,7 @@
-import { IRuleResult, IRuleFunction } from '../../types';
+import { IRuleResult, IRuleFunction, IAlphaRule } from '../../types';
 import { ensureRule } from '../index';
 
-export const alphabetical: IRuleFunction = (object, r, ruleMeta) => {
+export const alphabetical: IRuleFunction<IAlphaRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
 
   const { keyedBy, properties: inputProperties } = r.input;

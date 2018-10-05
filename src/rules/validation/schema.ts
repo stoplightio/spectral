@@ -1,4 +1,4 @@
-import { IRuleFunction } from '../../types';
+import { IRuleFunction, ISchemaRule } from '../../types';
 
 import * as AJV from 'ajv';
 
@@ -19,7 +19,7 @@ ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/sc
 ajv.addSchema(OASv2Schema, 'oas2');
 ajv.addSchema(OASv3Schema, 'oas3');
 
-export const schema: IRuleFunction = (object, r, meta) => {
+export const schema: IRuleFunction<ISchemaRule> = (object, r, meta) => {
   const results: any = [];
 
   const { schema } = r.input;

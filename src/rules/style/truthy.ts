@@ -1,9 +1,9 @@
-import { IRuleResult, IRuleFunction } from '../../types';
+import { IRuleResult, IRuleFunction, ITruthyRule } from '../../types';
 import { ensureRule } from '../index';
 
 import * as should from 'should';
 
-export const truthy: IRuleFunction = (object, r, meta) => {
+export const truthy: IRuleFunction<ITruthyRule> = (object, r, meta) => {
   const results: IRuleResult[] = [];
 
   const { properties: inputProperties, max } = r.input;

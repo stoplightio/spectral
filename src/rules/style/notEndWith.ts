@@ -1,7 +1,7 @@
-import { IRuleResult, IRuleFunction } from '../../types';
+import { IRuleResult, IRuleFunction, INotEndWithRule } from '../../types';
 import { ensureRule } from '../index';
 
-export const notEndWith: IRuleFunction = (object, r, ruleMeta) => {
+export const notEndWith: IRuleFunction<INotEndWithRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
   const { value, property } = r.input;
   const process = (target: any) => {

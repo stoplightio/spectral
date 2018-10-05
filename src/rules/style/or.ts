@@ -1,7 +1,7 @@
-import { IRuleResult, IRuleFunction } from '../../types';
+import { IRuleResult, IRuleFunction, IOrRule } from '../../types';
 import { ensureRule } from '../index';
 
-export const or: IRuleFunction = (object, r, ruleMeta) => {
+export const or: IRuleFunction<IOrRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
 
   const { properties } = r.input;

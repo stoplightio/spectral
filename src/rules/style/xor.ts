@@ -1,9 +1,9 @@
-import { IRuleResult, IRuleFunction } from '../../types';
+import { IRuleResult, IRuleFunction, IXorRule } from '../../types';
 import { ensureRule } from '../index';
 
 import * as should from 'should';
 
-export const xor: IRuleFunction = (object, r, ruleMeta) => {
+export const xor: IRuleFunction<IXorRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
 
   const { properties } = r.input;

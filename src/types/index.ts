@@ -11,7 +11,7 @@ export type Rule = ValidationRule | StyleRule;
 export type RawResult = ErrorObject | AssertionError;
 export type Path = (string | number)[];
 
-export type IRuleFunction = (object: any, r: any, ruleMeta: IRuleMetadata) => IRuleResult[];
+export type IRuleFunction<I = Rule> = (object: any, r: I, ruleMeta: IRuleMetadata) => IRuleResult[];
 
 export interface IRuleResult {
   type: RuleType;

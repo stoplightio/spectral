@@ -1,9 +1,9 @@
-import { IRuleResult, IRuleFunction } from '../../types';
+import { IRuleResult, IRuleFunction, IPatternRule } from '../../types';
 import { ensureRule } from '../index';
 
 import * as should from 'should';
 
-export const pattern: IRuleFunction = (object, r, ruleMeta) => {
+export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
   const { omit, property, split, value } = r.input;
 

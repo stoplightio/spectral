@@ -25,6 +25,6 @@ export const ensureRule = (
   }
 };
 
-export const generateRule = (r: types.Rule): types.IRuleFunction | undefined => {
+export const generateRule = (r: types.Rule): types.IRuleFunction<types.Rule> | undefined => {
   return ValidationRules[r.function] || StyleRules[r.function];
 };
