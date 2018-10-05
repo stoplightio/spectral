@@ -1,5 +1,5 @@
 import { Spectral } from '../index';
-import { IRuleResult, IRuleset, Rule } from '../types';
+import { IRuleResult, IRuleset, Rule, RuleFunction, RuleType } from '../types';
 
 const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
   const cfg: IRuleset[] = [
@@ -22,8 +22,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -47,8 +47,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -72,8 +72,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'alphabetical',
+              type: RuleType.STYLE,
+              function: RuleFunction.ALPHABETICAL,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -98,8 +98,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'alphabetical',
+              type: RuleType.STYLE,
+              function: RuleFunction.ALPHABETICAL,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -126,8 +126,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'or',
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -148,8 +148,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'or',
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -167,8 +167,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'or',
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -192,8 +192,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'xor',
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -215,8 +215,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'xor',
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -238,8 +238,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'xor',
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -263,8 +263,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -289,8 +289,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.responses',
               enabled: true,
               summary: '',
@@ -320,8 +320,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.info',
               enabled: true,
               summary: '',
@@ -346,8 +346,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.responses',
               enabled: true,
               summary: '',
@@ -379,8 +379,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notContain',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_CONTAIN,
               path: '$..*',
               enabled: true,
               summary: '',
@@ -403,8 +403,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notContain',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_CONTAIN,
               path: '$..*',
               enabled: true,
               summary: '',
@@ -429,8 +429,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notEndWith',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_END_WITH,
               path: '$.servers',
               enabled: true,
               summary: '',
@@ -457,8 +457,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notEndWith',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_END_WITH,
               path: '$.servers',
               enabled: true,
               summary: '',
@@ -487,8 +487,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'maxLength',
+              type: RuleType.STYLE,
+              function: RuleFunction.MAX_LENGTH,
               path: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
@@ -514,8 +514,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'maxLength',
+              type: RuleType.STYLE,
+              function: RuleFunction.MAX_LENGTH,
               path: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',

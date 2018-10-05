@@ -1,7 +1,7 @@
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 
-import { IRuleFunction, IRuleResult, ISchemaRule } from '../types';
+import { IRuleFunction, IRuleResult, ISchemaRule, RuleSeverity } from '../types';
 
 const ajv = new AJV({
   meta: false,
@@ -33,7 +33,7 @@ export const schema: IRuleFunction<ISchemaRule> = (object, r, meta) => {
         path: e.dataPath.split('/').slice(1), // FIXME - do we need to merge paths with meta path?
         name: meta.name,
         summary: r.summary,
-        severity: r.severity ? r.severity : 'error',
+        severity: r.severity ? r.severity : RuleSeverity.ERROR,
         message: e.message ? e.message : '',
       });
     });

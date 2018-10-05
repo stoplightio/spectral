@@ -1,9 +1,10 @@
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
 
-import { Rule, RuleSeverity, RuleType } from './rule';
+import { RuleSeverity, RuleType } from './enums';
+import { Rule } from './rule';
 
-export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
+export type TargetSpec = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
 export type RawResult = ErrorObject | AssertionError;
 export type Path = Array<string | number>;
 
@@ -70,3 +71,4 @@ export interface IRuleDeclaration {
 }
 
 export * from './rule';
+export * from './enums';

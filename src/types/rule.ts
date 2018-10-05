@@ -1,5 +1,4 @@
-export type RuleType = 'validation' | 'style';
-export type RuleSeverity = 'warn' | 'error' | 'info';
+import { RuleFunction, RuleSeverity, RuleType } from './enums';
 
 export type Rule =
   | IRule
@@ -74,7 +73,7 @@ export interface IRulePatternParam {
 }
 
 export interface ITruthyRule extends IRule {
-  function: 'truthy';
+  function: RuleFunction.TRUTHY;
 
   input: {
     // key(s) of object that should evaluate as 'truthy' (considered true in a
@@ -86,7 +85,7 @@ export interface ITruthyRule extends IRule {
 }
 
 export interface IOrRule extends IRule {
-  function: 'or';
+  function: RuleFunction.OR;
 
   input: {
     // test to verify if any of the provided keys are present in object
@@ -95,7 +94,7 @@ export interface IOrRule extends IRule {
 }
 
 export interface IXorRule extends IRule {
-  function: 'xor';
+  function: RuleFunction.XOR;
 
   input: {
     // test to verify if one (but not all) of the provided keys are present in
@@ -105,42 +104,42 @@ export interface IXorRule extends IRule {
 }
 
 export interface IMaxLengthRule extends IRule {
-  function: 'maxLength';
+  function: RuleFunction.MAX_LENGTH;
 
   // verify property is under a specified number of characters
   input: IRuleNumberParam;
 }
 
 export interface IAlphaRule extends IRule {
-  function: 'alphabetical';
+  function: RuleFunction.ALPHABETICAL;
 
   // verify property is within alphabetical order
   input: IAlphaRuleParam;
 }
 
 export interface INotEndWithRule extends IRule {
-  function: 'notEndWith';
+  function: RuleFunction.NOT_END_WITH;
 
   // verify property does not end with string
   input: IRulePatternParam;
 }
 
 export interface INotContainRule extends IRule {
-  function: 'notContain';
+  function: RuleFunction.NOT_CONTAIN;
 
   // verify property does not contain value
   input: IRuleStringParam;
 }
 
 export interface IPatternRule extends IRule {
-  function: 'pattern';
+  function: RuleFunction.PATTERN;
 
   // run regex match
   input: IRulePatternParam;
 }
 
 export interface ISchemaRule extends IRule {
-  function: 'schema';
+  function: RuleFunction.SCHEMA;
   input: {
     schema: object;
   };

@@ -1,9 +1,9 @@
-import * as types from '../../types';
+import { IRuleMetadata, IRuleResult, RuleSeverity } from '../../types';
 
 export const ensureRule = (
   shouldAssertion: Function,
-  ruleMeta: types.IRuleMetadata
-): void | types.IRuleResult => {
+  ruleMeta: IRuleMetadata
+): void | IRuleResult => {
   try {
     shouldAssertion();
   } catch (error) {
@@ -17,7 +17,7 @@ export const ensureRule = (
       name: ruleMeta.name,
       type: ruleMeta.rule.type,
       summary: ruleMeta.rule.summary,
-      severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : 'warn',
+      severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.WARN,
       message: error.message ? error.message : '',
     };
   }

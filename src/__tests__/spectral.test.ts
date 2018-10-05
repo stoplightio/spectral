@@ -1,6 +1,6 @@
 import { Spectral } from '../index';
 import { allPreset } from '../rulesets';
-import { IRuleset } from '../types';
+import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../types';
 
 const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
 
@@ -24,11 +24,11 @@ describe('spectral', () => {
         rules: {
           oas2: {
             'lint:test': {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$',
               enabled: false,
-              severity: 'error',
+              severity: RuleSeverity.ERROR,
               description: 'this should return an error if enabled',
               summary: '',
               input: {
@@ -67,8 +67,8 @@ describe('spectral', () => {
         rules: {
           oas2: {
             rule1: {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$',
               enabled: false,
               summary: '',
@@ -79,8 +79,8 @@ describe('spectral', () => {
           },
           'oas2|oas3': {
             rule2: {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$',
               enabled: false,
               summary: '',
@@ -91,8 +91,8 @@ describe('spectral', () => {
           },
           oas3: {
             rule3: {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$',
               enabled: false,
               summary: '',
