@@ -1,4 +1,4 @@
-import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../../types';
+import { IRuleset, RuleFunction, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
 
@@ -7,15 +7,74 @@ export const commonOasRuleset = (): IRuleset => {
     name: 'oas',
     functions: {
       oasPathParam: require('./functions/oasPathParam').oasPathParam,
+      oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
+      oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
+      oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
+      oasOpNoBodyFormData: require('./functions/oasOpNoBodyFormData').oasOpNoBodyFormData,
+      oasOpInBodyOne: require('./functions/oasOpInBodyOne').oasOpInBodyOne,
+      oasOpParametersUnique: require('./functions/oasOpParametersUnique').oasOpParametersUnique,
+      oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck')
+        .oasOpFormDataConsumeCheck,
     },
     rules: {
       'oas2|oas3': {
+        'operation-2xx-response': {
+          enabled: true,
+          function: 'oasOp2xxResponse',
+          path: "$..paths.*[?( name() !== 'parameters' )].responses",
+          summary: 'Operation must have at least one `2xx` response.',
+          type: RuleType.STYLE,
+        },
+        'operation-security-defined': {
+          enabled: true,
+          function: 'oasOpSecurityDefined',
+          path: '$',
+          summary:
+            'Operation `security` requirements must have matching a definition under `securityDefintion`.',
+          type: RuleType.VALIDATION,
+        },
+        'operation-operationId-unique': {
+          enabled: true,
+          function: 'oasOpIdUnique',
+          path: '$',
+          summary: 'Every operation must have a unique `operationId`.',
+          type: RuleType.VALIDATION,
+        },
+
+        'operation-no-body-formData': {
+          enabled: true,
+          function: 'oasOpNoBodyFormData',
+          path: "$..paths.*[?( name() !== 'parameters' )].parameters",
+          summary: 'Operation cannot have both `in:body` and `in:formData` parameters.',
+          type: RuleType.VALIDATION,
+        },
+        'operation-in-body-one': {
+          enabled: true,
+          function: 'oasOpInBodyOne',
+          path: "$..paths.*[?( name() !== 'parameters' )].parameters",
+          summary: 'Operation must have only one `in:body` parameter.',
+          type: RuleType.VALIDATION,
+        },
+        'operation-parameters-unique': {
+          enabled: true,
+          function: 'oasOpParametersUnique',
+          path: "$..paths.*[?( name() !== 'parameters' )].parameters",
+          summary: 'Operations must have unique `name` + `in` parameters.',
+          type: RuleType.VALIDATION,
+        },
+        'operation-formData-consume-check': {
+          enabled: true,
+          function: 'oasOpFormDataConsumeCheck',
+          path: "$..paths.*[?( name() !== 'parameters' )]",
+          summary:
+            'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their consumes property.',
+          type: RuleType.VALIDATION,
+        },
         'path-params': {
           type: RuleType.VALIDATION,
           summary:
             'Params defined in the path must have a corresponding property in the params object.',
           enabled: false, // FIXME should be true when the function is actually implemented correctly
-          severity: RuleSeverity.ERROR,
           path: operationPath,
           function: 'oasPathParam',
         },

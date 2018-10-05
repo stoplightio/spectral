@@ -1,5 +1,5 @@
-import { ensureRule } from '../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../types';
+import { ensureRule } from '../../../../functions/utils/ensureRule';
+import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
 
 export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
   const results: IRuleResult[] = [];
