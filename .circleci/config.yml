@@ -20,3 +20,54 @@ jobs:
       - run:
           name: Run build
           command: yarn build
+  publish-npm:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run:
+          name: Install publish dependencies
+          command: |
+            yarn global add semver
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
+      - run:
+          name: Set NPM token
+          command: |
+            cat <<EOF>.npmrc
+            @stoplight:registry=https://registry.npmjs.org/
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+            EOF
+      - run:
+          name: Publish
+          command: |
+            export PATH=$PATH:/home/circleci/.yarn/bin
+            scripts/publish.spectral.sh
+            git remote remove origin
+            git remote add origin https://stoplight-bot:$BOT_ACCESS_TOKEN@github.com/stoplightio/spectral.git
+            git config user.email "support@stoplight.io"
+            git config user.name "Stoplight Bot"
+            git push origin --tags
+workflows:
+  version: 2
+  build_and_publish:
+    jobs:
+      - build
+      - publish-npm:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+                - master
