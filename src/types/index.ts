@@ -1,21 +1,17 @@
-import { StyleRule } from './style';
-import { ValidationRule } from './validation';
-import { RuleSeverity } from './rule';
-
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
 
-export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
-export type Rule = ValidationRule | StyleRule;
+import { RuleSeverity, RuleType } from './enums';
+import { Rule } from './rule';
 
+export type TargetSpec = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
 export type RawResult = ErrorObject | AssertionError;
-export type Path = (string | number)[];
+export type Path = Array<string | number>;
+
+export type IRuleFunction<I = Rule> = (object: any, r: I, ruleMeta: IRuleMetadata) => IRuleResult[];
 
 export interface IRuleResult {
-  /**
-   * The category of the rule (ie, validation, lint)
-   */
-  type: string;
+  type: RuleType;
 
   /**
    * The relevant path within the object being operated on
@@ -45,14 +41,17 @@ export interface IRuleResult {
 
 export interface IRuleMetadata {
   path: Path;
-
   rule: Rule;
-
   name: string;
 }
 
-export interface IRuleConfig {
+export interface IRuleset {
   rules: IRuleStore;
+  name?: string;
+  functions?: {
+    // name is be the function name that will be used in rules
+    [name: string]: IRuleFunction;
+  };
 }
 
 export interface IRuleStore {
@@ -71,6 +70,5 @@ export interface IRuleDeclaration {
   [ruleName: string]: Rule | boolean;
 }
 
-export * from './style';
-export * from './validation';
 export * from './rule';
+export * from './enums';

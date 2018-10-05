@@ -1,16 +1,18 @@
-import { IRuleResult, IRuleConfig, Rule } from '../types';
 import { Spectral } from '../index';
+import { IRuleResult, IRuleset, Rule, RuleFunction, RuleType } from '../types';
 
 const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
-  const cfg: IRuleConfig = {
-    rules: {
-      testing: {
-        'test:rule': r,
+  const cfg: IRuleset[] = [
+    {
+      rules: {
+        testing: {
+          'test:rule': r,
+        },
       },
     },
-  };
-  const s = new Spectral(cfg);
-  return s.apply(o, 'testing');
+  ];
+  const s = new Spectral({ rulesets: cfg });
+  return s.run({ target: o, spec: 'testing' });
 };
 
 describe('lint', () => {
@@ -20,11 +22,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 properties: 'something-not-present',
@@ -46,11 +47,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'truthy',
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: 'version' },
             },
@@ -72,12 +72,11 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'alphabetical',
+              type: RuleType.STYLE,
+              function: RuleFunction.ALPHABETICAL,
               path: '$.info',
               enabled: true,
               summary: '',
-              description: '',
               input: {
                 properties: 'tags',
                 keyedBy: 'name',
@@ -99,11 +98,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'alphabetical',
+              type: RuleType.STYLE,
+              function: RuleFunction.ALPHABETICAL,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 properties: 'tags',
@@ -128,11 +126,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'or',
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['something-not-present', 'something-else-not-present'] },
             },
@@ -151,11 +148,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'or',
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['version', 'something-else-not-present'] },
             },
@@ -171,11 +167,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'or',
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['version', 'title', 'termsOfService'] },
             },
@@ -197,11 +192,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'xor',
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['yada-yada', 'whatever'] },
             },
@@ -221,11 +215,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'xor',
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['version', 'title'] },
             },
@@ -245,11 +238,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'xor',
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['something', 'title'] },
             },
@@ -271,11 +263,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: 'termsOfService',
@@ -298,11 +289,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.responses',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: '*',
@@ -330,11 +320,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.info',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: 'termsOfService',
@@ -357,11 +346,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'pattern',
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
               path: '$.responses',
               enabled: true,
-              description: '',
               summary: '',
               input: {
                 property: '*',
@@ -391,11 +379,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notContain',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_CONTAIN,
               path: '$..*',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['description'], value: '<script' },
             },
@@ -416,11 +403,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notContain',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_CONTAIN,
               path: '$..*',
               enabled: true,
-              description: '',
               summary: '',
               input: { properties: ['description'], value: '<script' },
             },
@@ -443,11 +429,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notEndWith',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_END_WITH,
               path: '$.servers',
               enabled: true,
-              description: '',
               summary: '',
               input: { property: 'url', value: '/' },
             },
@@ -472,11 +457,10 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'notEndWith',
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_END_WITH,
               path: '$.servers',
               enabled: true,
-              description: '',
               summary: '',
               input: { property: 'url', value: '/' },
             },
@@ -503,8 +487,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'maxLength',
+              type: RuleType.STYLE,
+              function: RuleFunction.MAX_LENGTH,
               path: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
@@ -517,7 +501,6 @@ describe('lint', () => {
               paths: {
                 '/rooms/{room_id}/reserve/': {
                   post: {
-                    description: '',
                     summary: 'Book Room Really fsdasddssdfgfdhdsafhsad fsad flong fjkdhfsds',
                   },
                 },
@@ -531,8 +514,8 @@ describe('lint', () => {
         expect(
           applyRuleToObject(
             {
-              type: 'style',
-              function: 'maxLength',
+              type: RuleType.STYLE,
+              function: RuleFunction.MAX_LENGTH,
               path: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
@@ -545,7 +528,6 @@ describe('lint', () => {
               paths: {
                 '/rooms/{room_id}/reserve/': {
                   post: {
-                    description: '',
                     summary: 'Book',
                   },
                 },

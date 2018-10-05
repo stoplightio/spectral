@@ -34,7 +34,10 @@ Things that speccy has, but spectral does not (though they would be easy to add)
 ## Usage
 
 ```typescript
-// an OAS specification
+import { Spectral } from '@stoplight/spectral';
+import { defaultRuleset } from '@stoplight/spectral/rulesets';
+
+// an OASv2 specification
 var myOAS = {
   [...]
   responses: {
@@ -48,25 +51,11 @@ var myOAS = {
   [...]
 };
 
-// create a new linter
-const spectral = new Spectral();
-// register a rule
-linter.registerRules([
-  {
-    type: 'pattern',
-    name: 'all-responses-must-be-numeric',
-    path: '$..responses',
-    enabled: true,
-    description: 'responses should all be numeric, aka match the regex ^[0-9]+',
-    pattern: {
-      property: '*',
-      value: '^[0-9]+$',
-    }
-  }
-]);
+// create a new instance of spectral with all of the baked in rulesets
+const spectral = new Spectral({ rulesets: [defaultRuleset()] });
 
-// lint!
-console.log(linter.lint(oas));
+// run!
+console.log(spectral.run({ spec: 'oas2', target: myOAS }));
 
 //  [ {
 //   path: '$.responses',
