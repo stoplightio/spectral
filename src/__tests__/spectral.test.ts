@@ -1,5 +1,5 @@
 import { Spectral } from '../index';
-import { allPreset } from '../rulesets';
+import { defaultRuleset } from '../rulesets';
 import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../types';
 
 const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
@@ -7,7 +7,7 @@ const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
 describe('spectral', () => {
   test('load and run the default rule set', () => {
     const s = new Spectral({
-      rulesets: [allPreset()],
+      rulesets: [defaultRuleset()],
     });
 
     const results = s.run({ target: todosPartialDeref, spec: 'oas2' });
