@@ -3,7 +3,7 @@ import { generateRule } from './rules';
 
 import * as rc from './rules/default.json';
 
-// TODO: figure out why rc cannot be used without the any typing
+// TODO: figure out why ruleConfig cannot be used without the any typing
 const ruleConfig: any = rc;
 
 import * as jp from 'jsonpath';
@@ -65,10 +65,15 @@ export class Spectral {
       this.paths[rule.path].push(name);
     }
 
+    const ruleFunc = generateRule(rule as types.Rule);
+    if (!ruleFunc) {
+      throw new SyntaxError(`Function does not exist for rule '${name}': ${rule.function}`);
+    }
+
     return {
       format,
       rule: rule as types.Rule,
-      apply: generateRule(rule as types.Rule),
+      apply: ruleFunc,
     };
   }
 

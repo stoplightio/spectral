@@ -1,4 +1,4 @@
-import { IRuleDefinitionBase } from './index';
+import { IRuleDefinitionBase } from './rule';
 
 export interface IRuleParam {
   properties: string | string[];

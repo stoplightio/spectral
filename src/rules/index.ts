@@ -1,6 +1,6 @@
 import * as types from '../types';
-import { alphabetical, truthy, or, xor, pattern, notContain, notEndWith, maxLength } from './style';
-import { schema } from './validation';
+import * as StyleRules from './style';
+import * as ValidationRules from './validation';
 
 export const ensureRule = (
   shouldAssertion: Function,
@@ -25,36 +25,6 @@ export const ensureRule = (
   }
 };
 
-export const generateRule = (
-  r: types.Rule
-): ((object: any, r: any, ruleMeta: types.IRuleMetadata) => types.IRuleResult[]) => {
-  switch (r.function) {
-    case 'truthy':
-      return truthy;
-      break;
-    case 'alphabetical':
-      return alphabetical;
-      break;
-    case 'or':
-      return or;
-      break;
-    case 'xor':
-      return xor;
-      break;
-    case 'pattern':
-      return pattern;
-      break;
-    case 'notContain':
-      return notContain;
-      break;
-    case 'notEndWith':
-      return notEndWith;
-      break;
-    case 'maxLength':
-      return maxLength;
-      break;
-    case 'schema':
-      return schema;
-      break;
-  }
+export const generateRule = (r: types.Rule): types.IRuleFunction | undefined => {
+  return ValidationRules[r.function] || StyleRules[r.function];
 };

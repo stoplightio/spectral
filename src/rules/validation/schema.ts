@@ -1,4 +1,4 @@
-import { ISchemaRule, IRuleResult, IRuleMetadata } from '../../types';
+import { IRuleFunction } from '../../types';
 
 import * as AJV from 'ajv';
 
@@ -19,7 +19,7 @@ ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/sc
 ajv.addSchema(OASv2Schema, 'oas2');
 ajv.addSchema(OASv3Schema, 'oas3');
 
-export const schema = (object: any, r: ISchemaRule, meta: IRuleMetadata): IRuleResult[] => {
+export const schema: IRuleFunction = (object, r, meta) => {
   const results: any = [];
 
   const { schema } = r.input;

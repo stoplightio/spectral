@@ -1,9 +1,9 @@
-import { StyleRule } from './style';
-import { ValidationRule } from './validation';
-import { RuleSeverity } from './rule';
-
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
+
+import { StyleRule } from './style';
+import { ValidationRule } from './validation';
+import { RuleType, RuleSeverity } from './rule';
 
 export type TargetFormat = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
 export type Rule = ValidationRule | StyleRule;
@@ -11,11 +11,10 @@ export type Rule = ValidationRule | StyleRule;
 export type RawResult = ErrorObject | AssertionError;
 export type Path = (string | number)[];
 
+export type IRuleFunction = (object: any, r: any, ruleMeta: IRuleMetadata) => IRuleResult[];
+
 export interface IRuleResult {
-  /**
-   * The category of the rule (ie, validation, lint)
-   */
-  type: string;
+  type: RuleType;
 
   /**
    * The relevant path within the object being operated on
@@ -45,9 +44,7 @@ export interface IRuleResult {
 
 export interface IRuleMetadata {
   path: Path;
-
   rule: Rule;
-
   name: string;
 }
 

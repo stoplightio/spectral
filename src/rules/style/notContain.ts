@@ -1,14 +1,10 @@
-import { INotContainRule, IRuleResult, IRuleMetadata } from '../../types';
+import { IRuleResult, IRuleFunction } from '../../types';
 import { ensureRule } from '../index';
 
 const regexFromString = (regex: string) =>
   new RegExp(regex.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'));
 
-export const notContain = (
-  object: any,
-  r: INotContainRule,
-  ruleMeta: IRuleMetadata
-): IRuleResult[] => {
+export const notContain: IRuleFunction = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
   const { value, properties } = r.input;
 

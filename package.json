@@ -23,6 +23,7 @@
     "jest": "23.6.x",
     "ts-jest": "23.10.x",
     "tslib": "1.9.x",
+    "tslint": "5.11.x",
     "typescript": "3.1.1"
   },
   "jest": {
