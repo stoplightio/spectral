@@ -10,7 +10,8 @@ export type Rule =
   | INotEndWithRule
   | INotContainRule
   | IPatternRule
-  | ISchemaRule;
+  | ISchemaRule
+  | IParamCheckRule;
 
 export interface IRule {
   type: RuleType;
@@ -139,6 +140,13 @@ export interface IPatternRule extends IRule {
 }
 
 export interface ISchemaRule extends IRule {
+  function: RuleFunction.SCHEMA;
+  input: {
+    schema: object;
+  };
+}
+
+export interface IParamCheckRule extends IRule {
   function: RuleFunction.SCHEMA;
   input: {
     schema: object;
