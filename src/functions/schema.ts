@@ -30,7 +30,7 @@ export const schema: IRuleFunction<ISchemaRule> = (object, r, meta) => {
 
       results.push({
         type: meta.rule.type,
-        path: e.dataPath.split('/').slice(1), // FIXME - do we need to merge paths with meta path?
+        path: meta.path.concat(e.dataPath.split('/').slice(1)),
         name: meta.name,
         summary: r.summary,
         severity: r.severity ? r.severity : RuleSeverity.ERROR,

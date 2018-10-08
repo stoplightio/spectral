@@ -270,7 +270,7 @@ export const commonOasRuleset = (): IRuleset => {
           input: {
             schema: {
               items: {
-                type: 'number',
+                type: 'string',
               },
               maxItems: 1,
               minItems: 1,
