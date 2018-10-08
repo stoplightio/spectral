@@ -67,8 +67,8 @@ export class Spectral {
 
   public setRules(rulesets: types.IRuleset[]) {
     this._rulesets = rulesets;
-    this._functions = this._rulesetsToFunctions(rulesets);
-    this._rules = this._rulesetsToRules(rulesets);
+    this._functions = this._rulesetsToFunctions(this._rulesets);
+    this._rules = this._rulesetsToRules(this._rulesets);
   }
 
   public run({ target, spec, rulesets = [], type }: IRunOpts): types.IRuleResult[] {
