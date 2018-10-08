@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -x
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 package="@stoplight/spectral"
@@ -13,11 +13,19 @@ original_version_tag_config="$(yarn config get version-git-tag -s 2>/dev/null)"
 # disable automatic tagging and commit messages
 yarn config set version-git-tag false
 
-# capture the current version (by tag, not based on the version listed in the
-# package.json)
-latest_version="$(semver $(git describe --tags $(git rev-list --tags --max-count=1)))"
-latest_major=$(echo ${latest_version[@]:0:1})
-latest_minor=$(echo ${latest_version[@]:2:1})
+# verify a tag has been set on the repo before
+git describe --tags $(git rev-list --tags --max-count=1) &>/dev/null
+if [[ $? -ne 0 ]]; then
+	#	tag has not been set before, use the version in package.json
+	latest_version=$(yarn version --non-interactive 2>/dev/null | awk '/Current version/ { print $4 }')
+	latest_major=$(echo ${latest_version[@]:0:1})
+	latest_minor=$(echo ${latest_version[@]:2:1})
+else
+	# capture the current version (by tag, not based on the version listed in the package.json)
+	latest_version="$(semver $(git describe --tags $(git rev-list --tags --max-count=1)))"
+	latest_major=$(echo ${latest_version[@]:0:1})
+	latest_minor=$(echo ${latest_version[@]:2:1})
+fi
 
 # capture the current version in package.json
 pkg_version=$(yarn version --non-interactive 2>/dev/null | awk '/Current version/ { print $4 }')
@@ -27,9 +35,6 @@ pkg_minor=$(echo ${pkg_version[@]:2:1})
 if [[ (${latest_major} != ${pkg_major}) || (${latest_minor} != ${pkg_minor}) ]]; then
 	# if package.json major-minor version differs from git version, use package.json
 	latest_version=${pkg_version}
-else
-	# otherwise rely on latest git tag
-	latest_version=${latest_version}
 fi
 
 case "${branch}" in
@@ -38,6 +43,9 @@ case "${branch}" in
 	tag="next"
 	if [[ "${latest_version}" == *"beta"* ]]; then
 		version="$(semver --increment prerelease --preid beta ${latest_version})"
+	elif [[ "${latest_version}" == "${pkg_version}" ]]; then
+		# No beta present and versions match
+		version="${pkg_version}-beta.1"
 	else
 		# No beta present in pre-release version, so we must have pushed a
 		# release. If so, increment the patch and add a pre-release version.
