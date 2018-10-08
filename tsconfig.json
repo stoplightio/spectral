@@ -26,5 +26,9 @@
     "baseUrl": ".",
     "paths": {}
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/**/*test.ts",
+    "fixtures"
+  ]
 }
