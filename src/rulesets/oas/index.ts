@@ -79,8 +79,7 @@ export const commonOasRuleset = (): IRuleset => {
         },
         'path-params': {
           type: RuleType.VALIDATION,
-          summary:
-            'Params defined in the path must have a corresponding property in the params object.',
+          summary: 'Path parameters are correct and valid',
           enabled: true,
           severity: RuleSeverity.ERROR,
           path: '$..paths',
