@@ -40,23 +40,23 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
     }
 
     // find parameters set within the top-level 'parameters' object
-    const tlParams: object = {};
+    const topParams: object = {};
     if (_object[path].parameters) {
       for (const p of _object[path].parameters) {
         if (p.in && p.in === 'path' && p.name) {
-          if (tlParams[p.name]) {
+          if (topParams[p.name]) {
             // name has already been specified
             results.push({
               path: [...ruleMeta.path, path, 'parameters'],
               name: ruleMeta.name,
               summary: _r.summary,
-              severity: RuleSeverity.ERROR,
+              severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
               type: _r.type,
               message: `Path parameter name '${p.name}' is used multiple times.`,
             });
             continue;
           }
-          tlParams[p.name] = [path, 'parameters'];
+          topParams[p.name] = [path, 'parameters'];
         }
       }
     }
@@ -77,7 +77,7 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
                 path: [...ruleMeta.path, path, op],
                 name: ruleMeta.name,
                 summary: _r.summary,
-                severity: RuleSeverity.ERROR,
+                severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
                 type: _r.type,
                 message: `Operation parameter name '${p.name}' is used multiple times.`,
               });
@@ -93,21 +93,21 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
     for (const p in pathElements) {
       if (!pathElements[p]) continue;
 
-      if (!tlParams[p] && !operationParams[p]) {
+      if (!topParams[p] && !operationParams[p]) {
         results.push({
           path: [...ruleMeta.path, path],
           name: ruleMeta.name,
           summary: _r.summary,
-          severity: RuleSeverity.ERROR,
+          severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
           type: _r.type,
           message: `Templated path parameter '${p}' does not have a corresponding parameter definition.`,
         });
-      } else if (tlParams[p] && operationParams[p]) {
+      } else if (topParams[p] && operationParams[p]) {
         results.push({
           path: [...ruleMeta.path, path],
           name: ruleMeta.name,
           summary: _r.summary,
-          severity: RuleSeverity.ERROR,
+          severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
           type: _r.type,
           message: `Templated path parameter '${p}' has multiple definitions`,
         });
@@ -116,17 +116,17 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
 
     // verify parameters defined in either top-level or operation parameters are set in path
     // template
-    for (const paramObj of [tlParams, operationParams]) {
+    for (const paramObj of [topParams, operationParams]) {
       for (const p in paramObj) {
-        if (!tlParams[p]) continue;
+        if (!topParams[p]) continue;
 
         if (!pathElements[p]) {
-          const resPath = tlParams[p];
+          const resPath = topParams[p];
           results.push({
             path: [...ruleMeta.path, resPath],
             name: ruleMeta.name,
             summary: _r.summary,
-            severity: RuleSeverity.ERROR,
+            severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
             type: _r.type,
             message: `Parameter '${p}' does not have a corresponding path parameter template.`,
           });
