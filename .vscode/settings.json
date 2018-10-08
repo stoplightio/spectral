@@ -21,11 +21,6 @@
     "**/lib/**": true
   },
 
-  "files.exclude": {
-    "**/.git": true,
-    "**/lib/**": true
-  },
-
   "search.exclude": {
     "**/.git/objects": true,
     "**/node_modules": true,
