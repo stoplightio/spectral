@@ -1,7 +1,8 @@
 import { IPatternRule, IRuleFunction, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
-import * as should from 'should';
+// @ts-ignore
+import * as should from 'should/as-function';
 
 export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
   const results: IRuleResult[] = [];
