@@ -361,17 +361,6 @@ export const commonOasRuleset = (): IRuleset => {
           type: RuleType.STYLE,
           tags: ['path'],
         },
-        'pathItem-summary-or-description': {
-          enabled: false,
-          function: RuleFunction.OR,
-          input: {
-            properties: ['description', 'summary'],
-          },
-          path: 'pathItem',
-          summary: 'pathItem should have `summary` or `description`.',
-          type: RuleType.STYLE,
-          tags: ['path'],
-        },
         'reference-components-regex': {
           enabled: false,
           function: RuleFunction.PATTERN,
@@ -382,18 +371,6 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: "$..['$ref']",
           summary: 'References should all match regex `^[a-zA-Z0-9\\.\\-_]+`.',
-          type: RuleType.STYLE,
-          tags: ['references'],
-        },
-        'reference-no-other-properties': {
-          enabled: true,
-          function: RuleFunction.TRUTHY,
-          input: {
-            properties: '$ref',
-            max: 1,
-          },
-          path: 'reference',
-          summary: 'References objects should only have a `$ref` property.',
           type: RuleType.STYLE,
           tags: ['references'],
         },
