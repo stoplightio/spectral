@@ -19,4 +19,5 @@ export enum RuleFunction {
   SCHEMA = 'schema',
   TRUTHY = 'truthy',
   XOR = 'xor',
+  PARAM_CHECK = 'paramCheck',
 }

@@ -1,4 +1,4 @@
-import { IRuleset, RuleFunction, RuleType } from '../../types';
+import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
 
@@ -82,7 +82,8 @@ export const commonOasRuleset = (): IRuleset => {
           summary:
             'Params defined in the path must have a corresponding property in the params object.',
           enabled: false, // FIXME should be true when the function is actually implemented correctly
-          path: operationPath,
+          severity: RuleSeverity.ERROR,
+          path: '$..paths',
           function: 'oasPathParam',
           tags: ['path'],
         },
