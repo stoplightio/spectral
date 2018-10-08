@@ -5,6 +5,8 @@
   "author": "Stoplight, Inc. (support@stoplight.io)",
   "license": "MIT",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": ["lib"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.{ts}\"",
