@@ -1,6 +1,6 @@
 import { IRuleFunction, IRuleResult, Rule, RuleSeverity } from '../../../../types';
 
-const pathRegex = /(\{[a-z]+\})+/g;
+const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
 export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
   const results: IRuleResult[] = [];
@@ -70,9 +70,13 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
         continue;
       }
       if (_object[path][op].parameters) {
+        // temporary store for tracking parameters specified across operations (to make sure
+        // parameters are not defined multiple times under the same operation)
+        const tmp = {};
+
         for (const p of _object[path][op].parameters) {
           if (p.in && p.in === 'path' && p.name) {
-            if (operationParams[p.name]) {
+            if (tmp[p.name]) {
               results.push({
                 path: [...ruleMeta.path, path, op],
                 name: ruleMeta.name,
@@ -82,7 +86,10 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
                 message: `Operation parameter name '${p.name}' is used multiple times.`,
               });
               continue;
+            } else if (operationParams[p.name]) {
+              continue;
             }
+            tmp[p.name] = {};
             operationParams[p.name] = [path, op];
           }
         }
@@ -118,12 +125,12 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
     // template
     for (const paramObj of [topParams, operationParams]) {
       for (const p in paramObj) {
-        if (!topParams[p]) continue;
+        if (!paramObj[p]) continue;
 
         if (!pathElements[p]) {
           const resPath = topParams[p];
           results.push({
-            path: [...ruleMeta.path, resPath],
+            path: [...ruleMeta.path, ...resPath],
             name: ruleMeta.name,
             summary: _r.summary,
             severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
