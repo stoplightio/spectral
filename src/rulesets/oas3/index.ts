@@ -19,7 +19,7 @@ export const oas3Ruleset = (): IRuleset => {
           input: {
             schema,
           },
-          tags: ['Validation'],
+          tags: ['validation'],
         },
       },
     },

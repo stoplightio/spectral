@@ -24,7 +24,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: "$..paths.*[?( name() !== 'parameters' )].responses",
           summary: 'Operation must have at least one `2xx` response.',
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-security-defined': {
           enabled: true,
@@ -33,7 +33,7 @@ export const commonOasRuleset = (): IRuleset => {
           summary:
             'Operation `security` requirements must have matching a definition under `securityDefintion`.',
           type: RuleType.VALIDATION,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-operationId-unique': {
           enabled: true,
@@ -41,7 +41,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$',
           summary: 'Every operation must have a unique `operationId`.',
           type: RuleType.VALIDATION,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
 
         'operation-no-body-formData': {
@@ -50,7 +50,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: "$..paths.*[?( name() !== 'parameters' )].parameters",
           summary: 'Operation cannot have both `in:body` and `in:formData` parameters.',
           type: RuleType.VALIDATION,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-in-body-one': {
           enabled: true,
@@ -58,7 +58,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: "$..paths.*[?( name() !== 'parameters' )].parameters",
           summary: 'Operation must have only one `in:body` parameter.',
           type: RuleType.VALIDATION,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-parameters-unique': {
           enabled: true,
@@ -66,7 +66,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: "$..paths.*[?( name() !== 'parameters' )].parameters",
           summary: 'Operations must have unique `name` + `in` parameters.',
           type: RuleType.VALIDATION,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-formData-consume-check': {
           enabled: true,
@@ -75,7 +75,7 @@ export const commonOasRuleset = (): IRuleset => {
           summary:
             'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their consumes property.',
           type: RuleType.VALIDATION,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'path-params': {
           type: RuleType.VALIDATION,
@@ -84,7 +84,7 @@ export const commonOasRuleset = (): IRuleset => {
           enabled: false, // FIXME should be true when the function is actually implemented correctly
           path: operationPath,
           function: 'oasPathParam',
-          tags: ['Path'],
+          tags: ['path'],
         },
         'contact-properties': {
           enabled: false,
@@ -95,7 +95,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$.info.contact',
           summary: 'Contact object should have `name`, `url` and `email`.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'example-value-or-externalValue': {
           enabled: true,
@@ -116,7 +116,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$.info',
           summary: 'Info object should contain `contact` object.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'info-description': {
           summary: 'API `description` must be present and non-empty string.',
@@ -128,7 +128,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$.info',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'info-license': {
           summary: 'API `license` must be present and non-empty string.',
@@ -139,7 +139,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$.info',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'license-apimatic-bug': {
           enabled: true,
@@ -151,7 +151,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$.license',
           summary: 'License URL should not point at `gruntjs`.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'license-url': {
           enabled: false,
@@ -162,7 +162,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$.info.license',
           summary: 'License object should include `url`.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'model-examples': {
           summary: 'Definition `description` must be present and non-empty string.',
@@ -205,7 +205,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: "$..['$ref']",
           type: RuleType.STYLE,
-          tags: ['Reference'],
+          tags: ['references'],
         },
         'openapi-tags': {
           enabled: false,
@@ -216,7 +216,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$',
           summary: 'OpenAPI object should have non-empty `tags` array.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'openapi-tags-alphabetical': {
           enabled: true,
@@ -228,7 +228,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$',
           summary: 'OpenAPI object should have alphabetical `tags`.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
         'operation-default-response': {
           summary: 'Operation must have a default response.',
@@ -239,7 +239,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$..paths.*.*.responses',
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-description': {
           summary: 'Operation `description` must be present and non-empty string.',
@@ -250,7 +250,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: "$..paths.*[?( name() !== 'parameters' )]",
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-operationId': {
           enabled: true,
@@ -261,7 +261,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: operationPath,
           summary: 'Operation should have an `operationId`.',
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-singular-tag': {
           summary: 'Operation must have one and only one tag.',
@@ -279,7 +279,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: "$..paths.*[?( name() !== 'parameters' )].tags",
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-summary-formatted': {
           summary: 'Operation `summary` should start with upper case and end with a dot.',
@@ -290,7 +290,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: "$..paths.*[?( name() !== 'parameters' )].summary",
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-summary-or-description': {
           enabled: true,
@@ -301,7 +301,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: operationPath,
           summary: 'Operation should have `summary` or `description`.',
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'operation-tags': {
           enabled: true,
@@ -312,7 +312,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: operationPath,
           summary: 'Operation should have non-empty `tags` array.',
           type: RuleType.STYLE,
-          tags: ['Operation'],
+          tags: ['operation'],
         },
         'parameter-description': {
           enabled: true,
@@ -323,7 +323,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$..paths.*.*.parameters',
           summary: 'Parameter objects should have a `description`.',
           type: RuleType.STYLE,
-          tags: ['Parameters'],
+          tags: ['parameters'],
         },
         'path-declarations-must-exist': {
           summary: 'Path declarations cannot be empty, ex.`/path/{}` is invalid.',
@@ -335,7 +335,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$..paths',
           type: RuleType.STYLE,
-          tags: ['Path'],
+          tags: ['path'],
         },
         'path-keys-no-trailing-slash': {
           enabled: true,
@@ -347,7 +347,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$..paths',
           summary: 'Path keys should not end with a slash.',
           type: RuleType.STYLE,
-          tags: ['Path'],
+          tags: ['path'],
         },
         'path-not-include-query': {
           summary: 'Path keys should not include a query string.',
@@ -359,7 +359,7 @@ export const commonOasRuleset = (): IRuleset => {
           },
           path: '$..paths',
           type: RuleType.STYLE,
-          tags: ['Path'],
+          tags: ['path'],
         },
         'pathItem-summary-or-description': {
           enabled: false,
@@ -370,7 +370,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: 'pathItem',
           summary: 'pathItem should have `summary` or `description`.',
           type: RuleType.STYLE,
-          tags: ['Path'],
+          tags: ['path'],
         },
         'reference-components-regex': {
           enabled: false,
@@ -440,7 +440,7 @@ export const commonOasRuleset = (): IRuleset => {
           path: '$.tags',
           summary: 'Tag object should have a `description`.',
           type: RuleType.STYLE,
-          tags: ['API'],
+          tags: ['api'],
         },
       },
     },
