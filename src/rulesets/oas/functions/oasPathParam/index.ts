@@ -13,8 +13,27 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
    * 2. every path.parameters + operation.parameters property must be used in the path string
    */
 
+  // keep track of normalized paths for verifying paths are unique
+  const uniquePaths: object = {};
+
   for (const path in _object) {
     if (!_object[path]) continue;
+
+    // verify normalized paths are functionally unique (ie `/path/{one}` vs `/path/{two}` are
+    // different but equivalent within the context of OAS)
+    const normalized = path.replace(pathRegex, '%'); // '%' is used here since its invalid in paths
+    if (uniquePaths[normalized]) {
+      results.push(
+        generateResult(
+          `Paths ${uniquePaths[normalized]} and ${path} are functionally equivalent`,
+          [...ruleMeta.path],
+          _r,
+          ruleMeta
+        )
+      );
+    } else {
+      uniquePaths[normalized] = path;
+    }
 
     // find all templated path parameters
     const pathElements = {};
