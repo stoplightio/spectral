@@ -1,4 +1,4 @@
-import { IRuleFunction, IRuleResult, Rule, RuleSeverity } from '../../../../types';
+import { IRuleFunction, IRuleMetadata, IRuleResult, Rule, RuleSeverity } from '../../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
@@ -8,7 +8,8 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
   /**
    * This rule verifies:
    *
-   * 1. for every param defined in the path string ie /users/{userId}, var must be defined in either path.parameters, or operation.parameters object
+   * 1. for every param defined in the path string ie /users/{userId}, var must be defined in either
+   *    path.parameters, or operation.parameters object
    * 2. every path.parameters + operation.parameters property must be used in the path string
    */
 
@@ -23,14 +24,14 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
       if (match && match.length > 0) {
         const p = match[0].replace(/[\{\}]/g, '');
         if (pathElements[p]) {
-          results.push({
-            path: [...ruleMeta.path, path],
-            name: ruleMeta.name,
-            summary: _r.summary,
-            severity: RuleSeverity.ERROR,
-            type: _r.type,
-            message: `Templated path parameter ${p} is used multiple times.`,
-          });
+          results.push(
+            generateResult(
+              `Templated path parameter ${p} is used multiple times.`,
+              [...ruleMeta.path, path],
+              _r,
+              ruleMeta
+            )
+          );
         } else {
           pathElements[p] = {};
         }
@@ -44,16 +45,27 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
     if (_object[path].parameters) {
       for (const p of _object[path].parameters) {
         if (p.in && p.in === 'path' && p.name) {
+          if (!p.required) {
+            results.push(
+              generateResult(
+                `Path parameter ${p.name} must have \`required\` set to \`true\``,
+                [...ruleMeta.path, path, 'parameters'],
+                _r,
+                ruleMeta
+              )
+            );
+          }
+
           if (topParams[p.name]) {
             // name has already been specified
-            results.push({
-              path: [...ruleMeta.path, path, 'parameters'],
-              name: ruleMeta.name,
-              summary: _r.summary,
-              severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
-              type: _r.type,
-              message: `Path parameter name '${p.name}' is used multiple times.`,
-            });
+            results.push(
+              generateResult(
+                `Path parameter name '${p.name}' is used multiple times.`,
+                [...ruleMeta.path, path, 'parameters'],
+                _r,
+                ruleMeta
+              )
+            );
             continue;
           }
           topParams[p.name] = [path, 'parameters'];
@@ -76,15 +88,26 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
 
         for (const p of _object[path][op].parameters) {
           if (p.in && p.in === 'path' && p.name) {
+            if (!p.required) {
+              results.push(
+                generateResult(
+                  `Path parameter ${p.name} must have \`required\` set to \`true\``,
+                  [...ruleMeta.path, path, op, 'parameters'],
+                  _r,
+                  ruleMeta
+                )
+              );
+            }
+
             if (tmp[p.name]) {
-              results.push({
-                path: [...ruleMeta.path, path, op],
-                name: ruleMeta.name,
-                summary: _r.summary,
-                severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
-                type: _r.type,
-                message: `Operation parameter name '${p.name}' is used multiple times.`,
-              });
+              results.push(
+                generateResult(
+                  `Operation parameter name '${p.name}' is used multiple times.`,
+                  [...ruleMeta.path, path, op, 'parameters'],
+                  _r,
+                  ruleMeta
+                )
+              );
               continue;
             } else if (operationParams[p.name]) {
               continue;
@@ -101,23 +124,23 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
       if (!pathElements[p]) continue;
 
       if (!topParams[p] && !operationParams[p]) {
-        results.push({
-          path: [...ruleMeta.path, path],
-          name: ruleMeta.name,
-          summary: _r.summary,
-          severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
-          type: _r.type,
-          message: `Templated path parameter '${p}' does not have a corresponding parameter definition.`,
-        });
+        results.push(
+          generateResult(
+            `Templated path parameter '${p}' does not have a corresponding parameter definition.`,
+            [...ruleMeta.path, path],
+            _r,
+            ruleMeta
+          )
+        );
       } else if (topParams[p] && operationParams[p]) {
-        results.push({
-          path: [...ruleMeta.path, path],
-          name: ruleMeta.name,
-          summary: _r.summary,
-          severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
-          type: _r.type,
-          message: `Templated path parameter '${p}' has multiple definitions`,
-        });
+        results.push(
+          generateResult(
+            `Templated path parameter '${p}' has multiple definitions`,
+            [...ruleMeta.path, path],
+            _r,
+            ruleMeta
+          )
+        );
       }
     }
 
@@ -129,14 +152,14 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
 
         if (!pathElements[p]) {
           const resPath = topParams[p];
-          results.push({
-            path: [...ruleMeta.path, ...resPath],
-            name: ruleMeta.name,
-            summary: _r.summary,
-            severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.ERROR,
-            type: _r.type,
-            message: `Parameter '${p}' does not have a corresponding path parameter template.`,
-          });
+          results.push(
+            generateResult(
+              `Parameter '${p}' does not have a corresponding path parameter template.`,
+              [...ruleMeta.path, ...resPath],
+              _r,
+              ruleMeta
+            )
+          );
         }
       }
     }
@@ -144,3 +167,19 @@ export const oasPathParam: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
 
   return results;
 };
+
+function generateResult(
+  message: string,
+  path: Array<string | number>,
+  _r: Rule,
+  _m: IRuleMetadata
+): IRuleResult {
+  return {
+    message,
+    path,
+    name: _m.name,
+    summary: _r.summary,
+    severity: _m.rule.severity ? _m.rule.severity : RuleSeverity.ERROR,
+    type: _r.type,
+  };
+}

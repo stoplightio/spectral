@@ -59,6 +59,7 @@ describe('oasPathParam', () => {
               {
                 name: 'bar',
                 in: 'path',
+                required: true,
               },
             ],
             get: {},
@@ -80,6 +81,7 @@ describe('oasPathParam', () => {
                 {
                   name: 'bar',
                   in: 'path',
+                  required: true,
                 },
               ],
             },
@@ -100,6 +102,7 @@ describe('oasPathParam', () => {
               {
                 name: 'bar',
                 in: 'path',
+                required: true,
               },
             ],
             get: {
@@ -107,6 +110,7 @@ describe('oasPathParam', () => {
                 {
                   name: 'bar',
                   in: 'path',
+                  required: true,
                 },
               ],
             },
@@ -128,6 +132,7 @@ describe('oasPathParam', () => {
               {
                 name: 'bar',
                 in: 'path',
+                required: true,
               },
             ],
             get: {},
@@ -137,5 +142,26 @@ describe('oasPathParam', () => {
     });
     expect(results.length).toEqual(1);
     expect(results[0].message).toContain('bar');
+  });
+
+  test('Error if path parameter definition is not required', () => {
+    const results = s.run({
+      spec: 'oas2',
+      target: {
+        paths: {
+          '/foo/{bar}': {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: false,
+              },
+            ],
+            get: {},
+          },
+        },
+      },
+    });
+    expect(results.length).toEqual(1);
   });
 });
