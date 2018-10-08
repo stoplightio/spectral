@@ -18,7 +18,7 @@ describe('validation', () => {
     const s = new Spectral({ rulesets: [oas2Ruleset()] });
     const results = s.run({ target: invalidV2, spec: 'oas2', type: RuleType.VALIDATION });
     expect(results.length).toEqual(1);
-    expect(results[0].path).toEqual(['info', 'license', 'name']);
+    expect(results[0].path).toEqual(['$', 'info', 'license', 'name']);
     expect(results[0].message).toEqual('should be string');
   });
 
