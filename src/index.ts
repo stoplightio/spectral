@@ -40,14 +40,13 @@ export class Spectral {
   private _rules: IRuleStore = {};
 
   // the initial rule config, set on initialization
-  private readonly _rulesets: types.IRuleset[];
+  // @ts-ignore
+  private _rulesets: types.IRuleset[] = [];
 
-  private readonly _functions: IFunctionStore;
+  private _functions: IFunctionStore = {};
 
   constructor(opts: ISpectralOpts) {
-    this._rulesets = opts.rulesets;
-    this._functions = this._rulesetsToFunctions(this._rulesets);
-    this._rules = this._rulesetsToRules(this._rulesets);
+    this.setRules(opts.rulesets);
   }
 
   // TODO needs better pattern matching
@@ -66,16 +65,25 @@ export class Spectral {
     return rules;
   }
 
+  public setRules(rulesets: types.IRuleset[]) {
+    this._rulesets = rulesets;
+    this._functions = this._rulesetsToFunctions(rulesets);
+    this._rules = this._rulesetsToRules(rulesets);
+  }
+
   public run({ target, spec, rulesets = [], type }: IRunOpts): types.IRuleResult[] {
     const results: types.IRuleResult[] = [];
 
-    let runRules: IRuleStore;
     if (rulesets.length) {
-      runRules = this._rulesetsToRules(rulesets);
-    } else {
-      // create a shallow copy of rule configuration for this run
-      runRules = { ...this._rules };
+      this.setRules(rulesets);
     }
+
+    if (!target) {
+      return results;
+    }
+
+    // create a shallow copy of rule configuration for this run
+    const runRules: IRuleStore = { ...this._rules };
 
     for (const path in this._paths) {
       if (!this._paths.hasOwnProperty(path)) continue;
