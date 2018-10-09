@@ -119,6 +119,7 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}']);
     expect(results[0].message).toContain('bar');
   });
 
@@ -141,6 +142,7 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}/{bar}']);
     expect(results[0].message).toContain('bar');
   });
 
@@ -163,6 +165,7 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}', 'parameters']);
   });
 
   test('Error if paths are functionally equivalent', () => {
@@ -194,5 +197,6 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths']);
   });
 });
