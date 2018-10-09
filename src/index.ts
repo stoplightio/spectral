@@ -140,7 +140,7 @@ export class Spectral {
             const { path: nPath, value } = n;
 
             try {
-              const result: types.IRuleResult[] = apply({
+              const opt: types.IRuleOpts = {
                 object: value,
                 rule,
                 meta: {
@@ -148,7 +148,20 @@ export class Spectral {
                   name: ruleName,
                   rule,
                 },
-              });
+              };
+
+              if (path === '$') {
+                // allow resolved and stringified targets to be passed to rules when operating on
+                // the root path
+                if (opts.resTarget) {
+                  opt.resObj = opts.resTarget;
+                }
+                if (opts.strTarget) {
+                  opt.strObj = opts.strTarget;
+                }
+              }
+
+              const result: types.IRuleResult[] = apply(opt);
 
               results.push(...result);
             } catch (e) {
