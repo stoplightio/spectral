@@ -1,10 +1,11 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
-export const oasOpFormDataConsumeCheck: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
+export const oasOpFormDataConsumeCheck: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const operation: any = _object;
+  const { object, meta } = opts;
+  const operation: any = object;
 
   const parameters = operation.parameters;
   const consumes = operation.consumes || [];
@@ -12,7 +13,7 @@ export const oasOpFormDataConsumeCheck: IRuleFunction<Rule> = (_object, _r, rule
   if (parameters && parameters.find((p: any) => p.in === 'formData')) {
     const res = ensureRule(() => {
       consumes.should.matchAny(/(application\/x-www-form-urlencoded|multipart\/form-data)/);
-    }, ruleMeta);
+    }, meta);
 
     if (res) results.push(res);
   }

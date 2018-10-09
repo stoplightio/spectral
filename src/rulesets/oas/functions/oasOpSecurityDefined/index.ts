@@ -1,10 +1,12 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
-export const oasOpSecurityDefined: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
+export const oasOpSecurityDefined: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const { paths = {}, securityDefinitions = {} } = _object;
+  const { object, meta } = opts;
+
+  const { paths = {}, securityDefinitions = {} } = object;
 
   const allDefs = Object.keys(securityDefinitions);
 
@@ -18,14 +20,14 @@ export const oasOpSecurityDefined: IRuleFunction<Rule> = (_object, _r, ruleMeta)
             if (security[index]) {
               const securityKey = Object.keys(security[index])[0];
 
-              const meta = {
-                ...ruleMeta,
+              const m = {
+                ...meta,
                 path: ['$', 'paths', path, operation, 'security', index],
               };
 
               const res = ensureRule(() => {
                 allDefs.should.containEql(securityKey);
-              }, meta);
+              }, m);
 
               if (res) {
                 results.push(res);

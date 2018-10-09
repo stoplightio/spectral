@@ -1,13 +1,16 @@
-import { INotEndWithRule, IRuleFunction, IRuleResult } from '../types';
+import { INotEndWithRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
-export const notEndWith: IRuleFunction<INotEndWithRule> = (object, r, ruleMeta) => {
+export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotEndWithRule>) => {
   const results: IRuleResult[] = [];
-  const { value, property } = r.input;
+  let { object } = opts;
+  const { rule, meta } = opts;
+  const { value, property } = rule.input;
+
   const process = (target: any) => {
     const res = ensureRule(() => {
       target.should.not.endWith(value);
-    }, ruleMeta);
+    }, meta);
 
     if (res) {
       results.push(res);

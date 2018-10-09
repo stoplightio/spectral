@@ -1,16 +1,17 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
-export const oasOp2xxResponse: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
+export const oasOp2xxResponse: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const responses = Object.keys(_object);
+  const { object, meta } = opts;
+  const responses = Object.keys(object);
 
   const res = ensureRule(() => {
     responses
       .filter(response => Number(response) >= 200 && Number(response) < 300)
       .length.should.aboveOrEqual(1);
-  }, ruleMeta);
+  }, meta);
 
   if (res) results.push(res);
 
