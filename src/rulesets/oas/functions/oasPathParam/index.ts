@@ -12,7 +12,16 @@ const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  let { object } = opts;
+  const { resObj, rule, meta } = opts;
+
+  if (!resObj) {
+    console.warn(
+      'oasPathParam expects a resolved object, but none was provided. Results may not be correct.'
+    );
+  } else {
+    object = resObj;
+  }
 
   /**
    * This rule verifies:
