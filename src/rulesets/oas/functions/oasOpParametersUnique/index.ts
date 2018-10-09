@@ -1,20 +1,21 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
-export const oasOpParametersUnique: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
+export const oasOpParametersUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const parameters: any[] = _object;
+  const { object, meta } = opts;
+  const parameters: any[] = object;
 
   parameters.forEach((parameter, index) => {
     if (!parameter.$ref) {
-      const meta = { ...ruleMeta, path: ruleMeta.path.concat(index) };
+      const m = { ...meta, path: meta.path.concat(index) };
 
       const res = ensureRule(() => {
         parameters
           .filter((p: any) => p.in === parameter.in && p.name === parameter.name && !parameter.$ref)
           .length.should.equal(1);
-      }, meta);
+      }, m);
 
       if (res) {
         results.push(res);

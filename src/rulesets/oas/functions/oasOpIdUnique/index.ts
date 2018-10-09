@@ -1,10 +1,11 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
-export const oasOpIdUnique: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
+export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const { paths = {} } = _object;
+  const { object, meta } = opts;
+  const { paths = {} } = object;
 
   const ids: any[] = [];
 
@@ -23,11 +24,11 @@ export const oasOpIdUnique: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
   }
 
   ids.forEach(operationId => {
-    const meta = { ...ruleMeta, path: operationId.path };
+    const m = { ...meta, path: operationId.path };
 
     const res = ensureRule(() => {
       ids.filter(id => id.operationId === operationId.operationId).length.should.equal(1);
-    }, meta);
+    }, m);
 
     if (res) {
       results.push(res);

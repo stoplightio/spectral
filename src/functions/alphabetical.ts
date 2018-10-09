@@ -1,10 +1,11 @@
-import { IAlphaRule, IRuleFunction, IRuleResult } from '../types';
+import { IAlphaRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
-export const alphabetical: IRuleFunction<IAlphaRule> = (object, r, ruleMeta) => {
+export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRule>) => {
   const results: IRuleResult[] = [];
 
-  const { keyedBy, properties: inputProperties } = r.input;
+  const { object, rule, meta } = opts;
+  const { keyedBy, properties: inputProperties } = rule.input;
 
   let properties = inputProperties;
   if (properties && !Array.isArray(properties)) {
@@ -37,7 +38,7 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (object, r, ruleMeta) => 
     const res = ensureRule(() => {
       object.should.have.property(property);
       object[property].should.be.deepEqual(arrayCopy);
-    }, ruleMeta);
+    }, meta);
 
     if (res) {
       results.push(res);

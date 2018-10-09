@@ -165,7 +165,7 @@ describe('oasPathParam', () => {
     expect(results.length).toEqual(1);
   });
 
-  test.only('Error if paths are functionally equivalent', () => {
+  test('Error if paths are functionally equivalent', () => {
     const results = s.run({
       spec: 'oas2',
       target: {

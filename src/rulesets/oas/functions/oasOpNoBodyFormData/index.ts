@@ -1,10 +1,11 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
-export const oasOpNoBodyFormData: IRuleFunction<Rule> = (_object, _r, ruleMeta) => {
+export const oasOpNoBodyFormData: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
 
-  const parameters: any[] = _object;
+  const { object, meta } = opts;
+  const parameters: any[] = object;
 
   const inBody = parameters.filter(param => param.in === 'body').length;
   const inFormData = parameters.filter(param => param.in === 'formData').length;
@@ -19,7 +20,7 @@ export const oasOpNoBodyFormData: IRuleFunction<Rule> = (_object, _r, ruleMeta) 
     if (inFormData) {
       inBody.should.equal(0);
     }
-  }, ruleMeta);
+  }, meta);
 
   if (res) results.push(res);
 
