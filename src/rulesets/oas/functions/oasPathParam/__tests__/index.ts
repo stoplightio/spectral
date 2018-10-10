@@ -22,7 +22,8 @@ describe('oasPathParam', () => {
   test('No error if templated path is not used', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo': {
             get: {},
@@ -36,7 +37,8 @@ describe('oasPathParam', () => {
   test('Error if no path parameter definition', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{bar}': {
             get: {},
@@ -52,7 +54,8 @@ describe('oasPathParam', () => {
   test('No error if path parameter definition is used (at the path level)', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{bar}': {
             parameters: [
@@ -73,7 +76,8 @@ describe('oasPathParam', () => {
   test('No error if path parameter definition is set (at the operation level)', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{bar}': {
             get: {
@@ -95,7 +99,8 @@ describe('oasPathParam', () => {
   test('Error if duplicate path parameter definitions are specified', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{bar}': {
             parameters: [
@@ -119,13 +124,15 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}']);
     expect(results[0].message).toContain('bar');
   });
 
   test('Error if duplicate path parameters with same name are used', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{bar}/{bar}': {
             parameters: [
@@ -141,13 +148,15 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}/{bar}']);
     expect(results[0].message).toContain('bar');
   });
 
   test('Error if path parameter definition is not required', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{bar}': {
             parameters: [
@@ -163,12 +172,14 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}', 'parameters']);
   });
 
-  test.only('Error if paths are functionally equivalent', () => {
+  test('Error if paths are functionally equivalent', () => {
     const results = s.run({
       spec: 'oas2',
-      target: {
+      target: {},
+      resTarget: {
         paths: {
           '/foo/{boo}': {
             parameters: [
@@ -194,5 +205,6 @@ describe('oasPathParam', () => {
       },
     });
     expect(results.length).toEqual(1);
+    expect(results[0].path).toEqual(['$', 'paths']);
   });
 });

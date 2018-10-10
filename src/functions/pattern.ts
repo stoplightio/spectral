@@ -1,12 +1,14 @@
-import { IPatternRule, IRuleFunction, IRuleResult } from '../types';
+import { IPatternRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
 // @ts-ignore
 import * as should from 'should/as-function';
 
-export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
+export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRule>) => {
   const results: IRuleResult[] = [];
-  const { omit, property, split, value } = r.input;
+
+  const { object, rule, meta } = opts;
+  const { omit, property, split, value } = rule.input;
 
   // if the collected object is not an object/array, set our target to be
   // the object itself
@@ -35,8 +37,11 @@ export const pattern: IRuleFunction<IPatternRule> = (object, r, ruleMeta) => {
         if (omit) component = component.split(omit).join('');
         if (component) {
           const res = ensureRule(() => {
-            should(re.test(component)).be.exactly(true, `${r.summary}, but received: ${component}`);
-          }, ruleMeta);
+            should(re.test(component)).be.exactly(
+              true,
+              `${rule.summary}, but received: ${component}`
+            );
+          }, meta);
 
           if (res) {
             results.push(res);

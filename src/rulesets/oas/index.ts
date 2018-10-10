@@ -10,18 +10,24 @@ export const commonOasRuleset = (): IRuleset => {
       oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
       oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
       oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
-      oasOpNoBodyFormData: require('./functions/oasOpNoBodyFormData').oasOpNoBodyFormData,
-      oasOpInBodyOne: require('./functions/oasOpInBodyOne').oasOpInBodyOne,
-      oasOpParametersUnique: require('./functions/oasOpParametersUnique').oasOpParametersUnique,
       oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck')
         .oasOpFormDataConsumeCheck,
+      oasOpParams: require('./functions/oasOpParams').oasOpParams,
     },
     rules: {
       'oas2|oas3': {
+        'operation-parameters': {
+          enabled: true,
+          function: 'oasOpParams',
+          path: '$',
+          summary: 'Operation parameters are unique and non-repeating.',
+          type: RuleType.VALIDATION,
+          tags: ['operation'],
+        },
         'operation-2xx-response': {
           enabled: true,
           function: 'oasOp2xxResponse',
-          path: "$..paths.*[?( name() !== 'parameters' )].responses",
+          path: `${operationPath}.responses`,
           summary: 'Operation must have at least one `2xx` response.',
           type: RuleType.STYLE,
           tags: ['operation'],
@@ -44,34 +50,10 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['operation'],
         },
 
-        'operation-no-body-formData': {
-          enabled: true,
-          function: 'oasOpNoBodyFormData',
-          path: "$..paths.*[?( name() !== 'parameters' )].parameters",
-          summary: 'Operation cannot have both `in:body` and `in:formData` parameters.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
-        'operation-in-body-one': {
-          enabled: true,
-          function: 'oasOpInBodyOne',
-          path: "$..paths.*[?( name() !== 'parameters' )].parameters",
-          summary: 'Operation must have only one `in:body` parameter.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
-        'operation-parameters-unique': {
-          enabled: true,
-          function: 'oasOpParametersUnique',
-          path: "$..paths.*[?( name() !== 'parameters' )].parameters",
-          summary: 'Operations must have unique `name` + `in` parameters.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
         'operation-formData-consume-check': {
           enabled: true,
           function: 'oasOpFormDataConsumeCheck',
-          path: "$..paths.*[?( name() !== 'parameters' )]",
+          path: operationPath,
           summary:
             'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their consumes property.',
           type: RuleType.VALIDATION,
@@ -82,7 +64,7 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'Path parameters are correct and valid',
           enabled: true,
           severity: RuleSeverity.ERROR,
-          path: '$..paths',
+          path: '$',
           function: 'oasPathParam',
           tags: ['path'],
         },
@@ -98,7 +80,7 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['api'],
         },
         'example-value-or-externalValue': {
-          enabled: true,
+          enabled: false,
           function: RuleFunction.XOR,
           input: {
             properties: ['externalValue', 'value'],
@@ -122,7 +104,6 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'API `description` must be present and non-empty string.',
           enabled: true,
           function: RuleFunction.TRUTHY,
-
           input: {
             properties: 'description',
           },
@@ -132,7 +113,7 @@ export const commonOasRuleset = (): IRuleset => {
         },
         'info-license': {
           summary: 'API `license` must be present and non-empty string.',
-          enabled: true,
+          enabled: false,
           function: RuleFunction.TRUTHY,
           input: {
             properties: 'license',
@@ -142,7 +123,7 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['api'],
         },
         'license-apimatic-bug': {
-          enabled: true,
+          enabled: false,
           function: RuleFunction.NOT_CONTAIN,
           input: {
             properties: ['url'],
@@ -164,9 +145,9 @@ export const commonOasRuleset = (): IRuleset => {
           type: RuleType.STYLE,
           tags: ['api'],
         },
-        'model-examples': {
+        'model-description': {
           summary: 'Definition `description` must be present and non-empty string.',
-          enabled: true,
+          enabled: false,
           function: RuleFunction.TRUTHY,
           input: {
             properties: 'description',
@@ -175,7 +156,7 @@ export const commonOasRuleset = (): IRuleset => {
           type: RuleType.STYLE,
         },
         'no-eval-in-descriptions': {
-          enabled: true,
+          enabled: false,
           function: RuleFunction.NOT_CONTAIN,
           input: {
             properties: ['description', 'title'],
@@ -198,7 +179,7 @@ export const commonOasRuleset = (): IRuleset => {
         },
         'only-local-references': {
           summary: 'References should start with `#/`.',
-          enabled: true,
+          enabled: false,
           function: RuleFunction.PATTERN,
           input: {
             value: '^#\\/',
@@ -219,7 +200,7 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['api'],
         },
         'openapi-tags-alphabetical': {
-          enabled: true,
+          enabled: false,
           function: RuleFunction.ALPHABETICAL,
           input: {
             keyedBy: 'name',
@@ -231,8 +212,8 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['api'],
         },
         'operation-default-response': {
-          summary: 'Operation must have a default response.',
-          enabled: true,
+          summary: 'Operations must have a default response.',
+          enabled: false,
           function: RuleFunction.TRUTHY,
           input: {
             properties: 'default',
@@ -248,7 +229,7 @@ export const commonOasRuleset = (): IRuleset => {
           input: {
             properties: 'description',
           },
-          path: "$..paths.*[?( name() !== 'parameters' )]",
+          path: operationPath,
           type: RuleType.STYLE,
           tags: ['operation'],
         },
@@ -265,7 +246,7 @@ export const commonOasRuleset = (): IRuleset => {
         },
         'operation-singular-tag': {
           summary: 'Operation must have one and only one tag.',
-          enabled: true,
+          enabled: false,
           function: RuleFunction.SCHEMA,
           input: {
             schema: {
@@ -277,18 +258,18 @@ export const commonOasRuleset = (): IRuleset => {
               type: 'array',
             },
           },
-          path: "$..paths.*[?( name() !== 'parameters' )].tags",
+          path: `${operationPath}.tags`,
           type: RuleType.STYLE,
           tags: ['operation'],
         },
         'operation-summary-formatted': {
           summary: 'Operation `summary` should start with upper case and end with a dot.',
-          enabled: true,
+          enabled: false,
           function: RuleFunction.PATTERN,
           input: {
             value: '^[A-Z].*\\.$',
           },
-          path: "$..paths.*[?( name() !== 'parameters' )].summary",
+          path: `${operationPath}.summary`,
           type: RuleType.STYLE,
           tags: ['operation'],
         },
@@ -315,7 +296,7 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['operation'],
         },
         'parameter-description': {
-          enabled: true,
+          enabled: false,
           function: RuleFunction.TRUTHY,
           input: {
             properties: 'description',

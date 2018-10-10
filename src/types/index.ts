@@ -8,7 +8,15 @@ export type TargetSpec = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
 export type RawResult = ErrorObject | AssertionError;
 export type Path = Array<string | number>;
 
-export type IRuleFunction<I = Rule> = (object: any, r: I, ruleMeta: IRuleMetadata) => IRuleResult[];
+export interface IRuleOpts<I = Rule> {
+  object: any;
+  strObj?: string;
+  resObj?: any;
+  rule: I;
+  meta: IRuleMetadata;
+}
+
+export type IRuleFunction<I = Rule> = (opts: IRuleOpts<I>) => IRuleResult[];
 
 export interface IRuleResult {
   type: RuleType;

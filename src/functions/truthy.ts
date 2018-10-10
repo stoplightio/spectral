@@ -1,13 +1,14 @@
-import { IRuleFunction, IRuleResult, ITruthyRule } from '../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, ITruthyRule } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
 // @ts-ignore
 import * as should from 'should/as-function';
 
-export const truthy: IRuleFunction<ITruthyRule> = (object, r, meta) => {
+export const truthy: IRuleFunction<ITruthyRule> = (opts: IRuleOpts<ITruthyRule>) => {
   const results: IRuleResult[] = [];
 
-  const { properties: inputProperties, max } = r.input;
+  const { object, rule, meta } = opts;
+  const { properties: inputProperties, max } = rule.input;
 
   let properties = inputProperties;
   if (!Array.isArray(properties)) properties = [properties];

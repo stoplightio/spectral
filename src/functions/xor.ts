@@ -1,20 +1,21 @@
-import { IRuleFunction, IRuleResult, IXorRule } from '../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, IXorRule } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
 import * as should from 'should';
 
-export const xor: IRuleFunction<IXorRule> = (object, r, ruleMeta) => {
+export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
   const results: IRuleResult[] = [];
 
-  const { properties } = r.input;
+  const { object, rule, meta } = opts;
+  const { properties } = rule.input;
 
   let found = false;
   for (const property of properties) {
     if (typeof object[property] !== 'undefined') {
       if (found) {
         const innerRes = ensureRule(() => {
-          should.fail(true, false, r.summary);
-        }, ruleMeta);
+          should.fail(true, false, rule.summary);
+        }, meta);
 
         if (innerRes) {
           results.push(innerRes);
@@ -26,8 +27,8 @@ export const xor: IRuleFunction<IXorRule> = (object, r, ruleMeta) => {
   }
 
   const res = ensureRule(() => {
-    found.should.be.exactly(true, r.summary);
-  }, ruleMeta);
+    found.should.be.exactly(true, rule.summary);
+  }, meta);
 
   if (res) {
     results.push(res);

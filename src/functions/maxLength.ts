@@ -1,9 +1,12 @@
-import { IMaxLengthRule, IRuleFunction, IRuleResult } from '../types';
+import { IMaxLengthRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
-export const maxLength: IRuleFunction<IMaxLengthRule> = (object, r, meta) => {
+export const maxLength: IRuleFunction<IMaxLengthRule> = (opts: IRuleOpts<IMaxLengthRule>) => {
   const results: IRuleResult[] = [];
-  const { value, property } = r.input;
+
+  const { object, rule, meta } = opts;
+
+  const { value, property } = rule.input;
 
   let target: any;
   if (property) {

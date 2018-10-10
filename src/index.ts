@@ -24,9 +24,35 @@ interface ISpectralOpts {
 }
 
 interface IRunOpts {
+  /**
+   * The un-resolved object being parsed
+   */
   target: object;
+
+  /**
+   * The fully-resolved object being parsed
+   */
+  resTarget?: object;
+
+  /**
+   * A stringified version of the target
+   */
+  strTarget?: string;
+
+  /**
+   * The specification to apply to the target
+   */
   spec: string;
+
+  /**
+   * Optional ruleset to apply to the target. If not provided, the initialized ruleset will be used
+   * instead.
+   */
   rulesets?: types.IRuleset[];
+
+  /**
+   * Optional rule type, when supplied only rules of this type are run
+   */
   type?: types.RuleType;
 }
 
@@ -71,7 +97,8 @@ export class Spectral {
     this._rules = this._rulesetsToRules(this._rulesets);
   }
 
-  public run({ target, spec, rulesets = [], type }: IRunOpts): types.IRuleResult[] {
+  public run(opts: IRunOpts): types.IRuleResult[] {
+    const { target, spec, rulesets = [], type } = opts;
     const results: types.IRuleResult[] = [];
 
     if (rulesets.length) {
@@ -113,11 +140,28 @@ export class Spectral {
             const { path: nPath, value } = n;
 
             try {
-              const result: types.IRuleResult[] = apply(value, rule, {
-                path: nPath,
-                name: ruleName,
+              const opt: types.IRuleOpts = {
+                object: value,
                 rule,
-              });
+                meta: {
+                  path: nPath,
+                  name: ruleName,
+                  rule,
+                },
+              };
+
+              if (path === '$') {
+                // allow resolved and stringified targets to be passed to rules when operating on
+                // the root path
+                if (opts.resTarget) {
+                  opt.resObj = opts.resTarget;
+                }
+                if (opts.strTarget) {
+                  opt.strObj = opts.strTarget;
+                }
+              }
+
+              const result: types.IRuleResult[] = apply(opt);
 
               results.push(...result);
             } catch (e) {

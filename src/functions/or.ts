@@ -1,10 +1,11 @@
-import { IOrRule, IRuleFunction, IRuleResult } from '../types';
+import { IOrRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
-export const or: IRuleFunction<IOrRule> = (object, r, ruleMeta) => {
+export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>) => {
   const results: IRuleResult[] = [];
 
-  const { properties } = r.input;
+  const { object, rule, meta } = opts;
+  const { properties } = rule.input;
 
   let found = false;
   for (const property of properties) {
@@ -14,8 +15,8 @@ export const or: IRuleFunction<IOrRule> = (object, r, ruleMeta) => {
     }
   }
   const res = ensureRule(() => {
-    found.should.be.exactly(true, r.description);
-  }, ruleMeta);
+    found.should.be.exactly(true, rule.description);
+  }, meta);
 
   if (res) {
     results.push(res);
