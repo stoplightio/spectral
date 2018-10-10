@@ -10,14 +10,20 @@ export const commonOasRuleset = (): IRuleset => {
       oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
       oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
       oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
-      oasOpNoBodyFormData: require('./functions/oasOpNoBodyFormData').oasOpNoBodyFormData,
-      oasOpInBodyOne: require('./functions/oasOpInBodyOne').oasOpInBodyOne,
-      oasOpParametersUnique: require('./functions/oasOpParametersUnique').oasOpParametersUnique,
       oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck')
         .oasOpFormDataConsumeCheck,
+      oasOpParams: require('./functions/oasOpParams').oasOpParams,
     },
     rules: {
       'oas2|oas3': {
+        'operation-parameters': {
+          enabled: true,
+          function: 'oasOpParams',
+          path: '$',
+          summary: 'Operation parameters are unique and non-repeating.',
+          type: RuleType.VALIDATION,
+          tags: ['operation'],
+        },
         'operation-2xx-response': {
           enabled: true,
           function: 'oasOp2xxResponse',
@@ -44,30 +50,6 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['operation'],
         },
 
-        'operation-no-body-formData': {
-          enabled: true,
-          function: 'oasOpNoBodyFormData',
-          path: `${operationPath}.parameters`,
-          summary: 'Operation cannot have both `in:body` and `in:formData` parameters.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
-        'operation-in-body-one': {
-          enabled: true,
-          function: 'oasOpInBodyOne',
-          path: `${operationPath}.parameters`,
-          summary: 'Operation must have only one `in:body` parameter.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
-        'operation-parameters-unique': {
-          enabled: true,
-          function: 'oasOpParametersUnique',
-          path: `${operationPath}.parameters`,
-          summary: 'Operations must have unique `name` + `in` parameters.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
         'operation-formData-consume-check': {
           enabled: true,
           function: 'oasOpFormDataConsumeCheck',
