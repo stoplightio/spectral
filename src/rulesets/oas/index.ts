@@ -92,7 +92,7 @@ export const commonOasRuleset = (): IRuleset => {
         },
         'api-schemes': {
           enabled: true,
-          function: RuleFunction.TRUTHY,
+          function: RuleFunction.SCHEMA,
           input: {
             schema: {
               items: {
