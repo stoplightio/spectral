@@ -79,6 +79,34 @@ export const commonOasRuleset = (): IRuleset => {
           type: RuleType.STYLE,
           tags: ['api'],
         },
+        'api-host': {
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+          input: {
+            properties: ['host'],
+          },
+          path: '$',
+          summary: 'OpenAPI host `description` must be present and non-empty string.',
+          type: RuleType.STYLE,
+          tags: ['api'],
+        },
+        'api-schemes': {
+          enabled: true,
+          function: RuleFunction.TRUTHY,
+          input: {
+            schema: {
+              items: {
+                type: 'string',
+              },
+              minItems: 1,
+              type: 'array',
+            },
+          },
+          path: '$.schemes',
+          summary: 'OpenAPI host `description` must be present and non-empty array.',
+          type: RuleType.STYLE,
+          tags: ['api'],
+        },
         'example-value-or-externalValue': {
           enabled: false,
           function: RuleFunction.XOR,
@@ -101,7 +129,7 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['api'],
         },
         'info-description': {
-          summary: 'API `description` must be present and non-empty string.',
+          summary: 'OpenAPI object info `description` must be present and non-empty string.',
           enabled: true,
           function: RuleFunction.TRUTHY,
           input: {
@@ -112,7 +140,7 @@ export const commonOasRuleset = (): IRuleset => {
           tags: ['api'],
         },
         'info-license': {
-          summary: 'API `license` must be present and non-empty string.',
+          summary: 'OpenAPI object info `license` must be present and non-empty string.',
           enabled: false,
           function: RuleFunction.TRUTHY,
           input: {
