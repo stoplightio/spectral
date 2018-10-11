@@ -103,7 +103,7 @@ export const commonOasRuleset = (): IRuleset => {
             },
           },
           path: '$.schemes',
-          summary: 'OpenAPI host `description` must be present and non-empty array.',
+          summary: 'OpenAPI host `schemes` must be present and non-empty array.',
           type: RuleType.STYLE,
           tags: ['api'],
         },
