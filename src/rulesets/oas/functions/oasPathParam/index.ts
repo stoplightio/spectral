@@ -173,15 +173,6 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             meta
           )
         );
-      } else if (topParams[p] && operationParams[p]) {
-        results.push(
-          generateResult(
-            `Templated path parameter '${p}' has multiple definitions`,
-            [...meta.path, 'paths', path],
-            rule,
-            meta
-          )
-        );
       }
     }
 
