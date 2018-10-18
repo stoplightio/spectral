@@ -47,7 +47,9 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
     if (uniquePaths[normalized]) {
       results.push(
         generateResult(
-          `Paths ${uniquePaths[normalized]} and ${path} are functionally equivalent`,
+          `The paths "**${uniquePaths[normalized]}**" and "**${path}**" are equivalent.
+
+To fix, remove one of the paths or merge them together.`,
           [...meta.path, 'paths'],
           rule,
           meta
@@ -67,7 +69,11 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
         if (pathElements[p]) {
           results.push(
             generateResult(
-              `Templated path parameter ${p} is used multiple times.`,
+              `The path "**${path}**" uses the parameter "**{${p}}**" multiple times.
+
+Path parameters must be unique.
+
+To fix, update the path so that all parameter names are unique.`,
               [...meta.path, 'paths', path],
               rule,
               meta
@@ -89,7 +95,7 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           if (!p.required) {
             results.push(
               generateResult(
-                `Path parameter ${p.name} must have \`required\` set to \`true\``,
+                requiredMessage(p.name),
                 [...meta.path, 'paths', path, 'parameters'],
                 rule,
                 meta
@@ -101,7 +107,7 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             // name has already been specified
             results.push(
               generateResult(
-                `Path parameter name '${p.name}' is used multiple times.`,
+                uniqueDefinitionMessage(p.name),
                 [...meta.path, 'paths', path, 'parameters'],
                 rule,
                 meta
@@ -122,18 +128,24 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
       if (op === 'parameters') {
         continue;
       }
-      if (object.paths[path][op].parameters) {
+
+      const parameters = object.paths[path][op].parameters;
+      if (parameters) {
         // temporary store for tracking parameters specified across operations (to make sure
         // parameters are not defined multiple times under the same operation)
         const tmp = {};
 
-        for (const p of object.paths[path][op].parameters) {
+        for (const i in parameters) {
+          if (!parameters.hasOwnProperty(i)) continue;
+
+          const p = parameters[i];
           if (p.in && p.in === 'path' && p.name) {
+            const parameterPath = ['paths', path, op, 'parameters', i];
             if (!p.required) {
               results.push(
                 generateResult(
-                  `Path parameter ${p.name} must have \`required\` set to \`true\``,
-                  [...meta.path, 'paths', path, op, 'parameters'],
+                  requiredMessage(p.name),
+                  [...meta.path, ...parameterPath],
                   rule,
                   meta
                 )
@@ -143,8 +155,8 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             if (tmp[p.name]) {
               results.push(
                 generateResult(
-                  `Operation parameter name '${p.name}' is used multiple times.`,
-                  [...meta.path, 'paths', path, op, 'parameters'],
+                  uniqueDefinitionMessage(p.name),
+                  [...meta.path, ...parameterPath],
                   rule,
                   meta
                 )
@@ -153,8 +165,9 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             } else if (operationParams[p.name]) {
               continue;
             }
+
             tmp[p.name] = {};
-            operationParams[p.name] = ['paths', path, op];
+            operationParams[p.name] = parameterPath;
           }
         }
       }
@@ -167,7 +180,9 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
       if (!topParams[p] && !operationParams[p]) {
         results.push(
           generateResult(
-            `Templated path parameter '${p}' does not have a corresponding parameter definition.`,
+            `The path "**${path}**" uses a parameter "**{${p}}**" that does not have a corresponding definition.
+
+To fix, add a path parameter with the name "**${p}**".`,
             [...meta.path, 'paths', path],
             rule,
             meta
@@ -186,7 +201,11 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           const resPath = paramObj[p];
           results.push(
             generateResult(
-              `Parameter '${p}' does not have a corresponding path parameter template.`,
+              `Parameter "**${p}**" is not used in the path "**${path}**".
+
+Unused parameters are not allowed.
+
+To fix, remove this parameter.`,
               [...meta.path, ...resPath],
               rule,
               meta
@@ -215,3 +234,17 @@ function generateResult(
     type: rule.type,
   };
 }
+
+const requiredMessage = (
+  name: string
+) => `Path parameter "**${name}**" must have a \`required\` that is set to \`true\`.
+
+To fix, mark this parameter as required.`;
+
+const uniqueDefinitionMessage = (
+  name: string
+) => `Path parameter '**${name}**' is defined multiple times.
+
+Path parameters must be unique.
+
+To fix, remove the duplicate parameters.`;
