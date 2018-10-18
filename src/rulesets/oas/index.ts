@@ -37,7 +37,7 @@ export const commonOasRuleset = (): IRuleset => {
           function: 'oasOpSecurityDefined',
           path: '$',
           summary:
-            'Operation `security` requirements must have matching a definition under `securityDefintion`.',
+            'Operation `security` values must match a scheme defined in global `securityDefinitions`.',
           type: RuleType.VALIDATION,
           tags: ['operation'],
         },
@@ -55,13 +55,13 @@ export const commonOasRuleset = (): IRuleset => {
           function: 'oasOpFormDataConsumeCheck',
           path: operationPath,
           summary:
-            'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their consumes property.',
+            'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
           type: RuleType.VALIDATION,
           tags: ['operation'],
         },
         'path-params': {
           type: RuleType.VALIDATION,
-          summary: 'Path parameters are correct and valid',
+          summary: 'Path parameters are correct and valid.',
           enabled: true,
           severity: RuleSeverity.ERROR,
           path: '$',
