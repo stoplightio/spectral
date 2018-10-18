@@ -1,14 +1,26 @@
-import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+const _get = require('lodash.get');
 
-export const oasOpSecurityDefined: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
+import { ensureRule } from '../../../../functions/utils/ensureRule';
+import { IRule, IRuleFunction, IRuleOpts, IRuleResult, Path } from '../../../../types';
+
+export type functionName = 'oasOpSecurityDefined';
+
+export interface IOasOpSecurityDefinedRule extends IRule {
+  function: functionName;
+  input: {
+    schemesPath: Path;
+  };
+}
+
+export const oasOpSecurityDefined: IRuleFunction<IOasOpSecurityDefinedRule> = (
+  opts: IRuleOpts<IOasOpSecurityDefinedRule>
+) => {
   const results: IRuleResult[] = [];
 
-  const { object, meta } = opts;
-
-  const { paths = {}, securityDefinitions = {} } = object;
-
-  const allDefs = Object.keys(securityDefinitions);
+  const { object, meta, rule } = opts;
+  const { paths = {} } = object;
+  const schemes = _get(object, rule.input.schemesPath) || {};
+  const allDefs = Object.keys(schemes);
 
   for (const path in paths) {
     if (Object.keys(paths[path]).length > 0)
