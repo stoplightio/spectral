@@ -32,15 +32,6 @@ export const commonOasRuleset = (): IRuleset => {
           type: RuleType.STYLE,
           tags: ['operation'],
         },
-        'operation-security-defined': {
-          enabled: true,
-          function: 'oasOpSecurityDefined',
-          path: '$',
-          summary:
-            'Operation `security` requirements must have matching a definition under `securityDefintion`.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
         'operation-operationId-unique': {
           enabled: true,
           function: 'oasOpIdUnique',
@@ -427,6 +418,36 @@ export const commonOasRuleset = (): IRuleset => {
           summary: 'Tag object should have a `description`.',
           type: RuleType.STYLE,
           tags: ['api'],
+        },
+      },
+
+      oas2: {
+        'operation-security-defined': {
+          enabled: true,
+          function: 'oasOpSecurityDefined',
+          input: {
+            schemesPath: ['securityDefinitions'],
+          },
+          path: '$',
+          summary:
+            'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+          type: RuleType.VALIDATION,
+          tags: ['operation'],
+        },
+      },
+
+      oas3: {
+        'operation-security-defined': {
+          enabled: true,
+          function: 'oasOpSecurityDefined',
+          input: {
+            schemesPath: ['components', 'securitySchemes'],
+          },
+          path: '$',
+          summary:
+            'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+          type: RuleType.VALIDATION,
+          tags: ['operation'],
         },
       },
     },
