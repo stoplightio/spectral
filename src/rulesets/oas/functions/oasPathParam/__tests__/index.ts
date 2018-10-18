@@ -96,38 +96,6 @@ describe('oasPathParam', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('Error if duplicate path parameter definitions are specified', () => {
-    const results = s.run({
-      spec: 'oas2',
-      target: {},
-      resTarget: {
-        paths: {
-          '/foo/{bar}': {
-            parameters: [
-              {
-                name: 'bar',
-                in: 'path',
-                required: true,
-              },
-            ],
-            get: {
-              parameters: [
-                {
-                  name: 'bar',
-                  in: 'path',
-                  required: true,
-                },
-              ],
-            },
-          },
-        },
-      },
-    });
-    expect(results.length).toEqual(1);
-    expect(results[0].path).toEqual(['$', 'paths', '/foo/{bar}']);
-    expect(results[0].message).toContain('bar');
-  });
-
   test('Error if duplicate path parameters with same name are used', () => {
     const results = s.run({
       spec: 'oas2',
