@@ -6,7 +6,9 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.{ts}\"",
@@ -19,13 +21,15 @@
   "dependencies": {
     "ajv": "6.5.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
-    "lodash.merge": "^4.6.1",
+    "lodash.get": "4.4.x",
+    "lodash.merge": "4.6.x",
     "should": "13.2.x"
   },
   "devDependencies": {
     "@types/jest": "23.3.x",
     "@types/jsonpath": "0.2.x",
-    "@types/lodash.merge": "^4.6.4",
+    "@types/lodash.get": "4.4.x",
+    "@types/lodash.merge": "4.6.x",
     "@types/node": "10.12.x",
     "jest": "23.6.x",
     "prettier": "1.14.x",
