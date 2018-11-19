@@ -1,37 +1,77 @@
-# spectral
+# Spectral
 
-> **Warning** This is still a prototype and not ready for general use.
+### Features
 
-This is an enhanced version of the [speccy](https://github.com/wework/speccy)
-project. Differences between this project and speccy include:
+- **Linting and rule engine** that be applied to **_any_ JSON object**, including OpenAPI Specification 2 and 3 documents
+- TODO: Explain more
 
-- Lint rules can be applied to _any_ JSON object, not just OAS3 specifications.
+##### Examples:
+- Create API design style guides using Spectral for linting
+- TODO: another example
 
-- All dependencies on the [oas-kit](https://github.com/Mermade/oas-kit/)
-  repository have been removed, since rules are no longer OAS-specific.
+## Installation
 
-- The rule structure has been modified slightly to use
-  [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead
-  of the `object` parameters (which were OAS-specific).
-
-- Rules are more clearly defined (thanks to TypeScript typings) and now require
-  specifying a `type` parameter.
-
-- Some rule types have been enhanced to be a little more flexible. An example of
-  this includes the ability to specify the object to be linted in the `path`
-  parameter itself, instead of relying on rule-specific options to be applied.
-
-- Ported to TypeScript.
-
-Things that speccy has, but spectral does not (though they would be easy to add):
-
-- A 'server' and CLI mode
-
-- The ability to add rules from file
-
-- The ability for rule files to specify a dependency on other rule files
+```shell
+npm install @stoplight/spectral
+```
 
 ## Usage
+
+### JavaScript (Node.js) with OAS 2 example:
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+const { defaultRuleset } = require('@stoplight/spectral/lib/rulesets');
+
+// an OASv2 specification
+var myOAS = {
+  [...]
+  responses: {
+    '401asdf': {
+      description: '',
+      schema: {
+        $ref: '#/definitions/error-response',
+      },
+    },
+  },
+  [...]
+};
+
+// create a new instance of spectral with all of the baked in rulesets
+const spectral = new Spectral({ rulesets: [defaultRuleset()] });
+
+// run!
+console.log(spectral.run({ spec: 'oas2', target: myOAS }));
+
+//  [ {
+//   path: '$.responses',
+//   rule:
+//     { type: 'pattern',
+//       name: 'all-responses-must-be-numeric',
+//       path: '$..responses',
+//       enabled: true,
+//       description: 'reference components should all match regex ^[0-9]+',
+//       pattern: { property: '*', value: '^[0-9]+$' } },
+//     error:
+//       Error {
+//         operator: 'to be',
+//         expected: true,
+//         message: 'reference components should all match regex ^[0-9]+',
+//         showDiff: true,
+//         actual: false,
+//         stackStartFunction: [Function: assert],
+//         negate: false,
+//         assertion:
+//         Assertion {
+//           obj: false,
+//           anyOne: false,
+//           negate: false,
+//           params: [Object],
+//           onlyThis: undefined,
+//           light: false } } } ]
+```
+
+### TypeScript with OAS 2 example:
 
 ```typescript
 import { Spectral } from '@stoplight/spectral';
@@ -85,6 +125,40 @@ console.log(spectral.run({ spec: 'oas2', target: myOAS }));
 //           light: false } } } ]
 ```
 
+## Example implmentations:
+
+- [Spectral Bot](), a GitHub pull request bot using the [Probot]() framework, built by Taylor Barnett
+
+## FAQs
+
+**I want to lint my OpenAPI Specification documents but don't want to implement Spectral right now.**
+
+No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here]().
+
+**What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
+
+With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible.
+
+An example of this includes the ability to specify the object to be linted in the `path` parameter itself, instead of relying on rule-specific options to be applied.
+
+## Contributing
+
+TODO:
+- Issue and PR templates (DONE)
+- Issue tags
+- Where to get help when wanting to contribute
+
+
 ## Helpful Links
 
 - [JSONPath Tester](https://jsonpath.curiousconcept.com/)
+- [Library of useful functions for when working with JSON](https://github.com/stoplightio/json)
+- [Library of useful functions for when working with YAML](https://github.com/stoplightio/yaml)
+
+## Support
+
+If you have a bug or feature request, please open an issue [here](https://github.com/stoplightio/spectral/issues).
+
+If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We're created an open source category for these questions. It's also a great place to share your implementations.
+
+Lastly, if you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
