@@ -7,6 +7,7 @@
 
 ##### Examples:
 - Create API design style guides using Spectral for linting
+- Validate JSON documents against a JSON schema specification
 - TODO: another example
 
 ## Installation
@@ -125,9 +126,9 @@ console.log(spectral.run({ spec: 'oas2', target: myOAS }));
 //           light: false } } } ]
 ```
 
-## Example implmentations:
+## Example Implementations
 
-- [Spectral Bot](), a GitHub pull request bot using the [Probot]() framework, built by Taylor Barnett
+- [Spectral Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot using the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
 
 ## FAQs
 
@@ -138,8 +139,6 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 **What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
 
 With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible.
-
-An example of this includes the ability to specify the object to be linted in the `path` parameter itself, instead of relying on rule-specific options to be applied.
 
 ## Contributing
 
@@ -159,6 +158,6 @@ TODO:
 
 If you have a bug or feature request, please open an issue [here](https://github.com/stoplightio/spectral/issues).
 
-If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We're created an open source category for these questions. It's also a great place to share your implementations.
+If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We've created an open source category for these questions. It's also a great place to share your implementations.
 
 Lastly, if you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
