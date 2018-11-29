@@ -142,11 +142,9 @@ With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 do
 
 ## Contributing
 
-TODO:
-- Issue and PR templates (DONE)
-- Issue tags
-- Where to get help when wanting to contribute
+Most of the interesting projects are built _with_ Spectral. Please consider using Spectral in a project or contribute to an [existing one](#example-implementations). If you would like to add your project to our examples, we encourage you to open an issue.
 
+We also love to help and support contributors! If you are interesting in contributing to Spectral itself, check out our [contributing docs]() to get started.
 
 ## Helpful Links
 
