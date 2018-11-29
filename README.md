@@ -154,6 +154,11 @@ TODO:
 - [Library of useful functions for when working with JSON](https://github.com/stoplightio/json)
 - [Library of useful functions for when working with YAML](https://github.com/stoplightio/yaml)
 
+## Credits
+
+- [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
+- [Ross McDonald](https://github.com/rossmcdonald) for creating the initial version of Spectral
+
 ## Support
 
 If you have a bug or feature request, please open an issue [here](https://github.com/stoplightio/spectral/issues).
