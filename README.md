@@ -2,7 +2,7 @@
 
 ### Features
 
-- **Linting and rule engine** that be applied to **_any_ JSON object**, including OpenAPI Specification 2 and 3 documents
+- Linting and rule engine that be applied to _any JSON object_, including OpenAPI Specification 2 and 3 documents
 - TODO: Explain more
 
 ##### Examples:
@@ -134,7 +134,7 @@ console.log(spectral.run({ spec: 'oas2', target: myOAS }));
 
 **I want to lint my OpenAPI Specification documents but don't want to implement Spectral right now.**
 
-No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here]().
+No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_campaign=spectral).
 
 **What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
 
@@ -142,9 +142,9 @@ With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 do
 
 ## Contributing
 
-Most of the interesting projects are built _with_ Spectral. Please consider using Spectral in a project or contribute to an [existing one](#example-implementations). If you would like to add your project to our examples, we encourage you to open an issue.
+Most of the interesting projects are built _with_ Spectral. Please consider using Spectral in a project or contribute to an [existing one](#example-implementations). If you would like to add your project to our examples, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
 
-We also love to help and support contributors! If you are interesting in contributing to Spectral itself, check out our [contributing docs]() to get started.
+We also love to help and support contributors! If you are interesting in contributing to Spectral itself, check out our [contributing docs](CONTRIBUTING.md) to get started.
 
 ## Helpful Links
 
