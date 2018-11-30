@@ -1,14 +1,20 @@
 # Spectral
 
-### Features
+TODO add CI badge
+
+## Features
 
 - Linting and rule engine that be applied to _any JSON object_, including OpenAPI Specification 2 and 3 documents
 - TODO: Explain more
 
-##### Examples:
+## Examples
 - Create API design style guides using Spectral for linting
 - Validate JSON documents against a JSON schema specification
 - TODO: another example
+
+### Example Implementations
+
+- [Spectral Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot using the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
 
 ## Installation
 
@@ -125,10 +131,6 @@ console.log(spectral.run({ spec: 'oas2', target: myOAS }));
 //           onlyThis: undefined,
 //           light: false } } } ]
 ```
-
-## Example Implementations
-
-- [Spectral Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot using the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
 
 ## FAQs
 
