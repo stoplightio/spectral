@@ -77,7 +77,7 @@ export const commonOasRuleset = (): IRuleset => {
             properties: ['host'],
           },
           path: '$',
-          summary: 'OpenAPI host `description` must be present and non-empty string.',
+          summary: 'OpenAPI `host` must be present and non-empty string.',
           type: RuleType.STYLE,
           tags: ['api'],
         },
