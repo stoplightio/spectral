@@ -60,7 +60,7 @@ interface IRunOpts {
 }
 
 export class Spectral {
-  // normalized object for holding rule definitions indexed by name
+  // normalized object for holding rule definitions indexed by ${format}-${name}
   private _rulesByIndex: IRuleStore = {};
 
   // the initial rule config, set on initialization
@@ -81,7 +81,7 @@ export class Spectral {
       if (!this._rulesByIndex.hasOwnProperty(name)) continue;
       const { rule, format, apply } = this._rulesByIndex[name];
 
-      if (!dataFormat || format.indexOf(dataFormat) !== -1) {
+      if (!dataFormat || format === dataFormat) {
         rules.push({ name, format, rule, apply });
       }
     }
@@ -112,7 +112,7 @@ export class Spectral {
           if (
             !ruleEntry.rule.enabled ||
             (opts.type && ruleEntry.rule.type !== opts.type) ||
-            ruleEntry.format.indexOf(opts.spec) === -1
+            ruleEntry.format !== opts.spec
           ) {
             return null;
           }
