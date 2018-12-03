@@ -1,3 +1,4 @@
+const merge = require('lodash.merge');
 import { Spectral } from '../index';
 import { defaultRuleset } from '../rulesets';
 import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../types';
@@ -12,6 +13,41 @@ describe('spectral', () => {
 
     const results = s.run({ target: todosPartialDeref, spec: 'oas2' });
     expect(results.length).toBeGreaterThan(0);
+  });
+
+  test('setting rules should not mutate the original ruleset', () => {
+    const givenCustomRuleSet = {
+      rules: {
+        oas2: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+    // deep copy
+    const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
+
+    const s = new Spectral({ rulesets: [givenCustomRuleSet] });
+
+    s.setRules([
+      {
+        rules: {
+          oas2: {
+            rule1: false,
+          },
+        },
+      },
+    ]);
+
+    expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
   });
 
   test('be able to toggle rules on apply', () => {
