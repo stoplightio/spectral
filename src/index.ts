@@ -60,13 +60,6 @@ interface IRunOpts {
 }
 
 export class Spectral {
-  // paths is an internal cache of rules keyed by their path element and format.
-  // This is used primarily to ensure that we only issue one JSON path query per
-  // unique path.
-  private _paths: {
-    [path: string]: Set<string>;
-  } = {};
-
   // normalized object for holding rule definitions indexed by name
   private _rulesByIndex: IRuleStore = {};
 
@@ -192,13 +185,6 @@ export class Spectral {
     } catch (e) {
       throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.path}\n\n${e}`);
     }
-
-    // update paths object (ensure uniqueness)
-    if (!this._paths[rule.path]) {
-      this._paths[rule.path] = new Set();
-    }
-
-    this._paths[rule.path].add(ruleIndex);
 
     const ruleFunc = this._functions[rule.function];
     if (!ruleFunc) {
