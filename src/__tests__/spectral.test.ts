@@ -1,3 +1,4 @@
+const merge = require('lodash.merge');
 import { Spectral } from '../index';
 import { defaultRuleset } from '../rulesets';
 import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../types';
@@ -31,22 +32,8 @@ describe('spectral', () => {
         },
       },
     };
-    const expectedCustomRuleSet = {
-      rules: {
-        oas2: {
-          rule1: {
-            type: RuleType.STYLE,
-            function: RuleFunction.TRUTHY,
-            path: '$',
-            enabled: true,
-            summary: '',
-            input: {
-              properties: 'something',
-            },
-          },
-        },
-      },
-    };
+    // deep copy
+    const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
 
     const s = new Spectral({ rulesets: [givenCustomRuleSet] });
 
