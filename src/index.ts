@@ -92,7 +92,7 @@ export class Spectral {
   }
 
   public setRules(rulesets: types.IRuleset[]) {
-    this._rulesets = rulesets;
+    this._rulesets = merge([], rulesets);
     this._functions = this._rulesetsToFunctions(this._rulesets);
     this._rules = this._rulesetsToRules(this._rulesets);
   }
@@ -126,7 +126,7 @@ export class Spectral {
           if (rule.path !== path) {
             console.warn(
               `Rule '${ruleName} was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
-                rule.path
+              rule.path
               }`
             );
             continue;
