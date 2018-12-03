@@ -16,6 +16,7 @@
     "prepublishOnly": "yarn build",
     "test": "jest",
     "test.cover": "jest --coverage",
+    "test.prod": "yarn lint && yarn test --coverage --no-cache --maxWorkers 2",
     "test.watch": "jest --watch"
   },
   "dependencies": {

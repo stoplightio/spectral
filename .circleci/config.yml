@@ -15,8 +15,19 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: Run tests
-          command: yarn test
+          name: Download cc-test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          name: cc-before
+          command: |
+            ./cc-test-reporter before-build
+      - run: yarn test.prod
+      - run:
+          name: cc-after
+          command: |
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
       - run:
           name: Run build
           command: yarn build
