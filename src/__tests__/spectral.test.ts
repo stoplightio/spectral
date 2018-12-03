@@ -12,7 +12,7 @@ describe('spectral', () => {
     });
 
     const results = s.run({ target: todosPartialDeref, spec: 'oas2' });
-    expect(results.length).toBeGreaterThan(0);
+    expect(results.length).toBe(0);
   });
 
   // Assures: https://stoplightio.atlassian.net/browse/SL-786
@@ -92,7 +92,7 @@ Array [
   Object {
     "apply": [Function],
     "format": "oas2",
-    "name": "oas2-ruleName1",
+    "name": "ruleName1",
     "rule": Object {
       "enabled": true,
       "function": "truthy",
@@ -111,7 +111,7 @@ Array [
   Object {
     "apply": [Function],
     "format": "oas3",
-    "name": "oas3-ruleName1",
+    "name": "ruleName1",
     "rule": Object {
       "enabled": false,
       "function": "notContain",
@@ -224,6 +224,6 @@ Array [
     const s = new Spectral({ rulesets });
     const results = s.getRules('oas2');
 
-    expect(results.length).toBe(2);
+    expect(results.length).toBe(1);
   });
 });

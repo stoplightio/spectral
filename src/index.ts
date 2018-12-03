@@ -79,10 +79,10 @@ export class Spectral {
 
     for (const name in this._rulesByIndex) {
       if (!this._rulesByIndex.hasOwnProperty(name)) continue;
-      const { rule, format, apply } = this._rulesByIndex[name];
+      const { name: rName, rule, format, apply } = this._rulesByIndex[name];
 
       if (!dataFormat || format === dataFormat) {
-        rules.push({ name, format, rule, apply });
+        rules.push({ name: rName, format, rule, apply });
       }
     }
 
