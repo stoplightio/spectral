@@ -51,6 +51,129 @@ describe('spectral', () => {
     expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
   });
 
+  // Assures: https://stoplightio.atlassian.net/browse/SL-789
+  test('setting rules with opts should update/append the current ruleset', () => {
+    const ruleset = {
+      rules: {
+        format: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+    // deep copy
+    const s = new Spectral({ rulesets: [ruleset] });
+
+    s.setRules([
+      {
+        rules: {
+          differentFormat: {
+            rule2: {
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                properties: 'a different rule',
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    expect(s.getRules()).toHaveLength(2);
+
+    s.setRules(
+      [
+        {
+          rules: {
+            format: {
+              rule1: false,
+            },
+          },
+        },
+      ],
+      { includeCurrent: true }
+    );
+
+    expect(s.getRules()).toHaveLength(2);
+  });
+
+  // Assures: https://stoplightio.atlassian.net/browse/SL-789
+  test('setting rules without includeCurren opts should overwrite the current ruleset', () => {
+    const ruleset = {
+      rules: {
+        format: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+    // deep copy
+    const s = new Spectral({ rulesets: [ruleset] });
+
+    s.setRules(
+      [
+        {
+          rules: {
+            differentFormat: {
+              rule2: {
+                type: RuleType.STYLE,
+                function: RuleFunction.TRUTHY,
+                path: '$',
+                enabled: true,
+                summary: '',
+                input: {
+                  properties: 'a different rule',
+                },
+              },
+            },
+          },
+        },
+      ],
+      { includeCurrent: false }
+    );
+
+    expect(s.getRules()).toHaveLength(1);
+    expect(s.getRules()).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "apply": [Function],
+    "format": "differentFormat",
+    "name": "rule2",
+    "rule": Object {
+      "enabled": true,
+      "function": "truthy",
+      "input": Object {
+        "properties": "a different rule",
+      },
+      "path": "$",
+      "summary": "",
+      "type": "style",
+    },
+  },
+]
+`);
+  });
+
   // Assures: https://stoplightio.atlassian.net/browse/SL-787
   test('given a ruleset with two identical rules under two distinct formats should not collide', () => {
     const rulesets = [

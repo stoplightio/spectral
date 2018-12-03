@@ -67,7 +67,7 @@ export class Spectral {
   // @ts-ignore
   private _rulesets: types.IRuleset[] = [];
 
-  private _functions: IFunctionStore = {};
+  private _functions: IFunctionStore = defaultFunctions;
 
   constructor(opts: ISpectralOpts) {
     this.setRules(opts.rulesets);
@@ -89,21 +89,23 @@ export class Spectral {
     return rules;
   }
 
-  public setRules(rulesets: types.IRuleset[]) {
-    this._rulesets = merge([], rulesets);
-    this._functions = { ...defaultFunctions, ...this._rulesetsToFunctions(this._rulesets) };
-    this._rulesByIndex = this._rulesetsToRules(this._rulesets, this._rulesByIndex, this._functions);
+  public setRules(
+    rulesets: types.IRuleset[],
+    opts: { includeCurrent: boolean } = { includeCurrent: true }
+  ) {
+    const { rulesets: rSets, functionStore, ruleStore } = this._parseRuleSets(rulesets, opts);
+
+    this._rulesets = rSets;
+    this._functions = functionStore;
+    this._rulesByIndex = ruleStore;
   }
 
   public run(opts: IRunOpts): types.IRuleResult[] {
     const { target, rulesets = [] } = opts;
 
-    let ruleStore = this._rulesByIndex;
-
-    if (rulesets.length) {
-      const functionStore = { ...this._functions, ...this._rulesetsToFunctions(rulesets) };
-      ruleStore = this._rulesetsToRules(rulesets, ruleStore, functionStore);
-    }
+    const ruleStore = rulesets.length
+      ? this._parseRuleSets(rulesets, { includeCurrent: true }).ruleStore
+      : this._rulesByIndex;
 
     return target ? this.runAllLinters(ruleStore, opts) : [];
   }
@@ -179,6 +181,27 @@ export class Spectral {
     }
 
     return ruleEntry.apply(opt);
+  }
+
+  private _parseRuleSets(
+    rulesets: types.IRuleset[],
+    opts: { includeCurrent: boolean } = { includeCurrent: true }
+  ): { rulesets: types.IRuleset[]; functionStore: IFunctionStore; ruleStore: IRuleStore } {
+    const rSets = merge([], rulesets);
+
+    let functionStore = opts.includeCurrent ? this._functions : defaultFunctions;
+    let ruleStore = opts.includeCurrent ? this._rulesByIndex : {};
+
+    if (rSets.length) {
+      functionStore = { ...functionStore, ...this._rulesetsToFunctions(rulesets) };
+      ruleStore = this._rulesetsToRules(rulesets, ruleStore, functionStore);
+    }
+
+    return {
+      rulesets: rSets,
+      functionStore,
+      ruleStore,
+    };
   }
 
   private _parseRuleDefinition(
