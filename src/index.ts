@@ -1,6 +1,9 @@
-const merge = require('lodash.merge');
+const merge = require('lodash/merge');
+const values = require('lodash/values');
 import * as jp from 'jsonpath';
 
+import { PathComponent } from 'jsonpath';
+import { compact, flatten } from 'lodash';
 import { functions } from './functions';
 import * as types from './types';
 
@@ -57,13 +60,8 @@ interface IRunOpts {
 }
 
 export class Spectral {
-  // paths is an internal cache of rules keyed by their path element and format.
-  // This is used primarily to ensure that we only issue one JSON path query per
-  // unique path.
-  private _paths: object = {};
-
-  // normalized object for holding rule definitions indexed by name
-  private _rules: IRuleStore = {};
+  // normalized object for holding rule definitions indexed by ${format}-${name}
+  private _rulesByIndex: IRuleStore = {};
 
   // the initial rule config, set on initialization
   // @ts-ignore
@@ -79,12 +77,12 @@ export class Spectral {
   public getRules(dataFormat?: string): IRuleEntry[] {
     const rules = [];
 
-    for (const name in this._rules) {
-      if (!this._rules.hasOwnProperty(name)) continue;
-      const { rule, format, apply } = this._rules[name];
+    for (const name in this._rulesByIndex) {
+      if (!this._rulesByIndex.hasOwnProperty(name)) continue;
+      const { name: rName, rule, format, apply } = this._rulesByIndex[name];
 
-      if (!dataFormat || format.indexOf(dataFormat) !== -1) {
-        rules.push({ name, format, rule, apply });
+      if (!dataFormat || format === dataFormat) {
+        rules.push({ name: rName, format, rule, apply });
       }
     }
 
@@ -94,118 +92,103 @@ export class Spectral {
   public setRules(rulesets: types.IRuleset[]) {
     this._rulesets = merge([], rulesets);
     this._functions = this._rulesetsToFunctions(this._rulesets);
-    this._rules = this._rulesetsToRules(this._rulesets);
+    this._rulesByIndex = this._rulesetsToRules(this._rulesets);
   }
 
   public run(opts: IRunOpts): types.IRuleResult[] {
-    const { target, spec, rulesets = [], type } = opts;
-    const results: types.IRuleResult[] = [];
+    const { target, rulesets = [] } = opts;
 
     if (rulesets.length) {
       this.setRules(rulesets);
     }
 
-    if (!target) {
-      return results;
-    }
+    return target ? this.runAllLinters(opts) : [];
+  }
 
-    // create a shallow copy of rule configuration for this run
-    const runRules: IRuleStore = { ...this._rules };
+  private runAllLinters(opts: IRunOpts): types.IRuleResult[] {
+    return flatten(
+      compact(
+        values(this._rulesByIndex).map((ruleEntry: IRuleEntry) => {
+          if (
+            !ruleEntry.rule.enabled ||
+            (opts.type && ruleEntry.rule.type !== opts.type) ||
+            ruleEntry.format !== opts.spec
+          ) {
+            return null;
+          }
 
-    for (const path in this._paths) {
-      if (!this._paths.hasOwnProperty(path)) continue;
+          try {
+            return this.lintNodes(ruleEntry, opts);
+          } catch (e) {
+            console.error(`Unable to run rule '${ruleEntry.name}':\n${e}`);
+            return null;
+          }
+        })
+      )
+    );
+  }
 
-      for (const ruleName of this._paths[path]) {
-        const { rule, apply, format } = runRules[ruleName];
-
-        if (!rule.enabled || (type && rule.type !== type) || format.indexOf(spec) === -1) {
-          continue;
-        }
-
-        if (ruleName) {
-          if (rule.path !== path) {
+  private lintNodes(ruleEntry: IRuleEntry, opts: IRunOpts): types.IRuleResult[] {
+    const nodes = jp.nodes(opts.target, ruleEntry.rule.path);
+    return flatten(
+      compact(
+        nodes.map(node => {
+          const { path: nPath } = node;
+          try {
+            return this.lintNode(ruleEntry, opts, node);
+          } catch (e) {
             console.warn(
-              `Rule '${ruleName} was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
-              rule.path
-              }`
+              `Encountered error when running rule '${
+                ruleEntry.name
+              }' on node at path '${nPath}':\n${e}`
             );
-            continue;
+            return null;
           }
-        }
+        })
+      )
+    );
+  }
 
-        try {
-          const nodes = jp.nodes(target, path);
+  private lintNode(
+    ruleEntry: IRuleEntry,
+    opts: IRunOpts,
+    node: { path: PathComponent[]; value: any }
+  ): types.IRuleResult[] {
+    const opt: types.IRuleOpts = {
+      object: node.value,
+      rule: ruleEntry.rule,
+      meta: {
+        path: node.path,
+        name: ruleEntry.name,
+        rule: ruleEntry.rule,
+      },
+    };
 
-          for (const n of nodes) {
-            const { path: nPath, value } = n;
-
-            try {
-              const opt: types.IRuleOpts = {
-                object: value,
-                rule,
-                meta: {
-                  path: nPath,
-                  name: ruleName,
-                  rule,
-                },
-              };
-
-              if (path === '$') {
-                // allow resolved and stringified targets to be passed to rules when operating on
-                // the root path
-                if (opts.resTarget) {
-                  opt.resObj = opts.resTarget;
-                }
-                if (opts.strTarget) {
-                  opt.strObj = opts.strTarget;
-                }
-              }
-
-              const result: types.IRuleResult[] = apply(opt);
-
-              results.push(...result);
-            } catch (e) {
-              console.warn(
-                `Encountered error when running rule '${ruleName}' on node at path '${nPath}':\n${e}`
-              );
-            }
-          }
-        } catch (e) {
-          console.error(`Unable to run rule '${ruleName}':\n${e}`);
-        }
+    if (ruleEntry.rule.path === '$') {
+      // allow resolved and stringified targets to be passed to rules when operating on
+      // the root path
+      if (opts.resTarget) {
+        opt.resObj = opts.resTarget;
+      }
+      if (opts.strTarget) {
+        opt.strObj = opts.strTarget;
       }
     }
 
-    return results;
+    return ruleEntry.apply(opt);
   }
 
   private _parseRuleDefinition(name: string, rule: types.Rule, format: string): IRuleEntry {
+    const ruleIndex = this.toRuleIndex(name, format);
     try {
       jp.parse(rule.path);
     } catch (e) {
-      throw new SyntaxError(`Invalid JSON path for rule '${name}': ${rule.path}\n\n${e}`);
-    }
-
-    // update paths object (ensure uniqueness)
-    if (!this._paths[rule.path]) {
-      this._paths[rule.path] = [];
-    }
-
-    let present = false;
-    for (const ruleName of this._paths[rule.path]) {
-      if (ruleName === name) {
-        present = true;
-        break;
-      }
-    }
-
-    if (!present) {
-      this._paths[rule.path].push(name);
+      throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.path}\n\n${e}`);
     }
 
     const ruleFunc = this._functions[rule.function];
     if (!ruleFunc) {
-      throw new SyntaxError(`Function does not exist for rule '${name}': ${rule.function}`);
+      throw new SyntaxError(`Function does not exist for rule '${ruleIndex}': ${rule.function}`);
     }
 
     return {
@@ -216,7 +199,11 @@ export class Spectral {
     };
   }
 
-  private _rulesetToRules(ruleset: types.IRuleset, rules: IRuleStore): IRuleStore {
+  private toRuleIndex(ruleName: string, ruleFormat: string) {
+    return `${ruleFormat}-${ruleName}`;
+  }
+
+  private _rulesetToRules(ruleset: types.IRuleset, internalRuleStore: IRuleStore): IRuleStore {
     const formats = ruleset.rules;
     for (const format in formats) {
       if (!formats.hasOwnProperty(format)) continue;
@@ -225,30 +212,31 @@ export class Spectral {
         if (!formats[format].hasOwnProperty(ruleName)) continue;
 
         const r = formats[format][ruleName];
+        const ruleIndex = this.toRuleIndex(ruleName, format);
         if (typeof r === 'boolean') {
           // enabling/disabling rule
-          if (!rules[ruleName]) {
+          if (!internalRuleStore[ruleIndex]) {
             console.warn(
               `Unable to find rule matching name '${ruleName}' under format ${format} - this entry has no effect`
             );
             continue;
           }
 
-          rules[ruleName].rule.enabled = r;
+          internalRuleStore[ruleIndex].rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
-          rules[ruleName] = this._parseRuleDefinition(ruleName, r, format);
+          internalRuleStore[ruleIndex] = this._parseRuleDefinition(ruleName, r, format);
         } else {
           throw new Error(`Unknown rule definition format: ${r}`);
         }
       }
     }
 
-    return rules;
+    return internalRuleStore;
   }
 
   private _rulesetsToRules(rulesets: types.IRuleset[]): IRuleStore {
-    const rules: IRuleStore = { ...this._rules };
+    const rules: IRuleStore = merge({}, this._rulesByIndex);
 
     for (const ruleset of rulesets) {
       merge(rules, this._rulesetToRules(ruleset, rules));
