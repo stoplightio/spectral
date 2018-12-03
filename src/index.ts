@@ -4,7 +4,7 @@ import * as jp from 'jsonpath';
 
 import { PathComponent } from 'jsonpath';
 import { compact, flatten } from 'lodash';
-import { functions } from './functions';
+import { functions as defaultFunctions } from './functions';
 import * as types from './types';
 
 interface IFunctionStore {
@@ -91,24 +91,27 @@ export class Spectral {
 
   public setRules(rulesets: types.IRuleset[]) {
     this._rulesets = merge([], rulesets);
-    this._functions = this._rulesetsToFunctions(this._rulesets);
-    this._rulesByIndex = this._rulesetsToRules(this._rulesets);
+    this._functions = { ...defaultFunctions, ...this._rulesetsToFunctions(this._rulesets) };
+    this._rulesByIndex = this._rulesetsToRules(this._rulesets, this._rulesByIndex, this._functions);
   }
 
   public run(opts: IRunOpts): types.IRuleResult[] {
     const { target, rulesets = [] } = opts;
 
+    let ruleStore = this._rulesByIndex;
+
     if (rulesets.length) {
-      this.setRules(rulesets);
+      const functionStore = { ...this._functions, ...this._rulesetsToFunctions(rulesets) };
+      ruleStore = this._rulesetsToRules(rulesets, ruleStore, functionStore);
     }
 
-    return target ? this.runAllLinters(opts) : [];
+    return target ? this.runAllLinters(ruleStore, opts) : [];
   }
 
-  private runAllLinters(opts: IRunOpts): types.IRuleResult[] {
+  private runAllLinters(ruleStore: IRuleStore, opts: IRunOpts): types.IRuleResult[] {
     return flatten(
       compact(
-        values(this._rulesByIndex).map((ruleEntry: IRuleEntry) => {
+        values(ruleStore).map((ruleEntry: IRuleEntry) => {
           if (
             !ruleEntry.rule.enabled ||
             (opts.type && ruleEntry.rule.type !== opts.type) ||
@@ -178,7 +181,10 @@ export class Spectral {
     return ruleEntry.apply(opt);
   }
 
-  private _parseRuleDefinition(name: string, rule: types.Rule, format: string): IRuleEntry {
+  private _parseRuleDefinition(
+    { name, format, rule }: { name: string; format: string; rule: types.Rule },
+    functionStore: IFunctionStore = {}
+  ): IRuleEntry {
     const ruleIndex = this.toRuleIndex(name, format);
     try {
       jp.parse(rule.path);
@@ -186,7 +192,7 @@ export class Spectral {
       throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.path}\n\n${e}`);
     }
 
-    const ruleFunc = this._functions[rule.function];
+    const ruleFunc = functionStore[rule.function] || this._functions[rule.function];
     if (!ruleFunc) {
       throw new SyntaxError(`Function does not exist for rule '${ruleIndex}': ${rule.function}`);
     }
@@ -203,7 +209,11 @@ export class Spectral {
     return `${ruleFormat}-${ruleName}`;
   }
 
-  private _rulesetToRules(ruleset: types.IRuleset, internalRuleStore: IRuleStore): IRuleStore {
+  private _rulesetToRules(
+    ruleset: types.IRuleset,
+    internalRuleStore: IRuleStore,
+    functionStore?: IFunctionStore
+  ): IRuleStore {
     const formats = ruleset.rules;
     for (const format in formats) {
       if (!formats.hasOwnProperty(format)) continue;
@@ -225,7 +235,10 @@ export class Spectral {
           internalRuleStore[ruleIndex].rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
-          internalRuleStore[ruleIndex] = this._parseRuleDefinition(ruleName, r, format);
+          internalRuleStore[ruleIndex] = this._parseRuleDefinition(
+            { name: ruleName, rule: r, format },
+            functionStore
+          );
         } else {
           throw new Error(`Unknown rule definition format: ${r}`);
         }
@@ -235,18 +248,22 @@ export class Spectral {
     return internalRuleStore;
   }
 
-  private _rulesetsToRules(rulesets: types.IRuleset[]): IRuleStore {
-    const rules: IRuleStore = merge({}, this._rulesByIndex);
+  private _rulesetsToRules(
+    rulesets: types.IRuleset[],
+    ruleStore?: IRuleStore,
+    functionStore?: IFunctionStore
+  ): IRuleStore {
+    const rules: IRuleStore = merge({}, ruleStore);
 
     for (const ruleset of rulesets) {
-      merge(rules, this._rulesetToRules(ruleset, rules));
+      merge(rules, this._rulesetToRules(ruleset, rules, functionStore));
     }
 
     return rules;
   }
 
   private _rulesetsToFunctions(rulesets: types.IRuleset[]): IFunctionStore {
-    let funcs = { ...functions };
+    let funcs = {};
 
     for (const ruleset of rulesets) {
       if (ruleset.functions) {

@@ -177,6 +177,73 @@ Array [
     expect(results.length).toEqual(1);
   });
 
+  // Assures: https://stoplightio.atlassian.net/browse/SL-788
+  test('run with rulesets overrides ruleset on run, not permenantly', () => {
+    const spec = {
+      hello: 'world',
+    };
+
+    const rulesets: IRuleset[] = [
+      {
+        rules: {
+          format: {
+            test: {
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
+              path: '$',
+              enabled: false,
+              severity: RuleSeverity.ERROR,
+              summary: '',
+              input: {
+                properties: 'nonexistant-property',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const overrideRulesets: IRuleset[] = [
+      {
+        rules: {
+          format: {
+            test: true,
+          },
+        },
+      },
+    ];
+
+    const s = new Spectral({ rulesets });
+
+    // run again with an override config
+    const run1 = s.run({ target: spec, spec: 'format', rulesets: overrideRulesets });
+
+    expect(s.getRules('format')).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "apply": [Function],
+    "format": "format",
+    "name": "test",
+    "rule": Object {
+      "enabled": false,
+      "function": "truthy",
+      "input": Object {
+        "properties": "nonexistant-property",
+      },
+      "path": "$",
+      "severity": "error",
+      "summary": "",
+      "type": "style",
+    },
+  },
+]
+`);
+
+    const run2 = s.run({ target: spec, spec: 'format' });
+
+    expect(run1).not.toEqual(run2);
+  });
+
   test('getRules returns a flattened list of rules filtered by format', () => {
     const rulesets: IRuleset[] = [
       {
