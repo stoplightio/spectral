@@ -14,6 +14,55 @@ describe('spectral', () => {
     expect(results.length).toBeGreaterThan(0);
   });
 
+  test('setting rules should not mutate the original ruleset', () => {
+    const givenCustomRuleSet = {
+      rules: {
+        oas2: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+    const expectedCustomRuleSet = {
+      rules: {
+        oas2: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+
+    const s = new Spectral({ rulesets: [givenCustomRuleSet] });
+
+    s.setRules([
+      {
+        rules: {
+          oas2: {
+            rule1: false,
+          },
+        },
+      },
+    ]);
+
+    expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
+  });
+
   test('be able to toggle rules on apply', () => {
     const spec = {
       hello: 'world',
