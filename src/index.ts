@@ -124,15 +124,6 @@ export class Spectral {
           continue;
         }
 
-        if (rule.path !== path) {
-          console.warn(
-            `Rule '${ruleIndex} was categorized under an incorrect path. Was under ${path}, but rule path is set to ${
-            rule.path
-            }`
-          );
-          continue;
-        }
-
         try {
           const nodes = jp.nodes(target, path);
 
