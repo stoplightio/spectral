@@ -21,15 +21,13 @@
   "dependencies": {
     "ajv": "6.5.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
-    "lodash.get": "4.4.x",
-    "lodash.merge": "4.6.x",
+    "lodash": "^4.17.11",
     "should": "13.2.x"
   },
   "devDependencies": {
     "@types/jest": "23.3.x",
     "@types/jsonpath": "0.2.x",
-    "@types/lodash.get": "4.4.x",
-    "@types/lodash.merge": "4.6.x",
+    "@types/lodash": "^4.14.118",
     "@types/node": "10.12.x",
     "jest": "23.6.x",
     "prettier": "1.14.x",

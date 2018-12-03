@@ -1,4 +1,4 @@
-const merge = require('lodash.merge');
+const merge = require('lodash/merge');
 
 import { IRuleset } from '../types';
 import { oas2Ruleset } from './oas2';

@@ -1,6 +1,9 @@
-const merge = require('lodash.merge');
+const merge = require('lodash/merge');
+const values = require('lodash/values');
 import * as jp from 'jsonpath';
 
+import { PathComponent } from 'jsonpath';
+import { compact, flatten } from 'lodash';
 import { functions } from './functions';
 import * as types from './types';
 
@@ -65,7 +68,7 @@ export class Spectral {
   } = {};
 
   // normalized object for holding rule definitions indexed by name
-  private _rules: IRuleStore = {};
+  private _rulesByIndex: IRuleStore = {};
 
   // the initial rule config, set on initialization
   // @ts-ignore
@@ -81,9 +84,9 @@ export class Spectral {
   public getRules(dataFormat?: string): IRuleEntry[] {
     const rules = [];
 
-    for (const name in this._rules) {
-      if (!this._rules.hasOwnProperty(name)) continue;
-      const { rule, format, apply } = this._rules[name];
+    for (const name in this._rulesByIndex) {
+      if (!this._rulesByIndex.hasOwnProperty(name)) continue;
+      const { rule, format, apply } = this._rulesByIndex[name];
 
       if (!dataFormat || format.indexOf(dataFormat) !== -1) {
         rules.push({ name, format, rule, apply });
@@ -96,78 +99,90 @@ export class Spectral {
   public setRules(rulesets: types.IRuleset[]) {
     this._rulesets = merge([], rulesets);
     this._functions = this._rulesetsToFunctions(this._rulesets);
-    this._rules = this._rulesetsToRules(this._rulesets);
+    this._rulesByIndex = this._rulesetsToRules(this._rulesets);
   }
 
   public run(opts: IRunOpts): types.IRuleResult[] {
-    const { target, spec, rulesets = [], type } = opts;
-    const results: types.IRuleResult[] = [];
+    const { target, rulesets = [] } = opts;
 
     if (rulesets.length) {
       this.setRules(rulesets);
     }
 
-    if (!target) {
-      return results;
-    }
+    return target ? this.runAllLinters(opts) : [];
+  }
 
-    // create a shallow copy of rule configuration for this run
-    const runRules: IRuleStore = { ...this._rules };
-
-    for (const path in this._paths) {
-      if (!this._paths.hasOwnProperty(path)) continue;
-
-      for (const ruleIndex of this._paths[path]) {
-        const { rule, apply, format } = runRules[ruleIndex];
-
-        if (!rule.enabled || (type && rule.type !== type) || format.indexOf(spec) === -1) {
-          continue;
-        }
-
-        try {
-          const nodes = jp.nodes(target, path);
-
-          for (const n of nodes) {
-            const { path: nPath, value } = n;
-
-            try {
-              const opt: types.IRuleOpts = {
-                object: value,
-                rule,
-                meta: {
-                  path: nPath,
-                  name: ruleIndex,
-                  rule,
-                },
-              };
-
-              if (path === '$') {
-                // allow resolved and stringified targets to be passed to rules when operating on
-                // the root path
-                if (opts.resTarget) {
-                  opt.resObj = opts.resTarget;
-                }
-                if (opts.strTarget) {
-                  opt.strObj = opts.strTarget;
-                }
-              }
-
-              const result: types.IRuleResult[] = apply(opt);
-
-              results.push(...result);
-            } catch (e) {
-              console.warn(
-                `Encountered error when running rule '${ruleIndex}' on node at path '${nPath}':\n${e}`
-              );
-            }
+  private runAllLinters(opts: IRunOpts): types.IRuleResult[] {
+    return flatten(
+      compact(
+        values(this._rulesByIndex).map((ruleEntry: IRuleEntry) => {
+          if (
+            !ruleEntry.rule.enabled ||
+            (opts.type && ruleEntry.rule.type !== opts.type) ||
+            ruleEntry.format.indexOf(opts.spec) === -1
+          ) {
+            return null;
           }
-        } catch (e) {
-          console.error(`Unable to run rule '${ruleIndex}':\n${e}`);
-        }
+
+          try {
+            return this.lintNodes(ruleEntry, opts);
+          } catch (e) {
+            console.error(`Unable to run rule '${ruleEntry.name}':\n${e}`);
+            return null;
+          }
+        })
+      )
+    );
+  }
+
+  private lintNodes(ruleEntry: IRuleEntry, opts: IRunOpts): types.IRuleResult[] {
+    const nodes = jp.nodes(opts.target, ruleEntry.rule.path);
+    return flatten(
+      compact(
+        nodes.map(node => {
+          const { path: nPath } = node;
+          try {
+            return this.lintNode(ruleEntry, opts, node);
+          } catch (e) {
+            console.warn(
+              `Encountered error when running rule '${
+                ruleEntry.name
+              }' on node at path '${nPath}':\n${e}`
+            );
+            return null;
+          }
+        })
+      )
+    );
+  }
+
+  private lintNode(
+    ruleEntry: IRuleEntry,
+    opts: IRunOpts,
+    node: { path: PathComponent[]; value: any }
+  ): types.IRuleResult[] {
+    const opt: types.IRuleOpts = {
+      object: node.value,
+      rule: ruleEntry.rule,
+      meta: {
+        path: node.path,
+        name: ruleEntry.name,
+        rule: ruleEntry.rule,
+      },
+    };
+
+    if (ruleEntry.rule.path === '$') {
+      // allow resolved and stringified targets to be passed to rules when operating on
+      // the root path
+      if (opts.resTarget) {
+        opt.resObj = opts.resTarget;
+      }
+      if (opts.strTarget) {
+        opt.strObj = opts.strTarget;
       }
     }
 
-    return results;
+    return ruleEntry.apply(opt);
   }
 
   private _parseRuleDefinition(name: string, rule: types.Rule, format: string): IRuleEntry {
@@ -235,7 +250,7 @@ export class Spectral {
   }
 
   private _rulesetsToRules(rulesets: types.IRuleset[]): IRuleStore {
-    const rules: IRuleStore = merge({}, this._rules);
+    const rules: IRuleStore = merge({}, this._rulesByIndex);
 
     for (const ruleset of rulesets) {
       merge(rules, this._rulesetToRules(ruleset, rules));

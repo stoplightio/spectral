@@ -1,4 +1,4 @@
-const merge = require('lodash.merge');
+const merge = require('lodash/merge');
 import { Spectral } from '../index';
 import { defaultRuleset } from '../rulesets';
 import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../types';
