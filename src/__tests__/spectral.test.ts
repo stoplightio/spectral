@@ -15,6 +15,7 @@ describe('spectral', () => {
     expect(results.length).toBeGreaterThan(0);
   });
 
+  // Assures: https://stoplightio.atlassian.net/browse/SL-786
   test('setting rules should not mutate the original ruleset', () => {
     const givenCustomRuleSet = {
       rules: {
@@ -48,6 +49,85 @@ describe('spectral', () => {
     ]);
 
     expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
+  });
+
+  // Assures: https://stoplightio.atlassian.net/browse/SL-787
+  test('given a ruleset with two identical rules under two distinct formats should not collide', () => {
+    const rulesets = [
+      {
+        rules: {
+          oas2: {
+            ruleName1: {
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                properties: 'something-different',
+              },
+            },
+          },
+          oas3: {
+            ruleName1: {
+              type: RuleType.STYLE,
+              function: RuleFunction.NOT_CONTAIN,
+              path: '$.license',
+              enabled: false,
+              summary: '',
+              input: {
+                properties: ['url'],
+                value: 'gruntjs',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const s = new Spectral({ rulesets });
+
+    expect(s.getRules('oas2')).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "apply": [Function],
+    "format": "oas2",
+    "name": "oas2-ruleName1",
+    "rule": Object {
+      "enabled": true,
+      "function": "truthy",
+      "input": Object {
+        "properties": "something-different",
+      },
+      "path": "$",
+      "summary": "",
+      "type": "style",
+    },
+  },
+]
+`);
+    expect(s.getRules('oas3')).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "apply": [Function],
+    "format": "oas3",
+    "name": "oas3-ruleName1",
+    "rule": Object {
+      "enabled": false,
+      "function": "notContain",
+      "input": Object {
+        "properties": Array [
+          "url",
+        ],
+        "value": "gruntjs",
+      },
+      "path": "$.license",
+      "summary": "",
+      "type": "style",
+    },
+  },
+]
+`);
   });
 
   test('be able to toggle rules on apply', () => {
