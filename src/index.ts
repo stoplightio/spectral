@@ -22,6 +22,12 @@ interface IRuleEntry {
   apply: types.IRuleFunction;
 }
 
+interface IParsedRulesetResult {
+  rulesets: types.IRuleset[];
+  functionStore: IFunctionStore;
+  ruleStore: IRuleStore;
+}
+
 interface ISpectralOpts {
   rulesets: types.IRuleset[];
 }
@@ -89,11 +95,20 @@ export class Spectral {
     return rules;
   }
 
-  public setRules(
-    rulesets: types.IRuleset[],
-    opts: { includeCurrent: boolean } = { includeCurrent: true }
-  ) {
-    const { rulesets: rSets, functionStore, ruleStore } = this._parseRuleSets(rulesets, opts);
+  public setRules(rulesets: types.IRuleset[]) {
+    const { rulesets: rSets, functionStore, ruleStore } = this._parseRuleSets(rulesets, {
+      includeCurrent: false,
+    });
+
+    this._rulesets = rSets;
+    this._functions = functionStore;
+    this._rulesByIndex = ruleStore;
+  }
+
+  public updateRules(rulesets: types.IRuleset[]) {
+    const { rulesets: rSets, functionStore, ruleStore } = this._parseRuleSets(rulesets, {
+      includeCurrent: true,
+    });
 
     this._rulesets = rSets;
     this._functions = functionStore;
@@ -185,12 +200,12 @@ export class Spectral {
 
   private _parseRuleSets(
     rulesets: types.IRuleset[],
-    opts: { includeCurrent: boolean } = { includeCurrent: true }
-  ): { rulesets: types.IRuleset[]; functionStore: IFunctionStore; ruleStore: IRuleStore } {
+    { includeCurrent }: { includeCurrent: boolean }
+  ): IParsedRulesetResult {
     const rSets = merge([], rulesets);
 
-    let functionStore = opts.includeCurrent ? this._functions : defaultFunctions;
-    let ruleStore = opts.includeCurrent ? this._rulesByIndex : {};
+    let functionStore = includeCurrent ? this._functions : defaultFunctions;
+    let ruleStore = includeCurrent ? this._rulesByIndex : {};
 
     if (rSets.length) {
       functionStore = { ...functionStore, ...this._rulesetsToFunctions(rulesets) };
