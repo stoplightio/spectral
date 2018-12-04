@@ -37,10 +37,7 @@ export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRul
         if (omit) component = component.split(omit).join('');
         if (component) {
           const res = ensureRule(() => {
-            should(re.test(component)).be.exactly(
-              true,
-              `${rule.summary}, but received: ${component}`
-            );
+            should(re.test(component)).be.exactly(true, `${rule.summary}, but received: ${component}`);
           }, meta);
 
           if (res) {

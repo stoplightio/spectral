@@ -79,11 +79,7 @@ describe('oasOpParams', () => {
         paths: {
           '/foo': {
             get: {
-              parameters: [
-                { in: 'query', name: 'foo' },
-                { in: 'query', name: 'foo' },
-                { in: 'query', name: 'foo' },
-              ],
+              parameters: [{ in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }],
             },
             put: {},
           },
