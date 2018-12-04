@@ -269,10 +269,7 @@ export class Spectral {
           internalRuleStore[ruleIndex].rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
-          internalRuleStore[ruleIndex] = this._parseRuleDefinition(
-            { name: ruleName, rule: r, format },
-            functionStore
-          );
+          internalRuleStore[ruleIndex] = this._parseRuleDefinition({ name: ruleName, rule: r, format }, functionStore);
         } else {
           throw new Error(`Unknown rule definition format: ${r}`);
         }
