@@ -11,12 +11,9 @@ describe('oasOpSecurityDefined', () => {
           functions: ruleset.functions,
           rules: {
             oas2: {
-              'operation-security-defined': Object.assign(
-                ruleset.rules.oas2['operation-security-defined'],
-                {
-                  enabled: true,
-                }
-              ),
+              'operation-security-defined': Object.assign(ruleset.rules.oas2['operation-security-defined'], {
+                enabled: true,
+              }),
             },
           },
         },
@@ -76,12 +73,9 @@ describe('oasOpSecurityDefined', () => {
           functions: ruleset.functions,
           rules: {
             oas3: {
-              'operation-security-defined': Object.assign(
-                ruleset.rules.oas3['operation-security-defined'],
-                {
-                  enabled: true,
-                }
-              ),
+              'operation-security-defined': Object.assign(ruleset.rules.oas3['operation-security-defined'], {
+                enabled: true,
+              }),
             },
           },
         },

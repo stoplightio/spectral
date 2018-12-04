@@ -4,7 +4,7 @@ import { AssertionError } from 'assert';
 import { RuleSeverity, RuleType } from './enums';
 import { Rule } from './rule';
 
-export type TargetSpec = 'oas2' | 'oas3' | 'oas2|oas3' | '*';
+export type TargetSpec = 'oas2' | 'oas3' | string;
 export type RawResult = ErrorObject | AssertionError;
 export type Path = Array<string | number>;
 
@@ -65,7 +65,7 @@ export interface IRuleset {
 export interface IRuleStore {
   /**
    * index is a simplified regex of the format(s) the rules apply to (ie,
-   * 'oas2', 'oas2|oas3', '*')
+   * 'oas2', 'oas3')
    */
   [index: string]: IRuleDeclaration;
 }

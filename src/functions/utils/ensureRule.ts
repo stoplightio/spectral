@@ -1,9 +1,6 @@
 import { IRuleMetadata, IRuleResult, RuleSeverity } from '../../types';
 
-export const ensureRule = (
-  shouldAssertion: Function,
-  ruleMeta: IRuleMetadata
-): void | IRuleResult => {
+export const ensureRule = (shouldAssertion: Function, ruleMeta: IRuleMetadata): void | IRuleResult => {
   try {
     shouldAssertion();
   } catch (error) {

@@ -12,7 +12,7 @@ describe('spectral', () => {
     });
 
     const results = s.run({ target: todosPartialDeref, spec: 'oas2' });
-    expect(results.length).toBe(0);
+    expect(results.length).toBeGreaterThan(0);
   });
 
   // Assures: https://stoplightio.atlassian.net/browse/SL-786
@@ -345,18 +345,6 @@ Array [
         rules: {
           oas2: {
             rule1: {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: false,
-              summary: '',
-              input: {
-                properties: 'something-not-present',
-              },
-            },
-          },
-          'oas2|oas3': {
-            rule2: {
               type: RuleType.STYLE,
               function: RuleFunction.TRUTHY,
               path: '$',

@@ -1,8 +1,7 @@
 import { INotContainRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
-const regexFromString = (regex: string) =>
-  new RegExp(regex.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'));
+const regexFromString = (regex: string) => new RegExp(regex.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&'));
 
 export const notContain: IRuleFunction<INotContainRule> = (opts: IRuleOpts<INotContainRule>) => {
   const results: IRuleResult[] = [];
@@ -13,9 +12,7 @@ export const notContain: IRuleFunction<INotContainRule> = (opts: IRuleOpts<INotC
   for (const property of properties) {
     if (object && object.hasOwnProperty(property)) {
       const res = ensureRule(() => {
-        object[property].should.be.a
-          .String()
-          .and.not.match(regexFromString(value), rule.description);
+        object[property].should.be.a.String().and.not.match(regexFromString(value), rule.description);
       }, meta);
 
       if (res) {
