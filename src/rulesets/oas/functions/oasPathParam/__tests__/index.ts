@@ -10,7 +10,7 @@ describe('oasPathParam', () => {
         functions: ruleset.functions,
         rules: {
           oas2: {
-            'path-params': Object.assign(ruleset.rules['oas2|oas3']['path-params'], {
+            'path-params': Object.assign(ruleset.rules.oas2['path-params'], {
               enabled: true,
             }),
           },

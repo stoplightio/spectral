@@ -10,7 +10,7 @@ describe('oasOpParams', () => {
         functions: ruleset.functions,
         rules: {
           oas2: {
-            'operation-parameters': Object.assign(ruleset.rules['oas2|oas3']['operation-parameters'], {
+            'operation-parameters': Object.assign(ruleset.rules.oas2['operation-parameters'], {
               enabled: true,
             }),
           },
