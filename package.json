@@ -20,7 +20,7 @@
     "type": "git",
     "url": "https://github.com/stoplightio/spectral"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "src/index.ts",
   "files": [
     "**/*"
