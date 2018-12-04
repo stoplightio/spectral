@@ -1,9 +1,3 @@
-export enum RuleSeverity {
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-}
-
 export enum RuleType {
   VALIDATION = 'validation',
   STYLE = 'style',

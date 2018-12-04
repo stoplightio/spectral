@@ -1,7 +1,9 @@
 import { ErrorObject } from 'ajv';
 import { AssertionError } from 'assert';
 
-import { RuleSeverity, RuleType } from './enums';
+// import { ValidationSeverity, RuleType } from './enums';
+import { IValidationResult } from '@stoplight/types/validations';
+import { RuleType } from './enums';
 import { Rule } from './rule';
 
 export type TargetSpec = 'oas2' | 'oas3' | string;
@@ -18,33 +20,8 @@ export interface IRuleOpts<I = Rule> {
 
 export type IRuleFunction<I = Rule> = (opts: IRuleOpts<I>) => IRuleResult[];
 
-export interface IRuleResult {
+export interface IRuleResult extends IValidationResult {
   type: RuleType;
-
-  /**
-   * The relevant path within the object being operated on
-   */
-  path: Path;
-
-  /**
-   * The rule emitting the result
-   */
-  name: string;
-
-  /**
-   * The rule summary for the rule generating the result
-   */
-  summary: string;
-
-  /**
-   * The rule emitting the result
-   */
-  severity: RuleSeverity;
-
-  /**
-   * Message describing the error
-   */
-  message: string;
 }
 
 export interface IRuleMetadata {

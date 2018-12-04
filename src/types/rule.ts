@@ -1,4 +1,5 @@
-import { RuleFunction, RuleSeverity, RuleType } from './enums';
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { RuleFunction, RuleType } from './enums';
 
 export type Rule =
   | IRule
@@ -35,7 +36,8 @@ export interface IRule {
   enabled?: boolean;
 
   // The severity of results this rule generates
-  severity?: RuleSeverity;
+  severity?: ValidationSeverity;
+  severityLabel?: ValidationSeverityLabel;
 
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];

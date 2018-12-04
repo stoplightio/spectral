@@ -1,4 +1,5 @@
-import { IRuleDeclaration, IRuleset, RuleFunction, RuleSeverity, RuleType } from '../../types';
+import { ValidationSeverity } from '@stoplight/types/validations';
+import { IRuleDeclaration, IRuleset, RuleFunction, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
 
@@ -87,7 +88,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     type: RuleType.VALIDATION,
     summary: 'Path parameters are correct and valid.',
     enabled: true,
-    severity: RuleSeverity.ERROR,
+    severity: ValidationSeverity.Error,
     path: '$',
     function: 'oasPathParam',
     tags: ['path'],
