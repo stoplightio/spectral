@@ -1,0 +1,14 @@
+// This config is used by `sl-scripts build` and `sl-scripts build.docs`
+{
+  "extends": "./tsconfig.json",
+
+  // NOTE: must only include one element, otherwise build process into dist folder ends up with incorrect structure
+  "include": ["src"],
+
+  // Ignore dev folders like __tests__ and __stories__ when building for distribution
+  "exclude": ["**/__*__/**"],
+
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
