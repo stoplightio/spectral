@@ -16,7 +16,7 @@ describe('spectral', () => {
   });
 
   // Assures: https://stoplightio.atlassian.net/browse/SL-786
-  test('setting rules should not mutate the original ruleset', () => {
+  test('setting/updating rules should not mutate the original ruleset', () => {
     const givenCustomRuleSet = {
       rules: {
         oas2: {
@@ -38,7 +38,7 @@ describe('spectral', () => {
 
     const s = new Spectral({ rulesets: [givenCustomRuleSet] });
 
-    s.setRules([
+    s.updateRules([
       {
         rules: {
           oas2: {
@@ -49,6 +49,123 @@ describe('spectral', () => {
     ]);
 
     expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
+  });
+
+  // Assures: https://stoplightio.atlassian.net/browse/SL-789
+  test('setRules should overwrite the current ruleset', () => {
+    const ruleset = {
+      rules: {
+        format: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+    // deep copy
+    const s = new Spectral({ rulesets: [ruleset] });
+
+    s.setRules([
+      {
+        rules: {
+          differentFormat: {
+            rule2: {
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                properties: 'a different rule',
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    expect(s.getRules()).toHaveLength(1);
+    expect(s.getRules()).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "apply": [Function],
+    "format": "differentFormat",
+    "name": "rule2",
+    "rule": Object {
+      "enabled": true,
+      "function": "truthy",
+      "input": Object {
+        "properties": "a different rule",
+      },
+      "path": "$",
+      "summary": "",
+      "type": "style",
+    },
+  },
+]
+`);
+  });
+
+  // Assures: https://stoplightio.atlassian.net/browse/SL-789
+  test('updateRules should update/append the current ruleset', () => {
+    const ruleset = {
+      rules: {
+        format: {
+          rule1: {
+            type: RuleType.STYLE,
+            function: RuleFunction.TRUTHY,
+            path: '$',
+            enabled: true,
+            summary: '',
+            input: {
+              properties: 'something',
+            },
+          },
+        },
+      },
+    };
+    // deep copy
+    const s = new Spectral({ rulesets: [ruleset] });
+
+    s.updateRules([
+      {
+        rules: {
+          differentFormat: {
+            rule2: {
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                properties: 'a different rule',
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    expect(s.getRules()).toHaveLength(2);
+
+    s.updateRules([
+      {
+        rules: {
+          format: {
+            rule1: false,
+          },
+        },
+      },
+    ]);
+
+    expect(s.getRules()).toHaveLength(2);
   });
 
   // Assures: https://stoplightio.atlassian.net/browse/SL-787
@@ -175,6 +292,51 @@ Array [
     // run again with an override config
     results = s.run({ target: spec, spec: 'oas2', rulesets: overrideRulesets });
     expect(results.length).toEqual(1);
+  });
+
+  // Assures: https://stoplightio.atlassian.net/browse/SL-788
+  test('run with rulesets overrides ruleset on run, not permenantly', () => {
+    const spec = {
+      hello: 'world',
+    };
+
+    const rulesets: IRuleset[] = [
+      {
+        rules: {
+          format: {
+            test: {
+              type: RuleType.STYLE,
+              function: RuleFunction.TRUTHY,
+              path: '$',
+              enabled: false,
+              severity: RuleSeverity.ERROR,
+              summary: '',
+              input: {
+                properties: 'nonexistant-property',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const overrideRulesets: IRuleset[] = [
+      {
+        rules: {
+          format: {
+            test: true,
+          },
+        },
+      },
+    ];
+
+    const s = new Spectral({ rulesets });
+
+    const originalRules = s.getRules('format');
+
+    s.run({ target: spec, spec: 'format', rulesets: overrideRulesets });
+
+    expect(s.getRules('format')).toEqual(originalRules);
   });
 
   test('getRules returns a flattened list of rules filtered by format', () => {

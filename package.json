@@ -45,7 +45,7 @@
   "dependencies": {
     "ajv": "6.x.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
-    "lodash": "4.x.x",
+    "lodash": ">=4.17.5",
     "should": "13.2.x"
   },
   "devDependencies": {
