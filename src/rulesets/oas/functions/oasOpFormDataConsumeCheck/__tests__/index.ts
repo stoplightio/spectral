@@ -10,12 +10,9 @@ describe('oasOpFormDataConsumeCheck', () => {
         functions: ruleset.functions,
         rules: {
           oas2: {
-            'operation-formData-consume-check': Object.assign(
-              ruleset.rules.oas2['operation-formData-consume-check'],
-              {
-                enabled: true,
-              }
-            ),
+            'operation-formData-consume-check': Object.assign(ruleset.rules.oas2['operation-formData-consume-check'], {
+              enabled: true,
+            }),
           },
         },
       },
