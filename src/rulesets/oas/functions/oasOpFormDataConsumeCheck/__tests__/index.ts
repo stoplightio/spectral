@@ -11,7 +11,7 @@ describe('oasOpFormDataConsumeCheck', () => {
         rules: {
           oas2: {
             'operation-formData-consume-check': Object.assign(
-              ruleset.rules['oas2|oas3']['operation-formData-consume-check'],
+              ruleset.rules.oas2['operation-formData-consume-check'],
               {
                 enabled: true,
               }
