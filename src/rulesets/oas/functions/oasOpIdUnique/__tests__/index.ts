@@ -10,12 +10,9 @@ describe('oasOpIdUnique', () => {
         functions: ruleset.functions,
         rules: {
           oas2: {
-            'operation-operationId-unique': Object.assign(
-              ruleset.rules['oas2|oas3']['operation-operationId-unique'],
-              {
-                enabled: true,
-              }
-            ),
+            'operation-operationId-unique': Object.assign(ruleset.rules['oas2|oas3']['operation-operationId-unique'], {
+              enabled: true,
+            }),
           },
         },
       },

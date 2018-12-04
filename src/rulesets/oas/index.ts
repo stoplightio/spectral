@@ -10,8 +10,7 @@ export const commonOasRuleset = (): IRuleset => {
       oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
       oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
       oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
-      oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck')
-        .oasOpFormDataConsumeCheck,
+      oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
       oasOpParams: require('./functions/oasOpParams').oasOpParams,
     },
     rules: {
@@ -429,8 +428,7 @@ export const commonOasRuleset = (): IRuleset => {
             schemesPath: ['securityDefinitions'],
           },
           path: '$',
-          summary:
-            'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+          summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
           type: RuleType.VALIDATION,
           tags: ['operation'],
         },

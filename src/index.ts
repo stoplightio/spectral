@@ -137,11 +137,7 @@ export class Spectral {
           try {
             return this.lintNode(ruleEntry, opts, node);
           } catch (e) {
-            console.warn(
-              `Encountered error when running rule '${
-                ruleEntry.name
-              }' on node at path '${nPath}':\n${e}`
-            );
+            console.warn(`Encountered error when running rule '${ruleEntry.name}' on node at path '${nPath}':\n${e}`);
             return null;
           }
         })

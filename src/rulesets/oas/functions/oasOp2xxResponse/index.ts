@@ -8,9 +8,7 @@ export const oasOp2xxResponse: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => 
   const responses = Object.keys(object);
 
   const res = ensureRule(() => {
-    responses
-      .filter(response => Number(response) >= 200 && Number(response) < 300)
-      .length.should.aboveOrEqual(1);
+    responses.filter(response => Number(response) >= 200 && Number(response) < 300).length.should.aboveOrEqual(1);
   }, meta);
 
   if (res) results.push(res);

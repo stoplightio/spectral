@@ -10,12 +10,9 @@ describe('oasOp2xxResponse', () => {
         functions: ruleset.functions,
         rules: {
           oas2: {
-            'operation-2xx-response': Object.assign(
-              ruleset.rules['oas2|oas3']['operation-2xx-response'],
-              {
-                enabled: true,
-              }
-            ),
+            'operation-2xx-response': Object.assign(ruleset.rules['oas2|oas3']['operation-2xx-response'], {
+              enabled: true,
+            }),
           },
         },
       },

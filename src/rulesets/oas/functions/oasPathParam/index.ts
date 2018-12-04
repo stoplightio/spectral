@@ -1,11 +1,4 @@
-import {
-  IRuleFunction,
-  IRuleMetadata,
-  IRuleOpts,
-  IRuleResult,
-  Rule,
-  RuleSeverity,
-} from '../../../../types';
+import { IRuleFunction, IRuleMetadata, IRuleOpts, IRuleResult, Rule, RuleSeverity } from '../../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
@@ -16,9 +9,7 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const { resObj, rule, meta } = opts;
 
   if (!resObj) {
-    console.warn(
-      'oasPathParam expects a resolved object, but none was provided. Results may not be correct.'
-    );
+    console.warn('oasPathParam expects a resolved object, but none was provided. Results may not be correct.');
   } else {
     object = resObj;
   }
@@ -94,24 +85,14 @@ To fix, update the path so that all parameter names are unique.`,
         if (p.in && p.in === 'path' && p.name) {
           if (!p.required) {
             results.push(
-              generateResult(
-                requiredMessage(p.name),
-                [...meta.path, 'paths', path, 'parameters'],
-                rule,
-                meta
-              )
+              generateResult(requiredMessage(p.name), [...meta.path, 'paths', path, 'parameters'], rule, meta)
             );
           }
 
           if (topParams[p.name]) {
             // name has already been specified
             results.push(
-              generateResult(
-                uniqueDefinitionMessage(p.name),
-                [...meta.path, 'paths', path, 'parameters'],
-                rule,
-                meta
-              )
+              generateResult(uniqueDefinitionMessage(p.name), [...meta.path, 'paths', path, 'parameters'], rule, meta)
             );
             continue;
           }
@@ -142,24 +123,12 @@ To fix, update the path so that all parameter names are unique.`,
           if (p.in && p.in === 'path' && p.name) {
             const parameterPath = ['paths', path, op, 'parameters', i];
             if (!p.required) {
-              results.push(
-                generateResult(
-                  requiredMessage(p.name),
-                  [...meta.path, ...parameterPath],
-                  rule,
-                  meta
-                )
-              );
+              results.push(generateResult(requiredMessage(p.name), [...meta.path, ...parameterPath], rule, meta));
             }
 
             if (tmp[p.name]) {
               results.push(
-                generateResult(
-                  uniqueDefinitionMessage(p.name),
-                  [...meta.path, ...parameterPath],
-                  rule,
-                  meta
-                )
+                generateResult(uniqueDefinitionMessage(p.name), [...meta.path, ...parameterPath], rule, meta)
               );
               continue;
             } else if (operationParams[p.name]) {
@@ -219,12 +188,7 @@ To fix, remove this parameter.`,
   return results;
 };
 
-function generateResult(
-  message: string,
-  path: Array<string | number>,
-  rule: Rule,
-  _m: IRuleMetadata
-): IRuleResult {
+function generateResult(message: string, path: Array<string | number>, rule: Rule, _m: IRuleMetadata): IRuleResult {
   return {
     message,
     path,
@@ -241,9 +205,7 @@ const requiredMessage = (
 
 To fix, mark this parameter as required.`;
 
-const uniqueDefinitionMessage = (
-  name: string
-) => `Path parameter '**${name}**' is defined multiple times.
+const uniqueDefinitionMessage = (name: string) => `Path parameter '**${name}**' is defined multiple times.
 
 Path parameters must be unique.
 
