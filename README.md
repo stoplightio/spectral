@@ -5,9 +5,9 @@
 
 ## Features
 
-- Create custom rules to lint _any JSON object_
+- Allows you to create custom rules to lint _any JSON object_
 - Built-in set of functions to help build custom rules, like for patterns, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
-- Existing rulesets for OpenAPI Specification 2 and 3 documents
+- Existing rulesets for OpenAPI Specification (OAS) 2 _and_ 3 documents
 - Validates JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
 ## Installation
@@ -169,7 +169,7 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 **What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
 
-With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible.
+With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
 
 ## Contributing
 
