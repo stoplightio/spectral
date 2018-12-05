@@ -1229,6 +1229,11 @@
     typedoc "0.13.x"
     typescript-plugin-styled-components "1.0.x"
 
+"@stoplight/types@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-3.0.0.tgz#2464b3149accd0ef4b822a6079a1a8ece416e9c3"
+  integrity sha512-08VUdzyHUenrk5m8rP6DiCQjZ/6DIjmFDKryBTuBNCrQQ6dwlqqGRN+f4nCOPc+Ks6jhHRLjT3hUCn8TUwIKuw==
+
 "@storybook/addon-actions@4.0.7":
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-4.0.7.tgz#a7088e619f705f1839156fe9eec65e43e747d206"

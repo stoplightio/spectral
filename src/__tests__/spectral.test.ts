@@ -1,7 +1,8 @@
 const merge = require('lodash/merge');
+import { ValidationSeverity } from '@stoplight/types/validations';
 import { Spectral } from '../index';
 import { defaultRuleset } from '../rulesets';
-import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../types';
+import { IRuleset, RuleFunction, RuleType } from '../types';
 
 const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
 
@@ -261,7 +262,7 @@ Array [
               function: RuleFunction.TRUTHY,
               path: '$',
               enabled: false,
-              severity: RuleSeverity.ERROR,
+              severity: ValidationSeverity.Error,
               description: 'this should return an error if enabled',
               summary: '',
               input: {

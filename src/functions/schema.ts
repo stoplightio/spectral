@@ -1,7 +1,8 @@
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 
-import { IRuleFunction, IRuleOpts, IRuleResult, ISchemaRule, RuleSeverity } from '../types';
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { IRuleFunction, IRuleOpts, IRuleResult, ISchemaRule } from '../types';
 
 const ajv = new AJV({
   meta: false,
@@ -33,8 +34,9 @@ export const schema: IRuleFunction<ISchemaRule> = (opts: IRuleOpts<ISchemaRule>)
         type: meta.rule.type,
         path: meta.path.concat(e.dataPath.split('/').slice(1)),
         name: meta.name,
-        summary: rule.summary,
-        severity: rule.severity ? rule.severity : RuleSeverity.ERROR,
+        description: rule.description || '',
+        severity: rule.severity || ValidationSeverity.Error,
+        severityLabel: rule.severityLabel || ValidationSeverityLabel.Error,
         message: e.message ? e.message : '',
       });
     });

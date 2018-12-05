@@ -1,4 +1,5 @@
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule, RuleSeverity } from '../../../../types';
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
 export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   const results: IRuleResult[] = [];
@@ -106,8 +107,9 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
               message,
               path: ['$', 'paths', path, operation],
               name: meta.name,
-              summary: rule.summary,
-              severity: meta.rule.severity || RuleSeverity.ERROR,
+              description: rule.summary,
+              severity: meta.rule.severity || ValidationSeverity.Error,
+              severityLabel: meta.rule.severityLabel || ValidationSeverityLabel.Error,
               type: rule.type,
             });
           }
@@ -126,8 +128,9 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             message,
             path: ['$', 'paths', path, operation],
             name: meta.name,
-            summary: rule.summary,
-            severity: meta.rule.severity || RuleSeverity.ERROR,
+            description: rule.summary,
+            severity: meta.rule.severity || ValidationSeverity.Error,
+            severityLabel: meta.rule.severityLabel || ValidationSeverityLabel.Error,
             type: rule.type,
           });
         }
@@ -145,8 +148,9 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             message,
             path: ['$', 'paths', path, operation],
             name: meta.name,
-            summary: rule.summary,
-            severity: meta.rule.severity || RuleSeverity.ERROR,
+            description: rule.summary,
+            severity: meta.rule.severity || ValidationSeverity.Error,
+            severityLabel: meta.rule.severityLabel || ValidationSeverityLabel.Error,
             type: rule.type,
           });
         }

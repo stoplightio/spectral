@@ -1,4 +1,5 @@
-import { IRuleMetadata, IRuleResult, RuleSeverity } from '../../types';
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { IRuleMetadata, IRuleResult } from '../../types';
 
 export const ensureRule = (shouldAssertion: Function, ruleMeta: IRuleMetadata): void | IRuleResult => {
   try {
@@ -13,8 +14,9 @@ export const ensureRule = (shouldAssertion: Function, ruleMeta: IRuleMetadata): 
       path: ruleMeta.path,
       name: ruleMeta.name,
       type: ruleMeta.rule.type,
-      summary: ruleMeta.rule.summary,
-      severity: ruleMeta.rule.severity ? ruleMeta.rule.severity : RuleSeverity.WARN,
+      description: ruleMeta.rule.summary,
+      severity: ruleMeta.rule.severity || ValidationSeverity.Warn,
+      severityLabel: ruleMeta.rule.severityLabel || ValidationSeverityLabel.Warn,
       message: error.message ? error.message : '',
     };
   }

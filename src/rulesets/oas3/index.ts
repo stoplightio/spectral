@@ -1,6 +1,7 @@
 const merge = require('lodash/merge');
 
-import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../../types';
+import { ValidationSeverity } from '@stoplight/types/validations';
+import { IRuleset, RuleFunction, RuleType } from '../../types';
 import { commonOasRuleset } from '../oas';
 import * as schema from './schemas/main.json';
 
@@ -13,7 +14,7 @@ export const oas3Ruleset = (): IRuleset => {
           type: RuleType.VALIDATION,
           summary: 'Validate structure of OpenAPIv3 specification.',
           enabled: true,
-          severity: RuleSeverity.ERROR,
+          severity: ValidationSeverity.Error,
           path: '$',
           function: RuleFunction.SCHEMA,
           input: {

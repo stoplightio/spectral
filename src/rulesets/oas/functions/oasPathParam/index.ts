@@ -1,4 +1,5 @@
-import { IRuleFunction, IRuleMetadata, IRuleOpts, IRuleResult, Rule, RuleSeverity } from '../../../../types';
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { IRuleFunction, IRuleMetadata, IRuleOpts, IRuleResult, Rule } from '../../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
@@ -193,8 +194,9 @@ function generateResult(message: string, path: Array<string | number>, rule: Rul
     message,
     path,
     name: _m.name,
-    summary: rule.summary,
-    severity: _m.rule.severity ? _m.rule.severity : RuleSeverity.ERROR,
+    description: rule.summary,
+    severity: _m.rule.severity || ValidationSeverity.Error,
+    severityLabel: _m.rule.severityLabel || ValidationSeverityLabel.Error,
     type: rule.type,
   };
 }

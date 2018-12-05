@@ -43,15 +43,16 @@
     "test.watch": "yarn test --watch"
   },
   "dependencies": {
+    "@stoplight/types": "3.x.x",
     "ajv": "6.x.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
     "lodash": ">=4.17.5",
     "should": "13.2.x"
   },
   "devDependencies": {
+    "@stoplight/scripts": "3.0.2",
     "@types/jsonpath": "0.2.x",
     "@types/lodash": "4.x.x",
-    "@stoplight/scripts": "3.0.2",
     "typescript": "3.2.1"
   },
   "lint-staged": {
