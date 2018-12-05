@@ -20,7 +20,11 @@ Supports Node v8.3+
 
 ## Usage
 
-### Creating a custom rule and ruleset example:
+There are three key parts to working with Spectral: **Functions**, **rules**, and **rulesets**. **Rulesets** are made up of **rules**, which are built with **functions**.
+
+Think of a **ruleset** as your own flexible and customizable style guide for your JSON objects.
+
+### Creating a custom rule and ruleset:
 
 Spectral has a built-in set of functions, which you can write your own rules with. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
 
@@ -60,9 +64,9 @@ const results = spectral.run({
 });
 ```
 
-### Creating a custom function, rule, and ruleset example:
+### Creating a custom function, rule, and ruleset:
 
-Sometimes the built-in functions aren't what you need to build a custom rule. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger_`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
+Sometimes the built-in functions aren't what you need to build a custom rule. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
 
 ```javascript
 const { Spectral } = require("@stoplight/spectral");
@@ -120,7 +124,7 @@ const results = spectral.run({
 });
 ```
 
-### Linting an OAS 2 document example:
+### Linting an OAS 2 document:
 
 Spectral also has existing rulesets that we have created for OAS 2 and 3. This example uses an existing ruleset to lint an OAS 2 document.
 
