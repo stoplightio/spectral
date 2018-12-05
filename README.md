@@ -5,17 +5,10 @@
 
 ## Features
 
-- Linting and rule engine that be applied to _any JSON object_, including OpenAPI Specification 2 and 3 documents
-- TODO: Explain more
-
-## Examples
-- Create API design style guides using Spectral for linting
-- Validate JSON documents against a JSON schema specification
-- TODO: another example
-
-### Example Implementations
-
-- [Spectral Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot using the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
+- Create custom rules to lint _any JSON object_
+- Built-in set of functions to help build custom rules, like for patterns, parameter checks, alphabetical ordering, specified number of characters, provided keys are present in object, etc.
+- Existing rulesets for OpenAPI Specification 2 and 3 documents
+- Validates JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
 ## Installation
 
@@ -23,9 +16,115 @@
 npm install @stoplight/spectral
 ```
 
+Supports Node v8.3+
+
 ## Usage
 
-### JavaScript (Node.js) with OAS 2 example:
+### Creating a custom rule and ruleset example:
+
+Spectral has built-in set of functions, which you can write your own rules with. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+
+const rulesets = {
+  rulesets: [
+    {
+      rules: {
+        mySpec: {
+          snake_case: {
+            type: RuleType.STYLE,
+            enabled: true,
+            summary: 'Checks for snake case pattern',
+            function: RuleFunction.PATTERN,
+            path: '$..*',
+            input: {
+              property: '*',
+              value: '^[a-z]+[a-z0-9_]*[a-z0-9]+$',
+            },
+          },
+        },
+      },
+    },
+  ],
+};
+
+const spectral = new Spectral(rulesets);
+
+// results would return a style warning because it is not in snake case pattern
+const results = spectral.run({
+  spec: 'mySpec',
+  target: {
+    name: 'helloWorld',
+  },
+});
+```
+
+### Creating a custom function, rule, and ruleset example:
+
+Sometimes the built-in functions aren't what you need to build a custom rule. This examples creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger_`. The custom function checks that you are not using a specific string (e.g. "Swagger") and offers a suggestion for what to use instead (e.g. "OpenAPI").
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+
+// custom function
+const customNotThatFunction = (opts: any) => {
+  const results = [];
+
+  const { object, rule, meta } = opts;
+  const { that, suggestion } = rule.input;
+
+  const res = ensureRule(() => {
+    object.should.match(new RegExp(that), `Don't use ${that}, use ${suggestion}!`);
+  }, meta);
+
+  if (res) {
+    results.push(res);
+  }
+
+  return results;
+};
+
+//custom rule and ruleset
+const spectral = new Spectral({
+  rulesets: [
+    {
+      rules: {
+        mySpec: {
+          openapi_not_swagger: {
+            type: RuleType.STYLE,
+            enabled: true,
+            summary: 'Checks for use of Swagger, and suggests OpenAPI.',
+            function: 'notThat',
+            path: '$..*',
+            input: {
+              that: '/Swagger/g',
+              suggestion: 'OpenAPI',
+            },
+          },
+        },
+      },
+      functions: {
+        notThat: customNotThatFunction,
+      },
+    },
+  ],
+});
+
+// results would return a style warning because you used "Swagger" instead of "OpenAPI"
+const results = spectral.run({
+  spec: 'mySpec',
+  target: {
+    description: 'Swagger is pretty cool!',
+  },
+});
+```
+
+### Linting an OAS 2 document example:
+
+Spectral also has existing rulesets that we have created for OAS 2 and 3. This example uses an existing ruleset to lint an OAS 2 document.
+
+You can also build on top of these rulesets for customized linting style guide for your OAS documents.
 
 ```javascript
 const { Spectral } = require("@stoplight/spectral");
@@ -50,88 +149,13 @@ const spectral = new Spectral({ rulesets: [defaultRuleset()] });
 
 // run!
 console.log(spectral.run({ spec: 'oas2', target: myOAS }));
-
-//  [ {
-//   path: '$.responses',
-//   rule:
-//     { type: 'pattern',
-//       name: 'all-responses-must-be-numeric',
-//       path: '$..responses',
-//       enabled: true,
-//       description: 'reference components should all match regex ^[0-9]+',
-//       pattern: { property: '*', value: '^[0-9]+$' } },
-//     error:
-//       Error {
-//         operator: 'to be',
-//         expected: true,
-//         message: 'reference components should all match regex ^[0-9]+',
-//         showDiff: true,
-//         actual: false,
-//         stackStartFunction: [Function: assert],
-//         negate: false,
-//         assertion:
-//         Assertion {
-//           obj: false,
-//           anyOne: false,
-//           negate: false,
-//           params: [Object],
-//           onlyThis: undefined,
-//           light: false } } } ]
 ```
 
-### TypeScript with OAS 2 example:
+Note: The existing OAS rulesets are opinionated. There might be some rules that you were prefer to change. We encourage you to create their own rulesets to fit your use case. We welcome contributions to the existing rulesets too!
 
-```typescript
-import { Spectral } from '@stoplight/spectral';
-import { defaultRuleset } from '@stoplight/spectral/rulesets';
+### Example Implementations
 
-// an OASv2 specification
-var myOAS = {
-  [...]
-  responses: {
-    '401asdf': {
-      description: '',
-      schema: {
-        $ref: '#/definitions/error-response',
-      },
-    },
-  },
-  [...]
-};
-
-// create a new instance of spectral with all of the baked in rulesets
-const spectral = new Spectral({ rulesets: [defaultRuleset()] });
-
-// run!
-console.log(spectral.run({ spec: 'oas2', target: myOAS }));
-
-//  [ {
-//   path: '$.responses',
-//   rule:
-//     { type: 'pattern',
-//       name: 'all-responses-must-be-numeric',
-//       path: '$..responses',
-//       enabled: true,
-//       description: 'reference components should all match regex ^[0-9]+',
-//       pattern: { property: '*', value: '^[0-9]+$' } },
-//     error:
-//       Error {
-//         operator: 'to be',
-//         expected: true,
-//         message: 'reference components should all match regex ^[0-9]+',
-//         showDiff: true,
-//         actual: false,
-//         stackStartFunction: [Function: assert],
-//         negate: false,
-//         assertion:
-//         Assertion {
-//           obj: false,
-//           anyOne: false,
-//           negate: false,
-//           params: [Object],
-//           onlyThis: undefined,
-//           light: false } } } ]
-```
+- [Spectral Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot that lints your repo's OAS document that uses the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
 
 ## FAQs
 
@@ -151,9 +175,9 @@ We also love to help and support contributors! If you are interesting in contrib
 
 ## Helpful Links
 
-- [JSONPath Tester](https://jsonpath.curiousconcept.com/)
-- [Library of useful functions for when working with JSON](https://github.com/stoplightio/json)
-- [Library of useful functions for when working with YAML](https://github.com/stoplightio/yaml)
+- [JSONPath Online Evaluator](http://jsonpath.com/), helpful to determine what `path` you want
+- [stoplightio/json](https://github.com/stoplightio/json), library of useful functions for when working with JSON
+- [stoplightio/yaml]((https://github.com/stoplightio/yaml)), library of useful functions for when working with YAML, including parsing YAML into JSON with a source map that includes JSONPath pointers for every property in the result
 
 ## Credits
 
