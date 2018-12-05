@@ -7,6 +7,7 @@
 
 - Allows you to create custom rules to lint _any JSON object_
 - Built-in set of functions to help build custom rules, like for patterns, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Ability to create custom functions for advanced linting use cases
 - Existing rulesets for OpenAPI Specification (OAS) 2 _and_ 3 documents
 - Validates JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
@@ -16,11 +17,11 @@
 npm install @stoplight/spectral
 ```
 
-Supports Node v8.3+
+Supports Node v8.3+ and modern browsers
 
 ## Usage
 
-There are three key parts to working with Spectral: **Functions**, **rules**, and **rulesets**. **Rulesets** are made up of **rules**, which are built with **functions**.
+There are three key parts to working with Spectral: **Functions**, **rules**, and **rulesets**. **Rulesets** are made up of **rules**, which reference **functions**.
 
 Think of a **ruleset** as your own flexible and customizable style guide for your JSON objects.
 
@@ -192,7 +193,7 @@ Note: The existing OAS rulesets are opinionated. There might be some rules that 
 
 **How is this different than [Ajv](https://github.com/epoberezkin/ajv)?**
 
-Ajv is a JSON Schema validator, not a linter. While Spectral runs your JSON objects through Ajv and returns the result to ensure you are using valid JSON, it goes a level beyond that and allows you to build a custom ruleset that lints your JSON objects.
+Ajv is a JSON Schema validator, not a linter. Spectral does expose a `schema` function that you can use in your rules to validate all or part of the target object with JSON Schema (Ajv is used under the hood). However, Spectral also provides a number of other functions and utilities that you can use to build up a linting ruleset that validates things JSON Schema is not suited for.
 
 **I want to lint my OpenAPI Specification documents but don't want to implement Spectral right now.**
 
@@ -214,10 +215,9 @@ We also love to help and support contributors! If you are interested in contribu
 - [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
 - [stoplightio/yaml]((https://github.com/stoplightio/yaml)), a library of useful functions for when working with YAML, including parsing YAML into JSON with a source map that includes JSONPath pointers for every property in the result
 
-## Credits
+## Thanks :)
 
 - [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
-- [Ross McDonald](https://github.com/rossmcdonald) for creating the initial version of Spectral
 
 ## Support
 
