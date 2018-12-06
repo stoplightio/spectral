@@ -1,0 +1,204 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`lint rules alphabetical dont return result if values are alphabetized 1`] = `Array []`;
+
+exports[`lint rules alphabetical returns result if values are not alphabetized 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected Array [
+  Object { name: 'Far', description: 'bar' },
+  Object { name: 'Boo', description: 'foo' }
+] to equal Array [
+  Object { name: 'Boo', description: 'foo' },
+  Object { name: 'Far', description: 'bar' }
+] (at '0' -> name, A has 'Far' and B has 'Boo')",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules maxLength dont return result if property is shorter than value 1`] = `Array []`;
+
+exports[`lint rules maxLength return result if property is longer than value 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected 61 to be below or equal 20",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "paths",
+      "/rooms/{room_id}/reserve/",
+      "post",
+      "summary",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules notContain dont return results if property doesnt contain value 1`] = `Array []`;
+
+exports[`lint rules notContain returns result if property contains value 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected '### Notes:\\\\n\\\\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\\\\n\\\\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\\\\n\\\\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.\\\\n\\\\n<script>console.log(\\\\'sup homie\\\\');</script>' not to match /<script/ (false negative fail)",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules notEndWith dont return result if property doesnt end with value 1`] = `Array []`;
+
+exports[`lint rules notEndWith return result if property ends with value 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected 'http://localhost:5000/' not to end with '/' (false negative fail)",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "servers",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules or dont returns results if any properties are present 1`] = `Array []`;
+
+exports[`lint rules or dont returns results if any properties are present 2`] = `Array []`;
+
+exports[`lint rules or returns result if no properties are present 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected false to be true",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules pattern dont return result if pattern is matched (on object keys) 1`] = `Array []`;
+
+exports[`lint rules pattern dont return result if pattern is matched (on string) 1`] = `Array []`;
+
+exports[`lint rules pattern returns result if pattern is not matched (on object keys) 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": ", but received: 456avbas",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "responses",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules pattern returns result if pattern is not matched (on string) 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": ", but received: http://swagger.io/terms/",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules truthy doesnt return result if value is present 1`] = `Array []`;
+
+exports[`lint rules truthy returns result if value is not present 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected Object {
+  version: '1.0.0',
+  title: 'Swagger Petstore',
+  termsOfService: 'http://swagger.io/terms/'
+} to have property 'something-not-present'",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules xor dont returns results if one of the properties are present 1`] = `Array []`;
+
+exports[`lint rules xor returns result if both properties are present 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected true undefined false",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
+exports[`lint rules xor returns result if no properties are present 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected false to be true",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+      "info",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;

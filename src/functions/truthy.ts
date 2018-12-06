@@ -2,6 +2,7 @@ import { IRuleFunction, IRuleOpts, IRuleResult, ITruthyRule } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
 // @ts-ignore
+// TODO(SO-11): isn't this polluting global scope Object? Wouldn't "expect" be better?
 import * as should from 'should/as-function';
 
 export const truthy: IRuleFunction<ITruthyRule> = (opts: IRuleOpts<ITruthyRule>) => {

@@ -176,6 +176,7 @@ export class Spectral {
       meta: {
         path: node.path,
         name: ruleEntry.name,
+        // TODO(SO-11): why is this duplicated with IRuleOpts.rule?
         rule: ruleEntry.rule,
       },
     };

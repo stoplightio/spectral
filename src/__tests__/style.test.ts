@@ -39,8 +39,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('doesnt return result if value is present', () => {
@@ -62,8 +62,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -90,8 +90,8 @@ describe('lint', () => {
                 tags: [{ name: 'Far', description: 'bar' }, { name: 'Boo', description: 'foo' }],
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont return result if values are alphabetized', () => {
@@ -116,8 +116,8 @@ describe('lint', () => {
                 tags: [{ name: 'Boo', description: 'bar' }, { name: 'Far', description: 'foo' }],
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -140,8 +140,8 @@ describe('lint', () => {
                 title: 'Swagger Petstore',
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont returns results if any properties are present', () => {
@@ -162,8 +162,8 @@ describe('lint', () => {
                 title: 'Swagger Petstore',
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
         expect(
           applyRuleToObject(
             {
@@ -182,8 +182,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -207,8 +207,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('returns result if both properties are present', () => {
@@ -230,8 +230,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont returns results if one of the properties are present', () => {
@@ -253,8 +253,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -281,8 +281,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('returns result if pattern is not matched (on object keys)', () => {
@@ -312,8 +312,8 @@ describe('lint', () => {
                 },
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont return result if pattern is matched (on string)', () => {
@@ -338,8 +338,8 @@ describe('lint', () => {
                 termsOfService: 'http://swagger.io/terms/',
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont return result if pattern is matched (on object keys)', () => {
@@ -369,8 +369,8 @@ describe('lint', () => {
                 },
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -395,8 +395,8 @@ describe('lint', () => {
                   "### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.\n\n<script>console.log('sup homie');</script>",
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont return results if property doesnt contain value', () => {
@@ -419,8 +419,8 @@ describe('lint', () => {
                   '### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.',
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -449,8 +449,8 @@ describe('lint', () => {
                 },
               ],
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont return result if property doesnt end with value', () => {
@@ -477,8 +477,8 @@ describe('lint', () => {
                 },
               ],
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
 
@@ -506,8 +506,8 @@ describe('lint', () => {
                 },
               },
             }
-          ).length
-        ).toEqual(1);
+          )
+        ).toMatchSnapshot();
       });
 
       test('dont return result if property is shorter than value', () => {
@@ -533,8 +533,8 @@ describe('lint', () => {
                 },
               },
             }
-          ).length
-        ).toEqual(0);
+          )
+        ).toMatchSnapshot();
       });
     });
   });
