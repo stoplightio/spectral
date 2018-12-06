@@ -1229,7 +1229,7 @@
     typedoc "0.13.x"
     typescript-plugin-styled-components "1.0.x"
 
-"@stoplight/types@^3.0.0":
+"@stoplight/types@3.x.x":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-3.0.0.tgz#2464b3149accd0ef4b822a6079a1a8ece416e9c3"
   integrity sha512-08VUdzyHUenrk5m8rP6DiCQjZ/6DIjmFDKryBTuBNCrQQ6dwlqqGRN+f4nCOPc+Ks6jhHRLjT3hUCn8TUwIKuw==

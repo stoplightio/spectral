@@ -213,7 +213,7 @@ We also love to help and support contributors! If you are interested in contribu
 
 - [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `path` you want
 - [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
-- [stoplightio/yaml]((https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON with a source map that includes JSONPath pointers for every property in the result
+- [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON with a source map that includes JSONPath pointers for every property in the result
 
 ## Thanks :)
 
