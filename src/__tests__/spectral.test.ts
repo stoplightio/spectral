@@ -1,5 +1,6 @@
 const merge = require('lodash/merge');
 import { ValidationSeverity } from '@stoplight/types/validations';
+
 import { Spectral } from '../index';
 import { defaultRuleset } from '../rulesets';
 import { IRuleset, RuleFunction, RuleType } from '../types';
@@ -310,7 +311,7 @@ Array [
               function: RuleFunction.TRUTHY,
               path: '$',
               enabled: false,
-              severity: RuleSeverity.ERROR,
+              severity: ValidationSeverity.Error,
               summary: '',
               input: {
                 properties: 'nonexistant-property',
