@@ -1,3 +1,4 @@
+const get = require('lodash/get');
 import { INotEndWithRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
@@ -7,7 +8,11 @@ export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotE
   const { rule, meta } = opts;
   const { value, property } = rule.input;
 
-  const process = (target: any) => {
+  const process = (prop: undefined | string | string[], o: any) => {
+    if (!prop) {
+      return;
+    }
+    const target = get(o, prop);
     const res = ensureRule(() => {
       target.should.not.endWith(value);
     }, meta);
@@ -17,18 +22,17 @@ export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotE
     }
   };
 
+  // TODO(SO-9): I think this is buggy. If *, we replace object with its keys, but later we do object_key[*] (see #32)
   if (property === '*') {
     object = Object.keys(object);
   }
 
   if (Array.isArray(object)) {
     object.forEach((obj: any) => {
-      if (property && obj[property]) {
-        process(obj[property]);
-      }
+      process(property, obj);
     });
-  } else if (property && object[property]) {
-    process(object[property]);
+  } else {
+    process(property, object);
   }
   return results;
 };

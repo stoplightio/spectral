@@ -1,9 +1,10 @@
 const merge = require('lodash/merge');
 const values = require('lodash/values');
+const compact = require('lodash/compact');
+const flatten = require('lodash/flatten');
 import * as jp from 'jsonpath';
 
 import { PathComponent } from 'jsonpath';
-import { compact, flatten } from 'lodash';
 import { functions as defaultFunctions } from './functions';
 import * as types from './types';
 
@@ -205,7 +206,10 @@ export class Spectral {
     let ruleStore = includeCurrent ? this._rulesByIndex : {};
 
     if (rSets.length) {
-      functionStore = { ...functionStore, ...this._rulesetsToFunctions(rulesets) };
+      functionStore = {
+        ...functionStore,
+        ...this._rulesetsToFunctions(rulesets),
+      };
       ruleStore = this._rulesetsToRules(rulesets, ruleStore, functionStore);
     }
 

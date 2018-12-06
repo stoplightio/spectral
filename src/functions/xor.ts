@@ -1,7 +1,7 @@
+import * as should from 'should';
 import { IRuleFunction, IRuleOpts, IRuleResult, IXorRule } from '../types';
 import { ensureRule } from './utils/ensureRule';
-
-import * as should from 'should';
+import { countExistingProperties } from './utils/object';
 
 export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
   const results: IRuleResult[] = [];
@@ -9,25 +9,9 @@ export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
   const { object, rule, meta } = opts;
   const { properties } = rule.input;
 
-  let found = false;
-  for (const property of properties) {
-    if (typeof object[property] !== 'undefined') {
-      if (found) {
-        const innerRes = ensureRule(() => {
-          should.fail(true, false, rule.summary);
-        }, meta);
-
-        if (innerRes) {
-          results.push(innerRes);
-        }
-      }
-
-      found = true;
-    }
-  }
-
+  const found = countExistingProperties(object, properties) === 1;
   const res = ensureRule(() => {
-    found.should.be.exactly(true, rule.summary);
+    should(found).be.exactly(true, rule.summary);
   }, meta);
 
   if (res) {

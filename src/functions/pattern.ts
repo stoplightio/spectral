@@ -2,7 +2,8 @@ import { IPatternRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
 // @ts-ignore
-import * as should from 'should/as-function';
+const get = require('lodash/get');
+import * as should from 'should';
 
 export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRule>) => {
   const results: IRuleResult[] = [];
@@ -14,10 +15,11 @@ export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRul
   // the object itself
   let target: any;
   if (typeof object === 'object') {
+    // TODO(SO-9): isn't this misleading? I would expect that rule will be applied to all VALUES, not KEYS.
     if (property === '*') {
       target = Object.keys(object);
     } else if (property) {
-      target = object[property];
+      target = get(object, property);
     }
   } else {
     target = object;

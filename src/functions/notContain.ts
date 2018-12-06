@@ -1,3 +1,4 @@
+import { get, has } from 'lodash';
 import { INotContainRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
@@ -9,10 +10,14 @@ export const notContain: IRuleFunction<INotContainRule> = (opts: IRuleOpts<INotC
   const { object, rule, meta } = opts;
   const { value, properties } = rule.input;
 
+  // TODO(SO-9): this is a bug. 'Property' can be a string. For of will work because string is iterable, but this is not what
+  // I think was intended. A unit test would help here.
   for (const property of properties) {
-    if (object && object.hasOwnProperty(property)) {
+    if (has(object, property)) {
       const res = ensureRule(() => {
-        object[property].should.be.a.String().and.not.match(regexFromString(value), rule.description);
+        get(object, property)
+          .should.be.a.String()
+          .and.not.match(regexFromString(value), rule.description);
       }, meta);
 
       if (res) {

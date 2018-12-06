@@ -1,5 +1,7 @@
+import * as should from 'should';
 import { IOrRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
+import { countExistingProperties } from './utils/object';
 
 export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>) => {
   const results: IRuleResult[] = [];
@@ -7,15 +9,9 @@ export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>) => {
   const { object, rule, meta } = opts;
   const { properties } = rule.input;
 
-  let found = false;
-  for (const property of properties) {
-    if (typeof object[property] !== 'undefined') {
-      found = true;
-      break;
-    }
-  }
+  const found = countExistingProperties(object, properties) > 0;
   const res = ensureRule(() => {
-    found.should.be.exactly(true, rule.description);
+    should(found).be.exactly(true, rule.description);
   }, meta);
 
   if (res) {

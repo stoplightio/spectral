@@ -25,6 +25,28 @@ Array [
 ]
 `;
 
+exports[`lint rules alphabetical returns result if values are not alphabetized, query nested 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected Array [
+  Object { name: 'Far', description: 'bar' },
+  Object { name: 'Boo', description: 'foo' }
+] to equal Array [
+  Object { name: 'Boo', description: 'foo' },
+  Object { name: 'Far', description: 'bar' }
+] (at '0' -> name, A has 'Far' and B has 'Boo')",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
 exports[`lint rules maxLength dont return result if property is shorter than value 1`] = `Array []`;
 
 exports[`lint rules maxLength return result if property is longer than value 1`] = `
@@ -106,6 +128,22 @@ Array [
 ]
 `;
 
+exports[`lint rules or returns result if no properties are present, nested props 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "expected false to be true",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
 exports[`lint rules pattern dont return result if pattern is matched (on object keys) 1`] = `Array []`;
 
 exports[`lint rules pattern dont return result if pattern is matched (on string) 1`] = `Array []`;
@@ -144,7 +182,25 @@ Array [
 ]
 `;
 
+exports[`lint rules pattern returns result if pattern is not matched (on string), nested props 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": ", but received: http://swagger.io/terms/",
+    "name": "test:rule",
+    "path": Array [
+      "$",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "type": "style",
+  },
+]
+`;
+
 exports[`lint rules truthy doesnt return result if value is present 1`] = `Array []`;
+
+exports[`lint rules truthy linting function should access simple nested fields 1`] = `Array []`;
 
 exports[`lint rules truthy returns result if value is not present 1`] = `
 Array [
@@ -169,11 +225,13 @@ Array [
 
 exports[`lint rules xor dont returns results if one of the properties are present 1`] = `Array []`;
 
+exports[`lint rules xor dont returns results if one of the properties are present, nested props 1`] = `Array []`;
+
 exports[`lint rules xor returns result if both properties are present 1`] = `
 Array [
   Object {
     "description": "",
-    "message": "expected true undefined false",
+    "message": "expected false to be true",
     "name": "test:rule",
     "path": Array [
       "$",

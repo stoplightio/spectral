@@ -44,7 +44,7 @@ export interface IRule {
 }
 
 export interface IRuleParam {
-  properties: string | string[];
+  properties: string | string[] | string[][];
 }
 
 export interface IRuleStringParam extends IRuleParam {
@@ -53,7 +53,7 @@ export interface IRuleStringParam extends IRuleParam {
 
 export interface IRuleNumberParam {
   value: number;
-  property?: string;
+  property?: string | string[];
 }
 
 export interface IAlphaRuleParam extends IRuleParam {
@@ -66,7 +66,7 @@ export interface IRulePatternParam {
   value: string;
 
   // object key to apply rule to
-  property?: string;
+  property?: string | string[];
 
   // value to omit from regex matching
   omit?: string;
@@ -81,7 +81,8 @@ export interface ITruthyRule extends IRule {
   input: {
     // key(s) of object that should evaluate as 'truthy' (considered true in a
     // boolean context)
-    properties: string | string[];
+    // note: string[][] represents a list of object "paths"
+    properties: string | string[] | string[][];
 
     max?: number;
   };
@@ -92,7 +93,7 @@ export interface IOrRule extends IRule {
 
   input: {
     // test to verify if any of the provided keys are present in object
-    properties: string[];
+    properties: string[] | string[][];
   };
 }
 
@@ -102,7 +103,7 @@ export interface IXorRule extends IRule {
   input: {
     // test to verify if one (but not all) of the provided keys are present in
     // object
-    properties: string[];
+    properties: string[] | string[][];
   };
 }
 

@@ -21,3 +21,11 @@ export const ensureRule = (shouldAssertion: Function, ruleMeta: IRuleMetadata): 
     };
   }
 };
+
+export function shouldHaveProperty(object: any, property: string | string[]) {
+  if (Array.isArray(property)) {
+    object.should.have.propertyByPath(...property);
+  } else {
+    object.should.have.property(property);
+  }
+}

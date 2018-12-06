@@ -1,3 +1,4 @@
+const get = require('lodash/get');
 import { IMaxLengthRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
@@ -10,8 +11,9 @@ export const maxLength: IRuleFunction<IMaxLengthRule> = (opts: IRuleOpts<IMaxLen
 
   let target: any;
   if (property) {
-    if (object[property] && typeof object[property] === 'string') {
-      target = object[property];
+    const val = get(object, property);
+    if (typeof val === 'string') {
+      target = val;
     }
   } else {
     target = object;

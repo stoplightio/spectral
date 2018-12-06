@@ -1,5 +1,6 @@
+const get = require('lodash/get');
 import { IAlphaRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
-import { ensureRule } from './utils/ensureRule';
+import { ensureRule, shouldHaveProperty } from './utils/ensureRule';
 
 export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRule>) => {
   const results: IRuleResult[] = [];
@@ -13,11 +14,13 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRu
   }
 
   for (const property of properties) {
-    if (!object[property] || object[property].length < 2) {
+    const value = get(object, property);
+    // TODO(SO-9): what if 'length' is not defined, bug
+    if (!value || value.length < 2) {
       continue;
     }
 
-    const arrayCopy: object[] = object[property].slice(0);
+    const arrayCopy: object[] = value.slice(0);
 
     // If we aren't expecting an object keyed by a specific property, then treat the
     // object as a simple array.
@@ -36,8 +39,8 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRu
     }
 
     const res = ensureRule(() => {
-      object.should.have.property(property);
-      object[property].should.be.deepEqual(arrayCopy);
+      shouldHaveProperty(object, property);
+      value.should.be.deepEqual(arrayCopy);
     }, meta);
 
     if (res) {

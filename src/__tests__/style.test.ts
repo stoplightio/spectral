@@ -65,6 +65,43 @@ describe('lint', () => {
           )
         ).toMatchSnapshot();
       });
+
+      test('linting function should access simple nested fields', () => {
+        const spectral = new Spectral({
+          rulesets: [
+            {
+              rules: {
+                sampleFormat: {
+                  sampleRule: {
+                    type: RuleType.VALIDATION,
+                    function: RuleFunction.TRUTHY,
+                    enabled: true,
+                    path: '$.a',
+                    summary: '',
+                    input: {
+                      properties: [['b', 'c']],
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        });
+
+        expect(
+          spectral.run({
+            target: {
+              a: {
+                b: {
+                  c: 1,
+                },
+                c: 2,
+              },
+            },
+            spec: 'sampleFormat',
+          })
+        ).toMatchSnapshot();
+      });
     });
 
     describe('alphabetical', () => {
@@ -79,6 +116,32 @@ describe('lint', () => {
               summary: '',
               input: {
                 properties: 'tags',
+                keyedBy: 'name',
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                tags: [{ name: 'Far', description: 'bar' }, { name: 'Boo', description: 'foo' }],
+              },
+            }
+          )
+        ).toMatchSnapshot();
+      });
+
+      test('returns result if values are not alphabetized, query nested', () => {
+        expect(
+          applyRuleToObject(
+            {
+              type: RuleType.STYLE,
+              function: RuleFunction.ALPHABETICAL,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                properties: [['info', 'tags']],
                 keyedBy: 'name',
               },
             },
@@ -131,7 +194,33 @@ describe('lint', () => {
               path: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['something-not-present', 'something-else-not-present'] },
+              input: {
+                properties: ['something-not-present', 'something-else-not-present'],
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+              },
+            }
+          )
+        ).toMatchSnapshot();
+      });
+
+      test('returns result if no properties are present, nested props', () => {
+        expect(
+          applyRuleToObject(
+            {
+              type: RuleType.STYLE,
+              function: RuleFunction.OR,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                properties: [['info', 'something-not-present'], ['info', 'something-else-not-present', 'xyz']],
+              },
             },
             {
               swagger: '2.0',
@@ -256,6 +345,29 @@ describe('lint', () => {
           )
         ).toMatchSnapshot();
       });
+
+      test('dont returns results if one of the properties are present, nested props', () => {
+        expect(
+          applyRuleToObject(
+            {
+              type: RuleType.STYLE,
+              function: RuleFunction.XOR,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: { properties: [['something'], ['info', 'title']] },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          )
+        ).toMatchSnapshot();
+      });
     });
 
     describe('pattern', () => {
@@ -270,6 +382,32 @@ describe('lint', () => {
               summary: '',
               input: {
                 property: 'termsOfService',
+                value: '^orange.*$',
+              },
+            },
+            {
+              swagger: '2.0',
+              info: {
+                version: '1.0.0',
+                title: 'Swagger Petstore',
+                termsOfService: 'http://swagger.io/terms/',
+              },
+            }
+          )
+        ).toMatchSnapshot();
+      });
+
+      test('returns result if pattern is not matched (on string), nested props', () => {
+        expect(
+          applyRuleToObject(
+            {
+              type: RuleType.STYLE,
+              function: RuleFunction.PATTERN,
+              path: '$',
+              enabled: true,
+              summary: '',
+              input: {
+                property: ['info', 'termsOfService'],
                 value: '^orange.*$',
               },
             },
