@@ -1,41 +1,166 @@
-# spectral
+# Spectral
 
-> **Warning** This is still a prototype and not ready for general use.
+[![Maintainability](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/maintainability)](https://codeclimate.com/github/stoplightio/spectral/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/test_coverage)](https://codeclimate.com/github/stoplightio/spectral/test_coverage)
 
-This is an enhanced version of the [speccy](https://github.com/wework/speccy)
-project. Differences between this project and speccy include:
+## Features
 
-- Lint rules can be applied to _any_ JSON object, not just OAS3 specifications.
+- Allows you to create custom rules to lint _any JSON object_
+- Built-in set of functions to help build custom rules, like for patterns, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Ability to create custom functions for advanced linting use cases
+- Existing rulesets for OpenAPI Specification (OAS) 2 _and_ 3 documents
+- Validates JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
-- All dependencies on the [oas-kit](https://github.com/Mermade/oas-kit/)
-  repository have been removed, since rules are no longer OAS-specific.
+## Installation
 
-- The rule structure has been modified slightly to use
-  [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead
-  of the `object` parameters (which were OAS-specific).
+```shell
+npm install @stoplight/spectral
+```
 
-- Rules are more clearly defined (thanks to TypeScript typings) and now require
-  specifying a `type` parameter.
-
-- Some rule types have been enhanced to be a little more flexible. An example of
-  this includes the ability to specify the object to be linted in the `path`
-  parameter itself, instead of relying on rule-specific options to be applied.
-
-- Ported to TypeScript.
-
-Things that speccy has, but spectral does not (though they would be easy to add):
-
-- A 'server' and CLI mode
-
-- The ability to add rules from file
-
-- The ability for rule files to specify a dependency on other rule files
+Supports Node v8.3+ and modern browsers
 
 ## Usage
 
-```typescript
-import { Spectral } from '@stoplight/spectral';
-import { defaultRuleset } from '@stoplight/spectral/rulesets';
+There are three key parts to working with Spectral: **Functions**, **rules**, and **rulesets**. **Rulesets** are made up of **rules**, which reference **functions**.
+
+Think of a **ruleset** as your own flexible and customizable style guide for your JSON objects.
+
+### Creating a custom rule and ruleset:
+
+Spectral has a built-in set of functions, which you can write your own rules with. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+const { RuleFunction, RuleType } = require("@stoplight/spectral/lib/types");
+
+const rulesets = {
+  rulesets: [
+    {
+      rules: {
+        mySpec: {
+          snake_case: {
+            type: RuleType.STYLE,
+            enabled: true,
+            summary: "Checks for snake case pattern",
+            function: RuleFunction.PATTERN,
+            // this path will check every property in the object being validated, see https://jsonpath.com
+            path: "$..*",
+            input: {
+              property: "*",
+              value: "^[a-z]+[a-z0-9_]*[a-z0-9]+$"
+            }
+          }
+        }
+      }
+    }
+  ]
+};
+
+const spectral = new Spectral(rulesets);
+
+// results would return a style warning because it is not in snake case pattern
+console.log(
+  spectral.run({
+    spec: "mySpec",
+    target: {
+      name: "helloWorld"
+    }
+  })
+);
+
+// [ { path: [ '$', 'name' ],
+//     name: 'snake_case',
+//     type: 'style',
+//     summary: 'Checks for snake case pattern',
+//     severity: 'warn',
+//     message: 'Checks for snake case pattern, but received: helloWorld' } ]
+```
+
+### Creating a custom function, rule, and ruleset:
+
+Sometimes the built-in functions aren't what you need to build a custom rule. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+const { RuleType } = require("@stoplight/spectral/lib/types");
+const { ensureRule } = require("@stoplight/spectral/lib/functions/utils/ensureRule");
+
+// custom function
+const customNotThatFunction = opts => {
+  const results = [];
+
+  const { object, rule, meta } = opts;
+  const { that, suggestion } = rule.input;
+
+  const res = ensureRule(() => {
+    object.should.match(
+      new RegExp(that),
+      `Don't use ${that}, use ${suggestion}!`
+    );
+  }, meta);
+
+  if (res) {
+    results.push(res);
+  }
+
+  return results;
+};
+
+//custom rule and ruleset
+const spectral = new Spectral({
+  rulesets: [
+    {
+      rules: {
+        mySpec: {
+          openapi_not_swagger: {
+            type: RuleType.STYLE,
+            enabled: true,
+            summary: "Checks for use of Swagger, and suggests OpenAPI.",
+            // see functions below
+            function: "notThat",
+            // this path will check every property in the object being validated, see https://jsonpath.com
+            path: "$..*",
+            input: {
+              that: "/Swagger/g",
+              suggestion: "OpenAPI"
+            }
+          }
+        }
+      },
+      functions: {
+        notThat: customNotThatFunction
+      }
+    }
+  ]
+});
+
+// results would return a style warning because you used "Swagger" instead of "OpenAPI"
+console.log(
+  spectral.run({
+    spec: "mySpec",
+    target: {
+      description: "Swagger is pretty cool!"
+    }
+  })
+);
+
+// [ { path: [ '$', 'description' ],
+//     name: 'openapi_not_swagger',
+//     type: 'style',
+//     summary: 'Checks for use of Swagger, and suggests OpenAPI.',
+//     severity: 'warn',
+//     message: 'Don\'t use /Swagger/g, use OpenAPI!' } ]
+```
+
+### Linting an OAS 2 document:
+
+Spectral also has existing rulesets that we have created for OAS 2 and 3. This example uses an existing ruleset to lint an OAS 2 document.
+
+You can also build on top of these rulesets for a customized linting style guide for your OAS documents.
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+const { defaultRuleset } = require('@stoplight/spectral/lib/rulesets');
 
 // an OASv2 specification
 var myOAS = {
@@ -56,35 +181,48 @@ const spectral = new Spectral({ rulesets: [defaultRuleset()] });
 
 // run!
 console.log(spectral.run({ spec: 'oas2', target: myOAS }));
-
-//  [ {
-//   path: '$.responses',
-//   rule:
-//     { type: 'pattern',
-//       name: 'all-responses-must-be-numeric',
-//       path: '$..responses',
-//       enabled: true,
-//       description: 'reference components should all match regex ^[0-9]+',
-//       pattern: { property: '*', value: '^[0-9]+$' } },
-//     error:
-//       Error {
-//         operator: 'to be',
-//         expected: true,
-//         message: 'reference components should all match regex ^[0-9]+',
-//         showDiff: true,
-//         actual: false,
-//         stackStartFunction: [Function: assert],
-//         negate: false,
-//         assertion:
-//         Assertion {
-//           obj: false,
-//           anyOne: false,
-//           negate: false,
-//           params: [Object],
-//           onlyThis: undefined,
-//           light: false } } } ]
 ```
+
+Note: The existing OAS rulesets are opinionated. There might be some rules that you prefer to change. We encourage you to create your rulesets to fit your use case. We welcome contributions to the existing rulesets too!
+
+### Example Implementations
+
+- [Spectral Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot that lints your repo's OAS document that uses the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
+
+## FAQs
+
+**How is this different than [Ajv](https://github.com/epoberezkin/ajv)?**
+
+Ajv is a JSON Schema validator, not a linter. Spectral does expose a `schema` function that you can use in your rules to validate all or part of the target object with JSON Schema (Ajv is used under the hood). However, Spectral also provides a number of other functions and utilities that you can use to build up a linting ruleset that validates things JSON Schema is not suited for.
+
+**I want to lint my OpenAPI Specification documents but don't want to implement Spectral right now.**
+
+No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_campaign=spectral).
+
+**What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
+
+With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
+
+## Contributing
+
+Most of the interesting projects are built _with_ Spectral. Please consider using Spectral in a project or contribute to an [existing one](#example-implementations). If you would like to add your project to our examples, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
+
+We also love to help and support contributors! If you are interested in contributing to Spectral itself, check out our [contributing docs](CONTRIBUTING.md) to get started.
 
 ## Helpful Links
 
-- [JSONPath Tester](https://jsonpath.curiousconcept.com/)
+- [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `path` you want
+- [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
+- [stoplightio/yaml]((https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON with a source map that includes JSONPath pointers for every property in the result
+
+## Thanks :)
+
+- [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
+
+## Support
+
+If you have a bug or feature request, please open an issue [here](https://github.com/stoplightio/spectral/issues).
+
+If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We've created an open source category for these questions. It's also a great place to share your implementations.
+
+Lastly, if you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
