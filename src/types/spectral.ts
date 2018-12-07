@@ -1,20 +1,21 @@
-import { ObjPath } from '@stoplight/types/parsers';
-import { IRuleFunction, IRuleResult, Rule, RuleType } from '.';
+import { Dictionary, ObjPath } from '@stoplight/types';
 
-export interface IFunctionCollection {
-  [name: string]: IRuleFunction;
-}
+import { IFunction } from './function';
+import { IRule, Rule } from './rule';
 
-export interface IRuleCollection {
-  [index: string]: IRuleEntry;
-}
+export type FunctionCollection = Dictionary<IFunction, string>;
+export type RuleCollection = Dictionary<Rule, string>;
+export type RunRuleCollection = Dictionary<IRunRule, string>;
 
-export interface IRuleEntry {
+export interface IRunRule extends IRule {
   name: string;
-  format: string;
-  rule: Rule;
-  apply: IRuleFunction;
 }
+
+/**
+ * Name of the rule with either a rule definition (when definining/overriding
+ * rules) or boolean (when enabling/disabling a default rule)
+ */
+export type RuleDeclaration = Dictionary<Partial<Rule> | boolean, string>;
 
 export interface IRunOpts {
   /**
@@ -23,41 +24,13 @@ export interface IRunOpts {
    * Some functions require this in order to operate.
    */
   resolvedTarget?: object;
-
-  /**
-   * Optional rule type, when supplied only rules of this type are run
-   */
-  type?: RuleType;
-
-  /**
-   * The specification to apply to the target
-   */
-  format: string;
-}
-
-export type IFunction<O = any> = (
-  targetValue: any,
-  options: O,
-  paths: IFunctionPaths,
-  otherValues: IFunctionValues
-) => void | IFunctionResult[];
-
-export interface IFunctionPaths {
-  given: ObjPath;
-  target?: ObjPath;
-}
-
-export interface IFunctionValues {
-  original: any;
-  resolved?: any;
-  given: any;
-}
-
-export interface IFunctionResult {
-  message: string;
-  path?: ObjPath;
 }
 
 export interface IRunResult {
   results: IRuleResult[];
+}
+
+export interface IRuleResult {
+  path: ObjPath;
+  message: string;
 }

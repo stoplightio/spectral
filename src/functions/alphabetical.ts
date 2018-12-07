@@ -1,49 +1,52 @@
-import { IAlphaRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
-import { IFunctionPaths } from '../types/spectral';
-import { ensureRule } from './utils/ensureRule';
+import isEqual = require('lodash/isEqual');
 
-export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRule>, paths: IFunctionPaths) => {
-  const results: IRuleResult[] = [];
+import { IAlphaRuleOptions, IFunction, IFunctionResult } from '../types';
 
-  const { object, rule } = opts;
-  const { keyedBy, properties: inputProperties } = rule.then.functionOptions;
+export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts) => {
+  const results: IFunctionResult[] = [];
 
-  let properties = inputProperties;
-  if (properties && !Array.isArray(properties)) {
-    properties = [properties];
+  if (!targetVal) {
+    return results;
   }
 
-  for (const property of properties) {
-    if (!object[property] || object[property].length < 2) {
-      continue;
-    }
+  let targetArray: any[] = targetVal;
+  if (!Array.isArray(targetVal)) {
+    targetArray = Object.keys(targetVal);
+  }
 
-    const arrayCopy: object[] = object[property].slice(0);
+  // don't mutate original array
+  const copiedArray = targetArray.slice();
 
-    // If we aren't expecting an object keyed by a specific property, then treat the
-    // object as a simple array.
-    if (keyedBy) {
-      arrayCopy.sort((a, b) => {
-        if (a[keyedBy] < b[keyedBy]) {
-          return -1;
-        } else if (a[keyedBy] > b[keyedBy]) {
-          return 1;
-        }
+  if (copiedArray.length < 2) {
+    return results;
+  }
 
+  const { keyedBy } = opts;
+
+  // If we aren't expecting an object keyed by a specific property, then treat the
+  // object as a simple array.
+  if (keyedBy) {
+    copiedArray.sort((a, b) => {
+      if (typeof a !== 'object') {
         return 0;
-      });
-    } else {
-      arrayCopy.sort();
-    }
+      }
 
-    const res = ensureRule(() => {
-      object.should.have.property(property);
-      object[property].should.be.deepEqual(arrayCopy);
-    }, paths.given);
+      if (a[keyedBy] < b[keyedBy]) {
+        return -1;
+      } else if (a[keyedBy] > b[keyedBy]) {
+        return 1;
+      }
 
-    if (res) {
-      results.push(res);
-    }
+      return 0;
+    });
+  } else {
+    copiedArray.sort();
+  }
+
+  if (!isEqual(targetArray, copiedArray)) {
+    results.push({
+      message: 'properties are not in alphabetical order',
+    });
   }
 
   return results;
