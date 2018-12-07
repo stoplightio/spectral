@@ -12,7 +12,7 @@ describe('spectral', () => {
   test('load and run the default rule set', () => {
     const s = new Spectral();
     if (aDefaultRuleset.functions) {
-      s.newSetFunctions(aDefaultRuleset.functions);
+      s.setFunctions(aDefaultRuleset.functions);
     }
     s.newSetRules(aDefaultRuleset.rules);
 
