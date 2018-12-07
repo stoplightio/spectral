@@ -2,11 +2,12 @@ import { IRuleFunction, IRuleOpts, IRuleResult, IXorRule } from '../types';
 import { ensureRule } from './utils/ensureRule';
 
 import * as should from 'should';
+import { IFunctionPaths } from '../types/spectral';
 
-export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
+export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  const { object, rule } = opts;
   const { properties } = rule.then.functionOptions;
 
   let found = false;
@@ -15,7 +16,7 @@ export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
       if (found) {
         const innerRes = ensureRule(() => {
           should.fail(true, false, rule.summary);
-        }, meta);
+        }, paths.given);
 
         if (innerRes) {
           results.push(innerRes);
@@ -28,7 +29,7 @@ export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
 
   const res = ensureRule(() => {
     found.should.be.exactly(true, rule.summary);
-  }, meta);
+  }, paths.given);
 
   if (res) {
     results.push(res);

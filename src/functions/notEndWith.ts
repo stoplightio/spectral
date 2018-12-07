@@ -1,16 +1,17 @@
 import { INotEndWithRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
+import { IFunctionPaths } from '../types/spectral';
 import { ensureRule } from './utils/ensureRule';
 
-export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotEndWithRule>) => {
+export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotEndWithRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
   let { object } = opts;
-  const { rule, meta } = opts;
+  const { rule } = opts;
   const { value, property } = rule.then.functionOptions;
 
   const process = (target: any) => {
     const res = ensureRule(() => {
       target.should.not.endWith(value);
-    }, meta);
+    }, paths.given);
 
     if (res) {
       results.push(res);

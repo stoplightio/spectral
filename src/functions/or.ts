@@ -1,10 +1,11 @@
 import { IOrRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
+import { IFunctionPaths } from '../types/spectral';
 import { ensureRule } from './utils/ensureRule';
 
-export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>) => {
+export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  const { object, rule } = opts;
   const { properties } = rule.then.functionOptions;
 
   let found = false;
@@ -16,7 +17,7 @@ export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>) => {
   }
   const res = ensureRule(() => {
     found.should.be.exactly(true, rule.description);
-  }, meta);
+  }, paths.given);
 
   if (res) {
     results.push(res);
