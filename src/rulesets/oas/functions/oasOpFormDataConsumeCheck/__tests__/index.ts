@@ -4,25 +4,19 @@ import { commonOasRuleset } from '../../../index';
 const ruleset = commonOasRuleset();
 
 describe('oasOpFormDataConsumeCheck', () => {
-  const s = new Spectral({
-    rulesets: [
-      {
-        functions: ruleset.functions,
-        rules: {
-          oas2: {
-            'operation-formData-consume-check': Object.assign(ruleset.rules.oas2['operation-formData-consume-check'], {
-              enabled: true,
-            }),
-          },
-        },
-      },
-    ],
+  const s = new Spectral();
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
+    oas2: {
+      'operation-formData-consume-check': Object.assign(ruleset.rules.oas2['operation-formData-consume-check'], {
+        enabled: true,
+      }),
+    },
   });
 
   test('validate a correct object', () => {
-    const results = s.run({
-      spec: 'oas2',
-      target: {
+    const results = s.run(
+      {
         paths: {
           '/path1': {
             get: {
@@ -32,14 +26,16 @@ describe('oasOpFormDataConsumeCheck', () => {
           },
         },
       },
-    });
-    expect(results.length).toEqual(0);
+      {
+        format: 'oas2',
+      }
+    );
+    expect(results.results.length).toEqual(0);
   });
 
   test('return errors on different path operations same id', () => {
-    const results = s.run({
-      spec: 'oas2',
-      target: {
+    const results = s.run(
+      {
         paths: {
           '/path1': {
             get: {
@@ -49,8 +45,11 @@ describe('oasOpFormDataConsumeCheck', () => {
           },
         },
       },
-    });
+      {
+        format: 'oas2',
+      }
+    );
 
-    expect(results.length).toEqual(1);
+    expect(results.results.length).toEqual(1);
   });
 });

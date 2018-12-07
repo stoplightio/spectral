@@ -1,4 +1,4 @@
-import { Spectral } from '../index';
+import { Spectral } from '../spectral';
 import { IRuleResult, IRuleset, Rule, RuleFunction, RuleType } from '../types';
 
 const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
@@ -11,8 +11,9 @@ const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
       },
     },
   ];
-  const s = new Spectral({ rulesets: cfg });
-  return s.run({ target: o, spec: 'testing' });
+  const s = new Spectral();
+  s.setRules(cfg[0].rules);
+  return s.run(o, { format: 'testing' }).results;
 };
 
 describe('lint', () => {

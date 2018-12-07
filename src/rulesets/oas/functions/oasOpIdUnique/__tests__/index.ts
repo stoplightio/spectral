@@ -4,25 +4,20 @@ import { commonOasRuleset } from '../../../index';
 const ruleset = commonOasRuleset();
 
 describe('oasOpIdUnique', () => {
-  const s = new Spectral({
-    rulesets: [
-      {
-        functions: ruleset.functions,
-        rules: {
-          oas2: {
-            'operation-operationId-unique': Object.assign(ruleset.rules.oas2['operation-operationId-unique'], {
-              enabled: true,
-            }),
-          },
-        },
-      },
-    ],
+  const s = new Spectral();
+
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
+    oas2: {
+      'operation-operationId-unique': Object.assign(ruleset.rules.oas2['operation-operationId-unique'], {
+        enabled: true,
+      }),
+    },
   });
 
   test('validate a correct object', () => {
-    const results = s.run({
-      spec: 'oas2',
-      target: {
+    const results = s.run(
+      {
         paths: {
           '/path1': {
             get: {
@@ -36,14 +31,16 @@ describe('oasOpIdUnique', () => {
           },
         },
       },
-    });
-    expect(results.length).toEqual(0);
+      {
+        format: 'oas2',
+      }
+    );
+    expect(results.results.length).toEqual(0);
   });
 
   test('return errors on different path operations same id', () => {
-    const results = s.run({
-      spec: 'oas2',
-      target: {
+    const results = s.run(
+      {
         paths: {
           '/path1': {
             get: {
@@ -57,15 +54,17 @@ describe('oasOpIdUnique', () => {
           },
         },
       },
-    });
+      {
+        format: 'oas2',
+      }
+    );
 
-    expect(results.length).toEqual(2);
+    expect(results.results.length).toEqual(2);
   });
 
   test('return errors on same path operations same id', () => {
-    const results = s.run({
-      spec: 'oas2',
-      target: {
+    const results = s.run(
+      {
         paths: {
           '/path1': {
             get: {
@@ -77,8 +76,11 @@ describe('oasOpIdUnique', () => {
           },
         },
       },
-    });
+      {
+        format: 'oas2',
+      }
+    );
 
-    expect(results.length).toEqual(2);
+    expect(results.results.length).toEqual(2);
   });
 });
