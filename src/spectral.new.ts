@@ -24,7 +24,7 @@ export class Spectral {
   // @ts-ignore
   private _rulesets: types.IRuleset[] = [];
 
-  private _functions: IFunctionCollection = defaultFunctions;
+  private _functionCollection: IFunctionCollection = defaultFunctions;
 
   constructor(opts: ISpectralOpts) {
     this.setRules(opts.rulesets);
@@ -51,17 +51,70 @@ export class Spectral {
   //   this._rulesByIndex = this.parseRules(rules);
   // }
 
-  public setRules(rulesets: types.IRuleset[]) {
-    const { rulesets: rSets, functionCollection: functionStore, ruleCollection: ruleStore } = this.parseRuleSets(
-      rulesets,
-      {
-        includeCurrent: false,
+  public newSetFunctions(functionCollection: IFunctionCollection) {
+    this._functionCollection = this.parseFunctionCollection(functionCollection, false);
+  }
+
+  public newUpdateFunctions(functionCollection: IFunctionCollection) {
+    this._functionCollection = this.parseFunctionCollection(functionCollection, true);
+  }
+
+  public newSetRules(rules: IRuleCollection) {
+    return this.parseRuleCollection(rules, false);
+  }
+
+  public newUpdateRules(rules: IRuleCollection) {
+    return this.parseRuleCollection(rules, true);
+  }
+
+  private parseRuleCollection(ruleCollection: IRuleCollection, includeCurrent: boolean) {
+    const currentRules = includeCurrent ? merge({}, this._rulesByIndex) : {};
+    return this.toRules(ruleCollection, currentRules, this._functionCollection);
+  }
+
+  private toRules(
+    ruleCollection: IRuleCollection,
+    internalRuleStore: IRuleCollection,
+    functionStore?: IFunctionCollection
+  ): IRuleCollection {
+    for (const format in ruleCollection) {
+      if (!ruleCollection.hasOwnProperty(format)) continue;
+
+      for (const ruleName in ruleCollection[format]) {
+        if (!ruleCollection[format].hasOwnProperty(ruleName)) continue;
+
+        const r = ruleCollection[format][ruleName];
+        const ruleIndex = this.toRuleIndex(ruleName, format);
+        if (typeof r === 'boolean') {
+          // enabling/disabling rule
+          if (!internalRuleStore[ruleIndex]) {
+            console.warn(
+              `Unable to find rule matching name '${ruleName}' under format ${format} - this entry has no effect`
+            );
+            continue;
+          }
+
+          internalRuleStore[ruleIndex].rule.enabled = r;
+        } else if (typeof r === 'object' && !Array.isArray(r)) {
+          // rule definition
+          internalRuleStore[ruleIndex] = this.parseRuleDefinition({ name: ruleName, rule: r, format }, functionStore);
+        } else {
+          throw new Error(`Unknown rule definition format: ${r}`);
+        }
       }
-    );
+    }
+
+    return internalRuleStore;
+  }
+
+  public setRules(rulesets: types.IRuleset[]) {
+    const { rulesets: rSets, functionCollection, ruleCollection } = this.parseRuleSets(rulesets, {
+      includeCurrent: false,
+    });
 
     this._rulesets = rSets;
-    this._functions = functionStore;
-    this._rulesByIndex = ruleStore;
+    this._functionCollection = functionCollection;
+    this._rulesByIndex = ruleCollection;
   }
 
   public updateRules(rulesets: types.IRuleset[]) {
@@ -70,7 +123,7 @@ export class Spectral {
     });
 
     this._rulesets = rSets;
-    this._functions = functionCollection;
+    this._functionCollection = functionCollection;
     this._rulesByIndex = ruleCollection;
   }
 
@@ -152,12 +205,12 @@ export class Spectral {
   ): IParsedRulesetResult {
     const rSets = merge([], rulesets);
 
-    let functionStore = includeCurrent ? this._functions : defaultFunctions;
+    let functionStore = includeCurrent ? this._functionCollection : defaultFunctions;
     let rulesCollection = includeCurrent ? this._rulesByIndex : {};
 
     if (rSets.length) {
-      functionStore = { ...functionStore, ...this._rulesetsToFunctions(rulesets) };
-      rulesCollection = this._rulesetsToRules(rulesets, rulesCollection, functionStore);
+      functionStore = { ...functionStore, ...this.rulesetsToFunctions(rulesets) };
+      rulesCollection = this.rulesetsToRules(rulesets, rulesCollection, functionStore);
     }
 
     return {
@@ -167,7 +220,12 @@ export class Spectral {
     };
   }
 
-  private _parseRuleDefinition(
+  private parseFunctionCollection(functionCollection: IFunctionCollection, includeCurrent: boolean) {
+    const functionStore = includeCurrent ? this._functionCollection : defaultFunctions;
+    return { ...functionStore, ...functionCollection };
+  }
+
+  private parseRuleDefinition(
     { name, format, rule }: { name: string; format: string; rule: types.Rule },
     functionStore: IFunctionCollection = {}
   ): IRuleEntry {
@@ -178,7 +236,7 @@ export class Spectral {
       throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.path}\n\n${e}`);
     }
 
-    const ruleFunc = functionStore[rule.function] || this._functions[rule.function];
+    const ruleFunc = functionStore[rule.function] || this._functionCollection[rule.function];
     if (!ruleFunc) {
       throw new SyntaxError(`Function does not exist for rule '${ruleIndex}': ${rule.function}`);
     }
@@ -195,7 +253,7 @@ export class Spectral {
     return `${ruleFormat}-${ruleName}`;
   }
 
-  private _rulesetToRules(
+  private rulesetToRules(
     ruleset: types.IRuleset,
     internalRuleStore: IRuleCollection,
     functionStore?: IFunctionCollection
@@ -221,7 +279,7 @@ export class Spectral {
           internalRuleStore[ruleIndex].rule.enabled = r;
         } else if (typeof r === 'object' && !Array.isArray(r)) {
           // rule definition
-          internalRuleStore[ruleIndex] = this._parseRuleDefinition({ name: ruleName, rule: r, format }, functionStore);
+          internalRuleStore[ruleIndex] = this.parseRuleDefinition({ name: ruleName, rule: r, format }, functionStore);
         } else {
           throw new Error(`Unknown rule definition format: ${r}`);
         }
@@ -231,7 +289,7 @@ export class Spectral {
     return internalRuleStore;
   }
 
-  private _rulesetsToRules(
+  private rulesetsToRules(
     rulesets: types.IRuleset[],
     ruleCollection?: IRuleCollection,
     functionCollection?: IFunctionCollection
@@ -239,13 +297,13 @@ export class Spectral {
     const rules: IRuleCollection = merge({}, ruleCollection);
 
     for (const ruleset of rulesets) {
-      merge(rules, this._rulesetToRules(ruleset, rules, functionCollection));
+      merge(rules, this.rulesetToRules(ruleset, rules, functionCollection));
     }
 
     return rules;
   }
 
-  private _rulesetsToFunctions(rulesets: types.IRuleset[]): IFunctionCollection {
+  private rulesetsToFunctions(rulesets: types.IRuleset[]): IFunctionCollection {
     let funcs = {};
 
     for (const ruleset of rulesets) {
