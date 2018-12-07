@@ -36,6 +36,15 @@ export interface IRule<O = any> {
   // Filter the target down to a subset[] with a JSON path
   given: string;
 
+  when?: {
+    // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+    // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
+    field: string;
+
+    // a regex pattern
+    pattern?: string;
+  };
+
   then: {
     // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
     // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
