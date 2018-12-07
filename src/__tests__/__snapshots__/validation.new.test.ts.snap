@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`validation validate multiple formats with same validator 1`] = `
+Array [
+  Object {
+    "description": "",
+    "message": "should be string",
+    "name": "oas2-schema",
+    "path": Array [
+      "$",
+      "info",
+      "license",
+      "name",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "type": "validation",
+  },
+]
+`;
