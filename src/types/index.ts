@@ -5,6 +5,7 @@ import { AssertionError } from 'assert';
 import { IValidationResult } from '@stoplight/types/validations';
 import { RuleType } from './enums';
 import { Rule } from './rule';
+import { IFunctionCollection } from './spectral';
 
 export type TargetSpec = 'oas2' | 'oas3' | string;
 export type RawResult = ErrorObject | AssertionError;
@@ -33,10 +34,7 @@ export interface IRuleMetadata {
 export interface IRuleset {
   rules: IRuleStore;
   name?: string;
-  functions?: {
-    // name is be the function name that will be used in rules
-    [name: string]: IRuleFunction;
-  };
+  functions?: IFunctionCollection;
 }
 
 export interface IRuleStore {

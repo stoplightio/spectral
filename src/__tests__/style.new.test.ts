@@ -11,7 +11,8 @@ const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
       },
     },
   ];
-  const s = new Spectral({ rulesets: cfg });
+  const s = new Spectral();
+  s.newSetRules(cfg[0].rules);
   return s.run(o, { format: 'testing' }).results;
 };
 
