@@ -12,6 +12,7 @@ import {
   IRuleEntry,
   IRuleStore,
   IRunOpts,
+  IRunResult,
   ISpectralOpts,
 } from './types/spectral';
 
@@ -65,8 +66,10 @@ export class Spectral {
     this._rulesByIndex = ruleStore;
   }
 
-  public run(target: object, opts: IRunOpts): types.IRuleResult[] {
-    return this.runAllLinters(target, this._rulesByIndex, opts);
+  public run(target: object, opts: IRunOpts): IRunResult {
+    return {
+      results: this.runAllLinters(target, this._rulesByIndex, opts),
+    };
   }
 
   private runAllLinters(target: object, ruleStore: IRuleStore, opts: IRunOpts): types.IRuleResult[] {

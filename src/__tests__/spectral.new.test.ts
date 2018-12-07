@@ -12,8 +12,8 @@ describe('spectral', () => {
       rulesets: [defaultRuleset()],
     });
 
-    const results = s.run(todosPartialDeref, { format: 'oas2' });
-    expect(results.length).toBeGreaterThan(0);
+    const result = s.run(todosPartialDeref, { format: 'oas2' });
+    expect(result.results.length).toBeGreaterThan(0);
   });
 
   // Assures: https://stoplightio.atlassian.net/browse/SL-786
