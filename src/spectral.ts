@@ -38,11 +38,11 @@ export class Spectral {
     this._functionCollection = merge({}, this._functionCollection, functionCollection);
   }
 
-  public newSetRules(ruleStore: types.IRuleStore) {
+  public setRules(ruleStore: types.IRuleStore) {
     this._rulesByIndex = this.toRuleCollection(ruleStore, {});
   }
 
-  public newUpdateRules(ruleStore: types.IRuleStore) {
+  public mergeRules(ruleStore: types.IRuleStore) {
     this._rulesByIndex = this.toRuleCollection(ruleStore, merge({}, this._rulesByIndex));
   }
 
