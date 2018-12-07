@@ -12,7 +12,7 @@ const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
     },
   ];
   const s = new Spectral({ rulesets: cfg });
-  return s.run({ target: o, spec: 'testing' });
+  return s.run(o, { format: 'testing' });
 };
 
 describe('lint', () => {

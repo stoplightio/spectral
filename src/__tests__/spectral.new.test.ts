@@ -1,5 +1,4 @@
 const merge = require('lodash/merge');
-import { ValidationSeverity } from '@stoplight/types/validations';
 
 import { defaultRuleset } from '../rulesets';
 import { Spectral } from '../spectral.new';
@@ -13,7 +12,7 @@ describe('spectral', () => {
       rulesets: [defaultRuleset()],
     });
 
-    const results = s.run({ target: todosPartialDeref, spec: 'oas2' });
+    const results = s.run(todosPartialDeref, { format: 'oas2' });
     expect(results.length).toBeGreaterThan(0);
   });
 
@@ -247,98 +246,6 @@ Array [
   },
 ]
 `);
-  });
-
-  test('be able to toggle rules on apply', () => {
-    const spec = {
-      hello: 'world',
-    };
-
-    const rulesets: IRuleset[] = [
-      {
-        rules: {
-          oas2: {
-            'lint:test': {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: false,
-              severity: ValidationSeverity.Error,
-              description: 'this should return an error if enabled',
-              summary: '',
-              input: {
-                properties: 'nonexistant-property',
-              },
-            },
-          },
-        },
-      },
-    ];
-
-    const overrideRulesets: IRuleset[] = [
-      {
-        rules: {
-          oas2: {
-            'lint:test': true,
-          },
-        },
-      },
-    ];
-
-    const s = new Spectral({ rulesets });
-
-    // run once with no override config
-    let results = s.run({ target: spec, spec: 'oas2' });
-    expect(results.length).toEqual(0);
-
-    // run again with an override config
-    results = s.run({ target: spec, spec: 'oas2', rulesets: overrideRulesets });
-    expect(results.length).toEqual(1);
-  });
-
-  // Assures: https://stoplightio.atlassian.net/browse/SL-788
-  test('run with rulesets overrides ruleset on run, not permenantly', () => {
-    const spec = {
-      hello: 'world',
-    };
-
-    const rulesets: IRuleset[] = [
-      {
-        rules: {
-          format: {
-            test: {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: false,
-              severity: ValidationSeverity.Error,
-              summary: '',
-              input: {
-                properties: 'nonexistant-property',
-              },
-            },
-          },
-        },
-      },
-    ];
-
-    const overrideRulesets: IRuleset[] = [
-      {
-        rules: {
-          format: {
-            test: true,
-          },
-        },
-      },
-    ];
-
-    const s = new Spectral({ rulesets });
-
-    const originalRules = s.getRules('format');
-
-    s.run({ target: spec, spec: 'format', rulesets: overrideRulesets });
-
-    expect(s.getRules('format')).toEqual(originalRules);
   });
 
   test('getRules returns a flattened list of rules filtered by format', () => {
