@@ -1,6 +1,5 @@
 import { ObjPath } from '@stoplight/types/parsers';
-import { IValidationResult } from '@stoplight/types/validations';
-import { IRuleFunction, Rule, RuleType } from '.';
+import { IRuleFunction, IRuleResult, Rule, RuleType } from '.';
 
 export interface IFunctionCollection {
   [name: string]: IRuleFunction;
@@ -45,7 +44,7 @@ export type IFunction<O = any> = (
 
 export interface IFunctionPaths {
   given: ObjPath;
-  target: ObjPath;
+  target?: ObjPath;
 }
 
 export interface IFunctionValues {
@@ -57,10 +56,6 @@ export interface IFunctionValues {
 export interface IFunctionResult {
   message: string;
   path?: ObjPath;
-}
-
-export interface IRuleResult extends IValidationResult {
-  type: RuleType;
 }
 
 export interface IRunResult {

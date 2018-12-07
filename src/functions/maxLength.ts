@@ -1,10 +1,11 @@
 import { IMaxLengthRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
+import { IFunctionPaths } from '../types/spectral';
 import { ensureRule } from './utils/ensureRule';
 
-export const maxLength: IRuleFunction<IMaxLengthRule> = (opts: IRuleOpts<IMaxLengthRule>) => {
+export const maxLength: IRuleFunction<IMaxLengthRule> = (opts: IRuleOpts<IMaxLengthRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  const { object, rule } = opts;
 
   const { value, property } = rule.then.functionOptions;
 
@@ -20,7 +21,7 @@ export const maxLength: IRuleFunction<IMaxLengthRule> = (opts: IRuleOpts<IMaxLen
   if (target) {
     const res = ensureRule(() => {
       target.length.should.be.belowOrEqual(value);
-    }, meta);
+    }, paths.given);
 
     if (res) {
       results.push(res);

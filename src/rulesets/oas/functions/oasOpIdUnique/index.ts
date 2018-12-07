@@ -1,10 +1,11 @@
 import { ensureRule } from '../../../../functions/utils/ensureRule';
 import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+import { IFunctionPaths } from '../../../../types/spectral';
 
-export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
+export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, functionPaths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, meta } = opts;
+  const { object } = opts;
   const { paths = {} } = object;
 
   const ids: any[] = [];
@@ -24,11 +25,9 @@ export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
   }
 
   ids.forEach(operationId => {
-    const m = { ...meta, path: operationId.path };
-
     const res = ensureRule(() => {
       ids.filter(id => id.operationId === operationId.operationId).length.should.equal(1);
-    }, m);
+    }, operationId.path || functionPaths.given);
 
     if (res) {
       results.push(res);

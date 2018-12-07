@@ -1,11 +1,11 @@
-import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
 import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+import { IFunctionPaths } from '../../../../types/spectral';
 
-export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
+export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
   let { object } = opts;
-  const { resObj, meta, rule } = opts;
+  const { resObj } = opts;
 
   if (!resObj) {
     console.warn('oasOpParams expects a resolved object, but none was provided. Results may not be correct.');
@@ -106,11 +106,6 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             results.push({
               message,
               path: ['$', 'paths', path, operation],
-              name: meta.name,
-              description: rule.summary,
-              severity: meta.rule.severity || ValidationSeverity.Error,
-              severityLabel: meta.rule.severityLabel || ValidationSeverityLabel.Error,
-              type: rule.type,
             });
           }
         }
@@ -127,11 +122,6 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           results.push({
             message,
             path: ['$', 'paths', path, operation],
-            name: meta.name,
-            description: rule.summary,
-            severity: meta.rule.severity || ValidationSeverity.Error,
-            severityLabel: meta.rule.severityLabel || ValidationSeverityLabel.Error,
-            type: rule.type,
           });
         }
 
@@ -147,11 +137,6 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           results.push({
             message,
             path: ['$', 'paths', path, operation],
-            name: meta.name,
-            description: rule.summary,
-            severity: meta.rule.severity || ValidationSeverity.Error,
-            severityLabel: meta.rule.severityLabel || ValidationSeverityLabel.Error,
-            type: rule.type,
           });
         }
       }
