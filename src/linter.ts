@@ -1,42 +1,70 @@
 import { PathComponent } from 'jsonpath';
-import { filter, omitBy } from 'lodash';
-import { IRule, IRuleOpts, IRuleResult } from '../types';
-import { IRuleEntry, IRunOpts } from '../types/spectral';
 const get = require('lodash/get');
 const has = require('lodash/has');
+const filter = require('lodash/filter');
+const omitBy = require('lodash/omitBy');
+
+import { IFunction, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
-export function lintNode(
-  ruleEntry: IRuleEntry,
-  opts: IRunOpts,
-  node: { path: PathComponent[]; value: any }
-): IRuleResult[] {
-  const conditioning = whatShouldBeLinted(node.value, ruleEntry.rule);
+export const lintNode = (
+  node: { path: PathComponent[]; value: any },
+  rule: IRunRule,
+  then: IThen<string, any>,
+  apply: IFunction,
+  opts: IRunOpts
+): IRuleResult[] => {
+  const conditioning = whatShouldBeLinted(node.value, rule);
+
   // If the 'when' condition is not satisfied, simply don't run the linter
   if (!conditioning.lint) {
     return [];
   }
 
-  const opt: IRuleOpts = {
-    object: conditioning.value,
-    rule: ruleEntry.rule,
-  };
+  let targetValue = conditioning.value;
 
-  if (ruleEntry.rule.given === '$') {
-    // allow resolved and stringified targets to be passed to rules when operating on
-    // the root path
-    if (opts.resolvedTarget) {
-      opt.resObj = opts.resolvedTarget;
-    }
+  // const opt: IRuleOpts = {
+  //   object: conditioning.value,
+  //   rule,
+  // };
+
+  // if (rule.given === '$') {
+  //   // allow resolved and stringified targets to be passed to rules when operating on
+  //   // the root path
+  //   if (opts.resolvedTarget) {
+  //     opt.resObj = opts.resolvedTarget;
+  //   }
+  // }
+
+  if (rule.then && then.field) {
+    targetValue = get(targetValue, then.field);
   }
 
-  return ruleEntry.apply(opt, {
-    given: node.path,
+  const results =
+    apply(
+      targetValue,
+      then.functionOptions || {},
+      {
+        given: node.path,
+        target: node.path, // todo, node.path + rule.then.field
+      },
+      {
+        original: {},
+        given: node.value,
+        resolved: opts.resolvedTarget,
+      }
+    ) || [];
+
+  return results.map(result => {
+    return {
+      path: result.path || node.path,
+      message: result.message,
+    };
   });
-}
+};
 
 // TODO(SO-23): unit test idividually
-export function whatShouldBeLinted(originalValue: any, rule: IRule): { lint: boolean; value: any } {
+export const whatShouldBeLinted = (originalValue: any, rule: IRunRule): { lint: boolean; value: any } => {
   const when = rule.when;
   if (!when) {
     return {
@@ -47,7 +75,8 @@ export function whatShouldBeLinted(originalValue: any, rule: IRule): { lint: boo
 
   const pattern = when.pattern;
   const field = when.field;
-  // what if someone's field is called '@key'?
+
+  // TODO: what if someone's field is called '@key'? should we use @@key?
   const isKey = field === '@key';
 
   if (!pattern) {
@@ -57,6 +86,7 @@ export function whatShouldBeLinted(originalValue: any, rule: IRule): { lint: boo
     if (isKey) {
       return keyAndOptionalPattern(originalValue);
     }
+
     return {
       lint: has(originalValue, field),
       value: originalValue,
@@ -73,7 +103,7 @@ export function whatShouldBeLinted(originalValue: any, rule: IRule): { lint: boo
     lint: fieldValue.match(pattern) !== null,
     value: originalValue,
   };
-}
+};
 
 function keyAndOptionalPattern(originalValue: any, pattern?: string) {
   const type = typeof originalValue;
@@ -96,7 +126,7 @@ function keyAndOptionalPattern(originalValue: any, pattern?: string) {
         };
       } else if (Array.isArray(originalValue)) {
         const leanValue = pattern
-          ? filter(originalValue, (v, index) => {
+          ? filter(originalValue, (_v: any, index: any) => {
               return String(index).match(pattern) !== null;
             })
           : originalValue;
@@ -106,7 +136,7 @@ function keyAndOptionalPattern(originalValue: any, pattern?: string) {
         };
       } else {
         const leanValue = pattern
-          ? omitBy(originalValue, (v, key) => {
+          ? omitBy(originalValue, (_v: any, key: any) => {
               return key.match(pattern) === null;
             })
           : originalValue;

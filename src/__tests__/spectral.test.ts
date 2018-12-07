@@ -1,303 +1,72 @@
 const merge = require('lodash/merge');
 
-import { defaultFunctions, defaultRules } from '../rulesets';
 import { Spectral } from '../spectral';
-import { RuleFunction, RuleType } from '../types';
-
-const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
-
-const aDefaultRuleset = {
-  functions: defaultFunctions(),
-  rules: defaultRules(),
-};
+import { RuleFunction } from '../types';
 
 describe('spectral', () => {
-  test('load and run the default rule set', () => {
-    const s = new Spectral();
-    if (aDefaultRuleset.functions) {
-      s.setFunctions(aDefaultRuleset.functions);
-    }
-    s.setRules(aDefaultRuleset.rules);
-
-    const result = s.run(todosPartialDeref, { format: 'oas2' });
-    expect(result.results.length).toBeGreaterThan(0);
-  });
-
-  // Assures: https://stoplightio.atlassian.net/browse/SL-786
-  test('setting/updating rules should not mutate the original ruleset', () => {
+  test('adding/merging rules should not mutate the passing in rules object', () => {
     const givenCustomRuleSet = {
-      rules: {
-        oas2: {
-          rule1: {
-            type: RuleType.STYLE,
-            then: {
-              function: RuleFunction.TRUTHY,
-              functionOptions: {
-                properties: 'something',
-              },
-            },
-            given: '$',
-            enabled: true,
-            summary: '',
+      rule1: {
+        summary: '',
+        given: '$',
+        then: {
+          function: RuleFunction.TRUTHY,
+          functionOptions: {
+            properties: 'something',
           },
         },
       },
     };
+
     // deep copy
     const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
 
     const s = new Spectral();
-    s.setRules(givenCustomRuleSet.rules);
+    s.addRules(givenCustomRuleSet);
 
     s.mergeRules({
-      oas2: {
-        rule1: false,
-      },
+      rule1: false,
     });
 
     expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
   });
 
-  // Assures: https://stoplightio.atlassian.net/browse/SL-789
-  test('setRules should overwrite the current ruleset', () => {
-    const ruleset = {
-      rules: {
-        format: {
-          rule1: {
-            type: RuleType.STYLE,
-            then: {
-              function: RuleFunction.TRUTHY,
-              functionOptions: {
-                properties: 'something',
-              },
-            },
-            given: '$',
-            enabled: true,
-            summary: '',
-          },
-        },
-      },
-    };
-    // deep copy
+  test('mergeRules should update/append on the current rules', () => {
     const s = new Spectral();
-    s.setRules(ruleset.rules);
-    s.setRules({
-      differentFormat: {
-        rule2: {
-          type: RuleType.STYLE,
-          then: {
-            function: RuleFunction.TRUTHY,
-            functionOptions: {
-              properties: 'a different rule',
-            },
+
+    s.addRules({
+      rule1: {
+        summary: '',
+        given: '$',
+        then: {
+          function: RuleFunction.TRUTHY,
+          functionOptions: {
+            properties: 'something',
           },
-          given: '$',
-          enabled: true,
-          summary: '',
         },
       },
     });
-
-    expect(s.getRules()).toHaveLength(1);
-    expect(s.getRules()).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "apply": [Function],
-    "format": "differentFormat",
-    "name": "rule2",
-    "rule": Object {
-      "enabled": true,
-      "given": "$",
-      "summary": "",
-      "then": Object {
-        "function": "truthy",
-        "functionOptions": Object {
-          "properties": "a different rule",
-        },
-      },
-      "type": "style",
-    },
-  },
-]
-`);
-  });
-
-  // Assures: https://stoplightio.atlassian.net/browse/SL-789
-  test('updateRules should update/append the current ruleset', () => {
-    const ruleset = {
-      rules: {
-        format: {
-          rule1: {
-            type: RuleType.STYLE,
-            then: {
-              function: RuleFunction.TRUTHY,
-              functionOptions: {
-                properties: 'something',
-              },
-            },
-            given: '$',
-            enabled: true,
-            summary: '',
-          },
-        },
-      },
-    };
-    // deep copy
-    const s = new Spectral();
-    s.setRules(ruleset.rules);
 
     s.mergeRules({
-      differentFormat: {
-        rule2: {
-          type: RuleType.STYLE,
-          then: {
-            function: RuleFunction.TRUTHY,
-            functionOptions: {
-              properties: 'a different rule',
-            },
+      rule2: {
+        summary: '',
+        given: '$',
+        then: {
+          function: RuleFunction.TRUTHY,
+          functionOptions: {
+            properties: 'a different rule',
           },
-          given: '$',
-          enabled: true,
-          summary: '',
         },
       },
     });
 
-    expect(s.getRules()).toHaveLength(2);
+    expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
 
     s.mergeRules({
-      format: {
-        rule1: false,
-      },
+      rule1: false,
     });
 
-    expect(s.getRules()).toHaveLength(2);
-  });
-
-  // Assures: https://stoplightio.atlassian.net/browse/SL-787
-  test('given a ruleset with two identical rules under two distinct formats should not collide', () => {
-    const rulesets = [
-      {
-        rules: {
-          oas2: {
-            ruleName1: {
-              type: RuleType.STYLE,
-              then: {
-                function: RuleFunction.TRUTHY,
-                functionOptions: {
-                  properties: 'something-different',
-                },
-              },
-              given: '$',
-              enabled: true,
-              summary: '',
-            },
-          },
-          oas3: {
-            ruleName1: {
-              type: RuleType.STYLE,
-              then: {
-                function: RuleFunction.NOT_CONTAIN,
-                functionOptions: {
-                  properties: ['url'],
-                  value: 'gruntjs',
-                },
-              },
-              given: '$.license',
-              enabled: false,
-              summary: '',
-            },
-          },
-        },
-      },
-    ];
-
-    const s = new Spectral();
-    s.setRules(rulesets[0].rules);
-
-    expect(s.getRules('oas2')).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "apply": [Function],
-    "format": "oas2",
-    "name": "ruleName1",
-    "rule": Object {
-      "enabled": true,
-      "given": "$",
-      "summary": "",
-      "then": Object {
-        "function": "truthy",
-        "functionOptions": Object {
-          "properties": "something-different",
-        },
-      },
-      "type": "style",
-    },
-  },
-]
-`);
-    expect(s.getRules('oas3')).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "apply": [Function],
-    "format": "oas3",
-    "name": "ruleName1",
-    "rule": Object {
-      "enabled": false,
-      "given": "$.license",
-      "summary": "",
-      "then": Object {
-        "function": "notContain",
-        "functionOptions": Object {
-          "properties": Array [
-            "url",
-          ],
-          "value": "gruntjs",
-        },
-      },
-      "type": "style",
-    },
-  },
-]
-`);
-  });
-
-  test('getRules returns a flattened list of rules filtered by format', () => {
-    const rules = {
-      oas2: {
-        rule1: {
-          type: RuleType.STYLE,
-          then: {
-            function: RuleFunction.TRUTHY,
-            functionOptions: {
-              properties: 'something-not-present',
-            },
-          },
-          given: '$',
-          enabled: false,
-          summary: '',
-        },
-      },
-      oas3: {
-        rule3: {
-          type: RuleType.STYLE,
-          then: {
-            function: RuleFunction.TRUTHY,
-            functionOptions: {
-              properties: 'something-not-present',
-            },
-          },
-          given: '$',
-          enabled: false,
-          summary: '',
-        },
-      },
-    };
-
-    const s = new Spectral();
-    s.setRules(rules);
-    const results = s.getRules('oas2');
-
-    expect(results.length).toBe(1);
+    expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
+    expect(s.rules.rule1.enabled).toBe(false);
   });
 });
