@@ -20,7 +20,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.TRUTHY,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: {
@@ -45,7 +45,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.TRUTHY,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: 'version' },
@@ -70,7 +70,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.ALPHABETICAL,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: {
@@ -96,7 +96,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.ALPHABETICAL,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: {
@@ -124,7 +124,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.OR,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: ['something-not-present', 'something-else-not-present'] },
@@ -146,7 +146,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.OR,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: ['version', 'something-else-not-present'] },
@@ -165,7 +165,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.OR,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: ['version', 'title', 'termsOfService'] },
@@ -190,7 +190,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.XOR,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: ['yada-yada', 'whatever'] },
@@ -213,7 +213,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.XOR,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: ['version', 'title'] },
@@ -236,7 +236,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.XOR,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: { properties: ['something', 'title'] },
@@ -261,7 +261,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.PATTERN,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: {
@@ -287,7 +287,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.PATTERN,
-              path: '$.responses',
+              given: '$.responses',
               enabled: true,
               summary: '',
               input: {
@@ -318,7 +318,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.PATTERN,
-              path: '$.info',
+              given: '$.info',
               enabled: true,
               summary: '',
               input: {
@@ -344,7 +344,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.PATTERN,
-              path: '$.responses',
+              given: '$.responses',
               enabled: true,
               summary: '',
               input: {
@@ -377,7 +377,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.NOT_CONTAIN,
-              path: '$..*',
+              given: '$..*',
               enabled: true,
               summary: '',
               input: { properties: ['description'], value: '<script' },
@@ -401,7 +401,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.NOT_CONTAIN,
-              path: '$..*',
+              given: '$..*',
               enabled: true,
               summary: '',
               input: { properties: ['description'], value: '<script' },
@@ -427,7 +427,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.NOT_END_WITH,
-              path: '$.servers',
+              given: '$.servers',
               enabled: true,
               summary: '',
               input: { property: 'url', value: '/' },
@@ -455,7 +455,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.NOT_END_WITH,
-              path: '$.servers',
+              given: '$.servers',
               enabled: true,
               summary: '',
               input: { property: 'url', value: '/' },
@@ -485,7 +485,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.MAX_LENGTH,
-              path: '$..summary',
+              given: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
               summary: '',
@@ -512,7 +512,7 @@ describe('lint', () => {
             {
               type: RuleType.STYLE,
               function: RuleFunction.MAX_LENGTH,
-              path: '$..summary',
+              given: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
               summary: '',

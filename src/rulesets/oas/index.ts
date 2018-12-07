@@ -1,5 +1,5 @@
 import { ValidationSeverity } from '@stoplight/types/validations';
-import { IRuleDeclaration, RuleFunction, RuleType } from '../../types';
+import { IRuleDeclaration, IRuleStore, RuleFunction, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
 
@@ -14,7 +14,7 @@ export const commonOasFunctions = () => {
   };
 };
 
-export const allOasRules = () => {
+export const allOasRules = (): IRuleStore => {
   return {
     oas2: {
       ...commonOasRules(),
@@ -24,7 +24,7 @@ export const allOasRules = () => {
         input: {
           schemesPath: ['securityDefinitions'],
         },
-        path: '$',
+        given: '$',
         summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
         type: RuleType.VALIDATION,
         tags: ['operation'],
@@ -39,7 +39,7 @@ export const allOasRules = () => {
         input: {
           schemesPath: ['components', 'securitySchemes'],
         },
-        path: '$',
+        given: '$',
         summary: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
         type: RuleType.VALIDATION,
         tags: ['operation'],
@@ -52,7 +52,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
   'operation-parameters': {
     enabled: true,
     function: 'oasOpParams',
-    path: '$',
+    given: '$',
     summary: 'Operation parameters are unique and non-repeating.',
     type: RuleType.VALIDATION,
     tags: ['operation'],
@@ -60,7 +60,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
   'operation-2xx-response': {
     enabled: true,
     function: 'oasOp2xxResponse',
-    path: `${operationPath}.responses`,
+    given: `${operationPath}.responses`,
     summary: 'Operation must have at least one `2xx` response.',
     type: RuleType.STYLE,
     tags: ['operation'],
@@ -68,7 +68,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
   'operation-operationId-unique': {
     enabled: true,
     function: 'oasOpIdUnique',
-    path: '$',
+    given: '$',
     summary: 'Every operation must have a unique `operationId`.',
     type: RuleType.VALIDATION,
     tags: ['operation'],
@@ -77,7 +77,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
   'operation-formData-consume-check': {
     enabled: true,
     function: 'oasOpFormDataConsumeCheck',
-    path: operationPath,
+    given: operationPath,
     summary:
       'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
     type: RuleType.VALIDATION,
@@ -85,12 +85,12 @@ export const commonOasRules = (): IRuleDeclaration => ({
   },
   'path-params': {
     type: RuleType.VALIDATION,
-    summary: 'Path parameters are correct and valid.',
+    summary: 'given parameters are correct and valid.',
     enabled: true,
     severity: ValidationSeverity.Error,
-    path: '$',
+    given: '$',
     function: 'oasPathParam',
-    tags: ['path'],
+    tags: ['given'],
   },
   'contact-properties': {
     enabled: false,
@@ -98,7 +98,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: ['email', 'name', 'url'],
     },
-    path: '$.info.contact',
+    given: '$.info.contact',
     summary: 'Contact object should have `name`, `url` and `email`.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -109,7 +109,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: ['host'],
     },
-    path: '$',
+    given: '$',
     summary: 'OpenAPI `host` must be present and non-empty string.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -126,7 +126,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
         type: 'array',
       },
     },
-    path: '$.schemes',
+    given: '$.schemes',
     summary: 'OpenAPI host `schemes` must be present and non-empty array.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -137,7 +137,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: ['externalValue', 'value'],
     },
-    path: '$..example',
+    given: '$..example',
     summary: 'Example should have either a `value` or `externalValue` field.',
     type: RuleType.STYLE,
   },
@@ -147,7 +147,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'contact',
     },
-    path: '$.info',
+    given: '$.info',
     summary: 'Info object should contain `contact` object.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -159,7 +159,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'description',
     },
-    path: '$.info',
+    given: '$.info',
     type: RuleType.STYLE,
     tags: ['api'],
   },
@@ -170,7 +170,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'license',
     },
-    path: '$.info',
+    given: '$.info',
     type: RuleType.STYLE,
     tags: ['api'],
   },
@@ -181,7 +181,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       properties: ['url'],
       value: 'gruntjs',
     },
-    path: '$.license',
+    given: '$.license',
     summary: 'License URL should not point at `gruntjs`.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -192,7 +192,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'url',
     },
-    path: '$.info.license',
+    given: '$.info.license',
     summary: 'License object should include `url`.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -204,7 +204,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'description',
     },
-    path: '$..definitions.*',
+    given: '$..definitions.*',
     type: RuleType.STYLE,
   },
   'no-eval-in-descriptions': {
@@ -214,7 +214,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       properties: ['description', 'title'],
       value: 'eval(',
     },
-    path: '$..*',
+    given: '$..*',
     summary: 'Markdown descriptions should not contain `eval(`.',
     type: RuleType.STYLE,
   },
@@ -225,7 +225,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       properties: ['description'],
       value: '<script',
     },
-    path: '$..*',
+    given: '$..*',
     summary: 'Markdown descriptions should not contain `<script>` tags.',
     type: RuleType.STYLE,
   },
@@ -236,7 +236,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       value: '^#\\/',
     },
-    path: "$..['$ref']",
+    given: "$..['$ref']",
     type: RuleType.STYLE,
     tags: ['references'],
   },
@@ -246,7 +246,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'tags',
     },
-    path: '$',
+    given: '$',
     summary: 'OpenAPI object should have non-empty `tags` array.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -258,7 +258,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       keyedBy: 'name',
       properties: 'tags',
     },
-    path: '$',
+    given: '$',
     summary: 'OpenAPI object should have alphabetical `tags`.',
     type: RuleType.STYLE,
     tags: ['api'],
@@ -270,7 +270,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'default',
     },
-    path: '$..paths.*.*.responses',
+    given: '$..paths.*.*.responses',
     type: RuleType.STYLE,
     tags: ['operation'],
   },
@@ -281,7 +281,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'description',
     },
-    path: operationPath,
+    given: operationPath,
     type: RuleType.STYLE,
     tags: ['operation'],
   },
@@ -291,7 +291,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'operationId',
     },
-    path: operationPath,
+    given: operationPath,
     summary: 'Operation should have an `operationId`.',
     type: RuleType.STYLE,
     tags: ['operation'],
@@ -310,7 +310,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
         type: 'array',
       },
     },
-    path: `${operationPath}.tags`,
+    given: `${operationPath}.tags`,
     type: RuleType.STYLE,
     tags: ['operation'],
   },
@@ -321,7 +321,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       value: '^[A-Z].*\\.$',
     },
-    path: `${operationPath}.summary`,
+    given: `${operationPath}.summary`,
     type: RuleType.STYLE,
     tags: ['operation'],
   },
@@ -331,7 +331,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: ['description', 'summary'],
     },
-    path: operationPath,
+    given: operationPath,
     summary: 'Operation should have `summary` or `description`.',
     type: RuleType.STYLE,
     tags: ['operation'],
@@ -342,7 +342,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'tags',
     },
-    path: operationPath,
+    given: operationPath,
     summary: 'Operation should have non-empty `tags` array.',
     type: RuleType.STYLE,
     tags: ['operation'],
@@ -353,22 +353,22 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'description',
     },
-    path: '$..paths.*.*.parameters',
+    given: '$..paths.*.*.parameters',
     summary: 'Parameter objects should have a `description`.',
     type: RuleType.STYLE,
     tags: ['parameters'],
   },
   'path-declarations-must-exist': {
-    summary: 'Path declarations cannot be empty, ex.`/path/{}` is invalid.',
+    summary: 'given declarations cannot be empty, ex.`/given/{}` is invalid.',
     enabled: true,
     function: RuleFunction.NOT_CONTAIN,
     input: {
       properties: '*',
       value: '{}',
     },
-    path: '$..paths',
+    given: '$..paths',
     type: RuleType.STYLE,
-    tags: ['path'],
+    tags: ['given'],
   },
   'path-keys-no-trailing-slash': {
     enabled: true,
@@ -377,22 +377,22 @@ export const commonOasRules = (): IRuleDeclaration => ({
       property: '*',
       value: '/',
     },
-    path: '$..paths',
-    summary: 'Path keys should not end with a slash.',
+    given: '$..paths',
+    summary: 'given keys should not end with a slash.',
     type: RuleType.STYLE,
-    tags: ['path'],
+    tags: ['given'],
   },
   'path-not-include-query': {
-    summary: 'Path keys should not include a query string.',
+    summary: 'given keys should not include a query string.',
     enabled: true,
     function: RuleFunction.NOT_CONTAIN,
     input: {
       properties: '*',
       value: '\\?',
     },
-    path: '$..paths',
+    given: '$..paths',
     type: RuleType.STYLE,
-    tags: ['path'],
+    tags: ['given'],
   },
   'reference-components-regex': {
     enabled: false,
@@ -402,7 +402,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       split: '/',
       value: '^[a-zA-Z0-9\\.\\-_]+$',
     },
-    path: "$..['$ref']",
+    given: "$..['$ref']",
     summary: 'References should all match regex `^[a-zA-Z0-9\\.\\-_]+`.',
     type: RuleType.STYLE,
     tags: ['references'],
@@ -416,7 +416,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
         function: 'object',
       },
     },
-    path: '$..schema.items',
+    given: '$..schema.items',
     type: RuleType.VALIDATION,
   },
   'server-not-example.com': {
@@ -426,7 +426,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       properties: ['url'],
       value: 'example.com',
     },
-    path: '$.servers',
+    given: '$.servers',
     summary: 'Server URL should not point at `example.com`.',
     type: RuleType.STYLE,
   },
@@ -437,7 +437,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
       property: 'url',
       value: '/',
     },
-    path: '$.servers',
+    given: '$.servers',
     summary: 'Server URL should not have a trailing slash.',
     type: RuleType.STYLE,
   },
@@ -447,7 +447,7 @@ export const commonOasRules = (): IRuleDeclaration => ({
     input: {
       properties: 'description',
     },
-    path: '$.tags',
+    given: '$.tags',
     summary: 'Tag object should have a `description`.',
     type: RuleType.STYLE,
     tags: ['api'],

@@ -17,8 +17,8 @@ export type Rule =
 export interface IRule {
   type: RuleType;
 
-  // The JSON path within the object this rule applies to
-  path: string;
+  // Filter the target down to a subset[] with a JSON path
+  given: string;
 
   // name of the function to run
   function: string;
