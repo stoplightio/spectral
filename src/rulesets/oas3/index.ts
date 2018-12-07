@@ -15,7 +15,7 @@ export const oas3Rules = () => {
         summary: 'Validate structure of OpenAPIv3 specification.',
         enabled: true,
         severity: ValidationSeverity.Error,
-        path: '$',
+        given: '$',
         function: RuleFunction.SCHEMA,
         input: {
           schema,
