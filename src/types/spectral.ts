@@ -1,3 +1,4 @@
+import { ObjPath } from '@stoplight/types/parsers';
 import { IRuleFunction, IRuleset, Rule, RuleType } from '.';
 
 export interface IFunctionStore {
@@ -27,33 +28,42 @@ export interface ISpectralOpts {
 
 export interface IRunOpts {
   /**
-   * The un-resolved object being parsed
+   * The fully-resolved version of the target object.
+   *
+   * Some functions require this in order to operate.
    */
-  target: object;
-
-  /**
-   * The fully-resolved object being parsed
-   */
-  resTarget?: object;
-
-  /**
-   * A stringified version of the target
-   */
-  strTarget?: string;
-
-  /**
-   * The specification to apply to the target
-   */
-  spec: string;
-
-  /**
-   * Optional ruleset to apply to the target. If not provided, the initialized ruleset will be used
-   * instead.
-   */
-  rulesets?: IRuleset[];
+  resolvedTarget?: object;
 
   /**
    * Optional rule type, when supplied only rules of this type are run
    */
   type?: RuleType;
+
+  /**
+   * The specification to apply to the target
+   */
+  format: string;
+}
+
+export type IFunction<O = any> = (
+  targetValue: any,
+  options: O,
+  paths: IFunctionPaths,
+  otherValues: IFunctionValues
+) => void | IFunctionResult[];
+
+export interface IFunctionPaths {
+  given: ObjPath;
+  target: ObjPath;
+}
+
+export interface IFunctionValues {
+  original: any;
+  resolved?: any;
+  given: any;
+}
+
+export interface IFunctionResult {
+  message: string;
+  path?: ObjPath;
 }
