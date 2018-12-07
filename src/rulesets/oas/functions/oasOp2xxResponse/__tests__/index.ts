@@ -1,7 +1,7 @@
 import { Spectral } from '../../../../../spectral';
-import { commonOasRuleset } from '../../../index';
+import { allOasRules, commonOasFunctions } from '../../../index';
 
-const ruleset = commonOasRuleset();
+const ruleset = { functions: commonOasFunctions(), rules: allOasRules() };
 
 describe('oasOp2xxResponse', () => {
   const s = new Spectral();
