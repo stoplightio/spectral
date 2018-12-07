@@ -1,12 +1,15 @@
 const merge = require('lodash/merge');
 
-import { defaultRuleset } from '../rulesets';
+import { defaultFunctions, defaultRules } from '../rulesets';
 import { Spectral } from '../spectral';
-import { IRuleset, RuleFunction, RuleType } from '../types';
+import { RuleFunction, RuleType } from '../types';
 
 const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
 
-const aDefaultRuleset = defaultRuleset();
+const aDefaultRuleset = {
+  functions: defaultFunctions(),
+  rules: defaultRules(),
+};
 
 describe('spectral', () => {
   test('load and run the default rule set', () => {
@@ -240,39 +243,35 @@ Array [
   });
 
   test('getRules returns a flattened list of rules filtered by format', () => {
-    const rulesets: IRuleset[] = [
-      {
-        rules: {
-          oas2: {
-            rule1: {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: false,
-              summary: '',
-              input: {
-                properties: 'something-not-present',
-              },
-            },
-          },
-          oas3: {
-            rule3: {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: false,
-              summary: '',
-              input: {
-                properties: 'something-not-present',
-              },
-            },
+    const rules = {
+      oas2: {
+        rule1: {
+          type: RuleType.STYLE,
+          function: RuleFunction.TRUTHY,
+          path: '$',
+          enabled: false,
+          summary: '',
+          input: {
+            properties: 'something-not-present',
           },
         },
       },
-    ];
+      oas3: {
+        rule3: {
+          type: RuleType.STYLE,
+          function: RuleFunction.TRUTHY,
+          path: '$',
+          enabled: false,
+          summary: '',
+          input: {
+            properties: 'something-not-present',
+          },
+        },
+      },
+    };
 
     const s = new Spectral();
-    s.setRules(rulesets[0].rules);
+    s.setRules(rules);
     const results = s.getRules('oas2');
 
     expect(results.length).toBe(1);
