@@ -10,34 +10,34 @@ const invalidV2 = require('./fixtures/todos.invalid.oas2.json');
 describe('validation', () => {
   test('validate a correct OASv2 spec', () => {
     const s = new Spectral({ rulesets: [oas2Ruleset()] });
-    const results = s.run(petstoreV2, { format: 'oas2', type: RuleType.VALIDATION });
-    expect(results.length).toEqual(0);
+    const result = s.run(petstoreV2, { format: 'oas2', type: RuleType.VALIDATION });
+    expect(result.results.length).toEqual(0);
   });
 
   test('return errors on invalid OASv2 spec', () => {
     const s = new Spectral({ rulesets: [oas2Ruleset()] });
-    const results = s.run(invalidV2, { format: 'oas2', type: RuleType.VALIDATION });
-    expect(results.length).toEqual(1);
-    expect(results[0].path).toEqual(['$', 'info', 'license', 'name']);
-    expect(results[0].message).toEqual('should be string');
+    const result = s.run(invalidV2, { format: 'oas2', type: RuleType.VALIDATION });
+    expect(result.results.length).toEqual(1);
+    expect(result.results[0].path).toEqual(['$', 'info', 'license', 'name']);
+    expect(result.results[0].message).toEqual('should be string');
   });
 
   test('validate a correct OASv3 spec', () => {
     const s = new Spectral({ rulesets: [oas3Ruleset()] });
-    const results = s.run(petstoreV3, { format: 'oas3', type: RuleType.VALIDATION });
-    expect(results.length).toEqual(0);
+    const result = s.run(petstoreV3, { format: 'oas3', type: RuleType.VALIDATION });
+    expect(result.results.length).toEqual(0);
   });
 
   test('validate multiple formats with same validator', () => {
     const s = new Spectral({ rulesets: [oas2Ruleset(), oas3Ruleset()] });
 
-    let results = s.run(petstoreV2, { format: 'oas2', type: RuleType.VALIDATION });
-    expect(results.length).toEqual(0);
+    let result = s.run(petstoreV2, { format: 'oas2', type: RuleType.VALIDATION });
+    expect(result.results.length).toEqual(0);
 
-    results = s.run(invalidV2, { format: 'oas2', type: RuleType.VALIDATION });
-    expect(results.length).toEqual(1);
+    result = s.run(invalidV2, { format: 'oas2', type: RuleType.VALIDATION });
+    expect(result.results.length).toEqual(1);
 
-    results = s.run(petstoreV3, { format: 'oas3', type: RuleType.VALIDATION });
-    expect(results.length).toEqual(0);
+    result = s.run(petstoreV3, { format: 'oas3', type: RuleType.VALIDATION });
+    expect(result.results.length).toEqual(0);
   });
 });
