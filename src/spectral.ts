@@ -4,8 +4,8 @@ const compact = require('lodash/compact');
 const flatten = require('lodash/flatten');
 import * as jp from 'jsonpath';
 
-import { PathComponent } from 'jsonpath';
 import { functions as defaultFunctions } from './functions';
+import { lintNode } from './linter';
 import * as types from './types';
 import { IFunctionCollection, IRuleCollection, IRuleEntry, IRunOpts, IRunResult } from './types/spectral';
 
@@ -109,7 +109,7 @@ export class Spectral {
         nodes.map(node => {
           const { path: nPath } = node;
           try {
-            return this.lintNode(ruleEntry, opts, node);
+            return lintNode(ruleEntry, opts, node);
           } catch (e) {
             console.warn(`Encountered error when running rule '${ruleEntry.name}' on node at path '${nPath}':\n${e}`);
             return null;
@@ -117,32 +117,6 @@ export class Spectral {
         })
       )
     );
-  }
-
-  private lintNode(
-    ruleEntry: IRuleEntry,
-    opts: IRunOpts,
-    node: { path: PathComponent[]; value: any }
-  ): types.IRuleResult[] {
-    const opt: types.IRuleOpts = {
-      object: node.value,
-      rule: ruleEntry.rule,
-      meta: {
-        path: node.path,
-        name: ruleEntry.name,
-        rule: ruleEntry.rule,
-      },
-    };
-
-    if (ruleEntry.rule.given === '$') {
-      // allow resolved and stringified targets to be passed to rules when operating on
-      // the root path
-      if (opts.resolvedTarget) {
-        opt.resObj = opts.resolvedTarget;
-      }
-    }
-
-    return ruleEntry.apply(opt);
   }
 
   private parseRuleDefinition(name: string, format: string, rule: types.Rule): IRuleEntry {
