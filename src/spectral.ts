@@ -103,7 +103,7 @@ export class Spectral {
   }
 
   private lintNodes(target: object, ruleEntry: IRuleEntry, opts: IRunOpts): types.IRuleResult[] {
-    const nodes = jp.nodes(target, ruleEntry.rule.path);
+    const nodes = jp.nodes(target, ruleEntry.rule.given);
     return flatten(
       compact(
         nodes.map(node => {
@@ -134,7 +134,7 @@ export class Spectral {
       },
     };
 
-    if (ruleEntry.rule.path === '$') {
+    if (ruleEntry.rule.given === '$') {
       // allow resolved and stringified targets to be passed to rules when operating on
       // the root path
       if (opts.resolvedTarget) {
@@ -148,9 +148,9 @@ export class Spectral {
   private parseRuleDefinition(name: string, format: string, rule: types.Rule): IRuleEntry {
     const ruleIndex = this.toRuleIndex(name, format);
     try {
-      jp.parse(rule.path);
+      jp.parse(rule.given);
     } catch (e) {
-      throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.path}\n\n${e}`);
+      throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.given}\n\n${e}`);
     }
 
     const ruleFunc = this._functionCollection[rule.function];
