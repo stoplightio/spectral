@@ -1,49 +1,48 @@
 import { ValidationSeverity } from '@stoplight/types/validations';
-import { IRuleDeclaration, IRuleset, RuleFunction, RuleType } from '../../types';
+import { IRuleDeclaration, RuleFunction, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
 
-export const commonOasRuleset = (): IRuleset => {
+export const commonOasFunctions = () => {
   return {
-    name: 'oas',
-    functions: {
-      oasPathParam: require('./functions/oasPathParam').oasPathParam,
-      oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
-      oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
-      oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
-      oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
-      oasOpParams: require('./functions/oasOpParams').oasOpParams,
-    },
-    rules: {
-      oas2: {
-        ...commonOasRules(),
-        'operation-security-defined': {
-          enabled: true,
-          function: 'oasOpSecurityDefined',
-          input: {
-            schemesPath: ['securityDefinitions'],
-          },
-          path: '$',
-          summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
-        },
-      },
+    oasPathParam: require('./functions/oasPathParam').oasPathParam,
+    oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
+    oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
+    oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
+    oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
+    oasOpParams: require('./functions/oasOpParams').oasOpParams,
+  };
+};
 
-      oas3: {
-        ...commonOasRules(),
-        'operation-security-defined': {
-          enabled: true,
-          function: 'oasOpSecurityDefined',
-          input: {
-            schemesPath: ['components', 'securitySchemes'],
-          },
-          path: '$',
-          summary:
-            'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
-          type: RuleType.VALIDATION,
-          tags: ['operation'],
+export const allOasRules = () => {
+  return {
+    oas2: {
+      ...commonOasRules(),
+      'operation-security-defined': {
+        enabled: true,
+        function: 'oasOpSecurityDefined',
+        input: {
+          schemesPath: ['securityDefinitions'],
         },
+        path: '$',
+        summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+        type: RuleType.VALIDATION,
+        tags: ['operation'],
+      },
+    },
+
+    oas3: {
+      ...commonOasRules(),
+      'operation-security-defined': {
+        enabled: true,
+        function: 'oasOpSecurityDefined',
+        input: {
+          schemesPath: ['components', 'securitySchemes'],
+        },
+        path: '$',
+        summary: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+        type: RuleType.VALIDATION,
+        tags: ['operation'],
       },
     },
   };
