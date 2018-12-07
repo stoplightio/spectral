@@ -19,7 +19,7 @@ export const schema: IRuleFunction<ISchemaRule> = (opts: IRuleOpts<ISchemaRule>)
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { schema: schemaObj } = rule.input;
+  const { schema: schemaObj } = rule.then.functionOptions;
 
   // TODO: potential performance improvements (compile, etc)?
   if (!ajv.validate(schemaObj, object) && ajv.errors) {

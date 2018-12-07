@@ -5,7 +5,7 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRu
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { keyedBy, properties: inputProperties } = rule.input;
+  const { keyedBy, properties: inputProperties } = rule.then.functionOptions;
 
   let properties = inputProperties;
   if (properties && !Array.isArray(properties)) {

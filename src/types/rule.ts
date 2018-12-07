@@ -14,33 +14,42 @@ export type Rule =
   | ISchemaRule
   | IParamCheckRule;
 
-export interface IRule {
+export interface IRule<O = any> {
   type: RuleType;
-
-  // Filter the target down to a subset[] with a JSON path
-  given: string;
-
-  // name of the function to run
-  function: string;
-
-  // Input to the function
-  input?: any;
 
   // A short summary of the rule and its intended purpose
   summary: string;
-
-  // A long-form description of the rule formatted in markdown
-  description?: string;
-
-  // should the rule be enabled by default?
-  enabled?: boolean;
 
   // The severity of results this rule generates
   severity?: ValidationSeverity;
   severityLabel?: ValidationSeverityLabel;
 
+  // A long-form description of the rule formatted in markdown
+  description?: string;
+
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];
+
+  // should the rule be enabled by default?
+  enabled?: boolean;
+
+  // Filter the target down to a subset[] with a JSON path
+  given: string;
+
+  then: {
+    // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+    // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
+    field?: string;
+
+    // a regex pattern
+    pattern?: string;
+
+    // name of the function to run
+    function: string;
+
+    // Options passed to the function
+    functionOptions?: O;
+  };
 }
 
 export interface IRuleParam {
