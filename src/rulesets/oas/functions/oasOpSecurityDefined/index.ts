@@ -19,7 +19,7 @@ export const oasOpSecurityDefined: IRuleFunction<IOasOpSecurityDefinedRule> = (
 
   const { object, meta, rule } = opts;
   const { paths = {} } = object;
-  const schemes = _get(object, rule.input.schemesPath) || {};
+  const schemes = _get(object, rule.then.functionOptions.schemesPath) || {};
   const allDefs = Object.keys(schemes);
 
   for (const path in paths) {

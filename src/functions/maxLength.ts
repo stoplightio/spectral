@@ -6,7 +6,7 @@ export const maxLength: IRuleFunction<IMaxLengthRule> = (opts: IRuleOpts<IMaxLen
 
   const { object, rule, meta } = opts;
 
-  const { value, property } = rule.input;
+  const { value, property } = rule.then.functionOptions;
 
   let target: any;
   if (property) {

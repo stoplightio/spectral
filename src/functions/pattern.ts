@@ -8,7 +8,7 @@ export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRul
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { omit, property, split, value } = rule.input;
+  const { omit, property, split, value } = rule.then.functionOptions;
 
   // if the collected object is not an object/array, set our target to be
   // the object itself

@@ -7,7 +7,7 @@ export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>) => {
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { properties } = rule.input;
+  const { properties } = rule.then.functionOptions;
 
   let found = false;
   for (const property of properties) {

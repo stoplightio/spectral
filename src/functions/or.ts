@@ -5,7 +5,7 @@ export const or: IRuleFunction<IOrRule> = (opts: IRuleOpts<IOrRule>) => {
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { properties } = rule.input;
+  const { properties } = rule.then.functionOptions;
 
   let found = false;
   for (const property of properties) {

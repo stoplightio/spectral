@@ -5,7 +5,7 @@ export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotE
   const results: IRuleResult[] = [];
   let { object } = opts;
   const { rule, meta } = opts;
-  const { value, property } = rule.input;
+  const { value, property } = rule.then.functionOptions;
 
   const process = (target: any) => {
     const res = ensureRule(() => {

@@ -7,7 +7,7 @@ export const notContain: IRuleFunction<INotContainRule> = (opts: IRuleOpts<INotC
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { value, properties } = rule.input;
+  const { value, properties } = rule.then.functionOptions;
 
   for (const property of properties) {
     if (object && object.hasOwnProperty(property)) {
