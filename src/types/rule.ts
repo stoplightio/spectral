@@ -96,7 +96,7 @@ export interface IRulePatternParam {
 export interface ITruthyRule extends IRule {
   function: RuleFunction.TRUTHY;
 
-  input: {
+  functionOptions: {
     // key(s) of object that should evaluate as 'truthy' (considered true in a
     // boolean context)
     properties: string | string[];
@@ -106,69 +106,87 @@ export interface ITruthyRule extends IRule {
 }
 
 export interface IOrRule extends IRule {
-  function: RuleFunction.OR;
+  then: {
+    function: RuleFunction.OR;
 
-  input: {
-    // test to verify if any of the provided keys are present in object
-    properties: string[];
+    functionOptions: {
+      // test to verify if any of the provided keys are present in object
+      properties: string[];
+    };
   };
 }
 
 export interface IXorRule extends IRule {
-  function: RuleFunction.XOR;
+  then: {
+    function: RuleFunction.XOR;
 
-  input: {
-    // test to verify if one (but not all) of the provided keys are present in
-    // object
-    properties: string[];
+    functionOptions: {
+      // test to verify if one (but not all) of the provided keys are present in
+      // object
+      properties: string[];
+    };
   };
 }
 
 export interface IMaxLengthRule extends IRule {
-  function: RuleFunction.MAX_LENGTH;
+  then: {
+    function: RuleFunction.MAX_LENGTH;
 
-  // verify property is under a specified number of characters
-  input: IRuleNumberParam;
+    // verify property is under a specified number of characters
+    functionOptions: IRuleNumberParam;
+  };
 }
 
 export interface IAlphaRule extends IRule {
-  function: RuleFunction.ALPHABETICAL;
+  then: {
+    function: RuleFunction.ALPHABETICAL;
 
-  // verify property is within alphabetical order
-  input: IAlphaRuleParam;
+    // verify property is within alphabetical order
+    functionOptions: IAlphaRuleParam;
+  };
 }
 
 export interface INotEndWithRule extends IRule {
-  function: RuleFunction.NOT_END_WITH;
+  then: {
+    function: RuleFunction.NOT_END_WITH;
 
-  // verify property does not end with string
-  input: IRulePatternParam;
+    // verify property does not end with string
+    functionOptions: IRulePatternParam;
+  };
 }
 
 export interface INotContainRule extends IRule {
-  function: RuleFunction.NOT_CONTAIN;
+  then: {
+    function: RuleFunction.NOT_CONTAIN;
 
-  // verify property does not contain value
-  input: IRuleStringParam;
+    // verify property does not contain value
+    functionOptions: IRuleStringParam;
+  };
 }
 
 export interface IPatternRule extends IRule {
-  function: RuleFunction.PATTERN;
+  then: {
+    function: RuleFunction.PATTERN;
 
-  // run regex match
-  input: IRulePatternParam;
+    // run regex match
+    functionOptions: IRulePatternParam;
+  };
 }
 
 export interface ISchemaRule extends IRule {
-  function: RuleFunction.SCHEMA;
-  input: {
-    schema: object;
+  then: {
+    function: RuleFunction.SCHEMA;
+    functionOptions: {
+      schema: object;
+    };
   };
 }
 
 export interface IParamCheckRule extends IRule {
-  function: RuleFunction.SCHEMA;
-  input: {
-    schema: object;
+  then: {
+    function: RuleFunction.SCHEMA;
+    functionOptions: {
+      schema: object;
+    };
   };
 }
