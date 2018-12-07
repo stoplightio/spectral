@@ -65,30 +65,24 @@ export class Spectral {
     this._rulesByIndex = ruleStore;
   }
 
-  public run(opts: IRunOpts): types.IRuleResult[] {
-    const { target, rulesets = [] } = opts;
-
-    const ruleStore = rulesets.length
-      ? this._parseRuleSets(rulesets, { includeCurrent: true }).ruleStore
-      : this._rulesByIndex;
-
-    return target ? this.runAllLinters(ruleStore, opts) : [];
+  public run(target: object, opts: IRunOpts): types.IRuleResult[] {
+    return this.runAllLinters(target, this._rulesByIndex, opts);
   }
 
-  private runAllLinters(ruleStore: IRuleStore, opts: IRunOpts): types.IRuleResult[] {
+  private runAllLinters(target: object, ruleStore: IRuleStore, opts: IRunOpts): types.IRuleResult[] {
     return flatten(
       compact(
         values(ruleStore).map((ruleEntry: IRuleEntry) => {
           if (
             !ruleEntry.rule.enabled ||
             (opts.type && ruleEntry.rule.type !== opts.type) ||
-            ruleEntry.format !== opts.spec
+            ruleEntry.format !== opts.format
           ) {
             return null;
           }
 
           try {
-            return this.lintNodes(ruleEntry, opts);
+            return this.lintNodes(target, ruleEntry, opts);
           } catch (e) {
             console.error(`Unable to run rule '${ruleEntry.name}':\n${e}`);
             return null;
@@ -98,8 +92,8 @@ export class Spectral {
     );
   }
 
-  private lintNodes(ruleEntry: IRuleEntry, opts: IRunOpts): types.IRuleResult[] {
-    const nodes = jp.nodes(opts.target, ruleEntry.rule.path);
+  private lintNodes(target: object, ruleEntry: IRuleEntry, opts: IRunOpts): types.IRuleResult[] {
+    const nodes = jp.nodes(target, ruleEntry.rule.path);
     return flatten(
       compact(
         nodes.map(node => {
@@ -133,11 +127,8 @@ export class Spectral {
     if (ruleEntry.rule.path === '$') {
       // allow resolved and stringified targets to be passed to rules when operating on
       // the root path
-      if (opts.resTarget) {
-        opt.resObj = opts.resTarget;
-      }
-      if (opts.strTarget) {
-        opt.strObj = opts.strTarget;
+      if (opts.resolvedTarget) {
+        opt.resObj = opts.resolvedTarget;
       }
     }
 
