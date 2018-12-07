@@ -100,7 +100,7 @@ function keyAndOptionalPattern(originalValue: any, pattern?: string) {
       } else if (Array.isArray(originalValue)) {
         const leanValue = pattern
           ? filter(originalValue, (v, index) => {
-              return String(index).match(pattern) === null;
+              return String(index).match(pattern) !== null;
             })
           : originalValue;
         return {
