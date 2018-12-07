@@ -3,11 +3,12 @@ import { ensureRule } from './utils/ensureRule';
 
 // @ts-ignore
 import * as should from 'should/as-function';
+import { IFunctionPaths } from '../types/spectral';
 
-export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRule>) => {
+export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  const { object, rule } = opts;
   const { omit, property, split, value } = rule.then.functionOptions;
 
   // if the collected object is not an object/array, set our target to be
@@ -38,7 +39,7 @@ export const pattern: IRuleFunction<IPatternRule> = (opts: IRuleOpts<IPatternRul
         if (component) {
           const res = ensureRule(() => {
             should(re.test(component)).be.exactly(true, `${rule.summary}, but received: ${component}`);
-          }, meta);
+          }, paths.given);
 
           if (res) {
             results.push(res);

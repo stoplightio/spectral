@@ -1,8 +1,7 @@
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
-
-import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
 import { IRuleFunction, IRuleOpts, IRuleResult, ISchemaRule } from '../types';
+import { IFunctionPaths } from '../types/spectral';
 
 const ajv = new AJV({
   meta: false,
@@ -15,10 +14,10 @@ ajv._opts.defaultMeta = jsonSpecv4.id;
 // @ts-ignore
 ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
 
-export const schema: IRuleFunction<ISchemaRule> = (opts: IRuleOpts<ISchemaRule>) => {
+export const schema: IRuleFunction<ISchemaRule> = (opts: IRuleOpts<ISchemaRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  const { object, rule } = opts;
   const { schema: schemaObj } = rule.then.functionOptions;
 
   // TODO: potential performance improvements (compile, etc)?
@@ -31,12 +30,7 @@ export const schema: IRuleFunction<ISchemaRule> = (opts: IRuleOpts<ISchemaRule>)
       }
 
       results.push({
-        type: meta.rule.type,
-        path: meta.path.concat(e.dataPath.split('/').slice(1)),
-        name: meta.name,
-        description: rule.description || '',
-        severity: rule.severity || ValidationSeverity.Error,
-        severityLabel: rule.severityLabel || ValidationSeverityLabel.Error,
+        path: paths.given.concat(e.dataPath.split('/').slice(1)),
         message: e.message ? e.message : '',
       });
     });

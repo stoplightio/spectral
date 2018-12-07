@@ -1,13 +1,13 @@
-import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
-import { IRuleFunction, IRuleMetadata, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+import { IFunctionPaths } from '../../../../types/spectral';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
-export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
+export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
   let { object } = opts;
-  const { resObj, rule, meta } = opts;
+  const { resObj } = opts;
 
   if (!resObj) {
     console.warn('oasPathParam expects a resolved object, but none was provided. Results may not be correct.');
@@ -42,9 +42,7 @@ export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           `The paths "**${uniquePaths[normalized]}**" and "**${path}**" are equivalent.
 
 To fix, remove one of the paths or merge them together.`,
-          [...meta.path, 'paths'],
-          rule,
-          meta
+          [...paths.given, 'paths']
         )
       );
     } else {
@@ -66,9 +64,7 @@ To fix, remove one of the paths or merge them together.`,
 Path parameters must be unique.
 
 To fix, update the path so that all parameter names are unique.`,
-              [...meta.path, 'paths', path],
-              rule,
-              meta
+              [...paths.given, 'paths', path]
             )
           );
         } else {
@@ -85,19 +81,17 @@ To fix, update the path so that all parameter names are unique.`,
       for (const p of object.paths[path].parameters) {
         if (p.in && p.in === 'path' && p.name) {
           if (!p.required) {
-            results.push(
-              generateResult(requiredMessage(p.name), [...meta.path, 'paths', path, 'parameters'], rule, meta)
-            );
+            results.push(generateResult(requiredMessage(p.name), [...paths.given, 'paths', path, 'parameters']));
           }
 
           if (topParams[p.name]) {
             // name has already been specified
             results.push(
-              generateResult(uniqueDefinitionMessage(p.name), [...meta.path, 'paths', path, 'parameters'], rule, meta)
+              generateResult(uniqueDefinitionMessage(p.name), [...paths.given, 'paths', path, 'parameters'])
             );
             continue;
           }
-          topParams[p.name] = [...meta.path, 'paths', path, 'parameters'];
+          topParams[p.name] = [...paths.given, 'paths', path, 'parameters'];
         }
       }
     }
@@ -124,13 +118,11 @@ To fix, update the path so that all parameter names are unique.`,
           if (p.in && p.in === 'path' && p.name) {
             const parameterPath = ['paths', path, op, 'parameters', i];
             if (!p.required) {
-              results.push(generateResult(requiredMessage(p.name), [...meta.path, ...parameterPath], rule, meta));
+              results.push(generateResult(requiredMessage(p.name), [...paths.given, ...parameterPath]));
             }
 
             if (tmp[p.name]) {
-              results.push(
-                generateResult(uniqueDefinitionMessage(p.name), [...meta.path, ...parameterPath], rule, meta)
-              );
+              results.push(generateResult(uniqueDefinitionMessage(p.name), [...paths.given, ...parameterPath]));
               continue;
             } else if (operationParams[p.name]) {
               continue;
@@ -153,9 +145,7 @@ To fix, update the path so that all parameter names are unique.`,
             `The path "**${path}**" uses a parameter "**{${p}}**" that does not have a corresponding definition.
 
 To fix, add a path parameter with the name "**${p}**".`,
-            [...meta.path, 'paths', path],
-            rule,
-            meta
+            [...paths.given, 'paths', path]
           )
         );
       }
@@ -176,9 +166,7 @@ To fix, add a path parameter with the name "**${p}**".`,
 Unused parameters are not allowed.
 
 To fix, remove this parameter.`,
-              [...meta.path, ...resPath],
-              rule,
-              meta
+              [...paths.given, ...resPath]
             )
           );
         }
@@ -189,15 +177,10 @@ To fix, remove this parameter.`,
   return results;
 };
 
-function generateResult(message: string, path: Array<string | number>, rule: Rule, _m: IRuleMetadata): IRuleResult {
+function generateResult(message: string, path: Array<string | number>): IRuleResult {
   return {
     message,
     path,
-    name: _m.name,
-    description: rule.summary,
-    severity: _m.rule.severity || ValidationSeverity.Error,
-    severityLabel: _m.rule.severityLabel || ValidationSeverityLabel.Error,
-    type: rule.type,
   };
 }
 

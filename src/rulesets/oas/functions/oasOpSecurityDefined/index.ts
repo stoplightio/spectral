@@ -17,7 +17,7 @@ export const oasOpSecurityDefined: IRuleFunction<IOasOpSecurityDefinedRule> = (
 ) => {
   const results: IRuleResult[] = [];
 
-  const { object, meta, rule } = opts;
+  const { object, rule } = opts;
   const { paths = {} } = object;
   const schemes = _get(object, rule.then.functionOptions.schemesPath) || {};
   const allDefs = Object.keys(schemes);
@@ -32,14 +32,12 @@ export const oasOpSecurityDefined: IRuleFunction<IOasOpSecurityDefinedRule> = (
             if (security[index]) {
               const securityKey = Object.keys(security[index])[0];
 
-              const m = {
-                ...meta,
-                path: ['$', 'paths', path, operation, 'security', index],
-              };
-
-              const res = ensureRule(() => {
-                allDefs.should.containEql(securityKey);
-              }, m);
+              const res = ensureRule(
+                () => {
+                  allDefs.should.containEql(securityKey);
+                },
+                ['$', 'paths', path, operation, 'security', index]
+              );
 
               if (res) {
                 results.push(res);

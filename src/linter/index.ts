@@ -1,7 +1,7 @@
 import { PathComponent } from 'jsonpath';
 import { filter, omitBy } from 'lodash';
-import { IRule, IRuleOpts } from '../types';
-import { IRuleEntry, IRuleResult, IRunOpts } from '../types/spectral';
+import { IRule, IRuleOpts, IRuleResult } from '../types';
+import { IRuleEntry, IRunOpts } from '../types/spectral';
 const get = require('lodash/get');
 const has = require('lodash/has');
 
@@ -20,11 +20,6 @@ export function lintNode(
   const opt: IRuleOpts = {
     object: conditioning.value,
     rule: ruleEntry.rule,
-    meta: {
-      path: node.path,
-      name: ruleEntry.name,
-      rule: ruleEntry.rule,
-    },
   };
 
   if (ruleEntry.rule.given === '$') {
@@ -35,7 +30,9 @@ export function lintNode(
     }
   }
 
-  return ruleEntry.apply(opt);
+  return ruleEntry.apply(opt, {
+    given: node.path,
+  });
 }
 
 // TODO(SO-23): unit test idividually

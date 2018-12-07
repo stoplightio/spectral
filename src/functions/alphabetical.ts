@@ -1,10 +1,11 @@
 import { IAlphaRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
+import { IFunctionPaths } from '../types/spectral';
 import { ensureRule } from './utils/ensureRule';
 
-export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRule>) => {
+export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRule>, paths: IFunctionPaths) => {
   const results: IRuleResult[] = [];
 
-  const { object, rule, meta } = opts;
+  const { object, rule } = opts;
   const { keyedBy, properties: inputProperties } = rule.then.functionOptions;
 
   let properties = inputProperties;
@@ -38,7 +39,7 @@ export const alphabetical: IRuleFunction<IAlphaRule> = (opts: IRuleOpts<IAlphaRu
     const res = ensureRule(() => {
       object.should.have.property(property);
       object[property].should.be.deepEqual(arrayCopy);
-    }, meta);
+    }, paths.given);
 
     if (res) {
       results.push(res);

@@ -1,7 +1,7 @@
-import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
-import { IRuleMetadata, IRuleResult } from '../../types';
+import { ObjPath } from '@stoplight/types/parsers';
+import { IRuleResult } from '../../types';
 
-export const ensureRule = (shouldAssertion: Function, ruleMeta: IRuleMetadata): void | IRuleResult => {
+export const ensureRule = (shouldAssertion: Function, path: ObjPath): void | IRuleResult => {
   try {
     shouldAssertion();
   } catch (error) {
@@ -11,12 +11,7 @@ export const ensureRule = (shouldAssertion: Function, ruleMeta: IRuleMetadata): 
     }
 
     return {
-      path: ruleMeta.path,
-      name: ruleMeta.name,
-      type: ruleMeta.rule.type,
-      description: ruleMeta.rule.summary,
-      severity: ruleMeta.rule.severity || ValidationSeverity.Warn,
-      severityLabel: ruleMeta.rule.severityLabel || ValidationSeverityLabel.Warn,
+      path,
       message: error.message ? error.message : '',
     };
   }
