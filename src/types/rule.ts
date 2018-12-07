@@ -3,22 +3,22 @@ import { RuleFunction, RuleType } from './enums';
 
 export type Rule =
   | IRule
-  | ITruthyRule
+  | TruthyRule
   | IOrRule
   | IXorRule
   | IMaxLengthRule
-  | IAlphaRule
+  | AlphaRule
   | INotEndWithRule
   | INotContainRule
   | IPatternRule
   | ISchemaRule
   | IParamCheckRule;
 
-export interface IRule<O = any> {
-  type: RuleType;
-
+export interface IRule<T = string, O = any> {
   // A short summary of the rule and its intended purpose
   summary: string;
+
+  type?: RuleType;
 
   // The severity of results this rule generates
   severity?: ValidationSeverity;
@@ -45,20 +45,19 @@ export interface IRule<O = any> {
     pattern?: string;
   };
 
-  then: {
-    // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
-    // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
-    field?: string;
+  then: IThen<T, O> | Array<IThen<T, O>>;
+}
 
-    // a regex pattern
-    pattern?: string;
+export interface IThen<T, O> {
+  // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+  // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
+  field?: string;
 
-    // name of the function to run
-    function: string;
+  // name of the function to run
+  function: T;
 
-    // Options passed to the function
-    functionOptions?: O;
-  };
+  // Options passed to the function
+  functionOptions?: O;
 }
 
 export interface IRuleParam {
@@ -72,11 +71,6 @@ export interface IRuleStringParam extends IRuleParam {
 export interface IRuleNumberParam {
   value: number;
   property?: string;
-}
-
-export interface IAlphaRuleParam extends IRuleParam {
-  // if sorting objects, use key for comparison
-  keyedBy?: string;
 }
 
 export interface IRulePatternParam {
@@ -93,17 +87,11 @@ export interface IRulePatternParam {
   split?: string;
 }
 
-export interface ITruthyRule extends IRule {
-  function: RuleFunction.TRUTHY;
-
-  functionOptions: {
-    // key(s) of object that should evaluate as 'truthy' (considered true in a
-    // boolean context)
-    properties: string | string[];
-
-    max?: number;
-  };
+export interface ITruthRuleOptions {
+  /** key(s) of object that should evaluate as 'truthy' (considered true in a boolean context) */
+  properties: string | string[];
 }
+export type TruthyRule = IRule<RuleFunction.TRUTHY, ITruthRuleOptions>;
 
 export interface IOrRule extends IRule {
   then: {
@@ -137,14 +125,11 @@ export interface IMaxLengthRule extends IRule {
   };
 }
 
-export interface IAlphaRule extends IRule {
-  then: {
-    function: RuleFunction.ALPHABETICAL;
-
-    // verify property is within alphabetical order
-    functionOptions: IAlphaRuleParam;
-  };
+export interface IAlphaRuleOptions {
+  /** if sorting objects, use key for comparison */
+  keyedBy?: string;
 }
+export type AlphaRule = IRule<RuleFunction.ALPHABETICAL, IAlphaRuleOptions>;
 
 export interface INotEndWithRule extends IRule {
   then: {
