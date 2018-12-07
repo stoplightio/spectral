@@ -1,12 +1,12 @@
 import { ObjPath } from '@stoplight/types/parsers';
-import { IRuleFunction, IRuleset, Rule, RuleType } from '.';
 import { IValidationResult } from '@stoplight/types/validations';
+import { IRuleFunction, IRuleset, Rule, RuleType } from '.';
 
-export interface IFunctionStore {
+export interface IFunctionCollection {
   [name: string]: IRuleFunction;
 }
 
-export interface IRuleStore {
+export interface IRuleCollection {
   [index: string]: IRuleEntry;
 }
 
@@ -19,8 +19,8 @@ export interface IRuleEntry {
 
 export interface IParsedRulesetResult {
   rulesets: IRuleset[];
-  functionStore: IFunctionStore;
-  ruleStore: IRuleStore;
+  functionCollection: IFunctionCollection;
+  ruleCollection: IRuleCollection;
 }
 
 export interface ISpectralOpts {
