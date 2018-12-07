@@ -10,7 +10,7 @@ const invalidV2 = require('./fixtures/todos.invalid.oas2.json');
 describe('validation', () => {
   test('validate a correct OASv2 spec', () => {
     const s = new Spectral();
-    s.newSetFunctions(oas2Ruleset().functions || {});
+    s.setFunctions(oas2Ruleset().functions || {});
     s.newSetRules(oas2Ruleset().rules);
     const result = s.run(petstoreV2, { format: 'oas2', type: RuleType.VALIDATION });
     expect(result.results.length).toEqual(0);
@@ -18,7 +18,7 @@ describe('validation', () => {
 
   test('return errors on invalid OASv2 spec', () => {
     const s = new Spectral();
-    s.newSetFunctions(oas2Ruleset().functions || {});
+    s.setFunctions(oas2Ruleset().functions || {});
     s.newSetRules(oas2Ruleset().rules);
     const result = s.run(invalidV2, { format: 'oas2', type: RuleType.VALIDATION });
     expect(result.results.length).toEqual(1);
@@ -28,7 +28,7 @@ describe('validation', () => {
 
   test('validate a correct OASv3 spec', () => {
     const s = new Spectral();
-    s.newSetFunctions(oas3Ruleset().functions || {});
+    s.setFunctions(oas3Ruleset().functions || {});
     s.newSetRules(oas3Ruleset().rules);
     const result = s.run(petstoreV3, { format: 'oas3', type: RuleType.VALIDATION });
     expect(result.results.length).toEqual(0);
@@ -36,9 +36,9 @@ describe('validation', () => {
 
   test('validate multiple formats with same validator', () => {
     const s = new Spectral();
-    s.newSetFunctions(oas2Ruleset().functions || {});
+    s.setFunctions(oas2Ruleset().functions || {});
     s.newSetRules(oas2Ruleset().rules);
-    s.newUpdateFunctions(oas3Ruleset().functions || {});
+    s.mergeFunctions(oas3Ruleset().functions || {});
     s.newUpdateRules(oas3Ruleset().rules);
 
     let result = s.run(petstoreV2, { format: 'oas2', type: RuleType.VALIDATION });
