@@ -16,9 +16,11 @@ export const oas3Rules = () => {
         enabled: true,
         severity: ValidationSeverity.Error,
         given: '$',
-        function: RuleFunction.SCHEMA,
-        input: {
-          schema,
+        then: {
+          function: RuleFunction.SCHEMA,
+          functionOptions: {
+            schema,
+          },
         },
         tags: ['validation'],
       },

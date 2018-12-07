@@ -19,13 +19,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
+              then: {
+                function: RuleFunction.TRUTHY,
+                functionOptions: { properties: 'something-not-present' },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: {
-                properties: 'something-not-present',
-              },
             },
             {
               swagger: '2.0',
@@ -44,11 +44,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
+              then: {
+                function: RuleFunction.TRUTHY,
+                functionOptions: { properties: 'version' },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: 'version' },
             },
             {
               swagger: '2.0',
@@ -69,14 +71,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.ALPHABETICAL,
+              then: {
+                function: RuleFunction.ALPHABETICAL,
+                functionOptions: { properties: 'tags', keyedBy: 'name' },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: {
-                properties: 'tags',
-                keyedBy: 'name',
-              },
             },
             {
               swagger: '2.0',
@@ -95,14 +96,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.ALPHABETICAL,
+              then: {
+                function: RuleFunction.ALPHABETICAL,
+                functionOptions: { properties: 'tags', keyedBy: 'name' },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: {
-                properties: 'tags',
-                keyedBy: 'name',
-              },
             },
             {
               swagger: '2.0',
@@ -123,11 +123,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.OR,
+              then: {
+                function: RuleFunction.OR,
+                functionOptions: { properties: ['something-not-present', 'something-else-not-present'] },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['something-not-present', 'something-else-not-present'] },
             },
             {
               swagger: '2.0',
@@ -145,11 +147,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.OR,
+              then: {
+                function: RuleFunction.OR,
+                functionOptions: { properties: ['version', 'something-else-not-present'] },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['version', 'something-else-not-present'] },
             },
             {
               swagger: '2.0',
@@ -164,11 +168,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.OR,
+              then: {
+                function: RuleFunction.OR,
+                functionOptions: { properties: ['version', 'title', 'termsOfService'] },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['version', 'title', 'termsOfService'] },
             },
             {
               swagger: '2.0',
@@ -189,11 +195,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.XOR,
+              then: {
+                function: RuleFunction.XOR,
+                functionOptions: { properties: ['yada-yada', 'whatever'] },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['yada-yada', 'whatever'] },
             },
             {
               swagger: '2.0',
@@ -212,11 +220,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.XOR,
+              then: {
+                function: RuleFunction.XOR,
+                functionOptions: { properties: ['version', 'title'] },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['version', 'title'] },
             },
             {
               swagger: '2.0',
@@ -235,11 +245,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.XOR,
+              then: {
+                function: RuleFunction.XOR,
+                functionOptions: { properties: ['something', 'title'] },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: { properties: ['something', 'title'] },
             },
             {
               swagger: '2.0',
@@ -260,14 +272,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.PATTERN,
+              then: {
+                function: RuleFunction.PATTERN,
+                functionOptions: { property: 'termsOfService', value: '^orange.*$' },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: {
-                property: 'termsOfService',
-                value: '^orange.*$',
-              },
             },
             {
               swagger: '2.0',
@@ -286,14 +297,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.PATTERN,
+              then: {
+                function: RuleFunction.PATTERN,
+                functionOptions: { property: '*', value: '^[0-9]+$' },
+              },
               given: '$.responses',
               enabled: true,
               summary: '',
-              input: {
-                property: '*',
-                value: '^[0-9]+$',
-              },
             },
             {
               responses: {
@@ -317,14 +327,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.PATTERN,
+              then: {
+                function: RuleFunction.PATTERN,
+                functionOptions: { property: 'termsOfService', value: '^http.*$' },
+              },
               given: '$.info',
               enabled: true,
               summary: '',
-              input: {
-                property: 'termsOfService',
-                value: '^http.*$',
-              },
             },
             {
               swagger: '2.0',
@@ -343,14 +352,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.PATTERN,
+              then: {
+                function: RuleFunction.PATTERN,
+                functionOptions: { property: '*', value: '^[0-9]+$' },
+              },
               given: '$.responses',
               enabled: true,
               summary: '',
-              input: {
-                property: '*',
-                value: '^[0-9]+$',
-              },
             },
             {
               responses: {
@@ -376,11 +384,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.NOT_CONTAIN,
+              then: {
+                function: RuleFunction.NOT_CONTAIN,
+                functionOptions: { properties: ['description'], value: '<script' },
+              },
               given: '$..*',
               enabled: true,
               summary: '',
-              input: { properties: ['description'], value: '<script' },
             },
             {
               swagger: '2.0',
@@ -400,11 +410,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.NOT_CONTAIN,
+              then: {
+                function: RuleFunction.NOT_CONTAIN,
+                functionOptions: { properties: ['description'], value: '<script' },
+              },
               given: '$..*',
               enabled: true,
               summary: '',
-              input: { properties: ['description'], value: '<script' },
             },
             {
               swagger: '2.0',
@@ -426,11 +438,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.NOT_END_WITH,
+              then: {
+                function: RuleFunction.NOT_END_WITH,
+                functionOptions: { property: 'url', value: '/' },
+              },
               given: '$.servers',
               enabled: true,
               summary: '',
-              input: { property: 'url', value: '/' },
             },
             {
               swagger: '2.0',
@@ -454,11 +468,13 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.NOT_END_WITH,
+              then: {
+                function: RuleFunction.NOT_END_WITH,
+                functionOptions: { property: 'url', value: '/' },
+              },
               given: '$.servers',
               enabled: true,
               summary: '',
-              input: { property: 'url', value: '/' },
             },
             {
               swagger: '2.0',
@@ -484,14 +500,14 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.MAX_LENGTH,
+              then: {
+                function: RuleFunction.MAX_LENGTH,
+                functionOptions: { value: 20 },
+              },
               given: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
               summary: '',
-              input: {
-                value: 20,
-              },
             },
             {
               paths: {
@@ -511,14 +527,14 @@ describe('lint', () => {
           applyRuleToObject(
             {
               type: RuleType.STYLE,
-              function: RuleFunction.MAX_LENGTH,
+              then: {
+                function: RuleFunction.MAX_LENGTH,
+                functionOptions: { value: 20 },
+              },
               given: '$..summary',
               enabled: true,
               description: 'summary should be short (description can be long)',
               summary: '',
-              input: {
-                value: 20,
-              },
             },
             {
               paths: {

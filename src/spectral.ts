@@ -153,10 +153,10 @@ export class Spectral {
       throw new SyntaxError(`Invalid JSON path for rule '${ruleIndex}': ${rule.given}\n\n${e}`);
     }
 
-    const ruleFunc = this._functionCollection[rule.function];
+    const ruleFunc = this._functionCollection[rule.then.function];
 
     if (!ruleFunc) {
-      throw new SyntaxError(`Function does not exist for rule '${ruleIndex}': ${rule.function}`);
+      throw new SyntaxError(`Function does not exist for rule '${ruleIndex}': ${rule.then.function}`);
     }
 
     return {

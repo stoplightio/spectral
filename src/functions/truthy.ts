@@ -8,7 +8,7 @@ export const truthy: IRuleFunction<ITruthyRule> = (opts: IRuleOpts<ITruthyRule>)
   const results: IRuleResult[] = [];
 
   const { object, rule, meta } = opts;
-  const { properties: inputProperties, max } = rule.input;
+  const { properties: inputProperties, max } = rule.then.functionOptions;
 
   let properties = inputProperties;
   if (!Array.isArray(properties)) properties = [properties];
