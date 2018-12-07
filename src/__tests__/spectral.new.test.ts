@@ -6,11 +6,15 @@ import { IRuleset, RuleFunction, RuleType } from '../types';
 
 const todosPartialDeref = require('./fixtures/todos.partial-deref.oas2.json');
 
+const aDefaultRuleset = defaultRuleset();
+
 describe('spectral', () => {
   test('load and run the default rule set', () => {
-    const s = new Spectral({
-      rulesets: [defaultRuleset()],
-    });
+    const s = new Spectral();
+    if (aDefaultRuleset.functions) {
+      s.newSetFunctions(aDefaultRuleset.functions);
+    }
+    s.newSetRules(aDefaultRuleset.rules);
 
     const result = s.run(todosPartialDeref, { format: 'oas2' });
     expect(result.results.length).toBeGreaterThan(0);
@@ -37,17 +41,14 @@ describe('spectral', () => {
     // deep copy
     const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
 
-    const s = new Spectral({ rulesets: [givenCustomRuleSet] });
+    const s = new Spectral();
+    s.newSetRules(givenCustomRuleSet.rules);
 
-    s.updateRules([
-      {
-        rules: {
-          oas2: {
-            rule1: false,
-          },
-        },
+    s.newUpdateRules({
+      oas2: {
+        rule1: false,
       },
-    ]);
+    });
 
     expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
   });
@@ -71,26 +72,22 @@ describe('spectral', () => {
       },
     };
     // deep copy
-    const s = new Spectral({ rulesets: [ruleset] });
-
-    s.setRules([
-      {
-        rules: {
-          differentFormat: {
-            rule2: {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: true,
-              summary: '',
-              input: {
-                properties: 'a different rule',
-              },
-            },
+    const s = new Spectral();
+    s.newSetRules(ruleset.rules);
+    s.newSetRules({
+      differentFormat: {
+        rule2: {
+          type: RuleType.STYLE,
+          function: RuleFunction.TRUTHY,
+          path: '$',
+          enabled: true,
+          summary: '',
+          input: {
+            properties: 'a different rule',
           },
         },
       },
-    ]);
+    });
 
     expect(s.getRules()).toHaveLength(1);
     expect(s.getRules()).toMatchInlineSnapshot(`
@@ -133,38 +130,31 @@ Array [
       },
     };
     // deep copy
-    const s = new Spectral({ rulesets: [ruleset] });
+    const s = new Spectral();
+    s.newSetRules(ruleset.rules);
 
-    s.updateRules([
-      {
-        rules: {
-          differentFormat: {
-            rule2: {
-              type: RuleType.STYLE,
-              function: RuleFunction.TRUTHY,
-              path: '$',
-              enabled: true,
-              summary: '',
-              input: {
-                properties: 'a different rule',
-              },
-            },
+    s.newUpdateRules({
+      differentFormat: {
+        rule2: {
+          type: RuleType.STYLE,
+          function: RuleFunction.TRUTHY,
+          path: '$',
+          enabled: true,
+          summary: '',
+          input: {
+            properties: 'a different rule',
           },
         },
       },
-    ]);
+    });
 
     expect(s.getRules()).toHaveLength(2);
 
-    s.updateRules([
-      {
-        rules: {
-          format: {
-            rule1: false,
-          },
-        },
+    s.newUpdateRules({
+      format: {
+        rule1: false,
       },
-    ]);
+    });
 
     expect(s.getRules()).toHaveLength(2);
   });
@@ -203,7 +193,8 @@ Array [
       },
     ];
 
-    const s = new Spectral({ rulesets });
+    const s = new Spectral();
+    s.newSetRules(rulesets[0].rules);
 
     expect(s.getRules('oas2')).toMatchInlineSnapshot(`
 Array [
@@ -280,7 +271,8 @@ Array [
       },
     ];
 
-    const s = new Spectral({ rulesets });
+    const s = new Spectral();
+    s.newSetRules(rulesets[0].rules);
     const results = s.getRules('oas2');
 
     expect(results.length).toBe(1);
