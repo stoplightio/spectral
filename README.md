@@ -8,7 +8,7 @@
 - Allows you to create custom rules to lint _any JSON object_
 - Built-in set of functions to help build custom rules, like for patterns, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Ability to create custom functions for advanced linting use cases
-- Existing rulesets for OpenAPI Specification (OAS) 2 _and_ 3 documents
+- Existing collection of rules and functions to validate and lint OpenAPI Specification (OAS) 2 _and_ 3 documents
 - Validates JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
 ## Installation
@@ -17,173 +17,146 @@
 npm install @stoplight/spectral
 ```
 
-Supports Node v8.3+ and modern browsers
+Supports Node v8.3+ and modern browsers.
 
 ## Usage
 
-There are three key parts to working with Spectral: **Functions**, **rules**, and **rulesets**. **Rulesets** are made up of **rules**, which reference **functions**.
+There are two key concepts in Spectral: **Rules** and **Functions**.
 
-Think of a **ruleset** as your own flexible and customizable style guide for your JSON objects.
+- **Rules** filter your object down to a set of target values, and specify the function that should evaluate those values.
+- **Functions** accept a value and return a list of validation results if there are problems with the value.
 
-### Creating a custom rule and ruleset:
+Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
 
-Spectral has a built-in set of functions, which you can write your own rules with. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
+### Creating a custom rule:
 
-```javascript
-const { Spectral } = require("@stoplight/spectral");
-const { RuleFunction, RuleType } = require("@stoplight/spectral/lib/types");
-
-const rulesets = {
-  rulesets: [
-    {
-      rules: {
-        mySpec: {
-          snake_case: {
-            type: RuleType.STYLE,
-            enabled: true,
-            summary: "Checks for snake case pattern",
-            function: RuleFunction.PATTERN,
-            // this path will check every property in the object being validated, see https://jsonpath.com
-            path: "$..*",
-            input: {
-              property: "*",
-              value: "^[a-z]+[a-z0-9_]*[a-z0-9]+$"
-            }
-          }
-        }
-      }
-    }
-  ]
-};
-
-const spectral = new Spectral(rulesets);
-
-// results would return a style warning because it is not in snake case pattern
-console.log(
-  spectral.run({
-    spec: "mySpec",
-    target: {
-      name: "helloWorld"
-    }
-  })
-);
-
-// [ { path: [ '$', 'name' ],
-//     name: 'snake_case',
-//     type: 'style',
-//     summary: 'Checks for snake case pattern',
-//     severity: 'warn',
-//     message: 'Checks for snake case pattern, but received: helloWorld' } ]
-```
-
-### Creating a custom function, rule, and ruleset:
-
-Sometimes the built-in functions aren't what you need to build a custom rule. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
+Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
 
 ```javascript
 const { Spectral } = require("@stoplight/spectral");
-const { RuleType } = require("@stoplight/spectral/lib/types");
-const { ensureRule } = require("@stoplight/spectral/lib/functions/utils/ensureRule");
 
-// custom function
-const customNotThatFunction = opts => {
-  const results = [];
+const spectral = new Spectral();
 
-  const { object, rule, meta } = opts;
-  const { that, suggestion } = rule.input;
-
-  const res = ensureRule(() => {
-    object.should.match(
-      new RegExp(that),
-      `Don't use ${that}, use ${suggestion}!`
-    );
-  }, meta);
-
-  if (res) {
-    results.push(res);
+spectral.addRules({
+  snake_case: {
+    summary: "Checks for snake case pattern",
+    given: "$..*",
+    then: {
+      field: "*",
+      pattern: "^[a-z]+[a-z0-9_]*[a-z0-9]+$"
+    }
   }
-
-  return results;
-};
-
-//custom rule and ruleset
-const spectral = new Spectral({
-  rulesets: [
-    {
-      rules: {
-        mySpec: {
-          openapi_not_swagger: {
-            type: RuleType.STYLE,
-            enabled: true,
-            summary: "Checks for use of Swagger, and suggests OpenAPI.",
-            // see functions below
-            function: "notThat",
-            // this path will check every property in the object being validated, see https://jsonpath.com
-            path: "$..*",
-            input: {
-              that: "/Swagger/g",
-              suggestion: "OpenAPI"
-            }
-          }
-        }
-      },
-      functions: {
-        notThat: customNotThatFunction
-      }
-    }
-  ]
 });
 
-// results would return a style warning because you used "Swagger" instead of "OpenAPI"
-console.log(
-  spectral.run({
-    spec: "mySpec",
-    target: {
-      description: "Swagger is pretty cool!"
-    }
-  })
-);
+const results = spectral.run({
+  name: "helloWorld"
+});
 
-// [ { path: [ '$', 'description' ],
-//     name: 'openapi_not_swagger',
-//     type: 'style',
-//     summary: 'Checks for use of Swagger, and suggests OpenAPI.',
-//     severity: 'warn',
-//     message: 'Don\'t use /Swagger/g, use OpenAPI!' } ]
+// should output a single result since `helloWorld` is not snake_case
+console.log(results);
+```
+
+### Creating a custom function:
+
+Sometimes the built-in functions won't cover your use case. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
+
+```javascript
+const { Spectral } = require("@stoplight/spectral");
+
+// custom function
+const customNotThatFunction = (targetValue, options) => {
+  const { pattern, suggestion } = options;
+
+  if (targetValue && targetValue.match(new RegExp(pattern))) {
+    return [
+      {
+        message: `Use ${suggestion} instead of ${pattern}!`
+      }
+    ];
+  }
+};
+
+const spectral = new Spectral();
+
+spectral.addFunctions({
+  notThat: customNotThatFunction
+});
+
+spectral.addRules({
+  openapi_not_swagger: {
+    summary: "Checks for use of Swagger, and suggests OpenAPI.",
+    given: "$..*",
+    then: {
+      field: "*",
+
+      // reference the function we added!
+      function: "notThat",
+
+      // pass it the options it needs
+      functionOptions: {
+        pattern: "/Swagger/g",
+        suggestion: "OpenAPI"
+      }
+    }
+  }
+});
+
+const results = spectral.run({
+  description: "Swagger is pretty cool!"
+});
+
+// should output a single result since we are using the term `Swagger` in our object
+console.log(results);
 ```
 
 ### Linting an OAS 2 document:
 
-Spectral also has existing rulesets that we have created for OAS 2 and 3. This example uses an existing ruleset to lint an OAS 2 document.
+Spectral also includes a number of ready made rules and functions for OpenAPI 2 and 3 documents. This example uses the OpenAPI 2 rules to lint an OpenAPI 2 document.
 
-You can also build on top of these rulesets for a customized linting style guide for your OAS documents.
+You can also build add to these rules for a customized linting style guide for your OAS documents.
 
 ```javascript
 const { Spectral } = require("@stoplight/spectral");
-const { defaultRuleset } = require('@stoplight/spectral/lib/rulesets');
+const { functions, rules } = require("@stoplight/spectral/rulesets/oas2");
 
-// an OASv2 specification
+// an OASv2 document
 var myOAS = {
-  [...]
+  // ... properties in your document
   responses: {
-    '401asdf': {
-      description: '',
+    "200": {
+      description: "",
       schema: {
-        $ref: '#/definitions/error-response',
-      },
-    },
-  },
-  [...]
+        $ref: "#/definitions/error-response"
+      }
+    }
+  }
+  // ... properties in your document
 };
 
 // create a new instance of spectral with all of the baked in rulesets
-const spectral = new Spectral({ rulesets: [defaultRuleset()] });
+const spectral = new Spectral();
+
+spectral.addFunctions(functions);
+spectral.addRules(rules);
+
+// modify existing rules - in this example we are disabling the built in json schema rule
+spectral.mergeRules({
+  "oas2-schema": {
+    enabled: false
+  }
+});
+
+spectral.addRules({
+  // .. extend with your own custom rules
+});
 
 // run!
-console.log(spectral.run({ spec: 'oas2', target: myOAS }));
+const results = spectral.run(myOAS);
+
+console.log(results);
 ```
 
-Note: The existing OAS rulesets are opinionated. There might be some rules that you prefer to change. We encourage you to create your rulesets to fit your use case. We welcome contributions to the existing rulesets too!
+Note: The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome contributions to the existing rules too!
 
 ### Example Implementations
 
