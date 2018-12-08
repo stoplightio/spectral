@@ -240,5 +240,27 @@ describe('linter', () => {
         });
       });
     });
+
+    describe('given many then field matches', () => {
+      test('should call each one with the appropriate args', () => {
+        spectral.addRules({
+          example: {
+            summary: '',
+            given: '$.responses',
+            then: {
+              field: '$..description',
+              function: fnName,
+            },
+          },
+        });
+
+        spectral.run(target);
+
+        expect(fakeLintingFunction).toHaveBeenCalledTimes(3);
+        expect(fakeLintingFunction.mock.calls[0][0]).toEqual('a');
+        expect(fakeLintingFunction.mock.calls[1][0]).toEqual('b');
+        expect(fakeLintingFunction.mock.calls[2][0]).toEqual('c');
+      });
+    });
   });
 });

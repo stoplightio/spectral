@@ -1,35 +1,19 @@
-import { INotEndWithRule, IRuleFunction, IRuleOpts, IRuleResult } from '../types';
-import { IFunctionPaths } from '../types/spectral';
-import { ensureRule } from './utils/ensureRule';
+import endsWith = require('lodash/endsWith');
 
-export const notEndWith: IRuleFunction<INotEndWithRule> = (opts: IRuleOpts<INotEndWithRule>, paths: IFunctionPaths) => {
-  const results: IRuleResult[] = [];
-  let { object } = opts;
-  const { rule } = opts;
-  const { value, property } = rule.then.functionOptions;
+import { IFunction, IFunctionResult, INotEndWithOptions } from '../types';
 
-  const process = (target: any) => {
-    const res = ensureRule(() => {
-      target.should.not.endWith(value);
-    }, paths.given);
+export const notEndWith: IFunction<INotEndWithOptions> = (targetVal, opts) => {
+  const results: IFunctionResult[] = [];
 
-    if (res) {
-      results.push(res);
-    }
-  };
+  const { value } = opts;
 
-  if (property === '*') {
-    object = Object.keys(object);
-  }
+  if (!targetVal || typeof targetVal !== 'string' || !value) return results;
 
-  if (Array.isArray(object)) {
-    object.forEach((obj: any) => {
-      if (property && obj[property]) {
-        process(obj[property]);
-      }
+  if (endsWith(targetVal, value)) {
+    results.push({
+      message: `must not end with '${value}'`,
     });
-  } else if (property && object[property]) {
-    process(object[property]);
   }
+
   return results;
 };
