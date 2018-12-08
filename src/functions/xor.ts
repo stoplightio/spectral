@@ -1,38 +1,17 @@
-import { IRuleFunction, IRuleOpts, IRuleResult, IXorRule } from '../types';
-import { ensureRule } from './utils/ensureRule';
+import { IFunction, IFunctionResult, IXorRuleOptions } from '../types';
 
-import * as should from 'should';
-import { IFunctionPaths } from '../types/spectral';
+export const xor: IFunction<IXorRuleOptions> = (targetVal, opts) => {
+  const results: IFunctionResult[] = [];
 
-export const xor: IRuleFunction<IXorRule> = (opts: IRuleOpts<IXorRule>, paths: IFunctionPaths) => {
-  const results: IRuleResult[] = [];
+  const { properties } = opts;
 
-  const { object, rule } = opts;
-  const { properties } = rule.then.functionOptions;
+  if (!targetVal || typeof targetVal !== 'object' || properties.length !== 2) return results;
 
-  let found = false;
-  for (const property of properties) {
-    if (typeof object[property] !== 'undefined') {
-      if (found) {
-        const innerRes = ensureRule(() => {
-          should.fail(true, false, rule.summary);
-        }, paths.given);
-
-        if (innerRes) {
-          results.push(innerRes);
-        }
-      }
-
-      found = true;
-    }
-  }
-
-  const res = ensureRule(() => {
-    found.should.be.exactly(true, rule.summary);
-  }, paths.given);
-
-  if (res) {
-    results.push(res);
+  const intersection = Object.keys(targetVal).filter(value => -1 !== properties.indexOf(value));
+  if (intersection.length !== 1) {
+    results.push({
+      message: `${properties[0]} and ${properties[1]} cannot both be defined`,
+    });
   }
 
   return results;

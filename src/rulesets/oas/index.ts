@@ -1,9 +1,9 @@
 import { ValidationSeverity } from '@stoplight/types/validations';
-import { IRuleDeclaration, IRuleStore, RuleFunction, RuleType } from '../../types';
+import { FunctionCollection, RuleCollection, RuleFunction, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
 
-export const commonOasFunctions = () => {
+export const commonOasFunctions = (): FunctionCollection => {
   return {
     oasPathParam: require('./functions/oasPathParam').oasPathParam,
     oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
@@ -14,47 +14,8 @@ export const commonOasFunctions = () => {
   };
 };
 
-export const allOasRules = (): IRuleStore => {
-  return {
-    oas2: {
-      ...commonOasRules(),
-      'operation-security-defined': {
-        enabled: true,
-        then: {
-          function: 'oasOpSecurityDefined',
-          functionOptions: {
-            schemesPath: ['securityDefinitions'],
-          },
-        },
-        given: '$',
-        summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
-        type: RuleType.VALIDATION,
-        tags: ['operation'],
-      },
-    },
-
-    oas3: {
-      ...commonOasRules(),
-      'operation-security-defined': {
-        enabled: true,
-        then: {
-          function: 'oasOpSecurityDefined',
-          functionOptions: {
-            schemesPath: ['components', 'securitySchemes'],
-          },
-        },
-        given: '$',
-        summary: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
-        type: RuleType.VALIDATION,
-        tags: ['operation'],
-      },
-    },
-  };
-};
-
-export const commonOasRules = (): IRuleDeclaration => ({
+export const commonOasRules = (): RuleCollection => ({
   'operation-parameters': {
-    enabled: true,
     then: {
       function: 'oasOpParams',
     },
@@ -64,7 +25,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['operation'],
   },
   'operation-2xx-response': {
-    enabled: true,
     then: {
       function: 'oasOp2xxResponse',
     },
@@ -74,7 +34,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['operation'],
   },
   'operation-operationId-unique': {
-    enabled: true,
     then: {
       function: 'oasOpIdUnique',
     },
@@ -85,7 +44,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
   },
 
   'operation-formData-consume-check': {
-    enabled: true,
     then: {
       function: 'oasOpFormDataConsumeCheck',
     },
@@ -98,7 +56,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
   'path-params': {
     type: RuleType.VALIDATION,
     summary: 'given parameters are correct and valid.',
-    enabled: true,
     severity: ValidationSeverity.Error,
     given: '$',
     then: {
@@ -120,7 +77,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['api'],
   },
   'api-host': {
-    enabled: true,
     then: {
       function: RuleFunction.TRUTHY,
       functionOptions: {
@@ -133,7 +89,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['api'],
   },
   'api-schemes': {
-    enabled: true,
     then: {
       function: RuleFunction.SCHEMA,
       functionOptions: {
@@ -164,7 +119,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     type: RuleType.STYLE,
   },
   'info-contact': {
-    enabled: true,
     then: {
       function: RuleFunction.TRUTHY,
       functionOptions: {
@@ -178,7 +132,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
   },
   'info-description': {
     summary: 'OpenAPI object info `description` must be present and non-empty string.',
-    enabled: true,
     then: {
       function: RuleFunction.TRUTHY,
       functionOptions: {
@@ -243,19 +196,21 @@ export const commonOasRules = (): IRuleDeclaration => ({
   },
   'no-eval-in-descriptions': {
     enabled: false,
-    then: {
-      function: RuleFunction.NOT_CONTAIN,
-      functionOptions: {
-        properties: ['description', 'title'],
-        value: 'eval(',
+    then: [
+      {
+        field: 'description',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          properties: ['description', 'title'],
+          value: 'eval(',
+        },
       },
-    },
+    ],
     given: '$..*',
     summary: 'Markdown descriptions should not contain `eval(`.',
     type: RuleType.STYLE,
   },
   'no-script-tags-in-markdown': {
-    enabled: true,
     then: {
       function: RuleFunction.NOT_CONTAIN,
       functionOptions: {
@@ -322,7 +277,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
   },
   'operation-description': {
     summary: 'Operation `description` must be present and non-empty string.',
-    enabled: true,
     then: {
       function: RuleFunction.TRUTHY,
       functionOptions: {
@@ -334,7 +288,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['operation'],
   },
   'operation-operationId': {
-    enabled: true,
     then: {
       function: RuleFunction.TRUTHY,
       functionOptions: {
@@ -380,7 +333,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['operation'],
   },
   'operation-summary-or-description': {
-    enabled: true,
     then: {
       function: RuleFunction.OR,
       functionOptions: {
@@ -393,7 +345,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     tags: ['operation'],
   },
   'operation-tags': {
-    enabled: true,
     then: {
       function: RuleFunction.TRUTHY,
       functionOptions: {
@@ -420,64 +371,44 @@ export const commonOasRules = (): IRuleDeclaration => ({
   },
   'path-declarations-must-exist': {
     summary: 'given declarations cannot be empty, ex.`/given/{}` is invalid.',
-    enabled: true,
     then: {
+      field: '@key',
       function: RuleFunction.NOT_CONTAIN,
       functionOptions: {
-        properties: '*',
         value: '{}',
       },
     },
-    given: '$..paths',
+    given: '$..paths[*]',
     type: RuleType.STYLE,
     tags: ['given'],
   },
   'path-keys-no-trailing-slash': {
-    enabled: true,
+    summary: 'given keys should not end with a slash.',
+    given: '$..paths[*]',
     then: {
+      field: '@key',
       function: RuleFunction.NOT_END_WITH,
       functionOptions: {
-        property: '*',
         value: '/',
       },
     },
-    given: '$..paths',
-    summary: 'given keys should not end with a slash.',
-    type: RuleType.STYLE,
     tags: ['given'],
   },
   'path-not-include-query': {
     summary: 'given keys should not include a query string.',
-    enabled: true,
     then: {
+      field: '@key',
       function: RuleFunction.NOT_CONTAIN,
       functionOptions: {
-        properties: '*',
         value: '\\?',
       },
     },
-    given: '$..paths',
+    given: '$..paths[*]',
     type: RuleType.STYLE,
     tags: ['given'],
   },
-  'reference-components-regex': {
-    enabled: false,
-    then: {
-      function: RuleFunction.PATTERN,
-      functionOptions: {
-        omit: '#',
-        split: '/',
-        value: '^[a-zA-Z0-9\\.\\-_]+$',
-      },
-    },
-    given: "$..['$ref']",
-    summary: 'References should all match regex `^[a-zA-Z0-9\\.\\-_]+`.',
-    type: RuleType.STYLE,
-    tags: ['references'],
-  },
   'schema-items-is-object': {
     summary: 'Schema containing `items` requires the items property to be an object.',
-    enabled: true,
     then: {
       function: RuleFunction.SCHEMA,
       functionOptions: {
@@ -503,7 +434,6 @@ export const commonOasRules = (): IRuleDeclaration => ({
     type: RuleType.STYLE,
   },
   'server-trailing-slash': {
-    enabled: true,
     then: {
       function: RuleFunction.NOT_END_WITH,
       functionOptions: {

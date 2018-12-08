@@ -1,18 +1,11 @@
 import { IFunction, IFunctionResult, ITruthRuleOptions } from '../types';
 
-export const truthy: IFunction<ITruthRuleOptions> = (targetVal, opts) => {
-  const results: IFunctionResult[] = [];
-
-  let properties = opts.properties;
-  if (!Array.isArray(properties)) properties = [properties];
-
-  for (const property of properties) {
-    if (!targetVal[property]) {
-      results.push({
-        message: `${property} is not truthy`,
-      });
-    }
+export const truthy: IFunction<ITruthRuleOptions> = (targetVal, _opts, paths): void | IFunctionResult[] => {
+  if (!targetVal) {
+    return [
+      {
+        message: `${paths.target ? paths.target.join('.') : 'property'} is not truthy`,
+      },
+    ];
   }
-
-  return results;
 };
