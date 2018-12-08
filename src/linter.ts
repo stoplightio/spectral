@@ -1,14 +1,14 @@
-import { PathComponent } from 'jsonpath';
+import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
 const filter = require('lodash/filter');
 const omitBy = require('lodash/omitBy');
 
-import { IFunction, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { IFunction, IFunctionResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
-  node: { path: PathComponent[]; value: any },
+  node: { path: jp.PathComponent[]; value: any },
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
@@ -21,7 +21,7 @@ export const lintNode = (
     return [];
   }
 
-  let targetValue = conditioning.value;
+  const targetValue = conditioning.value;
 
   // const opt: IRuleOpts = {
   //   object: conditioning.value,
@@ -36,24 +36,46 @@ export const lintNode = (
   //   }
   // }
 
+  let targets: any[] = [];
   if (rule.then && then.field) {
-    targetValue = get(targetValue, then.field);
+    if (then.field === '@key') {
+      // key lookup
+      targets = typeof targetValue === 'object' ? Object.keys(targetValue) : [];
+    } else if (then.field[0] === '$') {
+      // jsonpath lookup
+      const nodes = jp.nodes(targetValue, then.field);
+      targets = targets.concat(nodes.map(n => n.value));
+    } else {
+      // lodash lookup
+      targets.push(get(targetValue, then.field));
+    }
+  } else {
+    targets.push(targetValue);
   }
 
-  const results =
-    apply(
-      targetValue,
-      then.functionOptions || {},
-      {
-        given: node.path,
-        target: node.path, // todo, node.path + rule.then.field
-      },
-      {
-        original: {},
-        given: node.value,
-        resolved: opts.resolvedTarget,
-      }
-    ) || [];
+  if (!targets.length) {
+    // must call then at least once, with no result
+    targets.push(undefined);
+  }
+
+  let results: IFunctionResult[] = [];
+  for (const target of targets) {
+    results = results.concat(
+      apply(
+        target,
+        then.functionOptions || {},
+        {
+          given: node.path,
+          target: node.path, // todo, node.path + rule.then.field
+        },
+        {
+          original: {},
+          given: node.value,
+          resolved: opts.resolvedTarget,
+        }
+      ) || []
+    );
+  }
 
   return results.map(result => {
     return {

@@ -5,13 +5,10 @@ export enum RuleType {
 
 export enum RuleFunction {
   ALPHABETICAL = 'alphabetical',
-  MAX_LENGTH = 'maxLength',
-  NOT_CONTAIN = 'notContain',
+  LENGTH = 'length',
   NOT_END_WITH = 'notEndWith',
-  OR = 'or',
   PATTERN = 'pattern',
   SCHEMA = 'schema',
   TRUTHY = 'truthy',
   XOR = 'xor',
-  PARAM_CHECK = 'paramCheck',
 }

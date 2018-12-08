@@ -19,7 +19,7 @@ describe('functions', () => {
             given: '$.info',
             then: {
               function: RuleFunction.TRUTHY,
-              functionOptions: { properties: 'something-not-present' },
+              field: '$.missing_prop',
             },
           },
           {
@@ -39,7 +39,7 @@ describe('functions', () => {
             given: '$',
             then: {
               function: RuleFunction.TRUTHY,
-              functionOptions: { properties: 'count' },
+              field: 'count',
             },
           },
           {
@@ -55,10 +55,20 @@ describe('functions', () => {
           {
             summary: '',
             given: '$',
-            then: {
-              function: RuleFunction.TRUTHY,
-              functionOptions: { properties: ['count', 'name', 'count2'] },
-            },
+            then: [
+              {
+                function: RuleFunction.TRUTHY,
+                field: 'count',
+              },
+              {
+                function: RuleFunction.TRUTHY,
+                field: 'name',
+              },
+              {
+                function: RuleFunction.TRUTHY,
+                field: 'count2',
+              },
+            ],
           },
           {
             count: 0,
@@ -77,7 +87,7 @@ describe('functions', () => {
             given: '$',
             then: {
               function: RuleFunction.TRUTHY,
-              functionOptions: { properties: 'info' },
+              field: 'info',
             },
           },
           {
@@ -198,78 +208,6 @@ describe('functions', () => {
     });
   });
 
-  describe('or', () => {
-    test('returns result if no properties are present', () => {
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$.info',
-            then: {
-              function: RuleFunction.OR,
-              functionOptions: {
-                properties: ['something-not-present', 'something-else-not-present'],
-              },
-            },
-          },
-          {
-            swagger: '2.0',
-            info: {
-              version: '1.0.0',
-              title: 'Swagger Petstore',
-            },
-          }
-        ).length
-      ).toEqual(1);
-    });
-
-    test('dont returns results if any properties are present', () => {
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$.info',
-            then: {
-              function: RuleFunction.OR,
-              functionOptions: {
-                properties: ['version', 'something-else-not-present'],
-              },
-            },
-          },
-          {
-            swagger: '2.0',
-            info: {
-              version: '1.0.0',
-              title: 'Swagger Petstore',
-            },
-          }
-        ).length
-      ).toEqual(0);
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$.info',
-            then: {
-              function: RuleFunction.OR,
-              functionOptions: {
-                properties: ['version', 'title', 'termsOfService'],
-              },
-            },
-          },
-          {
-            swagger: '2.0',
-            info: {
-              version: '1.0.0',
-              title: 'Swagger Petstore',
-              termsOfService: 'http://swagger.io/terms/',
-            },
-          }
-        ).length
-      ).toEqual(0);
-    });
-  });
-
   describe('xor', () => {
     test('returns result if no properties are present', () => {
       expect(
@@ -349,18 +287,15 @@ describe('functions', () => {
             summary: '',
             given: '$.info',
             then: {
+              field: 'termsOfService',
               function: RuleFunction.PATTERN,
               functionOptions: {
-                property: 'termsOfService',
-                value: '^orange.*$',
+                match: '^orange.*$',
               },
             },
           },
           {
-            swagger: '2.0',
             info: {
-              version: '1.0.0',
-              title: 'Swagger Petstore',
               termsOfService: 'http://swagger.io/terms/',
             },
           }
@@ -375,8 +310,9 @@ describe('functions', () => {
             summary: '',
             given: '$.responses',
             then: {
+              field: '@key',
               function: RuleFunction.PATTERN,
-              functionOptions: { property: '*', value: '^[0-9]+$' },
+              functionOptions: { match: '^[0-9]+$' },
             },
           },
           {
@@ -401,20 +337,16 @@ describe('functions', () => {
         applyRuleToObject(
           {
             summary: '',
-            given: '$.info',
+            given: '$.info.termsOfService',
             then: {
               function: RuleFunction.PATTERN,
               functionOptions: {
-                property: 'termsOfService',
-                value: '^http.*$',
+                match: '^http.*$',
               },
             },
           },
           {
-            swagger: '2.0',
             info: {
-              version: '1.0.0',
-              title: 'Swagger Petstore',
               termsOfService: 'http://swagger.io/terms/',
             },
           }
@@ -429,8 +361,9 @@ describe('functions', () => {
             summary: '',
             given: '$.responses',
             then: {
+              field: '@key',
               function: RuleFunction.PATTERN,
-              functionOptions: { property: '*', value: '^[0-9]+$' },
+              functionOptions: { match: '^[0-9]+$' },
             },
           },
           {
@@ -451,72 +384,16 @@ describe('functions', () => {
     });
   });
 
-  describe('notContain', () => {
-    test('returns result if property contains value', () => {
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$..*',
-            then: {
-              function: RuleFunction.NOT_CONTAIN,
-              functionOptions: {
-                properties: ['description'],
-                value: '<script',
-              },
-            },
-          },
-          {
-            swagger: '2.0',
-            info: {
-              version: '1.0',
-              title: 'To-do Demo',
-              description:
-                "### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.\n\n<script>console.log('sup homie');</script>",
-            },
-          }
-        ).length
-      ).toEqual(1);
-    });
-
-    test('dont return results if property doesnt contain value', () => {
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$..*',
-            then: {
-              function: RuleFunction.NOT_CONTAIN,
-              functionOptions: {
-                properties: ['description'],
-                value: '<script',
-              },
-            },
-          },
-          {
-            swagger: '2.0',
-            info: {
-              version: '1.0',
-              title: 'To-do Demo',
-              description:
-                '### Notes:\n\nThis OAS2 (Swagger 2) specification defines common models and responses, that other specifications may reference.\n\nFor example, check out the user poperty in the main.oas2 todo-partial model - it references the user model in this specification!\n\nLikewise, the main.oas2 operations reference the shared error responses in this common specification.',
-            },
-          }
-        ).length
-      ).toEqual(0);
-    });
-  });
-
   describe('notEndWith', () => {
     test('return result if property ends with value', () => {
       expect(
         applyRuleToObject(
           {
             summary: '',
-            given: '$.servers',
+            given: '$..url',
             then: {
               function: RuleFunction.NOT_END_WITH,
-              functionOptions: { property: 'url', value: '/' },
+              functionOptions: { value: '/' },
             },
           },
           {
@@ -541,10 +418,10 @@ describe('functions', () => {
         applyRuleToObject(
           {
             summary: '',
-            given: '$.servers',
+            given: '$..url',
             then: {
               function: RuleFunction.NOT_END_WITH,
-              functionOptions: { property: 'url', value: '/' },
+              functionOptions: { value: '/' },
             },
           },
           {
@@ -565,50 +442,87 @@ describe('functions', () => {
     });
   });
 
-  describe('maxLength', () => {
-    test('return result if property is longer than value', () => {
+  describe('length', () => {
+    const vals = [
+      {
+        val: '123',
+      },
+      {
+        val: 3,
+      },
+      {
+        val: [1, 2, 3],
+      },
+      {
+        val: {
+          one: 1,
+          two: 2,
+          three: 3,
+        },
+      },
+    ];
+
+    test('return result if string, number, array, or object is greater than max', () => {
       expect(
         applyRuleToObject(
           {
-            summary: 'summary should be short (description can be long)',
-            given: '$..summary',
-            then: {
-              function: RuleFunction.MAX_LENGTH,
-              functionOptions: { value: 20 },
-            },
+            summary: '',
+            given: '$..val',
+            then: [
+              {
+                function: RuleFunction.LENGTH,
+                functionOptions: { max: 2 },
+              },
+              {
+                function: RuleFunction.LENGTH,
+                functionOptions: { max: 3 },
+              },
+            ],
           },
           {
-            paths: {
-              '/rooms/{room_id}/reserve/': {
-                post: {
-                  summary: 'Book Room Really fsdasddssdfgfdhdsafhsad fsad flong fjkdhfsds',
-                },
-              },
-            },
+            vals,
           }
         ).length
-      ).toEqual(1);
+      ).toEqual(4);
     });
 
-    test('dont return result if property is shorter than value', () => {
+    test('return result if string, number, array, or object is less than min', () => {
       expect(
         applyRuleToObject(
           {
-            summary: 'summary should be short (description can be long)',
-            given: '$..summary',
+            summary: '',
+            given: '$..val',
+            then: [
+              {
+                function: RuleFunction.LENGTH,
+                functionOptions: { min: 3 },
+              },
+              {
+                function: RuleFunction.LENGTH,
+                functionOptions: { min: 4 },
+              },
+            ],
+          },
+          {
+            vals,
+          }
+        ).length
+      ).toEqual(4);
+    });
+
+    test('dont return a result if string, number, array, or object is between min and max', () => {
+      expect(
+        applyRuleToObject(
+          {
+            summary: '',
+            given: '$..val',
             then: {
-              function: RuleFunction.MAX_LENGTH,
-              functionOptions: { value: 20 },
+              function: RuleFunction.LENGTH,
+              functionOptions: { min: 3, max: 3 },
             },
           },
           {
-            paths: {
-              '/rooms/{room_id}/reserve/': {
-                post: {
-                  summary: 'Book',
-                },
-              },
-            },
+            vals,
           }
         ).length
       ).toEqual(0);

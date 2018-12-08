@@ -1,18 +1,7 @@
 import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
 import { RuleFunction, RuleType } from './enums';
 
-export type Rule =
-  | IRule
-  | TruthyRule
-  | IOrRule
-  | IXorRule
-  | IMaxLengthRule
-  | AlphaRule
-  | INotEndWithRule
-  | INotContainRule
-  | IPatternRule
-  | ISchemaRule
-  | IParamCheckRule;
+export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | NotEndWithRule | PatternRule | SchemaRule;
 
 export interface IRule<T = string, O = any> {
   // A short summary of the rule and its intended purpose
@@ -60,118 +49,45 @@ export interface IThen<T, O> {
   functionOptions?: O;
 }
 
-export interface IRuleParam {
-  properties: string | string[];
-}
-
-export interface IRuleStringParam extends IRuleParam {
-  value: string;
-}
-
-export interface IRuleNumberParam {
-  value: number;
-  property?: string;
-}
-
-export interface IRulePatternParam {
-  // value to use for rule
-  value: string;
-
-  // object key to apply rule to
-  property?: string;
-
-  // value to omit from regex matching
-  omit?: string;
-
-  // value to split the property on prior to performing regex matching
-  split?: string;
-}
-
 export interface ITruthRuleOptions {
   /** key(s) of object that should evaluate as 'truthy' (considered true in a boolean context) */
   properties: string | string[];
 }
 export type TruthyRule = IRule<RuleFunction.TRUTHY, ITruthRuleOptions>;
 
-export interface IOrRule extends IRule {
-  then: {
-    function: RuleFunction.OR;
-
-    functionOptions: {
-      // test to verify if any of the provided keys are present in object
-      properties: string[];
-    };
-  };
+export interface IXorRuleOptions {
+  /** test to verify if one (but not all) of the provided keys are present in object */
+  properties: string[];
 }
+export type XorRule = IRule<RuleFunction.XOR, IXorRuleOptions>;
 
-export interface IXorRule extends IRule {
-  then: {
-    function: RuleFunction.XOR;
-
-    functionOptions: {
-      // test to verify if one (but not all) of the provided keys are present in
-      // object
-      properties: string[];
-    };
-  };
+export interface ILengthRuleOptions {
+  min?: number;
+  max?: number;
 }
-
-export interface IMaxLengthRule extends IRule {
-  then: {
-    function: RuleFunction.MAX_LENGTH;
-
-    // verify property is under a specified number of characters
-    functionOptions: IRuleNumberParam;
-  };
-}
+export type LengthRule = IRule<RuleFunction.LENGTH, ILengthRuleOptions>;
 
 export interface IAlphaRuleOptions {
-  /** if sorting objects, use key for comparison */
+  /** if sorting array of objects, which key to use for comparison */
   keyedBy?: string;
 }
 export type AlphaRule = IRule<RuleFunction.ALPHABETICAL, IAlphaRuleOptions>;
 
-export interface INotEndWithRule extends IRule {
-  then: {
-    function: RuleFunction.NOT_END_WITH;
-
-    // verify property does not end with string
-    functionOptions: IRulePatternParam;
-  };
+export interface INotEndWithOptions {
+  value: string;
 }
+export type NotEndWithRule = IRule<RuleFunction.NOT_END_WITH, INotEndWithOptions>;
 
-export interface INotContainRule extends IRule {
-  then: {
-    function: RuleFunction.NOT_CONTAIN;
+export interface IRulePatternOptions {
+  /** regex that target must match */
+  match?: string;
 
-    // verify property does not contain value
-    functionOptions: IRuleStringParam;
-  };
+  /** regex that target must not match */
+  notMatch?: string;
 }
+export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
 
-export interface IPatternRule extends IRule {
-  then: {
-    function: RuleFunction.PATTERN;
-
-    // run regex match
-    functionOptions: IRulePatternParam;
-  };
+export interface ISchemaOptions {
+  schema: object;
 }
-
-export interface ISchemaRule extends IRule {
-  then: {
-    function: RuleFunction.SCHEMA;
-    functionOptions: {
-      schema: object;
-    };
-  };
-}
-
-export interface IParamCheckRule extends IRule {
-  then: {
-    function: RuleFunction.SCHEMA;
-    functionOptions: {
-      schema: object;
-    };
-  };
-}
+export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
