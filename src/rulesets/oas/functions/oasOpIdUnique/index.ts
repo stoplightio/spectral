@@ -1,12 +1,9 @@
-import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
-import { IFunctionPaths } from '../../../../types/spectral';
+import { IFunction, IFunctionResult, Rule } from '../../../../types';
 
-export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, functionPaths: IFunctionPaths) => {
-  const results: IRuleResult[] = [];
+export const oasOpIdUnique: IFunction<Rule> = (targetVal, _options, functionPaths) => {
+  const results: IFunctionResult[] = [];
 
-  const { object } = opts;
-  const { paths = {} } = object;
+  const { paths = {} } = targetVal;
 
   const ids: any[] = [];
 
@@ -17,7 +14,10 @@ export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, functi
           const { operationId } = paths[path][operation];
 
           if (operationId) {
-            ids.push({ path: ['$', 'paths', path, operation, 'operationId'], operationId });
+            ids.push({
+              path: ['$', 'paths', path, operation, 'operationId'],
+              operationId,
+            });
           }
         }
       }
@@ -25,12 +25,11 @@ export const oasOpIdUnique: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, functi
   }
 
   ids.forEach(operationId => {
-    const res = ensureRule(() => {
-      ids.filter(id => id.operationId === operationId.operationId).length.should.equal(1);
-    }, operationId.path || functionPaths.given);
-
-    if (res) {
-      results.push(res);
+    if (ids.filter(id => id.operationId === operationId.operationId).length > 1) {
+      results.push({
+        message: 'operationId must be unique',
+        path: operationId.path || functionPaths.given,
+      });
     }
   });
 

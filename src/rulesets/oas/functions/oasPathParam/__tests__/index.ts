@@ -1,24 +1,21 @@
 import { Spectral } from '../../../../../index';
-import { allOasRules, commonOasFunctions } from '../../../index';
+import { commonOasFunctions, commonOasRules } from '../../../index';
 
-const ruleset = { functions: commonOasFunctions(), rules: allOasRules() };
+const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
 
 describe('oasPathParam', () => {
   const s = new Spectral();
-  s.setFunctions(ruleset.functions || {});
-  s.setRules({
-    oas2: {
-      'path-params': Object.assign(ruleset.rules.oas2['path-params'], {
-        enabled: true,
-      }),
-    },
+  s.addFunctions(ruleset.functions || {});
+  s.addRules({
+    'path-params': Object.assign(ruleset.rules['path-params'], {
+      enabled: true,
+    }),
   });
 
   test('No error if templated path is not used', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -35,7 +32,6 @@ describe('oasPathParam', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo/{bar}': {
@@ -46,7 +42,7 @@ describe('oasPathParam', () => {
       }
     );
     expect(results.results.length).toEqual(1);
-    expect(results.results[0].path).toEqual(['$', 'paths', '/foo/{bar}']);
+    expect(results.results[0].path).toEqual(['paths', '/foo/{bar}']);
     expect(results.results[0].message).toContain('bar');
   });
 
@@ -54,7 +50,6 @@ describe('oasPathParam', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo/{bar}': {
@@ -78,7 +73,6 @@ describe('oasPathParam', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo/{bar}': {
@@ -103,7 +97,6 @@ describe('oasPathParam', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo/{bar}/{bar}': {
@@ -121,7 +114,7 @@ describe('oasPathParam', () => {
       }
     );
     expect(results.results.length).toEqual(1);
-    expect(results.results[0].path).toEqual(['$', 'paths', '/foo/{bar}/{bar}']);
+    expect(results.results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
     expect(results.results[0].message).toContain('bar');
   });
 
@@ -129,7 +122,6 @@ describe('oasPathParam', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo/{bar}': {
@@ -147,14 +139,13 @@ describe('oasPathParam', () => {
       }
     );
     expect(results.results.length).toEqual(1);
-    expect(results.results[0].path).toEqual(['$', 'paths', '/foo/{bar}', 'parameters']);
+    expect(results.results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
   });
 
   test('Error if paths are functionally equivalent', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo/{boo}': {
@@ -182,6 +173,6 @@ describe('oasPathParam', () => {
       }
     );
     expect(results.results.length).toEqual(1);
-    expect(results.results[0].path).toEqual(['$', 'paths']);
+    expect(results.results[0].path).toEqual(['paths']);
   });
 });
