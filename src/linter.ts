@@ -4,11 +4,11 @@ const has = require('lodash/has');
 const filter = require('lodash/filter');
 const omitBy = require('lodash/omitBy');
 
-import { IFunction, IFunctionResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { IFunction, IFunctionResult, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
-  node: { path: jp.PathComponent[]; value: any },
+  node: IGivenNode,
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,

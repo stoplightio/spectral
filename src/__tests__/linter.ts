@@ -27,6 +27,46 @@ const rules = {
 };
 
 describe('linter', () => {
+  describe('functional tests for the given property', () => {
+    let fakeLintingFunction: any;
+
+    beforeEach(() => {
+      fakeLintingFunction = jest.fn();
+      spectral.addFunctions({
+        [fnName]: fakeLintingFunction,
+      });
+      spectral.addRules(rules);
+    });
+
+    describe('when given path is set', () => {
+      test('should pass given path through to lint function', () => {
+        spectral.run(target);
+
+        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
+        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['$', 'responses']);
+        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
+      });
+    });
+
+    describe('when given path is not set', () => {
+      test('should pass through root object', () => {
+        spectral.addRules({
+          example: {
+            summary: '',
+            then: {
+              function: fnName,
+            },
+          },
+        });
+        spectral.run(target);
+
+        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
+        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual([]);
+        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target);
+      });
+    });
+  });
+
   describe('functional tests for the when statement', () => {
     let fakeLintingFunction: any;
 
