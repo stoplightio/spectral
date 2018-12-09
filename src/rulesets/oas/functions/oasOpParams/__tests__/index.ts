@@ -1,24 +1,21 @@
 import { Spectral } from '../../../../../index';
-import { allOasRules, commonOasFunctions } from '../../../index';
+import { commonOasFunctions, commonOasRules } from '../../../index';
 
-const ruleset = { functions: commonOasFunctions(), rules: allOasRules() };
+const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
 
 describe('oasOpParams', () => {
   const s = new Spectral();
-  s.setFunctions(ruleset.functions || {});
-  s.setRules({
-    oas2: {
-      'operation-parameters': Object.assign(ruleset.rules.oas2['operation-parameters'], {
-        enabled: true,
-      }),
-    },
+  s.addFunctions(ruleset.functions || {});
+  s.addRules({
+    'operation-parameters': Object.assign(ruleset.rules['operation-parameters'], {
+      enabled: true,
+    }),
   });
 
   test('No error if no params', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -35,7 +32,6 @@ describe('oasOpParams', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -54,7 +50,6 @@ describe('oasOpParams', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -76,7 +71,6 @@ describe('oasOpParams', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -96,7 +90,6 @@ describe('oasOpParams', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -121,7 +114,6 @@ describe('oasOpParams', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {
@@ -141,7 +133,6 @@ describe('oasOpParams', () => {
     const results = s.run(
       {},
       {
-        format: 'oas2',
         resolvedTarget: {
           paths: {
             '/foo': {

@@ -23,19 +23,6 @@ export const lintNode = (
 
   const targetValue = conditioning.value;
 
-  // const opt: IRuleOpts = {
-  //   object: conditioning.value,
-  //   rule,
-  // };
-
-  // if (rule.given === '$') {
-  //   // allow resolved and stringified targets to be passed to rules when operating on
-  //   // the root path
-  //   if (opts.resolvedTarget) {
-  //     opt.resObj = opts.resolvedTarget;
-  //   }
-  // }
-
   let targets: any[] = [];
   if (rule.then && then.field) {
     if (then.field === '@key') {

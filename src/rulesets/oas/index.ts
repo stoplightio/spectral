@@ -16,48 +16,46 @@ export const commonOasFunctions = (): FunctionCollection => {
 
 export const commonOasRules = (): RuleCollection => ({
   'operation-parameters': {
+    summary: 'Operation parameters are unique and non-repeating.',
+    type: RuleType.VALIDATION,
     then: {
       function: 'oasOpParams',
     },
-    given: '$',
-    summary: 'Operation parameters are unique and non-repeating.',
-    type: RuleType.VALIDATION,
     tags: ['operation'],
   },
   'operation-2xx-response': {
-    then: {
-      function: 'oasOp2xxResponse',
-    },
-    given: `${operationPath}.responses`,
     summary: 'Operation must have at least one `2xx` response.',
     type: RuleType.STYLE,
+    given: operationPath,
+    then: {
+      field: 'responses',
+      function: 'oasOp2xxResponse',
+    },
     tags: ['operation'],
   },
   'operation-operationId-unique': {
+    summary: 'Every operation must have a unique `operationId`.',
+    type: RuleType.VALIDATION,
     then: {
       function: 'oasOpIdUnique',
     },
-    given: '$',
-    summary: 'Every operation must have a unique `operationId`.',
-    type: RuleType.VALIDATION,
     tags: ['operation'],
   },
 
   'operation-formData-consume-check': {
-    then: {
-      function: 'oasOpFormDataConsumeCheck',
-    },
-    given: operationPath,
     summary:
       'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
     type: RuleType.VALIDATION,
+    given: operationPath,
+    then: {
+      function: 'oasOpFormDataConsumeCheck',
+    },
     tags: ['operation'],
   },
   'path-params': {
+    summary: 'Path parameters are correct and valid.',
     type: RuleType.VALIDATION,
-    summary: 'given parameters are correct and valid.',
     severity: ValidationSeverity.Error,
-    given: '$',
     then: {
       function: 'oasPathParam',
     },
@@ -65,31 +63,39 @@ export const commonOasRules = (): RuleCollection => ({
   },
   'contact-properties': {
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: ['email', 'name', 'url'],
-      },
-    },
-    given: '$.info.contact',
     summary: 'Contact object should have `name`, `url` and `email`.',
     type: RuleType.STYLE,
+    given: '$.info.contact',
+    then: [
+      {
+        field: 'name',
+        function: RuleFunction.TRUTHY,
+      },
+      {
+        field: 'url',
+        function: RuleFunction.TRUTHY,
+      },
+      {
+        field: 'email',
+        function: RuleFunction.TRUTHY,
+      },
+    ],
     tags: ['api'],
   },
   'api-host': {
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: ['host'],
-      },
-    },
-    given: '$',
     summary: 'OpenAPI `host` must be present and non-empty string.',
     type: RuleType.STYLE,
+    then: {
+      field: 'host',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['api'],
   },
   'api-schemes': {
+    summary: 'OpenAPI host `schemes` must be present and non-empty array.',
+    type: RuleType.STYLE,
     then: {
+      field: 'schemes',
       function: RuleFunction.SCHEMA,
       functionOptions: {
         schema: {
@@ -101,285 +107,230 @@ export const commonOasRules = (): RuleCollection => ({
         },
       },
     },
-    given: '$.schemes',
-    summary: 'OpenAPI host `schemes` must be present and non-empty array.',
-    type: RuleType.STYLE,
     tags: ['api'],
   },
   'example-value-or-externalValue': {
     enabled: false,
+    summary: 'Example should have either a `value` or `externalValue` field.',
+    type: RuleType.STYLE,
+    given: '$..example',
     then: {
       function: RuleFunction.XOR,
       functionOptions: {
         properties: ['externalValue', 'value'],
       },
     },
-    given: '$..example',
-    summary: 'Example should have either a `value` or `externalValue` field.',
-    type: RuleType.STYLE,
   },
   'info-contact': {
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'contact',
-      },
-    },
-    given: '$.info',
     summary: 'Info object should contain `contact` object.',
     type: RuleType.STYLE,
+    then: {
+      field: 'info.contact',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['api'],
   },
   'info-description': {
     summary: 'OpenAPI object info `description` must be present and non-empty string.',
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'description',
-      },
-    },
-    given: '$.info',
     type: RuleType.STYLE,
+    then: {
+      field: 'info.description',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['api'],
   },
   'info-license': {
+    enabled: false,
     summary: 'OpenAPI object info `license` must be present and non-empty string.',
-    enabled: false,
+    type: RuleType.STYLE,
     then: {
+      field: 'info.license',
       function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'license',
-      },
     },
-    given: '$.info',
-    type: RuleType.STYLE,
-    tags: ['api'],
-  },
-  'license-apimatic-bug': {
-    enabled: false,
-    then: {
-      function: RuleFunction.NOT_CONTAIN,
-      functionOptions: {
-        properties: ['url'],
-        value: 'gruntjs',
-      },
-    },
-    given: '$.license',
-    summary: 'License URL should not point at `gruntjs`.',
-    type: RuleType.STYLE,
     tags: ['api'],
   },
   'license-url': {
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'url',
-      },
-    },
-    given: '$.info.license',
     summary: 'License object should include `url`.',
     type: RuleType.STYLE,
+    then: {
+      field: 'info.license.url',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['api'],
   },
   'model-description': {
-    summary: 'Definition `description` must be present and non-empty string.',
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'description',
-      },
-    },
-    given: '$..definitions.*',
+    summary: 'Definition `description` must be present and non-empty string.',
     type: RuleType.STYLE,
+    given: '$..definitions.*',
+    then: {
+      field: 'description',
+      function: RuleFunction.TRUTHY,
+    },
   },
   'no-eval-in-descriptions': {
     enabled: false,
+    summary: 'Markdown descriptions should not contain `eval(`.',
+    type: RuleType.STYLE,
+    given: '$..*',
     then: [
       {
         field: 'description',
         function: RuleFunction.PATTERN,
         functionOptions: {
-          properties: ['description', 'title'],
-          value: 'eval(',
+          notMatch: 'eval(',
+        },
+      },
+      {
+        field: 'title',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: 'eval(',
         },
       },
     ],
-    given: '$..*',
-    summary: 'Markdown descriptions should not contain `eval(`.',
-    type: RuleType.STYLE,
   },
   'no-script-tags-in-markdown': {
-    then: {
-      function: RuleFunction.NOT_CONTAIN,
-      functionOptions: {
-        properties: ['description'],
-        value: '<script',
-      },
-    },
-    given: '$..*',
     summary: 'Markdown descriptions should not contain `<script>` tags.',
     type: RuleType.STYLE,
+    given: '$..*',
+    then: {
+      field: 'description',
+      function: RuleFunction.PATTERN,
+      functionOptions: {
+        notMatch: '<script',
+      },
+    },
   },
   'only-local-references': {
-    summary: 'References should start with `#/`.',
     enabled: false,
+    summary: 'References should start with `#/`.',
+    type: RuleType.STYLE,
+    given: "$..['$ref']",
     then: {
       function: RuleFunction.PATTERN,
       functionOptions: {
-        value: '^#\\/',
+        match: '^#\\/',
       },
     },
-    given: "$..['$ref']",
-    type: RuleType.STYLE,
     tags: ['references'],
   },
   'openapi-tags': {
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'tags',
-      },
-    },
-    given: '$',
     summary: 'OpenAPI object should have non-empty `tags` array.',
     type: RuleType.STYLE,
+    then: {
+      field: 'tags',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['api'],
   },
   'openapi-tags-alphabetical': {
     enabled: false,
+    summary: 'OpenAPI object should have alphabetical `tags`.',
+    type: RuleType.STYLE,
     then: {
+      field: 'tags',
       function: RuleFunction.ALPHABETICAL,
       functionOptions: {
         keyedBy: 'name',
-        properties: 'tags',
       },
     },
-    given: '$',
-    summary: 'OpenAPI object should have alphabetical `tags`.',
-    type: RuleType.STYLE,
     tags: ['api'],
   },
   'operation-default-response': {
-    summary: 'Operations must have a default response.',
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'default',
-      },
-    },
-    given: '$..paths.*.*.responses',
+    summary: 'Operations must have a default response.',
     type: RuleType.STYLE,
+    given: '$..paths.*.*.responses',
+    then: {
+      field: 'default',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['operation'],
   },
   'operation-description': {
     summary: 'Operation `description` must be present and non-empty string.',
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'description',
-      },
-    },
-    given: operationPath,
     type: RuleType.STYLE,
+    given: operationPath,
+    then: {
+      field: 'description',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['operation'],
   },
   'operation-operationId': {
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'operationId',
-      },
-    },
-    given: operationPath,
     summary: 'Operation should have an `operationId`.',
     type: RuleType.STYLE,
+    given: operationPath,
+    then: {
+      field: 'operationId',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['operation'],
   },
   'operation-singular-tag': {
-    summary: 'Operation must have one and only one tag.',
     enabled: false,
+    summary: 'Operation must have one and only one tag.',
+    type: RuleType.STYLE,
+    given: operationPath,
     then: {
-      function: RuleFunction.SCHEMA,
+      field: 'tags',
+      function: RuleFunction.LENGTH,
       functionOptions: {
-        schema: {
-          items: {
-            type: 'string',
-          },
-        },
-        maxItems: 1,
-        minItems: 1,
-        type: 'array',
+        min: 1,
+        max: 1,
       },
     },
-    given: `${operationPath}.tags`,
-    type: RuleType.STYLE,
     tags: ['operation'],
   },
   'operation-summary-formatted': {
-    summary: 'Operation `summary` should start with upper case and end with a dot.',
     enabled: false,
+    summary: 'Operation `summary` should start with upper case and end with a dot.',
+    type: RuleType.STYLE,
+    given: operationPath,
     then: {
+      field: 'summary',
       function: RuleFunction.PATTERN,
       functionOptions: {
-        value: '^[A-Z].*\\.$',
+        match: '^[A-Z].*\\.$',
       },
     },
-    given: `${operationPath}.summary`,
-    type: RuleType.STYLE,
-    tags: ['operation'],
-  },
-  'operation-summary-or-description': {
-    then: {
-      function: RuleFunction.OR,
-      functionOptions: {
-        properties: ['description', 'summary'],
-      },
-    },
-    given: operationPath,
-    summary: 'Operation should have `summary` or `description`.',
-    type: RuleType.STYLE,
     tags: ['operation'],
   },
   'operation-tags': {
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'tags',
-      },
-    },
-    given: operationPath,
     summary: 'Operation should have non-empty `tags` array.',
     type: RuleType.STYLE,
+    given: operationPath,
+    then: {
+      field: 'tags',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['operation'],
   },
   'parameter-description': {
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'description',
-      },
-    },
-    given: '$..paths.*.*.parameters',
     summary: 'Parameter objects should have a `description`.',
     type: RuleType.STYLE,
+    given: '$..paths.*.*.parameters',
+    then: {
+      field: 'description',
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['parameters'],
   },
   'path-declarations-must-exist': {
     summary: 'given declarations cannot be empty, ex.`/given/{}` is invalid.',
+    type: RuleType.STYLE,
+    given: '$..paths[*]',
     then: {
       field: '@key',
-      function: RuleFunction.NOT_CONTAIN,
+      function: RuleFunction.PATTERN,
       functionOptions: {
-        value: '{}',
+        notMatch: '{}',
       },
     },
-    given: '$..paths[*]',
-    type: RuleType.STYLE,
     tags: ['given'],
   },
   'path-keys-no-trailing-slash': {
@@ -396,19 +347,21 @@ export const commonOasRules = (): RuleCollection => ({
   },
   'path-not-include-query': {
     summary: 'given keys should not include a query string.',
+    type: RuleType.STYLE,
+    given: '$..paths[*]',
     then: {
       field: '@key',
-      function: RuleFunction.NOT_CONTAIN,
+      function: RuleFunction.PATTERN,
       functionOptions: {
-        value: '\\?',
+        notMatch: '\\?',
       },
     },
-    given: '$..paths[*]',
-    type: RuleType.STYLE,
     tags: ['given'],
   },
   'schema-items-is-object': {
     summary: 'Schema containing `items` requires the items property to be an object.',
+    type: RuleType.VALIDATION,
+    given: '$..schema.items',
     then: {
       function: RuleFunction.SCHEMA,
       functionOptions: {
@@ -417,45 +370,40 @@ export const commonOasRules = (): RuleCollection => ({
         },
       },
     },
-    given: '$..schema.items',
-    type: RuleType.VALIDATION,
   },
   'server-not-example.com': {
     enabled: false,
-    then: {
-      function: RuleFunction.NOT_CONTAIN,
-      functionOptions: {
-        properties: ['url'],
-        value: 'example.com',
-      },
-    },
-    given: '$.servers',
     summary: 'Server URL should not point at `example.com`.',
     type: RuleType.STYLE,
+    given: '$.servers',
+    then: {
+      field: 'url',
+      function: RuleFunction.PATTERN,
+      functionOptions: {
+        notMatch: 'example.com',
+      },
+    },
   },
   'server-trailing-slash': {
+    summary: 'Server URL should not have a trailing slash.',
+    type: RuleType.STYLE,
+    given: '$.servers',
     then: {
+      field: 'url',
       function: RuleFunction.NOT_END_WITH,
       functionOptions: {
-        property: 'url',
         value: '/',
       },
     },
-    given: '$.servers',
-    summary: 'Server URL should not have a trailing slash.',
-    type: RuleType.STYLE,
   },
   'tag-description': {
     enabled: false,
-    then: {
-      function: RuleFunction.TRUTHY,
-      functionOptions: {
-        properties: 'description',
-      },
-    },
-    given: '$.tags',
     summary: 'Tag object should have a `description`.',
     type: RuleType.STYLE,
+    given: '$.tags[*].description',
+    then: {
+      function: RuleFunction.TRUTHY,
+    },
     tags: ['api'],
   },
 });

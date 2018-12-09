@@ -1,18 +1,17 @@
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
-import { IFunctionPaths } from '../../../../types/spectral';
+import { IFunction, IFunctionResult, Rule } from '../../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
-export const oasPathParam: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, paths: IFunctionPaths) => {
-  const results: IRuleResult[] = [];
+export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) => {
+  const results: IFunctionResult[] = [];
 
-  let { object } = opts;
-  const { resObj } = opts;
+  let object = targetVal;
+  const { resolved } = vals;
 
-  if (!resObj) {
+  if (!resolved) {
     console.warn('oasPathParam expects a resolved object, but none was provided. Results may not be correct.');
   } else {
-    object = resObj;
+    object = resolved;
   }
 
   /**
@@ -177,7 +176,7 @@ To fix, remove this parameter.`,
   return results;
 };
 
-function generateResult(message: string, path: Array<string | number>): IRuleResult {
+function generateResult(message: string, path: Array<string | number>): IFunctionResult {
   return {
     message,
     path,
