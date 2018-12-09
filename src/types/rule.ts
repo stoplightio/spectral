@@ -4,17 +4,17 @@ import { RuleFunction, RuleType } from './enums';
 export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | NotEndWithRule | PatternRule | SchemaRule;
 
 export interface IRule<T = string, O = any> {
-  // A short summary of the rule and its intended purpose
-  summary: string;
-
   type?: RuleType;
+
+  // A short summary of the rule and its intended purpose
+  summary?: string;
+
+  // A long-form description of the rule formatted in markdown
+  description?: string;
 
   // The severity of results this rule generates
   severity?: ValidationSeverity;
   severityLabel?: ValidationSeverityLabel;
-
-  // A long-form description of the rule formatted in markdown
-  description?: string;
 
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];
@@ -23,7 +23,7 @@ export interface IRule<T = string, O = any> {
   enabled?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
-  given: string;
+  given?: string;
 
   when?: {
     // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object

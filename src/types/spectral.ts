@@ -34,3 +34,8 @@ export interface IRuleResult {
   path: ObjPath;
   message: string;
 }
+
+export interface IGivenNode {
+  path: ObjPath;
+  value: any;
+}
