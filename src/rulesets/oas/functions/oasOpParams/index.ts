@@ -1,16 +1,15 @@
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
-import { IFunctionPaths } from '../../../../types/spectral';
+import { IFunction, IFunctionResult, Rule } from '../../../../types';
 
-export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>, paths: IFunctionPaths) => {
-  const results: IRuleResult[] = [];
+export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) => {
+  const results: IFunctionResult[] = [];
 
-  let { object } = opts;
-  const { resObj } = opts;
+  let object = targetVal;
+  const { resolved } = vals;
 
-  if (!resObj) {
+  if (!resolved) {
     console.warn('oasOpParams expects a resolved object, but none was provided. Results may not be correct.');
   } else {
-    object = resObj;
+    object = resolved;
   }
 
   /**
