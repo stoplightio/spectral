@@ -1,7 +1,15 @@
 import * as jp from 'jsonpath';
 
 import { lintNode } from './linter';
-import { FunctionCollection, IRuleResult, IRunOpts, IRunResult, IRunRule, RunRuleCollection } from './types';
+import {
+  FunctionCollection,
+  IGivenNode,
+  IRuleResult,
+  IRunOpts,
+  IRunResult,
+  IRunRule,
+  RunRuleCollection,
+} from './types';
 
 export const runRules = (
   target: object,
@@ -32,7 +40,15 @@ export const runRules = (
 const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, opts: IRunOpts): IRuleResult[] => {
   let results: IRuleResult[] = [];
 
-  const nodes = jp.nodes(target, rule.given);
+  let nodes: IGivenNode[] = [];
+  if (rule.given) {
+    nodes = jp.nodes(target, rule.given);
+  } else {
+    nodes.push({
+      path: [],
+      value: target,
+    });
+  }
 
   for (const node of nodes) {
     try {
