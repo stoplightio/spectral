@@ -1,4 +1,4 @@
-import { Spectral } from '../../../../../spectral';
+import { Spectral } from '../../../spectral';
 import { commonOasRules } from '../index';
 
 const ruleset = { rules: commonOasRules() };
