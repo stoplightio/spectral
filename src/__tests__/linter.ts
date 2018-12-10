@@ -53,6 +53,7 @@ describe('linter', () => {
         spectral.addRules({
           example: {
             summary: '',
+            given: '$',
             then: {
               function: fnName,
             },
