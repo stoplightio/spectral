@@ -1,18 +1,20 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
+import { oas3Rules } from '../index';
 
-const ruleset = { rules: commonOasRules() };
+const ruleset = { rules: oas3Rules() };
 
-describe('server-not-example.com', () => {
+describe('server-trailing-slash', () => {
   const s = new Spectral();
   s.addRules({
-    'server-not-example.com': Object.assign(ruleset.rules['server-not-example.com'], {
+    'server-trailing-slash': Object.assign(ruleset.rules['server-trailing-slash'], {
       enabled: true,
     }),
   });
 
   test('validate a correct object', () => {
     const results = s.run({
+      openapi: '3.0.0',
+      paths: {},
       servers: [
         {
           url: 'https://stoplight.io',
@@ -22,11 +24,13 @@ describe('server-not-example.com', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if server is example.com', () => {
+  test('return errors if server url ends with a slash', () => {
     const results = s.run({
+      openapi: '3.0.0',
+      paths: {},
       servers: [
         {
-          url: 'https://example.com',
+          url: 'https://stoplight.io/',
         },
       ],
     });

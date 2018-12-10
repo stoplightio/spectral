@@ -68,36 +68,6 @@ export const commonOasRules = (): RuleCollection => ({
   },
 
   // Generic Rules
-
-  'api-host': {
-    summary: 'OpenAPI `host` must be present and non-empty string.',
-    type: RuleType.STYLE,
-    given: '$',
-    then: {
-      field: 'host',
-      function: RuleFunction.TRUTHY,
-    },
-    tags: ['api'],
-  },
-  'api-schemes': {
-    summary: 'OpenAPI host `schemes` must be present and non-empty array.',
-    type: RuleType.STYLE,
-    given: '$',
-    then: {
-      field: 'schemes',
-      function: RuleFunction.SCHEMA,
-      functionOptions: {
-        schema: {
-          items: {
-            type: 'string',
-          },
-          minItems: 1,
-          type: 'array',
-        },
-      },
-    },
-    tags: ['api'],
-  },
   'contact-properties': {
     enabled: false,
     summary: 'Contact object should have `name`, `url` and `email`.',
@@ -172,16 +142,6 @@ export const commonOasRules = (): RuleCollection => ({
       function: RuleFunction.TRUTHY,
     },
     tags: ['api'],
-  },
-  'model-description': {
-    enabled: false,
-    summary: 'Definition `description` must be present and non-empty string.',
-    type: RuleType.STYLE,
-    given: '$..definitions[*]',
-    then: {
-      field: 'description',
-      function: RuleFunction.TRUTHY,
-    },
   },
   'no-eval-in-markdown': {
     enabled: false,
@@ -396,31 +356,6 @@ export const commonOasRules = (): RuleCollection => ({
         schema: {
           type: 'object',
         },
-      },
-    },
-  },
-  'server-not-example.com': {
-    enabled: false,
-    summary: 'Server URL should not point at `example.com`.',
-    type: RuleType.STYLE,
-    given: '$.servers[*]',
-    then: {
-      field: 'url',
-      function: RuleFunction.PATTERN,
-      functionOptions: {
-        notMatch: 'example.com',
-      },
-    },
-  },
-  'server-trailing-slash': {
-    summary: 'Server URL should not have a trailing slash.',
-    type: RuleType.STYLE,
-    given: '$.servers[*]',
-    then: {
-      field: 'url',
-      function: RuleFunction.PATTERN,
-      functionOptions: {
-        notMatch: '/$',
       },
     },
   },
