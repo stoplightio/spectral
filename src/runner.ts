@@ -41,7 +41,9 @@ const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, 
   let results: IRuleResult[] = [];
 
   let nodes: IGivenNode[] = [];
-  if (rule.given) {
+
+  // don't have to spend time running jsonpath if given is $ - can just use the root object
+  if (rule.given && rule.given !== '$') {
     nodes = jp.nodes(target, rule.given);
   } else {
     nodes.push({

@@ -18,6 +18,7 @@ export const commonOasRules = (): RuleCollection => ({
   'operation-parameters': {
     summary: 'Operation parameters are unique and non-repeating.',
     type: RuleType.VALIDATION,
+    given: '$',
     then: {
       function: 'oasOpParams',
     },
@@ -36,6 +37,7 @@ export const commonOasRules = (): RuleCollection => ({
   'operation-operationId-unique': {
     summary: 'Every operation must have a unique `operationId`.',
     type: RuleType.VALIDATION,
+    given: '$',
     then: {
       function: 'oasOpIdUnique',
     },
@@ -56,6 +58,7 @@ export const commonOasRules = (): RuleCollection => ({
     summary: 'Path parameters are correct and valid.',
     type: RuleType.VALIDATION,
     severity: ValidationSeverity.Error,
+    given: '$',
     then: {
       function: 'oasPathParam',
     },
@@ -85,6 +88,7 @@ export const commonOasRules = (): RuleCollection => ({
   'api-host': {
     summary: 'OpenAPI `host` must be present and non-empty string.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'host',
       function: RuleFunction.TRUTHY,
@@ -94,6 +98,7 @@ export const commonOasRules = (): RuleCollection => ({
   'api-schemes': {
     summary: 'OpenAPI host `schemes` must be present and non-empty array.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'schemes',
       function: RuleFunction.SCHEMA,
@@ -124,6 +129,7 @@ export const commonOasRules = (): RuleCollection => ({
   'info-contact': {
     summary: 'Info object should contain `contact` object.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'info.contact',
       function: RuleFunction.TRUTHY,
@@ -133,6 +139,7 @@ export const commonOasRules = (): RuleCollection => ({
   'info-description': {
     summary: 'OpenAPI object info `description` must be present and non-empty string.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'info.description',
       function: RuleFunction.TRUTHY,
@@ -143,6 +150,7 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'OpenAPI object info `license` must be present and non-empty string.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'info.license',
       function: RuleFunction.TRUTHY,
@@ -153,6 +161,7 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'License object should include `url`.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'info.license.url',
       function: RuleFunction.TRUTHY,
@@ -220,6 +229,7 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'OpenAPI object should have non-empty `tags` array.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'tags',
       function: RuleFunction.TRUTHY,
@@ -230,6 +240,7 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'OpenAPI object should have alphabetical `tags`.',
     type: RuleType.STYLE,
+    given: '$',
     then: {
       field: 'tags',
       function: RuleFunction.ALPHABETICAL,
