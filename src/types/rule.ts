@@ -23,7 +23,7 @@ export interface IRule<T = string, O = any> {
   enabled?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
-  given?: string;
+  given: string;
 
   when?: {
     // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
