@@ -7,7 +7,7 @@ export const commonOasFunctions = (): FunctionCollection => {
   return {
     oasPathParam: require('./functions/oasPathParam').oasPathParam,
     oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
-    oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
+    // oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined,
     oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
     oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
     oasOpParams: require('./functions/oasOpParams').oasOpParams,
@@ -15,15 +15,8 @@ export const commonOasFunctions = (): FunctionCollection => {
 };
 
 export const commonOasRules = (): RuleCollection => ({
-  'operation-parameters': {
-    summary: 'Operation parameters are unique and non-repeating.',
-    type: RuleType.VALIDATION,
-    given: '$',
-    then: {
-      function: 'oasOpParams',
-    },
-    tags: ['operation'],
-  },
+  // Custom Rules
+
   'operation-2xx-response': {
     summary: 'Operation must have at least one `2xx` response.',
     type: RuleType.STYLE,
@@ -31,6 +24,16 @@ export const commonOasRules = (): RuleCollection => ({
     then: {
       field: 'responses',
       function: 'oasOp2xxResponse',
+    },
+    tags: ['operation'],
+  },
+  'operation-formData-consume-check': {
+    summary:
+      'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
+    type: RuleType.VALIDATION,
+    given: operationPath,
+    then: {
+      function: 'oasOpFormDataConsumeCheck',
     },
     tags: ['operation'],
   },
@@ -44,13 +47,12 @@ export const commonOasRules = (): RuleCollection => ({
     tags: ['operation'],
   },
 
-  'operation-formData-consume-check': {
-    summary:
-      'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
+  'operation-parameters': {
+    summary: 'Operation parameters are unique and non-repeating.',
     type: RuleType.VALIDATION,
-    given: operationPath,
+    given: '$',
     then: {
-      function: 'oasOpFormDataConsumeCheck',
+      function: 'oasOpParams',
     },
     tags: ['operation'],
   },
@@ -64,27 +66,9 @@ export const commonOasRules = (): RuleCollection => ({
     },
     tags: ['given'],
   },
-  'contact-properties': {
-    enabled: false,
-    summary: 'Contact object should have `name`, `url` and `email`.',
-    type: RuleType.STYLE,
-    given: '$.info.contact',
-    then: [
-      {
-        field: 'name',
-        function: RuleFunction.TRUTHY,
-      },
-      {
-        field: 'url',
-        function: RuleFunction.TRUTHY,
-      },
-      {
-        field: 'email',
-        function: RuleFunction.TRUTHY,
-      },
-    ],
-    tags: ['api'],
-  },
+
+  // Generic Rules
+
   'api-host': {
     summary: 'OpenAPI `host` must be present and non-empty string.',
     type: RuleType.STYLE,
@@ -112,6 +96,27 @@ export const commonOasRules = (): RuleCollection => ({
         },
       },
     },
+    tags: ['api'],
+  },
+  'contact-properties': {
+    enabled: false,
+    summary: 'Contact object should have `name`, `url` and `email`.',
+    type: RuleType.STYLE,
+    given: '$.info.contact',
+    then: [
+      {
+        field: 'name',
+        function: RuleFunction.TRUTHY,
+      },
+      {
+        field: 'url',
+        function: RuleFunction.TRUTHY,
+      },
+      {
+        field: 'email',
+        function: RuleFunction.TRUTHY,
+      },
+    ],
     tags: ['api'],
   },
   'example-value-or-externalValue': {
@@ -172,13 +177,13 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'Definition `description` must be present and non-empty string.',
     type: RuleType.STYLE,
-    given: '$..definitions.*',
+    given: '$..definitions[*]',
     then: {
       field: 'description',
       function: RuleFunction.TRUTHY,
     },
   },
-  'no-eval-in-descriptions': {
+  'no-eval-in-markdown': {
     enabled: false,
     summary: 'Markdown descriptions should not contain `eval(`.',
     type: RuleType.STYLE,
@@ -188,14 +193,14 @@ export const commonOasRules = (): RuleCollection => ({
         field: 'description',
         function: RuleFunction.PATTERN,
         functionOptions: {
-          notMatch: 'eval(',
+          notMatch: 'eval\\(',
         },
       },
       {
         field: 'title',
         function: RuleFunction.PATTERN,
         functionOptions: {
-          notMatch: 'eval(',
+          notMatch: 'eval\\(',
         },
       },
     ],
@@ -204,13 +209,22 @@ export const commonOasRules = (): RuleCollection => ({
     summary: 'Markdown descriptions should not contain `<script>` tags.',
     type: RuleType.STYLE,
     given: '$..*',
-    then: {
-      field: 'description',
-      function: RuleFunction.PATTERN,
-      functionOptions: {
-        notMatch: '<script',
+    then: [
+      {
+        field: 'description',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: '<script',
+        },
       },
-    },
+      {
+        field: 'title',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: '<script',
+        },
+      },
+    ],
   },
   'only-local-references': {
     enabled: false,
@@ -225,17 +239,6 @@ export const commonOasRules = (): RuleCollection => ({
     },
     tags: ['references'],
   },
-  'openapi-tags': {
-    enabled: false,
-    summary: 'OpenAPI object should have non-empty `tags` array.',
-    type: RuleType.STYLE,
-    given: '$',
-    then: {
-      field: 'tags',
-      function: RuleFunction.TRUTHY,
-    },
-    tags: ['api'],
-  },
   'openapi-tags-alphabetical': {
     enabled: false,
     summary: 'OpenAPI object should have alphabetical `tags`.',
@@ -247,6 +250,17 @@ export const commonOasRules = (): RuleCollection => ({
       functionOptions: {
         keyedBy: 'name',
       },
+    },
+    tags: ['api'],
+  },
+  'openapi-tags': {
+    enabled: false,
+    summary: 'OpenAPI object should have non-empty `tags` array.',
+    type: RuleType.STYLE,
+    given: '$',
+    then: {
+      field: 'tags',
+      function: RuleFunction.TRUTHY,
     },
     tags: ['api'],
   },
@@ -283,14 +297,13 @@ export const commonOasRules = (): RuleCollection => ({
   },
   'operation-singular-tag': {
     enabled: false,
-    summary: 'Operation must have one and only one tag.',
+    summary: 'Operation may only have one tag.',
     type: RuleType.STYLE,
     given: operationPath,
     then: {
       field: 'tags',
       function: RuleFunction.LENGTH,
       functionOptions: {
-        min: 1,
         max: 1,
       },
     },
@@ -324,7 +337,11 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'Parameter objects should have a `description`.',
     type: RuleType.STYLE,
-    given: '$..paths.*.*.parameters',
+    given: '$..parameters[*]',
+    when: {
+      field: '@key',
+      pattern: '^(?!.*(\\$ref))',
+    },
     then: {
       field: 'description',
       function: RuleFunction.TRUTHY,
@@ -334,7 +351,7 @@ export const commonOasRules = (): RuleCollection => ({
   'path-declarations-must-exist': {
     summary: 'given declarations cannot be empty, ex.`/given/{}` is invalid.',
     type: RuleType.STYLE,
-    given: '$..paths[*]',
+    given: '$..paths',
     then: {
       field: '@key',
       function: RuleFunction.PATTERN,
@@ -346,7 +363,7 @@ export const commonOasRules = (): RuleCollection => ({
   },
   'path-keys-no-trailing-slash': {
     summary: 'given keys should not end with a slash.',
-    given: '$..paths[*]',
+    given: '$..paths',
     then: {
       field: '@key',
       function: RuleFunction.NOT_END_WITH,
@@ -359,7 +376,7 @@ export const commonOasRules = (): RuleCollection => ({
   'path-not-include-query': {
     summary: 'given keys should not include a query string.',
     type: RuleType.STYLE,
-    given: '$..paths[*]',
+    given: '$..paths',
     then: {
       field: '@key',
       function: RuleFunction.PATTERN,
@@ -377,7 +394,7 @@ export const commonOasRules = (): RuleCollection => ({
       function: RuleFunction.SCHEMA,
       functionOptions: {
         schema: {
-          function: 'object',
+          type: 'object',
         },
       },
     },
@@ -386,7 +403,7 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'Server URL should not point at `example.com`.',
     type: RuleType.STYLE,
-    given: '$.servers',
+    given: '$.servers[*]',
     then: {
       field: 'url',
       function: RuleFunction.PATTERN,
@@ -398,12 +415,12 @@ export const commonOasRules = (): RuleCollection => ({
   'server-trailing-slash': {
     summary: 'Server URL should not have a trailing slash.',
     type: RuleType.STYLE,
-    given: '$.servers',
+    given: '$.servers[*]',
     then: {
       field: 'url',
-      function: RuleFunction.NOT_END_WITH,
+      function: RuleFunction.PATTERN,
       functionOptions: {
-        value: '/',
+        notMatch: '/$',
       },
     },
   },
@@ -411,8 +428,9 @@ export const commonOasRules = (): RuleCollection => ({
     enabled: false,
     summary: 'Tag object should have a `description`.',
     type: RuleType.STYLE,
-    given: '$.tags[*].description',
+    given: '$.tags[*]',
     then: {
+      field: 'description',
       function: RuleFunction.TRUTHY,
     },
     tags: ['api'],

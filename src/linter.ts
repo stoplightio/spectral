@@ -2,7 +2,7 @@ import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
 const filter = require('lodash/filter');
-const omitBy = require('lodash/omitBy');
+const pickBy = require('lodash/pickBy');
 
 import { IFunction, IFunctionResult, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
@@ -144,11 +144,14 @@ function keyAndOptionalPattern(originalValue: any, pattern?: string) {
           value: leanValue,
         };
       } else {
-        const leanValue = pattern
-          ? omitBy(originalValue, (_v: any, key: any) => {
-              return key.match(pattern) === null;
-            })
-          : originalValue;
+        let leanValue = originalValue;
+        if (pattern) {
+          const re = new RegExp(pattern);
+          leanValue = pickBy(originalValue, (_v: any, key: any) => {
+            return re.test(key);
+          });
+        }
+
         return {
           lint: !!Object.keys(leanValue).length,
           value: leanValue,
