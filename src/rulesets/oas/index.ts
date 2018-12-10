@@ -366,9 +366,9 @@ export const commonOasRules = (): RuleCollection => ({
     given: '$..paths',
     then: {
       field: '@key',
-      function: RuleFunction.NOT_END_WITH,
+      function: RuleFunction.PATTERN,
       functionOptions: {
-        value: '/',
+        notMatch: '/$',
       },
     },
     tags: ['given'],

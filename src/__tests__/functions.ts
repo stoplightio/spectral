@@ -384,64 +384,6 @@ describe('functions', () => {
     });
   });
 
-  describe('notEndWith', () => {
-    test('return result if property ends with value', () => {
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$..url',
-            then: {
-              function: RuleFunction.NOT_END_WITH,
-              functionOptions: { value: '/' },
-            },
-          },
-          {
-            swagger: '2.0',
-            servers: [
-              {
-                url: 'http://localhost:5000/',
-                description: 'Development server',
-              },
-              {
-                url: 'https://rooms-staging.wework.com',
-                description: 'Staging server',
-              },
-            ],
-          }
-        ).length
-      ).toEqual(1);
-    });
-
-    test('dont return result if property doesnt end with value', () => {
-      expect(
-        applyRuleToObject(
-          {
-            summary: '',
-            given: '$..url',
-            then: {
-              function: RuleFunction.NOT_END_WITH,
-              functionOptions: { value: '/' },
-            },
-          },
-          {
-            swagger: '2.0',
-            servers: [
-              {
-                url: 'http://localhost:5000',
-                description: 'Development server',
-              },
-              {
-                url: 'https://rooms-staging.wework.com',
-                description: 'Staging server',
-              },
-            ],
-          }
-        ).length
-      ).toEqual(0);
-    });
-  });
-
   describe('length', () => {
     const vals = [
       {
