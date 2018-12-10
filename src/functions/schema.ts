@@ -17,7 +17,12 @@ import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
-  if (!targetVal) return results;
+  if (!targetVal)
+    return [
+      {
+        message: `${paths.target ? paths.target.join('.') : 'property'} does not exist`,
+      },
+    ];
 
   const { schema: schemaObj } = opts;
 
