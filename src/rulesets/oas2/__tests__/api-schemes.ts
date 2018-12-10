@@ -1,7 +1,7 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
+import { oas2Rules } from '../index';
 
-const ruleset = { rules: commonOasRules() };
+const ruleset = { rules: oas2Rules() };
 
 describe('api-schemes', () => {
   const s = new Spectral();
