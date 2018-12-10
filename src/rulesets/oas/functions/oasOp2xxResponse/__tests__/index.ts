@@ -1,5 +1,5 @@
 import { Spectral } from '../../../../../spectral';
-import { commonOasFunctions, commonOasRules } from '../../../index';
+import { commonOasFunctions, commonOasRules } from '../../../../oas/index';
 
 const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
 
