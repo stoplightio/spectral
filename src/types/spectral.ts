@@ -5,6 +5,7 @@ import { IRule, Rule } from './rule';
 
 export type FunctionCollection = Dictionary<IFunction, string>;
 export type RuleCollection = Dictionary<Rule, string>;
+export type PartialRuleCollection = Dictionary<Partial<Rule>, string>;
 export type RunRuleCollection = Dictionary<IRunRule, string>;
 
 export interface IRunRule extends IRule {
@@ -12,10 +13,11 @@ export interface IRunRule extends IRule {
 }
 
 /**
- * Name of the rule with either a rule definition (when definining/overriding
- * rules) or boolean (when enabling/disabling a default rule)
+ * Name of the rule with a boolean value to enable or disable the rule.
+ *
+ * Will expand on this format later to allow for things like overriding rule options.
  */
-export type RuleDeclaration = Dictionary<Partial<Rule> | boolean, string>;
+export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IRunOpts {
   /**
