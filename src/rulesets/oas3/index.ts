@@ -9,6 +9,7 @@ export { commonOasFunctions as oas3Functions } from '../oas';
 
 export const oas3Rules = () => {
   return merge(commonOasRules(), {
+    // specifcication validation
     'oas3-schema': {
       summary: 'Validate structure of OpenAPIv3 specification.',
       type: RuleType.VALIDATION,
@@ -20,6 +21,62 @@ export const oas3Rules = () => {
         },
       },
       tags: ['schema'],
+    },
+
+    // generic rules
+    'api-servers': {
+      summary: 'OpenAPI `servers` must be present and non-empty string.',
+      type: RuleType.STYLE,
+      given: '$',
+      then: {
+        field: 'servers',
+        function: RuleFunction.SCHEMA,
+        functionOptions: {
+          schema: {
+            items: {
+              type: 'object',
+            },
+            minItems: 1,
+            type: 'array',
+          },
+        },
+      },
+      tags: ['api'],
+    },
+    'model-description': {
+      enabled: false,
+      summary: 'Model `description` must be present and non-empty string.',
+      type: RuleType.STYLE,
+      given: '$.components.schemas[*]',
+      then: {
+        field: 'description',
+        function: RuleFunction.TRUTHY,
+      },
+    },
+    'server-not-example.com': {
+      enabled: false,
+      summary: 'Server URL should not point at `example.com`.',
+      type: RuleType.STYLE,
+      given: '$.servers[*]',
+      then: {
+        field: 'url',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: 'example.com',
+        },
+      },
+    },
+    'server-trailing-slash': {
+      summary: 'Server URL should not have a trailing slash.',
+      type: RuleType.STYLE,
+      given: '$.servers[*]',
+      then: {
+        field: 'url',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: '/$',
+        },
+      },
     },
   });
 };
