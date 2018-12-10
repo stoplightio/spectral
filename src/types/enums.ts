@@ -6,7 +6,6 @@ export enum RuleType {
 export enum RuleFunction {
   ALPHABETICAL = 'alphabetical',
   LENGTH = 'length',
-  NOT_END_WITH = 'notEndWith',
   PATTERN = 'pattern',
   SCHEMA = 'schema',
   TRUTHY = 'truthy',

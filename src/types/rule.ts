@@ -1,7 +1,7 @@
 import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
 import { RuleFunction, RuleType } from './enums';
 
-export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | NotEndWithRule | PatternRule | SchemaRule;
+export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | SchemaRule;
 
 export interface IRule<T = string, O = any> {
   type?: RuleType;
@@ -72,11 +72,6 @@ export interface IAlphaRuleOptions {
   keyedBy?: string;
 }
 export type AlphaRule = IRule<RuleFunction.ALPHABETICAL, IAlphaRuleOptions>;
-
-export interface INotEndWithOptions {
-  value: string;
-}
-export type NotEndWithRule = IRule<RuleFunction.NOT_END_WITH, INotEndWithOptions>;
 
 export interface IRulePatternOptions {
   /** regex that target must match */
