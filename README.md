@@ -9,7 +9,7 @@
 - Use JSON paths to apply rules / functions to specific parts of your JSON objects.
 - Built-in set of functions to help build custom rules. Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Create custom functions for advanced use cases.
-- Optional ready to use rules and functions to validate and lint OpenAPI v2 _and_ v3 documents.
+- Optional ready to use rules and functions to validate and lint OpenAPI Specification (OAS) 2 _and_ 3 documents.
 - Validate JSON with [Ajv](https://github.com/epoberezkin/ajv).
 
 ## Installation
@@ -147,7 +147,7 @@ console.log(JSON.stringify(results, null, 4));
 
 ### Linting an OAS 2 document:
 
-Spectral also includes a number of ready made rules and functions for OpenAPI 2 and 3 documents. This example uses the OpenAPI 2 rules to lint an OpenAPI 2 document.
+Spectral also includes a number of ready made rules and functions for OpenAPI Specification (OAS) 2 and 3 documents. This example uses the OAS 2 rules to lint a document.
 
 You can also add to these rules to create a customized linting style guide for your OAS documents.
 
@@ -210,9 +210,11 @@ With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 do
 
 ## Contributing
 
-If you are interested in contributing to Spectral itself, check out our [contributing docs](CONTRIBUTING.md) to get started.
+If you are interested in contributing to Spectral itself, check out our [contributing docs](CONTRIBUTING.md) [Coming soon!] to get started.
 
-If you are using Spectral in your open source project and want to be listed in the examples section, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
+Also, most of the interesting projects are built _with_ Spectral. Please consider using Spectral in a project or contribute to an [existing one](#example-implementations).
+
+If you are using Spectral in your project and want to be listed in the examples section, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
 
 ## Helpful Links
 
