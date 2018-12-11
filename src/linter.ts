@@ -88,8 +88,8 @@ export const lintNode = (
         return {
           name: rule.name,
           message: result.message,
-          severity: ValidationSeverity.Error || rule.severity,
-          severityLabel: ValidationSeverityLabel.Error || rule.severityLabel,
+          severity: rule.severity || ValidationSeverity.Error,
+          severityLabel: rule.severityLabel || ValidationSeverityLabel.Error,
           path: result.path || targetPath,
         };
       })

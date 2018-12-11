@@ -43,7 +43,7 @@ describe('linter', () => {
     expect(result.results.length).toBe(0);
   });
 
-  test('should return extra properties', () => {
+  test('should return all properties', () => {
     const message = '4xx responses require a description';
 
     spectral.addFunctions({
@@ -92,6 +92,36 @@ describe('linter', () => {
       severityLabel: ValidationSeverityLabel.Error,
       path: ['responses', '404', 'description'],
     });
+  });
+
+  test('should support rule overriding severity', () => {
+    spectral.addFunctions({
+      func1: () => {
+        return [
+          {
+            message: 'foo',
+          },
+        ];
+      },
+    });
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        severity: ValidationSeverity.Info,
+        severityLabel: ValidationSeverityLabel.Info,
+        then: {
+          function: 'func1',
+        },
+      },
+    });
+
+    const result = spectral.run({
+      x: true,
+    });
+
+    expect(result.results[0].severity).toEqual(ValidationSeverity.Info);
+    expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
   });
 
   describe('functional tests for the given property', () => {

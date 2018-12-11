@@ -12,6 +12,8 @@ import {
   RunRuleCollection,
 } from './types';
 
+export * from './types';
+
 export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
