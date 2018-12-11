@@ -40,6 +40,10 @@ export const runRules = (
 const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, opts: IRunOpts): IRuleResult[] => {
   let results: IRuleResult[] = [];
 
+  if (typeof target !== 'object') {
+    return results;
+  }
+
   let nodes: IGivenNode[] = [];
 
   // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -47,7 +51,7 @@ const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, 
     nodes = jp.nodes(target, rule.given);
   } else {
     nodes.push({
-      path: [],
+      path: ['$'],
       value: target,
     });
   }

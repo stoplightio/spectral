@@ -1,10 +1,9 @@
+import { ObjPath, ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
 import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
-const filter = require('lodash/filter');
-const pickBy = require('lodash/pickBy');
 
-import { IFunction, IFunctionResult, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -14,7 +13,8 @@ export const lintNode = (
   apply: IFunction,
   opts: IRunOpts
 ): IRuleResult[] => {
-  const conditioning = whatShouldBeLinted(node.value, rule);
+  const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
+  const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
 
   // If the 'when' condition is not satisfied, simply don't run the linter
   if (!conditioning.lint) {
@@ -23,57 +23,90 @@ export const lintNode = (
 
   const targetValue = conditioning.value;
 
-  let targets: any[] = [];
-  if (rule.then && then.field) {
+  const targets: any[] = [];
+  if (then && then.field) {
     if (then.field === '@key') {
-      // key lookup
-      targets = typeof targetValue === 'object' ? Object.keys(targetValue) : [];
+      for (const key of Object.keys(targetValue)) {
+        targets.push({
+          path: key,
+          value: key,
+        });
+      }
     } else if (then.field[0] === '$') {
       // jsonpath lookup
       const nodes = jp.nodes(targetValue, then.field);
-      targets = targets.concat(nodes.map(n => n.value));
+      for (const n of nodes) {
+        targets.push({
+          path: n.path,
+          value: n.value,
+        });
+      }
     } else {
       // lodash lookup
-      targets.push(get(targetValue, then.field));
+      targets.push({
+        path: typeof then.field === 'string' ? then.field.split('.') : then.field,
+        value: get(targetValue, then.field),
+      });
     }
   } else {
-    targets.push(targetValue);
+    targets.push({
+      path: [],
+      value: targetValue,
+    });
   }
 
   if (!targets.length) {
     // must call then at least once, with no result
-    targets.push(undefined);
+    targets.push({
+      path: [],
+      value: undefined,
+    });
   }
 
-  let results: IFunctionResult[] = [];
+  let results: IRuleResult[] = [];
+
   for (const target of targets) {
-    results = results.concat(
+    const targetPath = givenPath.concat(target.path);
+
+    const targetResults =
       apply(
-        target,
+        target.value,
         then.functionOptions || {},
         {
-          given: node.path,
-          target: node.path, // todo, node.path + rule.then.field
+          given: givenPath,
+          target: targetPath,
         },
         {
-          original: {},
+          original: node.value,
           given: node.value,
           resolved: opts.resolvedTarget,
         }
-      ) || []
+      ) || [];
+
+    results = results.concat(
+      targetResults.map(result => {
+        return {
+          name: rule.name,
+          message: result.message,
+          severity: ValidationSeverity.Error || rule.severity,
+          severityLabel: ValidationSeverityLabel.Error || rule.severityLabel,
+          path: result.path || targetPath,
+        };
+      })
     );
   }
 
-  return results.map(result => {
-    return {
-      path: result.path || node.path,
-      message: result.message,
-    };
-  });
+  return results;
 };
 
 // TODO(SO-23): unit test idividually
-export const whatShouldBeLinted = (originalValue: any, rule: IRunRule): { lint: boolean; value: any } => {
+export const whatShouldBeLinted = (
+  path: ObjPath,
+  originalValue: any,
+  rule: IRunRule
+): { lint: boolean; value: any } => {
+  const leaf = path[path.length - 1];
+
   const when = rule.when;
   if (!when) {
     return {
@@ -89,11 +122,12 @@ export const whatShouldBeLinted = (originalValue: any, rule: IRunRule): { lint: 
   const isKey = field === '@key';
 
   if (!pattern) {
-    // - if no pattern given
-    //  - if field is @key THEN check if object has ANY key
-    //  - else check if object[field] exists (MAY exist and be undefined!)
+    // isKey doesn't make sense without pattern
     if (isKey) {
-      return keyAndOptionalPattern(originalValue);
+      return {
+        lint: false,
+        value: originalValue,
+      };
     }
 
     return {
@@ -102,8 +136,8 @@ export const whatShouldBeLinted = (originalValue: any, rule: IRunRule): { lint: 
     };
   }
 
-  if (isKey) {
-    return keyAndOptionalPattern(originalValue, pattern);
+  if (isKey && pattern) {
+    return keyAndOptionalPattern(leaf, pattern, originalValue);
   }
 
   const fieldValue = String(get(originalValue, when.field));
@@ -114,52 +148,27 @@ export const whatShouldBeLinted = (originalValue: any, rule: IRunRule): { lint: 
   };
 };
 
-function keyAndOptionalPattern(originalValue: any, pattern?: string) {
-  const type = typeof originalValue;
-  switch (type) {
-    case 'boolean':
-    case 'string':
-    case 'number':
-    case 'bigint':
-    case 'undefined':
-    case 'function':
-      return {
-        lint: false,
-        value: originalValue,
-      };
-    case 'object':
-      if (originalValue === null) {
+function keyAndOptionalPattern(key: string | number, pattern: string, value: any) {
+  /** arrays, look at the keys on the array object. note, this number check on id prop is not foolproof... */
+  if (typeof key === 'number' && typeof value === 'object') {
+    for (const k of Object.keys(value)) {
+      if (String(k).match(pattern)) {
         return {
-          lint: false,
-          value: originalValue,
-        };
-      } else if (Array.isArray(originalValue)) {
-        const leanValue = pattern
-          ? filter(originalValue, (_v: any, index: any) => {
-              return String(index).match(pattern) !== null;
-            })
-          : originalValue;
-        return {
-          lint: !!leanValue.length,
-          value: leanValue,
-        };
-      } else {
-        let leanValue = originalValue;
-        if (pattern) {
-          const re = new RegExp(pattern);
-          leanValue = pickBy(originalValue, (_v: any, key: any) => {
-            return re.test(key);
-          });
-        }
-
-        return {
-          lint: !!Object.keys(leanValue).length,
-          value: leanValue,
+          lint: true,
+          value,
         };
       }
-    default:
-      throw new Error(
-        `value: "${originalValue}" of type: "${type}" is an unsupported type of value for the "when" statement`
-      );
+    }
+  } else if (String(key).match(pattern)) {
+    // objects
+    return {
+      lint: true,
+      value,
+    };
   }
+
+  return {
+    lint: false,
+    value,
+  };
 }
