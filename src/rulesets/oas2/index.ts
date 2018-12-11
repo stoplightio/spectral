@@ -1,27 +1,105 @@
-const merge = require('lodash.merge');
+const merge = require('lodash/merge');
 
-import { IRuleset, RuleFunction, RuleSeverity, RuleType } from '../../types';
-import { commonOasRuleset } from '../oas';
+import { ValidationSeverity } from '@stoplight/types/validations';
+import { RuleFunction, RuleType } from '../../types';
+import { commonOasRules } from '../oas';
 import * as schema from './schemas/main.json';
 
-export const oas2Ruleset = (): IRuleset => {
-  return merge(commonOasRuleset(), {
-    name: 'oas2',
-    rules: {
-      oas2: {
-        'oas2-schema': {
-          type: RuleType.VALIDATION,
-          summary: 'Validate structure of OpenAPIv2 specification.',
-          enabled: true,
-          severity: RuleSeverity.ERROR,
-          path: '$',
-          function: RuleFunction.SCHEMA,
-          input: {
-            schema,
-          },
-          tags: ['validation'],
+export { commonOasFunctions as oas2Functions } from '../oas';
+
+export const oas2Rules = () => {
+  return merge(commonOasRules(), {
+    // specification validation
+    'oas2-schema': {
+      summary: 'Validate structure of OpenAPIv2 specification.',
+      type: RuleType.VALIDATION,
+      severity: ValidationSeverity.Error,
+      then: {
+        function: RuleFunction.SCHEMA,
+        functionOptions: {
+          schema,
         },
       },
+      tags: ['schema'],
+    },
+
+    // generic
+    'api-host': {
+      summary: 'OpenAPI `host` must be present and non-empty string.',
+      type: RuleType.STYLE,
+      given: '$',
+      then: {
+        field: 'host',
+        function: RuleFunction.TRUTHY,
+      },
+      tags: ['api'],
+    },
+    'api-schemes': {
+      summary: 'OpenAPI host `schemes` must be present and non-empty array.',
+      type: RuleType.STYLE,
+      given: '$',
+      then: {
+        field: 'schemes',
+        function: RuleFunction.SCHEMA,
+        functionOptions: {
+          schema: {
+            items: {
+              type: 'string',
+            },
+            minItems: 1,
+            type: 'array',
+          },
+        },
+      },
+      tags: ['api'],
+    },
+    'host-not-example': {
+      enabled: false,
+      summary: 'Server URL should not point at `example.com`.',
+      type: RuleType.STYLE,
+      given: '$',
+      then: {
+        field: 'host',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: 'example.com',
+        },
+      },
+    },
+    'host-trailing-slash': {
+      summary: 'Server URL should not have a trailing slash.',
+      type: RuleType.STYLE,
+      given: '$',
+      then: {
+        field: 'host',
+        function: RuleFunction.PATTERN,
+        functionOptions: {
+          notMatch: '/$',
+        },
+      },
+    },
+    'model-description': {
+      enabled: false,
+      summary: 'Definition `description` must be present and non-empty string.',
+      type: RuleType.STYLE,
+      given: '$..definitions[*]',
+      then: {
+        field: 'description',
+        function: RuleFunction.TRUTHY,
+      },
+    },
+    'operation-security-defined': {
+      enabled: true,
+      summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+      type: RuleType.VALIDATION,
+      given: '$',
+      then: {
+        function: 'oasOpSecurityDefined',
+        functionOptions: {
+          schemesPath: ['securityDefinitions'],
+        },
+      },
+      tags: ['operation'],
     },
   });
 };

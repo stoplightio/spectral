@@ -1,17 +1,15 @@
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule, RuleSeverity } from '../../../../types';
+import { IFunction, IFunctionResult, Rule } from '../../../../types';
 
-export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
-  const results: IRuleResult[] = [];
+export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) => {
+  const results: IFunctionResult[] = [];
 
-  let { object } = opts;
-  const { resObj, meta, rule } = opts;
+  let object = targetVal;
+  const { resolved } = vals;
 
-  if (!resObj) {
-    console.warn(
-      'oasOpParams expects a resolved object, but none was provided. Results may not be correct.'
-    );
+  if (!resolved) {
+    console.warn('oasOpParams expects a resolved object, but none was provided. Results may not be correct.');
   } else {
-    object = resObj;
+    object = resolved;
   }
 
   /**
@@ -57,11 +55,9 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
                 nonUnique[`${params[paramIndex].in}-${params[paramIndex].name}`] = {};
               }
 
-              nonUnique[`${params[paramIndex].in}-${params[paramIndex].name}`][paramIndex] =
-                params[paramIndex];
+              nonUnique[`${params[paramIndex].in}-${params[paramIndex].name}`][paramIndex] = params[paramIndex];
 
-              nonUnique[`${params[paramIndex].in}-${params[paramIndex].name}`][compareIndex] =
-                params[compareIndex];
+              nonUnique[`${params[paramIndex].in}-${params[paramIndex].name}`][compareIndex] = params[compareIndex];
             }
 
             // Operation cannot have both `in:body` and `in:formData` parameters
@@ -109,17 +105,12 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
             results.push({
               message,
               path: ['$', 'paths', path, operation],
-              name: meta.name,
-              summary: rule.summary,
-              severity: meta.rule.severity || RuleSeverity.ERROR,
-              type: rule.type,
             });
           }
         }
 
         if (Object.keys(inBoth).length > 1) {
-          let message =
-            'Operation cannot have both `in:body` and `in:formData` parameters.\n\nParameters found at:\n';
+          let message = 'Operation cannot have both `in:body` and `in:formData` parameters.\n\nParameters found at:\n';
 
           for (const index in inBoth) {
             if (!inBody[index]) {
@@ -130,16 +121,11 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           results.push({
             message,
             path: ['$', 'paths', path, operation],
-            name: meta.name,
-            summary: rule.summary,
-            severity: meta.rule.severity || RuleSeverity.ERROR,
-            type: rule.type,
           });
         }
 
         if (Object.keys(inBody).length > 1) {
-          let message =
-            'Operation has multiple instances of the `in:body` parameter.\n\nParameters found at:\n';
+          let message = 'Operation has multiple instances of the `in:body` parameter.\n\nParameters found at:\n';
 
           for (const index in inBody) {
             if (!inBody[index]) {
@@ -150,10 +136,6 @@ export const oasOpParams: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
           results.push({
             message,
             path: ['$', 'paths', path, operation],
-            name: meta.name,
-            summary: rule.summary,
-            severity: meta.rule.severity || RuleSeverity.ERROR,
-            type: rule.type,
           });
         }
       }

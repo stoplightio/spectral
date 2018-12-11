@@ -1,9 +1,3 @@
-export enum RuleSeverity {
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-}
-
 export enum RuleType {
   VALIDATION = 'validation',
   STYLE = 'style',
@@ -11,13 +5,9 @@ export enum RuleType {
 
 export enum RuleFunction {
   ALPHABETICAL = 'alphabetical',
-  MAX_LENGTH = 'maxLength',
-  NOT_CONTAIN = 'notContain',
-  NOT_END_WITH = 'notEndWith',
-  OR = 'or',
+  LENGTH = 'length',
   PATTERN = 'pattern',
   SCHEMA = 'schema',
   TRUTHY = 'truthy',
   XOR = 'xor',
-  PARAM_CHECK = 'paramCheck',
 }

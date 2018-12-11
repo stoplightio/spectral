@@ -1,19 +1,15 @@
-import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+import { IFunction, IFunctionResult, Rule } from '../../../../types';
 
-export const oasOp2xxResponse: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
-  const results: IRuleResult[] = [];
+export const oasOp2xxResponse: IFunction<Rule> = targetVal => {
+  const results: IFunctionResult[] = [];
 
-  const { object, meta } = opts;
-  const responses = Object.keys(object);
+  const responses = Object.keys(targetVal);
 
-  const res = ensureRule(() => {
-    responses
-      .filter(response => Number(response) >= 200 && Number(response) < 300)
-      .length.should.aboveOrEqual(1);
-  }, meta);
-
-  if (res) results.push(res);
+  if (responses.filter(response => Number(response) >= 200 && Number(response) < 300).length === 0) {
+    results.push({
+      message: 'operations must define at least one 2xx response',
+    });
+  }
 
   return results;
 };

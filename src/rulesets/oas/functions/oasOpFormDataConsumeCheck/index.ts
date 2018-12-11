@@ -1,21 +1,17 @@
-import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRuleFunction, IRuleOpts, IRuleResult, Rule } from '../../../../types';
+import { IFunction, IFunctionResult, Rule } from '../../../../types';
 
-export const oasOpFormDataConsumeCheck: IRuleFunction<Rule> = (opts: IRuleOpts<Rule>) => {
-  const results: IRuleResult[] = [];
+export const oasOpFormDataConsumeCheck: IFunction<Rule> = targetVal => {
+  const results: IFunctionResult[] = [];
 
-  const { object, meta } = opts;
-  const operation: any = object;
-
-  const parameters = operation.parameters;
-  const consumes = operation.consumes || [];
+  const parameters = targetVal.parameters;
+  const consumes = targetVal.consumes || [];
 
   if (parameters && parameters.find((p: any) => p.in === 'formData')) {
-    const res = ensureRule(() => {
-      consumes.should.matchAny(/(application\/x-www-form-urlencoded|multipart\/form-data)/);
-    }, meta);
-
-    if (res) results.push(res);
+    if (!consumes.join(',').match(/(application\/x-www-form-urlencoded|multipart\/form-data)/)) {
+      results.push({
+        message: 'consumes must include urlencoded, multipart, or formdata media type when using formData parameter',
+      });
+    }
   }
 
   return results;

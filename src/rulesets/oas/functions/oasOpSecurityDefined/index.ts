@@ -1,25 +1,20 @@
-const _get = require('lodash.get');
+import { ObjPath } from '@stoplight/types';
 
-import { ensureRule } from '../../../../functions/utils/ensureRule';
-import { IRule, IRuleFunction, IRuleOpts, IRuleResult, Path } from '../../../../types';
+const _get = require('lodash/get');
+
+import { IFunction, IFunctionResult } from '../../../../types';
 
 export type functionName = 'oasOpSecurityDefined';
 
-export interface IOasOpSecurityDefinedRule extends IRule {
-  function: functionName;
-  input: {
-    schemesPath: Path;
-  };
-}
+export const oasOpSecurityDefined: IFunction<{
+  schemesPath: ObjPath;
+}> = (targetVal, options) => {
+  const results: IFunctionResult[] = [];
 
-export const oasOpSecurityDefined: IRuleFunction<IOasOpSecurityDefinedRule> = (
-  opts: IRuleOpts<IOasOpSecurityDefinedRule>
-) => {
-  const results: IRuleResult[] = [];
+  const { schemesPath } = options;
 
-  const { object, meta, rule } = opts;
-  const { paths = {} } = object;
-  const schemes = _get(object, rule.input.schemesPath) || {};
+  const { paths = {} } = targetVal;
+  const schemes = _get(targetVal, schemesPath) || {};
   const allDefs = Object.keys(schemes);
 
   for (const path in paths) {
@@ -32,17 +27,11 @@ export const oasOpSecurityDefined: IRuleFunction<IOasOpSecurityDefinedRule> = (
             if (security[index]) {
               const securityKey = Object.keys(security[index])[0];
 
-              const m = {
-                ...meta,
-                path: ['$', 'paths', path, operation, 'security', index],
-              };
-
-              const res = ensureRule(() => {
-                allDefs.should.containEql(securityKey);
-              }, m);
-
-              if (res) {
-                results.push(res);
+              if (!allDefs.includes(securityKey)) {
+                results.push({
+                  message: 'operation referencing undefined security scheme',
+                  path: ['$', 'paths', path, operation, 'security', index],
+                });
               }
             }
           }

@@ -1,138 +1,108 @@
 import { Spectral } from '../../../../../index';
-import { commonOasRuleset } from '../../../index';
+import { oas2Functions, oas2Rules } from '../../../../oas2/index';
+import { oas3Functions, oas3Rules } from '../../../../oas3/index';
 
-const ruleset = commonOasRuleset();
+const oas2Ruleset = { functions: oas2Functions(), rules: oas2Rules() };
+const oas3Ruleset = { functions: oas3Functions(), rules: oas3Rules() };
 
 describe('oasOpSecurityDefined', () => {
   describe('oas2', () => {
-    const s = new Spectral({
-      rulesets: [
-        {
-          functions: ruleset.functions,
-          rules: {
-            oas2: {
-              'operation-security-defined': Object.assign(
-                ruleset.rules.oas2['operation-security-defined'],
-                {
-                  enabled: true,
-                }
-              ),
-            },
-          },
-        },
-      ],
+    const s = new Spectral();
+    s.addFunctions(oas2Ruleset.functions || {});
+    s.addRules({
+      'operation-security-defined': Object.assign(oas2Ruleset.rules['operation-security-defined'], {
+        enabled: true,
+      }),
     });
 
     test('validate a correct object (just in body)', () => {
       const results = s.run({
-        spec: 'oas2',
-        target: {
-          securityDefinitions: {
-            apikey: {},
-          },
-          paths: {
-            '/path': {
-              get: {
-                security: [
-                  {
-                    apikey: [],
-                  },
-                ],
-              },
+        securityDefinitions: {
+          apikey: {},
+        },
+        paths: {
+          '/path': {
+            get: {
+              security: [
+                {
+                  apikey: [],
+                },
+              ],
             },
           },
         },
       });
-      expect(results.length).toEqual(0);
+      expect(results.results.length).toEqual(0);
     });
 
     test('return errors on invalid object', () => {
       const results = s.run({
-        spec: 'oas2',
-        target: {
-          securityDefinitions: {},
-          paths: {
-            '/path': {
-              get: {
-                security: [
-                  {
-                    apikey: [],
-                  },
-                ],
-              },
+        securityDefinitions: {},
+        paths: {
+          '/path': {
+            get: {
+              security: [
+                {
+                  apikey: [],
+                },
+              ],
             },
           },
         },
       });
 
-      expect(results.length).toEqual(1);
+      expect(results.results.length).toEqual(1);
     });
   });
 
   describe('oas3', () => {
-    const s = new Spectral({
-      rulesets: [
-        {
-          functions: ruleset.functions,
-          rules: {
-            oas3: {
-              'operation-security-defined': Object.assign(
-                ruleset.rules.oas3['operation-security-defined'],
-                {
-                  enabled: true,
-                }
-              ),
-            },
-          },
-        },
-      ],
+    const s = new Spectral();
+    s.addFunctions(oas3Ruleset.functions || {});
+    s.addRules({
+      'operation-security-defined': Object.assign(oas3Ruleset.rules['operation-security-defined'], {
+        enabled: true,
+      }),
     });
 
     test('validate a correct object (just in body)', () => {
       const results = s.run({
-        spec: 'oas3',
-        target: {
-          components: {
-            securitySchemes: {
-              apikey: {},
-            },
+        components: {
+          securitySchemes: {
+            apikey: {},
           },
-          paths: {
-            '/path': {
-              get: {
-                security: [
-                  {
-                    apikey: [],
-                  },
-                ],
-              },
+        },
+        paths: {
+          '/path': {
+            get: {
+              security: [
+                {
+                  apikey: [],
+                },
+              ],
             },
           },
         },
       });
-      expect(results.length).toEqual(0);
+      expect(results.results.length).toEqual(0);
     });
 
     test('return errors on invalid object', () => {
       const results = s.run({
-        spec: 'oas3',
-        target: {
-          components: {},
-          paths: {
-            '/path': {
-              get: {
-                security: [
-                  {
-                    apikey: [],
-                  },
-                ],
-              },
+        components: {},
+        paths: {
+          '/path': {
+            get: {
+              security: [
+                {
+                  apikey: [],
+                },
+              ],
             },
           },
         },
       });
 
-      expect(results.length).toEqual(1);
+      expect(results.results.length).toEqual(1);
     });
   });
 });

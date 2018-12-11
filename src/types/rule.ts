@@ -1,154 +1,88 @@
-import { RuleFunction, RuleSeverity, RuleType } from './enums';
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { RuleFunction, RuleType } from './enums';
 
-export type Rule =
-  | IRule
-  | ITruthyRule
-  | IOrRule
-  | IXorRule
-  | IMaxLengthRule
-  | IAlphaRule
-  | INotEndWithRule
-  | INotContainRule
-  | IPatternRule
-  | ISchemaRule
-  | IParamCheckRule;
+export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | SchemaRule;
 
-export interface IRule {
-  type: RuleType;
-
-  // The JSON path within the object this rule applies to
-  path: string;
-
-  // name of the function to run
-  function: string;
-
-  // Input to the function
-  input?: any;
+export interface IRule<T = string, O = any> {
+  type?: RuleType;
 
   // A short summary of the rule and its intended purpose
-  summary: string;
+  summary?: string;
 
   // A long-form description of the rule formatted in markdown
   description?: string;
 
-  // should the rule be enabled by default?
-  enabled?: boolean;
-
   // The severity of results this rule generates
-  severity?: RuleSeverity;
+  severity?: ValidationSeverity;
+  severityLabel?: ValidationSeverityLabel;
 
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];
+
+  // should the rule be enabled by default?
+  enabled?: boolean;
+
+  // Filter the target down to a subset[] with a JSON path
+  given: string;
+
+  when?: {
+    // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+    // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
+    field: string;
+
+    // a regex pattern
+    pattern?: string;
+  };
+
+  then: IThen<T, O> | Array<IThen<T, O>>;
 }
 
-export interface IRuleParam {
+export interface IThen<T, O> {
+  // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+  // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
+  field?: string;
+
+  // name of the function to run
+  function: T;
+
+  // Options passed to the function
+  functionOptions?: O;
+}
+
+export interface ITruthRuleOptions {
+  /** key(s) of object that should evaluate as 'truthy' (considered true in a boolean context) */
   properties: string | string[];
 }
+export type TruthyRule = IRule<RuleFunction.TRUTHY, ITruthRuleOptions>;
 
-export interface IRuleStringParam extends IRuleParam {
-  value: string;
+export interface IXorRuleOptions {
+  /** test to verify if one (but not all) of the provided keys are present in object */
+  properties: string[];
 }
+export type XorRule = IRule<RuleFunction.XOR, IXorRuleOptions>;
 
-export interface IRuleNumberParam {
-  value: number;
-  property?: string;
+export interface ILengthRuleOptions {
+  min?: number;
+  max?: number;
 }
+export type LengthRule = IRule<RuleFunction.LENGTH, ILengthRuleOptions>;
 
-export interface IAlphaRuleParam extends IRuleParam {
-  // if sorting objects, use key for comparison
+export interface IAlphaRuleOptions {
+  /** if sorting array of objects, which key to use for comparison */
   keyedBy?: string;
 }
+export type AlphaRule = IRule<RuleFunction.ALPHABETICAL, IAlphaRuleOptions>;
 
-export interface IRulePatternParam {
-  // value to use for rule
-  value: string;
+export interface IRulePatternOptions {
+  /** regex that target must match */
+  match?: string;
 
-  // object key to apply rule to
-  property?: string;
-
-  // value to omit from regex matching
-  omit?: string;
-
-  // value to split the property on prior to performing regex matching
-  split?: string;
+  /** regex that target must not match */
+  notMatch?: string;
 }
+export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
 
-export interface ITruthyRule extends IRule {
-  function: RuleFunction.TRUTHY;
-
-  input: {
-    // key(s) of object that should evaluate as 'truthy' (considered true in a
-    // boolean context)
-    properties: string | string[];
-
-    max?: number;
-  };
+export interface ISchemaOptions {
+  schema: object;
 }
-
-export interface IOrRule extends IRule {
-  function: RuleFunction.OR;
-
-  input: {
-    // test to verify if any of the provided keys are present in object
-    properties: string[];
-  };
-}
-
-export interface IXorRule extends IRule {
-  function: RuleFunction.XOR;
-
-  input: {
-    // test to verify if one (but not all) of the provided keys are present in
-    // object
-    properties: string[];
-  };
-}
-
-export interface IMaxLengthRule extends IRule {
-  function: RuleFunction.MAX_LENGTH;
-
-  // verify property is under a specified number of characters
-  input: IRuleNumberParam;
-}
-
-export interface IAlphaRule extends IRule {
-  function: RuleFunction.ALPHABETICAL;
-
-  // verify property is within alphabetical order
-  input: IAlphaRuleParam;
-}
-
-export interface INotEndWithRule extends IRule {
-  function: RuleFunction.NOT_END_WITH;
-
-  // verify property does not end with string
-  input: IRulePatternParam;
-}
-
-export interface INotContainRule extends IRule {
-  function: RuleFunction.NOT_CONTAIN;
-
-  // verify property does not contain value
-  input: IRuleStringParam;
-}
-
-export interface IPatternRule extends IRule {
-  function: RuleFunction.PATTERN;
-
-  // run regex match
-  input: IRulePatternParam;
-}
-
-export interface ISchemaRule extends IRule {
-  function: RuleFunction.SCHEMA;
-  input: {
-    schema: object;
-  };
-}
-
-export interface IParamCheckRule extends IRule {
-  function: RuleFunction.SCHEMA;
-  input: {
-    schema: object;
-  };
-}
+export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;

@@ -1,73 +1,46 @@
 version: 2
+
 jobs:
-  build:
-    docker:
-      - image: circleci/node:8
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-      - run:
-          name: Fetch dependencies
-          command: yarn
-      - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: Run tests
-          command: yarn test
-      - run:
-          name: Run build
-          command: yarn build
-  publish-npm:
+  test_node_8:
     docker:
       - image: circleci/node:8
     steps:
       - checkout
       - run:
-          name: Install publish dependencies
+          name: Download cc-test-reporter
           command: |
-            yarn global add semver
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run: yarn
       - run:
-          name: Install Dependencies
-          command: yarn
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules/
-      - run:
-          name: Set NPM token
+          name: cc-before
           command: |
-            cat <<EOF>.npmrc
-            @stoplight:registry=https://registry.npmjs.org/
-            //registry.npmjs.org/:_authToken=$NPM_TOKEN
-            EOF
+            ./cc-test-reporter before-build
+      - run: yarn test.prod
       - run:
-          name: Publish
+          name: cc-after
           command: |
-            export PATH=$PATH:/home/circleci/.yarn/bin
-            scripts/publish.spectral.sh
-            git remote remove origin
-            git remote add origin https://stoplight-bot:$BOT_ACCESS_TOKEN@github.com/stoplightio/spectral.git
-            git config user.email "support@stoplight.io"
-            git config user.name "Stoplight Bot"
-            git push origin --tags
+            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
+
+  release:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run: yarn
+      - run: yarn build
+      - run: yarn build.docs
+      - run: yarn release
+      - run: yarn release.docs
+
 workflows:
   version: 2
-  build_and_publish:
+  test_and_release:
     jobs:
-      - build
-      - publish-npm:
-          requires:
-            - build
+      - test_node_8
+      - release:
           filters:
             branches:
-              only:
-                - develop
-                - master
+              only: master
+          requires:
+            - test_node_8
