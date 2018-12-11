@@ -88,5 +88,18 @@ export const oas2Rules = () => {
         function: RuleFunction.TRUTHY,
       },
     },
+    'operation-security-defined': {
+      enabled: true,
+      summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+      type: RuleType.VALIDATION,
+      given: '$',
+      then: {
+        function: 'oasOpSecurityDefined',
+        functionOptions: {
+          schemesPath: ['securityDefinitions'],
+        },
+      },
+      tags: ['operation'],
+    },
   });
 };
