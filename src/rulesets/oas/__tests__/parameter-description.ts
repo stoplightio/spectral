@@ -5,6 +5,7 @@ const ruleset = { rules: commonOasRules() };
 
 describe('parameter-description', () => {
   const s = new Spectral();
+
   s.addRules({
     'parameter-description': Object.assign(ruleset.rules['parameter-description'], {
       enabled: true,
@@ -118,7 +119,7 @@ describe('parameter-description', () => {
     expect(results.results.length).toEqual(1);
   });
 
-  test('does not throw on refs', () => {
+  test.only('does not throw on refs', () => {
     const results = s.run({
       swagger: '2.0',
       paths: {
