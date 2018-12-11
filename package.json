@@ -38,7 +38,7 @@
     "release.docs": "sl-scripts release:docs",
     "release.dryRun": "sl-scripts release --dry-run --debug",
     "test": "sl-scripts test",
-    "test.prod": "yarn lint && yarn test --coverage --no-cache",
+    "test.prod": "yarn lint && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch"
   },
