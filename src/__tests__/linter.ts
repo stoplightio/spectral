@@ -1,8 +1,9 @@
+import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
+
 import { Spectral } from '../spectral';
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
-const spectral = new Spectral();
 const target = {
   responses: {
     200: {
@@ -27,6 +28,72 @@ const rules = {
 };
 
 describe('linter', () => {
+  const spectral = new Spectral();
+
+  test('should not lint if passing in value is not an object', () => {
+    const fakeLintingFunction = jest.fn();
+    spectral.addFunctions({
+      [fnName]: fakeLintingFunction,
+    });
+    spectral.addRules(rules);
+
+    // @ts-ignore
+    const result = spectral.run(123);
+
+    expect(result.results.length).toBe(0);
+  });
+
+  test('should return extra properties', () => {
+    const message = '4xx responses require a description';
+
+    spectral.addFunctions({
+      func1: val => {
+        if (!val) {
+          return [
+            {
+              message,
+            },
+          ];
+        }
+
+        return;
+      },
+    });
+
+    spectral.addRules({
+      rule1: {
+        given: '$.responses[*]',
+        when: {
+          field: '@key',
+          pattern: '^4.*',
+        },
+        then: {
+          field: 'description',
+          function: 'func1',
+        },
+      },
+    });
+
+    const result = spectral.run({
+      responses: {
+        '200': {
+          name: 'ok',
+        },
+        '404': {
+          name: 'not found',
+        },
+      },
+    });
+
+    expect(result.results[0]).toEqual({
+      name: 'rule1',
+      message,
+      severity: ValidationSeverity.Error,
+      severityLabel: ValidationSeverityLabel.Error,
+      path: ['responses', '404', 'description'],
+    });
+  });
+
   describe('functional tests for the given property', () => {
     let fakeLintingFunction: any;
 
@@ -43,7 +110,7 @@ describe('linter', () => {
         spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['$', 'responses']);
+        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
         expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
       });
     });
@@ -121,41 +188,6 @@ describe('linter', () => {
       });
     });
 
-    describe('given when with no pattern and @key field', () => {
-      test('should call linter if object has ANY keys', () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '@key',
-            },
-          },
-        });
-        spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          '200': { description: 'a' },
-          '201': { description: 'b' },
-          '300': { description: 'c' },
-        });
-      });
-
-      test('should NOT call linter if object has NO keys', () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '@key',
-            },
-          },
-        });
-        spectral.run({
-          responses: {},
-        });
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
-      });
-    });
-
     describe('given "when" with a pattern and regular field', () => {
       test('should NOT lint if pattern does not match', () => {
         spectral.mergeRules({
@@ -195,6 +227,7 @@ describe('linter', () => {
       test('should lint ONLY part of object that matches pattern', () => {
         spectral.mergeRules({
           example: {
+            given: '$.responses[*]',
             when: {
               field: '@key',
               pattern: '2..',
@@ -203,29 +236,10 @@ describe('linter', () => {
         });
         spectral.run(target);
 
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
+        expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          '200': { description: 'a' },
-          '201': { description: 'b' },
+          description: 'a',
         });
-      });
-
-      test('should work with arrays', () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '@key',
-              pattern: '[02]',
-            },
-          },
-        });
-
-        spectral.run({
-          responses: ['a', 'b', 'c', 'd', 'e'],
-        });
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual(['a', 'c']);
       });
     });
   });
