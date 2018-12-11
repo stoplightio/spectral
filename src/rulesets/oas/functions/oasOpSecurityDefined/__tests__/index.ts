@@ -1,15 +1,16 @@
 import { Spectral } from '../../../../../index';
-import { commonOasFunctions, commonOasRules } from '../../../index';
+import { oas2Functions, oas2Rules } from '../../../../oas2/index';
+import { oas3Functions, oas3Rules } from '../../../../oas3/index';
 
-const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
+const oas2Ruleset = { functions: oas2Functions(), rules: oas2Rules() };
+const oas3Ruleset = { functions: oas3Functions(), rules: oas3Rules() };
 
-// TODO: did usage of this custom function go away? where is it?
-describe.skip('oasOpSecurityDefined', () => {
+describe('oasOpSecurityDefined', () => {
   describe('oas2', () => {
     const s = new Spectral();
-    s.addFunctions(ruleset.functions || {});
+    s.addFunctions(oas2Ruleset.functions || {});
     s.addRules({
-      'operation-security-defined': Object.assign(ruleset.rules['operation-security-defined'], {
+      'operation-security-defined': Object.assign(oas2Ruleset.rules['operation-security-defined'], {
         enabled: true,
       }),
     });
@@ -56,9 +57,9 @@ describe.skip('oasOpSecurityDefined', () => {
 
   describe('oas3', () => {
     const s = new Spectral();
-    s.addFunctions(ruleset.functions || {});
+    s.addFunctions(oas3Ruleset.functions || {});
     s.addRules({
-      'operation-security-defined': Object.assign(ruleset.rules['operation-security-defined'], {
+      'operation-security-defined': Object.assign(oas3Ruleset.rules['operation-security-defined'], {
         enabled: true,
       }),
     });

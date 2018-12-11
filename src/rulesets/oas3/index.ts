@@ -53,6 +53,19 @@ export const oas3Rules = () => {
         function: RuleFunction.TRUTHY,
       },
     },
+    'operation-security-defined': {
+      enabled: true,
+      summary: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+      type: RuleType.VALIDATION,
+      given: '$',
+      then: {
+        function: 'oasOpSecurityDefined',
+        functionOptions: {
+          schemesPath: ['components', 'securitySchemes'],
+        },
+      },
+      tags: ['operation'],
+    },
     'server-not-example.com': {
       enabled: false,
       summary: 'Server URL should not point at `example.com`.',
