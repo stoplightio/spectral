@@ -49,11 +49,7 @@ export interface IThen<T, O> {
   functionOptions?: O;
 }
 
-export interface ITruthRuleOptions {
-  /** key(s) of object that should evaluate as 'truthy' (considered true in a boolean context) */
-  properties: string | string[];
-}
-export type TruthyRule = IRule<RuleFunction.TRUTHY, ITruthRuleOptions>;
+export type TruthyRule = IRule<RuleFunction.TRUTHY>;
 
 export interface IXorRuleOptions {
   /** test to verify if one (but not all) of the provided keys are present in object */
