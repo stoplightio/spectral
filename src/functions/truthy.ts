@@ -1,6 +1,6 @@
-import { IFunction, IFunctionResult, ITruthRuleOptions } from '../types';
+import { IFunction, IFunctionResult } from '../types';
 
-export const truthy: IFunction<ITruthRuleOptions> = (targetVal, _opts, paths): void | IFunctionResult[] => {
+export const truthy: IFunction = (targetVal, _opts, paths): void | IFunctionResult[] => {
   if (!targetVal) {
     return [
       {
