@@ -40,6 +40,6 @@ describe('operation-default-response', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

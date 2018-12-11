@@ -26,6 +26,6 @@ describe('host-trailing-slash', () => {
       paths: {},
       host: 'stoplight.io/',
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

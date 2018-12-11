@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`path-not-include-query return errors if indlues a query 1`] = `
+Array [
+  Object {
+    "message": "must not match the pattern '\\\\?'",
+    "name": "path-not-include-query",
+    "path": Array [
+      "paths",
+      "/path?query=true",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "given keys should not include a query string.",
+  },
+]
+`;

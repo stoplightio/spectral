@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`openapi-tags return errors if missing tags 1`] = `
+Array [
+  Object {
+    "message": "tags is not truthy",
+    "name": "openapi-tags",
+    "path": Array [
+      "tags",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "OpenAPI object should have non-empty \`tags\` array.",
+  },
+]
+`;

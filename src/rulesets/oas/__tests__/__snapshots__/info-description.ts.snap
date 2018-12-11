@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`info-description return errors if info missing description 1`] = `
+Array [
+  Object {
+    "message": "info.description is not truthy",
+    "name": "info-description",
+    "path": Array [
+      "info",
+      "description",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "OpenAPI object info \`description\` must be present and non-empty string.",
+  },
+]
+`;

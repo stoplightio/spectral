@@ -26,6 +26,6 @@ describe('openapi-tags-alphabetical', () => {
       paths: {},
       tags: [{ name: 'b-tag' }, { name: 'a-tag' }],
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

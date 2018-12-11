@@ -78,7 +78,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if top level path parameter description is missing', () => {
@@ -96,7 +96,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if operation level parameter description is missing', () => {
@@ -116,7 +116,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test.only('does not throw on refs', () => {

@@ -25,7 +25,7 @@ describe('api-schemes', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if schemes is an empty array ', () => {
@@ -34,6 +34,6 @@ describe('api-schemes', () => {
       paths: {},
       schemes: [],
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

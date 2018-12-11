@@ -87,6 +87,7 @@ export const lintNode = (
       targetResults.map(result => {
         return {
           name: rule.name,
+          summary: rule.summary,
           message: result.message,
           severity: rule.severity || ValidationSeverity.Error,
           severityLabel: rule.severityLabel || ValidationSeverityLabel.Error,

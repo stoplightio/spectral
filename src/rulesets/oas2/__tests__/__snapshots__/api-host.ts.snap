@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`api-host return errors if missing host 1`] = `
+Array [
+  Object {
+    "message": "host is not truthy",
+    "name": "api-host",
+    "path": Array [
+      "host",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "OpenAPI \`host\` must be present and non-empty string.",
+  },
+]
+`;

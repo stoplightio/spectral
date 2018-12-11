@@ -24,6 +24,6 @@ describe('path-not-include-query', () => {
       swagger: '2.0',
       paths: { '/path?query=true': {} },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

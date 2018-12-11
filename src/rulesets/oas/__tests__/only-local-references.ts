@@ -26,6 +26,6 @@ describe('only-local-references', () => {
       paths: {},
       parameters: [{ $ref: 'https://stoplight.io#/reference/path' }],
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

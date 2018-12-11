@@ -34,7 +34,7 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('does not get called on parameters', () => {
@@ -46,6 +46,6 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.results).toMatchSnapshot();
   });
 });
