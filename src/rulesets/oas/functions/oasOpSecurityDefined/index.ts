@@ -30,7 +30,7 @@ export const oasOpSecurityDefined: IFunction<{
               if (!allDefs.includes(securityKey)) {
                 results.push({
                   message: 'operation referencing undefined security scheme',
-                  path: ['$', 'paths', path, operation, 'security', index],
+                  path: ['paths', path, operation, 'security', index],
                 });
               }
             }

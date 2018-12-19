@@ -104,7 +104,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
             results.push({
               message,
-              path: ['$', 'paths', path, operation],
+              path: ['paths', path, operation],
             });
           }
         }
@@ -120,7 +120,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
           results.push({
             message,
-            path: ['$', 'paths', path, operation],
+            path: ['paths', path, operation],
           });
         }
 
@@ -135,7 +135,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
           results.push({
             message,
-            path: ['$', 'paths', path, operation],
+            path: ['paths', path, operation],
           });
         }
       }

@@ -25,6 +25,6 @@ describe('openapi-tags', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

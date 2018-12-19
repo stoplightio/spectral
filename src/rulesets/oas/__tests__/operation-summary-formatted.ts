@@ -36,7 +36,7 @@ describe('operation-summary-formatted', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if summary does not end with a dot', () => {
@@ -50,6 +50,6 @@ describe('operation-summary-formatted', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

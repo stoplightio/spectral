@@ -17,10 +17,13 @@ import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
+  const path = paths.target || paths.given;
+
   if (!targetVal)
     return [
       {
-        message: `${paths.target ? paths.target.join('.') : 'property'} does not exist`,
+        path,
+        message: `${paths ? path.join('.') : 'property'} does not exist`,
       },
     ];
 
@@ -36,7 +39,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       }
 
       results.push({
-        path: paths.given.concat(e.dataPath.split('/').slice(1)),
+        path: path.concat(e.dataPath.split('/').slice(1)),
         message: e.message ? e.message : '',
       });
     });

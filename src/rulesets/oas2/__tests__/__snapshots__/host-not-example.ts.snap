@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`host-not-example return errors if server is example.com 1`] = `
+Array [
+  Object {
+    "message": "must not match the pattern 'example.com'",
+    "name": "host-not-example",
+    "path": Array [
+      "host",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Server URL should not point at \`example.com\`.",
+  },
+]
+`;

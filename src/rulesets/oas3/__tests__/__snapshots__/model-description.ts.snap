@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`model-description return errors if a definition is missing description 1`] = `
+Array [
+  Object {
+    "message": "components.schemas.user.description is not truthy",
+    "name": "model-description",
+    "path": Array [
+      "components",
+      "schemas",
+      "user",
+      "description",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Model \`description\` must be present and non-empty string.",
+  },
+]
+`;

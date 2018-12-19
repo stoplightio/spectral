@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`operation-singular-tag return errors if tags has more than 1 1`] = `
+Array [
+  Object {
+    "message": "max length is 1",
+    "name": "operation-singular-tag",
+    "path": Array [
+      "paths",
+      "/todos",
+      "get",
+      "tags",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Operation may only have one tag.",
+  },
+]
+`;

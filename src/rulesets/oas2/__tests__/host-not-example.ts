@@ -26,6 +26,6 @@ describe('host-not-example', () => {
       paths: {},
       host: 'https://example.com',
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

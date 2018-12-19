@@ -51,7 +51,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results.results.length).toEqual(1);
+      expect(results.results).toMatchSnapshot();
     });
   });
 
@@ -102,7 +102,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results.results.length).toEqual(1);
+      expect(results.results).toMatchSnapshot();
     });
   });
 });

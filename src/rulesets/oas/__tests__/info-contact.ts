@@ -26,6 +26,6 @@ describe('info-contact', () => {
       paths: {},
       info: { version: '1.0' },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

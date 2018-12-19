@@ -25,7 +25,7 @@ describe('api-servers', () => {
       openapi: '3.0.0',
       paths: {},
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if servers is an empty array ', () => {
@@ -34,6 +34,6 @@ describe('api-servers', () => {
       paths: {},
       servers: [],
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

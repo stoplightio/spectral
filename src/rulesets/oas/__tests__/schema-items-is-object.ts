@@ -23,13 +23,13 @@ describe('schema-items-is-object', () => {
       schema: { items: undefined },
     });
 
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if items is not an object', () => {
     const results = s.run({
       schema: { items: 'string' },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

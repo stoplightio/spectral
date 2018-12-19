@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`operation-description does not get called on parameters 1`] = `Array []`;
+
+exports[`operation-description return errors if operation description is missing 1`] = `
+Array [
+  Object {
+    "message": "paths./todos.get.description is not truthy",
+    "name": "operation-description",
+    "path": Array [
+      "paths",
+      "/todos",
+      "get",
+      "description",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Operation \`description\` must be present and non-empty string.",
+  },
+]
+`;

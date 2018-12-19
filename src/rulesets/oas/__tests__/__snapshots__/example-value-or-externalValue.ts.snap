@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`example-value-or-externalValue return errors if both externalValue and value 1`] = `
+Array [
+  Object {
+    "message": "externalValue and value cannot both be defined",
+    "name": "example-value-or-externalValue",
+    "path": Array [
+      "example",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Example should have either a \`value\` or \`externalValue\` field.",
+  },
+]
+`;
+
+exports[`example-value-or-externalValue return errors if missing externalValue and value 1`] = `
+Array [
+  Object {
+    "message": "externalValue and value cannot both be defined",
+    "name": "example-value-or-externalValue",
+    "path": Array [
+      "example",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Example should have either a \`value\` or \`externalValue\` field.",
+  },
+]
+`;

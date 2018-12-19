@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`info-license return errors if info missing license 1`] = `
+Array [
+  Object {
+    "message": "info.license is not truthy",
+    "name": "info-license",
+    "path": Array [
+      "info",
+      "license",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "OpenAPI object info \`license\` must be present and non-empty string.",
+  },
+]
+`;

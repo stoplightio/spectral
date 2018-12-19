@@ -32,6 +32,6 @@ describe('no-eval-in-markdown', () => {
         description: 'some description contains eval(',
       },
     });
-    expect(results.results.length).toEqual(2);
+    expect(results.results).toMatchSnapshot();
   });
 });

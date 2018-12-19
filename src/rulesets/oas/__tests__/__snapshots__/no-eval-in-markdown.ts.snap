@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`no-eval-in-markdown return errors if descriptions or titles include eval 1`] = `
+Array [
+  Object {
+    "message": "must not match the pattern 'eval\\\\('",
+    "name": "no-eval-in-markdown",
+    "path": Array [
+      "info",
+      "description",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Markdown descriptions should not contain \`eval(\`.",
+  },
+  Object {
+    "message": "must not match the pattern 'eval\\\\('",
+    "name": "no-eval-in-markdown",
+    "path": Array [
+      "info",
+      "title",
+    ],
+    "severity": 50,
+    "severityLabel": "error",
+    "summary": "Markdown descriptions should not contain \`eval(\`.",
+  },
+]
+`;
