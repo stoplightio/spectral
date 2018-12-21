@@ -32,6 +32,6 @@ describe('model-description', () => {
       host: 'stoplight.io',
       definitions: { user: {} },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`oasOpIdUnique return errors on different path operations same id 1`] = `
+Array [
+  Object {
+    "message": "operationId must be unique",
+    "name": "operation-operationId-unique",
+    "path": Array [
+      "paths",
+      "/path1",
+      "get",
+      "operationId",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Every operation must have a unique \`operationId\`.",
+  },
+  Object {
+    "message": "operationId must be unique",
+    "name": "operation-operationId-unique",
+    "path": Array [
+      "paths",
+      "/path2",
+      "get",
+      "operationId",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Every operation must have a unique \`operationId\`.",
+  },
+]
+`;
+
+exports[`oasOpIdUnique return errors on same path operations same id 1`] = `
+Array [
+  Object {
+    "message": "operationId must be unique",
+    "name": "operation-operationId-unique",
+    "path": Array [
+      "paths",
+      "/path1",
+      "get",
+      "operationId",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Every operation must have a unique \`operationId\`.",
+  },
+  Object {
+    "message": "operationId must be unique",
+    "name": "operation-operationId-unique",
+    "path": Array [
+      "paths",
+      "/path1",
+      "post",
+      "operationId",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Every operation must have a unique \`operationId\`.",
+  },
+]
+`;

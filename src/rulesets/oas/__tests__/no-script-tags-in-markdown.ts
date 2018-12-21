@@ -30,6 +30,6 @@ describe('no-script-tags-in-markdown', () => {
         description: 'some description contains <script',
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

@@ -15,7 +15,7 @@ export const oasOpIdUnique: IFunction<Rule> = (targetVal, _options, functionPath
 
           if (operationId) {
             ids.push({
-              path: ['$', 'paths', path, operation, 'operationId'],
+              path: ['paths', path, operation, 'operationId'],
               operationId,
             });
           }

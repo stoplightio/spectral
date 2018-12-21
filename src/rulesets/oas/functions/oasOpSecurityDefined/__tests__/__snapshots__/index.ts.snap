@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`oasOpSecurityDefined oas2 return errors on invalid object 1`] = `
+Array [
+  Object {
+    "message": "operation referencing undefined security scheme",
+    "name": "operation-security-defined",
+    "path": Array [
+      "paths",
+      "/path",
+      "get",
+      "security",
+      "0",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation \`security\` values must match a scheme defined in the \`securityDefinitions\` object.",
+  },
+]
+`;
+
+exports[`oasOpSecurityDefined oas3 return errors on invalid object 1`] = `
+Array [
+  Object {
+    "message": "operation referencing undefined security scheme",
+    "name": "operation-security-defined",
+    "path": Array [
+      "paths",
+      "/path",
+      "get",
+      "security",
+      "0",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation \`security\` values must match a scheme defined in the \`components.securitySchemes\` object.",
+  },
+]
+`;

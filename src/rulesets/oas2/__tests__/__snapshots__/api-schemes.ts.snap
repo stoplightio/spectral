@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`api-schemes return errors if schemes is an empty array  1`] = `
+Array [
+  Object {
+    "message": "should NOT have fewer than 1 items",
+    "name": "api-schemes",
+    "path": Array [
+      "schemes",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
+  },
+]
+`;
+
+exports[`api-schemes return errors if schemes is missing  1`] = `
+Array [
+  Object {
+    "message": "schemes does not exist",
+    "name": "api-schemes",
+    "path": Array [
+      "schemes",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
+  },
+]
+`;

@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`oasOp2xxResponse return errors if missing 2xx 1`] = `
+Array [
+  Object {
+    "message": "operations must define at least one 2xx response",
+    "name": "operation-2xx-response",
+    "path": Array [
+      "paths",
+      "/path1",
+      "get",
+      "responses",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation must have at least one \`2xx\` response.",
+  },
+]
+`;
+
+exports[`oasOp2xxResponse return errors if no responses 1`] = `
+Array [
+  Object {
+    "message": "operations must define at least one 2xx response",
+    "name": "operation-2xx-response",
+    "path": Array [
+      "paths",
+      "/path1",
+      "get",
+      "responses",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation must have at least one \`2xx\` response.",
+  },
+]
+`;

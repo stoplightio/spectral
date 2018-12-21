@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`info-contact return errors if info is missing contact 1`] = `
+Array [
+  Object {
+    "message": "info.contact is not truthy",
+    "name": "info-contact",
+    "path": Array [
+      "info",
+      "contact",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Info object should contain \`contact\` object.",
+  },
+]
+`;

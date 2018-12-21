@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`oasOpParams Error if both in:formData and in:body 1`] = `
+Array [
+  Object {
+    "message": "Operation cannot have both \`in:body\` and \`in:formData\` parameters.
+
+Parameters found at:
+[ \`paths\`, \`/foo\`, \`get\`, \`0\` ]
+[ \`paths\`, \`/foo\`, \`get\`, \`1\` ]
+",
+    "name": "operation-parameters",
+    "path": Array [
+      "paths",
+      "/foo",
+      "get",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation parameters are unique and non-repeating.",
+  },
+]
+`;
+
+exports[`oasOpParams Error if multiple in:body 1`] = `
+Array [
+  Object {
+    "message": "Operation has multiple instances of the \`in:body\` parameter.
+
+Parameters found at:
+",
+    "name": "operation-parameters",
+    "path": Array [
+      "paths",
+      "/foo",
+      "get",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation parameters are unique and non-repeating.",
+  },
+]
+`;
+
+exports[`oasOpParams Error if nonunique param on same operation 1`] = `
+Array [
+  Object {
+    "message": "Operations must have unique \`name\` + \`in\` parameters.
+Repeats of \`in:query\` + \`name:foo\`
+
+Parameters found at:
+[ \`paths\`, \`/foo\`, \`get\`, \`0\` ]
+[ \`paths\`, \`/foo\`, \`get\`, \`1\` ]
+[ \`paths\`, \`/foo\`, \`get\`, \`2\` ]
+",
+    "name": "operation-parameters",
+    "path": Array [
+      "paths",
+      "/foo",
+      "get",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation parameters are unique and non-repeating.",
+  },
+]
+`;

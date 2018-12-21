@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`operation-summary-formatted return errors if summary does not end with a dot 1`] = `
+Array [
+  Object {
+    "message": "must match the pattern '^[A-Z].*\\\\.$'",
+    "name": "operation-summary-formatted",
+    "path": Array [
+      "paths",
+      "/todos",
+      "get",
+      "summary",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation \`summary\` should start with upper case and end with a dot.",
+  },
+]
+`;
+
+exports[`operation-summary-formatted return errors if summary does not start with an uppercase 1`] = `
+Array [
+  Object {
+    "message": "must match the pattern '^[A-Z].*\\\\.$'",
+    "name": "operation-summary-formatted",
+    "path": Array [
+      "paths",
+      "/todos",
+      "get",
+      "summary",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation \`summary\` should start with upper case and end with a dot.",
+  },
+]
+`;

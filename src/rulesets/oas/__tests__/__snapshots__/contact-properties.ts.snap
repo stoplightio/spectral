@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`contact-properties return errors if name, url, email are missing 1`] = `
+Array [
+  Object {
+    "message": "info.contact.name is not truthy",
+    "name": "contact-properties",
+    "path": Array [
+      "info",
+      "contact",
+      "name",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
+  },
+  Object {
+    "message": "info.contact.url is not truthy",
+    "name": "contact-properties",
+    "path": Array [
+      "info",
+      "contact",
+      "url",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
+  },
+  Object {
+    "message": "info.contact.email is not truthy",
+    "name": "contact-properties",
+    "path": Array [
+      "info",
+      "contact",
+      "email",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
+  },
+]
+`;

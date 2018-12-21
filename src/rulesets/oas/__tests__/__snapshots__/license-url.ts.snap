@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`license-url return errors if info license is missing url 1`] = `
+Array [
+  Object {
+    "message": "info.license.url is not truthy",
+    "name": "license-url",
+    "path": Array [
+      "info",
+      "license",
+      "url",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "License object should include \`url\`.",
+  },
+]
+`;

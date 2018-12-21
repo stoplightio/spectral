@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`operation-default-response return errors if path-responses is missing default 1`] = `
+Array [
+  Object {
+    "message": "paths./path./get.responses.default is not truthy",
+    "name": "operation-default-response",
+    "path": Array [
+      "paths",
+      "/path",
+      "/get",
+      "responses",
+      "default",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operations must have a default response.",
+  },
+]
+`;

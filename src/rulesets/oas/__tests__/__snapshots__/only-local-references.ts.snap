@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`only-local-references return errors if not local ref 1`] = `
+Array [
+  Object {
+    "message": "must match the pattern '^#\\\\/'",
+    "name": "only-local-references",
+    "path": Array [
+      "parameters",
+      0,
+      "$ref",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "References should start with \`#/\`.",
+  },
+]
+`;

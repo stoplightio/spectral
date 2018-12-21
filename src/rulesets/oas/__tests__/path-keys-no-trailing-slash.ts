@@ -24,6 +24,6 @@ describe('path-keys-no-trailing-slash', () => {
       swagger: '2.0',
       paths: { '/path/': {} },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

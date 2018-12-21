@@ -30,6 +30,6 @@ describe('license-url', () => {
         license: { name: 'MIT' },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

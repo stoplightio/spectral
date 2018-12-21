@@ -26,6 +26,6 @@ describe('info-description', () => {
       paths: {},
       info: { contact: { name: 'stoplight.io' } },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

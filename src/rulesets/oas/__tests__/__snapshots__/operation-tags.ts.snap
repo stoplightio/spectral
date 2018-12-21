@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`operation-tags return errors if tags is missing 1`] = `
+Array [
+  Object {
+    "message": "paths./todos.get.tags is not truthy",
+    "name": "operation-tags",
+    "path": Array [
+      "paths",
+      "/todos",
+      "get",
+      "tags",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Operation should have non-empty \`tags\` array.",
+  },
+]
+`;

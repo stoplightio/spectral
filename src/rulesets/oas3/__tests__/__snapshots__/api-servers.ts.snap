@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`api-servers return errors if servers is an empty array  1`] = `
+Array [
+  Object {
+    "message": "should NOT have fewer than 1 items",
+    "name": "api-servers",
+    "path": Array [
+      "servers",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "OpenAPI \`servers\` must be present and non-empty string.",
+  },
+]
+`;
+
+exports[`api-servers return errors if servers is missing  1`] = `
+Array [
+  Object {
+    "message": "servers does not exist",
+    "name": "api-servers",
+    "path": Array [
+      "servers",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "OpenAPI \`servers\` must be present and non-empty string.",
+  },
+]
+`;

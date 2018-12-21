@@ -94,7 +94,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
             const inVal = nonUnique[group][firstMatch].in;
             const nameVal = nonUnique[group][firstMatch].name;
 
-            let message = `Operations must have unique \`name\` + \`in\` parameters.\nRepeats of \`in:${inVal}\` + \`name:${nameVal}\` \n\nParameters found at:\n`;
+            let message = `Operations must have unique \`name\` + \`in\` parameters.\nRepeats of \`in:${inVal}\` + \`name:${nameVal}\`\n\nParameters found at:\n`;
 
             for (const index in nonUnique[group]) {
               if (!inBody[index]) {
@@ -104,7 +104,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
             results.push({
               message,
-              path: ['$', 'paths', path, operation],
+              path: ['paths', path, operation],
             });
           }
         }
@@ -120,7 +120,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
           results.push({
             message,
-            path: ['$', 'paths', path, operation],
+            path: ['paths', path, operation],
           });
         }
 
@@ -135,7 +135,7 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
           results.push({
             message,
-            path: ['$', 'paths', path, operation],
+            path: ['paths', path, operation],
           });
         }
       }

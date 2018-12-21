@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`host-trailing-slash return errors if host url ends with a slash 1`] = `
+Array [
+  Object {
+    "message": "must not match the pattern '/$'",
+    "name": "host-trailing-slash",
+    "path": Array [
+      "host",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Server URL should not have a trailing slash.",
+  },
+]
+`;

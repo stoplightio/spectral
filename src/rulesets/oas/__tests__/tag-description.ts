@@ -26,6 +26,6 @@ describe('tag-description', () => {
       paths: {},
       tags: [{ name: 'tag' }],
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

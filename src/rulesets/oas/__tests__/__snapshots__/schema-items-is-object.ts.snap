@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schema-items-is-object return errors if items is not an object 1`] = `
+Array [
+  Object {
+    "message": "should be object",
+    "name": "schema-items-is-object",
+    "path": Array [
+      "schema",
+      "items",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Schema containing \`items\` requires the items property to be an object.",
+  },
+]
+`;
+
+exports[`schema-items-is-object return errors if items is undefined 1`] = `
+Array [
+  Object {
+    "message": "schema.items does not exist",
+    "name": "schema-items-is-object",
+    "path": Array [
+      "schema",
+      "items",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "Schema containing \`items\` requires the items property to be an object.",
+  },
+]
+`;

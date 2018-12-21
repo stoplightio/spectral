@@ -52,7 +52,7 @@ describe('oasOp2xxResponse', () => {
       },
     });
 
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if no responses', () => {
@@ -65,6 +65,6 @@ describe('oasOp2xxResponse', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

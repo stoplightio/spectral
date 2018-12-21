@@ -23,11 +23,11 @@ describe('example-value-or-externalValue', () => {
 
   test('return errors if missing externalValue and value', () => {
     const results = s.run({ example: {} });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('return errors if both externalValue and value', () => {
     const results = s.run({ example: { externalValue: 'externalValue', value: 'value' } });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

@@ -83,7 +83,7 @@ describe('oasOpParams', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('Errors if multple nonunique param on same operation', () => {
@@ -126,7 +126,7 @@ describe('oasOpParams', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 
   test('Error if both in:formData and in:body', () => {
@@ -144,6 +144,6 @@ describe('oasOpParams', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

@@ -41,7 +41,8 @@ describe('oasPathParam', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
+
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}']);
     expect(results.results[0].message).toContain('bar');
   });
@@ -113,7 +114,8 @@ describe('oasPathParam', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
+
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
     expect(results.results[0].message).toContain('bar');
   });
@@ -138,7 +140,8 @@ describe('oasPathParam', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
+
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
   });
 
@@ -172,7 +175,8 @@ describe('oasPathParam', () => {
         },
       }
     );
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
+
     expect(results.results[0].path).toEqual(['paths']);
   });
 });

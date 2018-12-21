@@ -36,6 +36,6 @@ describe('operation-singular-tag', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(1);
+    expect(results.results).toMatchSnapshot();
   });
 });

@@ -32,6 +32,6 @@ describe('contact-properties', () => {
       paths: {},
       info: { contact: {} },
     });
-    expect(results.results.length).toEqual(3);
+    expect(results.results).toMatchSnapshot();
   });
 });
