@@ -323,6 +323,7 @@ export const commonOasRules = (): RuleCollection => ({
   },
   'path-keys-no-trailing-slash': {
     summary: 'given keys should not end with a slash.',
+    type: RuleType.STYLE,
     given: '$..paths',
     then: {
       field: '@key',
