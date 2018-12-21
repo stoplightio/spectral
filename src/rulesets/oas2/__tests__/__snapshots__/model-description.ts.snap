@@ -10,8 +10,8 @@ Array [
       "user",
       "description",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Definition \`description\` must be present and non-empty string.",
   },
 ]

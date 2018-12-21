@@ -12,8 +12,8 @@ Array [
       "responses",
       "default",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operations must have a default response.",
   },
 ]

@@ -11,8 +11,8 @@ Array [
       "get",
       "summary",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation \`summary\` should start with upper case and end with a dot.",
   },
 ]
@@ -29,8 +29,8 @@ Array [
       "get",
       "summary",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation \`summary\` should start with upper case and end with a dot.",
   },
 ]

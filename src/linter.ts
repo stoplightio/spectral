@@ -1,4 +1,4 @@
-import { ObjPath, ValidationSeverity } from '@stoplight/types';
+import { ObjPath, ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
 import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
@@ -85,7 +85,8 @@ export const lintNode = (
       ) || [];
 
     const severity = rule.severity || ValidationSeverity.Warn;
-    const severityLabel = rule.severityLabel || invert(ValidationSeverity)[rule.severity || ValidationSeverity.Warn];
+    const severityLabel =
+      rule.severityLabel || (ValidationSeverityLabel[invert(ValidationSeverity)[severity]] as ValidationSeverityLabel);
 
     results = results.concat(
       targetResults.map(result => {

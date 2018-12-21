@@ -13,8 +13,8 @@ Array [
       "get",
       "operationId",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation should have an \`operationId\`.",
   },
 ]

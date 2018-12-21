@@ -9,8 +9,8 @@ Array [
       "paths",
       "/path/{}",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "given declarations cannot be empty, ex.\`/given/{}\` is invalid.",
   },
 ]

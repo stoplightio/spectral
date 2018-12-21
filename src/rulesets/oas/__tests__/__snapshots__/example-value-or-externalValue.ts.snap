@@ -8,8 +8,8 @@ Array [
     "path": Array [
       "example",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Example should have either a \`value\` or \`externalValue\` field.",
   },
 ]
@@ -23,8 +23,8 @@ Array [
     "path": Array [
       "example",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Example should have either a \`value\` or \`externalValue\` field.",
   },
 ]

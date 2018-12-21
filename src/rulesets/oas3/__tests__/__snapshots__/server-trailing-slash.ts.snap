@@ -10,8 +10,8 @@ Array [
       0,
       "url",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Server URL should not have a trailing slash.",
   },
 ]

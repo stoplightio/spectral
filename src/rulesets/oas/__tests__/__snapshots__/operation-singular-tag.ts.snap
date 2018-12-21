@@ -11,8 +11,8 @@ Array [
       "get",
       "tags",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation may only have one tag.",
   },
 ]
