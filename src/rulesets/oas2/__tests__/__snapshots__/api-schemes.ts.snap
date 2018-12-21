@@ -8,8 +8,8 @@ Array [
     "path": Array [
       "schemes",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
   },
 ]
@@ -23,8 +23,8 @@ Array [
     "path": Array [
       "schemes",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
   },
 ]

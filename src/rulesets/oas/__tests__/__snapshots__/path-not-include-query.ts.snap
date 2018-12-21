@@ -9,8 +9,8 @@ Array [
       "paths",
       "/path?query=true",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "given keys should not include a query string.",
   },
 ]

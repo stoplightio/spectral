@@ -9,8 +9,8 @@ Array [
       "info",
       "contact",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Info object should contain \`contact\` object.",
   },
 ]

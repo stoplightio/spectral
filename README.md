@@ -34,28 +34,28 @@ Think of a set of **rules** and **functions** as a flexible and customizable sty
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
 
 ```javascript
-const { RuleFunction, Spectral } = require("@stoplight/spectral");
+const { RuleFunction, Spectral } = require('@stoplight/spectral');
 
 const spectral = new Spectral();
 
 spectral.addRules({
   snake_case: {
-    summary: "Checks for snake case pattern",
+    summary: 'Checks for snake case pattern',
 
     // evaluate every property
-    given: "$..*",
+    given: '$..*',
 
     then: {
       function: RuleFunction.PATTERN,
       functionOptions: {
-        match: "^[a-z]+[a-z0-9_]*[a-z0-9]+$"
-      }
-    }
-  }
+        match: '^[a-z]+[a-z0-9_]*[a-z0-9]+$',
+      },
+    },
+  },
 });
 
 const results = spectral.run({
-  name: "helloWorld"
+  name: 'helloWorld',
 });
 
 console.log(JSON.stringify(results, null, 4));
@@ -66,8 +66,8 @@ console.log(JSON.stringify(results, null, 4));
 //     {
 //       "name": "snake_case",
 //       "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
-//       "severity": 50,
-//       "severityLabel": "error",
+//       "severity": 40,
+//       "severityLabel": "warn",
 //       "path": [
 //         "name"
 //       ]
@@ -81,7 +81,7 @@ console.log(JSON.stringify(results, null, 4));
 Sometimes the built-in functions don't cover your use case. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
 
 ```javascript
-const { Spectral } = require("@stoplight/spectral");
+const { Spectral } = require('@stoplight/spectral');
 
 // custom function
 const customNotThatFunction = (targetValue, options) => {
@@ -91,8 +91,8 @@ const customNotThatFunction = (targetValue, options) => {
     // return the single error
     return [
       {
-        message: `Use ${suggestion} instead of ${match}!`
-      }
+        message: `Use ${suggestion} instead of ${match}!`,
+      },
     ];
   }
 };
@@ -100,31 +100,31 @@ const customNotThatFunction = (targetValue, options) => {
 const spectral = new Spectral();
 
 spectral.addFunctions({
-  notThat: customNotThatFunction
+  notThat: customNotThatFunction,
 });
 
 spectral.addRules({
   openapi_not_swagger: {
-    summary: "Checks for use of Swagger, and suggests OpenAPI.",
+    summary: 'Checks for use of Swagger, and suggests OpenAPI.',
 
     // check every property
-    given: "$..*",
+    given: '$..*',
 
     then: {
       // reference the function we added!
-      function: "notThat",
+      function: 'notThat',
 
       // pass it the options it needs
       functionOptions: {
-        match: "Swagger",
-        suggestion: "OpenAPI"
-      }
-    }
-  }
+        match: 'Swagger',
+        suggestion: 'OpenAPI',
+      },
+    },
+  },
 });
 
 const results = spectral.run({
-  description: "Swagger is pretty cool!"
+  description: 'Swagger is pretty cool!',
 });
 
 console.log(JSON.stringify(results, null, 4));
@@ -135,8 +135,8 @@ console.log(JSON.stringify(results, null, 4));
 //     {
 //       "name": "openapi_not_swagger",
 //       "message": "Use OpenAPI instead of Swagger!",
-//       "severity": 50,
-//       "severityLabel": "error",
+//       "severity": 40,
+//       "severityLabel": "warn",
 //       "path": [
 //         "description"
 //       ]
@@ -152,23 +152,20 @@ Spectral also includes a number of ready made rules and functions for OpenAPI Sp
 You can also add to these rules to create a customized linting style guide for your OAS documents.
 
 ```javascript
-const { Spectral } = require("@stoplight/spectral");
-const {
-  oas2Functions,
-  oas2Rules
-} = require("@stoplight/spectral/rulesets/oas2");
+const { Spectral } = require('@stoplight/spectral');
+const { oas2Functions, oas2Rules } = require('@stoplight/spectral/rulesets/oas2');
 
 // an OASv2 document
 var myOAS = {
   // ... properties in your document
   responses: {
-    "200": {
-      description: "",
+    '200': {
+      description: '',
       schema: {
-        $ref: "#/definitions/error-response"
-      }
-    }
-  }
+        $ref: '#/definitions/error-response',
+      },
+    },
+  },
   // ... properties in your document
 };
 

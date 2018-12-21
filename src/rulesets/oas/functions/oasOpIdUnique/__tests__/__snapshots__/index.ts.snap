@@ -11,8 +11,8 @@ Array [
       "get",
       "operationId",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
@@ -24,8 +24,8 @@ Array [
       "get",
       "operationId",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]
@@ -42,8 +42,8 @@ Array [
       "get",
       "operationId",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
@@ -55,8 +55,8 @@ Array [
       "post",
       "operationId",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]

@@ -9,8 +9,8 @@ Array [
       "info",
       "license",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "OpenAPI object info \`license\` must be present and non-empty string.",
   },
 ]

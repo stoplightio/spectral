@@ -88,8 +88,8 @@ describe('linter', () => {
     expect(result.results[0]).toEqual({
       name: 'rule1',
       message,
-      severity: ValidationSeverity.Error,
-      severityLabel: ValidationSeverityLabel.Error,
+      severity: ValidationSeverity.Warn,
+      severityLabel: ValidationSeverityLabel.Warn,
       path: ['responses', '404', 'description'],
     });
   });
@@ -110,6 +110,35 @@ describe('linter', () => {
         given: '$.x',
         severity: ValidationSeverity.Info,
         severityLabel: ValidationSeverityLabel.Info,
+        then: {
+          function: 'func1',
+        },
+      },
+    });
+
+    const result = spectral.run({
+      x: true,
+    });
+
+    expect(result.results[0].severity).toEqual(ValidationSeverity.Info);
+    expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
+  });
+
+  test('should default severityLabel based on rule severity', () => {
+    spectral.addFunctions({
+      func1: () => {
+        return [
+          {
+            message: 'foo',
+          },
+        ];
+      },
+    });
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        severity: ValidationSeverity.Info,
         then: {
           function: 'func1',
         },

@@ -10,8 +10,8 @@ Array [
       "contact",
       "name",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
   Object {
@@ -22,8 +22,8 @@ Array [
       "contact",
       "url",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
   Object {
@@ -34,8 +34,8 @@ Array [
       "contact",
       "email",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
 ]

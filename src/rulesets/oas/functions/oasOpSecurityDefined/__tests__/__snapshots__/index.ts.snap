@@ -12,8 +12,8 @@ Array [
       "security",
       "0",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation \`security\` values must match a scheme defined in the \`securityDefinitions\` object.",
   },
 ]
@@ -31,8 +31,8 @@ Array [
       "security",
       "0",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation \`security\` values must match a scheme defined in the \`components.securitySchemes\` object.",
   },
 ]

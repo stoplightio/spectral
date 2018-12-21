@@ -13,8 +13,8 @@ Array [
       "get",
       "description",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation \`description\` must be present and non-empty string.",
   },
 ]

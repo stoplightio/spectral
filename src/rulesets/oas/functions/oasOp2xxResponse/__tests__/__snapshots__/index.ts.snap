@@ -11,8 +11,8 @@ Array [
       "get",
       "responses",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation must have at least one \`2xx\` response.",
   },
 ]
@@ -29,8 +29,8 @@ Array [
       "get",
       "responses",
     ],
-    "severity": 50,
-    "severityLabel": "error",
+    "severity": 40,
+    "severityLabel": "warn",
     "summary": "Operation must have at least one \`2xx\` response.",
   },
 ]
