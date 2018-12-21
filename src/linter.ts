@@ -1,7 +1,8 @@
-import { ObjPath, ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
+import { ObjPath, ValidationSeverity } from '@stoplight/types';
 import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
+const invert = require('lodash/invert');
 
 import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
@@ -83,15 +84,18 @@ export const lintNode = (
         }
       ) || [];
 
+    const severity = rule.severity || ValidationSeverity.Warn;
+    const severityLabel = rule.severityLabel || invert(ValidationSeverity)[rule.severity || ValidationSeverity.Warn];
+
     results = results.concat(
       targetResults.map(result => {
         return {
           name: rule.name,
           summary: rule.summary,
           message: result.message,
-          severity: rule.severity || ValidationSeverity.Error,
-          severityLabel: rule.severityLabel || ValidationSeverityLabel.Error,
           path: result.path || targetPath,
+          severity,
+          severityLabel,
         };
       })
     );
