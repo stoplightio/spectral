@@ -9,7 +9,7 @@ export { commonOasFunctions as oas3Functions } from '../oas';
 
 export const oas3Rules = () => {
   return merge(commonOasRules(), {
-    // specifcication validation
+    // specification validation
     'oas3-schema': {
       summary: 'Validate structure of OpenAPIv3 specification.',
       type: RuleType.VALIDATION,
@@ -25,7 +25,7 @@ export const oas3Rules = () => {
 
     // generic rules
     'api-servers': {
-      summary: 'OpenAPI `servers` must be present and non-empty string.',
+      summary: 'OpenAPI `servers` must be present and non-empty array.',
       type: RuleType.STYLE,
       given: '$',
       then: {
