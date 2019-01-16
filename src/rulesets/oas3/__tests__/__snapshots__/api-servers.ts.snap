@@ -10,7 +10,7 @@ Array [
     ],
     "severity": 40,
     "severityLabel": "warn",
-    "summary": "OpenAPI \`servers\` must be present and non-empty string.",
+    "summary": "OpenAPI \`servers\` must be present and non-empty array.",
   },
 ]
 `;
@@ -25,7 +25,7 @@ Array [
     ],
     "severity": 40,
     "severityLabel": "warn",
-    "summary": "OpenAPI \`servers\` must be present and non-empty string.",
+    "summary": "OpenAPI \`servers\` must be present and non-empty array.",
   },
 ]
 `;
