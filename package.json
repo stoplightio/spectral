@@ -24,7 +24,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "**/*"
+    ".*",
+    "src/*",
+    "src/functions",
+    "src/rulesets",
+    "src/__tests__",
+    "src/types"
   ],
   "engines": {
     "node": ">=8.3.0"
