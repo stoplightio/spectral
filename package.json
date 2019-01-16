@@ -23,7 +23,12 @@
   "license": "Apache-2.0",
   "main": "src/index.ts",
   "files": [
-    "**/*"
+    ".*",
+    "src/*",
+    "src/functions",
+    "src/rulesets",
+    "src/__tests__",
+    "src/types"
   ],
   "engines": {
     "node": ">=8.3.0"
