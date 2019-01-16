@@ -22,8 +22,11 @@
   },
   "license": "Apache-2.0",
   "main": "src/index.ts",
+  "bin": {
+    "spectral": "src/cli/bin/run"
+  },
   "files": [
-    ".*",
+    "./*",
     "src/*",
     "src/functions",
     "src/rulesets",
