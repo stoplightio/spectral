@@ -1,7 +1,6 @@
-spectral
-========
+![Spectral logo](../../img/spectral-banner.png)
 
-Spectral CLI
+# Spectral CLI
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/spectral.svg)](https://npmjs.org/package/spectral)
@@ -15,7 +14,7 @@ Spectral CLI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g spectral
+$ yarn add --global spectral
 $ spectral COMMAND
 running command...
 $ spectral (-v|--version|version)
@@ -28,28 +27,28 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`spectral hello [FILE]`](#spectral-hello-file)
+* [`spectral lint [SOURCE]`](#spectral-lint-source)
 * [`spectral help [COMMAND]`](#spectral-help-command)
 
-## `spectral hello [FILE]`
+## `spectral lint [SOURCE]`
 
 describe the command here
 
 ```
 USAGE
-  $ spectral hello [FILE]
+  $ spectral lint [SOURCE]
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -e, --encoding=encoding  [default: utf8] text encoding to use
+  -h, --help               show CLI help
+  -m, --maxWarn=maxWarn    [default: all] maximum warnings to show
+  -r, --resolve            resolve external $refs
+  -v, --verbose            increase verbosity
 
 EXAMPLE
-  $ spectral hello
-  hello world from ./src/hello.ts!
+  $ spectral lint ./openapi.yaml
+  linting ./openapi.yaml
 ```
-
-_See code: [src/commands/hello.ts](https://github.com/stoplightio/spectral/blob/v0.0.0/src/commands/hello.ts)_
 
 ## `spectral help [COMMAND]`
 
@@ -66,5 +65,4 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.4/src/commands/help.ts)_
 <!-- commandsstop -->

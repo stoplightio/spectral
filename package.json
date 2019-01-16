@@ -21,10 +21,12 @@
     "url": "https://github.com/stoplightio/spectral"
   },
   "license": "Apache-2.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "bin": {
+    "spectral": "src/cli/bin/run"
+  },
   "files": [
-    ".*",
+    "./*",
     "src/*",
     "src/functions",
     "src/rulesets",
