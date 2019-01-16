@@ -13,6 +13,7 @@
     "@oclif/plugin-help": "^2",
     "@stoplight/yaml": "^1.1.0",
     "node-fetch": "^2.3.0",
+    "oas-resolver": "^1.1.1",
     "tslib": "^1"
   },
   "devDependencies": {
