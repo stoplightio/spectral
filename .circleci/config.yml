@@ -41,6 +41,8 @@ workflows:
       - release:
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - next
           requires:
             - test_node_8
