@@ -164,7 +164,7 @@ describe('linter', () => {
       spectral.addRules(rules);
     });
 
-    describe('when given path is set', () => {
+    describe('when a given path is set', () => {
       test('should pass given path through to lint function', () => {
         spectral.run(target);
 
