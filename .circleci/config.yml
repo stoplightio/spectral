@@ -38,11 +38,15 @@ workflows:
   test_and_release:
     jobs:
       - test_node_8
+        filters:
+          branches:
+            only:
+              - master
+              - next
       - release:
           filters:
             branches:
               only:
                 - master
-                - next
           requires:
             - test_node_8
