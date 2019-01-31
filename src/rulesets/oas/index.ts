@@ -255,6 +255,19 @@ export const commonOasRules = (): RuleCollection => ({
     },
     tags: ['operation'],
   },
+  'operation-operationId-valid-in-url': {
+    summary: 'operationId may only use characters that are valid when used in a URL.',
+    type: RuleType.VALIDATION,
+    given: operationPath,
+    then: {
+      field: 'operationId',
+      function: RuleFunction.PATTERN,
+      functionOptions: {
+        match: `^[A-Za-z0-9-._~:/?#\\[\\]@!\\$&'()*+,;=]*$`,
+      },
+    },
+    tags: ['operation'],
+  },
   'operation-singular-tag': {
     enabled: false,
     summary: 'Operation may only have one tag.',
