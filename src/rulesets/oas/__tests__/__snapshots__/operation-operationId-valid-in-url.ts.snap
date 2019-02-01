@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`operation-operationId-valid-in-url return errors if operationId contains invalid characters 1`] = `
+Array [
+  Object {
+    "message": "must match the pattern '^[A-Za-z0-9-._~:/?#\\\\[\\\\]@!\\\\$&'()*+,;=]*$'",
+    "name": "operation-operationId-valid-in-url",
+    "path": Array [
+      "paths",
+      "/todos",
+      "get",
+      "operationId",
+    ],
+    "severity": 40,
+    "severityLabel": "warn",
+    "summary": "operationId may only use characters that are valid when used in a URL.",
+  },
+]
+`;
