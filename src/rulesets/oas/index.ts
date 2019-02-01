@@ -342,7 +342,7 @@ export const commonOasRules = (): RuleCollection => ({
       field: '@key',
       function: RuleFunction.PATTERN,
       functionOptions: {
-        notMatch: '/$',
+        notMatch: '.+\\/$',
       },
     },
     tags: ['given'],

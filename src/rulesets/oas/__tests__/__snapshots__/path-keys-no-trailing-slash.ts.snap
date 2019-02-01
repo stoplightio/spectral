@@ -3,7 +3,7 @@
 exports[`path-keys-no-trailing-slash return errors if path ends with a slash 1`] = `
 Array [
   Object {
-    "message": "must not match the pattern '/$'",
+    "message": "must not match the pattern '.+\\\\/$'",
     "name": "path-keys-no-trailing-slash",
     "path": Array [
       "paths",
