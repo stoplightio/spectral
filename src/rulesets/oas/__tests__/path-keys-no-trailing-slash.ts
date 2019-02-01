@@ -26,4 +26,12 @@ describe('path-keys-no-trailing-slash', () => {
     });
     expect(results.results).toMatchSnapshot();
   });
+
+  test('does not return error if path IS a /', () => {
+    const results = s.run({
+      swagger: '2.0',
+      paths: { '/': {} },
+    });
+    expect(results.results.length).toEqual(0);
+  });
 });
