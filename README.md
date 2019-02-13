@@ -184,6 +184,9 @@ spectral.addRules({
 // run!
 const results = spectral.run(myOAS);
 
+// if your specification has already resolved all objects (i.e. no $refs in your specification), you can use this instead: 
+// const results = spectral.run(myOAS, { resolvedTarget: myOAS });
+
 console.log(JSON.stringify(results, null, 4));
 ```
 
@@ -206,6 +209,16 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 **What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
 
 With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
+
+**Why am I seeing an `oasOpParams expects a resolved object, but none was provided. Results may not be correct.` or `oasPathParam expects a resolved object, but none was provided. Results may not be correct.` message at the start of my output?**
+
+Certain rules need both the resolved and unresolved objects in the document in order to function. If you do not have any $refs in your document, you can run Spectral with this instead:
+
+```javascript
+const results = spectral.run(specification, { resolvedTarget: specification });
+```
+
+If you still need to get the resolved objects, you can check out our [json-ref-resolver](https://github.com/stoplightio/json-ref-resolver) to provide Spectral with resolved objects.
 
 ## Contributing
 
