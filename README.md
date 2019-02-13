@@ -184,7 +184,8 @@ spectral.addRules({
 // run!
 const results = spectral.run(myOAS);
 
-// if your specification has already resolved all objects (i.e. no $refs in your specification), you can use this instead: 
+// if your specification has already resolved all objects (i.e. no $refs in your specification), 
+// you can use this instead: 
 // const results = spectral.run(myOAS, { resolvedTarget: myOAS });
 
 console.log(JSON.stringify(results, null, 4));
