@@ -1172,6 +1172,21 @@
     into-stream "^4.0.0"
     lodash "^4.17.4"
 
+"@stoplight/fast-safe-stringify@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/fast-safe-stringify/-/fast-safe-stringify-2.1.2.tgz#2811eff4989c3d4c5c9a3789f057e25358db0899"
+  integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
+
+"@stoplight/json@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-1.5.0.tgz#174135278c345129381733c5bee8a9165f126418"
+  integrity sha512-f9kgxIusy+pO4Y2aPwgiFHXpm64Fmwli3a5tFAfz3iyRra8SiIlRxDJYkpQBFS/qxZP4VUjBAiVEGyudpOi1gQ==
+  dependencies:
+    "@stoplight/fast-safe-stringify" "2.1.2"
+    "@stoplight/types" "3.x.x"
+    json-source-map "0.4.0"
+    lodash "4.x.x"
+
 "@stoplight/scripts@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@stoplight/scripts/-/scripts-3.1.0.tgz#212f183ad2fc941be2c8e79d6abc40bfbb6e1500"
@@ -7186,6 +7201,11 @@ json-schema@0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
   integrity sha1-tIDIkuWaLwWVTOcnvT8qTogvnhM=
+
+json-source-map@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/json-source-map/-/json-source-map-0.4.0.tgz#eea837fe3ce2f2bfd5b13687779406354423c355"
+  integrity sha1-7qg3/jzi8r/VsTaHd5QGNUQjw1U=
 
 json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "5.0.1"

@@ -1,3 +1,4 @@
+import { decodePointerFragment } from '@stoplight/json';
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 
@@ -39,7 +40,12 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       }
 
       results.push({
-        path: path.concat(e.dataPath.split('/').slice(1)),
+        path: path.concat(
+          e.dataPath
+            .split('/')
+            .slice(1)
+            .map(frag => decodePointerFragment(frag))
+        ),
         message: e.message ? e.message : '',
       });
     });
