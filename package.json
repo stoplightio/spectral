@@ -65,15 +65,14 @@
     "ajv": "6.x.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
     "lodash": ">=4.17.5",
-    "node-fetch": "2.x.x",
-    "oas-resolver": "2.2.x"
+    "node-fetch": "2.x.x"
   },
   "devDependencies": {
     "@oclif/dev-cli": "1.21.x",
     "@stoplight/scripts": "3.1.0",
     "@types/jsonpath": "0.2.x",
     "@types/lodash": "4.x.x",
-    "fs-extra": "^7.0.1",
+    "fs-extra": "7.0.x",
     "typescript": "3.2.2"
   },
   "lint-staged": {
