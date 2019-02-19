@@ -3,6 +3,8 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/test_coverage)](https://codeclimate.com/github/stoplightio/spectral/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/maintainability)](https://codeclimate.com/github/stoplightio/spectral/maintainability)
 
+A flexible JSON object linter with out of the box support for OpenAPI Specification 2 and 3
+
 ## Features
 
 - Create custom rules to lint _any JSON object_.
