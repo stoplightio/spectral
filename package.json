@@ -21,7 +21,8 @@
     "url": "https://github.com/stoplightio/spectral"
   },
   "license": "Apache-2.0",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "**/*"
   ],
@@ -43,6 +44,7 @@
     "test.watch": "yarn test --watch"
   },
   "dependencies": {
+    "@stoplight/json": "1.x.x",
     "@stoplight/types": "3.x.x",
     "ajv": "6.x.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
