@@ -44,7 +44,7 @@
     "test.watch": "yarn test --watch"
   },
   "dependencies": {
-    "@stoplight/json": "^1.5.0",
+    "@stoplight/json": "1.x.x",
     "@stoplight/types": "3.x.x",
     "ajv": "6.x.x",
     "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
