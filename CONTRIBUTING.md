@@ -1,6 +1,6 @@
 # How to contribute to Spectral
 
-First of all, thanks for considering contributing to Spectral! It's people like you that make tools like Spectral awesome.  
+First of all, thanks for considering contributing to Spectral! ✨ It's people like you that make tools like Spectral awesome. 💖
 
 At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for anyone to contribute to. Contributions go beyond commits in pull requests. We are excited to recieve contributions in the form of:
 - TODO: content
@@ -24,7 +24,7 @@ Our Code of Conduct exists because of that dedication, and we do not tolerate ha
 
 Yarn is a package manager for your code, similar to npm. While you can use npm to use Spectral in your own project, we use yarn for development of Spectral.
 
-1. Install the [yarn](https://yarnpkg.com/lang/en/docs/install/), if you don't already have it on your machine.
+1. Install the [yarn](https://yarnpkg.com/lang/en/docs/install/) package manager, if you don't already have it on your machine.
 2. Fork the [https://github.com/stoplightio/spectral](https://github.com/stoplightio/spectral) repo.
 3. Git clone your fork (i.e. git clone https://github.com/<your-username>/spectral.git) to your machine.
 4. Run `yarn` to install dependencies and setup the project.
