@@ -2,15 +2,21 @@
 
 First of all, thanks for considering contributing to Spectral! ✨ It's people like you that make tools like Spectral awesome. 💖
 
-At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for anyone to contribute to. Contributions go beyond commits in pull requests. We are excited to recieve contributions in the form of:
-- TODO: content
-- TODO: ideas
-- TODO: sharing
-- TODO: triaging issues
-- TODO: reviewing pull requests
-- TODO: much more
+At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for anyone to contribute to. Contributions go beyond commits in pull requests. We are excited to receive contributions in the form of:
 
-If you are new to contributing to open source, GitHub has created a helpful guide with lots of resources [here](https://opensource.guide/how-to-contribute/). If you want more help, post in our [forum]() or send us an email to [support@stoplight.io](mailto:support@stoplight.io). We are happy to help you out there. 
+- feature ideas
+- code
+- implementations
+- triaging issues
+- reviewing pull requests
+- blog posts, talks referencing the project, tweets
+- and much more!
+
+If it is related to Spectral, we consider it a contribution. 
+
+If you are new to contributing to open source, GitHub has created a helpful guide with lots of resources [here](https://opensource.guide/how-to-contribute/). If you want more help, post in our [Community forum](https://community.stoplight.io/c/open-source) or send us an email to [support@stoplight.io](mailto:support@stoplight.io). We are happy to help you out there. 
+
+We want to encourage everyone to be welcoming to newcomers and encourage new contributors from all backgrounds.
 
 Also, to help create an environment where anyone could potentially be welcome to contribute, we have a Code of Conduct that applies to the project and adjacent spaces related to Spectral. 
 
@@ -24,19 +30,59 @@ Our Code of Conduct exists because of that dedication, and we do not tolerate ha
 
 Yarn is a package manager for your code, similar to npm. While you can use npm to use Spectral in your own project, we use yarn for development of Spectral.
 
-1. Install the [yarn](https://yarnpkg.com/lang/en/docs/install/) package manager, if you don't already have it on your machine.
+1. If you don't already have the yarn package manager on your machine, install [yarn](https://yarnpkg.com/lang/en/docs/install/).
 2. Fork the [https://github.com/stoplightio/spectral](https://github.com/stoplightio/spectral) repo.
 3. Git clone your fork (i.e. git clone https://github.com/<your-username>/spectral.git) to your machine.
 4. Run `yarn` to install dependencies and setup the project.
 5. Run `git checkout -b [name_of_your_new_branch]` to create a new branch for your work. To help build nicer changelogs, we have a convention for branch names. Please start your branch with either `feature/{branch-name}`, `chore/{branch-name}`, or `fix/{branch-name}`. For example, if I was adding a CLI, I would make my branch name: `feature/add-cli`. 
 6. Make changes, write tests, commit, etc. 
 7. Run `yarn test.prod` to test your changes.
-8. If you have passed existing tests and added tests for new features or fixes, you are ready to make a pull request to the Stoplight repo!
+8. If you have passed existing tests and added tests for new features or fixes, you are ready to make a pull request to the Stoplight repo! 😃
 
 If this is your first Pull Request on GitHub, here's some [help](https://egghead.io/lessons/javascript-how-to-create-a-pull-request-on-github). 
 
-We try to respond to all pull requests and issues within 7 days. 
+We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests. 
 
-## Filing an issue
+## Creating an issue
+
+We want to keep issues in this repo focused on bug reports and feature requests. 
+
+For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [Community forum](https://community.stoplight.io/c/open-source) is a great place to start.
+
+Before you open an issue, try to see if anyone else has already opened an issue that might be similar to your issue or feature request. Start by commenting there to see if you are having the same issue or feature request. 
+
+We have an issue template setup: 
+
+```
+### **I'm submitting a...**
+  - bug report
+  - feature request
+
+### What is the current behavior?
+
+If the current behavior is a bug, please provide the steps to reproduce and if possible a minimal demo of the problem.
+
+### What is the expected behavior?
+
+### What is the motivation / use case for changing the behavior?
+
+### Please tell us about your environment:
+
+  - Version: 2.0.0-beta.X
+  - Framework: [ ]
+  - Language: [all | TypeScript X.X | ES6/7 | ES5 | Dart]
+
+### Other information
+
+(e.g. detailed explanation, stacktraces, related issues, suggestions how to fix, links for us to have context, eg. stackoverflow, issues outside of the repo, forum, etc.)
+```
+
+We realize there is a lot of data requested here. We ask only that you do your best to provide as much information as possible so we can better help you.
 
 ## Support
+
+For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [Community forum](https://community.stoplight.io/c/open-source) is a great place to start.
+
+If you have confirmed a bug, please create an issue. 
+
+We try to respond to all pull requests and issues within 7 days.
