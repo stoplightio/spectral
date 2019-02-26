@@ -5,10 +5,10 @@ First of all, thanks for considering contributing to Spectral! ✨ It's people l
 At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for anyone to contribute to. Contributions go beyond commits in pull requests. We are excited to receive contributions in the form of:
 
 - feature ideas
-- code
-- implementations
+- pull requests
 - triaging issues
 - reviewing pull requests
+- implementations of Spectral in your own projects
 - blog posts, talks referencing the project, tweets
 - and much more!
 
@@ -35,7 +35,8 @@ Yarn is a package manager for your code, similar to npm. While you can use npm t
 3. Git clone your fork (i.e. git clone https://github.com/<your-username>/spectral.git) to your machine.
 4. Run `yarn` to install dependencies and setup the project.
 5. Run `git checkout -b [name_of_your_new_branch]` to create a new branch for your work. To help build nicer changelogs, we have a convention for branch names. Please start your branch with either `feature/{branch-name}`, `chore/{branch-name}`, or `fix/{branch-name}`. For example, if I was adding a CLI, I would make my branch name: `feature/add-cli`. 
-6. Make changes, write tests, commit, etc. 
+6. Make changes, write code and tests, etc. 
+7. Ready to `git commit`? **Important:** We use a [commit message format](https://www.conventionalcommits.org/en/v1.0.0-beta.3/) to add more semantic meaning to our git history to create automated, rich changelogs, filter what tests to run, and more. Run `yarn commit` to help you create this format, or you can put it together manually and then do a regular `git commit`. Commits outside of this format will be rejected.
 7. Run `yarn test.prod` to test your changes.
 8. If you have passed existing tests and added tests for new features or fixes, you are ready to make a pull request to the Stoplight repo! 😃
 
@@ -47,7 +48,7 @@ We try to respond to all pull requests and issues within 7 days. We welcome feed
 
 We want to keep issues in this repo focused on bug reports and feature requests. 
 
-For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [Community forum](https://community.stoplight.io/c/open-source) is a great place to start.
+For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
 
 Before you open an issue, try to see if anyone else has already opened an issue that might be similar to your issue or feature request. Start by commenting there to see if you are having the same issue or feature request. 
 
@@ -81,8 +82,8 @@ We realize there is a lot of data requested here. We ask only that you do your b
 
 ## Support
 
-For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [Community forum](https://community.stoplight.io/c/open-source) is a great place to start.
+For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
 
-If you have confirmed a bug, please create an issue. 
+If you have found a bug, please create an issue. 
 
 We try to respond to all pull requests and issues within 7 days.
