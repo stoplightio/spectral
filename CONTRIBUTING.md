@@ -2,7 +2,7 @@
 
 First of all, thanks for considering contributing to Spectral! ✨ It's people like you that make tools like Spectral awesome. 💖
 
-At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for anyone to contribute to. Contributions go beyond commits in pull requests. We are excited to receive contributions in the form of:
+At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for everyone. Contributions go beyond commits in pull requests. We are excited to receive contributions in the form of:
 
 - feature ideas
 - pull requests
