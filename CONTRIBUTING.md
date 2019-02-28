@@ -14,7 +14,7 @@ At Stoplight, we want contributing to Spectral to be an enjoyable and educationa
 
 If it is related to Spectral, we consider it a contribution. 
 
-If you are new to contributing to open source, GitHub has created a helpful guide with lots of resources [here](https://opensource.guide/how-to-contribute/). If you want more help, post in our [Community forum](https://community.stoplight.io/c/open-source) or send us an email to [support@stoplight.io](mailto:support@stoplight.io). We are happy to help you out there. 
+If you are new to contributing to open source, GitHub has created a helpful guide with lots of resources [here](https://opensource.guide/how-to-contribute/). If you want more help, post in our [Community forum](https://community.stoplight.io/c/open-source) or send an email to [support@stoplight.io](mailto:support@stoplight.io). We are happy to help you out there. 
 
 We want to encourage everyone to be welcoming to newcomers and encourage new contributors from all backgrounds.
 
