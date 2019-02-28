@@ -18,7 +18,7 @@ If you are new to contributing to open source, GitHub has created a helpful guid
 
 We want to encourage everyone to be welcoming to newcomers and encourage new contributors from all backgrounds.
 
-Also, to help create an environment where anyone could potentially be welcome to contribute, we have a Code of Conduct that applies to the project and adjacent spaces related to Spectral. 
+To help create an environment where anyone could potentially be welcome to contribute, we have a Code of Conduct that applies to the project and adjacent spaces related to Spectral. 
 
 ## Stoplight Community Code of Conduct
 
