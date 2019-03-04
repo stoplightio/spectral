@@ -47,7 +47,7 @@
     "@stoplight/json": "1.x.x",
     "@stoplight/types": "3.x.x",
     "ajv": "6.x.x",
-    "jsonpath": "git://github.com/stoplightio/jsonpath.git#fe90d42",
+    "jsonpath": "git://github.com/stoplightio/jsonpath.git#78140eb",
     "lodash": ">=4.17.5"
   },
   "devDependencies": {

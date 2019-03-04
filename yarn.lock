@@ -1177,7 +1177,7 @@
   resolved "https://registry.yarnpkg.com/@stoplight/fast-safe-stringify/-/fast-safe-stringify-2.1.2.tgz#2811eff4989c3d4c5c9a3789f057e25358db0899"
   integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
 
-"@stoplight/json@^1.5.0":
+"@stoplight/json@1.x.x":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-1.5.0.tgz#174135278c345129381733c5bee8a9165f126418"
   integrity sha512-f9kgxIusy+pO4Y2aPwgiFHXpm64Fmwli3a5tFAfz3iyRra8SiIlRxDJYkpQBFS/qxZP4VUjBAiVEGyudpOi1gQ==
@@ -7253,9 +7253,9 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-"jsonpath@git://github.com/stoplightio/jsonpath.git#fe90d42":
+"jsonpath@git://github.com/stoplightio/jsonpath.git#78140eb":
   version "1.0.0"
-  resolved "git://github.com/stoplightio/jsonpath.git#fe90d42805afb6dcfa7ca75f2503aa71f62f9a06"
+  resolved "git://github.com/stoplightio/jsonpath.git#78140eb1980d4ff385780e2fa12177735685ec3e"
   dependencies:
     esprima "1.2.2"
     jison "0.4.13"
