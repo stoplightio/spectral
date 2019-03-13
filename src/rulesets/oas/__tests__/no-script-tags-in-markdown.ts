@@ -11,8 +11,8 @@ describe('no-script-tags-in-markdown', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {
@@ -22,8 +22,8 @@ describe('no-script-tags-in-markdown', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if descriptions include <script', () => {
-    const results = s.run({
+  test('return errors if descriptions include <script', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {

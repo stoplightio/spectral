@@ -11,8 +11,8 @@ describe('api-schemes', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       schemes: ['http'],
@@ -20,16 +20,16 @@ describe('api-schemes', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if schemes is missing ', () => {
-    const results = s.run({
+  test('return errors if schemes is missing ', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
     });
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if schemes is an empty array ', () => {
-    const results = s.run({
+  test('return errors if schemes is an empty array ', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       schemes: [],

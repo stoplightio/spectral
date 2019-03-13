@@ -11,8 +11,8 @@ describe('api-servers', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       servers: [{ url: 'https://stoplight.io' }],
@@ -20,16 +20,16 @@ describe('api-servers', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if servers is missing ', () => {
-    const results = s.run({
+  test('return errors if servers is missing ', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
     });
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if servers is an empty array ', () => {
-    const results = s.run({
+  test('return errors if servers is an empty array ', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       servers: [],

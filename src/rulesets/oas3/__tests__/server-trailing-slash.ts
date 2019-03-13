@@ -11,8 +11,8 @@ describe('server-trailing-slash', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       servers: [
@@ -24,8 +24,8 @@ describe('server-trailing-slash', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if server url ends with a slash', () => {
-    const results = s.run({
+  test('return errors if server url ends with a slash', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       servers: [

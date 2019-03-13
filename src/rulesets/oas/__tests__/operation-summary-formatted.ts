@@ -11,8 +11,8 @@ describe('operation-summary-formatted', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -25,8 +25,8 @@ describe('operation-summary-formatted', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if summary does not start with an uppercase', () => {
-    const results = s.run({
+  test('return errors if summary does not start with an uppercase', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -39,8 +39,8 @@ describe('operation-summary-formatted', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if summary does not end with a dot', () => {
-    const results = s.run({
+  test('return errors if summary does not end with a dot', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {

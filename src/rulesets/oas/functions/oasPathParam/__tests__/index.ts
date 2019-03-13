@@ -12,15 +12,12 @@ describe('oasPathParam', () => {
     }),
   });
 
-  test('No error if templated path is not used', () => {
-    const results = s.run(
-      {},
+  test('No error if templated path is not used', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {},
-            },
+        paths: {
+          '/foo': {
+            get: {},
           },
         },
       }
@@ -28,15 +25,12 @@ describe('oasPathParam', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('Error if no path parameter definition', () => {
-    const results = s.run(
-      {},
+  test('Error if no path parameter definition', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo/{bar}': {
-              get: {},
-            },
+        paths: {
+          '/foo/{bar}': {
+            get: {},
           },
         },
       }
@@ -47,45 +41,39 @@ describe('oasPathParam', () => {
     expect(results.results[0].message).toContain('bar');
   });
 
-  test('No error if path parameter definition is used (at the path level)', () => {
-    const results = s.run(
-      {},
+  test('No error if path parameter definition is used (at the path level)', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo/{bar}': {
-              parameters: [
-                {
-                  name: 'bar',
-                  in: 'path',
-                  required: true,
-                },
-              ],
-              get: {},
-            },
-          },
-        },
-      }
-    );
-    expect(results.results.length).toEqual(0);
-  });
-
-  test('No error if path parameter definition is set (at the operation level)', () => {
-    const results = s.run(
-      {},
-      {
-        resolvedTarget: {
-          paths: {
-            '/foo/{bar}': {
-              get: {
-                parameters: [
-                  {
-                    name: 'bar',
-                    in: 'path',
-                    required: true,
-                  },
-                ],
+        paths: {
+          '/foo/{bar}': {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
               },
+            ],
+            get: {},
+          },
+        },
+      }
+    );
+    expect(results.results.length).toEqual(0);
+  });
+
+  test('No error if path parameter definition is set (at the operation level)', async () => {
+    const results = await s.run(
+      {
+        paths: {
+          '/foo/{bar}': {
+            get: {
+              parameters: [
+                {
+                  name: 'bar',
+                  in: 'path',
+                  required: true,
+                },
+              ],
             },
           },
         },
@@ -94,22 +82,19 @@ describe('oasPathParam', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('Error if duplicate path parameters with same name are used', () => {
-    const results = s.run(
-      {},
+  test('Error if duplicate path parameters with same name are used', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo/{bar}/{bar}': {
-              parameters: [
-                {
-                  name: 'bar',
-                  in: 'path',
-                  required: true,
-                },
-              ],
-              get: {},
-            },
+        paths: {
+          '/foo/{bar}/{bar}': {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+              },
+            ],
+            get: {},
           },
         },
       }
@@ -120,22 +105,19 @@ describe('oasPathParam', () => {
     expect(results.results[0].message).toContain('bar');
   });
 
-  test('Error if path parameter definition is not required', () => {
-    const results = s.run(
-      {},
+  test('Error if path parameter definition is not required', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo/{bar}': {
-              parameters: [
-                {
-                  name: 'bar',
-                  in: 'path',
-                  required: false,
-                },
-              ],
-              get: {},
-            },
+        paths: {
+          '/foo/{bar}': {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: false,
+              },
+            ],
+            get: {},
           },
         },
       }
@@ -145,32 +127,29 @@ describe('oasPathParam', () => {
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
   });
 
-  test('Error if paths are functionally equivalent', () => {
-    const results = s.run(
-      {},
+  test('Error if paths are functionally equivalent', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo/{boo}': {
-              parameters: [
-                {
-                  name: 'boo',
-                  in: 'path',
-                  required: true,
-                },
-              ],
-              get: {},
-            },
-            '/foo/{bar}': {
-              parameters: [
-                {
-                  name: 'bar',
-                  in: 'path',
-                  required: true,
-                },
-              ],
-              get: {},
-            },
+        paths: {
+          '/foo/{boo}': {
+            parameters: [
+              {
+                name: 'boo',
+                in: 'path',
+                required: true,
+              },
+            ],
+            get: {},
+          },
+          '/foo/{bar}': {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+              },
+            ],
+            get: {},
           },
         },
       }

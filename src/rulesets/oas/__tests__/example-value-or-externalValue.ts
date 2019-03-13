@@ -11,23 +11,23 @@ describe('example-value-or-externalValue', () => {
     }),
   });
 
-  test('validate if just externalValue', () => {
-    const results = s.run({ example: { externalValue: 'value' } });
+  test('validate if just externalValue', async () => {
+    const results = await s.run({ example: { externalValue: 'value' } });
     expect(results.results.length).toEqual(0);
   });
 
-  test('validate if just value', () => {
-    const results = s.run({ example: { value: 'value' } });
+  test('validate if just value', async () => {
+    const results = await s.run({ example: { value: 'value' } });
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if missing externalValue and value', () => {
-    const results = s.run({ example: {} });
+  test('return errors if missing externalValue and value', async () => {
+    const results = await s.run({ example: {} });
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if both externalValue and value', () => {
-    const results = s.run({ example: { externalValue: 'externalValue', value: 'value' } });
+  test('return errors if both externalValue and value', async () => {
+    const results = await s.run({ example: { externalValue: 'externalValue', value: 'value' } });
     expect(results.results).toMatchSnapshot();
   });
 });

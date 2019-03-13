@@ -11,8 +11,8 @@ describe('operation-singular-tag', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -25,8 +25,8 @@ describe('operation-singular-tag', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if tags has more than 1', () => {
-    const results = s.run({
+  test('return errors if tags has more than 1', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {

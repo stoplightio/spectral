@@ -85,13 +85,31 @@ describe('spectral', () => {
           },
         });
 
-        s.applyRuleDeclrations({
+        s.applyRuleDeclarations({
           rule1: true,
         });
 
         expect(Object.keys(s.rules)).toEqual(['rule1']);
         expect(s.rules.rule1.enabled).toBe(true);
       });
+    });
+  });
+
+  describe('when a $ref appears', () => {
+    test('will call the resolver with target', async () => {
+      const fakeResolver = {
+        resolve: jest.fn(() => Promise.resolve([])),
+      };
+
+      const s = new Spectral({
+        resolver: fakeResolver,
+      });
+
+      const target = { foo: 'bar' };
+
+      await s.run(target);
+
+      expect(fakeResolver.resolve).toBeCalledWith(target);
     });
   });
 });

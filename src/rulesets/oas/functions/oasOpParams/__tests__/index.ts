@@ -12,14 +12,26 @@ describe('oasOpParams', () => {
     }),
   });
 
-  test('No error if no params', () => {
-    const results = s.run(
-      {},
+  test('No error if no params', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {},
+        paths: {
+          '/foo': {
+            get: {},
+          },
+        },
+      }
+    );
+    expect(results.results.length).toEqual(0);
+  });
+
+  test('No error if only one param operation level', async () => {
+    const results = await s.run(
+      {
+        paths: {
+          '/foo': {
+            get: {
+              parameters: [{ in: 'body', name: 'foo' }],
             },
           },
         },
@@ -28,16 +40,16 @@ describe('oasOpParams', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('No error if only one param operation level', () => {
-    const results = s.run(
-      {},
+  test('No error if same param on different operations', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {
-                parameters: [{ in: 'body', name: 'foo' }],
-              },
+        paths: {
+          '/foo': {
+            get: {
+              parameters: [{ in: 'body', name: 'foo' }],
+            },
+            put: {
+              parameters: [{ in: 'body', name: 'foo' }],
             },
           },
         },
@@ -46,39 +58,15 @@ describe('oasOpParams', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('No error if same param on different operations', () => {
-    const results = s.run(
-      {},
+  test('Error if nonunique param on same operation', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {
-                parameters: [{ in: 'body', name: 'foo' }],
-              },
-              put: {
-                parameters: [{ in: 'body', name: 'foo' }],
-              },
+        paths: {
+          '/foo': {
+            get: {
+              parameters: [{ in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }],
             },
-          },
-        },
-      }
-    );
-    expect(results.results.length).toEqual(0);
-  });
-
-  test('Error if nonunique param on same operation', () => {
-    const results = s.run(
-      {},
-      {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {
-                parameters: [{ in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }],
-              },
-              put: {},
-            },
+            put: {},
           },
         },
       }
@@ -86,23 +74,20 @@ describe('oasOpParams', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('Errors if multple nonunique param on same operation', () => {
-    const results = s.run(
-      {},
+  test('Errors if multple nonunique param on same operation', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {
-                parameters: [
-                  { in: 'query', name: 'foo' },
-                  { in: 'query', name: 'foo' },
-                  { in: 'header', name: 'bar' },
-                  { in: 'header', name: 'bar' },
-                ],
-              },
-              put: {},
+        paths: {
+          '/foo': {
+            get: {
+              parameters: [
+                { in: 'query', name: 'foo' },
+                { in: 'query', name: 'foo' },
+                { in: 'header', name: 'bar' },
+                { in: 'header', name: 'bar' },
+              ],
             },
+            put: {},
           },
         },
       }
@@ -110,18 +95,15 @@ describe('oasOpParams', () => {
     expect(results.results.length).toEqual(2);
   });
 
-  test('Error if multiple in:body', () => {
-    const results = s.run(
-      {},
+  test('Error if multiple in:body', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {
-                parameters: [{ in: 'body', name: 'foo' }, { in: 'body', name: 'bar' }],
-              },
-              put: {},
+        paths: {
+          '/foo': {
+            get: {
+              parameters: [{ in: 'body', name: 'foo' }, { in: 'body', name: 'bar' }],
             },
+            put: {},
           },
         },
       }
@@ -129,16 +111,13 @@ describe('oasOpParams', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('Error if both in:formData and in:body', () => {
-    const results = s.run(
-      {},
+  test('Error if both in:formData and in:body', async () => {
+    const results = await s.run(
       {
-        resolvedTarget: {
-          paths: {
-            '/foo': {
-              get: {
-                parameters: [{ in: 'body', name: 'foo' }, { in: 'formData', name: 'bar' }],
-              },
+        paths: {
+          '/foo': {
+            get: {
+              parameters: [{ in: 'body', name: 'foo' }, { in: 'formData', name: 'bar' }],
             },
           },
         },

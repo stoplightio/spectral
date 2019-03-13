@@ -11,8 +11,8 @@ describe('oas2-schema', () => {
     }),
   });
 
-  test('annotates with correct paths', () => {
-    const results = s.run({
+  test('annotates with correct paths', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/test': {

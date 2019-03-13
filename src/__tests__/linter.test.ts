@@ -28,9 +28,9 @@ const rules = {
 };
 
 describe('linter', () => {
-  const spectral = new Spectral();
+    const spectral = new Spectral();
 
-  test('should not lint if passing in value is not an object', () => {
+  test('should not lint if passing in value is not an object', async () => {
     const fakeLintingFunction = jest.fn();
     spectral.addFunctions({
       [fnName]: fakeLintingFunction,
@@ -38,12 +38,12 @@ describe('linter', () => {
     spectral.addRules(rules);
 
     // @ts-ignore
-    const result = spectral.run(123);
+    const result = await spectral.run(123);
 
     expect(result.results.length).toBe(0);
   });
 
-  test('should return all properties', () => {
+  test('should return all properties', async () => {
     const message = '4xx responses require a description';
 
     spectral.addFunctions({
@@ -74,7 +74,7 @@ describe('linter', () => {
       },
     });
 
-    const result = spectral.run({
+    const result = await spectral.run({
       responses: {
         '200': {
           name: 'ok',
@@ -94,7 +94,7 @@ describe('linter', () => {
     });
   });
 
-  test('should support rule overriding severity', () => {
+  test('should support rule overriding severity', async () => {
     spectral.addFunctions({
       func1: () => {
         return [
@@ -116,7 +116,7 @@ describe('linter', () => {
       },
     });
 
-    const result = spectral.run({
+    const result = await spectral.run({
       x: true,
     });
 
@@ -124,7 +124,7 @@ describe('linter', () => {
     expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
   });
 
-  test('should default severityLabel based on rule severity', () => {
+  test('should default severityLabel based on rule severity', async () => {
     spectral.addFunctions({
       func1: () => {
         return [
@@ -145,7 +145,7 @@ describe('linter', () => {
       },
     });
 
-    const result = spectral.run({
+    const result = await spectral.run({
       x: true,
     });
 
@@ -165,8 +165,8 @@ describe('linter', () => {
     });
 
     describe('when given path is set', () => {
-      test('should pass given path through to lint function', () => {
-        spectral.run(target);
+      test('should pass given path through to lint function', async () => {
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
@@ -175,7 +175,7 @@ describe('linter', () => {
     });
 
     describe('when given path is not set', () => {
-      test('should pass through root object', () => {
+      test('should pass through root object', async () => {
         spectral.addRules({
           example: {
             summary: '',
@@ -185,7 +185,7 @@ describe('linter', () => {
             },
           },
         });
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][2].given).toEqual([]);
@@ -206,8 +206,8 @@ describe('linter', () => {
     });
 
     describe('given no when', () => {
-      test('should simply lint anything it matches in the given', () => {
-        spectral.run(target);
+      test('should simply lint anything it matches in the given', async () => {
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual(target.responses);
@@ -215,7 +215,7 @@ describe('linter', () => {
     });
 
     describe('given when with no pattern and regular field', () => {
-      test('should call linter if when field exists', () => {
+      test('should call linter if when field exists', async () => {
         spectral.mergeRules({
           example: {
             when: {
@@ -223,7 +223,7 @@ describe('linter', () => {
             },
           },
         });
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
@@ -233,7 +233,7 @@ describe('linter', () => {
         });
       });
 
-      test('should not call linter if when field not exist', () => {
+      test('should not call linter if when field not exist', async () => {
         spectral.mergeRules({
           example: {
             when: {
@@ -241,14 +241,14 @@ describe('linter', () => {
             },
           },
         });
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
       });
     });
 
     describe('given "when" with a pattern and regular field', () => {
-      test('should NOT lint if pattern does not match', () => {
+      test('should NOT lint if pattern does not match', async () => {
         spectral.mergeRules({
           example: {
             when: {
@@ -257,12 +257,12 @@ describe('linter', () => {
             },
           },
         });
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
       });
 
-      test('should lint if pattern does match', () => {
+      test('should lint if pattern does match', async () => {
         spectral.mergeRules({
           example: {
             when: {
@@ -271,7 +271,7 @@ describe('linter', () => {
             },
           },
         });
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
@@ -283,7 +283,7 @@ describe('linter', () => {
     });
 
     describe('given "when" with a pattern and @key field', () => {
-      test('should lint ONLY part of object that matches pattern', () => {
+      test('should lint ONLY part of object that matches pattern', async () => {
         spectral.mergeRules({
           example: {
             given: '$.responses[*]',
@@ -293,7 +293,7 @@ describe('linter', () => {
             },
           },
         });
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
@@ -338,8 +338,8 @@ describe('linter', () => {
     });
 
     describe('given list of then objects', () => {
-      test('should call each one with the appropriate args', () => {
-        spectral.run(target);
+      test('should call each one with the appropriate args', async () => {
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual(target.responses);
@@ -356,7 +356,7 @@ describe('linter', () => {
     });
 
     describe('given many then field matches', () => {
-      test('should call each one with the appropriate args', () => {
+      test('should call each one with the appropriate args', async () => {
         spectral.addRules({
           example: {
             summary: '',
@@ -368,7 +368,7 @@ describe('linter', () => {
           },
         });
 
-        spectral.run(target);
+        await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(3);
         expect(fakeLintingFunction.mock.calls[0][0]).toEqual('a');

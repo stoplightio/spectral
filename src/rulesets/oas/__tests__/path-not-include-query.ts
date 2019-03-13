@@ -11,16 +11,16 @@ describe('path-not-include-query', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: { '/path': {} },
     });
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if indlues a query', () => {
-    const results = s.run({
+  test('return errors if indlues a query', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: { '/path?query=true': {} },
     });
