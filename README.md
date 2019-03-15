@@ -31,7 +31,7 @@ There are two key concepts in Spectral: **Rules** and **Functions**.
 
 Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
 
-### Creating a custom rule:
+### Creating a custom rule
 
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
 
@@ -147,7 +147,7 @@ console.log(JSON.stringify(results, null, 4));
 // }
 ```
 
-### Linting an OAS 2 document:
+### Linting an OAS 2 document
 
 Spectral also includes a number of ready made rules and functions for OpenAPI Specification (OAS) 2 and 3 documents. This example uses the OAS 2 rules to lint a document.
 

@@ -3,6 +3,7 @@ export const functions = {
   length: require('./length').length,
   pattern: require('./pattern').pattern,
   schema: require('./schema').schema,
+  schemaPath: require('./schema-path').schemaPath,
   truthy: require('./truthy').truthy,
   xor: require('./xor').xor,
 };
