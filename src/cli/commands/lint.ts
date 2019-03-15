@@ -82,9 +82,10 @@ async function lint(name: string, flags: any, command: Lint) {
 
   const spectral = new Spectral();
   if (obj.data.swagger && obj.data.swagger === '2.0') {
-    command.log('Swagger/OpenAPI 2.0 detected');
+    command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
+    console.log(oas2Rules())
   } else if (obj.data.openapi && typeof obj.data.openapi === 'string' && obj.data.openapi.startsWith('3.')) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
