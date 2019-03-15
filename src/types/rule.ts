@@ -82,3 +82,10 @@ export interface ISchemaOptions {
   schema: object;
 }
 export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
+
+export interface ISchemaPathOptions {
+  schemaPath: string;
+  // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+  field?: string;
+}
+export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;

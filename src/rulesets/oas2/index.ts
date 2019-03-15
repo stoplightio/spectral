@@ -89,7 +89,6 @@ export const oas2Rules = () => {
       },
     },
     'operation-security-defined': {
-      enabled: true,
       summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
       type: RuleType.VALIDATION,
       given: '$',
@@ -100,6 +99,18 @@ export const oas2Rules = () => {
         },
       },
       tags: ['operation'],
+    },
+    'valid-example': {
+      summary: 'Examples must be valid against their defined schema.',
+      type: RuleType.VALIDATION,
+      given: '$..[?(@.example)]',
+      then: {
+        function: RuleFunction.SCHEMAPATH,
+        functionOptions: {
+          field: 'example',
+          schemaPath: '$',
+        },
+      },
     },
   });
 };

@@ -8,6 +8,7 @@ export enum RuleFunction {
   LENGTH = 'length',
   PATTERN = 'pattern',
   SCHEMA = 'schema',
+  SCHEMAPATH = 'schemaPath',
   TRUTHY = 'truthy',
   XOR = 'xor',
 }
