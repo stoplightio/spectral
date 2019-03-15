@@ -85,14 +85,13 @@ describe('valid-example', () => {
     expect(results.results).toHaveLength(1);
   });
 
-  test('will error with totally invalid input', () => {
+  test('will pass for valid parents examples which contain invalid child examples', () => {
     const results = s.run({
       swagger: '2.0',
       info: {
         version: '1.0.0',
         title: 'Swagger Petstore',
       },
-      host: 'petstore.swagger.io',
       paths: {
         '/pet': {
           post: {
@@ -102,9 +101,35 @@ describe('valid-example', () => {
                 name: 'body',
                 required: true,
                 schema: {
-                  type: 'string',
-                  format: 'email',
-                  example: 'hello',
+                  type: 'object',
+                  example: {
+                    a: {
+                      b: {
+                        c: 'foo',
+                      },
+                    },
+                  },
+                  properties: {
+                    a: {
+                      type: 'object',
+                      example: {
+                        b: {
+                          c: 'foo',
+                        },
+                      },
+                      properties: {
+                        b: {
+                          type: 'object',
+                          properties: {
+                            c: {
+                              type: 'string',
+                              example: 12345,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
                 },
               },
             ],
@@ -121,7 +146,7 @@ describe('valid-example', () => {
     expect(results.results).toMatchInlineSnapshot(`
 Array [
   Object {
-    "message": "should match format \\"email\\"",
+    "message": "should be string",
     "name": "valid-example",
     "path": Array [
       "paths",
@@ -130,6 +155,12 @@ Array [
       "parameters",
       0,
       "schema",
+      "properties",
+      "a",
+      "properties",
+      "b",
+      "properties",
+      "c",
     ],
     "severity": 40,
     "severityLabel": "warn",
@@ -137,5 +168,24 @@ Array [
   },
 ]
 `);
+  });
+
+  test('will not fail if an actual property is called example', () => {
+    const results = s.run({
+      xoxo: {
+        type: 'object',
+        properties: {
+          example: {
+            description: 'an actual field called example...',
+            type: 'string',
+          },
+        },
+        example: {
+          example: 'what is gonna happen',
+        },
+      },
+    });
+
+    expect(results.results).toHaveLength(0);
   });
 });
