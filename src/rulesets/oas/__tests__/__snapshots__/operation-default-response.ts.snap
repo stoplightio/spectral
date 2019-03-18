@@ -3,8 +3,8 @@
 exports[`operation-default-response return errors if path-responses is missing default 1`] = `
 Array [
   Object {
+    "code": "operation-default-response",
     "message": "paths./path./get.responses.default is not truthy",
-    "name": "operation-default-response",
     "path": Array [
       "paths",
       "/path",
@@ -12,9 +12,17 @@ Array [
       "responses",
       "default",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Operations must have a default response.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;

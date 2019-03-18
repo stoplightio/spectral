@@ -3,14 +3,22 @@
 exports[`api-schemes return errors if schemes is an empty array  1`] = `
 Array [
   Object {
+    "code": "api-schemes",
     "message": "should NOT have fewer than 1 items",
-    "name": "api-schemes",
     "path": Array [
       "schemes",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;
@@ -18,14 +26,22 @@ Array [
 exports[`api-schemes return errors if schemes is missing  1`] = `
 Array [
   Object {
+    "code": "api-schemes",
     "message": "schemes does not exist",
-    "name": "api-schemes",
     "path": Array [
       "schemes",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;

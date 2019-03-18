@@ -1,10 +1,9 @@
-import { ObjPath, ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
 import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
-const invert = require('lodash/invert');
 
 import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { JSONPath, DiagnosticSeverity } from '@stoplight/types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -84,20 +83,27 @@ export const lintNode = (
         }
       ) || [];
 
-    const severity = rule.severity || ValidationSeverity.Warn;
-    const severityLabel =
-      rule.severityLabel || (ValidationSeverityLabel[invert(ValidationSeverity)[severity]] as ValidationSeverityLabel);
+    const severity = rule.severity !== undefined ? rule.severity : DiagnosticSeverity.Warning;
 
     results = results.concat(
       targetResults.map(result => {
         return {
-          name: rule.name,
-          summary: rule.summary,
+          code: rule.name,
           message: result.message,
           path: result.path || targetPath,
           severity,
-          severityLabel,
-        };
+          // todo: make range optional?
+          range: {
+            start: {
+              character: -1,
+              line: -1,
+            },
+            end: {
+              character: -1,
+              line: -1,
+            }
+          }
+        }
       })
     );
   }
@@ -107,7 +113,7 @@ export const lintNode = (
 
 // TODO(SO-23): unit test idividually
 export const whatShouldBeLinted = (
-  path: ObjPath,
+  path: JSONPath,
   originalValue: any,
   rule: IRunRule
 ): { lint: boolean; value: any } => {

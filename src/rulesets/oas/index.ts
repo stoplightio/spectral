@@ -1,4 +1,4 @@
-import { ValidationSeverity } from '@stoplight/types/validations';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { FunctionCollection, RuleCollection, RuleFunction, RuleType } from '../../types';
 
 export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
@@ -59,7 +59,7 @@ export const commonOasRules = (): RuleCollection => ({
   'path-params': {
     summary: 'Path parameters are correct and valid.',
     type: RuleType.VALIDATION,
-    severity: ValidationSeverity.Error,
+    severity: DiagnosticSeverity.Error,
     given: '$',
     then: {
       function: 'oasPathParam',

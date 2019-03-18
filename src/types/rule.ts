@@ -1,4 +1,4 @@
-import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types/validations';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleFunction, RuleType } from './enums';
 
 export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | SchemaRule;
@@ -13,8 +13,7 @@ export interface IRule<T = string, O = any> {
   description?: string;
 
   // The severity of results this rule generates
-  severity?: ValidationSeverity;
-  severityLabel?: ValidationSeverityLabel;
+  severity?: DiagnosticSeverity;
 
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];

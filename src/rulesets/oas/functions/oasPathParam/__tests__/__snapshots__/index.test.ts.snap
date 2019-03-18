@@ -3,18 +3,35 @@
 exports[`oasPathParam Error if $ref path parameter definition is not required 1`] = `
 Array [
   Object {
+<<<<<<< HEAD:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.test.ts.snap
     "message": "Path parameter \\"**bar**\\" must have a \`required\` that is set to \`true\`.
 
 To fix, mark this parameter as required.",
     "name": "path-params",
+=======
+    "code": "path-params",
+    "message": "The path \\"**/foo/{bar}/{bar}**\\" uses the parameter \\"**{bar}**\\" multiple times.
+
+Path parameters must be unique.
+
+To fix, update the path so that all parameter names are unique.",
+>>>>>>> feat: make Spectral compatible with new diagnostic interfaces:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.ts.snap
     "path": Array [
       "paths",
       "/foo/{bar}",
       "parameters",
     ],
-    "severity": 50,
-    "severityLabel": "error",
-    "summary": "Path parameters are correct and valid.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 0,
   },
 ]
 `;
@@ -22,19 +39,34 @@ To fix, mark this parameter as required.",
 exports[`oasPathParam Error if duplicate path parameters with same name are used 1`] = `
 Array [
   Object {
+<<<<<<< HEAD:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.test.ts.snap
     "message": "The path \\"**/foo/{bar}/{bar}**\\" uses the parameter \\"**{bar}**\\" multiple times.
 
 Path parameters must be unique.
 
 To fix, update the path so that all parameter names are unique.",
     "name": "path-params",
+=======
+    "code": "path-params",
+    "message": "The path \\"**/foo/{bar}**\\" uses a parameter \\"**{bar}**\\" that does not have a corresponding definition.
+
+To fix, add a path parameter with the name \\"**bar**\\".",
+>>>>>>> feat: make Spectral compatible with new diagnostic interfaces:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.ts.snap
     "path": Array [
       "paths",
       "/foo/{bar}/{bar}",
     ],
-    "severity": 50,
-    "severityLabel": "error",
-    "summary": "Path parameters are correct and valid.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 0,
   },
 ]
 `;
@@ -42,17 +74,32 @@ To fix, update the path so that all parameter names are unique.",
 exports[`oasPathParam Error if no path parameter definition 1`] = `
 Array [
   Object {
+<<<<<<< HEAD:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.test.ts.snap
     "message": "The path \\"**/foo/{bar}**\\" uses a parameter \\"**{bar}**\\" that does not have a corresponding definition.
 
 To fix, add a path parameter with the name \\"**bar**\\".",
     "name": "path-params",
+=======
+    "code": "path-params",
+    "message": "Path parameter \\"**bar**\\" must have a \`required\` that is set to \`true\`.
+
+To fix, mark this parameter as required.",
+>>>>>>> feat: make Spectral compatible with new diagnostic interfaces:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.ts.snap
     "path": Array [
       "paths",
       "/foo/{bar}",
     ],
-    "severity": 50,
-    "severityLabel": "error",
-    "summary": "Path parameters are correct and valid.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 0,
   },
 ]
 `;
@@ -60,16 +107,24 @@ To fix, add a path parameter with the name \\"**bar**\\".",
 exports[`oasPathParam Error if paths are functionally equivalent 1`] = `
 Array [
   Object {
+    "code": "path-params",
     "message": "The paths \\"**/foo/{boo}**\\" and \\"**/foo/{bar}**\\" are equivalent.
 
 To fix, remove one of the paths or merge them together.",
-    "name": "path-params",
     "path": Array [
       "paths",
     ],
-    "severity": 50,
-    "severityLabel": "error",
-    "summary": "Path parameters are correct and valid.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 0,
   },
 ]
 `;

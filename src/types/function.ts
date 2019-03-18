@@ -1,4 +1,4 @@
-import { ObjPath } from '@stoplight/types';
+import { JSONPath } from '@stoplight/types';
 
 export type IFunction<O = any> = (
   targetValue: any,
@@ -8,8 +8,8 @@ export type IFunction<O = any> = (
 ) => void | IFunctionResult[];
 
 export interface IFunctionPaths {
-  given: ObjPath;
-  target?: ObjPath;
+  given: JSONPath;
+  target?: JSONPath;
 }
 
 export interface IFunctionValues {
@@ -20,5 +20,5 @@ export interface IFunctionValues {
 
 export interface IFunctionResult {
   message: string;
-  path?: ObjPath;
+  path?: JSONPath;
 }

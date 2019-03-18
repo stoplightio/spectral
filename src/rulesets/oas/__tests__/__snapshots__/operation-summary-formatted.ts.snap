@@ -3,17 +3,25 @@
 exports[`operation-summary-formatted return errors if summary does not end with a dot 1`] = `
 Array [
   Object {
+    "code": "operation-summary-formatted",
     "message": "must match the pattern '^[A-Z].*\\\\.$'",
-    "name": "operation-summary-formatted",
     "path": Array [
       "paths",
       "/todos",
       "get",
       "summary",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Operation \`summary\` should start with upper case and end with a dot.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;
@@ -21,17 +29,25 @@ Array [
 exports[`operation-summary-formatted return errors if summary does not start with an uppercase 1`] = `
 Array [
   Object {
+    "code": "operation-summary-formatted",
     "message": "must match the pattern '^[A-Z].*\\\\.$'",
-    "name": "operation-summary-formatted",
     "path": Array [
       "paths",
       "/todos",
       "get",
       "summary",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Operation \`summary\` should start with upper case and end with a dot.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;

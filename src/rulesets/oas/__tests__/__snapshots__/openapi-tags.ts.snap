@@ -3,14 +3,22 @@
 exports[`openapi-tags return errors if missing tags 1`] = `
 Array [
   Object {
+    "code": "openapi-tags",
     "message": "tags is not truthy",
-    "name": "openapi-tags",
     "path": Array [
       "tags",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "OpenAPI object should have non-empty \`tags\` array.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;

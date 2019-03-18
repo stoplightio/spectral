@@ -3,40 +3,64 @@
 exports[`contact-properties return errors if name, url, email are missing 1`] = `
 Array [
   Object {
+    "code": "contact-properties",
     "message": "info.contact.name is not truthy",
-    "name": "contact-properties",
     "path": Array [
       "info",
       "contact",
       "name",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
   Object {
+    "code": "contact-properties",
     "message": "info.contact.url is not truthy",
-    "name": "contact-properties",
     "path": Array [
       "info",
       "contact",
       "url",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
   Object {
+    "code": "contact-properties",
     "message": "info.contact.email is not truthy",
-    "name": "contact-properties",
     "path": Array [
       "info",
       "contact",
       "email",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;

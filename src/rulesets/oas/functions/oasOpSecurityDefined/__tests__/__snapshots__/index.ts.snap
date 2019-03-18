@@ -3,8 +3,8 @@
 exports[`oasOpSecurityDefined oas2 return errors on invalid object 1`] = `
 Array [
   Object {
+    "code": "operation-security-defined",
     "message": "operation referencing undefined security scheme",
-    "name": "operation-security-defined",
     "path": Array [
       "paths",
       "/path",
@@ -12,9 +12,17 @@ Array [
       "security",
       "0",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Operation \`security\` values must match a scheme defined in the \`securityDefinitions\` object.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;
@@ -22,8 +30,8 @@ Array [
 exports[`oasOpSecurityDefined oas3 return errors on invalid object 1`] = `
 Array [
   Object {
+    "code": "operation-security-defined",
     "message": "operation referencing undefined security scheme",
-    "name": "operation-security-defined",
     "path": Array [
       "paths",
       "/path",
@@ -31,9 +39,17 @@ Array [
       "security",
       "0",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
-    "summary": "Operation \`security\` values must match a scheme defined in the \`components.securitySchemes\` object.",
+    "range": Object {
+      "end": Object {
+        "character": -1,
+        "line": -1,
+      },
+      "start": Object {
+        "character": -1,
+        "line": -1,
+      },
+    },
+    "severity": 1,
   },
 ]
 `;
