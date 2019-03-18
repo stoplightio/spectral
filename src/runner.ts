@@ -20,6 +20,8 @@ export const runRules = (
   let results: IRuleResult[] = [];
 
   for (const name in rules) {
+    if (!rules.hasOwnProperty(name)) continue;
+
     const rule = rules[name];
     if (!rule) continue;
 

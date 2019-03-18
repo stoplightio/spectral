@@ -33,7 +33,7 @@
     "build": "sl-scripts build",
     "build.docs": "sl-scripts build:typedoc",
     "commit": "git-cz",
-    "lint": "tslint -c tslint.json 'src/**/*.ts?'",
+    "lint": "tslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",
     "release.docs": "sl-scripts release:docs",
