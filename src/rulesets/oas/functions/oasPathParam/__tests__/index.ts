@@ -13,28 +13,24 @@ describe('oasPathParam', () => {
   });
 
   test('No error if templated path is not used', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo': {
-            get: {},
-          },
+    const results = await s.run({
+      paths: {
+        '/foo': {
+          get: {},
         },
-      }
-    );
+      },
+    });
     expect(results.results.length).toEqual(0);
   });
 
   test('Error if no path parameter definition', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo/{bar}': {
-            get: {},
-          },
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          get: {},
         },
-      }
-    );
+      },
+    });
     expect(results.results).toMatchSnapshot();
 
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}']);
@@ -42,51 +38,28 @@ describe('oasPathParam', () => {
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo/{bar}': {
-            parameters: [
-              {
-                name: 'bar',
-                in: 'path',
-                required: true,
-              },
-            ],
-            get: {},
-          },
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+            },
+          ],
+          get: {},
         },
-      }
-    );
+      },
+    });
     expect(results.results.length).toEqual(0);
   });
 
   test('No error if path parameter definition is set (at the operation level)', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo/{bar}': {
-            get: {
-              parameters: [
-                {
-                  name: 'bar',
-                  in: 'path',
-                  required: true,
-                },
-              ],
-            },
-          },
-        },
-      }
-    );
-    expect(results.results.length).toEqual(0);
-  });
-
-  test('Error if duplicate path parameters with same name are used', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo/{bar}/{bar}': {
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          get: {
             parameters: [
               {
                 name: 'bar',
@@ -94,11 +67,28 @@ describe('oasPathParam', () => {
                 required: true,
               },
             ],
-            get: {},
           },
         },
-      }
-    );
+      },
+    });
+    expect(results.results.length).toEqual(0);
+  });
+
+  test('Error if duplicate path parameters with same name are used', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}/{bar}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+            },
+          ],
+          get: {},
+        },
+      },
+    });
     expect(results.results).toMatchSnapshot();
 
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
@@ -106,54 +96,50 @@ describe('oasPathParam', () => {
   });
 
   test('Error if path parameter definition is not required', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo/{bar}': {
-            parameters: [
-              {
-                name: 'bar',
-                in: 'path',
-                required: false,
-              },
-            ],
-            get: {},
-          },
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: false,
+            },
+          ],
+          get: {},
         },
-      }
-    );
+      },
+    });
     expect(results.results).toMatchSnapshot();
 
     expect(results.results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
   });
 
   test('Error if paths are functionally equivalent', async () => {
-    const results = await s.run(
-      {
-        paths: {
-          '/foo/{boo}': {
-            parameters: [
-              {
-                name: 'boo',
-                in: 'path',
-                required: true,
-              },
-            ],
-            get: {},
-          },
-          '/foo/{bar}': {
-            parameters: [
-              {
-                name: 'bar',
-                in: 'path',
-                required: true,
-              },
-            ],
-            get: {},
-          },
+    const results = await s.run({
+      paths: {
+        '/foo/{boo}': {
+          parameters: [
+            {
+              name: 'boo',
+              in: 'path',
+              required: true,
+            },
+          ],
+          get: {},
         },
-      }
-    );
+        '/foo/{bar}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+            },
+          ],
+          get: {},
+        },
+      },
+    });
     expect(results.results).toMatchSnapshot();
 
     expect(results.results[0].path).toEqual(['paths']);

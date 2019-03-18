@@ -28,7 +28,7 @@ const rules = {
 };
 
 describe('linter', () => {
-    const spectral = new Spectral();
+  const spectral = new Spectral();
 
   test('should not lint if passing in value is not an object', async () => {
     const fakeLintingFunction = jest.fn();
