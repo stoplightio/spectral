@@ -21,7 +21,7 @@ describe('server-not-example.com', () => {
         },
       ],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if server is example.com', async () => {
@@ -34,6 +34,6 @@ describe('server-not-example.com', () => {
         },
       ],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

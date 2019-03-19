@@ -19,7 +19,7 @@ describe('no-script-tags-in-markdown', () => {
         description: 'some description text',
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if descriptions include <script', async () => {
@@ -30,6 +30,6 @@ describe('no-script-tags-in-markdown', () => {
         description: 'some description contains <script',
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

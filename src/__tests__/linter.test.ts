@@ -38,9 +38,9 @@ describe('linter', () => {
     spectral.addRules(rules);
 
     // @ts-ignore
-    const result = await spectral.run(123);
+    const result = spectral.run(123);
 
-    expect(result.results.length).toBe(0);
+    expect(result).resolves.toHaveLength(0);
   });
 
   test('should return all properties', async () => {
@@ -85,7 +85,7 @@ describe('linter', () => {
       },
     });
 
-    expect(result.results[0]).toEqual({
+    expect(result[0]).toEqual({
       name: 'rule1',
       message,
       severity: ValidationSeverity.Warn,
@@ -120,8 +120,8 @@ describe('linter', () => {
       x: true,
     });
 
-    expect(result.results[0].severity).toEqual(ValidationSeverity.Info);
-    expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
+    expect(result[0].severity).toEqual(ValidationSeverity.Info);
+    expect(result[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
   });
 
   test('should default severityLabel based on rule severity', async () => {
@@ -149,8 +149,8 @@ describe('linter', () => {
       x: true,
     });
 
-    expect(result.results[0].severity).toEqual(ValidationSeverity.Info);
-    expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
+    expect(result[0].severity).toEqual(ValidationSeverity.Info);
+    expect(result[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
   });
 
   describe('functional tests for the given property', () => {

@@ -63,19 +63,17 @@ const results = await spectral.run({
 console.log(JSON.stringify(results, null, 4));
 
 // => outputs a single result since `helloWorld` is not snake_case
-// {
-//   "results": [
-//     {
-//       "name": "snake_case",
-//       "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
-//       "severity": 40,
-//       "severityLabel": "warn",
-//       "path": [
-//         "name"
-//       ]
-//     }
-//   ]
-// }
+// [
+//   {
+//     "name": "snake_case",
+//     "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
+//     "severity": 40,
+//     "severityLabel": "warn",
+//     "path": [
+//       "name"
+//     ]
+//   }
+// ]
 ```
 
 ### Creating a custom function:
@@ -132,19 +130,17 @@ const results = await spectral.run({
 console.log(JSON.stringify(results, null, 4));
 
 // => outputs a single result since we are using the term `Swagger` in our object
-// {
-//   "results": [
-//     {
-//       "name": "openapi_not_swagger",
-//       "message": "Use OpenAPI instead of Swagger!",
-//       "severity": 40,
-//       "severityLabel": "warn",
-//       "path": [
-//         "description"
-//       ]
-//     }
-//   ]
-// }
+// [
+//   {
+//     "name": "openapi_not_swagger",
+//     "message": "Use OpenAPI instead of Swagger!",
+//     "severity": 40,
+//     "severityLabel": "warn",
+//     "path": [
+//       "description"
+//     ]
+//   }
+// ]
 ```
 
 ### Linting an OpenAPI document

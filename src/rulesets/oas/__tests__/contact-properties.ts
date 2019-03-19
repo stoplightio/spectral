@@ -23,7 +23,7 @@ describe('contact-properties', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if name, url, email are missing', async () => {
@@ -32,6 +32,6 @@ describe('contact-properties', () => {
       paths: {},
       info: { contact: {} },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

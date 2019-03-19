@@ -22,7 +22,7 @@ describe('operation-summary-formatted', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if summary does not start with an uppercase', async () => {
@@ -36,7 +36,7 @@ describe('operation-summary-formatted', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if summary does not end with a dot', async () => {
@@ -50,6 +50,6 @@ describe('operation-summary-formatted', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

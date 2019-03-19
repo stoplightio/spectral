@@ -17,7 +17,7 @@ describe('tag-description', () => {
       paths: {},
       tags: [{ name: 'tag', description: 'some-description' }],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if tag has no description', async () => {
@@ -26,6 +26,6 @@ describe('tag-description', () => {
       paths: {},
       tags: [{ name: 'tag' }],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

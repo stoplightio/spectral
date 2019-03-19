@@ -18,7 +18,7 @@ describe('valid-example', () => {
         example: 'doggie',
       },
     });
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 
   test('will fail when simple example is invalid', async () => {
@@ -28,7 +28,7 @@ describe('valid-example', () => {
         example: 123,
       },
     });
-    expect(results.results).toHaveLength(1);
+    expect(results).toHaveLength(1);
   });
 
   test('will pass when complex example is used ', async () => {
@@ -55,7 +55,7 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 
   test('will error with totally invalid input', async () => {
@@ -82,7 +82,7 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toHaveLength(1);
+    expect(results).toHaveLength(1);
   });
 
   test('will pass for valid parents examples which contain invalid child examples', async () => {
@@ -143,7 +143,7 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toMatchInlineSnapshot(`
+    expect(results).toMatchInlineSnapshot(`
 Array [
   Object {
     "message": "should be string",
@@ -186,6 +186,6 @@ Array [
       },
     });
 
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 });

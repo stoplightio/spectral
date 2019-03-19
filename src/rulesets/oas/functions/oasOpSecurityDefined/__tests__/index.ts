@@ -32,7 +32,7 @@ describe('oasOpSecurityDefined', () => {
           },
         },
       });
-      expect(results.results.length).toEqual(0);
+      expect(results.length).toEqual(0);
     });
 
     test('return errors on invalid object', async () => {
@@ -51,7 +51,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results.results).toMatchSnapshot();
+      expect(results).toMatchSnapshot();
     });
   });
 
@@ -83,7 +83,7 @@ describe('oasOpSecurityDefined', () => {
           },
         },
       });
-      expect(results.results.length).toEqual(0);
+      expect(results.length).toEqual(0);
     });
 
     test('return errors on invalid object', async () => {
@@ -102,7 +102,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results.results).toMatchSnapshot();
+      expect(results).toMatchSnapshot();
     });
   });
 });

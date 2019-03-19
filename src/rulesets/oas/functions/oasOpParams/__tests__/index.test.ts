@@ -20,7 +20,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('No error if only one param operation level', async () => {
@@ -33,7 +33,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('No error if same param on different operations', async () => {
@@ -49,7 +49,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('Error if non-unique param on same operation', async () => {
@@ -63,7 +63,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('Error if non-unique $ref param on same operation', async () => {
@@ -86,7 +86,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('Errors if multiple non-unique param on same operation', async () => {
@@ -105,7 +105,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(2);
+    expect(results.length).toEqual(2);
   });
 
   test('Error if multiple in:body', async () => {
@@ -119,7 +119,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('Error if both in:formData and in:body', async () => {
@@ -132,6 +132,6 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

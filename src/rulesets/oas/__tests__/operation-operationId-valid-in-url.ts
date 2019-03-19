@@ -22,7 +22,7 @@ describe('operation-operationId-valid-in-url', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if operationId contains invalid characters', async () => {
@@ -36,6 +36,6 @@ describe('operation-operationId-valid-in-url', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

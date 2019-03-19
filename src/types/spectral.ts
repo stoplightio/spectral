@@ -33,10 +33,6 @@ export interface IRunOpts {
   resolvedTarget?: object;
 }
 
-export interface IRunResult {
-  results: IRuleResult[];
-}
-
 export interface IRuleResult extends IValidationResult {
   message: string;
   path: ObjPath;

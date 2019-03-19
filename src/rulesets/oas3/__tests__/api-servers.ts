@@ -17,7 +17,7 @@ describe('api-servers', () => {
       paths: {},
       servers: [{ url: 'https://stoplight.io' }],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if servers is missing ', async () => {
@@ -25,7 +25,7 @@ describe('api-servers', () => {
       openapi: '3.0.0',
       paths: {},
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if servers is an empty array ', async () => {
@@ -34,6 +34,6 @@ describe('api-servers', () => {
       paths: {},
       servers: [],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

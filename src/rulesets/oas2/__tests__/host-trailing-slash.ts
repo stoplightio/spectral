@@ -17,7 +17,7 @@ describe('host-trailing-slash', () => {
       paths: {},
       host: 'stoplight.io',
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if host url ends with a slash', async () => {
@@ -26,6 +26,6 @@ describe('host-trailing-slash', () => {
       paths: {},
       host: 'stoplight.io/',
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

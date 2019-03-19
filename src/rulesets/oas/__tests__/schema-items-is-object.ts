@@ -15,7 +15,7 @@ describe('schema-items-is-object', () => {
     const results = await s.run({
       schema: { items: { type: 'string' } },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if items is undefined', async () => {
@@ -23,13 +23,13 @@ describe('schema-items-is-object', () => {
       schema: { items: undefined },
     });
 
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if items is not an object', async () => {
     const results = await s.run({
       schema: { items: 'string' },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

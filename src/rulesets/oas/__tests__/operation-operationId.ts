@@ -22,7 +22,7 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if operation id is missing', async () => {
@@ -34,7 +34,7 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('does not get called on parameters', async () => {
@@ -46,6 +46,6 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

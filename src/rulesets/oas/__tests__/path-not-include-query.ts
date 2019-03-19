@@ -16,7 +16,7 @@ describe('path-not-include-query', () => {
       swagger: '2.0',
       paths: { '/path': {} },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if indlues a query', async () => {
@@ -24,6 +24,6 @@ describe('path-not-include-query', () => {
       swagger: '2.0',
       paths: { '/path?query=true': {} },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

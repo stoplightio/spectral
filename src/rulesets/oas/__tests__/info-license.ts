@@ -20,7 +20,7 @@ describe('info-license', () => {
         license: { name: 'MIT' },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if info missing license', async () => {
@@ -31,6 +31,6 @@ describe('info-license', () => {
         contact: { name: 'stoplight.io' },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

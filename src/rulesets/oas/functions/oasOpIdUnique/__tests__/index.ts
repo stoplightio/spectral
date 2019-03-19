@@ -28,7 +28,7 @@ describe('oasOpIdUnique', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors on different path operations same id', async () => {
@@ -47,7 +47,7 @@ describe('oasOpIdUnique', () => {
       },
     });
 
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors on same path operations same id', async () => {
@@ -64,6 +64,6 @@ describe('oasOpIdUnique', () => {
       },
     });
 
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

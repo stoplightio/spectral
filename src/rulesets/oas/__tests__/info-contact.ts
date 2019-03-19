@@ -17,7 +17,7 @@ describe('info-contact', () => {
       paths: {},
       info: { version: '1.0', contact: {} },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if info is missing contact', async () => {
@@ -26,6 +26,6 @@ describe('info-contact', () => {
       paths: {},
       info: { version: '1.0' },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

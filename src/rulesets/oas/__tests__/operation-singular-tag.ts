@@ -22,7 +22,7 @@ describe('operation-singular-tag', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if tags has more than 1', async () => {
@@ -36,6 +36,6 @@ describe('operation-singular-tag', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

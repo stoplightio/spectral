@@ -30,7 +30,7 @@ describe('oasOp2xxResponse', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if missing 2xx', async () => {
@@ -52,7 +52,7 @@ describe('oasOp2xxResponse', () => {
       },
     });
 
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if no responses', async () => {
@@ -65,6 +65,6 @@ describe('oasOp2xxResponse', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

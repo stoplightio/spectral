@@ -17,7 +17,7 @@ describe('openapi-tags', () => {
       paths: {},
       tags: [{ name: 'todos' }],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if missing tags', async () => {
@@ -25,6 +25,6 @@ describe('openapi-tags', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

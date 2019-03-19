@@ -16,7 +16,7 @@ describe('path-declarations-must-exist', () => {
       swagger: '2.0',
       paths: { '/path/{parameter}': {} },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if parameter is empty', async () => {
@@ -24,6 +24,6 @@ describe('path-declarations-must-exist', () => {
       swagger: '2.0',
       paths: { '/path/{}': {} },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });
