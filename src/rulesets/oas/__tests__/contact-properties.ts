@@ -11,8 +11,8 @@ describe('contact-properties', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {
@@ -26,8 +26,8 @@ describe('contact-properties', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if name, url, email are missing', () => {
-    const results = s.run({
+  test('return errors if name, url, email are missing', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: { contact: {} },

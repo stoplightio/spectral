@@ -56,7 +56,7 @@ spectral.addRules({
   },
 });
 
-const results = spectral.run({
+const results = await spectral.run({
   name: 'helloWorld',
 });
 
@@ -125,7 +125,7 @@ spectral.addRules({
   },
 });
 
-const results = spectral.run({
+const results = await spectral.run({
   description: 'Swagger is pretty cool!',
 });
 
@@ -147,11 +147,13 @@ console.log(JSON.stringify(results, null, 4));
 // }
 ```
 
-### Linting an OAS 2 document
+### Linting an OpenAPI document
 
-Spectral also includes a number of ready made rules and functions for OpenAPI Specification (OAS) 2 and 3 documents. This example uses the OAS 2 rules to lint a document.
+Spectral also includes a number of ready made rules and functions for OpenAPI v2 and v3 description documents (a.k.a specifications).
 
-You can also add to these rules to create a customized linting style guide for your OAS documents.
+This example uses the OpenAPI v2 rules to lint a document.
+
+You can also add to these rules to create a customized linting style guide for your OpenAPI documents.
 
 ```javascript
 const { Spectral } = require('@stoplight/spectral');
@@ -182,7 +184,7 @@ spectral.addRules({
 });
 
 // run!
-const results = spectral.run(myOAS);
+const results = await spectral.run(myOAS);
 
 console.log(JSON.stringify(results, null, 4));
 ```

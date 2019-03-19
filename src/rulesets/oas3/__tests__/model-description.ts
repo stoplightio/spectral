@@ -11,8 +11,8 @@ describe('model-description', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       components: {
@@ -26,8 +26,8 @@ describe('model-description', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if a definition is missing description', () => {
-    const results = s.run({
+  test('return errors if a definition is missing description', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       components: {

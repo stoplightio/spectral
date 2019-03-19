@@ -11,8 +11,8 @@ describe('operation-operationId', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -25,8 +25,8 @@ describe('operation-operationId', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if operation id is missing', () => {
-    const results = s.run({
+  test('return errors if operation id is missing', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -37,8 +37,8 @@ describe('operation-operationId', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('does not get called on parameters', () => {
-    const results = s.run({
+  test('does not get called on parameters', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {

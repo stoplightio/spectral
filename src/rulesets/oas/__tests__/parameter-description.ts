@@ -12,8 +12,8 @@ describe('parameter-description', () => {
     }),
   });
 
-  test('should work for shared level parameters', () => {
-    const results = s.run({
+  test('should work for shared level parameters', async () => {
+    const results = await s.run({
       swagger: '2.0',
       parameters: {
         limit: {
@@ -27,8 +27,8 @@ describe('parameter-description', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('should work for top level path parameters', () => {
-    const results = s.run({
+  test('should work for top level path parameters', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -46,8 +46,8 @@ describe('parameter-description', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('should work for operation level parameters', () => {
-    const results = s.run({
+  test('should work for operation level parameters', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -67,8 +67,8 @@ describe('parameter-description', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if shared level parameter description is missing', () => {
-    const results = s.run({
+  test('return errors if shared level parameter description is missing', async () => {
+    const results = await s.run({
       swagger: '2.0',
       parameters: {
         limit: {
@@ -81,8 +81,8 @@ describe('parameter-description', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if top level path parameter description is missing', () => {
-    const results = s.run({
+  test('return errors if top level path parameter description is missing', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -99,8 +99,8 @@ describe('parameter-description', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if operation level parameter description is missing', () => {
-    const results = s.run({
+  test('return errors if operation level parameter description is missing', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -119,8 +119,8 @@ describe('parameter-description', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test.only('does not throw on refs', () => {
-    const results = s.run({
+  test.only('does not throw on refs', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {

@@ -11,8 +11,8 @@ describe('no-eval-in-markdown', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {
@@ -23,8 +23,8 @@ describe('no-eval-in-markdown', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if descriptions or titles include eval', () => {
-    const results = s.run({
+  test('return errors if descriptions or titles include eval', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {

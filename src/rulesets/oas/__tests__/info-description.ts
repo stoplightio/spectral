@@ -11,8 +11,8 @@ describe('info-description', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: { contact: { name: 'stoplight.io' }, description: 'description' },
@@ -20,8 +20,8 @@ describe('info-description', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if info missing description', () => {
-    const results = s.run({
+  test('return errors if info missing description', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: { contact: { name: 'stoplight.io' } },

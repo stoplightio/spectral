@@ -11,8 +11,8 @@ describe('license-url', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {
@@ -22,8 +22,8 @@ describe('license-url', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if info license is missing url', () => {
-    const results = s.run({
+  test('return errors if info license is missing url', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       info: {

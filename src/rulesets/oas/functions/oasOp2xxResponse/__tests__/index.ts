@@ -12,8 +12,8 @@ describe('oasOp2xxResponse', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       paths: {
         '/path1': {
           get: {
@@ -33,8 +33,8 @@ describe('oasOp2xxResponse', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if missing 2xx', () => {
-    const results = s.run({
+  test('return errors if missing 2xx', async () => {
+    const results = await s.run({
       paths: {
         '/path1': {
           get: {
@@ -55,8 +55,8 @@ describe('oasOp2xxResponse', () => {
     expect(results.results).toMatchSnapshot();
   });
 
-  test('return errors if no responses', () => {
-    const results = s.run({
+  test('return errors if no responses', async () => {
+    const results = await s.run({
       paths: {
         '/path1': {
           get: {

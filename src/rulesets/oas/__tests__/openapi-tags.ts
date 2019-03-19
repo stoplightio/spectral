@@ -11,8 +11,8 @@ describe('openapi-tags', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       tags: [{ name: 'todos' }],
@@ -20,8 +20,8 @@ describe('openapi-tags', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if missing tags', () => {
-    const results = s.run({
+  test('return errors if missing tags', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
     });

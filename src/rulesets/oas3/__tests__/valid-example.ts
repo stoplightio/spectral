@@ -11,8 +11,8 @@ describe('valid-example', () => {
     }),
   });
 
-  test('will pass when simple example is valid', () => {
-    const results = s.run({
+  test('will pass when simple example is valid', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'string',
         example: 'doggie',
@@ -21,8 +21,8 @@ describe('valid-example', () => {
     expect(results.results).toHaveLength(0);
   });
 
-  test('will fail when simple example is invalid', () => {
-    const results = s.run({
+  test('will fail when simple example is invalid', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'string',
         example: 123,
@@ -31,8 +31,8 @@ describe('valid-example', () => {
     expect(results.results).toHaveLength(1);
   });
 
-  test('will pass when complex example is used ', () => {
-    const results = s.run({
+  test('will pass when complex example is used ', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'object',
         properties: {
@@ -58,8 +58,8 @@ describe('valid-example', () => {
     expect(results.results).toHaveLength(0);
   });
 
-  test('will error with totally invalid input', () => {
-    const results = s.run({
+  test('will error with totally invalid input', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'object',
         properties: {
@@ -85,8 +85,8 @@ describe('valid-example', () => {
     expect(results.results).toHaveLength(1);
   });
 
-  test('will error with totally invalid input', () => {
-    const results = s.run({
+  test('will error with totally invalid input', async () => {
+    const results = await s.run({
       openapi: '3.0.1',
       info: {
         title: 'OpenAPI Petstore',

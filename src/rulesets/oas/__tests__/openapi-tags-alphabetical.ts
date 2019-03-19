@@ -11,8 +11,8 @@ describe('openapi-tags-alphabetical', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       tags: [{ name: 'a-tag' }, { name: 'b-tag' }],
@@ -20,8 +20,8 @@ describe('openapi-tags-alphabetical', () => {
     expect(results.results.length).toEqual(0);
   });
 
-  test('return errors if tags is not in alphabetical order', () => {
-    const results = s.run({
+  test('return errors if tags is not in alphabetical order', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       tags: [{ name: 'b-tag' }, { name: 'a-tag' }],
