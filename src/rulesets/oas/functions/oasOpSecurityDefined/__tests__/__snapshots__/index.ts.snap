@@ -12,16 +12,6 @@ Array [
       "security",
       "0",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]
@@ -39,16 +29,6 @@ Array [
       "security",
       "0",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]

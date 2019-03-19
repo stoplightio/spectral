@@ -21,16 +21,6 @@ To fix, update the path so that all parameter names are unique.",
       "/foo/{bar}",
       "parameters",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 0,
   },
 ]
@@ -56,16 +46,6 @@ To fix, add a path parameter with the name \\"**bar**\\".",
       "paths",
       "/foo/{bar}/{bar}",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 0,
   },
 ]
@@ -89,16 +69,6 @@ To fix, mark this parameter as required.",
       "paths",
       "/foo/{bar}",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 0,
   },
 ]
@@ -114,16 +84,6 @@ To fix, remove one of the paths or merge them together.",
     "path": Array [
       "paths",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 0,
   },
 ]

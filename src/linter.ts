@@ -2,8 +2,8 @@ import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
 
+import { DiagnosticSeverity, JSONPath } from '@stoplight/types';
 import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
-import { JSONPath, DiagnosticSeverity } from '@stoplight/types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -92,18 +92,7 @@ export const lintNode = (
           message: result.message,
           path: result.path || targetPath,
           severity,
-          // todo: make range optional?
-          range: {
-            start: {
-              character: -1,
-              line: -1,
-            },
-            end: {
-              character: -1,
-              line: -1,
-            }
-          }
-        }
+        };
       })
     );
   }

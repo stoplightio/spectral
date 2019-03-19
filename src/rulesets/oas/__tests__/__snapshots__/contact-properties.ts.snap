@@ -10,16 +10,6 @@ Array [
       "contact",
       "name",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
   Object {
@@ -30,16 +20,6 @@ Array [
       "contact",
       "url",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
   Object {
@@ -50,16 +30,6 @@ Array [
       "contact",
       "email",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]

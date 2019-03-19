@@ -90,16 +90,6 @@ describe('linter', () => {
       message,
       severity: DiagnosticSeverity.Warning,
       path: ['responses', '404', 'description'],
-      range: expect.objectContaining({
-        start: expect.objectContaining({
-          character: expect.any(Number),
-          line: expect.any(Number),
-        }),
-        end: expect.objectContaining({
-          character: expect.any(Number),
-          line: expect.any(Number),
-        }),
-      }),
     });
   });
 

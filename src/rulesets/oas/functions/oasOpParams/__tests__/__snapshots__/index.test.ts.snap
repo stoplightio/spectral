@@ -15,16 +15,6 @@ Parameters found at:
       "/foo",
       "get",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]
@@ -43,16 +33,6 @@ Parameters found at:
       "/foo",
       "get",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]
@@ -99,16 +79,6 @@ Parameters found at:
       "/foo",
       "get",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]

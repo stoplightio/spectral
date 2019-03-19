@@ -11,16 +11,6 @@ Array [
       "get",
       "operationId",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
   Object {
@@ -32,16 +22,6 @@ Array [
       "get",
       "operationId",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]
@@ -58,16 +38,6 @@ Array [
       "get",
       "operationId",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
   Object {
@@ -79,16 +49,6 @@ Array [
       "post",
       "operationId",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]

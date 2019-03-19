@@ -8,16 +8,6 @@ Array [
     "path": Array [
       "servers",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]
@@ -31,16 +21,6 @@ Array [
     "path": Array [
       "servers",
     ],
-    "range": Object {
-      "end": Object {
-        "character": -1,
-        "line": -1,
-      },
-      "start": Object {
-        "character": -1,
-        "line": -1,
-      },
-    },
     "severity": 1,
   },
 ]
