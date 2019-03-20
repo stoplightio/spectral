@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'fs';
 // @ts-ignore
 import * as fetch from 'node-fetch';
 
-import { json as jsonFormatter } from '../../formatters';
+import { json, stylish } from '../../formatters';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
@@ -29,11 +29,13 @@ linting ./openapi.yaml
     }),
     format: flagHelpers.string({
       char: 'f',
+      default: 'stylish',
       description: 'formatter to use for outputting results',
+      options: ['json', 'stylish'],
     }),
-    maxWarn: flagHelpers.integer({
+    maxResults: flagHelpers.integer({
       char: 'm',
-      description: '[default: all] maximum warnings to show',
+      description: '[default: all] maximum results to show',
     }),
     verbose: flagHelpers.boolean({
       char: 'v',
@@ -91,22 +93,20 @@ async function lint(name: string, flags: any, command: Lint) {
     process.exitCode = 2;
     throw new Error(ex);
   }
-  process.exitCode = 1;
   // Keep only the requested number of warnings
-  if (flags.maxWarn) {
-    results = results.slice(0, flags.maxWarn);
+  if (flags.maxResults) {
+    results = results.slice(0, flags.maxResults);
   }
+  process.exitCode = 1;
   const output = await formatOutput(results, flags.format);
-  console.log(output);
+  command.log(output);
 }
 
 async function formatOutput(results: IRuleResult[], format: any) {
-  if (format === 'json') {
-    return jsonFormatter(results);
-  }
-
-  // TODO Default is also JSON for now lol
-  return jsonFormatter(results);
+  return {
+    json: () => json(results),
+    stylish: () => stylish(results),
+  }[format]();
 }
 
 async function readInputArguments(name: string, encoding: string) {
