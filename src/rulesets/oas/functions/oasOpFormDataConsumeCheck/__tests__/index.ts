@@ -12,8 +12,8 @@ describe('oasOpFormDataConsumeCheck', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       paths: {
         '/path1': {
           get: {
@@ -23,11 +23,11 @@ describe('oasOpFormDataConsumeCheck', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
-  test('return errors on different path operations same id', () => {
-    const results = s.run({
+  test('return errors on different path operations same id', async () => {
+    const results = await s.run({
       paths: {
         '/path1': {
           get: {
@@ -38,6 +38,6 @@ describe('oasOpFormDataConsumeCheck', () => {
       },
     });
 
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

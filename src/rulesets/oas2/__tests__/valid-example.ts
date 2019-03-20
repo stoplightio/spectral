@@ -11,28 +11,28 @@ describe('valid-example', () => {
     }),
   });
 
-  test('will pass when simple example is valid', () => {
-    const results = s.run({
+  test('will pass when simple example is valid', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'string',
         example: 'doggie',
       },
     });
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 
-  test('will fail when simple example is invalid', () => {
-    const results = s.run({
+  test('will fail when simple example is invalid', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'string',
         example: 123,
       },
     });
-    expect(results.results).toHaveLength(1);
+    expect(results).toHaveLength(1);
   });
 
-  test('will pass when complex example is used ', () => {
-    const results = s.run({
+  test('will pass when complex example is used ', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'object',
         properties: {
@@ -55,11 +55,11 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 
-  test('will error with totally invalid input', () => {
-    const results = s.run({
+  test('will error with totally invalid input', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'object',
         properties: {
@@ -82,11 +82,11 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toHaveLength(1);
+    expect(results).toHaveLength(1);
   });
 
-  test('will pass for valid parents examples which contain invalid child examples', () => {
-    const results = s.run({
+  test('will pass for valid parents examples which contain invalid child examples', async () => {
+    const results = await s.run({
       swagger: '2.0',
       info: {
         version: '1.0.0',
@@ -143,7 +143,7 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toMatchInlineSnapshot(`
+    expect(results).toMatchInlineSnapshot(`
 Array [
   Object {
     "message": "should be string",
@@ -170,8 +170,8 @@ Array [
 `);
   });
 
-  test('will not fail if an actual property is called example', () => {
-    const results = s.run({
+  test('will not fail if an actual property is called example', async () => {
+    const results = await s.run({
       xoxo: {
         type: 'object',
         properties: {
@@ -186,6 +186,6 @@ Array [
       },
     });
 
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 });

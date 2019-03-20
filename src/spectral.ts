@@ -1,11 +1,13 @@
 const merge = require('lodash/merge');
 
+import { Resolver } from '@stoplight/json-ref-resolver';
+
 import { functions as defaultFunctions } from './functions';
 import { runRules } from './runner';
 import {
   FunctionCollection,
-  IRunOpts,
-  IRunResult,
+  IConstructorOpts,
+  IRuleResult,
   PartialRuleCollection,
   RuleCollection,
   RuleDeclarationCollection,
@@ -18,8 +20,14 @@ export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
 
-  public run(target: object, opts: IRunOpts = {}): IRunResult {
-    return runRules(target, this.rules, this.functions, opts);
+  private resolver: any;
+  constructor(opts?: IConstructorOpts) {
+    this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+  }
+
+  public async run(target: object): Promise<IRuleResult[]> {
+    const resolvedTarget = (await this.resolver.resolve(target)).result;
+    return runRules(target, this.rules, this.functions, { resolvedTarget });
   }
 
   /**
@@ -66,7 +74,7 @@ export class Spectral {
     }
   }
 
-  public applyRuleDeclrations(declarations: RuleDeclarationCollection) {
+  public applyRuleDeclarations(declarations: RuleDeclarationCollection) {
     for (const ruleName in declarations) {
       const declaration = declarations[ruleName];
 

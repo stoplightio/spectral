@@ -15,8 +15,8 @@ describe('oasOpSecurityDefined', () => {
       }),
     });
 
-    test('validate a correct object (just in body)', () => {
-      const results = s.run({
+    test('validate a correct object (just in body)', async () => {
+      const results = await s.run({
         securityDefinitions: {
           apikey: {},
         },
@@ -32,11 +32,11 @@ describe('oasOpSecurityDefined', () => {
           },
         },
       });
-      expect(results.results.length).toEqual(0);
+      expect(results.length).toEqual(0);
     });
 
-    test('return errors on invalid object', () => {
-      const results = s.run({
+    test('return errors on invalid object', async () => {
+      const results = await s.run({
         securityDefinitions: {},
         paths: {
           '/path': {
@@ -51,7 +51,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results.results).toMatchSnapshot();
+      expect(results).toMatchSnapshot();
     });
   });
 
@@ -64,8 +64,8 @@ describe('oasOpSecurityDefined', () => {
       }),
     });
 
-    test('validate a correct object (just in body)', () => {
-      const results = s.run({
+    test('validate a correct object (just in body)', async () => {
+      const results = await s.run({
         components: {
           securitySchemes: {
             apikey: {},
@@ -83,11 +83,11 @@ describe('oasOpSecurityDefined', () => {
           },
         },
       });
-      expect(results.results.length).toEqual(0);
+      expect(results.length).toEqual(0);
     });
 
-    test('return errors on invalid object', () => {
-      const results = s.run({
+    test('return errors on invalid object', async () => {
+      const results = await s.run({
         components: {},
         paths: {
           '/path': {
@@ -102,7 +102,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results.results).toMatchSnapshot();
+      expect(results).toMatchSnapshot();
     });
   });
 });

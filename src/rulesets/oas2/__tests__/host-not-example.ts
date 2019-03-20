@@ -11,21 +11,21 @@ describe('host-not-example', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       host: 'stoplight.io',
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
-  test('return errors if server is example.com', () => {
-    const results = s.run({
+  test('return errors if server is example.com', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {},
       host: 'https://example.com',
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

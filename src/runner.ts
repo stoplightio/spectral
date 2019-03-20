@@ -1,22 +1,14 @@
 import * as jp from 'jsonpath';
 
 import { lintNode } from './linter';
-import {
-  FunctionCollection,
-  IGivenNode,
-  IRuleResult,
-  IRunOpts,
-  IRunResult,
-  IRunRule,
-  RunRuleCollection,
-} from './types';
+import { FunctionCollection, IGivenNode, IRuleResult, IRunOpts, IRunRule, RunRuleCollection } from './types';
 
 export const runRules = (
   target: object,
   rules: RunRuleCollection,
   functions: FunctionCollection,
   opts: IRunOpts
-): IRunResult => {
+): IRuleResult[] => {
   let results: IRuleResult[] = [];
 
   for (const name in rules) {
@@ -34,7 +26,7 @@ export const runRules = (
     }
   }
 
-  return { results };
+  return results;
 };
 
 const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, opts: IRunOpts): IRuleResult[] => {
