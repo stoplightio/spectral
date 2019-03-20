@@ -11,8 +11,8 @@ describe('oas2-schema', () => {
     }),
   });
 
-  test('annotates with correct paths', () => {
-    const results = s.run({
+  test('annotates with correct paths', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/test': {
@@ -25,7 +25,7 @@ describe('oas2-schema', () => {
         version: '1.0.0',
       },
     });
-    expect(results.results).toHaveLength(1);
-    expect(results.results[0].path).toEqual(['paths', '/test', 'get']);
+    expect(results).toHaveLength(1);
+    expect(results[0].path).toEqual(['paths', '/test', 'get']);
   });
 });

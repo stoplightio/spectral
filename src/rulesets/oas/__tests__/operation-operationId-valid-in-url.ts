@@ -11,8 +11,8 @@ describe('operation-operationId-valid-in-url', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -22,11 +22,11 @@ describe('operation-operationId-valid-in-url', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
-  test('return errors if operationId contains invalid characters', () => {
-    const results = s.run({
+  test('return errors if operationId contains invalid characters', async () => {
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/todos': {
@@ -36,6 +36,6 @@ describe('operation-operationId-valid-in-url', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

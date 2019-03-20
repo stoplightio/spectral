@@ -1,17 +1,17 @@
 import { Spectral } from '../spectral';
 import { IRuleResult, Rule, RuleFunction } from '../types';
 
-const applyRuleToObject = (r: Rule, o: object): IRuleResult[] => {
+const applyRuleToObject = async (r: Rule, o: object): Promise<IRuleResult[]> => {
   const s = new Spectral();
   s.addRules({
     testRule: r,
   });
-  return s.run(o).results;
+  return await s.run(o);
 };
 
 describe('functions', () => {
   describe('xor', () => {
-    test('returns result if no properties are present', () => {
+    test('returns result if no properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -30,11 +30,11 @@ describe('functions', () => {
               termsOfService: 'http://swagger.io/terms/',
             },
           }
-        ).length
-      ).toEqual(1);
+        )
+      ).resolves.toHaveLength(1);
     });
 
-    test('returns result if both properties are present', () => {
+    test('returns result if both properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -53,11 +53,11 @@ describe('functions', () => {
               termsOfService: 'http://swagger.io/terms/',
             },
           }
-        ).length
-      ).toEqual(1);
+        )
+      ).resolves.toHaveLength(1);
     });
 
-    test('dont returns results if one of the properties are present', () => {
+    test('dont returns results if one of the properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -76,13 +76,13 @@ describe('functions', () => {
               termsOfService: 'http://swagger.io/terms/',
             },
           }
-        ).length
-      ).toEqual(0);
+        )
+      ).resolves.toHaveLength(0);
     });
   });
 
   describe('pattern', () => {
-    test('returns result if pattern is not matched (on string)', () => {
+    test('returns result if pattern is not matched (on string)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -101,11 +101,11 @@ describe('functions', () => {
               termsOfService: 'http://swagger.io/terms/',
             },
           }
-        ).length
-      ).toEqual(1);
+        )
+      ).resolves.toHaveLength(1);
     });
 
-    test('returns result if pattern is not matched (on object keys)', () => {
+    test('returns result if pattern is not matched (on object keys)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -130,11 +130,11 @@ describe('functions', () => {
               },
             },
           }
-        ).length
-      ).toEqual(1);
+        )
+      ).resolves.toHaveLength(1);
     });
 
-    test('dont return result if pattern is matched (on string)', () => {
+    test('dont return result if pattern is matched (on string)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -152,11 +152,11 @@ describe('functions', () => {
               termsOfService: 'http://swagger.io/terms/',
             },
           }
-        ).length
-      ).toEqual(0);
+        )
+      ).resolves.toHaveLength(0);
     });
 
-    test('dont return result if pattern is matched (on object keys)', () => {
+    test('dont return result if pattern is matched (on object keys)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -181,8 +181,8 @@ describe('functions', () => {
               },
             },
           }
-        ).length
-      ).toEqual(0);
+        )
+      ).resolves.toHaveLength(0);
     });
   });
 
@@ -206,7 +206,7 @@ describe('functions', () => {
       },
     ];
 
-    test('return result if string, number, array, or object is greater than max', () => {
+    test('return result if string, number, array, or object is greater than max', async () => {
       expect(
         applyRuleToObject(
           {
@@ -226,11 +226,11 @@ describe('functions', () => {
           {
             vals,
           }
-        ).length
-      ).toEqual(4);
+        )
+      ).resolves.toHaveLength(4);
     });
 
-    test('return result if string, number, array, or object is less than min', () => {
+    test('return result if string, number, array, or object is less than min', async () => {
       expect(
         applyRuleToObject(
           {
@@ -250,11 +250,11 @@ describe('functions', () => {
           {
             vals,
           }
-        ).length
-      ).toEqual(4);
+        )
+      ).resolves.toHaveLength(4);
     });
 
-    test('dont return a result if string, number, array, or object is between min and max', () => {
+    test('dont return a result if string, number, array, or object is between min and max', async () => {
       expect(
         applyRuleToObject(
           {
@@ -268,8 +268,8 @@ describe('functions', () => {
           {
             vals,
           }
-        ).length
-      ).toEqual(0);
+        )
+      ).resolves.toHaveLength(0);
     });
   });
 });

@@ -11,25 +11,25 @@ describe('schema-items-is-object', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       schema: { items: { type: 'string' } },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
-  test('return errors if items is undefined', () => {
-    const results = s.run({
+  test('return errors if items is undefined', async () => {
+    const results = await s.run({
       schema: { items: undefined },
     });
 
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
-  test('return errors if items is not an object', () => {
-    const results = s.run({
+  test('return errors if items is not an object', async () => {
+    const results = await s.run({
       schema: { items: 'string' },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

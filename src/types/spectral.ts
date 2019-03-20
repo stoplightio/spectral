@@ -19,17 +19,18 @@ export interface IRunRule extends IRule {
  */
 export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
+export interface IConstructorOpts {
+  resolver?: object;
+}
+
 export interface IRunOpts {
   /**
-   * The fully-resolved version of the target object.
+   * The resolved version of the target object (could vary depending on the
+   * resolver used)
    *
    * Some functions require this in order to operate.
    */
   resolvedTarget?: object;
-}
-
-export interface IRunResult {
-  results: IRuleResult[];
 }
 
 export interface IRuleResult extends IValidationResult {

@@ -11,8 +11,8 @@ describe('server-not-example.com', () => {
     }),
   });
 
-  test('validate a correct object', () => {
-    const results = s.run({
+  test('validate a correct object', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       servers: [
@@ -21,11 +21,11 @@ describe('server-not-example.com', () => {
         },
       ],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
-  test('return errors if server is example.com', () => {
-    const results = s.run({
+  test('return errors if server is example.com', async () => {
+    const results = await s.run({
       openapi: '3.0.0',
       paths: {},
       servers: [
@@ -34,6 +34,6 @@ describe('server-not-example.com', () => {
         },
       ],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });
