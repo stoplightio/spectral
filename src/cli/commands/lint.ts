@@ -1,14 +1,15 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { parseWithPointers } from '@stoplight/yaml';
-import { existsSync, readFile } from 'fs';
-import { inspect, promisify } from 'util';
+import { existsSync, readFileSync } from 'fs';
 
 // @ts-ignore
 import * as fetch from 'node-fetch';
 
+import { json as jsonFormatter } from '../../formatters';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
+import { IRuleResult } from '../../types';
 
 export default class Lint extends Command {
   public static description = 'lint a JSON/YAML document from a file or URL';
@@ -25,6 +26,10 @@ linting ./openapi.yaml
       char: 'e',
       default: 'utf8',
       description: 'text encoding to use',
+    }),
+    format: flagHelpers.string({
+      char: 'f',
+      description: 'formatter to use for outputting results',
     }),
     maxWarn: flagHelpers.integer({
       char: 'm',
@@ -55,27 +60,9 @@ linting ./openapi.yaml
 
 async function lint(name: string, flags: any, command: Lint) {
   command.log(`linting ${name}`);
-
-  let text: string;
   let obj: any;
-
-  if (name.startsWith('http')) {
-    const res = await fetch(name);
-    text = await res.text();
-  } else if (existsSync(name)) {
-    const readFileAsync = promisify<(path: string, encoding: string) => Promise<string>>(readFile);
-
-    try {
-      text = await readFileAsync(name, flags.encoding);
-    } catch (ex) {
-      throw new Error(`Could not read ${name}: ${ex.message}`);
-    }
-  } else {
-    throw new Error(`${name} does not exist`);
-  }
-
   try {
-    obj = parseWithPointers(text);
+    obj = await readInputArguments(name, flags.encoding);
   } catch (ex) {
     throw new Error(`Could not parse ${name}: ${ex.message}`);
   }
@@ -85,7 +72,6 @@ async function lint(name: string, flags: any, command: Lint) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
-    console.log(oas2Rules())
   } else if (obj.data.openapi && typeof obj.data.openapi === 'string' && obj.data.openapi.startsWith('3.')) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
@@ -94,20 +80,45 @@ async function lint(name: string, flags: any, command: Lint) {
     throw new Error('Input document specification type could not be determined');
   }
 
+  let results = [];
   try {
-    const output = spectral.run(obj.data);
-
-    if (output.results.length === 0) {
+    results = await spectral.run(obj.data);
+    if (results.length === 0) {
       command.log('No errors or warnings found!');
-    } else {
-      process.exitCode = 1;
-      const warnings = flags.maxWarn ? output.results.slice(0, flags.maxWarn) : output.results;
-      for (const issue of warnings) {
-        command.warn(inspect(issue, { depth: null, colors: true }));
-      }
+      return;
     }
   } catch (ex) {
     process.exitCode = 2;
     throw new Error(ex);
   }
+  process.exitCode = 1;
+  // Keep only the requested number of warnings
+  if (flags.maxWarn) {
+    results = results.slice(0, flags.maxWarn);
+  }
+  const output = await formatOutput(results, flags.format);
+  console.log(output);
+}
+
+async function formatOutput(results: IRuleResult[], format: any) {
+  if (format === 'json') {
+    return jsonFormatter(results);
+  }
+
+  // TODO Default is also JSON for now lol
+  return jsonFormatter(results);
+}
+
+async function readInputArguments(name: string, encoding: string) {
+  if (name.startsWith('http')) {
+    const result = await fetch(name);
+    return parseWithPointers(await result.text());
+  } else if (existsSync(name)) {
+    try {
+      return parseWithPointers(readFileSync(name, encoding));
+    } catch (ex) {
+      throw new Error(`Could not read ${name}: ${ex.message}`);
+    }
+  }
+  throw new Error(`${name} does not exist`);
 }
