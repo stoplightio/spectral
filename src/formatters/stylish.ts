@@ -56,7 +56,7 @@ export const stylish = (results: IRuleResult[]): string => {
   let summaryColor = 'white';
 
   const groupedResults = groupByPath(results);
-  Object.keys(groupedResults).map((path: string, index: number) => {
+  Object.keys(groupedResults).map((path, index) => {
     const pathResults = groupedResults[path];
 
     const errors = pathResults.filter((result: IRuleResult) => result.severity === DiagnosticSeverity.Error);
@@ -123,7 +123,7 @@ export const stylish = (results: IRuleResult[]): string => {
   return total > 0 ? output : '';
 };
 
-const groupByPath = (xs: IRuleResult[]): Dictionary<IRuleResult[]> => {
+const groupByPath = (xs: IRuleResult[]) => {
   return xs.reduce((rv: any, x: any) => {
     x.pathStr = x.path.join(' > ');
     (rv[x.pathStr] = rv[x.pathStr] || []).push(x);
