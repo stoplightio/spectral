@@ -360,19 +360,6 @@ export const commonOasRules = (): RuleCollection => ({
     },
     tags: ['given'],
   },
-  'schema-items-is-object': {
-    summary: 'Schema containing `items` requires the items property to be an object.',
-    type: RuleType.VALIDATION,
-    given: '$..schema.items',
-    then: {
-      function: RuleFunction.SCHEMA,
-      functionOptions: {
-        schema: {
-          type: 'object',
-        },
-      },
-    },
-  },
   'tag-description': {
     enabled: false,
     summary: 'Tag object should have a `description`.',
