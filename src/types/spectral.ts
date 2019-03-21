@@ -33,10 +33,6 @@ export interface IRunOpts {
   resolvedTarget?: object;
 }
 
-export interface IRunResult {
-  results: IRuleResult[];
-}
-
 export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
   summary?: string;
   path: JsonPath;
