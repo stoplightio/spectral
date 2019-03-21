@@ -3,14 +3,13 @@
 exports[`info-contact return errors if info is missing contact 1`] = `
 Array [
   Object {
+    "code": "info-contact",
     "message": "info.contact is not truthy",
-    "name": "info-contact",
     "path": Array [
       "info",
       "contact",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Info object should contain \`contact\` object.",
   },
 ]

@@ -3,16 +3,15 @@
 exports[`operation-singular-tag return errors if tags has more than 1 1`] = `
 Array [
   Object {
+    "code": "operation-singular-tag",
     "message": "max length is 1",
-    "name": "operation-singular-tag",
     "path": Array [
       "paths",
       "/todos",
       "get",
       "tags",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Operation may only have one tag.",
   },
 ]

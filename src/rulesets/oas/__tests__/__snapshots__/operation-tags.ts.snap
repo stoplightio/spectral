@@ -3,16 +3,15 @@
 exports[`operation-tags return errors if tags is missing 1`] = `
 Array [
   Object {
+    "code": "operation-tags",
     "message": "paths./todos.get.tags is not truthy",
-    "name": "operation-tags",
     "path": Array [
       "paths",
       "/todos",
       "get",
       "tags",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Operation should have non-empty \`tags\` array.",
   },
 ]

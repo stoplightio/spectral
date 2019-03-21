@@ -3,14 +3,13 @@
 exports[`path-not-include-query return errors if indlues a query 1`] = `
 Array [
   Object {
+    "code": "path-not-include-query",
     "message": "must not match the pattern '\\\\?'",
-    "name": "path-not-include-query",
     "path": Array [
       "paths",
       "/path?query=true",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "given keys should not include a query string.",
   },
 ]

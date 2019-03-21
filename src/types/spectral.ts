@@ -1,4 +1,4 @@
-import { Dictionary, IValidationResult, ObjPath } from '@stoplight/types';
+import { Dictionary, IDiagnostic, JsonPath, Omit } from '@stoplight/types';
 
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
@@ -33,12 +33,12 @@ export interface IRunOpts {
   resolvedTarget?: object;
 }
 
-export interface IRuleResult extends IValidationResult {
-  message: string;
-  path: ObjPath;
+export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
+  summary?: string;
+  path: JsonPath;
 }
 
 export interface IGivenNode {
-  path: ObjPath;
+  path: JsonPath;
   value: any;
 }

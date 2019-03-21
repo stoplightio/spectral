@@ -3,14 +3,13 @@
 exports[`schema-items-is-object return errors if items is not an object 1`] = `
 Array [
   Object {
+    "code": "schema-items-is-object",
     "message": "should be object",
-    "name": "schema-items-is-object",
     "path": Array [
       "schema",
       "items",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Schema containing \`items\` requires the items property to be an object.",
   },
 ]
@@ -19,14 +18,13 @@ Array [
 exports[`schema-items-is-object return errors if items is undefined 1`] = `
 Array [
   Object {
+    "code": "schema-items-is-object",
     "message": "schema.items does not exist",
-    "name": "schema-items-is-object",
     "path": Array [
       "schema",
       "items",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Schema containing \`items\` requires the items property to be an object.",
   },
 ]

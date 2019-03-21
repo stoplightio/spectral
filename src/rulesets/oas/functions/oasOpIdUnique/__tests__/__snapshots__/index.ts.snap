@@ -3,29 +3,27 @@
 exports[`oasOpIdUnique return errors on different path operations same id 1`] = `
 Array [
   Object {
+    "code": "operation-operationId-unique",
     "message": "operationId must be unique",
-    "name": "operation-operationId-unique",
     "path": Array [
       "paths",
       "/path1",
       "get",
       "operationId",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
+    "code": "operation-operationId-unique",
     "message": "operationId must be unique",
-    "name": "operation-operationId-unique",
     "path": Array [
       "paths",
       "/path2",
       "get",
       "operationId",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]
@@ -34,29 +32,27 @@ Array [
 exports[`oasOpIdUnique return errors on same path operations same id 1`] = `
 Array [
   Object {
+    "code": "operation-operationId-unique",
     "message": "operationId must be unique",
-    "name": "operation-operationId-unique",
     "path": Array [
       "paths",
       "/path1",
       "get",
       "operationId",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
+    "code": "operation-operationId-unique",
     "message": "operationId must be unique",
-    "name": "operation-operationId-unique",
     "path": Array [
       "paths",
       "/path1",
       "post",
       "operationId",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]

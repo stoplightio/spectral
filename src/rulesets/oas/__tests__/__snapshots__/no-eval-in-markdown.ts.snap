@@ -3,25 +3,23 @@
 exports[`no-eval-in-markdown return errors if descriptions or titles include eval 1`] = `
 Array [
   Object {
+    "code": "no-eval-in-markdown",
     "message": "must not match the pattern 'eval\\\\('",
-    "name": "no-eval-in-markdown",
     "path": Array [
       "info",
       "description",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Markdown descriptions should not contain \`eval(\`.",
   },
   Object {
+    "code": "no-eval-in-markdown",
     "message": "must not match the pattern 'eval\\\\('",
-    "name": "no-eval-in-markdown",
     "path": Array [
       "info",
       "title",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Markdown descriptions should not contain \`eval(\`.",
   },
 ]
