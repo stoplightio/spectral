@@ -1,4 +1,4 @@
-import { Dictionary, IDiagnostic, JSONPath, Omit } from '@stoplight/types';
+import { Dictionary, IDiagnostic, JsonPath, Omit } from '@stoplight/types';
 
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
@@ -39,10 +39,10 @@ export interface IRunResult {
 
 export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
   summary?: string;
-  path: JSONPath;
+  path: JsonPath;
 }
 
 export interface IGivenNode {
-  path: JSONPath;
+  path: JsonPath;
   value: any;
 }

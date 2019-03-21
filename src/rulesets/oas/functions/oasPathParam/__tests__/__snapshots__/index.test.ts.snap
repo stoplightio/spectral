@@ -3,19 +3,10 @@
 exports[`oasPathParam Error if $ref path parameter definition is not required 1`] = `
 Array [
   Object {
-<<<<<<< HEAD:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.test.ts.snap
+    "code": "path-params",
     "message": "Path parameter \\"**bar**\\" must have a \`required\` that is set to \`true\`.
 
 To fix, mark this parameter as required.",
-    "name": "path-params",
-=======
-    "code": "path-params",
-    "message": "The path \\"**/foo/{bar}/{bar}**\\" uses the parameter \\"**{bar}**\\" multiple times.
-
-Path parameters must be unique.
-
-To fix, update the path so that all parameter names are unique.",
->>>>>>> feat: make Spectral compatible with new diagnostic interfaces:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.ts.snap
     "path": Array [
       "paths",
       "/foo/{bar}",
@@ -30,19 +21,12 @@ To fix, update the path so that all parameter names are unique.",
 exports[`oasPathParam Error if duplicate path parameters with same name are used 1`] = `
 Array [
   Object {
-<<<<<<< HEAD:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.test.ts.snap
+    "code": "path-params",
     "message": "The path \\"**/foo/{bar}/{bar}**\\" uses the parameter \\"**{bar}**\\" multiple times.
 
 Path parameters must be unique.
 
 To fix, update the path so that all parameter names are unique.",
-    "name": "path-params",
-=======
-    "code": "path-params",
-    "message": "The path \\"**/foo/{bar}**\\" uses a parameter \\"**{bar}**\\" that does not have a corresponding definition.
-
-To fix, add a path parameter with the name \\"**bar**\\".",
->>>>>>> feat: make Spectral compatible with new diagnostic interfaces:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.ts.snap
     "path": Array [
       "paths",
       "/foo/{bar}/{bar}",
@@ -56,17 +40,10 @@ To fix, add a path parameter with the name \\"**bar**\\".",
 exports[`oasPathParam Error if no path parameter definition 1`] = `
 Array [
   Object {
-<<<<<<< HEAD:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.test.ts.snap
+    "code": "path-params",
     "message": "The path \\"**/foo/{bar}**\\" uses a parameter \\"**{bar}**\\" that does not have a corresponding definition.
 
 To fix, add a path parameter with the name \\"**bar**\\".",
-    "name": "path-params",
-=======
-    "code": "path-params",
-    "message": "Path parameter \\"**bar**\\" must have a \`required\` that is set to \`true\`.
-
-To fix, mark this parameter as required.",
->>>>>>> feat: make Spectral compatible with new diagnostic interfaces:src/rulesets/oas/functions/oasPathParam/__tests__/__snapshots__/index.ts.snap
     "path": Array [
       "paths",
       "/foo/{bar}",

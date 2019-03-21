@@ -85,7 +85,7 @@ describe('linter', () => {
       },
     });
 
-    expect(result.results[0]).toEqual({
+    expect(result[0]).toEqual({
       code: 'rule1',
       message,
       severity: DiagnosticSeverity.Warning,
@@ -118,7 +118,7 @@ describe('linter', () => {
       x: true,
     });
 
-    expect(result.results[0].severity).toEqual(DiagnosticSeverity.Hint);
+    expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
   });
 
   test('should default severityLabel based on rule severity', async () => {
@@ -135,7 +135,7 @@ describe('linter', () => {
     spectral.addRules({
       rule1: {
         given: '$.x',
-        severity: ValidationSeverity.Info,
+        severity: DiagnosticSeverity.Information,
         then: {
           function: 'func1',
         },
@@ -146,8 +146,7 @@ describe('linter', () => {
       x: true,
     });
 
-    expect(result[0].severity).toEqual(ValidationSeverity.Info);
-    expect(result[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
+    expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Information);
   });
 
   describe('functional tests for the given property', () => {
