@@ -22,6 +22,7 @@ To fix, update the path so that all parameter names are unique.",
       "parameters",
     ],
     "severity": 0,
+    "summary": "Path parameters are correct and valid.",
   },
 ]
 `;
@@ -47,6 +48,7 @@ To fix, add a path parameter with the name \\"**bar**\\".",
       "/foo/{bar}/{bar}",
     ],
     "severity": 0,
+    "summary": "Path parameters are correct and valid.",
   },
 ]
 `;
@@ -70,6 +72,7 @@ To fix, mark this parameter as required.",
       "/foo/{bar}",
     ],
     "severity": 0,
+    "summary": "Path parameters are correct and valid.",
   },
 ]
 `;
@@ -85,6 +88,7 @@ To fix, remove one of the paths or merge them together.",
       "paths",
     ],
     "severity": 0,
+    "summary": "Path parameters are correct and valid.",
   },
 ]
 `;

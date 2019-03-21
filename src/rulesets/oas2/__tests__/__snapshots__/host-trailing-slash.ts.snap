@@ -9,6 +9,7 @@ Array [
       "host",
     ],
     "severity": 1,
+    "summary": "Server URL should not have a trailing slash.",
   },
 ]
 `;

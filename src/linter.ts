@@ -2,7 +2,7 @@ import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
 
-import { DiagnosticSeverity, JSONPath } from '@stoplight/types';
+import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
@@ -89,6 +89,7 @@ export const lintNode = (
       targetResults.map(result => {
         return {
           code: rule.name,
+          summary: rule.summary,
           message: result.message,
           path: result.path || targetPath,
           severity,
@@ -102,7 +103,7 @@ export const lintNode = (
 
 // TODO(SO-23): unit test idividually
 export const whatShouldBeLinted = (
-  path: JSONPath,
+  path: JsonPath,
   originalValue: any,
   rule: IRunRule
 ): { lint: boolean; value: any } => {

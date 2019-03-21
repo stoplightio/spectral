@@ -10,6 +10,7 @@ Array [
       "/path/",
     ],
     "severity": 1,
+    "summary": "given keys should not end with a slash.",
   },
 ]
 `;

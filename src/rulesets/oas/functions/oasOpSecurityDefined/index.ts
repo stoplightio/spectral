@@ -1,4 +1,4 @@
-import { JSONPath } from '@stoplight/types';
+import { JsonPath } from '@stoplight/types';
 
 const _get = require('lodash/get');
 
@@ -7,7 +7,7 @@ import { IFunction, IFunctionResult } from '../../../../types';
 export type functionName = 'oasOpSecurityDefined';
 
 export const oasOpSecurityDefined: IFunction<{
-  schemesPath: JSONPath;
+  schemesPath: JsonPath;
 }> = (targetVal, options) => {
   const results: IFunctionResult[] = [];
 

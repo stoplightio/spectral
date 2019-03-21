@@ -13,6 +13,7 @@ Array [
       "default",
     ],
     "severity": 1,
+    "summary": "Operations must have a default response.",
   },
 ]
 `;

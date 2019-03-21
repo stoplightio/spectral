@@ -11,6 +11,7 @@ Array [
       "description",
     ],
     "severity": 1,
+    "summary": "Tag object should have a \`description\`.",
   },
 ]
 `;

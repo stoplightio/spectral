@@ -9,6 +9,7 @@ Array [
       "host",
     ],
     "severity": 1,
+    "summary": "Server URL should not point at \`example.com\`.",
   },
 ]
 `;

@@ -11,6 +11,7 @@ Array [
       "$ref",
     ],
     "severity": 1,
+    "summary": "References should start with \`#/\`.",
   },
 ]
 `;

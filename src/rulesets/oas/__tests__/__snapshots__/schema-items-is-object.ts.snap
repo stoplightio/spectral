@@ -10,6 +10,7 @@ Array [
       "items",
     ],
     "severity": 1,
+    "summary": "Schema containing \`items\` requires the items property to be an object.",
   },
 ]
 `;
@@ -24,6 +25,7 @@ Array [
       "items",
     ],
     "severity": 1,
+    "summary": "Schema containing \`items\` requires the items property to be an object.",
   },
 ]
 `;

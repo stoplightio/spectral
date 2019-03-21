@@ -11,6 +11,7 @@ Array [
       "description",
     ],
     "severity": 1,
+    "summary": "Definition \`description\` must be present and non-empty string.",
   },
 ]
 `;

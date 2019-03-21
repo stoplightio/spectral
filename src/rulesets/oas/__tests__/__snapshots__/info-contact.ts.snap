@@ -10,6 +10,7 @@ Array [
       "contact",
     ],
     "severity": 1,
+    "summary": "Info object should contain \`contact\` object.",
   },
 ]
 `;

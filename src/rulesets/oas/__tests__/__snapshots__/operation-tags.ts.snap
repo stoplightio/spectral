@@ -12,6 +12,7 @@ Array [
       "tags",
     ],
     "severity": 1,
+    "summary": "Operation should have non-empty \`tags\` array.",
   },
 ]
 `;

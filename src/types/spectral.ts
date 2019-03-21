@@ -38,6 +38,7 @@ export interface IRunResult {
 }
 
 export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
+  summary?: string;
   path: JSONPath;
 }
 

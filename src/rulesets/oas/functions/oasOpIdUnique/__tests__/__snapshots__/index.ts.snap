@@ -12,6 +12,7 @@ Array [
       "operationId",
     ],
     "severity": 1,
+    "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
     "code": "operation-operationId-unique",
@@ -23,6 +24,7 @@ Array [
       "operationId",
     ],
     "severity": 1,
+    "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]
 `;
@@ -39,6 +41,7 @@ Array [
       "operationId",
     ],
     "severity": 1,
+    "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
     "code": "operation-operationId-unique",
@@ -50,6 +53,7 @@ Array [
       "operationId",
     ],
     "severity": 1,
+    "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]
 `;

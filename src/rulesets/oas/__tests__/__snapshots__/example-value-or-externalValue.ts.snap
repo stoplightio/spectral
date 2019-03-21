@@ -9,6 +9,7 @@ Array [
       "example",
     ],
     "severity": 1,
+    "summary": "Example should have either a \`value\` or \`externalValue\` field.",
   },
 ]
 `;
@@ -22,6 +23,7 @@ Array [
       "example",
     ],
     "severity": 1,
+    "summary": "Example should have either a \`value\` or \`externalValue\` field.",
   },
 ]
 `;

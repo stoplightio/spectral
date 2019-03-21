@@ -10,6 +10,7 @@ Array [
       "description",
     ],
     "severity": 1,
+    "summary": "Markdown descriptions should not contain \`<script>\` tags.",
   },
 ]
 `;

@@ -13,6 +13,7 @@ Array [
       "0",
     ],
     "severity": 1,
+    "summary": "Operation \`security\` values must match a scheme defined in the \`securityDefinitions\` object.",
   },
 ]
 `;
@@ -30,6 +31,7 @@ Array [
       "0",
     ],
     "severity": 1,
+    "summary": "Operation \`security\` values must match a scheme defined in the \`components.securitySchemes\` object.",
   },
 ]
 `;

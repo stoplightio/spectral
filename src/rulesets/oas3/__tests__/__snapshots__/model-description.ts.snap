@@ -12,6 +12,7 @@ Array [
       "description",
     ],
     "severity": 1,
+    "summary": "Model \`description\` must be present and non-empty string.",
   },
 ]
 `;

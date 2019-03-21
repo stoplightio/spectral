@@ -11,6 +11,7 @@ Array [
       "name",
     ],
     "severity": 1,
+    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
   Object {
     "code": "contact-properties",
@@ -21,6 +22,7 @@ Array [
       "url",
     ],
     "severity": 1,
+    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
   Object {
     "code": "contact-properties",
@@ -31,6 +33,7 @@ Array [
       "email",
     ],
     "severity": 1,
+    "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
 ]
 `;

@@ -12,6 +12,7 @@ Array [
       "responses",
     ],
     "severity": 1,
+    "summary": "Operation must have at least one \`2xx\` response.",
   },
 ]
 `;
@@ -28,6 +29,7 @@ Array [
       "responses",
     ],
     "severity": 1,
+    "summary": "Operation must have at least one \`2xx\` response.",
   },
 ]
 `;
