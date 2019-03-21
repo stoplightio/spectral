@@ -67,8 +67,7 @@ console.log(JSON.stringify(results, null, 4));
 //   {
 //     "name": "snake_case",
 //     "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
-//     "severity": 40,
-//     "severityLabel": "warn",
+//     "severity": 1,
 //     "path": [
 //       "name"
 //     ]
@@ -134,8 +133,7 @@ console.log(JSON.stringify(results, null, 4));
 //   {
 //     "name": "openapi_not_swagger",
 //     "message": "Use OpenAPI instead of Swagger!",
-//     "severity": 40,
-//     "severityLabel": "warn",
+//     "severity": 1,
 //     "path": [
 //       "description"
 //     ]
