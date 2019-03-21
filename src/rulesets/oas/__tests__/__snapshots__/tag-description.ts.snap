@@ -3,15 +3,14 @@
 exports[`tag-description return errors if tag has no description 1`] = `
 Array [
   Object {
+    "code": "tag-description",
     "message": "tags.0.description is not truthy",
-    "name": "tag-description",
     "path": Array [
       "tags",
       0,
       "description",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Tag object should have a \`description\`.",
   },
 ]

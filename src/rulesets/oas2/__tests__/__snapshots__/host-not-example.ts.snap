@@ -3,13 +3,12 @@
 exports[`host-not-example return errors if server is example.com 1`] = `
 Array [
   Object {
+    "code": "host-not-example",
     "message": "must not match the pattern 'example.com'",
-    "name": "host-not-example",
     "path": Array [
       "host",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Server URL should not point at \`example.com\`.",
   },
 ]

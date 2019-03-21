@@ -1,4 +1,4 @@
-import { ValidationSeverity } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 const merge = require('lodash/merge');
 
 import { Spectral } from '../spectral';
@@ -25,7 +25,7 @@ describe('spectral', () => {
 
       s.mergeRules({
         rule1: {
-          severity: ValidationSeverity.Error,
+          severity: DiagnosticSeverity.Error,
         },
       });
 
@@ -39,7 +39,7 @@ describe('spectral', () => {
         rule1: {
           summary: '',
           given: '$',
-          severity: ValidationSeverity.Warn,
+          severity: DiagnosticSeverity.Warning,
           then: {
             function: RuleFunction.TRUTHY,
           },
@@ -60,12 +60,12 @@ describe('spectral', () => {
 
       s.mergeRules({
         rule1: {
-          severity: ValidationSeverity.Error,
+          severity: DiagnosticSeverity.Error,
         },
       });
 
       expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
-      expect(s.rules.rule1.severity).toBe(ValidationSeverity.Error);
+      expect(s.rules.rule1.severity).toBe(DiagnosticSeverity.Error);
     });
   });
 

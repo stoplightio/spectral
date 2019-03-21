@@ -3,14 +3,13 @@
 exports[`info-description return errors if info missing description 1`] = `
 Array [
   Object {
+    "code": "info-description",
     "message": "info.description is not truthy",
-    "name": "info-description",
     "path": Array [
       "info",
       "description",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "OpenAPI object info \`description\` must be present and non-empty string.",
   },
 ]

@@ -121,8 +121,8 @@ describe('valid-example', () => {
     expect(results).toMatchInlineSnapshot(`
 Array [
   Object {
+    "code": "valid-example",
     "message": "should match format \\"email\\"",
-    "name": "valid-example",
     "path": Array [
       "paths",
       "/pet",
@@ -132,8 +132,7 @@ Array [
       "*/*",
       "schema",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Examples must be valid against their defined schema.",
   },
 ]
