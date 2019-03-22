@@ -59,7 +59,7 @@
     "@stoplight/json-ref-resolver": "^1.2.2",
     "@stoplight/json": "^1.8.0",
     "@stoplight/types": "^4.0.0",
-    "@stoplight/yaml": "^1.2.0",
+    "@stoplight/yaml": "^2.1.0",
     "ajv": "6.x.x",
     "chalk": "^2.4.2",
     "jsonpath": "https://github.com/stoplightio/jsonpath#78140eb1980d4ff385780e2fa12177735685ec3e",

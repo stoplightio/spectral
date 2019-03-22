@@ -27,7 +27,7 @@ import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
 import * as table from 'text-table';
 
-import { DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, IRange } from '@stoplight/types';
 import { IRuleResult } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -82,7 +82,12 @@ export const stylish = (results: IRuleResult[]): string => {
         messageType = chalk.yellow('white');
       }
 
-      return [messageType, result.code, result.summary && result.summary.replace(/([^ ])\.$/u, '$1')];
+      return [
+        formatRange(result.range),
+        messageType,
+        result.code,
+        result.summary && result.summary.replace(/([^ ])\.$/u, '$1'),
+      ];
     });
 
     output += `${table(pathTableData, {
@@ -130,3 +135,9 @@ const groupByPath = (xs: IRuleResult[]) => {
     return rv;
   }, {});
 };
+
+export function formatRange(range?: IRange) {
+  if (!range) return '';
+
+  return ` ${range.start.line + 1}:${range.start.character + 1}`;
+}

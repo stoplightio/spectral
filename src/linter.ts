@@ -3,6 +3,7 @@ const get = require('lodash/get');
 const has = require('lodash/has');
 
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
+import { getLocationForJsonPath } from '@stoplight/yaml';
 import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
@@ -87,12 +88,14 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
+        const location = opts.parsed && getLocationForJsonPath(opts.parsed, result.path || targetPath);
         return {
           code: rule.name,
           summary: rule.summary,
           message: result.message,
           path: result.path || targetPath,
           severity,
+          ...location,
         };
       })
     );
