@@ -123,7 +123,7 @@ export const stylish = (results: IRuleResult[]): string => {
   return total > 0 ? output : '';
 };
 
-const groupByPath = (xs: any) => {
+const groupByPath = (xs: IRuleResult[]): Dictionary<IRuleResult[]> => {
   return xs.reduce((rv: any, x: any) => {
     x.pathStr = x.path.join(' > ');
     (rv[x.pathStr] = rv[x.pathStr] || []).push(x);

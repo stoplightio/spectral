@@ -26,5 +26,5 @@ pkg.oclif = {
 // write it back
 writeJSONSync(pkgPath, pkg);
 
-/* tslint:disable */
+// tslint-disable-next-line no-console
 console.log("updated dist folder with cli related files and changes");
