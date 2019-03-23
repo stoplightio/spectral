@@ -38,9 +38,9 @@ describe('linter', () => {
     spectral.addRules(rules);
 
     // @ts-ignore
-    const result = spectral.run(123);
+    const result = await spectral.run(123);
 
-    expect(result).resolves.toHaveLength(0);
+    expect(result).toHaveLength(0);
   });
 
   test('should return all properties', async () => {

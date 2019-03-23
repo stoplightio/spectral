@@ -50,6 +50,7 @@ export class Spectral {
     const rules: RunRuleCollection = {};
 
     for (const name in this._rules) {
+      if (!this._rules.hasOwnProperty(name)) continue;
       const rule = this._rules[name];
 
       rules[name] = {
@@ -67,6 +68,7 @@ export class Spectral {
 
   public mergeRules(rules: PartialRuleCollection) {
     for (const ruleName in merge({}, rules)) {
+      if (!rules.hasOwnProperty(ruleName)) continue;
       const rule = rules[ruleName];
       if (rule) {
         this._rules[ruleName] = merge(this._rules[ruleName], rule);
@@ -76,6 +78,7 @@ export class Spectral {
 
   public applyRuleDeclarations(declarations: RuleDeclarationCollection) {
     for (const ruleName in declarations) {
+      if (!declarations.hasOwnProperty(ruleName)) continue;
       const declaration = declarations[ruleName];
 
       const rule = this.rules[ruleName];
