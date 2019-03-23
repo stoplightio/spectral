@@ -5,16 +5,15 @@ exports[`operation-operationId does not get called on parameters 1`] = `Array []
 exports[`operation-operationId return errors if operation id is missing 1`] = `
 Array [
   Object {
+    "code": "operation-operationId",
     "message": "paths./todos.get.operationId is not truthy",
-    "name": "operation-operationId",
     "path": Array [
       "paths",
       "/todos",
       "get",
       "operationId",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Operation should have an \`operationId\`.",
   },
 ]

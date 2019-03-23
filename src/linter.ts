@@ -1,9 +1,8 @@
-import { ObjPath, ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
 import * as jp from 'jsonpath';
 const get = require('lodash/get');
 const has = require('lodash/has');
-const invert = require('lodash/invert');
 
+import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
@@ -84,19 +83,16 @@ export const lintNode = (
         }
       ) || [];
 
-    const severity = rule.severity || ValidationSeverity.Warn;
-    const severityLabel =
-      rule.severityLabel || (ValidationSeverityLabel[invert(ValidationSeverity)[severity]] as ValidationSeverityLabel);
+    const severity = rule.severity !== undefined ? rule.severity : DiagnosticSeverity.Warning;
 
     results = results.concat(
       targetResults.map(result => {
         return {
-          name: rule.name,
+          code: rule.name,
           summary: rule.summary,
           message: result.message,
           path: result.path || targetPath,
           severity,
-          severityLabel,
         };
       })
     );
@@ -107,7 +103,7 @@ export const lintNode = (
 
 // TODO(SO-23): unit test idividually
 export const whatShouldBeLinted = (
-  path: ObjPath,
+  path: JsonPath,
   originalValue: any,
   rule: IRunRule
 ): { lint: boolean; value: any } => {

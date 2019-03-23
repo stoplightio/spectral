@@ -46,7 +46,7 @@
   "dependencies": {
     "@stoplight/json": "1.x.x",
     "@stoplight/json-ref-resolver": "^1.2.2",
-    "@stoplight/types": "3.x.x",
+    "@stoplight/types": "4.x.x",
     "ajv": "6.x.x",
     "jsonpath": "https://github.com/stoplightio/jsonpath#78140eb1980d4ff385780e2fa12177735685ec3e",
     "lodash": ">=4.17.5"

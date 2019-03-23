@@ -3,15 +3,14 @@
 exports[`server-trailing-slash return errors if server url ends with a slash 1`] = `
 Array [
   Object {
+    "code": "server-trailing-slash",
     "message": "must not match the pattern '/$'",
-    "name": "server-trailing-slash",
     "path": Array [
       "servers",
       0,
       "url",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Server URL should not have a trailing slash.",
   },
 ]

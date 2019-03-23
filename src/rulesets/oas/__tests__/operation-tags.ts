@@ -22,7 +22,7 @@ describe('operation-tags', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if tags is missing', async () => {
@@ -34,6 +34,6 @@ describe('operation-tags', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

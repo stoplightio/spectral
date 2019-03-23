@@ -18,7 +18,7 @@ describe('valid-example', () => {
         example: 'doggie',
       },
     });
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 
   test('will fail when simple example is invalid', async () => {
@@ -28,7 +28,7 @@ describe('valid-example', () => {
         example: 123,
       },
     });
-    expect(results.results).toHaveLength(1);
+    expect(results).toHaveLength(1);
   });
 
   test('will pass when complex example is used ', async () => {
@@ -55,7 +55,7 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toHaveLength(0);
+    expect(results).toHaveLength(0);
   });
 
   test('will error with totally invalid input', async () => {
@@ -82,7 +82,7 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toHaveLength(1);
+    expect(results).toHaveLength(1);
   });
 
   test('will error with totally invalid input', async () => {
@@ -118,11 +118,11 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results.results).toMatchInlineSnapshot(`
+    expect(results).toMatchInlineSnapshot(`
 Array [
   Object {
+    "code": "valid-example",
     "message": "should match format \\"email\\"",
-    "name": "valid-example",
     "path": Array [
       "paths",
       "/pet",
@@ -132,8 +132,7 @@ Array [
       "*/*",
       "schema",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Examples must be valid against their defined schema.",
   },
 ]

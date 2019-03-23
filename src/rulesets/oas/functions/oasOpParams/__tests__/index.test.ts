@@ -20,7 +20,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('No error if only one param operation level', async () => {
@@ -33,7 +33,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('No error if same param on different operations', async () => {
@@ -49,10 +49,10 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
-  test('Error if nonunique param on same operation', async () => {
+  test('Error if non-unique param on same operation', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -63,10 +63,33 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
-  test('Errors if multple nonunique param on same operation', async () => {
+  test('Error if non-unique $ref param on same operation', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo': {
+          get: {
+            parameters: [
+              { $ref: '#/definitions/fooParam' },
+              { $ref: '#/definitions/fooParam' },
+              { $ref: '#/definitions/fooParam' },
+            ],
+          },
+        },
+      },
+      definitions: {
+        fooParam: {
+          name: 'foo',
+          in: 'query',
+        },
+      },
+    });
+    expect(results).toMatchSnapshot();
+  });
+
+  test('Errors if multiple non-unique param on same operation', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -82,7 +105,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(2);
+    expect(results.length).toEqual(2);
   });
 
   test('Error if multiple in:body', async () => {
@@ -96,7 +119,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('Error if both in:formData and in:body', async () => {
@@ -109,6 +132,6 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

@@ -7,7 +7,7 @@ import { runRules } from './runner';
 import {
   FunctionCollection,
   IConstructorOpts,
-  IRunResult,
+  IRuleResult,
   PartialRuleCollection,
   RuleCollection,
   RuleDeclarationCollection,
@@ -25,7 +25,7 @@ export class Spectral {
     this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
-  public async run(target: object): Promise<IRunResult> {
+  public async run(target: object): Promise<IRuleResult[]> {
     const resolvedTarget = (await this.resolver.resolve(target)).result;
     return runRules(target, this.rules, this.functions, { resolvedTarget });
   }

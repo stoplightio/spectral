@@ -17,7 +17,7 @@ describe('openapi-tags-alphabetical', () => {
       paths: {},
       tags: [{ name: 'a-tag' }, { name: 'b-tag' }],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if tags is not in alphabetical order', async () => {
@@ -26,6 +26,6 @@ describe('openapi-tags-alphabetical', () => {
       paths: {},
       tags: [{ name: 'b-tag' }, { name: 'a-tag' }],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

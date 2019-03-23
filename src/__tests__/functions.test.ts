@@ -6,7 +6,7 @@ const applyRuleToObject = async (r: Rule, o: object): Promise<IRuleResult[]> => 
   s.addRules({
     testRule: r,
   });
-  return (await s.run(o)).results;
+  return await s.run(o);
 };
 
 describe('functions', () => {

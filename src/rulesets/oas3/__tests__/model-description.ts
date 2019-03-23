@@ -23,7 +23,7 @@ describe('model-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if a definition is missing description', async () => {
@@ -36,6 +36,6 @@ describe('model-description', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

@@ -3,13 +3,12 @@
 exports[`api-servers return errors if servers is an empty array  1`] = `
 Array [
   Object {
+    "code": "api-servers",
     "message": "should NOT have fewer than 1 items",
-    "name": "api-servers",
     "path": Array [
       "servers",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "OpenAPI \`servers\` must be present and non-empty array.",
   },
 ]
@@ -18,13 +17,12 @@ Array [
 exports[`api-servers return errors if servers is missing  1`] = `
 Array [
   Object {
+    "code": "api-servers",
     "message": "servers does not exist",
-    "name": "api-servers",
     "path": Array [
       "servers",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "OpenAPI \`servers\` must be present and non-empty array.",
   },
 ]

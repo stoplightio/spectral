@@ -16,7 +16,7 @@ describe('path-keys-no-trailing-slash', () => {
       swagger: '2.0',
       paths: { '/path': {} },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if path ends with a slash', async () => {
@@ -24,7 +24,7 @@ describe('path-keys-no-trailing-slash', () => {
       swagger: '2.0',
       paths: { '/path/': {} },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('does not return error if path IS a /', async () => {
@@ -32,6 +32,6 @@ describe('path-keys-no-trailing-slash', () => {
       swagger: '2.0',
       paths: { '/': {} },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 });

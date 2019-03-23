@@ -17,7 +17,7 @@ describe('api-schemes', () => {
       paths: {},
       schemes: ['http'],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if schemes is missing ', async () => {
@@ -25,7 +25,7 @@ describe('api-schemes', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if schemes is an empty array ', async () => {
@@ -34,6 +34,6 @@ describe('api-schemes', () => {
       paths: {},
       schemes: [],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

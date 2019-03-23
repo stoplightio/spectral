@@ -24,7 +24,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('should work for top level path parameters', async () => {
@@ -43,7 +43,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('should work for operation level parameters', async () => {
@@ -64,7 +64,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if shared level parameter description is missing', async () => {
@@ -78,7 +78,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if top level path parameter description is missing', async () => {
@@ -96,7 +96,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if operation level parameter description is missing', async () => {
@@ -116,7 +116,7 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test.only('does not throw on refs', async () => {
@@ -132,6 +132,6 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 });

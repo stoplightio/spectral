@@ -19,7 +19,7 @@ describe('license-url', () => {
         license: { url: 'stoplight.io' },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if info license is missing url', async () => {
@@ -30,6 +30,6 @@ describe('license-url', () => {
         license: { name: 'MIT' },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

@@ -13,14 +13,14 @@ describe('oasPathParam', () => {
   });
 
   test('No error if templated path is not used', async () => {
-    const results = await s.run({
+    const results = s.run({
       paths: {
         '/foo': {
           get: {},
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results).resolves.toHaveLength(0);
   });
 
   test('Error if no path parameter definition', async () => {
@@ -31,14 +31,14 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
 
-    expect(results.results[0].path).toEqual(['paths', '/foo/{bar}']);
-    expect(results.results[0].message).toContain('bar');
+    expect(results[0].path).toEqual(['paths', '/foo/{bar}']);
+    expect(results[0].message).toContain('bar');
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
-    const results = await s.run({
+    const results = s.run({
       paths: {
         '/foo/{bar}': {
           parameters: [
@@ -52,11 +52,34 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results).resolves.toHaveLength(0);
+  });
+
+  test('No error if $ref path parameter definition is used (at the path level)', async () => {
+    const results = s.run({
+      paths: {
+        '/foo/{bar}': {
+          parameters: [
+            {
+              $ref: '#/definitions/barParam',
+            },
+          ],
+          get: {},
+        },
+      },
+      definitions: {
+        barParam: {
+          name: 'bar',
+          in: 'path',
+          required: true,
+        },
+      },
+    });
+    expect(results).resolves.toHaveLength(0);
   });
 
   test('No error if path parameter definition is set (at the operation level)', async () => {
-    const results = await s.run({
+    const results = s.run({
       paths: {
         '/foo/{bar}': {
           get: {
@@ -71,7 +94,7 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results).resolves.toHaveLength(0);
   });
 
   test('Error if duplicate path parameters with same name are used', async () => {
@@ -89,30 +112,35 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
 
-    expect(results.results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
-    expect(results.results[0].message).toContain('bar');
+    expect(results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
+    expect(results[0].message).toContain('bar');
   });
 
-  test('Error if path parameter definition is not required', async () => {
+  test('Error if $ref path parameter definition is not required', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
           parameters: [
             {
-              name: 'bar',
-              in: 'path',
-              required: false,
+              $ref: '#/definitions/barParam',
             },
           ],
           get: {},
         },
       },
+      definitions: {
+        barParam: {
+          name: 'bar',
+          in: 'path',
+          required: false,
+        },
+      },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
 
-    expect(results.results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
+    expect(results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
   });
 
   test('Error if paths are functionally equivalent', async () => {
@@ -140,8 +168,8 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
 
-    expect(results.results[0].path).toEqual(['paths']);
+    expect(results[0].path).toEqual(['paths']);
   });
 });

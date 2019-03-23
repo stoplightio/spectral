@@ -3,16 +3,15 @@
 exports[`model-description return errors if a definition is missing description 1`] = `
 Array [
   Object {
+    "code": "model-description",
     "message": "components.schemas.user.description is not truthy",
-    "name": "model-description",
     "path": Array [
       "components",
       "schemas",
       "user",
       "description",
     ],
-    "severity": 40,
-    "severityLabel": "warn",
+    "severity": 1,
     "summary": "Model \`description\` must be present and non-empty string.",
   },
 ]

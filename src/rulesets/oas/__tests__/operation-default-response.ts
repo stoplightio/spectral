@@ -24,7 +24,7 @@ describe('operation-default-response', () => {
         },
       },
     });
-    expect(results.results.length).toEqual(0);
+    expect(results).toHaveLength(0);
   });
 
   test('return errors if path-responses is missing default', async () => {
@@ -40,6 +40,6 @@ describe('operation-default-response', () => {
         },
       },
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

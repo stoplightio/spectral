@@ -17,7 +17,7 @@ describe('only-local-references', () => {
       paths: {},
       parameters: [{ $ref: '#/reference/path' }],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if not local ref', async () => {
@@ -26,6 +26,6 @@ describe('only-local-references', () => {
       paths: {},
       parameters: [{ $ref: 'https://stoplight.io#/reference/path' }],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

@@ -1,4 +1,4 @@
-import { ValidationSeverity, ValidationSeverityLabel } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 import { Spectral } from '../spectral';
 
@@ -40,7 +40,7 @@ describe('linter', () => {
     // @ts-ignore
     const result = await spectral.run(123);
 
-    expect(result.results.length).toBe(0);
+    expect(result).resolves.toHaveLength(0);
   });
 
   test('should return all properties', async () => {
@@ -85,11 +85,10 @@ describe('linter', () => {
       },
     });
 
-    expect(result.results[0]).toEqual({
-      name: 'rule1',
+    expect(result[0]).toEqual({
+      code: 'rule1',
       message,
-      severity: ValidationSeverity.Warn,
-      severityLabel: ValidationSeverityLabel.Warn,
+      severity: DiagnosticSeverity.Warning,
       path: ['responses', '404', 'description'],
     });
   });
@@ -108,8 +107,7 @@ describe('linter', () => {
     spectral.addRules({
       rule1: {
         given: '$.x',
-        severity: ValidationSeverity.Info,
-        severityLabel: ValidationSeverityLabel.Info,
+        severity: DiagnosticSeverity.Hint,
         then: {
           function: 'func1',
         },
@@ -120,8 +118,7 @@ describe('linter', () => {
       x: true,
     });
 
-    expect(result.results[0].severity).toEqual(ValidationSeverity.Info);
-    expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
+    expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
   });
 
   test('should default severityLabel based on rule severity', async () => {
@@ -138,7 +135,7 @@ describe('linter', () => {
     spectral.addRules({
       rule1: {
         given: '$.x',
-        severity: ValidationSeverity.Info,
+        severity: DiagnosticSeverity.Information,
         then: {
           function: 'func1',
         },
@@ -149,8 +146,7 @@ describe('linter', () => {
       x: true,
     });
 
-    expect(result.results[0].severity).toEqual(ValidationSeverity.Info);
-    expect(result.results[0].severityLabel).toEqual(ValidationSeverityLabel.Info);
+    expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Information);
   });
 
   describe('functional tests for the given property', () => {

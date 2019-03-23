@@ -13,21 +13,21 @@ describe('example-value-or-externalValue', () => {
 
   test('validate if just externalValue', async () => {
     const results = await s.run({ example: { externalValue: 'value' } });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('validate if just value', async () => {
     const results = await s.run({ example: { value: 'value' } });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if missing externalValue and value', async () => {
     const results = await s.run({ example: {} });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 
   test('return errors if both externalValue and value', async () => {
     const results = await s.run({ example: { externalValue: 'externalValue', value: 'value' } });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

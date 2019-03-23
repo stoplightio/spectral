@@ -21,7 +21,7 @@ describe('server-trailing-slash', () => {
         },
       ],
     });
-    expect(results.results.length).toEqual(0);
+    expect(results.length).toEqual(0);
   });
 
   test('return errors if server url ends with a slash', async () => {
@@ -34,6 +34,6 @@ describe('server-trailing-slash', () => {
         },
       ],
     });
-    expect(results.results).toMatchSnapshot();
+    expect(results).toMatchSnapshot();
   });
 });

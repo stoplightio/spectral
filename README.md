@@ -56,26 +56,23 @@ spectral.addRules({
   },
 });
 
-const results = spectral.run({
+const results = await spectral.run({
   name: 'helloWorld',
 });
 
 console.log(JSON.stringify(results, null, 4));
 
 // => outputs a single result since `helloWorld` is not snake_case
-// {
-//   "results": [
-//     {
-//       "name": "snake_case",
-//       "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
-//       "severity": 40,
-//       "severityLabel": "warn",
-//       "path": [
-//         "name"
-//       ]
-//     }
-//   ]
-// }
+// [
+//   {
+//     "name": "snake_case",
+//     "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
+//     "severity": 1,
+//     "path": [
+//       "name"
+//     ]
+//   }
+// ]
 ```
 
 ### Creating a custom function:
@@ -125,33 +122,32 @@ spectral.addRules({
   },
 });
 
-const results = spectral.run({
+const results = await spectral.run({
   description: 'Swagger is pretty cool!',
 });
 
 console.log(JSON.stringify(results, null, 4));
 
 // => outputs a single result since we are using the term `Swagger` in our object
-// {
-//   "results": [
-//     {
-//       "name": "openapi_not_swagger",
-//       "message": "Use OpenAPI instead of Swagger!",
-//       "severity": 40,
-//       "severityLabel": "warn",
-//       "path": [
-//         "description"
-//       ]
-//     }
-//   ]
-// }
+// [
+//   {
+//     "name": "openapi_not_swagger",
+//     "message": "Use OpenAPI instead of Swagger!",
+//     "severity": 1,
+//     "path": [
+//       "description"
+//     ]
+//   }
+// ]
 ```
 
-### Linting an OAS 2 document
+### Linting an OpenAPI document
 
-Spectral also includes a number of ready made rules and functions for OpenAPI Specification (OAS) 2 and 3 documents. This example uses the OAS 2 rules to lint a document.
+Spectral also includes a number of ready made rules and functions for OpenAPI v2 and v3 description documents (a.k.a specifications).
 
-You can also add to these rules to create a customized linting style guide for your OAS documents.
+This example uses the OpenAPI v2 rules to lint a document.
+
+You can also add to these rules to create a customized linting style guide for your OpenAPI documents.
 
 ```javascript
 const { Spectral } = require('@stoplight/spectral');
@@ -182,7 +178,7 @@ spectral.addRules({
 });
 
 // run!
-const results = spectral.run(myOAS);
+const results = await spectral.run(myOAS);
 
 console.log(JSON.stringify(results, null, 4));
 ```
