@@ -33,12 +33,12 @@
     "build": "sl-scripts build",
     "build.docs": "sl-scripts build:typedoc",
     "commit": "git-cz",
-    "lint": "sl-scripts lint",
+    "lint": "tslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",
     "release.docs": "sl-scripts release:docs",
     "release.dryRun": "sl-scripts release --dry-run --debug",
-    "test": "sl-scripts test",
+    "test": "jest",
     "test.prod": "yarn lint && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch"
@@ -52,13 +52,19 @@
     "lodash": ">=4.17.5"
   },
   "devDependencies": {
-    "@stoplight/scripts": "3.1.0",
+    "@stoplight/scripts": "5.0.0",
+    "@types/jest": "24.0.x",
     "@types/jsonpath": "0.2.x",
     "@types/lodash": "4.x.x",
-    "typescript": "3.2.2"
+    "@types/node": "11.11.x",
+    "jest": "24.5.x",
+    "ts-jest": "24.0.x",
+    "tslint": "5.14.0",
+    "tslint-config-stoplight": "1.2.0",
+    "typescript": "3.3.4000"
   },
   "lint-staged": {
-    "*.{ts,tsx}$": [
+    "*.{ts,tsx}": [
       "yarn lint.fix",
       "git add"
     ]

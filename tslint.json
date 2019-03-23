@@ -1,5 +1,5 @@
 {
-  "extends": ["./node_modules/@stoplight/scripts/tslint.json"],
+  "extends": ["tslint-config-stoplight"],
   "linterOptions": {
     "exclude": ["**/*.json"]
   }
