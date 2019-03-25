@@ -24,6 +24,17 @@ Supports Node v8.3+ and modern browsers.
 
 ## Usage
 
+### CLI
+
+Spectral can be run via the command-line:
+
+```bash
+$ spectral lint petstore.yaml
+
+```
+
+## Customization
+
 There are two key concepts in Spectral: **Rules** and **Functions**.
 
 - **Rules** filter your object down to a set of target values, and specify the function that should evaluate those values.
@@ -75,7 +86,7 @@ console.log(JSON.stringify(results, null, 4));
 // ]
 ```
 
-### Creating a custom function:
+### Creating a custom function
 
 Sometimes the built-in functions don't cover your use case. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
 
@@ -147,8 +158,6 @@ Spectral also includes a number of ready made rules and functions for OpenAPI v2
 
 This example uses the OpenAPI v2 rules to lint a document.
 
-You can also add to these rules to create a customized linting style guide for your OpenAPI documents.
-
 ```javascript
 const { Spectral } = require('@stoplight/spectral');
 const { oas2Functions, oas2Rules } = require('@stoplight/spectral/rulesets/oas2');
@@ -183,6 +192,8 @@ const results = await spectral.run(myOAS);
 console.log(JSON.stringify(results, null, 4));
 ```
 
+You can also add to these rules to create a customized linting style guide for your OpenAPI documents.
+
 Note: The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
 
 ### Example Implementations
@@ -195,13 +206,13 @@ Note: The existing OAS rules are opinionated. There might be some rules that you
 
 Ajv is a JSON Schema validator, not a linter. Spectral does expose a `schema` function that you can use in your rules to validate all or part of the target object with JSON Schema (Ajv is used under the hood). However, Spectral also provides a number of other functions and utilities that you can use to build up a linting ruleset to validates things that JSON Schema is not well suited for.
 
-**I want to lint my OpenAPI Specification documents but don't want to implement Spectral right now.**
+**I want to lint my OpenAPI documents but don't want to implement Spectral right now.**
 
 No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_campaign=spectral).
 
 **What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
 
-With Spectral, lint rules can be applied to _any_ JSON object, not just OAS 3 documents. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OAS-specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
+With Spectral, lint rules can be applied to _any_ JSON object. Speccy is designed to work with OpenAPI v3 only. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OpenAPI specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
 
 ## Contributing
 
