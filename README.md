@@ -152,6 +152,33 @@ console.log(JSON.stringify(results, null, 4));
 // ]
 ```
 
+### Positional information
+
+CLI stylish formatter displays a line and a column for each validation result, but this information can also be obtained programmatically as follows
+
+```javascript
+const { Spectral } = require('@stoplight/spectral');
+const { parseWithPointers } = require('@stoplight/yaml'); // an extra dependency you should install (even though it's already used by Spectral internally)
+
+const spectral = new Spectral();
+
+const content = `
+# add some content here
+`
+// NOTE: the above sample is just for demonstration purposes.
+// You most likely shouldn't store any huge chunks of text in your code and should rather use fs module to read yaml/json files.
+
+const parsed = parseWithPointers(content);
+
+const results = await spectral.run(parsed.data, { ...parsed, source: 'filename' }); // note, filename should point to your file, can be undefined
+
+console.log(JSON.stringify(results, null, 4));
+```
+
+The caveat here is you must have your JSON/YAML represented in a text format.
+The parsed data cannot be mapped correctly if no metadata is provided, and therefore range property will be missing in such case.
+
+
 ### Linting an OpenAPI document
 
 Spectral also includes a number of ready made rules and functions for OpenAPI v2 and v3 description documents (a.k.a specifications).

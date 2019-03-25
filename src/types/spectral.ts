@@ -33,6 +33,10 @@ export interface IRunOpts {
    */
   resolvedTarget?: object;
 
+  /**
+   * Metadata of parsed content needed to calculate line and columns.
+   * If undefined, `range` and `source` won't be attached to validation result.
+   */
   parserMeta?: IParserMeta;
 }
 
@@ -48,5 +52,5 @@ export interface IGivenNode {
 }
 
 export interface IParserMeta extends IParserASTResult<object, YAMLNode, number[]> {
-  uri: string;
+  source: string;
 }
