@@ -56,8 +56,8 @@
   "dependencies": {
     "@oclif/command": "^1.0",
     "@oclif/plugin-help": "^2.0",
-    "@stoplight/json-ref-resolver": "^1.2.2",
     "@stoplight/json": "^1.8.0",
+    "@stoplight/json-ref-resolver": "^1.2.2",
     "@stoplight/types": "^4.0.0",
     "@stoplight/yaml": "^2.1.1",
     "ajv": "6.x.x",
@@ -71,7 +71,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
-    "@stoplight/scripts": "^5.0.0",
+    "@stoplight/scripts": "^5.1.0",
     "@types/chalk": "^2.2.0",
     "@types/jest": "24.0.x",
     "@types/jsonpath": "0.2.x",

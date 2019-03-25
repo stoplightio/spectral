@@ -1,5 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 
+import { oas2Functions, oas2Rules } from '../../dist/rulesets/oas2';
 import { Spectral } from '../spectral';
 
 const fnName = 'fake';
@@ -28,7 +29,11 @@ const rules = {
 };
 
 describe('linter', () => {
-  const spectral = new Spectral();
+  let spectral: Spectral;
+
+  beforeEach(() => {
+    spectral = new Spectral();
+  });
 
   test('should not lint if passed in value is not an object', async () => {
     const fakeLintingFunction = jest.fn();
@@ -37,8 +42,7 @@ describe('linter', () => {
     });
     spectral.addRules(rules);
 
-    // @ts-ignore
-    const result = await spectral.run(123);
+    const result = await spectral.run('123');
 
     expect(result).toHaveLength(0);
   });
@@ -129,6 +133,60 @@ describe('linter', () => {
     });
 
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
+  });
+
+  test('should include parser diagnostics', async () => {
+    spectral.addRules(oas2Rules());
+    spectral.addFunctions(oas2Functions());
+
+    const responses = `openapi: 2.0.0
+responses:: !!foo
+  400:
+    description: a
+  204:
+    description: b
+ 200:
+     description: c
+`;
+
+    const result = await spectral.run(responses);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        {
+          code: 'YAMLException',
+          message: 'unknown tag <tag:yaml.org,2002:foo>',
+          path: [],
+          range: {
+            end: {
+              character: 17,
+              line: 1,
+            },
+            start: {
+              character: 12,
+              line: 1,
+            },
+          },
+          severity: 0,
+        },
+        {
+          code: 'YAMLException',
+          message: 'bad indentation of a mapping entry',
+          path: [],
+          range: {
+            end: {
+              character: 1,
+              line: 6,
+            },
+            start: {
+              character: 1,
+              line: 6,
+            },
+          },
+          severity: 0,
+        },
+      ])
+    );
   });
 
   describe('functional tests for the given property', () => {

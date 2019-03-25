@@ -716,10 +716,10 @@
     jsonc-parser "https://github.com/stoplightio/node-jsonc-parser.git#f45703496d842937ec822683550067dfe68d898e"
     lodash "4.x.x"
 
-"@stoplight/scripts@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/scripts/-/scripts-5.0.0.tgz#bcee3cbdcffc7f1e1ef9d21a963d768f0e414d82"
-  integrity sha512-BUoAuudHtdT3CpzrqvxNhRvXJbFEBeZ4tbPvIEYARBmoTXuFTm6G7IKq8ohIAtvwU2A5qRbh/IogycWSIz5t0A==
+"@stoplight/scripts@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/scripts/-/scripts-5.1.0.tgz#9baf6b1379c4a5dced715384c015bdd32833bcc4"
+  integrity sha512-hfsHRR/VQyaVtnQLglo7H/zjFeo5hcaOfLzbl2B68WwcARmas5Z8LVUJuZbnhgKIJp7lnmPIymeVVf21g/WreA==
   dependencies:
     "@commitlint/cli" "7.5.2"
     "@commitlint/config-conventional" "7.5.0"

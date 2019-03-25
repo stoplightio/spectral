@@ -37,7 +37,7 @@ export class Spectral {
     }
 
     const resolvedTarget = (await this.resolver.resolve(parsed.data)).result;
-    return runRules(parsed, this.rules, this.functions, { resolvedTarget });
+    return [...formatParserDiagnostics(parsed), ...runRules(parsed, this.rules, this.functions, { resolvedTarget })];
   }
 
   /**
@@ -112,3 +112,11 @@ const isParserMeta = (obj: unknown): obj is IParsedResult =>
   Array.isArray((obj as Partial<{ diagnostics: any }>).diagnostics) &&
   'lineMap' in obj &&
   Array.isArray((obj as Partial<{ lineMap: any }>).lineMap);
+
+function formatParserDiagnostics(parsed: IParsedResult): IRuleResult[] {
+  return parsed.diagnostics.map(diagnostic => ({
+    ...diagnostic,
+    path: [],
+    source: parsed.source,
+  }));
+}
