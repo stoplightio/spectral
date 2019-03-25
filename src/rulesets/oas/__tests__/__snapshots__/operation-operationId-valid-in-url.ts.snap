@@ -12,6 +12,7 @@ Array [
       "operationId",
     ],
     "severity": 1,
+    "source": undefined,
     "summary": "operationId may only use characters that are valid when used in a URL.",
   },
 ]

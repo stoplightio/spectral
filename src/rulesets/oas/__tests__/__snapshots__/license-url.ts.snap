@@ -11,6 +11,7 @@ Array [
       "url",
     ],
     "severity": 1,
+    "source": undefined,
     "summary": "License object should include \`url\`.",
   },
 ]

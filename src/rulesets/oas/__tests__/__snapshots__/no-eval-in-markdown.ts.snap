@@ -10,6 +10,7 @@ Array [
       "description",
     ],
     "severity": 1,
+    "source": undefined,
     "summary": "Markdown descriptions should not contain \`eval(\`.",
   },
   Object {
@@ -20,6 +21,7 @@ Array [
       "title",
     ],
     "severity": 1,
+    "source": undefined,
     "summary": "Markdown descriptions should not contain \`eval(\`.",
   },
 ]

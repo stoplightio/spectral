@@ -133,6 +133,7 @@ Array [
       "schema",
     ],
     "severity": 1,
+    "source": undefined,
     "summary": "Examples must be valid against their defined schema.",
   },
 ]

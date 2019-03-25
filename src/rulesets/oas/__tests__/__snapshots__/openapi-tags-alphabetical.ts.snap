@@ -9,6 +9,7 @@ Array [
       "tags",
     ],
     "severity": 1,
+    "source": undefined,
     "summary": "OpenAPI object should have alphabetical \`tags\`.",
   },
 ]
