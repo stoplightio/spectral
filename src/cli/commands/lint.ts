@@ -1,6 +1,7 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { parseWithPointers } from '@stoplight/yaml';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFile } from 'fs';
+import { promisify } from 'util'
 
 // @ts-ignore
 import * as fetch from 'node-fetch';
@@ -32,6 +33,10 @@ linting ./openapi.yaml
       default: 'stylish',
       description: 'formatter to use for outputting results',
       options: ['json', 'stylish'],
+    }),
+    output: flagHelpers.string({
+      char: 'o',
+      description: 'output to a file instead of stdout',
     }),
     maxResults: flagHelpers.integer({
       char: 'm',
@@ -93,20 +98,35 @@ async function lint(name: string, flags: any, command: Lint) {
     process.exitCode = 2;
     throw new Error(ex);
   }
-  // Keep only the requested number of warnings
+
+  const output = await formatOutput(results, flags);
+  try {
+    await writeOutput(output, flags, command);
+    process.exitCode = 1;
+  } catch (ex) {
+    process.exitCode = 2;
+    throw new Error(ex);
+  }
+}
+
+async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
   if (flags.maxResults) {
     results = results.slice(0, flags.maxResults);
   }
-  process.exitCode = 1;
-  const output = await formatOutput(results, flags.format);
-  command.log(output);
-}
-
-async function formatOutput(results: IRuleResult[], format: any) {
   return {
     json: () => json(results),
     stylish: () => stylish(results),
-  }[format]();
+  }[flags.format]();
+}
+
+async function writeOutput(outputStr: string, flags: any, command: Lint) {
+  if (flags.output) {
+    const writeFileAsync = promisify(writeFile);
+    return writeFileAsync(flags.output, outputStr);
+  } else {
+    command.log(outputStr);
+    return Promise.resolve();
+  }
 }
 
 async function readInputArguments(name: string, encoding: string) {
