@@ -14,7 +14,6 @@ Array [
       "operationId",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation should have an \`operationId\`.",
   },
 ]

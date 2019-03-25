@@ -12,7 +12,6 @@ Array [
       "summary",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation \`summary\` should start with upper case and end with a dot.",
   },
 ]
@@ -30,7 +29,6 @@ Array [
       "summary",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation \`summary\` should start with upper case and end with a dot.",
   },
 ]

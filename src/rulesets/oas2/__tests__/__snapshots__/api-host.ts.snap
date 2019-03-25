@@ -9,7 +9,6 @@ Array [
       "host",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "OpenAPI \`host\` must be present and non-empty string.",
   },
 ]

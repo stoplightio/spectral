@@ -14,7 +14,6 @@ Array [
       "description",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation \`description\` must be present and non-empty string.",
   },
 ]

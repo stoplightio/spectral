@@ -95,7 +95,7 @@ export const lintNode = (
           message: result.message,
           path: result.path || targetPath,
           severity,
-          source: opts.parserMeta && opts.parserMeta.source,
+          ...(opts.parserMeta && { source: opts.parserMeta.source }),
           ...location,
         };
       })

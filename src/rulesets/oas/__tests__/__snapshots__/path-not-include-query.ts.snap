@@ -10,7 +10,6 @@ Array [
       "/path?query=true",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "given keys should not include a query string.",
   },
 ]

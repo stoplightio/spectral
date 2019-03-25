@@ -16,7 +16,6 @@ Parameters found at:
       "get",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]
@@ -36,7 +35,6 @@ Parameters found at:
       "get",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]
@@ -60,7 +58,6 @@ Parameters found at:
       "get",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]
@@ -84,7 +81,6 @@ Parameters found at:
       "get",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]

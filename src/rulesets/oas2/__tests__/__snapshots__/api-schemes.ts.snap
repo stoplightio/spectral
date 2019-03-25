@@ -9,7 +9,6 @@ Array [
       "schemes",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
   },
 ]
@@ -24,7 +23,6 @@ Array [
       "schemes",
     ],
     "severity": 1,
-    "source": undefined,
     "summary": "OpenAPI host \`schemes\` must be present and non-empty array.",
   },
 ]
