@@ -86,7 +86,7 @@ export const stylish = (results: IRuleResult[]): string => {
         formatRange(result.range),
         messageType,
         result.code,
-        result.summary && result.summary.replace(/([^ ])\.$/u, '$1'),
+        result.summary ? result.summary.replace(/([^ ])\.$/u, '$1') : result.message,
       ];
     });
 
