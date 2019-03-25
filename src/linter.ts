@@ -88,13 +88,14 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
-        const location = opts.parsed && getLocationForJsonPath(opts.parsed, result.path || targetPath);
+        const location = opts.parserMeta && getLocationForJsonPath(opts.parserMeta, result.path || targetPath);
         return {
           code: rule.name,
           summary: rule.summary,
           message: result.message,
           path: result.path || targetPath,
           severity,
+          source: opts.parserMeta && opts.parserMeta.uri,
           ...location,
         };
       })

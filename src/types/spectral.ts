@@ -33,7 +33,7 @@ export interface IRunOpts {
    */
   resolvedTarget?: object;
 
-  parsed?: IParserASTResult<object, YAMLNode, number[]>;
+  parserMeta?: IParserMeta;
 }
 
 export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
@@ -45,4 +45,8 @@ export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
 export interface IGivenNode {
   path: JsonPath;
   value: any;
+}
+
+export interface IParserMeta extends IParserASTResult<object, YAMLNode, number[]> {
+  uri: string;
 }

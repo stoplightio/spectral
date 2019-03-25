@@ -1,6 +1,4 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { IParserASTResult } from '@stoplight/types';
-import { YAMLNode } from 'yaml-ast-parser';
 
 const merge = require('lodash/merge');
 
@@ -9,6 +7,7 @@ import { runRules } from './runner';
 import {
   FunctionCollection,
   IConstructorOpts,
+  IParserMeta,
   IRuleResult,
   PartialRuleCollection,
   RuleCollection,
@@ -27,9 +26,9 @@ export class Spectral {
     this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
-  public async run(target: object, parsed?: IParserASTResult<object, YAMLNode, number[]>): Promise<IRuleResult[]> {
+  public async run(target: object, parserMeta?: IParserMeta): Promise<IRuleResult[]> {
     const resolvedTarget = (await this.resolver.resolve(target)).result;
-    return runRules(target, this.rules, this.functions, { resolvedTarget, parsed });
+    return runRules(target, this.rules, this.functions, { resolvedTarget, parserMeta });
   }
 
   /**

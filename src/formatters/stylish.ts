@@ -27,7 +27,7 @@ import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
 import * as table from 'text-table';
 
-import { DiagnosticSeverity, IRange } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, IRange } from '@stoplight/types';
 import { IRuleResult } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ export const stylish = (results: IRuleResult[]): string => {
   let infoCount = 0;
   let summaryColor = 'white';
 
-  const groupedResults = groupByPath(results);
+  const groupedResults = groupBySource(results);
   Object.keys(groupedResults).map((path, index) => {
     const pathResults = groupedResults[path];
 
@@ -128,11 +128,10 @@ export const stylish = (results: IRuleResult[]): string => {
   return total > 0 ? output : '';
 };
 
-const groupByPath = (xs: IRuleResult[]) => {
-  return xs.reduce((rv: any, x: any) => {
-    x.pathStr = x.path.join(' > ');
-    (rv[x.pathStr] = rv[x.pathStr] || []).push(x);
-    return rv;
+const groupBySource = (results: IRuleResult[]) => {
+  return results.reduce((grouped: Dictionary<IRuleResult[]>, result: IRuleResult) => {
+    (grouped[result.source!] = grouped[result.source!] || []).push(result);
+    return grouped;
   }, {});
 };
 
