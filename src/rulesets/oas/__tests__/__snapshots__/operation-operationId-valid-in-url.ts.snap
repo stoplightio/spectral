@@ -11,7 +11,18 @@ Array [
       "get",
       "operationId",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 31,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "operationId may only use characters that are valid when used in a URL.",
   },
 ]

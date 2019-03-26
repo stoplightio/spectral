@@ -12,7 +12,18 @@ Array [
       "security",
       "0",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 24,
+        "line": 7,
+      },
+      "start": Object {
+        "character": 10,
+        "line": 6,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation \`security\` values must match a scheme defined in the \`securityDefinitions\` object.",
   },
 ]
@@ -30,7 +41,18 @@ Array [
       "security",
       "0",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 24,
+        "line": 7,
+      },
+      "start": Object {
+        "character": 10,
+        "line": 6,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation \`security\` values must match a scheme defined in the \`components.securitySchemes\` object.",
   },
 ]

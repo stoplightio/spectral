@@ -1,4 +1,5 @@
-import { Dictionary, IDiagnostic, JsonPath, Omit } from '@stoplight/types';
+import { Dictionary, IDiagnostic, IParserASTResult, JsonPath } from '@stoplight/types';
+import { YAMLNode } from 'yaml-ast-parser';
 
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
@@ -33,7 +34,7 @@ export interface IRunOpts {
   resolvedTarget?: object;
 }
 
-export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
+export interface IRuleResult extends IDiagnostic {
   summary?: string;
   path: JsonPath;
 }
@@ -41,4 +42,8 @@ export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
 export interface IGivenNode {
   path: JsonPath;
   value: any;
+}
+
+export interface IParsedResult extends IParserASTResult<object, YAMLNode, number[]> {
+  source?: string;
 }

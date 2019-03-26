@@ -90,6 +90,16 @@ describe('linter', () => {
       message,
       severity: DiagnosticSeverity.Warning,
       path: ['responses', '404', 'description'],
+      range: {
+        end: {
+          line: 6,
+          character: 25,
+        },
+        start: {
+          character: 10,
+          line: 5,
+        },
+      },
     });
   });
 
@@ -119,34 +129,6 @@ describe('linter', () => {
     });
 
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
-  });
-
-  test('should default severityLabel based on rule severity', async () => {
-    spectral.addFunctions({
-      func1: () => {
-        return [
-          {
-            message: 'foo',
-          },
-        ];
-      },
-    });
-
-    spectral.addRules({
-      rule1: {
-        given: '$.x',
-        severity: DiagnosticSeverity.Information,
-        then: {
-          function: 'func1',
-        },
-      },
-    });
-
-    const result = await spectral.run({
-      x: true,
-    });
-
-    expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Information);
   });
 
   describe('functional tests for the given property', () => {

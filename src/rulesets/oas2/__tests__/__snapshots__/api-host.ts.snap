@@ -8,7 +8,18 @@ Array [
     "path": Array [
       "host",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 13,
+        "line": 2,
+      },
+      "start": Object {
+        "character": 0,
+        "line": 0,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "OpenAPI \`host\` must be present and non-empty string.",
   },
 ]

@@ -8,7 +8,18 @@ Array [
     "path": Array [
       "host",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 31,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 10,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Server URL should not point at \`example.com\`.",
   },
 ]

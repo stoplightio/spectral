@@ -1,12 +1,15 @@
-const merge = require('lodash/merge');
-
+import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
+import { parseWithPointers } from '@stoplight/yaml';
+
+import merge = require('lodash/merge');
 
 import { functions as defaultFunctions } from './functions';
 import { runRules } from './runner';
 import {
   FunctionCollection,
   IConstructorOpts,
+  IParsedResult,
   IRuleResult,
   PartialRuleCollection,
   RuleCollection,
@@ -25,9 +28,16 @@ export class Spectral {
     this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
-  public async run(target: object): Promise<IRuleResult[]> {
-    const resolvedTarget = (await this.resolver.resolve(target)).result;
-    return runRules(target, this.rules, this.functions, { resolvedTarget });
+  public async run(target: IParsedResult | object | string): Promise<IRuleResult[]> {
+    let parsed: IParsedResult;
+    if (!isParserMeta(target)) {
+      parsed = parseWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2));
+    } else {
+      parsed = target;
+    }
+
+    const resolvedTarget = (await this.resolver.resolve(parsed.data)).result;
+    return runRules(parsed, this.rules, this.functions, { resolvedTarget });
   }
 
   /**
@@ -90,3 +100,15 @@ export class Spectral {
     }
   }
 }
+
+const isParserMeta = (obj: unknown): obj is IParsedResult =>
+  typeof obj === 'object' &&
+  obj !== null &&
+  'data' in obj &&
+  (obj as Partial<{ data: any }>).data !== undefined &&
+  'ast' in obj &&
+  typeof (obj as Partial<{ ast: any }>).ast === 'object' &&
+  'diagnostics' in obj &&
+  Array.isArray((obj as Partial<{ diagnostics: any }>).diagnostics) &&
+  'lineMap' in obj &&
+  Array.isArray((obj as Partial<{ lineMap: any }>).lineMap);

@@ -9,7 +9,18 @@ Array [
       "info",
       "contact",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 20,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 9,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Info object should contain \`contact\` object.",
   },
 ]

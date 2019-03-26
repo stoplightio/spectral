@@ -15,7 +15,18 @@ Parameters found at:
       "/foo",
       "get",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 25,
+        "line": 11,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]
@@ -34,7 +45,18 @@ Parameters found at:
       "/foo",
       "get",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 25,
+        "line": 11,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]
@@ -57,7 +79,18 @@ Parameters found at:
       "/foo",
       "get",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 44,
+        "line": 12,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]
@@ -80,7 +113,18 @@ Parameters found at:
       "/foo",
       "get",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 25,
+        "line": 15,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation parameters are unique and non-repeating.",
   },
 ]

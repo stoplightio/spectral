@@ -1,6 +1,7 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { parseWithPointers } from '@stoplight/yaml';
 import { existsSync, readFileSync, writeFile } from 'fs';
+import { resolve } from 'path';
 import { promisify } from 'util';
 
 // @ts-ignore
@@ -91,7 +92,8 @@ async function lint(name: string, flags: any, command: Lint) {
 
   let results = [];
   try {
-    results = await spectral.run(obj.data);
+    obj.source = resolve(process.cwd(), name);
+    results = await spectral.run(obj);
     if (results.length === 0) {
       command.log('No errors or warnings found!');
       return;

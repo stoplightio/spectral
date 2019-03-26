@@ -9,7 +9,18 @@ Array [
       "info",
       "license",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 28,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 9,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "OpenAPI object info \`license\` must be present and non-empty string.",
   },
 ]
