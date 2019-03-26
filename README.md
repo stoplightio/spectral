@@ -45,7 +45,7 @@ Other options include:
 
 > Note: The Spectral CLI supports both YAML and JSON. 
 
-Currently, the CLI supports validation of OpenAPI 2 and 3 documents and lints them based on our default ruleset. If you want to build and run custom rulesets, see [Customization](#Customization). 
+Currently, the CLI supports validation of OpenAPI 2 and 3 documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization). 
 
 ## Customization
 
