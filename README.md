@@ -43,7 +43,9 @@ Other options include:
   -v, --verbose                increase verbosity
 ```
 
-> Note: Only the CLI supports YAML at this time. 
+> Note: The Spectral CLI supports both YAML and JSON. 
+
+> Currently, the CLI supports validation of OpenAPI 2 and 3 documents and lints them based on our default ruleset. If you want to build and run custom rulesets, see [Customization](#Customization). 
 
 ## Customization
 
@@ -243,6 +245,7 @@ If you are using Spectral in your project and want to be listed in the examples 
 ## Thanks :)
 
 - [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
+- [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI
 
 ## Support
 
