@@ -1,7 +1,7 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { parseWithPointers } from '@stoplight/yaml';
 import { existsSync, readFileSync, writeFile } from 'fs';
-import { promisify } from 'util'
+import { promisify } from 'util';
 
 // @ts-ignore
 import * as fetch from 'node-fetch';
@@ -11,6 +11,8 @@ import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
 import { IRuleResult } from '../../types';
+
+const writeFileAsync = promisify(writeFile);
 
 export default class Lint extends Command {
   public static description = 'lint a JSON/YAML document from a file or URL';
@@ -121,7 +123,6 @@ async function formatOutput(results: IRuleResult[], flags: any): Promise<string>
 
 async function writeOutput(outputStr: string, flags: any, command: Lint) {
   if (flags.output) {
-    const writeFileAsync = promisify(writeFile);
     return writeFileAsync(flags.output, outputStr);
   } else {
     command.log(outputStr);
