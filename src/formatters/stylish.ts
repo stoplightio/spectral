@@ -77,7 +77,11 @@ export const stylish = (results: IRuleResult[]): string => {
         summaryColor = 'red';
       } else if (result.severity === DiagnosticSeverity.Warning) {
         messageType = chalk.yellow('warning');
-        summaryColor = 'yellow';
+
+        // we should always display red color for summary if there are any errors
+        if (summaryColor !== 'red') {
+          summaryColor = 'yellow';
+        }
       } else {
         messageType = chalk.yellow('white');
       }
