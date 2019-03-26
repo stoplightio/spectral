@@ -1,5 +1,5 @@
-import { expect, test } from '@oclif/test';
-
+import { test } from '@oclif/test';
+import * as fs from 'fs';
 import { resolve } from 'path';
 
 const invalidSpecPath = resolve(__dirname, 'fixtures/openapi-3.0-no-contact.yaml');
@@ -10,6 +10,8 @@ const validSpecPath = resolve(__dirname, 'fixtures/openapi-3.0-valid.yaml');
  * supported like you might expect:
  *   https://github.com/oclif/oclif/issues/142
  */
+
+jest.mock('fs');
 
 describe('lint', () => {
   test
@@ -22,21 +24,33 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidSpecPath])
       .it('outputs warnings in default format', ctx => {
-        expect(ctx.stdout).to.contain('Info object should contain `contact` object');
+        expect(ctx.stdout).toContain('Info object should contain `contact` object');
       });
 
     test
       .stdout()
       .command(['lint', invalidSpecPath, '-f', 'json'])
       .it('outputs warnings in json format', ctx => {
-        expect(ctx.stdout).to.contain('"info.contact is not truthy"');
+        expect(ctx.stdout).toContain('"info.contact is not truthy"');
       });
 
     test
       .stdout()
       .command(['lint', validSpecPath])
       .it('outputs no issues', ctx => {
-        expect(ctx.stdout).to.contain('No errors or warnings found!');
+        expect(ctx.stdout).toContain('No errors or warnings found!');
+      });
+
+    test
+      .stdout()
+      .command(['lint', invalidSpecPath, '-o', 'results.json'])
+      .it('saves results to a file', () => {
+        expect(fs.writeFile).toHaveBeenCalledWith(
+          'results.json',
+          // there are more errors listed
+          expect.stringContaining('Info object should contain `contact` object'),
+          expect.any(Function) // callback, util.promisify handles it for us
+        );
       });
   });
 
@@ -50,7 +64,7 @@ describe('lint', () => {
       .stdout()
       .command(['lint', 'http://foo.local/openapi'])
       .it('outputs no issues', ctx => {
-        expect(ctx.stdout).to.contain('No errors or warnings found!');
+        expect(ctx.stdout).toContain('No errors or warnings found!');
       });
 
     test
@@ -69,7 +83,7 @@ describe('lint', () => {
       .stdout()
       .command(['lint', 'http://foo.local/openapi'])
       .it('outputs warnings in default format', ctx => {
-        expect(ctx.stdout).to.contain('Info object should contain `contact` object');
+        expect(ctx.stdout).toContain('Info object should contain `contact` object');
       });
   });
 });
