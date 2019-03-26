@@ -60,7 +60,6 @@
     "@stoplight/json": "^1.8.0",
     "@stoplight/types": "^4.0.0",
     "@stoplight/yaml": "^1.2.0",
-
     "ajv": "6.x.x",
     "chalk": "^2.4.2",
     "jsonpath": "https://github.com/stoplightio/jsonpath#78140eb1980d4ff385780e2fa12177735685ec3e",
@@ -80,7 +79,6 @@
     "@types/node": "11.11.x",
     "@types/strip-ansi": "^3.0.0",
     "@types/text-table": "^0.2.0",
-    "chai": "^4.2.0",
     "fs-extra": "^7.0.1",
     "jest": "24.5.x",
     "nock": "^10.0.6",

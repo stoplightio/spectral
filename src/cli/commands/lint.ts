@@ -124,10 +124,9 @@ async function formatOutput(results: IRuleResult[], flags: any): Promise<string>
 async function writeOutput(outputStr: string, flags: any, command: Lint) {
   if (flags.output) {
     return writeFileAsync(flags.output, outputStr);
-  } else {
-    command.log(outputStr);
-    return Promise.resolve();
   }
+
+  command.log(outputStr);
 }
 
 async function readInputArguments(name: string, encoding: string) {
