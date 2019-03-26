@@ -29,9 +29,23 @@ Supports Node v8.3+ and modern browsers.
 Spectral can be run via the command-line:
 
 ```bash
-$ spectral lint petstore.yaml
-
+spectral lint petstore.yaml
 ```
+
+Other options include:
+
+```bash
+  -e, --encoding=encoding      [default: utf8] text encoding to use
+  -f, --format=json|stylish    [default: stylish] formatter to use for outputting results
+  -h, --help                   show CLI help
+  -m, --maxResults=maxResults  [default: all] maximum results to show
+  -o, --output=output          output to a file instead of stdout
+  -v, --verbose                increase verbosity
+```
+
+> Note: The Spectral CLI supports both YAML and JSON. 
+
+Currently, the CLI supports validation of OpenAPI 2 and 3 documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization). 
 
 ## Customization
 
@@ -231,6 +245,7 @@ If you are using Spectral in your project and want to be listed in the examples 
 ## Thanks :)
 
 - [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
+- [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI
 
 ## Support
 
