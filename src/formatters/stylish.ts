@@ -69,7 +69,7 @@ export const stylish = (results: IRuleResult[]): string => {
 
     output += `${chalk.underline(path)}\n`;
 
-    const pathTableData = pathResults.map((result: IRuleResult) => {
+    const pathTableData = sortResults(pathResults).map((result: IRuleResult) => {
       let messageType;
 
       if (result.severity === DiagnosticSeverity.Error) {
@@ -85,7 +85,7 @@ export const stylish = (results: IRuleResult[]): string => {
       return [
         formatRange(result.range),
         messageType,
-        result.code,
+        result.code !== undefined ? result.code : '',
         result.summary ? result.summary.replace(/([^ ])\.$/u, '$1') : result.message,
       ];
     });
@@ -128,15 +128,27 @@ export const stylish = (results: IRuleResult[]): string => {
   return total > 0 ? output : '';
 };
 
-const groupBySource = (results: IRuleResult[]) => {
+const groupBySource = (results: IRuleResult[]): Dictionary<IRuleResult[]> => {
   return results.reduce((grouped: Dictionary<IRuleResult[]>, result: IRuleResult) => {
     (grouped[result.source!] = grouped[result.source!] || []).push(result);
     return grouped;
   }, {});
 };
 
-export function formatRange(range?: IRange) {
+const formatRange = (range?: IRange): string => {
   if (!range) return '';
 
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
-}
+};
+
+const sortResults = (results: IRuleResult[]) => {
+  return [...results].sort((resultA, resultB) => {
+    const diff = resultA.range.start.line - resultB.range.start.line;
+
+    if (diff === 0) {
+      return resultA.range.start.character - resultB.range.start.character;
+    }
+
+    return diff;
+  });
+};
