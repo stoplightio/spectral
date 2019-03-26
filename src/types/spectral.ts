@@ -44,6 +44,6 @@ export interface IGivenNode {
   value: any;
 }
 
-export interface IParserMeta extends IParserASTResult<object, YAMLNode, number[]> {
+export interface IParsedResult extends IParserASTResult<object, YAMLNode, number[]> {
   source?: string;
 }

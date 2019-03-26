@@ -9,7 +9,7 @@ import { runRules } from './runner';
 import {
   FunctionCollection,
   IConstructorOpts,
-  IParserMeta,
+  IParsedResult,
   IRuleResult,
   PartialRuleCollection,
   RuleCollection,
@@ -28,8 +28,8 @@ export class Spectral {
     this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
-  public async run(target: IParserMeta | object | string): Promise<IRuleResult[]> {
-    let parsed: IParserMeta;
+  public async run(target: IParsedResult | object | string): Promise<IRuleResult[]> {
+    let parsed: IParsedResult;
     if (!isParserMeta(target)) {
       parsed = parseWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2));
     } else {
@@ -101,7 +101,7 @@ export class Spectral {
   }
 }
 
-const isParserMeta = (obj: unknown): obj is IParserMeta =>
+const isParserMeta = (obj: unknown): obj is IParsedResult =>
   typeof obj === 'object' &&
   obj !== null &&
   'data' in obj &&

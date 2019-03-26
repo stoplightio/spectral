@@ -4,7 +4,7 @@ import { lintNode } from './linter';
 import {
   FunctionCollection,
   IGivenNode,
-  IParserMeta,
+  IParsedResult,
   IRuleResult,
   IRunOpts,
   IRunRule,
@@ -12,7 +12,7 @@ import {
 } from './types';
 
 export const runRules = (
-  parsed: IParserMeta,
+  parsed: IParsedResult,
   rules: RunRuleCollection,
   functions: FunctionCollection,
   opts: IRunOpts
@@ -39,7 +39,12 @@ export const runRules = (
   return results;
 };
 
-const runRule = (parsed: IParserMeta, rule: IRunRule, functions: FunctionCollection, opts: IRunOpts): IRuleResult[] => {
+const runRule = (
+  parsed: IParsedResult,
+  rule: IRunRule,
+  functions: FunctionCollection,
+  opts: IRunOpts
+): IRuleResult[] => {
   const { data: target } = parsed;
   let results: IRuleResult[] = [];
 

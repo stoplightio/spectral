@@ -4,7 +4,7 @@ import has = require('lodash/has');
 
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
-import { IFunction, IGivenNode, IParserMeta, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -13,7 +13,7 @@ export const lintNode = (
   then: IThen<string, any>,
   apply: IFunction,
   opts: IRunOpts,
-  parsed: IParserMeta
+  parsed: IParsedResult
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
