@@ -34,12 +34,7 @@
   },
   "files": [
     "./*",
-    "src/*",
-    "src/cli/commands",
-    "src/functions",
-    "src/rulesets",
-    "src/__tests__",
-    "src/types"
+    "src/**/*"
   ],
   "engines": {
     "node": ">=8.3.0"
@@ -59,12 +54,13 @@
     "test.watch": "yarn test --watch"
   },
   "dependencies": {
-    "@oclif/command": "^1",
-    "@oclif/plugin-help": "^2",
-    "@stoplight/json-ref-resolver": "^1.2",
-    "@stoplight/json": "1.x.x",
-    "@stoplight/types": "4.x.x",
-    "@stoplight/yaml": "1.2.x",
+    "@oclif/command": "^1.0",
+    "@oclif/plugin-help": "^2.0",
+    "@stoplight/json-ref-resolver": "^1.2.2",
+    "@stoplight/json": "^1.8.0",
+    "@stoplight/types": "^4.0.0",
+    "@stoplight/yaml": "^1.2.0",
+
     "ajv": "6.x.x",
     "chalk": "^2.4.2",
     "jsonpath": "https://github.com/stoplightio/jsonpath#78140eb1980d4ff385780e2fa12177735685ec3e",
@@ -76,7 +72,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
-    "@stoplight/scripts": "5.0.0",
+    "@stoplight/scripts": "^5.0.0",
     "@types/chalk": "^2.2.0",
     "@types/jest": "24.0.x",
     "@types/jsonpath": "0.2.x",
