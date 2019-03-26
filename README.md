@@ -29,9 +29,21 @@ Supports Node v8.3+ and modern browsers.
 Spectral can be run via the command-line:
 
 ```bash
-$ spectral lint petstore.yaml
-
+spectral lint petstore.yaml
 ```
+
+Other options include:
+
+```bash
+  -e, --encoding=encoding      [default: utf8] text encoding to use
+  -f, --format=json|stylish    [default: stylish] formatter to use for outputting results
+  -h, --help                   show CLI help
+  -m, --maxResults=maxResults  [default: all] maximum results to show
+  -o, --output=output          output to a file instead of stdout
+  -v, --verbose                increase verbosity
+```
+
+> Note: Only the CLI supports YAML at this time. 
 
 ## Customization
 
