@@ -9,7 +9,18 @@ Array [
       "paths",
       "/path/",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 16,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 13,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "given keys should not end with a slash.",
   },
 ]

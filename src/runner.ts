@@ -1,10 +1,18 @@
 import * as jp from 'jsonpath';
 
 import { lintNode } from './linter';
-import { FunctionCollection, IGivenNode, IRuleResult, IRunOpts, IRunRule, RunRuleCollection } from './types';
+import {
+  FunctionCollection,
+  IGivenNode,
+  IParserMeta,
+  IRuleResult,
+  IRunOpts,
+  IRunRule,
+  RunRuleCollection,
+} from './types';
 
 export const runRules = (
-  target: object,
+  parsed: IParserMeta,
   rules: RunRuleCollection,
   functions: FunctionCollection,
   opts: IRunOpts
@@ -22,7 +30,7 @@ export const runRules = (
     }
 
     try {
-      results = results.concat(runRule(target, rule, functions, opts));
+      results = results.concat(runRule(parsed, rule, functions, opts));
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }
@@ -31,12 +39,9 @@ export const runRules = (
   return results;
 };
 
-const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, opts: IRunOpts): IRuleResult[] => {
+const runRule = (parsed: IParserMeta, rule: IRunRule, functions: FunctionCollection, opts: IRunOpts): IRuleResult[] => {
+  const { data: target } = parsed;
   let results: IRuleResult[] = [];
-
-  if (typeof target !== 'object') {
-    return results;
-  }
 
   let nodes: IGivenNode[] = [];
 
@@ -60,7 +65,7 @@ const runRule = (target: object, rule: IRunRule, functions: FunctionCollection, 
           continue;
         }
 
-        results = results.concat(lintNode(node, rule, then, func, opts));
+        results = results.concat(lintNode(node, rule, then, func, opts, parsed));
       }
     } catch (e) {
       console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);

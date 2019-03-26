@@ -10,7 +10,18 @@ Array [
       "user",
       "description",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 14,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 11,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Definition \`description\` must be present and non-empty string.",
   },
 ]

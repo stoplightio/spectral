@@ -92,7 +92,8 @@ async function lint(name: string, flags: any, command: Lint) {
 
   let results = [];
   try {
-    results = await spectral.run(obj.data, { source: resolve(process.cwd(), name), ...obj });
+    obj.source = resolve(process.cwd(), name);
+    results = await spectral.run(obj);
     if (results.length === 0) {
       command.log('No errors or warnings found!');
       return;

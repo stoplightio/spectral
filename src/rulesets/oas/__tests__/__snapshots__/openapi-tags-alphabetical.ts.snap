@@ -8,7 +8,18 @@ Array [
     "path": Array [
       "tags",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 21,
+        "line": 8,
+      },
+      "start": Object {
+        "character": 9,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "OpenAPI object should have alphabetical \`tags\`.",
   },
 ]

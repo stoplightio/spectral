@@ -10,7 +10,18 @@ Array [
       "/path1",
       "get",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 26,
+        "line": 10,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operations with an \`in: formData\` parameter must include \`application/x-www-form-urlencoded\` or \`multipart/form-data\` in their \`consumes\` property.",
   },
 ]

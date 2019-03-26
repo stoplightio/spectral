@@ -10,7 +10,18 @@ Array [
       0,
       "$ref",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 52,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 14,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "References should start with \`#/\`.",
   },
 ]

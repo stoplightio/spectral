@@ -13,7 +13,18 @@ Array [
       "get",
       "description",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 15,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation \`description\` must be present and non-empty string.",
   },
 ]

@@ -1,4 +1,4 @@
-import { Dictionary, IDiagnostic, IParserASTResult, IRange, JsonPath, Omit } from '@stoplight/types';
+import { Dictionary, IDiagnostic, IParserASTResult, JsonPath } from '@stoplight/types';
 import { YAMLNode } from 'yaml-ast-parser';
 
 import { IFunction } from './function';
@@ -32,17 +32,10 @@ export interface IRunOpts {
    * Some functions require this in order to operate.
    */
   resolvedTarget?: object;
-
-  /**
-   * Metadata of parsed content needed to calculate line and columns.
-   * If undefined, `range` and `source` won't be attached to validation result.
-   */
-  parserMeta?: IParserMeta;
 }
 
-export interface IRuleResult extends Omit<IDiagnostic, 'range'> {
+export interface IRuleResult extends IDiagnostic {
   summary?: string;
-  range?: IRange;
   path: JsonPath;
 }
 
@@ -52,5 +45,5 @@ export interface IGivenNode {
 }
 
 export interface IParserMeta extends IParserASTResult<object, YAMLNode, number[]> {
-  source: string;
+  source?: string;
 }

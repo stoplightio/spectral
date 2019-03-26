@@ -132,7 +132,18 @@ Array [
       "*/*",
       "schema",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 34,
+        "line": 15,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 12,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Examples must be valid against their defined schema.",
   },
 ]

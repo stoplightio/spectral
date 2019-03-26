@@ -8,7 +8,18 @@ Array [
     "path": Array [
       "example",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 20,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 1,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Example should have either a \`value\` or \`externalValue\` field.",
   },
 ]
@@ -22,7 +33,18 @@ Array [
     "path": Array [
       "example",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 15,
+        "line": 1,
+      },
+      "start": Object {
+        "character": 12,
+        "line": 1,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Example should have either a \`value\` or \`externalValue\` field.",
   },
 ]

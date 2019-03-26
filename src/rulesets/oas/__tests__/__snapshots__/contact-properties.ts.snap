@@ -10,7 +10,18 @@ Array [
       "contact",
       "name",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 17,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 14,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
   Object {
@@ -21,7 +32,18 @@ Array [
       "contact",
       "url",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 17,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 14,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
   Object {
@@ -32,7 +54,18 @@ Array [
       "contact",
       "email",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 17,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 14,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Contact object should have \`name\`, \`url\` and \`email\`.",
   },
 ]
