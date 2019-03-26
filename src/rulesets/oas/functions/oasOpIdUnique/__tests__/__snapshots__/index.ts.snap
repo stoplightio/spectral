@@ -11,7 +11,18 @@ Array [
       "get",
       "operationId",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 28,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
@@ -23,7 +34,18 @@ Array [
       "get",
       "operationId",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 28,
+        "line": 9,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 9,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]
@@ -40,7 +62,18 @@ Array [
       "get",
       "operationId",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 28,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
   Object {
@@ -52,7 +85,18 @@ Array [
       "post",
       "operationId",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 28,
+        "line": 7,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 7,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Every operation must have a unique \`operationId\`.",
   },
 ]

@@ -8,7 +8,18 @@ Array [
     "path": Array [
       "tags",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 13,
+        "line": 2,
+      },
+      "start": Object {
+        "character": 0,
+        "line": 0,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "OpenAPI object should have non-empty \`tags\` array.",
   },
 ]

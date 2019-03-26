@@ -162,7 +162,18 @@ Array [
       "properties",
       "c",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 42,
+        "line": 37,
+      },
+      "start": Object {
+        "character": 28,
+        "line": 35,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Examples must be valid against their defined schema.",
   },
 ]

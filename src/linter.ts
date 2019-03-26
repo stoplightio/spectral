@@ -1,9 +1,10 @@
 import * as jp from 'jsonpath';
-const get = require('lodash/get');
-const has = require('lodash/has');
+import get = require('lodash/get');
+import has = require('lodash/has');
 
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
-import { IFunction, IGivenNode, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { getLocationForJsonPath } from '@stoplight/yaml';
+import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -11,7 +12,8 @@ export const lintNode = (
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
-  opts: IRunOpts
+  opts: IRunOpts,
+  parsed: IParsedResult
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
@@ -87,12 +89,15 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
+        const location = getLocationForJsonPath(parsed, result.path || targetPath)!;
         return {
           code: rule.name,
           summary: rule.summary,
           message: result.message,
           path: result.path || targetPath,
           severity,
+          source: parsed.source,
+          ...location,
         };
       })
     );

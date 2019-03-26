@@ -9,7 +9,18 @@ Array [
       "paths",
       "/path?query=true",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 26,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "given keys should not include a query string.",
   },
 ]

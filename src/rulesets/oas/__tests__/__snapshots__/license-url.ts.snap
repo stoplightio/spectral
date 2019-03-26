@@ -10,7 +10,18 @@ Array [
       "license",
       "url",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 19,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 14,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "License object should include \`url\`.",
   },
 ]

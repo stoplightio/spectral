@@ -11,7 +11,18 @@ Array [
       "get",
       "summary",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 48,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 19,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation \`summary\` should start with upper case and end with a dot.",
   },
 ]
@@ -28,7 +39,18 @@ Array [
       "get",
       "summary",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 49,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 19,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation \`summary\` should start with upper case and end with a dot.",
   },
 ]

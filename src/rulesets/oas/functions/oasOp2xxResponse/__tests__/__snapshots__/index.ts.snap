@@ -11,7 +11,18 @@ Array [
       "get",
       "responses",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 30,
+        "line": 9,
+      },
+      "start": Object {
+        "character": 20,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation must have at least one \`2xx\` response.",
   },
 ]
@@ -28,7 +39,18 @@ Array [
       "get",
       "responses",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 23,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 20,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operation must have at least one \`2xx\` response.",
   },
 ]

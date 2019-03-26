@@ -9,7 +9,18 @@ Array [
       "paths",
       "/path/{}",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 18,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 15,
+        "line": 3,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "given declarations cannot be empty, ex.\`/given/{}\` is invalid.",
   },
 ]

@@ -10,7 +10,18 @@ Array [
       0,
       "url",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 34,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 13,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Server URL should not point at \`example.com\`.",
   },
 ]

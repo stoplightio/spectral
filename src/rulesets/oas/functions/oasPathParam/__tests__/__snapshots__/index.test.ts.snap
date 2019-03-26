@@ -12,7 +12,18 @@ To fix, mark this parameter as required.",
       "/foo/{bar}",
       "parameters",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 42,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 19,
+        "line": 3,
+      },
+    },
     "severity": 0,
+    "source": undefined,
     "summary": "Path parameters are correct and valid.",
   },
 ]
@@ -31,7 +42,18 @@ To fix, update the path so that all parameter names are unique.",
       "paths",
       "/foo/{bar}/{bar}",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 15,
+        "line": 10,
+      },
+      "start": Object {
+        "character": 23,
+        "line": 2,
+      },
+    },
     "severity": 0,
+    "source": undefined,
     "summary": "Path parameters are correct and valid.",
   },
 ]
@@ -48,7 +70,18 @@ To fix, add a path parameter with the name \\"**bar**\\".",
       "paths",
       "/foo/{bar}",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 15,
+        "line": 3,
+      },
+      "start": Object {
+        "character": 17,
+        "line": 2,
+      },
+    },
     "severity": 0,
+    "source": undefined,
     "summary": "Path parameters are correct and valid.",
   },
 ]
@@ -64,7 +97,18 @@ To fix, remove one of the paths or merge them together.",
     "path": Array [
       "paths",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 15,
+        "line": 20,
+      },
+      "start": Object {
+        "character": 10,
+        "line": 1,
+      },
+    },
     "severity": 0,
+    "source": undefined,
     "summary": "Path parameters are correct and valid.",
   },
 ]

@@ -11,7 +11,18 @@ Array [
       "user",
       "description",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 16,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 13,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Model \`description\` must be present and non-empty string.",
   },
 ]

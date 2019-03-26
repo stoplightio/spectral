@@ -9,7 +9,18 @@ Array [
       "info",
       "description",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 54,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 19,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Markdown descriptions should not contain \`<script>\` tags.",
   },
 ]

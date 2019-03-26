@@ -12,7 +12,18 @@ Array [
       "responses",
       "default",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 19,
+        "line": 6,
+      },
+      "start": Object {
+        "character": 20,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Operations must have a default response.",
   },
 ]

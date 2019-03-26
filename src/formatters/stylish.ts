@@ -27,7 +27,7 @@ import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
 import * as table from 'text-table';
 
-import { DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, IRange } from '@stoplight/types';
 import { IRuleResult } from '../types';
 
 // -----------------------------------------------------------------------------
@@ -55,7 +55,7 @@ export const stylish = (results: IRuleResult[]): string => {
   let infoCount = 0;
   let summaryColor = 'white';
 
-  const groupedResults = groupByPath(results);
+  const groupedResults = groupBySource(results);
   Object.keys(groupedResults).map((path, index) => {
     const pathResults = groupedResults[path];
 
@@ -69,7 +69,7 @@ export const stylish = (results: IRuleResult[]): string => {
 
     output += `${chalk.underline(path)}\n`;
 
-    const pathTableData = pathResults.map((result: IRuleResult) => {
+    const pathTableData = sortResults(pathResults).map((result: IRuleResult) => {
       let messageType;
 
       if (result.severity === DiagnosticSeverity.Error) {
@@ -77,12 +77,21 @@ export const stylish = (results: IRuleResult[]): string => {
         summaryColor = 'red';
       } else if (result.severity === DiagnosticSeverity.Warning) {
         messageType = chalk.yellow('warning');
-        summaryColor = 'yellow';
+
+        // we should always display red color for summary if there are any errors
+        if (summaryColor !== 'red') {
+          summaryColor = 'yellow';
+        }
       } else {
         messageType = chalk.yellow('white');
       }
 
-      return [messageType, result.code, result.summary && result.summary.replace(/([^ ])\.$/u, '$1')];
+      return [
+        formatRange(result.range),
+        messageType,
+        result.code !== undefined ? result.code : '',
+        result.summary ? result.summary.replace(/([^ ])\.$/u, '$1') : result.message,
+      ];
     });
 
     output += `${table(pathTableData, {
@@ -123,10 +132,27 @@ export const stylish = (results: IRuleResult[]): string => {
   return total > 0 ? output : '';
 };
 
-const groupByPath = (xs: IRuleResult[]) => {
-  return xs.reduce((rv: any, x: any) => {
-    x.pathStr = x.path.join(' > ');
-    (rv[x.pathStr] = rv[x.pathStr] || []).push(x);
-    return rv;
+const groupBySource = (results: IRuleResult[]): Dictionary<IRuleResult[]> => {
+  return results.reduce((grouped: Dictionary<IRuleResult[]>, result: IRuleResult) => {
+    (grouped[result.source!] = grouped[result.source!] || []).push(result);
+    return grouped;
   }, {});
+};
+
+const formatRange = (range?: IRange): string => {
+  if (!range) return '';
+
+  return ` ${range.start.line + 1}:${range.start.character + 1}`;
+};
+
+const sortResults = (results: IRuleResult[]) => {
+  return [...results].sort((resultA, resultB) => {
+    const diff = resultA.range.start.line - resultB.range.start.line;
+
+    if (diff === 0) {
+      return resultA.range.start.character - resultB.range.start.character;
+    }
+
+    return diff;
+  });
 };

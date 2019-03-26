@@ -10,7 +10,18 @@ Array [
       0,
       "description",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 19,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 4,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Tag object should have a \`description\`.",
   },
 ]

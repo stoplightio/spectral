@@ -9,7 +9,18 @@ Array [
       "info",
       "description",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 52,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 19,
+        "line": 5,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Markdown descriptions should not contain \`eval(\`.",
   },
   Object {
@@ -19,7 +30,18 @@ Array [
       "info",
       "title",
     ],
+    "range": Object {
+      "end": Object {
+        "character": 40,
+        "line": 4,
+      },
+      "start": Object {
+        "character": 13,
+        "line": 4,
+      },
+    },
     "severity": 1,
+    "source": undefined,
     "summary": "Markdown descriptions should not contain \`eval(\`.",
   },
 ]
