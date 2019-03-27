@@ -40,6 +40,7 @@
   },
   "scripts": {
     "build": "sl-scripts build && oclif-dev manifest && node ./scripts/prepare-cli",
+    "build.binary": "yarn build && cp yarn.lock dist && cd dist && yarn && pkg . --out-path ./bin",
     "build.docs": "sl-scripts build:typedoc",
     "commit": "git-cz",
     "lint": "tslint 'src/**/*.ts'",
@@ -61,7 +62,7 @@
     "@stoplight/yaml": "^2.1.1",
     "ajv": "6.x.x",
     "chalk": "^2.4.2",
-    "jsonpath": "https://github.com/stoplightio/jsonpath#78140eb1980d4ff385780e2fa12177735685ec3e",
+    "jsonpath": "https://github.com/stoplightio/jsonpath#dd5b17c801b9fe12c88f332d2434c0402d468a8c",
     "lodash": ">=4.17.5",
     "node-fetch": "2.x.x",
     "strip-ansi": "^5.2.0",
@@ -81,6 +82,7 @@
     "fs-extra": "^7.0.1",
     "jest": "24.5.x",
     "nock": "^10.0.6",
+    "pkg": "4.3.7",
     "ts-jest": "24.0.x",
     "tslint": "5.14.0",
     "tslint-config-stoplight": "1.2.0",
@@ -110,5 +112,10 @@
   },
   "release": {
     "extends": "@stoplight/scripts/release"
+  },
+  "pkg": {
+    "scripts": [
+      "cli/**/*.js"
+    ]
   }
 }
