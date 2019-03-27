@@ -73,6 +73,7 @@ const runRule = (
         results = results.concat(lintNode(node, rule, then, func, opts, parsed));
       }
     } catch (e) {
+      console.debug(e)
       console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
     }
   }
