@@ -1,20 +1,22 @@
+import { commonOasFunctions, commonOasRules } from '../';
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
 
-const ruleset = { rules: commonOasRules() };
-const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
+const rules = commonOasRules();
+const { oasOp2xxResponse } = commonOasFunctions();
 
 describe('operation-2xx-response', () => {
-  const s = new Spectral();
-  s.addRules({
-    'operation-2xx-response': Object.assign(ruleset.rules['operation-2xx-response'], {
-      given: operationPath,
-      enabled: true,
-    }),
+  let spectral: Spectral;
+
+  beforeEach(() => {
+    spectral = new Spectral();
+    spectral.addFunctions({ oasOp2xxResponse });
+    spectral.addRules({
+      'operation-2xx-response': rules['operation-2xx-response'],
+    });
   });
 
   test('is happy when a 2xx response is set', async () => {
-    const results = await s.run({
+    const results = await spectral.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -26,11 +28,12 @@ describe('operation-2xx-response', () => {
         },
       },
     });
+
     expect(results).toHaveLength(0);
   });
 
   test('warns about missing 2xx response', async () => {
-    const results = await s.run({
+    const results = await spectral.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -42,11 +45,18 @@ describe('operation-2xx-response', () => {
         },
       },
     });
-    expect(results).toMatchInlineSnapshot('sd');
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'operation-2xx-response',
+        message: 'operations must define at least one 2xx response',
+        path: ['paths', '/path', 'get', 'responses'],
+      }),
+    ]);
   });
 
   test('can handle vendor extensions in the path', async () => {
-    const results = await s.run({
+    const results = await spectral.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -59,6 +69,13 @@ describe('operation-2xx-response', () => {
         },
       },
     });
-    expect(results).toMatchInlineSnapshot('sd');
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'operation-2xx-response',
+        message: 'operations must define at least one 2xx response',
+        path: ['paths', '/path', 'get', 'responses'],
+      }),
+    ]);
   });
 });
