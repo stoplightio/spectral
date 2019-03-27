@@ -82,9 +82,9 @@ spectral.addRules({
 });
 
 // run!
-const results = await spectral.run(myOAS);
-
-console.log(JSON.stringify(results, null, 4));
+spectral.run(myOAS).then(results => {
+  console.log(JSON.stringify(results, null, 4));
+});
 ```
 
 You can also [add to these rules](#Creating-a-custom-rule) to create a customized linting style guide for your OpenAPI documents.
@@ -132,8 +132,9 @@ const results = await spectral.run({
   name: 'helloWorld',
 });
 
-console.log(JSON.stringify(results, null, 4));
-
+spectral.run({name: 'helloWorld',}).then(results => {
+	console.log(JSON.stringify(results, null, 4));
+});
 // => outputs a single result since `helloWorld` is not snake_case
 // [
 //   {
@@ -194,11 +195,9 @@ spectral.addRules({
   },
 });
 
-const results = await spectral.run({
-  description: 'Swagger is pretty cool!',
+spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
+  console.log(JSON.stringify(results, null, 4));
 });
-
-console.log(JSON.stringify(results, null, 4));
 
 // => outputs a single result since we are using the term `Swagger` in our object
 // [
