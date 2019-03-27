@@ -58,7 +58,7 @@ const { Spectral } = require('@stoplight/spectral');
 const { oas3Functions, oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
 
 // an OASv3 document
-var myOAS = {
+const myOAS = {
   // ... properties in your document
   responses: {
     '200': {
