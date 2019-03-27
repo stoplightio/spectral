@@ -1,7 +1,10 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FunctionCollection, RuleCollection, RuleFunction, RuleType } from '../../types';
 
-export const operationPath = "$..paths.*[?( name() !== 'parameters' )]";
+export const operationPath =
+  "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post'" +
+  " || name() === 'delete' || name() === 'options' || name() === 'head'" +
+  " || name() === 'patch' || name() === 'trace' )]";
 
 export const commonOasFunctions = (): FunctionCollection => {
   return {

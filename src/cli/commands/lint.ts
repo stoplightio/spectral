@@ -60,7 +60,7 @@ linting ./openapi.yaml
       try {
         await lint(args.source, flags, this);
       } catch (ex) {
-        this.error('is it over here', ex.message);
+        this.error(ex.message);
       }
     } else {
       this.error('You must specify a document to lint');
