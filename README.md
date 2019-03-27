@@ -128,10 +128,6 @@ spectral.addRules({
   },
 });
 
-const results = await spectral.run({
-  name: 'helloWorld',
-});
-
 // run!
 spectral.run({name: 'helloWorld',}).then(results => {
   console.log(JSON.stringify(results, null, 4));
