@@ -132,9 +132,11 @@ const results = await spectral.run({
   name: 'helloWorld',
 });
 
+// run!
 spectral.run({name: 'helloWorld',}).then(results => {
-	console.log(JSON.stringify(results, null, 4));
+  console.log(JSON.stringify(results, null, 4));
 });
+
 // => outputs a single result since `helloWorld` is not snake_case
 // [
 //   {
@@ -195,6 +197,7 @@ spectral.addRules({
   },
 });
 
+// run!
 spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
   console.log(JSON.stringify(results, null, 4));
 });
