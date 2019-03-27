@@ -2,8 +2,8 @@ import { test } from '@oclif/test';
 import * as fs from 'fs';
 import { resolve } from 'path';
 
-const invalidSpecPath = resolve(__dirname, 'fixtures/openapi-3.0-no-contact.yaml');
-const validSpecPath = resolve(__dirname, 'fixtures/openapi-3.0-valid.yaml');
+const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
+const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
