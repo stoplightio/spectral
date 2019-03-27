@@ -11,7 +11,7 @@ A flexible JSON object linter with out of the box support for OpenAPI Specificat
 - Use JSON paths to apply rules / functions to specific parts of your JSON objects.
 - Built-in set of functions to help [build custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - [Create custom functions](#creating-a-custom-function) for advanced use cases.
-- Optional ready to use rules and functions to validate and lint OpenAPI Specification (OAS) 2 _and_ 3 documents.
+- Optional ready to use rules and functions to validate and lint [OpenAPI Specification (OAS) 2 _and_ 3 documents](#example-linting-an-openapi-document).
 - Validate JSON with [Ajv](https://github.com/epoberezkin/ajv).
 
 ## Installation
