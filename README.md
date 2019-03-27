@@ -89,7 +89,7 @@ console.log(JSON.stringify(results, null, 4));
 
 You can also [add to these rules](#Creating-a-custom-rule) to create a customized linting style guide for your OpenAPI documents.
 
-Note: The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
+The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
 
 
 ## Advanced
@@ -247,7 +247,7 @@ If you are using Spectral in your project and want to be listed in the examples 
 
 - [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `path` you want
 - [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
-- [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON with a source map that includes JSONPath pointers for every property in the result
+- [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON, and a few helper functions such as `getJsonPathForPosition` or `getLocationForJsonPath`
 
 ## Thanks :)
 
