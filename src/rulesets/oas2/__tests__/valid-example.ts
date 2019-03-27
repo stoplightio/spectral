@@ -85,6 +85,54 @@ describe('valid-example', () => {
     expect(results).toHaveLength(1);
   });
 
+  test('works fine with allOf $ref', async () => {
+    const results = await s.run({
+      definitions: {
+        halRoot: {
+          type: 'object',
+          allOf: [
+            {
+              $ref: '#/definitions/halResource',
+            },
+          ],
+          example: {
+            _links: {
+              self: {
+                href: '/',
+              },
+              products: {
+                href: '/products',
+              },
+              product: {
+                href: '/products/{product_id}',
+              },
+              users: {
+                href: '/users',
+              },
+            },
+          },
+        },
+        halResource: {
+          title: 'HAL Resource Object',
+          type: 'object',
+          properties: {
+            _links: {
+              type: 'object',
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-example',
+        summary: 'Examples must be valid against their defined schema.',
+        path: ['paths', '/path', 'get', 'responses'],
+      }),
+    ]);
+  });
+
   test('will pass for valid parents examples which contain invalid child examples', async () => {
     const results = await s.run({
       swagger: '2.0',
