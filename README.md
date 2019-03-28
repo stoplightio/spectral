@@ -43,7 +43,7 @@ Other options include:
   -v, --verbose                increase verbosity
 ```
 
-> Note: The Spectral CLI supports both YAML and JSON. 
+> Note: The Spectral CLI supports both YAML and JSON.
 
 Currently, the CLI supports validation of OpenAPI 2 and 3 documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization).
 
@@ -136,7 +136,7 @@ spectral.run({name: 'helloWorld',}).then(results => {
 // => outputs a single result since `helloWorld` is not snake_case
 // [
 //   {
-//     "name": "snake_case",
+//     "code": "snake_case",
 //     "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
 //     "severity": 1,
 //     "path": [
@@ -201,7 +201,7 @@ spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
 // => outputs a single result since we are using the term `Swagger` in our object
 // [
 //   {
-//     "name": "openapi_not_swagger",
+//     "code": "openapi_not_swagger",
 //     "message": "Use OpenAPI instead of Swagger!",
 //     "severity": 1,
 //     "path": [
