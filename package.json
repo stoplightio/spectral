@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@oclif/command": "^1.0",
+    "@oclif/config": "^1.12.11",
     "@oclif/plugin-help": "^2.0",
     "@stoplight/json": "^1.8.0",
     "@stoplight/json-ref-resolver": "^1.2.2",
