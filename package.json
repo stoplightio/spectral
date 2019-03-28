@@ -56,10 +56,10 @@
   "dependencies": {
     "@oclif/command": "^1.0",
     "@oclif/plugin-help": "^2.0",
-    "@stoplight/json-ref-resolver": "^1.2.2",
     "@stoplight/json": "^1.8.0",
+    "@stoplight/json-ref-resolver": "^1.2.2",
     "@stoplight/types": "^4.0.0",
-    "@stoplight/yaml": "^2.1.0",
+    "@stoplight/yaml": "^2.1.1",
     "ajv": "6.x.x",
     "chalk": "^2.4.2",
     "jsonpath": "https://github.com/stoplightio/jsonpath#78140eb1980d4ff385780e2fa12177735685ec3e",
@@ -71,7 +71,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
-    "@stoplight/scripts": "^5.0.0",
+    "@stoplight/scripts": "^5.1.0",
     "@types/chalk": "^2.2.0",
     "@types/jest": "24.0.x",
     "@types/jsonpath": "0.2.x",
@@ -83,8 +83,8 @@
     "jest": "24.5.x",
     "nock": "^10.0.6",
     "ts-jest": "24.0.x",
-    "tslint-config-stoplight": "1.2.0",
     "tslint": "5.14.0",
+    "tslint-config-stoplight": "1.2.0",
     "typescript": "3.3.4000"
   },
   "lint-staged": {
