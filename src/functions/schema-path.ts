@@ -13,24 +13,29 @@ import { schema } from './schema';
 import jp = require('jsonpath');
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
-  if (!targetVal) return [];
-  let value = targetVal;
+  if (!targetVal || typeof targetVal !== 'object') return [];
 
-  // We want to run this on a specific field, for example: example
-  if (opts.field && typeof targetVal === 'object') {
-    value = targetVal[opts.field];
+  let object = targetVal;
+
+  const { resolved } = otherValues;
+  if (!resolved) {
+    console.warn('schema-path expects a resolved object, but none was provided. Results may not be correct.');
+  } else {
+    // Take the relevant part of the resolved schema
+    object = jp.value(resolved, jp.stringify(['$', ...paths.given]));
   }
 
-  if (!value) return [];
+  // The subsection of the targetVal which contains the good bit
+  const relevantObject = opts.field ? object[opts.field] : object;
+  if (!relevantObject) return [];
 
-  // Hunt in the original targetVal for the schema we are going to apply
-  let schemaObj;
+  // The subsection of the targetValue which contains the schema for us to validate the good bit against
+  let schemaObject;
   try {
-    schemaObj = jp.value(targetVal, opts.schemaPath);
+    schemaObject = jp.value(object, opts.schemaPath);
   } catch (error) {
     console.error(error);
   }
-  if (!schemaObj) return [];
 
-  return schema(value, { schema: schemaObj }, paths, otherValues);
+  return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
 };
