@@ -85,6 +85,82 @@ describe('valid-example', () => {
     expect(results).toHaveLength(1);
   });
 
+  test('works fine with allOf $ref', async () => {
+    const results = await s.run({
+      definitions: {
+        halRoot: {
+          type: 'object',
+          allOf: [
+            {
+              $ref: '#/definitions/halResource',
+            },
+          ],
+          example: {
+            _links: {
+              self: {
+                href: '/',
+              },
+              products: {
+                href: '/products',
+              },
+              product: {
+                href: '/products/{product_id}',
+              },
+              users: {
+                href: '/users',
+              },
+            },
+          },
+        },
+        halResource: {
+          title: 'HAL Resource Object',
+          type: 'object',
+          properties: {
+            _links: {
+              type: 'object',
+              additionalProperties: {
+                allOf: [
+                  {
+                    $ref: '#/definitions/halLinkObject',
+                  },
+                  {
+                    type: 'array',
+                    items: [
+                      {
+                        $ref: '#/definitions/halLinkObject',
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+            _embedded: {
+              type: 'object',
+              additionalProperties: true,
+            },
+          },
+        },
+        halLinkObject: {
+          type: 'object',
+          required: ['href'],
+          properties: {
+            href: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-example',
+        summary: 'Examples must be valid against their defined schema.',
+        path: ['definitions', 'halRoot', '_links', 'self'],
+      }),
+    ]);
+  });
+
   test('will pass for valid parents examples which contain invalid child examples', async () => {
     const results = await s.run({
       swagger: '2.0',
