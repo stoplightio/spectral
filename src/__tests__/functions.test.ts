@@ -57,7 +57,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    test('dont returns results if one of the properties are present', async () => {
+    test('passes when only one of the properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -82,7 +82,7 @@ describe('functions', () => {
   });
 
   describe('pattern', () => {
-    test('returns result if pattern is not matched (on string)', async () => {
+    test('returns results if pattern is not matched (on string)', async () => {
       expect(
         applyRuleToObject(
           {

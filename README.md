@@ -34,7 +34,7 @@ spectral lint petstore.yaml
 
 Other options include:
 
-```bash
+``` text
   -e, --encoding=encoding      [default: utf8] text encoding to use
   -f, --format=json|stylish    [default: stylish] formatter to use for outputting results
   -h, --help                   show CLI help
@@ -91,10 +91,9 @@ You can also [add to these rules](#Creating-a-custom-rule) to create a customize
 
 The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
 
-
 ## Advanced
 
-###  Customization
+### Customization
 
 There are two key concepts in Spectral: **Rules** and **Functions**.
 
