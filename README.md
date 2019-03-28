@@ -3,16 +3,16 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/test_coverage)](https://codeclimate.com/github/stoplightio/spectral/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/maintainability)](https://codeclimate.com/github/stoplightio/spectral/maintainability)
 
-A flexible JSON object linter with out of the box support for OpenAPI Specification 2 and 3
+A flexible JSON object linter with out of the box support for OpenAPI v2 and v3
 
 ## Features
 
-- Create custom rules to lint _any JSON object_.
+- Create custom rules to lint _any JSON object_
 - Use JSON paths to apply rules / functions to specific parts of your JSON objects.
-- Built-in set of functions to help [build custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Built-in set of functions to help [build custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc
 - [Create custom functions](#creating-a-custom-function) for advanced use cases.
-- Optional ready to use rules and functions to validate and lint [OpenAPI Specification (OAS) 2 _and_ 3 documents](#example-linting-an-openapi-document).
-- Validate JSON with [Ajv](https://github.com/epoberezkin/ajv).
+- Optional ready to use rules and functions to validate and lint [OpenAPI v2 _and_ v3 documents](#example-linting-an-openapi-document)
+- Validate JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
 ## Installation
 
@@ -20,7 +20,7 @@ A flexible JSON object linter with out of the box support for OpenAPI Specificat
 npm install @stoplight/spectral
 ```
 
-Supports Node v8.3+ and modern browsers.
+Supports Node v8.3+.
 
 ## Usage
 
@@ -45,7 +45,7 @@ Other options include:
 
 > Note: The Spectral CLI supports both YAML and JSON.
 
-Currently, the CLI supports validation of OpenAPI 2 and 3 documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization).
+Currently, the CLI supports validation of OpenAPI documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization).
 
 ### Example: Linting an OpenAPI document
 
