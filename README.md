@@ -16,11 +16,72 @@ A flexible JSON object linter with out of the box support for OpenAPI v2 and v3
 
 ## Installation
 
-```shell
-npm install @stoplight/spectral
+```bash
+npm install -g @stoplight/spectral
+```
+
+or
+
+```bash
+yarn global add @stoplight/spectral
 ```
 
 Supports Node v8.3+.
+
+If you don't want to install Spectral, but still would like to try it out, you can do so as follows:
+
+```bash
+npx @stoplight/spectral lint path-to-your-file.yml
+```
+
+All options listed in the [CLI](#CLI) section are supported.
+
+### Executable binaries
+
+For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms:
+
+- x64 Windows
+- x64 MacOS
+- x64 Linux
+
+Note, the binaries are **not** auto-updatable, therefore you will need to download a new version on your own.
+
+Use of binaries is fairly easy.
+Once downloaded, you can proceed with the standard procedure for running any CLI tool.
+
+```bash
+./spectral-linux lint petstore.yaml
+```
+
+#### Installing binaries system-wide
+
+##### Linux
+
+As root, run:
+
+```bash
+mv ./spectral-linux /usr/local/bin/spectral
+```
+
+You may need to restart your terminal.
+Now, `spectral` command will be accessible in your terminal!
+
+Head over to releases for the latest binaries.
+
+#### Building binaries
+
+If you would like to build binaries on your own, you need to clone the repo.
+Then, make sure to install all dependencies needed to run the project.
+Once you are set, run
+
+```bash
+yarn build.binary
+```
+
+NOTE: Windows users need to run the above method in Git Bash (MinGW CLI) or under Linux subsystem.
+
+The binaries will appear in `dist/bin/` directory.
+
 
 ## Usage
 
