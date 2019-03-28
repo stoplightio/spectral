@@ -16,11 +16,49 @@ A flexible JSON object linter with out of the box support for OpenAPI v2 and v3
 
 ## Installation
 
-```shell
+### Local Installation
+
+```bash
 npm install @stoplight/spectral
 ```
 
+### Global Installation
+
+```bash
+npm install -g @stoplight/spectral
+```
+
 Supports Node v8.3+.
+
+### Executable binaries
+
+For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms:
+
+- x64 Windows
+- x64 MacOS
+- x64 Linux
+
+You can find them [here](https://github.com/stoplightio/spectral/releases).
+Once downloaded, you can proceed with the standard procedure for running any CLI tool.
+
+```bash
+./spectral-macos lint petstore.yaml
+```
+
+Note, the binaries are *not* auto-updatable, therefore you will need to download a new version on your own.
+
+#### Installing binaries system-wide
+
+##### Linux
+
+```bash
+sudo mv ./spectral-linux /usr/local/bin/spectral
+```
+
+You may need to restart your terminal.
+Now, `spectral` command will be accessible in your terminal.
+
+Head over to [releases](https://github.com/stoplightio/spectral/releases) for the latest binaries.
 
 ## Usage
 
