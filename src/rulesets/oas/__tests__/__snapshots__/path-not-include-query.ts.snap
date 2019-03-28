@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`path-not-include-query return errors if indlues a query 1`] = `
+exports[`path-not-include-query return errors if includes a query 1`] = `
 Array [
   Object {
     "code": "path-not-include-query",

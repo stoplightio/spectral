@@ -19,7 +19,7 @@ describe('path-not-include-query', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors if indlues a query', async () => {
+  test('return errors if includes a query', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: { '/path?query=true': {} },
