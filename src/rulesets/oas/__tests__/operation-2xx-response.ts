@@ -96,7 +96,7 @@ describe('operation-2xx-response', () => {
     ]);
   });
 
-  test('ignores any at the PathItem level which is not a HTTP verb', async () => {
+  test('ignores anything at the PathItem level which is not a HTTP method', async () => {
     const results = await spectral.run({
       swagger: '2.0',
       paths: {
