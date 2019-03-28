@@ -39,8 +39,9 @@
     "node": ">=8.3.0"
   },
   "scripts": {
-    "build": "sl-scripts build && oclif-dev manifest && node ./scripts/prepare-cli",
+    "build": "sl-scripts build && node ./scripts/prepare-cli",
     "build.docs": "sl-scripts build:typedoc",
+    "build.manifest": "cd dist && oclif-dev manifest",
     "commit": "git-cz",
     "lint": "tslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
@@ -70,6 +71,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
+    "@semantic-release/exec": "^3.3.2",
     "@stoplight/scripts": "^5.1.0",
     "@types/chalk": "^2.2.0",
     "@types/jest": "24.0.x",
@@ -109,6 +111,18 @@
     ]
   },
   "release": {
-    "extends": "@stoplight/scripts/release"
+    "pkgRoot": "dist",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "yarn build.manifest"
+        }
+      ]
+    ]
   }
 }

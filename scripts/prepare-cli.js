@@ -1,13 +1,10 @@
-const { copySync, moveSync, readJSONSync, writeJSONSync } = require('fs-extra');
+const { copySync, readJSONSync, writeFileSync } = require('fs-extra');
 const { resolve } = require('path');
 
 const cwd = process.cwd();
 
 // copy bin directory over
 copySync(resolve(cwd, 'bin'), resolve(cwd, 'dist', 'bin'));
-
-// move generated manifest
-moveSync(resolve(cwd, 'oclif.manifest.json'), resolve(cwd, 'dist', 'oclif.manifest.json'));
 
 // update the dist package.json file with cli properties
 const pkgPath = resolve(cwd, 'dist', 'package.json');
@@ -24,7 +21,7 @@ pkg.oclif = {
 };
 
 // write it back
-writeJSONSync(pkgPath, pkg);
+writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 
 // tslint-disable-next-line no-console
-console.log("updated dist folder with cli related files and changes");
+console.log('updated dist folder with cli related files and changes');
