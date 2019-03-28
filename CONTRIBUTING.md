@@ -48,20 +48,6 @@ We have a pull request template setup that you will fill out when you open your 
 
 > We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests. 
 
-#### Building binaries
-
-If you would like to build binaries on your own, you need to clone the repo.
-Then, make sure to install all dependencies needed to run the project.
-Once you are set, run
-
-```bash
-yarn build.binary
-```
-
-NOTE: Windows users need to run the above method in Git Bash (MinGW CLI) or under Linux subsystem.
-
-The binaries will appear in `dist/bin/` directory.
-
 ## Creating an issue
 
 We want to keep issues in this repo focused on bug reports and feature requests. 
