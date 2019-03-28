@@ -4556,12 +4556,7 @@ json5@2.x, json5@^2.1.0:
   dependencies:
     minimist "^1.2.0"
 
-jsonc-parser@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.0.3.tgz#6d4199ccab7f21ff5d2a4225050c54e981fb21a2"
-  integrity sha512-WJi9y9ABL01C8CxTKxRRQkkSpY/x2bo4Gy0WuiZGrInxQqgxQpvkBCLNcDYcHOSdhx4ODgbFcgAvfL49C+PHgQ==
-
-"jsonc-parser@https://github.com/stoplightio/node-jsonc-parser.git#f45703496d842937ec822683550067dfe68d898e":
+jsonc-parser@2.0.3, "jsonc-parser@https://github.com/stoplightio/node-jsonc-parser.git#f45703496d842937ec822683550067dfe68d898e":
   version "2.0.3"
   resolved "https://github.com/stoplightio/node-jsonc-parser.git#f45703496d842937ec822683550067dfe68d898e"
 
