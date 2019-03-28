@@ -1,11 +1,16 @@
 import { schemaPath } from '../schema-path';
 
 function runSchemaPath(target: any, field: string, schemaPathStr: string) {
-  return schemaPath(target, { field, schemaPath: schemaPathStr }, { given: ['$'] }, { given: null, original: null });
+  return schemaPath(
+    target,
+    { field, schemaPath: schemaPathStr },
+    { given: [], target: [] },
+    { given: null, original: null, resolved: target }
+  );
 }
 
 describe('schema', () => {
-  // Check the example field matches the conents of schema
+  // Check the example field matches the contents of schema
   const fieldToCheck = 'example';
   const path = '$.schema';
 
@@ -58,9 +63,7 @@ describe('schema', () => {
 Array [
   Object {
     "message": "should have required property 'url'",
-    "path": Array [
-      "$",
-    ],
+    "path": Array [],
   },
 ]
 `);
@@ -79,9 +82,7 @@ Array [
 Array [
   Object {
     "message": "should match format \\"url\\"",
-    "path": Array [
-      "$",
-    ],
+    "path": Array [],
   },
 ]
 `);

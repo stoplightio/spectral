@@ -118,6 +118,34 @@ describe('valid-example', () => {
           properties: {
             _links: {
               type: 'object',
+              additionalProperties: {
+                allOf: [
+                  {
+                    $ref: '#/definitions/halLinkObject',
+                  },
+                  {
+                    type: 'array',
+                    items: [
+                      {
+                        $ref: '#/definitions/halLinkObject',
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+            _embedded: {
+              type: 'object',
+              additionalProperties: true,
+            },
+          },
+        },
+        halLinkObject: {
+          type: 'object',
+          required: ['href'],
+          properties: {
+            href: {
+              type: 'string',
             },
           },
         },
@@ -128,7 +156,7 @@ describe('valid-example', () => {
       expect.objectContaining({
         code: 'valid-example',
         summary: 'Examples must be valid against their defined schema.',
-        path: ['paths', '/path', 'get', 'responses'],
+        path: ['definitions', 'halRoot', '_links', 'self'],
       }),
     ]);
   });
