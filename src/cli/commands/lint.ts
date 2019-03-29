@@ -1,5 +1,6 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
-import { parseWithPointers } from '@stoplight/yaml';
+import { IParserResult } from '@stoplight/types';
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { existsSync, readFileSync, writeFile } from 'fs';
 import { resolve } from 'path';
 import { promisify } from 'util';
@@ -11,7 +12,7 @@ import { json, stylish } from '../../formatters';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
-import { IRuleResult } from '../../types';
+import { IParsedResult, IRuleResult } from '../../types';
 
 const writeFileAsync = promisify(writeFile);
 
@@ -70,7 +71,7 @@ linting ./openapi.yaml
 
 async function lint(name: string, flags: any, command: Lint) {
   command.log(`linting ${name}`);
-  let obj: any;
+  let obj: IParserResult;
   try {
     obj = await readInputArguments(name, flags.encoding);
   } catch (ex) {
@@ -92,8 +93,13 @@ async function lint(name: string, flags: any, command: Lint) {
 
   let results = [];
   try {
-    obj.source = resolve(process.cwd(), name);
-    results = await spectral.run(obj);
+    const parsedResult: IParsedResult = {
+      source: resolve(process.cwd(), name),
+      parsed: obj,
+      getLocationForJsonPath,
+    };
+
+    results = await spectral.run(parsedResult);
     if (results.length === 0) {
       command.log('No errors or warnings found!');
       return;

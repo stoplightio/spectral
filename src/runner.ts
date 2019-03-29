@@ -12,7 +12,7 @@ import {
 } from './types';
 
 export const runRules = (
-  parsed: IParsedResult,
+  parsedResult: IParsedResult,
   rules: RunRuleCollection,
   functions: FunctionCollection,
   opts: IRunOpts
@@ -30,7 +30,7 @@ export const runRules = (
     }
 
     try {
-      results = results.concat(runRule(parsed, rule, functions, opts));
+      results = results.concat(runRule(parsedResult, rule, functions, opts));
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }
@@ -40,14 +40,15 @@ export const runRules = (
 };
 
 const runRule = (
-  parsed: IParsedResult,
+  parsedResult: IParsedResult,
   rule: IRunRule,
   functions: FunctionCollection,
   opts: IRunOpts
 ): IRuleResult[] => {
+  const { parsed } = parsedResult;
   const { data: target } = parsed;
-  let results: IRuleResult[] = [];
 
+  let results: IRuleResult[] = [];
   let nodes: IGivenNode[] = [];
 
   // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -70,7 +71,7 @@ const runRule = (
           continue;
         }
 
-        results = results.concat(lintNode(node, rule, then, func, opts, parsed));
+        results = results.concat(lintNode(node, rule, then, func, opts, parsedResult));
       }
     } catch (e) {
       console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
