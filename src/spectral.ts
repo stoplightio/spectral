@@ -1,9 +1,10 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { parseWithPointers } from '@stoplight/yaml';
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 
 import merge = require('lodash/merge');
 
+import { IParserResult } from '@stoplight/types';
 import { functions as defaultFunctions } from './functions';
 import { runRules } from './runner';
 import {
@@ -29,15 +30,22 @@ export class Spectral {
   }
 
   public async run(target: IParsedResult | object | string): Promise<IRuleResult[]> {
-    let parsed: IParsedResult;
-    if (!isParserMeta(target)) {
-      parsed = parseWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2));
+    let results: IRuleResult[] = [];
+
+    let parsedResult: IParsedResult;
+    if (!isParsedResult(target)) {
+      parsedResult = {
+        parsed: parseWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
+        getLocationForJsonPath,
+      };
+      results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
     } else {
-      parsed = target;
+      parsedResult = target;
     }
 
-    const resolvedTarget = (await this.resolver.resolve(parsed.data)).result;
-    return [...formatParserDiagnostics(parsed), ...runRules(parsed, this.rules, this.functions, { resolvedTarget })];
+    const resolvedTarget = (await this.resolver.resolve(parsedResult.parsed.data)).result;
+
+    return results.concat(runRules(parsedResult, this.rules, this.functions, { resolvedTarget }));
   }
 
   /**
@@ -101,22 +109,18 @@ export class Spectral {
   }
 }
 
-const isParserMeta = (obj: unknown): obj is IParsedResult =>
-  typeof obj === 'object' &&
-  obj !== null &&
-  'data' in obj &&
-  (obj as Partial<{ data: any }>).data !== undefined &&
-  'ast' in obj &&
-  typeof (obj as Partial<{ ast: any }>).ast === 'object' &&
-  'diagnostics' in obj &&
-  Array.isArray((obj as Partial<{ diagnostics: any }>).diagnostics) &&
-  'lineMap' in obj &&
-  Array.isArray((obj as Partial<{ lineMap: any }>).lineMap);
+export const isParsedResult = (obj: any): obj is IParsedResult => {
+  if (!obj || typeof obj !== 'object') return false;
+  if (!obj.parsed || typeof obj.parsed !== 'object') return false;
+  if (!obj.getLocationForJsonPath || typeof obj.getLocationForJsonPath !== 'function') return false;
 
-function formatParserDiagnostics(parsed: IParsedResult): IRuleResult[] {
+  return true;
+};
+
+function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleResult[] {
   return parsed.diagnostics.map(diagnostic => ({
     ...diagnostic,
     path: [],
-    source: parsed.source,
+    source,
   }));
 }

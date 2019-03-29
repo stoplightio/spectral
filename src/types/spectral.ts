@@ -1,5 +1,4 @@
-import { Dictionary, IDiagnostic, IParserResult, JsonPath } from '@stoplight/types';
-import { YAMLNode } from 'yaml-ast-parser';
+import { Dictionary, GetLocationForJsonPath, IDiagnostic, IParserResult, JsonPath } from '@stoplight/types';
 
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
@@ -44,6 +43,8 @@ export interface IGivenNode {
   value: any;
 }
 
-export interface IParsedResult extends IParserResult<object, YAMLNode, number[]> {
+export interface IParsedResult {
+  parsed: IParserResult;
+  getLocationForJsonPath: GetLocationForJsonPath<any, any>;
   source?: string;
 }

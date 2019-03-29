@@ -1,9 +1,8 @@
+import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import * as jp from 'jsonpath';
 import get = require('lodash/get');
 import has = require('lodash/has');
 
-import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
-import { getLocationForJsonPath } from '@stoplight/yaml';
 import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
@@ -13,7 +12,7 @@ export const lintNode = (
   then: IThen<string, any>,
   apply: IFunction,
   opts: IRunOpts,
-  parsed: IParsedResult
+  parsedResult: IParsedResult
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
@@ -23,6 +22,7 @@ export const lintNode = (
     return [];
   }
 
+  const { parsed } = parsedResult;
   const targetValue = conditioning.value;
 
   const targets: any[] = [];
@@ -89,15 +89,27 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
-        const location = getLocationForJsonPath(parsed, result.path || targetPath)!;
+        const location = parsedResult.getLocationForJsonPath(parsed, result.path || targetPath);
+
         return {
           code: rule.name,
           summary: rule.summary,
           message: result.message,
           path: result.path || targetPath,
           severity,
-          source: parsed.source,
-          ...location,
+          source: parsedResult.source,
+          ...(location || {
+            range: {
+              start: {
+                character: 0,
+                line: 0,
+              },
+              end: {
+                character: 0,
+                line: 0,
+              },
+            },
+          }),
         };
       })
     );
