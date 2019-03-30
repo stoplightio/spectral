@@ -43,6 +43,7 @@ export const commonOasRules = (): RuleCollection => ({
   'operation-operationId-unique': {
     summary: 'Every operation must have a unique `operationId`.',
     type: RuleType.VALIDATION,
+    severity: DiagnosticSeverity.Error,
     given: '$',
     then: {
       function: 'oasOpIdUnique',
