@@ -83,7 +83,7 @@
     "@types/strip-ansi": "^3.0.0",
     "@types/text-table": "^0.2.0",
     "fs-extra": "^7.0.1",
-    "jest": "24.5.x",
+    "jest": "24.7.x",
     "nock": "^10.0.6",
     "pkg": "4.3.7",
     "ts-jest": "24.0.x",
