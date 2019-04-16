@@ -4,6 +4,7 @@ import { resolve } from 'path';
 
 const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
+const validCustomSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 
@@ -78,17 +79,16 @@ describe('lint', () => {
 
     test
       .stdout()
-      .command(['lint', validSpecPath, '-r', validRulesetPath])
+      .command(['lint', validCustomSpecPath, '-r', validRulesetPath])
       .it('outputs no issues', ctx => {
         expect(ctx.stdout).toContain('No errors or warnings found!');
       });
 
     test
       .stdout()
-      .command(['lint', invalidRulesetPath, '-r', validRulesetPath])
-      .exit(2)
+      .command(['lint', validSpecPath, '-r', validRulesetPath])
       .it('outputs warnings in default format', ctx => {
-        expect(ctx.stdout).toContain('BLA');
+        expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
       });
   });
 

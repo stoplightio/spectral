@@ -7,7 +7,7 @@ import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
-import { IParsedResult } from '../../types';
+import { IParsedResult, RuleCollection } from '../../types';
 import { formatOutput, writeOutput } from '../utils/output';
 
 export default class Lint extends Command {
@@ -55,11 +55,12 @@ linting ./openapi.yaml
   public async run() {
     const { args, flags } = this.parse(Lint);
     const { ruleset } = flags;
+    let ruleCollection;
 
     if (ruleset) {
       try {
         this.log(`Reading ruleset`);
-        await readRuleset(ruleset, this);
+        ruleCollection = await readRuleset(ruleset, this);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -67,7 +68,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, flags, this);
+        await lint(args.source, flags, this, ruleCollection);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -77,7 +78,7 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: any, command: Lint) {
+async function lint(name: string, flags: any, command: Lint, customRuleset?: RuleCollection) {
   command.log(`Linting ${name}`);
   const spec: IParserResult = await readParsable(name, flags.encoding);
 
@@ -92,6 +93,10 @@ async function lint(name: string, flags: any, command: Lint) {
     spectral.addRules(oas3Rules());
   } else {
     throw new Error('Input document specification type could not be determined');
+  }
+
+  if (customRuleset) {
+    spectral.addRules(customRuleset);
   }
 
   let results = [];
