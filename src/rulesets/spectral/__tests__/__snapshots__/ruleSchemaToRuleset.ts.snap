@@ -12,6 +12,24 @@ Object {
     },
     "type": "validation",
   },
+  "severity:enum-value-match": Object {
+    "given": "$.rules[*]",
+    "severity": 0,
+    "summary": "'severity' must be one of '0, 1, 2, 3'",
+    "then": Object {
+      "field": "severity",
+      "function": "enumeration",
+      "functionOptions": Object {
+        "values": Array [
+          0,
+          1,
+          2,
+          3,
+        ],
+      },
+    },
+    "type": "validation",
+  },
   "then:no-undef": Object {
     "given": "$.rules[*]",
     "severity": 0,
@@ -19,6 +37,22 @@ Object {
     "then": Object {
       "field": "then",
       "function": "truthy",
+    },
+    "type": "validation",
+  },
+  "type:enum-value-match": Object {
+    "given": "$.rules[*]",
+    "severity": 0,
+    "summary": "'type' must be one of 'validation, style'",
+    "then": Object {
+      "field": "type",
+      "function": "enumeration",
+      "functionOptions": Object {
+        "values": Array [
+          "validation",
+          "style",
+        ],
+      },
     },
     "type": "validation",
   },

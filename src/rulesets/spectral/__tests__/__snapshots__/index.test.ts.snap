@@ -1,5 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Spectral Rules has invalid value 'severity' 1`] = `
+Object {
+  "code": "severity:enum-value-match",
+  "message": "some weird value xyz random stuff does not equal to one of 0,1,2,3",
+  "path": Array [
+    "rules",
+    0,
+    "severity",
+  ],
+  "range": Object {
+    "end": Object {
+      "character": 53,
+      "line": 3,
+    },
+    "start": Object {
+      "character": 18,
+      "line": 3,
+    },
+  },
+  "severity": 0,
+  "source": undefined,
+  "summary": "'severity' must be one of '0, 1, 2, 3'",
+}
+`;
+
+exports[`Spectral Rules has invalid value 'type' 1`] = `
+Object {
+  "code": "type:enum-value-match",
+  "message": "some weird value xyz random stuff does not equal to one of validation,style",
+  "path": Array [
+    "rules",
+    0,
+    "type",
+  ],
+  "range": Object {
+    "end": Object {
+      "character": 49,
+      "line": 3,
+    },
+    "start": Object {
+      "character": 14,
+      "line": 3,
+    },
+  },
+  "severity": 0,
+  "source": undefined,
+  "summary": "'type' must be one of 'validation, style'",
+}
+`;
+
 exports[`Spectral Rules rule is missing 'given' 1`] = `
 Array [
   Object {
