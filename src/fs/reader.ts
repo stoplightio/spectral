@@ -7,14 +7,10 @@ import * as fetch from 'node-fetch';
 async function doRead(name: string, encoding: string) {
   if (name.startsWith('http')) {
     const result = await fetch(name);
-    const parsed = parseWithPointers(await result.text());
-    console.error(parsed);
-    return parsed;
+    return parseWithPointers(await result.text());
   } else if (existsSync(name)) {
     try {
-      const parsed = parseWithPointers(readFileSync(name, encoding));
-      console.error(parsed);
-      return parsed;
+      return parseWithPointers(readFileSync(name, encoding));
     } catch (ex) {
       throw new Error(`Could not read ${name}: ${ex.message}`);
     }

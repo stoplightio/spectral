@@ -1,18 +1,14 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
-import { writeFile } from 'fs';
 import { resolve } from 'path';
-import { promisify } from 'util';
 import { readRuleset } from '../../config/rulesetReader';
-import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
-import { IParsedResult, IRuleResult } from '../../types';
-
-const writeFileAsync = promisify(writeFile);
+import { IParsedResult } from '../../types';
+import { formatOutput, writeOutput } from '../utils/output';
 
 export default class Lint extends Command {
   public static description = 'lint a JSON/YAML document from a file or URL';
@@ -62,8 +58,8 @@ linting ./openapi.yaml
 
     if (ruleset) {
       try {
-        this.log(`Reading ruleset ${ruleset}`);
-        await readRuleset(ruleset);
+        this.log(`Reading ruleset`);
+        await readRuleset(ruleset, this);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -124,22 +120,4 @@ async function lint(name: string, flags: any, command: Lint) {
     process.exitCode = 2;
     throw new Error(ex);
   }
-}
-
-async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
-  if (flags.maxResults) {
-    results = results.slice(0, flags.maxResults);
-  }
-  return {
-    json: () => json(results),
-    stylish: () => stylish(results),
-  }[flags.format]();
-}
-
-async function writeOutput(outputStr: string, flags: any, command: Lint) {
-  if (flags.output) {
-    return writeFileAsync(flags.output, outputStr);
-  }
-
-  command.log(outputStr);
 }

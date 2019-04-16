@@ -4,6 +4,8 @@ import { resolve } from 'path';
 
 const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
+const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
+const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -63,26 +65,39 @@ describe('lint', () => {
 
     test
       .stdout()
-      .command(['lint', validSpecPath, '-r', 'invalidRulesetFile'])
-      .it('outputs "invalid ruleset" error');
+      .command(['lint', validSpecPath, '-r', invalidRulesetPath])
+      .exit(2)
+      .it('outputs "invalid ruleset" error', ctx => {
+        expect(ctx.stdout).toContain(`2:31  error  given:no-undef             'given' must be defined`);
+        expect(ctx.stdout).toContain(`2:31  error  then:no-undef              'then' must be defined`);
+        expect(ctx.stdout).toContain(`13:15  error  severity:enum-value-match  'severity' must be one of '0, 1, 2, 3'`);
+        expect(ctx.stdout).toContain(
+          `14:11  error  type:enum-value-match      'type' must be one of 'validation, style'`
+        );
+      });
 
     test
       .stdout()
-      .command(['lint', validSpecPath, '-r', 'validRulesetFile'])
-      .it('outputs no issues');
+      .command(['lint', validSpecPath, '-r', validRulesetPath])
+      .it('outputs no issues', ctx => {
+        expect(ctx.stdout).toContain('No errors or warnings found!');
+      });
 
     test
       .stdout()
-      .command(['lint', 'invalidSpecPath2', '-r', 'validRulesetFile'])
-      .it('outputs warnings in default format');
+      .command(['lint', invalidRulesetPath, '-r', validRulesetPath])
+      .exit(2)
+      .it('outputs warnings in default format', ctx => {
+        expect(ctx.stdout).toContain('BLA');
+      });
   });
 
-  describe('when multiple rulesets provided', () => {
-    test
-      .stdout()
-      .command(['lint', 'invalidSpecPath2', '-r', 'validRulesetFile', '-r', 'validRulesetFile2'])
-      .it('outputs warnings in default format');
-  });
+  // describe('when multiple rulesets provided', () => {
+  //   test
+  //     .stdout()
+  //     .command(['lint', 'invalidSpecPath2', '-r', 'validRulesetFile', '-r', 'validRulesetFile2'])
+  //     .it('outputs warnings in default format');
+  // });
 
   describe('when loading remote specification files', () => {
     test
