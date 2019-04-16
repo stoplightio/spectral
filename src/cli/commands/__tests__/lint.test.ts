@@ -54,7 +54,37 @@ describe('lint', () => {
       });
   });
 
-  describe('when loading local specification files', () => {
+  describe('when single ruleset option provided', () => {
+    test
+      .stdout()
+      .command(['lint', validSpecPath, '-r', 'non-existent-path'])
+      .exit(2)
+      .it('outputs "does not exist" error');
+
+    test
+      .stdout()
+      .command(['lint', validSpecPath, '-r', 'invalidRulesetFile'])
+      .it('outputs "invalid ruleset" error');
+
+    test
+      .stdout()
+      .command(['lint', validSpecPath, '-r', 'validRulesetFile'])
+      .it('outputs no issues');
+
+    test
+      .stdout()
+      .command(['lint', 'invalidSpecPath2', '-r', 'validRulesetFile'])
+      .it('outputs warnings in default format');
+  });
+
+  describe('when multiple rulesets provided', () => {
+    test
+      .stdout()
+      .command(['lint', 'invalidSpecPath2', '-r', 'validRulesetFile', '-r', 'validRulesetFile2'])
+      .it('outputs warnings in default format');
+  });
+
+  describe('when loading remote specification files', () => {
     test
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, validSpecPath, {

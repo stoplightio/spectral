@@ -119,7 +119,7 @@ describe('parameter-description', () => {
     expect(results).toMatchSnapshot();
   });
 
-  test.only('does not throw on refs', async () => {
+  test('does not throw on refs', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {

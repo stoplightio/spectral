@@ -1,14 +1,12 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
-import { existsSync, readFileSync, writeFile } from 'fs';
+import { getLocationForJsonPath } from '@stoplight/yaml';
+import { writeFile } from 'fs';
 import { resolve } from 'path';
 import { promisify } from 'util';
-
-// @ts-ignore
-import * as fetch from 'node-fetch';
-
+import { readRuleset } from '../../config/rulesetReader';
 import { json, stylish } from '../../formatters';
+import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
@@ -50,12 +48,26 @@ linting ./openapi.yaml
       char: 'v',
       description: 'increase verbosity',
     }),
+    ruleset: flagHelpers.string({
+      char: 'r',
+      description: 'path to a ruleset file (supports http)',
+    }),
   };
 
   public static args = [{ name: 'source' }];
 
   public async run() {
     const { args, flags } = this.parse(Lint);
+    const { ruleset } = flags;
+
+    if (ruleset) {
+      try {
+        this.log(`Reading ruleset ${ruleset}`);
+        await readRuleset(ruleset);
+      } catch (ex) {
+        this.error(ex.message);
+      }
+    }
 
     if (args.source) {
       try {
@@ -70,20 +82,15 @@ linting ./openapi.yaml
 }
 
 async function lint(name: string, flags: any, command: Lint) {
-  command.log(`linting ${name}`);
-  let obj: IParserResult;
-  try {
-    obj = await readInputArguments(name, flags.encoding);
-  } catch (ex) {
-    throw new Error(`Could not parse ${name}: ${ex.message}`);
-  }
+  command.log(`Linting ${name}`);
+  const spec: IParserResult = await readParsable(name, flags.encoding);
 
   const spectral = new Spectral();
-  if (obj.data.swagger && obj.data.swagger === '2.0') {
+  if (spec.data.swagger && spec.data.swagger === '2.0') {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
-  } else if (obj.data.openapi && typeof obj.data.openapi === 'string' && obj.data.openapi.startsWith('3.')) {
+  } else if (spec.data.openapi && typeof spec.data.openapi === 'string' && spec.data.openapi.startsWith('3.')) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
     spectral.addRules(oas3Rules());
@@ -95,7 +102,7 @@ async function lint(name: string, flags: any, command: Lint) {
   try {
     const parsedResult: IParsedResult = {
       source: resolve(process.cwd(), name),
-      parsed: obj,
+      parsed: spec,
       getLocationForJsonPath,
     };
 
@@ -135,18 +142,4 @@ async function writeOutput(outputStr: string, flags: any, command: Lint) {
   }
 
   command.log(outputStr);
-}
-
-async function readInputArguments(name: string, encoding: string) {
-  if (name.startsWith('http')) {
-    const result = await fetch(name);
-    return parseWithPointers(await result.text());
-  } else if (existsSync(name)) {
-    try {
-      return parseWithPointers(readFileSync(name, encoding));
-    } catch (ex) {
-      throw new Error(`Could not read ${name}: ${ex.message}`);
-    }
-  }
-  throw new Error(`${name} does not exist`);
 }
