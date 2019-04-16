@@ -6,4 +6,5 @@ export const functions = {
   schemaPath: require('./schema-path').schemaPath,
   truthy: require('./truthy').truthy,
   xor: require('./xor').xor,
+  enumeration: require('./enumeration').enumeration,
 };

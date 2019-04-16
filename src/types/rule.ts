@@ -62,6 +62,11 @@ export interface ILengthRuleOptions {
 }
 export type LengthRule = IRule<RuleFunction.LENGTH, ILengthRuleOptions>;
 
+export interface IEnumRuleOptions {
+  values: Array<'string' | number>;
+}
+export type EnumRule = IRule<RuleFunction.ENUM, IEnumRuleOptions>;
+
 export interface IAlphaRuleOptions {
   /** if sorting array of objects, which key to use for comparison */
   keyedBy?: string;
