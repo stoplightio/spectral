@@ -1,4 +1,4 @@
-import { IRuleResult } from '../../../dist/types';
+import { IRuleResult } from '../../types';
 import { json } from '../json';
 
 const results: IRuleResult[] = [
