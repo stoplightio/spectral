@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Spectral Rules rule is missing 'given' 1`] = `
+Array [
+  Object {
+    "code": "given:no-undef",
+    "message": "rules.1.given is not truthy",
+    "path": Array [
+      "rules",
+      1,
+      "given",
+    ],
+    "range": Object {
+      "end": Object {
+        "character": 6,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 4,
+        "line": 5,
+      },
+    },
+    "severity": 0,
+    "source": undefined,
+    "summary": "'given' must be defined",
+  },
+]
+`;
+
+exports[`Spectral Rules rule is missing 'then' 1`] = `
+Array [
+  Object {
+    "code": "then:no-undef",
+    "message": "rules.1.then is not truthy",
+    "path": Array [
+      "rules",
+      1,
+      "then",
+    ],
+    "range": Object {
+      "end": Object {
+        "character": 6,
+        "line": 5,
+      },
+      "start": Object {
+        "character": 4,
+        "line": 5,
+      },
+    },
+    "severity": 0,
+    "source": undefined,
+    "summary": "'then' must be defined",
+  },
+]
+`;
