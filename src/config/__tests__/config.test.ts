@@ -13,57 +13,51 @@ describe('config loading', () => {
       maxResults: 5,
     };
   });
-  test('should load JSON config', () => {
+  test('should load JSON config', async () => {
     const configPath = getFixture('config.json');
-    const config = load(configPath, '');
+    const config = await load(configPath, '');
     expect(config).toEqual(exampleConfig);
   });
 
-  test('should load YAML config', () => {
+  test('should load YAML config', async () => {
     const configPath = getFixture('config.yaml');
-    const config = load(configPath, '');
+    const config = await load(configPath, '');
     expect(config).toEqual(exampleConfig);
   });
 
-  test('should load YML config', () => {
+  test('should load YML config', async () => {
     const configPath = getFixture('config.yml');
-    const config = load(configPath, '');
+    const config = await load(configPath, '');
     expect(config).toEqual(exampleConfig);
   });
 
-  test('should throw error if file does not exist', () => {
+  test('should throw error if file does not exist', async () => {
     const configPath = getFixture('config.ghost.json');
-    expect(() => {
-      load(configPath, '');
-    }).toThrowError(/does not exist/);
+    await expect(load(configPath, '')).rejects.toThrowError(/does not exist/);
   });
 
-  test('should throw error if JSON file is invalid', () => {
+  test('should throw error if JSON file is invalid', async () => {
     const configPath = getFixture('config.invalid.json');
-    expect(() => {
-      load(configPath, '');
-    }).toThrowError();
+    await expect(load(configPath, '')).rejects.toThrowError();
   });
 
-  test('should throw error if YAML file is invalid', () => {
+  test('should throw error if YAML file is invalid', async () => {
     const configPath = getFixture('config.invalid.yaml');
-    expect(() => {
-      load(configPath, '');
-    }).toThrowError();
+    await expect(load(configPath, '')).rejects.toThrowError();
   });
 
-  test('should load config and apply extension', () => {
+  test('should load config and apply extension', async () => {
     const configPath = getFixture('./extends/config.extended.yml');
-    const config = load(configPath, '');
+    const config = await load(configPath, '');
     expect(config).toEqual({
       ...exampleConfig,
       maxResults: 6,
     });
   });
 
-  test('should apply relative extension', () => {
+  test('should apply relative extension', async () => {
     const configPath = getFixture('./extends/config.extended2.yml');
-    const config = load(configPath, '');
+    const config = await load(configPath, '');
     expect(config).toEqual({
       ...exampleConfig,
       encoding: 'utf16',
