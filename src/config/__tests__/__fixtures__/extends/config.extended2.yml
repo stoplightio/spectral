@@ -1,0 +1,4 @@
+---
+extends: ../relative/config.encoding.yaml
+maxResults: 5
+verbose: true
