@@ -89,7 +89,7 @@
     "ts-jest": "24.0.x",
     "tslint": "5.15.0",
     "tslint-config-stoplight": "1.2.0",
-    "typescript": "3.4.1"
+    "typescript": "3.4.3"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
