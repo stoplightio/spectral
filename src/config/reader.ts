@@ -13,7 +13,7 @@ export async function readRuleset(file: string, command: Lint): Promise<RuleColl
 
   if (errors.length) {
     command.log(formatAjv(errors));
-    command.error('Provided ruleset is not valid', { exit: 1 });
+    command.error(`Provided ruleset '${file}' is not valid`, { exit: 1 });
   }
 
   const extendz = (ruleset as IRulesetFile).extends;
