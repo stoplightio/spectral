@@ -5,6 +5,9 @@
 We currently support ruleset files in both `yaml` and `json` formats.
 
 ```yaml
+extends:
+  - https://example.com/ruleset.json
+  - /path/to/ruleset.yaml
 rules:
     rule-name:
         given: $..parameters[*]
