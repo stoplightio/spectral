@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",    
+    "$id": "http://stoplight.io/schemas/ruleset.schema.json",
+    "type": "object",
+    "properties": {
+        "rules": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "rule.schema.json"
+            }
+        }
+    },
+    "required": [
+        "rules"
+    ]
+}

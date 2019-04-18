@@ -2,7 +2,7 @@ import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
 import { resolve } from 'path';
-import { readRuleset } from '../../config/rulesetReader';
+import { readRuleset } from '../../config/reader';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';

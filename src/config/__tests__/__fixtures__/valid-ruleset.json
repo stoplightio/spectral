@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "valid-rule": {
+      "summary": "should be OK",
+      "given": "$.info",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}
