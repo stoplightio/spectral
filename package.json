@@ -79,7 +79,7 @@
     "@types/jest": "24.0.x",
     "@types/jsonpath": "0.2.x",
     "@types/lodash": "4.x.x",
-    "@types/node": "11.12.x",
+    "@types/node": "11.13.x",
     "@types/strip-ansi": "^3.0.0",
     "@types/text-table": "^0.2.0",
     "fs-extra": "^7.0.1",
