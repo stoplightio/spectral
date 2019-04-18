@@ -1,10 +1,10 @@
 # Configuring Spectral
 
-## Example config file (spectral.yaml)
+## Example ruleset file
 
 ```yaml
 rules:
-    - rule-name:
+    rule-name:
         given: $..parameters[*]
         then:
             field: description
@@ -15,7 +15,7 @@ rules:
 
 Rules are highly configurable. There are only few required parameters but the optional ones gives powerful flexibility.
 
-TBD: replace TS interfaces with a nice table.
+TODO: replace TS interfaces with a nice (automaticaly generated) table.
 
 ```ts
 export interface IRule<T = string, O = any> {
@@ -64,8 +64,21 @@ export interface IThen<T, O> {
 }
 ```
 
-## Configuring via CLI
+## Configuring rulesets via CLI
 
 ```bash
-spectral lint foo.yaml --config=config.yaml
+spectral lint foo.yaml --ruleset=path/to/ruleset.yaml
 ```
+
+### Ruleset validation
+
+We use JSON Schema & AJV to validate your rulesets file and help you spot issues early.
+
+**Note for developers**
+
+Supporting YAML and JSON file validation doesn't come free. 
+We need to maintain schema files that mirror IRule and IRuleset types (see `/src/meta/*.schema.json`).
+Ideally, we would have a script that converts TS type to JSON Schema and keeps the meta files up to date. As of now we have a helper that partially automates the work.
+
+Invoke `yarn schema.update` to recreate the `/src/meta/rule.schema.json`.
+**Warning**: make sure to update *generic* types. Current tools fails to recognize it properly and e.g. treats `string` as `object`.

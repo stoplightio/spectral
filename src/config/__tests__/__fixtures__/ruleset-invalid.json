@@ -1,0 +1,22 @@
+{
+  "rules": {
+    "no-given-no-then": {
+      "summary": "deliberetely invalid"
+    },
+    "valid-rule": {
+      "summary": "should be OK",
+      "given": "$.info",
+      "then": {
+        "function": "truthy"
+      }
+    },
+    "rule-with-invalid-enum": {
+      "given": "$.info",
+      "then": {
+        "function": "truthy"
+      },
+      "severity": "must not be a string",
+      "type": "some bs type value"
+    }
+  }
+}

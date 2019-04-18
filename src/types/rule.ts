@@ -36,7 +36,7 @@ export interface IRule<T = string, O = any> {
   then: IThen<T, O> | Array<IThen<T, O>>;
 }
 
-export interface IThen<T, O> {
+export interface IThen<T = string, O = any> {
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
   field?: string;
