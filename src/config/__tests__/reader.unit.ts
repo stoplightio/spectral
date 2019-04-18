@@ -1,6 +1,7 @@
 jest.mock('../../fs/reader');
 jest.mock('../../formatters/ajv');
 jest.mock('../validation');
+jest.mock('../path');
 
 import { Dictionary } from '@stoplight/types/basic';
 import { when } from 'jest-when';
@@ -9,12 +10,14 @@ import Lint from '../../cli/commands/lint';
 import { formatAjv } from '../../formatters/ajv';
 import { readParsable } from '../../fs/reader';
 import { IRulesetFile } from '../../types/ruleset';
+import { resolvePath } from '../path';
 import { readRuleset } from '../reader';
 import { validateRuleset } from '../validation';
 
 const readParsableMock: jest.Mock = readParsable as jest.Mock;
 const formatAjvMock: jest.Mock = formatAjv as jest.Mock;
 const validateRulesetMock: jest.Mock = validateRuleset as jest.Mock;
+const resolvePathMock: jest.Mock = resolvePath as jest.Mock;
 
 const simpleRule: IRule = {
   enabled: false,
@@ -168,7 +171,7 @@ describe('reader', () => {
 
     await readRuleset('flat-ruleset.yaml', command);
 
-    expect(command.log).toHaveBeenCalledTimes(1);
+    expect(command.log).toHaveBeenCalledTimes(2);
     expect(command.log).toHaveBeenCalledWith('fake formatted message');
     expect(command.error).toHaveBeenCalledTimes(1);
     expect(command.error).toHaveBeenCalledWith(`Provided ruleset 'flat-ruleset.yaml' is not valid`, { exit: 1 });
@@ -176,6 +179,12 @@ describe('reader', () => {
 
   function givenRulesets(rulesets: Dictionary<IRulesetFile, string>) {
     Object.entries(rulesets).forEach(([key, ruleset]) => {
+      (ruleset.extends || []).forEach(extend =>
+        when(resolvePathMock)
+          .calledWith(key, extend)
+          .mockReturnValue(extend)
+      );
+
       when(readParsableMock)
         .calledWith(key, 'utf8')
         .mockReturnValue({
