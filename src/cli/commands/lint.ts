@@ -1,8 +1,11 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
+import { merge, omit } from 'lodash';
 import { resolve } from 'path';
+import { createEmptyConfig, load as loadConfig } from '../../config/configLoader';
 import { readRuleset } from '../../config/rulesetReader';
+import { IConfig } from '../../config/types';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
@@ -23,12 +26,10 @@ linting ./openapi.yaml
     help: flagHelpers.help({ char: 'h' }),
     encoding: flagHelpers.string({
       char: 'e',
-      default: 'utf8',
       description: 'text encoding to use',
     }),
     format: flagHelpers.string({
       char: 'f',
-      default: 'stylish',
       description: 'formatter to use for outputting results',
       options: ['json', 'stylish'],
     }),
@@ -48,13 +49,29 @@ linting ./openapi.yaml
       char: 'r',
       description: 'path to a ruleset file (supports http)',
     }),
+    config: flagHelpers.string({
+      char: 'c',
+      description: 'path to a config file',
+    }),
   };
 
   public static args = [{ name: 'source' }];
 
   public async run() {
     const { args, flags } = this.parse(Lint);
-    const { ruleset } = flags;
+    const { config: configFile } = flags;
+    let config: IConfig = merge(createEmptyConfig(), flags);
+
+    if (configFile) {
+      try {
+        const loadedConfig = await loadConfig(configFile, 'utf8');
+        config = merge(loadedConfig, omit(flags, 'config'));
+      } catch (ex) {
+        this.error('Cannot load provided config file');
+      }
+    }
+
+    const { ruleset } = config;
 
     if (ruleset) {
       try {
@@ -67,7 +84,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, flags, this);
+        await lint(args.source, config, this);
       } catch (ex) {
         this.error(ex.message);
       }

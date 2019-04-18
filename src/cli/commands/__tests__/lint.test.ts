@@ -6,6 +6,8 @@ const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.
 const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
+const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
+const invalidRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.yml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -129,6 +131,25 @@ describe('lint', () => {
       .command(['lint', 'http://foo.local/openapi'])
       .it('outputs warnings in default format', ctx => {
         expect(ctx.stdout).toContain('Info object should contain `contact` object');
+      });
+  });
+
+  describe.only('when using config file', () => {
+    test
+      .stdout()
+      .command(['lint', invalidSpecPath, '-c', validConfigPath])
+      .it('outputs warnings in json format', ctx => {
+        expect(ctx.stdout).toContain('"info.contact is not truthy"');
+        expect(ctx.stdout).toContain('"info.description is not truthy"');
+        expect(ctx.stdout).toContain('"servers does not exist"');
+      });
+
+    test
+      .stdout()
+      .command(['lint', validSpecPath, '-c', invalidRulesetConfigPath])
+      .exit(2)
+      .it('outputs invalid ruleset error', ctx => {
+        expect(ctx.stdout).toContain(`2:31  error  given:no-undef             'given' must be defined`);
       });
   });
 });

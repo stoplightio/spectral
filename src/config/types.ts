@@ -11,4 +11,5 @@ export interface IConfig {
   output?: string;
   verbose: boolean;
   ruleset?: string;
+  config?: string;
 }

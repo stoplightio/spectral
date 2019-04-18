@@ -20,14 +20,6 @@ const loadConfig = (filePath: any) => {
   return config;
 };
 
-const createEmptyConfig = (): IConfig => {
-  return {
-    encoding: 'utf8',
-    format: ConfigFormat.STYLISH,
-    verbose: false,
-  };
-};
-
 const extend = async (config: IConfig, filePath: string): Promise<IConfig> => {
   let configResult = Object.assign({}, config);
   const { extends: extendsValue } = config;
@@ -54,3 +46,9 @@ export const load = async (filePath: string, referencedPath: string): Promise<IC
 
   return merge(createEmptyConfig(), data);
 };
+
+export const createEmptyConfig = (): IConfig => ({
+  encoding: 'utf8',
+  format: ConfigFormat.STYLISH,
+  verbose: false,
+});

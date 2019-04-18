@@ -1,0 +1,2 @@
+---
+ruleset: src/cli/commands/__tests__/__fixtures__/ruleset-invalid.yaml
