@@ -83,11 +83,11 @@ async function lint(name: string, flags: any, command: Lint, customRuleset?: Rul
   const spec: IParserResult = await readParsable(name, flags.encoding);
 
   const spectral = new Spectral();
-  if (spec.data.swagger && spec.data.swagger === '2.0') {
+  if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
-  } else if (spec.data.openapi && typeof spec.data.openapi === 'string' && spec.data.openapi.startsWith('3.')) {
+  } else if (parseInt(spec.data.openapi) === 3) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
     spectral.addRules(oas3Rules());
