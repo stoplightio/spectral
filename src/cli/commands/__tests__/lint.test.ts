@@ -9,6 +9,7 @@ const validCustomSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-c
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
+const outputConfigPath = resolve(__dirname, '__fixtures__/config.output.yml');
 const invalidRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.yml');
 
 /*
@@ -151,6 +152,27 @@ describe('lint', () => {
       .exit(2)
       .it('outputs invalid ruleset error', ctx => {
         expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
+      });
+
+    test
+      .stdout()
+      .command(['lint', invalidSpecPath, '-c', outputConfigPath])
+      .it('saves results to a file', () => {
+        expect(fs.writeFile).toHaveBeenCalledWith(
+          'results.json',
+          // there are more errors listed
+          expect.stringContaining('Info object should contain `contact` object'),
+          expect.any(Function) // callback, util.promisify handles it for us
+        );
+      });
+  });
+
+  describe('when not using config nor default config file', () => {
+    test
+      .stdout()
+      .command(['lint', invalidSpecPath])
+      .it('outputs warnings in default format', ctx => {
+        expect(ctx.stdout).toContain('3:6  warning  info-contact      Info object should contain `contact` object');
       });
   });
 
