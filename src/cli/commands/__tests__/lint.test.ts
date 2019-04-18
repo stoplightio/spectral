@@ -134,7 +134,7 @@ describe('lint', () => {
       });
   });
 
-  describe.only('when using config file', () => {
+  describe('when using config file', () => {
     test
       .stdout()
       .command(['lint', invalidSpecPath, '-c', validConfigPath])
@@ -150,6 +150,16 @@ describe('lint', () => {
       .exit(2)
       .it('outputs invalid ruleset error', ctx => {
         expect(ctx.stdout).toContain(`2:31  error  given:no-undef             'given' must be defined`);
+      });
+  });
+
+  describe('when using default config file', () => {
+    jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
+    test
+      .stdout()
+      .command(['lint', invalidSpecPath])
+      .it('outputs data in format from default config file', ctx => {
+        expect(ctx.stdout).toContain('"info.contact is not truthy"');
       });
   });
 });

@@ -3,7 +3,7 @@ import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
 import { merge, omit } from 'lodash';
 import { resolve } from 'path';
-import { createEmptyConfig, load as loadConfig } from '../../config/configLoader';
+import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { readRuleset } from '../../config/rulesetReader';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
@@ -59,9 +59,10 @@ linting ./openapi.yaml
 
   public async run() {
     const { args, flags } = this.parse(Lint);
-    const { config: configFile } = flags;
+    const { config: configFileFlag } = flags;
     let config: IConfig = merge(createEmptyConfig(), flags);
 
+    const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
     if (configFile) {
       try {
         const loadedConfig = await loadConfig(configFile, 'utf8');

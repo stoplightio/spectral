@@ -1,8 +1,11 @@
 import { IParserResult } from '@stoplight/types';
+import { existsSync } from 'fs';
 import { isEmpty, merge } from 'lodash';
 import * as path from 'path';
 import { readParsable } from '../fs/reader';
 import { ConfigFormat, IConfig } from '../types/config';
+
+const DEFAULT_CONFIG_FILE = 'spectral.yml';
 
 const loadConfig = (filePath: any) => {
   let config;
@@ -52,3 +55,8 @@ export const createEmptyConfig = (): IConfig => ({
   format: ConfigFormat.STYLISH,
   verbose: false,
 });
+
+export const getDefaultConfigFile = (directory: string) => {
+  const filePath = path.join(directory, DEFAULT_CONFIG_FILE);
+  return existsSync(filePath) ? filePath : null;
+};
