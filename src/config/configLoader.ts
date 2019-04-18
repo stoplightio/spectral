@@ -2,7 +2,7 @@ import { IParserResult } from '@stoplight/types';
 import { isEmpty, merge } from 'lodash';
 import * as path from 'path';
 import { readParsable } from '../fs/reader';
-import { ConfigFormat, IConfig } from './types';
+import { ConfigFormat, IConfig } from '../types/config';
 
 const loadConfig = (filePath: any) => {
   let config;

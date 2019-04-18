@@ -5,12 +5,12 @@ import { merge, omit } from 'lodash';
 import { resolve } from 'path';
 import { createEmptyConfig, load as loadConfig } from '../../config/configLoader';
 import { readRuleset } from '../../config/rulesetReader';
-import { IConfig } from '../../config/types';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
 import { IParsedResult } from '../../types';
+import { IConfig } from '../../types/config';
 import { formatOutput, writeOutput } from '../utils/output';
 
 export default class Lint extends Command {
