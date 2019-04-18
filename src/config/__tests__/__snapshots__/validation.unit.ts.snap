@@ -4,7 +4,7 @@ exports[`Ruleset Validation given invalid ruleset should emit errors 1`] = `
 "[
   {
     \\"keyword\\": \\"required\\",
-    \\"dataPath\\": \\".rules['no-given-no-then']\\",
+    \\"dataPath\\": \\"/rules/no-given-no-then\\",
     \\"schemaPath\\": \\"#/required\\",
     \\"params\\": {
       \\"missingProperty\\": \\"given\\"
@@ -13,7 +13,7 @@ exports[`Ruleset Validation given invalid ruleset should emit errors 1`] = `
   },
   {
     \\"keyword\\": \\"required\\",
-    \\"dataPath\\": \\".rules['no-given-no-then']\\",
+    \\"dataPath\\": \\"/rules/no-given-no-then\\",
     \\"schemaPath\\": \\"#/required\\",
     \\"params\\": {
       \\"missingProperty\\": \\"then\\"
@@ -22,7 +22,7 @@ exports[`Ruleset Validation given invalid ruleset should emit errors 1`] = `
   },
   {
     \\"keyword\\": \\"type\\",
-    \\"dataPath\\": \\".rules['rule-with-invalid-enum'].severity\\",
+    \\"dataPath\\": \\"/rules/rule-with-invalid-enum/severity\\",
     \\"schemaPath\\": \\"#/properties/severity/type\\",
     \\"params\\": {
       \\"type\\": \\"number\\"
@@ -31,7 +31,7 @@ exports[`Ruleset Validation given invalid ruleset should emit errors 1`] = `
   },
   {
     \\"keyword\\": \\"enum\\",
-    \\"dataPath\\": \\".rules['rule-with-invalid-enum'].severity\\",
+    \\"dataPath\\": \\"/rules/rule-with-invalid-enum/severity\\",
     \\"schemaPath\\": \\"#/properties/severity/enum\\",
     \\"params\\": {
       \\"allowedValues\\": [
@@ -45,7 +45,7 @@ exports[`Ruleset Validation given invalid ruleset should emit errors 1`] = `
   },
   {
     \\"keyword\\": \\"enum\\",
-    \\"dataPath\\": \\".rules['rule-with-invalid-enum'].type\\",
+    \\"dataPath\\": \\"/rules/rule-with-invalid-enum/type\\",
     \\"schemaPath\\": \\"#/properties/type/enum\\",
     \\"params\\": {
       \\"allowedValues\\": [
