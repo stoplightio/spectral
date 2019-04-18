@@ -34,11 +34,12 @@ Yarn is a package manager for your code, similar to npm. While you can use npm t
 2. Fork the [https://github.com/stoplightio/spectral](https://github.com/stoplightio/spectral) repo.
 3. Git clone your fork (i.e. git clone https://github.com/<your-username>/spectral.git) to your machine.
 4. Run `yarn` to install dependencies and setup the project.
-5. Run `git checkout -b [name_of_your_new_branch]` to create a new branch for your work. To help build nicer changelogs, we have a convention for branch names. Please start your branch with either `feature/{branch-name}`, `chore/{branch-name}`, or `fix/{branch-name}`. For example, if I was adding a CLI, I would make my branch name: `feature/add-cli`. 
-6. Make changes, write code and tests, etc. The fun stuff!
-7. Run `yarn test.prod` to test your changes.
-8. Ready to `git commit`? **Important:** We use a [commit message format](https://www.conventionalcommits.org/en/v1.0.0-beta.3/) to add more semantic meaning to our git history to create automated, rich changelogs, filter what tests to run, and more. After you have `git add`, run `yarn commit` to help you create this format, or you can put it together manually and then do a regular `git commit`. Commits outside of this format will be rejected.
-9. Don't forget to `git push` to your branch after you have committed changes. 
+5. Use `yarn build && bin/run lint openapi.yml` to run Spectral from your local source tree.
+6. Run `git checkout -b [name_of_your_new_branch]` to create a new branch for your work. To help build nicer changelogs, we have a convention for branch names. Please start your branch with either `feature/{branch-name}`, `chore/{branch-name}`, or `fix/{branch-name}`. For example, if I was adding a CLI, I would make my branch name: `feature/add-cli`. 
+7. Make changes, write code and tests, etc. The fun stuff!
+8. Run `yarn test.prod` to test your changes.
+9. Ready to `git commit`? **Important:** We use a [commit message format](https://www.conventionalcommits.org/en/v1.0.0-beta.3/) to add more semantic meaning to our git history to create automated, rich changelogs, filter what tests to run, and more. After you have `git add`, run `yarn commit` to help you create this format, or you can put it together manually and then do a regular `git commit`. Commits outside of this format will be rejected.
+10. Don't forget to `git push` to your branch after you have committed changes. 
 
 Now, you are ready to make a pull request to the Stoplight repo! 😃
 
