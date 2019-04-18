@@ -105,7 +105,12 @@ describe('lint', () => {
         .command(['lint', validSpecPath, '-r', invalidRulesetPath])
         .exit(2)
         .it('outputs "invalid ruleset" error', ctx => {
-          expect(ctx.stdout).toMatchSnapshot();
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
+          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
+          expect(ctx.stdout).toContain(
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+          );
         });
 
       test
