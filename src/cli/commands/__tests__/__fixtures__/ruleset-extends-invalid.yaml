@@ -8,4 +8,4 @@ rules:
     then:      
       function: pattern
       functionOptions:
-        match: Swagger
+        notMatch: Swagger

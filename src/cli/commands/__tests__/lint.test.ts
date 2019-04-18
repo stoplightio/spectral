@@ -7,6 +7,8 @@ const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
 const validCustomSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
+const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
+const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -57,46 +59,81 @@ describe('lint', () => {
       });
   });
 
-  describe('when single ruleset option provided', () => {
-    test
-      .stdout()
-      .command(['lint', validSpecPath, '-r', 'non-existent-path'])
-      .exit(2)
-      .it('outputs "does not exist" error');
+  describe('--ruleset', () => {
+    describe('extends feature', () => {
+      test
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', validNestedRulesetPath])
+        .it('should extend a valid relative ruleset', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
 
-    test
-      .stdout()
-      .command(['lint', validSpecPath, '-r', invalidRulesetPath])
-      .exit(2)
-      .it('outputs "invalid ruleset" error', ctx => {
-        expect(ctx.stdout).toMatchSnapshot();
-      });
+      test
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', invalidNestedRulesetPath])
+        .exit(2)
+        .it('should fail trying to extend an invalid relative ruleset', ctx => {
+          expect(ctx.stdout).toContain("should have required property 'given'");
+        });
 
-    test
-      .stdout()
-      .command(['lint', validCustomSpecPath, '-r', validRulesetPath])
-      .it('outputs no issues', ctx => {
-        expect(ctx.stdout).toContain('No errors or warnings found!');
-      });
+      test
+        .nock('http://foo.local', api => {
+          api.get('/ruleset-master.yaml').replyWithFile(200, validNestedRulesetPath, {
+            'Content-Type': 'application/yaml',
+          });
 
-    test
-      .stdout()
-      .command(['lint', validSpecPath, '-r', validRulesetPath])
-      .it('outputs warnings in default format', ctx => {
-        expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
-      });
-
-    test
-      .nock('http://foo.local', api =>
-        api.get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
-          'Content-Type': 'application/yaml',
+          api.get('/ruleset-valid.yaml').replyWithFile(200, validRulesetPath, {
+            'Content-Type': 'application/yaml',
+          });
         })
-      )
-      .stdout()
-      .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset.yaml'])
-      .it('given valid remote ruleset file, outputs no issues', ctx => {
-        expect(ctx.stdout).toContain('No errors or warnings found!');
-      });
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset-master.yaml'])
+        .it('given remote nested ruleset should resolve', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+    });
+
+    describe('when single ruleset option provided', () => {
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', 'non-existent-path'])
+        .exit(2)
+        .it('outputs "does not exist" error');
+
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', invalidRulesetPath])
+        .exit(2)
+        .it('outputs "invalid ruleset" error', ctx => {
+          expect(ctx.stdout).toMatchSnapshot();
+        });
+
+      test
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', validRulesetPath])
+        .it('outputs no issues', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', validRulesetPath])
+        .it('outputs warnings in default format', ctx => {
+          expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
+        });
+
+      test
+        .nock('http://foo.local', api =>
+          api.get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
+            'Content-Type': 'application/yaml',
+          })
+        )
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset.yaml'])
+        .it('given valid remote ruleset file, outputs no issues', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+    });
   });
 
   describe('when loading remote specification files', () => {
