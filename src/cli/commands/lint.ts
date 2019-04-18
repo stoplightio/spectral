@@ -59,7 +59,6 @@ linting ./openapi.yaml
 
     if (ruleset) {
       try {
-        this.log(`Reading ruleset`);
         ruleCollection = await readRuleset(ruleset, this);
       } catch (ex) {
         this.error(ex.message);

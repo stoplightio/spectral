@@ -4,9 +4,11 @@ import { formatAjv } from '../formatters/ajv';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
+import { resolvePath } from './path';
 import { validateRuleset } from './validation';
 
 export async function readRuleset(file: string, command: Lint): Promise<RuleCollection> {
+  command.log(`Reading ruleset ${file}`);
   const parsed = await readParsable(file, 'utf8');
   const { data: ruleset } = parsed;
   const errors = validateRuleset(ruleset);
@@ -19,7 +21,11 @@ export async function readRuleset(file: string, command: Lint): Promise<RuleColl
   const extendz = (ruleset as IRulesetFile).extends;
   let extendedRules = {};
   if (extendz && extendz.length) {
-    extendedRules = await blendRuleCollections(extendz.map(extend => readRuleset(extend, command)));
+    extendedRules = await blendRuleCollections(
+      extendz.map(extend => {
+        return readRuleset(resolvePath(file, extend), command);
+      })
+    );
   }
 
   return merge(extendedRules, ruleset.rules);
