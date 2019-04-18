@@ -1,0 +1,98 @@
+{
+    "$id": "http://stoplight.io/schemas/rule.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "IThen<T,O>": {
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "function": {
+                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/T"
+                },
+                "functionOptions": {
+                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/O"
+                }
+            },
+            "required": [
+                "function"
+            ],
+            "type": "object"
+        },
+        "O": {
+            "type": "object"
+        },
+        "T": {
+            "type": "string"
+        }
+    },
+    "properties": {
+        "description": {
+            "type": "string"
+        },
+        "enabled": {
+            "type": "boolean"
+        },
+        "given": {
+            "type": "string"
+        },
+        "severity": {
+            "enum": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "type": "number"
+        },
+        "summary": {
+            "type": "string"
+        },
+        "tags": {
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "then": {
+            "anyOf": [
+                {
+                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/IThen<T,O>"
+                },
+                {
+                    "items": {
+                        "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/IThen<T,O>"
+                    },
+                    "type": "array"
+                }
+            ]
+        },
+        "type": {
+            "enum": [
+                "style",
+                "validation"
+            ],
+            "type": "string"
+        },
+        "when": {
+            "properties": {
+                "field": {
+                    "type": "string"
+                },
+                "pattern": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "field"
+            ],
+            "type": "object"
+        }
+    },
+    "required": [
+        "given",
+        "then"
+    ],
+    "type": "object"
+}
+

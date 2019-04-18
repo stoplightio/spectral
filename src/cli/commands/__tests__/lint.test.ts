@@ -1,9 +1,11 @@
 import { test } from '@oclif/test';
 import * as fs from 'fs';
 import { resolve } from 'path';
+import SpyInstance = jest.SpyInstance;
 
 const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
+const validCustomSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
@@ -70,36 +72,35 @@ describe('lint', () => {
       .command(['lint', validSpecPath, '-r', invalidRulesetPath])
       .exit(2)
       .it('outputs "invalid ruleset" error', ctx => {
-        expect(ctx.stdout).toContain(`2:31  error  given:no-undef             'given' must be defined`);
-        expect(ctx.stdout).toContain(`2:31  error  then:no-undef              'then' must be defined`);
-        expect(ctx.stdout).toContain(`13:15  error  severity:enum-value-match  'severity' must be one of '0, 1, 2, 3'`);
-        expect(ctx.stdout).toContain(
-          `14:11  error  type:enum-value-match      'type' must be one of 'validation, style'`
-        );
+        expect(ctx.stdout).toMatchSnapshot();
       });
 
     test
       .stdout()
-      .command(['lint', validSpecPath, '-r', validRulesetPath])
+      .command(['lint', validCustomSpecPath, '-r', validRulesetPath])
       .it('outputs no issues', ctx => {
         expect(ctx.stdout).toContain('No errors or warnings found!');
       });
 
     test
       .stdout()
-      .command(['lint', invalidRulesetPath, '-r', validRulesetPath])
-      .exit(2)
+      .command(['lint', validSpecPath, '-r', validRulesetPath])
       .it('outputs warnings in default format', ctx => {
-        expect(ctx.stdout).toContain('BLA');
+        expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
+      });
+
+    test
+      .nock('http://foo.local', api =>
+        api.get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
+          'Content-Type': 'application/yaml',
+        })
+      )
+      .stdout()
+      .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset.yaml'])
+      .it('given valid remote ruleset file, outputs no issues', ctx => {
+        expect(ctx.stdout).toContain('No errors or warnings found!');
       });
   });
-
-  // describe('when multiple rulesets provided', () => {
-  //   test
-  //     .stdout()
-  //     .command(['lint', 'invalidSpecPath2', '-r', 'validRulesetFile', '-r', 'validRulesetFile2'])
-  //     .it('outputs warnings in default format');
-  // });
 
   describe('when loading remote specification files', () => {
     test
@@ -149,12 +150,18 @@ describe('lint', () => {
       .command(['lint', validSpecPath, '-c', invalidRulesetConfigPath])
       .exit(2)
       .it('outputs invalid ruleset error', ctx => {
-        expect(ctx.stdout).toContain(`2:31  error  given:no-undef             'given' must be defined`);
+        expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
       });
   });
 
   describe('when using default config file', () => {
-    jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
+    let spy: SpyInstance;
+    beforeAll(() => {
+      spy = jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
+    });
+    afterAll(() => {
+      spy.mockClear();
+    });
     test
       .stdout()
       .command(['lint', invalidSpecPath])

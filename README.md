@@ -129,14 +129,19 @@ You can also [add to these rules](#Creating-a-custom-rule) to create a customize
 
 The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
 
+## Configuration
+
+You can find all about [configuration here](docs/configuration.md).
+
 ## Advanced
 
 ### Customization
 
-There are two key concepts in Spectral: **Rules** and **Functions**.
+There are three key concepts in Spectral: **Rulesets**, **Rules** and **Functions**.
 
-- **Rules** filter your object down to a set of target values, and specify the function that should evaluate those values.
-- **Functions** accept a value and return issue(s) if the value is incorrect.
+- **Ruleset** is a container for a collection of rules and functions.
+- **Rule** filters your object down to a set of target values, and specify the function that should evaluate those values.
+- **Function** accept a value and return issue(s) if the value is incorrect.
 
 Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
 

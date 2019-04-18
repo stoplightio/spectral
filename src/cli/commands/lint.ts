@@ -4,12 +4,12 @@ import { getLocationForJsonPath } from '@stoplight/yaml';
 import { merge, omit } from 'lodash';
 import { resolve } from 'path';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
-import { readRuleset } from '../../config/rulesetReader';
+import { readRuleset } from '../../config/reader';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
-import { IParsedResult } from '../../types';
+import { IParsedResult, RuleCollection } from '../../types';
 import { IConfig } from '../../types/config';
 import { formatOutput, writeOutput } from '../utils/output';
 
@@ -73,11 +73,12 @@ linting ./openapi.yaml
     }
 
     const { ruleset } = config;
+    let ruleCollection;
 
     if (ruleset) {
       try {
         this.log(`Reading ruleset`);
-        await readRuleset(ruleset, this);
+        ruleCollection = await readRuleset(ruleset, this);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -85,7 +86,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, config, this);
+        await lint(args.source, config, this, ruleCollection);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -95,21 +96,25 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: any, command: Lint) {
+async function lint(name: string, flags: any, command: Lint, customRuleset?: RuleCollection) {
   command.log(`Linting ${name}`);
   const spec: IParserResult = await readParsable(name, flags.encoding);
 
   const spectral = new Spectral();
-  if (spec.data.swagger && spec.data.swagger === '2.0') {
+  if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
-  } else if (spec.data.openapi && typeof spec.data.openapi === 'string' && spec.data.openapi.startsWith('3.')) {
+  } else if (parseInt(spec.data.openapi) === 3) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
     spectral.addRules(oas3Rules());
   } else {
     throw new Error('Input document specification type could not be determined');
+  }
+
+  if (customRuleset) {
+    spectral.addRules(customRuleset);
   }
 
   let results = [];
