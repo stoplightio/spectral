@@ -59,11 +59,11 @@ linting ./openapi.yaml
   public async run() {
     const { args, flags } = this.parse(Lint);
     const { ruleset } = flags;
-    let ruleCollection;
+    let rules;
 
     if (ruleset) {
       try {
-        ruleCollection = await readRuleset(ruleset, this);
+        rules = await readRuleset(ruleset, this);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -71,7 +71,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, flags, this, ruleCollection);
+        await lint(args.source, flags, this, rules);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -81,7 +81,7 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: any, command: Lint, customRuleset?: RuleCollection) {
+async function lint(name: string, flags: any, command: Lint, customRules?: RuleCollection) {
   command.log(`Linting ${name}`);
   const spec: IParserResult = await readParsable(name, flags.encoding);
 
@@ -98,8 +98,8 @@ async function lint(name: string, flags: any, command: Lint, customRuleset?: Rul
     throw new Error('Input document specification type could not be determined');
   }
 
-  if (customRuleset) {
-    spectral.addRules(customRuleset);
+  if (customRules) {
+    spectral.addRules(customRules);
   }
 
   let results = [];
