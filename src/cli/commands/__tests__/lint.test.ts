@@ -29,6 +29,7 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidSpecPath])
       .it('outputs warnings in default format', ctx => {
+        expect(ctx.stdout).toContain('OpenAPI 3.x detected');
         expect(ctx.stdout).toContain('Info object should contain `contact` object');
       });
 
@@ -124,7 +125,10 @@ describe('lint', () => {
         .stdout()
         .command(['lint', validSpecPath, '-r', validRulesetPath])
         .it('outputs warnings in default format', ctx => {
+          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
           expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
+          expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
+          expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
         });
 
       test

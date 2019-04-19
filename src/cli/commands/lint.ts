@@ -86,7 +86,10 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
   const spec: IParserResult = await readParsable(name, flags.encoding);
 
   const spectral = new Spectral();
-  if (parseInt(spec.data.swagger) === 2) {
+  if (customRules) {
+    command.log('Applying custom rules. Automatic rule detection is off.');
+    spectral.addRules(customRules);
+  } else if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
@@ -96,10 +99,6 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
     spectral.addRules(oas3Rules());
   } else {
     throw new Error('Input document specification type could not be determined');
-  }
-
-  if (customRules) {
-    spectral.addRules(customRules);
   }
 
   let results = [];
