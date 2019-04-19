@@ -8,6 +8,12 @@
             "additionalProperties": {
                 "$ref": "rule.schema.json"
             }
+        },
+        "extends": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         }
     },
     "required": [
