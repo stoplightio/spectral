@@ -78,7 +78,26 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'parameter-description',
+        message: 'parameters.limit.description is not truthy',
+        path: ['parameters', 'limit', 'description'],
+        range: {
+          end: {
+            character: 23,
+            line: 6,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: 1,
+        source: undefined,
+        summary: 'Parameter objects should have a `description`.',
+      },
+    ]);
   });
 
   test('return errors if top level path parameter description is missing', async () => {
@@ -96,7 +115,26 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'parameter-description',
+        message: 'paths./todos.parameters.0.description is not truthy',
+        path: ['paths', '/todos', 'parameters', 0, 'description'],
+        range: {
+          end: {
+            character: 27,
+            line: 8,
+          },
+          start: {
+            character: 8,
+            line: 5,
+          },
+        },
+        severity: 1,
+        source: undefined,
+        summary: 'Parameter objects should have a `description`.',
+      },
+    ]);
   });
 
   test('return errors if operation level parameter description is missing', async () => {
@@ -116,7 +154,26 @@ describe('parameter-description', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'parameter-description',
+        message: 'paths./todos.get.parameters.0.description is not truthy',
+        path: ['paths', '/todos', 'get', 'parameters', 0, 'description'],
+        range: {
+          end: {
+            character: 29,
+            line: 9,
+          },
+          start: {
+            character: 10,
+            line: 6,
+          },
+        },
+        severity: 1,
+        source: undefined,
+        summary: 'Parameter objects should have a `description`.',
+      },
+    ]);
   });
 
   test('does not throw on refs', async () => {
