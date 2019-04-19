@@ -6,7 +6,7 @@ We currently support ruleset files in both `yaml` and `json` formats.
 
 ```yaml
 extends:
-  - https://example.com/ruleset.json
+  - https://acme.com/ruleset.json
   - /path/to/ruleset.yaml
 rules:
     rule-name:
@@ -137,7 +137,7 @@ Rules are highly configurable. There are only few required parameters but the op
 ## Configuring rulesets via CLI
 
 ```bash
-spectral lint foo.yaml --ruleset=path/to/ruleset.yaml
+spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml
 ```
 
 ### Ruleset validation
@@ -147,7 +147,7 @@ We use JSON Schema & AJV to validate your rulesets file and help you spot issues
 **Example output**
 
 ```bash
-spectral lint some-oas.yaml --ruleset invalid-ruleset.json
+spectral lint some-oas.yaml --ruleset acme-company.json
 
 Reading ruleset
 
