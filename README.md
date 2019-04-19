@@ -129,9 +129,9 @@ You can also [add to these rules](#Creating-a-custom-rule) to create a customize
 
 The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
 
-## Configuration
+## Rulesets
 
-You can find all about [configuration here](docs/configuration.md).
+You can find all about [rulesets here](docs/rulesets.md).
 
 ## Advanced
 
