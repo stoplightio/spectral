@@ -2,8 +2,10 @@ import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { existsSync, readFileSync, writeFile } from 'fs';
+import { isNil, merge, omitBy } from 'lodash';
 import { resolve } from 'path';
 import { promisify } from 'util';
+import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 
 // @ts-ignore
 import * as fetch from 'node-fetch';
@@ -13,6 +15,7 @@ import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
 import { IParsedResult, IRuleResult } from '../../types';
+import { IConfig } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 
@@ -29,12 +32,10 @@ linting ./openapi.yaml
     help: flagHelpers.help({ char: 'h' }),
     encoding: flagHelpers.string({
       char: 'e',
-      default: 'utf8',
       description: 'text encoding to use',
     }),
     format: flagHelpers.string({
       char: 'f',
-      default: 'stylish',
       description: 'formatter to use for outputting results',
       options: ['json', 'stylish'],
     }),
@@ -50,16 +51,32 @@ linting ./openapi.yaml
       char: 'v',
       description: 'increase verbosity',
     }),
+    config: flagHelpers.string({
+      char: 'c',
+      description: 'path to a config file',
+    }),
   };
 
   public static args = [{ name: 'source' }];
 
   public async run() {
     const { args, flags } = this.parse(Lint);
+    const { config: configFileFlag } = flags;
+    let config: IConfig = mergeConfig(createEmptyConfig(), flags);
+
+    const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
+    if (configFile) {
+      try {
+        const loadedConfig = await loadConfig(configFile);
+        config = mergeConfig(loadedConfig, flags);
+      } catch (ex) {
+        this.error('Cannot load provided config file');
+      }
+    }
 
     if (args.source) {
       try {
-        await lint(args.source, flags, this);
+        await lint(args.source, config, this);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -149,4 +166,20 @@ async function readInputArguments(name: string, encoding: string) {
     }
   }
   throw new Error(`${name} does not exist`);
+}
+
+function mergeConfig(config: IConfig, flags: any): IConfig {
+  return merge(
+    config,
+    omitBy<IConfig>(
+      {
+        encoding: flags.encoding,
+        format: flags.format,
+        output: flags.output,
+        maxResults: flags.maxResults,
+        verbose: flags.verbose,
+      },
+      isNil
+    )
+  );
 }
