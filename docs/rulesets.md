@@ -1,4 +1,4 @@
-# Configuring Spectral
+# Spectral Rulesets
 
 ## Example ruleset file
 
