@@ -58,6 +58,10 @@ linting ./openapi.yaml
       description: 'path to a ruleset file (supports remote files)',
       multiple: true,
     }),
+    skip: flagHelpers.string({
+      char: 's',
+      description: 'skip rules. Provide multiple rules separated by ","',
+    }),
   };
 
   public static args = [{ name: 'source' }];
@@ -111,11 +115,11 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
   } else if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
-    spectral.addRules(oas2Rules());
+    spectral.addRules(skipRules(oas2Rules(), flags, command));
   } else if (parseInt(spec.data.openapi) === 3) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
-    spectral.addRules(oas3Rules());
+    spectral.addRules(skipRules(oas3Rules(), flags, command));
   } else {
     throw new Error('Input document specification type could not be determined');
   }
@@ -148,7 +152,28 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
   }
 }
 
-export async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
+function skipRules(rules: any, flags: any, command: Lint): any {
+  if (!flags.skip) return rules;
+  const skippedRules: string[] = [];
+  const invalidRules: string[] = [];
+  for (const rule of flags.skip.split(',')) {
+    if (rule in rules) {
+      delete rules[rule];
+      skippedRules.push(rule);
+    } else {
+      invalidRules.push(rule);
+    }
+  }
+  if (invalidRules.length !== 0) {
+    command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
+  }
+  if (skippedRules.length !== 0 && flags.verbose) {
+    command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
+  }
+  return rules;
+}
+
+async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
   if (flags.maxResults) {
     results = results.slice(0, flags.maxResults);
   }
