@@ -50,6 +50,10 @@ linting ./openapi.yaml
       char: 'v',
       description: 'increase verbosity',
     }),
+    skip: flagHelpers.string({
+      char: 's',
+      description: 'skip rules. Provide multiple rules seperated by ","',
+    }),
   };
 
   public static args = [{ name: 'source' }];
@@ -82,11 +86,11 @@ async function lint(name: string, flags: any, command: Lint) {
   if (obj.data.swagger && obj.data.swagger === '2.0') {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
-    spectral.addRules(oas2Rules());
+    spectral.addRules(skipRules(oas2Rules(), flags, command));
   } else if (obj.data.openapi && typeof obj.data.openapi === 'string' && obj.data.openapi.startsWith('3.')) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
-    spectral.addRules(oas3Rules());
+    spectral.addRules(skipRules(oas3Rules(), flags, command));
   } else {
     throw new Error('Input document specification type could not be determined');
   }
@@ -117,6 +121,27 @@ async function lint(name: string, flags: any, command: Lint) {
     process.exitCode = 2;
     throw new Error(ex);
   }
+}
+
+function skipRules(rules: any, flags: any, command: Lint): any {
+  if (!flags.skip) return rules;
+  const skippedRules: string[] = [];
+  const invalidRules: string[] = [];
+  for (const rule of flags.skip.split(',')) {
+    if (rule in rules) {
+      delete rules[rule];
+      skippedRules.push(rule);
+    } else {
+      invalidRules.push(rule);
+    }
+  }
+  if (invalidRules.length !== 0) {
+    command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
+  }
+  if (skippedRules.length !== 0 && flags.verbose) {
+    command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
+  }
+  return rules;
 }
 
 async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
