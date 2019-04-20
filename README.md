@@ -84,6 +84,7 @@ Other options include:
   -h, --help                   show CLI help
   -m, --maxResults=maxResults  [default: all] maximum results to show
   -o, --output=output          output to a file instead of stdout
+  -s, --skip=skip              skip rules. Provide multiple rules seperated by ","
   -v, --verbose                increase verbosity
 ```
 
