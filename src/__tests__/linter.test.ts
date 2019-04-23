@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 
-import { oas2Functions, oas2Rules } from '../../dist/rulesets/oas2';
+import { oas2Functions, oas2Rules } from '../rulesets/oas2';
 import { Spectral } from '../spectral';
 
 const fnName = 'fake';

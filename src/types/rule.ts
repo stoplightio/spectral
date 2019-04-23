@@ -36,7 +36,7 @@ export interface IRule<T = string, O = any> {
   then: IThen<T, O> | Array<IThen<T, O>>;
 }
 
-export interface IThen<T, O> {
+export interface IThen<T = string, O = any> {
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
   field?: string;
@@ -61,6 +61,11 @@ export interface ILengthRuleOptions {
   max?: number;
 }
 export type LengthRule = IRule<RuleFunction.LENGTH, ILengthRuleOptions>;
+
+export interface IEnumRuleOptions {
+  values: Array<string | number>;
+}
+export type EnumRule = IRule<RuleFunction.ENUM, IEnumRuleOptions>;
 
 export interface IAlphaRuleOptions {
   /** if sorting array of objects, which key to use for comparison */
