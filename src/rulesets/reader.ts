@@ -1,9 +1,9 @@
 import merge = require('lodash/merge');
 import Lint from '../cli/commands/lint';
-import { formatAjv } from '../formatters/ajv';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
+import { formatAjv } from './ajv';
 import { resolvePath } from './path';
 import { validateRuleset } from './validation';
 
