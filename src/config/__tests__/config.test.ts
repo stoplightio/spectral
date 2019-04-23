@@ -7,10 +7,12 @@ describe('config loading', () => {
   let exampleConfig: any;
   beforeEach(() => {
     exampleConfig = {
-      encoding: 'utf8',
-      format: 'json',
-      verbose: true,
-      maxResults: 5,
+      lint: {
+        encoding: 'utf8',
+        format: 'json',
+        verbose: true,
+        maxResults: 5,
+      },
     };
   });
   test('should load JSON config', async () => {
@@ -51,7 +53,10 @@ describe('config loading', () => {
     const config = await load(configPath, '');
     expect(config).toEqual({
       ...exampleConfig,
-      maxResults: 6,
+      lint: {
+        ...exampleConfig.lint,
+        maxResults: 6,
+      },
     });
   });
 
@@ -60,8 +65,11 @@ describe('config loading', () => {
     const config = await load(configPath, '');
     expect(config).toEqual({
       ...exampleConfig,
-      encoding: 'utf16',
-      format: 'stylish',
+      lint: {
+        ...exampleConfig.lint,
+        encoding: 'utf16',
+        format: 'stylish',
+      },
     });
   });
 });

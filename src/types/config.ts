@@ -3,13 +3,16 @@ export enum ConfigFormat {
   STYLISH = 'stylish',
 }
 
-export interface IConfig {
-  extends?: string;
+export interface ILintConfig {
   encoding: string;
   format: ConfigFormat;
   maxResults?: number;
   output?: string;
   verbose: boolean;
   ruleset?: string;
-  config?: string;
+}
+
+export interface IConfig {
+  extends?: string;
+  lint: ILintConfig;
 }

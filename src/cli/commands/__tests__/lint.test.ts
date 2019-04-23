@@ -113,6 +113,17 @@ describe('lint', () => {
       });
   });
 
+  describe('when using config file and command args', () => {
+    test
+      .stdout()
+      .command(['lint', invalidSpecPath, '-c', validConfigPath, '-m', '1'])
+      .it('outputs warnings in json format', ctx => {
+        expect(ctx.stdout).toContain('"info.contact is not truthy"');
+        expect(ctx.stdout).not.toContain('"info.description is not truthy"');
+        expect(ctx.stdout).not.toContain('"servers does not exist"');
+      });
+  });
+
   describe('when not using config nor default config file', () => {
     test
       .stdout()

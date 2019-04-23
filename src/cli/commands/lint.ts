@@ -2,7 +2,7 @@ import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { existsSync, readFileSync, writeFile } from 'fs';
-import { isNil, merge, omitBy } from 'lodash';
+import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
 import { promisify } from 'util';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
@@ -15,7 +15,7 @@ import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { Spectral } from '../../spectral';
 import { IParsedResult, IRuleResult } from '../../types';
-import { IConfig } from '../../types/config';
+import { IConfig, ILintConfig } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 
@@ -62,7 +62,7 @@ linting ./openapi.yaml
   public async run() {
     const { args, flags } = this.parse(Lint);
     const { config: configFileFlag } = flags;
-    let config: IConfig = mergeConfig(createEmptyConfig(), flags);
+    let config: ILintConfig = mergeConfig(createEmptyConfig(), flags);
 
     const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
     if (configFile) {
@@ -168,10 +168,10 @@ async function readInputArguments(name: string, encoding: string) {
   throw new Error(`${name} does not exist`);
 }
 
-function mergeConfig(config: IConfig, flags: any): IConfig {
-  return merge(
-    config,
-    omitBy<IConfig>(
+function mergeConfig(config: IConfig, flags: any): ILintConfig {
+  return {
+    ...config.lint,
+    ...omitBy<ILintConfig>(
       {
         encoding: flags.encoding,
         format: flags.format,
@@ -180,6 +180,6 @@ function mergeConfig(config: IConfig, flags: any): IConfig {
         verbose: flags.verbose,
       },
       isNil
-    )
-  );
+    ),
+  };
 }

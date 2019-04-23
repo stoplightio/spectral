@@ -1,2 +1,3 @@
 ---
-output: results.json
+lint:
+  output: results.json

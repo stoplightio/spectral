@@ -1,4 +1,5 @@
 ---
 extends: config.format.yaml
-maxResults: 6
-verbose: true
+lint:
+  maxResults: 6
+  verbose: true

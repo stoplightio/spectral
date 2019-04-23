@@ -1,4 +1,5 @@
 ---
-encoding: utf8
-format: json
-maxResults: 1
+lint:
+  encoding: utf8
+  format: json
+  maxResults: 1

@@ -1,6 +1,8 @@
 {
-  "encoding": "utf8",
-  "format": "json",
-  "maxResults": 5,
-  "verbose": true
+  "lint": {
+    "encoding": "utf8",
+    "format": "json",
+    "maxResults": 5,
+    "verbose": true
+  }
 }

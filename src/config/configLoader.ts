@@ -62,9 +62,11 @@ export const load = async (filePath: string, referencedPath: string = ''): Promi
 };
 
 export const createEmptyConfig = (): IConfig => ({
-  encoding: 'utf8',
-  format: ConfigFormat.STYLISH,
-  verbose: false,
+  lint: {
+    encoding: 'utf8',
+    format: ConfigFormat.STYLISH,
+    verbose: false,
+  },
 });
 
 export const getDefaultConfigFile = (directory: string) => {
