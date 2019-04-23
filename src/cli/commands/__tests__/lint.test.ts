@@ -145,7 +145,7 @@ describe('lint', () => {
     });
   });
 
-  describe('when loading remote specification files', () => {
+  describe('when loading specification files from web', () => {
     test
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, validSpecPath, {

@@ -82,7 +82,7 @@
     "@types/jest-when": "^1.1.4",
     "@types/jsonpath": "0.2.x",
     "@types/lodash": "4.x.x",
-    "@types/node": "11.12.x",
+    "@types/node": "11.13.x",
     "@types/strip-ansi": "^3.0.0",
     "@types/text-table": "^0.2.0",
     "fs-extra": "^7.0.1",
@@ -93,7 +93,7 @@
     "ts-jest": "24.0.x",
     "tslint": "5.16.0",
     "tslint-config-stoplight": "1.2.0",
-    "typescript": "3.4.3"
+    "typescript": "3.4.4"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
