@@ -164,5 +164,6 @@ Supporting YAML and JSON file validation doesn't come free.
 We need to maintain schema files that mirror IRule and IRuleset types (see `/src/meta/*.schema.json`).
 Ideally, we would have a script that converts TS type to JSON Schema and keeps the meta files up to date. As of now we have a helper that partially automates the work.
 
-Execute `yarn schema.  update` to recreate the `/src/meta/rule.schema.json`.
+Execute `yarn schema.update` to recreate the `/src/meta/rule.schema.json`.
+It will take `IRule` type from `types.ts` file and automatically update the JSON Schema file we use to validate yaml/json ruleset files.
 **Warning**: make sure to update *generic* types. Current tools fails to recognize it properly and e.g. treats `string` as `object`.
