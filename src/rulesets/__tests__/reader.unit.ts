@@ -1,5 +1,5 @@
 jest.mock('../../fs/reader');
-jest.mock('../../formatters/ajv');
+jest.mock('../ajv');
 jest.mock('../validation');
 jest.mock('../path');
 
