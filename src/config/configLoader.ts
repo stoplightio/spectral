@@ -1,41 +1,25 @@
-import { existsSync, readFileSync, readJSONSync } from 'fs-extra';
-import * as yaml from 'js-yaml';
-import { merge } from 'lodash';
+import { IParserResult } from '@stoplight/types';
+import { existsSync } from 'fs-extra';
+import { isEmpty, merge } from 'lodash';
 import * as path from 'path';
+import { readParsable } from '../fs/reader';
 import { ConfigFormat, IConfig } from '../types/config';
 
 const DEFAULT_CONFIG_FILE = 'spectral.yml';
 
-const loadJsonFile = (filePath: string) => {
-  if (existsSync(filePath)) {
-    return readJSONSync(filePath);
-  }
-  throw new Error(`${filePath} does not exist`);
-};
-
-const loadYamlFile = (filePath: string) => {
-  if (existsSync(filePath)) {
-    return yaml.safeLoad(readFileSync(filePath, 'utf8')) || {};
-  }
-  throw new Error(`${filePath} does not exist`);
-};
-
-const loadConfig = (filePath: any): IConfig => {
-  let config;
-
+const loadConfig = async (filePath: any): Promise<IConfig> => {
   switch (path.extname(filePath)) {
     case '.json':
-      config = loadJsonFile(filePath);
-      break;
     case '.yaml':
     case '.yml':
-      config = loadYamlFile(filePath);
-      break;
+      const { data, diagnostics }: IParserResult = await readParsable(filePath, 'utf8');
+      if (!isEmpty(diagnostics)) {
+        throw new Error('Parsing exception');
+      }
+      return data;
     default:
       throw new Error('Unknown file');
   }
-
-  return config;
 };
 
 const extend = async (config: IConfig, filePath: string): Promise<IConfig> => {
