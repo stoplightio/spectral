@@ -52,7 +52,8 @@
     "test": "jest",
     "test.prod": "yarn build && yarn lint && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
-    "test.watch": "yarn test --watch"
+    "test.watch": "yarn test --watch",
+    "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json"
   },
   "dependencies": {
     "@oclif/command": "^1.0",
@@ -70,7 +71,8 @@
     "lodash": ">=4.17.5",
     "node-fetch": "2.x.x",
     "strip-ansi": "^5.2.0",
-    "text-table": "^0.2.0"
+    "text-table": "^0.2.0",
+    "typescript-json-schema": "^0.37.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
@@ -79,19 +81,21 @@
     "@stoplight/scripts": "^5.1.0",
     "@types/chalk": "^2.2.0",
     "@types/jest": "24.0.x",
+    "@types/jest-when": "^1.1.4",
     "@types/jsonpath": "0.2.x",
     "@types/lodash": "4.x.x",
-    "@types/node": "11.12.x",
-    "@types/strip-ansi": "^3.0.0",
+    "@types/node": "11.13.x",
+    "@types/strip-ansi": "^5.2.1",
     "@types/text-table": "^0.2.0",
     "fs-extra": "^7.0.1",
     "jest": "24.7.x",
+    "jest-when": "^2.4.0",
     "nock": "^10.0.6",
     "pkg": "4.3.7",
     "ts-jest": "24.0.x",
     "tslint": "5.16.0",
     "tslint-config-stoplight": "1.2.0",
-    "typescript": "3.4.3"
+    "typescript": "3.4.4"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

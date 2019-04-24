@@ -1,24 +1,22 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
-import { existsSync, readFileSync, writeFile } from 'fs';
+import { getLocationForJsonPath } from '@stoplight/yaml';
+import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
 import { promisify } from 'util';
+import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
-
-// @ts-ignore
-import * as fetch from 'node-fetch';
-
 import { json, stylish } from '../../formatters';
+import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
+import { readRuleset } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
-import { IParsedResult, IRuleResult } from '../../types';
+import { IParsedResult, RuleCollection } from '../../types';
 import { IConfig, ILintConfig } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
-
 export default class Lint extends Command {
   public static description = 'lint a JSON/YAML document from a file or URL';
 
@@ -55,13 +53,27 @@ linting ./openapi.yaml
       char: 'c',
       description: 'path to a config file',
     }),
+    ruleset: flagHelpers.string({
+      char: 'r',
+      description: 'path to a ruleset file (supports http)',
+    }),
   };
 
   public static args = [{ name: 'source' }];
 
   public async run() {
     const { args, flags } = this.parse(Lint);
-    const { config: configFileFlag } = flags;
+    const { config: configFileFlag, ruleset } = flags;
+    let rules;
+
+    if (ruleset) {
+      try {
+        rules = await readRuleset(ruleset, this);
+      } catch (ex) {
+        this.error(ex.message);
+      }
+    }
+
     let config: ILintConfig = mergeConfig(createEmptyConfig(), flags);
 
     const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
@@ -76,7 +88,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, config, this);
+        await lint(args.source, config, this, rules);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -86,21 +98,19 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: any, command: Lint) {
-  command.log(`linting ${name}`);
-  let obj: IParserResult;
-  try {
-    obj = await readInputArguments(name, flags.encoding);
-  } catch (ex) {
-    throw new Error(`Could not parse ${name}: ${ex.message}`);
-  }
+async function lint(name: string, flags: any, command: Lint, customRules?: RuleCollection) {
+  command.log(`Linting ${name}`);
+  const spec: IParserResult = await readParsable(name, flags.encoding);
 
   const spectral = new Spectral();
-  if (obj.data.swagger && obj.data.swagger === '2.0') {
+  if (customRules) {
+    command.log('Applying custom rules. Automatic rule detection is off.');
+    spectral.addRules(customRules);
+  } else if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addFunctions(oas2Functions());
     spectral.addRules(oas2Rules());
-  } else if (obj.data.openapi && typeof obj.data.openapi === 'string' && obj.data.openapi.startsWith('3.')) {
+  } else if (parseInt(spec.data.openapi) === 3) {
     command.log('OpenAPI 3.x detected');
     spectral.addFunctions(oas3Functions());
     spectral.addRules(oas3Rules());
@@ -112,7 +122,7 @@ async function lint(name: string, flags: any, command: Lint) {
   try {
     const parsedResult: IParsedResult = {
       source: resolve(process.cwd(), name),
-      parsed: obj,
+      parsed: spec,
       getLocationForJsonPath,
     };
 
@@ -136,7 +146,7 @@ async function lint(name: string, flags: any, command: Lint) {
   }
 }
 
-async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
+export async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
   if (flags.maxResults) {
     results = results.slice(0, flags.maxResults);
   }
@@ -146,26 +156,12 @@ async function formatOutput(results: IRuleResult[], flags: any): Promise<string>
   }[flags.format]();
 }
 
-async function writeOutput(outputStr: string, flags: any, command: Lint) {
+export async function writeOutput(outputStr: string, flags: any, command: Lint) {
   if (flags.output) {
     return writeFileAsync(flags.output, outputStr);
   }
 
   command.log(outputStr);
-}
-
-async function readInputArguments(name: string, encoding: string) {
-  if (name.startsWith('http')) {
-    const result = await fetch(name);
-    return parseWithPointers(await result.text());
-  } else if (existsSync(name)) {
-    try {
-      return parseWithPointers(readFileSync(name, encoding));
-    } catch (ex) {
-      throw new Error(`Could not read ${name}: ${ex.message}`);
-    }
-  }
-  throw new Error(`${name} does not exist`);
 }
 
 function mergeConfig(config: IConfig, flags: any): ILintConfig {

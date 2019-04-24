@@ -1,9 +1,8 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-const merge = require('lodash/merge');
-
-import { IParsedResult } from '../../dist';
 import { isParsedResult, Spectral } from '../spectral';
-import { RuleFunction } from '../types';
+import { IParsedResult, RuleFunction } from '../types';
+
+const merge = require('lodash/merge');
 
 describe('spectral', () => {
   describe('addRules & mergeRules', () => {

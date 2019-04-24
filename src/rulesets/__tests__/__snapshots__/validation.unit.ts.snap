@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ruleset Validation given invalid ruleset should emit errors 1`] = `
+"[
+  {
+    \\"keyword\\": \\"required\\",
+    \\"dataPath\\": \\"/rules/no-given-no-then\\",
+    \\"schemaPath\\": \\"#/required\\",
+    \\"params\\": {
+      \\"missingProperty\\": \\"given\\"
+    },
+    \\"message\\": \\"should have required property 'given'\\"
+  },
+  {
+    \\"keyword\\": \\"required\\",
+    \\"dataPath\\": \\"/rules/no-given-no-then\\",
+    \\"schemaPath\\": \\"#/required\\",
+    \\"params\\": {
+      \\"missingProperty\\": \\"then\\"
+    },
+    \\"message\\": \\"should have required property 'then'\\"
+  },
+  {
+    \\"keyword\\": \\"type\\",
+    \\"dataPath\\": \\"/rules/rule-with-invalid-enum/severity\\",
+    \\"schemaPath\\": \\"#/properties/severity/type\\",
+    \\"params\\": {
+      \\"type\\": \\"number\\"
+    },
+    \\"message\\": \\"should be number\\"
+  },
+  {
+    \\"keyword\\": \\"enum\\",
+    \\"dataPath\\": \\"/rules/rule-with-invalid-enum/severity\\",
+    \\"schemaPath\\": \\"#/properties/severity/enum\\",
+    \\"params\\": {
+      \\"allowedValues\\": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    \\"message\\": \\"should be equal to one of the allowed values\\"
+  },
+  {
+    \\"keyword\\": \\"enum\\",
+    \\"dataPath\\": \\"/rules/rule-with-invalid-enum/type\\",
+    \\"schemaPath\\": \\"#/properties/type/enum\\",
+    \\"params\\": {
+      \\"allowedValues\\": [
+        \\"style\\",
+        \\"validation\\"
+      ]
+    },
+    \\"message\\": \\"should be equal to one of the allowed values\\"
+  }
+]"
+`;

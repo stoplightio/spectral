@@ -7,6 +7,11 @@ const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.
 const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
 const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
 const outputConfigPath = resolve(__dirname, '__fixtures__/config.output.yml');
+const validCustomSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
+const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
+const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
+const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
+const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -27,6 +32,7 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidSpecPath])
       .it('outputs warnings in default format', ctx => {
+        expect(ctx.stdout).toContain('OpenAPI 3.x detected');
         expect(ctx.stdout).toContain('Info object should contain `contact` object');
       });
 
@@ -57,7 +63,92 @@ describe('lint', () => {
       });
   });
 
-  describe('when loading local specification files', () => {
+  describe('--ruleset', () => {
+    describe('extends feature', () => {
+      test
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', validNestedRulesetPath])
+        .it('should extend a valid relative ruleset', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+
+      test
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', invalidNestedRulesetPath])
+        .exit(2)
+        .it('should fail trying to extend an invalid relative ruleset', ctx => {
+          expect(ctx.stdout).toContain("should have required property 'given'");
+        });
+
+      test
+        .nock('http://foo.local', api => {
+          api.get('/ruleset-master.yaml').replyWithFile(200, validNestedRulesetPath, {
+            'Content-Type': 'application/yaml',
+          });
+
+          api.get('/ruleset-valid.yaml').replyWithFile(200, validRulesetPath, {
+            'Content-Type': 'application/yaml',
+          });
+        })
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset-master.yaml'])
+        .it('given remote nested ruleset should resolve', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+    });
+
+    describe('when single ruleset option provided', () => {
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', 'non-existent-path'])
+        .exit(2)
+        .it('outputs "does not exist" error');
+
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', invalidRulesetPath])
+        .exit(2)
+        .it('outputs "invalid ruleset" error', ctx => {
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
+          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
+          expect(ctx.stdout).toContain(
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+          );
+        });
+
+      test
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', validRulesetPath])
+        .it('outputs no issues', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', validRulesetPath])
+        .it('outputs warnings in default format', ctx => {
+          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
+          expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
+          expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
+          expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
+        });
+
+      test
+        .nock('http://foo.local', api =>
+          api.get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
+            'Content-Type': 'application/yaml',
+          })
+        )
+        .stdout()
+        .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset.yaml'])
+        .it('given valid remote ruleset file, outputs no issues', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+    });
+  });
+
+  describe('when loading specification files from web', () => {
     test
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, validSpecPath, {
