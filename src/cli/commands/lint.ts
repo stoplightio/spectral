@@ -50,9 +50,9 @@ linting ./openapi.yaml
       char: 'v',
       description: 'increase verbosity',
     }),
-    skip: flagHelpers.string({
+    skipRule: flagHelpers.string({
       char: 's',
-      description: 'skip rules. Provide multiple rules seperated by ","',
+      description: 'skip a rule. Can skip multiple rules seperated by ","',
     }),
   };
 
