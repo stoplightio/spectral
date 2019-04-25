@@ -94,6 +94,30 @@ describe('lint', () => {
         });
     });
 
+    describe('when multiple ruleset options provided', () => {
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
+        .exit(2)
+        .it('given one is valid other is not, outputs "invalid ruleset" error', ctx => {
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
+          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
+          expect(ctx.stdout).toContain(
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+          );
+        });
+
+      test
+        .stdout()
+        .command(['lint', validSpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
+        .exit(2)
+        .it('given one is valid other is not, reads both', ctx => {
+          expect(ctx.stdout).toContain(`Reading ruleset ${invalidRulesetPath}`);
+          expect(ctx.stdout).toContain(`Reading ruleset ${validRulesetPath}`);
+        });
+    });
+
     describe('when single ruleset option provided', () => {
       test
         .stdout()

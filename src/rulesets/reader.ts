@@ -7,7 +7,12 @@ import { formatAjv } from './ajv';
 import { resolvePath } from './path';
 import { validateRuleset } from './validation';
 
-export async function readRuleset(file: string, command: Lint): Promise<RuleCollection> {
+export async function readRulesets(command: Lint, ...files: string[]): Promise<RuleCollection> {
+  const rulesets = await Promise.all(files.map(file => readRuleset(command, file)));
+  return merge({}, ...rulesets);
+}
+
+async function readRuleset(command: Lint, file: string): Promise<RuleCollection> {
   command.log(`Reading ruleset ${file}`);
   const parsed = await readParsable(file, 'utf8');
   const { data: ruleset } = parsed;
@@ -23,7 +28,7 @@ export async function readRuleset(file: string, command: Lint): Promise<RuleColl
   if (extendz && extendz.length) {
     extendedRules = await blendRuleCollections(
       extendz.map(extend => {
-        return readRuleset(resolvePath(file, extend), command);
+        return readRuleset(command, resolvePath(file, extend));
       })
     );
   }
