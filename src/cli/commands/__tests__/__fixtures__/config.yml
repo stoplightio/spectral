@@ -2,5 +2,5 @@
 lint:
   encoding: utf8
   format: json
-  maxResults: 5
+  max: 5
   verbose: true

@@ -28,6 +28,10 @@ linting ./openapi.yaml
 
   public static flags = {
     help: flagHelpers.help({ char: 'h' }),
+    config: flagHelpers.string({
+      char: 'c',
+      description: 'path to a config file',
+    }),
     encoding: flagHelpers.string({
       char: 'e',
       description: 'text encoding to use',
@@ -41,17 +45,13 @@ linting ./openapi.yaml
       char: 'o',
       description: 'output to a file instead of stdout',
     }),
+    max: flagHelpers.integer({
+      description: '[default: all] maximum results to show',
+    }),
+    // @deprecated in 2.2, remove in 3.0
     maxResults: flagHelpers.integer({
       char: 'm',
       description: '[default: all] maximum results to show',
-    }),
-    verbose: flagHelpers.boolean({
-      char: 'v',
-      description: 'increase verbosity',
-    }),
-    config: flagHelpers.string({
-      char: 'c',
-      description: 'path to a config file',
     }),
     ruleset: flagHelpers.string({
       char: 'r',
@@ -60,7 +60,12 @@ linting ./openapi.yaml
     }),
     skip: flagHelpers.string({
       char: 's',
-      description: 'skip rules. Provide multiple rules separated by ","',
+      description: 'skip rules',
+      multiple: true,
+    }),
+    verbose: flagHelpers.boolean({
+      char: 'v',
+      description: 'increase verbosity',
     }),
   };
 
@@ -104,25 +109,37 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: any, command: Lint, customRules?: RuleCollection) {
+async function lint(name: string, flags: any, command: Lint, rules?: RuleCollection) {
   command.log(`Linting ${name}`);
   const spec: IParserResult = await readParsable(name, flags.encoding);
 
   const spectral = new Spectral();
-  if (customRules) {
-    command.log('Applying custom rules. Automatic rule detection is off.');
-    spectral.addRules(customRules);
-  } else if (parseInt(spec.data.swagger) === 2) {
-    command.log('OpenAPI 2.0 (Swagger) detected');
-    spectral.addFunctions(oas2Functions());
-    spectral.addRules(skipRules(oas2Rules(), flags, command));
-  } else if (parseInt(spec.data.openapi) === 3) {
-    command.log('OpenAPI 3.x detected');
-    spectral.addFunctions(oas3Functions());
-    spectral.addRules(skipRules(oas3Rules(), flags, command));
+  if (rules !== undefined) {
+    const numRules = new Array(rules).length;
+    command.log(`Found ${numRules} rules`);
   } else {
-    throw new Error('Input document specification type could not be determined');
+    if (flags.verbose) {
+      command.log('No rules loaded, attempting to detect document type');
+    }
+    if (parseInt(spec.data.swagger) === 2) {
+      command.log('OpenAPI 2.0 (Swagger) detected');
+      spectral.addFunctions(oas2Functions());
+      rules = oas2Rules();
+    } else if (parseInt(spec.data.openapi) === 3) {
+      command.log('OpenAPI 3.x detected');
+      spectral.addFunctions(oas3Functions());
+      rules = oas3Rules();
+    }
   }
+
+  if (flags.skip) {
+    rules = skipRules(rules, flags, command);
+  }
+  if (!rules) {
+    throw new Error('No rules provided, and document type does not have any default rules, so lint has nothing to do.');
+  }
+
+  spectral.addRules(rules);
 
   let results = [];
   try {
@@ -152,11 +169,11 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
   }
 }
 
-function skipRules(rules: any, flags: any, command: Lint): any {
-  if (!flags.skip) return rules;
+const skipRules = (rules: any, flags: any, command: Lint): any => {
   const skippedRules: string[] = [];
   const invalidRules: string[] = [];
-  for (const rule of flags.skip.split(',')) {
+
+  for (const rule of flags.skip) {
     if (rule in rules) {
       delete rules[rule];
       skippedRules.push(rule);
@@ -171,11 +188,12 @@ function skipRules(rules: any, flags: any, command: Lint): any {
     command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
   }
   return rules;
-}
+};
 
 async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
-  if (flags.maxResults) {
-    results = results.slice(0, flags.maxResults);
+  const max = flags.maxResults > 0 ? flags.maxResults : flags.max;
+  if (max) {
+    results = results.slice(0, max);
   }
   return {
     json: () => json(results),
@@ -199,9 +217,10 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        maxResults: flags.maxResults,
+        max: flags.max,
         verbose: flags.verbose,
         ruleset: flags.ruleset,
+        skip: flags.skip,
       },
       isNil
     ),

@@ -82,9 +82,9 @@ Other options include:
   -e, --encoding=encoding      [default: utf8] text encoding to use
   -f, --format=json|stylish    [default: stylish] formatter to use for outputting results
   -h, --help                   show CLI help
-  -m, --maxResults=maxResults  [default: all] maximum results to show
+  -max=max                     [default: all] maximum results to show
   -o, --output=output          output to a file instead of stdout
-  -s, --skip=skip              skip rules. Provide multiple rules seperated by ","
+  -s, --skip=skip              skip rules. Provide multiple rules separated by ","
   -v, --verbose                increase verbosity
 ```
 

@@ -30,39 +30,71 @@ describe('lint', () => {
     .it('exits as error with no argument');
 
   describe('when loading local specification files', () => {
-    test
-      .stdout()
-      .command(['lint', invalidSpecPath])
-      .it('outputs warnings in default format', ctx => {
-        expect(ctx.stdout).toContain('OpenAPI 3.x detected');
-        expect(ctx.stdout).toContain('Info object should contain `contact` object');
+    describe('and the file is expected to have no warnings', () => {
+      test
+        .stdout()
+        .command(['lint', validSpecPath])
+        .it('outputs no issues', ctx => {
+          expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+    });
+
+    describe('and the file is expected to trigger oas3 warnings', () => {
+      const args = ['lint', invalidSpecPath];
+
+      test
+        .stdout()
+        .command(args)
+        .it('outputs warnings in default format', ctx => {
+          expect(ctx.stdout).toContain('OpenAPI 3.x detected');
+          expect(ctx.stdout).toContain('OpenAPI `servers` must be present and non-empty array');
+          expect(ctx.stdout).toContain('Info object should contain `contact` object');
+        });
+
+      describe('and -f json is set', () => {
+        test
+          .stdout()
+          .command([...args, '-f', 'json'])
+          .it('outputs warnings in json format', ctx => {
+            expect(ctx.stdout).toContain('OpenAPI `servers` must be present and non-empty array');
+            expect(ctx.stdout).toContain('"info.contact is not truthy"');
+          });
       });
 
-    test
-      .stdout()
-      .command(['lint', invalidSpecPath, '-f', 'json'])
-      .it('outputs warnings in json format', ctx => {
-        expect(ctx.stdout).toContain('"info.contact is not truthy"');
-      });
+      describe('and --skip=info-contact is set', () => {
+        test
+          .stdout()
+          .command([...args, '--skip', 'info-contact'])
+          .it('output other warnings but not info-contact', ctx => {
+            expect(ctx.stdout).toContain('OpenAPI `servers` must be present and non-empty array');
+            expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
+          });
 
-    test
-      .stdout()
-      .command(['lint', validSpecPath])
-      .it('outputs no issues', ctx => {
-        expect(ctx.stdout).toContain('No errors or warnings found!');
-      });
+        describe('and --skip=info-contact --skip=api-servers is set', () => {
+          test
+            .stdout()
+            .command([...args, '--skip', 'info-contact', '--skip', 'api-servers'])
+            .it('outputs neither info-contact or ', ctx => {
+              expect(ctx.stdout).not.toContain('OpenAPI `servers` must be present and non-empty array');
+              expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
+            });
+        });
 
-    test
-      .stdout()
-      .command(['lint', invalidSpecPath, '-o', 'results.json'])
-      .it('saves results to a file', () => {
-        expect(fs.writeFile).toHaveBeenCalledWith(
-          'results.json',
-          // there are more errors listed
-          expect.stringContaining('Info object should contain `contact` object'),
-          expect.any(Function) // callback, util.promisify handles it for us
-        );
+        describe('and -o results.json is set', () => {
+          test
+            .stdout()
+            .command([...args, '-o', 'results.json'])
+            .it('saves results to a file', () => {
+              expect(fs.writeFile).toHaveBeenCalledWith(
+                'results.json',
+                // there are more errors listed
+                expect.stringContaining('Info object should contain `contact` object'),
+                expect.any(Function) // callback, util.promisify handles it for us
+              );
+            });
+        });
       });
+    });
   });
 
   describe('--ruleset', () => {
@@ -154,7 +186,7 @@ describe('lint', () => {
         .stdout()
         .command(['lint', validSpecPath, '-r', validRulesetPath])
         .it('outputs warnings in default format', ctx => {
-          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
+          expect(ctx.stdout).toContain('Found 1 rules');
           expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
           expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
           expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
@@ -248,8 +280,8 @@ describe('lint', () => {
   describe('when using config file and command args', () => {
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-c', validConfigPath, '-m', '1'])
-      .it('given maxResults set to 1 outputs warnings in json format', ctx => {
+      .command(['lint', invalidSpecPath, '-c', validConfigPath, '--max', '1'])
+      .it('setting --max to 1 will override config value of 5', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
         expect(ctx.stdout).not.toContain('"info.description is not truthy"');
         expect(ctx.stdout).not.toContain('"servers does not exist"');
@@ -270,9 +302,8 @@ describe('lint', () => {
     beforeAll(() => {
       spy = jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
     });
-    afterAll(() => {
-      spy.mockClear();
-    });
+    afterAll(() => spy.mockClear());
+
     test
       .stdout()
       .command(['lint', invalidSpecPath])
