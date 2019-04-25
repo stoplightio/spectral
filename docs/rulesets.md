@@ -1,5 +1,11 @@
 # Spectral Rulesets
 
+## Usage
+
+```bash
+spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml --ruleset=http://example.com/acme-common-ruleset.yaml
+```
+
 ## Example ruleset file
 
 We currently support ruleset files in both `yaml` and `json` formats.
@@ -133,12 +139,6 @@ Rules are highly configurable. There are only few required parameters but the op
     </tr>
   </tbody>
 </table>
-
-## Configuring rulesets via CLI
-
-```bash
-spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml
-```
 
 ### Ruleset validation
 
