@@ -11,7 +11,7 @@ import { readParsable } from '../../fs/reader';
 import { IRulesetFile } from '../../types/ruleset';
 import { formatAjv } from '../ajv';
 import { resolvePath } from '../path';
-import { readRuleset } from '../reader';
+import { readRulesets } from '../reader';
 import { validateRuleset } from '../validation';
 
 const readParsableMock: jest.Mock = readParsable as jest.Mock;
@@ -47,8 +47,29 @@ describe('reader', () => {
       },
     });
 
-    expect(await readRuleset('flat-ruleset.yaml', command)).toEqual({
+    expect(await readRulesets(command, 'flat-ruleset.yaml')).toEqual({
       'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
+    });
+  });
+
+  it('given two flat, valid ruleset files should return rules', async () => {
+    validateRulesetMock.mockReturnValue([]);
+    givenRulesets({
+      'flat-ruleset-a.yaml': {
+        rules: {
+          'rule-1': simpleRule,
+        },
+      },
+      'flat-ruleset-b.yaml': {
+        rules: {
+          'rule-2': simpleRule,
+        },
+      },
+    });
+
+    expect(await readRulesets(command, 'flat-ruleset-a.yaml', 'flat-ruleset-b.yaml')).toEqual({
+      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
+      'rule-2': { given: 'abc', then: { function: 'f' }, enabled: false },
     });
   });
 
@@ -72,7 +93,7 @@ describe('reader', () => {
       },
     });
 
-    expect(await readRuleset('oneParentRuleset', command)).toEqual({
+    expect(await readRulesets(command, 'oneParentRuleset')).toEqual({
       'rule-1': { given: 'abc', then: { function: 'f' }, enabled: true },
     });
   });
@@ -98,7 +119,7 @@ describe('reader', () => {
       },
     });
 
-    expect(await readRuleset('oneParentRuleset', command)).toEqual({
+    expect(await readRulesets(command, 'oneParentRuleset')).toEqual({
       'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
       'rule-2': { given: 'another given', then: { function: 'b' } },
     });
@@ -147,7 +168,7 @@ describe('reader', () => {
       },
     });
 
-    expect(await readRuleset('oneParentRuleset', command)).toEqual({
+    expect(await readRulesets(command, 'oneParentRuleset')).toEqual({
       'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
       'rule-a': { given: 'given-a', then: { function: 'a' } },
       'rule-b': { given: 'given-b', then: { function: 'b' } },
@@ -169,7 +190,7 @@ describe('reader', () => {
       .calledWith(['fake errors'])
       .mockReturnValue('fake formatted message');
 
-    await readRuleset('flat-ruleset.yaml', command);
+    await readRulesets(command, 'flat-ruleset.yaml');
 
     expect(command.log).toHaveBeenCalledTimes(2);
     expect(command.log).toHaveBeenCalledWith('fake formatted message');

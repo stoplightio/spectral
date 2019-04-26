@@ -11,7 +11,7 @@ import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
-import { readRuleset } from '../../rulesets/reader';
+import { readRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
 import { IConfig, ILintConfig } from '../../types/config';
@@ -55,7 +55,8 @@ linting ./openapi.yaml
     }),
     ruleset: flagHelpers.string({
       char: 'r',
-      description: 'path to a ruleset file (supports http)',
+      description: 'path to a ruleset file (supports remote files)',
+      multiple: true,
     }),
   };
 
@@ -68,7 +69,7 @@ linting ./openapi.yaml
 
     if (ruleset) {
       try {
-        rules = await readRuleset(ruleset, this);
+        rules = await readRulesets(this, ...ruleset);
       } catch (ex) {
         this.error(ex.message);
       }
