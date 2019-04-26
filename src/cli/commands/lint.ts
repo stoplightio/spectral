@@ -64,16 +64,7 @@ linting ./openapi.yaml
 
   public async run() {
     const { args, flags } = this.parse(Lint);
-    const { config: configFileFlag, ruleset } = flags;
-    let rules;
-
-    if (ruleset) {
-      try {
-        rules = await readRulesets(this, ...ruleset);
-      } catch (ex) {
-        this.error(ex.message);
-      }
-    }
+    const { config: configFileFlag } = flags;
 
     let config: ILintConfig = mergeConfig(createEmptyConfig(), flags);
 
@@ -83,7 +74,17 @@ linting ./openapi.yaml
         const loadedConfig = await loadConfig(configFile);
         config = mergeConfig(loadedConfig, flags);
       } catch (ex) {
-        this.error('Cannot load provided config file');
+        this.error('Cannot load provided config file', ex);
+      }
+    }
+    const { ruleset } = config;
+    let rules;
+
+    if (ruleset) {
+      try {
+        rules = await readRulesets(this, ...ruleset);
+      } catch (ex) {
+        this.error(ex.message);
       }
     }
 
@@ -175,6 +176,7 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         output: flags.output,
         maxResults: flags.maxResults,
         verbose: flags.verbose,
+        ruleset: flags.ruleset,
       },
       isNil
     ),

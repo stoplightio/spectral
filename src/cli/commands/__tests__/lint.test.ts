@@ -12,6 +12,8 @@ const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
 const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
+const validRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.yml');
+const invalidRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.invalid.yml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -226,13 +228,28 @@ describe('lint', () => {
           expect.any(Function) // callback, util.promisify handles it for us
         );
       });
+
+    test
+      .stdout()
+      .command(['lint', validSpecPath, '-c', validRulesetConfigPath])
+      .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
+        expect(ctx.stdout).toContain(`5:10  warning  info-matches-stoplight  Info must contain Stoplight`);
+      });
+
+    test
+      .stdout()
+      .command(['lint', validSpecPath, '-c', invalidRulesetConfigPath])
+      .exit(2)
+      .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
+        expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
+      });
   });
 
   describe('when using config file and command args', () => {
     test
       .stdout()
       .command(['lint', invalidSpecPath, '-c', validConfigPath, '-m', '1'])
-      .it('outputs warnings in json format', ctx => {
+      .it('given maxResults set to 1 outputs warnings in json format', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
         expect(ctx.stdout).not.toContain('"info.description is not truthy"');
         expect(ctx.stdout).not.toContain('"servers does not exist"');

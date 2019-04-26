@@ -9,7 +9,7 @@ export interface ILintConfig {
   maxResults?: number;
   output?: string;
   verbose: boolean;
-  ruleset?: string;
+  ruleset?: string[];
 }
 
 export interface IConfig {

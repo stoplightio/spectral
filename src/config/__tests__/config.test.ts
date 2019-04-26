@@ -72,4 +72,16 @@ describe('config loading', () => {
       },
     });
   });
+
+  test('should load config with ruleset', async () => {
+    const configPath = getFixture('./ruleset/config.ruleset.yml');
+    const config = await load(configPath, '');
+    expect(config.lint.ruleset).toEqual(['src/cli/commands/__tests__/__fixtures__/ruleset-invalid.yaml']);
+  });
+
+  test('should load config with string ruleset', async () => {
+    const configPath = getFixture('./ruleset/config.ruleset.string.yml');
+    const config = await load(configPath, '');
+    expect(config.lint.ruleset).toEqual(['src/cli/commands/__tests__/__fixtures__/ruleset-invalid.yaml']);
+  });
 });

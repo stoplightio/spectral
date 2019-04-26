@@ -36,7 +36,10 @@ export const load = async (filePath: string, referencedPath: string = ''): Promi
   const resolvedPath: string = path.resolve(path.dirname(referencedPath), filePath);
   const config: IConfig = await loadConfig(resolvedPath);
 
-  // validate
+  if (config.lint && config.lint.ruleset) {
+    const { ruleset } = config.lint;
+    config.lint.ruleset = Array.isArray(ruleset) ? ruleset : [ruleset];
+  }
 
   if (config.extends) {
     return extend(config, resolvedPath);
