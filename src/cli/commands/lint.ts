@@ -2,9 +2,11 @@ import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
 import { writeFile } from 'fs';
+import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
 import { promisify } from 'util';
 import { IRuleResult } from '../..';
+import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
@@ -12,6 +14,7 @@ import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { readRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
+import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 export default class Lint extends Command {
@@ -27,12 +30,10 @@ linting ./openapi.yaml
     help: flagHelpers.help({ char: 'h' }),
     encoding: flagHelpers.string({
       char: 'e',
-      default: 'utf8',
       description: 'text encoding to use',
     }),
     format: flagHelpers.string({
       char: 'f',
-      default: 'stylish',
       description: 'formatter to use for outputting results',
       options: ['json', 'stylish'],
     }),
@@ -48,6 +49,10 @@ linting ./openapi.yaml
       char: 'v',
       description: 'increase verbosity',
     }),
+    config: flagHelpers.string({
+      char: 'c',
+      description: 'path to a config file',
+    }),
     ruleset: flagHelpers.string({
       char: 'r',
       description: 'path to a ruleset file (supports remote files)',
@@ -59,7 +64,20 @@ linting ./openapi.yaml
 
   public async run() {
     const { args, flags } = this.parse(Lint);
-    const { ruleset } = flags;
+    const { config: configFileFlag } = flags;
+
+    let config: ILintConfig = mergeConfig(createEmptyConfig(), flags);
+
+    const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
+    if (configFile) {
+      try {
+        const loadedConfig = await loadConfig(configFile, ConfigCommand.LINT);
+        config = mergeConfig(loadedConfig, flags);
+      } catch (ex) {
+        this.error(`Cannot load provided config file. ${ex.message}.`);
+      }
+    }
+    const { ruleset } = config;
     let rules;
 
     if (ruleset) {
@@ -72,7 +90,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, flags, this, rules);
+        await lint(args.source, config, this, rules);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -146,4 +164,21 @@ export async function writeOutput(outputStr: string, flags: any, command: Lint) 
   }
 
   command.log(outputStr);
+}
+
+function mergeConfig(config: IConfig, flags: any): ILintConfig {
+  return {
+    ...config.lint,
+    ...omitBy<ILintConfig>(
+      {
+        encoding: flags.encoding,
+        format: flags.format,
+        output: flags.output,
+        maxResults: flags.maxResults,
+        verbose: flags.verbose,
+        ruleset: flags.ruleset,
+      },
+      isNil
+    ),
+  };
 }

@@ -1,0 +1,5 @@
+---
+lint:
+  encoding: utf8
+  format: json
+  maxResults: 1

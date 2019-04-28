@@ -1,0 +1,8 @@
+{
+  "lint": {
+    "encoding": "utf8",
+    "format": "json",
+    "maxResults": 5,
+    "verbose": true
+  }
+}
