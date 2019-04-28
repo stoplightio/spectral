@@ -3,7 +3,7 @@ import { existsSync } from 'fs-extra';
 import { isEmpty, merge } from 'lodash';
 import * as path from 'path';
 import { readParsable } from '../fs/reader';
-import { ConfigFormat, IConfig } from '../types/config';
+import { ConfigCommand, ConfigFormat, IConfig } from '../types/config';
 
 const DEFAULT_CONFIG_FILE = 'spectral.yml';
 
@@ -22,30 +22,27 @@ const loadConfig = async (filePath: any): Promise<IConfig> => {
   }
 };
 
-const extend = async (config: IConfig, filePath: string): Promise<IConfig> => {
-  let configResult = Object.assign({}, config);
-  const { extends: extendsValue } = config;
-  if (extendsValue) {
-    configResult = merge(await load(extendsValue, filePath), config);
-  }
-  delete configResult.extends;
-  return configResult;
+export const load = async (filePath: string, command: ConfigCommand): Promise<IConfig> => {
+  const config: IConfig = await loadConfig(filePath);
+  validate(config, command);
+  normalize(config, command);
+  return merge(createEmptyConfig(), config);
 };
 
-export const load = async (filePath: string, referencedPath: string = ''): Promise<IConfig> => {
-  const resolvedPath: string = path.resolve(path.dirname(referencedPath), filePath);
-  const config: IConfig = await loadConfig(resolvedPath);
+export const validate = (config: IConfig, command: ConfigCommand) => {
+  if (!config) throw new Error('Missing config');
+  if (!config[command]) throw new Error(`Missing ${command} command in config file`);
+};
 
-  if (config.lint && config.lint.ruleset) {
-    const { ruleset } = config.lint;
-    config.lint.ruleset = Array.isArray(ruleset) ? ruleset : [ruleset];
+export const normalize = (config: IConfig, command: ConfigCommand) => {
+  switch (command) {
+    case ConfigCommand.LINT:
+      if (config.lint.ruleset) {
+        const { ruleset } = config.lint;
+        config.lint.ruleset = Array.isArray(ruleset) ? ruleset : [ruleset];
+      }
+      break;
   }
-
-  if (config.extends) {
-    return extend(config, resolvedPath);
-  }
-
-  return merge(createEmptyConfig(), config);
 };
 
 export const createEmptyConfig = (): IConfig => ({

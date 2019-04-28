@@ -14,7 +14,7 @@ import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
 import { readRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
-import { IConfig, ILintConfig } from '../../types/config';
+import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 export default class Lint extends Command {
@@ -71,10 +71,10 @@ linting ./openapi.yaml
     const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
     if (configFile) {
       try {
-        const loadedConfig = await loadConfig(configFile);
+        const loadedConfig = await loadConfig(configFile, ConfigCommand.LINT);
         config = mergeConfig(loadedConfig, flags);
       } catch (ex) {
-        this.error('Cannot load provided config file', ex);
+        this.error(`Cannot load provided config file. ${ex.message}.`);
       }
     }
     const { ruleset } = config;

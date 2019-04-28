@@ -1,5 +1,0 @@
----
-extends: config.format.yaml
-lint:
-  maxResults: 6
-  verbose: true

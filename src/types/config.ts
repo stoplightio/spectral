@@ -3,6 +3,10 @@ export enum ConfigFormat {
   STYLISH = 'stylish',
 }
 
+export enum ConfigCommand {
+  LINT = 'lint',
+}
+
 export interface ILintConfig {
   encoding: string;
   format: ConfigFormat;

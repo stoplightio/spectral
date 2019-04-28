@@ -1,5 +1,0 @@
----
-extends: ../relative/config.encoding.yaml
-lint:
-  maxResults: 5
-  verbose: true
