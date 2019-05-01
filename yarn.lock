@@ -864,10 +864,10 @@
   resolved "https://registry.yarnpkg.com/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
   integrity sha512-yALhelO3i0hqZwhjtcr6dYyaLoCHbAMshwtj6cGxTvHZAKXHsYGdff6E8EPw3xLKY0ELUTQ69Q1rQiJENnccMA==
 
-"@types/jest-when@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@types/jest-when/-/jest-when-1.1.4.tgz#4ca90ead832fc0ea55ff36e663b71b1a964c8665"
-  integrity sha512-C7RaMoSFd45iOkxezpjdA2Yfd+jUK9zD/bAi7dBousT4kqfiTOeYe7u/2BWZ2+c4Tbb3L5YNO1BGaYD7ZZvINA==
+"@types/jest-when@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@types/jest-when/-/jest-when-2.4.0.tgz#72e9af54c7f333f629e58881c3d94accbae241a0"
+  integrity sha512-PeFOBKNRRBkBQjPfQIQy0xSqN2965Yej74+HoDQ8aMQvV9vaxE+8Y2vtrqN7Asz8cTZgPKpMiSLr5C/2qb0N8Q==
   dependencies:
     "@types/jest" "*"
 
