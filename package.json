@@ -89,7 +89,7 @@
     "jest": "24.7.x",
     "jest-when": "^2.4.0",
     "nock": "^10.0.6",
-    "pkg": "4.3.7",
+    "pkg": "4.3.8",
     "ts-jest": "24.0.x",
     "tslint": "5.16.0",
     "tslint-config-stoplight": "1.2.0",
