@@ -60,6 +60,12 @@ Now, `spectral` command will be accessible in your terminal.
 
 Head over to [releases](https://github.com/stoplightio/spectral/releases) for the latest binaries.
 
+
+### Docker
+```bash
+docker run --rm -it stoplight/spectral lint "${URL}"`
+```
+
 ## Usage
 
 ### CLI
