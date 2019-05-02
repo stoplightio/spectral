@@ -94,6 +94,15 @@ This example uses the OpenAPI v3 rules to lint a document.
 ```javascript
 const { Spectral } = require('@stoplight/spectral');
 const { oas3Functions, oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
+// for YAML
+const { parseWithPointers } = require("@stoplight/yaml");
+const myOAS = parseWithPointers(`
+responses:
+  '200':
+    description: ''
+    schema:
+      $ref: '#/definitions/error-response'
+`)
 
 // an OASv3 document
 const myOAS = {
