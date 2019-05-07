@@ -3,17 +3,20 @@ import * as fs from 'fs';
 import { resolve } from 'path';
 import SpyInstance = jest.SpyInstance;
 
-const invalidSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
-const validSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
+const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
+const validOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
+const oas2PetstoreSpecPath = resolve(__dirname, '../../../__tests__/__fixtures__/petstore.oas2.json');
 const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
 const outputConfigPath = resolve(__dirname, '__fixtures__/config.output.yml');
-const validCustomSpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
+const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
 const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
 const validRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.yml');
 const invalidRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.invalid.yml');
+const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/oas3.ruleset.yaml');
+const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/oas2.ruleset.yaml');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -32,7 +35,7 @@ describe('lint', () => {
   describe('when loading local specification files', () => {
     test
       .stdout()
-      .command(['lint', invalidSpecPath])
+      .command(['lint', invalidOas3SpecPath])
       .it('outputs warnings in default format', ctx => {
         expect(ctx.stdout).toContain('OpenAPI 3.x detected');
         expect(ctx.stdout).toContain('Info object should contain `contact` object');
@@ -40,21 +43,21 @@ describe('lint', () => {
 
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-f', 'json'])
+      .command(['lint', invalidOas3SpecPath, '-f', 'json'])
       .it('outputs warnings in json format', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
       });
 
     test
       .stdout()
-      .command(['lint', validSpecPath])
+      .command(['lint', validOas3SpecPath])
       .it('outputs no issues', ctx => {
         expect(ctx.stdout).toContain('No errors or warnings found!');
       });
 
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-o', 'results.json'])
+      .command(['lint', invalidOas3SpecPath, '-o', 'results.json'])
       .it('saves results to a file', () => {
         expect(fs.writeFile).toHaveBeenCalledWith(
           'results.json',
@@ -69,14 +72,14 @@ describe('lint', () => {
     describe('extends feature', () => {
       test
         .stdout()
-        .command(['lint', validCustomSpecPath, '-r', validNestedRulesetPath])
+        .command(['lint', validCustomOas3SpecPath, '-r', validNestedRulesetPath])
         .it('should extend a valid relative ruleset', ctx => {
           expect(ctx.stdout).toContain('No errors or warnings found!');
         });
 
       test
         .stdout()
-        .command(['lint', validCustomSpecPath, '-r', invalidNestedRulesetPath])
+        .command(['lint', validCustomOas3SpecPath, '-r', invalidNestedRulesetPath])
         .exit(2)
         .it('should fail trying to extend an invalid relative ruleset', ctx => {
           expect(ctx.stdout).toContain("should have required property 'given'");
@@ -93,7 +96,7 @@ describe('lint', () => {
           });
         })
         .stdout()
-        .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset-master.yaml'])
+        .command(['lint', validCustomOas3SpecPath, '-r', 'http://foo.local/ruleset-master.yaml'])
         .it('given remote nested ruleset should resolve', ctx => {
           expect(ctx.stdout).toContain('No errors or warnings found!');
         });
@@ -102,7 +105,7 @@ describe('lint', () => {
     describe('when multiple ruleset options provided', () => {
       test
         .stdout()
-        .command(['lint', validSpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
+        .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
         .exit(2)
         .it('given one is valid other is not, outputs "invalid ruleset" error', ctx => {
           expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
@@ -115,7 +118,7 @@ describe('lint', () => {
 
       test
         .stdout()
-        .command(['lint', validSpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
+        .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
         .exit(2)
         .it('given one is valid other is not, reads both', ctx => {
           expect(ctx.stdout).toContain(`Reading ruleset ${invalidRulesetPath}`);
@@ -126,13 +129,13 @@ describe('lint', () => {
     describe('when single ruleset option provided', () => {
       test
         .stdout()
-        .command(['lint', validSpecPath, '-r', 'non-existent-path'])
+        .command(['lint', validOas3SpecPath, '-r', 'non-existent-path'])
         .exit(2)
         .it('outputs "does not exist" error');
 
       test
         .stdout()
-        .command(['lint', validSpecPath, '-r', invalidRulesetPath])
+        .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath])
         .exit(2)
         .it('outputs "invalid ruleset" error', ctx => {
           expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
@@ -145,14 +148,14 @@ describe('lint', () => {
 
       test
         .stdout()
-        .command(['lint', validCustomSpecPath, '-r', validRulesetPath])
+        .command(['lint', validCustomOas3SpecPath, '-r', validRulesetPath])
         .it('outputs no issues', ctx => {
           expect(ctx.stdout).toContain('No errors or warnings found!');
         });
 
       test
         .stdout()
-        .command(['lint', validSpecPath, '-r', validRulesetPath])
+        .command(['lint', validOas3SpecPath, '-r', validRulesetPath])
         .it('outputs warnings in default format', ctx => {
           expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
           expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
@@ -167,9 +170,38 @@ describe('lint', () => {
           })
         )
         .stdout()
-        .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset.yaml'])
+        .command(['lint', validCustomOas3SpecPath, '-r', 'http://foo.local/ruleset.yaml'])
         .it('given valid remote ruleset file, outputs no issues', ctx => {
           expect(ctx.stdout).toContain('No errors or warnings found!');
+        });
+    });
+
+    describe('when a standard oas3 ruleset provided through option', () => {
+      test
+        .stdout()
+        .command(['lint', invalidOas3SpecPath, '-r', standardOas3RulesetPath])
+        .it('outputs warnings in default format', ctx => {
+          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
+          expect(ctx.stdout).toContain(
+            '1:5  warning  api-servers       OpenAPI `servers` must be present and non-empty array'
+          );
+          expect(ctx.stdout).toContain('3:6  warning  info-contact      Info object should contain `contact` object');
+          expect(ctx.stdout).toContain(
+            '3:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string'
+          );
+          expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
+        });
+
+      test
+        .stdout()
+        .command(['lint', oas2PetstoreSpecPath, '-r', standardOas2RulesetPath])
+        .it('outputs warnings in default format', ctx => {
+          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
+          expect(ctx.stdout).toContain(
+            '46:24  warning  operation-description   Operation `description` must be present and non-empty string'
+          );
+          expect(ctx.stdout).toContain('22 problems (0 errors, 22 warnings, 0 infos)');
+          expect(ctx.stdout).not.toContain('OpenAPI 2.x detected');
         });
     });
   });
@@ -177,7 +209,7 @@ describe('lint', () => {
   describe('when loading specification files from web', () => {
     test
       .nock('http://foo.local', api =>
-        api.get('/openapi').replyWithFile(200, validSpecPath, {
+        api.get('/openapi').replyWithFile(200, validOas3SpecPath, {
           'Content-Type': 'application/yaml',
         })
       )
@@ -196,7 +228,7 @@ describe('lint', () => {
 
     test
       .nock('http://foo.local', api =>
-        api.get('/openapi').replyWithFile(200, invalidSpecPath, {
+        api.get('/openapi').replyWithFile(200, invalidOas3SpecPath, {
           'Content-Type': 'application/yaml',
         })
       )
@@ -210,7 +242,7 @@ describe('lint', () => {
   describe('when using config file', () => {
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-c', validConfigPath])
+      .command(['lint', invalidOas3SpecPath, '-c', validConfigPath])
       .it('outputs warnings in json format', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
         expect(ctx.stdout).toContain('"info.description is not truthy"');
@@ -219,7 +251,7 @@ describe('lint', () => {
 
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-c', outputConfigPath])
+      .command(['lint', invalidOas3SpecPath, '-c', outputConfigPath])
       .it('saves results to a file', () => {
         expect(fs.writeFile).toHaveBeenCalledWith(
           'results.json',
@@ -231,14 +263,14 @@ describe('lint', () => {
 
     test
       .stdout()
-      .command(['lint', validSpecPath, '-c', validRulesetConfigPath])
+      .command(['lint', validOas3SpecPath, '-c', validRulesetConfigPath])
       .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
         expect(ctx.stdout).toContain(`5:10  warning  info-matches-stoplight  Info must contain Stoplight`);
       });
 
     test
       .stdout()
-      .command(['lint', validSpecPath, '-c', invalidRulesetConfigPath])
+      .command(['lint', validOas3SpecPath, '-c', invalidRulesetConfigPath])
       .exit(2)
       .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
         expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
@@ -248,7 +280,7 @@ describe('lint', () => {
   describe('when using config file and command args', () => {
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-c', validConfigPath, '-m', '1'])
+      .command(['lint', invalidOas3SpecPath, '-c', validConfigPath, '-m', '1'])
       .it('given maxResults set to 1 outputs warnings in json format', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
         expect(ctx.stdout).not.toContain('"info.description is not truthy"');
@@ -259,7 +291,7 @@ describe('lint', () => {
   describe('when not using config nor default config file', () => {
     test
       .stdout()
-      .command(['lint', invalidSpecPath])
+      .command(['lint', invalidOas3SpecPath])
       .it('outputs warnings in default format', ctx => {
         expect(ctx.stdout).toContain('3:6  warning  info-contact      Info object should contain `contact` object');
       });
@@ -275,7 +307,7 @@ describe('lint', () => {
     });
     test
       .stdout()
-      .command(['lint', invalidSpecPath])
+      .command(['lint', invalidOas3SpecPath])
       .it('outputs data in format from default config file', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
       });

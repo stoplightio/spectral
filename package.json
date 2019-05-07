@@ -39,7 +39,7 @@
     "node": ">=8.3.0"
   },
   "scripts": {
-    "build": "sl-scripts build && node ./scripts/prepare-cli",
+    "build": "sl-scripts build && node ./scripts/prepare-cli && yarn build.rulesets",
     "build.rulesets": "ts-node scripts/generate-rulesets.ts",
     "build.binary": "yarn build && yarn build.manifest && cp yarn.lock dist && cd dist && yarn && pkg . --out-path ./bin",
     "build.docs": "sl-scripts build:typedoc",

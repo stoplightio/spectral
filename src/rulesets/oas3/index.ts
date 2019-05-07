@@ -1,19 +1,19 @@
-const merge = require('lodash/merge');
-
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleFunction, RuleType } from '../../types';
+import merge = require('lodash/merge');
+import { RuleCollection, RuleFunction, RuleType } from '../../types';
 import { commonOasRules } from '../oas';
 import * as schema from './schemas/main.json';
 
 export { commonOasFunctions as oas3Functions } from '../oas';
 
 export const oas3Rules = () => {
-  return merge(commonOasRules(), {
+  return merge<RuleCollection, RuleCollection>(commonOasRules(), {
     // specification validation
     'oas3-schema': {
       summary: 'Validate structure of OpenAPIv3 specification.',
       type: RuleType.VALIDATION,
       severity: DiagnosticSeverity.Error,
+      given: '$',
       then: {
         function: RuleFunction.SCHEMA,
         functionOptions: {

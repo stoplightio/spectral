@@ -315,6 +315,7 @@ rules:
     summary: Validate structure of OpenAPIv2 specification.
     type: validation
     severity: 0
+    given: $
     then:
       function: schema
       functionOptions:
