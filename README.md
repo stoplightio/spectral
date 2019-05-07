@@ -60,6 +60,12 @@ Now, `spectral` command will be accessible in your terminal.
 
 Head over to [releases](https://github.com/stoplightio/spectral/releases) for the latest binaries.
 
+
+### Docker
+```bash
+docker run --rm -it stoplight/spectral lint "${URL}"`
+```
+
 ## Usage
 
 ### CLI
@@ -94,6 +100,15 @@ This example uses the OpenAPI v3 rules to lint a document.
 ```javascript
 const { Spectral } = require('@stoplight/spectral');
 const { oas3Functions, oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
+// for YAML
+const { parseWithPointers } = require("@stoplight/yaml");
+const myOAS = parseWithPointers(`
+responses:
+  '200':
+    description: ''
+    schema:
+      $ref: '#/definitions/error-response'
+`)
 
 // an OASv3 document
 const myOAS = {
