@@ -2,4 +2,4 @@
 lint:
   encoding: utf8
   format: json
-  max: 1
+  maxResults: 1

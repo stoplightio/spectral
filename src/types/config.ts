@@ -13,7 +13,7 @@ export interface ILintConfig {
   maxResults?: number;
   output?: string;
   ruleset?: string[];
-  skip?: string[];
+  skipRule?: string[];
   verbose: boolean;
 }
 

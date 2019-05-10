@@ -45,7 +45,7 @@ linting ./openapi.yaml
       char: 'o',
       description: 'output to a file instead of stdout',
     }),
-    max: flagHelpers.integer({
+    'max-results': flagHelpers.integer({
       description: '[default: all] maximum results to show',
     }),
     // @deprecated in 2.2, remove in 3.0
@@ -58,9 +58,9 @@ linting ./openapi.yaml
       description: 'path to a ruleset file (supports remote files)',
       multiple: true,
     }),
-    skip: flagHelpers.string({
+    'skip-rule': flagHelpers.string({
       char: 's',
-      description: 'skip rules',
+      description: 'ignore certain rules if they are causing trouble',
       multiple: true,
     }),
     verbose: flagHelpers.boolean({
@@ -110,14 +110,14 @@ linting ./openapi.yaml
 }
 
 async function lint(name: string, flags: any, command: Lint, rules?: RuleCollection) {
-  command.log(`Linting ${name}`);
+  if (flags.verbose) {
+    command.log(`Linting ${name}`);
+  }
   const spec: IParserResult = await readParsable(name, flags.encoding);
-
   const spectral = new Spectral();
   if (rules !== undefined) {
-    const numRules = new Array(rules).length;
     if (flags.verbose) {
-      command.log(`Found ${numRules} rules`);
+      command.log(`Found ${Object.keys(rules).length} rules`);
     }
   } else {
     if (flags.verbose) {
@@ -134,11 +134,11 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     }
   }
 
-  if (flags.skip) {
+  if (flags.skipRule) {
     rules = skipRules({ ...rules }, flags, command);
   }
   if (!rules) {
-    throw new Error('No rules provided, and document type does not have any default rules, so lint has nothing to do.');
+    throw new Error('No rules provided, and document type does not have any default rules, so lint has nothing to do');
   }
 
   spectral.addRules(rules);
@@ -175,7 +175,7 @@ const skipRules = (rules: any, flags: any, command: Lint): any => {
   const skippedRules: string[] = [];
   const invalidRules: string[] = [];
 
-  for (const rule of flags.skip) {
+  for (const rule of flags.skipRule) {
     if (rule in rules) {
       delete rules[rule];
       skippedRules.push(rule);
@@ -193,9 +193,8 @@ const skipRules = (rules: any, flags: any, command: Lint): any => {
 };
 
 async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
-  const max = flags.maxResults > 0 ? flags.maxResults : flags.max;
-  if (max) {
-    results = results.slice(0, max);
+  if (flags.maxResults) {
+    results = results.slice(0, flags.maxResults);
   }
   return {
     json: () => json(results),
@@ -219,10 +218,10 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        max: flags.max,
+        maxResults: flags['max-results'],
         verbose: flags.verbose,
         ruleset: flags.ruleset,
-        skip: flags.skip,
+        skipRule: flags['skip-rule'],
       },
       isNil
     ),

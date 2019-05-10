@@ -61,20 +61,20 @@ describe('lint', () => {
           });
       });
 
-      describe('and --skip=info-contact is set', () => {
+      describe('and --skip-rule=info-contact is set', () => {
         test
           .stdout()
-          .command([...args, '--skip', 'info-contact'])
+          .command([...args, '--skip-rule', 'info-contact'])
           .it('output other warnings but not info-contact', ctx => {
             expect(ctx.stdout).toContain('OpenAPI `servers` must be present and non-empty array');
             expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
           });
 
-        describe('and --skip=info-contact --skip=api-servers is set', () => {
+        describe('and --skip-rule=info-contact --skip-rule=api-servers is set', () => {
           test
             .stdout()
-            .command([...args, '--skip', 'info-contact', '--skip', 'api-servers'])
-            .it('outputs neither info-contact or ', ctx => {
+            .command([...args, '--skip-rule', 'info-contact', '--skip-rule', 'api-servers'])
+            .it('outputs neither info-contact or api-servers', ctx => {
               expect(ctx.stdout).not.toContain('OpenAPI `servers` must be present and non-empty array');
               expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
             });
@@ -186,7 +186,6 @@ describe('lint', () => {
         .stdout()
         .command(['lint', validSpecPath, '-r', validRulesetPath])
         .it('outputs warnings in default format', ctx => {
-          expect(ctx.stdout).toContain('Found 1 rules');
           expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
           expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
           expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
@@ -280,8 +279,8 @@ describe('lint', () => {
   describe('when using config file and command args', () => {
     test
       .stdout()
-      .command(['lint', invalidSpecPath, '-c', validConfigPath, '--max', '1'])
-      .it('setting --max to 1 will override config value of 5', ctx => {
+      .command(['lint', invalidSpecPath, '-c', validConfigPath, '--max-results', '1'])
+      .it('setting --max-results to 1 will override config value of 5', ctx => {
         expect(ctx.stdout).toContain('"info.contact is not truthy"');
         expect(ctx.stdout).not.toContain('"info.description is not truthy"');
         expect(ctx.stdout).not.toContain('"servers does not exist"');
