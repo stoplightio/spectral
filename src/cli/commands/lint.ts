@@ -51,7 +51,7 @@ linting ./openapi.yaml
     // @deprecated in 2.2, remove in 3.0
     maxResults: flagHelpers.integer({
       char: 'm',
-      description: '[default: all] maximum results to show',
+      description: 'deprecated: use --max-results instead',
     }),
     ruleset: flagHelpers.string({
       char: 'r',
@@ -218,7 +218,7 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        maxResults: flags['max-results'],
+        maxResults: flags.maxResults > 0 ? flags.maxResults : flags['max-results'],
         verbose: flags.verbose,
         ruleset: flags.ruleset,
         skipRule: flags['skip-rule'],
