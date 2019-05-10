@@ -123,13 +123,13 @@ describe('spectral', () => {
     expect(
       isParsedResult({
         parsed: undefined,
-      })
+      }),
     ).toBe(false);
 
     expect(
       isParsedResult({
         parsed: [],
-      })
+      }),
     ).toBe(false);
 
     expect(
@@ -137,7 +137,7 @@ describe('spectral', () => {
         parsed: {
           data: {},
         },
-      })
+      }),
     ).toBe(false);
 
     const obj: IParsedResult = {

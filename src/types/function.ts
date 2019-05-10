@@ -4,7 +4,7 @@ export type IFunction<O = any> = (
   targetValue: any,
   options: O,
   paths: IFunctionPaths,
-  otherValues: IFunctionValues
+  otherValues: IFunctionValues,
 ) => void | IFunctionResult[];
 
 export interface IFunctionPaths {

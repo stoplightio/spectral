@@ -12,7 +12,7 @@ function runEnum(targetVal: any, values: any[]) {
     {
       given: [],
       original: '',
-    }
+    },
   );
 }
 

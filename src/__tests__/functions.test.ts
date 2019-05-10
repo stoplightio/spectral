@@ -29,8 +29,8 @@ describe('functions', () => {
               title: 'Swagger Petstore',
               termsOfService: 'http://swagger.io/terms/',
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(1);
     });
 
@@ -52,8 +52,8 @@ describe('functions', () => {
               title: 'Swagger Petstore',
               termsOfService: 'http://swagger.io/terms/',
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(1);
     });
 
@@ -75,8 +75,8 @@ describe('functions', () => {
               title: 'Swagger Petstore',
               termsOfService: 'http://swagger.io/terms/',
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(0);
     });
   });
@@ -100,8 +100,8 @@ describe('functions', () => {
             info: {
               termsOfService: 'http://swagger.io/terms/',
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(1);
     });
 
@@ -129,8 +129,8 @@ describe('functions', () => {
                 test: 'something',
               },
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(1);
     });
 
@@ -151,8 +151,8 @@ describe('functions', () => {
             info: {
               termsOfService: 'http://swagger.io/terms/',
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(0);
     });
 
@@ -180,8 +180,8 @@ describe('functions', () => {
                 test: 'something',
               },
             },
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(0);
     });
   });
@@ -225,8 +225,8 @@ describe('functions', () => {
           },
           {
             vals,
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(4);
     });
 
@@ -249,8 +249,8 @@ describe('functions', () => {
           },
           {
             vals,
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(4);
     });
 
@@ -267,8 +267,8 @@ describe('functions', () => {
           },
           {
             vals,
-          }
-        )
+          },
+        ),
       ).resolves.toHaveLength(0);
     });
   });
