@@ -89,7 +89,7 @@ describe('lint', () => {
                 'results.json',
                 // there are more errors listed
                 expect.stringContaining('Info object should contain `contact` object'),
-                expect.any(Function) // callback, util.promisify handles it for us
+                expect.any(Function), // callback, util.promisify handles it for us
               );
             });
         });
@@ -141,7 +141,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
           expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
           expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
           );
         });
 
@@ -171,7 +171,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
           expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
           expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
           );
         });
 
@@ -195,7 +195,7 @@ describe('lint', () => {
         .nock('http://foo.local', api =>
           api.get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
             'Content-Type': 'application/yaml',
-          })
+          }),
         )
         .stdout()
         .command(['lint', validCustomSpecPath, '-r', 'http://foo.local/ruleset.yaml'])
@@ -210,7 +210,7 @@ describe('lint', () => {
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, validSpecPath, {
           'Content-Type': 'application/yaml',
-        })
+        }),
       )
       .stdout()
       .command(['lint', 'http://foo.local/openapi'])
@@ -229,7 +229,7 @@ describe('lint', () => {
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, invalidSpecPath, {
           'Content-Type': 'application/yaml',
-        })
+        }),
       )
       .stdout()
       .command(['lint', 'http://foo.local/openapi'])
@@ -256,7 +256,7 @@ describe('lint', () => {
           'results.json',
           // there are more errors listed
           expect.stringContaining('Info object should contain `contact` object'),
-          expect.any(Function) // callback, util.promisify handles it for us
+          expect.any(Function), // callback, util.promisify handles it for us
         );
       });
 

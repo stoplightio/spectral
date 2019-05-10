@@ -15,7 +15,7 @@ describe('Path', () => {
 
   it('should resolve http absolute', () => {
     expect(resolvePath('http://www.example.com/a/b.json', 'http://www.acme.com/b.json')).toEqual(
-      'http://www.acme.com/b.json'
+      'http://www.acme.com/b.json',
     );
   });
 });

@@ -29,7 +29,7 @@ async function readRuleset(command: Lint, file: string): Promise<RuleCollection>
     extendedRules = await blendRuleCollections(
       extendz.map(extend => {
         return readRuleset(command, resolvePath(file, extend));
-      })
+      }),
     );
   }
 

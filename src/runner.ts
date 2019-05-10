@@ -15,7 +15,7 @@ export const runRules = (
   parsedResult: IParsedResult,
   rules: RunRuleCollection,
   functions: FunctionCollection,
-  opts: IRunOpts
+  opts: IRunOpts,
 ): IRuleResult[] => {
   let results: IRuleResult[] = [];
 
@@ -43,7 +43,7 @@ const runRule = (
   parsedResult: IParsedResult,
   rule: IRunRule,
   functions: FunctionCollection,
-  opts: IRunOpts
+  opts: IRunOpts,
 ): IRuleResult[] => {
   const { parsed } = parsedResult;
   const { data: target } = parsed;

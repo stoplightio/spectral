@@ -185,7 +185,7 @@ responses:: !!foo
           },
           severity: 0,
         },
-      ])
+      ]),
     );
   });
 
