@@ -116,7 +116,9 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   const spectral = new Spectral();
   if (rules !== undefined) {
     const numRules = new Array(rules).length;
-    command.log(`Found ${numRules} rules`);
+    if (flags.verbose) {
+      command.log(`Found ${numRules} rules`);
+    }
   } else {
     if (flags.verbose) {
       command.log('No rules loaded, attempting to detect document type');
@@ -133,7 +135,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   }
 
   if (flags.skip) {
-    rules = skipRules(rules, flags, command);
+    rules = skipRules({ ...rules }, flags, command);
   }
   if (!rules) {
     throw new Error('No rules provided, and document type does not have any default rules, so lint has nothing to do.');
