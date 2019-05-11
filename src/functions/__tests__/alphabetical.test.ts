@@ -18,7 +18,7 @@ describe('alphabetical', () => {
       runAlphabetical({
         c: 2,
         b: 'xz',
-      })
+      }),
     ).toMatchInlineSnapshot(`
 Array [
   Object {

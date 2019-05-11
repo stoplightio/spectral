@@ -203,7 +203,7 @@ describe('reader', () => {
       (ruleset.extends || []).forEach(extend =>
         when(resolvePathMock)
           .calledWith(key, extend)
-          .mockReturnValue(extend)
+          .mockReturnValue(extend),
       );
 
       when(readParsableMock)

@@ -44,7 +44,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
           e.dataPath
             .split('/')
             .slice(1)
-            .map(frag => decodePointerFragment(frag))
+            .map(frag => decodePointerFragment(frag)),
         ),
         message: e.message ? e.message : '',
       });
