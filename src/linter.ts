@@ -1,7 +1,6 @@
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import * as jp from 'jsonpath';
-import get = require('lodash/get');
-import has = require('lodash/has');
+import { get, has } from 'lodash';
 
 import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 

@@ -1,4 +1,4 @@
-import merge = require('lodash/merge');
+import { merge } from 'lodash';
 import Lint from '../cli/commands/lint';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';

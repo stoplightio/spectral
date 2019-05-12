@@ -1,7 +1,7 @@
-import AJV = require('ajv');
+const AJV = require('ajv');
 import { ErrorObject } from 'ajv';
-import ruleSchema = require('../meta/rule.schema.json');
-import rulesetSchema = require('../meta/ruleset.schema.json');
+const ruleSchema = require('../meta/rule.schema.json');
+const rulesetSchema = require('../meta/ruleset.schema.json');
 import { IRuleset } from '../types/ruleset';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
