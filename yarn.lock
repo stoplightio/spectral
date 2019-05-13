@@ -722,10 +722,20 @@
     lodash "4.x.x"
     urijs "1.x.x"
 
-"@stoplight/json@1.9.x", "@stoplight/json@1.x.x":
+"@stoplight/json@1.9.x":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-1.9.0.tgz#904887e8aea1eb8657b12b2a7efc259562b765fd"
   integrity sha512-5DwyrS+B2lGKVeDyNBaq1iTL2ovXaNVgh98r/jwO3z4A2d/xLffmPwnjgUByga+UBUbFMCFXdM3nj134V3Mt+w==
+  dependencies:
+    "@stoplight/fast-safe-stringify" "2.1.2"
+    "@stoplight/types" "4.0.x"
+    jsonc-parser "2.1.0"
+    lodash "4.x.x"
+
+"@stoplight/json@2.x.x":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.0.0.tgz#89f2f79feb2323d9dc1e7b2c172d9628226d2125"
+  integrity sha512-9NOtUI+Yf2tsGzJY4iwwriyiR0dzJpbYYLxunPlVaA+KzrE7Kj3ws3ht6GSgkm1tQFElkxr7ttFKG5kv3OIZ9w==
   dependencies:
     "@stoplight/fast-safe-stringify" "2.1.2"
     "@stoplight/types" "4.0.x"
