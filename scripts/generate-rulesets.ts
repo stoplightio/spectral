@@ -10,7 +10,7 @@ import { oas3Rules } from '../src/rulesets/oas3';
   { name: 'oas2', rules: oas2Rules() },
   { name: 'oas3', rules: oas3Rules() },
 ].forEach(({ name, rules }) => {
-  const path = resolve(process.cwd(), 'src', 'rulesets', name, `${name}.ruleset.yaml`);
+  const path = resolve(process.cwd(), 'dist', 'rulesets', name, `${name}.ruleset.yaml`);
   console.log(`Generating ruleset file: ${path}`);
   writeFileSync(
     path,
