@@ -116,7 +116,7 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
 
   command.log('Setting up rules...');
   if (customRules) {
-    command.log('Applying custom rules. Automatic rule detection is off.');
+    command.log('Applying rules. Automatic rule detection is off.');
     spectral.addRules(customRules);
   } else if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
