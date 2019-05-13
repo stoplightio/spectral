@@ -28,6 +28,10 @@ linting ./openapi.yaml
 
   public static flags = {
     help: flagHelpers.help({ char: 'h' }),
+    config: flagHelpers.string({
+      char: 'c',
+      description: 'path to a config file',
+    }),
     encoding: flagHelpers.string({
       char: 'e',
       description: 'text encoding to use',
@@ -41,22 +45,27 @@ linting ./openapi.yaml
       char: 'o',
       description: 'output to a file instead of stdout',
     }),
-    maxResults: flagHelpers.integer({
-      char: 'm',
+    'max-results': flagHelpers.integer({
       description: '[default: all] maximum results to show',
     }),
-    verbose: flagHelpers.boolean({
-      char: 'v',
-      description: 'increase verbosity',
-    }),
-    config: flagHelpers.string({
-      char: 'c',
-      description: 'path to a config file',
+    // @deprecated in 2.2, remove in 3.0
+    maxResults: flagHelpers.integer({
+      char: 'm',
+      description: 'deprecated: use --max-results instead',
     }),
     ruleset: flagHelpers.string({
       char: 'r',
       description: 'path to a ruleset file (supports remote files)',
       multiple: true,
+    }),
+    'skip-rule': flagHelpers.string({
+      char: 's',
+      description: 'ignore certain rules if they are causing trouble',
+      multiple: true,
+    }),
+    verbose: flagHelpers.boolean({
+      char: 'v',
+      description: 'increase verbosity',
     }),
   };
 
@@ -100,10 +109,11 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: any, command: Lint, customRules?: RuleCollection) {
-  command.log(`Linting ${name}`);
+async function lint(name: string, flags: any, command: Lint, rules?: RuleCollection) {
+  if (flags.verbose) {
+    command.log(`Linting ${name}`);
+  }
   const spec: IParserResult = await readParsable(name, flags.encoding);
-
   const spectral = new Spectral();
   command.log('Setting up functions...');
   if (parseInt(spec.data.swagger) === 2) {
@@ -115,9 +125,12 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
   }
 
   command.log('Setting up rules...');
-  if (customRules) {
+  if (rules) {
+    if (flags.verbose) {
+      command.log(`Found ${Object.keys(rules).length} rules`);
+    }
     command.log('Applying rules. Automatic rule detection is off.');
-    spectral.addRules(customRules);
+    spectral.addRules(rules);
   } else if (parseInt(spec.data.swagger) === 2) {
     command.log('OpenAPI 2.0 (Swagger) detected');
     spectral.addRules(oas2Rules());
@@ -125,8 +138,26 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
     command.log('OpenAPI 3.x detected');
     spectral.addRules(oas3Rules());
   } else {
-    throw new Error('Input document specification type could not be determined');
+    if (flags.verbose) {
+      command.log('No rules loaded, attempting to detect document type');
+    }
+    if (parseInt(spec.data.swagger) === 2) {
+      command.log('OpenAPI 2.0 (Swagger) detected');
+      rules = oas2Rules();
+    } else if (parseInt(spec.data.openapi) === 3) {
+      command.log('OpenAPI 3.x detected');
+      rules = oas3Rules();
+    }
   }
+
+  if (flags.skipRule) {
+    rules = skipRules({ ...rules }, flags, command);
+  }
+  if (!rules) {
+    throw new Error('No rules provided, and document type does not have any default rules, so lint has nothing to do');
+  }
+
+  spectral.addRules(rules);
 
   let results = [];
   try {
@@ -156,7 +187,28 @@ async function lint(name: string, flags: any, command: Lint, customRules?: RuleC
   }
 }
 
-export async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
+const skipRules = (rules: any, flags: any, command: Lint): any => {
+  const skippedRules: string[] = [];
+  const invalidRules: string[] = [];
+
+  for (const rule of flags.skipRule) {
+    if (rule in rules) {
+      delete rules[rule];
+      skippedRules.push(rule);
+    } else {
+      invalidRules.push(rule);
+    }
+  }
+  if (invalidRules.length !== 0) {
+    command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
+  }
+  if (skippedRules.length !== 0 && flags.verbose) {
+    command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
+  }
+  return rules;
+};
+
+async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
   if (flags.maxResults) {
     results = results.slice(0, flags.maxResults);
   }
@@ -182,9 +234,10 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        maxResults: flags.maxResults,
+        maxResults: flags.maxResults > 0 ? flags.maxResults : flags['max-results'],
         verbose: flags.verbose,
         ruleset: flags.ruleset,
+        skipRule: flags['skip-rule'],
       },
       isNil
     ),

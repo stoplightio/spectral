@@ -12,8 +12,9 @@ export interface ILintConfig {
   format: ConfigFormat;
   maxResults?: number;
   output?: string;
-  verbose: boolean;
   ruleset?: string[];
+  skipRule?: string[];
+  verbose: boolean;
 }
 
 export interface IConfig {

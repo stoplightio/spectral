@@ -490,9 +490,9 @@
     tslib "^1.9.3"
 
 "@oclif/config@^1.12.11":
-  version "1.12.12"
-  resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.12.12.tgz#09e6628fe454214bbd7630ae18d2bee0db6bd533"
-  integrity sha512-0vlX5VYvOfF9QbkCqMyPSzH9GMp6at4Mbqn8CxCskxhKvNZoPD5ocda2ku0zEnoqxGAQ4VfQP7NCqJthuiStfg==
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.13.0.tgz#fc2bd82a9cb30a73faf7d2aa5ae937c719492bd1"
+  integrity sha512-ttb4l85q7SBx+WlUJY4A9eXLgv4i7hGDNGaXnY9fDKrYD7PBMwNOQ3Ssn2YT2yARAjyOxVE/5LfcwhQGq4kzqg==
   dependencies:
     debug "^4.1.1"
     tslib "^1.9.3"
@@ -913,9 +913,9 @@
   integrity sha512-v7qlPA0VpKUlEdhghbDqRoKMxFB3h3Ch688TApBJ6v+XLDdvWCGLJIYiPKGZnS6MAOie+IorCfNYVHOPIHSWwQ==
 
 "@types/lodash@*", "@types/lodash@4.x.x", "@types/lodash@^4.14.110":
-  version "4.14.123"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.123.tgz#39be5d211478c8dd3bdae98ee75bb7efe4abfe4d"
-  integrity sha512-pQvPkc4Nltyx7G1Ww45OjVqUsJP4UsZm+GWJpigXgkikZqJgRm4c48g027o6tdgubWHwFRF15iFd+Y4Pmqv6+Q==
+  version "4.14.126"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.126.tgz#47cff3ea014aa083194f8ca3ec351136c3786613"
+  integrity sha512-HxQ+wQnBtnL0LszZrVdMqWIlzZNyKuMLUb6swQ3mo6ysPqpAu7gfnapCQIi0B+Mrf0fNLZh8AWgJs2njejVasg==
 
 "@types/marked@^0.4.0":
   version "0.4.2"
@@ -939,10 +939,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@11.13.x":
-  version "11.13.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.8.tgz#e5d71173c95533be9842b2c798978f095f912aab"
-  integrity sha512-szA3x/3miL90ZJxUCzx9haNbK5/zmPieGraZEe4WI+3srN0eGLiT22NXeMHmyhNEopn+IrxqMc7wdVwvPl8meg==
+"@types/node@*", "@types/node@12.0.x":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.0.tgz#d11813b9c0ff8aaca29f04cbc12817f4c7d656e5"
+  integrity sha512-Jrb/x3HT4PTJp6a4avhmJCDEVrPdqLfl3e8GGMbpkGGdwAV5UGlIs4vVEfsHHfylZVOKZWpOqmqFH8CbfOZ6kg==
 
 "@types/shelljs@^0.8.0":
   version "0.8.3"
@@ -8237,10 +8237,10 @@ tslint-config-prettier@1.15.x:
   resolved "https://registry.yarnpkg.com/tslint-config-prettier/-/tslint-config-prettier-1.15.0.tgz#76b9714399004ab6831fdcf76d89b73691c812cf"
   integrity sha512-06CgrHJxJmNYVgsmeMoa1KXzQRoOdvfkqnJth6XUkNeOz707qxN0WfxfhYwhL5kXHHbYJRby2bqAPKwThlZPhw==
 
-tslint-config-stoplight@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/tslint-config-stoplight/-/tslint-config-stoplight-1.2.0.tgz#fe72ef0d1482eeea362c0b24b79d29345b06342b"
-  integrity sha512-OZSCV3ouxK3Tdlarv3bXylzB763ZEmf8PIrVzXvxJ4WQz3js0jl8KE35nwrnska2GQfOQ82cxLaukdKQa3Un4Q==
+tslint-config-stoplight@1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/tslint-config-stoplight/-/tslint-config-stoplight-1.3.0.tgz#1e03815b5a6da19e001257e2530d66892cc1bd4f"
+  integrity sha512-X7W/+o5pI5dEytNqpMmpEgmY0MUfDBx6BB+XeLXmsqjOoHYt39XP9v44VneY2TkN9VmYCxgVaGqHjCP64qu4qw==
   dependencies:
     prettier "1.14.x"
     tslint "5.11.x"
