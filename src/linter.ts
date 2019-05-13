@@ -12,7 +12,7 @@ export const lintNode = (
   then: IThen<string, any>,
   apply: IFunction,
   opts: IRunOpts,
-  parsedResult: IParsedResult
+  parsedResult: IParsedResult,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
@@ -82,7 +82,7 @@ export const lintNode = (
           original: node.value,
           given: node.value,
           resolved: opts.resolvedTarget,
-        }
+        },
       ) || [];
 
     const severity = rule.severity !== undefined ? rule.severity : DiagnosticSeverity.Warning;
@@ -111,7 +111,7 @@ export const lintNode = (
             },
           }),
         };
-      })
+      }),
     );
   }
 
@@ -122,7 +122,7 @@ export const lintNode = (
 export const whatShouldBeLinted = (
   path: JsonPath,
   originalValue: any,
-  rule: IRunRule
+  rule: IRunRule,
 ): { lint: boolean; value: any } => {
   const leaf = path[path.length - 1];
 

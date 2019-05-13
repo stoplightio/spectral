@@ -92,7 +92,7 @@ describe('lint', () => {
                 'results.json',
                 // there are more errors listed
                 expect.stringContaining('Info object should contain `contact` object'),
-                expect.any(Function) // callback, util.promisify handles it for us
+                expect.any(Function), // callback, util.promisify handles it for us
               );
             });
         });
@@ -144,7 +144,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
           expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
           expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
           );
         });
 
@@ -174,7 +174,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
           expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
           expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`
+            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
           );
         });
 
@@ -198,7 +198,7 @@ describe('lint', () => {
         .nock('http://foo.local', api =>
           api.get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
             'Content-Type': 'application/yaml',
-          })
+          }),
         )
         .stdout()
         .command(['lint', validCustomOas3SpecPath, '-r', 'http://foo.local/ruleset.yaml'])
@@ -214,11 +214,11 @@ describe('lint', () => {
         .it('outputs warnings in default format', ctx => {
           expect(ctx.stdout).toContain('Applying rules. Automatic rule detection is off.');
           expect(ctx.stdout).toContain(
-            '1:5  warning  api-servers       OpenAPI `servers` must be present and non-empty array'
+            '1:5  warning  api-servers       OpenAPI `servers` must be present and non-empty array',
           );
           expect(ctx.stdout).toContain('3:6  warning  info-contact      Info object should contain `contact` object');
           expect(ctx.stdout).toContain(
-            '3:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string'
+            '3:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string',
           );
           expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
         });
@@ -229,7 +229,7 @@ describe('lint', () => {
         .it('outputs warnings in default format', ctx => {
           expect(ctx.stdout).toContain('Applying rules. Automatic rule detection is off.');
           expect(ctx.stdout).toContain(
-            '46:24  warning  operation-description   Operation `description` must be present and non-empty string'
+            '46:24  warning  operation-description   Operation `description` must be present and non-empty string',
           );
           expect(ctx.stdout).toContain('22 problems (0 errors, 22 warnings, 0 infos)');
           expect(ctx.stdout).not.toContain('OpenAPI 2.x detected');
@@ -242,7 +242,7 @@ describe('lint', () => {
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, validOas3SpecPath, {
           'Content-Type': 'application/yaml',
-        })
+        }),
       )
       .stdout()
       .command(['lint', 'http://foo.local/openapi'])
@@ -261,7 +261,7 @@ describe('lint', () => {
       .nock('http://foo.local', api =>
         api.get('/openapi').replyWithFile(200, invalidOas3SpecPath, {
           'Content-Type': 'application/yaml',
-        })
+        }),
       )
       .stdout()
       .command(['lint', 'http://foo.local/openapi'])
@@ -288,7 +288,7 @@ describe('lint', () => {
           'results.json',
           // there are more errors listed
           expect.stringContaining('Info object should contain `contact` object'),
-          expect.any(Function) // callback, util.promisify handles it for us
+          expect.any(Function), // callback, util.promisify handles it for us
         );
       });
 

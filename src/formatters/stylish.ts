@@ -102,7 +102,7 @@ export const stylish = (results: IRuleResult[]): string => {
     })
       .split('\n')
       .map((el: string) =>
-        el.replace(/(\d+)\s+(\d+)/u, (m: string, p1: string, p2: string) => chalk.dim(`${p1}:${p2}`))
+        el.replace(/(\d+)\s+(\d+)/u, (m: string, p1: string, p2: string) => chalk.dim(`${p1}:${p2}`)),
       )
       .join('\n')}\n\n`;
   });
@@ -125,7 +125,7 @@ export const stylish = (results: IRuleResult[]): string => {
         infoCount,
         pluralize(' info', infoCount),
         ')\n',
-      ].join('')
+      ].join(''),
     );
   }
 

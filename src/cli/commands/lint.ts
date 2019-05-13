@@ -232,7 +232,7 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         ruleset: flags.ruleset,
         skipRule: flags['skip-rule'],
       },
-      isNil
+      isNil,
     ),
   };
 }
