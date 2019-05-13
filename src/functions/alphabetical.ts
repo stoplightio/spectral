@@ -1,4 +1,4 @@
-import isEqual = require('lodash/isEqual');
+import { isEqual } from 'lodash';
 
 import { IAlphaRuleOptions, IFunction, IFunctionResult } from '../types';
 

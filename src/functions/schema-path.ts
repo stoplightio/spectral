@@ -10,7 +10,7 @@
 import { IFunction, ISchemaPathOptions } from '../types';
 import { schema } from './schema';
 
-import jp = require('jsonpath');
+const jp = require('jsonpath');
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
   if (!targetVal || typeof targetVal !== 'object') return [];
