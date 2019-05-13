@@ -59,7 +59,7 @@
     "@oclif/command": "^1.0",
     "@oclif/config": "^1.12.11",
     "@oclif/plugin-help": "^2.0",
-    "@stoplight/json": "1.x.x",
+    "@stoplight/json": "2.x.x",
     "@stoplight/json-ref-resolver": "1.x.x",
     "@stoplight/types": "4.1.x",
     "@stoplight/yaml": "2.x.x",
