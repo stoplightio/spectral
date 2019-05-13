@@ -130,13 +130,6 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
       command.log(`Found ${Object.keys(rules).length} rules`);
     }
     command.log('Applying rules. Automatic rule detection is off.');
-    spectral.addRules(rules);
-  } else if (parseInt(spec.data.swagger) === 2) {
-    command.log('OpenAPI 2.0 (Swagger) detected');
-    spectral.addRules(oas2Rules());
-  } else if (parseInt(spec.data.openapi) === 3) {
-    command.log('OpenAPI 3.x detected');
-    spectral.addRules(oas3Rules());
   } else {
     if (flags.verbose) {
       command.log('No rules loaded, attempting to detect document type');

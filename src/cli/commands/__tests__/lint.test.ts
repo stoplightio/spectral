@@ -212,7 +212,7 @@ describe('lint', () => {
         .stdout()
         .command(['lint', invalidOas3SpecPath, '-r', standardOas3RulesetPath])
         .it('outputs warnings in default format', ctx => {
-          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
+          expect(ctx.stdout).toContain('Applying rules. Automatic rule detection is off.');
           expect(ctx.stdout).toContain(
             '1:5  warning  api-servers       OpenAPI `servers` must be present and non-empty array'
           );
@@ -227,7 +227,7 @@ describe('lint', () => {
         .stdout()
         .command(['lint', oas2PetstoreSpecPath, '-r', standardOas2RulesetPath])
         .it('outputs warnings in default format', ctx => {
-          expect(ctx.stdout).toContain('Applying custom rules. Automatic rule detection is off.');
+          expect(ctx.stdout).toContain('Applying rules. Automatic rule detection is off.');
           expect(ctx.stdout).toContain(
             '46:24  warning  operation-description   Operation `description` must be present and non-empty string'
           );
