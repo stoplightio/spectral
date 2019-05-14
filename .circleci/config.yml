@@ -1,11 +1,27 @@
-version: 2
+version: 2.1
 
-jobs:
-  test_node_8:
-    docker:
-      - image: circleci/node:8
+commands:
+  cached-dependencies:
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+  install-and-test:
+    description: >-
+      Install everything required to run the test suite, then run it.
     steps:
       - checkout
+      - cached-dependencies
       - run:
           name: Download cc-test-reporter
           command: |
@@ -22,12 +38,37 @@ jobs:
           command: |
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
 
+jobs:
+  test-node-latest:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - install-and-test
+
+  test-node-12:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - install-and-test
+
+  test-node-10:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - install-and-test
+
+  test-node-8:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - install-and-test
+
   release:
     docker:
       - image: circleci/node:8
     steps:
       - checkout
-      - run: yarn
+      - cached-dependencies
       - run: yarn build
       - run: yarn build.docs
       - run: yarn release
@@ -35,12 +76,15 @@ jobs:
 
 workflows:
   version: 2
-  test_and_release:
+  commit:
     jobs:
-      - test_node_8
+      - test-node-latest
+      - test-node-12
+      - test-node-10
+      - test-node-8
+  release:
+    jobs:
       - release:
           filters:
             branches:
               only: master
-          requires:
-            - test_node_8
