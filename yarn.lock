@@ -899,9 +899,9 @@
   integrity sha512-yALhelO3i0hqZwhjtcr6dYyaLoCHbAMshwtj6cGxTvHZAKXHsYGdff6E8EPw3xLKY0ELUTQ69Q1rQiJENnccMA==
 
 "@types/jest-when@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@types/jest-when/-/jest-when-2.4.0.tgz#72e9af54c7f333f629e58881c3d94accbae241a0"
-  integrity sha512-PeFOBKNRRBkBQjPfQIQy0xSqN2965Yej74+HoDQ8aMQvV9vaxE+8Y2vtrqN7Asz8cTZgPKpMiSLr5C/2qb0N8Q==
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@types/jest-when/-/jest-when-2.4.1.tgz#a382017a8410ad73c4274c27edbc890de97346e7"
+  integrity sha512-6t3Wu+sPv6GqKSrTfIh3csy0syDrwXni85dowkBWbvl6oBXoEpSX389yELKFnPN9MSTPLGBfXw1/XytBh3Yxlg==
   dependencies:
     "@types/jest" "*"
 
