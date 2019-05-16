@@ -3,15 +3,15 @@ import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 import { promisify } from 'util';
 import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
-import { oas2Functions } from '../../rulesets/oas2';
-import { oas3Functions } from '../../rulesets/oas3';
-import { readRulesets } from '../../rulesets/reader';
+import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
+import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
+import { readRulesFromRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
 import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
@@ -90,11 +90,9 @@ linting ./openapi.yaml
     let rules;
 
     if (ruleset) {
-      try {
-        rules = await readRulesets(this, ...ruleset);
-      } catch (ex) {
-        this.error(ex.message);
-      }
+      rules = await handleReaderError(this, async () => {
+        return readRulesFromRulesets(...ruleset);
+      });
     }
 
     if (args.source) {
@@ -105,6 +103,19 @@ linting ./openapi.yaml
       }
     } else {
       this.error('You must specify a document to lint');
+    }
+  }
+}
+
+async function handleReaderError(command: Lint, reader: Function) {
+  try {
+    return await reader();
+  } catch (ex) {
+    if (ex.messages) {
+      command.log(ex.messages[0]);
+      command.error(ex.messages[1]);
+    } else {
+      command.error(ex);
     }
   }
 }
@@ -137,10 +148,10 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     if (parseInt(spec.data.swagger) === 2) {
       command.log('OpenAPI 2.0 (Swagger) detected');
       console.log('DIR', process.cwd(), __dirname);
-      rules = await readRulesets(command, join(__dirname, '..', '..', 'rulesets', 'oas2', 'ruleset.json'));
+      rules = await handleReaderError(command, async () => await oas2Rules());
     } else if (parseInt(spec.data.openapi) === 3) {
       command.log('OpenAPI 3.x detected');
-      rules = await readRulesets(command, join(__dirname, '..', '..', 'rulesets', 'oas3', 'ruleset.json'));
+      rules = await handleReaderError(command, async () => await oas3Rules());
     }
   }
 

@@ -1,4 +1,6 @@
+import { resolve } from 'path';
 import { FunctionCollection } from '../../types';
+import { readRulesFromRulesets } from '../reader';
 
 export const operationPath =
   "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post'" +
@@ -14,4 +16,8 @@ export const commonOasFunctions = (): FunctionCollection => {
     oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
     oasOpParams: require('./functions/oasOpParams').oasOpParams,
   };
+};
+
+export const rules = async () => {
+  return readRulesFromRulesets(resolve(__dirname, 'ruleset.json'));
 };

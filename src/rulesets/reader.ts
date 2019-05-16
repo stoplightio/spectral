@@ -1,5 +1,4 @@
 import merge = require('lodash/merge');
-import Lint from '../cli/commands/lint';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
@@ -7,20 +6,33 @@ import { formatAjv } from './ajv';
 import { resolvePath } from './path';
 import { validateRuleset } from './validation';
 
-export async function readRulesets(command: Lint, ...files: string[]): Promise<RuleCollection> {
-  const rulesets = await Promise.all(files.map(file => readRuleset(command, file)));
+export async function readRulesFromRulesets(...files: string[]): Promise<RuleCollection> {
+  const rulesets = await Promise.all(files.map(file => readRulesFromRuleset(file)));
   return merge({}, ...rulesets);
 }
 
-async function readRuleset(command: Lint, file: string): Promise<RuleCollection> {
-  command.log(`Reading ruleset ${file}`);
+export type Logger = {
+  log: (message?: string | undefined, ...args: any[]) => void;
+  error: (
+    input: string | Error,
+    options?:
+      | {
+          code?: string | undefined;
+          exit?: number | undefined;
+        }
+      | undefined,
+  ) => never;
+};
+
+async function readRulesFromRuleset(file: string): Promise<RuleCollection> {
   const parsed = await readParsable(file, 'utf8');
   const { data: ruleset } = parsed;
   const errors = validateRuleset(ruleset);
 
   if (errors.length) {
-    command.log(formatAjv(errors));
-    command.error(`Provided ruleset '${file}' is not valid`, { exit: 1 });
+    throw {
+      messages: [formatAjv(errors), `Provided ruleset '${file}' is not valid`],
+    };
   }
 
   const extendz = (ruleset as IRulesetFile).extends;
@@ -28,7 +40,7 @@ async function readRuleset(command: Lint, file: string): Promise<RuleCollection>
   if (extendz && extendz.length) {
     extendedRules = await blendRuleCollections(
       extendz.map(extend => {
-        return readRuleset(command, resolvePath(file, extend));
+        return readRulesFromRuleset(resolvePath(file, extend));
       }),
     );
   }

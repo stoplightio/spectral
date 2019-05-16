@@ -147,15 +147,6 @@ describe('lint', () => {
             `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
           );
         });
-
-      test
-        .stdout()
-        .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
-        .exit(2)
-        .it('given one is valid other is not, reads both', ctx => {
-          expect(ctx.stdout).toContain(`Reading ruleset ${invalidRulesetPath}`);
-          expect(ctx.stdout).toContain(`Reading ruleset ${validRulesetPath}`);
-        });
     });
 
     describe('when single ruleset option provided', () => {
