@@ -61,7 +61,7 @@
     "@oclif/plugin-help": "^2.0",
     "@stoplight/json": "2.x.x",
     "@stoplight/json-ref-resolver": "1.x.x",
-    "@stoplight/types": "4.1.x",
+    "@stoplight/types": "5.0.x",
     "@stoplight/yaml": "2.x.x",
     "ajv": "6.x.x",
     "chalk": "^2.4.2",
