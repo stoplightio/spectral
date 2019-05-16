@@ -2,7 +2,7 @@ import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 
-import merge = require('lodash/merge');
+import { merge } from 'lodash';
 
 import { IParserResult } from '@stoplight/types';
 import { functions as defaultFunctions } from './functions';
