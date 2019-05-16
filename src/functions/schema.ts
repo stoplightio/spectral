@@ -6,6 +6,7 @@ const ajv = new AJV({
   meta: false,
   schemaId: 'auto',
   jsonPointers: true,
+  unknownFormats: 'ignore',
 });
 ajv.addMetaSchema(jsonSpecv4);
 // @ts-ignore
