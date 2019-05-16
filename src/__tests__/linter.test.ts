@@ -1,6 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 
-import { oas2Functions, oas2Rules } from '../rulesets/oas2';
+import { oas2Functions } from '../rulesets/oas2';
+import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
 import { Spectral } from '../spectral';
 
 const fnName = 'fake';
@@ -136,7 +137,8 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    spectral.addRules(oas2Rules());
+    // @ts-ignore
+    spectral.addRules(oas2Ruleset.rules);
     spectral.addFunctions(oas2Functions());
 
     const responses = `openapi: 2.0.0

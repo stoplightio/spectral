@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import * as ruleset from '../ruleset.json';
 
 describe('contact-properties', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'contact-properties': Object.assign(ruleset.rules['contact-properties'], {
       enabled: true,
     }),

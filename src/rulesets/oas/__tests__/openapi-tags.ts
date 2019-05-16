@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import * as ruleset from '../ruleset.json';
 
 describe('openapi-tags', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'openapi-tags': Object.assign(ruleset.rules['openapi-tags'], {
       enabled: true,
     }),

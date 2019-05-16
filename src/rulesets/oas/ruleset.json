@@ -1,0 +1,408 @@
+{
+  "rules": {
+    "operation-2xx-response": {
+      "summary": "Operation must have at least one `2xx` response.",
+      "type": "style",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "responses",
+        "function": "oasOp2xxResponse"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-formData-consume-check": {
+      "summary": "Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.",
+      "type": "validation",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "function": "oasOpFormDataConsumeCheck"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-operationId-unique": {
+      "summary": "Every operation must have a unique `operationId`.",
+      "type": "validation",
+      "severity": 0,
+      "given": "$",
+      "then": {
+        "function": "oasOpIdUnique"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-parameters": {
+      "summary": "Operation parameters are unique and non-repeating.",
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasOpParams"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "path-params": {
+      "summary": "Path parameters are correct and valid.",
+      "type": "validation",
+      "severity": 0,
+      "given": "$",
+      "then": {
+        "function": "oasPathParam"
+      },
+      "tags": [
+        "given"
+      ]
+    },
+    "contact-properties": {
+      "enabled": false,
+      "summary": "Contact object should have `name`, `url` and `email`.",
+      "type": "style",
+      "given": "$.info.contact",
+      "then": [
+        {
+          "field": "name",
+          "function": "truthy"
+        },
+        {
+          "field": "url",
+          "function": "truthy"
+        },
+        {
+          "field": "email",
+          "function": "truthy"
+        }
+      ],
+      "tags": [
+        "api"
+      ]
+    },
+    "example-value-or-externalValue": {
+      "enabled": false,
+      "summary": "Example should have either a `value` or `externalValue` field.",
+      "type": "style",
+      "given": "$..example",
+      "then": {
+        "function": "xor",
+        "functionOptions": {
+          "properties": [
+            "externalValue",
+            "value"
+          ]
+        }
+      }
+    },
+    "info-contact": {
+      "summary": "Info object should contain `contact` object.",
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "info-description": {
+      "summary": "OpenAPI object info `description` must be present and non-empty string.",
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "info-license": {
+      "enabled": false,
+      "summary": "OpenAPI object info `license` must be present and non-empty string.",
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.license",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "license-url": {
+      "enabled": false,
+      "summary": "License object should include `url`.",
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.license.url",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "no-eval-in-markdown": {
+      "enabled": false,
+      "summary": "Markdown descriptions should not contain `eval(`.",
+      "type": "style",
+      "given": "$..*",
+      "then": [
+        {
+          "field": "description",
+          "function": "pattern",
+          "functionOptions": {
+            "notMatch": "eval\\("
+          }
+        },
+        {
+          "field": "title",
+          "function": "pattern",
+          "functionOptions": {
+            "notMatch": "eval\\("
+          }
+        }
+      ]
+    },
+    "no-script-tags-in-markdown": {
+      "summary": "Markdown descriptions should not contain `<script>` tags.",
+      "type": "style",
+      "given": "$..*",
+      "then": [
+        {
+          "field": "description",
+          "function": "pattern",
+          "functionOptions": {
+            "notMatch": "<script"
+          }
+        },
+        {
+          "field": "title",
+          "function": "pattern",
+          "functionOptions": {
+            "notMatch": "<script"
+          }
+        }
+      ]
+    },
+    "only-local-references": {
+      "enabled": false,
+      "summary": "References should start with `#/`.",
+      "type": "style",
+      "given": "$..['$ref']",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "match": "^#\\/"
+        }
+      },
+      "tags": [
+        "references"
+      ]
+    },
+    "openapi-tags-alphabetical": {
+      "enabled": false,
+      "summary": "OpenAPI object should have alphabetical `tags`.",
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "tags",
+        "function": "alphabetical",
+        "functionOptions": {
+          "keyedBy": "name"
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "openapi-tags": {
+      "enabled": false,
+      "summary": "OpenAPI object should have non-empty `tags` array.",
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "tags",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "operation-default-response": {
+      "enabled": false,
+      "summary": "Operations must have a default response.",
+      "type": "style",
+      "given": "$..paths.*.*.responses",
+      "then": {
+        "field": "default",
+        "function": "truthy"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-description": {
+      "summary": "Operation `description` must be present and non-empty string.",
+      "type": "style",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-operationId": {
+      "summary": "Operation should have an `operationId`.",
+      "type": "style",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "operationId",
+        "function": "truthy"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-operationId-valid-in-url": {
+      "summary": "operationId may only use characters that are valid when used in a URL.",
+      "type": "validation",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "operationId",
+        "function": "pattern",
+        "functionOptions": {
+          "match": "^[A-Za-z0-9-._~:/?#\\[\\]@!\\$&'()*+,;=]*$"
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-singular-tag": {
+      "enabled": false,
+      "summary": "Operation may only have one tag.",
+      "type": "style",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "tags",
+        "function": "length",
+        "functionOptions": {
+          "max": 1
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-summary-formatted": {
+      "enabled": false,
+      "summary": "Operation `summary` should start with upper case and end with a dot.",
+      "type": "style",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "summary",
+        "function": "pattern",
+        "functionOptions": {
+          "match": "^[A-Z].*\\.$"
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-tags": {
+      "summary": "Operation should have non-empty `tags` array.",
+      "type": "style",
+      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "then": {
+        "field": "tags",
+        "function": "truthy"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "parameter-description": {
+      "enabled": false,
+      "summary": "Parameter objects should have a `description`.",
+      "type": "style",
+      "given": "$..parameters[*]",
+      "when": {
+        "field": "@key",
+        "pattern": "^(?!.*(\\$ref))"
+      },
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "parameters"
+      ]
+    },
+    "path-declarations-must-exist": {
+      "summary": "given declarations cannot be empty, ex.`/given/{}` is invalid.",
+      "type": "style",
+      "given": "$..paths",
+      "then": {
+        "field": "@key",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "{}"
+        }
+      },
+      "tags": [
+        "given"
+      ]
+    },
+    "path-keys-no-trailing-slash": {
+      "summary": "given keys should not end with a slash.",
+      "type": "style",
+      "given": "$..paths",
+      "then": {
+        "field": "@key",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": ".+\\/$"
+        }
+      },
+      "tags": [
+        "given"
+      ]
+    },
+    "path-not-include-query": {
+      "summary": "given keys should not include a query string.",
+      "type": "style",
+      "given": "$..paths",
+      "then": {
+        "field": "@key",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "\\?"
+        }
+      },
+      "tags": [
+        "given"
+      ]
+    },
+    "tag-description": {
+      "enabled": false,
+      "summary": "Tag object should have a `description`.",
+      "type": "style",
+      "given": "$.tags[*]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    }
+  }
+}

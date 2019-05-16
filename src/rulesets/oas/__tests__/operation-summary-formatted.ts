@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import * as ruleset from '../ruleset.json';
 
 describe('operation-summary-formatted', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'operation-summary-formatted': Object.assign(ruleset.rules['operation-summary-formatted'], {
       enabled: true,
     }),

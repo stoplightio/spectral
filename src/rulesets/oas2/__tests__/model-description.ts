@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { oas2Rules } from '../index';
-
-const ruleset = { rules: oas2Rules() };
+import * as ruleset from '../ruleset.json';
 
 describe('model-description', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'model-description': Object.assign(ruleset.rules['model-description'], {
       enabled: true,
     }),

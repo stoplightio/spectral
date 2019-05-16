@@ -3,14 +3,14 @@ import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
-import { resolve } from 'path';
+import { join, resolve } from 'path';
 import { promisify } from 'util';
 import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
-import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
-import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
+import { oas2Functions } from '../../rulesets/oas2';
+import { oas3Functions } from '../../rulesets/oas3';
 import { readRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
@@ -136,10 +136,11 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     }
     if (parseInt(spec.data.swagger) === 2) {
       command.log('OpenAPI 2.0 (Swagger) detected');
-      rules = oas2Rules();
+      console.log('DIR', process.cwd(), __dirname);
+      rules = await readRulesets(command, join(__dirname, '..', '..', 'rulesets', 'oas2', 'ruleset.json'));
     } else if (parseInt(spec.data.openapi) === 3) {
       command.log('OpenAPI 3.x detected');
-      rules = oas3Rules();
+      rules = await readRulesets(command, join(__dirname, '..', '..', 'rulesets', 'oas3', 'ruleset.json'));
     }
   }
 

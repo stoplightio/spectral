@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { oas3Rules } from '../index';
-
-const ruleset = { rules: oas3Rules() };
+import * as ruleset from '../ruleset.json';
 
 describe('api-servers', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'api-servers': Object.assign(ruleset.rules['api-servers'], {
       enabled: true,
     }),

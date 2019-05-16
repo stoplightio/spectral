@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import * as ruleset from '../ruleset.json';
 
 describe('no-eval-in-markdown', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'no-eval-in-markdown': Object.assign(ruleset.rules['no-eval-in-markdown'], {
       enabled: true,
     }),

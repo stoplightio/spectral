@@ -1,7 +1,7 @@
-import { commonOasFunctions, commonOasRules } from '../';
+import { commonOasFunctions } from '../';
 import { Spectral } from '../../../spectral';
+import { rules } from '../ruleset.json';
 
-const rules = commonOasRules();
 const { oasOp2xxResponse } = commonOasFunctions();
 
 describe('operation-2xx-response', () => {
@@ -11,6 +11,7 @@ describe('operation-2xx-response', () => {
     spectral = new Spectral();
     spectral.addFunctions({ oasOp2xxResponse });
     spectral.addRules({
+      // @ts-ignore
       'operation-2xx-response': rules['operation-2xx-response'],
     });
   });

@@ -1,11 +1,10 @@
 import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import * as ruleset from '../ruleset.json';
 
 describe('example-value-or-externalValue', () => {
   const s = new Spectral();
   s.addRules({
+    // @ts-ignore
     'example-value-or-externalValue': Object.assign(ruleset.rules['example-value-or-externalValue'], {
       enabled: true,
     }),
