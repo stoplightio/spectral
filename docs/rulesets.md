@@ -133,7 +133,7 @@ Rules are highly configurable. There are only few required parameters but the op
       <td><b>Required</b> The <code>path.to.prop</code> to field, or special <code>@key</code> value to target keys for matched <code>given</code> object. <br/><br/> Example: if the target object is an oas object and given = <code>$..responses[*]</code>, then <code>@key</code> would be the response code (200, 400, etc)</td>
     </tr>
     <tr>
-      <td>patterns</td>
+      <td>pattern</td>
       <td><code>string</code></td>
       <td>A regex pattern</td>
     </tr>
