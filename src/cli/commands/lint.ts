@@ -147,7 +147,6 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     }
     if (parseInt(spec.data.swagger) === 2) {
       command.log('OpenAPI 2.0 (Swagger) detected');
-      console.log('DIR', process.cwd(), __dirname);
       rules = await handleReaderError(command, async () => await oas2Rules());
     } else if (parseInt(spec.data.openapi) === 3) {
       command.log('OpenAPI 3.x detected');
