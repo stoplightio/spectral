@@ -1,7 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { oas2Functions, oas2Rules } from '../rulesets/oas2';
+import { oas3Functions, oas3Rules } from '../rulesets/oas3';
 import { Spectral } from '../spectral';
+
+const invalidSchema = fs.readFileSync(
+  path.join(__dirname, './__fixtures__/petstore.invalid-schema.oas3.yaml'),
+  'utf-8',
+);
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -187,6 +195,34 @@ responses:: !!foo
         },
       ]),
     );
+  });
+
+  test('should merge similar ajv errors', async () => {
+    spectral.addRules(oas3Rules());
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(invalidSchema);
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'oas3-schema',
+        summary: 'Validate structure of OpenAPIv3 specification.',
+        message: 'should NOT have additional properties: type',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        summary: 'Validate structure of OpenAPIv3 specification.',
+        message: 'should match exactly one schema in oneOf',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        summary: 'Validate structure of OpenAPIv3 specification.',
+        message: "should have required property '$ref'",
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+    ]);
   });
 
   describe('functional tests for the given property', () => {

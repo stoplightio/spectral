@@ -14,7 +14,28 @@ ajv._opts.defaultMeta = jsonSpecv4.id;
 // @ts-ignore
 ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
 
+import { AdditionalPropertiesParams } from 'ajv';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
+
+const formatPath = (path: string) =>
+  path
+    .split('/')
+    .slice(1)
+    .map(decodePointerFragment);
+
+const mergeErrors = (existingError: IFunctionResult, newError: AJV.ErrorObject) => {
+  switch (newError.keyword) {
+    case 'additionalProperties': {
+      const { additionalProperty } = newError.params as AdditionalPropertiesParams;
+      if (!new RegExp(`[:,] ${additionalProperty}`).test(existingError.message)) {
+        existingError.message += `, ${(newError.params as AdditionalPropertiesParams).additionalProperty}`;
+      }
+      return true;
+    }
+    default:
+      return existingError.message === newError.message;
+  }
+};
 
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
@@ -31,25 +52,30 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   const { schema: schemaObj } = opts;
 
-  // TODO: potential performance improvements (compile, etc)?
   if (!ajv.validate(schemaObj, targetVal) && ajv.errors) {
-    ajv.errors.forEach((e: AJV.ErrorObject) => {
-      // @ts-ignore
-      if (e.params && e.params.additionalProperty) {
-        // @ts-ignore
-        e.message = e.message + ': ' + e.params.additionalProperty;
+    // TODO: potential performance improvements (compile, etc)?
+    const collectedErrors: string[] = [];
+
+    for (const error of ajv.errors) {
+      if (collectedErrors.length > 0) {
+        const index = collectedErrors.indexOf(error.keyword);
+        if (index !== -1) {
+          if (mergeErrors(results[index], error)) continue;
+        }
       }
 
+      let message = error.message || '';
+
+      if (error.keyword === 'additionalProperties' && (error.params as AdditionalPropertiesParams).additionalProperty) {
+        message += `: ${(error.params as AdditionalPropertiesParams).additionalProperty}`;
+      }
+
+      collectedErrors.push(error.keyword);
       results.push({
-        path: path.concat(
-          e.dataPath
-            .split('/')
-            .slice(1)
-            .map(frag => decodePointerFragment(frag)),
-        ),
-        message: e.message ? e.message : '',
+        path: [...path, ...formatPath(error.dataPath)],
+        message,
       });
-    });
+    }
   }
 
   return results;
