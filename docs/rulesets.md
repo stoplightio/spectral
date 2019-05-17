@@ -106,7 +106,7 @@ Rules are highly configurable. There are only few required parameters but the op
     <tr>
       <td>field</td>
       <td><code>string</code></td>
-      <td>Name of the field to narrow by. Given this field, the function will receive value of that field.</td>
+      <td>Name of the field to narrow by or special <code>@key</code> value. If a field name is provided, the function will receive value of that field. If <code>@key</code> is provided, the function will receive its key.<br/>Example: if the target object is an oas object and given = <code>$..responses[*]</code>, then <code>@key</code> would be the response code (200, 400, etc) and <code>description</code> would be the value of each response's description</td>
     </tr>    
     <tr>
       <td>functionOptions</td>
