@@ -734,13 +734,13 @@
     jsonc-parser "2.1.0"
     lodash "4.x.x"
 
-"@stoplight/json@2.x.x":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.0.0.tgz#89f2f79feb2323d9dc1e7b2c172d9628226d2125"
-  integrity sha512-9NOtUI+Yf2tsGzJY4iwwriyiR0dzJpbYYLxunPlVaA+KzrE7Kj3ws3ht6GSgkm1tQFElkxr7ttFKG5kv3OIZ9w==
+"@stoplight/json@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.1.0.tgz#889b38d3078d9ff85c39122d04bd84968aabdd85"
+  integrity sha512-PQyt4tODH7dgfa+RuibMDAvqIoEOa6xdTa2et3ucb5rYHa/Z7Wf1GtWJ5hoACApPyNeokjv20S/DMoPOv7uQXA==
   dependencies:
     "@stoplight/fast-safe-stringify" "2.1.2"
-    "@stoplight/types" "4.0.x"
+    "@stoplight/types" "5.x.x"
     jsonc-parser "2.1.0"
     lodash "4.x.x"
 
@@ -776,17 +776,17 @@
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-4.0.0.tgz#04669b13f4de54e0446392167087cd6a9a570556"
   integrity sha512-xh7STKNeE7j4Z6w8vkw+QxSCaxhF5+c2mY7UBqT6BMiom/Ep/EdYmYq3dmvYfXqwbkiTMR6qbYymwqnoJo8Z6w==
 
-"@stoplight/types@4.1.x", "@stoplight/types@4.x.x":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-4.1.0.tgz#23a4a987fe1344339e33ee81c4608340c842ab44"
-  integrity sha512-2zcUn/jtD4tqonsBoX4QHNNKXE6llNMaS7V4PkRDFkssIIVPB0gZjLWLeR//dY/aaFriO7kdhNss1UAMTLNvcA==
+"@stoplight/types@5.x.x", "@stoplight/types@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-5.1.0.tgz#33fb18d8927e2538b2f0b19edc076d6f7e3a9978"
+  integrity sha512-GKOcgmwDMJyg09WmI4irIiq7d32hwlqyrdAqpV4b/Eg6/XT2e3g8spguiOsQKIqQSvZqSrrfpGWn/ENCPBvFEA==
 
-"@stoplight/yaml@2.x.x":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-2.2.1.tgz#31abbf4951ca8d858ddfa7f1d2f82f22782f1232"
-  integrity sha512-PF/pl5jdEriyQvn/G4fW8x6mhCeCbhmKJCF6JWQDexGuEderRQR1z9EtNgGhJUxY0o0XvHojkZQCl9NxvAy7Sw==
+"@stoplight/yaml@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-2.3.0.tgz#1a81779cc5d67a3efa2b3a350bf70c814bc9e592"
+  integrity sha512-2mNeuMA06bGqQ5voL5Fr5XF8C/pOJu6TDixG7b4zcw2rWx7EFIbWpSMD5C+1gNtJFt1QMgkXrTkuFQgeNPCI8A==
   dependencies:
-    "@stoplight/types" "4.x.x"
+    "@stoplight/types" "5.x.x"
     lodash "4.x.x"
     yaml-ast-parser "0.0.43"
 

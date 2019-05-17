@@ -88,7 +88,7 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
-        const location = parsedResult.getLocationForJsonPath(parsed, result.path || targetPath);
+        const location = parsedResult.getLocationForJsonPath(parsed, result.path || targetPath, true);
 
         return {
           code: rule.name,
