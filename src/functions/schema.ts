@@ -2,6 +2,7 @@ import { decodePointerFragment } from '@stoplight/json';
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 const validator = require('ajv-oai/lib/format-validator');
+import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 
 const ajv = new AJV({
   meta: false,
@@ -21,9 +22,6 @@ ajv.addFormat('float', { type: 'number', validate: validator.float });
 ajv.addFormat('double', { type: 'number', validate: validator.double });
 ajv.addFormat('byte', { type: 'string', validate: validator.byte });
 
-import { AdditionalPropertiesParams } from 'ajv';
-import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
-
 const formatPath = (path: string) =>
   path
     .split('/')
@@ -33,9 +31,9 @@ const formatPath = (path: string) =>
 const mergeErrors = (existingError: IFunctionResult, newError: AJV.ErrorObject) => {
   switch (newError.keyword) {
     case 'additionalProperties': {
-      const { additionalProperty } = newError.params as AdditionalPropertiesParams;
+      const { additionalProperty } = newError.params as AJV.AdditionalPropertiesParams;
       if (!new RegExp(`[:,] ${additionalProperty}`).test(existingError.message)) {
-        existingError.message += `, ${(newError.params as AdditionalPropertiesParams).additionalProperty}`;
+        existingError.message += `, ${(newError.params as AJV.AdditionalPropertiesParams).additionalProperty}`;
       }
       return true;
     }
@@ -73,8 +71,11 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
       let message = error.message || '';
 
-      if (error.keyword === 'additionalProperties' && (error.params as AdditionalPropertiesParams).additionalProperty) {
-        message += `: ${(error.params as AdditionalPropertiesParams).additionalProperty}`;
+      if (
+        error.keyword === 'additionalProperties' &&
+        (error.params as AJV.AdditionalPropertiesParams).additionalProperty
+      ) {
+        message += `: ${(error.params as AJV.AdditionalPropertiesParams).additionalProperty}`;
       }
 
       collectedErrors.push(error.keyword);
