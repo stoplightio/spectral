@@ -1,6 +1,7 @@
 import { decodePointerFragment } from '@stoplight/json';
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
+const validator = require('ajv-oai/lib/format-validator');
 
 const ajv = new AJV({
   meta: false,
@@ -13,6 +14,12 @@ ajv.addMetaSchema(jsonSpecv4);
 ajv._opts.defaultMeta = jsonSpecv4.id;
 // @ts-ignore
 ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
+
+ajv.addFormat('int32', { type: 'number', validate: validator.int32 });
+ajv.addFormat('int64', { type: 'number', validate: validator.int64 });
+ajv.addFormat('float', { type: 'number', validate: validator.float });
+ajv.addFormat('double', { type: 'number', validate: validator.double });
+ajv.addFormat('byte', { type: 'string', validate: validator.byte });
 
 import { AdditionalPropertiesParams } from 'ajv';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';

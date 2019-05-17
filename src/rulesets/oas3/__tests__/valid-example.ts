@@ -150,16 +150,6 @@ Array [
 `);
   });
 
-  /*
-   * NOTE: This used to throw and error so we told AJV to ignore unknownFormats
-   *
-   *   Error: unknown format "int64" is used in schema at path "#"
-   *
-   * If this test starts to correctly report that 2886989840 is not a valid int64, then
-   * great, somebody must have trained AJV what a int64 is.
-   *
-   * More information: https://github.com/stoplightio/spectral/issues/187
-   */
   test('does not report example mismatches for unknown AJV formats', async () => {
     const results = await s.run({
       xoxo: {
@@ -167,7 +157,7 @@ Array [
         properties: {
           ip_address: {
             type: 'integer',
-            format: 'int64',
+            format: 'foo',
             example: 2886989840,
           },
         },
@@ -175,5 +165,27 @@ Array [
     });
 
     expect(results).toEqual([]);
+  });
+
+  test('does report invalid int64', async () => {
+    const results = await s.run({
+      xoxo: {
+        type: 'object',
+        properties: {
+          ip_address: {
+            type: 'integer',
+            format: 'int64',
+            example: Number.MAX_VALUE,
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-example',
+        message: 'should match format "int64"',
+      }),
+    ]);
   });
 });
