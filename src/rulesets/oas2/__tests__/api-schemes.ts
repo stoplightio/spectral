@@ -5,7 +5,6 @@ describe('api-schemes', () => {
   const s = new Spectral();
   s.addRules({
     // @ts-ignore
-    // @ts-ignore
     'api-schemes': Object.assign(ruleset.rules['api-schemes'], {
       enabled: true,
     }),

@@ -90,7 +90,7 @@ linting ./openapi.yaml
     let rules;
 
     if (ruleset) {
-      rules = await handleReaderError(this, async () => {
+      rules = await tryReadOrLog(this, async () => {
         return readRulesFromRulesets(...ruleset);
       });
     }
@@ -107,7 +107,7 @@ linting ./openapi.yaml
   }
 }
 
-async function handleReaderError(command: Lint, reader: Function) {
+async function tryReadOrLog(command: Lint, reader: Function) {
   try {
     return await reader();
   } catch (ex) {
@@ -147,10 +147,10 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     }
     if (parseInt(spec.data.swagger) === 2) {
       command.log('OpenAPI 2.0 (Swagger) detected');
-      rules = await handleReaderError(command, async () => await oas2Rules());
+      rules = await tryReadOrLog(command, async () => await oas2Rules());
     } else if (parseInt(spec.data.openapi) === 3) {
       command.log('OpenAPI 3.x detected');
-      rules = await handleReaderError(command, async () => await oas3Rules());
+      rules = await tryReadOrLog(command, async () => await oas3Rules());
     }
   }
 

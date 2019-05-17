@@ -39,7 +39,8 @@
     "node": ">=8.3.0"
   },
   "scripts": {
-    "build": "sl-scripts build && node ./scripts/prepare-cli && yarn copy.rulesets --verbose",
+    "build": "sl-scripts build && node ./scripts/prepare-cli",
+    "postbuild": "yarn copy.rulesets --verbose",
     "build.binary": "yarn build && yarn build.manifest && cp yarn.lock dist && cd dist && yarn && pkg . --out-path ./bin",
     "build.docs": "sl-scripts build:typedoc",
     "build.manifest": "cd dist && oclif-dev manifest",
