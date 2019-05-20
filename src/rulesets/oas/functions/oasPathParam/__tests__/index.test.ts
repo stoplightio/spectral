@@ -34,7 +34,10 @@ describe('oasPathParam', () => {
     expect(results).toMatchSnapshot();
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}']);
-    expect(results[0].message).toEqual('Path parameters are correct and valid.');
+    expect(results[0].message)
+      .toEqual(`The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.
+
+To fix, add a path parameter with the name "**bar**".`);
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
@@ -115,7 +118,11 @@ describe('oasPathParam', () => {
     expect(results).toMatchSnapshot();
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
-    expect(results[0].message).toEqual('Path parameters are correct and valid.');
+    expect(results[0].message).toEqual(`The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.
+
+Path parameters must be unique.
+
+To fix, update the path so that all parameter names are unique.`);
   });
 
   test('Error if $ref path parameter definition is not required', async () => {
