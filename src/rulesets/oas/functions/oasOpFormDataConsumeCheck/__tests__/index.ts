@@ -1,4 +1,4 @@
-import { Spectral } from '../../../../../index';
+import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
 
 import { rules } from '../../../ruleset.json';
@@ -9,9 +9,9 @@ describe('oasOpFormDataConsumeCheck', () => {
   const s = new Spectral();
   s.addFunctions(ruleset.functions || {});
   s.addRules({
-    // @ts-ignore
     'operation-formData-consume-check': Object.assign(ruleset.rules['operation-formData-consume-check'], {
       enabled: true,
+      type: RuleType[ruleset.rules['operation-formData-consume-check'].type],
     }),
   });
 

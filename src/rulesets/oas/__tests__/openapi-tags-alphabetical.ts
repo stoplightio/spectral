@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('openapi-tags-alphabetical', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'openapi-tags-alphabetical': Object.assign(ruleset.rules['openapi-tags-alphabetical'], {
       enabled: true,
+      type: RuleType[ruleset.rules['openapi-tags-alphabetical'].type],
     }),
   });
 

@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('no-script-tags-in-markdown', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'no-script-tags-in-markdown': Object.assign(ruleset.rules['no-script-tags-in-markdown'], {
       enabled: true,
+      type: RuleType[ruleset.rules['no-script-tags-in-markdown'].type],
     }),
   });
 

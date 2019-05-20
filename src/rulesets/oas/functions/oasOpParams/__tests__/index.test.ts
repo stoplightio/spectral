@@ -1,4 +1,4 @@
-import { Spectral } from '../../../../../index';
+import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
 
 import { rules } from '../../../ruleset.json';
@@ -9,9 +9,9 @@ describe('oasOpParams', () => {
   const s = new Spectral();
   s.addFunctions(ruleset.functions || {});
   s.addRules({
-    // @ts-ignore
     'operation-parameters': Object.assign(ruleset.rules['operation-parameters'], {
       enabled: true,
+      type: RuleType[ruleset.rules['operation-parameters'].type],
     }),
   });
 

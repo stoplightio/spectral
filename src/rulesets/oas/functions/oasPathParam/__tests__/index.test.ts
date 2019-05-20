@@ -1,4 +1,4 @@
-import { Spectral } from '../../../../../index';
+import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
 
 import { rules } from '../../../ruleset.json';
@@ -9,9 +9,9 @@ describe('oasPathParam', () => {
   const s = new Spectral();
   s.addFunctions(ruleset.functions || {});
   s.addRules({
-    // @ts-ignore
     'path-params': Object.assign(ruleset.rules['path-params'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-params'].type],
     }),
   });
 

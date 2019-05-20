@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('path-declarations-must-exist', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'path-declarations-must-exist': Object.assign(ruleset.rules['path-declarations-must-exist'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-declarations-must-exist'].type],
     }),
   });
 

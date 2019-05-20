@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('operation-operationId-valid-in-url', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'operation-operationId-valid-in-url': Object.assign(ruleset.rules['operation-operationId-valid-in-url'], {
       enabled: true,
+      type: RuleType[ruleset.rules['operation-operationId-valid-in-url'].type],
     }),
   });
 

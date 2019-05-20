@@ -1,4 +1,4 @@
-import { Spectral } from '../../../../../index';
+import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
 
 import { rules } from '../../../ruleset.json';
@@ -10,9 +10,9 @@ describe('oasOpIdUnique', () => {
 
   s.addFunctions(ruleset.functions || {});
   s.addRules({
-    // @ts-ignore
     'operation-operationId-unique': Object.assign(ruleset.rules['operation-operationId-unique'], {
       enabled: true,
+      type: RuleType[ruleset.rules['operation-operationId-unique'].type],
     }),
   });
 

@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('server-trailing-slash', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'server-trailing-slash': Object.assign(ruleset.rules['server-trailing-slash'], {
       enabled: true,
+      type: RuleType[ruleset.rules['server-trailing-slash'].type],
     }),
   });
 

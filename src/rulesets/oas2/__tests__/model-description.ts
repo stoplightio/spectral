@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('model-description', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'model-description': Object.assign(ruleset.rules['model-description'], {
       enabled: true,
+      type: RuleType[ruleset.rules['model-description'].type],
     }),
   });
 

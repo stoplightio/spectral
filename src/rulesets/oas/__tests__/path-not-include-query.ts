@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('path-not-include-query', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'path-not-include-query': Object.assign(ruleset.rules['path-not-include-query'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-not-include-query'].type],
     }),
   });
 

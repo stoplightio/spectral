@@ -1,12 +1,12 @@
-import { Spectral } from '../../../spectral';
+import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
 describe('no-eval-in-markdown', () => {
   const s = new Spectral();
   s.addRules({
-    // @ts-ignore
     'no-eval-in-markdown': Object.assign(ruleset.rules['no-eval-in-markdown'], {
       enabled: true,
+      type: RuleType[ruleset.rules['no-eval-in-markdown'].type],
     }),
   });
 
