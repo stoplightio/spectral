@@ -93,9 +93,12 @@ export const lintNode = (
 
         return {
           code: rule.name,
+
+          // @deprecated, points to message
           get summary() {
             return this.message;
           },
+
           message:
             rule.message === undefined
               ? rule.summary || result.message
