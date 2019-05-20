@@ -41,13 +41,11 @@
   "scripts": {
     "build": "sl-scripts build && node ./scripts/prepare-cli",
     "build.binary": "yarn build && yarn build.manifest && cp yarn.lock dist && cd dist && yarn && pkg . --out-path ./bin",
-    "build.docs": "sl-scripts build:typedoc",
     "build.manifest": "cd dist && oclif-dev manifest",
     "commit": "git-cz",
     "lint": "tslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "release": "sl-scripts release",
-    "release.docs": "sl-scripts release:docs",
     "release.dryRun": "sl-scripts release --dry-run --debug",
     "test": "jest",
     "test.prod": "yarn build && yarn lint && yarn test --coverage --maxWorkers=2",
