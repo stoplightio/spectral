@@ -70,7 +70,7 @@
     "node-fetch": "2.x.x",
     "strip-ansi": "^5.2.0",
     "text-table": "^0.2.0",
-    "typescript-json-schema": "^0.37.0"
+    "typescript-json-schema": "^0.38.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
