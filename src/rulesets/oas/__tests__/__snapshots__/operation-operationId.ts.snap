@@ -6,7 +6,7 @@ exports[`operation-operationId return errors if operation id is missing 1`] = `
 Array [
   Object {
     "code": "operation-operationId",
-    "message": "paths./todos.get.operationId is not truthy",
+    "message": "Operation should have an \`operationId\`.",
     "path": Array [
       "paths",
       "/todos",

@@ -6,7 +6,7 @@ exports[`operation-description return errors if operation description is missing
 Array [
   Object {
     "code": "operation-description",
-    "message": "paths./todos.get.description is not truthy",
+    "message": "Operation \`description\` must be present and non-empty string.",
     "path": Array [
       "paths",
       "/todos",

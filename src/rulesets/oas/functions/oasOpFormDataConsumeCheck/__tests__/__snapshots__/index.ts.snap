@@ -4,7 +4,7 @@ exports[`oasOpFormDataConsumeCheck return errors on different path operations sa
 Array [
   Object {
     "code": "operation-formData-consume-check",
-    "message": "consumes must include urlencoded, multipart, or formdata media type when using formData parameter",
+    "message": "Operations with an \`in: formData\` parameter must include \`application/x-www-form-urlencoded\` or \`multipart/form-data\` in their \`consumes\` property.",
     "path": Array [
       "paths",
       "/path1",

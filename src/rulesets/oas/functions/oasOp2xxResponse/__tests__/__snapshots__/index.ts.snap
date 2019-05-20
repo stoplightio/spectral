@@ -4,7 +4,7 @@ exports[`oasOp2xxResponse return errors if missing 2xx 1`] = `
 Array [
   Object {
     "code": "operation-2xx-response",
-    "message": "operations must define at least one 2xx response",
+    "message": "Operation must have at least one \`2xx\` response.",
     "path": Array [
       "paths",
       "/path1",
@@ -32,7 +32,7 @@ exports[`oasOp2xxResponse return errors if no responses 1`] = `
 Array [
   Object {
     "code": "operation-2xx-response",
-    "message": "operations must define at least one 2xx response",
+    "message": "Operation must have at least one \`2xx\` response.",
     "path": Array [
       "paths",
       "/path1",

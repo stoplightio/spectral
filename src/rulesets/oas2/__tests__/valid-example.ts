@@ -155,7 +155,7 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        summary: 'Examples must be valid against their defined schema.',
+        message: '"self" property should be array',
         path: ['definitions', 'halRoot', '_links', 'self'],
       }),
     ]);
@@ -220,40 +220,40 @@ describe('valid-example', () => {
     });
 
     expect(results).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "code": "valid-example",
-    "message": "should be string",
-    "path": Array [
-      "paths",
-      "/pet",
-      "post",
-      "parameters",
-      0,
-      "schema",
-      "properties",
-      "a",
-      "properties",
-      "b",
-      "properties",
-      "c",
-    ],
-    "range": Object {
-      "end": Object {
-        "character": 42,
-        "line": 37,
-      },
-      "start": Object {
-        "character": 28,
-        "line": 35,
-      },
-    },
-    "severity": 1,
-    "source": undefined,
-    "summary": "Examples must be valid against their defined schema.",
-  },
-]
-`);
+      Array [
+        Object {
+          "code": "valid-example",
+          "message": "\\"c\\" property should be string",
+          "path": Array [
+            "paths",
+            "/pet",
+            "post",
+            "parameters",
+            0,
+            "schema",
+            "properties",
+            "a",
+            "properties",
+            "b",
+            "properties",
+            "c",
+          ],
+          "range": Object {
+            "end": Object {
+              "character": 42,
+              "line": 37,
+            },
+            "start": Object {
+              "character": 28,
+              "line": 35,
+            },
+          },
+          "severity": 1,
+          "source": undefined,
+          "summary": "\\"c\\" property should be string",
+        },
+      ]
+    `);
   });
 
   test('will not fail if an actual property is called example', async () => {

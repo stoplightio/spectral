@@ -4,7 +4,7 @@ exports[`info-license return errors if info missing license 1`] = `
 Array [
   Object {
     "code": "info-license",
-    "message": "info.license is not truthy",
+    "message": "OpenAPI object info \`license\` must be present and non-empty string.",
     "path": Array [
       "info",
       "license",

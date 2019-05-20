@@ -97,7 +97,7 @@ describe('linter', () => {
       },
     });
 
-    expect(result[0]).toEqual({
+    expect(result[0]).toMatchObject({
       code: 'rule1',
       message,
       severity: DiagnosticSeverity.Warning,
@@ -206,19 +206,16 @@ responses:: !!foo
     expect(result).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
-        summary: 'Validate structure of OpenAPIv3 specification.',
         message: 'should NOT have additional properties: type',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        summary: 'Validate structure of OpenAPIv3 specification.',
         message: 'should match exactly one schema in oneOf',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        summary: 'Validate structure of OpenAPIv3 specification.',
         message: "should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),

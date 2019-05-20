@@ -4,7 +4,7 @@ exports[`no-script-tags-in-markdown return errors if descriptions include <scrip
 Array [
   Object {
     "code": "no-script-tags-in-markdown",
-    "message": "must not match the pattern '<script'",
+    "message": "Markdown descriptions should not contain \`<script>\` tags.",
     "path": Array [
       "info",
       "description",

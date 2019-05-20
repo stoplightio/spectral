@@ -121,35 +121,35 @@ describe('valid-example', () => {
     });
 
     expect(results).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "code": "valid-example",
-    "message": "should match format \\"email\\"",
-    "path": Array [
-      "paths",
-      "/pet",
-      "post",
-      "requestBody",
-      "content",
-      "*/*",
-      "schema",
-    ],
-    "range": Object {
-      "end": Object {
-        "character": 34,
-        "line": 15,
-      },
-      "start": Object {
-        "character": 23,
-        "line": 12,
-      },
-    },
-    "severity": 1,
-    "source": undefined,
-    "summary": "Examples must be valid against their defined schema.",
-  },
-]
-`);
+      Array [
+        Object {
+          "code": "valid-example",
+          "message": "\\"schema\\" property should match format \\"email\\"",
+          "path": Array [
+            "paths",
+            "/pet",
+            "post",
+            "requestBody",
+            "content",
+            "*/*",
+            "schema",
+          ],
+          "range": Object {
+            "end": Object {
+              "character": 34,
+              "line": 15,
+            },
+            "start": Object {
+              "character": 23,
+              "line": 12,
+            },
+          },
+          "severity": 1,
+          "source": undefined,
+          "summary": "\\"schema\\" property should match format \\"email\\"",
+        },
+      ]
+    `);
   });
 
   test('does not report example mismatches for unknown AJV formats', async () => {
@@ -188,7 +188,7 @@ Array [
       expect(results).toEqual([
         expect.objectContaining({
           code: 'valid-example',
-          message: `should match format "${format}"`,
+          message: `"ip_address" property should match format "${format}"`,
         }),
       ]);
     },

@@ -4,7 +4,7 @@ exports[`server-not-example.com return errors if server is example.com 1`] = `
 Array [
   Object {
     "code": "server-not-example.com",
-    "message": "must not match the pattern 'example.com'",
+    "message": "Server URL should not point at \`example.com\`.",
     "path": Array [
       "servers",
       0,

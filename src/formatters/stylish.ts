@@ -48,8 +48,6 @@ function pluralize(word: string, count: number): string {
 // Public Interface
 // -----------------------------------------------------------------------------
 
-const SCHEMA_CODE_REGEXP = /^oas[23]-schema$/;
-
 export const stylish = (results: IRuleResult[]): string => {
   let output = '\n';
   let errorCount = 0;
@@ -88,14 +86,7 @@ export const stylish = (results: IRuleResult[]): string => {
         messageType = chalk.yellow('white');
       }
 
-      return [
-        formatRange(result.range),
-        messageType,
-        result.code !== undefined ? result.code : '',
-        result.summary && (typeof result.code !== 'string' || !SCHEMA_CODE_REGEXP.test(result.code))
-          ? result.summary.replace(/([^ ])\.$/u, '$1')
-          : result.message,
-      ];
+      return [formatRange(result.range), messageType, result.code !== undefined ? result.code : '', result.message];
     });
 
     output += `${table(pathTableData, {

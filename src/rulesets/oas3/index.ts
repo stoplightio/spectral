@@ -2,6 +2,7 @@ const merge = require('lodash/merge');
 
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleFunction, RuleType } from '../../types';
+import { message } from '../message';
 import { commonOasRules } from '../oas';
 import * as schema from './schemas/main.json';
 
@@ -11,7 +12,7 @@ export const oas3Rules = () => {
   return merge(commonOasRules(), {
     // specification validation
     'oas3-schema': {
-      summary: 'Validate structure of OpenAPIv3 specification.',
+      message: message`${'error'}`,
       type: RuleType.VALIDATION,
       severity: DiagnosticSeverity.Error,
       then: {
@@ -25,7 +26,7 @@ export const oas3Rules = () => {
 
     // generic rules
     'api-servers': {
-      summary: 'OpenAPI `servers` must be present and non-empty array.',
+      message: 'OpenAPI `servers` must be present and non-empty array.',
       type: RuleType.STYLE,
       given: '$',
       then: {
@@ -45,7 +46,7 @@ export const oas3Rules = () => {
     },
     'model-description': {
       enabled: false,
-      summary: 'Model `description` must be present and non-empty string.',
+      message: 'Model `description` must be present and non-empty string.',
       type: RuleType.STYLE,
       given: '$.components.schemas[*]',
       then: {
@@ -54,7 +55,7 @@ export const oas3Rules = () => {
       },
     },
     'operation-security-defined': {
-      summary: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+      message: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
       type: RuleType.VALIDATION,
       given: '$',
       then: {
@@ -67,7 +68,7 @@ export const oas3Rules = () => {
     },
     'server-not-example.com': {
       enabled: false,
-      summary: 'Server URL should not point at `example.com`.',
+      message: 'Server URL should not point at `example.com`.',
       type: RuleType.STYLE,
       given: '$.servers[*]',
       then: {
@@ -79,7 +80,7 @@ export const oas3Rules = () => {
       },
     },
     'server-trailing-slash': {
-      summary: 'Server URL should not have a trailing slash.',
+      message: 'Server URL should not have a trailing slash.',
       type: RuleType.STYLE,
       given: '$.servers[*]',
       then: {
@@ -91,7 +92,7 @@ export const oas3Rules = () => {
       },
     },
     'valid-example': {
-      summary: 'Examples must be valid against their defined schema.',
+      message: message`"${'property'}" property ${'error'}`,
       type: RuleType.VALIDATION,
       given: '$..[?(@.example)]',
       then: {

@@ -81,10 +81,9 @@ describe('parameter-description', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'parameter-description',
-        message: 'parameters.limit.description is not truthy',
+        message: 'Parameter objects should have a `description`.',
         path: ['parameters', 'limit', 'description'],
         severity: 1,
-        summary: 'Parameter objects should have a `description`.',
       }),
     ]);
   });
@@ -107,10 +106,9 @@ describe('parameter-description', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'parameter-description',
-        message: 'paths./todos.parameters.0.description is not truthy',
+        message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'parameters', 0, 'description'],
         severity: 1,
-        summary: 'Parameter objects should have a `description`.',
       }),
     ]);
   });
@@ -135,10 +133,9 @@ describe('parameter-description', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'parameter-description',
-        message: 'paths./todos.get.parameters.0.description is not truthy',
+        message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'get', 'parameters', 0, 'description'],
         severity: 1,
-        summary: 'Parameter objects should have a `description`.',
       }),
     ]);
   });
