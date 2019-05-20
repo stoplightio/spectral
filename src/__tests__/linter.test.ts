@@ -207,16 +207,19 @@ responses:: !!foo
       expect.objectContaining({
         code: 'oas3-schema',
         message: 'should NOT have additional properties: type',
+        summary: 'should NOT have additional properties: type',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
         message: 'should match exactly one schema in oneOf',
+        summary: 'should match exactly one schema in oneOf',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
         message: "should have required property '$ref'",
+        summary: "should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
     ]);
