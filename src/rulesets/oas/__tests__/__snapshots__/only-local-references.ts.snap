@@ -4,7 +4,7 @@ exports[`only-local-references return errors if not local ref 1`] = `
 Array [
   Object {
     "code": "only-local-references",
-    "message": "must match the pattern '^#\\\\/'",
+    "message": "References should start with \`#/\`.",
     "path": Array [
       "parameters",
       0,

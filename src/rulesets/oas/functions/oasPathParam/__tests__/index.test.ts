@@ -34,7 +34,7 @@ describe('oasPathParam', () => {
     expect(results).toMatchSnapshot();
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}']);
-    expect(results[0].message).toContain('bar');
+    expect(results[0].message).toEqual('Path parameters are correct and valid.');
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
@@ -115,7 +115,7 @@ describe('oasPathParam', () => {
     expect(results).toMatchSnapshot();
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
-    expect(results[0].message).toContain('bar');
+    expect(results[0].message).toEqual('Path parameters are correct and valid.');
   });
 
   test('Error if $ref path parameter definition is not required', async () => {

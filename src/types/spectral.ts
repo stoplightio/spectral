@@ -34,6 +34,7 @@ export interface IRunOpts {
 }
 
 export interface IRuleResult extends IDiagnostic {
+  // @deprecated, use message instead
   summary?: string;
   path: JsonPath;
 }

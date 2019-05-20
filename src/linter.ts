@@ -88,13 +88,28 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
-        const location = parsedResult.getLocationForJsonPath(parsed, result.path || targetPath, true);
+        const path = result.path || targetPath;
+        const location = parsedResult.getLocationForJsonPath(parsed, path, true);
 
         return {
           code: rule.name,
-          summary: rule.summary,
-          message: result.message,
-          path: result.path || targetPath,
+
+          // @deprecated, points to message
+          get summary() {
+            return this.message;
+          },
+
+          message:
+            rule.message === undefined
+              ? rule.summary || result.message
+              : typeof rule.message === 'function'
+                ? rule.message({
+                    error: result.message,
+                    property: path.length > 0 ? path[path.length - 1] : '',
+                    description: rule.description,
+                  })
+                : rule.message,
+          path,
           severity,
           source: parsedResult.source,
           ...(location || {

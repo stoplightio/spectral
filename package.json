@@ -64,6 +64,7 @@
     "@stoplight/types": "^5.1.0",
     "@stoplight/yaml": "^2.3.0",
     "ajv": "6.x.x",
+    "ajv-oai": "^1.1.1",
     "chalk": "^2.4.2",
     "jsonpath": "https://github.com/stoplightio/jsonpath#f1c0e9e634da2d45671b7639fa0a99afc807da17",
     "lodash": ">=4.17.5",

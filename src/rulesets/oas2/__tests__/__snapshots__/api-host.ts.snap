@@ -4,7 +4,7 @@ exports[`api-host return errors if missing host 1`] = `
 Array [
   Object {
     "code": "api-host",
-    "message": "host is not truthy",
+    "message": "OpenAPI \`host\` must be present and non-empty string.",
     "path": Array [
       "host",
     ],

@@ -4,7 +4,7 @@ exports[`openapi-tags-alphabetical return errors if tags is not in alphabetical 
 Array [
   Object {
     "code": "openapi-tags-alphabetical",
-    "message": "properties are not in alphabetical order",
+    "message": "OpenAPI object should have alphabetical \`tags\`.",
     "path": Array [
       "tags",
     ],

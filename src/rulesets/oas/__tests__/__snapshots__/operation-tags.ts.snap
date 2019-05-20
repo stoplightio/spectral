@@ -4,7 +4,7 @@ exports[`operation-tags return errors if tags is missing 1`] = `
 Array [
   Object {
     "code": "operation-tags",
-    "message": "paths./todos.get.tags is not truthy",
+    "message": "Operation should have non-empty \`tags\` array.",
     "path": Array [
       "paths",
       "/todos",

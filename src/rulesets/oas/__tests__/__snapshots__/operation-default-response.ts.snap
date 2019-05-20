@@ -4,7 +4,7 @@ exports[`operation-default-response return errors if path-responses is missing d
 Array [
   Object {
     "code": "operation-default-response",
-    "message": "paths./path./get.responses.default is not truthy",
+    "message": "Operations must have a default response.",
     "path": Array [
       "paths",
       "/path",

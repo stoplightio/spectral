@@ -4,7 +4,7 @@ exports[`path-declarations-must-exist return errors if parameter is empty 1`] = 
 Array [
   Object {
     "code": "path-declarations-must-exist",
-    "message": "must not match the pattern '{}'",
+    "message": "given declarations cannot be empty, ex.\`/given/{}\` is invalid.",
     "path": Array [
       "paths",
       "/path/{}",

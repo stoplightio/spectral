@@ -57,7 +57,7 @@ describe('lint', () => {
           .command([...args, '-f', 'json'])
           .it('outputs warnings in json format', ctx => {
             expect(ctx.stdout).toContain('OpenAPI `servers` must be present and non-empty array');
-            expect(ctx.stdout).toContain('"info.contact is not truthy"');
+            expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
           });
       });
 
@@ -243,9 +243,9 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidSpecPath, '-c', validConfigPath])
       .it('outputs warnings in json format', ctx => {
-        expect(ctx.stdout).toContain('"info.contact is not truthy"');
-        expect(ctx.stdout).toContain('"info.description is not truthy"');
-        expect(ctx.stdout).toContain('"servers does not exist"');
+        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+        expect(ctx.stdout).toContain('"OpenAPI object info `description` must be present and non-empty string."');
+        expect(ctx.stdout).toContain('"OpenAPI `servers` must be present and non-empty array."');
       });
 
     test
@@ -281,9 +281,9 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidSpecPath, '-c', validConfigPath, '--max-results', '1'])
       .it('setting --max-results to 1 will override config value of 5', ctx => {
-        expect(ctx.stdout).toContain('"info.contact is not truthy"');
-        expect(ctx.stdout).not.toContain('"info.description is not truthy"');
-        expect(ctx.stdout).not.toContain('"servers does not exist"');
+        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+        expect(ctx.stdout).not.toContain('"OpenAPI object info `description` must be present and non-empty string."');
+        expect(ctx.stdout).not.toContain('"OpenAPI `servers` must be present and non-empty array."');
       });
   });
 
@@ -307,7 +307,7 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidSpecPath])
       .it('outputs data in format from default config file', ctx => {
-        expect(ctx.stdout).toContain('"info.contact is not truthy"');
+        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
       });
   });
 });

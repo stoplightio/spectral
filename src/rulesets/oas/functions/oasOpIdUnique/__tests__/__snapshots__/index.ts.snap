@@ -4,7 +4,7 @@ exports[`oasOpIdUnique return errors on different path operations same id 1`] = 
 Array [
   Object {
     "code": "operation-operationId-unique",
-    "message": "operationId must be unique",
+    "message": "Every operation must have a unique \`operationId\`.",
     "path": Array [
       "paths",
       "/path1",
@@ -27,7 +27,7 @@ Array [
   },
   Object {
     "code": "operation-operationId-unique",
-    "message": "operationId must be unique",
+    "message": "Every operation must have a unique \`operationId\`.",
     "path": Array [
       "paths",
       "/path2",
@@ -55,7 +55,7 @@ exports[`oasOpIdUnique return errors on same path operations same id 1`] = `
 Array [
   Object {
     "code": "operation-operationId-unique",
-    "message": "operationId must be unique",
+    "message": "Every operation must have a unique \`operationId\`.",
     "path": Array [
       "paths",
       "/path1",
@@ -78,7 +78,7 @@ Array [
   },
   Object {
     "code": "operation-operationId-unique",
-    "message": "operationId must be unique",
+    "message": "Every operation must have a unique \`operationId\`.",
     "path": Array [
       "paths",
       "/path1",

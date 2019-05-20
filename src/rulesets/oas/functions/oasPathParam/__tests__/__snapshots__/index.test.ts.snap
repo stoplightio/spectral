@@ -4,9 +4,7 @@ exports[`oasPathParam Error if $ref path parameter definition is not required 1`
 Array [
   Object {
     "code": "path-params",
-    "message": "Path parameter \\"**bar**\\" must have a \`required\` that is set to \`true\`.
-
-To fix, mark this parameter as required.",
+    "message": "Path parameters are correct and valid.",
     "path": Array [
       "paths",
       "/foo/{bar}",
@@ -33,11 +31,7 @@ exports[`oasPathParam Error if duplicate path parameters with same name are used
 Array [
   Object {
     "code": "path-params",
-    "message": "The path \\"**/foo/{bar}/{bar}**\\" uses the parameter \\"**{bar}**\\" multiple times.
-
-Path parameters must be unique.
-
-To fix, update the path so that all parameter names are unique.",
+    "message": "Path parameters are correct and valid.",
     "path": Array [
       "paths",
       "/foo/{bar}/{bar}",
@@ -63,9 +57,7 @@ exports[`oasPathParam Error if no path parameter definition 1`] = `
 Array [
   Object {
     "code": "path-params",
-    "message": "The path \\"**/foo/{bar}**\\" uses a parameter \\"**{bar}**\\" that does not have a corresponding definition.
-
-To fix, add a path parameter with the name \\"**bar**\\".",
+    "message": "Path parameters are correct and valid.",
     "path": Array [
       "paths",
       "/foo/{bar}",
@@ -91,9 +83,7 @@ exports[`oasPathParam Error if paths are functionally equivalent 1`] = `
 Array [
   Object {
     "code": "path-params",
-    "message": "The paths \\"**/foo/{boo}**\\" and \\"**/foo/{bar}**\\" are equivalent.
-
-To fix, remove one of the paths or merge them together.",
+    "message": "Path parameters are correct and valid.",
     "path": Array [
       "paths",
     ],
