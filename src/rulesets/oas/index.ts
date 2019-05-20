@@ -1,5 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FunctionCollection, RuleCollection, RuleFunction, RuleType } from '../../types';
+import { message } from '../message';
 
 export const operationPath =
   "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post'" +
@@ -62,6 +63,7 @@ export const commonOasRules = (): RuleCollection => ({
   },
   'path-params': {
     summary: 'Path parameters are correct and valid.',
+    message: message`${'error'}`,
     type: RuleType.VALIDATION,
     severity: DiagnosticSeverity.Error,
     given: '$',
