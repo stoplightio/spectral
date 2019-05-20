@@ -3,6 +3,8 @@ import { oas3Rules } from '../index';
 
 const ruleset = { rules: oas3Rules() };
 
+// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
+// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
 declare var test: jest.It;
 
 describe('valid-example', () => {
