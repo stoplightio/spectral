@@ -140,7 +140,6 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     if (flags.verbose) {
       command.log(`Found ${Object.keys(rules).length} rules`);
     }
-    command.log('Applying rules. Automatic rule detection is off.');
   } else {
     if (flags.verbose) {
       command.log('No rules loaded, attempting to detect document type');

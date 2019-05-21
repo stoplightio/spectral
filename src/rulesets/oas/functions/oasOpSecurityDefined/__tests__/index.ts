@@ -1,4 +1,4 @@
-import { Spectral } from '../../../../../index';
+import { RuleType, Spectral } from '../../../../../index';
 import { oas2Functions } from '../../../../oas2/index';
 import { rules as oas2Rules } from '../../../../oas2/ruleset.json';
 import { oas3Functions } from '../../../../oas3/index';
@@ -12,9 +12,9 @@ describe('oasOpSecurityDefined', () => {
     const s = new Spectral();
     s.addFunctions(oas2Ruleset.functions || {});
     s.addRules({
-      // @ts-ignore
       'operation-security-defined': Object.assign(oas2Ruleset.rules['operation-security-defined'], {
         enabled: true,
+        type: RuleType[oas2Ruleset.rules['operation-security-defined'].type],
       }),
     });
 
@@ -62,9 +62,9 @@ describe('oasOpSecurityDefined', () => {
     const s = new Spectral();
     s.addFunctions(oas3Ruleset.functions || {});
     s.addRules({
-      // @ts-ignore
       'operation-security-defined': Object.assign(oas3Ruleset.rules['operation-security-defined'], {
         enabled: true,
+        type: RuleType[oas3Ruleset.rules['operation-security-defined'].type],
       }),
     });
 
