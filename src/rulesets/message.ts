@@ -4,16 +4,19 @@ export interface IMessageVars {
   description?: string;
 }
 
-export type MessageInterpolator = (values: IMessageVars) => string;
+export type MessageInterpolator = (str: string, values: IMessageVars) => string;
 
-export function message(strings: TemplateStringsArray, ...vars: Array<keyof IMessageVars>) {
-  return (values: IMessageVars) => {
-    const result = [strings[0]];
+const BRACES = /{{([^}]+)}}/g;
 
-    for (const [i, key] of vars.entries()) {
-      result.push(String(values[key] || ''), strings[i + 1]);
-    }
+export const message: MessageInterpolator = (str, values) => {
+  BRACES.lastIndex = 0;
+  let result: RegExpExecArray | null = null;
 
-    return result.join('');
-  };
-}
+  // tslint:disable-next-line:no-conditional-assignment
+  while ((result = BRACES.exec(str))) {
+    str = `${str.slice(0, result.index)}${String(values[result[1]] || '')}${str.slice(BRACES.lastIndex)}`;
+    BRACES.lastIndex = result.index;
+  }
+
+  return str;
+};
