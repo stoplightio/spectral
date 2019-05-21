@@ -48,6 +48,7 @@
     },
     "path-params": {
       "summary": "Path parameters are correct and valid.",
+      "message": "{{error}}",
       "type": "validation",
       "severity": 0,
       "given": "$",

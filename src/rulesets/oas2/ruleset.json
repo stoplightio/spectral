@@ -5,6 +5,7 @@
   "rules": {
     "oas2-schema": {
       "summary": "Validate structure of OpenAPIv2 specification.",
+      "message": "{{error}}",
       "type": "validation",
       "severity": 0,
       "given": "$",
@@ -1724,6 +1725,7 @@
     },
     "valid-example": {
       "summary": "Examples must be valid against their defined schema.",
+      "message": "\"{{property}}\" property {{error}}",
       "type": "validation",
       "given": "$..[?(@.example)]",
       "then": {
