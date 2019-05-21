@@ -1,7 +1,5 @@
-import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('parameter-description', () => {
   const s = new Spectral();
@@ -9,6 +7,7 @@ describe('parameter-description', () => {
   s.addRules({
     'parameter-description': Object.assign(ruleset.rules['parameter-description'], {
       enabled: true,
+      type: RuleType[ruleset.rules['parameter-description'].type],
     }),
   });
 

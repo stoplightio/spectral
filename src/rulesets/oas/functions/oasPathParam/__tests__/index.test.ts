@@ -1,7 +1,9 @@
-import { Spectral } from '../../../../../index';
-import { commonOasFunctions, commonOasRules } from '../../../index';
+import { RuleType, Spectral } from '../../../../../index';
+import { commonOasFunctions } from '../../../index';
 
-const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
+import { rules } from '../../../ruleset.json';
+
+const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasPathParam', () => {
   const s = new Spectral();
@@ -9,6 +11,7 @@ describe('oasPathParam', () => {
   s.addRules({
     'path-params': Object.assign(ruleset.rules['path-params'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-params'].type],
     }),
   });
 

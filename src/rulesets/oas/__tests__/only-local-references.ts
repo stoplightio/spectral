@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('only-local-references', () => {
   const s = new Spectral();
   s.addRules({
     'only-local-references': Object.assign(ruleset.rules['only-local-references'], {
       enabled: true,
+      type: RuleType[ruleset.rules['only-local-references'].type],
     }),
   });
 

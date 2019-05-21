@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { oas2Rules } from '../index';
-
-const ruleset = { rules: oas2Rules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('host-not-example', () => {
   const s = new Spectral();
   s.addRules({
     'host-not-example': Object.assign(ruleset.rules['host-not-example'], {
       enabled: true,
+      type: RuleType[ruleset.rules['host-not-example'].type],
     }),
   });
 

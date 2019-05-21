@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { oas3Rules } from '../index';
-
-const ruleset = { rules: oas3Rules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('server-not-example.com', () => {
   const s = new Spectral();
   s.addRules({
     'server-not-example.com': Object.assign(ruleset.rules['server-not-example.com'], {
       enabled: true,
+      type: RuleType[ruleset.rules['server-not-example.com'].type],
     }),
   });
 

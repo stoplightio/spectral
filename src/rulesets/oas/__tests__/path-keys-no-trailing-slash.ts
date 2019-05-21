@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('path-keys-no-trailing-slash', () => {
   const s = new Spectral();
   s.addRules({
     'path-keys-no-trailing-slash': Object.assign(ruleset.rules['path-keys-no-trailing-slash'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-keys-no-trailing-slash'].type],
     }),
   });
 

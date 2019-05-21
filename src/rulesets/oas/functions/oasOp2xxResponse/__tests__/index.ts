@@ -1,7 +1,7 @@
-import { Spectral } from '../../../../../spectral';
-import { commonOasFunctions, commonOasRules } from '../../../../oas/index';
-
-const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
+import { RuleType, Spectral } from '../../../../../spectral';
+import { commonOasFunctions } from '../../../../oas/index';
+import { rules } from '../../../../oas/ruleset.json';
+const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOp2xxResponse', () => {
   const s = new Spectral();
@@ -9,6 +9,7 @@ describe('oasOp2xxResponse', () => {
   s.addRules({
     'operation-2xx-response': Object.assign(ruleset.rules['operation-2xx-response'], {
       enabled: true,
+      type: RuleType[ruleset.rules['operation-2xx-response'].type],
     }),
   });
 

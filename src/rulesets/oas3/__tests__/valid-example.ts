@@ -1,7 +1,5 @@
-import { Spectral } from '../../../spectral';
-import { oas3Rules } from '../index';
-
-const ruleset = { rules: oas3Rules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 // @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
 // TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
@@ -12,6 +10,7 @@ describe('valid-example', () => {
   s.addRules({
     'valid-example': Object.assign(ruleset.rules['valid-example'], {
       enabled: true,
+      type: RuleType[ruleset.rules['valid-example'].type],
     }),
   });
 

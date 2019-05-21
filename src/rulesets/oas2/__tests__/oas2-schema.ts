@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { oas2Rules } from '../index';
-
-const ruleset = { rules: oas2Rules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('oas2-schema', () => {
   const s = new Spectral();
   s.addRules({
     'oas2-schema': Object.assign(ruleset.rules['oas2-schema'], {
       enabled: true,
+      type: RuleType[ruleset.rules['oas2-schema'].type],
     }),
   });
 

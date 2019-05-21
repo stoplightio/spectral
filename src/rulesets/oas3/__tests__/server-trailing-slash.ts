@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { oas3Rules } from '../index';
-
-const ruleset = { rules: oas3Rules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('server-trailing-slash', () => {
   const s = new Spectral();
   s.addRules({
     'server-trailing-slash': Object.assign(ruleset.rules['server-trailing-slash'], {
       enabled: true,
+      type: RuleType[ruleset.rules['server-trailing-slash'].type],
     }),
   });
 

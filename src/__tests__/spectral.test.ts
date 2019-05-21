@@ -36,6 +36,7 @@ describe('spectral', () => {
       const s = new Spectral();
 
       s.addRules({
+        // @ts-ignore
         rule1: {
           summary: '',
           given: '$',
@@ -75,6 +76,7 @@ describe('spectral', () => {
         const s = new Spectral();
 
         s.addRules({
+          // @ts-ignore
           rule1: {
             summary: '',
             given: '$',

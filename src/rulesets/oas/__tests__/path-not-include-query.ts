@@ -1,13 +1,12 @@
-import { Spectral } from '../../../spectral';
-import { commonOasRules } from '../index';
-
-const ruleset = { rules: commonOasRules() };
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
 describe('path-not-include-query', () => {
   const s = new Spectral();
   s.addRules({
     'path-not-include-query': Object.assign(ruleset.rules['path-not-include-query'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-not-include-query'].type],
     }),
   });
 

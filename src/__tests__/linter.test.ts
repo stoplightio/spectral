@@ -1,10 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as path from 'path';
-
-import { oas2Functions, oas2Rules } from '../rulesets/oas2';
-import { oas3Functions, oas3Rules } from '../rulesets/oas3';
+import { oas2Functions } from '../rulesets/oas2';
+import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
+import { oas3Functions } from '../rulesets/oas3';
+import * as oas3Ruleset from '../rulesets/oas3/ruleset.json';
 import { Spectral } from '../spectral';
+import { RuleCollection } from '../types';
 
 const invalidSchema = fs.readFileSync(
   path.join(__dirname, './__fixtures__/petstore.invalid-schema.oas3.yaml'),
@@ -144,7 +146,7 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    spectral.addRules(oas2Rules());
+    spectral.addRules(oas2Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas2Functions());
 
     const responses = `openapi: 2.0.0
@@ -198,7 +200,7 @@ responses:: !!foo
   });
 
   test('should merge similar ajv errors', async () => {
-    spectral.addRules(oas3Rules());
+    spectral.addRules(oas3Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
