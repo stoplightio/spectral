@@ -2,7 +2,6 @@ const merge = require('lodash/merge');
 
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleFunction, RuleType } from '../../types';
-import { message } from '../message';
 import { commonOasRules } from '../oas';
 import * as schema from './schemas/main.json';
 
@@ -12,7 +11,7 @@ export const oas2Rules = () => {
   return merge(commonOasRules(), {
     // specification validation
     'oas2-schema': {
-      message: message`${'error'}`,
+      message: '{{error}}',
       type: RuleType.VALIDATION,
       severity: DiagnosticSeverity.Error,
       then: {
@@ -102,7 +101,7 @@ export const oas2Rules = () => {
       tags: ['operation'],
     },
     'valid-example': {
-      message: message`"${'property'}" property ${'error'}`,
+      message: '"{{property}}" property {{error}}',
       type: RuleType.VALIDATION,
       given: '$..[?(@.example)]',
       then: {
