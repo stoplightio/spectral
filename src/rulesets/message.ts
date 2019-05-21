@@ -14,8 +14,9 @@ export const message: MessageInterpolator = (str, values) => {
 
   // tslint:disable-next-line:no-conditional-assignment
   while ((result = BRACES.exec(str))) {
-    str = `${str.slice(0, result.index)}${String(values[result[1]] || '')}${str.slice(BRACES.lastIndex)}`;
-    BRACES.lastIndex = result.index;
+    const newValue = String(values[result[1]] || '');
+    str = `${str.slice(0, result.index)}${newValue}${str.slice(BRACES.lastIndex)}`;
+    BRACES.lastIndex = result.index + newValue.length;
   }
 
   return str;
