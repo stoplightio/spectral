@@ -126,7 +126,6 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   }
   const spec: IParserResult = await readParsable(name, flags.encoding);
   const spectral = new Spectral();
-  command.log('Setting up functions...');
   if (parseInt(spec.data.swagger) === 2) {
     command.log('Adding OpenAPI 2.0 (Swagger) functions');
     spectral.addFunctions(oas2Functions());
@@ -135,7 +134,6 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     spectral.addFunctions(oas3Functions());
   }
 
-  command.log('Setting up rules...');
   if (rules) {
     if (flags.verbose) {
       command.log(`Found ${Object.keys(rules).length} rules`);
