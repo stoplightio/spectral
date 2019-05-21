@@ -1,4 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import { MessageInterpolator } from '../rulesets/message';
 import { RuleFunction, RuleType } from './enums';
 
 export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | SchemaRule;
@@ -6,8 +7,11 @@ export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | Patte
 export interface IRule<T = string, O = any> {
   type?: RuleType;
 
-  // A short summary of the rule and its intended purpose
+  // @deprecated - use message instead
   summary?: string;
+
+  // A meaningful feedback about the error
+  message?: string | MessageInterpolator;
 
   // A long-form description of the rule formatted in markdown
   description?: string;

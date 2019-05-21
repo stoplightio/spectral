@@ -24,7 +24,9 @@ To fix, mark this parameter as required.",
     },
     "severity": 0,
     "source": undefined,
-    "summary": "Path parameters are correct and valid.",
+    "summary": "Path parameter \\"**bar**\\" must have a \`required\` that is set to \`true\`.
+
+To fix, mark this parameter as required.",
   },
 ]
 `;
@@ -54,7 +56,11 @@ To fix, update the path so that all parameter names are unique.",
     },
     "severity": 0,
     "source": undefined,
-    "summary": "Path parameters are correct and valid.",
+    "summary": "The path \\"**/foo/{bar}/{bar}**\\" uses the parameter \\"**{bar}**\\" multiple times.
+
+Path parameters must be unique.
+
+To fix, update the path so that all parameter names are unique.",
   },
 ]
 `;
@@ -82,7 +88,9 @@ To fix, add a path parameter with the name \\"**bar**\\".",
     },
     "severity": 0,
     "source": undefined,
-    "summary": "Path parameters are correct and valid.",
+    "summary": "The path \\"**/foo/{bar}**\\" uses a parameter \\"**{bar}**\\" that does not have a corresponding definition.
+
+To fix, add a path parameter with the name \\"**bar**\\".",
   },
 ]
 `;
@@ -109,7 +117,9 @@ To fix, remove one of the paths or merge them together.",
     },
     "severity": 0,
     "source": undefined,
-    "summary": "Path parameters are correct and valid.",
+    "summary": "The paths \\"**/foo/{boo}**\\" and \\"**/foo/{bar}**\\" are equivalent.
+
+To fix, remove one of the paths or merge them together.",
   },
 ]
 `;

@@ -4,7 +4,7 @@ exports[`operation-operationId-valid-in-url return errors if operationId contain
 Array [
   Object {
     "code": "operation-operationId-valid-in-url",
-    "message": "must match the pattern '^[A-Za-z0-9-._~:/?#\\\\[\\\\]@!\\\\$&'()*+,;=]*$'",
+    "message": "operationId may only use characters that are valid when used in a URL.",
     "path": Array [
       "paths",
       "/todos",

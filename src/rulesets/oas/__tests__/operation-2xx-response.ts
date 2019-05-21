@@ -67,7 +67,7 @@ describe('operation-2xx-response', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'operation-2xx-response',
-          message: 'operations must define at least one 2xx response',
+          message: 'Operation must have at least one `2xx` response.',
           path: ['paths', '/path', method, 'responses'],
         }),
       ]);
@@ -91,7 +91,7 @@ describe('operation-2xx-response', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'operation-2xx-response',
-        message: 'operations must define at least one 2xx response',
+        summary: 'Operation must have at least one `2xx` response.',
         path: ['paths', '/path', 'get', 'responses'],
       }),
     ]);

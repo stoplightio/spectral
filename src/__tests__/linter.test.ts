@@ -1,8 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-
+import * as fs from 'fs';
+import * as path from 'path';
 import { oas2Functions } from '../rulesets/oas2';
 import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
+import { oas3Functions } from '../rulesets/oas3';
+import * as oas3Ruleset from '../rulesets/oas3/ruleset.json';
 import { Spectral } from '../spectral';
+import { RuleCollection } from '../types';
+
+const invalidSchema = fs.readFileSync(
+  path.join(__dirname, './__fixtures__/petstore.invalid-schema.oas3.yaml'),
+  'utf-8',
+);
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -90,7 +99,7 @@ describe('linter', () => {
       },
     });
 
-    expect(result[0]).toEqual({
+    expect(result[0]).toMatchObject({
       code: 'rule1',
       message,
       severity: DiagnosticSeverity.Warning,
@@ -137,8 +146,7 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    // @ts-ignore
-    spectral.addRules(oas2Ruleset.rules);
+    spectral.addRules(oas2Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas2Functions());
 
     const responses = `openapi: 2.0.0
@@ -189,6 +197,34 @@ responses:: !!foo
         },
       ]),
     );
+  });
+
+  test('should merge similar ajv errors', async () => {
+    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(invalidSchema);
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'should NOT have additional properties: type',
+        summary: 'should NOT have additional properties: type',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'should match exactly one schema in oneOf',
+        summary: 'should match exactly one schema in oneOf',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: "should have required property '$ref'",
+        summary: "should have required property '$ref'",
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+    ]);
   });
 
   describe('functional tests for the given property', () => {

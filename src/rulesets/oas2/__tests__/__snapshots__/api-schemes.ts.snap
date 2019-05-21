@@ -4,7 +4,7 @@ exports[`api-schemes return errors if schemes is an empty array  1`] = `
 Array [
   Object {
     "code": "api-schemes",
-    "message": "should NOT have fewer than 1 items",
+    "message": "OpenAPI host \`schemes\` must be present and non-empty array.",
     "path": Array [
       "schemes",
     ],
@@ -29,7 +29,7 @@ exports[`api-schemes return errors if schemes is missing  1`] = `
 Array [
   Object {
     "code": "api-schemes",
-    "message": "schemes does not exist",
+    "message": "OpenAPI host \`schemes\` must be present and non-empty array.",
     "path": Array [
       "schemes",
     ],

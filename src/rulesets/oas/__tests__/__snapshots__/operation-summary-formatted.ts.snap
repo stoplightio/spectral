@@ -4,7 +4,7 @@ exports[`operation-summary-formatted return errors if summary does not end with 
 Array [
   Object {
     "code": "operation-summary-formatted",
-    "message": "must match the pattern '^[A-Z].*\\\\.$'",
+    "message": "Operation \`summary\` should start with upper case and end with a dot.",
     "path": Array [
       "paths",
       "/todos",
@@ -32,7 +32,7 @@ exports[`operation-summary-formatted return errors if summary does not start wit
 Array [
   Object {
     "code": "operation-summary-formatted",
-    "message": "must match the pattern '^[A-Z].*\\\\.$'",
+    "message": "Operation \`summary\` should start with upper case and end with a dot.",
     "path": Array [
       "paths",
       "/todos",

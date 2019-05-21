@@ -4,7 +4,7 @@ exports[`contact-properties return errors if name, url, email are missing 1`] = 
 Array [
   Object {
     "code": "contact-properties",
-    "message": "info.contact.name is not truthy",
+    "message": "Contact object should have \`name\`, \`url\` and \`email\`.",
     "path": Array [
       "info",
       "contact",
@@ -26,7 +26,7 @@ Array [
   },
   Object {
     "code": "contact-properties",
-    "message": "info.contact.url is not truthy",
+    "message": "Contact object should have \`name\`, \`url\` and \`email\`.",
     "path": Array [
       "info",
       "contact",
@@ -48,7 +48,7 @@ Array [
   },
   Object {
     "code": "contact-properties",
-    "message": "info.contact.email is not truthy",
+    "message": "Contact object should have \`name\`, \`url\` and \`email\`.",
     "path": Array [
       "info",
       "contact",

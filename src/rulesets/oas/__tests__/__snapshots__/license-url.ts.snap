@@ -4,7 +4,7 @@ exports[`license-url return errors if info license is missing url 1`] = `
 Array [
   Object {
     "code": "license-url",
-    "message": "info.license.url is not truthy",
+    "message": "License object should include \`url\`.",
     "path": Array [
       "info",
       "license",
