@@ -777,9 +777,9 @@
   integrity sha512-xh7STKNeE7j4Z6w8vkw+QxSCaxhF5+c2mY7UBqT6BMiom/Ep/EdYmYq3dmvYfXqwbkiTMR6qbYymwqnoJo8Z6w==
 
 "@stoplight/types@5.x.x", "@stoplight/types@^5.1.0":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-5.1.1.tgz#9224aec04948ac59197da503c084c3826598be09"
-  integrity sha512-XaGr0GFD4CuDCrdbof2pPYIs+FHSNJfvCFur4ZN31iwoTtlhVg0MBwAbj9dlFviUrMMbIflLFaFgqBUNguyMEA==
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-5.1.2.tgz#f2c147eed36b582f920146ad2d7bad9cee3f64d0"
+  integrity sha512-3PHbFrJoFQT/TChGmax3mjiZXVKXjuiFV5PkywNKO4w4AOpmydGM7Z/K2ATag9dqCCOsIz0gvcbOirdjsuwjGg==
 
 "@stoplight/yaml@^2.3.0":
   version "2.3.0"
