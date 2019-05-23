@@ -60,7 +60,7 @@
     "@oclif/config": "^1.12.11",
     "@oclif/plugin-help": "^2.0",
     "@stoplight/json": "^2.1.0",
-    "@stoplight/json-ref-resolver": "1.x.x",
+    "@stoplight/json-ref-resolver": "^1.5.0",
     "@stoplight/types": "^7.0.1",
     "@stoplight/yaml": "^2.3.0",
     "ajv": "6.x.x",
