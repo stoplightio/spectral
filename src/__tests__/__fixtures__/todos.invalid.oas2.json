@@ -79,6 +79,14 @@
                 "completed": false
               }
             }
+          },
+          {
+            "name": "missing",
+            "in": "query",
+            "schema": {
+              "$ref": "#/parameters/missing",
+              "example": "test"
+            }
           }
         ],
         "responses": {

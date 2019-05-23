@@ -57,32 +57,43 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   const { schema: schemaObj } = opts;
 
-  if (!ajv.validate(schemaObj, targetVal) && ajv.errors) {
-    // TODO: potential performance improvements (compile, etc)?
-    const collectedErrors: string[] = [];
+  try {
+    if (!ajv.validate(schemaObj, targetVal) && ajv.errors) {
+      // TODO: potential performance improvements (compile, etc)?
+      const collectedErrors: string[] = [];
 
-    for (const error of ajv.errors) {
-      if (collectedErrors.length > 0) {
-        const index = collectedErrors.indexOf(error.keyword);
-        if (index !== -1) {
-          if (mergeErrors(results[index], error)) continue;
+      for (const error of ajv.errors) {
+        if (collectedErrors.length > 0) {
+          const index = collectedErrors.indexOf(error.keyword);
+          if (index !== -1) {
+            if (mergeErrors(results[index], error)) continue;
+          }
         }
+
+        let message = error.message || '';
+
+        if (
+          error.keyword === 'additionalProperties' &&
+          (error.params as AJV.AdditionalPropertiesParams).additionalProperty
+        ) {
+          message += `: ${(error.params as AJV.AdditionalPropertiesParams).additionalProperty}`;
+        }
+
+        collectedErrors.push(error.keyword);
+        results.push({
+          path: [...path, ...formatPath(error.dataPath)],
+          message,
+        });
       }
-
-      let message = error.message || '';
-
-      if (
-        error.keyword === 'additionalProperties' &&
-        (error.params as AJV.AdditionalPropertiesParams).additionalProperty
-      ) {
-        message += `: ${(error.params as AJV.AdditionalPropertiesParams).additionalProperty}`;
-      }
-
-      collectedErrors.push(error.keyword);
+    }
+  } catch (ex) {
+    if (ex instanceof AJV.MissingRefError) {
       results.push({
-        path: [...path, ...formatPath(error.dataPath)],
-        message,
+        message: ex.message,
+        path,
       });
+    } else {
+      throw ex;
     }
   }
 

@@ -12,6 +12,7 @@ const invalidSchema = fs.readFileSync(
   path.join(__dirname, './__fixtures__/petstore.invalid-schema.oas3.yaml'),
   'utf-8',
 );
+const todosInvalid = fs.readFileSync(path.join(__dirname, './__fixtures__/todos.invalid.oas2.json'), 'utf-8');
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -225,6 +226,23 @@ responses:: !!foo
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
     ]);
+  });
+
+  test('should report invalid $refs', async () => {
+    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(todosInvalid);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'valid-example',
+          message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', 1, 'schema'],
+        }),
+      ]),
+    );
   });
 
   describe('functional tests for the given property', () => {
