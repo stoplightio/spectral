@@ -139,19 +139,20 @@ describe('parameter-description', () => {
     ]);
   });
 
-  test('does not throw on refs', async () => {
-    const results = await s.run({
-      swagger: '2.0',
-      paths: {
-        '/todos': {
-          parameters: [
-            {
-              $ref: '#/parameters/limit',
-            },
-          ],
+  test('does not throw on refs', () => {
+    return expect(
+      s.run({
+        swagger: '2.0',
+        paths: {
+          '/todos': {
+            parameters: [
+              {
+                $ref: '#/parameters/limit',
+              },
+            ],
+          },
         },
-      },
-    });
-    expect(results.length).toEqual(0);
+      }),
+    ).not.rejects;
   });
 });

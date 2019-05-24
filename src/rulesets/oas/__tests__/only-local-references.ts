@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
@@ -16,7 +17,11 @@ describe('only-local-references', () => {
       paths: {},
       parameters: [{ $ref: '#/reference/path' }],
     });
-    expect(results.length).toEqual(0);
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+    ]);
   });
 
   test('return errors if not local ref', async () => {
@@ -25,6 +30,14 @@ describe('only-local-references', () => {
       paths: {},
       parameters: [{ $ref: 'https://stoplight.io#/reference/path' }],
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'only-local-references',
+          message: 'References should start with `#/`.',
+          severity: DiagnosticSeverity.Warning,
+        }),
+      ]),
+    );
   });
 });
