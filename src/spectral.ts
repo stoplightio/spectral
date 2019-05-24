@@ -1,10 +1,10 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
+import { IResolveError } from '@stoplight/json-ref-resolver/types';
+import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
+import { merge, uniqBy } from 'lodash';
 
-import { merge } from 'lodash';
-
-import { IParserResult } from '@stoplight/types';
 import { functions as defaultFunctions } from './functions';
 import { runRules } from './runner';
 import {
@@ -24,7 +24,7 @@ export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
 
-  private resolver: any;
+  private resolver: Resolver;
   constructor(opts?: IConstructorOpts) {
     this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
@@ -43,9 +43,13 @@ export class Spectral {
       parsedResult = target;
     }
 
-    const resolvedTarget = (await this.resolver.resolve(parsedResult.parsed.data)).result;
+    const { result: resolvedTarget, errors } = await this.resolver.resolve(parsedResult.parsed.data);
 
-    return results.concat(runRules(parsedResult, this.rules, this.functions, { resolvedTarget }));
+    return [
+      ...results,
+      ...formatResolverErrors(errors, parsedResult),
+      ...runRules(parsedResult, this.rules, this.functions, { resolvedTarget }),
+    ];
   }
 
   /**
@@ -124,3 +128,24 @@ function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleR
     source,
   }));
 }
+
+const prettyPrintResolverError = (message: string) => message.replace(/^Error\s*:\s*/, '');
+
+const formatResolverErrors = (resolveErrors: IResolveError[], result: IParsedResult): IRuleResult[] => {
+  return uniqBy(resolveErrors, 'message').reduce<IRuleResult[]>((errors, error) => {
+    const path = [...error.path, '$ref'];
+    const location = result.getLocationForJsonPath(result.parsed, path);
+
+    if (location) {
+      errors.push({
+        code: 'invalid-ref',
+        path,
+        message: prettyPrintResolverError(error.message),
+        severity: DiagnosticSeverity.Error,
+        range: location.range,
+      });
+    }
+
+    return errors;
+  }, []);
+};

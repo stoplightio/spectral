@@ -1,5 +1,6 @@
 import { Dictionary, GetLocationForJsonPath, IDiagnostic, IParserResult, JsonPath } from '@stoplight/types';
 
+import { Resolver } from '@stoplight/json-ref-resolver';
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
 
@@ -20,7 +21,7 @@ export interface IRunRule extends IRule {
 export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IConstructorOpts {
-  resolver?: object;
+  resolver?: Resolver;
 }
 
 export interface IRunOpts {

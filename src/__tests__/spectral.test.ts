@@ -104,7 +104,7 @@ describe('spectral', () => {
       };
 
       const s = new Spectral({
-        resolver: fakeResolver,
+        resolver: fakeResolver as any,
       });
 
       const target = { foo: 'bar' };
