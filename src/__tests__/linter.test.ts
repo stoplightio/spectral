@@ -206,29 +206,31 @@ responses:: !!foo
 
     const result = await spectral.run(invalidSchema);
 
-    expect(result).toEqual([
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'should NOT have additional properties: type',
-        summary: 'should NOT have additional properties: type',
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'should match exactly one schema in oneOf',
-        summary: 'should match exactly one schema in oneOf',
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: "should have required property '$ref'",
-        summary: "should have required property '$ref'",
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-      }),
-    ]);
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'oas3-schema',
+          message: 'should NOT have additional properties: type',
+          summary: 'should NOT have additional properties: type',
+          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+        }),
+        expect.objectContaining({
+          code: 'oas3-schema',
+          message: 'should match exactly one schema in oneOf',
+          summary: 'should match exactly one schema in oneOf',
+          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+        }),
+        expect.objectContaining({
+          code: 'oas3-schema',
+          message: "should have required property '$ref'",
+          summary: "should have required property '$ref'",
+          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+        }),
+      ]),
+    );
   });
 
-  test('should report invalid $refs', async () => {
+  test('should report invalid schema $refs', async () => {
     spectral.addRules(oas3Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas3Functions());
 
@@ -240,6 +242,30 @@ responses:: !!foo
           code: 'valid-example',
           message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', 1, 'schema'],
+        }),
+      ]),
+    );
+  });
+
+  test('should report invalid $refs', async () => {
+    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(invalidSchema);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: "No reader defined for scheme 'file' in ref file://models/pet.yaml",
+          path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+          severity: DiagnosticSeverity.Error,
+        }),
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: "No reader defined for scheme 'file' in ref file://../common/models/error.yaml",
+          path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+          severity: DiagnosticSeverity.Error,
         }),
       ]),
     );
