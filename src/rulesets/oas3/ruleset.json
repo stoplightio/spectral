@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "../oas/ruleset.json"
-  ],
+  "extends": ["oas-common"],
   "rules": {
     "oas3-schema": {
       "summary": "Validate structure of OpenAPIv3 specification.",

@@ -14,7 +14,7 @@ import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
-import { readRulesFromRulesets } from '../../rulesets/reader';
+import { readRulesFromRuleset } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
 import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
@@ -97,7 +97,7 @@ linting ./openapi.yaml
 
     if (ruleset) {
       rules = await tryReadOrLog(this, async () => {
-        return readRulesFromRulesets(...ruleset);
+        return Promise.all(ruleset.map(async file => readRulesFromRuleset((await readParsable(file, 'utf-8')).data)));
       });
     }
 

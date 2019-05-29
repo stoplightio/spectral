@@ -147,6 +147,7 @@ const formatResolverErrors = (resolveErrors: IResolveError[], result: IParsedRes
         message: prettyPrintResolverError(error.message),
         severity: DiagnosticSeverity.Error,
         range: location.range,
+        source: result.source,
       });
     }
 

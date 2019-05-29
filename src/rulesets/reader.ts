@@ -1,14 +1,15 @@
 import { merge } from 'lodash';
-import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
 import { formatAjv } from './ajv';
-import { resolvePath } from './path';
 import { validateRuleset } from './validation';
 
-export async function readRulesFromRulesets(...files: string[]): Promise<RuleCollection> {
-  const rulesets = await Promise.all(files.map(file => readRulesFromRuleset(file)));
-  return merge({}, ...rulesets);
+export const rulesetsRegistry = new Map();
+
+export function readRulesFromRulesets(...rulesets: object[]): RuleCollection {
+  return rulesets.reduce<RuleCollection>((rules, ruleset) => {
+    return merge(rules, readRulesFromRuleset(ruleset));
+  }, {});
 }
 
 export type Logger = {
@@ -24,30 +25,24 @@ export type Logger = {
   ) => never;
 };
 
-async function readRulesFromRuleset(file: string): Promise<RuleCollection> {
-  const parsed = await readParsable(file, 'utf8');
-  const { data: ruleset } = parsed;
-  const errors = validateRuleset(ruleset);
+export function readRulesFromRuleset(ruleset: object): RuleCollection {
+  if (!('rules' in ruleset)) {
+    throw new Error('Provided ruleset is not valid');
+  }
+
+  const errors = validateRuleset(ruleset as IRulesetFile);
 
   if (errors.length) {
-    throw {
-      messages: [formatAjv(errors), `Provided ruleset '${file}' is not valid`],
-    };
+    throw new Error(`${formatAjv(errors)} Provided ruleset is not valid`);
   }
 
   const extendz = (ruleset as IRulesetFile).extends;
-  let extendedRules = {};
+  const extendedRules = {};
   if (extendz && extendz.length) {
-    extendedRules = await blendRuleCollections(
-      extendz.map(extend => {
-        return readRulesFromRuleset(resolvePath(file, extend));
-      }),
-    );
+    for (const base of extendz) {
+      merge(extendedRules, rulesetsRegistry.get(base).rules);
+    }
   }
 
-  return merge(extendedRules, ruleset.rules);
-}
-
-export async function blendRuleCollections(futureCollections: Array<Promise<RuleCollection>>) {
-  return Promise.all(futureCollections).then(collections => merge({}, ...collections));
+  return merge(extendedRules, (ruleset as IRulesetFile).rules);
 }

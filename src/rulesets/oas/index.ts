@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import { FunctionCollection } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
@@ -18,6 +17,4 @@ export const commonOasFunctions = (): FunctionCollection => {
   };
 };
 
-export const rules = async () => {
-  return readRulesFromRulesets(resolve(__dirname, 'ruleset.json'));
-};
+export const rules = async () => readRulesFromRulesets(await import('./ruleset.json'));

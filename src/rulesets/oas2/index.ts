@@ -1,8 +1,7 @@
-import { resolve } from 'path';
-import { readRulesFromRulesets } from '../reader';
+import { readRulesFromRulesets, rulesetsRegistry } from '../reader';
 
 export { commonOasFunctions as oas2Functions } from '../oas';
 
-export const rules = async () => {
-  return readRulesFromRulesets(resolve(__dirname, 'ruleset.json'));
-};
+rulesetsRegistry.set('oas-common', require('../oas/ruleset.json'));
+
+export const rules = async () => readRulesFromRulesets(await import('./ruleset.json'));
