@@ -2390,7 +2390,7 @@
     },
     "valid-schema-example": {
       "summary": "Schema examples must be valid against their defined schema.",
-      "message": "\"{{property}}\" property {{error}}",
+      "message": "Property example {{error}}",
       "type": "validation",
       "given": "$..*[?(@.schema)][?(@.example)]",
       "then": {
@@ -2403,14 +2403,14 @@
     },
     "valid-openapi-example": {
       "summary": "Examples must be valid against ???",
-      "message": "{{error}}",
+      "message": "Property example {{error}}",
       "type": "validation",
       "given": "$..*[?(!@.schema)][?(@.example)]",
       "then": {
-        "function": "example",
+        "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$.schema"
         }
       }
     }

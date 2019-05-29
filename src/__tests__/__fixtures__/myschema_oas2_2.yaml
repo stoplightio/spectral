@@ -21,7 +21,7 @@ paths:
           required: true
           description: The id of the pet to retrieve
           type: string
-          example: 222
+          #example: 222 #should NOT have additional properties: type, example, name - error, oas2-schema
       responses:
         '200':
           description: Expected response to a valid request

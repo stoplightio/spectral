@@ -16,7 +16,7 @@ paths:
           schema:
             type: integer
             example: 123
-          example: 23
+#          example: 23 #should NOT have additional properties: type, example, name - error, oas2-schema
       responses:
         200:
           description: ok
