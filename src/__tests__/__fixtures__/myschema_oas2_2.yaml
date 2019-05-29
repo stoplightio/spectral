@@ -1,0 +1,27 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  description: Swagger Petstore
+  license:
+    name: MIT
+  contact:
+    name: Test
+paths:
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      description: Get a pet
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          type: string
+          example: 222
+      responses:
+        '200':
+          description: Expected response to a valid request

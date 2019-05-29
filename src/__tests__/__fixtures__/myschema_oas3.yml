@@ -1,0 +1,31 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  description: Swagger Petstore
+  license:
+    name: MIT
+  contact:
+    name: Test
+servers:
+  - url: http://petstore.swagger.io/v1
+paths:
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      description: Get a pet
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+            example: "1234567890"
+          example: 32323
+      responses:
+        '200':
+          description: Expected response to a valid request
