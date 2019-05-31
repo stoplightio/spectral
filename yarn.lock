@@ -8422,9 +8422,9 @@ typedoc@0.14.2:
     typescript "3.2.x"
 
 typescript-json-schema@^0.38.0:
-  version "0.38.0"
-  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.38.0.tgz#8abd2761aa53084a8c382d94e4b570a42811f375"
-  integrity sha512-X3dnxETu/K4e17CW6ZYnBLVlH3K5RRlDg8RpPKz6YKJrtd0eL9MHi0OWhyQgjtGw0NAKGI5jpoXUsiR+6xPcZw==
+  version "0.38.1"
+  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.38.1.tgz#695d7b1901646e07e11b29ea4862bf251371611d"
+  integrity sha512-+bm4cqlpWIjdtq5e1bj/gO/j+UQSeFlctdBFiNMQCQzr8v6RK7/Nuk0Jo1cL6LtRRa2YiFYcAncdeTQTyrLH8w==
   dependencies:
     glob "~7.1.4"
     json-stable-stringify "^1.0.1"
