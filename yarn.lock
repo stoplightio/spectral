@@ -694,10 +694,15 @@
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/lodash@*", "@types/lodash@^4.0.0":
-  version "4.14.135"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.135.tgz#d2607c35dd68f70c2b35ba020c667493dedd8447"
-  integrity sha512-Ed+tSZ9qM1oYpi5kzdsBuOzcAIn1wDW+e8TFJ50IMJMlSopGdJgKAbhHzN6h1E1OfjlGOr2JepzEWtg9NIfoNg==
+"@types/jsonpath@0.2.x":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@types/jsonpath/-/jsonpath-0.2.0.tgz#13c62db22a34d9c411364fac79fd374d63445aa1"
+  integrity sha512-v7qlPA0VpKUlEdhghbDqRoKMxFB3h3Ch688TApBJ6v+XLDdvWCGLJIYiPKGZnS6MAOie+IorCfNYVHOPIHSWwQ==
+
+"@types/lodash@*", "@types/lodash@4.x.x", "@types/lodash@^4.14.110":
+  version "4.14.133"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.133.tgz#430721c96da22dd1694443e68e6cec7ba1c1003d"
+  integrity sha512-/3JqnvPnY58GLzG3Y7fpphOhATV1DDZ/Ak3DQufjlRK5E4u+s0CfClfNFtAGBabw+jDGtRFbOZe+Z02ZMWCBNQ==
 
 "@types/minimatch@*":
   version "3.0.3"
