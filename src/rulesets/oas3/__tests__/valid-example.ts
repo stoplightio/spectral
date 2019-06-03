@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../ruleset.json';
 
@@ -22,6 +23,21 @@ describe('valid-example', () => {
       },
     });
     expect(results).toHaveLength(0);
+  });
+
+  test('does not warn about data/required when required is not an array', async () => {
+    const spy = jest.spyOn(console, 'warn');
+
+    const results = await s.run({
+      xoxo: {
+        required: true,
+        type: 'string',
+        example: 'doggie',
+      },
+    });
+
+    expect(results).toHaveLength(0);
+    expect(get(spy, 'mock.calls[0][0]', '')).not.toContain('Error: schema is invalid: data/required should be array');
   });
 
   test('will fail when simple example is invalid', async () => {
@@ -214,4 +230,62 @@ describe('valid-example', () => {
       expect(results).toHaveLength(0);
     },
   );
+});
+
+describe('valid-openapi-example', () => {
+  const s = new Spectral();
+
+  s.addRules({
+    'valid-openapi-example': Object.assign(ruleset.rules['valid-openapi-example'], {
+      enabled: true,
+      type: RuleType[ruleset.rules['valid-openapi-example'].type],
+    }),
+  });
+
+  describe('when example is not of schema.type', () => {
+    test('reports example field validation issue', async () => {
+      const results = await s.run({
+        xoxo: {
+          schema: {
+            type: 'string',
+          },
+          example: 1234,
+        },
+      });
+
+      expect(results[0].message).toBe('Example property should be string');
+    });
+  });
+
+  describe('when example is of schema.type', () => {
+    test('does not return validation issues', async () => {
+      const results = await s.run({
+        xoxo: {
+          schema: {
+            type: 'string',
+          },
+          example: 'abc',
+        },
+      });
+
+      expect(results).toHaveLength(0);
+    });
+  });
+
+  describe('when schema.required is not an array', () => {
+    test('does not warn about data/required', async () => {
+      const spy = jest.spyOn(console, 'warn');
+
+      const results = await s.run({
+        xoxo: {
+          required: true,
+          type: 'string',
+          example: 'doggie',
+        },
+      });
+
+      expect(results).toHaveLength(0);
+      expect(get(spy, 'mock.calls[0][0]', '')).not.toContain('Error: schema is invalid: data/required should be array');
+    });
+  });
 });

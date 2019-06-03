@@ -37,5 +37,11 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     console.error(error);
   }
 
-  return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
+  return schema(relevantObject, { schema: withoutRequiredIfNotArray(schemaObject) }, paths, otherValues);
 };
+
+function withoutRequiredIfNotArray(schemaObject: any) {
+  const { required, ...rest } = schemaObject;
+
+  return !Array.isArray(required) ? rest : schemaObject;
+}

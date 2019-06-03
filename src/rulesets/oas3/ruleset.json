@@ -2400,6 +2400,19 @@
           "schemaPath": "$"
         }
       }
+    },
+    "valid-openapi-example": {
+      "summary": "Examples must be valid against their defined schema.",
+      "message": "Example property {{error}}",
+      "type": "validation",
+      "given": "$..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
     }
   }
 }
