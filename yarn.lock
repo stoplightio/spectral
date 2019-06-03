@@ -8422,13 +8422,13 @@ typedoc@0.14.2:
     typescript "3.2.x"
 
 typescript-json-schema@^0.38.0:
-  version "0.38.0"
-  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.38.0.tgz#8abd2761aa53084a8c382d94e4b570a42811f375"
-  integrity sha512-X3dnxETu/K4e17CW6ZYnBLVlH3K5RRlDg8RpPKz6YKJrtd0eL9MHi0OWhyQgjtGw0NAKGI5jpoXUsiR+6xPcZw==
+  version "0.38.2"
+  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.38.2.tgz#6defce4c04022eb736182d8192a5a92ef8aa61ab"
+  integrity sha512-lD/rWhDPQ1+yeF4f/cPJ2dKpbUNoLKSHNK4z4XFAz7SY4tjAmQj2GF9k+Si6EsCiwAHrpn6haulo2YcFKYBh1g==
   dependencies:
     glob "~7.1.4"
     json-stable-stringify "^1.0.1"
-    typescript "^3.4.5"
+    typescript "^3.5.1"
     yargs "^13.2.4"
 
 typescript@3.2.x:
@@ -8436,7 +8436,7 @@ typescript@3.2.x:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.4.tgz#c585cb952912263d915b462726ce244ba510ef3d"
   integrity sha512-0RNDbSdEokBeEAkgNbxJ+BLwSManFy9TeXz8uW+48j/xhEXv1ePME60olyzw2XzUqUBNAYFeJadIqAgNqIACwg==
 
-typescript@3.5.1, typescript@^3.4.5:
+typescript@3.5.1, typescript@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.1.tgz#ba72a6a600b2158139c5dd8850f700e231464202"
   integrity sha512-64HkdiRv1yYZsSe4xC1WVgamNigVYjlssIoaH2HcZF0+ijsk5YK2g0G34w9wJkze8+5ow4STd22AynfO6ZYYLw==
