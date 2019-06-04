@@ -6,8 +6,8 @@ import {
   IGivenNode,
   IParsedResult,
   IRuleResult,
-  IRunOpts,
   IRunRule,
+  IRunRuleOpts,
   RunRuleCollection,
 } from './types';
 
@@ -15,7 +15,7 @@ export const runRules = (
   parsedResult: IParsedResult,
   rules: RunRuleCollection,
   functions: FunctionCollection,
-  opts: IRunOpts,
+  opts: IRunRuleOpts,
 ): IRuleResult[] => {
   let results: IRuleResult[] = [];
 
@@ -43,7 +43,7 @@ const runRule = (
   parsedResult: IParsedResult,
   rule: IRunRule,
   functions: FunctionCollection,
-  opts: IRunOpts,
+  opts: IRunRuleOpts,
 ): IRuleResult[] => {
   const { parsed } = parsedResult;
   const { data: target } = parsed;

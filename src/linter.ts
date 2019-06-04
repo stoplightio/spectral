@@ -3,7 +3,7 @@ import * as jp from 'jsonpath';
 import { get, has } from 'lodash';
 
 import { message } from './rulesets/message';
-import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
+import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunRule, IRunRuleOpts, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -11,7 +11,7 @@ export const lintNode = (
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
-  opts: IRunOpts,
+  opts: IRunRuleOpts,
   parsedResult: IParsedResult,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
