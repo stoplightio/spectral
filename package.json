@@ -71,7 +71,8 @@
     "node-fetch": "2.x.x",
     "strip-ansi": "^5.2.0",
     "text-table": "^0.2.0",
-    "typescript-json-schema": "^0.38.0"
+    "typescript-json-schema": "^0.38.0",
+    "unfetch": "^4.1.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
