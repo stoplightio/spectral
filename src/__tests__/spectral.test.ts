@@ -111,7 +111,7 @@ describe('spectral', () => {
 
       await s.run(target);
 
-      expect(fakeResolver.resolve).toBeCalledWith(target, undefined);
+      expect(fakeResolver.resolve).toBeCalledWith(target, { authority: undefined });
     });
   });
 
