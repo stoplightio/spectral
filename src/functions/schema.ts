@@ -55,8 +55,8 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       },
     ];
 
-  // we already access resolved object in src/functions/schema-path.ts
-  const schemaObj = opts.schema;
+  // we already access a resolved object in src/functions/schema-path.ts
+  const { schema: schemaObj } = opts;
 
   try {
     if (!ajv.validate(schemaObj, targetVal) && ajv.errors) {
