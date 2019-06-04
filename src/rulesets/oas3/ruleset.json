@@ -2390,7 +2390,7 @@
     },
     "valid-openapi-example": {
       "summary": "Examples must be valid against their defined schema.",
-      "message": "Example property should be string",
+      "message": "\"{{property}}\" property {{error}}",
       "type": "validation",
       "given": "$..[?(@.schema)][?(@.example)]",
       "then": {
@@ -2403,7 +2403,7 @@
     },
     "valid-schema-example": {
       "summary": "Examples must be valid against their defined schema.",
-      "message": "Example property {{error}}",
+      "message": "\"{{property}}\" property {{error}}",
       "type": "validation",
       "given": "$..[?(@.example && @.schema)]",
       "then": {

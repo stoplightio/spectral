@@ -239,7 +239,7 @@ responses:: !!foo
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'valid-example',
+          code: 'valid-openapi-example',
           message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', 1, 'schema'],
         }),

@@ -238,7 +238,12 @@ describe('valid-schema-example', () => {
         },
       });
 
-      expect(results[0].message).toBe('Example property should be string');
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'valid-schema-example',
+          message: '"xoxo" property should be string',
+        }),
+      ]);
     });
   });
 
@@ -279,7 +284,12 @@ describe('valid-openapi-example', () => {
         },
       });
 
-      expect(results[0].message).toBe('Example property should be string');
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'valid-openapi-example',
+          message: '"schema" property should be string',
+        }),
+      ]);
     });
   });
 
