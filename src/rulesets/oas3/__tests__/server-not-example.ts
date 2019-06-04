@@ -33,6 +33,12 @@ describe('server-not-example.com', () => {
         },
       ],
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'server-not-example.com',
+        message: 'Server URL should not point at `example.com`.',
+        path: ['servers', 0, 'url'],
+      }),
+    ]);
   });
 });

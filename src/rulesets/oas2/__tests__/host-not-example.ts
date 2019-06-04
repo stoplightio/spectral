@@ -25,6 +25,12 @@ describe('host-not-example', () => {
       paths: {},
       host: 'https://example.com',
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'host-not-example',
+        message: 'Server URL should not point at `example.com`.',
+        path: ['host'],
+      }),
+    ]);
   });
 });
