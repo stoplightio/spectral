@@ -69,11 +69,10 @@
     "chalk": "^2.4.2",
     "jsonpath": "https://github.com/stoplightio/jsonpath#f1c0e9e634da2d45671b7639fa0a99afc807da17",
     "lodash": ">=4.17.5",
-    "node-fetch": "2.x.x",
+    "node-fetch": "^2.6.0",
     "strip-ansi": "^5.2.0",
     "text-table": "^0.2.0",
-    "typescript-json-schema": "^0.38.0",
-    "unfetch": "^4.1.0"
+    "typescript-json-schema": "^0.38.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
