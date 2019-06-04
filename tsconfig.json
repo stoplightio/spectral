@@ -2,5 +2,9 @@
   "extends": "./node_modules/@stoplight/scripts/tsconfig.json",
 
   // target all ts files
-  "include": ["."]
+  "include": ["."],
+
+  "compilerOptions": {
+    "allowJs": true
+  }
 }
