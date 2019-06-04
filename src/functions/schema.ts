@@ -42,7 +42,7 @@ const mergeErrors = (existingError: IFunctionResult, newError: AJV.ErrorObject) 
   }
 };
 
-export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths, { resolved }) => {
+export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
   const path = paths.target || paths.given;
@@ -55,7 +55,8 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths, { reso
       },
     ];
 
-  const schemaObj = resolved || opts.schema;
+  // we already access resolved object in src/functions/schema-path.ts
+  const schemaObj = opts.schema;
 
   try {
     if (!ajv.validate(schemaObj, targetVal) && ajv.errors) {
