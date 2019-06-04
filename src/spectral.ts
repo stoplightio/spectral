@@ -45,9 +45,9 @@ export class Spectral {
       parsedResult = target;
     }
 
-    const authority = opts.resolve && opts.resolve.authority;
+    const documentUri = opts.resolve && opts.resolve.documentUri;
     const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, {
-      authority: authority ? new URI(authority) : undefined,
+      authority: documentUri ? new URI(documentUri) : undefined,
     });
 
     return [

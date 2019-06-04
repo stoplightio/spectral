@@ -176,7 +176,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
 
     results = await spectral.run(parsedResult, {
       resolve: {
-        authority: targetUri,
+        documentUri: targetUri,
       },
     });
 
