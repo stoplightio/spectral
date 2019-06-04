@@ -5,10 +5,12 @@ import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
 import { promisify } from 'util';
+
 import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
+import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
 import { readRulesFromRulesets } from '../../rulesets/reader';
@@ -124,8 +126,11 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   if (flags.verbose) {
     command.log(`Linting ${name}`);
   }
-  const spec: IParserResult = await readParsable(name, flags.encoding);
-  const spectral = new Spectral();
+
+  const targetUri = resolve(name);
+
+  const spec: IParserResult = await readParsable(targetUri, flags.encoding);
+  const spectral = new Spectral({ resolver: httpAndFileResolver });
   if (parseInt(spec.data.swagger) === 2) {
     command.log('Adding OpenAPI 2.0 (Swagger) functions');
     spectral.addFunctions(oas2Functions());
@@ -163,12 +168,17 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   let results = [];
   try {
     const parsedResult: IParsedResult = {
-      source: resolve(process.cwd(), name),
+      source: targetUri,
       parsed: spec,
       getLocationForJsonPath,
     };
 
-    results = await spectral.run(parsedResult);
+    results = await spectral.run(parsedResult, {
+      resolve: {
+        authority: targetUri,
+      },
+    });
+
     if (results.length === 0) {
       command.log('No errors or warnings found!');
       return;

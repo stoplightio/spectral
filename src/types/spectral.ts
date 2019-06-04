@@ -26,7 +26,7 @@ export interface IConstructorOpts {
 
 export interface IRunOpts {
   resolve?: {
-    authority?: uri.URI;
+    authority?: string;
   };
 }
 

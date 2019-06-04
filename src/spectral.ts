@@ -4,6 +4,7 @@ import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { merge, uniqBy } from 'lodash';
+import * as URI from 'urijs';
 
 import { functions as defaultFunctions } from './functions';
 import { runRules } from './runner';
@@ -44,7 +45,10 @@ export class Spectral {
       parsedResult = target;
     }
 
-    const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, opts.resolve);
+    const authority = opts.resolve && opts.resolve.authority;
+    const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, {
+      authority: authority ? new URI(authority) : undefined,
+    });
 
     return [
       ...results,

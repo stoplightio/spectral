@@ -10,12 +10,13 @@ export const httpAndFileResolver = new Resolver({
     http: httpReader,
     file: {
       read(ref: any) {
-        return new Promise((resolve, reject) =>
-          fs.readFile(String(ref), 'utf8', (err, data) => {
+        return new Promise((resolve, reject) => {
+          const path = ref.path();
+          return fs.readFile(path, 'utf8', (err, data) => {
             if (err) reject(err);
             resolve(data);
-          }),
-        );
+          });
+        });
       },
     },
   },
