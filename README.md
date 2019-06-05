@@ -101,47 +101,50 @@ Spectral includes a number of ready made rules and functions for OpenAPI v2 and 
 
 This example uses the OpenAPI v3 rules to lint a document.
 
-```javascript
+```ts
 const { Spectral } = require('@stoplight/spectral');
-const { oas3Functions, oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
+const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
 // for YAML
 const { parseWithPointers } = require("@stoplight/yaml");
-const myOAS = parseWithPointers(`
-responses:
-  '200':
-    description: ''
-    schema:
-      $ref: '#/definitions/error-response'
-`)
 
-// an OASv3 document
-const myOAS = {
-  // ... properties in your document
-  responses: {
-    '200': {
-      description: '',
-      schema: {
-        $ref: '#/definitions/error-response',
+// Using the anonymous async wrapper for the sake of the example.
+(async function() {
+  const myOAS = parseWithPointers(`
+  responses:
+    '200':
+      description: ''
+      schema:
+        $ref: '#/definitions/error-response'
+  `)
+
+  // an OASv3 document
+  const myOAS = {
+    // ... properties in your document
+    responses: {
+      '200': {
+        description: '',
+        schema: {
+          $ref: '#/definitions/error-response',
+        },
       },
     },
-  },
-  // ... properties in your document
-};
+    // ... properties in your document
+  };
 
-// create a new instance of spectral with all of the baked in rulesets
-const spectral = new Spectral();
+  // create a new instance of spectral with all of the baked in rulesets
+  const spectral = new Spectral();
 
-spectral.addFunctions(oas3Functions());
-spectral.addRules(oas3Rules());
+  spectral.addFunctions(oas3Functions());
+  spectral.addRules(await oas3Rules());
 
-spectral.addRules({
-  // .. extend with your own custom rules
-});
+  spectral.addRules({
+    // .. extend with your own custom rules
+  });
 
-// run!
-spectral.run(myOAS).then(results => {
+  // run!
+  const results = await spectral.run(myOAS);
   console.log(JSON.stringify(results, null, 4));
-});
+})();
 ```
 
 You can also [add to these rules](#Creating-a-custom-rule) to create a customized linting style guide for your OpenAPI documents.
