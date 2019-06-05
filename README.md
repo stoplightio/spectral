@@ -108,43 +108,44 @@ const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/ruleset
 const { parseWithPointers } = require("@stoplight/yaml");
 
 // Using the anonymous async wrapper for the sake of the example.
-(async function() {
-  const myOAS = parseWithPointers(`
-  responses:
-    '200':
-      description: ''
-      schema:
-        $ref: '#/definitions/error-response'
-  `)
+const myOAS = parseWithPointers(`
+responses:
+  '200':
+    description: ''
+    schema:
+      $ref: '#/definitions/error-response'
+`)
 
-  // an OASv3 document
-  const myOAS = {
-    // ... properties in your document
-    responses: {
-      '200': {
-        description: '',
-        schema: {
-          $ref: '#/definitions/error-response',
-        },
+// an OASv3 document
+const myOAS = {
+  // ... properties in your document
+  responses: {
+    '200': {
+      description: '',
+      schema: {
+        $ref: '#/definitions/error-response',
       },
     },
-    // ... properties in your document
-  };
+  },
+  // ... properties in your document
+};
 
-  // create a new instance of spectral with all of the baked in rulesets
-  const spectral = new Spectral();
+// create a new instance of spectral with all of the baked in rulesets
+const spectral = new Spectral();
 
-  spectral.addFunctions(oas3Functions());
-  spectral.addRules(await oas3Rules());
+spectral.addFunctions(oas3Functions());
+oas3Rules()
+  .then(rules => spectral.addRules(rules))
+  .then(() => {
+    spectral.addRules({
+      // .. extend with your own custom rules
+    });
 
-  spectral.addRules({
-    // .. extend with your own custom rules
+    // run!
+    spectral.run(myOAS).then(results => {
+      console.log(JSON.stringify(results, null, 4));
+    });
   });
-
-  // run!
-  const results = await spectral.run(myOAS);
-  console.log(JSON.stringify(results, null, 4));
-})();
 ```
 
 You can also [add to these rules](#Creating-a-custom-rule) to create a customized linting style guide for your OpenAPI documents.
