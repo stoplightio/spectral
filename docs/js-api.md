@@ -1,4 +1,4 @@
-# Using Spectral in code
+# Using Spectral programatically
 
 ## Example: Linting an OpenAPI document
 
