@@ -95,6 +95,16 @@ Other options include:
 
 Currently, the CLI supports validation of OpenAPI documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization).
 
+## Concepts
+
+There are three key concepts in Spectral: **Rulesets**, **Rules** and **Functions**.
+
+- **Ruleset** is a container for a collection of rules and functions.
+- **Rule** filters your object down to a set of target values, and specify the function that should evaluate those values.
+- **Function** accept a value and return issue(s) if the value is incorrect.
+
+Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
+
 ## Programmatic usage
 
 Spectral is written in TypeScript (JavaScript) and can be used directly for when working with the CLI isn't the right approach. Take a look at our ["JavaScript API documentation"](docs/js-api.md).

@@ -59,16 +59,6 @@ The existing OAS rules are opinionated. There might be some rules that you prefe
 
 ## Advanced
 
-### Customization
-
-There are three key concepts in Spectral: **Rulesets**, **Rules** and **Functions**.
-
-- **Ruleset** is a container for a collection of rules and functions.
-- **Rule** filters your object down to a set of target values, and specify the function that should evaluate those values.
-- **Function** accept a value and return issue(s) if the value is incorrect.
-
-Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
-
 #### Creating a custom rule
 
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
