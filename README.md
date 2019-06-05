@@ -97,7 +97,7 @@ Currently, the CLI supports validation of OpenAPI documents and lints them based
 
 ## Programmatic usage
 
-Should you need to use Spectral as a library feel free to check out the ["Using Spectral in code"](docs/js-api.md) documentation.
+Spectral is written in TypeScript (JavaScript) and can be used directly for when working with the CLI isn't the right approach. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## Rulesets
 
