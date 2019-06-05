@@ -1,4 +1,5 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
+import { parseWithPointers } from '@stoplight/yaml';
 import * as fs from 'fs';
 
 import { httpReader } from './http';
@@ -12,12 +13,25 @@ export const httpAndFileResolver = new Resolver({
       read(ref: any) {
         return new Promise((resolve, reject) => {
           const path = ref.path();
-          return fs.readFile(path, 'utf8', (err, data) => {
+          fs.readFile(path, 'utf8', (err, data) => {
             if (err) reject(err);
             resolve(data);
           });
         });
       },
     },
+  },
+
+  parseAuthorityResult: async opts => {
+    const parts = opts.targetAuthority.path().split('.');
+    const format = parts[parts.length - 1];
+
+    if (format === 'yml' || format === 'yaml') {
+      opts.result = parseWithPointers(opts.result).data;
+    } else if (format === 'json') {
+      opts.result = JSON.parse(opts.result);
+    }
+
+    return opts;
   },
 });
