@@ -101,7 +101,7 @@ Spectral includes a number of ready made rules and functions for OpenAPI v2 and 
 
 This example uses the OpenAPI v3 rules to lint a document.
 
-```ts
+```js
 const { Spectral } = require('@stoplight/spectral');
 const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
 // for YAML
