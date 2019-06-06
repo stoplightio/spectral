@@ -107,7 +107,7 @@ Think of a set of **rules** and **functions** as a flexible and customizable sty
 
 ## Programmatic usage
 
-Spectral is written in TypeScript (JavaScript) and can be used directly for when working with the CLI isn't the right approach. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
+Spectral is written in TypeScript (JavaScript) and can be used directly for when you need to use Spectral programatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## Rulesets
 

@@ -12,14 +12,14 @@ const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/ruleset
 // for YAML
 const { parseWithPointers } = require("@stoplight/yaml");
 
-// Using the anonymous async wrapper for the sake of the example.
-const myOAS = parseWithPointers(`
-responses:
-  '200':
-    description: ''
-    schema:
-      $ref: '#/definitions/error-response'
-`)
+// Uncomment to use parseWithPointers (remember to comment the next instance of myOAS)
+// const myOAS = parseWithPointers(`
+// responses:
+//   '200':
+//     description: ''
+//     schema:
+//       $ref: '#/definitions/error-response'
+// `)
 
 // an OASv3 document
 const myOAS = {
@@ -62,6 +62,8 @@ The existing OAS rules are opinionated. There might be some rules that you prefe
 #### Creating a custom rule
 
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
+
+<iframe height="400px" width="100%" src="https://repl.it/repls/ZanyPlumpFonts?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>
 
 ```javascript
 const { RuleFunction, Spectral } = require('@stoplight/spectral');
