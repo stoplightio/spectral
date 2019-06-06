@@ -53,6 +53,116 @@ oas3Rules()
   });
 ```
 
+[Try it out!](https://repl.it/@ChrisMiaskowski/spectral-rules-example)
+
+<details><summary>Click to see the output</summary>
+<p>
+
+```bash
+[
+    {
+        "code": "invalid-ref",
+        "path": [
+            "responses",
+            "200",
+            "schema",
+            "$ref"
+        ],
+        "message": "'#/definitions/error-response' does not exist",
+        "severity": 0,
+        "range": {
+            "start": {
+                "line": 5,
+                "character": 16
+            },
+            "end": {
+                "line": 5,
+                "character": 46
+            }
+        }
+    },
+    {
+        "code": "info-contact",
+        "summary": "Info object should contain `contact` object.",
+        "message": "Info object should contain `contact` object.",
+        "path": [
+            "info",
+            "contact"
+        ],
+        "severity": 1,
+        "range": {
+            "start": {
+                "line": 0,
+                "character": 0
+            },
+            "end": {
+                "line": 5,
+                "character": 46
+            }
+        }
+    },
+    {
+        "code": "info-description",
+        "summary": "OpenAPI object info `description` must be present and non-empty string.",
+        "message": "OpenAPI object info `description` must be present and non-empty string.",
+        "path": [
+            "info",
+            "description"
+        ],
+        "severity": 1,
+        "range": {
+            "start": {
+                "line": 0,
+                "character": 0
+            },
+            "end": {
+                "line": 5,
+                "character": 46
+            }
+        }
+    },
+    {
+        "code": "oas3-schema",
+        "summary": "should NOT have additional properties: responses",
+        "message": "should NOT have additional properties: responses",
+        "path": [],
+        "severity": 0,
+        "range": {
+            "start": {
+                "line": 0,
+                "character": 0
+            },
+            "end": {
+                "line": 5,
+                "character": 46
+            }
+        }
+    },
+    {
+        "code": "api-servers",
+        "summary": "OpenAPI `servers` must be present and non-empty array.",
+        "message": "OpenAPI `servers` must be present and non-empty array.",
+        "path": [
+            "servers"
+        ],
+        "severity": 1,
+        "range": {
+            "start": {
+                "line": 0,
+                "character": 0
+            },
+            "end": {
+                "line": 5,
+                "character": 46
+            }
+        }
+    }
+]
+```
+
+</p>
+</details>
+
 You can also [add to these rules](#Creating-a-custom-rule) to create a customized linting style guide for your OpenAPI documents.
 
 The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
@@ -62,8 +172,6 @@ The existing OAS rules are opinionated. There might be some rules that you prefe
 #### Creating a custom rule
 
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
-
-<iframe height="400px" width="100%" src="https://repl.it/repls/ZanyPlumpFonts?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>
 
 ```javascript
 const { RuleFunction, Spectral } = require('@stoplight/spectral');
@@ -90,18 +198,32 @@ spectral.addRules({
 spectral.run({name: 'helloWorld',}).then(results => {
   console.log(JSON.stringify(results, null, 4));
 });
+```
 
-// => outputs a single result since `helloWorld` is not snake_case
-// [
-//   {
-//     "code": "snake_case",
-//     "message": "must match the pattern '^[a-z]+[a-z0-9_]*[a-z0-9]+$'",
-//     "severity": 1,
-//     "path": [
-//       "name"
-//     ]
-//   }
-// ]
+[Try it out!](https://repl.it/@ChrisMiaskowski/spectral-pattern-example)
+
+```bash
+[
+    {
+        "code": "snake_case",
+        "summary": "Checks for snake case pattern",
+        "message": "Checks for snake case pattern",
+        "path": [
+            "name"
+        ],
+        "severity": 1,
+        "range": {
+            "start": {
+                "line": 1,
+                "character": 10
+            },
+            "end": {
+                "line": 1,
+                "character": 22
+            }
+        }
+    }
+]
 ```
 
 #### Creating a custom function
@@ -155,16 +277,31 @@ spectral.addRules({
 spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
   console.log(JSON.stringify(results, null, 4));
 });
+```
 
-// => outputs a single result since we are using the term `Swagger` in our object
-// [
-//   {
-//     "code": "openapi_not_swagger",
-//     "message": "Use OpenAPI instead of Swagger!",
-//     "severity": 1,
-//     "path": [
-//       "description"
-//     ]
-//   }
-// ]
+[Try it out!](https://repl.it/@ChrisMiaskowski/spectral-custom-function-example)
+
+```bash
+# Outputs a single result since we are using the term `Swagger` in our object 
+[
+    {
+        "code": "openapi_not_swagger",
+        "summary": "Checks for use of Swagger, and suggests OpenAPI.",
+        "message": "Checks for use of Swagger, and suggests OpenAPI.",
+        "path": [
+            "description"
+        ],
+        "severity": 1,
+        "range": {
+            "start": {
+                "line": 1,
+                "character": 17
+            },
+            "end": {
+                "line": 1,
+                "character": 42
+            }
+        }
+    }
+]
 ```
