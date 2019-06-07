@@ -1,13 +1,16 @@
-import { Spectral } from '../../../spectral';
-import { oas3Rules } from '../index';
+import { RuleType, Spectral } from '../../../spectral';
+import * as ruleset from '../ruleset.json';
 
-const ruleset = { rules: oas3Rules() };
+// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
+// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
+declare var test: jest.It;
 
 describe('valid-example', () => {
   const s = new Spectral();
   s.addRules({
     'valid-example': Object.assign(ruleset.rules['valid-example'], {
       enabled: true,
+      type: RuleType[ruleset.rules['valid-example'].type],
     }),
   });
 
@@ -119,47 +122,37 @@ describe('valid-example', () => {
     });
 
     expect(results).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "code": "valid-example",
-    "message": "should match format \\"email\\"",
-    "path": Array [
-      "paths",
-      "/pet",
-      "post",
-      "requestBody",
-      "content",
-      "*/*",
-      "schema",
-    ],
-    "range": Object {
-      "end": Object {
-        "character": 34,
-        "line": 15,
-      },
-      "start": Object {
-        "character": 23,
-        "line": 12,
-      },
-    },
-    "severity": 1,
-    "source": undefined,
-    "summary": "Examples must be valid against their defined schema.",
-  },
-]
-`);
+      Array [
+        Object {
+          "code": "valid-example",
+          "message": "\\"schema\\" property should match format \\"email\\"",
+          "path": Array [
+            "paths",
+            "/pet",
+            "post",
+            "requestBody",
+            "content",
+            "*/*",
+            "schema",
+          ],
+          "range": Object {
+            "end": Object {
+              "character": 34,
+              "line": 15,
+            },
+            "start": Object {
+              "character": 23,
+              "line": 12,
+            },
+          },
+          "severity": 1,
+          "source": undefined,
+          "summary": "\\"schema\\" property should match format \\"email\\"",
+        },
+      ]
+    `);
   });
 
-  /*
-   * NOTE: This used to throw and error so we told AJV to ignore unknownFormats
-   *
-   *   Error: unknown format "int64" is used in schema at path "#"
-   *
-   * If this test starts to correctly report that 2886989840 is not a valid int64, then
-   * great, somebody must have trained AJV what a int64 is.
-   *
-   * More information: https://github.com/stoplightio/spectral/issues/187
-   */
   test('does not report example mismatches for unknown AJV formats', async () => {
     const results = await s.run({
       xoxo: {
@@ -167,7 +160,7 @@ Array [
         properties: {
           ip_address: {
             type: 'integer',
-            format: 'int64',
+            format: 'foo',
             example: 2886989840,
           },
         },
@@ -176,4 +169,49 @@ Array [
 
     expect(results).toEqual([]);
   });
+
+  test.each([['byte', '1'], ['int32', 2 ** 31], ['int64', 2 ** 63], ['float', 2 ** 128]])(
+    'reports invalid usage of %s format',
+    async (format, example) => {
+      const results = await s.run({
+        xoxo: {
+          type: 'object',
+          properties: {
+            ip_address: {
+              type: ['string', 'number'],
+              format,
+              example,
+            },
+          },
+        },
+      });
+
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'valid-example',
+          message: `"ip_address" property should match format "${format}"`,
+        }),
+      ]);
+    },
+  );
+
+  test.each([['byte', 'MTI3'], ['int32', 2 ** 30], ['int64', 2 ** 40], ['float', 2 ** 64], ['double', 2 ** 1028]])(
+    'does not report valid usage of %s format',
+    async (format, example) => {
+      const results = await s.run({
+        xoxo: {
+          type: 'object',
+          properties: {
+            ip_address: {
+              type: ['string', 'number'],
+              format,
+              example,
+            },
+          },
+        },
+      });
+
+      expect(results).toHaveLength(0);
+    },
+  );
 });

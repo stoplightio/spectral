@@ -1,7 +1,9 @@
-import { Spectral } from '../../../../../index';
-import { commonOasFunctions, commonOasRules } from '../../../index';
+import { RuleType, Spectral } from '../../../../../index';
+import { commonOasFunctions } from '../../../index';
 
-const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
+import { rules } from '../../../ruleset.json';
+
+const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOpIdUnique', () => {
   const s = new Spectral();
@@ -10,6 +12,7 @@ describe('oasOpIdUnique', () => {
   s.addRules({
     'operation-operationId-unique': Object.assign(ruleset.rules['operation-operationId-unique'], {
       enabled: true,
+      type: RuleType[ruleset.rules['operation-operationId-unique'].type],
     }),
   });
 

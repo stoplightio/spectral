@@ -70,9 +70,7 @@ jobs:
       - checkout
       - cached-dependencies
       - run: yarn build
-      - run: yarn build.docs
       - run: yarn release
-      - run: yarn release.docs
 
 workflows:
   version: 2

@@ -4,12 +4,7 @@ exports[`oasOpParams Error if both in:formData and in:body 1`] = `
 Array [
   Object {
     "code": "operation-parameters",
-    "message": "Operation cannot have both \`in:body\` and \`in:formData\` parameters.
-
-Parameters found at:
-[ \`paths\`, \`/foo\`, \`get\`, \`0\` ]
-[ \`paths\`, \`/foo\`, \`get\`, \`1\` ]
-",
+    "message": "Operation parameters are unique and non-repeating.",
     "path": Array [
       "paths",
       "/foo",
@@ -36,10 +31,7 @@ exports[`oasOpParams Error if multiple in:body 1`] = `
 Array [
   Object {
     "code": "operation-parameters",
-    "message": "Operation has multiple instances of the \`in:body\` parameter.
-
-Parameters found at:
-",
+    "message": "Operation parameters are unique and non-repeating.",
     "path": Array [
       "paths",
       "/foo",
@@ -66,14 +58,7 @@ exports[`oasOpParams Error if non-unique $ref param on same operation 1`] = `
 Array [
   Object {
     "code": "operation-parameters",
-    "message": "Operations must have unique \`name\` + \`in\` parameters.
-Repeats of \`in:query\` + \`name:foo\`
-
-Parameters found at:
-[ \`paths\`, \`/foo\`, \`get\`, \`0\` ]
-[ \`paths\`, \`/foo\`, \`get\`, \`1\` ]
-[ \`paths\`, \`/foo\`, \`get\`, \`2\` ]
-",
+    "message": "Operation parameters are unique and non-repeating.",
     "path": Array [
       "paths",
       "/foo",
@@ -100,14 +85,7 @@ exports[`oasOpParams Error if non-unique param on same operation 1`] = `
 Array [
   Object {
     "code": "operation-parameters",
-    "message": "Operations must have unique \`name\` + \`in\` parameters.
-Repeats of \`in:query\` + \`name:foo\`
-
-Parameters found at:
-[ \`paths\`, \`/foo\`, \`get\`, \`0\` ]
-[ \`paths\`, \`/foo\`, \`get\`, \`1\` ]
-[ \`paths\`, \`/foo\`, \`get\`, \`2\` ]
-",
+    "message": "Operation parameters are unique and non-repeating.",
     "path": Array [
       "paths",
       "/foo",

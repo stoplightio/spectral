@@ -2,6 +2,7 @@ import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import * as jp from 'jsonpath';
 import { get, has } from 'lodash';
 
+import { message } from './rulesets/message';
 import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
@@ -88,13 +89,26 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map(result => {
-        const location = parsedResult.getLocationForJsonPath(parsed, result.path || targetPath);
+        const path = result.path || targetPath;
+        const location = parsedResult.getLocationForJsonPath(parsed, path, true);
 
         return {
           code: rule.name,
-          summary: rule.summary,
-          message: result.message,
-          path: result.path || targetPath,
+
+          // @deprecated, points to message
+          get summary() {
+            return this.message;
+          },
+
+          message:
+            rule.message === undefined
+              ? rule.summary || result.message
+              : message(rule.message, {
+                  error: result.message,
+                  property: path.length > 0 ? path[path.length - 1] : '',
+                  description: rule.description,
+                }),
+          path,
           severity,
           source: parsedResult.source,
           ...(location || {

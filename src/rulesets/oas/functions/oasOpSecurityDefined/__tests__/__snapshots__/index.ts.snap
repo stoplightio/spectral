@@ -4,7 +4,7 @@ exports[`oasOpSecurityDefined oas2 return errors on invalid object 1`] = `
 Array [
   Object {
     "code": "operation-security-defined",
-    "message": "operation referencing undefined security scheme",
+    "message": "Operation \`security\` values must match a scheme defined in the \`securityDefinitions\` object.",
     "path": Array [
       "paths",
       "/path",
@@ -33,7 +33,7 @@ exports[`oasOpSecurityDefined oas3 return errors on invalid object 1`] = `
 Array [
   Object {
     "code": "operation-security-defined",
-    "message": "operation referencing undefined security scheme",
+    "message": "Operation \`security\` values must match a scheme defined in the \`components.securitySchemes\` object.",
     "path": Array [
       "paths",
       "/path",

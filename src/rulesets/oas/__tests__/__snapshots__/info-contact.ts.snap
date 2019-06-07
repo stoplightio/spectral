@@ -4,7 +4,7 @@ exports[`info-contact return errors if info is missing contact 1`] = `
 Array [
   Object {
     "code": "info-contact",
-    "message": "info.contact is not truthy",
+    "message": "Info object should contain \`contact\` object.",
     "path": Array [
       "info",
       "contact",

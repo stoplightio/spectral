@@ -1,7 +1,7 @@
-import { commonOasFunctions, commonOasRules } from '../';
+import { commonOasFunctions } from '../';
 import { Spectral } from '../../../spectral';
+import { rules } from '../ruleset.json';
 
-const rules = commonOasRules();
 const { oasOp2xxResponse } = commonOasFunctions();
 
 describe('operation-2xx-response', () => {
@@ -11,6 +11,7 @@ describe('operation-2xx-response', () => {
     spectral = new Spectral();
     spectral.addFunctions({ oasOp2xxResponse });
     spectral.addRules({
+      // @ts-ignore
       'operation-2xx-response': rules['operation-2xx-response'],
     });
   });
@@ -66,7 +67,7 @@ describe('operation-2xx-response', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'operation-2xx-response',
-          message: 'operations must define at least one 2xx response',
+          message: 'Operation must have at least one `2xx` response.',
           path: ['paths', '/path', method, 'responses'],
         }),
       ]);
@@ -90,7 +91,7 @@ describe('operation-2xx-response', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'operation-2xx-response',
-        message: 'operations must define at least one 2xx response',
+        summary: 'Operation must have at least one `2xx` response.',
         path: ['paths', '/path', 'get', 'responses'],
       }),
     ]);

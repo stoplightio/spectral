@@ -9,9 +9,9 @@ import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
-import { oas2Functions, oas2Rules } from '../../rulesets/oas2';
-import { oas3Functions, oas3Rules } from '../../rulesets/oas3';
-import { readRulesets } from '../../rulesets/reader';
+import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
+import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
+import { readRulesFromRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
 import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
@@ -90,11 +90,9 @@ linting ./openapi.yaml
     let rules;
 
     if (ruleset) {
-      try {
-        rules = await readRulesets(this, ...ruleset);
-      } catch (ex) {
-        this.error(ex.message);
-      }
+      rules = await tryReadOrLog(this, async () => {
+        return readRulesFromRulesets(...ruleset);
+      });
     }
 
     if (args.source) {
@@ -109,13 +107,34 @@ linting ./openapi.yaml
   }
 }
 
+async function tryReadOrLog(command: Lint, reader: Function) {
+  try {
+    return await reader();
+  } catch (ex) {
+    if (ex.messages) {
+      command.log(ex.messages[0]);
+      command.error(ex.messages[1]);
+    } else {
+      command.error(ex);
+    }
+  }
+}
+
 async function lint(name: string, flags: any, command: Lint, rules?: RuleCollection) {
   if (flags.verbose) {
     command.log(`Linting ${name}`);
   }
   const spec: IParserResult = await readParsable(name, flags.encoding);
   const spectral = new Spectral();
-  if (rules !== undefined) {
+  if (parseInt(spec.data.swagger) === 2) {
+    command.log('Adding OpenAPI 2.0 (Swagger) functions');
+    spectral.addFunctions(oas2Functions());
+  } else if (parseInt(spec.data.openapi) === 3) {
+    command.log('Adding OpenAPI 3.x functions');
+    spectral.addFunctions(oas3Functions());
+  }
+
+  if (rules) {
     if (flags.verbose) {
       command.log(`Found ${Object.keys(rules).length} rules`);
     }
@@ -125,12 +144,10 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     }
     if (parseInt(spec.data.swagger) === 2) {
       command.log('OpenAPI 2.0 (Swagger) detected');
-      spectral.addFunctions(oas2Functions());
-      rules = oas2Rules();
+      rules = await tryReadOrLog(command, async () => await oas2Rules());
     } else if (parseInt(spec.data.openapi) === 3) {
       command.log('OpenAPI 3.x detected');
-      spectral.addFunctions(oas3Functions());
-      rules = oas3Rules();
+      rules = await tryReadOrLog(command, async () => await oas3Rules());
     }
   }
 

@@ -4,7 +4,7 @@ exports[`example-value-or-externalValue return errors if both externalValue and 
 Array [
   Object {
     "code": "example-value-or-externalValue",
-    "message": "externalValue and value cannot both be defined",
+    "message": "Example should have either a \`value\` or \`externalValue\` field.",
     "path": Array [
       "example",
     ],
@@ -29,7 +29,7 @@ exports[`example-value-or-externalValue return errors if missing externalValue a
 Array [
   Object {
     "code": "example-value-or-externalValue",
-    "message": "externalValue and value cannot both be defined",
+    "message": "Example should have either a \`value\` or \`externalValue\` field.",
     "path": Array [
       "example",
     ],

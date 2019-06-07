@@ -1,7 +1,9 @@
-import { Spectral } from '../../../../../index';
-import { commonOasFunctions, commonOasRules } from '../../../index';
+import { RuleType, Spectral } from '../../../../../index';
+import { commonOasFunctions } from '../../../index';
 
-const ruleset = { functions: commonOasFunctions(), rules: commonOasRules() };
+import { rules } from '../../../ruleset.json';
+
+const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasPathParam', () => {
   const s = new Spectral();
@@ -9,6 +11,7 @@ describe('oasPathParam', () => {
   s.addRules({
     'path-params': Object.assign(ruleset.rules['path-params'], {
       enabled: true,
+      type: RuleType[ruleset.rules['path-params'].type],
     }),
   });
 
@@ -34,7 +37,10 @@ describe('oasPathParam', () => {
     expect(results).toMatchSnapshot();
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}']);
-    expect(results[0].message).toContain('bar');
+    expect(results[0].message)
+      .toEqual(`The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.
+
+To fix, add a path parameter with the name "**bar**".`);
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
@@ -115,7 +121,11 @@ describe('oasPathParam', () => {
     expect(results).toMatchSnapshot();
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
-    expect(results[0].message).toContain('bar');
+    expect(results[0].message).toEqual(`The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.
+
+Path parameters must be unique.
+
+To fix, update the path so that all parameter names are unique.`);
   });
 
   test('Error if $ref path parameter definition is not required', async () => {

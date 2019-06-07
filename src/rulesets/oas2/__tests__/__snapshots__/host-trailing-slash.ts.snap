@@ -4,7 +4,7 @@ exports[`host-trailing-slash return errors if host url ends with a slash 1`] = `
 Array [
   Object {
     "code": "host-trailing-slash",
-    "message": "must not match the pattern '/$'",
+    "message": "Server URL should not have a trailing slash.",
     "path": Array [
       "host",
     ],
