@@ -713,18 +713,19 @@
   integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
 
 "@stoplight/json-ref-resolver@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-1.5.0.tgz#e423ecdd077ef7baeaeada7ae0a11157e2fdd32a"
-  integrity sha512-+0OPoSOa0fjcF0QViywTjs0NIMi4V92p11m04zrCAZ5KnW/4reC8D+FcHm6HcgNcWTNqWB0JoudSIjxJQf2TEw==
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-1.5.1.tgz#77f75c9c833c5507add1cf1ac57395050484d1cc"
+  integrity sha512-0PyMjdoK651zZl2qHbLp6Xe2u+JXVVr/1w5Pop5gdmfGSyn7X0xxyc0RWx2Fm79r0inUrP5HyutndBiHbqP44w==
   dependencies:
-    "@stoplight/json" "^2.1.0"
+    "@stoplight/json" "2.1.x"
+    "@types/urijs" "1.19.1"
     dependency-graph "0.8.x"
     fast-memoize "2.x.x"
-    immer "^3.1.2"
+    immer "3.x.x"
     lodash "4.x.x"
     urijs "1.x.x"
 
-"@stoplight/json@^2.1.0":
+"@stoplight/json@2.1.x", "@stoplight/json@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.1.0.tgz#889b38d3078d9ff85c39122d04bd84968aabdd85"
   integrity sha512-PQyt4tODH7dgfa+RuibMDAvqIoEOa6xdTa2et3ucb5rYHa/Z7Wf1GtWJ5hoACApPyNeokjv20S/DMoPOv7uQXA==
@@ -968,6 +969,11 @@
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@types/text-table/-/text-table-0.2.1.tgz#39c4d4a058a82f677392dfd09976e83d9b4c9264"
   integrity sha512-dchbFCWfVgUSWEvhOkXGS7zjm+K7jCUvGrQkAHPk2Fmslfofp4HQTH2pqnQ3Pw5GPYv0zWa2AQjKtsfZThuemQ==
+
+"@types/urijs@1.19.1":
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/@types/urijs/-/urijs-1.19.1.tgz#da69e8479eec0bb4580c7cc218d218f107d2d526"
+  integrity sha512-5waMuQ9z8pH8+5yAyX05bsA7SOl50l5ZkeMripxoOgN2+nSQb4TOSuhWoRlPt7FPIIohk6iBrX/rEktUJa8KfQ==
 
 "@types/yaml@^1.0.2":
   version "1.0.2"
@@ -3747,10 +3753,10 @@ ignore@^4.0.3:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
-immer@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-3.1.2.tgz#1f24f2e25433f5ff168a1ff6c8c6366d2106e61a"
-  integrity sha512-pi8JuvJ9c+98DlpDms/o0YLLg5khP8Qzjd8CtIGc4qVm2eoLdQGivJL266nWccofKT/oBSxnhAh/o+nmOXtLXw==
+immer@3.x.x:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-3.1.3.tgz#59bc742b2aab6e2c676445edb653e588a23c70fc"
+  integrity sha512-HG5SXTXTTVy9lGNwS075cNhQoV375jHsIJO3UtMjuUWJOuwlMr0u42FlsKTJcppt5AzsFAsmj9r4kHvsSHh3hQ==
 
 import-fresh@^2.0.0:
   version "2.0.0"
