@@ -1,6 +1,6 @@
 import { IFunction, IFunctionResult, IRulePatternOptions } from '../types';
 
-function test(value: string, regex: any) {
+function test(value: string, regex: RegExp | string) {
   let re;
   if (typeof regex === 'string') {
     // regex in a string like {"match": "/[a-b]+/im"} or {"match": "[a-b]+"} in a json ruleset
