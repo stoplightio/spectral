@@ -48,7 +48,7 @@ export class Spectral {
     return [
       ...results,
       ...formatResolverErrors(errors, parsedResult),
-      ...runRules(parsedResult, this.rules, this.functions, { resolvedTarget }),
+      ...(await runRules(parsedResult, this.rules, this.functions, { resolvedTarget }, Spectral)),
     ];
   }
 

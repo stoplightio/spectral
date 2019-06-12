@@ -5,6 +5,8 @@ export const functions = {
   schema: require('./schema').schema,
   schemaPath: require('./schema-path').schemaPath,
   truthy: require('./truthy').truthy,
+  exampleType: require('./example-type').example,
+  validExamples: require('./valid-examples').validExamples,
   xor: require('./xor').xor,
   enumeration: require('./enumeration').enumeration,
 };

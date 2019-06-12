@@ -6,14 +6,14 @@ import { message } from './rulesets/message';
 import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunOpts, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
-export const lintNode = (
+export async function lintNode(
   node: IGivenNode,
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
   opts: IRunOpts,
   parsedResult: IParsedResult,
-): IRuleResult[] => {
+): Promise<IRuleResult[]> {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
 
@@ -88,7 +88,7 @@ export const lintNode = (
     const severity = rule.severity !== undefined ? rule.severity : DiagnosticSeverity.Warning;
 
     results = results.concat(
-      targetResults.map(result => {
+      (await targetResults).map(result => {
         const path = result.path || targetPath;
         const location = parsedResult.getLocationForJsonPath(parsed, path, true);
 
@@ -129,7 +129,7 @@ export const lintNode = (
   }
 
   return results;
-};
+}
 
 // TODO(SO-23): unit test idividually
 export const whatShouldBeLinted = (

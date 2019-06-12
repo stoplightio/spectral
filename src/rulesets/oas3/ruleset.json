@@ -2413,6 +2413,24 @@
           "schemaPath": "$.schema"
         }
       }
+    },
+    "valid-schema-examples": {
+      "summary": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "type": "validation",
+      "given": "$..[?(@.examples && @.schema)]",
+      "then": {
+        "function": "validExamples"
+      }
+    },
+    "valid-type-example": {
+      "summary": "Examples must be valid against their type.",
+      "message": "\"{{property}}\" property {{error}}",
+      "type": "validation",
+      "given": "$..[?(@.example && @.type)]",
+      "then": {
+        "function": "exampleType"
+      }
     }
   }
 }
