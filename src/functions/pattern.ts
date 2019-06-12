@@ -5,7 +5,7 @@ function test(value: string, regex: any) {
   if (typeof regex === 'string') {
     // regex in a string like {"match": "/[a-b]+/im"} or {"match": "[a-b]+"} in a json ruleset
     // the available flags are "gimsuy" as described here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
-    const splitRegex = /^\/(.+)\/([gimsuy]*)$/.exec(regex);
+    const splitRegex = /^\/(.+)\/([a-z]*)$/.exec(regex);
     if (splitRegex) {
       // with slashes like /[a-b]+/ and possibly with flags like /[a-b]+/im
       re = new RegExp(splitRegex[1], splitRegex[2]);
