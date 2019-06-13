@@ -148,11 +148,11 @@ describe('valid-type-example', () => {
         }),
         expect.objectContaining({
           code: 'valid-type-example',
-          message: `\"xoxo\" property .width should be integer`,
+          message: `\"xoxo\" property : property .width should be integer`,
         }),
         expect.objectContaining({
           code: 'valid-type-example',
-          message: `\"xoxo\" property .height should be integer`,
+          message: `\"xoxo\" property : property .height should be integer`,
         }),
       ]);
 

@@ -28,7 +28,7 @@ export const example: IFunction<ISchemaPathOptions> = async (targetVal, opts, pa
       const dataPath = get(err, 'dataPath');
 
       return {
-        message: (dataPath ? `${dataPath} ` : '') + err.message,
+        message: (dataPath ? `: property ${dataPath} ` : '') + err.message,
         path: [...path, ...formatPath(err.dataPath)],
       };
     });
