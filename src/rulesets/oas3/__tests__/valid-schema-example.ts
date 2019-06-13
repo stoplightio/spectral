@@ -14,22 +14,46 @@ describe('valid-schema-example', () => {
   });
 
   describe('when example is not of schema.type', () => {
-    test('reports example field validation issue', async () => {
-      const results = await s.run({
-        xoxo: {
-          schema: {
-            type: 'string',
+    describe('when schema is inside an object', () => {
+      test('reports example field validation issue', async () => {
+        const results = await s.run({
+          xoxo: {
+            schema: {
+              type: 'string',
+            },
+            example: 1234,
           },
-          example: 1234,
-        },
-      });
+        });
 
-      expect(results).toEqual([
-        expect.objectContaining({
-          code: 'valid-schema-example',
-          message: '"xoxo" property should be string',
-        }),
-      ]);
+        expect(results).toEqual([
+          expect.objectContaining({
+            code: 'valid-schema-example',
+            message: '"xoxo" property should be string',
+          }),
+        ]);
+      });
+    });
+
+    describe('when schema is inside an an array', () => {
+      test.only('reports example field validation issue', async () => {
+        const results = await s.run({
+          parameters: [
+            {
+              schema: {
+                type: 'string',
+              },
+              example: 1234,
+            },
+          ],
+        });
+
+        expect(results).toEqual([
+          expect.objectContaining({
+            code: 'valid-schema-example',
+            message: '"" property should be string',
+          }),
+        ]);
+      });
     });
   });
 
