@@ -1,5 +1,5 @@
 import { IParserResult } from '@stoplight/types';
-import { existsSync } from 'fs-extra';
+import { existsSync } from 'fs';
 import { isEmpty, merge } from 'lodash';
 import * as path from 'path';
 import { readParsable } from '../fs/reader';
