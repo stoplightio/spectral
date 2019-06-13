@@ -20,21 +20,10 @@ export const validExamples: IFunction<ISchemaPathOptions> = async function(
   paths,
   otherValues,
 ) {
-  const s = new this();
+  const s = initSpectral(this);
   const original = otherValues.original;
 
-  const examples = map(original.examples, (val: any, key) => {
-    return {
-      [key]: { example: val.value, schema: original.schema },
-    };
-  });
-
-  s.addRules({
-    'valid-schema-example': Object.assign(oas3Ruleset.rules['valid-schema-example'], {
-      enabled: true,
-      type: RuleType[oas3Ruleset.rules['valid-schema-example'].type],
-    }),
-  });
+  const examples = map(original.examples, toExampleAndSchema.bind({}, original.schema));
 
   const [errors] = await Promise.all(examples.map(example => s.run(example)));
 
@@ -47,4 +36,23 @@ function rmPaths(errors: IFunctionResult[]) {
 
     return { ...rest };
   });
+}
+
+function initSpectral(spectral: typeof Spectral) {
+  const s = new spectral();
+
+  s.addRules({
+    'valid-schema-example': Object.assign(oas3Ruleset.rules['valid-schema-example'], {
+      enabled: true,
+      type: RuleType[oas3Ruleset.rules['valid-schema-example'].type],
+    }),
+  });
+
+  return s;
+}
+
+function toExampleAndSchema(schema: any, val: any, key: string) {
+  return {
+    [key]: { example: val.value, schema },
+  };
 }
