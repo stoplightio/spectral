@@ -63,9 +63,9 @@ describe('valid-type-example', () => {
     });
   });
 
-  describe('arrays', () => {
-    describe('array of objects', () => {
-      it('fails', async () => {
+  describe('array examples', () => {
+    describe('when examples field is an array of objects', () => {
+      it('reports validation issue', async () => {
         const results = await s.run({
           xoxo: {
             type: 'array',
@@ -92,8 +92,8 @@ describe('valid-type-example', () => {
       });
     });
 
-    describe('array of primitives', () => {
-      it('fails', async () => {
+    describe('when examples field is an array of primitives', () => {
+      it('reports validation issue', async () => {
         const results = await s.run({
           xoxo: {
             type: 'array',
@@ -116,7 +116,7 @@ describe('valid-type-example', () => {
     });
   });
 
-  describe('objects', () => {
+  describe('object example', () => {
     it('errors with totally invalid input', async () => {
       const results = await s.run({
         xoxo: {
