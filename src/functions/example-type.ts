@@ -1,5 +1,8 @@
 import * as AJV from 'ajv';
-import { IFunction, ISchemaPathOptions } from '../types';
+import { ErrorObject } from 'ajv';
+import { get, last } from 'lodash';
+import { IFunction, IFunctionPaths, ISchemaPathOptions } from '../types';
+import { formatPath } from './schema';
 
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const ajv = new AJV({ allErrors: true });
@@ -10,14 +13,6 @@ ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
 ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
 ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
-import { decodePointerFragment } from '@stoplight/json';
-
-const formatPath = (path: string) =>
-  path
-    .split('/')
-    .slice(1)
-    .map(decodePointerFragment);
-
 export const example: IFunction<ISchemaPathOptions> = async (targetVal, opts, paths, otherValues) => {
   const original = otherValues.original;
   const validate = ajv.compile(original);
@@ -25,13 +20,24 @@ export const example: IFunction<ISchemaPathOptions> = async (targetVal, opts, pa
   validate(original.example);
 
   const path = paths.target || paths.given;
+  const ajvErrs = get(validate, 'errors');
 
   const errs =
-    validate.errors &&
-    validate.errors.map((err: any) => ({
-      message: (err.dataPath ? `${err.dataPath} ` : '') + err.message,
-      path: [...path, ...formatPath(err.dataPath)],
-    }));
+    ajvErrs &&
+    ajvErrs.map((err: ErrorObject) => {
+      const dataPath = get(err, 'dataPath');
 
-  return (paths && paths.given && paths.given[paths.given.length - 1]) === 'schema' ? [] : errs || [];
+      return {
+        message: (dataPath ? `${dataPath} ` : '') + err.message,
+        path: [...path, ...formatPath(err.dataPath)],
+      };
+    });
+
+  return isTypeInsideSchema(paths) ? [] : errs || [];
 };
+
+function isTypeInsideSchema(paths: IFunctionPaths) {
+  const given = get(paths, 'given');
+
+  return last(given) === 'schema';
+}

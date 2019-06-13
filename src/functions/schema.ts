@@ -22,7 +22,7 @@ ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
 ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
 ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
-const formatPath = (path: string) =>
+export const formatPath = (path: string) =>
   path
     .split('/')
     .slice(1)
