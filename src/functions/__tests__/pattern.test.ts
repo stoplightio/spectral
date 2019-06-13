@@ -48,10 +48,14 @@ describe('pattern', () => {
       expect(runPattern('aBc', { match: '/[abc]+/im' })).toEqual([]);
     });
 
-    test('should return an array with a message when given value matches the given match string regex with slashes and modifier', () => {
-      expect(runPattern('aBc', { match: '/[abc]+/izorglug' })).toEqual([
-        { message: "must match the pattern '/[abc]+/izorglug'" },
-      ]);
+    test('should throw an exception when given string regex contains invalid flags', () => {
+      let exception = null;
+      try {
+        runPattern('aBc', { match: '/[abc]+/invalid' });
+      } catch (ex) {
+        exception = ex;
+      }
+      expect(exception.message).toEqual("Invalid flags supplied to RegExp constructor 'invalid'");
     });
 
     test('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', () => {
