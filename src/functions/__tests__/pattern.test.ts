@@ -49,13 +49,9 @@ describe('pattern', () => {
     });
 
     test('should throw an exception when given string regex contains invalid flags', () => {
-      let exception = null;
-      try {
-        runPattern('aBc', { match: '/[abc]+/invalid' });
-      } catch (ex) {
-        exception = ex;
-      }
-      expect(exception.message).toEqual("Invalid flags supplied to RegExp constructor 'invalid'");
+      expect(() => runPattern('aBc', { match: '/[abc]+/invalid' })).toThrow(
+        "Invalid flags supplied to RegExp constructor 'invalid'",
+      );
     });
 
     test('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', () => {
