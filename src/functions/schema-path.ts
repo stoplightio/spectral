@@ -22,7 +22,11 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     console.warn('schema-path expects a resolved object, but none was provided. Results may not be correct.');
   } else {
     // Take the relevant part of the resolved schema
-    object = JSONPath({ path: ['$', ...paths.given], json: resolved })[0];
+    try {
+      object = JSONPath({ path: ['$', ...paths.given], json: resolved })[0];
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   // The subsection of the targetVal which contains the good bit

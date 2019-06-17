@@ -53,17 +53,21 @@ const runRule = (
 
   // don't have to spend time running jsonpath if given is $ - can just use the root object
   if (rule.given && rule.given !== '$') {
-    JSONPath({
-      path: rule.given,
-      json: target,
-      resultType: 'all',
-      callback: (result: any) => {
-        nodes.push({
-          path: JSONPath.toPathArray(result.path),
-          value: result.value,
-        });
-      },
-    });
+    try {
+      JSONPath({
+        path: rule.given,
+        json: target,
+        resultType: 'all',
+        callback: (result: any) => {
+          nodes.push({
+            path: JSONPath.toPathArray(result.path),
+            value: result.value,
+          });
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
   } else {
     nodes.push({
       path: ['$'],
