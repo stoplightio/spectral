@@ -37,7 +37,7 @@ describe('server-not-example.com', () => {
       expect.objectContaining({
         code: 'server-not-example.com',
         message: 'Server URL should not point at `example.com`.',
-        path: ['servers', 0, 'url'],
+        path: ['servers', '0', 'url'],
       }),
     ]);
   });

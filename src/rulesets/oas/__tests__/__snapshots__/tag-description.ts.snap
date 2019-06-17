@@ -7,7 +7,7 @@ Array [
     "message": "Tag object should have a \`description\`.",
     "path": Array [
       "tags",
-      0,
+      "0",
       "description",
     ],
     "range": Object {

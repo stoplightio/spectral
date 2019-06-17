@@ -7,7 +7,7 @@ Array [
     "message": "Server URL should not have a trailing slash.",
     "path": Array [
       "servers",
-      0,
+      "0",
       "url",
     ],
     "range": Object {
