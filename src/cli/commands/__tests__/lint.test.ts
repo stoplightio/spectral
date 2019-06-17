@@ -226,6 +226,35 @@ describe('lint', () => {
     });
   });
 
+  describe('when --quiet flag is provided', () => {
+    test
+      .stdout()
+      .command(['lint', invalidOas3SpecPath, '--quiet'])
+      .it('does not log any additional feedback', ctx => {
+        expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
+      });
+
+    test
+      .stdout()
+      .command(['lint', invalidOas3SpecPath, '--quiet', '--format=json'])
+      .it('outputs warnings/errors in a parseable json format', ctx => {
+        expect(JSON.parse(ctx.stdout)).toEqual([
+          expect.objectContaining({
+            message: 'Info object should contain `contact` object.',
+            code: 'info-contact',
+          }),
+          expect.objectContaining({
+            code: 'info-description',
+            message: 'OpenAPI object info `description` must be present and non-empty string.',
+          }),
+          expect.objectContaining({
+            code: 'api-servers',
+            message: 'OpenAPI `servers` must be present and non-empty array.',
+          }),
+        ]);
+      });
+  });
+
   describe('when loading specification files from web', () => {
     test
       .nock('http://foo.local', api =>
