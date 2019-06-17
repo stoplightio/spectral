@@ -241,7 +241,7 @@ responses:: !!foo
         expect.objectContaining({
           code: 'valid-example',
           message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
-          path: ['paths', '/todos/{todoId}', 'put', 'parameters', 1, 'schema'],
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema'],
         }),
       ]),
     );

@@ -228,7 +228,7 @@ describe('valid-example', () => {
             "/pet",
             "post",
             "parameters",
-            0,
+            "0",
             "schema",
             "properties",
             "a",
