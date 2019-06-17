@@ -492,7 +492,7 @@
     debug "^4.1.1"
     tslib "^1.9.3"
 
-"@oclif/dev-cli@^1":
+"@oclif/dev-cli@^1.0":
   version "1.22.0"
   resolved "https://registry.yarnpkg.com/@oclif/dev-cli/-/dev-cli-1.22.0.tgz#ee8f13cea19affa5727ba17a85cc323f1f142c4f"
   integrity sha512-oMiZxMNv6sQtlpof8qFqVM7/UmO2i5hbHZxcC7Zq4PoBGnqVl8Rc+uLdNrE39T/JPCGWwq8kEqkhok6eNdG8wg==
@@ -568,7 +568,7 @@
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.4.tgz#b740f68609dfae8aa71c3a6cab15d816407ba493"
   integrity sha512-60CHpq+eqnTxLZQ4PGHYNwUX572hgpMHGPtTWMjdTMsAvlm69lZV/4ly6O3sAYkomo4NggGcomrDpBe34rxUqw==
 
-"@oclif/test@^1":
+"@oclif/test@^1.0":
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/@oclif/test/-/test-1.2.4.tgz#81203074927c00b0804a171e67a45c5968813c01"
   integrity sha512-c0khMdYBGV7t9L7SNbh84t9PmTqfaTp4Jqf3JbWu80fd+SAM03m9o+dvrgx+qv4YbSTum4GpXBZtXHq4AXsD3Q==
@@ -1178,7 +1178,7 @@ ajv-oai@^1.1.1:
     ajv "^6.1.1"
     decimal.js "^9.0.1"
 
-ajv@^6, ajv@^6.1.1, ajv@^6.5.5:
+ajv@^6.1.1, ajv@^6.5.5, ajv@^6.7:
   version "6.10.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.10.0.tgz#90d0d54439da587cd7e843bfb7045f50bd22bdf1"
   integrity sha512-nffhOpkymDECQyR0mnsUtoCE8RlX38G0rYP+wgLWFyZuUyuuojSSvi/+euOiQBIn63whYwYVIIH1TvE3tu4OEg==
@@ -6053,7 +6053,7 @@ node-fetch-npm@^2.0.2:
     json-parse-better-errors "^1.0.0"
     safe-buffer "^5.1.1"
 
-node-fetch@^2, node-fetch@^2.3.0:
+node-fetch@^2.0, node-fetch@^2.3.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
