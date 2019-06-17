@@ -48,11 +48,6 @@ linting ./openapi.yaml
     'max-results': flagHelpers.integer({
       description: '[default: all] maximum results to show',
     }),
-    // @deprecated in 2.2, remove in 3.0
-    maxResults: flagHelpers.integer({
-      char: 'm',
-      description: 'deprecated: use --max-results instead',
-    }),
     ruleset: flagHelpers.string({
       char: 'r',
       description: 'path to a ruleset file (supports remote files)',
@@ -253,7 +248,7 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        maxResults: flags.maxResults > 0 ? flags.maxResults : flags['max-results'],
+        maxResults: flags['max-results'],
         verbose: flags.verbose,
         ruleset: flags.ruleset,
         quiet: flags.quiet,
