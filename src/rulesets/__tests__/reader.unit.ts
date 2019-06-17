@@ -3,7 +3,7 @@ jest.mock('../ajv');
 jest.mock('../validation');
 jest.mock('../path');
 
-import { Dictionary } from '@stoplight/types/basic';
+import { Dictionary } from '@stoplight/types';
 import { when } from 'jest-when';
 import { IRule } from '../..';
 import { readParsable } from '../../fs/reader';
