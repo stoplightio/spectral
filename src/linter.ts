@@ -36,17 +36,21 @@ export const lintNode = (
         });
       }
     } else if (then.field[0] === '$') {
-      JSONPath({
-        path: then.field,
-        json: targetValue,
-        resultType: 'all',
-        callback: (result: any) => {
-          targets.push({
-            path: JSONPath.toPathArray(result.path),
-            value: result.value,
-          });
-        },
-      });
+      try {
+        JSONPath({
+          path: then.field,
+          json: targetValue,
+          resultType: 'all',
+          callback: (result: any) => {
+            targets.push({
+              path: JSONPath.toPathArray(result.path),
+              value: result.value,
+            });
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
     } else {
       // lodash lookup
       targets.push({
