@@ -4,9 +4,9 @@ import { getLocationForJsonPath } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
-import * as URI from 'urijs';
 import { promisify } from 'util';
 
+import { startsWith } from '@stoplight/json';
 import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
@@ -141,7 +141,11 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     command.log(`Linting ${name}`);
   }
 
-  const targetUri = isValidURI(name) ? name : resolve(name);
+  let targetUri = name;
+  if (!startsWith(name, 'http')) {
+    // we always want the absolute path to the target file
+    targetUri = resolve(name);
+  }
 
   const spec: IParserResult = await readParsable(targetUri, flags.encoding);
   const spectral = new Spectral({ resolver: httpAndFileResolver });
@@ -269,13 +273,3 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
     ),
   };
 }
-
-const isValidURI = (maybeUri: string) => {
-  try {
-    // tslint:disable-next-line:no-unused-expression
-    new URI(maybeUri);
-    return true;
-  } catch {
-    return false;
-  }
-};
