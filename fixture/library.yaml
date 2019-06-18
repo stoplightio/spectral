@@ -1,8 +1,0 @@
-definitions:
-  address:
-    type: object
-    properties:
-      zipcode:
-        description: zip.
-        example: "foo"
-        type: number
