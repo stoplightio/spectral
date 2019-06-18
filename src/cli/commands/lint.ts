@@ -51,11 +51,6 @@ linting ./openapi.yaml
     'max-results': flagHelpers.integer({
       description: '[default: all] maximum results to show',
     }),
-    // @deprecated in 2.2, remove in 3.0
-    maxResults: flagHelpers.integer({
-      char: 'm',
-      description: 'deprecated: use --max-results instead',
-    }),
     ruleset: flagHelpers.string({
       char: 'r',
       description: 'path to a ruleset file (supports remote files)',
@@ -70,7 +65,13 @@ linting ./openapi.yaml
       char: 'v',
       description: 'increase verbosity',
     }),
+    quiet: flagHelpers.boolean({
+      char: 'q',
+      description: 'no logging - output only',
+    }),
   };
+
+  protected quiet = false;
 
   public static args = [{ name: 'source' }];
 
@@ -79,6 +80,8 @@ linting ./openapi.yaml
     const { config: configFileFlag } = flags;
 
     let config: ILintConfig = mergeConfig(createEmptyConfig(), flags);
+
+    this.quiet = flags.quiet;
 
     const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
     if (configFile) {
@@ -107,6 +110,16 @@ linting ./openapi.yaml
     } else {
       this.error('You must specify a document to lint');
     }
+  }
+
+  public log(message?: string, ...args: any[]): void {
+    if (!this.quiet) {
+      super.log(message, ...args);
+    }
+  }
+
+  public print(message?: string, ...args: any[]): void {
+    super.log(message, ...args);
   }
 }
 
@@ -235,7 +248,7 @@ export async function writeOutput(outputStr: string, flags: any, command: Lint) 
     return writeFileAsync(flags.output, outputStr);
   }
 
-  command.log(outputStr);
+  command.print(outputStr);
 }
 
 function mergeConfig(config: IConfig, flags: any): ILintConfig {
@@ -246,9 +259,10 @@ function mergeConfig(config: IConfig, flags: any): ILintConfig {
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        maxResults: flags.maxResults > 0 ? flags.maxResults : flags['max-results'],
+        maxResults: flags['max-results'],
         verbose: flags.verbose,
         ruleset: flags.ruleset,
+        quiet: flags.quiet,
         skipRule: flags['skip-rule'],
       },
       isNil,

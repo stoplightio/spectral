@@ -1681,7 +1681,7 @@
         "field": "host",
         "function": "pattern",
         "functionOptions": {
-          "notMatch": "example.com"
+          "notMatch": "example\\.com"
         }
       }
     },

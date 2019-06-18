@@ -1,6 +1,7 @@
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
-import * as jp from 'jsonpath';
 import { get, has } from 'lodash';
+
+const { JSONPath } = require('jsonpath-plus');
 
 import { message } from './rulesets/message';
 import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunRule, IRunRuleOpts, IThen } from './types';
@@ -35,13 +36,20 @@ export const lintNode = (
         });
       }
     } else if (then.field[0] === '$') {
-      // jsonpath lookup
-      const nodes = jp.nodes(targetValue, then.field);
-      for (const n of nodes) {
-        targets.push({
-          path: n.path,
-          value: n.value,
+      try {
+        JSONPath({
+          path: then.field,
+          json: targetValue,
+          resultType: 'all',
+          callback: (result: any) => {
+            targets.push({
+              path: JSONPath.toPathArray(result.path),
+              value: result.value,
+            });
+          },
         });
+      } catch (e) {
+        console.error(e);
       }
     } else {
       // lodash lookup

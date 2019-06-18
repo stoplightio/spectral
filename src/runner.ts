@@ -1,4 +1,4 @@
-import * as jp from 'jsonpath';
+const { JSONPath } = require('jsonpath-plus');
 
 import { lintNode } from './linter';
 import {
@@ -49,11 +49,25 @@ const runRule = (
   const { data: target } = parsed;
 
   let results: IRuleResult[] = [];
-  let nodes: IGivenNode[] = [];
+  const nodes: IGivenNode[] = [];
 
   // don't have to spend time running jsonpath if given is $ - can just use the root object
   if (rule.given && rule.given !== '$') {
-    nodes = jp.nodes(target, rule.given);
+    try {
+      JSONPath({
+        path: rule.given,
+        json: target,
+        resultType: 'all',
+        callback: (result: any) => {
+          nodes.push({
+            path: JSONPath.toPathArray(result.path),
+            value: result.value,
+          });
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
   } else {
     nodes.push({
       path: ['$'],

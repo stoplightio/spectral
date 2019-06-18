@@ -241,7 +241,7 @@ responses:: !!foo
         expect.objectContaining({
           code: 'valid-example',
           message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
-          path: ['paths', '/todos/{todoId}', 'put', 'parameters', 1, 'schema'],
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema'],
         }),
       ]),
     );
@@ -257,13 +257,13 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'invalid-ref',
-          message: "No reader defined for scheme 'file' in ref file://models/pet.yaml",
+          message: "No resolver defined for scheme 'file' in ref ./models/pet.yaml",
           path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
           severity: DiagnosticSeverity.Error,
         }),
         expect.objectContaining({
           code: 'invalid-ref',
-          message: "No reader defined for scheme 'file' in ref file://../common/models/error.yaml",
+          message: "No resolver defined for scheme 'file' in ref ../common/models/error.yaml",
           path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
           severity: DiagnosticSeverity.Error,
         }),

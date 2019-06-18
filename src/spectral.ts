@@ -4,7 +4,6 @@ import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { merge, uniqBy } from 'lodash';
-import * as URI from 'urijs';
 
 import { functions as defaultFunctions } from './functions';
 import { runRules } from './runner';
@@ -27,8 +26,8 @@ export class Spectral {
   private _functions: FunctionCollection = defaultFunctions;
   private _resolver: Resolver;
 
-  constructor(opts: IConstructorOpts = {}) {
-    this._resolver = opts.resolver ? opts.resolver : new Resolver();
+  constructor(opts?: IConstructorOpts) {
+    this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
   public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
@@ -47,7 +46,7 @@ export class Spectral {
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
     const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, {
-      authority: documentUri ? new URI(documentUri) : undefined,
+      baseUri: documentUri,
     });
 
     return [

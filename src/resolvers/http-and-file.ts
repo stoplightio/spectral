@@ -6,11 +6,11 @@ import { httpReader } from './http';
 
 // resolves files, http and https $refs, and internal $refs
 export const httpAndFileResolver = new Resolver({
-  readers: {
+  resolvers: {
     https: httpReader,
     http: httpReader,
     file: {
-      read(ref: any) {
+      resolve(ref: any) {
         return new Promise((resolve, reject) => {
           const path = ref.path();
           fs.readFile(path, 'utf8', (err, data) => {
@@ -22,7 +22,7 @@ export const httpAndFileResolver = new Resolver({
     },
   },
 
-  parseAuthorityResult: async opts => {
+  parseResolveResult: async opts => {
     const parts = opts.targetAuthority.path().split('.');
     const format = parts[parts.length - 1];
 

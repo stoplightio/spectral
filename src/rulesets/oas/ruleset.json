@@ -3,7 +3,7 @@
     "operation-2xx-response": {
       "summary": "Operation must have at least one `2xx` response.",
       "type": "style",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "responses",
         "function": "oasOp2xxResponse"
@@ -15,7 +15,7 @@
     "operation-formData-consume-check": {
       "summary": "Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.",
       "type": "validation",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "function": "oasOpFormDataConsumeCheck"
       },
@@ -250,7 +250,7 @@
     "operation-description": {
       "summary": "Operation `description` must be present and non-empty string.",
       "type": "style",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "description",
         "function": "truthy"
@@ -262,7 +262,7 @@
     "operation-operationId": {
       "summary": "Operation should have an `operationId`.",
       "type": "style",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "operationId",
         "function": "truthy"
@@ -274,7 +274,7 @@
     "operation-operationId-valid-in-url": {
       "summary": "operationId may only use characters that are valid when used in a URL.",
       "type": "validation",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "operationId",
         "function": "pattern",
@@ -290,7 +290,7 @@
       "enabled": false,
       "summary": "Operation may only have one tag.",
       "type": "style",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "tags",
         "function": "length",
@@ -306,7 +306,7 @@
       "enabled": false,
       "summary": "Operation `summary` should start with upper case and end with a dot.",
       "type": "style",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "summary",
         "function": "pattern",
@@ -321,7 +321,7 @@
     "operation-tags": {
       "summary": "Operation should have non-empty `tags` array.",
       "type": "style",
-      "given": "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post' || name() === 'delete' || name() === 'options' || name() === 'head' || name() === 'patch' || name() === 'trace' )]",
+      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "tags",
         "function": "truthy"
