@@ -1,6 +1,7 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { parseWithPointers } from '@stoplight/yaml';
+import { parse } from '@stoplight/yaml';
 import * as fs from 'fs';
+import { extname } from 'path';
 
 import { httpReader } from './http';
 
@@ -23,12 +24,11 @@ export const httpAndFileResolver = new Resolver({
   },
 
   parseResolveResult: async opts => {
-    const parts = opts.targetAuthority.path().split('.');
-    const format = parts[parts.length - 1];
+    const ext = extname(opts.targetAuthority.toString());
 
-    if (format === 'yml' || format === 'yaml') {
-      opts.result = parseWithPointers(opts.result).data;
-    } else if (format === 'json') {
+    if (ext === '.yml' || ext === '.yaml') {
+      opts.result = parse(opts.result);
+    } else if (ext === '.json') {
       opts.result = JSON.parse(opts.result);
     }
 
