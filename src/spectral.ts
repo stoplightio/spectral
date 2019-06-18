@@ -12,6 +12,7 @@ import {
   IConstructorOpts,
   IParsedResult,
   IRuleResult,
+  IRunOpts,
   PartialRuleCollection,
   RuleCollection,
   RuleDeclarationCollection,
@@ -23,13 +24,13 @@ export * from './types';
 export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
+  private _resolver: Resolver;
 
-  private resolver: Resolver;
   constructor(opts?: IConstructorOpts) {
-    this.resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+    this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
-  public async run(target: IParsedResult | object | string): Promise<IRuleResult[]> {
+  public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
     let results: IRuleResult[] = [];
 
     let parsedResult: IParsedResult;
@@ -43,7 +44,10 @@ export class Spectral {
       parsedResult = target;
     }
 
-    const { result: resolvedTarget, errors } = await this.resolver.resolve(parsedResult.parsed.data);
+    const documentUri = opts.resolve && opts.resolve.documentUri;
+    const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, {
+      baseUri: documentUri,
+    });
 
     return [
       ...results,

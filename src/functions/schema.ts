@@ -55,6 +55,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       },
     ];
 
+  // we already access a resolved object in src/functions/schema-path.ts
   const { schema: schemaObj } = opts;
 
   try {

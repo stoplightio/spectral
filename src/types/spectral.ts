@@ -1,6 +1,6 @@
+import { Resolver } from '@stoplight/json-ref-resolver';
 import { Dictionary, GetLocationForJsonPath, IDiagnostic, IParserResult, JsonPath } from '@stoplight/types';
 
-import { Resolver } from '@stoplight/json-ref-resolver';
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
 
@@ -25,6 +25,12 @@ export interface IConstructorOpts {
 }
 
 export interface IRunOpts {
+  resolve?: {
+    documentUri?: string;
+  };
+}
+
+export interface IRunRuleOpts {
   /**
    * The resolved version of the target object (could vary depending on the
    * resolver used)
