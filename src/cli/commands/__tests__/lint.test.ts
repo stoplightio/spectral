@@ -5,6 +5,7 @@ type SpyInstance = jest.SpyInstance;
 
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 const validOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
+const oas2RefSpecPath = resolve(__dirname, '__fixtures__/openapi-2.0-ref.yaml');
 const oas2PetstoreSpecPath = resolve(__dirname, '../../../__tests__/__fixtures__/petstore.oas2.json');
 const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
 const outputConfigPath = resolve(__dirname, '__fixtures__/config.output.yml');
@@ -98,6 +99,18 @@ describe('lint', () => {
         });
       });
     });
+  });
+
+  describe('when a spec contains external references', () => {
+    test
+      .stdout()
+      .command(['lint', oas2RefSpecPath])
+      .it('outputs invalid references', ctx => {
+        expect(ctx.stdout).toContain(
+          '"email" property can\'t resolve reference ./schema-ref.yaml#/definitions/email-d from id #',
+        );
+        expect(ctx.stdout).toContain("should have required property 'type'");
+      });
   });
 
   describe('--ruleset', () => {
