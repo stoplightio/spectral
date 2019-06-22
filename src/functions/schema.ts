@@ -1,8 +1,10 @@
-import { decodePointerFragment } from '@stoplight/json';
 import * as AJV from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
+import { ValidateFunction } from 'ajv';
+import { IOutputError } from 'better-ajv-errors';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
+const betterAjvErrors = require('better-ajv-errors');
 
 const ajv = new AJV({
   meta: false,
@@ -22,25 +24,17 @@ ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
 ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
 ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
-const formatPath = (path: string) =>
-  path
-    .split('/')
-    .slice(1)
-    .map(decodePointerFragment);
-
-const mergeErrors = (existingError: IFunctionResult, newError: AJV.ErrorObject) => {
-  switch (newError.keyword) {
-    case 'additionalProperties': {
-      const { additionalProperty } = newError.params as AJV.AdditionalPropertiesParams;
-      if (!new RegExp(`[:,] ${additionalProperty}`).test(existingError.message)) {
-        existingError.message += `, ${(newError.params as AJV.AdditionalPropertiesParams).additionalProperty}`;
-      }
-      return true;
+const validators = new class extends WeakMap<object, ValidateFunction> {
+  public get(schemaObj: object) {
+    let validator = super.get(schemaObj);
+    if (validator === void 0) {
+      validator = ajv.compile(schemaObj);
+      super.set(schemaObj, validator);
     }
-    default:
-      return existingError.message === newError.message;
+
+    return validator;
   }
-};
+}();
 
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
@@ -59,33 +53,16 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const { schema: schemaObj } = opts;
 
   try {
-    if (!ajv.validate(schemaObj, targetVal) && ajv.errors) {
-      // TODO: potential performance improvements (compile, etc)?
-      const collectedErrors: string[] = [];
-
-      for (const error of ajv.errors) {
-        if (collectedErrors.length > 0) {
-          const index = collectedErrors.indexOf(error.keyword);
-          if (index !== -1) {
-            if (mergeErrors(results[index], error)) continue;
-          }
-        }
-
-        let message = error.message || '';
-
-        if (
-          error.keyword === 'additionalProperties' &&
-          (error.params as AJV.AdditionalPropertiesParams).additionalProperty
-        ) {
-          message += `: ${(error.params as AJV.AdditionalPropertiesParams).additionalProperty}`;
-        }
-
-        collectedErrors.push(error.keyword);
-        results.push({
-          path: [...path, ...formatPath(error.dataPath)],
-          message,
-        });
-      }
+    const validator = validators.get(schemaObj);
+    if (!validator(targetVal) && validator.errors) {
+      results.push(
+        ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IOutputError[]).map(
+          ({ error }) => ({
+            message: error.trim(),
+            path,
+          }),
+        ),
+      );
     }
   } catch (ex) {
     if (ex instanceof AJV.MissingRefError) {
