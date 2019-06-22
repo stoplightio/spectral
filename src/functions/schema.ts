@@ -36,6 +36,8 @@ const validators = new class extends WeakMap<object, ValidateFunction> {
   }
 }();
 
+const cleanAJVErrorMessage = (message: string) => message.trim().replace(/^[^:]*:\s*/, '');
+
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
@@ -58,7 +60,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       results.push(
         ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IOutputError[]).map(
           ({ error }) => ({
-            message: error.trim(),
+            message: cleanAJVErrorMessage(error),
             path,
           }),
         ),

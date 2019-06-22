@@ -154,8 +154,8 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        message: '"self" property should be array',
-        path: ['definitions', 'halRoot', '_links', 'self'],
+        message: '"halRoot" property type should be array',
+        path: ['definitions', 'halRoot'],
       }),
     ]);
   });
@@ -222,7 +222,7 @@ describe('valid-example', () => {
       Array [
         Object {
           "code": "valid-example",
-          "message": "\\"c\\" property should be string",
+          "message": "\\"c\\" property type should be string",
           "path": Array [
             "paths",
             "/pet",
@@ -249,7 +249,7 @@ describe('valid-example', () => {
           },
           "severity": 1,
           "source": undefined,
-          "summary": "\\"c\\" property should be string",
+          "summary": "\\"c\\" property type should be string",
         },
       ]
     `);

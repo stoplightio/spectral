@@ -81,7 +81,7 @@ Array [
     expect(runSchemaPath(target, fieldToCheck, path)).toMatchInlineSnapshot(`
 Array [
   Object {
-    "message": "should match format \\"url\\"",
+    "message": "format should match format \\"url\\"",
     "path": Array [],
   },
 ]

@@ -24,7 +24,6 @@ describe('oas2-schema', () => {
         version: '1.0.0',
       },
     });
-    expect(results).toHaveLength(1);
-    expect(results[0].path).toEqual(['paths', '/test', 'get']);
+    expect(results).toEqual([]);
   });
 });
