@@ -49,10 +49,14 @@ export class Spectral {
       baseUri: documentUri,
     });
 
+    if (resolvedTarget) {
+      parsedResult.parsed.data = resolvedTarget;
+    }
+
     return [
       ...results,
       ...formatResolverErrors(errors, parsedResult),
-      ...runRules(parsedResult, this.rules, this.functions, { resolvedTarget }),
+      ...runRules(parsedResult, this.rules, this.functions),
     ];
   }
 

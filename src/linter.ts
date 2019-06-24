@@ -4,7 +4,7 @@ import { get, has } from 'lodash';
 const { JSONPath } = require('jsonpath-plus');
 
 import { message } from './rulesets/message';
-import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunRule, IRunRuleOpts, IThen } from './types';
+import { IFunction, IGivenNode, IParsedResult, IRuleResult, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -12,7 +12,6 @@ export const lintNode = (
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
-  opts: IRunRuleOpts,
   parsedResult: IParsedResult,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
@@ -89,7 +88,6 @@ export const lintNode = (
         {
           original: node.value,
           given: node.value,
-          resolved: opts.resolvedTarget,
         },
       ) || [];
 

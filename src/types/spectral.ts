@@ -30,16 +30,6 @@ export interface IRunOpts {
   };
 }
 
-export interface IRunRuleOpts {
-  /**
-   * The resolved version of the target object (could vary depending on the
-   * resolver used)
-   *
-   * Some functions require this in order to operate.
-   */
-  resolvedTarget?: object;
-}
-
 export interface IRuleResult extends IDiagnostic {
   // @deprecated, use message instead
   summary?: string;

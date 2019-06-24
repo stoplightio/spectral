@@ -1,21 +1,12 @@
 const { JSONPath } = require('jsonpath-plus');
 
 import { lintNode } from './linter';
-import {
-  FunctionCollection,
-  IGivenNode,
-  IParsedResult,
-  IRuleResult,
-  IRunRule,
-  IRunRuleOpts,
-  RunRuleCollection,
-} from './types';
+import { FunctionCollection, IGivenNode, IParsedResult, IRuleResult, IRunRule, RunRuleCollection } from './types';
 
 export const runRules = (
   parsedResult: IParsedResult,
   rules: RunRuleCollection,
   functions: FunctionCollection,
-  opts: IRunRuleOpts,
 ): IRuleResult[] => {
   let results: IRuleResult[] = [];
 
@@ -30,7 +21,7 @@ export const runRules = (
     }
 
     try {
-      results = results.concat(runRule(parsedResult, rule, functions, opts));
+      results = results.concat(runRule(parsedResult, rule, functions));
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }
@@ -39,12 +30,7 @@ export const runRules = (
   return results;
 };
 
-const runRule = (
-  parsedResult: IParsedResult,
-  rule: IRunRule,
-  functions: FunctionCollection,
-  opts: IRunRuleOpts,
-): IRuleResult[] => {
+const runRule = (parsedResult: IParsedResult, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
   const { parsed } = parsedResult;
   const { data: target } = parsed;
 
@@ -85,7 +71,7 @@ const runRule = (
           continue;
         }
 
-        results = results.concat(lintNode(node, rule, then, func, opts, parsedResult));
+        results = results.concat(lintNode(node, rule, then, func, parsedResult));
       }
     } catch (e) {
       console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);

@@ -5,7 +5,7 @@ function runSchemaPath(target: any, field: string, schemaPathStr: string) {
     target,
     { field, schemaPath: schemaPathStr },
     { given: [], target: [] },
-    { given: null, original: null, resolved: target },
+    { given: null, original: target },
   );
 }
 
