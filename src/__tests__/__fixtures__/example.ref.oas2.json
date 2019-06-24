@@ -1,0 +1,6 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "$ref": "./ref.json"
+  }
+}

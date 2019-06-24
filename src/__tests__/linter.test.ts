@@ -1,6 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as path from 'path';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { oas2Functions } from '../rulesets/oas2';
 import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
 import { oas3Functions } from '../rulesets/oas3';
@@ -13,6 +14,7 @@ const invalidSchema = fs.readFileSync(
   'utf-8',
 );
 const todosInvalid = fs.readFileSync(path.join(__dirname, './__fixtures__/todos.invalid.oas2.json'), 'utf-8');
+const exampleRef = fs.readFileSync(path.join(__dirname, './__fixtures__/example.ref.oas2.json'), 'utf-8');
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -44,6 +46,26 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
+  });
+
+  test('baz', async () => {
+    spectral = new Spectral({
+      resolver: httpAndFileResolver,
+    });
+    spectral.addRules(oas2Ruleset.rules as RuleCollection);
+    spectral.addFunctions(oas2Functions());
+
+    const result = await spectral.run(exampleRef);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'valid-example',
+          message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema'],
+        }),
+      ]),
+    );
   });
 
   test('should not lint if passed in value is not an object', async () => {

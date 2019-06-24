@@ -1,11 +1,11 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { merge, uniqBy } from 'lodash';
 
 import { functions as defaultFunctions } from './functions';
+import { Resolved } from './resolved';
 import { runRules } from './runner';
 import {
   FunctionCollection,
@@ -45,19 +45,14 @@ export class Spectral {
     }
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
-    const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, {
-      baseUri: documentUri,
-    });
+    const resolved = new Resolved(
+      parsedResult,
+      await this._resolver.resolve(parsedResult.parsed.data, {
+        baseUri: documentUri,
+      }),
+    );
 
-    if (resolvedTarget) {
-      parsedResult.parsed.data = resolvedTarget;
-    }
-
-    return [
-      ...results,
-      ...formatResolverErrors(errors, parsedResult),
-      ...runRules(parsedResult, this.rules, this.functions),
-    ];
+    return [...results, ...formatResolverErrors(resolved), ...runRules(resolved, this.rules, this.functions)];
   }
 
   /**
@@ -139,10 +134,10 @@ function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleR
 
 const prettyPrintResolverError = (message: string) => message.replace(/^Error\s*:\s*/, '');
 
-const formatResolverErrors = (resolveErrors: IResolveError[], result: IParsedResult): IRuleResult[] => {
-  return uniqBy(resolveErrors, 'message').reduce<IRuleResult[]>((errors, error) => {
+const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
+  return uniqBy(resolved.errors, 'message').reduce<IRuleResult[]>((errors, error) => {
     const path = [...error.path, '$ref'];
-    const location = result.getLocationForJsonPath(result.parsed, path);
+    const location = resolved.getLocationForJsonPath(path);
 
     if (location) {
       errors.push({
