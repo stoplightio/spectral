@@ -1,6 +1,7 @@
 import { test } from '@oclif/test';
 import * as fs from 'fs';
 import { resolve } from 'path';
+import * as path from 'path';
 type SpyInstance = jest.SpyInstance;
 
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
@@ -360,4 +361,12 @@ describe('lint', () => {
         expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
       });
   });
+
+  test
+    .stdout()
+    .command(['lint', path.join(__dirname, '../../../__tests__/__fixtures__/example.ref.oas2.json')])
+    .it('outputs data in format from default config file', ctx => {
+      console.log(ctx);
+      expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+    });
 });

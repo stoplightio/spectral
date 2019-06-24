@@ -1,12 +1,14 @@
-import { Resolver } from '@stoplight/json-ref-resolver';
 import { parse } from '@stoplight/yaml';
 import * as fs from 'fs';
 import { extname } from 'path';
 
 import { httpReader } from './http';
-
+import { SpectralResolver } from './resolver';
+import { IParsedResult } from '../types';
+// import { IParsedResult } from '../types';
+//
 // resolves files, http and https $refs, and internal $refs
-export const httpAndFileResolver = new Resolver({
+export const httpAndFileResolver = new SpectralResolver(parsedMap => ({
   resolvers: {
     https: httpReader,
     http: httpReader,
@@ -24,14 +26,23 @@ export const httpAndFileResolver = new Resolver({
   },
 
   parseResolveResult: async opts => {
-    const ext = extname(opts.targetAuthority.toString());
+    const ref = opts.targetAuthority.toString();
+    const ext = extname(ref);
 
+    const content = String(opts.result);
+    let parsedResult: IParsedResult;
     if (ext === '.yml' || ext === '.yaml') {
-      opts.result = parse(opts.result);
+      opts.result = parse(content);
+      parsedResult = {
+      }
     } else if (ext === '.json') {
-      opts.result = JSON.parse(opts.result);
+      opts.result = JSON.parse(content);
+    }
+
+    if (typeof opts.result === 'object' && opts.result !== null) {
+      parsedMap[ref] = parsedResult;
     }
 
     return opts;
   },
-});
+}));
