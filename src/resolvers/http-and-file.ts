@@ -3,7 +3,6 @@ import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/pars
 import { parseWithPointers as parseYAMLWithPointers } from '@stoplight/yaml';
 import { getLocationForJsonPath as getLocationForJsonPathYAML } from '@stoplight/yaml';
 import * as fs from 'fs';
-import { set } from 'lodash';
 import { extname } from 'path';
 
 import { IParsedResult } from '../types';
@@ -13,7 +12,7 @@ import { SpectralResolver } from './resolver';
 export const ANNOTATION = Symbol('annotation');
 
 // resolves files, http and https $refs, and internal $refs
-export const httpAndFileResolver = new SpectralResolver(parsedMap => ({
+export const httpAndFileResolver = new SpectralResolver(process => ({
   resolvers: {
     https: httpReader,
     http: httpReader,
@@ -54,22 +53,7 @@ export const httpAndFileResolver = new SpectralResolver(parsedMap => ({
 
     if (parsedResult !== undefined) {
       opts.result = parsedResult.parsed.data;
-      parsedMap.parsed[ref] = parsedResult;
-      parsedMap.parent[ref] = opts.parentPath;
-      const parentRef = opts.parentAuthority.toString();
-
-      set(
-        parsedMap.refs,
-        [...(parsedMap.parent[parentRef] ? parsedMap.parent[parentRef] : []), ...opts.parentPath],
-        Object.defineProperty({}, ANNOTATION, {
-          enumerable: false,
-          writable: false,
-          value: {
-            ref,
-            root: opts.fragment.split('/').slice(1),
-          },
-        }),
-      );
+      process(parsedResult, opts);
     }
 
     return opts;
