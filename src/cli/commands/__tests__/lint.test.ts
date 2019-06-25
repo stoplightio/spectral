@@ -1,7 +1,6 @@
 import { test } from '@oclif/test';
 import * as fs from 'fs';
 import { resolve } from 'path';
-import * as path from 'path';
 type SpyInstance = jest.SpyInstance;
 
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
@@ -18,6 +17,8 @@ const validRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.y
 const invalidRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.invalid.yml');
 const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/ruleset.json');
 const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/ruleset.json');
+const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
+const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 
 /*
  * These tests currently do not assert stderr because it doesn't seem to be
@@ -352,7 +353,7 @@ describe('lint', () => {
     beforeAll(() => {
       spy = jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
     });
-    afterAll(() => spy.mockClear());
+    afterAll(() => spy.mockRestore());
 
     test
       .stdout()
@@ -362,12 +363,99 @@ describe('lint', () => {
       });
   });
 
-  describe('d', () => {
+  describe('ref linting', () => {
     test
       .stdout()
-      .command(['lint', path.join(__dirname, '../../../__tests__/__fixtures__/example.ref.oas2.json')])
-      .it('outputs data in format from default config file', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+      .command(['lint', draftRefSpec, '-q', '-f=json'])
+      .it('outputs errors occurring in referenced files', ctx => {
+        expect(JSON.parse(ctx.stdout)).toEqual([
+          expect.objectContaining({
+            code: 'info-description',
+            message: 'OpenAPI object info `description` must be present and non-empty string.',
+            path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted ref, but there is such in spec when working on resolved file
+            range: {
+              end: {
+                character: 22,
+                line: 5,
+              },
+              start: {
+                character: 21,
+                line: 5,
+              },
+            },
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas2-schema',
+            message: 'should NOT have additional properties: foo',
+            path: ['info'],
+            range: {
+              end: {
+                character: 5,
+                line: 9,
+              },
+              start: {
+                character: 12,
+                line: 3,
+              },
+            },
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
+          }),
+          expect.objectContaining({
+            code: 'api-schemes',
+            message: 'OpenAPI host `schemes` must be present and non-empty array.',
+            path: ['schemes'],
+            range: expect.any(Object),
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-ref.oas2.json'),
+          }),
+        ]);
+      });
+
+    test
+      .stdout()
+      .command(['lint', draftNestedRefSpec, '-q', '-f=json'])
+      .it('outputs errors occurring in nested referenced files', ctx => {
+        expect(JSON.parse(ctx.stdout)).toEqual([
+          expect.objectContaining({
+            code: 'info-description',
+            message: 'OpenAPI object info `description` must be present and non-empty string.',
+            path: ['info', 'description'],
+            range: {
+              end: {
+                character: 18,
+                line: 2,
+              },
+              start: {
+                character: 17,
+                line: 2,
+              },
+            },
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas2-schema',
+            message: "should have required property 'title'",
+            path: ['info'],
+            range: {
+              end: {
+                character: 1,
+                line: 3,
+              },
+              start: {
+                character: 0,
+                line: 0,
+              },
+            },
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),
+          }),
+          expect.objectContaining({
+            code: 'api-schemes',
+            message: 'OpenAPI host `schemes` must be present and non-empty array.',
+            path: ['schemes'],
+            range: expect.any(Object),
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-nested-ref.oas2.json'),
+          }),
+        ]);
       });
   });
 });
