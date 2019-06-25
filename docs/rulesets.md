@@ -1,4 +1,13 @@
-# Spectral Rulesets
+---
+title: Spectral Rulesets
+tags: 
+- Documentation
+- Rulesets
+---
+
+Rulesets are a container for collections of rules. These rules are essentially calling functions Specvtral, and by taking parameters you can make these functions do whatever you want. 
+
+First the rule filters your object (JSON/YAML file) down to a set of target values, and then list what function arguments should be passed in.
 
 ## Usage
 
@@ -6,7 +15,7 @@
 spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml --ruleset=http://example.com/acme-common-ruleset.yaml
 ```
 
-## Example ruleset file
+## Example Ruleset
 
 We currently support ruleset files in both `yaml` and `json` formats.
 
@@ -27,8 +36,6 @@ rules:
 Rules are highly configurable. There are only few required parameters but the optional ones gives powerful flexibility. Please see the following type tables for more information.
 
 *TODO: generate this table automatically from the TS file.*
-
-### Rule
 
 <table>
   <thead>
@@ -140,14 +147,14 @@ Rules are highly configurable. There are only few required parameters but the op
   </tbody>
 </table>
 
-### Ruleset validation
+## Ruleset Validation
 
 We use JSON Schema & AJV to validate your rulesets file and help you spot issues early.
 
 **Example output**
 
 ```bash
-spectral lint some-oas.yaml --ruleset acme-company.json
+$ spectral lint some-oas.yaml --ruleset acme-company.json
 
 Reading ruleset
 
@@ -158,12 +165,5 @@ Reading ruleset
 /rules/rule-with-invalid-enum/type 	 should be equal to one of the allowed values 
 ```
 
-**Note for developers**
-
-Supporting YAML and JSON file validation doesn't come free. 
-We need to maintain schema files that mirror IRule and IRuleset types (see `/src/meta/*.schema.json`).
-Ideally, we would have a script that converts TS type to JSON Schema and keeps the meta files up to date. As of now we have a helper that partially automates the work.
-
-Execute `yarn schema.update` to recreate the `/src/meta/rule.schema.json`.
-It will take `IRule` type from `types.ts` file and automatically update the JSON Schema file we use to validate yaml/json ruleset files.
-**Warning**: make sure to update *generic* types. Current tools fails to recognize it properly and e.g. treats `string` as `object`.
+These errors should look just like errors you get from Spectral when an API description is invalid, 
+so use them to fix your rules in the same way.
