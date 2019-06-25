@@ -20,14 +20,14 @@ export class Resolved implements IResolveResult {
   }
 
   public getParsedForJsonPath(path: JsonPath) {
-    let target = this.resolver.parsedMap.refs;
+    let target: object = this.resolver.parsedMap.refs;
     const newPath = [...path];
     let segment: Segment;
 
     while (newPath.length > 0) {
       segment = newPath.shift()!;
       if (segment && segment in target) {
-        target = target[segment] as any;
+        target = target[segment];
       } else {
         newPath.unshift(segment);
         break;
