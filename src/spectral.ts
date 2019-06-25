@@ -1,11 +1,11 @@
 import { safeStringify } from '@stoplight/json';
-import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { merge, uniqBy } from 'lodash';
 
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
+import { SpectralResolver } from './resolvers/resolver';
 import { runRules } from './runner';
 import {
   FunctionCollection,
@@ -24,10 +24,10 @@ export * from './types';
 export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
-  private _resolver: Resolver;
+  private _resolver: SpectralResolver;
 
   constructor(opts?: IConstructorOpts) {
-    this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+    this._resolver = opts && opts.resolver ? opts.resolver : new SpectralResolver();
   }
 
   public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
@@ -45,11 +45,13 @@ export class Spectral {
     }
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
+
     const resolved = new Resolved(
       parsedResult,
       await this._resolver.resolve(parsedResult.parsed.data, {
         baseUri: documentUri,
       }),
+      this._resolver,
     );
 
     return [...results, ...formatResolverErrors(resolved), ...runRules(resolved, this.rules, this.functions)];

@@ -1,12 +1,17 @@
-import { parse } from '@stoplight/yaml';
+import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
+import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
+import { parseWithPointers as parseYAMLWithPointers } from '@stoplight/yaml';
+import { getLocationForJsonPath as getLocationForJsonPathYAML } from '@stoplight/yaml';
 import * as fs from 'fs';
+import { set } from 'lodash';
 import { extname } from 'path';
 
+import { IParsedResult } from '../types';
 import { httpReader } from './http';
 import { SpectralResolver } from './resolver';
-import { IParsedResult } from '../types';
-// import { IParsedResult } from '../types';
-//
+
+export const ANNOTATION = Symbol('annotation');
+
 // resolves files, http and https $refs, and internal $refs
 export const httpAndFileResolver = new SpectralResolver(parsedMap => ({
   resolvers: {
@@ -30,17 +35,41 @@ export const httpAndFileResolver = new SpectralResolver(parsedMap => ({
     const ext = extname(ref);
 
     const content = String(opts.result);
-    let parsedResult: IParsedResult;
+    let parsedResult: IParsedResult | void;
     if (ext === '.yml' || ext === '.yaml') {
-      opts.result = parse(content);
       parsedResult = {
-      }
+        // todo: print diagnostics
+        parsed: parseYAMLWithPointers(content),
+        source: ref,
+        getLocationForJsonPath: getLocationForJsonPathYAML,
+      };
     } else if (ext === '.json') {
-      opts.result = JSON.parse(content);
+      parsedResult = {
+        // todo: print diagnostics
+        parsed: parseJSONWithPointers(content),
+        source: ref,
+        getLocationForJsonPath: getLocationForJsonPathJSON,
+      };
     }
 
-    if (typeof opts.result === 'object' && opts.result !== null) {
-      parsedMap[ref] = parsedResult;
+    if (parsedResult !== undefined) {
+      opts.result = parsedResult.parsed.data;
+      parsedMap.parsed[ref] = parsedResult;
+      parsedMap.parent[ref] = opts.parentPath;
+      const parentRef = opts.parentAuthority.toString();
+
+      set(
+        parsedMap.refs,
+        [...(parsedMap.parent[parentRef] ? parsedMap.parent[parentRef] : []), ...opts.parentPath],
+        Object.defineProperty({}, ANNOTATION, {
+          enumerable: false,
+          writable: false,
+          value: {
+            ref,
+            root: opts.fragment.split('/').slice(1),
+          },
+        }),
+      );
     }
 
     return opts;

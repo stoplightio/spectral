@@ -362,11 +362,12 @@ describe('lint', () => {
       });
   });
 
-  test
-    .stdout()
-    .command(['lint', path.join(__dirname, '../../../__tests__/__fixtures__/example.ref.oas2.json')])
-    .it('outputs data in format from default config file', ctx => {
-      console.log(ctx);
-      expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
-    });
+  describe('d', () => {
+    test
+      .stdout()
+      .command(['lint', path.join(__dirname, '../../../__tests__/__fixtures__/example.ref.oas2.json')])
+      .it('outputs data in format from default config file', ctx => {
+        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+      });
+  });
 });

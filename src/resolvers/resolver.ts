@@ -3,12 +3,22 @@ import { IResolverOpts } from '@stoplight/json-ref-resolver/types';
 import { Dictionary } from '@stoplight/types/dist';
 import { IParsedResult } from '../types';
 
-export class SpectralResolver extends Resolver {
-  public parsedMap: Dictionary<IParsedResult>;
+export interface IParseMap {
+  refs: Dictionary<object>;
+  parsed: Dictionary<IParsedResult>;
+  parent: Dictionary<string[]>;
+}
 
-  constructor(opts: (map: Dictionary<IParsedResult>) => IResolverOpts) {
-    const parsedMap: Dictionary<IParsedResult> = {};
-    super(opts(parsedMap));
+export class SpectralResolver extends Resolver {
+  public parsedMap: IParseMap;
+
+  constructor(opts?: (map: IParseMap) => IResolverOpts) {
+    const parsedMap: IParseMap = {
+      refs: {},
+      parsed: {},
+      parent: {},
+    };
+    super(opts && opts(parsedMap));
     this.parsedMap = parsedMap;
   }
 }
