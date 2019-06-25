@@ -5,7 +5,7 @@ tags:
 - Rulesets
 ---
 
-Rulesets are a container for collections of rules. These rules are essentially calling functions Specvtral, and by taking parameters you can make these functions do whatever you want. 
+Rulesets are a container for collections of rules. These rules are essentially calling functions Spectral, and by taking parameters you can make these functions do whatever you want. 
 
 First the rule filters your object (JSON/YAML file) down to a set of target values, and then list what function arguments should be passed in.
 

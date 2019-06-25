@@ -93,7 +93,7 @@ Other options include:
 
 > Note: The Spectral CLI supports both YAML and JSON.
 
-Currently, the CLI supports validation of OpenAPI documents and lints them based on our default ruleset. It does not support custom rulesets at this time. Although if you want to build and run custom rulesets outside of the CLI, see [Customization](#Customization).
+Currently, Spectral CLI CLI supports validation of OpenAPI documents and lints them based on our default ruleset, or you can provide [your own rulesets](docs/rulesets.md).
 
 ## Concepts
 
@@ -105,13 +105,13 @@ There are three key concepts in Spectral: **Rulesets**, **Rules** and **Function
 
 Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
 
+## Config
+
+Spectral CLI supports [config files](docs/config.md), to avoid typing out CLI options and arguments every single time. 
+
 ## Programmatic usage
 
-Spectral is written in TypeScript (JavaScript) and can be used directly for when you need to use Spectral programatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
-
-## Rulesets
-
-You can find all about [rulesets here](docs/rulesets.md).
+Spectral is written in TypeScript (JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## FAQs
 

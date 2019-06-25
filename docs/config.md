@@ -5,7 +5,7 @@ tags:
 - Config
 ---
 
-Spectral CLI supports config files, to save you typing out CLI options and arguments every single time. 
+Spectral CLI supports config files, to avoid typing out CLI options and arguments every single time. 
 
 By default Spectral CLI will look for `spectral.yml` in the current working directory, but it could be any JSON or YAML file if you specify it with the `--config` option. 
 
