@@ -467,9 +467,9 @@
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
 "@oclif/command@1.5.x", "@oclif/command@^1.0", "@oclif/command@^1.5.1", "@oclif/command@^1.5.12", "@oclif/command@^1.5.13", "@oclif/command@^1.5.8":
-  version "1.5.14"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.14.tgz#cdf6013134abfb5630783f27e78436096ce3ed88"
-  integrity sha512-R9gat0yUjamDVd4trvFgjlx2XYuMz1nM0uEBFP6nR1zOQAwJ3E1zqYbsVlCMWiUDGjU1hYmudmK7IjAxDUoqDw==
+  version "1.5.15"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.15.tgz#b926a6eb0491636150a256c0797f786c1f0938bc"
+  integrity sha512-bNfXihQ+piSa3WVA3DgSpptFtN2Ex/Xzv16qZt88Kp4P2tFUTcvMhyaisGYy7UjAW6mcjJrxx/141/Kfz5vtxA==
   dependencies:
     "@oclif/errors" "^1.2.2"
     "@oclif/parser" "^3.7.3"
@@ -8542,10 +8542,10 @@ tslint@5.11.x:
     tslib "^1.8.0"
     tsutils "^2.27.2"
 
-tslint@~5.17:
-  version "5.17.0"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.17.0.tgz#f9f0ce2011d8e90debaa6e9b4975f24cd16852b8"
-  integrity sha512-pflx87WfVoYepTet3xLfDOLDm9Jqi61UXIKePOuca0qoAZyrGWonDG9VTbji58Fy+8gciUn8Bt7y69+KEVjc/w==
+tslint@~5.18:
+  version "5.18.0"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.18.0.tgz#f61a6ddcf372344ac5e41708095bbf043a147ac6"
+  integrity sha512-Q3kXkuDEijQ37nXZZLKErssQVnwCV/+23gFEMROi8IlbaBG6tXqLPQJ5Wjcyt/yHPKBC+hD5SzuGaMora+ZS6w==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     builtin-modules "^1.1.1"
