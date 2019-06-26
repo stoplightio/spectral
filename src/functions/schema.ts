@@ -28,6 +28,7 @@ const validators = new class extends WeakMap<object, ValidateFunction> {
   public get(schemaObj: object) {
     let validator = super.get(schemaObj);
     if (validator === void 0) {
+      // compiling might give us some perf improvements
       validator = ajv.compile(schemaObj);
       super.set(schemaObj, validator);
     }
@@ -55,6 +56,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const { schema: schemaObj } = opts;
 
   try {
+    // we used the compiled validation now, hence this lookup here (see the logic above for more info)
     const validator = validators.get(schemaObj);
     if (!validator(targetVal) && validator.errors) {
       results.push(
