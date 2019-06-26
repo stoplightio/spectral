@@ -85,6 +85,7 @@ Other options include:
   -h, --help                   show CLI help
   -m, --maxResults=maxResults  deprecated: use --max-results instead
   -o, --output=output          output to a file instead of stdout
+  -q, --quiet                  no logging - output only
   -r, --ruleset=ruleset        path to a ruleset file (supports remote files)
   -s, --skip-rule=skip-rule    ignore certain rules if they are causing trouble
   -v, --verbose                increase verbosity
