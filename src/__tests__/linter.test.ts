@@ -213,6 +213,27 @@ responses:: !!foo
       expect.objectContaining({
         code: 'invalid-ref',
       }),
+      expect.objectContaining({
+        code: 'valid-example',
+        message: '"foo" property type should be number',
+        path: ['components', 'schemas', 'foo'],
+      }),
+    ]);
+  });
+
+  test('should remove all report schema validation errors', async () => {
+    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(invalidSchema);
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
     ]);
   });
 
