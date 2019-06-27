@@ -16,7 +16,7 @@ elif [ "$UNAME" = "Linux" ] ; then
   PLATFORM="linux"
 fi
 
-URL="https://github.com/stoplightio/spectral/releases/latest/download/spectral-cli-$PLATFORM"
+URL="https://github.com/stoplightio/spectral/releases/latest/download/spectral-$PLATFORM"
 SRC=$(pwd)/spectral-$PLATFORM
 DEST=/usr/local/bin/spectral
 
