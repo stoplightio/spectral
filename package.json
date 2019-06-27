@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral",
-  "version": "4.0.0",
+  "version": "4.0.0-beta1",
   "description": "A flexible object linter with out of the box support for OpenAPI v2 and v3.",
   "keywords": [
     "json linter",
