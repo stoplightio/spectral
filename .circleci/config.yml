@@ -105,7 +105,7 @@ workflows:
               only: master
       - upload_artifacts:
           filters:
-            branches:
-              only: master
+            tags:
+              only: /^v.*/          
           requires:
             - release
