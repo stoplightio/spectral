@@ -106,6 +106,6 @@ workflows:
       - upload_artifacts:
           filters:
             tags:
-              only: /^v.*/          
+              only: /^v.*/
           requires:
             - release
