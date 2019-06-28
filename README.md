@@ -9,9 +9,8 @@ A flexible JSON object linter with out of the box support for OpenAPI v2 and v3
 
 - Create custom rules to lint _any JSON object_
 - Use JSON paths to apply rules / functions to specific parts of your JSON objects
-- Built-in set of functions to help [build custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc
-- [Create custom functions](#creating-a-custom-function) for advanced use cases
-- Optional ready to use rules and functions to validate and lint [OpenAPI v2 _and_ v3 documents](#example-linting-an-openapi-document)
+- Built-in set of functions to help [build custom rulesets](docs/rulesets.md). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc
+- Default ready to use rules and functions to validate and lint OpenAPI v2 _and_ v3 documents
 - Validate JSON with [Ajv](https://github.com/epoberezkin/ajv)
 
 ## Installation
@@ -85,7 +84,7 @@ Other options include:
 
 > Note: The Spectral CLI supports both YAML and JSON.
 
-Currently, Spectral CLI CLI supports validation of OpenAPI documents and lints them based on our default ruleset, or you can provide [your own rulesets](docs/rulesets.md).
+Currently, Spectral CLI supports validation of OpenAPI documents and lints them based on our default ruleset, or you can provide [your own rulesets](docs/rulesets.md).
 
 ## Concepts
 
