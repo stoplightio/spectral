@@ -1,26 +1,27 @@
-import { IParserResult } from '@stoplight/types';
-import { parseWithPointers } from '@stoplight/yaml';
-import { existsSync, readFileSync } from 'fs';
+import { parse } from '@stoplight/yaml';
+import { readFile } from 'fs';
 // @ts-ignore
 import * as fetch from 'node-fetch';
+import { promisify } from 'util';
+
+const readFileAsync = promisify(readFile);
 
 async function doRead(name: string, encoding: string) {
-  if (name.startsWith('http')) {
+  if (/^https:\/\//.test(name)) {
     const result = await fetch(name);
-    return parseWithPointers(await result.text());
-  } else if (existsSync(name)) {
+    return parse(await result.text());
+  } else {
     try {
-      return parseWithPointers(readFileSync(name, encoding));
+      return parse(await readFileAsync(name, encoding));
     } catch (ex) {
       throw new Error(`Could not read ${name}: ${ex.message}`);
     }
   }
-  throw new Error(`${name} does not exist`);
 }
 
-export async function readParsable(name: string, encoding: string): Promise<IParserResult> {
+export async function readParsable(name: string, encoding: string): Promise<unknown> {
   try {
-    return doRead(name, encoding);
+    return await doRead(name, encoding);
   } catch (ex) {
     throw new Error(`Could not parse ${name}: ${ex.message}`);
   }
