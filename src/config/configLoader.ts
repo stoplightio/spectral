@@ -1,4 +1,5 @@
 import { IParserResult } from '@stoplight/types';
+import { parseWithPointers } from '@stoplight/yaml';
 import { existsSync } from 'fs';
 import { isEmpty, merge } from 'lodash';
 import * as path from 'path';
@@ -12,7 +13,7 @@ const loadConfig = async (filePath: any): Promise<IConfig> => {
     case '.json':
     case '.yaml':
     case '.yml':
-      const { data, diagnostics }: IParserResult = await readParsable(filePath, 'utf8');
+      const { data, diagnostics }: IParserResult = parseWithPointers(await readParsable(filePath, 'utf8'));
       if (!isEmpty(diagnostics)) {
         throw new Error('Parsing exception');
       }

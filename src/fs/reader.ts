@@ -1,25 +1,25 @@
-import { parse } from '@stoplight/yaml';
 import { readFile } from 'fs';
-// @ts-ignore
-import * as fetch from 'node-fetch';
+const fetch = require('node-fetch');
 import { promisify } from 'util';
 
 const readFileAsync = promisify(readFile);
 
+export const isURL = (uri: string) => /^https?:\/\//.test(uri);
+
 async function doRead(name: string, encoding: string) {
-  if (/^https:\/\//.test(name)) {
+  if (isURL(name)) {
     const result = await fetch(name);
-    return parse(await result.text());
+    return await result.text();
   } else {
     try {
-      return parse(await readFileAsync(name, encoding));
+      return await readFileAsync(name, encoding);
     } catch (ex) {
       throw new Error(`Could not read ${name}: ${ex.message}`);
     }
   }
 }
 
-export async function readParsable(name: string, encoding: string): Promise<unknown> {
+export async function readParsable(name: string, encoding: string): Promise<string> {
   try {
     return await doRead(name, encoding);
   } catch (ex) {

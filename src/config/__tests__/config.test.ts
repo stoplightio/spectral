@@ -36,7 +36,7 @@ describe('config loading', () => {
 
   test('should throw error if file does not exist', async () => {
     const configPath = getFixture('config.ghost.json');
-    await expect(load(configPath, ConfigCommand.LINT)).rejects.toThrowError(/does not exist/);
+    await expect(load(configPath, ConfigCommand.LINT)).rejects.toThrowError(/Could not parse/);
   });
 
   test('should throw error if JSON file is invalid', async () => {

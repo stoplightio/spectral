@@ -1,6 +1,6 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath } from '@stoplight/yaml';
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
@@ -14,7 +14,7 @@ import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
-import { readRulesFromRuleset } from '../../rulesets/reader';
+import { readRulesFromRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
 import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
@@ -96,9 +96,12 @@ linting ./openapi.yaml
     let rules;
 
     if (ruleset) {
-      rules = await tryReadOrLog(this, async () => {
-        return Promise.all(ruleset.map(async file => readRulesFromRuleset((await readParsable(file, 'utf-8')).data)));
-      });
+      try {
+        rules = await readRulesFromRulesets(...ruleset);
+      } catch (ex) {
+        this.log(ex.message);
+        this.error(ex);
+      }
     }
 
     if (args.source) {
@@ -147,7 +150,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     targetUri = resolve(name);
   }
 
-  const spec: IParserResult = await readParsable(targetUri, flags.encoding);
+  const spec: IParserResult = parseWithPointers(await readParsable(targetUri, flags.encoding));
   const spectral = new Spectral({ resolver: httpAndFileResolver });
   if (parseInt(spec.data.swagger) === 2) {
     command.log('Adding OpenAPI 2.0 (Swagger) functions');
@@ -209,7 +212,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   const output = await formatOutput(results, flags);
   try {
     await writeOutput(output, flags, command);
-    process.exitCode = 1;
+    process.exitCode = 0;
   } catch (ex) {
     process.exitCode = 2;
     throw new Error(ex);

@@ -1,18 +1,16 @@
-import { readFile } from 'fs';
+import { parse } from '@stoplight/yaml';
 import { merge } from 'lodash';
-import { promisify } from 'util';
+import * as path from 'path';
 import { PROJECT_ROOT } from '../consts';
+import { isURL, readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
-import { formatAjv } from './ajv';
-import { validateRuleset } from './validation';
+import { assertValidRuleset } from './validation';
 
-const readFileAsync = promisify(readFile);
-
-export async function readRulesFromRulesets(...rulesets: object[]): Promise<RuleCollection> {
+export async function readRulesFromRulesets(...uris: string[]): Promise<RuleCollection> {
   const rules = {};
-  for (const ruleset of rulesets) {
-    merge(rules, await readRulesFromRuleset(ruleset));
+  for (const uri of uris) {
+    merge(rules, await readRulesFromRuleset(uri));
   }
 
   return rules;
@@ -31,36 +29,38 @@ export type Logger = {
   ) => never;
 };
 
-export async function readRulesFromRuleset(ruleset: object): Promise<RuleCollection> {
-  if (!('rules' in ruleset)) {
-    throw new Error('Provided ruleset is not valid');
-  }
+async function readRulesFromRuleset(uri: string): Promise<RuleCollection> {
+  const base = path.dirname(uri);
+  const ruleset = assertValidRuleset(parse(await readParsable(uri, 'utf-8')));
 
-  const errors = validateRuleset(ruleset as IRulesetFile);
-
-  if (errors.length) {
-    throw new Error(`${formatAjv(errors)} Provided ruleset is not valid`);
-  }
-
-  const extendz = (ruleset as IRulesetFile).extends;
+  const extendz = ruleset.extends;
   const extendedRules = {};
   if (extendz && extendz.length) {
-    for (const base of extendz) {
-      merge(extendedRules, JSON.parse(await readFileAsync(resolveRuleset(base), 'utf-8')).rules);
+    for (const extended of extendz) {
+      const extendedRuleset = assertValidRuleset(parse(await readParsable(resolveRuleset(base, extended), 'utf-8')));
+      merge(extendedRules, (extendedRuleset as IRulesetFile).rules);
     }
   }
 
   return merge(extendedRules, (ruleset as IRulesetFile).rules);
 }
 
-function resolveRuleset(uri: string) {
-  if (uri.startsWith('@stoplight/spectral/')) {
+function resolveRuleset(base: string, extended: string) {
+  if (isURL(extended)) {
+    return extended;
+  }
+
+  if (extended.startsWith('@stoplight/spectral/')) {
     try {
-      return uri.replace('@stoplight/spectral/', require.resolve('@stoplight/spectral'));
+      return extended.replace('@stoplight/spectral/', require.resolve('@stoplight/spectral'));
     } catch {
-      return uri.replace('@stoplight/spectral/', `${PROJECT_ROOT}/`);
+      return extended.replace('@stoplight/spectral/', `${PROJECT_ROOT}/`);
     }
   }
 
-  return uri;
+  if (path.isAbsolute(extended)) {
+    return extended;
+  }
+
+  return path.join(base, extended).replace(/(https?:\/)([^\/])/, '$1/$2'); // todo: use stoplight/path
 }

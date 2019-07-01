@@ -2,6 +2,7 @@ jest.mock('../../fs/reader');
 jest.mock('../ajv');
 jest.mock('../validation');
 jest.mock('../path');
+jest.mock('path');
 
 import { Dictionary } from '@stoplight/types';
 import { when } from 'jest-when';
@@ -11,11 +12,11 @@ import { IRulesetFile } from '../../types/ruleset';
 import { formatAjv } from '../ajv';
 import { resolvePath } from '../path';
 import { readRulesFromRulesets } from '../reader';
-import { validateRuleset } from '../validation';
+import { assertValidRuleset } from '../validation';
 
 const readParsableMock: jest.Mock = readParsable as jest.Mock;
 const formatAjvMock: jest.Mock = formatAjv as jest.Mock;
-const validateRulesetMock: jest.Mock = validateRuleset as jest.Mock;
+const validateRulesetMock: jest.Mock = assertValidRuleset as jest.Mock;
 const resolvePathMock: jest.Mock = resolvePath as jest.Mock;
 
 const simpleRule: IRule = {
@@ -27,12 +28,15 @@ const simpleRule: IRule = {
 };
 
 describe('reader', () => {
+  beforeEach(() => {
+    validateRulesetMock.mockImplementationOnce(given => given);
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
-    validateRulesetMock.mockReturnValue([]);
     givenRulesets({
       'flat-ruleset.yaml': {
         rules: {
@@ -47,7 +51,6 @@ describe('reader', () => {
   });
 
   it('given two flat, valid ruleset files should return rules', async () => {
-    validateRulesetMock.mockReturnValue([]);
     givenRulesets({
       'flat-ruleset-a.yaml': {
         rules: {
@@ -68,7 +71,6 @@ describe('reader', () => {
   });
 
   it('should override properties of extended rulesets', async () => {
-    validateRulesetMock.mockReturnValue([]);
     givenRulesets({
       flatRuleset: {
         rules: {
@@ -93,7 +95,6 @@ describe('reader', () => {
   });
 
   it('should inherit properties of extended rulesets', async () => {
-    validateRulesetMock.mockReturnValue([]);
     givenRulesets({
       flatRuleset: {
         rules: {
@@ -120,7 +121,6 @@ describe('reader', () => {
   });
 
   it('should blend together parent rulesets', async () => {
-    validateRulesetMock.mockReturnValue([]);
     givenRulesets({
       rulesetA: {
         rules: {
@@ -179,7 +179,10 @@ describe('reader', () => {
     givenRulesets({
       'flat-ruleset.yaml': flatRuleset,
     });
-    validateRulesetMock.mockReturnValue(['fake errors']);
+    validateRulesetMock.mockImplementationOnce(() => {
+      throw new Error('fake errors');
+    });
+
     when(formatAjvMock)
       .calledWith(['fake errors'])
       .mockReturnValue('fake formatted message');
@@ -190,18 +193,16 @@ describe('reader', () => {
   });
 
   function givenRulesets(rulesets: Dictionary<IRulesetFile, string>) {
-    Object.entries(rulesets).forEach(([key, ruleset]) => {
-      (ruleset.extends || []).forEach(extend =>
+    for (const [name, ruleset] of Object.entries(rulesets)) {
+      for (const extend of ruleset.extends || []) {
         when(resolvePathMock)
-          .calledWith(key, extend)
-          .mockReturnValue(extend),
-      );
+          .calledWith(name, extend)
+          .mockReturnValue(extend);
+      }
 
       when(readParsableMock)
-        .calledWith(key, 'utf8')
-        .mockReturnValue({
-          data: ruleset,
-        });
-    });
+        .calledWith(name, 'utf8')
+        .mockReturnValue(JSON.stringify(ruleset));
+    }
   }
 });

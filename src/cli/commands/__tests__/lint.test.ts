@@ -114,7 +114,7 @@ describe('lint', () => {
         .command(['lint', validCustomOas3SpecPath, '-r', invalidNestedRulesetPath])
         .exit(2)
         .it('should fail trying to extend an invalid relative ruleset', ctx => {
-          expect(ctx.stdout).toContain("should have required property 'given'");
+          expect(ctx.stdout).toContain('Provided ruleset is not valid');
         });
 
       test
@@ -140,12 +140,7 @@ describe('lint', () => {
         .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
         .exit(2)
         .it('given one is valid other is not, outputs "invalid ruleset" error', ctx => {
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
-          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
-          expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
-          );
+          expect(ctx.stdout).toContain('Provided ruleset is not valid');
         });
     });
 
@@ -161,12 +156,7 @@ describe('lint', () => {
         .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath])
         .exit(2)
         .it('outputs "invalid ruleset" error', ctx => {
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
-          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
-          expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
-          );
+          expect(ctx.stdout).toContain('Provided ruleset is not valid');
         });
 
       test
@@ -322,7 +312,7 @@ describe('lint', () => {
       .command(['lint', validOas3SpecPath, '-c', invalidRulesetConfigPath])
       .exit(2)
       .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
-        expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
+        expect(ctx.stdout).toContain('Provided ruleset is not valid');
       });
   });
 
