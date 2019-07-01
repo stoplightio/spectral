@@ -1,11 +1,6 @@
 import { FunctionCollection } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
-export const operationPath =
-  "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post'" +
-  " || name() === 'delete' || name() === 'options' || name() === 'head'" +
-  " || name() === 'patch' || name() === 'trace' )]";
-
 export const commonOasFunctions = (): FunctionCollection => {
   return {
     oasPathParam: require('./functions/oasPathParam').oasPathParam,

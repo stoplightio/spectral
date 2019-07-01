@@ -1,5 +1,5 @@
 {
-  "extends": ["oas-common"],
+  "extends": ["@stoplight/spectral/rulesets/oas/ruleset.json"],
   "rules": {
     "oas2-schema": {
       "summary": "Validate structure of OpenAPIv2 specification.",

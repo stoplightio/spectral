@@ -79,6 +79,7 @@ const runRule = (
     try {
       const thens = Array.isArray(rule.then) ? rule.then : [rule.then];
       for (const then of thens) {
+        if (!then) continue;
         const func = functions[then.function];
         if (!func) {
           console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);

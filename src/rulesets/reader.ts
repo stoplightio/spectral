@@ -1,15 +1,21 @@
+import { readFile } from 'fs';
 import { merge } from 'lodash';
+import { promisify } from 'util';
+import { PROJECT_ROOT } from '../consts';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
 import { formatAjv } from './ajv';
 import { validateRuleset } from './validation';
 
-export const rulesetsRegistry = new Map();
+const readFileAsync = promisify(readFile);
 
-export function readRulesFromRulesets(...rulesets: object[]): RuleCollection {
-  return rulesets.reduce<RuleCollection>((rules, ruleset) => {
-    return merge(rules, readRulesFromRuleset(ruleset));
-  }, {});
+export async function readRulesFromRulesets(...rulesets: object[]): Promise<RuleCollection> {
+  const rules = {};
+  for (const ruleset of rulesets) {
+    merge(rules, await readRulesFromRuleset(ruleset));
+  }
+
+  return rules;
 }
 
 export type Logger = {
@@ -25,7 +31,7 @@ export type Logger = {
   ) => never;
 };
 
-export function readRulesFromRuleset(ruleset: object): RuleCollection {
+export async function readRulesFromRuleset(ruleset: object): Promise<RuleCollection> {
   if (!('rules' in ruleset)) {
     throw new Error('Provided ruleset is not valid');
   }
@@ -40,9 +46,21 @@ export function readRulesFromRuleset(ruleset: object): RuleCollection {
   const extendedRules = {};
   if (extendz && extendz.length) {
     for (const base of extendz) {
-      merge(extendedRules, rulesetsRegistry.get(base).rules);
+      merge(extendedRules, JSON.parse(await readFileAsync(resolveRuleset(base), 'utf-8')).rules);
     }
   }
 
   return merge(extendedRules, (ruleset as IRulesetFile).rules);
+}
+
+function resolveRuleset(uri: string) {
+  if (uri.startsWith('@stoplight/spectral/')) {
+    try {
+      return uri.replace('@stoplight/spectral/', require.resolve('@stoplight/spectral'));
+    } catch {
+      return uri.replace('@stoplight/spectral/', `${PROJECT_ROOT}/`);
+    }
+  }
+
+  return uri;
 }
