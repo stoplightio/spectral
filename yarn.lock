@@ -805,9 +805,9 @@
   integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
 
 "@stoplight/json-ref-resolver@^2":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.0.0.tgz#9ba116bb788ee0facdbb9eaeb23b9718722ca591"
-  integrity sha512-csJillLL9aJkGl2RxWOoWyv/A/Qa9Q+KLUTRKZWXjFnPRtk4gK3MFsXyqxdo/2sevsbmEjqqWz1d4XjqohCHkw==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.0.1.tgz#cb2c232ea2a3626f3090a47eb6fec4fa667aa2ac"
+  integrity sha512-ht99x0g9Fx57nyFleBTW3Z3QIKVAD2qp1mk4RWp+U15cFyr7k9zdG/8tkDSSmNz25ssiLSbPPwHkuhF4c5AZiQ==
   dependencies:
     "@stoplight/json" "2.x.x"
     "@types/urijs" "1.x.x"
