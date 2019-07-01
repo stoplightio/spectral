@@ -662,9 +662,9 @@
   integrity sha512-9Tj/qn+y2j+sjCI3Jd+qseGtHjOAeg7dU2/lVcqIQ9TV3QDaDXDYXcoOHU+7o2Hwh8L8ymL4gfuO7KxDs3q2zg==
 
 "@semantic-release/exec@^3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@semantic-release/exec/-/exec-3.3.3.tgz#5c915d289aa88492bc9f6b6fb62eb94701476005"
-  integrity sha512-cYmQZHlOda8XbGWfdDqQnnxFBAnxYE+heiNQUduAn7y1qRVKTBalXae/hzEucsBI9XK8NKYK55mgLqzzY21YUg==
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/@semantic-release/exec/-/exec-3.3.5.tgz#19fa9d6852ff77a70966a972510c4ad0c4ae3147"
+  integrity sha512-P4/IUL5SY6l9av0VCZEc1GjKG0LJshigvvpL/gxIUCTgGNahi+ZtP2Um9RXOc/3elekg1SDEXFUKlTEu2+JTyQ==
   dependencies:
     "@semantic-release/error" "^2.1.0"
     aggregate-error "^3.0.0"
