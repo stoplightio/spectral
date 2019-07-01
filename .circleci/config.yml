@@ -71,6 +71,23 @@ jobs:
       - cached-dependencies
       - run: yarn build
       - run: yarn release
+      - run: yarn build.binary
+      - persist_to_workspace:
+          root: ./dist
+          paths:
+            - bin
+  upload_artifacts:
+    docker:
+      - image: circleci/golang:1-stretch
+    steps:
+      - attach_workspace:
+          at: /tmp/
+      - run:
+          name: "Download GitHub Release Utility"
+          command: go get github.com/tcnksm/ghr
+      - run:
+          name: "Publish Release artifacts on GitHub"
+          command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/bin
 
 workflows:
   version: 2
@@ -86,3 +103,9 @@ workflows:
           filters:
             branches:
               only: master
+      - upload_artifacts:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - release
