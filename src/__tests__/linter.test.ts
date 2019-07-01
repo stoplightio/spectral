@@ -200,34 +200,25 @@ responses:: !!foo
     );
   });
 
-  test('should merge similar ajv errors', async () => {
+  test('should remove all redundant ajv errors', async () => {
     spectral.addRules(oas3Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
 
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'oas3-schema',
-          message: 'should NOT have additional properties: type',
-          summary: 'should NOT have additional properties: type',
-          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-        }),
-        expect.objectContaining({
-          code: 'oas3-schema',
-          message: 'should match exactly one schema in oneOf',
-          summary: 'should match exactly one schema in oneOf',
-          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-        }),
-        expect.objectContaining({
-          code: 'oas3-schema',
-          message: "should have required property '$ref'",
-          summary: "should have required property '$ref'",
-          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-        }),
-      ]),
-    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'valid-example',
+        message: '"foo" property type should be number',
+        path: ['components', 'schemas', 'foo'],
+      }),
+    ]);
   });
 
   test('should report invalid schema $refs', async () => {

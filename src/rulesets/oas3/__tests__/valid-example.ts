@@ -125,7 +125,7 @@ describe('valid-example', () => {
       Array [
         Object {
           "code": "valid-example",
-          "message": "\\"schema\\" property should match format \\"email\\"",
+          "message": "\\"schema\\" property format should match format \\"email\\"",
           "path": Array [
             "paths",
             "/pet",
@@ -147,7 +147,7 @@ describe('valid-example', () => {
           },
           "severity": 1,
           "source": undefined,
-          "summary": "\\"schema\\" property should match format \\"email\\"",
+          "summary": "\\"schema\\" property format should match format \\"email\\"",
         },
       ]
     `);
@@ -189,7 +189,7 @@ describe('valid-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'valid-example',
-          message: `"ip_address" property should match format "${format}"`,
+          message: `"ip_address" property format should match format "${format}"`,
         }),
       ]);
     },

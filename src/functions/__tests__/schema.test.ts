@@ -18,7 +18,7 @@ describe('schema', () => {
       const input = { foo: 'bar' };
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'should be array',
+          message: 'type should be array',
           path: ['$'],
         }),
       ]);
@@ -28,7 +28,7 @@ describe('schema', () => {
       const input = ['1', '2'];
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'should NOT have more than 1 items',
+          message: 'maxItems should NOT have more than 1 items',
           path: ['$'],
         }),
       ]);
@@ -45,7 +45,7 @@ describe('schema', () => {
       const input = 'not an email';
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'should match format "email"',
+          message: 'format should match format "email"',
           path: ['$'],
         }),
       ]);

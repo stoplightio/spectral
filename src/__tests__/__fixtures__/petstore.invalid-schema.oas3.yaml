@@ -56,3 +56,6 @@ components:
         - Pets
       title: Pets
       description: A list of pets.
+    foo:
+      type: number
+      example:  test
