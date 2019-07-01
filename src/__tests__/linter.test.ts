@@ -221,22 +221,6 @@ responses:: !!foo
     ]);
   });
 
-  test('should remove all report schema validation errors', async () => {
-    spectral.addRules(oas3Ruleset.rules as RuleCollection);
-    spectral.addFunctions(oas3Functions());
-
-    const result = await spectral.run(invalidSchema);
-
-    expect(result).toEqual([
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-    ]);
-  });
-
   test('should report invalid schema $refs', async () => {
     spectral.addRules(oas3Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas3Functions());
