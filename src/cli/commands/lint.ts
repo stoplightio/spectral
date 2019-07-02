@@ -212,7 +212,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   const output = await formatOutput(results, flags);
   try {
     await writeOutput(output, flags, command);
-    process.exitCode = 0;
+    process.exitCode = 1;
   } catch (ex) {
     process.exitCode = 2;
     throw new Error(ex);
