@@ -1,10 +1,10 @@
 import { parse } from '@stoplight/yaml';
 import { merge } from 'lodash';
 import * as path from 'path';
-import { PROJECT_ROOT } from '../consts';
-import { isURL, readParsable } from '../fs/reader';
+import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
+import { resolvePath } from './path';
 import { assertValidRuleset } from './validation';
 
 export async function readRulesFromRulesets(...uris: string[]): Promise<RuleCollection> {
@@ -37,30 +37,10 @@ async function readRulesFromRuleset(uri: string): Promise<RuleCollection> {
   const extendedRules = {};
   if (extendz && extendz.length) {
     for (const extended of extendz) {
-      const extendedRuleset = assertValidRuleset(parse(await readParsable(resolveRuleset(base, extended), 'utf-8')));
+      const extendedRuleset = assertValidRuleset(parse(await readParsable(resolvePath(base, extended), 'utf-8')));
       merge(extendedRules, (extendedRuleset as IRulesetFile).rules);
     }
   }
 
   return merge(extendedRules, (ruleset as IRulesetFile).rules);
-}
-
-function resolveRuleset(base: string, extended: string) {
-  if (isURL(extended)) {
-    return extended;
-  }
-
-  if (extended.startsWith('@stoplight/spectral/')) {
-    try {
-      return extended.replace('@stoplight/spectral/', require.resolve('@stoplight/spectral'));
-    } catch {
-      return extended.replace('@stoplight/spectral/', `${PROJECT_ROOT}/`);
-    }
-  }
-
-  if (path.isAbsolute(extended)) {
-    return extended;
-  }
-
-  return path.join(base, extended).replace(/(https?:\/)([^\/])/, '$1/$2'); // todo: use stoplight/path
 }
