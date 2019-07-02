@@ -1,8 +1,5 @@
 import { readFile } from 'fs';
 const fetch = require('node-fetch');
-import { promisify } from 'util';
-
-const readFileAsync = promisify(readFile);
 
 export const isURL = (uri: string) => /^https?:\/\//.test(uri);
 
@@ -12,7 +9,15 @@ async function doRead(name: string, encoding: string) {
     return await result.text();
   } else {
     try {
-      return await readFileAsync(name, encoding);
+      return await new Promise((resolve, reject) => {
+        readFile(name, encoding, (err, data) => {
+          if (err !== null) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        });
+      });
     } catch (ex) {
       throw new Error(`Could not read ${name}: ${ex.message}`);
     }
