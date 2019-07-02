@@ -1,5 +1,5 @@
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../ruleset.json';
+import * as ruleset from '../index.json';
 
 describe('path-declarations-must-exist', () => {
   const s = new Spectral();

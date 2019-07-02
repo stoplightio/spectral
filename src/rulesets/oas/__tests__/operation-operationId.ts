@@ -1,5 +1,5 @@
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../ruleset.json';
+import * as ruleset from '../index.json';
 
 describe('operation-operationId', () => {
   const s = new Spectral();

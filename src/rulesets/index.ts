@@ -1,7 +1,7 @@
 import { oas2Functions } from './oas2';
-import * as oas2Ruleset from './oas2/ruleset.json';
+import * as oas2Ruleset from './oas2/index.json';
 import { oas3Functions } from './oas3';
-import * as oas3Ruleset from './oas3/ruleset.json';
+import * as oas3Ruleset from './oas3/index.json';
 
 const merge = require('lodash/merge');
 

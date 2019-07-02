@@ -2,9 +2,9 @@ import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import { oas2Functions } from '../rulesets/oas2';
-import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
+import * as oas2Ruleset from '../rulesets/oas2/index.json';
 import { oas3Functions } from '../rulesets/oas3';
-import * as oas3Ruleset from '../rulesets/oas3/ruleset.json';
+import * as oas3Ruleset from '../rulesets/oas3/index.json';
 import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
 

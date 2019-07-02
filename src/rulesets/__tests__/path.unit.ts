@@ -21,8 +21,12 @@ describe('Path', () => {
   });
 
   it('should support spectral built-in rules', () => {
-    expect(resolvePath('/b/c/d', '@stoplight/spectral/rulesets/oas2/ruleset.json')).toEqual(
-      path.join(process.cwd(), 'src/rulesets/oas2/ruleset.json'),
+    expect(resolvePath('/b/c/d', '@stoplight/spectral/rulesets/oas2/index.json')).toEqual(
+      path.join(process.cwd(), 'src/rulesets/oas2/index.json'),
     );
+  });
+
+  it('should support spectral built-in rules shorthands', () => {
+    expect(resolvePath('', 'spectral:oas2')).toEqual(path.join(process.cwd(), 'src/rulesets/oas2/index.json'));
   });
 });

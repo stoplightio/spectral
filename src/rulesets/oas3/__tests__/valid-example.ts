@@ -1,5 +1,5 @@
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../ruleset.json';
+import * as ruleset from '../index.json';
 
 // @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
 // TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones

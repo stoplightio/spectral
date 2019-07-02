@@ -43,7 +43,7 @@
     "postbuild": "yarn copy.rulesets --verbose",
     "build.binary": "yarn build && yarn build.manifest && cp yarn.lock dist && cd dist && yarn && pkg . --out-path ./bin",
     "build.manifest": "cd dist && oclif-dev manifest",
-    "copy.rulesets": "copyfiles -u 1 \"src/**/ruleset.json\" dist",
+    "copy.rulesets": "copyfiles -u 1 \"src/rulesets/**/*.json\" dist",
     "commit": "git-cz",
     "lint": "tslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
