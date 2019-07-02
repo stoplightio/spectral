@@ -828,10 +828,10 @@
     jsonc-parser "2.1.0"
     lodash "4.x.x"
 
-"@stoplight/path@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.0.0.tgz#25fdb91be35357724c79abcb672b7683bb86135a"
-  integrity sha512-kDblpsESqU+d//U5GaXFml0lMLvVI+NPwkkt/v9q8b/+WT5ycVdJoR5+9frIabqdeX2vKFtHojPuBi+8W7yGAA==
+"@stoplight/path@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.0.1.tgz#0350a33ccc122ae05f940d1cf19531f78660f6f5"
+  integrity sha512-P/fHhBtnmwv3rZwOMZL1BTGzGInf/GW9HVNkqAyNx22mEOmV0gfghRnhQNOkFDwyHdt9V7eJ06cjhMzoKTfM1A==
 
 "@stoplight/scripts@~5.1":
   version "5.1.0"

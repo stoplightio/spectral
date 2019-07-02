@@ -1,7 +1,6 @@
+import { isURL } from '@stoplight/path';
 import { readFile } from 'fs';
 const fetch = require('node-fetch');
-
-export const isURL = (uri: string) => /^https?:\/\//.test(uri);
 
 async function doRead(name: string, encoding: string) {
   if (isURL(name)) {

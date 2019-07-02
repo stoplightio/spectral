@@ -1,6 +1,5 @@
 import * as path from '@stoplight/path';
 import { PROJECT_ROOT } from '../consts';
-import { isURL } from '../fs/reader';
 import { rulesetsMap } from './map';
 
 export function resolvePath(from: string, to: string) {
@@ -9,7 +8,7 @@ export function resolvePath(from: string, to: string) {
     to = mapped;
   }
 
-  if (isURL(to) || path.isAbsolute(to)) {
+  if (path.isURL(to) || path.isAbsolute(to)) {
     return to;
   }
 
