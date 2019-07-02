@@ -1,7 +1,7 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
+import { extname } from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
 import * as fs from 'fs';
-import { extname } from 'path';
 
 import { httpReader } from './http';
 

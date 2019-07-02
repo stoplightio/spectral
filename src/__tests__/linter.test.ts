@@ -1,6 +1,6 @@
+import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
-import * as path from 'path';
 import { oas2Functions } from '../rulesets/oas2';
 import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
 import { oas3Functions } from '../rulesets/oas3';

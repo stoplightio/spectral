@@ -1,6 +1,6 @@
 import { test } from '@oclif/test';
+import { resolve } from '@stoplight/path';
 import * as fs from 'fs';
-import { resolve } from 'path';
 type SpyInstance = jest.SpyInstance;
 
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');

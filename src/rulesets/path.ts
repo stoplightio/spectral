@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import { PROJECT_ROOT } from '../consts';
 import { isURL } from '../fs/reader';
 
@@ -15,5 +15,5 @@ export function resolvePath(from: string, to: string) {
     }
   }
 
-  return path.join(from, to).replace(/(https?:\/)([^\/])/, '$1/$2'); // todo: use stoplight/path
+  return path.join(from, to);
 }

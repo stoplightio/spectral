@@ -1,8 +1,8 @@
+import * as path from '@stoplight/path';
 import { IParserResult } from '@stoplight/types';
 import { parseWithPointers } from '@stoplight/yaml';
 import { existsSync } from 'fs';
 import { isEmpty, merge } from 'lodash';
-import * as path from 'path';
 import { readParsable } from '../fs/reader';
 import { ConfigCommand, ConfigFormat, IConfig } from '../types/config';
 

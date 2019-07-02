@@ -2,11 +2,11 @@ jest.mock('../../fs/reader');
 jest.mock('../ajv');
 jest.mock('../validation');
 jest.mock('../path');
-jest.mock('path');
+jest.mock('@stoplight/path');
 
+import { dirname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { when } from 'jest-when';
-import { dirname } from 'path';
 import { IRule } from '../..';
 import { readParsable } from '../../fs/reader';
 import { IRulesetFile } from '../../types/ruleset';

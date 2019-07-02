@@ -1,6 +1,6 @@
+import * as path from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
 import { merge } from 'lodash';
-import * as path from 'path';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';

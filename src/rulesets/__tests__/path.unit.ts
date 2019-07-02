@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import { resolvePath } from '../path';
 
 describe('Path', () => {
@@ -11,7 +11,7 @@ describe('Path', () => {
   });
 
   it('should join http relative', () => {
-    expect(resolvePath('http://www.example.com/a/b.json', 'd.json')).toEqual('http://www.example.com/a/d.json');
+    expect(resolvePath('http://www.example.com/a/b.json', '../d.json')).toEqual('http://www.example.com/a/d.json');
   });
 
   it('should resolve http absolute', () => {

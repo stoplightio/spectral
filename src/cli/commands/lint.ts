@@ -1,9 +1,9 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
+import { resolve } from '@stoplight/path';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
-import { resolve } from 'path';
 import { promisify } from 'util';
 
 import { startsWith } from '@stoplight/json';

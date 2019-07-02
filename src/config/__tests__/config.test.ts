@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import { ConfigCommand } from '../../types/config';
 import { load } from '../configLoader';
 
