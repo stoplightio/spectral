@@ -1,7 +1,7 @@
 import { schema } from '../schema';
 
 function runSchema(target: any, schemaObj: object) {
-  return schema(target, { schema: schemaObj }, { given: ['$'] }, { given: null, original: null });
+  return schema(target, { schema: schemaObj }, { given: [] }, { given: null, original: null });
 }
 
 describe('schema', () => {
@@ -19,7 +19,7 @@ describe('schema', () => {
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
           message: 'type should be array',
-          path: ['$'],
+          path: [],
         }),
       ]);
     });
@@ -29,8 +29,40 @@ describe('schema', () => {
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
           message: 'maxItems should NOT have more than 1 items',
-          path: ['$'],
+          path: [],
         }),
+      ]);
+    });
+  });
+
+  describe('when schema defines a nested object', () => {
+    const testSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'object',
+          properties: {
+            bar: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    };
+
+    test('reports correct path', () => {
+      const input = {
+        abc: 'string',
+        foo: {
+          bar: 0,
+        },
+      };
+
+      expect(runSchema(input, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: ['foo', 'bar'],
+        },
       ]);
     });
   });
@@ -46,7 +78,7 @@ describe('schema', () => {
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
           message: 'format should match format "email"',
-          path: ['$'],
+          path: [],
         }),
       ]);
     });
