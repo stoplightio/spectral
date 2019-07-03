@@ -4,7 +4,7 @@ import { merge } from 'lodash';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
-import { resolvePath } from './path';
+import { resolvePath } from './resolver';
 import { assertValidRuleset } from './validation';
 
 export async function readRulesFromRulesets(...uris: string[]): Promise<RuleCollection> {
@@ -37,7 +37,7 @@ async function readRulesFromRuleset(uri: string): Promise<RuleCollection> {
   const extendedRules = {};
   if (extendz && extendz.length) {
     for (const extended of extendz) {
-      const extendedRuleset = assertValidRuleset(parse(await readParsable(resolvePath(base, extended), 'utf-8')));
+      const extendedRuleset = assertValidRuleset(parse(await readParsable(await resolvePath(base, extended), 'utf-8')));
       merge(extendedRules, (extendedRuleset as IRulesetFile).rules);
     }
   }
