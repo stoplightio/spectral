@@ -146,6 +146,43 @@ describe('linter', () => {
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
   });
 
+  test('should support human readable severity levels', async () => {
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'rule2',
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
+  });
+
   test('should include parser diagnostics', async () => {
     spectral.addRules(oas2Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas2Functions());
