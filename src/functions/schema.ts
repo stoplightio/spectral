@@ -6,6 +6,10 @@ import { IOutputError } from 'better-ajv-errors';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 const betterAjvErrors = require('better-ajv-errors');
 
+interface IAJVOutputError extends IOutputError {
+  path?: string;
+}
+
 const ajv = new AJV({
   meta: false,
   schemaId: 'auto',
@@ -60,11 +64,13 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     const validator = validators.get(schemaObj);
     if (!validator(targetVal) && validator.errors) {
       results.push(
-        ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IOutputError[]).map(
-          ({ error }) => ({
-            message: cleanAJVErrorMessage(error),
-            path,
-          }),
+        ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
+          ({ error, path: errorPath }) => {
+            return {
+              message: cleanAJVErrorMessage(error),
+              path: [...path, ...(errorPath ? errorPath.replace(/^\//, '').split('/') : [])],
+            };
+          },
         ),
       );
     }

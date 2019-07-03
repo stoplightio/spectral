@@ -387,7 +387,7 @@ describe('lint', () => {
           }),
           expect.objectContaining({
             code: 'oas2-schema',
-            message: 'should NOT have additional properties: foo',
+            message: '/info Property foo is not expected to be here',
             path: ['info'],
             range: {
               end: {
@@ -434,7 +434,7 @@ describe('lint', () => {
           }),
           expect.objectContaining({
             code: 'oas2-schema',
-            message: "should have required property 'title'",
+            message: "/info should have required property 'title'",
             path: ['info'],
             range: {
               end: {
