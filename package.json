@@ -78,7 +78,7 @@
     "@oclif/dev-cli": "^1.0",
     "@oclif/test": "^1.0",
     "@semantic-release/exec": "^3.3.3",
-    "@stoplight/scripts": "~5.1",
+    "@stoplight/scripts": "~7.0",
     "@types/chalk": "^2.2.0",
     "@types/jest": "^24.0.0",
     "@types/jest-when": "^2.4.0",
