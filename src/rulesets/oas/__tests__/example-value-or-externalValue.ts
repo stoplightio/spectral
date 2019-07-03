@@ -5,7 +5,7 @@ describe('example-value-or-externalValue', () => {
   const s = new Spectral();
   s.addRules({
     'example-value-or-externalValue': Object.assign(ruleset.rules['example-value-or-externalValue'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['example-value-or-externalValue'].type],
     }),
   });

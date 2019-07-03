@@ -5,7 +5,7 @@ describe('license-url', () => {
   const s = new Spectral();
   s.addRules({
     'license-url': Object.assign(ruleset.rules['license-url'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['license-url'].type],
     }),
   });

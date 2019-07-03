@@ -2,6 +2,7 @@
   "rules": {
     "operation-2xx-response": {
       "summary": "Operation must have at least one `2xx` response.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -14,6 +15,7 @@
     },
     "operation-formData-consume-check": {
       "summary": "Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.",
+      "recommended": true,
       "type": "validation",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -25,6 +27,7 @@
     },
     "operation-operationId-unique": {
       "summary": "Every operation must have a unique `operationId`.",
+      "recommended": true,
       "type": "validation",
       "severity": 0,
       "given": "$",
@@ -37,6 +40,7 @@
     },
     "operation-parameters": {
       "summary": "Operation parameters are unique and non-repeating.",
+      "recommended": true,
       "type": "validation",
       "given": "$",
       "then": {
@@ -51,6 +55,7 @@
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
+      "recommended": true,
       "given": "$",
       "then": {
         "function": "oasPathParam"
@@ -60,8 +65,8 @@
       ]
     },
     "contact-properties": {
-      "enabled": false,
       "summary": "Contact object should have `name`, `url` and `email`.",
+      "recommended": false,
       "type": "style",
       "given": "$.info.contact",
       "then": [
@@ -83,8 +88,8 @@
       ]
     },
     "example-value-or-externalValue": {
-      "enabled": false,
       "summary": "Example should have either a `value` or `externalValue` field.",
+      "recommended": false,
       "type": "style",
       "given": "$..example",
       "then": {
@@ -99,6 +104,7 @@
     },
     "info-contact": {
       "summary": "Info object should contain `contact` object.",
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -111,6 +117,7 @@
     },
     "info-description": {
       "summary": "OpenAPI object info `description` must be present and non-empty string.",
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -122,8 +129,8 @@
       ]
     },
     "info-license": {
-      "enabled": false,
       "summary": "OpenAPI object info `license` must be present and non-empty string.",
+      "recommended": false,
       "type": "style",
       "given": "$",
       "then": {
@@ -135,8 +142,8 @@
       ]
     },
     "license-url": {
-      "enabled": false,
       "summary": "License object should include `url`.",
+      "recommended": false,
       "type": "style",
       "given": "$",
       "then": {
@@ -148,8 +155,8 @@
       ]
     },
     "no-eval-in-markdown": {
-      "enabled": false,
       "summary": "Markdown descriptions should not contain `eval(`.",
+      "recommended": false,
       "type": "style",
       "given": "$..*",
       "then": [
@@ -171,6 +178,7 @@
     },
     "no-script-tags-in-markdown": {
       "summary": "Markdown descriptions should not contain `<script>` tags.",
+      "recommended": true,
       "type": "style",
       "given": "$..*",
       "then": [
@@ -191,8 +199,8 @@
       ]
     },
     "only-local-references": {
-      "enabled": false,
       "summary": "References should start with `#/`.",
+      "recommended": false,
       "type": "style",
       "given": "$..['$ref']",
       "then": {
@@ -206,8 +214,8 @@
       ]
     },
     "openapi-tags-alphabetical": {
-      "enabled": false,
       "summary": "OpenAPI object should have alphabetical `tags`.",
+      "recommended": false,
       "type": "style",
       "given": "$",
       "then": {
@@ -222,8 +230,8 @@
       ]
     },
     "openapi-tags": {
-      "enabled": false,
       "summary": "OpenAPI object should have non-empty `tags` array.",
+      "recommended": false,
       "type": "style",
       "given": "$",
       "then": {
@@ -235,8 +243,8 @@
       ]
     },
     "operation-default-response": {
-      "enabled": false,
       "summary": "Operations must have a default response.",
+      "recommended": false,
       "type": "style",
       "given": "$..paths.*.*.responses",
       "then": {
@@ -249,6 +257,7 @@
     },
     "operation-description": {
       "summary": "Operation `description` must be present and non-empty string.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -261,6 +270,7 @@
     },
     "operation-operationId": {
       "summary": "Operation should have an `operationId`.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -273,6 +283,7 @@
     },
     "operation-operationId-valid-in-url": {
       "summary": "operationId may only use characters that are valid when used in a URL.",
+      "recommended": true,
       "type": "validation",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -287,8 +298,8 @@
       ]
     },
     "operation-singular-tag": {
-      "enabled": false,
       "summary": "Operation may only have one tag.",
+      "recommended": false,
       "type": "style",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -303,8 +314,8 @@
       ]
     },
     "operation-summary-formatted": {
-      "enabled": false,
       "summary": "Operation `summary` should start with upper case and end with a dot.",
+      "recommended": false,
       "type": "style",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -320,6 +331,7 @@
     },
     "operation-tags": {
       "summary": "Operation should have non-empty `tags` array.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -331,8 +343,8 @@
       ]
     },
     "parameter-description": {
-      "enabled": false,
       "summary": "Parameter objects should have a `description`.",
+      "recommended": false,
       "type": "style",
       "given": "$..parameters[*]",
       "when": {
@@ -349,6 +361,7 @@
     },
     "path-declarations-must-exist": {
       "summary": "given declarations cannot be empty, ex.`/given/{}` is invalid.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths",
       "then": {
@@ -364,6 +377,7 @@
     },
     "path-keys-no-trailing-slash": {
       "summary": "given keys should not end with a slash.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths",
       "then": {
@@ -379,6 +393,7 @@
     },
     "path-not-include-query": {
       "summary": "given keys should not include a query string.",
+      "recommended": true,
       "type": "style",
       "given": "$..paths",
       "then": {
@@ -393,8 +408,8 @@
       ]
     },
     "tag-description": {
-      "enabled": false,
       "summary": "Tag object should have a `description`.",
+      "recommended": false,
       "type": "style",
       "given": "$.tags[*]",
       "then": {

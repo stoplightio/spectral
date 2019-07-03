@@ -5,7 +5,7 @@ describe('openapi-tags', () => {
   const s = new Spectral();
   s.addRules({
     'openapi-tags': Object.assign(ruleset.rules['openapi-tags'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['openapi-tags'].type],
     }),
   });

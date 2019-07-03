@@ -19,7 +19,7 @@ const validateRulesetMock: jest.Mock = validateRuleset as jest.Mock;
 const resolvePathMock: jest.Mock = resolvePath as jest.Mock;
 
 const simpleRule: IRule = {
-  enabled: false,
+  recommended: false,
   given: 'abc',
   then: {
     function: 'f',
@@ -42,7 +42,7 @@ describe('reader', () => {
     });
 
     expect(await readRulesFromRulesets('flat-ruleset.yaml')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
+      'rule-1': { given: 'abc', then: { function: 'f' }, recommended: false },
     });
   });
 
@@ -62,8 +62,8 @@ describe('reader', () => {
     });
 
     expect(await readRulesFromRulesets('flat-ruleset-a.yaml', 'flat-ruleset-b.yaml')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
-      'rule-2': { given: 'abc', then: { function: 'f' }, enabled: false },
+      'rule-1': { given: 'abc', then: { function: 'f' }, recommended: false },
+      'rule-2': { given: 'abc', then: { function: 'f' }, recommended: false },
     });
   });
 
@@ -81,14 +81,14 @@ describe('reader', () => {
           'rule-1': {
             ...simpleRule,
             // note that i'm enabling the rule here
-            enabled: true,
+            recommended: true,
           },
         },
       },
     });
 
     expect(await readRulesFromRulesets('oneParentRuleset')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: true },
+      'rule-1': { given: 'abc', then: { function: 'f' }, recommended: true },
     });
   });
 
@@ -114,7 +114,7 @@ describe('reader', () => {
     });
 
     expect(await readRulesFromRulesets('oneParentRuleset')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
+      'rule-1': { given: 'abc', then: { function: 'f' }, recommended: false },
       'rule-2': { given: 'another given', then: { function: 'b' } },
     });
   });
@@ -163,7 +163,7 @@ describe('reader', () => {
     });
 
     expect(await readRulesFromRulesets('oneParentRuleset')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
+      'rule-1': { given: 'abc', then: { function: 'f' }, recommended: false },
       'rule-a': { given: 'given-a', then: { function: 'a' } },
       'rule-b': { given: 'given-b', then: { function: 'b' } },
       'common-rule': { given: 'common', then: { function: 'cb' } },

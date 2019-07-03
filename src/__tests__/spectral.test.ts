@@ -72,7 +72,7 @@ describe('spectral', () => {
 
   describe('addRuleDeclarations', () => {
     describe('boolean value', () => {
-      test('should update the name rule enabled property', () => {
+      test('should update the name rule recommended property', () => {
         const s = new Spectral();
 
         s.addRules({
@@ -80,7 +80,7 @@ describe('spectral', () => {
           rule1: {
             summary: '',
             given: '$',
-            enabled: false,
+            recommended: false,
             then: {
               function: RuleFunction.TRUTHY,
             },
@@ -92,7 +92,7 @@ describe('spectral', () => {
         });
 
         expect(Object.keys(s.rules)).toEqual(['rule1']);
-        expect(s.rules.rule1.enabled).toBe(true);
+        expect(s.rules.rule1.recommended).toBe(true);
       });
     });
   });

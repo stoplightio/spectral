@@ -21,8 +21,8 @@ export interface IRule<T = string, O = any> {
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];
 
-  // should the rule be enabled by default?
-  enabled?: boolean;
+  // some rules are more important than others, recommended rules will be enabled by default
+  recommended?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
   given: string;

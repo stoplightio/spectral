@@ -8,7 +8,7 @@ describe('oasOp2xxResponse', () => {
   s.addFunctions(ruleset.functions || {});
   s.addRules({
     'operation-2xx-response': Object.assign(ruleset.rules['operation-2xx-response'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['operation-2xx-response'].type],
     }),
   });

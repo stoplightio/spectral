@@ -25,7 +25,7 @@ export const runRules = (
     const rule = rules[name];
     if (!rule) continue;
 
-    if (rule.hasOwnProperty('enabled') && !rule.enabled) {
+    if (rule.hasOwnProperty('recommended') && !rule.recommended) {
       continue;
     }
 

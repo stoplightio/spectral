@@ -110,7 +110,7 @@ export class Spectral {
       const rule = this.rules[ruleName];
       if (rule) {
         if (typeof declaration === 'boolean') {
-          this._rules[ruleName].enabled = declaration;
+          this._rules[ruleName].recommended = declaration;
         }
       }
     }

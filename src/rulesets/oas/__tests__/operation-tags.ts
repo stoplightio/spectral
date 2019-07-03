@@ -5,7 +5,7 @@ describe('operation-tags', () => {
   const s = new Spectral();
   s.addRules({
     'operation-tags': Object.assign(ruleset.rules['operation-tags'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['operation-tags'].type],
     }),
   });

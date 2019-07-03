@@ -5,7 +5,7 @@ describe('path-declarations-must-exist', () => {
   const s = new Spectral();
   s.addRules({
     'path-declarations-must-exist': Object.assign(ruleset.rules['path-declarations-must-exist'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['path-declarations-must-exist'].type],
     }),
   });
