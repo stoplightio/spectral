@@ -34,10 +34,6 @@ function markRule(rule: Rule) {
   }
 }
 
-function getRootRule(rule: Rule): Rule {
-  return rule[ROOT_DESCRIPTOR];
-}
-
 function updateRootRule(root: Rule, newRule: Rule | null) {
   root[ROOT_DESCRIPTOR] = copyRule(newRule === null ? root : merge(root, newRule));
 }
@@ -53,7 +49,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule) {
     case 'boolean': {
       // what if rule does not exist (yet)? throw, store the invalid state somehow?
       if (isValidRule(existingRule)) {
-        existingRule.severity = !rule ? 'off' : getRootRule(existingRule).severity;
+        existingRule.severity = !rule ? 'off' : existingRule.severity;
       }
 
       break;

@@ -111,7 +111,7 @@ describe('Config merger', () => {
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'error');
+    expect(config).toHaveProperty('rules.test.severity', 'off');
   });
 
   it('includes new rules', () => {
