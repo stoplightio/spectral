@@ -1,18 +1,16 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
-import {
-  getLocationForJsonPath,
-  getLocationForJsonPath as getLocationForJsonPathYAML,
-  parseWithPointers,
-  parseWithPointers as parseYAMLWithPointers,
-} from '@stoplight/yaml';
-import { merge, set, uniqBy } from 'lodash';
-
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
 import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
 import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
+import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
+import {
+  getLocationForJsonPath as getLocationForJsonPathYAML,
+  parseWithPointers as parseYAMLWithPointers,
+} from '@stoplight/yaml';
+import { merge, set, uniqBy } from 'lodash';
 import { extname } from 'path';
+
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
 import { runRules } from './runner';
@@ -45,8 +43,8 @@ export class Spectral {
     let parsedResult: IParsedResult;
     if (!isParsedResult(target)) {
       parsedResult = {
-        parsed: parseWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
-        getLocationForJsonPath,
+        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
+        getLocationForJsonPath: getLocationForJsonPathYAML,
       };
       results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
     } else {
