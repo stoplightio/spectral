@@ -10,7 +10,7 @@ describe('oasOpFormDataConsumeCheck', () => {
   s.addFunctions(ruleset.functions || {});
   s.addRules({
     'operation-formData-consume-check': Object.assign(ruleset.rules['operation-formData-consume-check'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['operation-formData-consume-check'].type],
     }),
   });

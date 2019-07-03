@@ -82,7 +82,7 @@ Rules are highly configurable. There are only few required parameters but the op
       <td>Tags attached to the rule, which can be used for organizational purposes</td>
     </tr>
     <tr>
-      <td>enabled</td>
+      <td>recommended</td>
       <td><code>boolean</code></td>
       <td>should the rule be enabled by default?</td>
     </tr>        

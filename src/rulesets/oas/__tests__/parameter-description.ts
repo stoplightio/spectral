@@ -6,7 +6,7 @@ describe('parameter-description', () => {
 
   s.addRules({
     'parameter-description': Object.assign(ruleset.rules['parameter-description'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['parameter-description'].type],
     }),
   });

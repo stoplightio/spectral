@@ -10,7 +10,7 @@ describe('oasPathParam', () => {
   s.addFunctions(ruleset.functions || {});
   s.addRules({
     'path-params': Object.assign(ruleset.rules['path-params'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['path-params'].type],
     }),
   });

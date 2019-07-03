@@ -5,7 +5,7 @@ describe('operation-summary-formatted', () => {
   const s = new Spectral();
   s.addRules({
     'operation-summary-formatted': Object.assign(ruleset.rules['operation-summary-formatted'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['operation-summary-formatted'].type],
     }),
   });

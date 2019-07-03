@@ -5,7 +5,7 @@ describe('api-host', () => {
   const s = new Spectral();
   s.addRules({
     'api-host': Object.assign(ruleset.rules['api-host'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['api-host'].type],
     }),
   });

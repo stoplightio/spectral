@@ -13,7 +13,7 @@ describe('oasOpSecurityDefined', () => {
     s.addFunctions(oas2Ruleset.functions || {});
     s.addRules({
       'operation-security-defined': Object.assign(oas2Ruleset.rules['operation-security-defined'], {
-        enabled: true,
+        recommended: true,
         type: RuleType[oas2Ruleset.rules['operation-security-defined'].type],
       }),
     });
@@ -63,7 +63,7 @@ describe('oasOpSecurityDefined', () => {
     s.addFunctions(oas3Ruleset.functions || {});
     s.addRules({
       'operation-security-defined': Object.assign(oas3Ruleset.rules['operation-security-defined'], {
-        enabled: true,
+        recommended: true,
         type: RuleType[oas3Ruleset.rules['operation-security-defined'].type],
       }),
     });

@@ -5,7 +5,7 @@ describe('no-eval-in-markdown', () => {
   const s = new Spectral();
   s.addRules({
     'no-eval-in-markdown': Object.assign(ruleset.rules['no-eval-in-markdown'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['no-eval-in-markdown'].type],
     }),
   });

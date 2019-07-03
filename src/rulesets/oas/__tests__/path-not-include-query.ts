@@ -5,7 +5,7 @@ describe('path-not-include-query', () => {
   const s = new Spectral();
   s.addRules({
     'path-not-include-query': Object.assign(ruleset.rules['path-not-include-query'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['path-not-include-query'].type],
     }),
   });
