@@ -2,8 +2,7 @@ import { IResolveError, IResolveResult, IResolveRunner } from '@stoplight/json-r
 import { Dictionary, ILocation, JsonPath } from '@stoplight/types';
 import { Segment } from '@stoplight/types/dist';
 import { get } from 'lodash';
-import { ANNOTATION } from './resolvers/http-and-file';
-import { SpectralResolver } from './resolvers/resolver';
+import { IParseMap, REF_METADATA } from './spectral';
 import { IParsedResult } from './types';
 
 export class Resolved implements IResolveResult {
@@ -12,7 +11,7 @@ export class Resolved implements IResolveResult {
   public errors: IResolveError[];
   public runner: IResolveRunner;
 
-  constructor(public spec: IParsedResult, result: IResolveResult, public resolver: SpectralResolver) {
+  constructor(public spec: IParsedResult, result: IResolveResult, public parsedMap: IParseMap) {
     this.refMap = result.refMap;
     this.result = result.result;
     this.errors = result.errors;
@@ -20,7 +19,7 @@ export class Resolved implements IResolveResult {
   }
 
   public getParsedForJsonPath(path: JsonPath) {
-    let target: object = this.resolver.parsedMap.refs;
+    let target: object = this.parsedMap.refs;
     const newPath = [...path];
     let segment: Segment;
 
@@ -36,8 +35,8 @@ export class Resolved implements IResolveResult {
 
     if (target) {
       return {
-        path: [...get(target, [ANNOTATION, 'root'], []), ...newPath],
-        doc: get(this.resolver.parsedMap.parsed, get(target, [ANNOTATION, 'ref']), this.spec),
+        path: [...get(target, [REF_METADATA, 'root'], []), ...newPath],
+        doc: get(this.parsedMap.parsed, get(target, [REF_METADATA, 'ref']), this.spec),
       };
     }
 

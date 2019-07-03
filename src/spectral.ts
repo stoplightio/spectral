@@ -1,11 +1,20 @@
 import { safeStringify } from '@stoplight/json';
-import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
-import { merge, uniqBy } from 'lodash';
+import { Resolver } from '@stoplight/json-ref-resolver';
+import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
+import {
+  getLocationForJsonPath,
+  getLocationForJsonPath as getLocationForJsonPathYAML,
+  parseWithPointers,
+  parseWithPointers as parseYAMLWithPointers,
+} from '@stoplight/yaml';
+import { merge, set, uniqBy } from 'lodash';
 
+import { IUriParser } from '@stoplight/json-ref-resolver/types';
+import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
+import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
+import { extname } from 'path';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
-import { SpectralResolver } from './resolvers/resolver';
 import { runRules } from './runner';
 import {
   FunctionCollection,
@@ -24,10 +33,10 @@ export * from './types';
 export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
-  private _resolver: SpectralResolver;
+  private _resolver: Resolver;
 
   constructor(opts?: IConstructorOpts) {
-    this._resolver = opts && opts.resolver ? opts.resolver : new SpectralResolver();
+    this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
   }
 
   public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
@@ -45,16 +54,53 @@ export class Spectral {
     }
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
+    const refDiagnostics: IRuleResult[] = [];
 
     const resolved = new Resolved(
       parsedResult,
       await this._resolver.resolve(parsedResult.parsed.data, {
         baseUri: documentUri,
+        parseResolveResult: async resolveOpts => {
+          const ref = resolveOpts.targetAuthority.toString();
+          const ext = extname(ref);
+
+          const content = String(resolveOpts.result);
+          let parsedRefResult: IParsedResult | void;
+          if (ext === '.yml' || ext === '.yaml') {
+            parsedRefResult = {
+              parsed: parseYAMLWithPointers(content),
+              source: ref,
+              getLocationForJsonPath: getLocationForJsonPathYAML,
+            };
+          } else if (ext === '.json') {
+            parsedRefResult = {
+              parsed: parseJSONWithPointers(content),
+              source: ref,
+              getLocationForJsonPath: getLocationForJsonPathJSON,
+            };
+          }
+
+          if (parsedRefResult !== undefined) {
+            resolveOpts.result = parsedRefResult.parsed.data;
+            if (parsedRefResult.parsed.diagnostics.length > 0) {
+              refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed, parsedRefResult.source));
+            }
+
+            this._processExternalRef(parsedRefResult, resolveOpts);
+          }
+
+          return resolveOpts;
+        },
       }),
-      this._resolver,
+      this._parsedMap,
     );
 
-    return [...results, ...formatResolverErrors(resolved), ...runRules(resolved, this.rules, this.functions)];
+    return [
+      ...refDiagnostics,
+      ...results,
+      ...formatResolverErrors(resolved),
+      ...runRules(resolved, this.rules, this.functions),
+    ];
   }
 
   /**
@@ -116,7 +162,35 @@ export class Spectral {
       }
     }
   }
+
+  private _parsedMap: IParseMap = {
+    refs: {},
+    parsed: {},
+    pointers: {},
+  };
+
+  private _processExternalRef(parsedResult: IParsedResult, opts: IUriParser) {
+    const ref = opts.targetAuthority.toString();
+    this._parsedMap.parsed[ref] = parsedResult;
+    this._parsedMap.pointers[ref] = opts.parentPath;
+    const parentRef = opts.parentAuthority.toString();
+
+    set(
+      this._parsedMap.refs,
+      [...(this._parsedMap.pointers[parentRef] ? this._parsedMap.pointers[parentRef] : []), ...opts.parentPath],
+      Object.defineProperty({}, REF_METADATA, {
+        enumerable: false,
+        writable: false,
+        value: {
+          ref,
+          root: opts.fragment.split('/').slice(1),
+        },
+      }),
+    );
+  }
 }
+
+export const REF_METADATA = Symbol('external_ref_metadata');
 
 export const isParsedResult = (obj: any): obj is IParsedResult => {
   if (!obj || typeof obj !== 'object') return false;
@@ -154,3 +228,9 @@ const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
     return errors;
   }, []);
 };
+
+export interface IParseMap {
+  refs: Dictionary<object>;
+  parsed: Dictionary<IParsedResult>;
+  pointers: Dictionary<string[]>;
+}
