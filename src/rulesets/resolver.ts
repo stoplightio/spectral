@@ -2,6 +2,8 @@ import * as path from '@stoplight/path';
 import * as fs from 'fs';
 import { rulesetsMap } from './map';
 
+const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
+
 export async function resolvePath(from: string, to: string) {
   const mapped = rulesetsMap.get(to);
   if (mapped !== void 0) {
@@ -13,29 +15,41 @@ export async function resolvePath(from: string, to: string) {
   }
 
   if (path.isURL(from)) {
-    return path.join(from, to);
+    return path.join(from, '..', to);
   }
 
   try {
-    const targetPath = path.join(from, to);
-    await new Promise((reject, resolve) => {
-      fs.stat(targetPath, err => {
-        if (err !== null) {
-          reject();
-        } else {
-          resolve();
-        }
-      });
-    });
-
-    // it's very likely to be Node.js env or browser/worker env where the file is accessible cause it's a part of project
-    return targetPath;
+    const targetPath = path.join(from, '..', to);
+    if (await exists(targetPath)) {
+      return targetPath;
+    }
   } catch {
+    // nothing very bad, let's move on
+    // it's just not a file, but could be a npm module
+  }
+
+  if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/') {
     try {
-      require(to);
-      return require.resolve(to);
+      const targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace('@stoplight/spectral/', './'));
+      if (await exists(targetPath)) {
+        return targetPath;
+      }
     } catch {
-      return path.join('https://unpkg.com/', to); // try to point to npm module
+      // same as above
     }
   }
+
+  try {
+    return require.resolve(to);
+  } catch {
+    return path.join('https://unpkg.com/', to); // try to point to npm module
+  }
+}
+
+function exists(uri: string): Promise<boolean> {
+  return new Promise<boolean>(resolve => {
+    fs.access(uri, fs.constants.F_OK, err => {
+      resolve(err === null);
+    });
+  });
 }

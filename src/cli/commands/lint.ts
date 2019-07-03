@@ -97,7 +97,7 @@ linting ./openapi.yaml
 
     if (ruleset) {
       try {
-        rules = await readRulesFromRulesets(...ruleset);
+        rules = await readRulesFromRulesets(...ruleset.map(file => resolve(process.cwd(), file)));
       } catch (ex) {
         this.log(ex.message);
         this.error(ex);

@@ -1,6 +1,7 @@
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types/dist';
 import { HumanReadableDiagnosticSeverity, Rule } from './rule';
+import { RuleCollection } from './spectral';
 
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 
@@ -9,7 +10,7 @@ export type FileRule = Rule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleS
 export type FileRuleCollection = Dictionary<FileRule, string>;
 
 export interface IRuleset {
-  rules: FileRuleCollection;
+  rules: RuleCollection;
 }
 
 export interface IRulesetFile {

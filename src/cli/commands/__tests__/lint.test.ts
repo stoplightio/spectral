@@ -230,16 +230,16 @@ describe('lint', () => {
       .it('outputs warnings/errors in a parseable json format', ctx => {
         expect(JSON.parse(ctx.stdout)).toEqual([
           expect.objectContaining({
+            code: 'api-servers',
+            message: 'OpenAPI `servers` must be present and non-empty array.',
+          }),
+          expect.objectContaining({
             message: 'Info object should contain `contact` object.',
             code: 'info-contact',
           }),
           expect.objectContaining({
             code: 'info-description',
             message: 'OpenAPI object info `description` must be present and non-empty string.',
-          }),
-          expect.objectContaining({
-            code: 'api-servers',
-            message: 'OpenAPI `servers` must be present and non-empty array.',
           }),
         ]);
       });
@@ -321,9 +321,9 @@ describe('lint', () => {
       .stdout()
       .command(['lint', invalidOas3SpecPath, '-c', validConfigPath, '--max-results', '1'])
       .it('setting --max-results to 1 will override config value of 5', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+        expect(ctx.stdout).toContain('"OpenAPI `servers` must be present and non-empty array."');
+        expect(ctx.stdout).not.toContain('"Info object should contain `contact` object."');
         expect(ctx.stdout).not.toContain('"OpenAPI object info `description` must be present and non-empty string."');
-        expect(ctx.stdout).not.toContain('"OpenAPI `servers` must be present and non-empty array."');
       });
   });
 
@@ -341,13 +341,13 @@ describe('lint', () => {
     beforeAll(() => {
       spy = jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
     });
-    afterAll(() => spy.mockClear());
+    afterAll(() => spy.mockRestore());
 
     test
       .stdout()
       .command(['lint', invalidOas3SpecPath])
       .it('outputs data in format from default config file', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+        expect(ctx.stdout).toContain('"OpenAPI `servers` must be present and non-empty array."');
       });
   });
 });
