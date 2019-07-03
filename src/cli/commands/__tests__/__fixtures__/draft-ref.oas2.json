@@ -1,0 +1,10 @@
+{
+  "swagger": "2.0",
+  "host": "d",
+  "info": {
+    "$ref": "./refs/info.json#/definitions/info"
+  },
+  "paths": {
+    "test": {}
+  }
+}

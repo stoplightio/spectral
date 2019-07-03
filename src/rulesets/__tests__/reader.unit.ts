@@ -119,7 +119,7 @@ describe('reader', () => {
     });
   });
 
-  it('should blend together parent rulesets', async () => {
+  it('should blend together pointers rulesets', async () => {
     validateRulesetMock.mockReturnValue([]);
     givenRulesets({
       rulesetA: {

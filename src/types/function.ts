@@ -15,7 +15,6 @@ export interface IFunctionPaths {
 export interface IFunctionValues {
   original: any;
   given: any;
-  resolved?: any;
 }
 
 export interface IFunctionResult {

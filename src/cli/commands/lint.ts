@@ -6,7 +6,6 @@ import { isNil, omitBy } from 'lodash';
 import { resolve } from 'path';
 import { promisify } from 'util';
 
-import { startsWith } from '@stoplight/json';
 import { IRuleResult } from '../..';
 import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
@@ -142,7 +141,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   }
 
   let targetUri = name;
-  if (!startsWith(name, 'http')) {
+  if (!/^https?:\/\//.test(name)) {
     // we always want the absolute path to the target file
     targetUri = resolve(name);
   }

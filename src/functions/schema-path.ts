@@ -15,19 +15,7 @@ const { JSONPath } = require('jsonpath-plus');
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
   if (!targetVal || typeof targetVal !== 'object') return [];
 
-  let object = targetVal;
-
-  const { resolved } = otherValues;
-  if (!resolved) {
-    console.warn('schema-path expects a resolved object, but none was provided. Results may not be correct.');
-  } else {
-    // Take the relevant part of the resolved schema
-    try {
-      object = JSONPath({ path: ['$', ...paths.given], json: resolved })[0];
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  const { original: object } = otherValues;
 
   // The subsection of the targetVal which contains the good bit
   const relevantObject = opts.field ? object[opts.field] : object;
