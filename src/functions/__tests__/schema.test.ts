@@ -46,22 +46,43 @@ describe('schema', () => {
               type: 'string',
             },
           },
+          additionalProperties: false,
         },
       },
     };
 
-    test('reports correct path', () => {
-      const input = {
-        abc: 'string',
-        foo: {
-          bar: 0,
-        },
-      };
-
-      expect(runSchema(input, testSchema)).toEqual([
+    test('reports correct paths', () => {
+      expect(
+        runSchema(
+          {
+            abc: 'string',
+            foo: {
+              bar: 0,
+            },
+          },
+          testSchema,
+        ),
+      ).toEqual([
         {
           message: 'type should be string',
           path: ['foo', 'bar'],
+        },
+      ]);
+
+      expect(
+        runSchema(
+          {
+            abc: 'string',
+            foo: {
+              baz: 'test',
+            },
+          },
+          testSchema,
+        ),
+      ).toEqual([
+        {
+          message: '/foo Property baz is not expected to be here',
+          path: ['foo'],
         },
       ]);
     });
