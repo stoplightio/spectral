@@ -15,9 +15,5 @@ export interface ILintConfig {
   ruleset?: string[];
   skipRule?: string[];
   verbose: boolean;
-}
-
-export interface IConfig {
-  extends?: string;
-  lint: ILintConfig;
+  quiet?: boolean;
 }
