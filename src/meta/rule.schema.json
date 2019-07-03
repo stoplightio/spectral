@@ -24,9 +24,21 @@
         },
         "T": {
             "type": "string"
+        },
+        "HumanReadableSeverity": {
+            "type": "string",
+            "enum": [
+                "error",
+                "warn",
+                "info",
+                "hint",
+                "off"
+            ]
         }
     },
-    "properties": {
+    "oneOf": [
+        {
+            "properties": {
         "description": {
             "type": "string"
         },
@@ -89,10 +101,31 @@
             "type": "object"
         }
     },
-    "required": [
-        "given",
-        "then"
-    ],
-    "type": "object"
+            "required": [
+                "given",
+                "then"
+            ],
+            "type": "object"
+        },
+        {
+            "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/HumanReadableSeverity"
+        },
+        {
+            "type": "boolean"
+        },
+        {
+            "type": "array",
+            "additionalItems": false,
+            "minItems": 1,
+            "items": [
+                {
+                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/HumanReadableSeverity"
+                },
+                {
+                    "type": "object"
+                }
+            ]
+        }
+    ]
 }
 
