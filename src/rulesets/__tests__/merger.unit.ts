@@ -9,6 +9,7 @@ describe('Config merger', () => {
     then: {
       field: 'responses',
       function: 'oasOp2xxResponse',
+      functionOptions: {},
     },
     severity: 'warn',
   };
@@ -129,5 +130,71 @@ describe('Config merger', () => {
         example: baseRule,
       },
     });
+  });
+
+  it('supports array-ish syntax', () => {
+    const config = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeConfigs(config, {
+      rules: {
+        test: ['off'],
+      },
+    });
+
+    expect(config).toHaveProperty('rules.test.severity', 'off');
+  });
+
+  it('supports array-ish syntax', () => {
+    const config = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeConfigs(config, {
+      rules: {
+        test: ['off'],
+      },
+    });
+
+    expect(config).toHaveProperty('rules.test.severity', 'off');
+  });
+
+  it('does not set functionOptions if rule does not implement it', () => {
+    const config = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    delete config.rules.test.then.functionOptions;
+
+    mergeConfigs(config, {
+      rules: {
+        test: ['off', { baz: 'bar' }],
+      },
+    });
+
+    expect(config).not.toHaveProperty('rules.test.then.functionOptions');
+  });
+
+  it('provides support for custom functionOptions via array-ish syntax', () => {
+    const config = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeConfigs(config, {
+      rules: {
+        test: ['off', { baz: 'bar' }],
+      },
+    });
+
+    expect(config).toHaveProperty('rules.test.then.functionOptions', { baz: 'bar' });
   });
 });

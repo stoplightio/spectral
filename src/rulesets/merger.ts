@@ -34,8 +34,8 @@ function getRootRule(rule: Rule): Rule {
   return rule[ROOT_DESCRIPTOR];
 }
 
-function updateRootRule(root: Rule, newRule: Rule) {
-  root[ROOT_DESCRIPTOR] = copyRule(merge(root, newRule));
+function updateRootRule(root: Rule, newRule: Rule | null) {
+  root[ROOT_DESCRIPTOR] = copyRule(newRule === null ? root : merge(root, newRule));
 }
 
 function copyRule(rule: Rule) {
@@ -65,9 +65,17 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule) {
     case 'object':
       if (Array.isArray(rule)) {
         processRule(rules, name, rule[0]);
+
+        if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== undefined) {
+          if ('functionOptions' in existingRule.then) {
+            existingRule.then.functionOptions = merge(existingRule.then.functionOptions || {}, rule[1]);
+          }
+
+          updateRootRule(existingRule, null);
+        }
       } else if (isValidRule(existingRule)) {
         updateRootRule(existingRule, rule);
-      } else if (rule !== null) {
+      } else {
         // new rule
         markRule(rule);
         rules[name] = rule;
@@ -80,5 +88,5 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule) {
 }
 
 function isValidRule(rule: FileRule): rule is Rule {
-  return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && 'given' in rule;
+  return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
 }
