@@ -1,7 +1,7 @@
 jest.mock('../../fs/reader');
 jest.mock('../ajv');
 jest.mock('../validation');
-jest.mock('../path');
+jest.mock('../resolver');
 jest.mock('@stoplight/path');
 
 import { dirname } from '@stoplight/path';
@@ -10,8 +10,8 @@ import { when } from 'jest-when';
 import { IRule } from '../..';
 import { readParsable } from '../../fs/reader';
 import { IRulesetFile } from '../../types/ruleset';
-import { resolvePath } from '../path';
 import { readRulesFromRulesets } from '../reader';
+import { resolvePath } from '../resolver';
 import { assertValidRuleset } from '../validation';
 
 const readParsableMock: jest.Mock = readParsable as jest.Mock;

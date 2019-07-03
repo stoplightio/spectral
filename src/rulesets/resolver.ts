@@ -42,6 +42,7 @@ export async function resolvePath(from: string, to: string) {
   try {
     return require.resolve(to);
   } catch {
+    // todo: put hardcoded version here? might be good if we decide to make a breaking change in future.
     return path.join('https://unpkg.com/', to); // try to point to npm module
   }
 }
