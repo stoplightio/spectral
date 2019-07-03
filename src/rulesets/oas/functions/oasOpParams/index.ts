@@ -3,14 +3,7 @@ import { IFunction, IFunctionResult, Rule } from '../../../../types';
 export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) => {
   const results: IFunctionResult[] = [];
 
-  let object = targetVal;
-
-  const { resolved } = vals;
-  if (!resolved) {
-    console.warn('oasOpParams expects a resolved object, but none was provided. Results may not be correct.');
-  } else {
-    object = resolved;
-  }
+  const { original: object } = vals;
 
   /**
    * This rule verifies:

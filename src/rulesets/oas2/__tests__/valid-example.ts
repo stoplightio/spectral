@@ -154,8 +154,8 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        message: '"halRoot" property type should be array',
-        path: ['definitions', 'halRoot'],
+        message: '"self" property type should be array',
+        path: ['definitions', 'halRoot', '_links', 'self'],
       }),
     ]);
   });

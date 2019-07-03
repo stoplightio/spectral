@@ -5,7 +5,7 @@ function runSchemaPath(target: any, field: string, schemaPathStr: string) {
     target,
     { field, schemaPath: schemaPathStr },
     { given: [], target: [] },
-    { given: null, original: null, resolved: target },
+    { given: null, original: target },
   );
 }
 
@@ -59,14 +59,12 @@ describe('schema', () => {
         notUrl: 'images/38.png',
       },
     };
-    expect(runSchemaPath(target, fieldToCheck, path)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "should have required property 'url'",
-    "path": Array [],
-  },
-]
-`);
+    expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
+      {
+        path: [],
+        message: "should have required property 'url'",
+      },
+    ]);
   });
 
   test('will error formats', () => {
@@ -78,14 +76,12 @@ Array [
       example: 'turtle',
     };
 
-    expect(runSchemaPath(target, fieldToCheck, path)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "format should match format \\"url\\"",
-    "path": Array [],
-  },
-]
-`);
+    expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
+      {
+        message: 'format should match format "url"',
+        path: [],
+      },
+    ]);
   });
 
   describe('when schema path is not there', () => {

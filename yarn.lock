@@ -804,10 +804,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/fast-safe-stringify/-/fast-safe-stringify-2.1.2.tgz#2811eff4989c3d4c5c9a3789f057e25358db0899"
   integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
 
-"@stoplight/json-ref-resolver@^2":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.0.1.tgz#cb2c232ea2a3626f3090a47eb6fec4fa667aa2ac"
-  integrity sha512-ht99x0g9Fx57nyFleBTW3Z3QIKVAD2qp1mk4RWp+U15cFyr7k9zdG/8tkDSSmNz25ssiLSbPPwHkuhF4c5AZiQ==
+"@stoplight/json-ref-resolver@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.0.2.tgz#508cf634f5bdab0c4cbe638df7a9f604bacdc560"
+  integrity sha512-vqi8R4RmnYqgEPGrISlgAPFDWPqoZb3i39l4qhhFGT7YIPprgxqtBrRhCcPOrG808720jomjz/R18+nS0EjBPw==
   dependencies:
     "@stoplight/json" "2.x.x"
     "@types/urijs" "1.x.x"
