@@ -13,11 +13,7 @@ export function mergeConfigs(target: IRulesetFile, src: IRulesetFile) {
   const { rules } = target;
 
   for (const [name, rule] of Object.entries(src.rules)) {
-    try {
-      processRule(rules, name, rule);
-    } catch (ex) {
-      console.error('dddd');
-    }
+    processRule(rules, name, rule);
   }
 }
 
