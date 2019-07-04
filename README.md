@@ -7,61 +7,33 @@ A flexible JSON object linter with out of the box support for OpenAPI v2 and v3
 
 ## Features
 
-- Create custom rules to lint _any JSON object_
-- Use JSON paths to apply rules / functions to specific parts of your JSON objects
-- Built-in set of functions to help [build custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc
-- [Create custom functions](#creating-a-custom-function) for advanced use cases
-- Optional ready to use rules and functions to validate and lint [OpenAPI v2 _and_ v3 documents](#example-linting-an-openapi-document)
-- Validate JSON with [Ajv](https://github.com/epoberezkin/ajv)
+- Create custom rules to lint JSON or YAML objects.
+- Ready to use rules to validate and lint [OpenAPI v2 _and_ v3 documents](#example-linting-an-openapi-document).
+- Use JSON path to apply rules to specific parts of your objects.
+- Built-in set of functions to help [create custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- [Create custom functions](#creating-a-custom-function) for advanced use cases.
+- Validate JSON with [Ajv](https://github.com/epoberezkin/ajv).
 
 ## Installation
 
-### Local Installation
-
 ```bash
-npm install @stoplight/spectral
-```
-
-### Global Installation
-
-```bash
+# npm
 npm install -g @stoplight/spectral
-```
 
-Supports Node v8.3+.
+# yarn
+yarn global add @stoplight/spectral
 
-### Executable binaries
-
-For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms. We also provide a shell script to auto download the executable based on your operating system:
-
-`curl -L https://raw.githack.com/stoplightio/spectral/master/install.sh | sh`
-
-Note, the binaries are *not* auto-updatable, therefore you will need to download a new version on your own.
-
-#### Installing binaries system-wide
-
-##### Linux
-
-```bash
-sudo mv ./spectral-linux /usr/local/bin/spectral
-```
-
-You may need to restart your terminal.
-Now, `spectral` command will be accessible in your terminal.
-
-Head over to [releases](https://github.com/stoplightio/spectral/releases) for the latest binaries.
-
-
-### Docker
-```bash
+# docker
 docker run --rm -it stoplight/spectral lint "${URL}"`
 ```
+
+[Executable binaries](#executable-binaries) are also available.
 
 ## Usage
 
 ### CLI
 
-Spectral can be run via the command-line:
+Spectral can be run via the command-line. For example, validating an OpenAPI v2 or v3 file with the built in rules is as simple as:
 
 ```bash
 spectral lint petstore.yaml
@@ -69,41 +41,45 @@ spectral lint petstore.yaml
 
 Other options include:
 
-``` text
-  -c, --config=config          path to a config file
+```text
+  -r, --ruleset=ruleset          path to a ruleset file
   -e, --encoding=encoding      text encoding to use
   -f, --format=json|stylish    formatter to use for outputting results
   -h, --help                   show CLI help
-  -m, --maxResults=maxResults  deprecated: use --max-results instead
   -o, --output=output          output to a file instead of stdout
   -q, --quiet                  no logging - output only
-  -r, --ruleset=ruleset        path to a ruleset file (supports remote files)
   -s, --skip-rule=skip-rule    ignore certain rules if they are causing trouble
   -v, --verbose                increase verbosity
-  --max-results=max-results    [default: all] maximum results to show
+  --max-results=10    [default: all] maximum results to show
 ```
 
-> Note: The Spectral CLI supports both YAML and JSON.
+> The Spectral CLI supports passing in both YAML and JSON files.
 
-Currently, Spectral CLI CLI supports validation of OpenAPI documents and lints them based on our default ruleset, or you can provide [your own rulesets](docs/rulesets.md).
+### Programmatic usage
+
+Spectral is written in TypeScript (JavaScript) and can be imported and used directly. Take a look at the [JavaScript API](./docs/js-api.md).
+
+### Examples
+
+- [Make a custom rule]()
+- [Extend the built in OpenAPI v2 or v3 config]()
+- [Turn a rule off]()
+- [Change the severity of a rule]()
+- [Make custom function]()
 
 ## Concepts
 
-There are three key concepts in Spectral: **Rulesets**, **Rules** and **Functions**.
+There are three key concepts in Spectral: **Rulesets**, **Rules**, and **Functions**.
 
-- **Ruleset** is a container for a collection of rules and functions.
-- **Rule** filters your object down to a set of target values, and specify the function that should evaluate those values.
-- **Function** accept a value and return issue(s) if the value is incorrect.
+- **Rulesets** act as a container for rules and functions.
+- **Rules** filter your object down to a set of target values, and specify the function that is used to evaluate those values.
+- **Functions** accept a value and return issue(s) if the value is incorrect.
 
-Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
+Think of a **Spectral Config** as a flexible and customizable style guide for your JSON objects.
 
 ## Config
 
 Spectral CLI supports [config files](docs/config.md), to avoid typing out CLI options and arguments every single time.
-
-## Programmatic usage
-
-Spectral is written in TypeScript (JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## FAQs
 
@@ -118,6 +94,16 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 **What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
 
 With Spectral, lint rules can be applied to _any_ JSON object. Speccy is designed to work with OpenAPI v3 only. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OpenAPI specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
+
+### Executable binaries
+
+For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms. We also provide a shell script to auto download the executable based on your operating system:
+
+`curl -L https://raw.githack.com/stoplightio/spectral/master/install.sh | sh`
+
+Note, the binaries are *not* auto-updatable, therefore you will need to download a new version on your own.
+
+Head over to [releases](https://github.com/stoplightio/spectral/releases) for the latest binaries.
 
 ## Contributing
 
