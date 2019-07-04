@@ -1,6 +1,10 @@
 import * as path from '@stoplight/path';
 import { resolvePath } from '../resolver';
 
+// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
+// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
+declare var it: jest.It;
+
 describe('Resolver', () => {
   it('should join relative path', () => {
     return expect(resolvePath(__filename, './resolver.test.ts')).resolves.toEqual(
@@ -30,9 +34,9 @@ describe('Resolver', () => {
     );
   });
 
-  it('should support spectral built-in rules shorthands', () => {
-    return expect(resolvePath('', 'spectral:oas2')).resolves.toEqual(
-      path.join(process.cwd(), 'src/rulesets/oas2/index.json'),
+  it.each(['oas', 'oas2', 'oas3'])('should support spectral built-in %s ruleset shorthand', shorthand => {
+    return expect(resolvePath('', `spectral:${shorthand}`)).resolves.toEqual(
+      path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
     );
   });
 
