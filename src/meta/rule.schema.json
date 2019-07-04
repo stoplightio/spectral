@@ -8,10 +8,10 @@
                     "type": "string"
                 },
                 "function": {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/T"
+                    "$ref": "#/definitions/T"
                 },
                 "functionOptions": {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/O"
+                    "$ref": "#/definitions/O"
                 }
             },
             "required": [
@@ -69,11 +69,11 @@
         "then": {
             "anyOf": [
                 {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/IThen<T,O>"
+                    "$ref": "#/definitions/IThen<T,O>"
                 },
                 {
                     "items": {
-                        "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/IThen<T,O>"
+                        "$ref": "#/definitions/IThen<T,O>"
                     },
                     "type": "array"
                 }
@@ -108,7 +108,7 @@
             "type": "object"
         },
         {
-            "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/HumanReadableSeverity"
+            "$ref": "#/definitions/HumanReadableSeverity"
         },
         {
             "type": "boolean"
@@ -119,7 +119,7 @@
             "minItems": 1,
             "items": [
                 {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/HumanReadableSeverity"
+                    "$ref": "#/definitions/HumanReadableSeverity"
                 },
                 {
                     "type": "object"

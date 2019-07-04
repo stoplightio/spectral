@@ -327,7 +327,7 @@ describe('lint', () => {
     test
       .stdout()
       .command(['lint', invalidOas3SpecPath])
-      .it('respects rules from a config file', ctx => {
+      .it('respects rules from a ruleset file', ctx => {
         expect(ctx.stdout).toContain(' 5:10  warning  info-matches-stoplight  Info must contain Stoplight');
       });
   });
