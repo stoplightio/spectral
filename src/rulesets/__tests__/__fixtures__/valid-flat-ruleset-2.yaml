@@ -1,0 +1,6 @@
+rules:
+  valid-rule:
+    summary: should be OK
+    given: "$.foo"
+    then:
+      function: truthy

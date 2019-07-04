@@ -21,23 +21,27 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
     }
   }
 
-  return base.rules; // todo: return the entire config
+  return base.rules;
 }
 
 async function readRulesFromRuleset(baseUri: string, uri: string): Promise<IRulesetFile> {
   const ruleset = assertValidRuleset(parse(await readParsable(await resolvePath(baseUri, uri), 'utf8')));
+
+  const newRuleset: IRulesetFile = {
+    rules: {},
+  };
 
   const extendz = ruleset.extends;
 
   if (extendz && extendz.length) {
     for (const extended of extendz) {
       if (Array.isArray(extended)) {
-        mergeRulesets(ruleset, await readRulesFromRuleset(uri, extended[0]), extended[1]);
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0]), extended[1]);
       } else {
-        mergeRulesets(ruleset, await readRulesFromRuleset(uri, extended));
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended));
       }
     }
   }
 
-  return ruleset;
+  return mergeRulesets(newRuleset, ruleset);
 }

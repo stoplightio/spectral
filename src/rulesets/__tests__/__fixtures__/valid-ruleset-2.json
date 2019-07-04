@@ -1,7 +1,8 @@
 {
   "extends": [["spectral:oas2", "all"]],
   "rules": {
-    "valid-rule": {
+    "operation-security-defined": "off",
+    "operation-2xx-response": {
       "summary": "should be OK",
       "given": "$.info",
       "then": {

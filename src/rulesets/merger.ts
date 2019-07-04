@@ -24,6 +24,8 @@ export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, configSev
       processRule(rules, name, rule);
     }
   }
+
+  return target;
 }
 
 const ROOT_DESCRIPTOR = Symbol('root-descriptor');
@@ -40,7 +42,8 @@ function markRule(rule: Rule) {
 }
 
 function updateRootRule(root: Rule, newRule: Rule | null) {
-  root[ROOT_DESCRIPTOR] = copyRule(newRule === null ? root : merge(root, newRule));
+  markRule(root);
+  Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : merge(root, newRule)));
 }
 
 function copyRule(rule: Rule) {

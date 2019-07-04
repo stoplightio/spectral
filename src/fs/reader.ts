@@ -4,8 +4,9 @@ const fetch = require('node-fetch');
 
 async function doRead(name: string, encoding: string) {
   if (isURL(name)) {
-    const result = await fetch(name);
-    return await result.text();
+    const response = await fetch(name);
+    if (!response.ok) throw new Error(response.statusText);
+    return await response.text();
   } else {
     try {
       return await new Promise((resolve, reject) => {

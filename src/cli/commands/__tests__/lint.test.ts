@@ -236,16 +236,16 @@ describe('lint', () => {
       .it('outputs warnings/errors in a parseable json format', ctx => {
         expect(JSON.parse(ctx.stdout)).toEqual([
           expect.objectContaining({
-            code: 'api-servers',
-            message: 'OpenAPI `servers` must be present and non-empty array.',
-          }),
-          expect.objectContaining({
             message: 'Info object should contain `contact` object.',
             code: 'info-contact',
           }),
           expect.objectContaining({
             code: 'info-description',
             message: 'OpenAPI object info `description` must be present and non-empty string.',
+          }),
+          expect.objectContaining({
+            code: 'api-servers',
+            message: 'OpenAPI `servers` must be present and non-empty array.',
           }),
         ]);
       });
@@ -288,15 +288,6 @@ describe('lint', () => {
     test
       .stdout()
       .command(['lint', invalidOas3SpecPath, '-r', validRulesetPath])
-      .it('outputs warnings in json format', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
-        expect(ctx.stdout).toContain('"OpenAPI object info `description` must be present and non-empty string."');
-        expect(ctx.stdout).toContain('"OpenAPI `servers` must be present and non-empty array."');
-      });
-
-    test
-      .stdout()
-      .command(['lint', invalidOas3SpecPath, '-r', validRulesetPath])
       .it('saves results to a file', () => {
         expect(fs.writeFile).toHaveBeenCalledWith(
           'results.json',
@@ -309,8 +300,9 @@ describe('lint', () => {
     test
       .stdout()
       .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath])
+      .exit(2)
       .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
-        expect(ctx.stdout).toContain(`5:10  warning  info-matches-stoplight  Info must contain Stoplight`);
+        expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them should have required property 'given'`);
       });
   });
 

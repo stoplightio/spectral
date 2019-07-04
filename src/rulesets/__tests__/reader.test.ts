@@ -1,190 +1,95 @@
-import { dirname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
-import { when } from 'jest-when';
-import { IRule } from '../..';
-import { IRulesetFile } from '../../types/ruleset';
+import { DiagnosticSeverity } from '@stoplight/types/dist';
+import * as path from 'path';
 import { readRulesFromRulesets } from '../reader';
 
-const simpleRule: IRule = {
-  enabled: false,
-  given: 'abc',
-  then: {
-    function: 'f',
-  },
-};
+const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
+const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-flat-ruleset.yaml');
+const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
+const validRuleset = path.join(__dirname, './__fixtures__/valid-ruleset.json');
+const validRuleset2 = path.join(__dirname, './__fixtures__/valid-ruleset-2.json');
+const oasRuleset = require('../oas/index.json');
+const oas2Ruleset = require('../oas2/index.json');
 
-describe('reader', () => {
-  beforeEach(() => {
-    validateRulesetMock.mockImplementation(given => given);
-    (dirname as jest.Mock).mockImplementation(given => given);
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
+describe('Rulesets reader', () => {
   it('given flat, valid ruleset file should return rules', async () => {
-    givenRulesets({
-      'flat-ruleset.yaml': {
-        rules: {
-          'rule-1': simpleRule,
+    expect(await readRulesFromRulesets(validFlatRuleset)).toEqual({
+      'valid-rule': {
+        given: '$.info',
+        summary: 'should be OK',
+        then: {
+          function: 'truthy',
         },
       },
-    });
-
-    expect(await readRulesFromRulesets('flat-ruleset.yaml')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
     });
   });
 
   it('given two flat, valid ruleset files should return rules', async () => {
-    givenRulesets({
-      'flat-ruleset-a.yaml': {
-        rules: {
-          'rule-1': simpleRule,
+    expect(await readRulesFromRulesets(validFlatRuleset, validFlatRuleset2)).toEqual({
+      'valid-rule': {
+        given: '$.info',
+        summary: 'should be OK',
+        then: {
+          function: 'truthy',
         },
       },
-      'flat-ruleset-b.yaml': {
-        rules: {
-          'rule-2': simpleRule,
+      'valid-rule-2': {
+        given: '$.info',
+        summary: 'should be OK',
+        then: {
+          function: 'truthy',
         },
       },
     });
+  });
 
-    expect(await readRulesFromRulesets('flat-ruleset-a.yaml', 'flat-ruleset-b.yaml')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
-      'rule-2': { given: 'abc', then: { function: 'f' }, enabled: false },
+  it('should inherit properties of extended rulesets', () => {
+    return expect(readRulesFromRulesets(validRuleset)).resolves.toEqual({
+      ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (rules, [name, rule]) => {
+          rules[name] = {
+            ...rule,
+            severity: expect.any(Number),
+          };
+
+          return rules;
+        },
+        {},
+      ),
+
+      'valid-rule': {
+        given: '$.info',
+        summary: 'should be OK',
+        then: {
+          function: 'truthy',
+        },
+      },
     });
   });
 
   it('should override properties of extended rulesets', async () => {
-    givenRulesets({
-      flatRuleset: {
-        rules: {
-          'rule-1': simpleRule,
-        },
+    const result = await readRulesFromRulesets(validRuleset2);
+    expect(result).not.toHaveProperty('operation-security-defined');
+    expect(result).toHaveProperty('operation-2xx-response', {
+      summary: 'should be OK',
+      given: '$.info',
+      severity: DiagnosticSeverity.Error,
+      tags: ['operation'],
+      then: {
+        field: 'responses',
+        function: 'truthy',
       },
-      oneParentRuleset: {
-        extends: ['flatRuleset'],
-        rules: {
-          'rule-1': {
-            ...simpleRule,
-            // note that i'm enabling the rule here
-            enabled: true,
-          },
-        },
-      },
-    });
-
-    expect(await readRulesFromRulesets('oneParentRuleset')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: true },
+      type: 'style',
     });
   });
 
-  it('should inherit properties of extended rulesets', async () => {
-    givenRulesets({
-      flatRuleset: {
-        rules: {
-          'rule-2': {
-            given: 'another given',
-            then: {
-              function: 'b',
-            },
-          },
-        },
-      },
-      oneParentRuleset: {
-        extends: ['flatRuleset'],
-        rules: {
-          'rule-1': simpleRule,
-        },
-      },
-    });
-
-    expect(await readRulesFromRulesets('oneParentRuleset')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
-      'rule-2': { given: 'another given', then: { function: 'b' } },
-    });
-  });
-
-  it('should blend together parent rulesets', async () => {
-    givenRulesets({
-      rulesetA: {
-        rules: {
-          'rule-a': {
-            given: 'given-a',
-            then: {
-              function: 'a',
-            },
-          },
-          'common-rule': {
-            given: 'common',
-            then: {
-              function: 'ca',
-            },
-          },
-        },
-      },
-      rulesetB: {
-        rules: {
-          'rule-b': {
-            given: 'given-b',
-            then: {
-              function: 'b',
-            },
-          },
-          'common-rule': {
-            given: 'common',
-            then: {
-              function: 'cb',
-            },
-          },
-        },
-      },
-      oneParentRuleset: {
-        extends: ['rulesetA', 'rulesetB'],
-        rules: {
-          'rule-1': simpleRule,
-        },
-      },
-    });
-
-    expect(await readRulesFromRulesets('oneParentRuleset')).toEqual({
-      'rule-1': { given: 'abc', then: { function: 'f' }, enabled: false },
-      'rule-a': { given: 'given-a', then: { function: 'a' } },
-      'rule-b': { given: 'given-b', then: { function: 'b' } },
-      'common-rule': { given: 'common', then: { function: 'cb' } },
-    });
+  it('given non-existent ruleset should output error', () => {
+    return expect(readRulesFromRulesets('oneParentRuleset')).rejects.toThrowError(
+      'Could not parse https://unpkg.com/oneParentRuleset: Not Found',
+    );
   });
 
   it('given invalid ruleset should output errors', () => {
-    const flatRuleset = {
-      rules: {
-        'rule-1': simpleRule,
-      },
-    };
-    givenRulesets({
-      'flat-ruleset.yaml': flatRuleset,
-    });
-    validateRulesetMock.mockReset();
-    validateRulesetMock.mockImplementationOnce(() => {
-      throw new Error('fake errors');
-    });
-
-    return expect(readRulesFromRulesets('flat-ruleset.yaml')).rejects.toThrowError('fake errors');
+    return expect(readRulesFromRulesets(invalidRuleset)).rejects.toThrowError(/should have required property/);
   });
-
-  function givenRulesets(rulesets: Dictionary<IRulesetFile, string>) {
-    for (const [name, ruleset] of Object.entries(rulesets)) {
-      for (const extend of ruleset.extends || []) {
-        when(resolvePathMock)
-          .calledWith(name, extend)
-          .mockReturnValue(extend);
-      }
-
-      when(readParsableMock)
-        .calledWith(name, 'utf-8')
-        .mockReturnValue(JSON.stringify(ruleset));
-    }
-  }
 });

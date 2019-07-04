@@ -1,5 +1,5 @@
 import { assertValidRuleset } from '../validation';
-const invalidRuleset = require('./__fixtures__/ruleset-invalid.json');
+const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-ruleset.json');
 
 describe('Ruleset Validation', () => {
