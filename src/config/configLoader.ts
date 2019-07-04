@@ -1,12 +1,12 @@
 import { join } from '@stoplight/path';
 import * as fs from 'fs';
-import { ConfigFormat, ILintConfig } from '../types/config';
+import { ILintConfig, OutputFormat } from '../types/config';
 
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(?:ya?ml|json)$/;
 
 export const createEmptyConfig = (): ILintConfig => ({
   encoding: 'utf8',
-  format: ConfigFormat.STYLISH,
+  format: OutputFormat.STYLISH,
   verbose: false,
 });
 
