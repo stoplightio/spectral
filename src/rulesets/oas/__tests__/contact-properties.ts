@@ -5,7 +5,7 @@ describe('contact-properties', () => {
   const s = new Spectral();
   s.addRules({
     'contact-properties': Object.assign(ruleset.rules['contact-properties'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['contact-properties'].type],
     }),
   });

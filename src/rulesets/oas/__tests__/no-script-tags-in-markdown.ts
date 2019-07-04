@@ -5,7 +5,7 @@ describe('no-script-tags-in-markdown', () => {
   const s = new Spectral();
   s.addRules({
     'no-script-tags-in-markdown': Object.assign(ruleset.rules['no-script-tags-in-markdown'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['no-script-tags-in-markdown'].type],
     }),
   });

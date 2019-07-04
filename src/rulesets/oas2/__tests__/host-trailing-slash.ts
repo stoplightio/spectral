@@ -5,7 +5,7 @@ describe('host-trailing-slash', () => {
   const s = new Spectral();
   s.addRules({
     'host-trailing-slash': Object.assign(ruleset.rules['host-trailing-slash'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['host-trailing-slash'].type],
     }),
   });

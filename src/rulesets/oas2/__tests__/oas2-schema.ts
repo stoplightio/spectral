@@ -5,7 +5,7 @@ describe('oas2-schema', () => {
   const s = new Spectral();
   s.addRules({
     'oas2-schema': Object.assign(ruleset.rules['oas2-schema'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['oas2-schema'].type],
     }),
   });

@@ -6,6 +6,7 @@
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
+      "recommended": true,
       "given": "$",
       "then": {
         "function": "schema",
@@ -2315,6 +2316,7 @@
     },
     "api-servers": {
       "summary": "OpenAPI `servers` must be present and non-empty array.",
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -2335,8 +2337,8 @@
       ]
     },
     "model-description": {
-      "enabled": false,
       "summary": "Model `description` must be present and non-empty string.",
+      "recommended": false,
       "type": "style",
       "given": "$.components.schemas[*]",
       "then": {
@@ -2346,6 +2348,7 @@
     },
     "operation-security-defined": {
       "summary": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
+      "recommended": true,
       "type": "validation",
       "given": "$",
       "then": {
@@ -2362,8 +2365,8 @@
       ]
     },
     "server-not-example.com": {
-      "enabled": false,
       "summary": "Server URL should not point at `example.com`.",
+      "recommended": false,
       "type": "style",
       "given": "$.servers[*]",
       "then": {
@@ -2376,6 +2379,7 @@
     },
     "server-trailing-slash": {
       "summary": "Server URL should not have a trailing slash.",
+      "recommended": true,
       "type": "style",
       "given": "$.servers[*]",
       "then": {
@@ -2389,6 +2393,7 @@
     "valid-example": {
       "summary": "Examples must be valid against their defined schema.",
       "message": "\"{{property}}\" property {{error}}",
+      "recommended": true,
       "type": "validation",
       "given": "$..[?(@.example)]",
       "then": {

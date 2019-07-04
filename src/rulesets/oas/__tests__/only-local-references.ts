@@ -6,7 +6,7 @@ describe('only-local-references', () => {
   const s = new Spectral();
   s.addRules({
     'only-local-references': Object.assign(ruleset.rules['only-local-references'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['only-local-references'].type],
     }),
   });

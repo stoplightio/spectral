@@ -9,6 +9,7 @@ export const json = (results: IRuleResult[]): string => {
       summary: result.summary,
       severity: result.severity,
       range: result.range,
+      source: result.source,
     };
   });
   return JSON.stringify(outputJson, null, '\t');

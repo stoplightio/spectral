@@ -1,5 +1,4 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
-import { startsWith } from '@stoplight/json';
 import { isAbsolute, resolve } from '@stoplight/path';
 import { IParserResult } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
@@ -142,7 +141,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   }
 
   let targetUri = name;
-  if (!startsWith(name, 'http')) {
+  if (!/^https?:\/\//.test(name)) {
     // we always want the absolute path to the target file
     targetUri = resolve(name);
   }

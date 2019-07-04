@@ -3,17 +3,9 @@ import { get, has } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
+import { Resolved } from './resolved';
 import { message } from './rulesets/message';
-import {
-  HumanReadableDiagnosticSeverity,
-  IFunction,
-  IGivenNode,
-  IParsedResult,
-  IRuleResult,
-  IRunRule,
-  IRunRuleOpts,
-  IThen,
-} from './types';
+import { HumanReadableDiagnosticSeverity, IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
 
 const SEVERITY_MAP: Dictionary<number, HumanReadableDiagnosticSeverity> = {
   error: DiagnosticSeverity.Error,
@@ -37,8 +29,7 @@ export const lintNode = (
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
-  opts: IRunRuleOpts,
-  parsedResult: IParsedResult,
+  resolved: Resolved,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
@@ -48,7 +39,6 @@ export const lintNode = (
     return [];
   }
 
-  const { parsed } = parsedResult;
   const targetValue = conditioning.value;
 
   const targets: any[] = [];
@@ -114,7 +104,6 @@ export const lintNode = (
         {
           original: node.value,
           given: node.value,
-          resolved: opts.resolvedTarget,
         },
       ) || [];
 
@@ -124,7 +113,7 @@ export const lintNode = (
     results = results.concat(
       targetResults.map(result => {
         const path = result.path || targetPath;
-        const location = parsedResult.getLocationForJsonPath(parsed, path, true);
+        const location = resolved.getLocationForJsonPath(path, true);
 
         return {
           code: rule.name,
@@ -144,7 +133,7 @@ export const lintNode = (
                 }),
           path,
           severity,
-          source: parsedResult.source,
+          source: location.uri,
           ...(location || {
             range: {
               start: {

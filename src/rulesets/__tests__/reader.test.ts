@@ -73,6 +73,7 @@ describe('Rulesets reader', () => {
     expect(result).toHaveProperty('operation-2xx-response', {
       summary: 'should be OK',
       given: '$.info',
+      recommended: true,
       severity: DiagnosticSeverity.Error,
       tags: ['operation'],
       then: {

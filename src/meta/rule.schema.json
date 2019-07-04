@@ -42,7 +42,7 @@
         "description": {
             "type": "string"
         },
-        "enabled": {
+        "recommended": {
             "type": "boolean"
         },
         "given": {
@@ -128,4 +128,3 @@
         }
     ]
 }
-

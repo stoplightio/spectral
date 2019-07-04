@@ -11,7 +11,7 @@ describe('oasOpIdUnique', () => {
   s.addFunctions(ruleset.functions || {});
   s.addRules({
     'operation-operationId-unique': Object.assign(ruleset.rules['operation-operationId-unique'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['operation-operationId-unique'].type],
     }),
   });

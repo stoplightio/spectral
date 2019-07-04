@@ -6,6 +6,7 @@
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
+      "recommended": true,
       "given": "$",
       "then": {
         "function": "schema",
@@ -1639,6 +1640,7 @@
     },
     "api-host": {
       "summary": "OpenAPI `host` must be present and non-empty string.",
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -1651,6 +1653,7 @@
     },
     "api-schemes": {
       "summary": "OpenAPI host `schemes` must be present and non-empty array.",
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -1671,8 +1674,8 @@
       ]
     },
     "host-not-example": {
-      "enabled": false,
       "summary": "Server URL should not point at `example.com`.",
+      "recommended": false,
       "type": "style",
       "given": "$",
       "then": {
@@ -1685,6 +1688,7 @@
     },
     "host-trailing-slash": {
       "summary": "Server URL should not have a trailing slash.",
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -1696,8 +1700,8 @@
       }
     },
     "model-description": {
-      "enabled": false,
       "summary": "Definition `description` must be present and non-empty string.",
+      "recommended": false,
       "type": "style",
       "given": "$..definitions[*]",
       "then": {
@@ -1707,6 +1711,7 @@
     },
     "operation-security-defined": {
       "summary": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
+      "recommended": true,
       "type": "validation",
       "given": "$",
       "then": {
@@ -1724,6 +1729,7 @@
     "valid-example": {
       "summary": "Examples must be valid against their defined schema.",
       "message": "\"{{property}}\" property {{error}}",
+      "recommended": true,
       "type": "validation",
       "given": "$..[?(@.example)]",
       "then": {

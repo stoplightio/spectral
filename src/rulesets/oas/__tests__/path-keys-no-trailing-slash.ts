@@ -5,7 +5,7 @@ describe('path-keys-no-trailing-slash', () => {
   const s = new Spectral();
   s.addRules({
     'path-keys-no-trailing-slash': Object.assign(ruleset.rules['path-keys-no-trailing-slash'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['path-keys-no-trailing-slash'].type],
     }),
   });

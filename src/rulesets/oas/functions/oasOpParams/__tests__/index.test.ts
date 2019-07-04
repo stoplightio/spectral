@@ -10,7 +10,7 @@ describe('oasOpParams', () => {
   s.addFunctions(ruleset.functions || {});
   s.addRules({
     'operation-parameters': Object.assign(ruleset.rules['operation-parameters'], {
-      enabled: true,
+      recommended: true,
       type: RuleType[ruleset.rules['operation-parameters'].type],
     }),
   });

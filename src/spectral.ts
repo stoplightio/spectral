@@ -1,11 +1,18 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { IResolveError } from '@stoplight/json-ref-resolver/types';
-import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
-import { merge, uniqBy } from 'lodash';
+import { IUriParser } from '@stoplight/json-ref-resolver/types';
+import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
+import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
+import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
+import {
+  getLocationForJsonPath as getLocationForJsonPathYAML,
+  parseWithPointers as parseYAMLWithPointers,
+} from '@stoplight/yaml';
+import { merge, set, uniqBy } from 'lodash';
+import { extname } from 'path';
 
 import { functions as defaultFunctions } from './functions';
+import { Resolved } from './resolved';
 import { runRules } from './runner';
 import {
   FunctionCollection,
@@ -36,8 +43,8 @@ export class Spectral {
     let parsedResult: IParsedResult;
     if (!isParsedResult(target)) {
       parsedResult = {
-        parsed: parseWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
-        getLocationForJsonPath,
+        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
+        getLocationForJsonPath: getLocationForJsonPathYAML,
       };
       results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
     } else {
@@ -45,14 +52,52 @@ export class Spectral {
     }
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
-    const { result: resolvedTarget, errors } = await this._resolver.resolve(parsedResult.parsed.data, {
-      baseUri: documentUri,
-    });
+    const refDiagnostics: IRuleResult[] = [];
+
+    const resolved = new Resolved(
+      parsedResult,
+      await this._resolver.resolve(parsedResult.parsed.data, {
+        baseUri: documentUri,
+        parseResolveResult: async resolveOpts => {
+          const ref = resolveOpts.targetAuthority.toString();
+          const ext = extname(ref);
+
+          const content = String(resolveOpts.result);
+          let parsedRefResult: IParsedResult | void;
+          if (ext === '.yml' || ext === '.yaml') {
+            parsedRefResult = {
+              parsed: parseYAMLWithPointers(content),
+              source: ref,
+              getLocationForJsonPath: getLocationForJsonPathYAML,
+            };
+          } else if (ext === '.json') {
+            parsedRefResult = {
+              parsed: parseJSONWithPointers(content),
+              source: ref,
+              getLocationForJsonPath: getLocationForJsonPathJSON,
+            };
+          }
+
+          if (parsedRefResult !== undefined) {
+            resolveOpts.result = parsedRefResult.parsed.data;
+            if (parsedRefResult.parsed.diagnostics.length > 0) {
+              refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed, parsedRefResult.source));
+            }
+
+            this._processExternalRef(parsedRefResult, resolveOpts);
+          }
+
+          return resolveOpts;
+        },
+      }),
+      this._parsedMap,
+    );
 
     return [
+      ...refDiagnostics,
       ...results,
-      ...formatResolverErrors(errors, parsedResult),
-      ...runRules(parsedResult, this.rules, this.functions, { resolvedTarget }),
+      ...formatResolverErrors(resolved),
+      ...runRules(resolved, this.rules, this.functions),
     ];
   }
 
@@ -110,12 +155,40 @@ export class Spectral {
       const rule = this.rules[ruleName];
       if (rule) {
         if (typeof declaration === 'boolean') {
-          this._rules[ruleName].enabled = declaration;
+          this._rules[ruleName].recommended = declaration;
         }
       }
     }
   }
+
+  private _parsedMap: IParseMap = {
+    refs: {},
+    parsed: {},
+    pointers: {},
+  };
+
+  private _processExternalRef(parsedResult: IParsedResult, opts: IUriParser) {
+    const ref = opts.targetAuthority.toString();
+    this._parsedMap.parsed[ref] = parsedResult;
+    this._parsedMap.pointers[ref] = opts.parentPath;
+    const parentRef = opts.parentAuthority.toString();
+
+    set(
+      this._parsedMap.refs,
+      [...(this._parsedMap.pointers[parentRef] ? this._parsedMap.pointers[parentRef] : []), ...opts.parentPath],
+      Object.defineProperty({}, REF_METADATA, {
+        enumerable: false,
+        writable: false,
+        value: {
+          ref,
+          root: opts.fragment.split('/').slice(1),
+        },
+      }),
+    );
+  }
 }
+
+export const REF_METADATA = Symbol('external_ref_metadata');
 
 export const isParsedResult = (obj: any): obj is IParsedResult => {
   if (!obj || typeof obj !== 'object') return false;
@@ -135,10 +208,10 @@ function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleR
 
 const prettyPrintResolverError = (message: string) => message.replace(/^Error\s*:\s*/, '');
 
-const formatResolverErrors = (resolveErrors: IResolveError[], result: IParsedResult): IRuleResult[] => {
-  return uniqBy(resolveErrors, 'message').reduce<IRuleResult[]>((errors, error) => {
+const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
+  return uniqBy(resolved.errors, 'message').reduce<IRuleResult[]>((errors, error) => {
     const path = [...error.path, '$ref'];
-    const location = result.getLocationForJsonPath(result.parsed, path);
+    const location = resolved.getLocationForJsonPath(path);
 
     if (location) {
       errors.push({
@@ -147,10 +220,16 @@ const formatResolverErrors = (resolveErrors: IResolveError[], result: IParsedRes
         message: prettyPrintResolverError(error.message),
         severity: DiagnosticSeverity.Error,
         range: location.range,
-        source: result.source,
+        source: resolved.spec.source,
       });
     }
 
     return errors;
   }, []);
 };
+
+export interface IParseMap {
+  refs: Dictionary<object>;
+  parsed: Dictionary<IParsedResult>;
+  pointers: Dictionary<string[]>;
+}
