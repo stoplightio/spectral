@@ -34,7 +34,6 @@ describe('lint', () => {
         .stdout()
         .command(['lint', validCustomOas3SpecPath])
         .it('outputs no issues', ctx => {
-          console.log(ctx.stdout);
           expect(ctx.stdout).toContain('No errors or warnings found!');
         });
     });

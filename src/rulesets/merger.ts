@@ -1,6 +1,7 @@
+import { DiagnosticSeverity } from '@stoplight/types/dist';
 import { cloneDeep, merge } from 'lodash';
-import { Rule } from '../types';
-import { FileRule, FileRuleCollection, IRulesetFile } from '../types/ruleset';
+import { HumanReadableDiagnosticSeverity, Rule } from '../types';
+import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
 
 /*
 - if rule is object, simple deep merge (or we could replace to be a bit stricter?)
@@ -9,11 +10,19 @@ import { FileRule, FileRuleCollection, IRulesetFile } from '../types/ruleset';
 - if rule is string or number, use parent rule and set it's severity to the given string/number value
 - if rule is array, index 0 should be false/true/string/number - same severity logic as above. optional second
 */
-export function mergeConfigs(target: IRulesetFile, src: IRulesetFile) {
+export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, configSeverity?: FileRulesetSeverity) {
   const { rules } = target;
 
   for (const [name, rule] of Object.entries(src.rules)) {
-    processRule(rules, name, rule);
+    if (configSeverity !== undefined) {
+      if (isValidRule(rule)) {
+        processRule(rules, name, { ...rule, severity: getSeverityLevel(src.rules, name, configSeverity) });
+      } else {
+        processRule(rules, name, configSeverity);
+      }
+    } else {
+      processRule(rules, name, rule);
+    }
   }
 }
 
@@ -38,7 +47,7 @@ function copyRule(rule: Rule) {
   return cloneDeep(rule);
 }
 
-function processRule(rules: FileRuleCollection, name: string, rule: FileRule) {
+function processRule(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity) {
   const existingRule = rules[name];
 
   switch (typeof rule) {
@@ -54,7 +63,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule) {
     case 'number':
       // what if rule does not exist (yet)? throw, store the invalid state somehow?
       if (isValidRule(existingRule)) {
-        existingRule.severity = rule;
+        existingRule.severity = getSeverityLevel(rules, name, rule);
       }
 
       break;
@@ -85,4 +94,34 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule) {
 
 function isValidRule(rule: FileRule): rule is Rule {
   return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
+}
+
+function getSeverityLevel(
+  rules: FileRuleCollection,
+  name: string,
+  rule: FileRule | FileRulesetSeverity,
+): DiagnosticSeverity | HumanReadableDiagnosticSeverity {
+  const existingRule = rules[name];
+
+  if (!isValidRule(existingRule)) return 'off';
+
+  if (rule === 'recommended') {
+    return existingRule.recommended
+      ? existingRule.severity || DiagnosticSeverity.Error // not sure what a default value could be
+      : 'off';
+  }
+
+  if (rule === 'all') {
+    return existingRule.severity || DiagnosticSeverity.Error; // ditto
+  }
+
+  switch (typeof rule) {
+    case 'number':
+    case 'string':
+      return rule;
+    case 'boolean':
+      return (rule && existingRule.severity) || 'off';
+    default:
+      return 'off';
+  }
 }

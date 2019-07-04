@@ -4,6 +4,7 @@ import { HumanReadableDiagnosticSeverity, Rule } from './rule';
 import { RuleCollection } from './spectral';
 
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
+export type FileRulesetSeverity = 'off' | 'recommended' | 'all';
 
 export type FileRule = Rule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, object];
 
@@ -14,6 +15,6 @@ export interface IRuleset {
 }
 
 export interface IRulesetFile {
-  extends?: string[];
+  extends?: Array<string | [string, FileRulesetSeverity]>;
   rules: FileRuleCollection;
 }

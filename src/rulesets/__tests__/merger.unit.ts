@@ -1,7 +1,7 @@
 import { IRule } from '../../types';
-import { mergeConfigs } from '../merger';
+import { mergeRulesets } from '../merger';
 
-describe('Config merger', () => {
+describe('Rulesets merger', () => {
   const baseRule: IRule = {
     summary: 'Operation must have at least one `2xx` response.',
     given:
@@ -11,6 +11,7 @@ describe('Config merger', () => {
       function: 'oasOp2xxResponse',
       functionOptions: {},
     },
+    recommended: true,
     severity: 'warn',
   };
 
@@ -21,7 +22,7 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: false,
       },
@@ -37,13 +38,13 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: false,
       },
     });
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: 'error',
       },
@@ -59,7 +60,7 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: {
           summary: 'Operation must have at least one `2xx` response.',
@@ -84,7 +85,7 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: {
           summary: 'Operation must have at least one `2xx` response.',
@@ -99,13 +100,13 @@ describe('Config merger', () => {
       },
     });
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: false,
       },
     });
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: true,
       },
@@ -119,7 +120,7 @@ describe('Config merger', () => {
       rules: {},
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         example: JSON.parse(JSON.stringify(baseRule)),
       },
@@ -139,7 +140,7 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: ['off'],
       },
@@ -155,7 +156,7 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: ['off'],
       },
@@ -173,7 +174,7 @@ describe('Config merger', () => {
 
     delete config.rules.test.then.functionOptions;
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: ['off', { baz: 'bar' }],
       },
@@ -189,12 +190,78 @@ describe('Config merger', () => {
       },
     };
 
-    mergeConfigs(config, {
+    mergeRulesets(config, {
       rules: {
         test: ['off', { baz: 'bar' }],
       },
     });
 
     expect(config).toHaveProperty('rules.test.then.functionOptions', { baz: 'bar' });
+  });
+
+  it('provides support to disable all rules present in a given ruleset', () => {
+    const config = {
+      rules: {},
+    };
+
+    mergeRulesets(
+      config,
+      {
+        rules: {
+          test: JSON.parse(JSON.stringify(baseRule)),
+          test2: JSON.parse(JSON.stringify(baseRule)),
+        },
+      },
+      'off',
+    );
+
+    expect(config).toHaveProperty('rules.test.severity', 'off');
+    expect(config).toHaveProperty('rules.test2.severity', 'off');
+  });
+
+  it('picks up recommended rules', () => {
+    const config = {
+      rules: {},
+    };
+
+    mergeRulesets(
+      config,
+      {
+        rules: {
+          test: JSON.parse(JSON.stringify(baseRule)),
+          test2: {
+            ...JSON.parse(JSON.stringify(baseRule)),
+            recommended: false,
+          },
+        },
+      },
+      'recommended',
+    );
+
+    expect(config).toHaveProperty('rules.test.severity', 'warn');
+    expect(config).toHaveProperty('rules.test2.severity', 'off');
+  });
+
+  it('picks up all rules', () => {
+    const config = {
+      rules: {},
+    };
+
+    mergeRulesets(
+      config,
+      {
+        rules: {
+          test: JSON.parse(JSON.stringify(baseRule)),
+          test2: {
+            ...JSON.parse(JSON.stringify(baseRule)),
+            recommended: false,
+          },
+        },
+      },
+      'all',
+    );
+
+    expect(config).toHaveProperty('rules.test.severity', 'warn');
+    expect(config).toHaveProperty('rules.test2.severity', 'warn');
   });
 });

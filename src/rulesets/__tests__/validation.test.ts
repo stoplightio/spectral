@@ -40,4 +40,22 @@ describe('Ruleset Validation', () => {
       }),
     ).toThrow();
   });
+
+  it('recognizes valid array-ish extends syntax', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        extends: [['foo', 'off'], 'test'],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it('recognizes invalid array-ish extends syntax', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        extends: [['foo', 'test']],
+        rules: {},
+      }),
+    ).toThrow();
+  });
 });

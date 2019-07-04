@@ -2,7 +2,7 @@ import { parse } from '@stoplight/yaml';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRuleset, IRulesetFile } from '../types/ruleset';
-import { mergeConfigs } from './merger';
+import { mergeRulesets } from './merger';
 import { resolvePath } from './resolver';
 import { assertValidRuleset } from './validation';
 
@@ -12,7 +12,7 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
   };
 
   for (const uri of uris) {
-    mergeConfigs(base, await readRulesFromRuleset('', uri));
+    mergeRulesets(base, await readRulesFromRuleset('', uri));
   }
 
   for (const [name, rule] of Object.entries(base.rules)) {
@@ -25,13 +25,17 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
 }
 
 async function readRulesFromRuleset(baseUri: string, uri: string): Promise<IRulesetFile> {
-  const ruleset = assertValidRuleset(parse(await readParsable(await resolvePath(baseUri, uri), 'utf-8')));
+  const ruleset = assertValidRuleset(parse(await readParsable(await resolvePath(baseUri, uri), 'utf8')));
 
   const extendz = ruleset.extends;
 
   if (extendz && extendz.length) {
     for (const extended of extendz) {
-      mergeConfigs(ruleset, await readRulesFromRuleset(uri, extended));
+      if (Array.isArray(extended)) {
+        mergeRulesets(ruleset, await readRulesFromRuleset(uri, extended[0]), extended[1]);
+      } else {
+        mergeRulesets(ruleset, await readRulesFromRuleset(uri, extended));
+      }
     }
   }
 

@@ -23,6 +23,7 @@ export interface IRule<T = string, O = any> {
 
   // should the rule be enabled by default?
   enabled?: boolean;
+  recommended?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
   given: string;
