@@ -1,6 +1,10 @@
 {
   "extends": "./node_modules/@stoplight/scripts/tsconfig.json",
-
+  "compilerOptions": {
+    "baseUrl": "."
+  },
   // target all ts files
-  "include": ["."]
+  "include": [
+    "."
+  ]
 }

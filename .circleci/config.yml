@@ -59,23 +59,23 @@ jobs:
 
   test-node-8:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - install-and-test
 
   release:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
       - cached-dependencies
       - run: yarn build
-      - run: yarn release
+      - run: npm publish
       - run: yarn build.binary
       - persist_to_workspace:
-          root: ./dist
+          root: ./
           paths:
-            - bin
+            - binaries
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
@@ -90,7 +90,6 @@ jobs:
           command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/bin
 
 workflows:
-  version: 2
   commit:
     jobs:
       - test-node-latest
