@@ -1,6 +1,6 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
-
 import { rules } from '../../../index.json';
 
 const ruleset = { functions: commonOasFunctions(), rules };
@@ -34,13 +34,27 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
-
-    expect(results[0].path).toEqual(['paths', '/foo/{bar}']);
-    expect(results[0].message)
-      .toEqual(`The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.
-
-To fix, add a path parameter with the name "**bar**".`);
+    expect(results).toEqual([
+      {
+        code: 'path-params',
+        message:
+          'The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.\n\nTo fix, add a path parameter with the name "**bar**".',
+        path: ['paths', '/foo/{bar}'],
+        range: {
+          end: {
+            character: 15,
+            line: 3,
+          },
+          start: {
+            character: 17,
+            line: 2,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary:
+          'The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.\n\nTo fix, add a path parameter with the name "**bar**".',
+      },
+    ]);
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
@@ -118,7 +132,29 @@ To fix, add a path parameter with the name "**bar**".`);
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'path-params',
+        message: `The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.\n
+Path parameters must be unique.\n
+To fix, update the path so that all parameter names are unique.`,
+        path: ['paths', '/foo/{bar}/{bar}'],
+        range: {
+          end: {
+            character: 15,
+            line: 10,
+          },
+          start: {
+            character: 23,
+            line: 2,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: `The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.\n
+Path parameters must be unique.\n
+To fix, update the path so that all parameter names are unique.`,
+      },
+    ]);
 
     expect(results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
     expect(results[0].message).toEqual(`The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.
@@ -148,9 +184,26 @@ To fix, update the path so that all parameter names are unique.`);
         },
       },
     });
-    expect(results).toMatchSnapshot();
 
-    expect(results[0].path).toEqual(['paths', '/foo/{bar}', 'parameters']);
+    expect(results).toEqual([
+      {
+        code: 'path-params',
+        message: `Path parameter \"**bar**\" must have a \`required\` that is set to \`true\`.\n\nTo fix, mark this parameter as required.`,
+        path: ['paths', '/foo/{bar}', 'parameters'],
+        range: {
+          end: {
+            character: 42,
+            line: 5,
+          },
+          start: {
+            character: 19,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: `Path parameter \"**bar**\" must have a \`required\` that is set to \`true\`.\n\nTo fix, mark this parameter as required.`,
+      },
+    ]);
   });
 
   test('Error if paths are functionally equivalent', async () => {
@@ -178,8 +231,25 @@ To fix, update the path so that all parameter names are unique.`);
         },
       },
     });
-    expect(results).toMatchSnapshot();
 
-    expect(results[0].path).toEqual(['paths']);
+    expect(results).toEqual([
+      {
+        code: 'path-params',
+        message: `The paths \"**/foo/{boo}**\" and \"**/foo/{bar}**\" are equivalent.\n\nTo fix, remove one of the paths or merge them together.`,
+        path: ['paths'],
+        range: {
+          end: {
+            character: 15,
+            line: 20,
+          },
+          start: {
+            character: 10,
+            line: 1,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: `The paths \"**/foo/{boo}**\" and \"**/foo/{bar}**\" are equivalent.\n\nTo fix, remove one of the paths or merge them together.`,
+      },
+    ]);
   });
 });

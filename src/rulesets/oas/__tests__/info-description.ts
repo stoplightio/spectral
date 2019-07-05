@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -25,6 +26,24 @@ describe('info-description', () => {
       paths: {},
       info: { contact: { name: 'stoplight.io' } },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'info-description',
+        message: 'OpenAPI object info `description` must be present and non-empty string.',
+        path: ['info', 'description'],
+        range: {
+          end: {
+            character: 28,
+            line: 5,
+          },
+          start: {
+            character: 9,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'OpenAPI object info `description` must be present and non-empty string.',
+      },
+    ]);
   });
 });

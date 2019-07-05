@@ -30,6 +30,24 @@ describe('info-license', () => {
         contact: { name: 'stoplight.io' },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'info-license',
+        message: 'OpenAPI object info `license` must be present and non-empty string.',
+        path: ['info', 'license'],
+        range: {
+          end: {
+            character: 28,
+            line: 5,
+          },
+          start: {
+            character: 9,
+            line: 3,
+          },
+        },
+        severity: 1,
+        summary: 'OpenAPI object info `license` must be present and non-empty string.',
+      },
+    ]);
   });
 });

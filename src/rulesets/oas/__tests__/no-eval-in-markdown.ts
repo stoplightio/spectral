@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -31,6 +32,41 @@ describe('no-eval-in-markdown', () => {
         description: 'some description contains eval(',
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'no-eval-in-markdown',
+        message: 'Markdown descriptions should not contain `eval(`.',
+        path: ['info', 'description'],
+        range: {
+          end: {
+            character: 52,
+            line: 5,
+          },
+          start: {
+            character: 19,
+            line: 5,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Markdown descriptions should not contain `eval(`.',
+      },
+      {
+        code: 'no-eval-in-markdown',
+        message: 'Markdown descriptions should not contain `eval(`.',
+        path: ['info', 'title'],
+        range: {
+          end: {
+            character: 40,
+            line: 4,
+          },
+          start: {
+            character: 13,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Markdown descriptions should not contain `eval(`.',
+      },
+    ]);
   });
 });
