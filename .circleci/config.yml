@@ -75,20 +75,20 @@ jobs:
       - run: npm version from-git
       - run: yarn build
       - run: |
-          if [ $CIRCLE_TAG = *beta* ] ; then
+          if [[ "$CIRCLE_TAG" == *beta* ]] ; then
             npm publish --tag beta
-          elif [ $CIRCLE_TAG = *alpha* ] ; then
+          elif [[ "$CIRCLE_TAG" == *alpha* ]] ; then
             npm publish --tag alpha
           else
             npm publish
           fi
       - run: yarn build.binary
-      - run: "docker build -t stoplight/spectral:${CIRCLE_TAG} -t stoplight/spectral:latest --build-arg EG_VERSION=latest ."
+      - run: docker build -t stoplight/spectral:${CIRCLE_TAG} -t stoplight/spectral:latest
       - run: docker push stoplight/spectral:${CIRCLE_TAG}
       - run: |
-          if [ $CIRCLE_TAG = *beta* ] ; then
+          if [[ "$CIRCLE_TAG" == *beta* ]] ; then
             docker push stoplight/spectral:beta
-          elif [ $CIRCLE_TAG = *alpha* ] ; then
+          elif [[ "$CIRCLE_TAG" == *alpha* ]] ; then
             docker push stoplight/spectral:alpha
           else
             docker push stoplight/spectral:latest

@@ -1,5 +1,5 @@
 function resolveSpectralRuleset(ruleset: string) {
-  return `@stoplight/spectral/rulesets/${ruleset}/rules.json`;
+  return `@stoplight/spectral/rulesets/${ruleset}/index.json`;
 }
 export const rulesetsMap = new Map<string, string>([
   ['spectral:oas', resolveSpectralRuleset('oas')],
