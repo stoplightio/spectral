@@ -63,7 +63,7 @@ export class Spectral {
           const ext = extname(ref);
 
           const content = String(resolveOpts.result);
-          let parsedRefResult: IParsedResult | void;
+          let parsedRefResult: IParsedResult | undefined;
           if (ext === '.yml' || ext === '.yaml') {
             parsedRefResult = {
               parsed: parseYAMLWithPointers(content),
