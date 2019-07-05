@@ -1,6 +1,6 @@
 import { commonOasFunctions } from '../';
 import { Spectral } from '../../../spectral';
-import { rules } from '../index.json';
+import { rules } from '../rules.json';
 
 const { oasOp2xxResponse } = commonOasFunctions();
 
