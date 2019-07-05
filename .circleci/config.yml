@@ -70,6 +70,7 @@ jobs:
       - checkout
       - cached-dependencies
       - run: yarn build
+      - run: npm version from-git
       - run: npm publish
       - run: yarn build.binary
       - persist_to_workspace:
