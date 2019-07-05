@@ -100,10 +100,14 @@ workflows:
     jobs:
       - release:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v.*/
       - upload_artifacts:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v.*/
           requires:
