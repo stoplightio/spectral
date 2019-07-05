@@ -19,13 +19,13 @@ describe('Rulesets merger', () => {
   };
 
   it('performs a shallow merging', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: {
           ...JSON.parse(JSON.stringify(baseRule)),
@@ -38,7 +38,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(config).toHaveProperty('rules.test.then', {
+    expect(ruleset).toHaveProperty('rules.test.then', {
       field: 'info',
       function: 'truthy',
       functionOptions: {},
@@ -46,51 +46,51 @@ describe('Rulesets merger', () => {
   });
 
   it('is possible to disable the rule using flag', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: false,
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
   });
 
   it('supports nested severity', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: false,
       },
     });
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: 'error',
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'error');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'error');
   });
 
   it('merges the same rules', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: {
           summary: 'Operation must have at least one `2xx` response.',
@@ -105,17 +105,17 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'error');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'error');
   });
 
   it('prefers the most recent severity level', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: {
           summary: 'Operation must have at least one `2xx` response.',
@@ -130,33 +130,33 @@ describe('Rulesets merger', () => {
       },
     });
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: false,
       },
     });
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: true,
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
   });
 
   it('includes new rules', () => {
-    const config = {
+    const ruleset = {
       rules: {},
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         example: JSON.parse(JSON.stringify(baseRule)),
       },
     });
 
-    expect(config).toEqual({
+    expect(ruleset).toEqual({
       rules: {
         example: baseRule,
       },
@@ -164,78 +164,78 @@ describe('Rulesets merger', () => {
   });
 
   it('supports array-ish syntax', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: ['off'],
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
   });
 
   it('supports array-ish syntax', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: ['off'],
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
   });
 
   it('does not set functionOptions if rule does not implement it', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    delete config.rules.test.then.functionOptions;
+    delete ruleset.rules.test.then.functionOptions;
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: ['off', { baz: 'bar' }],
       },
     });
 
-    expect(config).not.toHaveProperty('rules.test.then.functionOptions');
+    expect(ruleset).not.toHaveProperty('rules.test.then.functionOptions');
   });
 
   it('provides support for custom functionOptions via array-ish syntax', () => {
-    const config = {
+    const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
       },
     };
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: ['off', { baz: 'bar' }],
       },
     });
 
-    expect(config).toHaveProperty('rules.test.then.functionOptions', { baz: 'bar' });
+    expect(ruleset).toHaveProperty('rules.test.then.functionOptions', { baz: 'bar' });
   });
 
   it('provides support to disable all rules present in a given ruleset', () => {
-    const config = {
+    const ruleset = {
       rules: {},
     };
 
     mergeRulesets(
-      config,
+      ruleset,
       {
         rules: {
           test: JSON.parse(JSON.stringify(baseRule)),
@@ -245,17 +245,17 @@ describe('Rulesets merger', () => {
       'off',
     );
 
-    expect(config).toHaveProperty('rules.test.severity', 'off');
-    expect(config).toHaveProperty('rules.test2.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test2.severity', 'off');
   });
 
   it('picks up recommended rules', () => {
-    const config = {
+    const ruleset = {
       rules: {},
     };
 
     mergeRulesets(
-      config,
+      ruleset,
       {
         rules: {
           test: JSON.parse(JSON.stringify(baseRule)),
@@ -268,19 +268,19 @@ describe('Rulesets merger', () => {
       'recommended',
     );
 
-    expect(config).toHaveProperty('rules.test.severity', 'warn');
-    expect(config).toHaveProperty('rules.test2.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'warn');
+    expect(ruleset).toHaveProperty('rules.test2.severity', 'off');
   });
 
   it('sets warning as default severity level if a rule has no severity specified', () => {
-    const config = {
+    const ruleset = {
       rules: {},
     };
 
     const baseWithoutSeverity = JSON.parse(JSON.stringify(baseRule));
     delete baseWithoutSeverity.severity;
 
-    mergeRulesets(config, {
+    mergeRulesets(ruleset, {
       rules: {
         test: baseWithoutSeverity,
         test2: {
@@ -290,17 +290,17 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(config).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
-    expect(config).toHaveProperty('rules.test2.severity', DiagnosticSeverity.Error);
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
+    expect(ruleset).toHaveProperty('rules.test2.severity', DiagnosticSeverity.Error);
   });
 
   it('picks up all rules', () => {
-    const config = {
+    const ruleset = {
       rules: {},
     };
 
     mergeRulesets(
-      config,
+      ruleset,
       {
         rules: {
           test: JSON.parse(JSON.stringify(baseRule)),
@@ -313,7 +313,7 @@ describe('Rulesets merger', () => {
       'all',
     );
 
-    expect(config).toHaveProperty('rules.test.severity', 'warn');
-    expect(config).toHaveProperty('rules.test2.severity', 'warn');
+    expect(ruleset).toHaveProperty('rules.test.severity', 'warn');
+    expect(ruleset).toHaveProperty('rules.test2.severity', 'warn');
   });
 });

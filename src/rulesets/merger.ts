@@ -12,15 +12,15 @@ const DEFAULT_SEVERITY_LEVEL = DiagnosticSeverity.Warning;
 - if rule is string or number, use parent rule and set it's severity to the given string/number value
 - if rule is array, index 0 should be false/true/string/number - same severity logic as above. optional second
 */
-export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, configSeverity?: FileRulesetSeverity) {
+export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, rulesetSeverity?: FileRulesetSeverity) {
   const { rules } = target;
 
   for (const [name, rule] of Object.entries(src.rules)) {
-    if (configSeverity !== undefined) {
+    if (rulesetSeverity !== undefined) {
       if (isValidRule(rule)) {
-        processRule(rules, name, { ...rule, severity: getSeverityLevel(src.rules, name, configSeverity) });
+        processRule(rules, name, { ...rule, severity: getSeverityLevel(src.rules, name, rulesetSeverity) });
       } else {
-        processRule(rules, name, configSeverity);
+        processRule(rules, name, rulesetSeverity);
       }
     } else {
       processRule(rules, name, rule);
