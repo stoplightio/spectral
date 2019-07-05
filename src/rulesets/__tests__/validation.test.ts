@@ -47,6 +47,14 @@ describe('Ruleset Validation', () => {
         },
       }),
     ).not.toThrow();
+
+    expect(
+      assertValidRuleset.bind(null, {
+        rules: {
+          rule: [1],
+        },
+      }),
+    ).not.toThrow();
   });
 
   it('recognizes invalid array-ish syntax', () => {
