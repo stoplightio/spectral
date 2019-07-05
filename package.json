@@ -33,6 +33,7 @@
     ]
   },
   "files": [
+    "bin/*",
     "dist/*",
     "oclif.manifest.json"
   ],
