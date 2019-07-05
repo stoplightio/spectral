@@ -82,7 +82,6 @@ describe('oasOpParams', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation parameters are unique and non-repeating.',
       },
     ]);
   });
@@ -123,7 +122,6 @@ describe('oasOpParams', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation parameters are unique and non-repeating.',
       },
     ]);
   });
@@ -174,7 +172,6 @@ describe('oasOpParams', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation parameters are unique and non-repeating.',
       },
     ]);
   });
@@ -205,7 +202,6 @@ describe('oasOpParams', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation parameters are unique and non-repeating.',
       },
     ]);
   });

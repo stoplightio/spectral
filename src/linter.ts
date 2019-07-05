@@ -113,21 +113,16 @@ export const lintNode = (
     // NOTE: we might want to normalize that during merging (once we have it in place)
 
     results = results.concat(
-      targetResults.map(result => {
+      targetResults.map<IRuleResult>(result => {
         const path = result.path || targetPath;
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
           code: rule.name,
 
-          // @deprecated, points to message
-          get summary() {
-            return this.message;
-          },
-
           message:
             rule.message === undefined
-              ? rule.summary || result.message
+              ? rule.description || result.message
               : message(rule.message, {
                   error: result.message,
                   property: path.length > 0 ? path[path.length - 1] : '',

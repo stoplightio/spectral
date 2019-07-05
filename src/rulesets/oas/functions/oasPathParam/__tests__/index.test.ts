@@ -51,8 +51,6 @@ describe('oasPathParam', () => {
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary:
-          'The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.\n\nTo fix, add a path parameter with the name "**bar**".',
       },
     ]);
   });
@@ -150,18 +148,8 @@ To fix, update the path so that all parameter names are unique.`,
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: `The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.\n
-Path parameters must be unique.\n
-To fix, update the path so that all parameter names are unique.`,
       },
     ]);
-
-    expect(results[0].path).toEqual(['paths', '/foo/{bar}/{bar}']);
-    expect(results[0].message).toEqual(`The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.
-
-Path parameters must be unique.
-
-To fix, update the path so that all parameter names are unique.`);
   });
 
   test('Error if $ref path parameter definition is not required', async () => {
@@ -201,7 +189,6 @@ To fix, update the path so that all parameter names are unique.`);
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: `Path parameter \"**bar**\" must have a \`required\` that is set to \`true\`.\n\nTo fix, mark this parameter as required.`,
       },
     ]);
   });
@@ -248,7 +235,6 @@ To fix, update the path so that all parameter names are unique.`);
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: `The paths \"**/foo/{boo}**\" and \"**/foo/{bar}**\" are equivalent.\n\nTo fix, remove one of the paths or merge them together.`,
       },
     ]);
   });

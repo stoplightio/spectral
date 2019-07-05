@@ -49,7 +49,6 @@ describe('contact-properties', () => {
         },
         severity: 1,
         source: undefined,
-        summary: 'Contact object should have `name`, `url` and `email`.',
       },
       {
         code: 'contact-properties',
@@ -66,7 +65,6 @@ describe('contact-properties', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Contact object should have `name`, `url` and `email`.',
       },
       {
         code: 'contact-properties',
@@ -83,7 +81,6 @@ describe('contact-properties', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Contact object should have `name`, `url` and `email`.',
       },
     ]);
   });

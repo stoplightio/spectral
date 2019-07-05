@@ -42,7 +42,6 @@ describe('info-description', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'OpenAPI object info `description` must be present and non-empty string.',
       },
     ]);
   });

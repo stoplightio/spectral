@@ -41,7 +41,6 @@ describe('api-servers', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'OpenAPI `servers` must be present and non-empty array.',
       },
     ]);
   });
@@ -68,7 +67,6 @@ describe('api-servers', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'OpenAPI `servers` must be present and non-empty array.',
       },
     ]);
   });

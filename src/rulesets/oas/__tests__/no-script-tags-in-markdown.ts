@@ -46,7 +46,6 @@ describe('no-script-tags-in-markdown', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Markdown descriptions should not contain `<script>` tags.',
       },
     ]);
   });

@@ -70,7 +70,6 @@ describe('oasOp2xxResponse', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation must have at least one `2xx` response.',
       },
     ]);
   });
@@ -101,7 +100,6 @@ describe('oasOp2xxResponse', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation must have at least one `2xx` response.',
       },
     ]);
   });

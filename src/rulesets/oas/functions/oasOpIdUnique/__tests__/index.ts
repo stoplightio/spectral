@@ -67,7 +67,6 @@ describe('oasOpIdUnique', () => {
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: 'Every operation must have a unique `operationId`.',
       },
       {
         code: 'operation-operationId-unique',
@@ -84,7 +83,6 @@ describe('oasOpIdUnique', () => {
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: 'Every operation must have a unique `operationId`.',
       },
     ]);
   });
@@ -119,7 +117,6 @@ describe('oasOpIdUnique', () => {
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: 'Every operation must have a unique `operationId`.',
       },
       {
         code: 'operation-operationId-unique',
@@ -136,7 +133,6 @@ describe('oasOpIdUnique', () => {
           },
         },
         severity: DiagnosticSeverity.Error,
-        summary: 'Every operation must have a unique `operationId`.',
       },
     ]);
   });

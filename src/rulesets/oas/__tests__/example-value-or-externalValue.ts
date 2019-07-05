@@ -39,7 +39,6 @@ describe('example-value-or-externalValue', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Example should have either a `value` or `externalValue` field.',
       },
     ]);
   });
@@ -62,7 +61,6 @@ describe('example-value-or-externalValue', () => {
           },
         },
         severity: 1,
-        summary: 'Example should have either a `value` or `externalValue` field.',
       },
     ]);
   });

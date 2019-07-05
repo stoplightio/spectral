@@ -42,7 +42,6 @@ describe('openapi-tags-alphabetical', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'OpenAPI object should have alphabetical `tags`.',
       },
     ]);
   });

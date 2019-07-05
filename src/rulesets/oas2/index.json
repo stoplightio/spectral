@@ -2,7 +2,7 @@
   "extends": ["spectral:oas"],
   "rules": {
     "oas2-schema": {
-      "summary": "Validate structure of OpenAPIv2 specification.",
+      "description": "Validate structure of OpenAPIv2 specification.",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
@@ -1639,7 +1639,7 @@
       ]
     },
     "api-host": {
-      "summary": "OpenAPI `host` must be present and non-empty string.",
+      "description": "OpenAPI `host` must be present and non-empty string.",
       "recommended": true,
       "type": "style",
       "given": "$",
@@ -1652,7 +1652,7 @@
       ]
     },
     "api-schemes": {
-      "summary": "OpenAPI host `schemes` must be present and non-empty array.",
+      "description": "OpenAPI host `schemes` must be present and non-empty array.",
       "recommended": true,
       "type": "style",
       "given": "$",
@@ -1674,7 +1674,7 @@
       ]
     },
     "host-not-example": {
-      "summary": "Server URL should not point at `example.com`.",
+      "description": "Server URL should not point at `example.com`.",
       "recommended": false,
       "type": "style",
       "given": "$",
@@ -1687,7 +1687,7 @@
       }
     },
     "host-trailing-slash": {
-      "summary": "Server URL should not have a trailing slash.",
+      "description": "Server URL should not have a trailing slash.",
       "recommended": true,
       "type": "style",
       "given": "$",
@@ -1700,7 +1700,7 @@
       }
     },
     "model-description": {
-      "summary": "Definition `description` must be present and non-empty string.",
+      "description": "Definition `description` must be present and non-empty string.",
       "recommended": false,
       "type": "style",
       "given": "$..definitions[*]",
@@ -1710,7 +1710,7 @@
       }
     },
     "operation-security-defined": {
-      "summary": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
+      "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
       "recommended": true,
       "type": "validation",
       "given": "$",
@@ -1727,7 +1727,7 @@
       ]
     },
     "valid-example": {
-      "summary": "Examples must be valid against their defined schema.",
+      "description": "Examples must be valid against their defined schema.",
       "message": "\"{{property}}\" property {{error}}",
       "recommended": true,
       "type": "validation",

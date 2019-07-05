@@ -4,7 +4,7 @@ import { mergeRulesets } from '../merger';
 
 describe('Rulesets merger', () => {
   const baseRule: IRule = {
-    summary: 'Operation must have at least one `2xx` response.',
+    message: 'Operation must have at least one `2xx` response.',
     given:
       "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
     then: {
@@ -93,7 +93,7 @@ describe('Rulesets merger', () => {
     mergeRulesets(ruleset, {
       rules: {
         test: {
-          summary: 'Operation must have at least one `2xx` response.',
+          message: 'Operation must have at least one `2xx` response.',
           given:
             "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
           then: {
@@ -118,7 +118,7 @@ describe('Rulesets merger', () => {
     mergeRulesets(ruleset, {
       rules: {
         test: {
-          summary: 'Operation must have at least one `2xx` response.',
+          message: 'Operation must have at least one `2xx` response.',
           given:
             "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
           then: {

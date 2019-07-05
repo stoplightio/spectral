@@ -42,7 +42,6 @@ describe('host-trailing-slash', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Server URL should not have a trailing slash.',
       },
     ]);
   });

@@ -50,7 +50,6 @@ describe('operation-tags', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation should have non-empty `tags` array.',
       },
     ]);
   });

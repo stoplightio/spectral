@@ -52,7 +52,6 @@ describe('operation-singular-tag', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation may only have one tag.',
       },
     ]);
   });

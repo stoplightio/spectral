@@ -52,7 +52,6 @@ describe('operation-summary-formatted', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation `summary` should start with upper case and end with a dot.',
       },
     ]);
   });
@@ -84,7 +83,6 @@ describe('operation-summary-formatted', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation `summary` should start with upper case and end with a dot.',
       },
     ]);
   });

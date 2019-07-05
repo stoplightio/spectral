@@ -3,7 +3,7 @@
   "rules": {
     "operation-security-defined": "off",
     "operation-2xx-response": {
-      "summary": "should be OK",
+      "description": "should be overridden",
       "given": "$.info",
       "then": {
         "function": "truthy"

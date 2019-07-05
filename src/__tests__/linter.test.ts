@@ -34,7 +34,7 @@ const target = {
 };
 const rules = {
   example: {
-    summary: '',
+    message: '',
     given: '$.responses',
     then: {
       function: fnName,
@@ -347,7 +347,7 @@ responses:: !!foo
       test('should pass through root object', async () => {
         spectral.addRules({
           example: {
-            summary: '',
+            message: '',
             given: '$',
             then: {
               function: fnName,
@@ -485,7 +485,7 @@ responses:: !!foo
       });
       spectral.addRules({
         example: {
-          summary: '',
+          message: '',
           given: '$.responses',
           then: [
             {
@@ -528,7 +528,7 @@ responses:: !!foo
       test('should call each one with the appropriate args', async () => {
         spectral.addRules({
           example: {
-            summary: '',
+            message: '',
             given: '$.responses',
             then: {
               field: '$..description',

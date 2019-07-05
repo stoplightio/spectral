@@ -42,7 +42,6 @@ describe('api-host', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'OpenAPI `host` must be present and non-empty string.',
       },
     ]);
   });

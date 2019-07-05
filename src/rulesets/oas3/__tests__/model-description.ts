@@ -52,7 +52,6 @@ describe('model-description', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Model `description` must be present and non-empty string.',
       },
     ]);
   });

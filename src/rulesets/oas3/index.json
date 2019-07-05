@@ -2,7 +2,7 @@
   "extends": ["spectral:oas"],
   "rules": {
     "oas3-schema": {
-      "summary": "Validate structure of OpenAPIv3 specification.",
+      "description": "Validate structure of OpenAPIv3 specification.",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
@@ -2315,7 +2315,7 @@
       ]
     },
     "api-servers": {
-      "summary": "OpenAPI `servers` must be present and non-empty array.",
+      "description": "OpenAPI `servers` must be present and non-empty array.",
       "recommended": true,
       "type": "style",
       "given": "$",
@@ -2337,7 +2337,7 @@
       ]
     },
     "model-description": {
-      "summary": "Model `description` must be present and non-empty string.",
+      "description": "Model `description` must be present and non-empty string.",
       "recommended": false,
       "type": "style",
       "given": "$.components.schemas[*]",
@@ -2347,7 +2347,7 @@
       }
     },
     "operation-security-defined": {
-      "summary": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
+      "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
       "recommended": true,
       "type": "validation",
       "given": "$",
@@ -2365,7 +2365,7 @@
       ]
     },
     "server-not-example.com": {
-      "summary": "Server URL should not point at `example.com`.",
+      "description": "Server URL should not point at `example.com`.",
       "recommended": false,
       "type": "style",
       "given": "$.servers[*]",
@@ -2378,7 +2378,7 @@
       }
     },
     "server-trailing-slash": {
-      "summary": "Server URL should not have a trailing slash.",
+      "description": "Server URL should not have a trailing slash.",
       "recommended": true,
       "type": "style",
       "given": "$.servers[*]",
@@ -2391,7 +2391,7 @@
       }
     },
     "valid-example": {
-      "summary": "Examples must be valid against their defined schema.",
+      "description": "Examples must be valid against their defined schema.",
       "message": "\"{{property}}\" property {{error}}",
       "recommended": true,
       "type": "validation",

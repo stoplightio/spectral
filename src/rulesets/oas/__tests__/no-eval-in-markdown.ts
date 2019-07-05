@@ -48,7 +48,6 @@ describe('no-eval-in-markdown', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Markdown descriptions should not contain `eval(`.',
       },
       {
         code: 'no-eval-in-markdown',
@@ -65,7 +64,6 @@ describe('no-eval-in-markdown', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Markdown descriptions should not contain `eval(`.',
       },
     ]);
   });

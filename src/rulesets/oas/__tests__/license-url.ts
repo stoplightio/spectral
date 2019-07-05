@@ -46,7 +46,6 @@ describe('license-url', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'License object should include `url`.',
       },
     ]);
   });
