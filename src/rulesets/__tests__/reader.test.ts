@@ -5,10 +5,10 @@ import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
-const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-flat-ruleset.yaml');
+const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
-const validRuleset = path.join(__dirname, './__fixtures__/valid-ruleset.json');
-const validRuleset2 = path.join(__dirname, './__fixtures__/valid-ruleset-2.json');
+const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
+const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
 
@@ -36,7 +36,7 @@ describe('Rulesets reader', () => {
           function: 'truthy',
         },
       },
-      'valid-rule-2': {
+      'require-info': {
         given: '$.info',
         summary: 'should be OK',
         severity: DiagnosticSeverity.Warning,
@@ -48,7 +48,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should inherit properties of extended rulesets', () => {
-    return expect(readRulesFromRulesets(validRuleset)).resolves.toEqual({
+    return expect(readRulesFromRulesets(extendsOas2Ruleset)).resolves.toEqual({
       ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
         (rules, [name, rule]) => {
           rules[name] = {
@@ -73,34 +73,40 @@ describe('Rulesets reader', () => {
   });
 
   it('should override properties of extended rulesets', () => {
-    return expect(readRulesFromRulesets(validRuleset2)).resolves.toHaveProperty('operation-2xx-response', {
-      summary: 'should be OK',
-      given: '$.info',
-      recommended: true,
-      severity: DiagnosticSeverity.Warning,
-      tags: ['operation'],
-      then: {
-        function: 'truthy',
+    return expect(readRulesFromRulesets(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
+      'operation-2xx-response',
+      {
+        summary: 'should be OK',
+        given: '$.info',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        tags: ['operation'],
+        then: {
+          function: 'truthy',
+        },
+        type: 'style',
       },
-      type: 'style',
-    });
+    );
   });
 
   it('should persists disabled properties of extended rulesets', () => {
-    return expect(readRulesFromRulesets(validRuleset2)).resolves.toHaveProperty('operation-security-defined', {
-      given: '$',
-      recommended: true,
-      severity: 'off',
-      summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
-      tags: ['operation'],
-      then: {
-        function: 'oasOpSecurityDefined',
-        functionOptions: {
-          schemesPath: ['securityDefinitions'],
+    return expect(readRulesFromRulesets(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
+      'operation-security-defined',
+      {
+        given: '$',
+        recommended: true,
+        severity: 'off',
+        summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+        tags: ['operation'],
+        then: {
+          function: 'oasOpSecurityDefined',
+          functionOptions: {
+            schemesPath: ['securityDefinitions'],
+          },
         },
+        type: 'validation',
       },
-      type: 'validation',
-    });
+    );
   });
 
   it('given non-existent ruleset should output error', () => {

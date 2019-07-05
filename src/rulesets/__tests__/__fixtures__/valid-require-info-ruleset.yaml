@@ -1,6 +1,6 @@
 rules:
-  valid-rule:
+  require-info:
     summary: should be OK
-    given: "$.foo"
+    given: "$.info"
     then:
       function: truthy

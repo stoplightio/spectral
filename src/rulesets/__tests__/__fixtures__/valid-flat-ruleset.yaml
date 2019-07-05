@@ -1,6 +1,0 @@
-rules:
-  valid-rule-2:
-    summary: should be OK
-    given: "$.info"
-    then:
-      function: truthy
