@@ -1,21 +1,24 @@
-### Please check if the PR fulfills these requirements
-- [ ] Tests for the changes have been added (for bug fixes / features)
-- [ ] Docs have been added / updated (for bug fixes / features)
+Fixes #[ISSUE_NUMBER].
 
-### What kind of change does this PR introduce?
+**Checklist**
 
-Bug fix, feature, or docs update
+- [ ] Tests added / updated
+- [ ] Docs added / updated
+- [ ] Check this off Breaking change?
 
-### What is the current behavior?
+**Does this PR introduce a breaking change?**
 
-You can also link to an open issue here.
+- [ ] Yes
+- [ ] No
 
-### If this is a feature change, what is the new behavior?
+> If indicated yes above, please describe the breaking change(s).
+>
+> **Remove this quote before creating the PR.**
 
-### Does this PR introduce a breaking change?
+**Screenshots**
 
-What changes might users need to make in their application due to this PR?
+If applicable, add screenshots or gifs to help demonstrate the changes. If not applicable, remove this screenshots section before creating the PR.
 
-### Other information
+**Additional context**
 
-(e.g. detailed explanation, related issues, links for us to have context, eg. stackoverflow, issues outside of the repo, forum, etc.)
+Add any other context about the pull request here. Remove this section if there is no additional context.
