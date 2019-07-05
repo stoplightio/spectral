@@ -11,8 +11,8 @@ const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
 const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
-const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/rules.json');
-const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/rules.json');
+const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/index.json');
+const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/index.json');
 const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
 const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 
