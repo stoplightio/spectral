@@ -89,7 +89,7 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
 
 workflows:
   commit:
