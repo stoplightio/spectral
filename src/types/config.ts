@@ -1,23 +1,15 @@
-export enum ConfigFormat {
+export enum OutputFormat {
   JSON = 'json',
   STYLISH = 'stylish',
 }
 
-export enum ConfigCommand {
-  LINT = 'lint',
-}
-
 export interface ILintConfig {
   encoding: string;
-  format: ConfigFormat;
+  format: OutputFormat;
   maxResults?: number;
   output?: string;
   ruleset?: string[];
   skipRule?: string[];
   verbose: boolean;
-}
-
-export interface IConfig {
-  extends?: string;
-  lint: ILintConfig;
+  quiet?: boolean;
 }

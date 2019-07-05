@@ -1,5 +1,5 @@
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../ruleset.json';
+import * as ruleset from '../rules.json';
 
 describe('server-trailing-slash', () => {
   const s = new Spectral();

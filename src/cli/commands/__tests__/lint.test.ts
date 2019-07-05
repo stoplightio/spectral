@@ -1,22 +1,18 @@
 import { test } from '@oclif/test';
+import { resolve } from '@stoplight/path';
 import * as fs from 'fs';
-import { resolve } from 'path';
 type SpyInstance = jest.SpyInstance;
 
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 const validOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
 const oas2PetstoreSpecPath = resolve(__dirname, '../../../__tests__/__fixtures__/petstore.oas2.json');
-const validConfigPath = resolve(__dirname, '__fixtures__/config.yml');
-const outputConfigPath = resolve(__dirname, '__fixtures__/config.output.yml');
 const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
 const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
-const validRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.yml');
-const invalidRulesetConfigPath = resolve(__dirname, '__fixtures__/config.ruleset.invalid.yml');
-const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/ruleset.json');
-const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/ruleset.json');
+const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/rules.json');
+const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/rules.json');
 const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
 const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 
@@ -142,11 +138,11 @@ describe('lint', () => {
         .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath, '-r', validRulesetPath])
         .exit(2)
         .it('given one is valid other is not, outputs "invalid ruleset" error', ctx => {
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
-          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them should have required property 'given'`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them should have required property 'then'`);
+          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity should be number`);
           expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
+            `/rules/rule-with-invalid-enum/severity should be equal to one of the allowed values`,
           );
         });
     });
@@ -163,11 +159,11 @@ describe('lint', () => {
         .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath])
         .exit(2)
         .it('outputs "invalid ruleset" error', ctx => {
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
-          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'then'`);
-          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity 	 should be number`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them should have required property 'given'`);
+          expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them should have required property 'then'`);
+          expect(ctx.stdout).toContain(`/rules/rule-with-invalid-enum/severity should be number`);
           expect(ctx.stdout).toContain(
-            `/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values`,
+            `/rules/rule-with-invalid-enum/severity should be equal to one of the allowed values`,
           );
         });
 
@@ -290,19 +286,10 @@ describe('lint', () => {
       });
   });
 
-  describe('when using config file', () => {
+  describe('when using ruleset file', () => {
     test
       .stdout()
-      .command(['lint', invalidOas3SpecPath, '-c', validConfigPath])
-      .it('outputs warnings in json format', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
-        expect(ctx.stdout).toContain('"OpenAPI object info `description` must be present and non-empty string."');
-        expect(ctx.stdout).toContain('"OpenAPI `servers` must be present and non-empty array."');
-      });
-
-    test
-      .stdout()
-      .command(['lint', invalidOas3SpecPath, '-c', outputConfigPath])
+      .command(['lint', invalidOas3SpecPath, '-r', validRulesetPath])
       .it('saves results to a file', () => {
         expect(fs.writeFile).toHaveBeenCalledWith(
           'results.json',
@@ -314,28 +301,10 @@ describe('lint', () => {
 
     test
       .stdout()
-      .command(['lint', validOas3SpecPath, '-c', validRulesetConfigPath])
-      .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
-        expect(ctx.stdout).toContain(`5:10  warning  info-matches-stoplight  Info must contain Stoplight`);
-      });
-
-    test
-      .stdout()
-      .command(['lint', validOas3SpecPath, '-c', invalidRulesetConfigPath])
+      .command(['lint', validOas3SpecPath, '-r', invalidRulesetPath])
       .exit(2)
       .it('outputs invalid ruleset error when invalid ruleset provided', ctx => {
-        expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them 	 should have required property 'given'`);
-      });
-  });
-
-  describe('when using config file and command args', () => {
-    test
-      .stdout()
-      .command(['lint', invalidOas3SpecPath, '-c', validConfigPath, '--max-results', '1'])
-      .it('setting --max-results to 1 will override config value of 5', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
-        expect(ctx.stdout).not.toContain('"OpenAPI object info `description` must be present and non-empty string."');
-        expect(ctx.stdout).not.toContain('"OpenAPI `servers` must be present and non-empty array."');
+        expect(ctx.stdout).toContain(`/rules/rule-without-given-nor-them should have required property 'given'`);
       });
   });
 
@@ -358,8 +327,8 @@ describe('lint', () => {
     test
       .stdout()
       .command(['lint', invalidOas3SpecPath])
-      .it('outputs data in format from default config file', ctx => {
-        expect(ctx.stdout).toContain('"Info object should contain `contact` object."');
+      .it('respects rules from a ruleset file', ctx => {
+        expect(ctx.stdout).toContain(' 5:10  warning  info-matches-stoplight  Info must contain Stoplight');
       });
   });
 

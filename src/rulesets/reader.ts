@@ -1,53 +1,41 @@
-import { merge } from 'lodash';
+import { parse } from '@stoplight/yaml';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
-import { IRulesetFile } from '../types/ruleset';
-import { formatAjv } from './ajv';
-import { resolvePath } from './path';
-import { validateRuleset } from './validation';
+import { IRuleset, IRulesetFile } from '../types/ruleset';
+import { findRuleset } from './finder';
+import { mergeRulesets } from './merger';
+import { assertValidRuleset } from './validation';
 
-export async function readRulesFromRulesets(...files: string[]): Promise<RuleCollection> {
-  const rulesets = await Promise.all(files.map(file => readRulesFromRuleset(file)));
-  return merge({}, ...rulesets);
-}
+export async function readRulesFromRulesets(...uris: string[]): Promise<RuleCollection> {
+  const base: IRuleset = {
+    rules: {},
+  };
 
-export type Logger = {
-  log: (message?: string | undefined, ...args: any[]) => void;
-  error: (
-    input: string | Error,
-    options?:
-      | {
-          code?: string | undefined;
-          exit?: number | undefined;
-        }
-      | undefined,
-  ) => never;
-};
-
-async function readRulesFromRuleset(file: string): Promise<RuleCollection> {
-  const parsed = await readParsable(file, 'utf8');
-  const { data: ruleset } = parsed;
-  const errors = validateRuleset(ruleset);
-
-  if (errors.length) {
-    throw {
-      messages: [formatAjv(errors), `Provided ruleset '${file}' is not valid`],
-    };
+  for (const uri of uris) {
+    mergeRulesets(base, await readRulesFromRuleset('', uri));
   }
 
-  const extendz = (ruleset as IRulesetFile).extends;
-  let extendedRules = {};
+  return base.rules;
+}
+
+async function readRulesFromRuleset(baseUri: string, uri: string): Promise<IRulesetFile> {
+  const ruleset = assertValidRuleset(parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')));
+
+  const newRuleset: IRulesetFile = {
+    rules: {},
+  };
+
+  const extendz = ruleset.extends;
+
   if (extendz && extendz.length) {
-    extendedRules = await blendRuleCollections(
-      extendz.map(extend => {
-        return readRulesFromRuleset(resolvePath(file, extend));
-      }),
-    );
+    for (const extended of extendz) {
+      if (Array.isArray(extended)) {
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0]), extended[1]);
+      } else {
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended));
+      }
+    }
   }
 
-  return merge(extendedRules, ruleset.rules);
-}
-
-export async function blendRuleCollections(futureCollections: Array<Promise<RuleCollection>>) {
-  return Promise.all(futureCollections).then(collections => merge({}, ...collections));
+  return mergeRulesets(newRuleset, ruleset);
 }

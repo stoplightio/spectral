@@ -1,12 +1,15 @@
+import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
-import * as path from 'path';
+import { cloneDeep } from 'lodash';
+import { mergeRulesets } from '../rulesets/merger';
 import { oas2Functions } from '../rulesets/oas2';
-import * as oas2Ruleset from '../rulesets/oas2/ruleset.json';
+import * as oas2Ruleset from '../rulesets/oas2/rules.json';
 import { oas3Functions } from '../rulesets/oas3';
-import * as oas3Ruleset from '../rulesets/oas3/ruleset.json';
+import * as oas3Ruleset from '../rulesets/oas3/rules.json';
 import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
+import { IRulesetFile } from '../types/ruleset';
 
 const invalidSchema = fs.readFileSync(
   path.join(__dirname, './__fixtures__/petstore.invalid-schema.oas3.yaml'),
@@ -144,6 +147,63 @@ describe('linter', () => {
     });
 
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
+  });
+
+  test('should not report anything for disabled rules', async () => {
+    spectral.addFunctions(oas3Functions());
+    spectral.addRules(mergeRulesets(cloneDeep(oas3Ruleset) as IRulesetFile, {
+      rules: {
+        'valid-example': 'off',
+      },
+    }).rules as RuleCollection);
+
+    const result = await spectral.run(invalidSchema);
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+    ]);
+  });
+
+  test('should support human readable severity levels', async () => {
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'rule2',
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
   });
 
   test('should include parser diagnostics', async () => {

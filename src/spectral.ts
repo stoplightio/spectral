@@ -220,6 +220,7 @@ const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
         message: prettyPrintResolverError(error.message),
         severity: DiagnosticSeverity.Error,
         range: location.range,
+        source: resolved.spec.source,
       });
     }
 

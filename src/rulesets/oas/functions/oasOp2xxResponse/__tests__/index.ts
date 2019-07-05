@@ -1,6 +1,6 @@
 import { RuleType, Spectral } from '../../../../../spectral';
 import { commonOasFunctions } from '../../../../oas/index';
-import { rules } from '../../../../oas/ruleset.json';
+import { rules } from '../../../../oas/rules.json';
 const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOp2xxResponse', () => {

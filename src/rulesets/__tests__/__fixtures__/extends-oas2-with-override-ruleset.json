@@ -1,0 +1,13 @@
+{
+  "extends": [["spectral:oas2", "all"]],
+  "rules": {
+    "operation-security-defined": "off",
+    "operation-2xx-response": {
+      "summary": "should be OK",
+      "given": "$.info",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}

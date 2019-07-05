@@ -12,7 +12,24 @@
         "extends": {
             "type": "array",
             "items": {
-                "type": "string"
+                "oneOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "array",
+                        "items": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "string",
+                                "enum": ["off", "recommended", "all"]
+                            }
+                        ],
+                        "additionalItems": false
+                    }
+                ]
             }
         }
     },

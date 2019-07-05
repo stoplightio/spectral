@@ -1,13 +1,13 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
+import { isAbsolute, resolve } from '@stoplight/path';
 import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath } from '@stoplight/yaml';
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
-import { resolve } from 'path';
 import { promisify } from 'util';
 
 import { IRuleResult } from '../..';
-import { createEmptyConfig, getDefaultConfigFile, load as loadConfig } from '../../config/configLoader';
+import { createEmptyConfig, getDefaultRulesetFile } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
@@ -16,7 +16,7 @@ import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
 import { readRulesFromRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
-import { ConfigCommand, IConfig, ILintConfig } from '../../types/config';
+import { ILintConfig } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 export default class Lint extends Command {
@@ -76,28 +76,28 @@ linting ./openapi.yaml
 
   public async run() {
     const { args, flags } = this.parse(Lint);
-    const { config: configFileFlag } = flags;
+    const { ruleset } = flags;
+    let rules;
 
-    let config: ILintConfig = mergeConfig(createEmptyConfig(), flags);
+    const cwd = process.cwd();
+
+    const config: ILintConfig = mergeConfig(createEmptyConfig(), flags as Partial<ILintConfig>);
 
     this.quiet = flags.quiet;
 
-    const configFile = configFileFlag || getDefaultConfigFile(process.cwd()) || null;
-    if (configFile) {
-      try {
-        const loadedConfig = await loadConfig(configFile, ConfigCommand.LINT);
-        config = mergeConfig(loadedConfig, flags);
-      } catch (ex) {
-        this.error(`Cannot load provided config file. ${ex.message}.`);
-      }
-    }
-    const { ruleset } = config;
-    let rules;
+    const rulesetFile = ruleset || (await getDefaultRulesetFile(cwd)) || null;
 
-    if (ruleset) {
-      rules = await tryReadOrLog(this, async () => {
-        return readRulesFromRulesets(...ruleset);
-      });
+    if (rulesetFile) {
+      try {
+        rules = await readRulesFromRulesets(
+          ...(Array.isArray(rulesetFile) ? rulesetFile : [rulesetFile]).map(
+            file => (isAbsolute(file) ? file : resolve(cwd, file)),
+          ),
+        );
+      } catch (ex) {
+        this.log(ex.message);
+        this.error(ex);
+      }
     }
 
     if (args.source) {
@@ -146,7 +146,7 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
     targetUri = resolve(name);
   }
 
-  const spec: IParserResult = await readParsable(targetUri, flags.encoding);
+  const spec: IParserResult = parseWithPointers(await readParsable(targetUri, flags.encoding));
   const spectral = new Spectral({ resolver: httpAndFileResolver });
   if (parseInt(spec.data.swagger) === 2) {
     command.log('Adding OpenAPI 2.0 (Swagger) functions');
@@ -254,10 +254,10 @@ export async function writeOutput(outputStr: string, flags: any, command: Lint) 
   command.print(outputStr);
 }
 
-function mergeConfig(config: IConfig, flags: any): ILintConfig {
+function mergeConfig(config: ILintConfig, flags: Partial<ILintConfig>): ILintConfig {
   return {
-    ...config.lint,
-    ...omitBy<ILintConfig>(
+    ...config,
+    ...omitBy<Partial<ILintConfig>>(
       {
         encoding: flags.encoding,
         format: flags.format,

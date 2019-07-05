@@ -1,11 +1,5 @@
-import { resolve } from 'path';
 import { FunctionCollection } from '../../types';
 import { readRulesFromRulesets } from '../reader';
-
-export const operationPath =
-  "$..paths.*[?( name() === 'get' || name() === 'put' || name() === 'post'" +
-  " || name() === 'delete' || name() === 'options' || name() === 'head'" +
-  " || name() === 'patch' || name() === 'trace' )]";
 
 export const commonOasFunctions = (): FunctionCollection => {
   return {
@@ -18,6 +12,4 @@ export const commonOasFunctions = (): FunctionCollection => {
   };
 };
 
-export const rules = async () => {
-  return readRulesFromRulesets(resolve(__dirname, 'ruleset.json'));
-};
+export const rules = async () => readRulesFromRulesets(require.resolve('./rules.json'));

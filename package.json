@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "copyfiles -u 1 \"src/**/ruleset.json\" dist && oclif-dev manifest",
+    "postbuild": "copyfiles -u 1 \"src/rulesets/**/*.json\" dist && oclif-dev manifest",
     "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
     "commit": "git-cz",
     "lint": "tslint 'src/**/*.ts'",
@@ -58,6 +58,7 @@
     "@oclif/plugin-help": "^2.0",
     "@stoplight/json": "^2.2.2",
     "@stoplight/json-ref-resolver": "^2.0.2",
+    "@stoplight/path": "^1.0.1",
     "@stoplight/types": "^9.0.2",
     "@stoplight/yaml": "^2.5",
     "ajv": "^6.7",
@@ -101,7 +102,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn lint.fix",
+      "tslint --fix",
       "git add"
     ]
   },

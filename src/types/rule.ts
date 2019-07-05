@@ -16,7 +16,7 @@ export interface IRule<T = string, O = any> {
   description?: string;
 
   // The severity of results this rule generates
-  severity?: DiagnosticSeverity;
+  severity?: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
 
   // Tags attached to the rule, which can be used for organizational purposes
   tags?: string[];
@@ -96,3 +96,5 @@ export interface ISchemaPathOptions {
   field?: string;
 }
 export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
+
+export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';

@@ -8,10 +8,10 @@
                     "type": "string"
                 },
                 "function": {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/T"
+                    "$ref": "#/definitions/T"
                 },
                 "functionOptions": {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/O"
+                    "$ref": "#/definitions/O"
                 }
             },
             "required": [
@@ -24,9 +24,21 @@
         },
         "T": {
             "type": "string"
+        },
+        "HumanReadableSeverity": {
+            "type": "string",
+            "enum": [
+                "error",
+                "warn",
+                "info",
+                "hint",
+                "off"
+            ]
         }
     },
-    "properties": {
+    "oneOf": [
+        {
+            "properties": {
         "description": {
             "type": "string"
         },
@@ -57,11 +69,11 @@
         "then": {
             "anyOf": [
                 {
-                    "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/IThen<T,O>"
+                    "$ref": "#/definitions/IThen<T,O>"
                 },
                 {
                     "items": {
-                        "$ref": "http://stoplight.io/schemas/rule.schema.json#/definitions/IThen<T,O>"
+                        "$ref": "#/definitions/IThen<T,O>"
                     },
                     "type": "array"
                 }
@@ -89,9 +101,30 @@
             "type": "object"
         }
     },
-    "required": [
-        "given",
-        "then"
-    ],
-    "type": "object"
+            "required": [
+                "given",
+                "then"
+            ],
+            "type": "object"
+        },
+        {
+            "$ref": "#/definitions/HumanReadableSeverity"
+        },
+        {
+            "type": "boolean"
+        },
+        {
+            "type": "array",
+            "additionalItems": false,
+            "minItems": 1,
+            "items": [
+                {
+                    "$ref": "#/definitions/HumanReadableSeverity"
+                },
+                {
+                    "type": "object"
+                }
+            ]
+        }
+    ]
 }

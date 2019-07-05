@@ -567,6 +567,11 @@
     jsonc-parser "2.1.0"
     lodash "4.x.x"
 
+"@stoplight/path@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.0.1.tgz#0350a33ccc122ae05f940d1cf19531f78660f6f5"
+  integrity sha512-P/fHhBtnmwv3rZwOMZL1BTGzGInf/GW9HVNkqAyNx22mEOmV0gfghRnhQNOkFDwyHdt9V7eJ06cjhMzoKTfM1A==
+
 "@stoplight/types@9.0.2", "@stoplight/types@^9.0.2":
   version "9.0.2"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-9.0.2.tgz#1978287d2cfbcb176d00300fa158d5a1daf63c00"

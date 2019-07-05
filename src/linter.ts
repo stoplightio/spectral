@@ -1,11 +1,27 @@
-import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, JsonPath } from '@stoplight/types';
 import { get, has } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
 import { Resolved } from './resolved';
 import { message } from './rulesets/message';
-import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
+import { HumanReadableDiagnosticSeverity, IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
+
+const SEVERITY_MAP: Dictionary<number, HumanReadableDiagnosticSeverity> = {
+  error: DiagnosticSeverity.Error,
+  warn: DiagnosticSeverity.Warning,
+  info: DiagnosticSeverity.Information,
+  hint: DiagnosticSeverity.Hint,
+  off: -1,
+};
+
+function printSeverity(severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity): DiagnosticSeverity {
+  if (Number.isNaN(Number(severity))) {
+    return SEVERITY_MAP[severity];
+  }
+
+  return Number(severity);
+}
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -75,6 +91,9 @@ export const lintNode = (
   let results: IRuleResult[] = [];
 
   for (const target of targets) {
+    const severity = rule.severity !== undefined ? printSeverity(rule.severity) : DiagnosticSeverity.Warning;
+
+    if (severity === -1) continue;
     const targetPath = givenPath.concat(target.path);
 
     const targetResults =
@@ -91,7 +110,7 @@ export const lintNode = (
         },
       ) || [];
 
-    const severity = rule.severity !== undefined ? rule.severity : DiagnosticSeverity.Warning;
+    // NOTE: we might want to normalize that during merging (once we have it in place)
 
     results = results.concat(
       targetResults.map(result => {

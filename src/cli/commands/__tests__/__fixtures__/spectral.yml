@@ -1,5 +1,10 @@
----
-lint:
-  encoding: utf8
-  format: json
-  maxResults: 1
+rules:
+  info-matches-stoplight:
+    summary: Info must contain Stoplight
+    given: $.info
+    type: style
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        match: Stoplight
