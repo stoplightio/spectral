@@ -1,6 +1,6 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
-
 import { rules } from '../../../index.json';
 
 const ruleset = { functions: commonOasFunctions(), rules };
@@ -66,7 +66,25 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-parameters',
+        message: 'Operation parameters are unique and non-repeating.',
+        path: ['paths', '/foo', 'get'],
+        range: {
+          end: {
+            character: 25,
+            line: 15,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Operation parameters are unique and non-repeating.',
+      },
+    ]);
   });
 
   test('Error if non-unique $ref param on same operation', async () => {
@@ -89,7 +107,25 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-parameters',
+        message: 'Operation parameters are unique and non-repeating.',
+        path: ['paths', '/foo', 'get'],
+        range: {
+          end: {
+            character: 44,
+            line: 12,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Operation parameters are unique and non-repeating.',
+      },
+    ]);
   });
 
   test('Errors if multiple non-unique param on same operation', async () => {
@@ -122,7 +158,25 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-parameters',
+        message: 'Operation parameters are unique and non-repeating.',
+        path: ['paths', '/foo', 'get'],
+        range: {
+          end: {
+            character: 25,
+            line: 11,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Operation parameters are unique and non-repeating.',
+      },
+    ]);
   });
 
   test('Error if both in:formData and in:body', async () => {
@@ -135,6 +189,24 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-parameters',
+        message: 'Operation parameters are unique and non-repeating.',
+        path: ['paths', '/foo', 'get'],
+        range: {
+          end: {
+            character: 25,
+            line: 11,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Operation parameters are unique and non-repeating.',
+      },
+    ]);
   });
 });

@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -23,6 +24,24 @@ describe('path-not-include-query', () => {
       swagger: '2.0',
       paths: { '/path?query=true': {} },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'path-not-include-query',
+        message: 'given keys should not include a query string.',
+        path: ['paths', '/path?query=true'],
+        range: {
+          end: {
+            character: 26,
+            line: 3,
+          },
+          start: {
+            character: 23,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'given keys should not include a query string.',
+      },
+    ]);
   });
 });

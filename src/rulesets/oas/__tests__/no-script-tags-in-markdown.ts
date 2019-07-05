@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -29,6 +30,24 @@ describe('no-script-tags-in-markdown', () => {
         description: 'some description contains <script',
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'no-script-tags-in-markdown',
+        message: 'Markdown descriptions should not contain `<script>` tags.',
+        path: ['info', 'description'],
+        range: {
+          end: {
+            character: 54,
+            line: 4,
+          },
+          start: {
+            character: 19,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Markdown descriptions should not contain `<script>` tags.',
+      },
+    ]);
   });
 });

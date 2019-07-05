@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -25,6 +26,24 @@ describe('info-contact', () => {
       paths: {},
       info: { version: '1.0' },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'info-contact',
+        message: 'Info object should contain `contact` object.',
+        path: ['info', 'contact'],
+        range: {
+          end: {
+            character: 20,
+            line: 4,
+          },
+          start: {
+            character: 9,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Info object should contain `contact` object.',
+      },
+    ]);
   });
 });

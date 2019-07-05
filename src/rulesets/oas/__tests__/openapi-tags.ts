@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -24,6 +25,24 @@ describe('openapi-tags', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'openapi-tags',
+        message: 'OpenAPI object should have non-empty `tags` array.',
+        path: ['tags'],
+        range: {
+          end: {
+            character: 13,
+            line: 2,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'OpenAPI object should have non-empty `tags` array.',
+      },
+    ]);
   });
 });

@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -35,6 +36,24 @@ describe('operation-operationId-valid-in-url', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-operationId-valid-in-url',
+        message: 'operationId may only use characters that are valid when used in a URL.',
+        path: ['paths', '/todos', 'get', 'operationId'],
+        range: {
+          end: {
+            character: 31,
+            line: 5,
+          },
+          start: {
+            character: 23,
+            line: 5,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'operationId may only use characters that are valid when used in a URL.',
+      },
+    ]);
   });
 });
