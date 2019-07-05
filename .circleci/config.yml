@@ -99,7 +99,7 @@ jobs:
             npm publish
           fi
       - run: yarn build.binary
-      - run: docker build -t stoplight/spectral:${CIRCLE_TAG} -t stoplight/spectral:latest
+      - run: docker build -t stoplight/spectral:${CIRCLE_TAG} -t stoplight/spectral:latest .
       - run: docker push stoplight/spectral:${CIRCLE_TAG}
       - run: |
           if [[ "$CIRCLE_TAG" == *beta* ]] ; then
