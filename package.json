@@ -102,7 +102,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn lint.fix",
+      "tslint --fix",
       "git add"
     ]
   },

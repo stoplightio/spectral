@@ -9,8 +9,8 @@ const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-require-inf
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
 const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
 const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
-const oasRuleset = require('../oas/index.json');
-const oas2Ruleset = require('../oas2/index.json');
+const oasRuleset = require('../oas/rules.json');
+const oas2Ruleset = require('../oas2/rules.json');
 
 describe('Rulesets reader', () => {
   it('given flat, valid ruleset file should return rules', async () => {

@@ -1,5 +1,5 @@
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import * as ruleset from '../rules.json';
 
 describe('contact-properties', () => {
   const s = new Spectral();
