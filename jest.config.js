@@ -7,7 +7,6 @@ module.exports = {
     color: 'blue',
     name: 'Spectral Core',
   },
-  testPathIgnorePatterns: [ '/node_modules/', '<rootDir>/src/cli'],
   projects: [
     '<rootDir>',
     {
@@ -16,6 +15,7 @@ module.exports = {
         color: 'red',
         name: 'Spectral Electron',
       },
+      testPathIgnorePatterns: [ '/node_modules/', '<rootDir>/src/cli/'],
       runner: '@jest-runner/electron',
       testEnvironment: '@jest-runner/electron/environment',
     },
@@ -25,7 +25,6 @@ module.exports = {
         name: 'Spectral CLI',
         color: 'grey',
       },
-      testPathIgnorePatterns: ['/node_modules/'],
       testMatch: ["<rootDir>/src/cli/**/__tests__/**/*.[jt]s?(x)"]
     }
   ],
