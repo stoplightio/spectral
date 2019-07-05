@@ -3,8 +3,8 @@
 (global as any).test = it;
 
 expect.extend({
-  toMatchSnapshot: () => ({ pass: true, message: '' }),
-  toMatchInlineSnapshot: () => ({ pass: true, message: '' }),
+  toMatchSnapshot: () => ({ pass: false, message: ':)' }),
+  toMatchInlineSnapshot: () => ({ pass: false, message: ':)' }),
 });
 
 // @ts-ignore
