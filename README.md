@@ -1,18 +1,20 @@
 ![Spectral logo](img/spectral-banner.png)
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/test_coverage)](https://codeclimate.com/github/stoplightio/spectral/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/1aa53502913a428f40ac/maintainability)](https://codeclimate.com/github/stoplightio/spectral/maintainability)
+[![CircleCI](https://circleci.com/gh/stoplightio/spectral.svg?style=svg)](https://circleci.com/gh/stoplightio/spectral)
 
-A flexible JSON object linter with out of the box support for OpenAPI v2 and v3
+A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
+
+![Demo of Spectral linting an OpenAPI document from the CLI](./docs/demo.svg)
 
 ## Features
 
-- Create custom rules to lint JSON or YAML objects.
-- Ready to use rules to validate and lint [OpenAPI v2 _and_ v3 documents](#example-linting-an-openapi-document).
-- Use JSON path to apply rules to specific parts of your objects.
+- Create custom rules to lint JSON or YAML objects
+- Ready to use rules to validate and lint OpenAPI v2 _and_ v3 documents
+- Use JSON path to apply rules to specific parts of your objects
 - Built-in set of functions to help [create custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
-- [Create custom functions](#creating-a-custom-function) for advanced use cases.
-- Validate JSON with [Ajv](https://github.com/epoberezkin/ajv).
+- [Create custom functions](#creating-a-custom-function) for advanced use cases
+- Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
 ## Installation
 
@@ -31,31 +33,9 @@ docker run --rm -it stoplight/spectral lint "${URL}"`
 
 ## Usage
 
-### CLI
+Please check out our `docs` directory. A good point to start is the [CLI section][cli-docs]
 
-Spectral can be run via the command-line. For example, validating an OpenAPI v2 or v3 file with the built in rules is as simple as:
-
-```bash
-spectral lint petstore.yaml
-```
-
-Other options include:
-
-```text
-  -r, --ruleset=ruleset          path to a ruleset file
-  -e, --encoding=encoding      text encoding to use
-  -f, --format=json|stylish    formatter to use for outputting results
-  -h, --help                   show CLI help
-  -o, --output=output          output to a file instead of stdout
-  -q, --quiet                  no logging - output only
-  -s, --skip-rule=skip-rule    ignore certain rules if they are causing trouble
-  -v, --verbose                increase verbosity
-  --max-results=10    [default: all] maximum results to show
-```
-
-> The Spectral CLI supports passing in both YAML and JSON files.
-
-### Programmatic usage
+### TypeScript (JavaScript)
 
 Spectral is written in TypeScript (JavaScript) and can be imported and used directly. Take a look at the [JavaScript API](./docs/js-api.md).
 
@@ -65,7 +45,6 @@ Spectral is written in TypeScript (JavaScript) and can be imported and used dire
 - [Extend the built in OpenAPI v2 or v3 config]()
 - [Turn a rule off]()
 - [Change the severity of a rule]()
-- [Make custom function]()
 
 ## Concepts
 
@@ -77,13 +56,9 @@ There are three key concepts in Spectral: **Rulesets**, **Rules**, and **Functio
 
 Think of a **Spectral Config** as a flexible and customizable style guide for your JSON objects.
 
-## Config
-
-Spectral CLI supports [config files](docs/config.md), to avoid typing out CLI options and arguments every single time.
-
 ## FAQs
 
-**How is this different than [Ajv](https://github.com/epoberezkin/ajv)?**
+**How is this different than [Ajv](https://www.npmjs.com/package/ajv)?**
 
 Ajv is a JSON Schema validator, not a linter. Spectral does expose a `schema` function that you can use in your rules to validate all or part of the target object with JSON Schema (Ajv is used under the hood). However, Spectral also provides a number of other functions and utilities that you can use to build up a linting ruleset to validates things that JSON Schema is not well suited for.
 
@@ -97,13 +72,13 @@ With Spectral, lint rules can be applied to _any_ JSON object. Speccy is designe
 
 ### Executable binaries
 
-For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms. We also provide a shell script to auto download the executable based on your operating system:
+For users without Node and/or NPM/Yarn, we provide standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). We also provide a shell script to auto download the executable based on your operating system:
 
-`curl -L https://raw.githack.com/stoplightio/spectral/master/install.sh | sh`
+```bash
+curl -L https://raw.githack.com/stoplightio/spectral/master/install.sh | sh
+```
 
 Note, the binaries are *not* auto-updatable, therefore you will need to download a new version on your own.
-
-Head over to [releases](https://github.com/stoplightio/spectral/releases) for the latest binaries.
 
 ## Contributing
 

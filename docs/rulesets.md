@@ -5,14 +5,16 @@ tags:
 - Rulesets
 ---
 
-Rulesets are a container for collections of rules. These rules are essentially calling functions Spectral, and by taking parameters you can make these functions do whatever you want. 
-
-First the rule filters your object (JSON/YAML file) down to a set of target values, and then list what function arguments should be passed in.
+Rulesets are a container for collections of rules. These rules are taking parameters, and calling functions on certain parts of the JSON object being linted.
 
 ## Usage
 
 ```bash
-spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml --ruleset=http://example.com/acme-common-ruleset.yaml
+# local ruleset
+spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml
+
+# URL ruleset
+spectral lint foo.yaml --ruleset=http://example.com/acme-common-ruleset.yaml
 ```
 
 ## Example Ruleset
