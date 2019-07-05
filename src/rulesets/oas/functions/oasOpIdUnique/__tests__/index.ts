@@ -1,6 +1,7 @@
 import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
 
+import { DiagnosticSeverity } from '@stoplight/types';
 import { rules } from '../../../index.json';
 
 const ruleset = { functions: commonOasFunctions(), rules };
@@ -50,7 +51,42 @@ describe('oasOpIdUnique', () => {
       },
     });
 
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-operationId-unique',
+        message: 'Every operation must have a unique `operationId`.',
+        path: ['paths', '/path1', 'get', 'operationId'],
+        range: {
+          end: {
+            character: 28,
+            line: 4,
+          },
+          start: {
+            character: 23,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: 'Every operation must have a unique `operationId`.',
+      },
+      {
+        code: 'operation-operationId-unique',
+        message: 'Every operation must have a unique `operationId`.',
+        path: ['paths', '/path2', 'get', 'operationId'],
+        range: {
+          end: {
+            character: 28,
+            line: 9,
+          },
+          start: {
+            character: 23,
+            line: 9,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: 'Every operation must have a unique `operationId`.',
+      },
+    ]);
   });
 
   test('return errors on same path operations same id', async () => {
@@ -67,6 +103,41 @@ describe('oasOpIdUnique', () => {
       },
     });
 
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-operationId-unique',
+        message: 'Every operation must have a unique `operationId`.',
+        path: ['paths', '/path1', 'get', 'operationId'],
+        range: {
+          end: {
+            character: 28,
+            line: 4,
+          },
+          start: {
+            character: 23,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: 'Every operation must have a unique `operationId`.',
+      },
+      {
+        code: 'operation-operationId-unique',
+        message: 'Every operation must have a unique `operationId`.',
+        path: ['paths', '/path1', 'post', 'operationId'],
+        range: {
+          end: {
+            character: 28,
+            line: 7,
+          },
+          start: {
+            character: 23,
+            line: 7,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        summary: 'Every operation must have a unique `operationId`.',
+      },
+    ]);
   });
 });

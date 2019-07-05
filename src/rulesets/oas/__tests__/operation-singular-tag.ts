@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -35,6 +36,24 @@ describe('operation-singular-tag', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-singular-tag',
+        message: 'Operation may only have one tag.',
+        path: ['paths', '/todos', 'get', 'tags'],
+        range: {
+          end: {
+            character: 19,
+            line: 7,
+          },
+          start: {
+            character: 15,
+            line: 5,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'Operation may only have one tag.',
+      },
+    ]);
   });
 });

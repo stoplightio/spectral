@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -121,36 +122,15 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "code": "valid-example",
-          "message": "\\"schema\\" property format should match format \\"email\\"",
-          "path": Array [
-            "paths",
-            "/pet",
-            "post",
-            "requestBody",
-            "content",
-            "*/*",
-            "schema",
-          ],
-          "range": Object {
-            "end": Object {
-              "character": 34,
-              "line": 15,
-            },
-            "start": Object {
-              "character": 23,
-              "line": 12,
-            },
-          },
-          "severity": 1,
-          "source": undefined,
-          "summary": "\\"schema\\" property format should match format \\"email\\"",
-        },
-      ]
-    `);
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-example',
+        message: '"schema" property format should match format "email"',
+        path: ['paths', '/pet', 'post', 'requestBody', 'content', '*/*', 'schema'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
   });
 
   test('does not report example mismatches for unknown AJV formats', async () => {

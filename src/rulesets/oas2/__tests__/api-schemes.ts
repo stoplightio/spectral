@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -19,20 +20,56 @@ describe('api-schemes', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors if schemes is missing ', async () => {
+  test('return errors if schemes is missing', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {},
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'api-schemes',
+        message: 'OpenAPI host `schemes` must be present and non-empty array.',
+        path: ['schemes'],
+        range: {
+          end: {
+            character: 13,
+            line: 2,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'OpenAPI host `schemes` must be present and non-empty array.',
+      },
+    ]);
   });
 
-  test('return errors if schemes is an empty array ', async () => {
+  test('return errors if schemes is an empty array', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {},
       schemes: [],
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'api-schemes',
+        message: 'OpenAPI host `schemes` must be present and non-empty array.',
+        path: ['schemes'],
+        range: {
+          end: {
+            character: 15,
+            line: 3,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+        summary: 'OpenAPI host `schemes` must be present and non-empty array.',
+      },
+    ]);
   });
 });

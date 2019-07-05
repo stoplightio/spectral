@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -218,41 +219,28 @@ describe('valid-example', () => {
       },
     });
 
-    expect(results).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "code": "valid-example",
-          "message": "\\"c\\" property type should be string",
-          "path": Array [
-            "paths",
-            "/pet",
-            "post",
-            "parameters",
-            "0",
-            "schema",
-            "properties",
-            "a",
-            "properties",
-            "b",
-            "properties",
-            "c",
-          ],
-          "range": Object {
-            "end": Object {
-              "character": 42,
-              "line": 37,
-            },
-            "start": Object {
-              "character": 28,
-              "line": 35,
-            },
-          },
-          "severity": 1,
-          "source": undefined,
-          "summary": "\\"c\\" property type should be string",
-        },
-      ]
-    `);
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-example',
+        message: '"c" property type should be string',
+        path: [
+          'paths',
+          '/pet',
+          'post',
+          'parameters',
+          '0',
+          'schema',
+          'properties',
+          'a',
+          'properties',
+          'b',
+          'properties',
+          'c',
+        ],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
   });
 
   test('will not fail if an actual property is called example', async () => {
