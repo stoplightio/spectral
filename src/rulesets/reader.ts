@@ -2,8 +2,8 @@ import { parse } from '@stoplight/yaml';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
 import { IRuleset, IRulesetFile } from '../types/ruleset';
+import { findRuleset } from './finder';
 import { mergeRulesets } from './merger';
-import { resolvePath } from './resolver';
 import { assertValidRuleset } from './validation';
 
 export async function readRulesFromRulesets(...uris: string[]): Promise<RuleCollection> {
@@ -25,7 +25,7 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
 }
 
 async function readRulesFromRuleset(baseUri: string, uri: string): Promise<IRulesetFile> {
-  const ruleset = assertValidRuleset(parse(await readParsable(await resolvePath(baseUri, uri), 'utf8')));
+  const ruleset = assertValidRuleset(parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')));
 
   const newRuleset: IRulesetFile = {
     rules: {},

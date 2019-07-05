@@ -4,7 +4,7 @@ import { rulesetsMap } from './map';
 
 const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
 
-export async function resolvePath(from: string, to: string) {
+export async function findRuleset(from: string, to: string) {
   const mapped = rulesetsMap.get(to);
   if (mapped !== void 0) {
     to = mapped;
