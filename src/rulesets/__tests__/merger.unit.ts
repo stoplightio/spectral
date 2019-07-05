@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { IRule } from '../../types';
 import { mergeRulesets } from '../merger';
 
@@ -269,6 +270,28 @@ describe('Rulesets merger', () => {
 
     expect(config).toHaveProperty('rules.test.severity', 'warn');
     expect(config).toHaveProperty('rules.test2.severity', 'off');
+  });
+
+  it('sets warning as default severity level if a rule has no severity specified', () => {
+    const config = {
+      rules: {},
+    };
+
+    const baseWithoutSeverity = JSON.parse(JSON.stringify(baseRule));
+    delete baseWithoutSeverity.severity;
+
+    mergeRulesets(config, {
+      rules: {
+        test: baseWithoutSeverity,
+        test2: {
+          ...JSON.parse(JSON.stringify(baseRule)),
+          severity: DiagnosticSeverity.Error,
+        },
+      },
+    });
+
+    expect(config).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
+    expect(config).toHaveProperty('rules.test2.severity', DiagnosticSeverity.Error);
   });
 
   it('picks up all rules', () => {

@@ -3,6 +3,8 @@ import { cloneDeep } from 'lodash';
 import { HumanReadableDiagnosticSeverity, Rule } from '../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
 
+const DEFAULT_SEVERITY_LEVEL = DiagnosticSeverity.Warning;
+
 /*
 - if rule is object, simple deep merge (or we could replace to be a bit stricter?)
 - if rule is true, use parent rule with it's default severity
@@ -54,14 +56,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
   const existingRule = rules[name];
 
   switch (typeof rule) {
-    case 'boolean': {
-      // what if rule does not exist (yet)? throw, store the invalid state somehow?
-      if (isValidRule(existingRule)) {
-        existingRule.severity = !rule ? 'off' : existingRule.severity;
-      }
-
-      break;
-    }
+    case 'boolean':
     case 'string':
     case 'number':
       // what if rule does not exist (yet)? throw, store the invalid state somehow?
@@ -87,6 +82,9 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
         // new rule
         markRule(rule);
         rules[name] = rule;
+        if (rule.severity === undefined) {
+          rule.severity = DEFAULT_SEVERITY_LEVEL;
+        }
       }
 
       break;
@@ -108,14 +106,14 @@ function getSeverityLevel(
 
   if (!isValidRule(existingRule)) return 'off';
 
+  const existingSeverity = existingRule.severity !== undefined ? existingRule.severity : DEFAULT_SEVERITY_LEVEL;
+
   if (rule === 'recommended') {
-    return existingRule.recommended
-      ? existingRule.severity || DiagnosticSeverity.Error // not sure what a default value could be
-      : 'off';
+    return existingRule.recommended ? existingSeverity : 'off';
   }
 
   if (rule === 'all') {
-    return existingRule.severity || DiagnosticSeverity.Error; // ditto
+    return existingSeverity;
   }
 
   switch (typeof rule) {
@@ -123,7 +121,7 @@ function getSeverityLevel(
     case 'string':
       return rule;
     case 'boolean':
-      return (rule && existingRule.severity) || 'off';
+      return rule ? existingSeverity : 'off';
     default:
       return 'off';
   }

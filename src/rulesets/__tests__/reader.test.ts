@@ -1,6 +1,7 @@
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types/dist';
 import * as path from 'path';
+import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
@@ -17,6 +18,7 @@ describe('Rulesets reader', () => {
       'valid-rule': {
         given: '$.info',
         summary: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
         },
@@ -29,6 +31,7 @@ describe('Rulesets reader', () => {
       'valid-rule': {
         given: '$.info',
         summary: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
         },
@@ -36,6 +39,7 @@ describe('Rulesets reader', () => {
       'valid-rule-2': {
         given: '$.info',
         summary: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
         },
@@ -49,7 +53,7 @@ describe('Rulesets reader', () => {
         (rules, [name, rule]) => {
           rules[name] = {
             ...rule,
-            severity: expect.any(Number),
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
           };
 
           return rules;
@@ -60,6 +64,7 @@ describe('Rulesets reader', () => {
       'valid-rule': {
         given: '$.info',
         summary: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
         },
@@ -72,7 +77,7 @@ describe('Rulesets reader', () => {
       summary: 'should be OK',
       given: '$.info',
       recommended: true,
-      severity: DiagnosticSeverity.Error,
+      severity: DiagnosticSeverity.Warning,
       tags: ['operation'],
       then: {
         function: 'truthy',
