@@ -12,7 +12,7 @@ const SEVERITY_MAP: Dictionary<number, HumanReadableDiagnosticSeverity> = {
   warn: DiagnosticSeverity.Warning,
   info: DiagnosticSeverity.Information,
   hint: DiagnosticSeverity.Hint,
-  off: -1, // very unlikely to happen as we don't run such rules at all, but let's have it included
+  off: -1,
 };
 
 function printSeverity(severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity): DiagnosticSeverity {
@@ -91,6 +91,9 @@ export const lintNode = (
   let results: IRuleResult[] = [];
 
   for (const target of targets) {
+    const severity = rule.severity !== undefined ? printSeverity(rule.severity) : DiagnosticSeverity.Warning;
+
+    if (severity === -1) continue;
     const targetPath = givenPath.concat(target.path);
 
     const targetResults =
@@ -108,7 +111,6 @@ export const lintNode = (
       ) || [];
 
     // NOTE: we might want to normalize that during merging (once we have it in place)
-    const severity = rule.severity !== undefined ? printSeverity(rule.severity) : DiagnosticSeverity.Warning;
 
     results = results.concat(
       targetResults.map(result => {

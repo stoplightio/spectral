@@ -67,10 +67,8 @@ describe('Rulesets reader', () => {
     });
   });
 
-  it('should override properties of extended rulesets', async () => {
-    const result = await readRulesFromRulesets(validRuleset2);
-    expect(result).not.toHaveProperty('operation-security-defined');
-    expect(result).toHaveProperty('operation-2xx-response', {
+  it('should override properties of extended rulesets', () => {
+    return expect(readRulesFromRulesets(validRuleset2)).resolves.toHaveProperty('operation-2xx-response', {
       summary: 'should be OK',
       given: '$.info',
       recommended: true,
@@ -80,6 +78,23 @@ describe('Rulesets reader', () => {
         function: 'truthy',
       },
       type: 'style',
+    });
+  });
+
+  it('should persists disabled properties of extended rulesets', () => {
+    return expect(readRulesFromRulesets(validRuleset2)).resolves.toHaveProperty('operation-security-defined', {
+      given: '$',
+      recommended: true,
+      severity: 'off',
+      summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+      tags: ['operation'],
+      then: {
+        function: 'oasOpSecurityDefined',
+        functionOptions: {
+          schemesPath: ['securityDefinitions'],
+        },
+      },
+      type: 'validation',
     });
   });
 

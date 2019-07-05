@@ -15,12 +15,6 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
     mergeRulesets(base, await readRulesFromRuleset('', uri));
   }
 
-  for (const [name, rule] of Object.entries(base.rules)) {
-    if (rule.severity === 'off') {
-      delete base.rules[name];
-    }
-  }
-
   return base.rules;
 }
 
