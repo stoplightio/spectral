@@ -32,3 +32,5 @@
 *.log*
 *-debug.log*
 *-error.log*
+oclif.manifest.json
+binaries
