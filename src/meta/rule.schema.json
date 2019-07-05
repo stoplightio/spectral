@@ -49,13 +49,20 @@
             "type": "string"
         },
         "severity": {
-            "enum": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "type": "number"
+            "oneOf": [
+                {
+                    "enum": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ],
+                    "type": "number"
+                },
+                {
+                    "$ref": "#/definitions/HumanReadableSeverity"
+                }
+            ]
         },
         "message": {
             "type": "string"
