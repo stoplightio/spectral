@@ -32,18 +32,9 @@ Supports Node v8.3+.
 
 ### Executable binaries
 
-For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms:
+For users without Node and/or NPM/Yarn, we provide standalone packages for all major platforms. We also provide a shell script to auto download the executable based on your operating system:
 
-- x64 Windows
-- x64 MacOS
-- x64 Linux
-
-You can find them [here](https://github.com/stoplightio/spectral/releases).
-Once downloaded, you can proceed with the standard procedure for running any CLI tool.
-
-```bash
-./spectral-macos lint petstore.yaml
-```
+`curl -L https://raw.githack.com/stoplightio/spectral/master/install.sh | sh`
 
 Note, the binaries are *not* auto-updatable, therefore you will need to download a new version on your own.
 
@@ -108,7 +99,7 @@ Think of a set of **rules** and **functions** as a flexible and customizable sty
 
 ## Config
 
-Spectral CLI supports [config files](docs/config.md), to avoid typing out CLI options and arguments every single time. 
+Spectral CLI supports [config files](docs/config.md), to avoid typing out CLI options and arguments every single time.
 
 ## Programmatic usage
 

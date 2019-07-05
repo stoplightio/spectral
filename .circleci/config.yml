@@ -59,23 +59,44 @@ jobs:
 
   test-node-8:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - install-and-test
 
   release:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
       - cached-dependencies
+      - setup_remote_docker
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin"
+      - run: npm version from-git
       - run: yarn build
-      - run: yarn release
+      - run: |
+          if [ $CIRCLE_TAG = *beta* ] ; then
+            npm publish --tag beta
+          elif [ $CIRCLE_TAG = *alpha* ] ; then
+            npm publish --tag alpha
+          else
+            npm publish
+          fi
       - run: yarn build.binary
+      - run: "docker build -t stoplight/spectral:${CIRCLE_TAG} -t stoplight/spectral:latest --build-arg EG_VERSION=latest ."
+      - run: docker push stoplight/spectral:${CIRCLE_TAG}
+      - run: |
+          if [ $CIRCLE_TAG = *beta* ] ; then
+            docker push stoplight/spectral:beta
+          elif [ $CIRCLE_TAG = *alpha* ] ; then
+            docker push stoplight/spectral:alpha
+          else
+            docker push stoplight/spectral:latest
+          fi
       - persist_to_workspace:
-          root: ./dist
+          root: ./
           paths:
-            - bin
+            - binaries
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
@@ -87,10 +108,9 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/bin
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
 
 workflows:
-  version: 2
   commit:
     jobs:
       - test-node-latest
@@ -102,9 +122,13 @@ workflows:
       - release:
           filters:
             branches:
-              only: master
+              ignore: /.*/
+            tags:
+              only: /^v.*/
       - upload_artifacts:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v.*/
           requires:
