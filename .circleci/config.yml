@@ -69,7 +69,9 @@ jobs:
     steps:
       - checkout
       - cached-dependencies
+      - setup_remote_docker
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin"
       - run: npm version from-git
       - run: yarn build
       - run: |
@@ -81,6 +83,16 @@ jobs:
             npm publish
           fi
       - run: yarn build.binary
+      - run: "docker build -t stoplight/spectral:${CIRCLE_TAG} -t stoplight/spectral:latest --build-arg EG_VERSION=latest ."
+      - run: docker push stoplight/spectral:${CIRCLE_TAG}
+      - run: |
+          if [ $CIRCLE_TAG = *beta* ] ; then
+            docker push stoplight/spectral:beta
+          elif [ $CIRCLE_TAG = *alpha* ] ; then
+            docker push stoplight/spectral:alpha
+          else
+            docker push stoplight/spectral:latest
+          fi
       - persist_to_workspace:
           root: ./
           paths:
