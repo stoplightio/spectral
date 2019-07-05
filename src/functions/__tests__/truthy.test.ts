@@ -21,32 +21,26 @@ describe('truthy', () => {
   });
 
   test('should return an error message if target value is falsy', () => {
-    expect(runTruthy(false)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "property is not truthy",
-  },
-]
-`);
+    expect(runTruthy(false)).toEqual([
+      {
+        message: 'property is not truthy',
+      },
+    ]);
   });
 
   test('should return an error message if target value is null', () => {
-    expect(runTruthy(null)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "property is not truthy",
-  },
-]
-`);
+    expect(runTruthy(null)).toEqual([
+      {
+        message: 'property is not truthy',
+      },
+    ]);
   });
 
   test('should return a detailed error message if target path is set', () => {
-    expect(runTruthy(null, ['a', 'b'])).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "a.b is not truthy",
-  },
-]
-`);
+    expect(runTruthy(null, ['a', 'b'])).toEqual([
+      {
+        message: 'a.b is not truthy',
+      },
+    ]);
   });
 });
