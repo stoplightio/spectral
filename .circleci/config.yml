@@ -70,9 +70,16 @@ jobs:
       - checkout
       - cached-dependencies
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: yarn build
       - run: npm version from-git
-      - run: npm publish
+      - run: yarn build
+      - run: |
+          if [ $CIRCLE_TAG = *beta* ] ; then
+            npm publish --tag beta
+          elif [ $CIRCLE_TAG = *alpha* ] ; then
+            npm publish --tag alpha
+          else
+            npm publish
+          fi
       - run: yarn build.binary
       - persist_to_workspace:
           root: ./
@@ -89,7 +96,7 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
 
 workflows:
   commit:
