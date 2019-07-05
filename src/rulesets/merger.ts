@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types/dist';
-import { cloneDeep, merge } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { HumanReadableDiagnosticSeverity, Rule } from '../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
 
@@ -43,7 +43,7 @@ function markRule(rule: Rule) {
 
 function updateRootRule(root: Rule, newRule: Rule | null) {
   markRule(root);
-  Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : merge(root, newRule)));
+  Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
 }
 
 function copyRule(rule: Rule) {
@@ -76,7 +76,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
         if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== undefined) {
           if ('functionOptions' in existingRule.then) {
-            existingRule.then.functionOptions = merge(existingRule.then.functionOptions || {}, rule[1]);
+            existingRule.then.functionOptions = rule[1];
           }
 
           updateRootRule(existingRule, null);

@@ -9,11 +9,40 @@ describe('Rulesets merger', () => {
     then: {
       field: 'responses',
       function: 'oasOp2xxResponse',
-      functionOptions: {},
+      functionOptions: {
+        foo: 'bar',
+      },
     },
     recommended: true,
     severity: 'warn',
   };
+
+  it('performs a shallow merging', () => {
+    const config = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeRulesets(config, {
+      rules: {
+        test: {
+          ...JSON.parse(JSON.stringify(baseRule)),
+          then: {
+            field: 'info',
+            function: 'truthy',
+            functionOptions: {},
+          },
+        },
+      },
+    });
+
+    expect(config).toHaveProperty('rules.test.then', {
+      field: 'info',
+      function: 'truthy',
+      functionOptions: {},
+    });
+  });
 
   it('is possible to disable the rule using flag', () => {
     const config = {

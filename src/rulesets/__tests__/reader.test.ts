@@ -77,7 +77,6 @@ describe('Rulesets reader', () => {
       severity: DiagnosticSeverity.Error,
       tags: ['operation'],
       then: {
-        field: 'responses',
         function: 'truthy',
       },
       type: 'style',
