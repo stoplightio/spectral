@@ -1,7 +1,7 @@
 {
   "rules": {
     "valid-rule": {
-      "summary": "should be OK",
+      "message": "should be OK",
       "given": "$.info",
       "then": {
         "function": "truthy"

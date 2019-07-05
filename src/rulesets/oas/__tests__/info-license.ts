@@ -46,7 +46,6 @@ describe('info-license', () => {
           },
         },
         severity: 1,
-        summary: 'OpenAPI object info `license` must be present and non-empty string.',
       },
     ]);
   });

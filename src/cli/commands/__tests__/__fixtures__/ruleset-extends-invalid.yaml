@@ -2,7 +2,7 @@ extends:
   - ruleset-invalid.yaml
 rules:
   no-swagger:
-    summary: Use OpenAPI instead ;)
+    message: Use OpenAPI instead ;)
     given: $..*
     type: style
     then:      

@@ -41,7 +41,6 @@ describe('openapi-tags', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'OpenAPI object should have non-empty `tags` array.',
       },
     ]);
   });

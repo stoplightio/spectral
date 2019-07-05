@@ -71,7 +71,6 @@ describe('oasOpSecurityDefined', () => {
             },
           },
           severity: DiagnosticSeverity.Warning,
-          summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
         },
       ]);
     });
@@ -142,8 +141,6 @@ describe('oasOpSecurityDefined', () => {
             },
           },
           severity: DiagnosticSeverity.Warning,
-          summary:
-            'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
         },
       ]);
     });

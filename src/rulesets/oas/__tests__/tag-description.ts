@@ -42,7 +42,6 @@ describe('tag-description', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Tag object should have a `description`.',
       },
     ]);
   });

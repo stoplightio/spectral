@@ -40,7 +40,6 @@ describe('path-not-include-query', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'given keys should not include a query string.',
       },
     ]);
   });

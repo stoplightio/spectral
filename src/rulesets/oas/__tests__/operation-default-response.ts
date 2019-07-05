@@ -56,7 +56,6 @@ describe('operation-default-response', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operations must have a default response.',
       },
     ]);
   });

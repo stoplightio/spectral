@@ -40,7 +40,6 @@ describe('path-keys-no-trailing-slash', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'given keys should not end with a slash.',
       },
     ]);
   });

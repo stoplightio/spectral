@@ -50,7 +50,6 @@ describe('operation-description', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation `description` must be present and non-empty string.',
       },
     ]);
   });

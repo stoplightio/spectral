@@ -38,7 +38,7 @@ describe('spectral', () => {
       s.addRules({
         // @ts-ignore
         rule1: {
-          summary: '',
+          message: '',
           given: '$',
           severity: DiagnosticSeverity.Warning,
           then: {
@@ -49,7 +49,7 @@ describe('spectral', () => {
 
       s.mergeRules({
         rule2: {
-          summary: '',
+          message: '',
           given: '$',
           then: {
             function: RuleFunction.TRUTHY,
@@ -78,7 +78,7 @@ describe('spectral', () => {
         s.addRules({
           // @ts-ignore
           rule1: {
-            summary: '',
+            message: '',
             given: '$',
             recommended: false,
             then: {

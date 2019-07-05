@@ -52,7 +52,6 @@ describe('operation-operationId-valid-in-url', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'operationId may only use characters that are valid when used in a URL.',
       },
     ]);
   });

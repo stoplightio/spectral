@@ -57,7 +57,7 @@
             ],
             "type": "number"
         },
-        "summary": {
+        "message": {
             "type": "string"
         },
         "tags": {

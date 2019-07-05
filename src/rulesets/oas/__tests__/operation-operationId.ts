@@ -50,7 +50,6 @@ describe('operation-operationId', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Operation should have an `operationId`.',
       },
     ]);
   });

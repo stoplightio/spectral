@@ -42,7 +42,6 @@ describe('info-contact', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'Info object should contain `contact` object.',
       },
     ]);
   });

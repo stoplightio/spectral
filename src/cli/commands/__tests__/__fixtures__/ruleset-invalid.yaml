@@ -1,8 +1,8 @@
 rules:
   rule-without-given-nor-them:
-    summary: 'deliberetely invalid'
+    message: 'deliberetely invalid'
   valid-rule:
-    summary: 'should be OK'
+    message: 'should be OK'
     given: '$.info'
     then:
       function: 'truthy'

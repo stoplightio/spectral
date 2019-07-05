@@ -40,7 +40,6 @@ describe('path-declarations-must-exist', () => {
           },
         },
         severity: DiagnosticSeverity.Warning,
-        summary: 'given declarations cannot be empty, ex.`/given/{}` is invalid.',
       },
     ]);
   });

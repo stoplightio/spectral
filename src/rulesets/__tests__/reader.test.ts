@@ -17,7 +17,7 @@ describe('Rulesets reader', () => {
     expect(await readRulesFromRulesets(validFlatRuleset)).toEqual({
       'valid-rule': {
         given: '$.info',
-        summary: 'should be OK',
+        message: 'should be OK',
         severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
@@ -30,7 +30,7 @@ describe('Rulesets reader', () => {
     expect(await readRulesFromRulesets(validFlatRuleset, validFlatRuleset2)).toEqual({
       'valid-rule': {
         given: '$.info',
-        summary: 'should be OK',
+        message: 'should be OK',
         severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
@@ -38,7 +38,7 @@ describe('Rulesets reader', () => {
       },
       'require-info': {
         given: '$.info',
-        summary: 'should be OK',
+        message: 'should be OK',
         severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
@@ -63,7 +63,7 @@ describe('Rulesets reader', () => {
 
       'valid-rule': {
         given: '$.info',
-        summary: 'should be OK',
+        message: 'should be OK',
         severity: DiagnosticSeverity.Warning,
         then: {
           function: 'truthy',
@@ -76,7 +76,7 @@ describe('Rulesets reader', () => {
     return expect(readRulesFromRulesets(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
       'operation-2xx-response',
       {
-        summary: 'should be OK',
+        description: 'should be overridden',
         given: '$.info',
         recommended: true,
         severity: DiagnosticSeverity.Warning,
@@ -96,7 +96,7 @@ describe('Rulesets reader', () => {
         given: '$',
         recommended: true,
         severity: 'off',
-        summary: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+        description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
         tags: ['operation'],
         then: {
           function: 'oasOpSecurityDefined',
