@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../rules.json';
+import * as ruleset from '../index.json';
 
 describe('only-local-references', () => {
   const s = new Spectral();

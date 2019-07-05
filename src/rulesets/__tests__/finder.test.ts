@@ -29,14 +29,14 @@ describe('Rulesets finder', () => {
   });
 
   it('should support spectral built-in rules', () => {
-    return expect(findRuleset('/b/c/d', '@stoplight/spectral/rulesets/oas2/rules.json')).resolves.toEqual(
-      path.join(process.cwd(), 'src/rulesets/oas2/rules.json'),
+    return expect(findRuleset('/b/c/d', '@stoplight/spectral/rulesets/oas2/index.json')).resolves.toEqual(
+      path.join(process.cwd(), 'src/rulesets/oas2/index.json'),
     );
   });
 
   it.each(['oas', 'oas2', 'oas3'])('should support spectral built-in %s ruleset shorthand', shorthand => {
     return expect(findRuleset('', `spectral:${shorthand}`)).resolves.toEqual(
-      path.join(process.cwd(), `src/rulesets/${shorthand}/rules.json`),
+      path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
     );
   });
 

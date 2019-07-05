@@ -12,4 +12,4 @@ export const commonOasFunctions = (): FunctionCollection => {
   };
 };
 
-export const rules = async () => readRulesFromRulesets(require.resolve('./rules.json'));
+export const rules = async () => readRulesFromRulesets(require.resolve('./index.json'));
