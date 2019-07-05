@@ -1,7 +1,7 @@
 import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
 
-import { rules } from '../../../rules.json';
+import { rules } from '../../../index.json';
 
 const ruleset = { functions: commonOasFunctions(), rules };
 
