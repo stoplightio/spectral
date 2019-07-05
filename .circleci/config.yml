@@ -100,8 +100,8 @@ workflows:
     jobs:
       - release:
           filters:
-            branches:
-              only: master
+            tags:
+              only: /^v.*/
       - upload_artifacts:
           filters:
             tags:
