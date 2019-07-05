@@ -69,6 +69,7 @@ jobs:
     steps:
       - checkout
       - cached-dependencies
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: yarn build
       - run: npm version from-git
       - run: npm publish
