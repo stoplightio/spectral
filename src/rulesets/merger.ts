@@ -16,10 +16,11 @@ export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, rulesetSe
 
   for (const [name, rule] of Object.entries(src.rules)) {
     if (rulesetSeverity !== undefined) {
+      const severity = getSeverityLevel(src.rules, name, rulesetSeverity);
       if (isValidRule(rule)) {
-        processRule(rules, name, { ...rule, severity: getSeverityLevel(src.rules, name, rulesetSeverity) });
+        processRule(rules, name, { ...rule, severity });
       } else {
-        processRule(rules, name, rulesetSeverity);
+        processRule(rules, name, severity);
       }
     } else {
       processRule(rules, name, rule);

@@ -1,5 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { IRule } from '../../types';
+import { IRulesetFile } from '../../types/ruleset';
 import { mergeRulesets } from '../merger';
 
 describe('Rulesets merger', () => {
@@ -318,5 +319,41 @@ describe('Rulesets merger', () => {
 
     expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
     expect(ruleset).toHaveProperty('rules.test2.severity', DiagnosticSeverity.Warning);
+  });
+
+  it('overrides existing severity if no ruleset severity is given', () => {
+    const ruleset: IRulesetFile = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeRulesets(ruleset, {
+      rules: {
+        test: 'hint',
+      },
+    });
+
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Hint);
+  });
+
+  it('overrides existing severity if all ruleset severity is given', () => {
+    const ruleset: IRulesetFile = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeRulesets(
+      ruleset,
+      {
+        rules: {
+          test: 'hint',
+        },
+      },
+      'all',
+    );
+
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Hint);
   });
 });
