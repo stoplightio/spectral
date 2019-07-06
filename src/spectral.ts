@@ -13,6 +13,7 @@ import { extname } from 'path';
 
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
   FunctionCollection,
@@ -127,6 +128,7 @@ export class Spectral {
       rules[name] = {
         name,
         ...rule,
+        severity: rule.severity === undefined ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
       };
     }
 

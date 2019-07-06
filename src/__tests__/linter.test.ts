@@ -149,6 +149,7 @@ describe('linter', () => {
     spectral.addRules(mergeRulesets(cloneDeep(oas3Ruleset) as IRulesetFile, {
       rules: {
         'valid-example': 'off',
+        'model-description': -1,
       },
     }).rules as RuleCollection);
 
@@ -277,6 +278,9 @@ responses:: !!foo
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '~1pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'model-description',
       }),
       expect.objectContaining({
         code: 'valid-example',

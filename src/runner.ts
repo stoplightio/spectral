@@ -3,6 +3,7 @@ import { Resolved } from './resolved';
 const { JSONPath } = require('jsonpath-plus');
 
 import { lintNode } from './linter';
+import { getDiagnosticSeverity } from './rulesets/severity';
 import { FunctionCollection, IGivenNode, IRuleResult, IRunRule, RunRuleCollection } from './types';
 
 export const runRules = (
@@ -13,12 +14,12 @@ export const runRules = (
   let results: IRuleResult[] = [];
 
   for (const name in rules) {
-    if (!rules.hasOwnProperty(name)) continue;
+    if (!Object.prototype.hasOwnProperty.call(rules, name)) continue;
 
     const rule = rules[name];
     if (!rule) continue;
 
-    if (rule.hasOwnProperty('recommended') && !rule.recommended) {
+    if (rule.severity !== undefined && getDiagnosticSeverity(rule.severity) === -1) {
       continue;
     }
 
