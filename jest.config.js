@@ -3,4 +3,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   testEnvironment: 'node',
   testMatch: ['<rootDir>/src/**/__tests__/*.(ts)'],
+  testPathIgnorePatterns: ['/node_modules/', '\.karma\.test\.ts$']
 };

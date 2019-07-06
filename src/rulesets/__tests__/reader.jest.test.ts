@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { DiagnosticSeverity } from '@stoplight/types';
 import * as path from 'path';
 import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';

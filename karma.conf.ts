@@ -15,7 +15,7 @@ module.exports = (config: any) => {
 
     // list of files / patterns to exclude
     // unit tests are excluded because most of them make use of jest.mock
-    exclude: ['src/cli/**', 'src/config/__tests__/config.test.ts', 'src/rulesets/__tests__/reader.test.ts'],
+    exclude: ['src/cli/**', 'src/config/__tests__/config.test.ts', 'src/**/*.jest.test.ts'],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
