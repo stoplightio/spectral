@@ -105,7 +105,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'error');
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Error);
   });
 
   it('prefers the most recent severity level', () => {
@@ -158,7 +158,10 @@ describe('Rulesets merger', () => {
 
     expect(ruleset).toEqual({
       rules: {
-        example: baseRule,
+        example: {
+          ...baseRule,
+          severity: DiagnosticSeverity.Warning,
+        },
       },
     });
   });

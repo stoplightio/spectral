@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { Rule } from '../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
-import { DEFAULT_SEVERITY_LEVEL, getSeverityLevel } from './severity';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from './severity';
 import { isValidRule } from './validation';
 
 /*
@@ -65,6 +65,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
       break;
     case 'object':
+      normalizeRule(rule);
       if (Array.isArray(rule)) {
         processRule(rules, name, rule[0]);
 
@@ -81,13 +82,20 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
         // new rule
         markRule(rule);
         rules[name] = rule;
-        if (rule.severity === undefined) {
-          rule.severity = DEFAULT_SEVERITY_LEVEL;
-        }
       }
 
       break;
     default:
       throw new Error('Invalid value for a rule');
+  }
+}
+
+function normalizeRule(rule: FileRule) {
+  if (isValidRule(rule)) {
+    if (rule.severity === undefined) {
+      rule.severity = DEFAULT_SEVERITY_LEVEL;
+    } else {
+      rule.severity = getDiagnosticSeverity(rule.severity);
+    }
   }
 }
