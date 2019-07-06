@@ -28,7 +28,7 @@ npm install @stoplight/spectral
 npm install -g @stoplight/spectral
 ```
 
-Supports Node v8.3+.
+Supports Node v8.3+ and modern browsers.
 
 ### Executable binaries
 
