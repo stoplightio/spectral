@@ -12,7 +12,7 @@ const applyRuleToObject = async (r: Rule, o: object): Promise<IRuleResult[]> => 
 
 describe('functions', () => {
   describe('xor', () => {
-    it('returns result if no properties are present', async () => {
+    test('returns result if no properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -35,7 +35,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    it('returns result if both properties are present', async () => {
+    test('returns result if both properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -58,7 +58,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    it('passes when only one of the properties are present', async () => {
+    test('passes when only one of the properties are present', async () => {
       expect(
         applyRuleToObject(
           {
@@ -83,7 +83,7 @@ describe('functions', () => {
   });
 
   describe('pattern', () => {
-    it('returns results if pattern is not matched (on string)', async () => {
+    test('returns results if pattern is not matched (on string)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -106,7 +106,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    it('returns result if pattern is not matched (on object keys)', async () => {
+    test('returns result if pattern is not matched (on object keys)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -135,7 +135,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    it('dont return result if pattern is matched (on string)', async () => {
+    test('dont return result if pattern is matched (on string)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -157,7 +157,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(0);
     });
 
-    it('dont return result if pattern is matched (on object keys)', async () => {
+    test('dont return result if pattern is matched (on object keys)', async () => {
       expect(
         applyRuleToObject(
           {
@@ -207,7 +207,7 @@ describe('functions', () => {
       },
     ];
 
-    it('return result if string, number, array, or object is greater than max', async () => {
+    test('return result if string, number, array, or object is greater than max', async () => {
       expect(
         applyRuleToObject(
           {
@@ -231,7 +231,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(4);
     });
 
-    it('return result if string, number, array, or object is less than min', async () => {
+    test('return result if string, number, array, or object is less than min', async () => {
       expect(
         applyRuleToObject(
           {
@@ -255,7 +255,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(4);
     });
 
-    it('dont return a result if string, number, array, or object is between min and max', async () => {
+    test('dont return a result if string, number, array, or object is between min and max', async () => {
       expect(
         applyRuleToObject(
           {
