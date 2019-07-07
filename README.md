@@ -28,7 +28,7 @@ npm install @stoplight/spectral
 npm install -g @stoplight/spectral
 ```
 
-Supports Node v8.3+.
+Supports Node v8.3+ and modern browsers.
 
 ### Executable binaries
 
@@ -70,7 +70,6 @@ spectral lint petstore.yaml
 Other options include:
 
 ``` text
-  -c, --config=config          path to a config file
   -e, --encoding=encoding      text encoding to use
   -f, --format=json|stylish    formatter to use for outputting results
   -h, --help                   show CLI help
@@ -96,10 +95,6 @@ There are three key concepts in Spectral: **Rulesets**, **Rules** and **Function
 - **Function** accept a value and return issue(s) if the value is incorrect.
 
 Think of a set of **rules** and **functions** as a flexible and customizable style guide for your JSON objects.
-
-## Config
-
-Spectral CLI supports [config files](docs/config.md), to avoid typing out CLI options and arguments every single time.
 
 ## Programmatic usage
 
