@@ -308,7 +308,7 @@ describe('lint', () => {
       });
   });
 
-  describe('when not using config nor default config file', () => {
+  describe('when not using ruleset nor default ruleset file', () => {
     test
       .stdout()
       .command(['lint', invalidOas3SpecPath])
@@ -317,7 +317,7 @@ describe('lint', () => {
       });
   });
 
-  describe('when using default config file', () => {
+  describe('when using default ruleset file', () => {
     let spy: SpyInstance;
     beforeAll(() => {
       spy = jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));
