@@ -19,10 +19,7 @@ jobs:
       - script: yarn
         displayName: Install deps
 
-      - script: yarn build
-        displayName: Build the code
-
-      - script: yarn test
+      - script: yarn test.prod
         displayName: Run tests
 
       - script: npx pkg --output ./cli-binaries/spectral-cli ./packages/cli/
