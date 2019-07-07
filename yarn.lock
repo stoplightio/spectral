@@ -1079,10 +1079,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-better-ajv-errors@^0.6.4:
+"better-ajv-errors@https://github.com/stoplightio/better-ajv-errors#4dbb2d633af8dad1ebfeef5b742acbf48f80b327":
   version "0.6.4"
-  resolved "https://registry.yarnpkg.com/better-ajv-errors/-/better-ajv-errors-0.6.4.tgz#1e3c6b93dc11e72c94a0b042594515eb917f2957"
-  integrity sha512-+spBhtcCzovXWeHpt5dGylFsn3p5l9w+KcUqh/b4MFdLV+q1sT1olxD9izvwi0D3WuP06eVgeZAGLtxtTnUIDg==
+  resolved "https://github.com/stoplightio/better-ajv-errors#4dbb2d633af8dad1ebfeef5b742acbf48f80b327"
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@babel/runtime" "^7.0.0"
