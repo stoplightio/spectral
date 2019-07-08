@@ -6,7 +6,7 @@ Rulesets are a container for collections of rules. These rules are taking parame
 
 When you run the `spectral lint my-document.json` CLI command, Spectral will automatically apply the built in OpenAPI v2 or v3 ruleset if appropriate.
 
-To customize the rules that are applied, simply create a `spectral.yml` in the same directory that you are running the `spectral lint` command from and it will automatically be used.
+To customize the rules that are applied, create a `spectral.yml` in the same directory that you are running the `spectral lint` command from and it will automatically be used.
 
 ## Ruleset Examples
 
@@ -31,7 +31,7 @@ rules:
 
 The example above adds a single rule that checks that tags objects have a description property defined.
 
-Running `spectral lint` on the following object with the rulset above will result in an error being reported, since the tag does not have a description:
+Running `spectral lint` on the following object with the ruleset above will result in an error being reported, since the tag does not have a description:
 
 ```json
 {
@@ -73,7 +73,7 @@ The example above will apply the recommended rules from the built in OpenAPI v2 
 
 ### Enabling specific OpenAPI rules
 
-Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to load add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
+Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
 
 **spectral.yml**
 
@@ -84,7 +84,7 @@ rules:
   operation-operationId-unique: true
 ```
 
-The example above will run the two rules we enabled, since we pass `off` to disable all rules by default when extending the `spectral:oas2` ruleset.
+The example above will run the single rulee that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas2` ruleset.
 
 ### Disabling specific OpenAPI rules
 
@@ -102,7 +102,7 @@ rules:
   operation-operationId-unique: false
 ```
 
-The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs just the recommended ones), with two exceptions - we turned `operation-operationId-unique` and `operation-2xx-response` off.
+The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs just the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
 ### Changing the severity of a rule
 

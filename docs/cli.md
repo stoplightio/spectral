@@ -1,6 +1,6 @@
 # Spectral CLI
 
-One installed, Spectral can be run via the command-line:
+Once installed, Spectral can be run via the command-line:
 
 ```bash
 spectral lint petstore.yaml

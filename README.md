@@ -20,31 +20,29 @@ A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 
 ## Installation
 
-Spectral's CLI can be installed either via npm or yarn
-
-### npm
+Spectral's CLI can be installed via npm or yarn.
 
 ```bash
 npm install -g @stoplight/spectral
-# or
+
+# OR
+
 yarn global add @stoplight/spectral
 ```
 
-### Docker Image
-
-Spectral is avaiable as a Docker image as well
+Spectral is avaiable as a Docker image as well.
 
 ```bash
-docker run --rm -it stoplight/spectral lint "${URL}"`
+docker run --rm -it stoplight/spectral lint "${url or filepath to openapi file}"`
 ```
 
-[Executable binaries](#executable-binaries) are also available.
+Finally, [executable binaries](#executable-binaries) are also available.
 
 ## Usage
 
 ### CLI
 
-Spectral can be installed and used via your terminal. Take a look at the [CLI docs](./docs/cli.md).
+After installing via one of the methods above, Spectral can be used via your command-line. Take a look at the [CLI docs](./docs/cli.md) for information on the options available.
 
 ### Examples
 
@@ -66,7 +64,7 @@ Think of a **Spectral ruleset** as a flexible and customizable style guide for y
 
 ## Programmatic usage
 
-Spectral is written in TypeScript (the compiled to JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
+Spectral is written in TypeScript (then compiled to JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## FAQs
 
