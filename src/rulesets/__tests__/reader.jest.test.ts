@@ -13,6 +13,8 @@ const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/exte
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
 
+jest.setTimeout(10000);
+
 describe('Rulesets reader', () => {
   it('given flat, valid ruleset file should return rules', async () => {
     expect(await readRulesFromRulesets(validFlatRuleset)).toEqual({
@@ -51,38 +53,27 @@ describe('Rulesets reader', () => {
   it('should inherit properties of extended rulesets', async () => {
     const rules = await readRulesFromRulesets(extendsOas2Ruleset);
 
-    // we pick up recommended rules only from spectral:oas
-    expect(rules).toMatchObject(
-      Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
-        oasRules[name] = {
-          ...rule,
-          ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-          ...(!(rule as IRule).recommended && { severity: -1 }),
-        };
+    // we pick up all rules only from spectral:oas
+    expect(rules).toEqual({
+      ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (oasRules, [name, rule]) => {
+          oasRules[name] = {
+            ...rule,
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+          };
 
-        return oasRules;
-      }, {}),
-    );
+          return oasRules;
+        },
+        {},
+      ),
 
-    // we pick up all rules from spectral:oas2
-
-    expect(rules).toMatchObject(
-      Object.entries(oas2Ruleset.rules).reduce<Dictionary<unknown>>((oas2Rules, [name, rule]) => {
-        oas2Rules[name] = {
-          ...rule,
-          ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-        };
-
-        return oas2Rules;
-      }, {}),
-    );
-
-    expect(rules).toHaveProperty('valid-rule', {
-      given: '$.info',
-      message: 'should be OK',
-      severity: DiagnosticSeverity.Warning,
-      then: {
-        function: 'truthy',
+      'valid-rule': {
+        given: '$.info',
+        message: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'truthy',
+        },
       },
     });
   });
