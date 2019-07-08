@@ -49,9 +49,6 @@ linting ./openapi.yaml
       char: 'o',
       description: 'output to a file instead of stdout',
     }),
-    'max-results': flagHelpers.integer({
-      description: '[default: all] maximum results to show',
-    }),
     ruleset: flagHelpers.string({
       char: 'r',
       description: 'path to a ruleset file (supports remote files)',
@@ -137,7 +134,7 @@ async function tryReadOrLog(command: Lint, reader: Function) {
   }
 }
 
-async function lint(name: string, flags: any, command: Lint, rules?: RuleCollection) {
+async function lint(name: string, flags: ILintConfig, command: Lint, rules?: RuleCollection) {
   if (flags.verbose) {
     command.log(`Linting ${name}`);
   }
@@ -217,38 +214,40 @@ async function lint(name: string, flags: any, command: Lint, rules?: RuleCollect
   }
 }
 
-const skipRules = (rules: any, flags: any, command: Lint): any => {
+const skipRules = (rules: RuleCollection, flags: ILintConfig, command: Lint): RuleCollection => {
   const skippedRules: string[] = [];
   const invalidRules: string[] = [];
 
-  for (const rule of flags.skipRule) {
-    if (rule in rules) {
-      delete rules[rule];
-      skippedRules.push(rule);
-    } else {
-      invalidRules.push(rule);
+  if (flags.skipRule !== undefined) {
+    for (const rule of flags.skipRule) {
+      if (rule in rules) {
+        delete rules[rule];
+        skippedRules.push(rule);
+      } else {
+        invalidRules.push(rule);
+      }
     }
   }
+
   if (invalidRules.length !== 0) {
     command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
   }
+
   if (skippedRules.length !== 0 && flags.verbose) {
     command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
   }
+
   return rules;
 };
 
-async function formatOutput(results: IRuleResult[], flags: any): Promise<string> {
-  if (flags.maxResults) {
-    results = results.slice(0, flags.maxResults);
-  }
+async function formatOutput(results: IRuleResult[], flags: ILintConfig): Promise<string> {
   return {
     json: () => json(results),
     stylish: () => stylish(results),
   }[flags.format]();
 }
 
-export async function writeOutput(outputStr: string, flags: any, command: Lint) {
+export async function writeOutput(outputStr: string, flags: ILintConfig, command: Lint) {
   if (flags.output) {
     return writeFileAsync(flags.output, outputStr);
   }
@@ -264,7 +263,6 @@ function mergeConfig(config: ILintConfig, flags: Partial<ILintConfig>): ILintCon
         encoding: flags.encoding,
         format: flags.format,
         output: flags.output,
-        maxResults: flags['max-results'],
         verbose: flags.verbose,
         ruleset: flags.ruleset,
         quiet: flags.quiet,
