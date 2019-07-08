@@ -2,9 +2,11 @@
 (global as any).expect = require('expect');
 (global as any).test = it;
 
+const message = "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
+
 expect.extend({
-  toMatchSnapshot: () => ({ pass: false, message: ':)' }),
-  toMatchInlineSnapshot: () => ({ pass: false, message: ':)' }),
+  toMatchSnapshot: () => ({ pass: false, message }),
+  toMatchInlineSnapshot: () => ({ pass: false, message }),
 });
 
 // @ts-ignore
