@@ -41,25 +41,25 @@ commands:
 jobs:
   test-node-latest:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:latest-browsers
     steps:
       - install-and-test
 
   test-node-12:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:12-browsers
     steps:
       - install-and-test
 
   test-node-10:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:10-browsers
     steps:
       - install-and-test
 
   test-node-8:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:8-browsers
     steps:
       - install-and-test
 

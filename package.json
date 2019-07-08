@@ -48,7 +48,7 @@
     "lint": "tslint 'src/**/*.ts'",
     "lint.fix": "yarn lint --fix",
     "test": "jest",
-    "test.prod": "yarn build && yarn lint && yarn test --coverage --maxWorkers=2",
+    "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
     "test.karma": "karma start",
