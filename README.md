@@ -20,19 +20,19 @@ A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 
 ## Installation
 
+Spectral's CLI can be installed either via npm or yarn
+
 ### npm
 
 ```bash
 npm install -g @stoplight/spectral
-```
-
-### yarn
-
-```bash
+# or
 yarn global add @stoplight/spectral
 ```
 
-### docker
+### Docker Image
+
+Spectral is avaiable as a Docker image as well
 
 ```bash
 docker run --rm -it stoplight/spectral lint "${URL}"`
@@ -66,19 +66,19 @@ Think of a **Spectral ruleset** as a flexible and customizable style guide for y
 
 ## Programmatic usage
 
-Spectral is written in TypeScript (JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
+Spectral is written in TypeScript (the compiled to JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## FAQs
 
-**How is this different than [Ajv](https://www.npmjs.com/package/ajv)?**
+#### How is this different than [Ajv](https://www.npmjs.com/package/ajv)?
 
 Ajv is a JSON Schema validator, not a linter. Spectral does expose a `schema` function that you can use in your rules to validate all or part of the target object with JSON Schema (Ajv is used under the hood). However, Spectral also provides a number of other functions and utilities that you can use to build up a linting ruleset to validates things that JSON Schema is not well suited for.
 
-**I want to lint my OpenAPI documents but don't want to implement Spectral right now.**
+#### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
 
 No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_campaign=spectral).
 
-**What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?**
+#### What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?
 
 With Spectral, lint rules can be applied to _any_ JSON object. Speccy is designed to work with OpenAPI v3 only. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OpenAPI specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
 
