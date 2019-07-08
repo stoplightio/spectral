@@ -23,7 +23,7 @@ jobs:
       - script: yarn test.prod
         displayName: Run tests
 
-      - script: npx pkg --output ./cli-binaries/spectral-cli ./packages/cli/
+      - script: npx pkg --output ./cli-binaries/spectral-cli ./
         displayName: Create binary
 
       - publish: ./cli-binaries/
