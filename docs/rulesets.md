@@ -122,7 +122,7 @@ Available severity levels are `error`, `warn`, `info`, and `off`.
 
 Rules are highly configurable. There are only few required parameters but the optional ones gives powerful flexibility. Please see the following type tables for more information.
 
-*TODO: generate this table automatically from the TS file.*
+<!-- *TODO: generate this table automatically from the TS file.* -->
 
 <table>
   <thead>
