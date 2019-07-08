@@ -1,6 +1,6 @@
+import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
-import * as path from 'path';
 import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
@@ -12,6 +12,7 @@ const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-rul
 const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas2-ruleset.json');
 const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
 const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
+const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
 
@@ -152,7 +153,7 @@ describe('Rulesets reader', () => {
     );
   });
 
-  it('should persists disabled properties of extended rulesets', () => {
+  it('should persist disabled properties of extended rulesets', () => {
     return expect(readRulesFromRulesets(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
       'operation-security-defined',
       {
@@ -194,6 +195,36 @@ describe('Rulesets reader', () => {
         rule => rule.severity === -1 || rule.severity === 'off' || rule.severity === undefined,
       ),
     ).toHaveLength(0);
+  });
+
+  it('should support local rulesets', () => {
+    return expect(readRulesFromRulesets(extendsRelativeRuleset)).resolves.toEqual({
+      PascalCase: {
+        given: '$',
+        message: 'bar',
+        severity: -1, // turned off, cause it's not recommended
+        then: {
+          function: 'truthy',
+        },
+      },
+      camelCase: {
+        given: '$',
+        message: 'bar',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'truthy',
+        },
+      },
+      snake_case: {
+        given: '$',
+        message: 'foo',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
   });
 
   it('given non-existent ruleset should output error', () => {

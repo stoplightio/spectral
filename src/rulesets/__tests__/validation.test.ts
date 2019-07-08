@@ -87,6 +87,15 @@ describe('Ruleset Validation', () => {
     ).not.toThrow();
   });
 
+  it('recognizes string extends syntax', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        extends: 'foo',
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
   it('recognizes invalid array-ish extends syntax', () => {
     expect(
       assertValidRuleset.bind(null, {

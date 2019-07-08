@@ -12,7 +12,7 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
   };
 
   for (const uri of uris) {
-    mergeRulesets(base, await readRulesFromRuleset('', uri));
+    mergeRulesets(base, await readRulesFromRuleset(uri, uri));
   }
 
   return base.rules;
@@ -29,10 +29,10 @@ async function readRulesFromRuleset(
     rules: {},
   };
 
-  const extendz = ruleset.extends;
+  const extendedRulesets = ruleset.extends;
 
-  if (extendz && extendz.length) {
-    for (const extended of extendz) {
+  if (extendedRulesets !== undefined) {
+    for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
       if (Array.isArray(extended)) {
         const parentSeverity = severity === undefined ? extended[1] : severity;
         mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0], parentSeverity), parentSeverity);
