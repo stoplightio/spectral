@@ -116,7 +116,7 @@ rules:
 
 The example above will run the recommended rules from the `spectral:oas2` ruleset, but report `operation-2xx-response` as a warning rather than as an error (as is the default behavior in the `spectral:oas2` ruleset).
 
-Available severity levels are `error`, `warn`, `info`, and `off`.
+Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
 ## Rules
 
