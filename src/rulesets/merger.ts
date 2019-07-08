@@ -18,7 +18,8 @@ export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, rulesetSe
     if (rulesetSeverity !== undefined) {
       const severity = getSeverityLevel(src.rules, name, rulesetSeverity);
       if (isValidRule(rule)) {
-        processRule(rules, name, { ...rule, severity });
+        rule.severity = severity;
+        processRule(rules, name, rule);
       } else {
         processRule(rules, name, severity);
       }
@@ -48,6 +49,10 @@ function updateRootRule(root: Rule, newRule: Rule | null) {
   Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
 }
 
+function getRootRule(rule: Rule): Rule {
+  return rule[ROOT_DESCRIPTOR] !== undefined ? rule[ROOT_DESCRIPTOR] : null;
+}
+
 function copyRule(rule: Rule) {
   return cloneDeep(rule);
 }
@@ -57,6 +62,12 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
   switch (typeof rule) {
     case 'boolean':
+      if (isValidRule(existingRule)) {
+        const rootRule = getRootRule(existingRule);
+        existingRule.severity = rootRule ? rootRule.severity : getSeverityLevel(rules, name, rule);
+        updateRootRule(existingRule, existingRule);
+      }
+      break;
     case 'string':
     case 'number':
       // what if rule does not exist (yet)? throw, store the invalid state somehow?

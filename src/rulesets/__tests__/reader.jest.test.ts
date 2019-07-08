@@ -9,6 +9,7 @@ const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-require-inf
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
 const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
 const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas2-ruleset.json');
+const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
 const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
@@ -100,6 +101,35 @@ describe('Rulesets reader', () => {
         then: {
           function: 'truthy',
         },
+      },
+    });
+  });
+
+  it('should mark disabled rules as disabled if appropriate', () => {
+    return expect(readRulesFromRulesets(extendsDisabledOas2Ruleset)).resolves.toEqual({
+      ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (rules, [name, rule]) => {
+          rules[name] = {
+            ...rule,
+            severity: -1,
+          };
+
+          return rules;
+        },
+        {},
+      ),
+
+      'operation-operationId-unique': {
+        // value of oasRuleset.rules['operation-operationId-unique']
+        description: 'Every operation must have a unique `operationId`.',
+        recommended: true,
+        type: 'validation',
+        severity: 0,
+        given: '$',
+        then: {
+          function: 'oasOpIdUnique',
+        },
+        tags: ['operation'],
       },
     });
   });

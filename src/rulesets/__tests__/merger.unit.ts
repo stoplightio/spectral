@@ -109,7 +109,7 @@ describe('Rulesets merger', () => {
     expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Error);
   });
 
-  it('prefers the most recent severity level', () => {
+  it('prefers the root definition severity level', () => {
     const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
@@ -143,7 +143,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', -1);
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Error);
   });
 
   it('includes new rules', () => {
