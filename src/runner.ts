@@ -14,7 +14,7 @@ export const runRules = (
   let results: IRuleResult[] = [];
 
   for (const name in rules) {
-    if (!Object.prototype.hasOwnProperty.call(rules, name)) continue;
+    if (!rules.hasOwnProperty(name)) continue;
 
     const rule = rules[name];
     if (!rule) continue;
