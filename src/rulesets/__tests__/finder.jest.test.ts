@@ -7,8 +7,8 @@ declare var it: jest.It;
 
 describe('Rulesets finder', () => {
   it('should join relative path', () => {
-    return expect(findRuleset(__filename, './finder.test.ts')).resolves.toEqual(
-      path.join(__dirname, './finder.test.ts'),
+    return expect(findRuleset(__filename, './finder.jest.test.ts')).resolves.toEqual(
+      path.join(__dirname, './finder.jest.test.ts'),
     );
   });
 
