@@ -24,23 +24,7 @@ module.exports = (config: any) => {
       './karma-jest.ts': ['karma-typescript'],
     },
 
-    karmaTypescriptConfig: {
-      compilerOptions: {
-        emitDecoratorMetadata: true,
-        experimentalDecorators: true,
-        module: 'commonjs',
-        sourceMap: true,
-        target: 'ES6',
-        resolveJsonModule: true,
-      },
-      exclude: ['node_modules'],
-      include: ['./src/**/*', './karma-jest.ts'],
-      bundlerOptions: {
-        acornOptions: {
-          ecmaVersion: 9,
-        },
-      },
-    },
+    karmaTypescriptConfig: require('./tsconfig.build.json'),
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
