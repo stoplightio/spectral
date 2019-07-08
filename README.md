@@ -56,7 +56,7 @@ Head over to [releases](https://github.com/stoplightio/spectral/releases) for th
 
 ### Docker
 ```bash
-docker run --rm -it stoplight/spectral lint "${URL}"`
+docker run --rm -it stoplight/spectral lint "${URL}"
 ```
 
 ## Usage
