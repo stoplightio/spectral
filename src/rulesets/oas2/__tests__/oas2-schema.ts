@@ -24,6 +24,23 @@ describe('oas2-schema', () => {
         version: '1.0.0',
       },
     });
-    expect(results).toEqual([]);
+    expect(results).toEqual([
+      {
+        code: 'oas2-schema',
+        message: "/paths//test/get should have required property 'responses'",
+        path: ['paths', '~1test', 'get'],
+        range: {
+          end: {
+            character: 15,
+            line: 4,
+          },
+          start: {
+            character: 10,
+            line: 2,
+          },
+        },
+        severity: 0,
+      },
+    ]);
   });
 });

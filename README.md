@@ -18,14 +18,21 @@ A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 
 ## Installation
 
+### npm
+
 ```bash
-# npm
 npm install -g @stoplight/spectral
+```
 
-# yarn
+### yarn
+
+```bash
 yarn global add @stoplight/spectral
+```
 
-# docker
+### docker
+
+```bash
 docker run --rm -it stoplight/spectral lint "${URL}"`
 ```
 
@@ -36,10 +43,6 @@ docker run --rm -it stoplight/spectral lint "${URL}"`
 ### CLI
 
 Spectral can be installed and used via your terminal. Take a look at the [CLI docs](./docs/cli.md).
-
-### TypeScript (JavaScript)
-
-Spectral is written in TypeScript (JavaScript) and can be imported and used directly. Take a look at the [JavaScript API](./docs/js-api.md).
 
 ### Examples
 
@@ -58,6 +61,10 @@ There are three key concepts in Spectral: **Rulesets**, **Rules**, and **Functio
 - **Functions** accept a value and return issue(s) if the value is incorrect.
 
 Think of a **Spectral ruleset** as a flexible and customizable style guide for your JSON objects.
+
+## Programmatic usage
+
+Spectral is written in TypeScript (JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
 
 ## FAQs
 

@@ -166,6 +166,11 @@ describe('linter', () => {
       expect.objectContaining({
         code: 'invalid-ref',
       }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        path: ['paths', '~1pets', 'get', 'responses', '200'],
+      }),
     ]);
   });
 
@@ -272,6 +277,11 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        path: ['paths', '~1pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
         code: 'valid-example',
