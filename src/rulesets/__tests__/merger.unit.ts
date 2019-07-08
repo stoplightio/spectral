@@ -4,7 +4,7 @@ import { mergeRulesets } from '../merger';
 
 describe('Rulesets merger', () => {
   const baseRule: IRule = {
-    summary: 'Operation must have at least one `2xx` response.',
+    message: 'Operation must have at least one `2xx` response.',
     given:
       "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
     then: {
@@ -58,7 +58,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', -1);
   });
 
   it('supports nested severity', () => {
@@ -80,7 +80,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'error');
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Error);
   });
 
   it('merges the same rules', () => {
@@ -93,7 +93,7 @@ describe('Rulesets merger', () => {
     mergeRulesets(ruleset, {
       rules: {
         test: {
-          summary: 'Operation must have at least one `2xx` response.',
+          message: 'Operation must have at least one `2xx` response.',
           given:
             "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
           then: {
@@ -118,7 +118,7 @@ describe('Rulesets merger', () => {
     mergeRulesets(ruleset, {
       rules: {
         test: {
-          summary: 'Operation must have at least one `2xx` response.',
+          message: 'Operation must have at least one `2xx` response.',
           given:
             "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
           then: {
@@ -142,7 +142,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', -1);
   });
 
   it('includes new rules', () => {
@@ -176,7 +176,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', -1);
   });
 
   it('supports array-ish syntax', () => {
@@ -192,7 +192,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', -1);
   });
 
   it('does not set functionOptions if rule does not implement it', () => {
@@ -245,8 +245,8 @@ describe('Rulesets merger', () => {
       'off',
     );
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'off');
-    expect(ruleset).toHaveProperty('rules.test2.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', -1);
+    expect(ruleset).toHaveProperty('rules.test2.severity', -1);
   });
 
   it('picks up recommended rules', () => {
@@ -268,8 +268,8 @@ describe('Rulesets merger', () => {
       'recommended',
     );
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'warn');
-    expect(ruleset).toHaveProperty('rules.test2.severity', 'off');
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
+    expect(ruleset).toHaveProperty('rules.test2.severity', -1);
   });
 
   it('sets warning as default severity level if a rule has no severity specified', () => {
@@ -313,7 +313,7 @@ describe('Rulesets merger', () => {
       'all',
     );
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'warn');
-    expect(ruleset).toHaveProperty('rules.test2.severity', 'warn');
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
+    expect(ruleset).toHaveProperty('rules.test2.severity', DiagnosticSeverity.Warning);
   });
 });

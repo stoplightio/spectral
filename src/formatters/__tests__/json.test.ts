@@ -4,7 +4,6 @@ import { json } from '../json';
 const results: IRuleResult[] = [
   {
     code: 'operation-description',
-    summary: 'Operation `description` must be present and non-empty string.',
     message: 'paths./pets.get.description is not truthy',
     path: ['paths', '/pets', 'get', 'description'],
     severity: 1,
@@ -22,7 +21,6 @@ const results: IRuleResult[] = [
   },
   {
     code: 'operation-tags',
-    summary: 'Operation should have non-empty `tags` array.',
     message: 'paths./pets.get.tags is not truthy',
     path: ['paths', '/pets', 'get', 'tags'],
     severity: 1,
@@ -70,13 +68,13 @@ describe('JSON formatter', () => {
     ]);
   });
 
-  test('should include summary', () => {
+  test('should include message', () => {
     expect(JSON.parse(json(results))).toEqual([
       expect.objectContaining({
-        summary: 'Operation `description` must be present and non-empty string.',
+        message: 'paths./pets.get.description is not truthy',
       }),
       expect.objectContaining({
-        summary: 'Operation should have non-empty `tags` array.',
+        message: 'paths./pets.get.tags is not truthy',
       }),
     ]);
   });

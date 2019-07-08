@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -22,11 +23,45 @@ describe('example-value-or-externalValue', () => {
 
   test('return errors if missing externalValue and value', async () => {
     const results = await s.run({ example: {} });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'example-value-or-externalValue',
+        message: 'Example should have either a `value` or `externalValue` field.',
+        path: ['example'],
+        range: {
+          end: {
+            character: 15,
+            line: 1,
+          },
+          start: {
+            character: 12,
+            line: 1,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 
   test('return errors if both externalValue and value', async () => {
     const results = await s.run({ example: { externalValue: 'externalValue', value: 'value' } });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'example-value-or-externalValue',
+        message: 'Example should have either a `value` or `externalValue` field.',
+        path: ['example'],
+        range: {
+          end: {
+            character: 20,
+            line: 3,
+          },
+          start: {
+            character: 12,
+            line: 1,
+          },
+        },
+        severity: 1,
+      },
+    ]);
   });
 });

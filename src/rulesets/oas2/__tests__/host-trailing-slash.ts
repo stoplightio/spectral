@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -25,6 +26,23 @@ describe('host-trailing-slash', () => {
       paths: {},
       host: 'stoplight.io/',
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'host-trailing-slash',
+        message: 'Server URL should not have a trailing slash.',
+        path: ['host'],
+        range: {
+          end: {
+            character: 25,
+            line: 3,
+          },
+          start: {
+            character: 10,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

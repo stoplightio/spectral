@@ -1,27 +1,12 @@
-import { DiagnosticSeverity, Dictionary, JsonPath } from '@stoplight/types';
+import { JsonPath } from '@stoplight/types';
 import { get, has } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
 import { Resolved } from './resolved';
 import { message } from './rulesets/message';
-import { HumanReadableDiagnosticSeverity, IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
-
-const SEVERITY_MAP: Dictionary<number, HumanReadableDiagnosticSeverity> = {
-  error: DiagnosticSeverity.Error,
-  warn: DiagnosticSeverity.Warning,
-  info: DiagnosticSeverity.Information,
-  hint: DiagnosticSeverity.Hint,
-  off: -1,
-};
-
-function printSeverity(severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity): DiagnosticSeverity {
-  if (Number.isNaN(Number(severity))) {
-    return SEVERITY_MAP[severity];
-  }
-
-  return Number(severity);
-}
+import { getDiagnosticSeverity } from './rulesets/severity';
+import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -91,9 +76,6 @@ export const lintNode = (
   let results: IRuleResult[] = [];
 
   for (const target of targets) {
-    const severity = rule.severity !== undefined ? printSeverity(rule.severity) : DiagnosticSeverity.Warning;
-
-    if (severity === -1) continue;
     const targetPath = givenPath.concat(target.path);
 
     const targetResults =
@@ -110,31 +92,24 @@ export const lintNode = (
         },
       ) || [];
 
-    // NOTE: we might want to normalize that during merging (once we have it in place)
-
     results = results.concat(
-      targetResults.map(result => {
+      targetResults.map<IRuleResult>(result => {
         const path = result.path || targetPath;
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
           code: rule.name,
 
-          // @deprecated, points to message
-          get summary() {
-            return this.message;
-          },
-
           message:
             rule.message === undefined
-              ? rule.summary || result.message
+              ? rule.description || result.message
               : message(rule.message, {
                   error: result.message,
                   property: path.length > 0 ? path[path.length - 1] : '',
                   description: rule.description,
                 }),
           path,
-          severity,
+          severity: getDiagnosticSeverity(rule.severity),
           source: location.uri,
           ...(location || {
             range: {

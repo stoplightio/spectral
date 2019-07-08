@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -33,6 +34,23 @@ describe('operation-tags', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-tags',
+        message: 'Operation should have non-empty `tags` array.',
+        path: ['paths', '/todos', 'get', 'tags'],
+        range: {
+          end: {
+            character: 15,
+            line: 4,
+          },
+          start: {
+            character: 12,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

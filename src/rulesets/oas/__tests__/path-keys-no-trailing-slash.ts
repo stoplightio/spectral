@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -23,7 +24,24 @@ describe('path-keys-no-trailing-slash', () => {
       swagger: '2.0',
       paths: { '/path/': {} },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'path-keys-no-trailing-slash',
+        message: 'given keys should not end with a slash.',
+        path: ['paths', '/path/'],
+        range: {
+          end: {
+            character: 16,
+            line: 3,
+          },
+          start: {
+            character: 13,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 
   test('does not return error if path IS a /', async () => {

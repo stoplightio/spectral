@@ -1,6 +1,6 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../../index';
 import { commonOasFunctions } from '../../../index';
-
 import { rules } from '../../../index.json';
 
 const ruleset = { functions: commonOasFunctions(), rules };
@@ -41,6 +41,24 @@ describe('oasOpFormDataConsumeCheck', () => {
       },
     });
 
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-formData-consume-check',
+        message:
+          'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
+        path: ['paths', '/path1', 'get'],
+        range: {
+          end: {
+            character: 26,
+            line: 10,
+          },
+          start: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

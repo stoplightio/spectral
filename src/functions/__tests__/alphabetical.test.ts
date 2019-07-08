@@ -19,24 +19,20 @@ describe('alphabetical', () => {
         c: 2,
         b: 'xz',
       }),
-    ).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "properties are not in alphabetical order",
-  },
-]
-`);
+    ).toEqual([
+      {
+        message: 'properties are not in alphabetical order',
+      },
+    ]);
   });
 
   describe('given NO keyedBy', () => {
     test('given an unsorted array of strings should return error', () => {
-      expect(runAlphabetical(['b', 'a'])).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "properties are not in alphabetical order",
-  },
-]
-`);
+      expect(runAlphabetical(['b', 'a'])).toEqual([
+        {
+          message: 'properties are not in alphabetical order',
+        },
+      ]);
     });
 
     test('given a sorted array of strings should NOT return error', () => {
@@ -44,39 +40,33 @@ Array [
     });
 
     test('given an unsorted array of numbers should return error', () => {
-      expect(runAlphabetical([10, 1])).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "properties are not in alphabetical order",
-  },
-]
-`);
+      expect(runAlphabetical([10, 1])).toEqual([
+        {
+          message: 'properties are not in alphabetical order',
+        },
+      ]);
     });
 
     test('given an unsorted array of numbers should return error', () => {
-      expect(runAlphabetical([10, 1])).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "properties are not in alphabetical order",
-  },
-]
-`);
+      expect(runAlphabetical([10, 1])).toEqual([
+        {
+          message: 'properties are not in alphabetical order',
+        },
+      ]);
     });
 
     test('given an array of objects should NOT return an error', () => {
-      expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toMatchInlineSnapshot(`Array []`);
+      expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toEqual([]);
     });
   });
 
   describe('given keyedBy', () => {
     test('given an array of objects with unsorted prop values return an error', () => {
-      expect(runAlphabetical([{ a: '10' }, { a: '1' }], 'a')).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "message": "properties are not in alphabetical order",
-  },
-]
-`);
+      expect(runAlphabetical([{ a: '10' }, { a: '1' }], 'a')).toEqual([
+        {
+          message: 'properties are not in alphabetical order',
+        },
+      ]);
     });
 
     test('given an array of objects with sorted prop values to NOT return an error', () => {

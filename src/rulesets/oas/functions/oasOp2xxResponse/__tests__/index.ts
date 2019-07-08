@@ -1,5 +1,6 @@
+import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { commonOasFunctions } from '../../../';
 import { RuleType, Spectral } from '../../../../../spectral';
-import { commonOasFunctions } from '../../../../oas/index';
 import { rules } from '../../../../oas/index.json';
 const ruleset = { functions: commonOasFunctions(), rules };
 
@@ -53,7 +54,24 @@ describe('oasOp2xxResponse', () => {
       },
     });
 
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-2xx-response',
+        message: 'Operation must have at least one `2xx` response.',
+        path: ['paths', '/path1', 'get', 'responses'],
+        range: {
+          end: {
+            character: 30,
+            line: 9,
+          },
+          start: {
+            character: 20,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 
   test('return errors if no responses', async () => {
@@ -66,6 +84,23 @@ describe('oasOp2xxResponse', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-2xx-response',
+        message: 'Operation must have at least one `2xx` response.',
+        path: ['paths', '/path1', 'get', 'responses'],
+        range: {
+          end: {
+            character: 23,
+            line: 4,
+          },
+          start: {
+            character: 20,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -39,6 +40,23 @@ describe('operation-default-response', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-default-response',
+        message: 'Operations must have a default response.',
+        path: ['paths', '/path', '/get', 'responses', 'default'],
+        range: {
+          end: {
+            character: 19,
+            line: 6,
+          },
+          start: {
+            character: 20,
+            line: 5,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

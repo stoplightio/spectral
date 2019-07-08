@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -33,7 +34,24 @@ describe('operation-description', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'operation-description',
+        message: 'Operation `description` must be present and non-empty string.',
+        path: ['paths', '/todos', 'get', 'description'],
+        range: {
+          end: {
+            character: 15,
+            line: 4,
+          },
+          start: {
+            character: 12,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 
   test('does not get called on parameters', async () => {
@@ -45,6 +63,6 @@ describe('operation-description', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([]);
   });
 });

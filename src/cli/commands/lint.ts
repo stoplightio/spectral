@@ -7,16 +7,16 @@ import { isNil, omitBy } from 'lodash';
 import { promisify } from 'util';
 
 import { IRuleResult } from '../..';
-import { createEmptyConfig, getDefaultRulesetFile } from '../../config/configLoader';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
+import { getDefaultRulesetFile } from '../../rulesets/loader';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
 import { readRulesFromRulesets } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
-import { ILintConfig } from '../../types/config';
+import { ILintConfig, OutputFormat } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 export default class Lint extends Command {
@@ -28,12 +28,14 @@ linting ./openapi.yaml
 `,
   ];
 
+  private static defaultLintConfig: ILintConfig = {
+    encoding: 'utf8',
+    format: OutputFormat.STYLISH,
+    verbose: false,
+  };
+
   public static flags = {
     help: flagHelpers.help({ char: 'h' }),
-    config: flagHelpers.string({
-      char: 'c',
-      description: 'path to a config file',
-    }),
     encoding: flagHelpers.string({
       char: 'e',
       description: 'text encoding to use',
@@ -81,11 +83,11 @@ linting ./openapi.yaml
 
     const cwd = process.cwd();
 
-    const config: ILintConfig = mergeConfig(createEmptyConfig(), flags as Partial<ILintConfig>);
+    const lintConfig: ILintConfig = mergeConfig({ ...Lint.defaultLintConfig }, flags as Partial<ILintConfig>);
 
     this.quiet = flags.quiet;
 
-    const rulesetFile = ruleset || (await getDefaultRulesetFile(cwd)) || null;
+    const rulesetFile = ruleset || (await getDefaultRulesetFile(cwd));
 
     if (rulesetFile) {
       try {
@@ -102,7 +104,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, config, this, rules);
+        await lint(args.source, lintConfig, this, rules);
       } catch (ex) {
         this.error(ex.message);
       }

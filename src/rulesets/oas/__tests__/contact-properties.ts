@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -31,6 +32,56 @@ describe('contact-properties', () => {
       paths: {},
       info: { contact: {} },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'contact-properties',
+        message: 'Contact object should have `name`, `url` and `email`.',
+        path: ['info', 'contact', 'name'],
+        range: {
+          end: {
+            character: 17,
+            line: 4,
+          },
+          start: {
+            character: 14,
+            line: 4,
+          },
+        },
+        severity: 1,
+        source: undefined,
+      },
+      {
+        code: 'contact-properties',
+        message: 'Contact object should have `name`, `url` and `email`.',
+        path: ['info', 'contact', 'url'],
+        range: {
+          end: {
+            character: 17,
+            line: 4,
+          },
+          start: {
+            character: 14,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        code: 'contact-properties',
+        message: 'Contact object should have `name`, `url` and `email`.',
+        path: ['info', 'contact', 'email'],
+        range: {
+          end: {
+            character: 17,
+            line: 4,
+          },
+          start: {
+            character: 14,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

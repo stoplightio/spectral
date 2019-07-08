@@ -202,7 +202,8 @@ describe('lint', () => {
         .command(['lint', invalidOas3SpecPath, '-r', standardOas3RulesetPath])
         .it('outputs warnings in default format', ctx => {
           expect(ctx.stdout).toContain(
-            '1:5  warning  api-servers       OpenAPI `servers` must be present and non-empty array',
+            'warning  api-servers       OpenAPI `servers` must be present and non-empty array',
+            // Restore to once Windows new line is sorted '1:5  warning  api-servers       OpenAPI `servers` must be present and non-empty array',
           );
           expect(ctx.stdout).toContain('3:6  warning  info-contact      Info object should contain `contact` object');
           expect(ctx.stdout).toContain(
@@ -218,7 +219,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(
             '46:24  warning  operation-description   Operation `description` must be present and non-empty string',
           );
-          expect(ctx.stdout).toContain('22 problems (0 errors, 22 warnings, 0 infos)');
+          expect(ctx.stdout).toContain('28 problems (0 errors, 28 warnings, 0 infos)');
           expect(ctx.stdout).not.toContain('OpenAPI 2.x detected');
         });
     });
@@ -308,7 +309,7 @@ describe('lint', () => {
       });
   });
 
-  describe('when not using config nor default config file', () => {
+  describe('when not using ruleset nor default ruleset file', () => {
     test
       .stdout()
       .command(['lint', invalidOas3SpecPath])
@@ -317,7 +318,7 @@ describe('lint', () => {
       });
   });
 
-  describe('when using default config file', () => {
+  describe('when using default ruleset file', () => {
     let spy: SpyInstance;
     beforeAll(() => {
       spy = jest.spyOn(process, 'cwd').mockReturnValue(resolve(__dirname, '__fixtures__'));

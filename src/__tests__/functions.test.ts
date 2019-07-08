@@ -16,7 +16,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.info',
             then: {
               function: RuleFunction.XOR,
@@ -39,7 +39,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.info',
             then: {
               function: RuleFunction.XOR,
@@ -62,7 +62,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.info',
             then: {
               function: RuleFunction.XOR,
@@ -87,7 +87,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.info',
             then: {
               field: 'termsOfService',
@@ -110,7 +110,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.responses',
             then: {
               field: '@key',
@@ -139,7 +139,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.info.termsOfService',
             then: {
               function: RuleFunction.PATTERN,
@@ -161,7 +161,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$.responses',
             then: {
               field: '@key',
@@ -211,7 +211,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$..val',
             then: [
               {
@@ -235,7 +235,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$..val',
             then: [
               {
@@ -259,7 +259,7 @@ describe('functions', () => {
       expect(
         applyRuleToObject(
           {
-            summary: '',
+            message: '',
             given: '$..val',
             then: {
               function: RuleFunction.LENGTH,

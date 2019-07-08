@@ -25,6 +25,16 @@
         "T": {
             "type": "string"
         },
+        "DiagnosticSeverity": {
+            "enum": [
+                -1,
+                0,
+                1,
+                2,
+                3
+            ],
+            "type": "number"
+        },
         "HumanReadableSeverity": {
             "type": "string",
             "enum": [
@@ -33,6 +43,16 @@
                 "info",
                 "hint",
                 "off"
+            ]
+        },
+        "Severity": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/DiagnosticSeverity"
+                },
+                {
+                    "$ref": "#/definitions/HumanReadableSeverity"
+                }
             ]
         }
     },
@@ -49,15 +69,9 @@
             "type": "string"
         },
         "severity": {
-            "enum": [
-                0,
-                1,
-                2,
-                3
-            ],
-            "type": "number"
+            "$ref": "#/definitions/Severity"
         },
-        "summary": {
+        "message": {
             "type": "string"
         },
         "tags": {
@@ -119,7 +133,7 @@
             "minItems": 1,
             "items": [
                 {
-                    "$ref": "#/definitions/HumanReadableSeverity"
+                    "$ref": "#/definitions/Severity"
                 },
                 {
                     "type": "object"

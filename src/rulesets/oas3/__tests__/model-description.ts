@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -35,6 +36,23 @@ describe('model-description', () => {
         },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'model-description',
+        message: 'Model `description` must be present and non-empty string.',
+        path: ['components', 'schemas', 'user', 'description'],
+        range: {
+          end: {
+            character: 16,
+            line: 5,
+          },
+          start: {
+            character: 13,
+            line: 5,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

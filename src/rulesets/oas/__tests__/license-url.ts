@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -29,6 +30,23 @@ describe('license-url', () => {
         license: { name: 'MIT' },
       },
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'license-url',
+        message: 'License object should include `url`.',
+        path: ['info', 'license', 'url'],
+        range: {
+          end: {
+            character: 19,
+            line: 5,
+          },
+          start: {
+            character: 14,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

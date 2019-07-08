@@ -83,7 +83,6 @@ oas3Rules()
     },
     {
         "code": "info-contact",
-        "summary": "Info object should contain `contact` object.",
         "message": "Info object should contain `contact` object.",
         "path": [
             "info",
@@ -103,7 +102,6 @@ oas3Rules()
     },
     {
         "code": "info-description",
-        "summary": "OpenAPI object info `description` must be present and non-empty string.",
         "message": "OpenAPI object info `description` must be present and non-empty string.",
         "path": [
             "info",
@@ -123,7 +121,6 @@ oas3Rules()
     },
     {
         "code": "oas3-schema",
-        "summary": "should NOT have additional properties: responses",
         "message": "should NOT have additional properties: responses",
         "path": [],
         "severity": 0,
@@ -140,7 +137,6 @@ oas3Rules()
     },
     {
         "code": "api-servers",
-        "summary": "OpenAPI `servers` must be present and non-empty array.",
         "message": "OpenAPI `servers` must be present and non-empty array.",
         "path": [
             "servers"
@@ -180,7 +176,7 @@ const spectral = new Spectral();
 
 spectral.addRules({
   snake_case: {
-    summary: 'Checks for snake case pattern',
+    description: 'Checks for snake case pattern',
 
     // evaluate every property
     given: '$..*',
@@ -206,7 +202,6 @@ spectral.run({name: 'helloWorld',}).then(results => {
 [
     {
         "code": "snake_case",
-        "summary": "Checks for snake case pattern",
         "message": "Checks for snake case pattern",
         "path": [
             "name"
@@ -255,7 +250,7 @@ spectral.addFunctions({
 
 spectral.addRules({
   openapi_not_swagger: {
-    summary: 'Checks for use of Swagger, and suggests OpenAPI.',
+    description: 'Checks for use of Swagger, and suggests OpenAPI.',
 
     // check every property
     given: '$..*',
@@ -286,7 +281,6 @@ spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
 [
     {
         "code": "openapi_not_swagger",
-        "summary": "Checks for use of Swagger, and suggests OpenAPI.",
         "message": "Checks for use of Swagger, and suggests OpenAPI.",
         "path": [
             "description"

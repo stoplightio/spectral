@@ -1,6 +1,4 @@
-import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
-import * as fs from 'fs';
 import { cloneDeep } from 'lodash';
 import { mergeRulesets } from '../rulesets/merger';
 import { oas2Functions } from '../rulesets/oas2';
@@ -11,11 +9,8 @@ import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
 import { IRulesetFile } from '../types/ruleset';
 
-const invalidSchema = fs.readFileSync(
-  path.join(__dirname, './__fixtures__/petstore.invalid-schema.oas3.yaml'),
-  'utf-8',
-);
-const todosInvalid = fs.readFileSync(path.join(__dirname, './__fixtures__/todos.invalid.oas2.json'), 'utf-8');
+const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
+const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -34,7 +29,7 @@ const target = {
 };
 const rules = {
   example: {
-    summary: '',
+    message: '',
     given: '$.responses',
     then: {
       function: fnName,
@@ -154,6 +149,7 @@ describe('linter', () => {
     spectral.addRules(mergeRulesets(cloneDeep(oas3Ruleset) as IRulesetFile, {
       rules: {
         'valid-example': 'off',
+        'model-description': -1,
       },
     }).rules as RuleCollection);
 
@@ -165,6 +161,11 @@ describe('linter', () => {
       }),
       expect.objectContaining({
         code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        path: ['paths', '~1pets', 'get', 'responses', '200'],
       }),
     ]);
   });
@@ -274,6 +275,14 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
+        code: 'oas3-schema',
+        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        path: ['paths', '~1pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'model-description',
+      }),
+      expect.objectContaining({
         code: 'valid-example',
         message: '"foo" property type should be number',
         path: ['components', 'schemas', 'foo'],
@@ -347,7 +356,7 @@ responses:: !!foo
       test('should pass through root object', async () => {
         spectral.addRules({
           example: {
-            summary: '',
+            message: '',
             given: '$',
             then: {
               function: fnName,
@@ -485,7 +494,7 @@ responses:: !!foo
       });
       spectral.addRules({
         example: {
-          summary: '',
+          message: '',
           given: '$.responses',
           then: [
             {
@@ -528,7 +537,7 @@ responses:: !!foo
       test('should call each one with the appropriate args', async () => {
         spectral.addRules({
           example: {
-            summary: '',
+            message: '',
             given: '$.responses',
             then: {
               field: '$..description',

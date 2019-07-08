@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -25,6 +26,23 @@ describe('tag-description', () => {
       paths: {},
       tags: [{ name: 'tag' }],
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'tag-description',
+        message: 'Tag object should have a `description`.',
+        path: ['tags', '0', 'description'],
+        range: {
+          end: {
+            character: 19,
+            line: 5,
+          },
+          start: {
+            character: 4,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

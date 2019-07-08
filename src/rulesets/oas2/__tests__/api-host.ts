@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -25,6 +26,23 @@ describe('api-host', () => {
       paths: {},
     });
 
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'api-host',
+        message: 'OpenAPI `host` must be present and non-empty string.',
+        path: ['host'],
+        range: {
+          end: {
+            character: 13,
+            line: 2,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });

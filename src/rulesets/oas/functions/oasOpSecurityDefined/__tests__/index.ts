@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../../index';
 import { oas2Functions } from '../../../../oas2/index';
 import { rules as oas2Rules } from '../../../../oas2/index.json';
@@ -54,7 +55,24 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results).toMatchSnapshot();
+      expect(results).toEqual([
+        {
+          code: 'operation-security-defined',
+          message: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+          path: ['paths', '/path', 'get', 'security', '0'],
+          range: {
+            end: {
+              character: 24,
+              line: 7,
+            },
+            start: {
+              character: 10,
+              line: 6,
+            },
+          },
+          severity: DiagnosticSeverity.Warning,
+        },
+      ]);
     });
   });
 
@@ -106,7 +124,25 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results).toMatchSnapshot();
+      expect(results).toEqual([
+        {
+          code: 'operation-security-defined',
+          message:
+            'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+          path: ['paths', '/path', 'get', 'security', '0'],
+          range: {
+            end: {
+              character: 24,
+              line: 7,
+            },
+            start: {
+              character: 10,
+              line: 6,
+            },
+          },
+          severity: DiagnosticSeverity.Warning,
+        },
+      ]);
     });
   });
 });

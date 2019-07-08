@@ -1,5 +1,12 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { Dictionary, GetLocationForJsonPath, IDiagnostic, IParserResult, JsonPath } from '@stoplight/types';
+import {
+  DiagnosticSeverity,
+  Dictionary,
+  GetLocationForJsonPath,
+  IDiagnostic,
+  IParserResult,
+  JsonPath,
+} from '@stoplight/types';
 
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
@@ -11,7 +18,10 @@ export type RunRuleCollection = Dictionary<IRunRule, string>;
 
 export interface IRunRule extends IRule {
   name: string;
+  severity: SpectralDiagnosticSeverity;
 }
+
+export type SpectralDiagnosticSeverity = DiagnosticSeverity | -1;
 
 /**
  * Name of the rule with a boolean value to enable or disable the rule.
@@ -31,8 +41,6 @@ export interface IRunOpts {
 }
 
 export interface IRuleResult extends IDiagnostic {
-  // @deprecated, use message instead
-  summary?: string;
   path: JsonPath;
 }
 

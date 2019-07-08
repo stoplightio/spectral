@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -25,6 +26,23 @@ describe('openapi-tags-alphabetical', () => {
       paths: {},
       tags: [{ name: 'b-tag' }, { name: 'a-tag' }],
     });
-    expect(results).toMatchSnapshot();
+    expect(results).toEqual([
+      {
+        code: 'openapi-tags-alphabetical',
+        message: 'OpenAPI object should have alphabetical `tags`.',
+        path: ['tags'],
+        range: {
+          end: {
+            character: 21,
+            line: 8,
+          },
+          start: {
+            character: 9,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 });
