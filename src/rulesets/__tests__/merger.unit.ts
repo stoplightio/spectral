@@ -356,4 +356,22 @@ describe('Rulesets merger', () => {
 
     expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Hint);
   });
+
+  it('given invalid rule value should throw', () => {
+    const ruleset: IRulesetFile = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    expect(
+      mergeRulesets.bind(null, ruleset, {
+        rules: {
+          test() {
+            // should never happen
+          },
+        } as any,
+      }),
+    ).toThrow('Invalid value for a rule');
+  });
 });
