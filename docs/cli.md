@@ -1,9 +1,4 @@
----
-title: Spectral CLI
-tags: 
-- Documentation
-- CLI
----
+# Spectral CLI
 
 One installed, Spectral can be run via the command-line:
 

@@ -12,8 +12,8 @@ A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 - Create custom rules to lint JSON or YAML objects
 - Ready to use rules to validate and lint OpenAPI v2 _and_ v3 documents
 - Use JSON path to apply rules to specific parts of your objects
-- Built-in set of functions to help [create custom rules](#creating-a-custom-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
-- [Create custom functions](#creating-a-custom-function) for advanced use cases
+- Built-in set of functions to help [create custom rules](./docs/rulesets.md). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Create custom functions for advanced use cases
 - Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
 ## Installation
@@ -33,7 +33,9 @@ docker run --rm -it stoplight/spectral lint "${URL}"`
 
 ## Usage
 
-Please check out our `docs` directory. A good point to start is the [CLI section][cli-docs]
+### CLI
+
+Spectral can be installed and used via your terminal. Take a look at the [CLI docs](./docs/cli.md).
 
 ### TypeScript (JavaScript)
 
@@ -41,10 +43,11 @@ Spectral is written in TypeScript (JavaScript) and can be imported and used dire
 
 ### Examples
 
-- [Make a custom rule]()
-- [Extend the built in OpenAPI v2 or v3 config]()
-- [Turn a rule off]()
-- [Change the severity of a rule]()
+- [Adding a rule](./docs/rulesets.md#adding-a-rule)
+- [Adding to the recommended OpenAPI rules](./docs/rulesets.md#adding-to-the-recommended-openapi-rules)
+- [Enabling specific OpenAPI rules](./docs/rulesets.md#enabling-specific-openapi-rules)
+- [Disabling specific OpenAPI rules](./docs/rulesets.md#disabling-specific-openapi-rules)
+- [Changing the severity of a rule](./docs/rulesets.md#changing-the-severity-of-a-rule)
 
 ## Concepts
 
@@ -54,7 +57,7 @@ There are three key concepts in Spectral: **Rulesets**, **Rules**, and **Functio
 - **Rules** filter your object down to a set of target values, and specify the function that is used to evaluate those values.
 - **Functions** accept a value and return issue(s) if the value is incorrect.
 
-Think of a **Spectral Config** as a flexible and customizable style guide for your JSON objects.
+Think of a **Spectral ruleset** as a flexible and customizable style guide for your JSON objects.
 
 ## FAQs
 
