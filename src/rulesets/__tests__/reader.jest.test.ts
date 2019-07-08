@@ -105,7 +105,7 @@ describe('Rulesets reader', () => {
     });
   });
 
-  it('should mark disabled rules as disabled if appropriate', () => {
+  it('should set severity of disabled rules to off', () => {
     return expect(readRulesFromRulesets(extendsDisabledOas2Ruleset)).resolves.toEqual({
       ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
         (rules, [name, rule]) => {
