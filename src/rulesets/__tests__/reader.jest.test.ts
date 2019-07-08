@@ -5,7 +5,8 @@ import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
-const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
+const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
+const enabledAllRuleset = path.join(__dirname, './__fixtures__/enable-all-ruleset.json');
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
 const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
 const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas2-ruleset.json');
@@ -31,7 +32,7 @@ describe('Rulesets reader', () => {
   });
 
   it('given two flat, valid ruleset files should return rules', async () => {
-    expect(await readRulesFromRulesets(validFlatRuleset, validFlatRuleset2)).toEqual({
+    expect(await readRulesFromRulesets(validFlatRuleset, validRequireInfo)).toEqual({
       'valid-rule': {
         given: '$.info',
         message: 'should be OK',
@@ -169,6 +170,30 @@ describe('Rulesets reader', () => {
         type: 'validation',
       },
     );
+  });
+
+  it('should prefer top-level ruleset severity level', async () => {
+    const enabledRules = await readRulesFromRulesets(enabledAllRuleset);
+    expect(enabledRules).toEqual(
+      [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (rules, [name, rule]) => {
+          rules[name] = {
+            ...rule,
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+          };
+
+          return rules;
+        },
+        {},
+      ),
+    );
+
+    // let's make sure all rules are enabled
+    expect(
+      Object.values(enabledRules).filter(
+        rule => rule.severity === -1 || rule.severity === 'off' || rule.severity === undefined,
+      ),
+    ).toHaveLength(0);
   });
 
   it('given non-existent ruleset should output error', () => {

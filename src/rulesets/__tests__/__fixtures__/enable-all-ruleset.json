@@ -1,0 +1,6 @@
+{
+  "extends": [[
+    "./extends-disabled-oas2-ruleset.yaml", "all"
+  ]],
+  "rules": {}
+}
