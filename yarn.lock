@@ -577,10 +577,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-9.0.2.tgz#1978287d2cfbcb176d00300fa158d5a1daf63c00"
   integrity sha512-fMVOgl0TSWA9VvsdGyTA26qp2AQ/g4jgSHm3BeFbGIBRGaVKU8JoUNV/tH+a7uxuPIzXzcE1BQa9fENOCKF2BQ==
 
-"@stoplight/yaml@^2.5":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-2.5.1.tgz#7044f7ea11ca89f562c0bf3d9ca0f6527a1e8068"
-  integrity sha512-gIcnhtDdT8XrlmcipiTeJsxApncu1xzdoAkwxryTAUdkGGK1O5Bn6ACnNqdOCQXn+gDbhzYgacGTnSGSb8jcNQ==
+"@stoplight/yaml@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-2.6.0.tgz#9ff3ad3cc9b9146a3a5f0c42b2ab0af011f2a272"
+  integrity sha512-/FJhHsx3PxnIHP7GNiqCVJq8dUhGMynRBfdiW314uIxpdIsapMfw/8r2gip7zsBWx+n9fxu95faOsX2m9xS6qw==
   dependencies:
     "@stoplight/types" "^9.0.2"
     lodash "^4.17.5"
