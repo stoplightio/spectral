@@ -1,9 +1,8 @@
-import { DiagnosticSeverity } from '@stoplight/types/dist';
 import { cloneDeep } from 'lodash';
-import { HumanReadableDiagnosticSeverity, Rule } from '../types';
+import { Rule } from '../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
-
-const DEFAULT_SEVERITY_LEVEL = DiagnosticSeverity.Warning;
+import { DEFAULT_SEVERITY_LEVEL, getSeverityLevel } from './severity';
+import { isValidRule } from './validation';
 
 /*
 - if rule is object, simple deep merge (or we could replace to be a bit stricter?)
@@ -90,39 +89,5 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
       break;
     default:
       throw new Error('Invalid value for a rule');
-  }
-}
-
-function isValidRule(rule: FileRule): rule is Rule {
-  return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
-}
-
-function getSeverityLevel(
-  rules: FileRuleCollection,
-  name: string,
-  rule: FileRule | FileRulesetSeverity,
-): DiagnosticSeverity | HumanReadableDiagnosticSeverity {
-  const existingRule = rules[name];
-
-  if (!isValidRule(existingRule)) return 'off';
-
-  const existingSeverity = existingRule.severity !== undefined ? existingRule.severity : DEFAULT_SEVERITY_LEVEL;
-
-  if (rule === 'recommended') {
-    return existingRule.recommended ? existingSeverity : 'off';
-  }
-
-  if (rule === 'all') {
-    return existingSeverity;
-  }
-
-  switch (typeof rule) {
-    case 'number':
-    case 'string':
-      return rule;
-    case 'boolean':
-      return rule ? existingSeverity : 'off';
-    default:
-      return 'off';
   }
 }

@@ -4,7 +4,7 @@ const oasFormatValidator = require('ajv-oai/lib/format-validator');
 import { ValidateFunction } from 'ajv';
 import { IOutputError } from 'better-ajv-errors';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
-const betterAjvErrors = require('better-ajv-errors');
+const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 interface IAJVOutputError extends IOutputError {
   path?: string;

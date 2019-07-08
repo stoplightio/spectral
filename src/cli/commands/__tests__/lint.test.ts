@@ -218,7 +218,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(
             '46:24  warning  operation-description   Operation `description` must be present and non-empty string',
           );
-          expect(ctx.stdout).toContain('22 problems (0 errors, 22 warnings, 0 infos)');
+          expect(ctx.stdout).toContain('28 problems (0 errors, 28 warnings, 0 infos)');
           expect(ctx.stdout).not.toContain('OpenAPI 2.x detected');
         });
     });

@@ -32,7 +32,7 @@ async function readRulesFromRuleset(baseUri: string, uri: string): Promise<IRule
       if (Array.isArray(extended)) {
         mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0]), extended[1]);
       } else {
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended));
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended), 'recommended');
       }
     }
   }

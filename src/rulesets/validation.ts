@@ -1,9 +1,10 @@
-import { IRulesetFile } from '../types/ruleset';
+import { FileRule, IRulesetFile } from '../types/ruleset';
 
 import { ErrorObject } from 'ajv';
 const AJV = require('ajv');
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
+import { Rule } from '../types';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
@@ -24,4 +25,8 @@ export function assertValidRuleset(ruleset: unknown): IRulesetFile {
   }
 
   return ruleset as IRulesetFile;
+}
+
+export function isValidRule(rule: FileRule): rule is Rule {
+  return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
 }
