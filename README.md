@@ -56,7 +56,7 @@ Head over to [releases](https://github.com/stoplightio/spectral/releases) for th
 
 ### Docker
 ```bash
-docker run --rm -it stoplight/spectral lint "${URL}"`
+docker run --rm -it stoplight/spectral lint "${URL}"
 ```
 
 ## Usage
@@ -75,13 +75,11 @@ Other options include:
   -e, --encoding=encoding      text encoding to use
   -f, --format=json|stylish    formatter to use for outputting results
   -h, --help                   show CLI help
-  -m, --maxResults=maxResults  deprecated: use --max-results instead
   -o, --output=output          output to a file instead of stdout
   -q, --quiet                  no logging - output only
   -r, --ruleset=ruleset        path to a ruleset file (supports remote files)
   -s, --skip-rule=skip-rule    ignore certain rules if they are causing trouble
   -v, --verbose                increase verbosity
-  --max-results=max-results    [default: all] maximum results to show
 ```
 
 > Note: The Spectral CLI supports both YAML and JSON.

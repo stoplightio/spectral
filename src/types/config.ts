@@ -6,7 +6,6 @@ export enum OutputFormat {
 export interface ILintConfig {
   encoding: string;
   format: OutputFormat;
-  maxResults?: number;
   output?: string;
   ruleset?: string[];
   skipRule?: string[];
