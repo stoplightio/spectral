@@ -7,10 +7,7 @@ import {
   IParserResult,
   JsonPath,
 } from '@stoplight/types';
-
-import { Resolver } from '@stoplight/json-ref-resolver';
-import { IFunction } from './function';
-import { IRule, Rule } from './rule';
+import { IFunction, IRule, Rule } from '.';
 
 export type FunctionCollection = Dictionary<IFunction, string>;
 export type RuleCollection = Dictionary<Rule, string>;

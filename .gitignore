@@ -34,3 +34,4 @@
 *-error.log*
 oclif.manifest.json
 /binaries
+/rulesets

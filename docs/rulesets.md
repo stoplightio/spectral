@@ -1,41 +1,129 @@
----
-title: Spectral Rulesets
-tags: 
-- Documentation
-- Rulesets
----
+# Spectral Rulesets
 
-Rulesets are a container for collections of rules. These rules are essentially calling functions Spectral, and by taking parameters you can make these functions do whatever you want. 
+Rulesets are a container for collections of rules. These rules are taking parameters, and calling functions on certain parts of the JSON object being linted.
 
-First the rule filters your object (JSON/YAML file) down to a set of target values, and then list what function arguments should be passed in.
+## CLI Usage
 
-## Usage
+To get a general overview of the CLI usage, please refer to the dedicated [documentation page](./cli.md)
 
-```bash
-spectral lint foo.yaml --ruleset=path/to/acme-company-ruleset.yaml --ruleset=http://example.com/acme-common-ruleset.yaml
-```
+When you run the `spectral lint my-document.json` CLI command, Spectral will automatically apply the built in OpenAPI v2 or v3 ruleset if appropriate.
 
-## Example Ruleset
+To customize the rules that are applied, create a `spectral.yml` in the same directory that you are running the `spectral lint` command from and it will automatically be used.
 
-We currently support ruleset files in both `yaml` and `json` formats.
+## Ruleset Examples
+
+Spectral currently support ruleset files in both `yaml` and `json` formats.
+
+### Adding a rule
+
+Add your own rules under the `rules` property in your `spectral.yml` ruleset file.
+
+**spectral.yml**
 
 ```yaml
-extends:
-  - https://acme.com/ruleset.json
-  - /path/to/ruleset.yaml
 rules:
-    rule-name:
-        given: $..parameters[*]
-        then:
-            field: description
-            function: truthy
+  my-rule-name:
+    description: Tags must have a description.
+    given: $.tags[*]
+    severity: error
+    then:
+      field: description
+      function: truthy
 ```
+
+The example above adds a single rule that checks that tags objects have a description property defined.
+
+Running `spectral lint` on the following object with the ruleset above will result in an error being reported, since the tag does not have a description:
+
+```json
+{
+  "tags": [{
+    "name": "animals"
+  }]
+}
+```
+
+While running it with this object, it will succeed:
+
+```json
+{
+  "tags": [{
+    "name": "animals",
+    "description": "come in all shapes and sizes"
+  }]
+}
+```
+
+### Adding to the recommended OpenAPI rules
+
+Spectral comes with two built in rulesets - one for OpenAPI v2 (`spectral:oas2`), and one for OpenAPI v3 (`spectral:oas3`). Use the `extends` property in your ruleset file to build upon or customize other rulesets.
+
+**spectral.yml**
+
+```yaml
+extends: spectral:oas2
+rules:
+  my-rule-name:
+    description: Tags must have a description.
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+```
+
+The example above will apply the recommended rules from the built in OpenAPI v2 ruleset AND apply the custom `my-rule-name` rule.
+
+### Enabling specific OpenAPI rules
+
+Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
+
+**spectral.yml**
+
+```yaml
+extends: [[spectral:oas2, off]]
+rules:
+  # This rule is defined in the spectral:oas2 ruleset. We're passing `true` to turn it on and inherit the severity defined in the spectral:oas2 ruleset.
+  operation-operationId-unique: true
+```
+
+The example above will run the single rulee that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas2` ruleset.
+
+### Disabling specific OpenAPI rules
+
+This example shows the opposite of the `Enabling specific OpenAPI rules` example. Sometimes you might want to enable all rules by default, and disable a few.
+
+**spectral.yml**
+
+```yaml
+extends: [[spectral:oas2, all]]
+
+rules:
+  operation-operationId-unique: false
+```
+
+The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs just the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
+
+The current recommended rules are marked with the property `recommended: true` in their respective directories: [OAS2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2), [OAS3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3)
+
+### Changing the severity of a rule
+
+**spectral.yml**
+
+```yaml
+extends: spectral:oas2
+rules:
+  operation-2xx-response: warn
+```
+
+The example above will run the recommended rules from the `spectral:oas2` ruleset, but report `operation-2xx-response` as a warning rather than as an error (as is the default behavior in the `spectral:oas2` ruleset).
+
+Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
 ## Rules
 
 Rules are highly configurable. There are only few required parameters but the optional ones gives powerful flexibility. Please see the following type tables for more information.
 
-*TODO: generate this table automatically from the TS file.*
+<!-- *TODO: generate this table automatically from the TS file.* -->
 
 <table>
   <thead>
@@ -85,7 +173,7 @@ Rules are highly configurable. There are only few required parameters but the op
       <td>recommended</td>
       <td><code>boolean</code></td>
       <td>should the rule be enabled by default?</td>
-    </tr>        
+    </tr>
     <tr>
       <td>when</td>
       <td><code><a href="#when">When</a></code></td>
@@ -104,7 +192,7 @@ Rules are highly configurable. There are only few required parameters but the op
       <th>Description</th>
     </tr>
   </thead>
-  <tbody>    
+  <tbody>
     <tr>
       <td>function</td>
       <td><code>string</code></td>
@@ -114,7 +202,7 @@ Rules are highly configurable. There are only few required parameters but the op
       <td>field</td>
       <td><code>string</code></td>
       <td>Name of the field to narrow by or special <code>@key</code> value. If a field name is provided, the function will receive value of that field. If <code>@key</code> is provided, the function will receive its key.<br/>Example: if the target object is an oas object and given = <code>$..responses[*]</code>, then <code>@key</code> would be the response code (200, 400, etc) and <code>description</code> would be the value of each response's description</td>
-    </tr>    
+    </tr>
     <tr>
       <td>functionOptions</td>
       <td><code>Object</code></td>
@@ -133,7 +221,7 @@ Rules are highly configurable. There are only few required parameters but the op
       <th>Description</th>
     </tr>
   </thead>
-  <tbody>    
+  <tbody>
     <tr>
       <td>field</td>
       <td><code>string</code></td>
@@ -158,12 +246,12 @@ $ spectral lint some-oas.yaml --ruleset acme-company.json
 
 Reading ruleset
 
-/rules/rule-without-given-nor-them 	 should have required property 'given' 
-/rules/rule-without-given-nor-them 	 should have required property 'then' 
-/rules/rule-with-invalid-enum/severity 	 should be number 
-/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values 
-/rules/rule-with-invalid-enum/type 	 should be equal to one of the allowed values 
+/rules/rule-without-given-nor-them 	 should have required property 'given'
+/rules/rule-without-given-nor-them 	 should have required property 'then'
+/rules/rule-with-invalid-enum/severity 	 should be number
+/rules/rule-with-invalid-enum/severity 	 should be equal to one of the allowed values
+/rules/rule-with-invalid-enum/type 	 should be equal to one of the allowed values
 ```
 
-These errors should look just like errors you get from Spectral when an API description is invalid, 
+These errors should look just like errors you get from Spectral when an API description is invalid,
 so use them to fix your rules in the same way.
