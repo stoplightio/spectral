@@ -82,7 +82,7 @@ jobs:
       - cached-dependencies
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: npm version from-git
-      - run: yarn build
+      - run: yarn build --outDir ./
       - run: |
           if [[ "$CIRCLE_TAG" == *beta* ]] ; then
             npm publish --tag beta

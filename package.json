@@ -34,7 +34,7 @@
   },
   "files": [
     "bin/*",
-    "dist/*",
+    "*.js",
     "oclif.manifest.json"
   ],
   "engines": {
