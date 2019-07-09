@@ -36,10 +36,10 @@ Spectral is avaiable as a Docker image as well
 docker run --rm -it stoplight/spectral lint "${url}"`
 ```
 
-If the file you want to lint is on your computer, you need to mount the directory as a volume
--v myvol2:/app
+If the file you want to lint is on your computer, you'll need to mount the directory where the file resides as a volume
+
 ```bash
-docker run --rm -it -v $(PWD):/ stoplight/spectral lint "/file.yml"
+docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint "/tmp/file.yaml"
 ```
 
 Finally, [executable binaries](#executable-binaries) are also available.
