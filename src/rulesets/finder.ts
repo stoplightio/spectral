@@ -4,6 +4,12 @@ import { rulesetsMap } from './map';
 
 const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
 
+// DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
+// parameter can be renamed, but don't this if you don't need to
+function resolveSpectralVersion(pkg: string) {
+  return pkg;
+}
+
 export async function findRuleset(from: string, to: string) {
   const mapped = rulesetsMap.get(to);
   if (mapped !== void 0) {
@@ -42,8 +48,7 @@ export async function findRuleset(from: string, to: string) {
   try {
     return require.resolve(to);
   } catch {
-    // todo: put hardcoded version here? might be good if we decide to make a breaking change in future.
-    return path.join('https://unpkg.com/', to); // try to point to npm module
+    return path.join('https://unpkg.com/', resolveSpectralVersion(to)); // try to point to npm module
   }
 }
 
