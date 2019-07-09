@@ -10,13 +10,43 @@ function resolveSpectralVersion(pkg: string) {
   return pkg;
 }
 
+function resolveFromNPM(pkg: string) {
+  try {
+    return require.resolve(pkg);
+  } catch {
+    return path.join('https://unpkg.com/', resolveSpectralVersion(pkg));
+  }
+}
+
+async function resolveFromFS(from: string, to: string) {
+  let targetPath: string;
+
+  // if a built-in ruleset starting with @stoplight/spectral is given,
+  // try to search in spectral source directory - we should be able to find it
+  // this path is often hit when spectral:oas(?:2|3)? shorthand is provided
+  if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/' && to.startsWith('@stoplight/spectral')) {
+    targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace('@stoplight/spectral/', './'));
+    if (await exists(targetPath)) {
+      return targetPath;
+    }
+  }
+
+  targetPath = path.join(from, '..', to);
+  // if it's not a built-in ruleset, try to resolve the file according to the provided path
+  if (await exists(targetPath)) {
+    return targetPath;
+  }
+
+  throw new Error('File does not exist');
+}
+
 export async function findRuleset(from: string, to: string) {
   const mapped = rulesetsMap.get(to);
   if (mapped !== void 0) {
     to = mapped;
   }
 
-  if (path.isURL(to) || path.isAbsolute(to)) {
+  if (path.isAbsolute(to)) {
     return to;
   }
 
@@ -25,30 +55,11 @@ export async function findRuleset(from: string, to: string) {
   }
 
   try {
-    const targetPath = path.join(from, '..', to);
-    if (await exists(targetPath)) {
-      return targetPath;
-    }
+    return await resolveFromFS(from, to);
   } catch {
-    // nothing very bad, let's move on
-    // it's just not a file, but could be a npm module
-  }
-
-  if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/') {
-    try {
-      const targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace('@stoplight/spectral/', './'));
-      if (await exists(targetPath)) {
-        return targetPath;
-      }
-    } catch {
-      // same as above
-    }
-  }
-
-  try {
-    return require.resolve(to);
-  } catch {
-    return path.join('https://unpkg.com/', resolveSpectralVersion(to)); // try to point to npm module
+    // fs lookup failed...
+    // we either given a npm module or the code is executed in a browser or other environment without fs access
+    return resolveFromNPM(to);
   }
 }
 
