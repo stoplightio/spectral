@@ -277,7 +277,7 @@ spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
 [Try it out!](https://repl.it/@ChrisMiaskowski/spectral-custom-function-example)
 
 ```bash
-# Outputs a single result since we are using the term `Swagger` in our object 
+# Outputs a single result since we are using the term `Swagger` in our object
 [
     {
         "code": "openapi_not_swagger",
