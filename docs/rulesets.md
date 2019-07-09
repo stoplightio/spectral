@@ -103,7 +103,7 @@ rules:
 
 The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs just the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
-The current recommended rules are marked with the property `recommended: true` in their respective directories: [OAS2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2), [OAS3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3)
+The current recommended rules are marked with the property `recommended: true` in their respective directories: [OpenAPI v2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2/index.json), [OpenAPI v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3/index.json)
 
 ### Changing the severity of a rule
 
