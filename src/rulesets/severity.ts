@@ -20,40 +20,47 @@ function getSeverityForRule(
   }
 }
 
+function getSeverityForInvalidRule(
+  existingRule: FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, object],
+  newRule: FileRule | FileRulesetSeverity,
+) {
+  if (newRule === 'off') return -1;
+
+  if (newRule === 'recommended' || newRule === 'all') {
+    if (existingRule === false || existingRule === -1 || existingRule === 'off') {
+      return -1;
+    }
+
+    return getSeverityForRule(existingRule, DEFAULT_SEVERITY_LEVEL);
+  }
+
+  return getSeverityForRule(newRule, DEFAULT_SEVERITY_LEVEL);
+}
+
 export function getSeverityLevel(
   rules: FileRuleCollection,
   name: string,
-  rule: FileRule | FileRulesetSeverity,
+  newRule: FileRule | FileRulesetSeverity,
 ): SpectralDiagnosticSeverity {
   const existingRule = rules[name];
 
   // this is an edge case, please refer to related tests
   if (!isValidRule(existingRule)) {
-    if (rule === 'off') return -1;
-
-    if (rule === 'recommended' || rule === 'all') {
-      if (existingRule === false || existingRule === -1 || existingRule === 'off') {
-        return -1;
-      }
-
-      return getSeverityForRule(existingRule, DEFAULT_SEVERITY_LEVEL);
-    }
-
-    return getSeverityForRule(rule, DEFAULT_SEVERITY_LEVEL);
+    return getSeverityForInvalidRule(existingRule, newRule);
   }
 
   const existingSeverity =
     existingRule.severity !== undefined ? getDiagnosticSeverity(existingRule.severity) : DEFAULT_SEVERITY_LEVEL;
 
-  if (rule === 'recommended') {
+  if (newRule === 'recommended') {
     return existingRule.recommended ? existingSeverity : -1;
   }
 
-  if (rule === 'all') {
+  if (newRule === 'all') {
     return existingSeverity;
   }
 
-  return getSeverityForRule(rule, existingSeverity);
+  return getSeverityForRule(newRule, existingSeverity);
 }
 
 const SEVERITY_MAP: Dictionary<SpectralDiagnosticSeverity, HumanReadableDiagnosticSeverity> = {
