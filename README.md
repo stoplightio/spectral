@@ -30,10 +30,16 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-Spectral is avaiable as a Docker image as well.
+Spectral is avaiable as a Docker image as well
 
 ```bash
-docker run --rm -it stoplight/spectral lint "${url or filepath to openapi file}"`
+docker run --rm -it stoplight/spectral lint "${url}"`
+```
+
+If the file you want to lint is on your computer, you need to mount the directory as a volume
+-v myvol2:/app
+```bash
+docker run --rm -it -v $(PWD):/ stoplight/spectral lint "/file.yml"
 ```
 
 Finally, [executable binaries](#executable-binaries) are also available.

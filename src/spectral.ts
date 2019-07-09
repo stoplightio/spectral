@@ -3,13 +3,13 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
 import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
 import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
+import { extname } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
   parseWithPointers as parseYAMLWithPointers,
 } from '@stoplight/yaml';
 import { merge, set, uniqBy } from 'lodash';
-import { extname } from 'path';
 
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';

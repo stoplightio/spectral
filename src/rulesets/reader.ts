@@ -1,7 +1,7 @@
 import { parse } from '@stoplight/yaml';
 import { readParsable } from '../fs/reader';
 import { RuleCollection } from '../types';
-import { IRuleset, IRulesetFile } from '../types/ruleset';
+import { FileRulesetSeverity, IRuleset, IRulesetFile } from '../types/ruleset';
 import { findRuleset } from './finder';
 import { mergeRulesets } from './merger';
 import { assertValidRuleset } from './validation';
@@ -12,27 +12,33 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
   };
 
   for (const uri of uris) {
-    mergeRulesets(base, await readRulesFromRuleset('', uri));
+    mergeRulesets(base, await readRulesFromRuleset(uri, uri));
   }
 
   return base.rules;
 }
 
-async function readRulesFromRuleset(baseUri: string, uri: string): Promise<IRulesetFile> {
+async function readRulesFromRuleset(
+  baseUri: string,
+  uri: string,
+  severity?: FileRulesetSeverity,
+): Promise<IRulesetFile> {
   const ruleset = assertValidRuleset(parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')));
 
   const newRuleset: IRulesetFile = {
     rules: {},
   };
 
-  const extendz = ruleset.extends;
+  const extendedRulesets = ruleset.extends;
 
-  if (extendz && extendz.length) {
-    for (const extended of extendz) {
+  if (extendedRulesets !== undefined) {
+    for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
       if (Array.isArray(extended)) {
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0]), extended[1]);
+        const parentSeverity = severity === undefined ? extended[1] : severity;
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0], parentSeverity), parentSeverity);
       } else {
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended), 'recommended');
+        const parentSeverity = severity === undefined ? 'recommended' : severity;
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended, parentSeverity), parentSeverity);
       }
     }
   }

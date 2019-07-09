@@ -1,5 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { IRule } from '../../types';
+import { IRulesetFile } from '../../types/ruleset';
 import { mergeRulesets } from '../merger';
 
 describe('Rulesets merger', () => {
@@ -105,10 +106,10 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', 'error');
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Error);
   });
 
-  it('prefers the most recent severity level', () => {
+  it('prefers the root definition severity level', () => {
     const ruleset = {
       rules: {
         test: JSON.parse(JSON.stringify(baseRule)),
@@ -142,7 +143,7 @@ describe('Rulesets merger', () => {
       },
     });
 
-    expect(ruleset).toHaveProperty('rules.test.severity', -1);
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Error);
   });
 
   it('includes new rules', () => {
@@ -158,7 +159,10 @@ describe('Rulesets merger', () => {
 
     expect(ruleset).toEqual({
       rules: {
-        example: baseRule,
+        example: {
+          ...baseRule,
+          severity: DiagnosticSeverity.Warning,
+        },
       },
     });
   });
@@ -315,5 +319,59 @@ describe('Rulesets merger', () => {
 
     expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Warning);
     expect(ruleset).toHaveProperty('rules.test2.severity', DiagnosticSeverity.Warning);
+  });
+
+  it('overrides existing severity if no ruleset severity is given', () => {
+    const ruleset: IRulesetFile = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeRulesets(ruleset, {
+      rules: {
+        test: 'hint',
+      },
+    });
+
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Hint);
+  });
+
+  it('overrides existing severity if all ruleset severity is given', () => {
+    const ruleset: IRulesetFile = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    mergeRulesets(
+      ruleset,
+      {
+        rules: {
+          test: 'hint',
+        },
+      },
+      'all',
+    );
+
+    expect(ruleset).toHaveProperty('rules.test.severity', DiagnosticSeverity.Hint);
+  });
+
+  it('given invalid rule value should throw', () => {
+    const ruleset: IRulesetFile = {
+      rules: {
+        test: JSON.parse(JSON.stringify(baseRule)),
+      },
+    };
+
+    expect(
+      mergeRulesets.bind(null, ruleset, {
+        rules: {
+          test() {
+            // should never happen
+          },
+        } as any,
+      }),
+    ).toThrow('Invalid value for a rule');
   });
 });
