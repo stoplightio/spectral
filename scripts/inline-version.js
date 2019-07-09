@@ -21,7 +21,10 @@ for (const node of body) {
     node.body.body = [
       b.returnStatement(
         b.callExpression(
-          b.memberExpression(b.identifier(node.params[0].name), b.identifier('replace')),
+          b.memberExpression(
+            b.callExpression(b.identifier('String'), [b.identifier(node.params[0].name)]),
+            b.identifier('replace'),
+          ),
           [
             b.stringLiteral(pkg.name),
             b.stringLiteral(`${pkg.name}@${pkg.version}`),
