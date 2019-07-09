@@ -1,6 +1,108 @@
 {
   "extends": ["spectral:oas"],
   "rules": {
+    "api-host": {
+      "description": "OpenAPI `host` must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "host",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "api-schemes": {
+      "description": "OpenAPI host `schemes` must be present and non-empty array.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "schemes",
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "host-not-example": {
+      "description": "Server URL should not point at `example.com`.",
+      "recommended": false,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "host",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "example\\.com"
+        }
+      }
+    },
+    "host-trailing-slash": {
+      "description": "Server URL should not have a trailing slash.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "host",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "/$"
+        }
+      }
+    },
+    "model-description": {
+      "description": "Definition `description` must be present and non-empty string.",
+      "recommended": false,
+      "type": "style",
+      "given": "$..definitions[*]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      }
+    },
+    "operation-security-defined": {
+      "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
+      "recommended": true,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasOpSecurityDefined",
+        "functionOptions": {
+          "schemesPath": [
+            "securityDefinitions"
+          ]
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "valid-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "\"{{property}}\" property {{error}}",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?(@.example)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
     "oas2-schema": {
       "description": "Validate structure of OpenAPIv2 specification.",
       "message": "{{error}}",
@@ -1637,108 +1739,6 @@
       "tags": [
         "schema"
       ]
-    },
-    "api-host": {
-      "description": "OpenAPI `host` must be present and non-empty string.",
-      "recommended": true,
-      "type": "style",
-      "given": "$",
-      "then": {
-        "field": "host",
-        "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
-    },
-    "api-schemes": {
-      "description": "OpenAPI host `schemes` must be present and non-empty array.",
-      "recommended": true,
-      "type": "style",
-      "given": "$",
-      "then": {
-        "field": "schemes",
-        "function": "schema",
-        "functionOptions": {
-          "schema": {
-            "items": {
-              "type": "string"
-            },
-            "minItems": 1,
-            "type": "array"
-          }
-        }
-      },
-      "tags": [
-        "api"
-      ]
-    },
-    "host-not-example": {
-      "description": "Server URL should not point at `example.com`.",
-      "recommended": false,
-      "type": "style",
-      "given": "$",
-      "then": {
-        "field": "host",
-        "function": "pattern",
-        "functionOptions": {
-          "notMatch": "example\\.com"
-        }
-      }
-    },
-    "host-trailing-slash": {
-      "description": "Server URL should not have a trailing slash.",
-      "recommended": true,
-      "type": "style",
-      "given": "$",
-      "then": {
-        "field": "host",
-        "function": "pattern",
-        "functionOptions": {
-          "notMatch": "/$"
-        }
-      }
-    },
-    "model-description": {
-      "description": "Definition `description` must be present and non-empty string.",
-      "recommended": false,
-      "type": "style",
-      "given": "$..definitions[*]",
-      "then": {
-        "field": "description",
-        "function": "truthy"
-      }
-    },
-    "operation-security-defined": {
-      "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
-      "recommended": true,
-      "type": "validation",
-      "given": "$",
-      "then": {
-        "function": "oasOpSecurityDefined",
-        "functionOptions": {
-          "schemesPath": [
-            "securityDefinitions"
-          ]
-        }
-      },
-      "tags": [
-        "operation"
-      ]
-    },
-    "valid-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "\"{{property}}\" property {{error}}",
-      "recommended": true,
-      "type": "validation",
-      "given": "$..[?(@.example)]",
-      "then": {
-        "function": "schemaPath",
-        "functionOptions": {
-          "field": "example",
-          "schemaPath": "$"
-        }
-      }
     }
   }
 }

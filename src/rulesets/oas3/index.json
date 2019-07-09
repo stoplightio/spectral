@@ -1,6 +1,96 @@
 {
   "extends": ["spectral:oas"],
   "rules": {
+    "api-servers": {
+      "description": "OpenAPI `servers` must be present and non-empty array.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "items": {
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "model-description": {
+      "description": "Model `description` must be present and non-empty string.",
+      "recommended": false,
+      "type": "style",
+      "given": "$.components.schemas[*]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      }
+    },
+    "operation-security-defined": {
+      "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
+      "recommended": true,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasOpSecurityDefined",
+        "functionOptions": {
+          "schemesPath": [
+            "components",
+            "securitySchemes"
+          ]
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "server-not-example.com": {
+      "description": "Server URL should not point at `example.com`.",
+      "recommended": false,
+      "type": "style",
+      "given": "$.servers[*]",
+      "then": {
+        "field": "url",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "example\\.com"
+        }
+      }
+    },
+    "server-trailing-slash": {
+      "description": "Server URL should not have a trailing slash.",
+      "recommended": true,
+      "type": "style",
+      "given": "$.servers[*]",
+      "then": {
+        "field": "url",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "/$"
+        }
+      }
+    },
+    "valid-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "\"{{property}}\" property {{error}}",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?(@.example)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
     "oas3-schema": {
       "description": "Validate structure of OpenAPIv3 specification.",
       "message": "{{error}}",
@@ -2313,96 +2403,6 @@
       "tags": [
         "schema"
       ]
-    },
-    "api-servers": {
-      "description": "OpenAPI `servers` must be present and non-empty array.",
-      "recommended": true,
-      "type": "style",
-      "given": "$",
-      "then": {
-        "field": "servers",
-        "function": "schema",
-        "functionOptions": {
-          "schema": {
-            "items": {
-              "type": "object"
-            },
-            "minItems": 1,
-            "type": "array"
-          }
-        }
-      },
-      "tags": [
-        "api"
-      ]
-    },
-    "model-description": {
-      "description": "Model `description` must be present and non-empty string.",
-      "recommended": false,
-      "type": "style",
-      "given": "$.components.schemas[*]",
-      "then": {
-        "field": "description",
-        "function": "truthy"
-      }
-    },
-    "operation-security-defined": {
-      "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
-      "recommended": true,
-      "type": "validation",
-      "given": "$",
-      "then": {
-        "function": "oasOpSecurityDefined",
-        "functionOptions": {
-          "schemesPath": [
-            "components",
-            "securitySchemes"
-          ]
-        }
-      },
-      "tags": [
-        "operation"
-      ]
-    },
-    "server-not-example.com": {
-      "description": "Server URL should not point at `example.com`.",
-      "recommended": false,
-      "type": "style",
-      "given": "$.servers[*]",
-      "then": {
-        "field": "url",
-        "function": "pattern",
-        "functionOptions": {
-          "notMatch": "example\\.com"
-        }
-      }
-    },
-    "server-trailing-slash": {
-      "description": "Server URL should not have a trailing slash.",
-      "recommended": true,
-      "type": "style",
-      "given": "$.servers[*]",
-      "then": {
-        "field": "url",
-        "function": "pattern",
-        "functionOptions": {
-          "notMatch": "/$"
-        }
-      }
-    },
-    "valid-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "\"{{property}}\" property {{error}}",
-      "recommended": true,
-      "type": "validation",
-      "given": "$..[?(@.example)]",
-      "then": {
-        "function": "schemaPath",
-        "functionOptions": {
-          "field": "example",
-          "schemaPath": "$"
-        }
-      }
     }
   }
 }

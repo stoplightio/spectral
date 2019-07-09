@@ -355,6 +355,13 @@ describe('lint', () => {
             source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
           }),
           expect.objectContaining({
+            code: 'api-schemes',
+            message: 'OpenAPI host `schemes` must be present and non-empty array.',
+            path: ['schemes'],
+            range: expect.any(Object),
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-ref.oas2.json'),
+          }),
+          expect.objectContaining({
             code: 'oas2-schema',
             message: '/info Property foo is not expected to be here',
             path: ['info'],
@@ -369,13 +376,6 @@ describe('lint', () => {
               },
             },
             source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
-          }),
-          expect.objectContaining({
-            code: 'api-schemes',
-            message: 'OpenAPI host `schemes` must be present and non-empty array.',
-            path: ['schemes'],
-            range: expect.any(Object),
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-ref.oas2.json'),
           }),
         ]);
       });
@@ -402,6 +402,13 @@ describe('lint', () => {
             source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),
           }),
           expect.objectContaining({
+            code: 'api-schemes',
+            message: 'OpenAPI host `schemes` must be present and non-empty array.',
+            path: ['schemes'],
+            range: expect.any(Object),
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-nested-ref.oas2.json'),
+          }),
+          expect.objectContaining({
             code: 'oas2-schema',
             message: "/info should have required property 'title'",
             path: ['info'],
@@ -416,13 +423,6 @@ describe('lint', () => {
               },
             },
             source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),
-          }),
-          expect.objectContaining({
-            code: 'api-schemes',
-            message: 'OpenAPI host `schemes` must be present and non-empty array.',
-            path: ['schemes'],
-            range: expect.any(Object),
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-nested-ref.oas2.json'),
           }),
         ]);
       });

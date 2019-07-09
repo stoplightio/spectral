@@ -275,17 +275,17 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
-        code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
-        path: ['paths', '~1pets', 'get', 'responses', '200'],
-      }),
-      expect.objectContaining({
         code: 'model-description',
       }),
       expect.objectContaining({
         code: 'valid-example',
         message: '"foo" property type should be number',
         path: ['components', 'schemas', 'foo'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        path: ['paths', '~1pets', 'get', 'responses', '200'],
       }),
     ]);
   });
