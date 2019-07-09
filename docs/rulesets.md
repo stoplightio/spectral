@@ -2,7 +2,7 @@
 
 Rulesets are a container for collections of rules. These rules are taking parameters, and calling functions on certain parts of the JSON object being linted.
 
-## CLI Usage
+## [CLI Usage](./cli.md)
 
 When you run the `spectral lint my-document.json` CLI command, Spectral will automatically apply the built in OpenAPI v2 or v3 ruleset if appropriate.
 
@@ -95,14 +95,13 @@ This example shows the opposite of the `Enabling specific OpenAPI rules` example
 ```yaml
 extends: [[spectral:oas2, all]]
 
-# we could also just extend spectral:oas2 like this, which would only run the recommended rules (rather than every single rule)
-# extends: spectral:oas2
-
 rules:
   operation-operationId-unique: false
 ```
 
 The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs just the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
+
+The current recommended rules are marked with the property `recommended: true` in their respective directories: [OAS2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2), [OAS3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3)
 
 ### Changing the severity of a rule
 
