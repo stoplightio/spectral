@@ -8,6 +8,7 @@ import {
   JsonPath,
 } from '@stoplight/types';
 
+import { Resolver } from '@stoplight/json-ref-resolver';
 import { IFunction } from './function';
 import { IRule, Rule } from './rule';
 
