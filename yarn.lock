@@ -1042,6 +1042,11 @@ assign-symbols@^1.0.0:
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
   integrity sha1-WWZ/QfrdTyDMvCu5a41Pf3jsA2c=
 
+ast-types@0.13.1:
+  version "0.13.1"
+  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.13.1.tgz#9461428a270c5a27fda44b738dd3bab2e9353003"
+  integrity sha512-b+EeK0WlzrSmpMw5jktWvQGxblpWnvMrV+vOp69RLjzGiHwWV0vgq75DPKtUjppKni3yWwSW8WLGV3Ch/XIWcQ==
+
 astral-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
@@ -5854,6 +5859,11 @@ pretty-format@^24.8.0:
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
 
+private@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
+  integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
+
 process-nextick-args@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
@@ -6133,6 +6143,16 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
+
+recast@^0.18.1:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/recast/-/recast-0.18.1.tgz#dd1788cfa403be8be06a10f201317f881adc602b"
+  integrity sha512-Ri42yIOwHetqKgEhQSS4N1B9wSLn+eYcyLoQfuSpvd661Jty1Q3P0FXkzjIQ9XxTN+3+kRu1JFXbRmUCUmde5Q==
+  dependencies:
+    ast-types "0.13.1"
+    esprima "~4.0.0"
+    private "^0.1.8"
+    source-map "~0.6.1"
 
 redent@^1.0.0:
   version "1.0.0"
