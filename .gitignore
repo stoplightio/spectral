@@ -2,16 +2,12 @@
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
 
 # testing
 /coverage
 
 # production
-/build
 /dist
-/docs-auto
 
 # misc
 .DS_Store
@@ -23,14 +19,9 @@
 .idea
 .nyc_output
 .DS_Store
-.awcache
-.cache-loader
-.cache
-.rpt2_cache
 
 # logs
 *.log*
-*-debug.log*
-*-error.log*
 oclif.manifest.json
 /binaries
+rulesets/
