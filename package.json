@@ -12,7 +12,9 @@
     "schema",
     "API"
   ],
-  "sideEffects": false,
+  "_moduleAliases": {
+    "@stoplight/spectral": "./dist"
+  },
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -69,6 +71,7 @@
     "chalk": "^2.4.2",
     "jsonpath-plus": "~0.20",
     "lodash": ">=4.17.5",
+    "module-alias": "^2.2.0",
     "node-fetch": "^2.6",
     "strip-ansi": "^5.2",
     "text-table": "^0.2",
