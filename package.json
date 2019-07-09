@@ -34,15 +34,17 @@
   },
   "files": [
     "bin/*",
-    "*.js",
-    "oclif.manifest.json"
+    "dist/*",
+    "oclif.manifest.json",
+    "rulesets/*"
   ],
   "engines": {
     "node": ">=8.3.0"
   },
   "scripts": {
+    "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/*.json\" ./",
     "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "copyfiles -u 1 \"src/rulesets/**/*.json\" dist && oclif-dev manifest",
+    "postbuild": "oclif-dev manifest",
     "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
     "commit": "git-cz",
     "lint": "tslint 'src/**/*.ts'",
