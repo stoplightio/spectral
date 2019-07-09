@@ -7,6 +7,17 @@ const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 declare var it: jest.It;
 
 describe('Ruleset Validation', () => {
+  it('given primitive type should throw', () => {
+    expect(assertValidRuleset.bind(null, null)).toThrow();
+    expect(assertValidRuleset.bind(null, 2)).toThrow();
+    expect(assertValidRuleset.bind(null, 'true')).toThrow();
+  });
+
+  it('given object with no rules property should throw', () => {
+    expect(assertValidRuleset.bind(null, {})).toThrow();
+    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow();
+  });
+
   it('given invalid ruleset should throw', () => {
     expect(assertValidRuleset.bind(null, invalidRuleset)).toThrow();
   });
@@ -71,6 +82,15 @@ describe('Ruleset Validation', () => {
     expect(
       assertValidRuleset.bind(null, {
         extends: [['foo', 'off'], 'test'],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it('recognizes string extends syntax', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        extends: 'foo',
         rules: {},
       }),
     ).not.toThrow();

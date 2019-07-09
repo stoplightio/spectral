@@ -10,7 +10,7 @@
             }
         },
         "extends": {
-            "type": "array",
+            "type": ["array", "string"],
             "items": {
                 "oneOf": [
                     {

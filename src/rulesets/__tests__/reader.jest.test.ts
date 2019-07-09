@@ -1,17 +1,22 @@
+import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
-import * as path from 'path';
 import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
-const validFlatRuleset2 = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
+const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
+const enabledAllRuleset = path.join(__dirname, './__fixtures__/enable-all-ruleset.json');
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
 const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
 const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas2-ruleset.json');
+const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
 const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
+const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
+
+jest.setTimeout(10000);
 
 describe('Rulesets reader', () => {
   it('given flat, valid ruleset file should return rules', async () => {
@@ -28,7 +33,7 @@ describe('Rulesets reader', () => {
   });
 
   it('given two flat, valid ruleset files should return rules', async () => {
-    expect(await readRulesFromRulesets(validFlatRuleset, validFlatRuleset2)).toEqual({
+    expect(await readRulesFromRulesets(validFlatRuleset, validRequireInfo)).toEqual({
       'valid-rule': {
         given: '$.info',
         message: 'should be OK',
@@ -51,38 +56,27 @@ describe('Rulesets reader', () => {
   it('should inherit properties of extended rulesets', async () => {
     const rules = await readRulesFromRulesets(extendsOas2Ruleset);
 
-    // we pick up recommended rules only from spectral:oas
-    expect(rules).toMatchObject(
-      Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
-        oasRules[name] = {
-          ...rule,
-          ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-          ...(!(rule as IRule).recommended && { severity: -1 }),
-        };
+    // we pick up *all* rules only from spectral:oas and spectral:oas2 and keep their severity level or set a default one
+    expect(rules).toEqual({
+      ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (oasRules, [name, rule]) => {
+          oasRules[name] = {
+            ...rule,
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+          };
 
-        return oasRules;
-      }, {}),
-    );
+          return oasRules;
+        },
+        {},
+      ),
 
-    // we pick up all rules from spectral:oas2
-
-    expect(rules).toMatchObject(
-      Object.entries(oas2Ruleset.rules).reduce<Dictionary<unknown>>((oas2Rules, [name, rule]) => {
-        oas2Rules[name] = {
-          ...rule,
-          ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-        };
-
-        return oas2Rules;
-      }, {}),
-    );
-
-    expect(rules).toHaveProperty('valid-rule', {
-      given: '$.info',
-      message: 'should be OK',
-      severity: DiagnosticSeverity.Warning,
-      then: {
-        function: 'truthy',
+      'valid-rule': {
+        given: '$.info',
+        message: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'truthy',
+        },
       },
     });
   });
@@ -113,6 +107,35 @@ describe('Rulesets reader', () => {
     });
   });
 
+  it('should set severity of disabled rules to off', () => {
+    return expect(readRulesFromRulesets(extendsDisabledOas2Ruleset)).resolves.toEqual({
+      ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (rules, [name, rule]) => {
+          rules[name] = {
+            ...rule,
+            severity: -1,
+          };
+
+          return rules;
+        },
+        {},
+      ),
+
+      'operation-operationId-unique': {
+        // value of oasRuleset.rules['operation-operationId-unique']
+        description: 'Every operation must have a unique `operationId`.',
+        recommended: true,
+        type: 'validation',
+        severity: 0,
+        given: '$',
+        then: {
+          function: 'oasOpIdUnique',
+        },
+        tags: ['operation'],
+      },
+    });
+  });
+
   it('should override properties of extended rulesets', () => {
     return expect(readRulesFromRulesets(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
       'operation-2xx-response',
@@ -130,7 +153,7 @@ describe('Rulesets reader', () => {
     );
   });
 
-  it('should persists disabled properties of extended rulesets', () => {
+  it('should persist disabled properties of extended rulesets', () => {
     return expect(readRulesFromRulesets(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
       'operation-security-defined',
       {
@@ -148,6 +171,60 @@ describe('Rulesets reader', () => {
         type: 'validation',
       },
     );
+  });
+
+  it('should prefer top-level ruleset severity level', async () => {
+    const enabledRules = await readRulesFromRulesets(enabledAllRuleset);
+    expect(enabledRules).toEqual(
+      [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (rules, [name, rule]) => {
+          rules[name] = {
+            ...rule,
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+          };
+
+          return rules;
+        },
+        {},
+      ),
+    );
+
+    // let's make sure all rules are enabled
+    expect(
+      Object.values(enabledRules).filter(
+        rule => rule.severity === -1 || rule.severity === 'off' || rule.severity === undefined,
+      ),
+    ).toHaveLength(0);
+  });
+
+  it('should support local rulesets', () => {
+    return expect(readRulesFromRulesets(extendsRelativeRuleset)).resolves.toEqual({
+      PascalCase: {
+        given: '$',
+        message: 'bar',
+        severity: -1, // turned off, cause it's not recommended
+        then: {
+          function: 'truthy',
+        },
+      },
+      camelCase: {
+        given: '$',
+        message: 'bar',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'truthy',
+        },
+      },
+      snake_case: {
+        given: '$',
+        message: 'foo',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
   });
 
   it('given non-existent ruleset should output error', () => {

@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { Rule } from '../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
-import { DEFAULT_SEVERITY_LEVEL, getSeverityLevel } from './severity';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from './severity';
 import { isValidRule } from './validation';
 
 /*
@@ -16,10 +16,12 @@ export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, rulesetSe
 
   for (const [name, rule] of Object.entries(src.rules)) {
     if (rulesetSeverity !== undefined) {
+      const severity = getSeverityLevel(src.rules, name, rulesetSeverity);
       if (isValidRule(rule)) {
-        processRule(rules, name, { ...rule, severity: getSeverityLevel(src.rules, name, rulesetSeverity) });
+        rule.severity = severity;
+        processRule(rules, name, rule);
       } else {
-        processRule(rules, name, rulesetSeverity);
+        processRule(rules, name, severity);
       }
     } else {
       processRule(rules, name, rule);
@@ -47,6 +49,10 @@ function updateRootRule(root: Rule, newRule: Rule | null) {
   Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
 }
 
+function getRootRule(rule: Rule): Rule {
+  return rule[ROOT_DESCRIPTOR] !== undefined ? rule[ROOT_DESCRIPTOR] : null;
+}
+
 function copyRule(rule: Rule) {
   return cloneDeep(rule);
 }
@@ -56,6 +62,12 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
   switch (typeof rule) {
     case 'boolean':
+      if (isValidRule(existingRule)) {
+        const rootRule = getRootRule(existingRule);
+        existingRule.severity = rootRule ? rootRule.severity : getSeverityLevel(rules, name, rule);
+        updateRootRule(existingRule, existingRule);
+      }
+      break;
     case 'string':
     case 'number':
       // what if rule does not exist (yet)? throw, store the invalid state somehow?
@@ -65,6 +77,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
       break;
     case 'object':
+      normalizeRule(rule);
       if (Array.isArray(rule)) {
         processRule(rules, name, rule[0]);
 
@@ -81,13 +94,20 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
         // new rule
         markRule(rule);
         rules[name] = rule;
-        if (rule.severity === undefined) {
-          rule.severity = DEFAULT_SEVERITY_LEVEL;
-        }
       }
 
       break;
     default:
       throw new Error('Invalid value for a rule');
+  }
+}
+
+function normalizeRule(rule: FileRule) {
+  if (isValidRule(rule)) {
+    if (rule.severity === undefined) {
+      rule.severity = DEFAULT_SEVERITY_LEVEL;
+    } else {
+      rule.severity = getDiagnosticSeverity(rule.severity);
+    }
   }
 }

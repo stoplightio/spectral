@@ -1,0 +1,13 @@
+{
+  "extends": "./casing-rules.json",
+  "rules": {
+    "snake_case": {
+      "severity": "warn",
+      "given": "$",
+      "message": "foo",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}

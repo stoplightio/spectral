@@ -1,0 +1,3 @@
+extends: [[spectral:oas2, off]]
+rules:
+  operation-operationId-unique: true
