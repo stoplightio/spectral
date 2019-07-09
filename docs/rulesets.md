@@ -2,7 +2,9 @@
 
 Rulesets are a container for collections of rules. These rules are taking parameters, and calling functions on certain parts of the JSON object being linted.
 
-## [CLI Usage](./cli.md)
+## CLI Usage
+
+To get a general overview of the CLI usage, please refer to the dedicated [documentation page](./cli.md)
 
 When you run the `spectral lint my-document.json` CLI command, Spectral will automatically apply the built in OpenAPI v2 or v3 ruleset if appropriate.
 
@@ -41,7 +43,7 @@ Running `spectral lint` on the following object with the ruleset above will resu
 }
 ```
 
-While running it with this object will succeed:
+While running it with this object, it will succeed:
 
 ```json
 {
