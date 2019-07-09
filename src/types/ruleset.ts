@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { HumanReadableDiagnosticSeverity, Rule } from './rule';
 import { RuleCollection } from './spectral';
 
