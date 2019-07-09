@@ -1,3 +1,5 @@
+import { getLocationForJsonPath } from '@stoplight/json/getLocationForJsonPath';
+import { parseWithPointers } from '@stoplight/json/parseWithPointers';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
 import { mergeRulesets } from '../rulesets/merger';
@@ -329,6 +331,57 @@ responses:: !!foo
         }),
       ]),
     );
+  });
+
+  describe('reports duplicated properties for', () => {
+    test('JSON format', async () => {
+      const result = await spectral.run({
+        parsed: parseWithPointers('{"foo":true,"foo":false}', { ignoreDuplicateKeys: false }),
+        getLocationForJsonPath,
+      });
+
+      expect(result).toEqual([
+        {
+          code: 20,
+          message: 'DuplicatedKey',
+          path: [],
+          range: {
+            end: {
+              character: 17,
+              line: 0,
+            },
+            start: {
+              character: 12,
+              line: 0,
+            },
+          },
+          severity: DiagnosticSeverity.Error,
+        },
+      ]);
+    });
+
+    test('YAML format', async () => {
+      const result = await spectral.run(`foo: bar\nfoo: baz`);
+
+      expect(result).toEqual([
+        {
+          code: 'YAMLException',
+          message: 'duplicate key',
+          path: [],
+          range: {
+            end: {
+              character: 3,
+              line: 1,
+            },
+            start: {
+              character: 0,
+              line: 1,
+            },
+          },
+          severity: DiagnosticSeverity.Error,
+        },
+      ]);
+    });
   });
 
   describe('functional tests for the given property', () => {

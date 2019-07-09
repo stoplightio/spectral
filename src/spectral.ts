@@ -44,13 +44,17 @@ export class Spectral {
     let parsedResult: IParsedResult;
     if (!isParsedResult(target)) {
       parsedResult = {
-        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
+        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2), {
+          ignoreDuplicateKeys: false,
+        }),
         getLocationForJsonPath: getLocationForJsonPathYAML,
       };
-      results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
     } else {
       parsedResult = target;
     }
+
+    console.log(parsedResult.parsed);
+    results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
     const refDiagnostics: IRuleResult[] = [];
@@ -67,13 +71,13 @@ export class Spectral {
           let parsedRefResult: IParsedResult | undefined;
           if (ext === '.yml' || ext === '.yaml') {
             parsedRefResult = {
-              parsed: parseYAMLWithPointers(content),
+              parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
               source: ref,
               getLocationForJsonPath: getLocationForJsonPathYAML,
             };
           } else if (ext === '.json') {
             parsedRefResult = {
-              parsed: parseJSONWithPointers(content),
+              parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
               source: ref,
               getLocationForJsonPath: getLocationForJsonPathJSON,
             };
