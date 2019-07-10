@@ -35,7 +35,7 @@ oas3Rules()
   });
 ```
 
-_**Note:** Spectral v4.0 does not yet support loading rulesets in the same way as the CLI, so this code is a little bloated adding functions and rules seperately. This example will become much nicer in v4.1 when we add loading custom rulesets. 
+_**Note:** Spectral v4.0 does not yet support loading rulesets in the same way as the CLI, so this code is a little bloated adding functions and rules separately. This example will become much nicer in v4.1 when we add loading custom rulesets. 
 
 This example shows working with the default OpenAPI v2 or v3 rulesets, they can be loaded like this:
 
