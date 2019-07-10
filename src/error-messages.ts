@@ -1,4 +1,4 @@
-import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
+import { DiagnosticSeverity, IDiagnostic } from '@stoplight/types';
 import { uniqBy } from 'lodash';
 import { Resolved } from './resolved';
 import { IRuleResult } from './types';
@@ -12,8 +12,8 @@ export function prettifyDiagnosticErrorMessage(message: string) {
 
 export const prettyPrintResolverErrorMessage = (message: string) => message.replace(/^Error\s*:\s*/, '');
 
-export function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleResult[] {
-  return parsed.diagnostics.map(diagnostic => ({
+export function formatParserDiagnostics(diagnostics: IDiagnostic[], source?: string): IRuleResult[] {
+  return diagnostics.map(diagnostic => ({
     ...diagnostic,
     code: 'parser',
     message: prettifyDiagnosticErrorMessage(diagnostic.message),

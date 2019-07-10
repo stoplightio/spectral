@@ -54,7 +54,7 @@ export class Spectral {
       parsedResult = target;
     }
 
-    results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
+    results = results.concat(formatParserDiagnostics(parsedResult.parsed.diagnostics, parsedResult.source));
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
     const refDiagnostics: IRuleResult[] = [];
@@ -86,7 +86,9 @@ export class Spectral {
           if (parsedRefResult !== undefined) {
             resolveOpts.result = parsedRefResult.parsed.data;
             if (parsedRefResult.parsed.diagnostics.length > 0) {
-              refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed, parsedRefResult.source));
+              refDiagnostics.push(
+                ...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source),
+              );
             }
 
             this._processExternalRef(parsedRefResult, resolveOpts);
