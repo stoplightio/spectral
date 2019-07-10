@@ -4,7 +4,6 @@ Fixes #[ISSUE_NUMBER].
 
 - [ ] Tests added / updated
 - [ ] Docs added / updated
-- [ ] Check this off Breaking change?
 
 **Does this PR introduce a breaking change?**
 
