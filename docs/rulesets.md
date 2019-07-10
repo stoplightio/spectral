@@ -154,18 +154,18 @@ Rules are highly configurable. There are only few required parameters but the op
       <td></td>
     </tr>
     <tr>
-      <td>summary</td>
+      <td>message</td>
       <td><code>string</code></td>
-      <td>A short summary of the rule and its intended purpose</td>
+      <td>A message to be displayed when the rule validation fails</td>
     </tr>
     <tr>
       <td>description</td>
       <td><code>string</code></td>
-      <td>A long-form description of the rule formatted in markdown</td>
+      <td>A short-form or long-form description of the rule formatted in plain string or markdown</td>
     </tr>
     <tr>
       <td>severity</td>
-      <td><code>Error = 0, Warning = 1, Information = 2, Hint = 3</code></td>
+      <td><code>Off = -1, Error = 0, Warning = 1, Information = 2, Hint = 3</code></td>
       <td>The severity of results this rule generates</td>
     </tr>
     <tr>
