@@ -229,7 +229,7 @@ responses:: !!foo
       expect.arrayContaining([
         {
           code: 'parser',
-          message: 'unknown tag <tag:yaml.org,2002:foo>',
+          message: 'Unknown tag <tag:yaml.org,2002:foo>',
           path: [],
           range: {
             end: {
@@ -245,7 +245,7 @@ responses:: !!foo
         },
         {
           code: 'parser',
-          message: 'bad indentation of a mapping entry',
+          message: 'Bad indentation of a mapping entry',
           path: [],
           range: {
             end: {
@@ -343,7 +343,7 @@ responses:: !!foo
       expect(result).toEqual([
         {
           code: 'parser',
-          message: 'DuplicatedKey',
+          message: 'Duplicate key',
           path: [],
           range: {
             end: {
@@ -366,7 +366,7 @@ responses:: !!foo
       expect(result).toEqual([
         {
           code: 'parser',
-          message: 'duplicate key',
+          message: 'Duplicate key',
           path: [],
           range: {
             end: {

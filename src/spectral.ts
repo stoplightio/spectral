@@ -4,13 +4,14 @@ import { IUriParser } from '@stoplight/json-ref-resolver/types';
 import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
 import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
 import { extname } from '@stoplight/path';
-import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
+import { Dictionary } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
   parseWithPointers as parseYAMLWithPointers,
 } from '@stoplight/yaml';
-import { merge, set, uniqBy } from 'lodash';
+import { merge, set } from 'lodash';
 
+import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
@@ -201,37 +202,6 @@ export const isParsedResult = (obj: any): obj is IParsedResult => {
   if (!obj.getLocationForJsonPath || typeof obj.getLocationForJsonPath !== 'function') return false;
 
   return true;
-};
-
-function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleResult[] {
-  return parsed.diagnostics.map(diagnostic => ({
-    ...diagnostic,
-    code: 'parser',
-    path: [],
-    source,
-  }));
-}
-
-const prettyPrintResolverError = (message: string) => message.replace(/^Error\s*:\s*/, '');
-
-const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
-  return uniqBy(resolved.errors, 'message').reduce<IRuleResult[]>((errors, error) => {
-    const path = [...error.path, '$ref'];
-    const location = resolved.getLocationForJsonPath(path);
-
-    if (location) {
-      errors.push({
-        code: 'invalid-ref',
-        path,
-        message: prettyPrintResolverError(error.message),
-        severity: DiagnosticSeverity.Error,
-        range: location.range,
-        source: resolved.spec.source,
-      });
-    }
-
-    return errors;
-  }, []);
 };
 
 export interface IParseMap {

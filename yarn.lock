@@ -574,10 +574,10 @@
     jsonc-parser "2.1.0"
     lodash "4.x.x"
 
-"@stoplight/json@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.3.1.tgz#87b0e8d9bb4a5252d6ceef98365ae2f6d97ce0ff"
-  integrity sha512-OaYjfO3EHltalda6sVPX5l/BXVgY7jJ12tU+fOZA0Pklwu+LmfYmC+z3iNAy9RD4CGS/gcProRqUlHcafE+BLw==
+"@stoplight/json@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.3.2.tgz#da757bdb1be7440feaa8c359c95c50ac5e7a5f4e"
+  integrity sha512-V8zdMTzLYDmWJBWe+zpF8Qm/0Mw4AMhXJcmB7U1ShXNtylcD7+TvFllg5PuhH/TSAD+yHstRMZQ5zMwPOEeI0Q==
   dependencies:
     "@stoplight/fast-safe-stringify" "^2.1.2"
     "@stoplight/types" "^9.1.2"
