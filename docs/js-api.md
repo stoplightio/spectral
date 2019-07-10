@@ -8,7 +8,7 @@ This example uses the OpenAPI v3 rules to lint a document.
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
-const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/rulesets/oas3');
+const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
 // for YAML
 const { parseWithPointers } = require("@stoplight/yaml");
 
