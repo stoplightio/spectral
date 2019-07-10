@@ -53,7 +53,6 @@ export class Spectral {
       parsedResult = target;
     }
 
-    console.log(parsedResult.parsed);
     results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
@@ -207,6 +206,7 @@ export const isParsedResult = (obj: any): obj is IParsedResult => {
 function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleResult[] {
   return parsed.diagnostics.map(diagnostic => ({
     ...diagnostic,
+    code: 'parser',
     path: [],
     source,
   }));
