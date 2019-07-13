@@ -17,7 +17,7 @@ export function formatParserDiagnostics(diagnostics: IDiagnostic[], source?: str
     ...diagnostic,
     code: 'parser',
     message: prettifyDiagnosticErrorMessage(diagnostic.message),
-    path: [],
+    path: diagnostic.path || [],
     source,
   }));
 }

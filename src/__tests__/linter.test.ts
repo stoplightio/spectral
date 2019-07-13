@@ -344,7 +344,7 @@ responses:: !!foo
         {
           code: 'parser',
           message: 'Duplicate key',
-          path: [],
+          path: ['foo'],
           range: {
             end: {
               character: 17,
