@@ -343,7 +343,7 @@ responses:: !!foo
       expect(result).toEqual([
         {
           code: 'parser',
-          message: 'Duplicate key',
+          message: 'Duplicate key: foo',
           path: ['foo'],
           range: {
             end: {
@@ -366,8 +366,8 @@ responses:: !!foo
       expect(result).toEqual([
         {
           code: 'parser',
-          message: 'Duplicate key',
-          path: [],
+          message: 'Duplicate key: foo',
+          path: ['foo'],
           range: {
             end: {
               character: 3,

@@ -1,4 +1,5 @@
-import { DiagnosticSeverity, IDiagnostic } from '@stoplight/types';
+import { DiagnosticSeverity, IDiagnostic, Segment } from '@stoplight/types';
+import { JsonPath } from '@stoplight/types/dist';
 import { uniqBy } from 'lodash';
 import { Resolved } from './resolved';
 import { IRuleResult } from './types';
@@ -6,17 +7,29 @@ import { IRuleResult } from './types';
 const toUpperCase = (word: string) => word.toUpperCase();
 const splitWord = (word: string, end: string, start: string) => `${end} ${start.toLowerCase()}`;
 
-export function prettifyDiagnosticErrorMessage(message: string) {
-  return message.replace(/^[a-z]/, toUpperCase).replace(/([a-z])([A-Z])/g, splitWord);
+export function prettifyDiagnosticErrorMessage(message: string, key: Segment | void) {
+  const prettifiedMessage = message.replace(/^[a-z]/, toUpperCase).replace(/([a-z])([A-Z])/g, splitWord);
+
+  if (key !== undefined) {
+    return prettifiedMessage.replace(/(Duplicate key)/, `$1: ${key}`);
+  }
+
+  return prettifiedMessage;
 }
 
 export const prettyPrintResolverErrorMessage = (message: string) => message.replace(/^Error\s*:\s*/, '');
+
+const getPropertyKey = (path: JsonPath | undefined): Segment | void => {
+  if (path !== undefined && path.length > 0) {
+    return path[path.length - 1];
+  }
+};
 
 export function formatParserDiagnostics(diagnostics: IDiagnostic[], source?: string): IRuleResult[] {
   return diagnostics.map(diagnostic => ({
     ...diagnostic,
     code: 'parser',
-    message: prettifyDiagnosticErrorMessage(diagnostic.message),
+    message: prettifyDiagnosticErrorMessage(diagnostic.message, getPropertyKey(diagnostic.path)),
     path: diagnostic.path || [],
     source,
   }));

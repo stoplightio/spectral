@@ -16,6 +16,7 @@ describe('Error messages', () => {
               character: 17,
             },
           },
+          path: ['test'],
           message: 'DuplicateKey',
           severity: 0,
           code: 20,
@@ -70,8 +71,8 @@ describe('Error messages', () => {
       expect(formatParserDiagnostics(cloneDeep(diagnostics))).toEqual([
         {
           ...diagnostics[0],
-          path: [],
-          message: 'Duplicate key',
+          path: ['test'],
+          message: 'Duplicate key: test',
           code: 'parser',
         },
         {
