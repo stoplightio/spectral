@@ -574,20 +574,20 @@
     jsonc-parser "2.1.0"
     lodash "4.x.x"
 
-"@stoplight/json@^2.3.2":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.3.2.tgz#da757bdb1be7440feaa8c359c95c50ac5e7a5f4e"
-  integrity sha512-V8zdMTzLYDmWJBWe+zpF8Qm/0Mw4AMhXJcmB7U1ShXNtylcD7+TvFllg5PuhH/TSAD+yHstRMZQ5zMwPOEeI0Q==
+"@stoplight/json@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.3.3.tgz#7f461f7e9234a244af7d7e3c0d37fd66fc944eac"
+  integrity sha512-iGRT6N/uUnoXbaGAGlcJJNbI7zZity+vLb1GBUezLeuW1ZHUevxfqK1kvrxK3iZD/2slOPeH23mDHIk56nswSA==
   dependencies:
     "@stoplight/fast-safe-stringify" "^2.1.2"
     "@stoplight/types" "^9.1.2"
     jsonc-parser "~2.1.0"
     lodash "^4.10"
 
-"@stoplight/path@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.0.2.tgz#161a1fbfb7593ce74768db891ec9b00c20c076db"
-  integrity sha512-Xou4eIuEIyRIir3cEaK7h/JnPQo0TKKeVgBM5Nhh72gvggbeQfZKn3e5qrArHIL2zRn6IReyMzgsiqnce0sGIA==
+"@stoplight/path@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.0.3.tgz#2b891c263ab0796b1ef96b11beb878056ff005ca"
+  integrity sha512-YZOn9PjMbtdHrn/6xxvwk+JGCHRORohbIfQLgjveO+jMhHWnK4E/gg5/Q4f7724F7jTZD3AS/jaQiQG77sV/Ow==
 
 "@stoplight/types@9.0.2":
   version "9.0.2"
@@ -601,10 +601,10 @@
   dependencies:
     "@types/json-schema" "^7.0.3"
 
-"@stoplight/yaml@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-2.7.0.tgz#e9f9af7656d0a635b1ec8e090c57b95c81dd7c03"
-  integrity sha512-GwCg9FY5nCy6efRHt37TSxc2i/C+W0romP3Dc7lzqgQpnA1Y11miRGcx7PlG/umwqTQRUytz/UGLf5MUIrwsnA==
+"@stoplight/yaml@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-2.8.0.tgz#1a33854f00f4397c67bb08450dd9784b5e9cf890"
+  integrity sha512-rokktl+qa3O+SwykhCBe6G+vFEUl55SMFxIbdIcnbjWuFroSVABERF+JLxDBlxiWKl9jdPmdgR4Uxlmo345ekA==
   dependencies:
     "@stoplight/types" "^9.1.2"
     "@types/js-yaml" "3.12.1"
