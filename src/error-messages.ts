@@ -7,11 +7,17 @@ import { IRuleResult } from './types';
 const toUpperCase = (word: string) => word.toUpperCase();
 const splitWord = (word: string, end: string, start: string) => `${end} ${start.toLowerCase()}`;
 
-export function prettifyDiagnosticErrorMessage(message: string, key: Segment | void) {
-  const prettifiedMessage = message.replace(/^[a-z]/, toUpperCase).replace(/([a-z])([A-Z])/g, splitWord);
+export function getDiagnosticErrorMessage(diagnostic: IDiagnostic) {
+  const key = getPropertyKey(diagnostic.path);
+  let prettifiedMessage = diagnostic.message.replace(/^[a-z]/, toUpperCase);
+
+  if (diagnostic.code !== 'YAMLException') {
+    // yaml exceptions are already fairly user-friendly
+    prettifiedMessage = prettifiedMessage.replace(/([a-z])([A-Z])/g, splitWord);
+  }
 
   if (key !== undefined) {
-    return prettifiedMessage.replace(/(Duplicate key)/, `$1: ${key}`);
+    prettifiedMessage = prettifiedMessage.replace(/(Duplicate key)/, `$1: ${key}`);
   }
 
   return prettifiedMessage;
@@ -29,7 +35,7 @@ export function formatParserDiagnostics(diagnostics: IDiagnostic[], source?: str
   return diagnostics.map(diagnostic => ({
     ...diagnostic,
     code: 'parser',
-    message: prettifyDiagnosticErrorMessage(diagnostic.message, getPropertyKey(diagnostic.path)),
+    message: getDiagnosticErrorMessage(diagnostic),
     path: diagnostic.path || [],
     source,
   }));
