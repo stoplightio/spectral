@@ -145,7 +145,9 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
     targetUri = resolve(name);
   }
 
-  const spec: IParserResult = parseWithPointers(await readParsable(targetUri, flags.encoding));
+  const spec: IParserResult = parseWithPointers(await readParsable(targetUri, flags.encoding), {
+    ignoreDuplicateKeys: false,
+  });
   const spectral = new Spectral({ resolver: httpAndFileResolver });
   if (parseInt(spec.data.swagger) === 2) {
     command.log('Adding OpenAPI 2.0 (Swagger) functions');
