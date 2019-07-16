@@ -1,5 +1,4 @@
-import { getLocationForJsonPath } from '@stoplight/json/getLocationForJsonPath';
-import { parseWithPointers } from '@stoplight/json/parseWithPointers';
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
 import { mergeRulesets } from '../rulesets/merger';

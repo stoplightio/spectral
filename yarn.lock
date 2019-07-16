@@ -592,7 +592,7 @@
     urijs "~1.19.1"
     vscode-uri "^2.0.2"
 
-"@stoplight/json@^2.2.2", "@stoplight/json@^2.3.3":
+"@stoplight/json@^2.2.2":
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-2.3.3.tgz#7f461f7e9234a244af7d7e3c0d37fd66fc944eac"
   integrity sha512-iGRT6N/uUnoXbaGAGlcJJNbI7zZity+vLb1GBUezLeuW1ZHUevxfqK1kvrxK3iZD/2slOPeH23mDHIk56nswSA==
@@ -601,6 +601,16 @@
     "@stoplight/types" "^9.1.2"
     jsonc-parser "~2.1.0"
     lodash "^4.10"
+
+"@stoplight/json@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.0.1.tgz#e81345a2874486523c215282b252d70259c9c739"
+  integrity sha512-xsqbuXcvv6tepeifrtsRXXVLXzCJurESwUiZQx0SRmRGAk3EEANRrClZMOQf0LCSp2RoJkSd8Ch66tCO+079Xw==
+  dependencies:
+    "@stoplight/types" "^9.1.2"
+    jsonc-parser "~2.1"
+    lodash "^4.17"
+    safe-stable-stringify "^1.1"
 
 "@stoplight/path@^1.1.0":
   version "1.1.0"
@@ -4368,7 +4378,7 @@ json5@2.x, json5@^2.1.0:
   dependencies:
     minimist "^1.2.0"
 
-jsonc-parser@~2.1.0:
+jsonc-parser@~2.1, jsonc-parser@~2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.1.0.tgz#eb0d0c7a3c33048524ce3574c57c7278fb2f1bf3"
   integrity sha512-n9GrT8rrr2fhvBbANa1g+xFmgGK5X91KFeDwlKQ3+SJfmH5+tKv/M/kahx/TXOMflfWHKGKqKyfHQaLKTNzJ6w==
@@ -6427,6 +6437,11 @@ safe-regex@^1.1.0:
   integrity sha1-QKNmnzsHfR6UPURinhV91IAjvy4=
   dependencies:
     ret "~0.1.10"
+
+safe-stable-stringify@^1.1:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/safe-stable-stringify/-/safe-stable-stringify-1.1.0.tgz#f712b600f8f775444ccc66e8f31d250e43fdfe01"
+  integrity sha512-8h+96qSufNQrydRPzbHms38VftQQSRGbqUkaIMWUBWN4/N8sLNALIALa8KmFcQ8P/a9uzMkA+KY04Rj5WQiXPA==
 
 "safer-buffer@>= 2.1.2 < 3", safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
