@@ -1,8 +1,10 @@
 import { safeStringify } from '@stoplight/json';
+import {
+  getLocationForJsonPath as getLocationForJsonPathJSON,
+  parseWithPointers as parseJSONWithPointers,
+} from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
-import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
-import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import {
