@@ -1,3 +1,4 @@
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
 import { mergeRulesets } from '../rulesets/merger';
@@ -226,8 +227,8 @@ responses:: !!foo
     expect(result).toEqual(
       expect.arrayContaining([
         {
-          code: 'YAMLException',
-          message: 'unknown tag <tag:yaml.org,2002:foo>',
+          code: 'parser',
+          message: 'Unknown tag <tag:yaml.org,2002:foo>',
           path: [],
           range: {
             end: {
@@ -242,8 +243,8 @@ responses:: !!foo
           severity: 0,
         },
         {
-          code: 'YAMLException',
-          message: 'bad indentation of a mapping entry',
+          code: 'parser',
+          message: 'Bad indentation of a mapping entry',
           path: [],
           range: {
             end: {
@@ -329,6 +330,57 @@ responses:: !!foo
         }),
       ]),
     );
+  });
+
+  describe('reports duplicated properties for', () => {
+    test('JSON format', async () => {
+      const result = await spectral.run({
+        parsed: parseWithPointers('{"foo":true,"foo":false}', { ignoreDuplicateKeys: false }),
+        getLocationForJsonPath,
+      });
+
+      expect(result).toEqual([
+        {
+          code: 'parser',
+          message: 'Duplicate key: foo',
+          path: ['foo'],
+          range: {
+            end: {
+              character: 17,
+              line: 0,
+            },
+            start: {
+              character: 12,
+              line: 0,
+            },
+          },
+          severity: DiagnosticSeverity.Error,
+        },
+      ]);
+    });
+
+    test('YAML format', async () => {
+      const result = await spectral.run(`foo: bar\nfoo: baz`);
+
+      expect(result).toEqual([
+        {
+          code: 'parser',
+          message: 'Duplicate key: foo',
+          path: ['foo'],
+          range: {
+            end: {
+              character: 3,
+              line: 1,
+            },
+            start: {
+              character: 0,
+              line: 1,
+            },
+          },
+          severity: DiagnosticSeverity.Error,
+        },
+      ]);
+    });
   });
 
   describe('functional tests for the given property', () => {

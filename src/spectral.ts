@@ -1,16 +1,19 @@
 import { safeStringify } from '@stoplight/json';
+import {
+  getLocationForJsonPath as getLocationForJsonPathJSON,
+  parseWithPointers as parseJSONWithPointers,
+} from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
-import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
-import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
 import { extname } from '@stoplight/path';
-import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
+import { Dictionary } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
   parseWithPointers as parseYAMLWithPointers,
 } from '@stoplight/yaml';
-import { merge, set, uniqBy } from 'lodash';
+import { merge, set } from 'lodash';
 
+import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
@@ -44,13 +47,16 @@ export class Spectral {
     let parsedResult: IParsedResult;
     if (!isParsedResult(target)) {
       parsedResult = {
-        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
+        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2), {
+          ignoreDuplicateKeys: false,
+        }),
         getLocationForJsonPath: getLocationForJsonPathYAML,
       };
-      results = results.concat(formatParserDiagnostics(parsedResult.parsed, parsedResult.source));
     } else {
       parsedResult = target;
     }
+
+    results = results.concat(formatParserDiagnostics(parsedResult.parsed.diagnostics, parsedResult.source));
 
     const documentUri = opts.resolve && opts.resolve.documentUri;
     const refDiagnostics: IRuleResult[] = [];
@@ -67,13 +73,13 @@ export class Spectral {
           let parsedRefResult: IParsedResult | undefined;
           if (ext === '.yml' || ext === '.yaml') {
             parsedRefResult = {
-              parsed: parseYAMLWithPointers(content),
+              parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
               source: ref,
               getLocationForJsonPath: getLocationForJsonPathYAML,
             };
           } else if (ext === '.json') {
             parsedRefResult = {
-              parsed: parseJSONWithPointers(content),
+              parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
               source: ref,
               getLocationForJsonPath: getLocationForJsonPathJSON,
             };
@@ -82,7 +88,9 @@ export class Spectral {
           if (parsedRefResult !== undefined) {
             resolveOpts.result = parsedRefResult.parsed.data;
             if (parsedRefResult.parsed.diagnostics.length > 0) {
-              refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed, parsedRefResult.source));
+              refDiagnostics.push(
+                ...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source),
+              );
             }
 
             this._processExternalRef(parsedRefResult, resolveOpts);
@@ -198,36 +206,6 @@ export const isParsedResult = (obj: any): obj is IParsedResult => {
   if (!obj.getLocationForJsonPath || typeof obj.getLocationForJsonPath !== 'function') return false;
 
   return true;
-};
-
-function formatParserDiagnostics(parsed: IParserResult, source?: string): IRuleResult[] {
-  return parsed.diagnostics.map(diagnostic => ({
-    ...diagnostic,
-    path: [],
-    source,
-  }));
-}
-
-const prettyPrintResolverError = (message: string) => message.replace(/^Error\s*:\s*/, '');
-
-const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
-  return uniqBy(resolved.errors, 'message').reduce<IRuleResult[]>((errors, error) => {
-    const path = [...error.path, '$ref'];
-    const location = resolved.getLocationForJsonPath(path);
-
-    if (location) {
-      errors.push({
-        code: 'invalid-ref',
-        path,
-        message: prettyPrintResolverError(error.message),
-        severity: DiagnosticSeverity.Error,
-        range: location.range,
-        source: resolved.spec.source,
-      });
-    }
-
-    return errors;
-  }, []);
 };
 
 export interface IParseMap {
