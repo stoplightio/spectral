@@ -451,35 +451,19 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
-"@oclif/command@^1.5.1", "@oclif/command@^1.5.12", "@oclif/command@^1.5.13":
-  version "1.5.15"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.15.tgz#b926a6eb0491636150a256c0797f786c1f0938bc"
-  integrity sha512-bNfXihQ+piSa3WVA3DgSpptFtN2Ex/Xzv16qZt88Kp4P2tFUTcvMhyaisGYy7UjAW6mcjJrxx/141/Kfz5vtxA==
+"@oclif/command@^1.5.1", "@oclif/command@^1.5.12", "@oclif/command@^1.5.13", "@oclif/command@^1.5.17":
+  version "1.5.18"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.18.tgz#57125b501fafa155ad280bf8dc9f36a911c44f11"
+  integrity sha512-sfLb5UUCwyQ0w9LyQ1/3DUuD/RWnPZk6uvcK5P7pqD65WgRJaOPCqzuNZyb56kPsj6FftRp1UudApNKd7U0KBQ==
   dependencies:
-    "@oclif/errors" "^1.2.2"
-    "@oclif/parser" "^3.7.3"
-    debug "^4.1.1"
-    semver "^5.6.0"
-
-"@oclif/command@^1.5.17":
-  version "1.5.17"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.5.17.tgz#a3eabe1c159b4e8e47dbc11e7810a4c0b5b2eab2"
-  integrity sha512-it745U06qMKA5j3xEnMB/V9HkOTr2l42Q6MXNcGxj06Y7mhvahEQOYmj2NDWO6oRadyRRAtlEjZv82cenN0RlQ==
-  dependencies:
+    "@oclif/config" "^1"
     "@oclif/errors" "^1.2.2"
     "@oclif/parser" "^3.8.3"
+    "@oclif/plugin-help" "^2"
     debug "^4.1.1"
     semver "^5.6.0"
 
-"@oclif/config@^1.12.11":
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.13.0.tgz#fc2bd82a9cb30a73faf7d2aa5ae937c719492bd1"
-  integrity sha512-ttb4l85q7SBx+WlUJY4A9eXLgv4i7hGDNGaXnY9fDKrYD7PBMwNOQ3Ssn2YT2yARAjyOxVE/5LfcwhQGq4kzqg==
-  dependencies:
-    debug "^4.1.1"
-    tslib "^1.9.3"
-
-"@oclif/config@^1.13.2":
+"@oclif/config@^1", "@oclif/config@^1.12.11", "@oclif/config@^1.13.2":
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.13.2.tgz#c1dc25296bf06c039fd5fb0b90e4132be2213b2a"
   integrity sha512-RUOKeuAaopo3zrA5hcgE0PT2lbAUT72+eJdqTlWyI9sbPrGHZgUwV+vrL6Qal7ywWYDkL0vrKd1YS4yXtKIDKw==
@@ -522,15 +506,6 @@
   resolved "https://registry.yarnpkg.com/@oclif/linewrap/-/linewrap-1.0.0.tgz#aedcb64b479d4db7be24196384897b5000901d91"
   integrity sha512-Ups2dShK52xXa8w6iBWLgcjPJWjais6KPJQq3gQ/88AY6BXoTX+MIGFPrWQO1KLMiQfoTpcLnUwloN4brrVUHw==
 
-"@oclif/parser@^3.7.3":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.8.1.tgz#3c842ef4a8ce3d1f5bcfa5938d3fbebf1c6a0618"
-  integrity sha512-0OavFuLj6FBTdZDD6DXdNqH4qdLFLQD/PKK1OvNZhUd4/5v/lp6Ftzilwmirf549naNHq0u15uk1YCBvym5tNQ==
-  dependencies:
-    "@oclif/linewrap" "^1.0.0"
-    chalk "^2.4.2"
-    tslib "^1.9.3"
-
 "@oclif/parser@^3.8.0", "@oclif/parser@^3.8.3":
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.8.3.tgz#717fbbe5bfafef4270224b8bd41a2d3c80b9554e"
@@ -540,7 +515,7 @@
     chalk "^2.4.2"
     tslib "^1.9.3"
 
-"@oclif/plugin-help@^2.0", "@oclif/plugin-help@^2.1.6":
+"@oclif/plugin-help@^2", "@oclif/plugin-help@^2.0", "@oclif/plugin-help@^2.1.6":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-2.2.0.tgz#8dfc1c80deae47a205fbc70b018747ba93f31cc3"
   integrity sha512-56iIgE7NQfwy/ZrWrvrEfJGb5rrMUt409yoQGw4feiU101UudA1btN1pbUbcKBr7vY9KFeqZZcftXEGxOp7zBg==
