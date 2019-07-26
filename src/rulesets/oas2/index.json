@@ -103,8 +103,36 @@
         }
       }
     },
+    "oas2-anyOf": {
+      "description": "OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.",
+      "message": "anyOf is not available in OpenAPI v2, it was added in OpenAPI v3",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?(@.anyOf)]",
+      "then": {
+        "field": "anyOf",
+        "function": "undefined"
+      },
+      "tags": [
+        "schema"
+      ]
+    },
+    "oas2-oneOf": {
+      "description": "OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.",
+      "message": "oneOf is not available in OpenAPI v2, it was added in OpenAPI v3",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?(@.oneOf)]",
+      "then": {
+        "field": "oneOf",
+        "function": "undefined"
+      },
+      "tags": [
+        "schema"
+      ]
+    },
     "oas2-schema": {
-      "description": "Validate structure of OpenAPIv2 specification.",
+      "description": "Validate structure of OpenAPI v2 specification.",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
