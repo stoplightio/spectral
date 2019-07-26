@@ -24,7 +24,7 @@ describe('falsy', () => {
     expect(runFalsy(null)).toBeUndefined();
   });
 
-  test('returns error message if target value is falsy', () => {
+  test('returns error message if target value is not falsy', () => {
     expect(runFalsy(true)).toEqual([
       {
         message: 'property is not falsy',
