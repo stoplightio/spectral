@@ -89,6 +89,20 @@
         "operation"
       ]
     },
+    "oas2-anyOf-oneOf": {
+      "description": "OpenAPI v3 keyword detected in an OpenAPI v2 document.",
+      "message": "\"{{property}}\" property {{error}}",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?[anyOf,oneOf]]",
+      "then": {
+        "field": "description",
+        "function": "falsy"
+      },
+      "tags": [
+        "schema"
+      ]
+    },
     "valid-example": {
       "description": "Examples must be valid against their defined schema.",
       "message": "\"{{property}}\" property {{error}}",
