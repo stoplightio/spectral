@@ -1,0 +1,23 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  license:
+    name: MIT
+  contact:
+    name: Phil Sturgeon
+    email: phil@stoplight.io
+  description: 
+    An api all about pets what I like.
+
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: 'stuff'
+      responses:
+        '200':
+          description: A paged array of pets
+          schema:
+            anyOf:
+              - type: string
