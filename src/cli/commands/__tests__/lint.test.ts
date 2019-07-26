@@ -337,47 +337,49 @@ describe('lint', () => {
       .stdout()
       .command(['lint', draftRefSpec, '-q', '-f=json'])
       .it('outputs errors occurring in referenced files', ctx => {
-        expect(JSON.parse(ctx.stdout)).toEqual([
-          expect.objectContaining({
-            code: 'info-description',
-            message: 'OpenAPI object info `description` must be present and non-empty string.',
-            path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted ref, but there is such in spec when working on resolved file
-            range: {
-              end: {
-                character: 22,
-                line: 5,
+        expect(JSON.parse(ctx.stdout)).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              code: 'info-description',
+              message: 'OpenAPI object info `description` must be present and non-empty string.',
+              path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted ref, but there is such in spec when working on resolved file
+              range: {
+                end: {
+                  character: 22,
+                  line: 5,
+                },
+                start: {
+                  character: 21,
+                  line: 5,
+                },
               },
-              start: {
-                character: 21,
-                line: 5,
+              source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
+            }),
+            expect.objectContaining({
+              code: 'api-schemes',
+              message: 'OpenAPI host `schemes` must be present and non-empty array.',
+              path: ['schemes'],
+              range: expect.any(Object),
+              source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-ref.oas2.json'),
+            }),
+            expect.objectContaining({
+              code: 'oas2-schema',
+              message: '/info Property foo is not expected to be here',
+              path: ['info'],
+              range: {
+                end: {
+                  character: 5,
+                  line: 9,
+                },
+                start: {
+                  character: 12,
+                  line: 3,
+                },
               },
-            },
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
-          }),
-          expect.objectContaining({
-            code: 'api-schemes',
-            message: 'OpenAPI host `schemes` must be present and non-empty array.',
-            path: ['schemes'],
-            range: expect.any(Object),
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/draft-ref.oas2.json'),
-          }),
-          expect.objectContaining({
-            code: 'oas2-schema',
-            message: '/info Property foo is not expected to be here',
-            path: ['info'],
-            range: {
-              end: {
-                character: 5,
-                line: 9,
-              },
-              start: {
-                character: 12,
-                line: 3,
-              },
-            },
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
-          }),
-        ]);
+              source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
+            }),
+          ]),
+        );
       });
 
     test
