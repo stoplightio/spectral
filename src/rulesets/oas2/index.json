@@ -119,7 +119,7 @@
     },
     "oas2-oneOf": {
       "description": "OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.",
-      "message": "anyOf is not available in OpenAPI v2, it was added in OpenAPI v3",
+      "message": "oneOf is not available in OpenAPI v2, it was added in OpenAPI v3",
       "recommended": true,
       "type": "validation",
       "given": "$..[?(@.oneOf)]",
