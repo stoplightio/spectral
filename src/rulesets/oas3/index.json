@@ -92,7 +92,7 @@
       }
     },
     "oas3-schema": {
-      "description": "Validate structure of OpenAPIv3 specification.",
+      "description": "Validate structure of OpenAPI v3 specification.",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
