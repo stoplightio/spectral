@@ -75,7 +75,7 @@
     "node-fetch": "^2.6",
     "strip-ansi": "^5.2",
     "text-table": "^0.2",
-    "typescript-json-schema": "~0.38"
+    "typescript-json-schema": "~0.39"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.1.0",
