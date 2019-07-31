@@ -4,7 +4,7 @@
       "description": "Operation must have at least one `2xx` response.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "responses",
         "function": "oasOp2xxResponse"
@@ -17,7 +17,7 @@
       "description": "Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.",
       "recommended": true,
       "type": "validation",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "function": "oasOpFormDataConsumeCheck"
       },
@@ -246,7 +246,7 @@
       "description": "Operations must have a default response.",
       "recommended": false,
       "type": "style",
-      "given": "$..paths.*.*.responses",
+      "given": "$.paths.*.*.responses",
       "then": {
         "field": "default",
         "function": "truthy"
@@ -259,7 +259,7 @@
       "description": "Operation `description` must be present and non-empty string.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "description",
         "function": "truthy"
@@ -272,7 +272,7 @@
       "description": "Operation should have an `operationId`.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "operationId",
         "function": "truthy"
@@ -285,7 +285,7 @@
       "description": "operationId may only use characters that are valid when used in a URL.",
       "recommended": true,
       "type": "validation",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "operationId",
         "function": "pattern",
@@ -301,7 +301,7 @@
       "description": "Operation may only have one tag.",
       "recommended": false,
       "type": "style",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "tags",
         "function": "length",
@@ -317,7 +317,7 @@
       "description": "Operation `summary` should start with upper case and end with a dot.",
       "recommended": false,
       "type": "style",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "summary",
         "function": "pattern",
@@ -333,7 +333,7 @@
       "description": "Operation should have non-empty `tags` array.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "tags",
         "function": "truthy"
@@ -363,7 +363,7 @@
       "description": "given declarations cannot be empty, ex.`/given/{}` is invalid.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths",
+      "given": "$.paths",
       "then": {
         "field": "@key",
         "function": "pattern",
@@ -379,7 +379,7 @@
       "description": "given keys should not end with a slash.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths",
+      "given": "$.paths",
       "then": {
         "field": "@key",
         "function": "pattern",
@@ -395,7 +395,7 @@
       "description": "given keys should not include a query string.",
       "recommended": true,
       "type": "style",
-      "given": "$..paths",
+      "given": "$.paths",
       "then": {
         "field": "@key",
         "function": "pattern",
