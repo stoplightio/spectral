@@ -1,4 +1,4 @@
-import { safeStringify } from '@stoplight/json';
+import { JsonParserResult, safeStringify } from '@stoplight/json';
 import {
   getLocationForJsonPath as getLocationForJsonPathJSON,
   parseWithPointers as parseJSONWithPointers,
@@ -10,6 +10,7 @@ import { Dictionary } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
   parseWithPointers as parseYAMLWithPointers,
+  YamlParserResult,
 } from '@stoplight/yaml';
 import { merge, set } from 'lodash';
 
@@ -44,11 +45,12 @@ export class Spectral {
   public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
     let results: IRuleResult[] = [];
 
-    let parsedResult: IParsedResult;
+    let parsedResult: IParsedResult | IParsedResult<YamlParserResult<unknown>>;
     if (!isParsedResult(target)) {
       parsedResult = {
         parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2), {
           ignoreDuplicateKeys: false,
+          mergeKeys: true,
         }),
         getLocationForJsonPath: getLocationForJsonPathYAML,
       };
@@ -70,7 +72,10 @@ export class Spectral {
           const ext = extname(ref);
 
           const content = String(resolveOpts.result);
-          let parsedRefResult: IParsedResult | undefined;
+          let parsedRefResult:
+            | IParsedResult<YamlParserResult<unknown>>
+            | IParsedResult<JsonParserResult<unknown>>
+            | undefined;
           if (ext === '.yml' || ext === '.yaml') {
             parsedRefResult = {
               parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),

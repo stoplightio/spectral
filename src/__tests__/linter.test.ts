@@ -12,6 +12,7 @@ import { IRulesetFile } from '../types/ruleset';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
+const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -330,6 +331,15 @@ responses:: !!foo
         }),
       ]),
     );
+  });
+
+  test('should support YAML merge keys', async () => {
+    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(petstoreMergeKeys);
+
+    expect(result).toEqual([]);
   });
 
   describe('reports duplicated properties for', () => {
