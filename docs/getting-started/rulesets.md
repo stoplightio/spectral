@@ -40,6 +40,41 @@ While running it with this object, it will succeed:
 }
 ```
 
+### Severity
+
+The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`.
+
+### Then
+
+The Then part of the rules explains what to do with the `given` JSON Path, and involves two required keywords:
+
+```yaml
+  then:
+    field: description
+    function: truthy
+```
+
+The `field` keyword is the name for a property in the object selected. It could also be `@key` if the given path is an object.
+
+```yaml
+given: '$.responses'
+then:
+  field: '@key'
+  function: pattern
+  functionOptions:
+    match: '^[0-9]+$' 
+```
+
+The above pattern based rule would error on `456avbas` as it is not numeric.
+
+```yaml
+responses:
+  123:
+    foo: bar
+  456avbas:
+    foo: bar
+```
+
 ### Extending Rules
 
 Rulesets can extend other rulesets. For example, Spectral comes with two built in rulesets - one for OpenAPI v2 (`spectral:oas2`), and one for OpenAPI v3 (`spectral:oas3`). 
@@ -85,7 +120,7 @@ rules:
   operation-operationId-unique: false
 ```
 
-The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs just the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
+The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
 The current recommended rules are marked with the property `recommended: true` in their respective rulesets:
 
@@ -93,7 +128,7 @@ The current recommended rules are marked with the property `recommended: true` i
 - [Rules specific to only OpenAPI v2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2/index.json)
 - [Rules specific to only OpenAPI v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3/index.json)
 
-### Changing Severity of a rule
+### Changing Severity of a Rule
 
 ```yaml
 extends: spectral:oas2

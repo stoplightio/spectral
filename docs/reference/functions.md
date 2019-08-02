@@ -1,7 +1,8 @@
 # Core Functions
 
-Rules use "functions and those can be custom defined. To save everyone the effort of writing functions for common tasks, Spectral comes with a few bundled out of the box. 
+Rules use "functions" and those can be custom defined. To save everyone the effort of writing functions for common tasks, Spectral comes with a few bundled out of the box. 
 
+All functions 
 
 ## alphabetical
 
@@ -14,7 +15,6 @@ Enforce alphabetical content, for simple arrays, or for objects by passing a key
 ``` yaml
   openapi-tags-alphabetical:
     description: OpenAPI object should have alphabetical `tags`.
-    recommended: false
     type: style
     given: "$"
     then:
