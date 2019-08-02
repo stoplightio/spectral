@@ -18,8 +18,10 @@ Rules can be comprised of one of more functions, to facilitate any style guide.
 - Tags must be plural
 - Tags must be singular
 
-Spectral comes bundled with a [bunch of functions](TODO Funcs) and a default style guide for [OpenAPI v2 and v3](./openapi), which you can extend, cherry-pick, or disable entirely. 
+Spectral comes bundled with a [bunch of functions][ref-funcs] and a default style guide for [OpenAPI v2 and v3][openapi], which you can extend, cherry-pick, or disable entirely. 
 
 Learn more about [rulesets][]. 
 
+[ref-funcs]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/functions.md
 [rulesets]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/rulesets.md
+[openapi]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/openapi.md

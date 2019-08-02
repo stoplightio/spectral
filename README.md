@@ -28,11 +28,11 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-For more installation options, see [Getting Started > Installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md)
+For more installation options, see [Getting Started > Installation][install]
 
 ## Getting Started
 
-After [installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md) take a look at our getting started documentation,
+After [installation][install] take a look at our [getting started documentation][get-started].
 
 - [Adding a rule][add-rule]
 - [Extending rulesets][extending-rulesets]
@@ -87,6 +87,7 @@ If you need help using Spectral or have a support question, please use the [Stop
 If you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
 
 [ajv]: https://www.npmjs.com/package/ajv
+[get-started]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/concepts.md
 [ref-funcs]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/functions.md
 [add-rule]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule
 [extending-rulesets]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#extending-rules
@@ -94,3 +95,4 @@ If you want to discuss something in private, you can reach out to Stoplight supp
 [disable-rules]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#disable-rules
 [change-severity]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#changing-severity-of-a-rule
 [js-api]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/javascript.md
+[install]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md
