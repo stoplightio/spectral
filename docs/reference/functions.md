@@ -133,7 +133,7 @@ The schema-path rule is very meta. It is an extension of the schema rule, but it
 
 ## truthy
 
-The value should be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (!targetVal)`.
+The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (targetVal)`.
 
 ## undefined
 
