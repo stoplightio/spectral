@@ -20,8 +20,6 @@ A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 
 ## Installation
 
-Spectral's CLI can be installed via npm or yarn.
-
 ```bash
 npm install -g @stoplight/spectral
 
@@ -29,20 +27,6 @@ npm install -g @stoplight/spectral
 
 yarn global add @stoplight/spectral
 ```
-
-Spectral is avaiable as a Docker image as well
-
-```bash
-docker run --rm -it stoplight/spectral lint "${url}"`
-```
-
-If the file you want to lint is on your computer, you'll need to mount the directory where the file resides as a volume
-
-```bash
-docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint "/tmp/file.yaml"
-```
-
-Finally, [executable binaries](#executable-binaries) are also available.
 
 ## Usage
 
@@ -85,16 +69,6 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 #### What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?
 
 With Spectral, lint rules can be applied to _any_ JSON object. Speccy is designed to work with OpenAPI v3 only. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OpenAPI specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
-
-### Executable binaries
-
-For users without Node and/or NPM/Yarn, we provide standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). We also provide a shell script to auto download the executable based on your operating system:
-
-```bash
-curl -L https://raw.githack.com/stoplightio/spectral/master/install.sh | sh
-```
-
-Note, the binaries are *not* auto-updatable, therefore you will need to download a new version on your own.
 
 ## Contributing
 

@@ -17,7 +17,6 @@ Other options include:
   -r, --ruleset=ruleset        path to a ruleset file (supports remote files)
   -s, --skip-rule=skip-rule    ignore certain rules if they are causing trouble
   -v, --verbose                increase verbosity
-  --max-results=max-results    [default: all] maximum results to show
 ```
 
 > Note: The Spectral CLI supports both YAML and JSON.

@@ -54,7 +54,7 @@ While running it with this object, it will succeed:
 }
 ```
 
-### Adding to the recommended OpenAPI rules
+### Adding to the core OpenAPI rules
 
 Spectral comes with two built in rulesets - one for OpenAPI v2 (`spectral:oas2`), and one for OpenAPI v3 (`spectral:oas3`). Use the `extends` property in your ruleset file to build upon or customize other rulesets.
 
@@ -71,7 +71,7 @@ rules:
       function: truthy
 ```
 
-The example above will apply the recommended rules from the built in OpenAPI v2 ruleset AND apply the custom `my-rule-name` rule.
+The example above will apply the core rules from the built in OpenAPI v2 ruleset AND apply the custom `my-rule-name` rule.
 
 ### Enabling specific OpenAPI rules
 
@@ -86,7 +86,7 @@ rules:
   operation-operationId-unique: true
 ```
 
-The example above will run the single rulee that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas2` ruleset.
+The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas2` ruleset.
 
 ### Disabling specific OpenAPI rules
 
@@ -105,9 +105,9 @@ The example above will run all of the rules defined in the `spectral:oas2` rules
 
 The current recommended rules are marked with the property `recommended: true` in their respective rulesets:
 
-- [Rules relevant to OpenAPI v2 and v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas/index.json)
-- [Rules specific to OpenAPI v2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2/index.json)
-- [Rules specific to OpenAPI v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3/index.json)
+- [Rules relevant to both OpenAPI v2 and v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas/index.json)
+- [Rules specific to only OpenAPI v2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2/index.json)
+- [Rules specific to only OpenAPI v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3/index.json)
 
 ### Changing the severity of a rule
 
@@ -127,7 +127,7 @@ Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
 Rules are highly configurable. There are only few required parameters but the optional ones gives powerful flexibility. Please see the following type tables for more information.
 
-<!-- *TODO: generate this table automatically from the TS file.* -->
+<!-- *TODO: generate this table automatically from the JSON file.* -->
 
 <table>
   <thead>
