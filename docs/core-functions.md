@@ -1,6 +1,6 @@
 # Spectral Core Functions
 
-Functions described in this document are supposed to be used in your [rulesets.md](./rulesets.md).
+Functions described here are available for use in your [rulesets](./rulesets.md).
 These functions are built-in meaning you don't need to include them in any particular way.
 They are just always loaded and ready to be used.
 A lot of core OAS rules provided by Spectral make use of those functions.
