@@ -9,7 +9,7 @@ npm install -g @stoplight/spectral
 
 If you are a Yarn user:
 
-```
+```bash
 yarn global add @stoplight/spectral
 ```
 

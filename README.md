@@ -28,47 +28,34 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-## Usage
+For more installation options, see [Getting Started > Installation](./docs/getting-started/installation.md)
 
-### CLI
+## Getting Started
 
-After installing via one of the methods above, Spectral can be used via your command-line. Take a look at the [CLI docs](./docs/cli.md) for information on the options available.
+After [installation](./docs/getting-started/installation.md) take a look at our getting started documentation,
 
-### Examples
+### Quick Tips
 
 - [Adding a rule](./docs/rulesets.md#adding-a-rule)
 - [Adding to the recommended OpenAPI rules](./docs/rulesets.md#adding-to-the-recommended-openapi-rules)
 - [Enabling specific OpenAPI rules](./docs/rulesets.md#enabling-specific-openapi-rules)
 - [Disabling specific OpenAPI rules](./docs/rulesets.md#disabling-specific-openapi-rules)
 - [Changing the severity of a rule](./docs/rulesets.md#changing-the-severity-of-a-rule)
-
-## Concepts
-
-There are three key concepts in Spectral: **Rulesets**, **Rules**, and **Functions**.
-
-- **Rulesets** act as a container for rules and functions.
-- **Rules** filter your object down to a set of target values, and specify the function that is used to evaluate those values.
-- **Functions** accept a value and return issue(s) if the value is incorrect.
-
-Think of a **Spectral ruleset** as a flexible and customizable style guide for your JSON objects.
-
-## Programmatic usage
-
-Spectral is written in TypeScript (then compiled to JavaScript) and can be used directly for when you need to use Spectral programmatically. Take a look at our ["JavaScript API documentation"](docs/js-api.md).
+- [JavaScript API documentation](./docs/guides/javascript.md).
 
 ## FAQs
 
-#### How is this different than [Ajv](https://www.npmjs.com/package/ajv)?
+### How is this different than [Ajv](https://www.npmjs.com/package/ajv)?
 
-Ajv is a JSON Schema validator, not a linter. Spectral does expose a `schema` function that you can use in your rules to validate all or part of the target object with JSON Schema (Ajv is used under the hood). However, Spectral also provides a number of other functions and utilities that you can use to build up a linting ruleset to validates things that JSON Schema is not well suited for.
+Ajv is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](TODO functions) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
 
-#### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
+### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
 
 No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_campaign=spectral).
 
-#### What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?
+### What is the difference between Spectral and [Speccy](https://github.com/wework/speccy)?
 
-With Spectral, lint rules can be applied to _any_ JSON object. Speccy is designed to work with OpenAPI v3 only. The rule structure is different between the two. Spectral uses [JSONPath](http://goessner.net/articles/JsonPath/) `path` parameters instead of the `object` parameters (which are OpenAPI specific). Rules are also more clearly defined (thanks to TypeScript typings) and now require specifying a `type` parameter. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in and custom functions.
+Speccy was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2 and v3) through the use of [JSONPath](http://goessner.net/articles/JsonPath/) `given` parameters. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in functions, and we've added the ability to define custom functions too.
 
 ## Contributing
 
@@ -86,14 +73,14 @@ If you are using Spectral in your project and want to be listed in the examples 
 
 ## Helpful Links
 
-- [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `path` you want
+- [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `given` path you want
 - [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
 - [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON, and a few helper functions such as `getJsonPathForPosition` or `getLocationForJsonPath`
 
 ## Thanks :)
 
 - [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
-- [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI
+- [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI and his work on Speccy
 
 ## Support
 

@@ -1,39 +1,23 @@
-# Using Spectral programatically
+# Spectral in JavaScript
 
-## Example: Linting an OpenAPI document
+The Spectral CLI is a thin wrapper around a JavaScript (TypeScript) API, which can be used independently to do all the same things outside of the CLI.
 
-Spectral includes a number of ready made rules and functions for OpenAPI v2 and v3 documents.
+Assuming it has been installed as a Node module via NPM/Yarn, it can be used to lint YAML and JSON documents from a string, or from an object.
 
-This example uses the OpenAPI v3 rules to lint a document.
+## Linting a YAML string
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
 const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
-// for YAML
 const { parseWithPointers } = require("@stoplight/yaml");
 
-// Uncomment to use parseWithPointers (remember to comment the next instance of myOAS)
-// const myOAS = parseWithPointers(`
-// responses:
-//   '200':
-//     description: ''
-//     schema:
-//       $ref: '#/definitions/error-response'
-// `)
-
-// an OASv3 document
-const myOAS = {
-  // ... properties in your document
-  responses: {
-    '200': {
-      description: '',
-      schema: {
-        $ref: '#/definitions/error-response',
-      },
-    },
-  },
-  // ... properties in your document
-};
+const myOpenApiDocument = parseWithPointers(`
+responses:
+  '200':
+    description: ''
+    schema:
+      $ref: '#/definitions/error-response'
+`);
 
 // create a new instance of spectral with all of the baked in rulesets
 const spectral = new Spectral();
@@ -42,15 +26,25 @@ spectral.addFunctions(oas3Functions());
 oas3Rules()
   .then(rules => spectral.addRules(rules))
   .then(() => {
+    // optional: extend with your own custom rules
     spectral.addRules({
-      // .. extend with your own custom rules
+      // ... snip
     });
 
-    // run!
-    spectral.run(myOAS).then(results => {
-      console.log(JSON.stringify(results, null, 4));
-    });
+    spectral.run(myOpenApiDocument).then(results => console.log(results);
   });
+```
+
+_**Note:** Spectral v4.0 does not yet support loading rulesets in the same way as the CLI, so this code is a little bloated adding functions and rules seperately. This example will become much nicer in v4.1 when we add loading custom rulesets. 
+
+This example shows working with the default OpenAPI v2 or v3 rulesets, they can be loaded like this:
+
+```js
+// OpenAPI v2.0 Rules
+const { oas2Functions, rules: oas2Rules } = require('@stoplight/spectral/dist/rulesets/oas2');
+
+// OpenAPI v3.0 Rules
+const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
 ```
 
 [Try it out!](https://repl.it/@ChrisMiaskowski/spectral-rules-example)
@@ -192,7 +186,7 @@ spectral.addRules({
 
 // run!
 spectral.run({name: 'helloWorld',}).then(results => {
-  console.log(JSON.stringify(results, null, 4));
+  console.log(results);
 });
 ```
 
