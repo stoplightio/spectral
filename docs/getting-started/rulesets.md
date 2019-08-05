@@ -54,7 +54,7 @@ The Then part of the rules explains what to do with the `given` JSON Path, and i
     function: truthy
 ```
 
-The `field` keyword is the name for a property in the object selected. It could also be `@key` if the given path is an object.
+The `field` keyword is optional, and is for applying the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSON Path. The value can also be `@key` to apply the rule to a keys of an object.
 
 ```yaml
 given: '$.responses'

@@ -1,8 +1,9 @@
 # Workflow
 
-When and where should you use Spectral? 
+When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, but probably wherever they are being made.
 
-It depends a lot how you are creating and managing your API description documents, but probably wherever they are being made. [Stoplight Studio](https://stoplight.io/studio/) users have Spectral baked right into the editor, but if you are using another text-editor or IDE you can switch to the command-line and run Spectral [as a CLI tool][cli].
+- Run [Spectral CLI][cli] against design docs and get feedback very early on.
+- Run Spectral in [Stoplight Studio](https://stoplight.io/spectral/) automatically as you work, without switching to the CLI.
 
 ## Linting Design-First Workflows
 
