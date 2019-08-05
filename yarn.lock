@@ -600,9 +600,9 @@
   integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
 
 "@stoplight/json-ref-resolver@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.0.3.tgz#ee1c3309c1cbc339061b3d16925a6bdbe814910e"
-  integrity sha512-nupwxhAKdKVE1BgOJX1HMhJuRyMCk0yHJ1mR4nKE/2CesP0usHdwCBwlPFGlnmegfA40GSLRoNi8DEAq34butg==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.1.1.tgz#442b935b9d7cab9f42f7548bd7c2e6cb2599a5cf"
+  integrity sha512-bI90+DK7OjQYf4mOCZdvabuYyaWDQhr30YyuUcNB688hO+5qNekzJfq/GgkImfHe+E/b2vVpeqS2ST1Cu/WB+g==
   dependencies:
     "@stoplight/json" "^2.2.2"
     "@stoplight/types" "^9.1.2"
@@ -624,9 +624,9 @@
     lodash "^4.10"
 
 "@stoplight/json@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.0.2.tgz#a73b92ab89fc12b94800ab7cd8c5787124fd9e70"
-  integrity sha512-wrhSajr+HTnEnJ+LgriHpelo3oVZGFpjyeYcDlNelvn6mH7I2oV2gFqtJv0cQxsVZNMAutBEbDSBZoxqjlQbPQ==
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.0.3.tgz#8ea6614e6704940ce154276574578d4d9d7adf34"
+  integrity sha512-OiPBzSxsDnc32pQ20+68lTHqGhIhNP/LCrOI6cM2Y/PEDW1KwjhWcF3rjJtIgpObuQeMhCKk3djxHZaB/MzNDA==
   dependencies:
     "@stoplight/types" "^10.0.1"
     jsonc-parser "~2.1"
@@ -754,9 +754,9 @@
     "@types/jest" "*"
 
 "@types/jest@*", "@types/jest@^24.0.0":
-  version "24.0.15"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.15.tgz#6c42d5af7fe3b44ffff7cc65de7bf741e8fa427f"
-  integrity sha512-MU1HIvWUme74stAoc3mgAi+aMlgKOudgEvQDIm1v4RkrDudBh1T+NFp5sftpBAdXdx1J0PbdpJ+M2EsSOi1djA==
+  version "24.0.16"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.16.tgz#8d3e406ec0f0dc1688d6711af3062ff9bd428066"
+  integrity sha512-JrAiyV+PPGKZzw6uxbI761cHZ0G7QMOHXPhtSpcl08rZH6CswXaaejckn3goFKmF7M3nzEoJ0lwYCbqLMmjziQ==
   dependencies:
     "@types/jest-diff" "*"
 
