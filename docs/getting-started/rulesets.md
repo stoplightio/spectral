@@ -94,7 +94,13 @@ rules:
 
 The example above will apply the core rules from the built in OpenAPI v2 ruleset AND apply the custom `my-rule-name` rule. 
 
-Extends can be a single string or an array of strings, and can contain either local file paths or URLs. In the future we will support loading from NPM modules. 
+Extends can be a single string or an array of strings, and can contain either local file paths or URLs.
+
+```yaml
+extends: 
+- ./config/spectral.json
+- https://example.org/api/style.yaml
+```
 
 ### Enable Rules
 
