@@ -6,7 +6,7 @@ Rules use "functions" and those can be custom defined. To save everyone the effo
 
 Enforce alphabetical content, for simple arrays, or for objects by passing a key.
 
-*functionOptions*
+**functionOptions**
 
 - keyedBy: optional key to sort an object by
 
@@ -26,7 +26,7 @@ Enforce alphabetical content, for simple arrays, or for objects by passing a key
 
 Does the field value exist in this set of possible values?
 
-*functionOptions*
+**functionOptions**
 
 - values: an array of possible values
 
@@ -70,7 +70,7 @@ Count the length of a string an or array, the number of properties in an object,
 
 Regular expressions! 
 
-*functionOptions*
+**functionOptions**
 
 - match: if provided, value must match this regex
 - notMatch: if provided, value must _not_ match this regex
@@ -90,7 +90,7 @@ Regular expressions!
 
 Use JSON Schema (draft 7) to treat the contents of the $given JSON Path as a JSON instance.
 
-*functionOptions*
+**functionOptions**
 
 - schema: a valid JSON Schema document
 
