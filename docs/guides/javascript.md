@@ -8,7 +8,6 @@ Assuming it has been installed as a Node module via NPM/Yarn, it can be used to 
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
-const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
 const { parseWithPointers } = require("@stoplight/yaml");
 
 const myOpenApiDocument = parseWithPointers(`
@@ -21,31 +20,52 @@ responses:
 
 // create a new instance of spectral with all of the baked in rulesets
 const spectral = new Spectral();
-
-spectral.addFunctions(oas3Functions());
-oas3Rules()
-  .then(rules => spectral.addRules(rules))
-  .then(() => {
-    // optional: extend with your own custom rules
-    spectral.addRules({
-      // ... snip
-    });
-
-    spectral.run(myOpenApiDocument).then(results => console.log(results);
-  });
+spectral.run(myOpenApiDocument).then(results => console.log(results);
 ```
 
-_**Note:** Spectral v4.0 does not yet support loading rulesets in the same way as the CLI, so this code is a little bloated adding functions and rules separately. This example will become much nicer in v4.1 when we add loading custom rulesets. 
+This will run Spectral with no rules or functions, so it's not going to do anything. Find out how to add rules and functions below.
 
-This example shows working with the default OpenAPI v2 or v3 rulesets, they can be loaded like this:
+## Linting an Object
+
+Instead of passing a string to `parseWithPointers`, you can pass in JavaScript object, with or without `$ref`'s.
 
 ```js
-// OpenAPI v2.0 Rules
-const { oas2Functions, rules: oas2Rules } = require('@stoplight/spectral/dist/rulesets/oas2');
+const { Spectral } = require('@stoplight/spectral');
+const { parseWithPointers } = require("@stoplight/yaml");
 
-// OpenAPI v3.0 Rules
-const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
+const myOpenApiDocument = {
+  responses: {
+    '200': {
+      description: '',
+      schema: {
+        $ref: '#/definitions/error-response',
+      },
+    },
+  },
+};
+
+const spectral = new Spectral();
+spectral.run(myOpenApiDocument).then(results => console.log(results);
 ```
+
+## Loading Rules
+
+Spectral comes with some rules and functions that are very specific to OpenAPI v2/v3, and they can be used by loading them up and passing them into `Spectral.addRules()`. 
+
+```js
+const { Spectral } = require('@stoplight/spectral');
+const { parseWithPointers } = require("@stoplight/yaml");
+const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
+
+
+const myOpenApiDocument = { ... };
+
+const spectral = new Spectral();
+spectral.addFunctions(oas3Functions());
+oas3Rules().then(rules => spectral.addRules(rules));
+``` 
+
+_Spectral JS API does not yet support loading rulesets directly, but will be added in an upcoming version to avoid needing to load rules and functions separately._
 
 [Try it out!](https://repl.it/@ChrisMiaskowski/spectral-rules-example)
 
@@ -153,9 +173,7 @@ const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/ru
 </p>
 </details>
 
-You can also [add to these rules](#Creating-a-custom-rule) to create a customized linting style guide for your OpenAPI documents.
-
-The existing OAS rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
+The OpenAPI rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
 
 ## Advanced
 
@@ -164,7 +182,7 @@ The existing OAS rules are opinionated. There might be some rules that you prefe
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
 
 ```javascript
-const { RuleFunction, Spectral } = require('@stoplight/spectral');
+const { Spectral } = require('@stoplight/spectral');
 
 const spectral = new Spectral();
 
@@ -176,7 +194,7 @@ spectral.addRules({
     given: '$..*',
 
     then: {
-      function: RuleFunction.PATTERN,
+      function: 'pattern',
       functionOptions: {
         match: '^[a-z]+[a-z0-9_]*[a-z0-9]+$',
       },
@@ -293,3 +311,5 @@ spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
     }
 ]
 ```
+
+For more information on creating rules, read about [rulesets](../getting-started/rulesets.md).

@@ -130,9 +130,9 @@ The example above will run all of the rules defined in the `spectral:oas2` rules
 
 The current recommended rules are marked with the property `recommended: true` in their respective rulesets:
 
-- [Rules relevant to both OpenAPI v2 and v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas/index.json)
-- [Rules specific to only OpenAPI v2](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas2/index.json)
-- [Rules specific to only OpenAPI v3](https://github.com/stoplightio/spectral/tree/develop/src/rulesets/oas3/index.json)
+- [Rules relevant to both OpenAPI v2 and v3](https://github.com/stoplightio/spectral/tree/master/src/rulesets/oas/index.json)
+- [Rules specific to only OpenAPI v2](https://github.com/stoplightio/spectral/tree/master/src/rulesets/oas2/index.json)
+- [Rules specific to only OpenAPI v3](https://github.com/stoplightio/spectral/tree/master/src/rulesets/oas3/index.json)
 
 ### Changing Severity of a Rule
 

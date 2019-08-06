@@ -7,16 +7,16 @@
 
 A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 
-![Demo of Spectral linting an OpenAPI document from the CLI](./docs/demo.svg)
+![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
 ## Features
 
 - Create custom rules to lint JSON or YAML objects
 - Ready to use rules to validate and lint OpenAPI v2 _and_ v3 documents
 - Use JSON path to apply rules to specific parts of your objects
-- Built-in set of functions to help [create custom rules][add-rule]. Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Built-in set of functions to help [create custom rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Create custom functions for advanced use cases
-- Validate JSON with [Ajv][ajv]
+- Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
 ## Installation
 
@@ -28,24 +28,24 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-For more installation options, see [Getting Started > Installation][install]
+For more installation options, see [Getting Started > Installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md)
 
 ## Getting Started
 
-After [installation][install] take a look at our [getting started documentation][get-started].
+After [installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md) take a look at our [getting started documentation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/concepts.md).
 
-- [Adding a rule][add-rule]
-- [Extending rulesets][extending-rulesets]
-- [Enable only specific rules][enable-rule]
-- [Disable specific rules][disable-rules]
-- [Changing the severity of a rule][change-severity]
-- [Using the JavaScript API][js-api]
+- [Adding a rule](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule)
+- [Extending rulesets](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#extending-rules)
+- [Enable only specific rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#enable-rules)
+- [Disable specific rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#disable-rules)
+- [Changing the severity of a rule](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#changing-severity-of-a-rule)
+- [Using the JavaScript API](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/javascript.md)
 
 ## FAQs
 
 ### How is this different to AJV
 
-[Ajv][ajv] is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function][ref-funcs] that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
+[Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
 
 ### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
 
@@ -85,14 +85,3 @@ If you have a bug or feature request, please [create an issue](https://github.co
 If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We've created an open source category for these questions. It's also a great place to share your implementations.
 
 If you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
-
-[ajv]: https://www.npmjs.com/package/ajv
-[get-started]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/concepts.md
-[ref-funcs]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/functions.md
-[add-rule]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule
-[extending-rulesets]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#extending-rules
-[enable-rules]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#enable-rules
-[disable-rules]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#disable-rules
-[change-severity]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#changing-severity-of-a-rule
-[js-api]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/javascript.md
-[install]: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md
