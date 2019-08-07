@@ -135,7 +135,9 @@ The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically any
 
 ## undefined
 
-The value must not be `undefined`, which in YAML/JSON terms means the property should not exist.
+The value must be `undefined`. When combined with `field: foo` on an object the `foo` property must be undefined.
+
+_**Note:** Due to the way YAML works, just having `foo: ` with no value set is not the same as being `undefined`. This would be `falsy`.
 
 ## xor
 
