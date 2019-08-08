@@ -653,9 +653,9 @@
     "@types/json-schema" "^7.0.3"
 
 "@stoplight/yaml@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.0.0.tgz#5e152a5517792ed4aea7c169f779bf33998f7452"
-  integrity sha512-WTQG/fxyZmjdgjxfG/dNrKa//S2CMxNnKYgzpmS9clmmAMEgUX2kXVlDpG2S9S6L1WfVLwqikU94W1oZvPuZKw==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.0.1.tgz#a06da326f14ccf099d67d6b809d8ac7b91aa3c19"
+  integrity sha512-JzqOWRKwHoHHptWIplVEiZ5LZboAWPOkc/KtOvY+hiL3tcgXoDplLB1Mxd29BNP7a7j1HO82RUo1J3SeEBccIQ==
   dependencies:
     "@stoplight/types" "^10.0.1"
     "@types/js-yaml" "3.12.1"
