@@ -1,7 +1,7 @@
 /*
  * Schema Path is a variant of the normal Schema rule with a slight twist.
  * Instead of passing the rule a schema to validate, there is already a schema
- * somewhere inside the target, and we are just selecting it, and applying it to
+ * somewhere inside the target, and we are selecting it, and applying it to
  * a given field.
  *
  * The primary use case for this was validating OpenAPI examples
