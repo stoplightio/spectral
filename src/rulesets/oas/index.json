@@ -198,21 +198,6 @@
         }
       ]
     },
-    "only-local-references": {
-      "description": "References should start with `#/`.",
-      "recommended": false,
-      "type": "style",
-      "given": "$..['$ref']",
-      "then": {
-        "function": "pattern",
-        "functionOptions": {
-          "match": "^#\\/"
-        }
-      },
-      "tags": [
-        "references"
-      ]
-    },
     "openapi-tags-alphabetical": {
       "description": "OpenAPI object should have alphabetical `tags`.",
       "recommended": false,
