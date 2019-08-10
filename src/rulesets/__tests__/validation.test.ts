@@ -153,4 +153,67 @@ describe('Ruleset Validation', () => {
       }),
     ).toThrow();
   });
+
+  it('recognizes functions directory', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functionsDir: 'baz',
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it('recognizes invalid functions directory', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functionsDir: 2,
+        rules: {},
+      }),
+    ).toThrow();
+  });
+
+  it('recognizes valid array of functions with names only', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: ['foo', 'bar'],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it('recognizes valid array of functions with object only', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: [{ foo: true, bar: {} }, { baz: null }],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it('recognizes valid array of functions with both names and objects only', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: ['falsy', { foo: true, bar: {} }, { baz: null }, 'truthy'],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it('recognizes invalid functions', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: 3,
+        rules: {},
+      }),
+    ).toThrow();
+  });
+
+  it('recognizes invalid functions options', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: [3],
+        rules: {},
+      }),
+    ).toThrow();
+  });
 });

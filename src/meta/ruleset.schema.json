@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",    
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://stoplight.io/schemas/ruleset.schema.json",
     "type": "object",
     "properties": {
@@ -35,6 +35,22 @@
                             }
                         ],
                         "additionalItems": false
+                    }
+                ]
+            }
+        },
+        "functionsDir": {
+            "type": "string"
+        },
+        "functions": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "object"
                     }
                 ]
             }
