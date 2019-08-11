@@ -17,6 +17,7 @@ import { merge, set } from 'lodash';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
+import { readRulesFromRulesets } from './rulesets';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
@@ -125,6 +126,10 @@ export class Spectral {
 
   public addFunctions(functions: FunctionCollection) {
     Object.assign(this._functions, merge({}, functions));
+  }
+
+  public async loadRuleset(...uris: string[]) {
+    this.addRules(await readRulesFromRulesets(...uris));
   }
 
   /**
