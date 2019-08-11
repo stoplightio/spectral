@@ -1,5 +1,6 @@
 {
   "extends": ["spectral:oas"],
+  "formats": ["oas2"],
   "rules": {
     "api-host": {
       "description": "OpenAPI `host` must be present and non-empty string.",
