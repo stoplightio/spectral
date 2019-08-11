@@ -1,28 +1,37 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { FetchMockSandbox } from 'fetch-mock';
-import * as path from 'path';
 import { Spectral } from '../spectral';
-const fetch = require('node-fetch');
+
+const { fetch } = window;
 
 const oasRuleset = require('../rulesets/oas/index.json');
 const oas2Ruleset = require('../rulesets/oas2/index.json');
 const oas3Ruleset = require('../rulesets/oas3/index.json');
-const customOASRuleset = require('./__fixtures__/custom-oas-ruleset.json');
-
-jest.mock(
-  'node-fetch',
-  (() => {
-    // I know it might look weird, and it in fact is, so let me explain.
-    // There was some weird issue I had to mitigate against.
-    // Basically, if you deferred loading of fetch-mock module, sandbox method was no longer there for some reason.
-    const fetchMock = require('fetch-mock');
-    return () => fetchMock.sandbox();
-  })(),
-);
 
 describe('Spectral', () => {
   describe('loadRuleset', () => {
+    let fetchMock: FetchMockSandbox;
+
+    beforeEach(() => {
+      fetchMock = require('fetch-mock').sandbox();
+      window.fetch = fetchMock;
+    });
+
+    afterEach(() => {
+      window.fetch = fetch;
+    });
+
     test('should support loading built-in rulesets', async () => {
+      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
+        status: 200,
+        body: oasRuleset,
+      });
+
+      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas2/index.json', {
+        status: 200,
+        body: oas2Ruleset,
+      });
+
       const s = new Spectral();
       await s.loadRuleset('spectral:oas2');
 
@@ -43,6 +52,21 @@ describe('Spectral', () => {
     });
 
     test('should support loading multiple built-in rulesets', async () => {
+      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
+        status: 200,
+        body: oasRuleset,
+      });
+
+      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas2/index.json', {
+        status: 200,
+        body: oas2Ruleset,
+      });
+
+      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas3/index.json', {
+        status: 200,
+        body: oas3Ruleset,
+      });
+
       const s = new Spectral();
       await s.loadRuleset('spectral:oas2', 'spectral:oas3');
 
@@ -63,28 +87,6 @@ describe('Spectral', () => {
       );
     });
 
-    test('should support loading rulesets from filesystem', async () => {
-      const s = new Spectral();
-      await s.loadRuleset(path.join(__dirname, '__fixtures__/custom-oas-ruleset.json'));
-
-      expect(s.rules).toEqual({
-        ...[...Object.entries(oasRuleset.rules)].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
-          oasRules[name] = {
-            name,
-            ...rule,
-            severity: expect.any(Number),
-          };
-
-          return oasRules;
-        }, {}),
-        'info-matches-stoplight': {
-          ...customOASRuleset.rules['info-matches-stoplight'],
-          name: 'info-matches-stoplight',
-          severity: DiagnosticSeverity.Warning,
-        },
-      });
-    });
-
     test('should support loading rulesets over http', async () => {
       const ruleset = {
         rules: {
@@ -103,7 +105,7 @@ describe('Spectral', () => {
         },
       };
 
-      (fetch as FetchMockSandbox).mock('https://localhost:4000/custom-ruleset', {
+      fetchMock.mock('https://localhost:4000/custom-ruleset', {
         status: 200,
         body: ruleset,
       });
