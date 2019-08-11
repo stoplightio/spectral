@@ -14,6 +14,7 @@ import {
 } from '@stoplight/yaml';
 import { merge, set } from 'lodash';
 
+import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
@@ -129,7 +130,7 @@ export class Spectral {
   }
 
   public async loadRuleset(...uris: string[]) {
-    this.addRules(await readRulesFromRulesets(...uris));
+    this._addRules(await readRulesFromRulesets(...uris));
   }
 
   /**
@@ -153,7 +154,12 @@ export class Spectral {
     return rules;
   }
 
+  @deprecated('loadRuleset', '4.1')
   public addRules(rules: RuleCollection) {
+    this._addRules(rules);
+  }
+
+  private _addRules(rules: RuleCollection) {
     Object.assign(this._rules, merge({}, rules));
   }
 
