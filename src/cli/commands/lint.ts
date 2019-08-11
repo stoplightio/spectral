@@ -11,6 +11,7 @@ import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { getDefaultRulesetFile } from '../../rulesets/loader';
+import { isOAS2Spec, isOAS3Spec } from '../../rulesets/lookups';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
 import { readRulesFromRulesets } from '../../rulesets/reader';
@@ -150,6 +151,24 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
     mergeKeys: true,
   });
   const spectral = new Spectral({ resolver: httpAndFileResolver });
+  spectral.registerFormat('oas2', document => {
+    if (isOAS2Spec(document)) {
+      command.log('OpenAPI 2.0 (Swagger) detected');
+      return true;
+    }
+
+    return false;
+  });
+
+  spectral.registerFormat('oas3', document => {
+    if (isOAS3Spec(document)) {
+      command.log('OpenAPI 3.x detected');
+      return true;
+    }
+
+    return false;
+  });
+
   if (parseInt(spec.data.swagger) === 2) {
     command.log('Adding OpenAPI 2.0 (Swagger) functions');
     spectral.addFunctions(oas2Functions());
@@ -166,13 +185,12 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
     if (flags.verbose) {
       command.log('No rules loaded, attempting to detect document type');
     }
-    if (parseInt(spec.data.swagger) === 2) {
-      command.log('OpenAPI 2.0 (Swagger) detected');
-      rules = await tryReadOrLog(command, async () => await oas2Rules());
-    } else if (parseInt(spec.data.openapi) === 3) {
-      command.log('OpenAPI 3.x detected');
-      rules = await tryReadOrLog(command, async () => await oas3Rules());
-    }
+
+    rules = Object.assign(
+      {},
+      await tryReadOrLog(command, async () => await oas2Rules()),
+      await tryReadOrLog(command, async () => await oas3Rules()),
+    );
   }
 
   if (flags.skipRule) {
