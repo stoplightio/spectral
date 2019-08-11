@@ -7,7 +7,7 @@ import { IParsedResult } from './types';
 
 export class Resolved implements IResolveResult {
   public refMap: Dictionary<string>;
-  public result: unknown;
+  public result: IResolveResult;
   public errors: IResolveError[];
   public runner: IResolveRunner;
   public format?: string | null;

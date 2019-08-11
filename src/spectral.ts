@@ -28,6 +28,7 @@ import {
   IParsedResult,
   IRuleResult,
   IRunOpts,
+  ISpectralFullResult,
   PartialRuleCollection,
   RegisteredFormats,
   RuleCollection,
@@ -49,7 +50,18 @@ export class Spectral {
     this.formats = {};
   }
 
-  public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
+  public async run(
+    target: IParsedResult | object | string,
+    opts?: Omit<IRunOpts, 'includeResolved'> & { includeResolved?: false },
+  ): Promise<IRuleResult[]>;
+  public async run(
+    target: IParsedResult | object | string,
+    opts: Omit<IRunOpts, 'includeResolved'> & { includeResolved: true },
+  ): Promise<ISpectralFullResult>;
+  public async run(
+    target: IParsedResult | object | string,
+    opts: IRunOpts = {},
+  ): Promise<IRuleResult[] | ISpectralFullResult> {
     let results: IRuleResult[] = [];
 
     let parsedResult: IParsedResult | IParsedResult<YamlParserResult<unknown>>;
@@ -119,12 +131,21 @@ export class Spectral {
       resolved.format = foundFormat === void 0 ? null : foundFormat;
     }
 
-    return [
+    const validationResults = [
       ...refDiagnostics,
       ...results,
       ...formatResolverErrors(resolved),
       ...runRules(resolved, this.rules, this.functions),
     ];
+
+    if (opts.includeResolved) {
+      return {
+        resolved: resolved.result,
+        results: validationResults,
+      };
+    }
+
+    return validationResults;
   }
 
   /**
