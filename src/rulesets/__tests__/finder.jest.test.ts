@@ -40,6 +40,15 @@ describe('Rulesets finder', () => {
     );
   });
 
+  it.each(['oas', 'oas2', 'oas3'])(
+    'should resolve spectral built-in %s ruleset shorthand even if a base uri is provided',
+    shorthand => {
+      return expect(findRuleset('https://localhost:4000', `spectral:${shorthand}`)).resolves.toEqual(
+        path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
+      );
+    },
+  );
+
   it('should load local npm module if available', () => {
     return expect(findRuleset('', '@stoplight/json')).resolves.toEqual(require.resolve('@stoplight/json'));
   });
