@@ -1,5 +1,5 @@
 {
-  "formats": ["oas2", "oas3"],
+  "formats": ["oas-2", "oas-3"],
   "rules": {
     "operation-2xx-response": {
       "description": "Operation must have at least one `2xx` response.",

@@ -11,7 +11,7 @@ import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { getDefaultRulesetFile } from '../../rulesets/loader';
-import { isOAS2Spec, isOAS3Spec } from '../../rulesets/lookups';
+import { isOpenApiv2_0, isOpenApiv3 } from '../../rulesets/lookups';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
 import { readRulesFromRulesets } from '../../rulesets/reader';
@@ -151,8 +151,8 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
     mergeKeys: true,
   });
   const spectral = new Spectral({ resolver: httpAndFileResolver });
-  spectral.registerFormat('oas2', document => {
-    if (isOAS2Spec(document)) {
+  spectral.registerFormat('oas-2', document => {
+    if (isOpenApiv2_0(document)) {
       command.log('OpenAPI 2.0 (Swagger) detected');
       return true;
     }
@@ -160,8 +160,8 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
     return false;
   });
 
-  spectral.registerFormat('oas3', document => {
-    if (isOAS3Spec(document)) {
+  spectral.registerFormat('oas-3', document => {
+    if (isOpenApiv3(document)) {
       command.log('OpenAPI 3.x detected');
       return true;
     }

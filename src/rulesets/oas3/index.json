@@ -1,6 +1,6 @@
 {
   "extends": ["spectral:oas"],
-  "formats": ["oas3"],
+  "formats": ["oas-3"],
   "rules": {
     "api-servers": {
       "description": "OpenAPI `servers` must be present and non-empty array.",

@@ -210,7 +210,7 @@ describe('Rulesets reader', () => {
     return expect(readRulesFromRulesets(myOpenAPIRuleset)).resolves.toEqual({
       ...Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
         rules[name] = expect.objectContaining({
-          formats: ['oas2', 'oas3'],
+          formats: ['oas-2', 'oas-3'],
         });
 
         return rules;
@@ -218,7 +218,7 @@ describe('Rulesets reader', () => {
 
       ...Object.entries(oas2Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
         rules[name] = expect.objectContaining({
-          formats: ['oas2'],
+          formats: ['oas-2'],
         });
 
         return rules;
@@ -226,7 +226,7 @@ describe('Rulesets reader', () => {
 
       ...Object.entries(oas3Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
         rules[name] = expect.objectContaining({
-          formats: ['oas3'],
+          formats: ['oas-3'],
         });
 
         return rules;
