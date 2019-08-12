@@ -1,5 +1,5 @@
 import { FunctionCollection } from '../../types';
-import { readRulesFromRulesets } from '../reader';
+import { readRuleset } from '../reader';
 
 export const commonOasFunctions = (): FunctionCollection => {
   return {
@@ -12,4 +12,4 @@ export const commonOasFunctions = (): FunctionCollection => {
   };
 };
 
-export const rules = async () => readRulesFromRulesets(require.resolve('./index.json'));
+export const rules = async () => (await readRuleset(require.resolve('./index.json'))).rules;

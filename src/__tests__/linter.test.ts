@@ -2,9 +2,7 @@ import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
-import { readRulesFromRulesets } from '../rulesets';
 import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
-import { mergeRulesets } from '../rulesets/merger';
 import { oas2Functions } from '../rulesets/oas2';
 import * as oas2Ruleset from '../rulesets/oas2/index.json';
 import { oas3Functions } from '../rulesets/oas3';
@@ -152,16 +150,11 @@ describe('linter', () => {
 
   test('should not report anything for disabled rules', async () => {
     spectral.addFunctions(oas3Functions());
-    const oas3Rules = await readRulesFromRulesets('spectral:oas3');
-    spectral.addRules(mergeRulesets(
-      { rules: oas3Rules },
-      {
-        rules: {
-          'valid-example': 'off',
-          'model-description': -1,
-        },
-      },
-    ).rules as RuleCollection);
+    const { rules: oas3Rules } = await readRuleset('spectral:oas3');
+    spectral.addRules(mergeRules(oas3Rules, {
+      'valid-example': 'off',
+      'model-description': -1,
+    }) as RuleCollection);
 
     const result = await spectral.run(invalidSchema);
 

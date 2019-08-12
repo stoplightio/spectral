@@ -1,14 +1,8 @@
 import { cloneDeep } from 'lodash';
-import { Rule } from '../types';
-import {
-  FileRule,
-  FileRuleCollection,
-  FileRulesetSeverity,
-  IRulesetFile,
-  IRulesetFileMergingStrategy,
-} from '../types/ruleset';
-import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from './severity';
-import { isValidRule } from './validation';
+import { Rule } from '../../types';
+import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
+import { isValidRule } from '../validation';
 
 /*
 - if rule is object, simple deep merge (or we could replace to be a bit stricter?)
@@ -17,28 +11,22 @@ import { isValidRule } from './validation';
 - if rule is string or number, use parent rule and set it's severity to the given string/number value
 - if rule is array, index 0 should be false/true/string/number - same severity logic as above. optional second
 */
-export function mergeRulesets(
-  target: IRulesetFile,
-  src: IRulesetFile,
-  strategy?: IRulesetFileMergingStrategy,
-): IRulesetFile {
-  const { rules } = target;
-
-  for (const [name, rule] of Object.entries(src.rules)) {
-    if (strategy !== void 0 && strategy.severity !== void 0) {
-      const severity = getSeverityLevel(src.rules, name, strategy.severity);
+export function mergeRules(
+  target: FileRuleCollection,
+  source: FileRuleCollection,
+  rulesetSeverity?: FileRulesetSeverity,
+): FileRuleCollection {
+  for (const [name, rule] of Object.entries(source)) {
+    if (rulesetSeverity !== undefined) {
+      const severity = getSeverityLevel(source, name, rulesetSeverity);
       if (isValidRule(rule)) {
         rule.severity = severity;
-        includeSeverity(rules, name, rule);
+        processRule(target, name, rule);
       } else {
-        includeSeverity(rules, name, severity);
+        processRule(target, name, severity);
       }
     } else {
-      includeSeverity(rules, name, rule);
-    }
-
-    if (isValidRule(rule) && rule.formats === void 0 && src.formats !== void 0) {
-      rule.formats = src.formats;
+      processRule(target, name, rule);
     }
   }
 
@@ -71,7 +59,7 @@ function copyRule(rule: Rule) {
   return cloneDeep(rule);
 }
 
-function includeSeverity(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity) {
+function processRule(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity) {
   const existingRule = rules[name];
 
   switch (typeof rule) {
@@ -93,7 +81,7 @@ function includeSeverity(rules: FileRuleCollection, name: string, rule: FileRule
     case 'object':
       normalizeRule(rule);
       if (Array.isArray(rule)) {
-        includeSeverity(rules, name, rule[0]);
+        processRule(rules, name, rule[0]);
 
         if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== undefined) {
           if ('functionOptions' in existingRule.then) {

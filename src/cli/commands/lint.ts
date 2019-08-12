@@ -14,7 +14,7 @@ import { getDefaultRulesetFile } from '../../rulesets/loader';
 import { isOpenApiv2, isOpenApiv3 } from '../../rulesets/lookups';
 import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
 import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
-import { readRulesFromRulesets } from '../../rulesets/reader';
+import { readRuleset } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
 import { IParsedResult, RuleCollection } from '../../types';
 import { ILintConfig, OutputFormat } from '../../types/config';
@@ -89,11 +89,11 @@ linting ./openapi.yaml
 
     if (rulesetFile) {
       try {
-        rules = await readRulesFromRulesets(
+        ({ rules } = await readRuleset(
           ...(Array.isArray(rulesetFile) ? rulesetFile : [rulesetFile]).map(
             file => (isAbsolute(file) ? file : resolve(cwd, file)),
           ),
-        );
+        ));
       } catch (ex) {
         this.log(ex.message);
         this.error(ex);

@@ -1,6 +1,6 @@
 import * as path from '@stoplight/path';
 import * as fs from 'fs';
-import { rulesetsMap } from './map';
+import { filesMap } from './map';
 
 const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
 
@@ -40,8 +40,8 @@ async function resolveFromFS(from: string, to: string) {
   throw new Error('File does not exist');
 }
 
-export async function findRuleset(from: string, to: string) {
-  const mapped = rulesetsMap.get(to);
+export async function findFile(from: string, to: string) {
+  const mapped = filesMap.get(to);
   if (mapped !== void 0) {
     to = mapped;
   }

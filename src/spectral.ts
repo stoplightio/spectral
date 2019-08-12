@@ -18,7 +18,7 @@ import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
-import { readRulesFromRulesets } from './rulesets';
+import { readRuleset } from './rulesets';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
@@ -153,7 +153,7 @@ export class Spectral {
   }
 
   public async loadRuleset(...uris: string[]) {
-    this._addRules(await readRulesFromRulesets(...uris));
+    this._addRules((await readRuleset(...uris)).rules);
   }
 
   /**
