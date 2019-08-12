@@ -1,8 +1,8 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { IRule } from '../../types';
-import { mergeRules } from '../mergers/rules';
+import { IRule } from '../../../types';
+import { mergeRules } from '../rules';
 
-describe('Rulesets merger', () => {
+describe('Ruleset rules merging', () => {
   const baseRule: IRule = {
     message: 'Operation must have at least one `2xx` response.',
     given:
