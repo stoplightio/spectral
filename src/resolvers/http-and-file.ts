@@ -10,6 +10,11 @@ export const httpAndFileResolver = new Resolver({
   resolvers: {
     https: httpReader,
     http: httpReader,
+    spectral: {
+      async resolve(ref): Promise<any> {
+        // console.log(ref);
+      },
+    },
     file: {
       resolve(ref: any) {
         return new Promise((resolve, reject) => {

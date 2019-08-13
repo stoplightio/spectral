@@ -1,5 +1,6 @@
 import { parse } from '@stoplight/yaml';
 import { readParsable } from '../fs/reader';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { RuleCollection } from '../types';
 import { FileRulesetSeverity, IRuleset, IRulesetFile } from '../types/ruleset';
 import { findRuleset } from './finder';
@@ -23,7 +24,10 @@ async function readRulesFromRuleset(
   uri: string,
   severity?: FileRulesetSeverity,
 ): Promise<IRulesetFile> {
-  const ruleset = assertValidRuleset(parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')));
+  const { result } = await httpAndFileResolver.resolve(
+    parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')),
+  );
+  const ruleset = assertValidRuleset(result);
 
   const newRuleset: IRulesetFile = {
     rules: {},
