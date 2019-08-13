@@ -115,7 +115,8 @@ export class Spectral {
     );
 
     if (resolved.format === void 0) {
-      resolved.format = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+      resolved.format = foundFormat === void 0 ? null : foundFormat;
     }
 
     return [
