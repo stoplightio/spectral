@@ -193,7 +193,7 @@ describe('Ruleset rules merging', () => {
         test: JSON.parse(JSON.stringify(baseRule)),
         test2: JSON.parse(JSON.stringify(baseRule)),
       },
-      { severity: 'off' },
+      'off',
     );
 
     expect(rules).toHaveProperty('test.severity', -1);
@@ -212,7 +212,7 @@ describe('Ruleset rules merging', () => {
           recommended: false,
         },
       },
-      { severity: 'recommended' },
+      'recommended',
     );
 
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Warning);
@@ -249,7 +249,7 @@ describe('Ruleset rules merging', () => {
           recommended: false,
         },
       },
-      { severity: 'all' },
+      'all',
     );
 
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Warning);
@@ -278,7 +278,7 @@ describe('Ruleset rules merging', () => {
       {
         test: 'hint',
       },
-      { severity: 'all' },
+      'all',
     );
 
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Hint);
@@ -296,56 +296,5 @@ describe('Ruleset rules merging', () => {
         },
       } as any),
     ).toThrow('Invalid value for a rule');
-  });
-
-  it('injects spec-scoped formats to each rule without a format', () => {
-    const ruleset: IRulesetFile = {
-      rules: {},
-    };
-
-    mergeRulesets(ruleset, {
-      formats: ['oas2', 'oas3'],
-      rules: {
-        test: JSON.parse(JSON.stringify(baseRule)),
-        test2: JSON.parse(JSON.stringify(baseRule)),
-      },
-    });
-
-    expect(ruleset).not.toHaveProperty('formats'); // makes sure we do not attach formats in the final output
-    expect(ruleset.rules).toEqual({
-      test: expect.objectContaining({
-        formats: ['oas2', 'oas3'],
-      }),
-      test2: expect.objectContaining({
-        formats: ['oas2', 'oas3'],
-      }),
-    });
-  });
-
-  it('preserves own formats of a rule if any declared', () => {
-    const ruleset: IRulesetFile = {
-      rules: {},
-    };
-
-    mergeRulesets(ruleset, {
-      formats: ['oas2', 'oas3'],
-      rules: {
-        test: {
-          ...JSON.parse(JSON.stringify(baseRule)),
-          formats: ['markdown'],
-        },
-        test2: JSON.parse(JSON.stringify(baseRule)),
-      },
-    });
-
-    expect(ruleset).not.toHaveProperty('formats'); // makes sure we do not attach formats in the final output
-    expect(ruleset.rules).toEqual({
-      test: expect.objectContaining({
-        formats: ['markdown'],
-      }),
-      test2: expect.objectContaining({
-        formats: ['oas2', 'oas3'],
-      }),
-    });
   });
 });
