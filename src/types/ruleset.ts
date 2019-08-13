@@ -16,5 +16,10 @@ export interface IRuleset {
 
 export interface IRulesetFile {
   extends?: Array<string | [string, FileRulesetSeverity]>;
+  formats?: string[];
   rules: FileRuleCollection;
+}
+
+export interface IRulesetFileMergingStrategy {
+  severity?: FileRulesetSeverity;
 }

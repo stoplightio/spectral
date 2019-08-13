@@ -22,12 +22,14 @@ import { readRulesFromRulesets } from './rulesets';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
+  FormatLookup,
   FunctionCollection,
   IConstructorOpts,
   IParsedResult,
   IRuleResult,
   IRunOpts,
   PartialRuleCollection,
+  RegisteredFormats,
   RuleCollection,
   RuleDeclarationCollection,
   RunRuleCollection,
@@ -40,8 +42,11 @@ export class Spectral {
   private _functions: FunctionCollection = defaultFunctions;
   private _resolver: Resolver;
 
+  public formats: RegisteredFormats;
+
   constructor(opts?: IConstructorOpts) {
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+    this.formats = {};
   }
 
   public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
@@ -108,6 +113,10 @@ export class Spectral {
       }),
       this._parsedMap,
     );
+
+    if (resolved.format === void 0) {
+      resolved.format = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+    }
 
     return [
       ...refDiagnostics,
@@ -185,6 +194,10 @@ export class Spectral {
         }
       }
     }
+  }
+
+  public registerFormat(format: string, fn: FormatLookup) {
+    this.formats[format] = fn;
   }
 
   private _parsedMap: IParseMap = {

@@ -1,6 +1,12 @@
 import { cloneDeep } from 'lodash';
 import { Rule } from '../types';
-import { FileRule, FileRuleCollection, FileRulesetSeverity, IRulesetFile } from '../types/ruleset';
+import {
+  FileRule,
+  FileRuleCollection,
+  FileRulesetSeverity,
+  IRulesetFile,
+  IRulesetFileMergingStrategy,
+} from '../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from './severity';
 import { isValidRule } from './validation';
 
@@ -11,20 +17,28 @@ import { isValidRule } from './validation';
 - if rule is string or number, use parent rule and set it's severity to the given string/number value
 - if rule is array, index 0 should be false/true/string/number - same severity logic as above. optional second
 */
-export function mergeRulesets(target: IRulesetFile, src: IRulesetFile, rulesetSeverity?: FileRulesetSeverity) {
+export function mergeRulesets(
+  target: IRulesetFile,
+  src: IRulesetFile,
+  strategy?: IRulesetFileMergingStrategy,
+): IRulesetFile {
   const { rules } = target;
 
   for (const [name, rule] of Object.entries(src.rules)) {
-    if (rulesetSeverity !== undefined) {
-      const severity = getSeverityLevel(src.rules, name, rulesetSeverity);
+    if (strategy !== void 0 && strategy.severity !== void 0) {
+      const severity = getSeverityLevel(src.rules, name, strategy.severity);
       if (isValidRule(rule)) {
         rule.severity = severity;
-        processRule(rules, name, rule);
+        includeSeverity(rules, name, rule);
       } else {
-        processRule(rules, name, severity);
+        includeSeverity(rules, name, severity);
       }
     } else {
-      processRule(rules, name, rule);
+      includeSeverity(rules, name, rule);
+    }
+
+    if (isValidRule(rule) && rule.formats === void 0 && src.formats !== void 0) {
+      rule.formats = src.formats;
     }
   }
 
@@ -57,7 +71,7 @@ function copyRule(rule: Rule) {
   return cloneDeep(rule);
 }
 
-function processRule(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity) {
+function includeSeverity(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity) {
   const existingRule = rules[name];
 
   switch (typeof rule) {
@@ -79,7 +93,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
     case 'object':
       normalizeRule(rule);
       if (Array.isArray(rule)) {
-        processRule(rules, name, rule[0]);
+        includeSeverity(rules, name, rule[0]);
 
         if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== undefined) {
           if ('functionOptions' in existingRule.then) {
