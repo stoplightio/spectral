@@ -1,6 +1,7 @@
 import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as nock from 'nock';
 import { IRule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
@@ -21,6 +22,10 @@ const oas3Ruleset = require('../oas3/index.json');
 jest.setTimeout(10000);
 
 describe('Rulesets reader', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   it('given flat, valid ruleset file should return rules', async () => {
     expect(await readRulesFromRulesets(validFlatRuleset)).toEqual({
       'valid-rule': {
@@ -269,6 +274,10 @@ describe('Rulesets reader', () => {
   });
 
   it('given non-existent ruleset should output error', () => {
+    nock('https://unpkg.com')
+      .get('/oneParentRuleset')
+      .reply(404);
+
     return expect(readRulesFromRulesets('oneParentRuleset')).rejects.toThrowError(
       'Could not parse https://unpkg.com/oneParentRuleset: Not Found',
     );

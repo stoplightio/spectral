@@ -50,7 +50,7 @@ export async function findRuleset(from: string, to: string) {
     return to;
   }
 
-  if (path.isURL(from)) {
+  if (path.isURL(from) && mapped === void 0) {
     return path.join(from, '..', to);
   }
 
