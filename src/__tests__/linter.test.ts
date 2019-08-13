@@ -209,6 +209,192 @@ describe('linter', () => {
     ]);
   });
 
+  test('should respect the format of data and run rules associated with it', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        formats: [],
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      'foo-bar': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+      }),
+    ]);
+  });
+
+  test('should match all formats if rule has no formats defined', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      'foo-bar': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+      }),
+      expect.objectContaining({
+        code: 'rule2',
+      }),
+    ]);
+  });
+
+  test('should include all rules if document has no formats defined', async () => {
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      'foo-bar': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+      }),
+      expect.objectContaining({
+        code: 'rule2',
+      }),
+    ]);
+  });
+
+  test('should let a format lookup to be overridden', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+    spectral.registerFormat('foo-bar', () => false);
+    spectral.registerFormat('baz', () => true);
+
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        formats: ['foo-bar'],
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      'foo-bar': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([]);
+  });
+
+  test('should prefer the first matched format', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+    spectral.registerFormat('baz', () => true);
+
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        formats: ['baz'],
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      'foo-bar': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+      }),
+    ]);
+  });
+
   test('should include parser diagnostics', async () => {
     spectral.addRules(oas2Ruleset.rules as RuleCollection);
     spectral.addFunctions(oas2Functions());
