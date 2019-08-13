@@ -19,7 +19,11 @@ export const runRules = (
     const rule = rules[name];
     if (!rule) continue;
 
-    if (resolved.format !== void 0 && rule.formats !== void 0 && !rule.formats.includes(resolved.format)) continue;
+    if (
+      rule.formats !== void 0 &&
+      (resolved.format === null || (resolved.format !== void 0 && !rule.formats.includes(resolved.format)))
+    )
+      continue;
 
     if (rule.severity !== undefined && getDiagnosticSeverity(rule.severity) === -1) {
       continue;
