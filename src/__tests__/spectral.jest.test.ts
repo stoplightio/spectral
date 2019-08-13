@@ -1,26 +1,18 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
-import { FetchMockSandbox } from 'fetch-mock';
+import * as nock from 'nock';
 import * as path from 'path';
 import { Spectral } from '../spectral';
-const fetch = require('node-fetch');
 
 const oasRuleset = require('../rulesets/oas/index.json');
 const oas2Ruleset = require('../rulesets/oas2/index.json');
 const oas3Ruleset = require('../rulesets/oas3/index.json');
 const customOASRuleset = require('./__fixtures__/custom-oas-ruleset.json');
 
-jest.mock(
-  'node-fetch',
-  (() => {
-    // I know it might look weird, and it in fact is, so let me explain.
-    // There was some weird issue I had to mitigate against.
-    // Basically, if you deferred loading of fetch-mock module, sandbox method was no longer there for some reason.
-    const fetchMock = require('fetch-mock');
-    return () => fetchMock.sandbox();
-  })(),
-);
-
 describe('Spectral', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   describe('loadRuleset', () => {
     test('should support loading built-in rulesets', async () => {
       const s = new Spectral();
@@ -32,6 +24,7 @@ describe('Spectral', () => {
             oasRules[name] = {
               name,
               ...rule,
+              formats: expect.arrayContaining([expect.any(String)]),
               severity: expect.any(Number),
             };
 
@@ -55,6 +48,7 @@ describe('Spectral', () => {
           oasRules[name] = {
             name,
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             severity: expect.any(Number),
           };
 
@@ -72,6 +66,7 @@ describe('Spectral', () => {
           oasRules[name] = {
             name,
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             severity: expect.any(Number),
           };
 
@@ -103,10 +98,9 @@ describe('Spectral', () => {
         },
       };
 
-      (fetch as FetchMockSandbox).mock('https://localhost:4000/custom-ruleset', {
-        status: 200,
-        body: ruleset,
-      });
+      nock('https://localhost:4000')
+        .get('/custom-ruleset')
+        .reply(200, JSON.stringify(ruleset));
 
       const s = new Spectral();
       await s.loadRuleset('https://localhost:4000/custom-ruleset');

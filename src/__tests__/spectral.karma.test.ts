@@ -41,6 +41,7 @@ describe('Spectral', () => {
             oasRules[name] = {
               name,
               ...rule,
+              formats: expect.arrayContaining([expect.any(String)]),
               severity: expect.any(Number),
             };
 
@@ -79,6 +80,7 @@ describe('Spectral', () => {
           oasRules[name] = {
             name,
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             severity: expect.any(Number),
           };
 
