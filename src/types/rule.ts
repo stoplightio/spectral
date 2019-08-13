@@ -6,6 +6,8 @@ export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | Patte
 export interface IRule<T = string, O = any> {
   type?: RuleType;
 
+  formats?: string[];
+
   // A meaningful feedback about the error
   message?: string;
 

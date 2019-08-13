@@ -9,6 +9,13 @@
                 "$ref": "rule.schema.json"
             }
         },
+        "formats": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
         "extends": {
             "type": ["array", "string"],
             "items": {
