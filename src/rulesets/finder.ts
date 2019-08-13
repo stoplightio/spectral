@@ -31,7 +31,7 @@ async function resolveFromFS(from: string, to: string) {
     }
   }
 
-  targetPath = path.join(from, '..', to);
+  targetPath = path.resolve(from, to);
   // if it's not a built-in ruleset, try to resolve the file according to the provided path
   if (await exists(targetPath)) {
     return targetPath;
@@ -51,7 +51,7 @@ export async function findFile(from: string, to: string) {
   }
 
   if (path.isURL(from) && mapped === void 0) {
-    return path.join(from, '..', to);
+    return path.join(from, to);
   }
 
   try {

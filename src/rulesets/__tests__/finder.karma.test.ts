@@ -15,7 +15,7 @@ describe('Rulesets finder', () => {
     });
 
     it(`should resolve spectral built-in ${shorthand} ruleset shorthand even if a base uri is provided`, () => {
-      return expect(findRuleset('https://localhost:4000', `spectral:${shorthand}`)).resolves.toEqual(
+      return expect(findFile('https://localhost:4000', `spectral:${shorthand}`)).resolves.toEqual(
         `https://unpkg.com/@stoplight/spectral/rulesets/${shorthand}/index.json`,
       );
     });

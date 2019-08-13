@@ -1,5 +1,6 @@
 import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
+import { join } from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
@@ -7,7 +8,7 @@ import { FunctionsCollection } from '../types';
 import { FileRulesetSeverity, IRuleset } from '../types/ruleset';
 import { evaluateExport } from './evaluators';
 import { findFile } from './finder';
-import { mergeFunctions, mergeRules } from './mergers';
+import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { assertValidRuleset } from './validation';
 
 export async function readRuleset(...uris: string[]): Promise<IRuleset> {
@@ -21,7 +22,7 @@ export async function readRuleset(...uris: string[]): Promise<IRuleset> {
   for (const uri of uris) {
     const resolvedRuleset = await processRuleset(cache, uri, uri);
     mergeRules(base.rules, resolvedRuleset.rules);
-    Object.assign(base.functions, resolvedRuleset.functions); // todo
+    Object.assign(base.functions, resolvedRuleset.functions); // todo: bind fn
   }
 
   return base;
@@ -33,7 +34,7 @@ async function processRuleset(
   uri: string,
   severity?: FileRulesetSeverity,
 ): Promise<IRuleset> {
-  const rulesetUri = await findFile(baseUri, uri);
+  const rulesetUri = await findFile(join(baseUri, '..'), uri);
   const { result } = await httpAndFileResolver.resolve(parse(await readParsable(rulesetUri, 'utf8')), {
     baseUri: rulesetUri,
     dereferenceInline: false,
@@ -71,10 +72,12 @@ async function processRuleset(
   }
 
   mergeRules(rules, ruleset.rules);
+  if (Array.isArray(ruleset.formats)) {
+    mergeFormats(rules, ruleset.formats);
+  }
 
   if (rulesetFunctions !== void 0) {
-    // todo: functionsDir support
-    const rulesetFunctionsBaseDir = ruleset.functionsDir !== void 0 ? ruleset.functionsDir : rulesetUri;
+    const rulesetFunctionsBaseDir = ruleset.functionsDir !== void 0 ? ruleset.functionsDir : join(rulesetUri, '..');
     const resolvedFunctions: FunctionsCollection = {};
 
     await Promise.all(
@@ -84,7 +87,11 @@ async function processRuleset(
         resolvedFunctions[fnName] = evaluateExport(
           await readFile(await findFile(rulesetFunctionsBaseDir, `./functions/${fnName}.js`), 'utf-8'),
         );
-        // Reflect.defineProperty(resolvedFunctions[fnName].name = fnName;
+
+        Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
+          configurable: true,
+          value: fnName,
+        });
       }),
     );
 

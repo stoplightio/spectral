@@ -7,7 +7,7 @@ declare var it: jest.It;
 
 describe('Rulesets finder', () => {
   it('should join relative path', () => {
-    return expect(findFile(__filename, './finder.jest.test.ts')).resolves.toEqual(
+    return expect(findFile(__dirname, './finder.jest.test.ts')).resolves.toEqual(
       path.join(__dirname, './finder.jest.test.ts'),
     );
   });
@@ -17,9 +17,7 @@ describe('Rulesets finder', () => {
   });
 
   it('should join http relative', () => {
-    return expect(findFile('http://www.example.com/a/b.json', 'd.json')).resolves.toEqual(
-      'http://www.example.com/a/d.json',
-    );
+    return expect(findFile('http://www.example.com/a', 'd.json')).resolves.toEqual('http://www.example.com/a/d.json');
   });
 
   it('should resolve http absolute', () => {
@@ -43,7 +41,7 @@ describe('Rulesets finder', () => {
   it.each(['oas', 'oas2', 'oas3'])(
     'should resolve spectral built-in %s ruleset shorthand even if a base uri is provided',
     shorthand => {
-      return expect(findRuleset('https://localhost:4000', `spectral:${shorthand}`)).resolves.toEqual(
+      return expect(findFile('https://localhost:4000', `spectral:${shorthand}`)).resolves.toEqual(
         path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
       );
     },
