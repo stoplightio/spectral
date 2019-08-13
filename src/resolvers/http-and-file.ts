@@ -1,4 +1,4 @@
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { Resolver } from '@stoplight/json-ref-resolver/dist';
 import { extname } from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
 import * as fs from 'fs';

@@ -1,4 +1,4 @@
-import { IResolveError, IResolveResult, IResolveRunner } from '@stoplight/json-ref-resolver/types';
+import { IResolveError, IResolveResult, IResolveRunner } from '@stoplight/json-ref-resolver/dist/types';
 import { Dictionary, ILocation, JsonPath } from '@stoplight/types';
 import { Segment } from '@stoplight/types/dist';
 import { get } from 'lodash';

@@ -3,8 +3,8 @@ import {
   getLocationForJsonPath as getLocationForJsonPathJSON,
   parseWithPointers as parseJSONWithPointers,
 } from '@stoplight/json';
-import { Resolver } from '@stoplight/json-ref-resolver';
-import { IUriParser } from '@stoplight/json-ref-resolver/types';
+import { Resolver } from '@stoplight/json-ref-resolver/dist';
+import { IUriParser } from '@stoplight/json-ref-resolver/dist/types';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import {

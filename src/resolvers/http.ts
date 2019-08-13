@@ -1,4 +1,4 @@
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { Resolver } from '@stoplight/json-ref-resolver/dist';
 
 const fetch = require('node-fetch');
 
