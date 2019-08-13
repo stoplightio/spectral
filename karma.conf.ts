@@ -27,6 +27,11 @@ module.exports = (config: any) => {
     karmaTypescriptConfig: {
       ...require('./tsconfig.json'),
       bundlerOptions: {
+        resolve: {
+          alias: {
+            'node-fetch': require.resolve('./__karma__/fetch'),
+          },
+        },
         acornOptions: {
           ecmaVersion: 9,
         },

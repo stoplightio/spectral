@@ -50,22 +50,25 @@ spectral.run(myOpenApiDocument).then(results => console.log(results);
 
 ## Loading Rules
 
-Spectral comes with some rules and functions that are very specific to OpenAPI v2/v3, and they can be used by loading them up and passing them into `Spectral.addRules()`. 
+Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`. 
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
 const { parseWithPointers } = require("@stoplight/yaml");
-const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
+const { oas3Functions } = require('@stoplight/spectral/dist/rulesets/oas3');
 
-
-const myOpenApiDocument = { ... };
+const myOpenApiDocument = {
+  // any parsed open api document
+};
 
 const spectral = new Spectral();
 spectral.addFunctions(oas3Functions());
-oas3Rules().then(rules => spectral.addRules(rules));
+spectral.loadRuleset('spectral:oas3') // spectral:oas2 for OAS 2.0 aka Swagger
+  .then(() => spectral.run(myOpenApiDocument))
+  .then(results => {
+    console.log('here are the results', results);
+  });
 ``` 
-
-_Spectral JS API does not yet support loading rulesets directly, but will be added in an upcoming version to avoid needing to load rules and functions separately._
 
 [Try it out!](https://repl.it/@ChrisMiaskowski/spectral-rules-example)
 
