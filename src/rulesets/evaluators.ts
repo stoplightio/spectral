@@ -37,8 +37,7 @@ export const evaluateExport = (body: string): Function => {
   const root: ContextExport = {};
   const define = createDefine(mod);
 
-  // todo: make window a 'trap' + detect 'global' + support node global
-  Function('module, exports, define, window', String(body)).call(root, mod, exports, define, {});
+  Function('module, exports, define', String(body)).call(root, mod, exports, define);
 
   let maybeFn: unknown;
 

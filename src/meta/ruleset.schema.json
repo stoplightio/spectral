@@ -45,12 +45,21 @@
         "functions": {
             "type": "array",
             "items": {
-                "anyOf": [
+                "oneOf": [
                     {
                         "type": "string"
                     },
                     {
-                        "type": "object"
+                        "type": "array",
+                        "items": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object"
+                            }
+                        ],
+                        "additionalItems": false
                     }
                 ]
             }

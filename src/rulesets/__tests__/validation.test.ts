@@ -184,7 +184,7 @@ describe('Ruleset Validation', () => {
   it('recognizes valid array of functions with object only', () => {
     expect(
       assertValidRuleset.bind(null, {
-        functions: [{ foo: true, bar: {} }, { baz: null }],
+        functions: [['foo', {}], ['baz', {}]],
         rules: {},
       }),
     ).not.toThrow();
@@ -193,7 +193,7 @@ describe('Ruleset Validation', () => {
   it('recognizes valid array of functions with both names and objects only', () => {
     expect(
       assertValidRuleset.bind(null, {
-        functions: ['falsy', { foo: true, bar: {} }, { baz: null }, 'truthy'],
+        functions: ['falsy', ['foo', {}], ['baz', {}], 'truthy'],
         rules: {},
       }),
     ).not.toThrow();
@@ -211,7 +211,7 @@ describe('Ruleset Validation', () => {
   it('recognizes invalid functions options', () => {
     expect(
       assertValidRuleset.bind(null, {
-        functions: [3],
+        functions: [3, 'd'],
         rules: {},
       }),
     ).toThrow();
