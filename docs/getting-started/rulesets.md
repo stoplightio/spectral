@@ -47,7 +47,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `oas2` (this is OpenAPI v2.0 - formerly known as Swagger)
 - `oas3` (this is OpenAPI v3.0)
 
-Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the format key is here to help.
+Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
 
 ```yaml
 rules:
