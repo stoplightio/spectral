@@ -22,7 +22,7 @@ export async function readRuleset(...uris: string[]): Promise<IRuleset> {
   for (const uri of uris) {
     const resolvedRuleset = await processRuleset(cache, uri, uri);
     mergeRules(base.rules, resolvedRuleset.rules);
-    Object.assign(base.functions, resolvedRuleset.functions); // todo: bind fn
+    mergeFunctions(base.functions, resolvedRuleset.functions, resolvedRuleset.rules);
   }
 
   return base;
@@ -83,10 +83,13 @@ async function processRuleset(
     await Promise.all(
       rulesetFunctions.map(async fn => {
         const fnName = Array.isArray(fn) ? fn[0] : fn;
+        // const fnSchema = Array.isArray(fn) ? fn[1] : null; // todo: define me in ruleset.schema.json
         // todo: consume schema, i.e. wrap a function
-        resolvedFunctions[fnName] = evaluateExport(
+        const exportedFn = evaluateExport(
           await readFile(await findFile(rulesetFunctionsBaseDir, `./functions/${fnName}.js`), 'utf-8'),
         );
+
+        resolvedFunctions[fnName] = exportedFn;
 
         Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
           configurable: true,
