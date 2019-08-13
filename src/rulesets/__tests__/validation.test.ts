@@ -104,4 +104,53 @@ describe('Ruleset Validation', () => {
       }),
     ).toThrow();
   });
+
+  it('recognizes valid ruleset formats syntax', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        formats: ['oas3'],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
+  it.each([[2, 'a'], 2, ['']])('recognizes invalid ruleset formats syntax', formats => {
+    expect(
+      assertValidRuleset.bind(null, {
+        formats,
+        rules: {},
+      }),
+    ).toThrow();
+  });
+
+  it('recognizes valid rule formats syntax', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        formats: ['d'],
+        rules: {
+          rule: {
+            given: '$.info',
+            then: {
+              function: 'truthy',
+            },
+            formats: ['oas2'],
+          },
+        },
+      }),
+    ).not.toThrow();
+  });
+
+  it.each([[2, 'a'], 2, ['']])('recognizes invalid rule formats syntax', formats => {
+    expect(
+      assertValidRuleset.bind(null, {
+        rules: {
+          given: '$.info',
+          then: {
+            function: 'truthy',
+          },
+          formats,
+        },
+      }),
+    ).toThrow();
+  });
 });

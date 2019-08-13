@@ -35,10 +35,14 @@ async function readRulesFromRuleset(
     for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
       if (Array.isArray(extended)) {
         const parentSeverity = severity === undefined ? extended[1] : severity;
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0], parentSeverity), parentSeverity);
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0], parentSeverity), {
+          severity: parentSeverity,
+        });
       } else {
         const parentSeverity = severity === undefined ? 'recommended' : severity;
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended, parentSeverity), parentSeverity);
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended, parentSeverity), {
+          severity: parentSeverity,
+        });
       }
     }
   }

@@ -13,8 +13,10 @@ const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/exten
 const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
 const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
 const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
+const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-ruleset.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
+const oas3Ruleset = require('../oas3/index.json');
 
 jest.setTimeout(10000);
 
@@ -62,6 +64,7 @@ describe('Rulesets reader', () => {
         (oasRules, [name, rule]) => {
           oasRules[name] = {
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
           };
 
@@ -87,6 +90,7 @@ describe('Rulesets reader', () => {
         (rules, [name, rule]) => {
           rules[name] = {
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
             ...(!(rule as IRule).recommended && { severity: -1 }),
           };
@@ -113,6 +117,7 @@ describe('Rulesets reader', () => {
         (rules, [name, rule]) => {
           rules[name] = {
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             severity: -1,
           };
 
@@ -124,6 +129,7 @@ describe('Rulesets reader', () => {
       'operation-operationId-unique': {
         // value of oasRuleset.rules['operation-operationId-unique']
         description: 'Every operation must have a unique `operationId`.',
+        formats: expect.arrayContaining([expect.any(String)]),
         recommended: true,
         type: 'validation',
         severity: 0,
@@ -142,6 +148,7 @@ describe('Rulesets reader', () => {
       {
         description: 'should be overridden',
         given: '$.info',
+        formats: expect.arrayContaining([expect.any(String)]),
         recommended: true,
         severity: DiagnosticSeverity.Warning,
         tags: ['operation'],
@@ -159,6 +166,7 @@ describe('Rulesets reader', () => {
       {
         given: '$',
         recommended: true,
+        formats: expect.arrayContaining([expect.any(String)]),
         severity: -1,
         description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
         tags: ['operation'],
@@ -180,6 +188,7 @@ describe('Rulesets reader', () => {
         (rules, [name, rule]) => {
           rules[name] = {
             ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
           };
 
@@ -195,6 +204,38 @@ describe('Rulesets reader', () => {
         rule => rule.severity === -1 || rule.severity === 'off' || rule.severity === undefined,
       ),
     ).toHaveLength(0);
+  });
+
+  it('should limit the scope of formats to a ruleset', () => {
+    return expect(readRulesFromRulesets(myOpenAPIRuleset)).resolves.toEqual({
+      ...Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+        rules[name] = expect.objectContaining({
+          formats: ['oas2', 'oas3'],
+        });
+
+        return rules;
+      }, {}),
+
+      ...Object.entries(oas2Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+        rules[name] = expect.objectContaining({
+          formats: ['oas2'],
+        });
+
+        return rules;
+      }, {}),
+
+      ...Object.entries(oas3Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+        rules[name] = expect.objectContaining({
+          formats: ['oas3'],
+        });
+
+        return rules;
+      }, {}),
+
+      'valid-rule': expect.objectContaining({
+        message: 'should be OK',
+      }),
+    });
   });
 
   it('should support local rulesets', () => {
