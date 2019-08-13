@@ -180,7 +180,7 @@ describe('lint', () => {
         .it('outputs warnings in default format', ctx => {
           expect(ctx.stdout).toContain('5:10  warning  info-matches-stoplight  Info must contain Stoplight');
           expect(ctx.stdout).not.toContain('Info object should contain `contact` object');
-          expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
+          expect(ctx.stdout).toContain('OpenAPI 3.x detected');
         });
 
       test
@@ -208,7 +208,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(
             '3:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string',
           );
-          expect(ctx.stdout).not.toContain('OpenAPI 3.x detected');
+          expect(ctx.stdout).toContain('OpenAPI 3.x detected');
         });
 
       test
@@ -219,7 +219,7 @@ describe('lint', () => {
             '46:24  warning  operation-description   Operation `description` must be present and non-empty string',
           );
           expect(ctx.stdout).toContain('28 problems (0 errors, 28 warnings, 0 infos)');
-          expect(ctx.stdout).not.toContain('OpenAPI 2.x detected');
+          expect(ctx.stdout).toContain('OpenAPI 2.0 (Swagger) detected');
         });
     });
   });

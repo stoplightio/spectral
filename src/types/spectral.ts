@@ -51,4 +51,8 @@ export interface IParsedResult<R extends IParserResult = IParserResult<unknown, 
   parsed: IParserResult;
   getLocationForJsonPath: GetLocationForJsonPath<R>;
   source?: string;
+  format?: string;
 }
+
+export type FormatLookup = (document: unknown) => boolean;
+export type RegisteredFormats = Dictionary<FormatLookup, string>;
