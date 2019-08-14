@@ -121,33 +121,6 @@ describe('spectral', () => {
     });
   });
 
-  describe('addRuleDeclarations', () => {
-    describe('boolean value', () => {
-      test('should update the name rule recommended property', () => {
-        const s = new Spectral();
-
-        s.addRules({
-          // @ts-ignore
-          rule1: {
-            message: '',
-            given: '$',
-            recommended: false,
-            then: {
-              function: RuleFunction.TRUTHY,
-            },
-          },
-        });
-
-        s.applyRuleDeclarations({
-          rule1: true,
-        });
-
-        expect(Object.keys(s.rules)).toEqual(['rule1']);
-        expect(s.rules.rule1.recommended).toBe(true);
-      });
-    });
-  });
-
   describe('when a $ref appears', () => {
     test('will call the resolver with target', async () => {
       const fakeResolver = {

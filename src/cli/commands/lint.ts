@@ -6,7 +6,7 @@ import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
 import { promisify } from 'util';
 
-import { IRuleResult } from '../..';
+import { IRuleResult, RunRuleCollection } from '../..';
 import { json, stylish } from '../../formatters';
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
@@ -162,8 +162,7 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: O
   }
 
   if (flags.skipRule) {
-    // todo: bring me back
-    // rules = skipRules({ ...rules }, flags, command);
+    skipRules(spectral.rules, flags, command);
   }
 
   let results = [];
@@ -199,31 +198,31 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: O
   }
 }
 
-// const skipRules = (rules: RuleCollection, flags: ILintConfig, command: Lint): RuleCollection => {
-//   const skippedRules: string[] = [];
-//   const invalidRules: string[] = [];
-//
-//   if (flags.skipRule !== undefined) {
-//     for (const rule of flags.skipRule) {
-//       if (rule in rules) {
-//         delete rules[rule];
-//         skippedRules.push(rule);
-//       } else {
-//         invalidRules.push(rule);
-//       }
-//     }
-//   }
-//
-//   if (invalidRules.length !== 0) {
-//     command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
-//   }
-//
-//   if (skippedRules.length !== 0 && flags.verbose) {
-//     command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
-//   }
-//
-//   return rules;
-// };
+const skipRules = (rules: RunRuleCollection, flags: ILintConfig, command: Lint): RunRuleCollection => {
+  const skippedRules: string[] = [];
+  const invalidRules: string[] = [];
+
+  if (flags.skipRule !== undefined) {
+    for (const rule of flags.skipRule) {
+      if (rule in rules) {
+        delete rules[rule];
+        skippedRules.push(rule);
+      } else {
+        invalidRules.push(rule);
+      }
+    }
+  }
+
+  if (invalidRules.length !== 0) {
+    command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
+  }
+
+  if (skippedRules.length !== 0 && flags.verbose) {
+    command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
+  }
+
+  return rules;
+};
 
 async function formatOutput(results: IRuleResult[], flags: ILintConfig): Promise<string> {
   return {
