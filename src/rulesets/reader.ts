@@ -22,7 +22,7 @@ export async function readRuleset(...uris: string[]): Promise<IRuleset> {
   for (const uri of uris) {
     const resolvedRuleset = await processRuleset(cache, uri, uri);
     mergeRules(base.rules, resolvedRuleset.rules);
-    mergeFunctions(base.functions, resolvedRuleset.functions, resolvedRuleset.rules);
+    Object.assign(base.functions, resolvedRuleset.functions);
   }
 
   return base;

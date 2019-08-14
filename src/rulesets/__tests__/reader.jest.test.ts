@@ -387,7 +387,10 @@ describe('Rulesets reader', () => {
       'foo-rule': expect.objectContaining({
         message: 'should be OK',
         given: '$.info',
-        then: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: 'random-id-0',
+        },
       }),
     });
 
