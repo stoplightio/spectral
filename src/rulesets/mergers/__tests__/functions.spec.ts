@@ -1,4 +1,4 @@
-import { RuleCollection } from '../../../types';
+import { FunctionCollection, IFunction, RuleCollection } from '../../../types';
 import { mergeFunctions } from '../functions';
 const nanoid = require('nanoid');
 
@@ -12,8 +12,8 @@ describe('Ruleset functions merging', () => {
 
   it('re-writes function names', () => {
     const target = {};
-    const foo = Function();
-    const sources = {
+    const foo = Function() as IFunction;
+    const sources: FunctionCollection = {
       foo,
     };
 
@@ -33,11 +33,11 @@ describe('Ruleset functions merging', () => {
   });
 
   it('overrides existing global function', () => {
-    const target = {
-      foo: Function(),
+    const target: FunctionCollection = {
+      foo: Function() as IFunction,
     };
-    const foo = Function();
-    const sources = {
+    const foo = Function() as IFunction;
+    const sources: FunctionCollection = {
       foo,
     };
 
@@ -48,12 +48,12 @@ describe('Ruleset functions merging', () => {
   });
 
   it('overrides all function names', () => {
-    const target = {
-      foo: Function(),
+    const target: FunctionCollection = {
+      foo: Function() as IFunction,
     };
-    const foo = Function();
-    const bar = Function();
-    const sources = {
+    const foo = Function() as IFunction;
+    const bar = Function() as IFunction;
+    const sources: FunctionCollection = {
       foo,
       bar,
     };

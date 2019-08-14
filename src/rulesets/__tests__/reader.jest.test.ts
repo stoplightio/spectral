@@ -388,7 +388,7 @@ describe('Rulesets reader', () => {
       }),
     });
 
-    expect(ruleset.functions['foo.cjs']()).toEqual(5);
+    expect((ruleset.functions['foo.cjs'] as Function)()).toEqual(5);
   });
 
   it('given non-existent ruleset should output error', () => {
