@@ -61,13 +61,18 @@ async function processRuleset(
 
   if (extendedRulesets !== void 0) {
     for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
+      let extendedRuleset: IRuleset;
+      let parentSeverity: FileRulesetSeverity;
       if (Array.isArray(extended)) {
-        const parentSeverity = severity === undefined ? extended[1] : severity;
-        mergeRules(rules, (await processRuleset(uriCache, uri, extended[0], parentSeverity)).rules, parentSeverity);
+        parentSeverity = severity === undefined ? extended[1] : severity;
+        extendedRuleset = await processRuleset(uriCache, uri, extended[0], parentSeverity);
       } else {
-        const parentSeverity = severity === undefined ? 'recommended' : severity;
-        mergeRules(rules, (await processRuleset(uriCache, uri, extended, parentSeverity)).rules, parentSeverity);
+        parentSeverity = severity === undefined ? 'recommended' : severity;
+        extendedRuleset = await processRuleset(uriCache, uri, extended, parentSeverity);
       }
+
+      mergeRules(rules, extendedRuleset.rules, parentSeverity);
+      mergeFunctions(functions, extendedRuleset.functions, rules);
     }
   }
 

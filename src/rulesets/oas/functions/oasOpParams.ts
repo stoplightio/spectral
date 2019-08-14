@@ -137,3 +137,5 @@ export const oasOpParams: IFunction<Rule> = (targetVal, _options, _paths, vals) 
 
   return results;
 };
+
+export default oasOpParams;

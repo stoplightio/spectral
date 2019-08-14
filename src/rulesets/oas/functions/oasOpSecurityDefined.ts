@@ -41,3 +41,5 @@ export const oasOpSecurityDefined: IFunction<{
 
   return results;
 };
+
+export default oasOpSecurityDefined;

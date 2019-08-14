@@ -35,3 +35,5 @@ export const oasOpIdUnique: IFunction<Rule> = (targetVal, _options, functionPath
 
   return results;
 };
+
+export default oasOpIdUnique;

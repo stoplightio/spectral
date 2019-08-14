@@ -16,3 +16,5 @@ export const oasOpFormDataConsumeCheck: IFunction<Rule> = targetVal => {
 
   return results;
 };
+
+export default oasOpFormDataConsumeCheck;

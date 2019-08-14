@@ -187,3 +187,5 @@ const uniqueDefinitionMessage = (name: string) => `Path parameter '**${name}**' 
 Path parameters must be unique.
 
 To fix, remove the duplicate parameters.`;
+
+export default oasPathParam;

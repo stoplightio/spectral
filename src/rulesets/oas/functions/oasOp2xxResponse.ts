@@ -13,3 +13,5 @@ export const oasOp2xxResponse: IFunction<Rule> = targetVal => {
 
   return results;
 };
+
+export default oasOp2xxResponse;
