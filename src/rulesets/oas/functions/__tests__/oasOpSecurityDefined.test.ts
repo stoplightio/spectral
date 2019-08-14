@@ -1,9 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../../../index';
-import { oas2Functions } from '../../../../oas2/index';
-import { rules as oas2Rules } from '../../../../oas2/index.json';
-import { oas3Functions } from '../../../../oas3/index';
-import { rules as oas3Rules } from '../../../../oas3/index.json';
+import { RuleType, Spectral } from '../../../../index';
+import { oas2Functions } from '../../../oas2';
+import { rules as oas2Rules } from '../../../oas2/index.json';
+import { oas3Functions } from '../../../oas3';
+import { rules as oas3Rules } from '../../../oas3/index.json';
 
 const oas2Ruleset = { functions: oas2Functions(), rules: oas2Rules };
 const oas3Ruleset = { functions: oas3Functions(), rules: oas3Rules };

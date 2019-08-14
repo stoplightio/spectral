@@ -1,8 +1,8 @@
-import { RuleType, Spectral } from '../../../../../index';
-import { commonOasFunctions } from '../../../index';
+import { RuleType, Spectral } from '../../../../index';
+import { commonOasFunctions } from '../../index';
 
 import { DiagnosticSeverity } from '@stoplight/types';
-import { rules } from '../../../index.json';
+import { rules } from '../../index.json';
 
 const ruleset = { functions: commonOasFunctions(), rules };
 

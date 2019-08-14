@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types/dist';
-import { commonOasFunctions } from '../../../';
-import { RuleType, Spectral } from '../../../../../spectral';
-import { rules } from '../../../../oas/index.json';
+import { commonOasFunctions } from '../../index';
+import { RuleType, Spectral } from '../../../../spectral';
+import { rules } from '../../index.json';
 const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOp2xxResponse', () => {

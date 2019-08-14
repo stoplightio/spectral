@@ -1,4 +1,4 @@
-import { IFunction, IFunctionResult, Rule } from '../../../../types';
+import { IFunction, IFunctionResult, Rule } from '../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 

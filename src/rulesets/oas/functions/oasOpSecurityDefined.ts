@@ -2,7 +2,7 @@ import { JsonPath } from '@stoplight/types';
 
 const _get = require('lodash/get');
 
-import { IFunction, IFunctionResult } from '../../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
 export type functionName = 'oasOpSecurityDefined';
 
