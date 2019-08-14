@@ -118,6 +118,16 @@ linting ./openapi.yaml
 }
 
 async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: Optional<string[]>) {
+  const spectral = new Spectral({ resolver: httpAndFileResolver });
+
+  try {
+    await spectral.loadRuleset(...(rulesets ? rulesets : ['spectral:oas2', 'spectral:oas3']));
+  } catch (ex) {
+    command.log(ex.message);
+    process.exitCode = 2;
+    throw ex;
+  }
+
   if (flags.verbose) {
     command.log(`Linting ${name}`);
   }
@@ -132,7 +142,6 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: O
     ignoreDuplicateKeys: false,
     mergeKeys: true,
   });
-  const spectral = new Spectral({ resolver: httpAndFileResolver });
   spectral.registerFormat('oas2', document => {
     if (isOpenApiv2(document)) {
       command.log('OpenAPI 2.0 (Swagger) detected');
@@ -153,12 +162,6 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: O
 
   if (rulesets && flags.verbose) {
     command.log(`Found ${Object.keys(rulesets).length} rulesets`);
-  }
-
-  try {
-    await spectral.loadRuleset(...(rulesets ? rulesets : ['spectral:oas2', 'spectral:oas3']));
-  } catch (ex) {
-    command.error(ex);
   }
 
   if (flags.skipRule) {
