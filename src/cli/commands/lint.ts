@@ -1,6 +1,6 @@
 import { Command, flags as flagHelpers } from '@oclif/command';
 import { isAbsolute, resolve } from '@stoplight/path';
-import { IParserResult } from '@stoplight/types';
+import { IParserResult, Optional } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 import { writeFile } from 'fs';
 import { isNil, omitBy } from 'lodash';
@@ -12,11 +12,8 @@ import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { getDefaultRulesetFile } from '../../rulesets/loader';
 import { isOpenApiv2, isOpenApiv3 } from '../../rulesets/lookups';
-import { oas2Functions, rules as oas2Rules } from '../../rulesets/oas2';
-import { oas3Functions, rules as oas3Rules } from '../../rulesets/oas3';
-import { readRuleset } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
-import { IParsedResult, RuleCollection } from '../../types';
+import { IParsedResult } from '../../types';
 import { ILintConfig, OutputFormat } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
@@ -77,7 +74,7 @@ linting ./openapi.yaml
   public async run() {
     const { args, flags } = this.parse(Lint);
     const { ruleset } = flags;
-    let rules;
+    let rulesets: string[] | undefined;
 
     const cwd = process.cwd();
 
@@ -89,11 +86,9 @@ linting ./openapi.yaml
 
     if (rulesetFile) {
       try {
-        ({ rules } = await readRuleset(
-          ...(Array.isArray(rulesetFile) ? rulesetFile : [rulesetFile]).map(
-            file => (isAbsolute(file) ? file : resolve(cwd, file)),
-          ),
-        ));
+        rulesets = (Array.isArray(rulesetFile) ? rulesetFile : [rulesetFile]).map(
+          file => (isAbsolute(file) ? file : resolve(cwd, file)),
+        );
       } catch (ex) {
         this.log(ex.message);
         this.error(ex);
@@ -102,7 +97,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, lintConfig, this, rules);
+        await lint(args.source, lintConfig, this, rulesets);
       } catch (ex) {
         this.error(ex.message);
       }
@@ -122,20 +117,7 @@ linting ./openapi.yaml
   }
 }
 
-async function tryReadOrLog(command: Lint, reader: Function) {
-  try {
-    return await reader();
-  } catch (ex) {
-    if (ex.messages) {
-      command.log(ex.messages[0]);
-      command.error(ex.messages[1]);
-    } else {
-      command.error(ex);
-    }
-  }
-}
-
-async function lint(name: string, flags: ILintConfig, command: Lint, rules?: RuleCollection) {
+async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: Optional<string[]>) {
   if (flags.verbose) {
     command.log(`Linting ${name}`);
   }
@@ -169,38 +151,20 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
     return false;
   });
 
-  if (parseInt(spec.data.swagger) === 2) {
-    command.log('Adding OpenAPI 2.0 (Swagger) functions');
-    spectral.addFunctions(oas2Functions());
-  } else if (parseInt(spec.data.openapi) === 3) {
-    command.log('Adding OpenAPI 3.x functions');
-    spectral.addFunctions(oas3Functions());
+  if (rulesets && flags.verbose) {
+    command.log(`Found ${Object.keys(rulesets).length} rulesets`);
   }
 
-  if (rules) {
-    if (flags.verbose) {
-      command.log(`Found ${Object.keys(rules).length} rules`);
-    }
-  } else {
-    if (flags.verbose) {
-      command.log('No rules loaded, attempting to detect document type');
-    }
-
-    rules = Object.assign(
-      {},
-      await tryReadOrLog(command, async () => await oas2Rules()),
-      await tryReadOrLog(command, async () => await oas3Rules()),
-    );
+  try {
+    await spectral.loadRuleset(...(rulesets ? rulesets : ['spectral:oas2', 'spectral:oas3']));
+  } catch (ex) {
+    command.error(ex);
   }
 
   if (flags.skipRule) {
-    rules = skipRules({ ...rules }, flags, command);
+    // todo: bring me back
+    // rules = skipRules({ ...rules }, flags, command);
   }
-  if (!rules) {
-    throw new Error('No rules provided, and document type does not have any default rules, so lint has nothing to do');
-  }
-
-  spectral.addRules(rules);
 
   let results = [];
   try {
@@ -235,31 +199,31 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rules?: Rul
   }
 }
 
-const skipRules = (rules: RuleCollection, flags: ILintConfig, command: Lint): RuleCollection => {
-  const skippedRules: string[] = [];
-  const invalidRules: string[] = [];
-
-  if (flags.skipRule !== undefined) {
-    for (const rule of flags.skipRule) {
-      if (rule in rules) {
-        delete rules[rule];
-        skippedRules.push(rule);
-      } else {
-        invalidRules.push(rule);
-      }
-    }
-  }
-
-  if (invalidRules.length !== 0) {
-    command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
-  }
-
-  if (skippedRules.length !== 0 && flags.verbose) {
-    command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
-  }
-
-  return rules;
-};
+// const skipRules = (rules: RuleCollection, flags: ILintConfig, command: Lint): RuleCollection => {
+//   const skippedRules: string[] = [];
+//   const invalidRules: string[] = [];
+//
+//   if (flags.skipRule !== undefined) {
+//     for (const rule of flags.skipRule) {
+//       if (rule in rules) {
+//         delete rules[rule];
+//         skippedRules.push(rule);
+//       } else {
+//         invalidRules.push(rule);
+//       }
+//     }
+//   }
+//
+//   if (invalidRules.length !== 0) {
+//     command.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
+//   }
+//
+//   if (skippedRules.length !== 0 && flags.verbose) {
+//     command.log(`INFO: skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
+//   }
+//
+//   return rules;
+// };
 
 async function formatOutput(results: IRuleResult[], flags: ILintConfig): Promise<string> {
   return {
