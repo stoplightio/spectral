@@ -87,7 +87,7 @@
     "@types/jest": "^24.0.0",
     "@types/jest-when": "^2.4.0",
     "@types/lodash": "^4.14.136",
-    "@types/node": "~12.6",
+    "@types/node": "~12.7",
     "@types/strip-ansi": "^5.2.1",
     "@types/text-table": "^0.2.0",
     "@types/yaml": "^1.0.2",
