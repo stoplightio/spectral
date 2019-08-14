@@ -14,9 +14,11 @@ import {
 } from '@stoplight/yaml';
 import { merge, set } from 'lodash';
 
+import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
+import { readRulesFromRulesets } from './rulesets';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
@@ -113,7 +115,8 @@ export class Spectral {
     );
 
     if (resolved.format === void 0) {
-      resolved.format = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+      resolved.format = foundFormat === void 0 ? null : foundFormat;
     }
 
     return [
@@ -134,6 +137,10 @@ export class Spectral {
 
   public addFunctions(functions: FunctionCollection) {
     Object.assign(this._functions, merge({}, functions));
+  }
+
+  public async loadRuleset(...uris: string[]) {
+    this._addRules(await readRulesFromRulesets(...uris));
   }
 
   /**
@@ -157,7 +164,12 @@ export class Spectral {
     return rules;
   }
 
+  @deprecated('loadRuleset', '4.1')
   public addRules(rules: RuleCollection) {
+    this._addRules(rules);
+  }
+
+  private _addRules(rules: RuleCollection) {
     Object.assign(this._rules, merge({}, rules));
   }
 

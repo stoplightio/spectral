@@ -40,6 +40,60 @@ While running it with this object, it will succeed:
 }
 ```
 
+### Formats
+
+Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these two formats:
+
+- `oas2` (this is OpenAPI v2.0 - formerly known as Swagger)
+- `oas3` (this is OpenAPI v3.0)
+
+Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
+
+```yaml
+rules:
+  api-servers:
+    description: "OpenAPI `servers` must be present and non-empty array."
+    recommended: true
+    formats: ["oas3"]
+    given: "$"
+    then:
+      field: servers
+      function: schema
+      functionOptions: 
+        schema:
+          items: 
+            type: object
+          minItems: 1
+          type: array
+```
+
+Seeing as the `servers` array only appeared in OpenAPI v3.0, we don't want this rule appearing when Spectral lints OpenAPI v2.0 documents.
+
+Alternatively, formats can be specified at the ruleset level:
+
+```
+```yaml
+formats: ["oas3"]
+rules:
+  api-servers:
+    description: "OpenAPI `servers` must be present and non-empty array."
+    recommended: true
+    given: "$"
+    then:
+      field: servers
+      function: schema
+      functionOptions: 
+        schema:
+          items: 
+            type: object
+          minItems: 1
+          type: array
+```
+
+Now all the rules in this ruleset will only be applied if the specified format is detected.
+
+Custom formats can be registered via the [JS API](../guides/javascript.md), but the CLI is limited to using the predefined ones.
+
 ### Severity
 
 The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`.

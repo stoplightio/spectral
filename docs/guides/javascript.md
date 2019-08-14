@@ -50,22 +50,25 @@ spectral.run(myOpenApiDocument).then(results => console.log(results);
 
 ## Loading Rules
 
-Spectral comes with some rules and functions that are very specific to OpenAPI v2/v3, and they can be used by loading them up and passing them into `Spectral.addRules()`. 
+Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`. 
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
 const { parseWithPointers } = require("@stoplight/yaml");
-const { oas3Functions, rules: oas3Rules } = require('@stoplight/spectral/dist/rulesets/oas3');
+const { oas3Functions } = require('@stoplight/spectral/dist/rulesets/oas3');
 
-
-const myOpenApiDocument = { ... };
+const myOpenApiDocument = {
+  // any parsed open api document
+};
 
 const spectral = new Spectral();
 spectral.addFunctions(oas3Functions());
-oas3Rules().then(rules => spectral.addRules(rules));
+spectral.loadRuleset('spectral:oas3') // spectral:oas2 for OAS 2.0 aka Swagger
+  .then(() => spectral.run(myOpenApiDocument))
+  .then(results => {
+    console.log('here are the results', results);
+  });
 ``` 
-
-_Spectral JS API does not yet support loading rulesets directly, but will be added in an upcoming version to avoid needing to load rules and functions separately._
 
 [Try it out!](https://repl.it/@ChrisMiaskowski/spectral-rules-example)
 
@@ -177,7 +180,7 @@ The OpenAPI rules are opinionated. There might be some rules that you prefer to 
 
 ## Advanced
 
-#### Creating a custom rule
+### Creating a custom rule
 
 Spectral has a built-in set of functions which you can reference in your rules. This example uses the `RuleFunction.PATTERN` to create a rule that checks that all property values are in snake case.
 
@@ -233,7 +236,7 @@ spectral.run({name: 'helloWorld',}).then(results => {
 ]
 ```
 
-#### Creating a custom function
+### Creating a custom function
 
 Sometimes the built-in functions don't cover your use case. This example creates a custom function, `customNotThatFunction`, and then uses it within a rule, `openapi_not_swagger`. The custom function checks that you are not using a specific string (e.g., "Swagger") and suggests what to use instead (e.g., "OpenAPI").
 
@@ -313,3 +316,33 @@ spectral.run({description: 'Swagger is pretty cool!',}).then(results => {
 ```
 
 For more information on creating rules, read about [rulesets](../getting-started/rulesets.md).
+
+### Creating a custom format
+
+Spectral supports two core formats: `oas2` and `oas3`. Using `registerFormat` you can add support for autodetecting other formats. You might want to do this for a ruleset which is run against multiple major versions of description format like RAML v0.8 and v1.0.
+
+```js
+spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+
+spectral.addRules({
+  rule1: {
+    given: '$.x',
+    formats: ['foo-bar'],
+    severity: 'error',
+    then: {
+      function: 'truthy',
+    },
+  }
+});
+
+const result = await spectral.run({
+  'foo-bar': true,
+  x: false
+});
+
+expect(result).toEqual([
+  expect.objectContaining({
+    code: 'rule1',
+  }),
+]);
+```

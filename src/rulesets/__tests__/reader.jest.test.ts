@@ -1,11 +1,13 @@
 import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { IRule } from '../../types';
+import * as nock from 'nock';
+import { IRule, Rule } from '../../types';
 import { readRulesFromRulesets } from '../reader';
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
 const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
+const github447 = path.join(__dirname, './__fixtures__/github-issue-447-fixture.yaml');
 const enabledAllRuleset = path.join(__dirname, './__fixtures__/enable-all-ruleset.json');
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
 const extendsOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
@@ -21,6 +23,10 @@ const oas3Ruleset = require('../oas3/index.json');
 jest.setTimeout(10000);
 
 describe('Rulesets reader', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
   it('given flat, valid ruleset file should return rules', async () => {
     expect(await readRulesFromRulesets(validFlatRuleset)).toEqual({
       'valid-rule': {
@@ -108,6 +114,68 @@ describe('Rulesets reader', () => {
           function: 'truthy',
         },
       },
+    });
+  });
+
+  // https://github.com/stoplightio/spectral/issues/447
+  it('given GitHub issue #447, loads recommended oas3 and oas rules correctly', async () => {
+    const readRules = await readRulesFromRulesets(github447);
+
+    expect(readRules).toEqual({
+      ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas3Ruleset.rules)].reduce<Dictionary<unknown>>(
+        (rules, [name, rule]) => {
+          const formattedRule: Rule = {
+            ...(rule as Rule),
+            formats: expect.arrayContaining([expect.any(String)]),
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+            ...(!(rule as IRule).recommended && { severity: -1 }),
+          };
+
+          rules[name] = formattedRule;
+
+          if (name === 'operation-operationId') {
+            formattedRule.severity = DiagnosticSeverity.Error;
+          }
+
+          if (name === 'operation-tags') {
+            formattedRule.severity = DiagnosticSeverity.Hint;
+          }
+
+          return rules;
+        },
+        {
+          'schema-names-pascal-case': {
+            description: 'Schema names MUST be written in PascalCase',
+            given: '$.components.schemas.*~',
+            message: '{{property}} is not PascalCase: {{error}}',
+            recommended: true,
+            severity: DiagnosticSeverity.Warning,
+            then: {
+              function: 'pattern',
+              functionOptions: {
+                match: '^[A-Z][a-zA-Z0-9]*$',
+              },
+            },
+            type: 'style',
+          },
+          'operation-id-kebab-case': {
+            description: 'operationId MUST be written in kebab-case',
+            given:
+              "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+            message: '{{property}} is not kebab-case: {{error}}',
+            recommended: true,
+            severity: DiagnosticSeverity.Warning,
+            then: {
+              field: 'operationId',
+              function: 'pattern',
+              functionOptions: {
+                match: '^[a-z][a-z0-9\\-]*$',
+              },
+            },
+            type: 'style',
+          },
+        },
+      ),
     });
   });
 
@@ -269,6 +337,10 @@ describe('Rulesets reader', () => {
   });
 
   it('given non-existent ruleset should output error', () => {
+    nock('https://unpkg.com')
+      .get('/oneParentRuleset')
+      .reply(404);
+
     return expect(readRulesFromRulesets('oneParentRuleset')).rejects.toThrowError(
       'Could not parse https://unpkg.com/oneParentRuleset: Not Found',
     );

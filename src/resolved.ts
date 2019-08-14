@@ -10,7 +10,7 @@ export class Resolved implements IResolveResult {
   public result: unknown;
   public errors: IResolveError[];
   public runner: IResolveRunner;
-  public format?: string;
+  public format?: string | null;
 
   constructor(public spec: IParsedResult, result: IResolveResult, public parsedMap: IParseMap) {
     this.refMap = result.refMap;
