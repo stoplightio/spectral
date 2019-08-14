@@ -72,6 +72,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+            then: expect.any(Object),
           };
 
           return oasRules;
@@ -99,6 +100,7 @@ describe('Rulesets reader', () => {
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
             ...(!(rule as IRule).recommended && { severity: -1 }),
+            then: expect.any(Object),
           };
 
           return rules;
@@ -187,6 +189,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             severity: -1,
+            then: expect.any(Object),
           };
 
           return rules;
@@ -258,6 +261,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+            then: expect.any(Object),
           };
 
           return rules;
