@@ -131,6 +131,7 @@ describe('Rulesets reader', () => {
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
             ...(!(rule as IRule).recommended && { severity: -1 }),
+            then: expect.any(Object),
           };
 
           rules[name] = formattedRule;
