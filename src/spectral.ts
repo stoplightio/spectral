@@ -148,12 +148,19 @@ export class Spectral {
     return this._functions;
   }
 
+  @deprecated('loadRuleset', '4.1')
   public addFunctions(functions: FunctionCollection) {
+    this._addFunctions(functions);
+  }
+
+  public _addFunctions(functions: FunctionCollection) {
     Object.assign(this._functions, merge({}, functions));
   }
 
   public async loadRuleset(...uris: string[]) {
-    this._addRules((await readRuleset(...uris)).rules);
+    const { rules, functions } = await readRuleset(...uris);
+    this._addRules(rules);
+    this._addFunctions(functions);
   }
 
   /**

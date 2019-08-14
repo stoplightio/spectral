@@ -2,7 +2,7 @@ import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { HumanReadableDiagnosticSeverity, Rule } from './rule';
-import { FunctionsCollection, RuleCollection } from './spectral';
+import { FunctionCollection, RuleCollection } from './spectral';
 
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 export type FileRulesetSeverity = 'off' | 'recommended' | 'all';
@@ -13,7 +13,7 @@ export type FileRuleCollection = Dictionary<FileRule, string>;
 
 export interface IRuleset {
   rules: RuleCollection;
-  functions: FunctionsCollection;
+  functions: FunctionCollection;
 }
 
 export interface IRulesetFile {

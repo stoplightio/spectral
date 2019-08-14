@@ -4,7 +4,7 @@ import { join } from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { FunctionsCollection } from '../types';
+import { FunctionCollection, IFunction } from '../types';
 import { FileRulesetSeverity, IRuleset } from '../types/ruleset';
 import { evaluateExport } from './evaluators';
 import { findFile } from './finder';
@@ -78,7 +78,7 @@ async function processRuleset(
 
   if (rulesetFunctions !== void 0) {
     const rulesetFunctionsBaseDir = ruleset.functionsDir !== void 0 ? ruleset.functionsDir : join(rulesetUri, '..');
-    const resolvedFunctions: FunctionsCollection = {};
+    const resolvedFunctions: FunctionCollection = {};
 
     await Promise.all(
       rulesetFunctions.map(async fn => {
@@ -89,7 +89,7 @@ async function processRuleset(
           await readFile(await findFile(rulesetFunctionsBaseDir, `./functions/${fnName}.js`), 'utf-8'),
         );
 
-        resolvedFunctions[fnName] = exportedFn;
+        resolvedFunctions[fnName] = exportedFn as IFunction;
 
         Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
           configurable: true,

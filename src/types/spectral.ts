@@ -29,8 +29,6 @@ export type SpectralDiagnosticSeverity = DiagnosticSeverity | -1;
  */
 export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
-export type FunctionsCollection = Dictionary<Function, string>;
-
 export interface IConstructorOpts {
   resolver?: Resolver;
 }
