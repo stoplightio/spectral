@@ -1,3 +1,5 @@
+import { Cache } from '@stoplight/json-ref-resolver';
+import { ICache } from '@stoplight/json-ref-resolver/types';
 import { parse } from '@stoplight/yaml';
 import { readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
@@ -12,14 +14,17 @@ export async function readRulesFromRulesets(...uris: string[]): Promise<RuleColl
     rules: {},
   };
 
+  const cache = new Cache();
+
   for (const uri of uris) {
-    mergeRulesets(base, await readRulesFromRuleset(uri, uri));
+    mergeRulesets(base, await readRulesFromRuleset(cache, uri, uri));
   }
 
   return base.rules;
 }
 
 async function readRulesFromRuleset(
+  uriCache: ICache,
   baseUri: string,
   uri: string,
   severity?: FileRulesetSeverity,
@@ -29,6 +34,7 @@ async function readRulesFromRuleset(
     {
       baseUri,
       dereferenceInline: false,
+      uriCache,
       async parseResolveResult(opts) {
         try {
           opts.result = parse(opts.result);
@@ -51,12 +57,12 @@ async function readRulesFromRuleset(
     for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
       if (Array.isArray(extended)) {
         const parentSeverity = severity === undefined ? extended[1] : severity;
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended[0], parentSeverity), {
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uriCache, uri, extended[0], parentSeverity), {
           severity: parentSeverity,
         });
       } else {
         const parentSeverity = severity === undefined ? 'recommended' : severity;
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uri, extended, parentSeverity), {
+        mergeRulesets(newRuleset, await readRulesFromRuleset(uriCache, uri, extended, parentSeverity), {
           severity: parentSeverity,
         });
       }
