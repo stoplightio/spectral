@@ -1,6 +1,7 @@
 import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as fs from 'fs';
 import * as nock from 'nock';
 import { IRule, Rule } from '../../types';
 import { readRuleset } from '../reader';
@@ -25,8 +26,26 @@ const oas2Ruleset = require('../oas2/index.json');
 const oas3Ruleset = require('../oas3/index.json');
 
 jest.setTimeout(10000);
+jest.mock('fs');
 
 describe('Rulesets reader', () => {
+  let readFileSpy: jest.SpyInstance;
+  let accessSpy: jest.SpyInstance;
+
+  beforeAll(() => {
+    const { readFile, access } = fs;
+    readFileSpy = jest.spyOn(fs, 'readFile');
+    accessSpy = jest.spyOn(fs, 'access');
+
+    accessSpy.mockImplementation((target, type, cb) => {
+      return access(target.replace('src/rulesets/oas', 'dist/rulesets/oas'), type, cb);
+    });
+
+    readFileSpy.mockImplementation((target, encoding, cb) => {
+      return readFile(target.replace('src/rulesets/oas', 'dist/rulesets/oas'), encoding, cb);
+    });
+  });
+
   beforeEach(() => {
     let seed = 0;
     (nanoid as jest.Mock).mockImplementation(() => `random-id-${seed++}`);
@@ -34,6 +53,11 @@ describe('Rulesets reader', () => {
 
   afterEach(() => {
     nock.cleanAll();
+  });
+
+  afterAll(() => {
+    readFileSpy.mockRestore();
+    accessSpy.mockRestore();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
@@ -44,9 +68,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
-            then: {
-              function: 'truthy',
-            },
+            then: expect.any(Object),
           },
         },
       }),
@@ -61,17 +83,13 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
-            then: {
-              function: 'truthy',
-            },
+            then: expect.any(Object),
           },
           'require-info': {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
-            then: {
-              function: 'truthy',
-            },
+            then: expect.any(Object),
           },
         },
       }),
@@ -101,9 +119,7 @@ describe('Rulesets reader', () => {
         given: '$.info',
         message: 'should be OK',
         severity: DiagnosticSeverity.Warning,
-        then: {
-          function: 'truthy',
-        },
+        then: expect.any(Object),
       },
     });
   });
@@ -131,9 +147,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
-            then: {
-              function: 'truthy',
-            },
+            then: expect.any(Object),
           },
         },
       }),
@@ -229,9 +243,7 @@ describe('Rulesets reader', () => {
             type: 'validation',
             severity: 0,
             given: '$',
-            then: {
-              function: 'oasOpIdUnique',
-            },
+            then: expect.any(Object),
             tags: ['operation'],
           },
         },
@@ -247,9 +259,7 @@ describe('Rulesets reader', () => {
       recommended: true,
       severity: DiagnosticSeverity.Warning,
       tags: ['operation'],
-      then: {
-        function: 'truthy',
-      },
+      then: expect.any(Object),
       type: 'style',
     });
   });
@@ -264,12 +274,7 @@ describe('Rulesets reader', () => {
         severity: -1,
         description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
         tags: ['operation'],
-        then: {
-          function: 'oasOpSecurityDefined',
-          functionOptions: {
-            schemesPath: ['securityDefinitions'],
-          },
-        },
+        then: expect.any(Object),
         type: 'validation',
       },
     );
@@ -382,9 +387,7 @@ describe('Rulesets reader', () => {
       'foo-rule': expect.objectContaining({
         message: 'should be OK',
         given: '$.info',
-        then: {
-          function: 'random-id-0',
-        },
+        then: expect.any(Object),
       }),
     });
 
