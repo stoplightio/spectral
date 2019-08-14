@@ -29,22 +29,21 @@ async function readRulesFromRuleset(
   uri: string,
   severity?: FileRulesetSeverity,
 ): Promise<IRulesetFile> {
-  const { result } = await httpAndFileResolver.resolve(
-    parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')),
-    {
-      baseUri,
-      dereferenceInline: false,
-      uriCache,
-      async parseResolveResult(opts) {
-        try {
-          opts.result = parse(opts.result);
-        } catch {
-          // happens
-        }
-        return opts;
-      },
+  const rulesetUri = await findRuleset(baseUri, uri);
+
+  const { result } = await httpAndFileResolver.resolve(parse(await readParsable(rulesetUri, 'utf8')), {
+    baseUri: rulesetUri,
+    dereferenceInline: false,
+    uriCache,
+    async parseResolveResult(opts) {
+      try {
+        opts.result = parse(opts.result);
+      } catch {
+        // happens
+      }
+      return opts;
     },
-  );
+  });
   const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
 
   const newRuleset: IRulesetFile = {
