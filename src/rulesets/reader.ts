@@ -82,7 +82,8 @@ async function processRuleset(
   }
 
   if (rulesetFunctions !== void 0) {
-    const rulesetFunctionsBaseDir = ruleset.functionsDir !== void 0 ? ruleset.functionsDir : join(rulesetUri, '..');
+    const rulesetFunctionsBaseDir =
+      ruleset.functionsDir !== void 0 ? ruleset.functionsDir : join(rulesetUri, '../functions');
     const resolvedFunctions: FunctionCollection = {};
 
     await Promise.all(
@@ -91,7 +92,7 @@ async function processRuleset(
         // const fnSchema = Array.isArray(fn) ? fn[1] : null; // todo: define me in ruleset.schema.json
         // todo: consume schema, i.e. wrap a function
         const exportedFn = evaluateExport(
-          await readFile(await findFile(rulesetFunctionsBaseDir, `./functions/${fnName}.js`), 'utf-8'),
+          await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
         );
 
         resolvedFunctions[fnName] = exportedFn as IFunction;
