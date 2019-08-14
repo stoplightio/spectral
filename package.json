@@ -64,7 +64,7 @@
     "@stoplight/json": "^3.0.2",
     "@stoplight/json-ref-resolver": "^2.0.3",
     "@stoplight/path": "^1.1.0",
-    "@stoplight/types": "^10.0.1",
+    "@stoplight/types": "^11.0.0",
     "@stoplight/yaml": "^3.0.0",
     "ajv": "^6.7",
     "ajv-oai": "^1.1.1",
