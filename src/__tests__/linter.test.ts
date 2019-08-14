@@ -285,7 +285,7 @@ describe('linter', () => {
     ]);
   });
 
-  test('should include all rules if document has no formats defined', async () => {
+  test('should not run any rule with defined formats if there are no formats registered', async () => {
     spectral.addFunctions(oas2Functions());
 
     spectral.addRules({
@@ -298,6 +298,14 @@ describe('linter', () => {
         },
       },
       rule2: {
+        formats: ['baz'],
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule3: {
         given: '$.y',
         severity: 'warn',
         then: {
@@ -314,10 +322,7 @@ describe('linter', () => {
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'rule1',
-      }),
-      expect.objectContaining({
-        code: 'rule2',
+        code: 'rule3',
       }),
     ]);
   });
@@ -391,6 +396,50 @@ describe('linter', () => {
     expect(result).toEqual([
       expect.objectContaining({
         code: 'rule1',
+      }),
+    ]);
+  });
+
+  test('should not run any rule with defined formats if some formats are are registered but document format could not be associated', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+
+    spectral.addFunctions(oas2Functions());
+
+    spectral.addRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        formats: ['baz'],
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule3: {
+        given: '$.y',
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run({
+      'bar-foo': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule3',
       }),
     ]);
   });
