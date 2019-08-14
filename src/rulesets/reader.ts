@@ -26,8 +26,20 @@ async function readRulesFromRuleset(
 ): Promise<IRulesetFile> {
   const { result } = await httpAndFileResolver.resolve(
     parse(await readParsable(await findRuleset(baseUri, uri), 'utf8')),
+    {
+      baseUri,
+      dereferenceInline: false,
+      async parseResolveResult(opts) {
+        try {
+          opts.result = parse(opts.result);
+        } catch {
+          // happens
+        }
+        return opts;
+      },
+    },
   );
-  const ruleset = assertValidRuleset(result);
+  const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
 
   const newRuleset: IRulesetFile = {
     rules: {},

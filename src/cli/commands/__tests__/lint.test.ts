@@ -337,7 +337,6 @@ describe('lint', () => {
       .stdout()
       .command(['lint', draftRefSpec, '-q', '-f=json'])
       .it('outputs errors occurring in referenced files', ctx => {
-        expect(ctx.stdout).toBe('');
         expect(JSON.parse(ctx.stdout)).toEqual([
           expect.objectContaining({
             code: 'info-description',
