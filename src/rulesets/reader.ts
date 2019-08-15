@@ -2,6 +2,7 @@ import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
 import { join } from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
+import { JSONSchema7 } from 'json-schema';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { FunctionCollection, IFunction } from '../types';
@@ -9,7 +10,7 @@ import { FileRulesetSeverity, IRuleset } from '../types/ruleset';
 import { evaluateExport } from './evaluators';
 import { findFile } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
-import { assertValidRuleset } from './validation';
+import { assertValidRuleset, wrapIFunctionWithSchema } from './validation';
 
 export async function readRuleset(...uris: string[]): Promise<IRuleset> {
   const base: IRuleset = {
@@ -82,20 +83,21 @@ async function processRuleset(
   }
 
   if (rulesetFunctions !== void 0) {
-    const rulesetFunctionsBaseDir =
-      ruleset.functionsDir !== void 0 ? ruleset.functionsDir : join(rulesetUri, '../functions');
+    const rulesetFunctionsBaseDir = join(
+      rulesetUri,
+      ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
+    );
     const resolvedFunctions: FunctionCollection = {};
 
     await Promise.all(
       rulesetFunctions.map(async fn => {
         const fnName = Array.isArray(fn) ? fn[0] : fn;
-        // const fnSchema = Array.isArray(fn) ? fn[1] : null; // todo: define me in ruleset.schema.json
-        // todo: consume schema, i.e. wrap a function
+        const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
         const exportedFn = evaluateExport(
           await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
-        );
+        ) as IFunction;
 
-        resolvedFunctions[fnName] = exportedFn as IFunction;
+        resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
 
         Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
           configurable: true,

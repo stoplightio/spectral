@@ -1,4 +1,5 @@
-import { assertValidRuleset } from '../validation';
+import { JSONSchema7 } from 'json-schema';
+import { assertValidRuleset, wrapIFunctionWithSchema } from '../validation';
 const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 
@@ -199,10 +200,28 @@ describe('Ruleset Validation', () => {
     ).not.toThrow();
   });
 
+  it('recognizes valid schema functions', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: [['d', { type: 'object' }]],
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
   it('recognizes invalid functions', () => {
     expect(
       assertValidRuleset.bind(null, {
         functions: 3,
+        rules: {},
+      }),
+    ).toThrow();
+  });
+
+  it('recognizes invalid schema functions', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        functions: ['d', { typo: 'a' }],
         rules: {},
       }),
     ).toThrow();
@@ -215,5 +234,36 @@ describe('Ruleset Validation', () => {
         rules: {},
       }),
     ).toThrow();
+  });
+});
+
+describe('Function Validation', () => {
+  it('throws if options supplied to fn does not meet schema', () => {
+    const schema: JSONSchema7 = { type: 'string' };
+    const wrapped = wrapIFunctionWithSchema(Function, schema);
+    expect(() => wrapped({}, 2)).toThrow();
+  });
+
+  it('does not call supplied fn if options do not meet schema', () => {
+    const schema: JSONSchema7 = { type: 'string' };
+    const fn = jest.fn();
+    const wrapped = wrapIFunctionWithSchema(fn, schema);
+    try {
+      wrapped({}, 2);
+    } catch {
+      // will throw
+    }
+
+    expect(fn).not.toHaveBeenCalled();
+    expect(() => wrapped({}, 2)).toThrow();
+  });
+
+  it('calls supplied fn and passes all other arguments if options do not match schema', () => {
+    const schema: JSONSchema7 = { type: 'string' };
+    const fn = jest.fn();
+    const wrapped = wrapIFunctionWithSchema(fn, schema);
+    wrapped({}, '2', true, 1, []);
+
+    expect(fn).toHaveBeenCalledWith({}, '2', true, 1, []);
   });
 });

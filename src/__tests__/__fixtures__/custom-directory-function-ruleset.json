@@ -1,0 +1,20 @@
+{
+  "extends": ["./custom-functions-oas-ruleset.json"],
+  "functionsDir": "./customOasFunctions",
+  "functions": [
+    "hasIn"
+  ],
+  "rules": {
+    "has-field-property": {
+      "message": "{{error}}",
+      "given": "$",
+      "type": "style",
+      "then": {
+        "function": "hasIn",
+        "functionOptions": {
+          "prop": "field"
+        }
+      }
+    }
+  }
+}

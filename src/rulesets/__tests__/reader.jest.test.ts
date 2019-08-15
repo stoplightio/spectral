@@ -20,6 +20,8 @@ const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/exte
 const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
 const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-ruleset.json');
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
+const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/custom-functions-directory-ruleset.json');
+const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
 const oas3Ruleset = require('../oas3/index.json');
@@ -371,6 +373,46 @@ describe('Rulesets reader', () => {
     });
 
     expect((ruleset.functions['foo.cjs'] as Function)()).toEqual(5);
+  });
+
+  it('should load functions from custom directory', async () => {
+    const ruleset = await readRuleset(customFunctionsDirectoryRuleset);
+    expect(ruleset.functions).toEqual({
+      bar: expect.any(Function),
+      'random-id-0': expect.any(Function),
+      truthy: expect.any(Function),
+      'random-id-1': expect.any(Function),
+    });
+
+    expect(ruleset.functions.bar).toHaveProperty('name', 'bar');
+    expect(ruleset.functions.truthy).toHaveProperty('name', 'truthy');
+
+    expect(ruleset.rules).toEqual({
+      'bar-rule': expect.objectContaining({
+        message: 'should be OK',
+        given: '$.info',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: Object.keys(ruleset.functions).find(
+            key => key !== 'bar' && ruleset.functions[key] === ruleset.functions.bar,
+          ),
+        },
+      }),
+      'truthy-rule': expect.objectContaining({
+        message: 'should be OK',
+        given: '$.x',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: Object.keys(ruleset.functions).find(
+            key => key !== 'truthy' && ruleset.functions[key] === ruleset.functions.truthy,
+          ),
+        },
+      }),
+    });
+  });
+
+  it('should fail if function cannot be loaded', () => {
+    return expect(readRuleset(rulesetWithMissingFunctions)).rejects.toThrow();
   });
 
   it('given non-existent ruleset should output error', () => {
