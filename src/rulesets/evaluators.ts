@@ -5,8 +5,10 @@ export type ESCJSCompatibleExport = Partial<{ default: unknown }>;
 export type ContextExport = Partial<{ returnExports: unknown }>;
 
 const createDefine = (exports: CJSExport) => {
-  const define = (modules: string[], factory: Function): Optional<CJSExport> => {
-    if (typeof factory === 'function') {
+  const define = (nameOrFactory: string | string[] | Function, factory: Function): Optional<CJSExport> => {
+    if (typeof nameOrFactory === 'function') {
+      exports.exports = nameOrFactory();
+    } else if (typeof factory === 'function') {
       exports.exports = factory();
     }
 
