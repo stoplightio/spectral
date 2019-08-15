@@ -6,6 +6,8 @@ const oas2Schema = JSON.parse(JSON.stringify(require('./rulesets/oas2/schemas/ma
 const oas3Ruleset = JSON.parse(JSON.stringify(require('./rulesets/oas3/index.json')));
 const oas3Schema = JSON.parse(JSON.stringify(require('./rulesets/oas3/schemas/main.json')));
 
+const oasFunctions = JSON.parse(JSON.stringify(require('./src/__tests__/__fixtures__/oas-functions.json')));
+
 const { fetch } = window;
 let fetchMock: FetchMockSandbox;
 
@@ -37,6 +39,13 @@ beforeEach(() => {
     status: 200,
     body: JSON.parse(JSON.stringify(oas3Schema)),
   });
+
+  for (const [name, fn] of Object.entries<string>(oasFunctions)) {
+    fetchMock.get(`https://unpkg.com/@stoplight/spectral/rulesets/oas/functions/${name}`, {
+      status: 200,
+      body: fn,
+    });
+  }
 });
 
 afterEach(() => {

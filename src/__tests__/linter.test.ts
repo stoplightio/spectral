@@ -2,7 +2,6 @@ import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
-import * as fs from 'fs';
 import { mergeRules, readRuleset } from '../rulesets';
 import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
 import { oas2Functions } from '../rulesets/oas2';
@@ -40,37 +39,13 @@ const rules = {
   },
 };
 
-jest.mock('fs');
-
 describe('linter', () => {
   let spectral: Spectral;
-
-  let readFileSpy: jest.SpyInstance;
-  let accessSpy: jest.SpyInstance;
-
-  beforeAll(() => {
-    const { readFile, access } = fs;
-    readFileSpy = jest.spyOn(fs, 'readFile');
-    accessSpy = jest.spyOn(fs, 'access');
-
-    accessSpy.mockImplementation((path, type, cb) => {
-      return access(path.replace('src/rulesets/oas', 'dist/rulesets/oas'), type, cb);
-    });
-
-    readFileSpy.mockImplementation((path, encoding, cb) => {
-      return readFile(path.replace('src/rulesets/oas', 'dist/rulesets/oas'), encoding, cb);
-    });
-  });
 
   beforeEach(() => {
     spectral = new Spectral();
     spectral.registerFormat('oas3', isOpenApiv3);
     spectral.registerFormat('oas2', isOpenApiv2);
-  });
-
-  afterAll(() => {
-    readFileSpy.mockRestore();
-    accessSpy.mockRestore();
   });
 
   test('should not lint if passed in value is not an object', async () => {

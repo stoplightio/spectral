@@ -1,5 +1,4 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
-import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
 import { Spectral } from '../spectral';
@@ -7,33 +6,9 @@ import { Spectral } from '../spectral';
 const oasRuleset = require('../rulesets/oas/index.json');
 const customOASRuleset = require('./__fixtures__/custom-oas-ruleset.json');
 
-jest.mock('fs');
-
 describe('Spectral', () => {
-  let readFileSpy: jest.SpyInstance;
-  let accessSpy: jest.SpyInstance;
-
-  beforeAll(() => {
-    const { readFile, access } = fs;
-    readFileSpy = jest.spyOn(fs, 'readFile');
-    accessSpy = jest.spyOn(fs, 'access');
-
-    accessSpy.mockImplementation((target, type, cb) => {
-      return access(target.replace('src/rulesets/oas', 'dist/rulesets/oas'), type, cb);
-    });
-
-    readFileSpy.mockImplementation((target, encoding, cb) => {
-      return readFile(target.replace('src/rulesets/oas', 'dist/rulesets/oas'), encoding, cb);
-    });
-  });
-
   afterEach(() => {
     nock.cleanAll();
-  });
-
-  afterAll(() => {
-    readFileSpy.mockRestore();
-    accessSpy.mockRestore();
   });
 
   describe('loadRuleset', () => {
