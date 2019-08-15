@@ -6,7 +6,6 @@ import * as fs from 'fs';
 import { mergeRules, readRuleset } from '../rulesets';
 import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
 import { oas2Functions } from '../rulesets/oas2';
-import * as oas2Ruleset from '../rulesets/oas2/index.json';
 import { oas3Functions } from '../rulesets/oas3';
 import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
@@ -489,8 +488,7 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    spectral.addRules(oas2Ruleset.rules as RuleCollection);
-    spectral.addFunctions(oas2Functions());
+    await spectral.loadRuleset('spectral:oas2');
 
     const responses = `openapi: 2.0.0
 responses:: !!foo
@@ -570,7 +568,6 @@ responses:: !!foo
 
   test('should remove all redundant ajv errors', async () => {
     await spectral.loadRuleset('spectral:oas3');
-    spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
 
