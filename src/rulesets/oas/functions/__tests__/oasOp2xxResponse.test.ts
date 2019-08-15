@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types/dist';
-import { commonOasFunctions } from '../../index';
 import { RuleType, Spectral } from '../../../../spectral';
+import { commonOasFunctions } from '../../index';
 import { rules } from '../../index.json';
 const ruleset = { functions: commonOasFunctions(), rules };
 
