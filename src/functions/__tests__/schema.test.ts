@@ -1,3 +1,4 @@
+import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { schema } from '../schema';
 
 function runSchema(target: any, schemaObj: object) {
@@ -120,5 +121,45 @@ describe('schema', () => {
       const input = 123;
       expect(runSchema(input, testSchema)).toEqual([]);
     });
+  });
+
+  describe('handles duplicate JSONSchema4 ids', () => {
+    const testSchema: JSONSchema4 = {
+      id: 'test',
+      type: 'string',
+    };
+
+    const testSchema2: JSONSchema4 = {
+      id: 'test',
+      type: 'number',
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        path: [],
+        message: 'type should be string',
+      },
+    ]);
+    expect(runSchema('a', testSchema2)).toEqual([]);
+  });
+
+  describe('handles duplicate JSONSchema6 ids', () => {
+    const testSchema: JSONSchema6 = {
+      $id: 'test',
+      type: 'string',
+    };
+
+    const testSchema2: JSONSchema6 = {
+      $id: 'test',
+      type: 'number',
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        path: [],
+        message: 'type should be string',
+      },
+    ]);
+    expect(runSchema('a', testSchema2)).toEqual([]);
   });
 });

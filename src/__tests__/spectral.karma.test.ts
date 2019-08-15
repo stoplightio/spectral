@@ -6,7 +6,9 @@ const { fetch } = window;
 
 const oasRuleset = require('../rulesets/oas/index.json');
 const oas2Ruleset = require('../rulesets/oas2/index.json');
+const oas2Schema = require('../rulesets/oas2/schemas/main.json');
 const oas3Ruleset = require('../rulesets/oas3/index.json');
+const oas3Schema = require('../rulesets/oas3/schemas/main.json');
 
 describe('Spectral', () => {
   describe('loadRuleset', () => {
@@ -15,6 +17,31 @@ describe('Spectral', () => {
     beforeEach(() => {
       fetchMock = require('fetch-mock').sandbox();
       window.fetch = fetchMock;
+
+      fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
+        status: 200,
+        body: oasRuleset,
+      });
+
+      fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas2/index.json', {
+        status: 200,
+        body: oas2Ruleset,
+      });
+
+      fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas3/index.json', {
+        status: 200,
+        body: oas3Ruleset,
+      });
+
+      fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas2/schemas/main.json', {
+        status: 200,
+        body: oas2Schema,
+      });
+
+      fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas3/schemas/main.json', {
+        status: 200,
+        body: oas3Schema,
+      });
     });
 
     afterEach(() => {
@@ -22,16 +49,6 @@ describe('Spectral', () => {
     });
 
     test('should support loading built-in rulesets', async () => {
-      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
-        status: 200,
-        body: oasRuleset,
-      });
-
-      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas2/index.json', {
-        status: 200,
-        body: oas2Ruleset,
-      });
-
       const s = new Spectral();
       await s.loadRuleset('spectral:oas2');
 
@@ -43,6 +60,7 @@ describe('Spectral', () => {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
               severity: expect.any(Number),
+              then: expect.any(Object),
             };
 
             return oasRules;
@@ -53,21 +71,6 @@ describe('Spectral', () => {
     });
 
     test('should support loading multiple built-in rulesets', async () => {
-      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
-        status: 200,
-        body: oasRuleset,
-      });
-
-      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas2/index.json', {
-        status: 200,
-        body: oas2Ruleset,
-      });
-
-      fetchMock.mock('https://unpkg.com/@stoplight/spectral/rulesets/oas3/index.json', {
-        status: 200,
-        body: oas3Ruleset,
-      });
-
       const s = new Spectral();
       await s.loadRuleset('spectral:oas2', 'spectral:oas3');
 
@@ -82,6 +85,7 @@ describe('Spectral', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             severity: expect.any(Number),
+            then: expect.any(Object),
           };
 
           return oasRules;
