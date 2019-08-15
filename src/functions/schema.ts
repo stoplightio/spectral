@@ -3,6 +3,7 @@ import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 import { ValidateFunction } from 'ajv';
 import { IOutputError } from 'better-ajv-errors';
+import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
@@ -28,9 +29,25 @@ ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
 ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
 ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
-const validators = new class extends WeakMap<object, ValidateFunction> {
-  public get(schemaObj: object) {
-    let validator = super.get(schemaObj);
+function getSchemaId(schemaObj: JSONSchema4 | JSONSchema6): void | string {
+  if ('$id' in schemaObj) {
+    return schemaObj.$id;
+  }
+
+  if ('id' in schemaObj) {
+    return schemaObj.id;
+  }
+}
+
+const validators = new class extends WeakMap<JSONSchema4 | JSONSchema6, ValidateFunction> {
+  public get(schemaObj: JSONSchema4 | JSONSchema6) {
+    const schemaId = getSchemaId(schemaObj);
+    let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
+    if (validator !== void 0) {
+      return validator;
+    }
+
+    validator = super.get(schemaObj);
     if (validator === void 0) {
       // compiling might give us some perf improvements
       validator = ajv.compile(schemaObj);

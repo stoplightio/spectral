@@ -72,6 +72,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+            then: expect.any(Object),
           };
 
           return oasRules;
@@ -99,6 +100,7 @@ describe('Rulesets reader', () => {
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
             ...(!(rule as IRule).recommended && { severity: -1 }),
+            then: expect.any(Object),
           };
 
           return rules;
@@ -129,6 +131,7 @@ describe('Rulesets reader', () => {
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
             ...(!(rule as IRule).recommended && { severity: -1 }),
+            then: expect.any(Object),
           };
 
           rules[name] = formattedRule;
@@ -187,6 +190,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             severity: -1,
+            then: expect.any(Object),
           };
 
           return rules;
@@ -258,6 +262,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+            then: expect.any(Object),
           };
 
           return rules;
@@ -334,6 +339,32 @@ describe('Rulesets reader', () => {
         },
       },
     });
+  });
+
+  it('should resolve oas2-schema', async () => {
+    const rules = await readRulesFromRulesets('spectral:oas2');
+    expect(rules['oas2-schema']).not.toHaveProperty('then.functionOptions.schema.$ref');
+    expect(rules['oas2-schema']).toHaveProperty(
+      'then.functionOptions.schema',
+      expect.objectContaining({
+        title: 'A JSON Schema for Swagger 2.0 API.',
+        id: 'http://swagger.io/v2/schema.json#',
+        $schema: 'http://json-schema.org/draft-04/schema#',
+      }),
+    );
+  });
+
+  it('should resolve oas3-schema', async () => {
+    const rules = await readRulesFromRulesets('spectral:oas3');
+    expect(rules['oas3-schema']).not.toHaveProperty('then.functionOptions.schema.$ref');
+    expect(rules['oas3-schema']).toHaveProperty(
+      'then.functionOptions.schema',
+      expect.objectContaining({
+        id: 'https://spec.openapis.org/oas/3.0/schema/2019-04-02',
+        $schema: 'http://json-schema.org/draft-04/schema#',
+        description: 'Validation schema for OpenAPI Specification 3.0.X.',
+      }),
+    );
   });
 
   it('given non-existent ruleset should output error', () => {

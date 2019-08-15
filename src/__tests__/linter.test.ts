@@ -1,14 +1,13 @@
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { cloneDeep } from 'lodash';
+import { readRulesFromRulesets } from '../rulesets';
+import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
 import { mergeRulesets } from '../rulesets/merger';
 import { oas2Functions } from '../rulesets/oas2';
 import * as oas2Ruleset from '../rulesets/oas2/index.json';
 import { oas3Functions } from '../rulesets/oas3';
-import * as oas3Ruleset from '../rulesets/oas3/index.json';
 import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
-import { IRulesetFile } from '../types/ruleset';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
@@ -44,6 +43,8 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
+    spectral.registerFormat('oas3', isOpenApiv3);
+    spectral.registerFormat('oas2', isOpenApiv2);
   });
 
   test('should not lint if passed in value is not an object', async () => {
@@ -148,12 +149,16 @@ describe('linter', () => {
 
   test('should not report anything for disabled rules', async () => {
     spectral.addFunctions(oas3Functions());
-    spectral.addRules(mergeRulesets(cloneDeep(oas3Ruleset) as IRulesetFile, {
-      rules: {
-        'valid-example': 'off',
-        'model-description': -1,
+    const oas3Rules = await readRulesFromRulesets('spectral:oas3');
+    spectral.addRules(mergeRulesets(
+      { rules: oas3Rules },
+      {
+        rules: {
+          'valid-example': 'off',
+          'model-description': -1,
+        },
       },
-    }).rules as RuleCollection);
+    ).rules as RuleCollection);
 
     const result = await spectral.run(invalidSchema);
 
@@ -499,7 +504,7 @@ responses:: !!foo
   });
 
   test('should remove all redundant ajv errors', async () => {
-    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    await spectral.loadRuleset('spectral:oas3');
     spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
@@ -528,7 +533,7 @@ responses:: !!foo
   });
 
   test('should report invalid schema $refs', async () => {
-    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    await spectral.loadRuleset('spectral:oas2');
     spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(todosInvalid);
@@ -545,7 +550,7 @@ responses:: !!foo
   });
 
   test('should report invalid $refs', async () => {
-    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    await spectral.loadRuleset('spectral:oas3');
     spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
@@ -569,7 +574,7 @@ responses:: !!foo
   });
 
   test('should support YAML merge keys', async () => {
-    spectral.addRules(oas3Ruleset.rules as RuleCollection);
+    await spectral.loadRuleset('spectral:oas3');
     spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(petstoreMergeKeys);
