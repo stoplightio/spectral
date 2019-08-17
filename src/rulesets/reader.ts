@@ -84,7 +84,7 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
 
         if (extendedRuleset !== null) {
           mergeRules(rules, extendedRuleset.rules, parentSeverity);
-          mergeFunctions(functions, extendedRuleset.functions, rules);
+          Object.assign(functions, extendedRuleset.functions);
         }
       }
     }
