@@ -1,8 +1,13 @@
 import { Dictionary } from '@stoplight/types/dist';
-import { FunctionCollection, RuleCollection } from '../../types';
+import { RuleCollection } from '../../types';
+import { RulesetFunctionCollection } from '../../types/ruleset';
 const nanoid = require('nanoid');
 
-export function mergeFunctions(target: FunctionCollection, source: FunctionCollection, rules: RuleCollection) {
+export function mergeFunctions(
+  target: RulesetFunctionCollection,
+  source: RulesetFunctionCollection,
+  rules: RuleCollection,
+) {
   const map: Dictionary<string, string> = {};
 
   for (const [name, fn] of Object.entries(source)) {

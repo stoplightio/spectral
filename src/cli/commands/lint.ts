@@ -121,7 +121,7 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: O
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
   try {
-    await spectral.loadRuleset(rulesets ? rulesets : ['spectral:oas']);
+    await spectral.loadRuleset(rulesets || ['spectral:oas']);
   } catch (ex) {
     command.log(ex.message);
     process.exitCode = 2;

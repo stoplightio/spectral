@@ -5,14 +5,16 @@ import { parse } from '@stoplight/yaml';
 import { JSONSchema7 } from 'json-schema';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { FunctionCollection, IFunction } from '../types';
-import { FileRulesetSeverity, IRuleset } from '../types/ruleset';
-import { evaluateExport } from './evaluators';
+import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
-import { assertValidRuleset, wrapIFunctionWithSchema } from './validation';
+import { assertValidRuleset } from './validation';
 
-export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
+export interface IRulesetReadOptions {
+  timeout?: number;
+}
+
+export async function readRuleset(uris: string | string[], opts?: IRulesetReadOptions): Promise<IRuleset> {
   const base: IRuleset = {
     rules: {},
     functions: {},
@@ -97,7 +99,7 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
         rulesetUri,
         ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
       );
-      const resolvedFunctions: FunctionCollection = {};
+      const resolvedFunctions: RulesetFunctionCollection = {};
 
       await Promise.all(
         rulesetFunctions.map(async fn => {
@@ -105,16 +107,11 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
           const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
 
           try {
-            const exportedFn = evaluateExport(
-              await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
-            ) as IFunction;
-
-            resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
-
-            Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
-              configurable: true,
-              value: fnName,
-            });
+            resolvedFunctions[fnName] = {
+              name: fnName,
+              code: await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
+              schema: fnSchema,
+            };
           } catch (ex) {
             console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
           }

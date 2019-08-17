@@ -400,7 +400,7 @@ describe('Rulesets reader', () => {
       }),
     });
 
-    expect((ruleset.functions['foo.cjs'] as Function)()).toEqual(5);
+    expect(ruleset.functions['foo.cjs']).toEqual({});
   });
 
   it('should load functions from custom directory', async () => {
