@@ -156,7 +156,7 @@ describe('valid-example', () => {
       expect.objectContaining({
         code: 'valid-example',
         message: '"self" property type should be array',
-        path: ['definitions', 'halRoot', '_links', 'self'],
+        path: ['definitions', 'halRoot', 'example', '_links', 'self'],
       }),
     ]);
   });

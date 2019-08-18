@@ -106,7 +106,7 @@ describe('linter', () => {
       code: 'rule1',
       message,
       severity: DiagnosticSeverity.Warning,
-      path: ['responses', '404', 'description'],
+      path: ['responses', '404'],
       range: {
         end: {
           line: 6,

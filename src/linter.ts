@@ -95,7 +95,8 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map<IRuleResult>(result => {
-        const path = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
+        const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
+        const path = getRealJsonPath(resolved.result, escapedJsonPath);
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
@@ -204,4 +205,14 @@ function keyAndOptionalPattern(key: string | number, pattern: string, value: any
     lint: false,
     value,
   };
+}
+
+function getRealJsonPath(data: unknown, path: JsonPath) {
+  if (data === null || typeof data !== 'object') return [];
+
+  while (path.length > 0 && !has(data, path)) {
+    path.pop();
+  }
+
+  return path;
 }

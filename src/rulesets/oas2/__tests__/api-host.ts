@@ -30,7 +30,7 @@ describe('api-host', () => {
       {
         code: 'api-host',
         message: 'OpenAPI `host` must be present and non-empty string.',
-        path: ['host'],
+        path: [],
         range: {
           end: {
             character: 13,
