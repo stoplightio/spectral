@@ -71,7 +71,6 @@ Seeing as the `servers` array only appeared in OpenAPI v3.0, we don't want this 
 
 Alternatively, formats can be specified at the ruleset level:
 
-```
 ```yaml
 formats: ["oas3"]
 rules:
@@ -199,3 +198,96 @@ rules:
 The example above will run the recommended rules from the `spectral:oas2` ruleset, but report `operation-2xx-response` as a warning rather than as an error (as is the default behavior in the `spectral:oas2` ruleset).
 
 Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
+
+
+### Adding a custom function
+
+If the built-in functions are not enough, Spectral gives you a possibility of providing your own ones.
+Previously, this used to be possible only in case of programmatic usage of Spectral, but there is no such limitation anymore,
+and functions are an integral part of Spectral rulesets.
+
+A custom function might be any JS function compliant with IFunction type.
+
+```
+export type IFunction<O = any> = (
+  targetValue: any,
+  options: O,
+  paths: IFunctionPaths,
+  otherValues: IFunctionValues,
+) => void | IFunctionResult[];
+```
+
+#### Introduction
+
+It takes exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
+
+Before you write your first custom function, you must be wary of certain limitations that will apply.
+First of all, Spectral is meant to support a variety of environments, so ideally your function should have an equal or at least very similar functionality in Node.js, browsers etc.
+That said, that's one of the core restriction, namely: do not rely on globals or functions specific to one particular environment.
+If you do need to use such, make sure to provide an alternative. 
+You are obviously allowed to use anything that's available natively in JS, this is naturally a safe usage.
+Note, we are planning to execute custom functions in a sandboxed environment, therefore while, the code might run fine for now, it may break if it happens to break that assumption.
+
+Besides that, we encourage you to not transpile the code to ES5 if you can help it. Spectral does not support older environments than ES2017, so there is no need to bloat the bundle with useless transformations and polyfills.
+Ship untransformed async/await, do not include unneeded shims, it's all good.
+
+Another caveat is that ES Modules and other modules systems are not supported. Although, you are recommended to write ES2017 code, you should not be using require or imports.
+We don't support it, if you have any module system, you need to use some bundler, preferably Rollup.js as it generates efficient bundles.
+One note here - we are still evaluating that idea and perhaps we bring support for ES Modules at some point.
+
+#### How do I create a function?
+
+The process should be quite hassle-free.
+All you need to do is to:
+
+- create a js file inside of a directory called `functions` that should be placed next to your ruleset file
+- create a `functions` array in your ruleset if you haven't done it yet and place a string with the filename without `.js` extension
+
+Example:
+
+functions/abc.js
+my-ruleset.yaml
+
+```yaml
+functions: [abc]
+rules:
+  my-rule:
+    message: "{{error}}"
+    given: "$.info"
+    then:
+      function: "abc"
+```
+
+Optionally, if you'd like to validate the data that it passed to abc function before the function gets executed, you can provide a JSON schema.
+You can do it as follows
+
+```yaml
+functions: [[abc, { type: "string" }]] # can be any valid JSONSchema7
+rules:
+  my-rule:
+    message: "{{error}}"
+    given: "$.info"
+    then:
+      function: "abc"
+```
+
+If for some reason, you do not want to place your functions in a directory called `functions`, you can specify a custom path.
+
+```yaml
+functionsDir: "./my-functions" # any relative path to the ruleset is okay
+functions: [[abc, { type: "string" }]] # can be any valid JSONSchema7
+rules:
+  my-rule:
+    message: "{{error}}"
+    given: "$.info"
+    then:
+      function: "abc"
+```
+
+Spectral would look for functions in a `my-functions` directory now.
+
+#### Inheritance
+
+In general, you don't need to worry that your function with the same name would be overridden.
+There is no way another ruleset could have an influence on any function you declare in your ruleset.
+That said, you are able to override any built-in function, such as truthy or falsy.
