@@ -1,6 +1,7 @@
 import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as fs from 'fs';
 import * as nock from 'nock';
 import { IRule, Rule } from '../../types';
 import { readRuleset } from '../reader';
@@ -24,6 +25,9 @@ const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/cus
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
 const fooExtendsBarRuleset = path.join(__dirname, './__fixtures__/foo-extends-bar-ruleset.json');
 const selfExtendingRuleset = path.join(__dirname, './__fixtures__/self-extending-ruleset.json');
+const fooCJSFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/functions/foo.cjs.js'), 'utf-8');
+const barFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/bar.js'), 'utf-8');
+const truthyFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/truthy.js'), 'utf-8');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
 const oas3Ruleset = require('../oas3/index.json');
@@ -385,8 +389,16 @@ describe('Rulesets reader', () => {
   it('given a ruleset with custom functions should return rules and resolved functions', async () => {
     const ruleset = await readRuleset(fooRuleset);
     expect(ruleset.functions).toEqual({
-      'foo.cjs': expect.any(Function),
-      'random-id-0': ruleset.functions['foo.cjs'],
+      'foo.cjs': {
+        name: 'foo.cjs',
+        ref: 'random-id-0',
+        schema: null,
+      },
+      'random-id-0': {
+        name: 'foo.cjs',
+        code: fooCJSFunction,
+        schema: null,
+      },
     });
 
     expect(ruleset.rules).toEqual({
@@ -399,17 +411,31 @@ describe('Rulesets reader', () => {
         },
       }),
     });
-
-    expect(ruleset.functions['foo.cjs']).toEqual({});
   });
 
   it('should load functions from custom directory', async () => {
     const ruleset = await readRuleset(customFunctionsDirectoryRuleset);
     expect(ruleset.functions).toEqual({
-      bar: expect.any(Function),
-      'random-id-0': expect.any(Function),
-      truthy: expect.any(Function),
-      'random-id-1': expect.any(Function),
+      bar: {
+        name: 'bar',
+        ref: 'random-id-0',
+        schema: null,
+      },
+      'random-id-0': {
+        name: 'bar',
+        code: barFunction,
+        schema: null,
+      },
+      truthy: {
+        name: 'truthy',
+        ref: 'random-id-1',
+        schema: null,
+      },
+      'random-id-1': {
+        name: 'truthy',
+        code: truthyFunction,
+        schema: null,
+      },
     });
 
     expect(ruleset.functions.bar).toHaveProperty('name', 'bar');
@@ -421,9 +447,7 @@ describe('Rulesets reader', () => {
         given: '$.info',
         severity: DiagnosticSeverity.Warning,
         then: {
-          function: Object.keys(ruleset.functions).find(
-            key => key !== 'bar' && ruleset.functions[key] === ruleset.functions.bar,
-          ),
+          function: 'random-id-0',
         },
       }),
       'truthy-rule': expect.objectContaining({
@@ -431,9 +455,7 @@ describe('Rulesets reader', () => {
         given: '$.x',
         severity: DiagnosticSeverity.Warning,
         then: {
-          function: Object.keys(ruleset.functions).find(
-            key => key !== 'truthy' && ruleset.functions[key] === ruleset.functions.truthy,
-          ),
+          function: 'random-id-1',
         },
       }),
     });

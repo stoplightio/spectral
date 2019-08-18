@@ -65,7 +65,7 @@ describe('Ruleset functions merging', () => {
     });
     expect(target).toHaveProperty('foo', {
       name: 'foo.c',
-      code: 'foo.a()',
+      ref: 'random-id-0',
       schema: null,
     });
   });

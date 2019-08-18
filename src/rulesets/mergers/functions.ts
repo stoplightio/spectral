@@ -10,11 +10,15 @@ export function mergeFunctions(
 ) {
   const map: Dictionary<string, string> = {};
 
-  for (const [name, fn] of Object.entries(source)) {
+  for (const [name, def] of Object.entries(source)) {
     const newName = nanoid();
     map[name] = newName;
-    target[newName] = fn;
-    target[name] = fn;
+    target[newName] = def;
+    target[name] = {
+      name: def.name,
+      schema: def.schema,
+      ref: newName,
+    };
   }
 
   for (const rule of Object.values(rules)) {

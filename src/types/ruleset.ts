@@ -12,7 +12,8 @@ export type FileRule = Rule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleS
 export type FileRuleCollection = Dictionary<FileRule, string>;
 
 export interface IRulesetFunctionDefinition {
-  code: string;
+  code?: string;
+  ref?: string;
   schema: JSONSchema7 | null;
   name: string;
 }
