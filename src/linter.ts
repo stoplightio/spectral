@@ -3,6 +3,7 @@ import { get, has } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
+import { decodePointerFragment } from '@stoplight/json';
 import { Resolved } from './resolved';
 import { message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
@@ -94,7 +95,7 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map<IRuleResult>(result => {
-        const path = result.path || targetPath;
+        const path = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
