@@ -29,5 +29,12 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     console.error(error);
   }
 
+  if (opts.field) {
+    paths.given.push(opts.field);
+    if (paths.target) {
+      paths.target.push(opts.field);
+    }
+  }
+
   return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
 };

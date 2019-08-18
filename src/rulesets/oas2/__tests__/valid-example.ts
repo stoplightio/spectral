@@ -222,7 +222,7 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        message: '"c" property type should be string',
+        message: '"example" property type should be string',
         path: [
           'paths',
           '/pet',
@@ -236,6 +236,7 @@ describe('valid-example', () => {
           'b',
           'properties',
           'c',
+          'example',
         ],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
