@@ -67,12 +67,6 @@ jobs:
     steps:
       - install-and-test
 
-  test-node-8:
-    docker:
-      - image: circleci/node:8-browsers
-    steps:
-      - install-and-test
-
   release:
     docker:
       - image: circleci/node:10
@@ -116,7 +110,6 @@ workflows:
       - test-node-latest
       - test-node-12
       - test-node-10
-      - test-node-8
   release:
     jobs:
       - release:
