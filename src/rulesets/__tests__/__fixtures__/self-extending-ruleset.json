@@ -1,0 +1,12 @@
+{
+  "extends": ["./self-extending-ruleset.json"],
+  "rules": {
+    "foo-rule": {
+      "message": "Foo",
+      "given": "$",
+      "then": {
+        "function": "falsy"
+      }
+    }
+  }
+}

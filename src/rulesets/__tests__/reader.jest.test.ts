@@ -22,6 +22,8 @@ const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-rulese
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
 const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/custom-functions-directory-ruleset.json');
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
+const fooExtendsBarRuleset = path.join(__dirname, './__fixtures__/foo-extends-bar-ruleset.json');
+const selfExtendingRuleset = path.join(__dirname, './__fixtures__/self-extending-ruleset.json');
 const oasRuleset = require('../oas/index.json');
 const oas2Ruleset = require('../oas2/index.json');
 const oas3Ruleset = require('../oas3/index.json');
@@ -415,6 +417,46 @@ describe('Rulesets reader', () => {
     return expect(readRuleset(rulesetWithMissingFunctions)).resolves.toEqual({
       rules: {},
       functions: {},
+    });
+  });
+
+  it('should handle ruleset with circular extensions', () => {
+    return expect(readRuleset(fooExtendsBarRuleset)).resolves.toEqual({
+      functions: {},
+      rules: {
+        'bar-rule': {
+          given: '$.bar',
+          message: 'Bar is truthy',
+          severity: -1, // rule was not recommended, hence the severity is set to false
+          then: {
+            function: 'truthy',
+          },
+        },
+        'foo-rule': {
+          given: '$.foo',
+          message: 'Foo is falsy',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            function: 'falsy',
+          },
+        },
+      },
+    });
+  });
+
+  it('should handle ruleset that extends itself', () => {
+    return expect(readRuleset(selfExtendingRuleset)).resolves.toEqual({
+      functions: {},
+      rules: {
+        'foo-rule': {
+          given: '$',
+          message: 'Foo',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            function: 'falsy',
+          },
+        },
+      },
     });
   });
 

@@ -18,10 +18,13 @@ export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
     functions: {},
   };
 
-  const cache = new Cache();
+  const processedRulesets = new Set<string>();
+  const processRuleset = createRulesetProcessor(processedRulesets, new Cache());
 
-  for (const uri of Array.isArray(uris) ? uris : [uris]) {
-    const resolvedRuleset = await processRuleset(cache, uri, uri);
+  for (const uri of Array.isArray(uris) ? new Set([...uris]) : [uris]) {
+    processedRulesets.clear(); // makes sure each separate ruleset starts with clear list
+    const resolvedRuleset = await processRuleset(uri, uri);
+    if (resolvedRuleset === null) continue;
     mergeRules(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
   }
@@ -29,90 +32,98 @@ export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
   return base;
 }
 
-async function processRuleset(
-  uriCache: ICache,
-  baseUri: string,
-  uri: string,
-  severity?: FileRulesetSeverity,
-): Promise<IRuleset> {
-  const rulesetUri = await findFile(join(baseUri, '..'), uri);
-  const { result } = await httpAndFileResolver.resolve(parse(await readParsable(rulesetUri, 'utf8')), {
-    baseUri: rulesetUri,
-    dereferenceInline: false,
-    uriCache,
-    async parseResolveResult(opts) {
-      try {
-        opts.result = parse(opts.result);
-      } catch {
-        // happens
-      }
-      return opts;
-    },
-  });
-  const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
-  const rules = {};
-  const functions = {};
-  const newRuleset: IRuleset = {
-    rules,
-    functions,
-  };
-
-  const extendedRulesets = ruleset.extends;
-  const rulesetFunctions = ruleset.functions;
-
-  if (extendedRulesets !== void 0) {
-    for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
-      let extendedRuleset: IRuleset;
-      let parentSeverity: FileRulesetSeverity;
-      if (Array.isArray(extended)) {
-        parentSeverity = severity === undefined ? extended[1] : severity;
-        extendedRuleset = await processRuleset(uriCache, uri, extended[0], parentSeverity);
-      } else {
-        parentSeverity = severity === undefined ? 'recommended' : severity;
-        extendedRuleset = await processRuleset(uriCache, uri, extended, parentSeverity);
-      }
-
-      mergeRules(rules, extendedRuleset.rules, parentSeverity);
-      mergeFunctions(functions, extendedRuleset.functions, rules);
+const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache) => {
+  return async function processRuleset(
+    baseUri: string,
+    uri: string,
+    severity?: FileRulesetSeverity,
+  ): Promise<IRuleset | null> {
+    const rulesetUri = await findFile(join(baseUri, '..'), uri);
+    if (processedRulesets.has(rulesetUri)) {
+      return null;
     }
-  }
 
-  mergeRules(rules, ruleset.rules);
-  if (Array.isArray(ruleset.formats)) {
-    mergeFormats(rules, ruleset.formats);
-  }
-
-  if (rulesetFunctions !== void 0) {
-    const rulesetFunctionsBaseDir = join(
-      rulesetUri,
-      ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
-    );
-    const resolvedFunctions: FunctionCollection = {};
-
-    await Promise.all(
-      rulesetFunctions.map(async fn => {
-        const fnName = Array.isArray(fn) ? fn[0] : fn;
-        const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
-
+    processedRulesets.add(rulesetUri);
+    const { result } = await httpAndFileResolver.resolve(parse(await readParsable(rulesetUri, 'utf8')), {
+      baseUri: rulesetUri,
+      dereferenceInline: false,
+      uriCache,
+      async parseResolveResult(opts) {
         try {
-          const exportedFn = evaluateExport(
-            await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
-          ) as IFunction;
-
-          resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
-
-          Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
-            configurable: true,
-            value: fnName,
-          });
-        } catch (ex) {
-          console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
+          opts.result = parse(opts.result);
+        } catch {
+          // happens
         }
-      }),
-    );
+        return opts;
+      },
+    });
+    const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
+    const rules = {};
+    const functions = {};
+    const newRuleset: IRuleset = {
+      rules,
+      functions,
+    };
 
-    mergeFunctions(functions, resolvedFunctions, rules);
-  }
+    const extendedRulesets = ruleset.extends;
+    const rulesetFunctions = ruleset.functions;
 
-  return newRuleset;
-}
+    if (extendedRulesets !== void 0) {
+      for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
+        let extendedRuleset: IRuleset | null;
+        let parentSeverity: FileRulesetSeverity;
+        if (Array.isArray(extended)) {
+          parentSeverity = severity === undefined ? extended[1] : severity;
+          extendedRuleset = await processRuleset(rulesetUri, extended[0], parentSeverity);
+        } else {
+          parentSeverity = severity === undefined ? 'recommended' : severity;
+          extendedRuleset = await processRuleset(rulesetUri, extended, parentSeverity);
+        }
+
+        if (extendedRuleset !== null) {
+          mergeRules(rules, extendedRuleset.rules, parentSeverity);
+          mergeFunctions(functions, extendedRuleset.functions, rules);
+        }
+      }
+    }
+
+    mergeRules(rules, ruleset.rules);
+    if (Array.isArray(ruleset.formats)) {
+      mergeFormats(rules, ruleset.formats);
+    }
+
+    if (rulesetFunctions !== void 0) {
+      const rulesetFunctionsBaseDir = join(
+        rulesetUri,
+        ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
+      );
+      const resolvedFunctions: FunctionCollection = {};
+
+      await Promise.all(
+        rulesetFunctions.map(async fn => {
+          const fnName = Array.isArray(fn) ? fn[0] : fn;
+          const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
+
+          try {
+            const exportedFn = evaluateExport(
+              await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
+            ) as IFunction;
+
+            resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
+
+            Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
+              configurable: true,
+              value: fnName,
+            });
+          } catch (ex) {
+            console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
+          }
+        }),
+      );
+
+      mergeFunctions(functions, resolvedFunctions, rules);
+    }
+
+    return newRuleset;
+  };
+};

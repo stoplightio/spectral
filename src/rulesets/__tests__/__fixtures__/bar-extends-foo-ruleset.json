@@ -1,0 +1,12 @@
+{
+  "extends": ["./foo-extends-bar-ruleset.json"],
+  "rules": {
+    "bar-rule": {
+      "message": "Bar is truthy",
+      "given": "$.bar",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}
