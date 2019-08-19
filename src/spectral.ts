@@ -50,18 +50,10 @@ export class Spectral {
     this.formats = {};
   }
 
-  public async run(
-    target: IParsedResult | object | string,
-    opts?: Omit<IRunOpts, 'includeResolved'> & { includeResolved?: false },
-  ): Promise<IRuleResult[]>;
-  public async run(
-    target: IParsedResult | object | string,
-    opts: Omit<IRunOpts, 'includeResolved'> & { includeResolved: true },
-  ): Promise<ISpectralFullResult>;
-  public async run(
+  public async runWithResolved(
     target: IParsedResult | object | string,
     opts: IRunOpts = {},
-  ): Promise<IRuleResult[] | ISpectralFullResult> {
+  ): Promise<ISpectralFullResult> {
     let results: IRuleResult[] = [];
 
     let parsedResult: IParsedResult | IParsedResult<YamlParserResult<unknown>>;
@@ -138,14 +130,14 @@ export class Spectral {
       ...runRules(resolved, this.rules, this.functions),
     ];
 
-    if (opts.includeResolved) {
-      return {
-        resolved: resolved.result,
-        results: validationResults,
-      };
-    }
+    return {
+      resolved: resolved.result,
+      results: validationResults,
+    };
+  }
 
-    return validationResults;
+  public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
+    return (await this.runWithResolved(target, opts)).results;
   }
 
   /**

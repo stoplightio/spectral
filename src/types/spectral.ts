@@ -37,7 +37,6 @@ export interface IRunOpts {
   resolve?: {
     documentUri?: string;
   };
-  includeResolved?: boolean;
 }
 
 export interface IRuleResult extends IDiagnostic {

@@ -628,26 +628,6 @@ responses:: !!foo
     expect(result).toEqual([]);
   });
 
-  test('should include both resolved and validation results if includeResolved is true', async () => {
-    spectral.addRules({
-      'no-info': {
-        // some dumb rule to have some error
-        message: 'should be OK',
-        given: '$.info',
-        then: {
-          function: 'falsy',
-        },
-      },
-    });
-    spectral.addFunctions(oas3Functions());
-
-    const { result } = await new Resolver().resolve(parse(petstoreMergeKeys));
-    const { resolved, results } = await spectral.run(petstoreMergeKeys, { includeResolved: true });
-
-    expect(resolved).toEqual(result);
-    expect(results).toEqual([expect.objectContaining({ code: 'no-info' })]);
-  });
-
   describe('reports duplicated properties for', () => {
     test('JSON format', async () => {
       const result = await spectral.run({
@@ -921,6 +901,28 @@ responses:: !!foo
         expect(fakeLintingFunction.mock.calls[1][0]).toEqual('b');
         expect(fakeLintingFunction.mock.calls[2][0]).toEqual('c');
       });
+    });
+  });
+
+  describe('runWithResolved', () => {
+    test('should include both resolved and validation results', async () => {
+      spectral.addRules({
+        'no-info': {
+          // some dumb rule to have some error
+          message: 'should be OK',
+          given: '$.info',
+          then: {
+            function: 'falsy',
+          },
+        },
+      });
+      spectral.addFunctions(oas3Functions());
+
+      const { result } = await new Resolver().resolve(parse(petstoreMergeKeys));
+      const { resolved, results } = await spectral.runWithResolved(petstoreMergeKeys);
+
+      expect(resolved).toEqual(result);
+      expect(results).toEqual([expect.objectContaining({ code: 'no-info' })]);
     });
   });
 });
