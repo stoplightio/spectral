@@ -10,6 +10,7 @@ import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
+const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
 const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
 const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
 
@@ -172,9 +173,26 @@ describe('linter', () => {
       expect.objectContaining({
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
-        path: ['paths', '~1pets', 'get', 'responses', '200'],
+        path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
     ]);
+  });
+
+  test('should output unescaped json paths', async () => {
+    spectral.addFunctions(oas3Functions());
+    await spectral.loadRuleset('spectral:oas3');
+
+    const result = await spectral.run(invalidSchema);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'oas3-schema',
+          message: "/paths//pets/get/responses/200 should have required property '$ref'",
+          path: ['paths', '/pets', 'get', 'responses', '200'],
+        }),
+      ]),
+    );
   });
 
   test('should support human readable severity levels', async () => {
@@ -503,6 +521,32 @@ responses:: !!foo
     );
   });
 
+  test('should report a valid line number for json paths containing escaped slashes', async () => {
+    await spectral.loadRuleset('spectral:oas3');
+    spectral.addFunctions(oas3Functions());
+
+    const result = await spectral.run(studioFixture);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'oas3-schema',
+          path: ['paths', '/users', 'get', 'responses'],
+          range: {
+            end: {
+              character: 23,
+              line: 16,
+            },
+            start: {
+              character: 20,
+              line: 16,
+            },
+          },
+        }),
+      ]),
+    );
+  });
+
   test('should remove all redundant ajv errors', async () => {
     await spectral.loadRuleset('spectral:oas3');
     spectral.addFunctions(oas3Functions());
@@ -527,7 +571,7 @@ responses:: !!foo
       expect.objectContaining({
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
-        path: ['paths', '~1pets', 'get', 'responses', '200'],
+        path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
     ]);
   });
