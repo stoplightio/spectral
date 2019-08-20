@@ -1,7 +1,7 @@
 name: Auto-Dependabot
 
 on: 
-  push:
+  pull_request:
     branches:
     - test
 
@@ -9,11 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-
-#    - name: Auto Approve
-#      uses: hmarr/auto-approve-action@v1.0.0
+    - name: Auto Approve
+      # if: github.actor == 'dependabot-preview[bot]' || github.actor == "dependabot[bot]'
+      if: github.actor == 'philsturgeon'
+      uses: hmarr/auto-approve-action@v1.0.0
