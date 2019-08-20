@@ -80,7 +80,7 @@
     },
     "valid-example": {
       "description": "Examples must be valid against their defined schema.",
-      "message": "\"{{property}}\" property {{error}}",
+      "message": "{{error}}",
       "recommended": true,
       "type": "validation",
       "given": "$..[?(@.example)]",

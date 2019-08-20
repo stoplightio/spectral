@@ -1,0 +1,17 @@
+{
+  "include": ["src", "./karma*.ts", "./setupKarma.ts"],
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es2015", "es2016", "es2017", "dom"],
+    "strict": true,
+    "pretty": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "importHelpers": true
+  }
+}

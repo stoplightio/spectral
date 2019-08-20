@@ -36,7 +36,7 @@ describe('contact-properties', () => {
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact', 'name'],
+        path: ['info', 'contact'],
         range: {
           end: {
             character: 17,
@@ -53,7 +53,7 @@ describe('contact-properties', () => {
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact', 'url'],
+        path: ['info', 'contact'],
         range: {
           end: {
             character: 17,
@@ -69,7 +69,7 @@ describe('contact-properties', () => {
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact', 'email'],
+        path: ['info', 'contact'],
         range: {
           end: {
             character: 17,

@@ -38,7 +38,7 @@ describe('operation-operationId', () => {
       {
         code: 'operation-operationId',
         message: 'Operation should have an `operationId`.',
-        path: ['paths', '/todos', 'get', 'operationId'],
+        path: ['paths', '/todos', 'get'],
         range: {
           end: {
             character: 15,
