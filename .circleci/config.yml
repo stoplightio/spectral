@@ -33,11 +33,11 @@ commands:
           command: |
             ./cc-test-reporter before-build
       - run:
-          name: Run browser tests
-          command: yarn test.karma
-      - run:
           name: Build the code
           command: yarn build
+      - run:
+          name: Run browser tests
+          command: yarn test.karma
       - run:
           name: Run node tests
           command: yarn test --coverage --maxWorkers=2
