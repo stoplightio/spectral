@@ -206,7 +206,7 @@ If the built-in functions are not enough, Spectral gives you a possibility of pr
 Previously, this used to be possible only in case of programmatic usage of Spectral, but there is no such limitation anymore,
 and functions are an integral part of Spectral rulesets.
 
-A custom function might be any JS function compliant with IFunction type.
+A custom function might be any JS function compliant with [IFunction](https://github.com/stoplightio/spectral/blob/90a0864863fa232bf367a26dace61fd9f93198db/src/types/function.ts#L3#L8) type.
 
 ```
 export type IFunction<O = any> = (
