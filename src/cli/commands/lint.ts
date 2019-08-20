@@ -138,7 +138,7 @@ async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: O
     targetUri = resolve(name);
   }
 
-  const spec: IParserResult = parseWithPointers(await readParsable(targetUri, flags.encoding), {
+  const spec: IParserResult = parseWithPointers(await readParsable(targetUri, { encoding: flags.encoding }), {
     ignoreDuplicateKeys: false,
     mergeKeys: true,
   });

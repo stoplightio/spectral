@@ -42,6 +42,7 @@ describe('Rulesets reader', () => {
 
   afterEach(() => {
     nock.cleanAll();
+    jest.useRealTimers();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
@@ -517,6 +518,17 @@ describe('Rulesets reader', () => {
     return expect(readRuleset('oneParentRuleset')).rejects.toThrowError(
       'Could not parse https://unpkg.com/oneParentRuleset: Not Found',
     );
+  });
+
+  it('should reject if request is not finished within a specified timeout', () => {
+    nock('https://unpkg.com')
+      .get('/oneParentRuleset')
+      .delay(10000)
+      .reply(200);
+
+    const ruleset = readRuleset('oneParentRuleset', { timeout: 100 });
+
+    return expect(ruleset).rejects.toThrowError('Could not parse https://unpkg.com/oneParentRuleset: Timeout');
   });
 
   it('given invalid ruleset should output errors', () => {

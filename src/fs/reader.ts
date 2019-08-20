@@ -1,16 +1,45 @@
 import { isURL } from '@stoplight/path';
 import * as fs from 'fs';
 const fetch = require('node-fetch');
+import AbortController from 'abort-controller';
 
-export async function readFile(name: string, encoding: string) {
+export interface IReadOptions {
+  encoding: string;
+  timeout?: number;
+}
+
+export async function readFile(name: string, opts: IReadOptions) {
   if (isURL(name)) {
-    const response = await fetch(name);
-    if (!response.ok) throw new Error(response.statusText);
-    return await response.text();
+    let response;
+    let timeout: NodeJS.Timeout | null = null;
+    try {
+      if (opts.timeout) {
+        const controller = new AbortController();
+        timeout = setTimeout(() => {
+          controller.abort();
+        }, opts.timeout);
+        response = await fetch(name, { signal: controller.signal });
+      } else {
+        response = await fetch(name);
+      }
+
+      if (!response.ok) throw new Error(response.statusText);
+      return await response.text();
+    } catch (ex) {
+      if (ex.name === 'AbortError') {
+        throw new Error('Timeout');
+      } else {
+        throw ex;
+      }
+    } finally {
+      if (timeout !== null) {
+        clearTimeout(timeout);
+      }
+    }
   } else {
     try {
       return await new Promise((resolve, reject) => {
-        fs.readFile(name, encoding, (err, data) => {
+        fs.readFile(name, opts.encoding, (err, data) => {
           if (err !== null) {
             reject(err);
           } else {
@@ -24,9 +53,9 @@ export async function readFile(name: string, encoding: string) {
   }
 }
 
-export async function readParsable(name: string, encoding: string): Promise<string> {
+export async function readParsable(name: string, opts: IReadOptions): Promise<string> {
   try {
-    return await readFile(name, encoding);
+    return await readFile(name, opts);
   } catch (ex) {
     throw new Error(`Could not parse ${name}: ${ex.message}`);
   }
