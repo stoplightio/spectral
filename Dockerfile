@@ -30,12 +30,8 @@ ENV NODE_ENV production
 COPY package.json /usr/src/spectral/
 
 COPY --from=compiler /usr/src/spectral/dist /usr/src/spectral/dist
-
-COPY --from=compiler /usr/src/spectral/oclif.manifest.json /usr/src/spectral/oclif.manifest.json
-COPY ./bin /usr/src/spectral/bin
-
 COPY --from=dependencies /usr/src/spectral/node_modules/ /usr/src/spectral/node_modules/
 
 WORKDIR /usr/src/spectral/
 
-ENTRYPOINT [ "node", "bin/run" ]
+ENTRYPOINT [ "node", "dist/cli/index.js" ]

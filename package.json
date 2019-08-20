@@ -23,26 +23,16 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "bin": {
-    "spectral": "./bin/run"
-  },
-  "oclif": {
-    "commands": "./dist/cli/commands",
-    "bin": "spectral",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
+    "spectral": "./dist/cli/index.js"
   },
   "files": [
-    "bin/*",
     "dist/*",
-    "oclif.manifest.json",
     "rulesets/*"
   ],
   "engines": {
     "node": ">=8.3.0"
   },
   "scripts": {
-    "prebuild.binary": "yarn build",
     "build.binary": "pkg . --output ./cli-binaries/spectral-cli",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
@@ -51,8 +41,9 @@
     "lint.fix": "yarn lint --fix",
     "lint": "tslint 'src/**/*.ts'",
     "postbuild.oas-functions": "copyfiles -u 1 \"dist/rulesets/oas*/functions/*.js\" ./",
-    "postbuild": "oclif-dev manifest && yarn build.oas-functions && yarn compile-rulesets",
+    "postbuild": "yarn build.oas-functions && yarn compile-rulesets",
     "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./",
+    "prebuild.binary": "yarn build",
     "pretest.karma": "node ./scripts/generate-karma-fixtures.js",
     "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json",
     "test.harness": "jest -c ./jest.harness.config.js",
@@ -63,9 +54,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@oclif/command": "^1.5.17",
-    "@oclif/config": "^1.13.2",
-    "@oclif/plugin-help": "^2.0",
     "@stoplight/json": "^3.1.1",
     "@stoplight/json-ref-resolver": "^2.2.0",
     "@stoplight/path": "^1.1.0",
@@ -83,11 +71,12 @@
     "node-fetch": "^2.6",
     "strip-ansi": "^5.2",
     "text-table": "^0.2",
-    "typescript-json-schema": "~0.40"
+    "typescript-json-schema": "~0.40",
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.0",
-    "@oclif/test": "^1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@types/chalk": "^2.2.0",
     "@types/fetch-mock": "^7.3.1",
     "@types/jest": "^24.0.16",
     "@types/jest-when": "^2.4.0",
@@ -120,7 +109,7 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
     "tslint": "~5.19",
-    "tslint-config-stoplight": "^1.3.0",
+    "tslint-config-stoplight": "~1.3",
     "typescript": "^3.5.3",
     "yaml": "~1.6"
   },
@@ -140,8 +129,8 @@
       "./dist/**/*.js"
     ],
     "assets": [
-      "./oclif.manifest.json",
       "./dist/**/*.json"
     ]
-  }
+  },
+  "types": "dist/index.d.ts"
 }

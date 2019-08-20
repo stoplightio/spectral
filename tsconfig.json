@@ -17,7 +17,6 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
     "resolveJsonModule": true,
     "outDir": "dist",
     "sourceMap": true,
@@ -25,6 +24,7 @@
     "removeComments": true,
     "jsx": "react",
     "skipLibCheck": true,
+    "noEmitHelpers": true,
     "importHelpers": true
   }
 }

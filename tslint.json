@@ -1,6 +1,9 @@
 {
-  "extends": ["tslint-config-stoplight"],
+  "extends": "tslint-config-stoplight",
   "linterOptions": {
     "exclude": ["**/*.json"]
+  },
+  "rules": {
+    "no-unused-expression": false
   }
 }
