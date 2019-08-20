@@ -36,7 +36,7 @@ describe('model-description', () => {
       {
         code: 'model-description',
         message: 'Definition `description` must be present and non-empty string.',
-        path: ['definitions', 'user', 'description'],
+        path: ['definitions', 'user'],
         range: {
           end: {
             character: 14,

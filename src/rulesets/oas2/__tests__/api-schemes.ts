@@ -29,7 +29,7 @@ describe('api-schemes', () => {
       {
         code: 'api-schemes',
         message: 'OpenAPI host `schemes` must be present and non-empty array.',
-        path: ['schemes'],
+        path: [],
         range: {
           end: {
             character: 13,

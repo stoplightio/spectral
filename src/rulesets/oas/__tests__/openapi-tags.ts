@@ -29,7 +29,7 @@ describe('openapi-tags', () => {
       {
         code: 'openapi-tags',
         message: 'OpenAPI object should have non-empty `tags` array.',
-        path: ['tags'],
+        path: [],
         range: {
           end: {
             character: 13,
