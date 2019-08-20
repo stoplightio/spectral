@@ -5,7 +5,7 @@ describe('Ruleset formats merging', () => {
   const baseRule: IRule = {
     message: 'Operation must have at least one `2xx` response.',
     given:
-      "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
     then: {
       field: 'responses',
       function: 'oasOp2xxResponse',
