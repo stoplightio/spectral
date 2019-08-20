@@ -411,8 +411,11 @@ describe('Rulesets reader', () => {
     });
   });
 
-  it('should fail if function cannot be loaded', () => {
-    return expect(readRuleset(rulesetWithMissingFunctions)).rejects.toThrow();
+  it('should not fail if function cannot be loaded', () => {
+    return expect(readRuleset(rulesetWithMissingFunctions)).resolves.toEqual({
+      rules: {},
+      functions: {},
+    });
   });
 
   it('given non-existent ruleset should output error', () => {

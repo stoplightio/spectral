@@ -93,16 +93,21 @@ async function processRuleset(
       rulesetFunctions.map(async fn => {
         const fnName = Array.isArray(fn) ? fn[0] : fn;
         const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
-        const exportedFn = evaluateExport(
-          await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
-        ) as IFunction;
 
-        resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
+        try {
+          const exportedFn = evaluateExport(
+            await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
+          ) as IFunction;
 
-        Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
-          configurable: true,
-          value: fnName,
-        });
+          resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
+
+          Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
+            configurable: true,
+            value: fnName,
+          });
+        } catch (ex) {
+          console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
+        }
       }),
     );
 
