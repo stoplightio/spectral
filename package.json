@@ -97,7 +97,7 @@
     "fetch-mock": "^7.3.9",
     "fs-extra": "^8.0.1",
     "husky": "^3.0.0",
-    "jest": "~24.8",
+    "jest": "~24.9",
     "jest-mock": "^24.8.0",
     "jest-when": "~2.6",
     "karma": "^4.2.0",
