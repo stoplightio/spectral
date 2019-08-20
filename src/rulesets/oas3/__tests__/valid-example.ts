@@ -125,8 +125,8 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        message: '"schema" property format should match format "email"',
-        path: ['paths', '/pet', 'post', 'requestBody', 'content', '*/*', 'schema'],
+        message: '"schema.example" property format should match format "email"',
+        path: ['paths', '/pet', 'post', 'requestBody', 'content', '*/*', 'schema', 'example'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       }),
@@ -169,7 +169,7 @@ describe('valid-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'valid-example',
-          message: `"ip_address" property format should match format "${format}"`,
+          message: `"ip_address.example" property format should match format "${format}"`, // hm, ip_address is likely to be more meaningful no?
         }),
       ]);
     },

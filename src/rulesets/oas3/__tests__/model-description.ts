@@ -40,7 +40,7 @@ describe('model-description', () => {
       {
         code: 'model-description',
         message: 'Model `description` must be present and non-empty string.',
-        path: ['components', 'schemas', 'user', 'description'],
+        path: ['components', 'schemas', 'user'],
         range: {
           end: {
             character: 16,

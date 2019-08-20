@@ -4,8 +4,6 @@ import * as path from 'path';
 import { Spectral } from '../spectral';
 
 const oasRuleset = require('../rulesets/oas/index.json');
-const oas2Ruleset = require('../rulesets/oas2/index.json');
-const oas3Ruleset = require('../rulesets/oas3/index.json');
 const customOASRuleset = require('./__fixtures__/custom-oas-ruleset.json');
 
 describe('Spectral', () => {
@@ -14,51 +12,6 @@ describe('Spectral', () => {
   });
 
   describe('loadRuleset', () => {
-    test('should support loading built-in rulesets', async () => {
-      const s = new Spectral();
-      await s.loadRuleset('spectral:oas2');
-
-      expect(s.rules).toEqual(
-        [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (oasRules, [name, rule]) => {
-            oasRules[name] = {
-              name,
-              ...rule,
-              formats: expect.arrayContaining([expect.any(String)]),
-              severity: expect.any(Number),
-              then: expect.any(Object),
-            };
-
-            return oasRules;
-          },
-          {},
-        ),
-      );
-    });
-
-    test('should support loading multiple built-in rulesets', async () => {
-      const s = new Spectral();
-      await s.loadRuleset('spectral:oas2', 'spectral:oas3');
-
-      expect(s.rules).toEqual(
-        [
-          ...Object.entries(oasRuleset.rules),
-          ...Object.entries(oas2Ruleset.rules),
-          ...Object.entries(oas3Ruleset.rules),
-        ].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
-          oasRules[name] = {
-            name,
-            ...rule,
-            formats: expect.arrayContaining([expect.any(String)]),
-            severity: expect.any(Number),
-            then: expect.any(Object),
-          };
-
-          return oasRules;
-        }, {}),
-      );
-    });
-
     test('should support loading rulesets from filesystem', async () => {
       const s = new Spectral();
       await s.loadRuleset(path.join(__dirname, '__fixtures__/custom-oas-ruleset.json'));

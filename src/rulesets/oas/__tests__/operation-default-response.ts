@@ -44,7 +44,7 @@ describe('operation-default-response', () => {
       {
         code: 'operation-default-response',
         message: 'Operations must have a default response.',
-        path: ['paths', '/path', '/get', 'responses', 'default'],
+        path: ['paths', '/path', '/get', 'responses'],
         range: {
           end: {
             character: 19,

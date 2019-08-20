@@ -108,7 +108,7 @@ describe('linter', () => {
       code: 'rule1',
       message,
       severity: DiagnosticSeverity.Warning,
-      path: ['responses', '404', 'description'],
+      path: ['responses', '404'],
       range: {
         end: {
           line: 6,
@@ -567,8 +567,8 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'valid-example',
-        message: '"foo" property type should be number',
-        path: ['components', 'schemas', 'foo'],
+        message: '"foo.example" property type should be number',
+        path: ['components', 'schemas', 'foo', 'example'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
@@ -588,8 +588,8 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'valid-example',
-          message: '"schema" property can\'t resolve reference #/parameters/missing from id #',
-          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema'],
+          message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
       ]),
     );

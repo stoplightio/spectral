@@ -53,6 +53,7 @@
     "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
+    "pretest.karma": "yarn build",
     "test.karma": "karma start",
     "inline-version": "./scripts/inline-version.js",
     "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json"

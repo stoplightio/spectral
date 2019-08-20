@@ -30,7 +30,7 @@ describe('tag-description', () => {
       {
         code: 'tag-description',
         message: 'Tag object should have a `description`.',
-        path: ['tags', '0', 'description'],
+        path: ['tags', '0'],
         range: {
           end: {
             character: 19,

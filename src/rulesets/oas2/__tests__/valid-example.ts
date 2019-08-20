@@ -155,8 +155,8 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        message: '"self" property type should be array',
-        path: ['definitions', 'halRoot', '_links', 'self'],
+        message: '"halRoot.example" property type should be array',
+        path: ['definitions', 'halRoot', 'example', '_links', 'self'],
       }),
     ]);
   });
@@ -222,7 +222,7 @@ describe('valid-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'valid-example',
-        message: '"c" property type should be string',
+        message: '"c.example" property type should be string',
         path: [
           'paths',
           '/pet',
@@ -236,6 +236,7 @@ describe('valid-example', () => {
           'b',
           'properties',
           'c',
+          'example',
         ],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
