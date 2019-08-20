@@ -237,7 +237,6 @@ One note here - we are still evaluating that idea and perhaps we bring support f
 
 #### How do I create a function?
 
-The process should be quite hassle-free.
 All you need to do is to:
 
 - create a js file inside of a directory called `functions` that should be placed next to your ruleset file
