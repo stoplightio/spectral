@@ -20,6 +20,10 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
   // The subsection of the targetVal which contains the good bit
   const relevantObject = opts.field ? object[opts.field] : object;
   if (!relevantObject) return [];
+  const { target, given } = paths;
+  const lastItem = target
+    ? target.length > 0 && target[target.length - 1]
+    : given.length > 0 && given[given.length - 1];
 
   // The subsection of the targetValue which contains the schema for us to validate the good bit against
   let schemaObject;
@@ -30,11 +34,21 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
   }
 
   if (opts.field) {
-    paths.given.push(opts.field);
-    if (paths.target) {
-      paths.target.push(opts.field);
+    given.push(opts.field);
+    if (target) {
+      target.push(opts.field);
     }
   }
 
-  return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
+  const errors = schema(relevantObject, { schema: schemaObject }, paths, otherValues);
+  return (
+    errors &&
+    errors.map(error => {
+      const propertyPath = [lastItem, opts.field].filter(Boolean).join('.');
+      return {
+        ...error,
+        message: `${propertyPath ? `"${propertyPath}"` : ''} property ${error.message}`,
+      };
+    })
+  );
 };

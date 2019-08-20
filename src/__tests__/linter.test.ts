@@ -565,7 +565,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'valid-example',
-        message: '"example" property type should be number',
+        message: '"foo.example" property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
       expect.objectContaining({
@@ -586,7 +586,7 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'valid-example',
-          message: '"example" property can\'t resolve reference #/parameters/missing from id #',
+          message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
       ]),
