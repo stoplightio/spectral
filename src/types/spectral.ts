@@ -1,4 +1,5 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
+import { IResolveResult } from '@stoplight/json-ref-resolver/types';
 import {
   DiagnosticSeverity,
   Dictionary,
@@ -40,6 +41,11 @@ export interface IRunOpts {
 
 export interface IRuleResult extends IDiagnostic {
   path: JsonPath;
+}
+
+export interface ISpectralFullResult {
+  resolved: IResolveResult;
+  results: IRuleResult[];
 }
 
 export interface IGivenNode {
