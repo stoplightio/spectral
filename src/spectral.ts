@@ -1,10 +1,11 @@
-import { JsonParserResult, safeStringify } from '@stoplight/json';
 import {
   getLocationForJsonPath as getLocationForJsonPathJSON,
+  JsonParserResult,
   parseWithPointers as parseJSONWithPointers,
+  safeStringify,
 } from '@stoplight/json';
-import { Cache, Resolver } from '@stoplight/json-ref-resolver';
-import { IUriParser } from '@stoplight/json-ref-resolver/types';
+import { Cache, defaultGetRef, Resolver } from '@stoplight/json-ref-resolver';
+import { IComputeRefOpts, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import {
@@ -14,6 +15,7 @@ import {
 } from '@stoplight/yaml';
 import { merge, set } from 'lodash';
 
+import { DiagnosticSeverity, IDiagnostic } from '@stoplight/types/dist';
 import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
@@ -80,42 +82,8 @@ export class Spectral {
       await this._resolver.resolve(parsedResult.parsed.data, {
         uriCache: this._uriCache,
         baseUri: documentUri,
-        parseResolveResult: async resolveOpts => {
-          const ref = resolveOpts.targetAuthority.toString();
-          const ext = extname(ref);
-
-          const content = String(resolveOpts.result);
-          let parsedRefResult:
-            | IParsedResult<YamlParserResult<unknown>>
-            | IParsedResult<JsonParserResult<unknown>>
-            | undefined;
-          if (ext === '.yml' || ext === '.yaml') {
-            parsedRefResult = {
-              parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
-              source: ref,
-              getLocationForJsonPath: getLocationForJsonPathYAML,
-            };
-          } else if (ext === '.json') {
-            parsedRefResult = {
-              parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
-              source: ref,
-              getLocationForJsonPath: getLocationForJsonPathJSON,
-            };
-          }
-
-          if (parsedRefResult !== undefined) {
-            resolveOpts.result = parsedRefResult.parsed.data;
-            if (parsedRefResult.parsed.diagnostics.length > 0) {
-              refDiagnostics.push(
-                ...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source),
-              );
-            }
-
-            this._processExternalRef(parsedRefResult, resolveOpts);
-          }
-
-          return resolveOpts;
-        },
+        getRef: this._getRef(refDiagnostics, parsedResult),
+        parseResolveResult: this._parseResolveResult(refDiagnostics),
       }),
       this._parsedMap,
     );
@@ -232,6 +200,71 @@ export class Spectral {
       }),
     );
   }
+
+  private _getRef = (refDiagnostics: IDiagnostic[], parsed: IParsedResult) => (
+    key: string,
+    val: unknown,
+    opts: IComputeRefOpts,
+  ) => {
+    const $ref = defaultGetRef(key, val);
+
+    if ($ref !== void 0) {
+      for (const _key in Object(val)) {
+        if (_key !== '$ref' && Object.hasOwnProperty.call(val, _key) && opts.jsonPointer !== void 0) {
+          const jsonPath = opts.jsonPointer
+            .replace(/^#\/?/, '')
+            .split('/')
+            .filter(part => part !== '');
+          const { range } = parsed.getLocationForJsonPath(parsed.parsed, jsonPath, true)!;
+          refDiagnostics.push({
+            message: '$ref cannot have sibling',
+            code: 'ref-sibling',
+            range,
+            source: parsed.source,
+            severity: DiagnosticSeverity.Error,
+            path: jsonPath,
+          });
+        }
+      }
+    }
+
+    return $ref;
+  };
+
+  private _parseResolveResult = (refDiagnostics: IDiagnostic[]) => async (resolveOpts: IUriParser) => {
+    const ref = resolveOpts.targetAuthority.toString();
+    const ext = extname(ref);
+
+    const content = String(resolveOpts.result);
+    let parsedRefResult:
+      | IParsedResult<YamlParserResult<unknown>>
+      | IParsedResult<JsonParserResult<unknown>>
+      | undefined;
+    if (ext === '.yml' || ext === '.yaml') {
+      parsedRefResult = {
+        parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
+        source: ref,
+        getLocationForJsonPath: getLocationForJsonPathYAML,
+      };
+    } else if (ext === '.json') {
+      parsedRefResult = {
+        parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
+        source: ref,
+        getLocationForJsonPath: getLocationForJsonPathJSON,
+      };
+    }
+
+    if (parsedRefResult !== undefined) {
+      resolveOpts.result = parsedRefResult.parsed.data;
+      if (parsedRefResult.parsed.diagnostics.length > 0) {
+        refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source));
+      }
+
+      this._processExternalRef(parsedRefResult, resolveOpts);
+    }
+
+    return resolveOpts;
+  };
 }
 
 export const REF_METADATA = Symbol('external_ref_metadata');

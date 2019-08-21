@@ -871,6 +871,78 @@ responses:: !!foo
     });
   });
 
+  test('should report ref siblings', async () => {
+    const results = await spectral.run({
+      $ref: '#/',
+      responses: {
+        200: {
+          description: 'a',
+        },
+        201: {
+          description: 'b',
+        },
+        300: {
+          description: 'c',
+          abc: 'd',
+          $ref: '#/d',
+        },
+      },
+    });
+
+    expect(results).toEqual(
+      expect.arrayContaining([
+        {
+          code: 'ref-sibling',
+          message: '$ref cannot have sibling',
+          path: [],
+          range: {
+            end: {
+              character: 19,
+              line: 12,
+            },
+            start: {
+              character: 0,
+              line: 0,
+            },
+          },
+          severity: 0,
+        },
+        {
+          code: 'ref-sibling',
+          message: '$ref cannot have sibling',
+          path: ['responses', '300'],
+          range: {
+            end: {
+              character: 19,
+              line: 12,
+            },
+            start: {
+              character: 10,
+              line: 9,
+            },
+          },
+          severity: 0,
+        },
+        {
+          code: 'ref-sibling',
+          message: '$ref cannot have sibling',
+          path: ['responses', '300'],
+          range: {
+            end: {
+              character: 19,
+              line: 12,
+            },
+            start: {
+              character: 10,
+              line: 9,
+            },
+          },
+          severity: 0,
+        },
+      ]),
+    );
+  });
+
   describe('runWithResolved', () => {
     test('should include both resolved and validation results', async () => {
       spectral.setRules({

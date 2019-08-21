@@ -141,6 +141,7 @@ describe('spectral', () => {
       expect(fakeResolver.resolve).toBeCalledWith(target, {
         authority: undefined,
         uriCache: expect.any(Cache),
+        getRef: expect.any(Function),
         parseResolveResult: expect.any(Function),
       });
     });

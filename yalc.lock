@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@stoplight/json-ref-resolver": {
+      "signature": "4e78c176f8254e98efc85b78f3853da4",
+      "file": true,
+      "replaced": "^2.0.3"
+    }
+  }
+}
