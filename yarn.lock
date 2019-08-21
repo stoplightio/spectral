@@ -609,11 +609,13 @@
   resolved "https://registry.yarnpkg.com/@stoplight/fast-safe-stringify/-/fast-safe-stringify-2.1.2.tgz#2811eff4989c3d4c5c9a3789f057e25358db0899"
   integrity sha512-ayw3qQ9KNn2K5q6ggrLclh+rdZsSLwYIUz3uAer1NzaCpalJLR4g32G845ylgq7Xy2AunMHnNfD3FC3s0rUcsA==
 
-"@stoplight/json-ref-resolver@file:.yalc/@stoplight/json-ref-resolver":
-  version "0.0.0-4e78c176"
+"@stoplight/json-ref-resolver@^2.0.3":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.1.1.tgz#442b935b9d7cab9f42f7548bd7c2e6cb2599a5cf"
+  integrity sha512-bI90+DK7OjQYf4mOCZdvabuYyaWDQhr30YyuUcNB688hO+5qNekzJfq/GgkImfHe+E/b2vVpeqS2ST1Cu/WB+g==
   dependencies:
     "@stoplight/json" "^2.2.2"
-    "@stoplight/types" "^11.0.0"
+    "@stoplight/types" "^9.1.2"
     dependency-graph "~0.8.0"
     fast-memoize "^2.5.1"
     immer "^3.1.3"

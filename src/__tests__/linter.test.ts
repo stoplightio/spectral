@@ -894,50 +894,50 @@ responses:: !!foo
         {
           code: 'ref-sibling',
           message: '$ref cannot have sibling',
-          path: [],
+          path: ['responses'],
           range: {
             end: {
               character: 19,
               line: 12,
             },
             start: {
-              character: 0,
-              line: 0,
+              character: 14,
+              line: 2,
             },
           },
-          severity: 0,
+          severity: DiagnosticSeverity.Error,
         },
         {
           code: 'ref-sibling',
           message: '$ref cannot have sibling',
-          path: ['responses', '300'],
+          path: ['responses', '300', 'description'],
           range: {
             end: {
-              character: 19,
-              line: 12,
+              character: 24,
+              line: 10,
             },
             start: {
-              character: 10,
-              line: 9,
+              character: 21,
+              line: 10,
             },
           },
-          severity: 0,
+          severity: DiagnosticSeverity.Error,
         },
         {
           code: 'ref-sibling',
           message: '$ref cannot have sibling',
-          path: ['responses', '300'],
+          path: ['responses', '300', 'abc'],
           range: {
             end: {
-              character: 19,
-              line: 12,
+              character: 16,
+              line: 11,
             },
             start: {
-              character: 10,
-              line: 9,
+              character: 13,
+              line: 11,
             },
           },
-          severity: 0,
+          severity: DiagnosticSeverity.Error,
         },
       ]),
     );
