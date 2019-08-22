@@ -103,6 +103,13 @@ describe('lint', () => {
       .it('should handle relative path to a document', ctx => {
         expect(ctx.stdout).not.toContain('invalid-ref');
       });
+
+    test
+      .stdout()
+      .command(['lint', 'src/__tests__/__fixtures__/gh-474/spec-2.yaml'])
+      .it('should handle relative path to a document #2', ctx => {
+        expect(ctx.stdout).not.toContain('invalid-ref');
+      });
   });
 
   describe('--ruleset', () => {
