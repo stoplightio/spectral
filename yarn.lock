@@ -4568,10 +4568,10 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-jsonpath-plus@~0.20:
-  version "0.20.1"
-  resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-0.20.1.tgz#5358b8e8a5df569c541de64908d54bca55550e1c"
-  integrity sha512-8O4tBeXh9XGma2x2aPVwvpo9lXJAd4bx0XA0eRjYs4Cpz7e5PQy7sPttk2YmhvROJhEUu4DNUxmtLueicCqyZg==
+jsonpath-plus@~1.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/jsonpath-plus/-/jsonpath-plus-1.0.0.tgz#78fa5c4ae62968476268d505d9f78c65469d0e7c"
+  integrity sha512-CXQJ/tsgFogKYBuCRmnlChIw66JBXp8kAkT+R4mSB2cuzCSBi88lx2A+vHvo27RY4Wtj5xVVGu2/2O7NwZ79mg==
 
 jsonpointer@^4.0.1:
   version "4.0.1"
