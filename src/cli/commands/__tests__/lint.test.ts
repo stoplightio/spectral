@@ -96,6 +96,13 @@ describe('lint', () => {
         });
       });
     });
+
+    test
+      .stdout()
+      .command(['lint', 'src/__tests__/__fixtures__/gh-474/spec.yaml'])
+      .it('should handle relative path to a document', ctx => {
+        expect(ctx.stdout).not.toContain('invalid-ref');
+      });
   });
 
   describe('--ruleset', () => {
