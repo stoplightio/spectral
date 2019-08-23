@@ -3,7 +3,7 @@ import { IRuleResult, Rule, RuleFunction } from '../types';
 
 const applyRuleToObject = async (r: Rule, o: object): Promise<IRuleResult[]> => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     // @ts-ignore
     testRule: r,
   });

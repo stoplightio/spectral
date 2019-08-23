@@ -39,7 +39,7 @@ export * from './types';
 
 export class Spectral {
   private _resolver: Resolver;
-  public functions: FunctionCollection = defaultFunctions;
+  public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
 
   public formats: RegisteredFormats;
@@ -148,9 +148,27 @@ export class Spectral {
     Object.assign(this.functions, functions);
   }
 
+  public setFunctions(functions: FunctionCollection) {
+    for (const key in this.functions) {
+      if (!Object.hasOwnProperty.call(this.functions, key)) continue;
+      delete this.functions[key];
+    }
+
+    this._addFunctions({ ...functions });
+  }
+
   @deprecated('loadRuleset', '4.1')
   public addRules(rules: RuleCollection) {
     this._addRules(rules);
+  }
+
+  public setRules(rules: RuleCollection) {
+    for (const key in this.rules) {
+      if (!Object.hasOwnProperty.call(this.rules, key)) continue;
+      delete this.rules[key];
+    }
+
+    this._addRules({ ...rules });
   }
 
   private _addRules(rules: RuleCollection) {

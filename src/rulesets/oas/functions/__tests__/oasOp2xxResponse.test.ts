@@ -6,8 +6,8 @@ const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOp2xxResponse', () => {
   const s = new Spectral();
-  s.addFunctions(ruleset.functions || {});
-  s.addRules({
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
     'operation-2xx-response': Object.assign(ruleset.rules['operation-2xx-response'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-2xx-response'].type],

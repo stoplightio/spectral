@@ -9,8 +9,8 @@ const ruleset = { functions: commonOasFunctions(), rules };
 describe('oasOpIdUnique', () => {
   const s = new Spectral();
 
-  s.addFunctions(ruleset.functions || {});
-  s.addRules({
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
     'operation-operationId-unique': Object.assign(ruleset.rules['operation-operationId-unique'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-operationId-unique'].type],

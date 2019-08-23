@@ -56,7 +56,7 @@ describe('spectral', () => {
     });
   });
 
-  describe('addRules & mergeRules', () => {
+  describe('setRules & mergeRules', () => {
     test('should not mutate the passing in rules object', () => {
       const givenCustomRuleSet = {
         rule1: {
@@ -72,7 +72,7 @@ describe('spectral', () => {
       const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
 
       const s = new Spectral();
-      s.addRules(givenCustomRuleSet);
+      s.setRules(givenCustomRuleSet);
 
       s.mergeRules({
         rule1: {
@@ -86,7 +86,7 @@ describe('spectral', () => {
     test('should update/append on the current rules', () => {
       const s = new Spectral();
 
-      s.addRules({
+      s.setRules({
         // @ts-ignore
         rule1: {
           message: '',

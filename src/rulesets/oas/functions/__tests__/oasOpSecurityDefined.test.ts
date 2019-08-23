@@ -11,8 +11,8 @@ const oas3Ruleset = { functions: oas3Functions(), rules: oas3Rules };
 describe('oasOpSecurityDefined', () => {
   describe('oas2', () => {
     const s = new Spectral();
-    s.addFunctions(oas2Ruleset.functions || {});
-    s.addRules({
+    s.setFunctions(oas2Ruleset.functions || {});
+    s.setRules({
       'operation-security-defined': Object.assign(oas2Ruleset.rules['operation-security-defined'], {
         recommended: true,
         type: RuleType[oas2Ruleset.rules['operation-security-defined'].type],
@@ -78,8 +78,8 @@ describe('oasOpSecurityDefined', () => {
 
   describe('oas3', () => {
     const s = new Spectral();
-    s.addFunctions(oas3Ruleset.functions || {});
-    s.addRules({
+    s.setFunctions(oas3Ruleset.functions || {});
+    s.setRules({
       'operation-security-defined': Object.assign(oas3Ruleset.rules['operation-security-defined'], {
         recommended: true,
         type: RuleType[oas3Ruleset.rules['operation-security-defined'].type],

@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('no-eval-in-markdown', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'no-eval-in-markdown': Object.assign(ruleset.rules['no-eval-in-markdown'], {
       recommended: true,
       type: RuleType[ruleset.rules['no-eval-in-markdown'].type],

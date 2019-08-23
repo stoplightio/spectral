@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('openapi-tags', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'openapi-tags': Object.assign(ruleset.rules['openapi-tags'], {
       recommended: true,
       type: RuleType[ruleset.rules['openapi-tags'].type],

@@ -7,8 +7,8 @@ const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOpParams', () => {
   const s = new Spectral();
-  s.addFunctions(ruleset.functions || {});
-  s.addRules({
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
     'operation-parameters': Object.assign(ruleset.rules['operation-parameters'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-parameters'].type],

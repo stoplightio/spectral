@@ -7,8 +7,8 @@ const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasOpFormDataConsumeCheck', () => {
   const s = new Spectral();
-  s.addFunctions(ruleset.functions || {});
-  s.addRules({
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
     'operation-formData-consume-check': Object.assign(ruleset.rules['operation-formData-consume-check'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-formData-consume-check'].type],

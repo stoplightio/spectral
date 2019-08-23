@@ -7,8 +7,8 @@ const ruleset = { functions: commonOasFunctions(), rules };
 
 describe('oasPathParam', () => {
   const s = new Spectral();
-  s.addFunctions(ruleset.functions || {});
-  s.addRules({
+  s.setFunctions(ruleset.functions || {});
+  s.setRules({
     'path-params': Object.assign(ruleset.rules['path-params'], {
       recommended: true,
       type: RuleType[ruleset.rules['path-params'].type],

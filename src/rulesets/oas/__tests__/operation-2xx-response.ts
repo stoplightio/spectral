@@ -9,8 +9,8 @@ describe('operation-2xx-response', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.addFunctions({ oasOp2xxResponse });
-    spectral.addRules({
+    spectral.setFunctions({ oasOp2xxResponse });
+    spectral.setRules({
       // @ts-ignore
       'operation-2xx-response': rules['operation-2xx-response'],
     });
