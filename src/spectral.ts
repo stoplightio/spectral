@@ -3,7 +3,7 @@ import {
   getLocationForJsonPath as getLocationForJsonPathJSON,
   parseWithPointers as parseJSONWithPointers,
 } from '@stoplight/json';
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { Cache, Resolver } from '@stoplight/json-ref-resolver';
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
@@ -39,6 +39,7 @@ export * from './types';
 
 export class Spectral {
   private _resolver: Resolver;
+  private _uriCache: Cache;
   public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
 
@@ -47,6 +48,7 @@ export class Spectral {
   constructor(opts?: IConstructorOpts) {
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
     this.formats = {};
+    this._uriCache = new Cache();
   }
 
   public async runWithResolved(
@@ -76,6 +78,7 @@ export class Spectral {
     const resolved = new Resolved(
       parsedResult,
       await this._resolver.resolve(parsedResult.parsed.data, {
+        uriCache: this._uriCache,
         baseUri: documentUri,
         parseResolveResult: async resolveOpts => {
           const ref = resolveOpts.targetAuthority.toString();
