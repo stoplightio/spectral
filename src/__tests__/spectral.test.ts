@@ -1,3 +1,4 @@
+import { Cache } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isParsedResult, Spectral } from '../spectral';
 import { IParsedResult, RuleFunction } from '../types';
@@ -164,6 +165,7 @@ describe('spectral', () => {
 
       expect(fakeResolver.resolve).toBeCalledWith(target, {
         authority: undefined,
+        uriCache: expect.any(Cache),
         parseResolveResult: expect.any(Function),
       });
     });

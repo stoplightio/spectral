@@ -96,6 +96,24 @@ describe('lint', () => {
         });
       });
     });
+
+    test
+      .stdout()
+      .command(['lint', 'src/__tests__/__fixtures__/gh-474/spec.yaml'])
+      .it('should handle relative path to a document', ctx => {
+        expect(ctx.stdout).not.toContain('invalid-ref');
+        expect(ctx.stdout).toContain(`/__tests__/__fixtures__/gh-474/common.yaml
+ 6:11  error  oas3-schema  type should be string`);
+      });
+
+    test
+      .stdout()
+      .command(['lint', 'src/__tests__/__fixtures__/gh-474/spec-2.yaml'])
+      .it('should handle relative path to a document #2', ctx => {
+        expect(ctx.stdout).not.toContain('invalid-ref');
+        expect(ctx.stdout).toContain(`/__tests__/__fixtures__/gh-474/common.yaml
+ 6:11  error  oas3-schema  type should be string`);
+      });
   });
 
   describe('--ruleset', () => {
