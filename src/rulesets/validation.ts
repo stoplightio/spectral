@@ -13,6 +13,15 @@ const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
 const serializeAJVErrors = (errors: ErrorObject[]) =>
   errors.map(({ message, dataPath }) => `${dataPath} ${message}`).join('\n');
 
+export class ValidationError extends AJV.ValidationError {
+  public message: string;
+
+  constructor(errors: ErrorObject[]) {
+    super(errors);
+    this.message = serializeAJVErrors(errors);
+  }
+}
+
 export function assertValidRuleset(ruleset: unknown): IRulesetFile {
   if (ruleset === null || typeof ruleset !== 'object') {
     throw new Error('Provided ruleset is not an object');
@@ -23,7 +32,7 @@ export function assertValidRuleset(ruleset: unknown): IRulesetFile {
   }
 
   if (!validate(ruleset)) {
-    throw new Error(serializeAJVErrors(validate.errors));
+    throw new ValidationError(validate.errors);
   }
 
   return ruleset as IRulesetFile;
@@ -36,7 +45,7 @@ export function isValidRule(rule: FileRule): rule is Rule {
 export function wrapIFunctionWithSchema(fn: Function, schema: JSONSchema7) {
   return (data: unknown, opts: unknown, ...args: any[]) => {
     if (!ajv.validate(schema, opts)) {
-      throw new Error(serializeAJVErrors(ajv.errors));
+      throw new ValidationError(ajv.errors);
     }
 
     return fn(data, opts, ...args);
