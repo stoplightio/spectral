@@ -1,17 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../index';
-import { commonOasFunctions } from '../../index';
 import { rules } from '../../index.json';
-
-const ruleset = { functions: commonOasFunctions(), rules };
+import oasPathParam from '../oasPathParam';
 
 describe('oasPathParam', () => {
   const s = new Spectral();
-  s.setFunctions(ruleset.functions || {});
+  s.setFunctions({ oasPathParam });
   s.setRules({
-    'path-params': Object.assign(ruleset.rules['path-params'], {
+    'path-params': Object.assign(rules['path-params'], {
       recommended: true,
-      type: RuleType[ruleset.rules['path-params'].type],
+      type: RuleType[rules['path-params'].type],
     }),
   });
 

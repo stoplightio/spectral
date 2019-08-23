@@ -1,19 +1,17 @@
 import { RuleType, Spectral } from '../../../../index';
-import { commonOasFunctions } from '../../index';
 
 import { DiagnosticSeverity } from '@stoplight/types';
 import { rules } from '../../index.json';
-
-const ruleset = { functions: commonOasFunctions(), rules };
+import oasOpIdUnique from '../oasOpIdUnique';
 
 describe('oasOpIdUnique', () => {
   const s = new Spectral();
 
-  s.setFunctions(ruleset.functions || {});
+  s.setFunctions({ oasOpIdUnique });
   s.setRules({
-    'operation-operationId-unique': Object.assign(ruleset.rules['operation-operationId-unique'], {
+    'operation-operationId-unique': Object.assign(rules['operation-operationId-unique'], {
       recommended: true,
-      type: RuleType[ruleset.rules['operation-operationId-unique'].type],
+      type: RuleType[rules['operation-operationId-unique'].type],
     }),
   });
 

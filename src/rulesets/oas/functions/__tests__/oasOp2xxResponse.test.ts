@@ -1,16 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types/dist';
 import { RuleType, Spectral } from '../../../../spectral';
-import { commonOasFunctions } from '../../index';
 import { rules } from '../../index.json';
-const ruleset = { functions: commonOasFunctions(), rules };
+import oasOp2xxResponse from '../oasOp2xxResponse';
 
 describe('oasOp2xxResponse', () => {
   const s = new Spectral();
-  s.setFunctions(ruleset.functions || {});
+  s.setFunctions({ oasOp2xxResponse });
   s.setRules({
-    'operation-2xx-response': Object.assign(ruleset.rules['operation-2xx-response'], {
+    'operation-2xx-response': Object.assign(rules['operation-2xx-response'], {
       recommended: true,
-      type: RuleType[ruleset.rules['operation-2xx-response'].type],
+      type: RuleType[rules['operation-2xx-response'].type],
     }),
   });
 

@@ -1,17 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../index';
-import { commonOasFunctions } from '../../index';
 import { rules } from '../../index.json';
-
-const ruleset = { functions: commonOasFunctions(), rules };
+import oasOpFormDataConsumeCheck from '../oasOpFormDataConsumeCheck';
 
 describe('oasOpFormDataConsumeCheck', () => {
   const s = new Spectral();
-  s.setFunctions(ruleset.functions || {});
+  s.setFunctions({ oasOpFormDataConsumeCheck });
   s.setRules({
-    'operation-formData-consume-check': Object.assign(ruleset.rules['operation-formData-consume-check'], {
+    'operation-formData-consume-check': Object.assign(rules['operation-formData-consume-check'], {
       recommended: true,
-      type: RuleType[ruleset.rules['operation-formData-consume-check'].type],
+      type: RuleType[rules['operation-formData-consume-check'].type],
     }),
   });
 

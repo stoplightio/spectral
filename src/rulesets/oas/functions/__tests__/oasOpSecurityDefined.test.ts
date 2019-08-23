@@ -1,21 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../index';
-import { oas2Functions } from '../../../oas2';
 import { rules as oas2Rules } from '../../../oas2/index.json';
-import { oas3Functions } from '../../../oas3';
 import { rules as oas3Rules } from '../../../oas3/index.json';
-
-const oas2Ruleset = { functions: oas2Functions(), rules: oas2Rules };
-const oas3Ruleset = { functions: oas3Functions(), rules: oas3Rules };
+import oasOpSecurityDefined from '../oasOpSecurityDefined';
 
 describe('oasOpSecurityDefined', () => {
   describe('oas2', () => {
     const s = new Spectral();
-    s.setFunctions(oas2Ruleset.functions || {});
+    s.setFunctions({ oasOpSecurityDefined });
     s.setRules({
-      'operation-security-defined': Object.assign(oas2Ruleset.rules['operation-security-defined'], {
+      'operation-security-defined': Object.assign(oas2Rules['operation-security-defined'], {
         recommended: true,
-        type: RuleType[oas2Ruleset.rules['operation-security-defined'].type],
+        type: RuleType[oas2Rules['operation-security-defined'].type],
       }),
     });
 
@@ -78,11 +74,11 @@ describe('oasOpSecurityDefined', () => {
 
   describe('oas3', () => {
     const s = new Spectral();
-    s.setFunctions(oas3Ruleset.functions || {});
+    s.setFunctions({ oasOpSecurityDefined });
     s.setRules({
-      'operation-security-defined': Object.assign(oas3Ruleset.rules['operation-security-defined'], {
+      'operation-security-defined': Object.assign(oas3Rules['operation-security-defined'], {
         recommended: true,
-        type: RuleType[oas3Ruleset.rules['operation-security-defined'].type],
+        type: RuleType[oas3Rules['operation-security-defined'].type],
       }),
     });
 

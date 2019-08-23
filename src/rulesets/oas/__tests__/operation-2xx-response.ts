@@ -1,8 +1,6 @@
-import { commonOasFunctions } from '../';
 import { Spectral } from '../../../spectral';
+import oasOp2xxResponse from '../functions/oasOp2xxResponse';
 import { rules } from '../index.json';
-
-const { oasOp2xxResponse } = commonOasFunctions();
 
 describe('operation-2xx-response', () => {
   let spectral: Spectral;
