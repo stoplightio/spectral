@@ -89,7 +89,7 @@ export class Spectral {
     );
 
     if (resolved.format === void 0) {
-      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.resolved));
       resolved.format = foundFormat === void 0 ? null : foundFormat;
     }
 
@@ -102,7 +102,7 @@ export class Spectral {
     ];
 
     return {
-      resolved: resolved.result,
+      resolved: resolved.resolved,
       results: validationResults,
     };
   }

@@ -26,6 +26,9 @@ export interface IRule<T = string, O = any> {
   // Filter the target down to a subset[] with a JSON path
   given: string;
 
+  // If true, rule will operate on original (unresolved) data
+  unresolved?: boolean;
+
   when?: {
     // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
     // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)

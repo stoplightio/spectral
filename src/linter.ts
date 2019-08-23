@@ -67,7 +67,7 @@ export const lintNode = (
   }
 
   if (!targets.length) {
-    // must call then at least once, with no result
+    // must call then at least once, with no resolved
     targets.push({
       path: [],
       value: undefined,
@@ -96,7 +96,7 @@ export const lintNode = (
     results = results.concat(
       targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const path = getRealJsonPath(resolved.result, escapedJsonPath);
+        const path = getRealJsonPath(resolved.resolved, escapedJsonPath);
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
