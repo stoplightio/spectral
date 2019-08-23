@@ -19,7 +19,6 @@ import { IDiagnostic } from '@stoplight/types/dist';
 import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
-import { listRefSiblings } from './listRefSiblings';
 import { Resolved } from './resolved';
 import { readRuleset } from './rulesets';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
@@ -97,7 +96,6 @@ export class Spectral {
       ...refDiagnostics,
       ...results,
       ...formatResolverErrors(resolved),
-      ...listRefSiblings(parsedResult),
       ...runRules(resolved, this.rules, this.functions),
     ];
 
@@ -230,8 +228,6 @@ export class Spectral {
       if (parsedRefResult.parsed.diagnostics.length > 0) {
         refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source));
       }
-
-      refDiagnostics.push(...listRefSiblings(parsedRefResult));
 
       this._processExternalRef(parsedRefResult, resolveOpts);
     }

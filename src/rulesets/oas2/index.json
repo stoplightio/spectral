@@ -136,6 +136,17 @@
       "tags": [
         "schema"
       ]
+    },
+    "$ref-siblings": {
+      "description": "Validate the position of $refs.",
+      "message": "{{description}}",
+      "type": "validation",
+      "severity": 0,
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "function": "refSiblings"
+      }
     }
   }
 }

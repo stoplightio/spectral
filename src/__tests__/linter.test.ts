@@ -872,6 +872,9 @@ responses:: !!foo
   });
 
   test('should report ref siblings', async () => {
+    spectral.addFunctions(oas3Functions());
+    await spectral.loadRuleset('spectral:oas3');
+
     const results = await spectral.run({
       $ref: '#/',
       responses: {
@@ -887,13 +890,14 @@ responses:: !!foo
           $ref: '#/d',
         },
       },
+      openapi: '3.0.0',
     });
 
     expect(results).toEqual(
       expect.arrayContaining([
         {
-          code: 'ref-sibling',
-          message: '$ref cannot have sibling',
+          code: '$ref-siblings',
+          message: 'Property cannot be placed among $ref',
           path: ['responses'],
           range: {
             end: {
@@ -908,8 +912,8 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
         },
         {
-          code: 'ref-sibling',
-          message: '$ref cannot have sibling',
+          code: '$ref-siblings',
+          message: 'Property cannot be placed among $ref',
           path: ['responses', '300', 'description'],
           range: {
             end: {
@@ -924,8 +928,8 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
         },
         {
-          code: 'ref-sibling',
-          message: '$ref cannot have sibling',
+          code: '$ref-siblings',
+          message: 'Property cannot be placed among $ref',
           path: ['responses', '300', 'abc'],
           range: {
             end: {
