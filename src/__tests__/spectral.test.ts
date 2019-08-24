@@ -35,7 +35,7 @@ describe('spectral', () => {
 
     test('should support loading multiple built-in rulesets', async () => {
       const s = new Spectral();
-      await s.loadRuleset('spectral:oas2', 'spectral:oas3');
+      await s.loadRuleset(['spectral:oas2', 'spectral:oas3']);
 
       expect(s.rules).toEqual(
         [

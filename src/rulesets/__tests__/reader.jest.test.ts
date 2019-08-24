@@ -54,7 +54,7 @@ describe('Rulesets reader', () => {
   });
 
   it('given two flat, valid ruleset files should return ruleset with rules', async () => {
-    expect(await readRuleset(validFlatRuleset, validRequireInfo)).toEqual(
+    expect(await readRuleset([validFlatRuleset, validRequireInfo])).toEqual(
       expect.objectContaining({
         rules: {
           'valid-rule': {

@@ -197,8 +197,8 @@ export class Spectral {
     }
   }
 
-  public async loadRuleset(...uris: string[]) {
-    const { rules, functions } = await readRuleset(...uris);
+  public async loadRuleset(uris: string[] | string) {
+    const { rules, functions } = await readRuleset(uris);
     this._addRules(rules);
     this._addFunctions(functions);
   }

@@ -12,7 +12,7 @@ import { findFile } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { assertValidRuleset, wrapIFunctionWithSchema } from './validation';
 
-export async function readRuleset(...uris: string[]): Promise<IRuleset> {
+export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
   const base: IRuleset = {
     rules: {},
     functions: {},
@@ -20,7 +20,7 @@ export async function readRuleset(...uris: string[]): Promise<IRuleset> {
 
   const cache = new Cache();
 
-  for (const uri of uris) {
+  for (const uri of Array.isArray(uris) ? uris : [uris]) {
     const resolvedRuleset = await processRuleset(cache, uri, uri);
     mergeRules(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);

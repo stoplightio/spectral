@@ -117,11 +117,11 @@ linting ./openapi.yaml
   }
 }
 
-async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: Optional<string[]>) {
+async function lint(name: string, flags: ILintConfig, command: Lint, rulesets: Optional<string[] | string>) {
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
   try {
-    await spectral.loadRuleset(...(rulesets ? rulesets : ['spectral:oas2', 'spectral:oas3']));
+    await spectral.loadRuleset(rulesets ? rulesets : ['spectral:oas2', 'spectral:oas3']);
   } catch (ex) {
     command.log(ex.message);
     process.exitCode = 2;
