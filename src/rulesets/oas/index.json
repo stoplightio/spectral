@@ -60,7 +60,7 @@
       ]
     },
     "path-params": {
-      "description": "Path parameters are correct and valid.",
+      "description": "Path parameters should be defined and valid.",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
