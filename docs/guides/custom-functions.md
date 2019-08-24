@@ -48,7 +48,7 @@ rules:
       function: "abc"
 ```
 
-Optionally, if you'd like to validate the data that it passed to abc function before the function gets executed, you can provide a JSON Schema.
+Optionally, if you'd like to validate the function options, you can provide a JSON Schema.
 You can do it as follows
 
 ```yaml
