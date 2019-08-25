@@ -42,7 +42,6 @@ describe('Rulesets reader', () => {
 
   afterEach(() => {
     nock.cleanAll();
-    jest.useRealTimers();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
