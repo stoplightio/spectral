@@ -872,7 +872,6 @@ responses:: !!foo
   });
 
   test('should report ref siblings', async () => {
-    spectral.addFunctions(oas3Functions());
     await spectral.loadRuleset('spectral:oas3');
 
     const results = await spectral.run({

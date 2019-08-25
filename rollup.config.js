@@ -7,12 +7,13 @@ import { terser } from 'rollup-plugin-terser';
 const BASE_PATH = process.cwd();
 
 module.exports = [
-  "oasOp2xxResponse",
-  "oasOpFormDataConsumeCheck",
-  "oasOpIdUnique",
-  "oasOpParams",
-  "oasOpSecurityDefined",
-  "oasPathParam"
+  'oasOp2xxResponse',
+  'oasOpFormDataConsumeCheck',
+  'oasOpIdUnique',
+  'oasOpParams',
+  'oasOpSecurityDefined',
+  'oasPathParam',
+  'refSiblings'
 ].map(fn => ({
   input: path.resolve(BASE_PATH, 'dist/rulesets/oas/functions', `${fn}.js`),
   plugins: [
@@ -20,9 +21,7 @@ module.exports = [
       tsconfig: path.join(BASE_PATH, './tsconfig.rollup.json'),
       include: ['dist/**/*.{ts,tsx}'],
     }),
-    resolve({
-      only: ['json-schema-merge-allof', /lodash\/?.*/],
-    }),
+    resolve(),
     commonjs(),
     terser(),
   ],

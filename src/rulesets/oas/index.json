@@ -7,7 +7,8 @@
     "oasOpIdUnique",
     "oasOpParams",
     "oasOpSecurityDefined",
-    "oasPathParam"
+    "oasPathParam",
+    "refSiblings"
   ],
   "rules": {
     "operation-2xx-response": {

@@ -1,5 +1,5 @@
 import { JsonPath } from '@stoplight/types';
-import { IFunction, IFunctionResult } from '../../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
 function* siblingIterator(obj: object, path: JsonPath): IterableIterator<JsonPath> {
   const hasRef = '$ref' in obj;
@@ -16,7 +16,7 @@ function* siblingIterator(obj: object, path: JsonPath): IterableIterator<JsonPat
   }
 }
 
-export const refSiblings: IFunction = (data: unknown) => {
+const refSiblings: IFunction = (data: unknown) => {
   const results: IFunctionResult[] = [];
   if (typeof data !== 'object' || data === null) return results;
 
@@ -29,3 +29,5 @@ export const refSiblings: IFunction = (data: unknown) => {
 
   return results;
 };
+
+export default refSiblings;
