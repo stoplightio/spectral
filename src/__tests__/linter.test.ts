@@ -2,12 +2,8 @@ import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
-import { readRulesFromRulesets } from '../rulesets';
+import { mergeRules, readRuleset } from '../rulesets';
 import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
-import { mergeRulesets } from '../rulesets/merger';
-import { oas2Functions } from '../rulesets/oas2';
-import * as oas2Ruleset from '../rulesets/oas2/index.json';
-import { oas3Functions } from '../rulesets/oas3';
 import { Spectral } from '../spectral';
 import { RuleCollection } from '../types';
 
@@ -52,10 +48,10 @@ describe('linter', () => {
 
   test('should not lint if passed in value is not an object', async () => {
     const fakeLintingFunction = jest.fn();
-    spectral.addFunctions({
+    spectral.setFunctions({
       [fnName]: fakeLintingFunction,
     });
-    spectral.addRules(rules);
+    spectral.setRules(rules);
 
     const result = await spectral.run('123');
 
@@ -65,7 +61,7 @@ describe('linter', () => {
   test('should return all properties', async () => {
     const message = '4xx responses require a description';
 
-    spectral.addFunctions({
+    spectral.setFunctions({
       func1: val => {
         if (!val) {
           return [
@@ -79,7 +75,7 @@ describe('linter', () => {
       },
     });
 
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.responses[*]',
         when: {
@@ -123,7 +119,7 @@ describe('linter', () => {
   });
 
   test('should support rule overriding severity', async () => {
-    spectral.addFunctions({
+    spectral.setFunctions({
       func1: () => {
         return [
           {
@@ -133,7 +129,7 @@ describe('linter', () => {
       },
     });
 
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         severity: DiagnosticSeverity.Hint,
@@ -151,17 +147,12 @@ describe('linter', () => {
   });
 
   test('should not report anything for disabled rules', async () => {
-    spectral.addFunctions(oas3Functions());
-    const oas3Rules = await readRulesFromRulesets('spectral:oas3');
-    spectral.addRules(mergeRulesets(
-      { rules: oas3Rules },
-      {
-        rules: {
-          'valid-example': 'off',
-          'model-description': -1,
-        },
-      },
-    ).rules as RuleCollection);
+    await spectral.loadRuleset('spectral:oas3');
+    const { rules: oas3Rules } = await readRuleset('spectral:oas3');
+    spectral.setRules(mergeRules(oas3Rules, {
+      'valid-example': 'off',
+      'model-description': -1,
+    }) as RuleCollection);
 
     const result = await spectral.run(invalidSchema);
 
@@ -181,7 +172,6 @@ describe('linter', () => {
   });
 
   test('should output unescaped json paths', async () => {
-    spectral.addFunctions(oas3Functions());
     await spectral.loadRuleset('spectral:oas3');
 
     const result = await spectral.run(invalidSchema);
@@ -198,9 +188,7 @@ describe('linter', () => {
   });
 
   test('should support human readable severity levels', async () => {
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         severity: 'error',
@@ -237,9 +225,7 @@ describe('linter', () => {
   test('should respect the format of data and run rules associated with it', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
 
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         formats: ['foo-bar'],
@@ -274,9 +260,7 @@ describe('linter', () => {
   test('should match all formats if rule has no formats defined', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
 
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         formats: ['foo-bar'],
@@ -311,9 +295,7 @@ describe('linter', () => {
   });
 
   test('should not run any rule with defined formats if there are no formats registered', async () => {
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         formats: ['foo-bar'],
@@ -357,9 +339,7 @@ describe('linter', () => {
     spectral.registerFormat('foo-bar', () => false);
     spectral.registerFormat('baz', () => true);
 
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         formats: ['foo-bar'],
@@ -391,9 +371,7 @@ describe('linter', () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
     spectral.registerFormat('baz', () => true);
 
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         formats: ['foo-bar'],
@@ -428,9 +406,7 @@ describe('linter', () => {
   test('should not run any rule with defined formats if some formats are are registered but document format could not be associated', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
 
-    spectral.addFunctions(oas2Functions());
-
-    spectral.addRules({
+    spectral.setRules({
       rule1: {
         given: '$.x',
         formats: ['foo-bar'],
@@ -470,8 +446,7 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    spectral.addRules(oas2Ruleset.rules as RuleCollection);
-    spectral.addFunctions(oas2Functions());
+    await spectral.loadRuleset('spectral:oas2');
 
     const responses = `openapi: 2.0.0
 responses:: !!foo
@@ -525,7 +500,6 @@ responses:: !!foo
 
   test('should report a valid line number for json paths containing escaped slashes', async () => {
     await spectral.loadRuleset('spectral:oas3');
-    spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(studioFixture);
 
@@ -551,7 +525,6 @@ responses:: !!foo
 
   test('should remove all redundant ajv errors', async () => {
     await spectral.loadRuleset('spectral:oas3');
-    spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
 
@@ -580,7 +553,6 @@ responses:: !!foo
 
   test('should report invalid schema $refs', async () => {
     await spectral.loadRuleset('spectral:oas2');
-    spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(todosInvalid);
 
@@ -597,7 +569,6 @@ responses:: !!foo
 
   test('should report invalid $refs', async () => {
     await spectral.loadRuleset('spectral:oas3');
-    spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(invalidSchema);
 
@@ -621,7 +592,6 @@ responses:: !!foo
 
   test('should support YAML merge keys', async () => {
     await spectral.loadRuleset('spectral:oas3');
-    spectral.addFunctions(oas3Functions());
 
     const result = await spectral.run(petstoreMergeKeys);
 
@@ -684,10 +654,10 @@ responses:: !!foo
 
     beforeEach(() => {
       fakeLintingFunction = jest.fn();
-      spectral.addFunctions({
+      spectral.setFunctions({
         [fnName]: fakeLintingFunction,
       });
-      spectral.addRules(rules);
+      spectral.setRules(rules);
     });
 
     describe('when given path is set', () => {
@@ -702,7 +672,7 @@ responses:: !!foo
 
     describe('when given path is not set', () => {
       test('should pass through root object', async () => {
-        spectral.addRules({
+        spectral.setRules({
           example: {
             message: '',
             given: '$',
@@ -725,10 +695,10 @@ responses:: !!foo
 
     beforeEach(() => {
       fakeLintingFunction = jest.fn();
-      spectral.addFunctions({
+      spectral.setFunctions({
         [fnName]: fakeLintingFunction,
       });
-      spectral.addRules(rules);
+      spectral.setRules(rules);
     });
 
     describe('given no when', () => {
@@ -836,11 +806,11 @@ responses:: !!foo
     beforeEach(() => {
       fakeLintingFunction = jest.fn();
       fakeLintingFunction2 = jest.fn();
-      spectral.addFunctions({
+      spectral.setFunctions({
         [fnName]: fakeLintingFunction,
         [fnName2]: fakeLintingFunction2,
       });
-      spectral.addRules({
+      spectral.setRules({
         example: {
           message: '',
           given: '$.responses',
@@ -883,7 +853,7 @@ responses:: !!foo
 
     describe('given many then field matches', () => {
       test('should call each one with the appropriate args', async () => {
-        spectral.addRules({
+        spectral.setRules({
           example: {
             message: '',
             given: '$.responses',
@@ -906,7 +876,7 @@ responses:: !!foo
 
   describe('runWithResolved', () => {
     test('should include both resolved and validation results', async () => {
-      spectral.addRules({
+      spectral.setRules({
         'no-info': {
           // some dumb rule to have some error
           message: 'should be OK',
@@ -916,7 +886,6 @@ responses:: !!foo
           },
         },
       });
-      spectral.addFunctions(oas3Functions());
 
       const { result } = await new Resolver().resolve(parse(petstoreMergeKeys));
       const { resolved, results } = await spectral.runWithResolved(petstoreMergeKeys);

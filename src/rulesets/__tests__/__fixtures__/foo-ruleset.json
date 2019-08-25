@@ -1,0 +1,14 @@
+{
+  "functions": [
+    "foo.cjs"
+  ],
+  "rules": {
+    "foo-rule": {
+      "message": "should be OK",
+      "given": "$.info",
+      "then": {
+        "function": "foo.cjs"
+      }
+    }
+  }
+}

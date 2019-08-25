@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('no-script-tags-in-markdown', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'no-script-tags-in-markdown': Object.assign(ruleset.rules['no-script-tags-in-markdown'], {
       recommended: true,
       type: RuleType[ruleset.rules['no-script-tags-in-markdown'].type],

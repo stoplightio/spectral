@@ -18,7 +18,7 @@ import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
-import { readRulesFromRulesets } from './rulesets';
+import { readRuleset } from './rulesets';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
@@ -32,17 +32,16 @@ import {
   PartialRuleCollection,
   RegisteredFormats,
   RuleCollection,
-  RuleDeclarationCollection,
   RunRuleCollection,
 } from './types';
 
 export * from './types';
 
 export class Spectral {
-  private _rules: RuleCollection = {};
-  private _functions: FunctionCollection = defaultFunctions;
   private _resolver: Resolver;
   private _uriCache: Cache;
+  public functions: FunctionCollection = { ...defaultFunctions };
+  public rules: RunRuleCollection = {};
 
   public formats: RegisteredFormats;
 
@@ -143,41 +142,22 @@ export class Spectral {
     return (await this.runWithResolved(target, opts)).results;
   }
 
-  /**
-   * Functions
-   */
-
-  public get functions(): FunctionCollection {
-    return this._functions;
-  }
-
+  @deprecated('loadRuleset', '4.1')
   public addFunctions(functions: FunctionCollection) {
-    Object.assign(this._functions, merge({}, functions));
+    this._addFunctions(functions);
   }
 
-  public async loadRuleset(...uris: string[]) {
-    this._addRules(await readRulesFromRulesets(...uris));
+  public _addFunctions(functions: FunctionCollection) {
+    Object.assign(this.functions, functions);
   }
 
-  /**
-   * Rules
-   */
-
-  public get rules(): RunRuleCollection {
-    const rules: RunRuleCollection = {};
-
-    for (const name in this._rules) {
-      if (!this._rules.hasOwnProperty(name)) continue;
-      const rule = this._rules[name];
-
-      rules[name] = {
-        name,
-        ...rule,
-        severity: rule.severity === undefined ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
-      };
+  public setFunctions(functions: FunctionCollection) {
+    for (const key in this.functions) {
+      if (!Object.hasOwnProperty.call(this.functions, key)) continue;
+      delete this.functions[key];
     }
 
-    return rules;
+    this._addFunctions({ ...functions });
   }
 
   @deprecated('loadRuleset', '4.1')
@@ -185,32 +165,42 @@ export class Spectral {
     this._addRules(rules);
   }
 
+  public setRules(rules: RuleCollection) {
+    for (const key in this.rules) {
+      if (!Object.hasOwnProperty.call(this.rules, key)) continue;
+      delete this.rules[key];
+    }
+
+    this._addRules({ ...rules });
+  }
+
   private _addRules(rules: RuleCollection) {
-    Object.assign(this._rules, merge({}, rules));
+    for (const name in rules) {
+      if (!rules.hasOwnProperty(name)) continue;
+      const rule = rules[name];
+
+      this.rules[name] = {
+        name,
+        ...rule,
+        severity: rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
+      };
+    }
   }
 
   public mergeRules(rules: PartialRuleCollection) {
-    for (const ruleName in merge({}, rules)) {
-      if (!rules.hasOwnProperty(ruleName)) continue;
-      const rule = rules[ruleName];
+    for (const name in rules) {
+      if (!rules.hasOwnProperty(name)) continue;
+      const rule = rules[name];
       if (rule) {
-        this._rules[ruleName] = merge(this._rules[ruleName], rule);
+        this.rules[name] = merge(this.rules[name], rule);
       }
     }
   }
 
-  public applyRuleDeclarations(declarations: RuleDeclarationCollection) {
-    for (const ruleName in declarations) {
-      if (!declarations.hasOwnProperty(ruleName)) continue;
-      const declaration = declarations[ruleName];
-
-      const rule = this.rules[ruleName];
-      if (rule) {
-        if (typeof declaration === 'boolean') {
-          this._rules[ruleName].recommended = declaration;
-        }
-      }
-    }
+  public async loadRuleset(uris: string[] | string) {
+    const { rules, functions } = await readRuleset(uris);
+    this._addRules(rules);
+    this._addFunctions(functions);
   }
 
   public registerFormat(format: string, fn: FormatLookup) {

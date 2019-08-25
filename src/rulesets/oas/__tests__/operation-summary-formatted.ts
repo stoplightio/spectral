@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-summary-formatted', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-summary-formatted': Object.assign(ruleset.rules['operation-summary-formatted'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-summary-formatted'].type],

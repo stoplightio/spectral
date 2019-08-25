@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('path-keys-no-trailing-slash', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'path-keys-no-trailing-slash': Object.assign(ruleset.rules['path-keys-no-trailing-slash'], {
       recommended: true,
       type: RuleType[ruleset.rules['path-keys-no-trailing-slash'].type],

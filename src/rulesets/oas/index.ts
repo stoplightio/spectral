@@ -1,7 +1,8 @@
 import { FunctionCollection } from '../../types';
-import { readRulesFromRulesets } from '../reader';
+import { readRuleset } from '../reader';
 
 export const commonOasFunctions = (): FunctionCollection => {
+  console.warn('This is deprecated. Use loadRuleset method instead');
   return {
     oasPathParam: require('./functions/oasPathParam').oasPathParam,
     oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
@@ -12,4 +13,7 @@ export const commonOasFunctions = (): FunctionCollection => {
   };
 };
 
-export const rules = async () => readRulesFromRulesets(require.resolve('./index.json'));
+export const rules = async () => {
+  console.warn('This is deprecated. Use loadRuleset method instead');
+  return (await readRuleset(require.resolve('./index.json'))).rules;
+};

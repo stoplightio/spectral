@@ -1,36 +1,41 @@
 import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
+import { join } from '@stoplight/path';
 import { parse } from '@stoplight/yaml';
-import { readParsable } from '../fs/reader';
+import { JSONSchema7 } from 'json-schema';
+import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { RuleCollection } from '../types';
-import { FileRulesetSeverity, IRuleset, IRulesetFile } from '../types/ruleset';
-import { findRuleset } from './finder';
-import { mergeRulesets } from './merger';
-import { assertValidRuleset } from './validation';
+import { FunctionCollection, IFunction } from '../types';
+import { FileRulesetSeverity, IRuleset } from '../types/ruleset';
+import { evaluateExport } from './evaluators';
+import { findFile } from './finder';
+import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
+import { assertValidRuleset, wrapIFunctionWithSchema } from './validation';
 
-export async function readRulesFromRulesets(...uris: string[]): Promise<RuleCollection> {
+export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
   const base: IRuleset = {
     rules: {},
+    functions: {},
   };
 
   const cache = new Cache();
 
-  for (const uri of uris) {
-    mergeRulesets(base, await readRulesFromRuleset(cache, uri, uri));
+  for (const uri of Array.isArray(uris) ? uris : [uris]) {
+    const resolvedRuleset = await processRuleset(cache, uri, uri);
+    mergeRules(base.rules, resolvedRuleset.rules);
+    Object.assign(base.functions, resolvedRuleset.functions);
   }
 
-  return base.rules;
+  return base;
 }
 
-async function readRulesFromRuleset(
+async function processRuleset(
   uriCache: ICache,
   baseUri: string,
   uri: string,
   severity?: FileRulesetSeverity,
-): Promise<IRulesetFile> {
-  const rulesetUri = await findRuleset(baseUri, uri);
-
+): Promise<IRuleset> {
+  const rulesetUri = await findFile(join(baseUri, '..'), uri);
   const { result } = await httpAndFileResolver.resolve(parse(await readParsable(rulesetUri, 'utf8')), {
     baseUri: rulesetUri,
     dereferenceInline: false,
@@ -45,28 +50,69 @@ async function readRulesFromRuleset(
     },
   });
   const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
-
-  const newRuleset: IRulesetFile = {
-    rules: {},
+  const rules = {};
+  const functions = {};
+  const newRuleset: IRuleset = {
+    rules,
+    functions,
   };
 
   const extendedRulesets = ruleset.extends;
+  const rulesetFunctions = ruleset.functions;
 
-  if (extendedRulesets !== undefined) {
+  if (extendedRulesets !== void 0) {
     for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
+      let extendedRuleset: IRuleset;
+      let parentSeverity: FileRulesetSeverity;
       if (Array.isArray(extended)) {
-        const parentSeverity = severity === undefined ? extended[1] : severity;
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uriCache, uri, extended[0], parentSeverity), {
-          severity: parentSeverity,
-        });
+        parentSeverity = severity === undefined ? extended[1] : severity;
+        extendedRuleset = await processRuleset(uriCache, uri, extended[0], parentSeverity);
       } else {
-        const parentSeverity = severity === undefined ? 'recommended' : severity;
-        mergeRulesets(newRuleset, await readRulesFromRuleset(uriCache, uri, extended, parentSeverity), {
-          severity: parentSeverity,
-        });
+        parentSeverity = severity === undefined ? 'recommended' : severity;
+        extendedRuleset = await processRuleset(uriCache, uri, extended, parentSeverity);
       }
+
+      mergeRules(rules, extendedRuleset.rules, parentSeverity);
+      mergeFunctions(functions, extendedRuleset.functions, rules);
     }
   }
 
-  return mergeRulesets(newRuleset, ruleset);
+  mergeRules(rules, ruleset.rules);
+  if (Array.isArray(ruleset.formats)) {
+    mergeFormats(rules, ruleset.formats);
+  }
+
+  if (rulesetFunctions !== void 0) {
+    const rulesetFunctionsBaseDir = join(
+      rulesetUri,
+      ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
+    );
+    const resolvedFunctions: FunctionCollection = {};
+
+    await Promise.all(
+      rulesetFunctions.map(async fn => {
+        const fnName = Array.isArray(fn) ? fn[0] : fn;
+        const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
+
+        try {
+          const exportedFn = evaluateExport(
+            await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
+          ) as IFunction;
+
+          resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
+
+          Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
+            configurable: true,
+            value: fnName,
+          });
+        } catch (ex) {
+          console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
+        }
+      }),
+    );
+
+    mergeFunctions(functions, resolvedFunctions, rules);
+  }
+
+  return newRuleset;
 }

@@ -3,7 +3,7 @@ import * as ruleset from '../index.json';
 
 describe('oas2-oneOf', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'oas2-oneOf': Object.assign(ruleset.rules['oas2-oneOf'], {
       recommended: true,
       type: RuleType[ruleset.rules['oas2-oneOf'].type],

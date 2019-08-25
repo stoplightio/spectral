@@ -1,8 +1,8 @@
 import { isURL } from '@stoplight/path';
-import { readFile } from 'fs';
+import * as fs from 'fs';
 const fetch = require('node-fetch');
 
-async function doRead(name: string, encoding: string) {
+export async function readFile(name: string, encoding: string) {
   if (isURL(name)) {
     const response = await fetch(name);
     if (!response.ok) throw new Error(response.statusText);
@@ -10,7 +10,7 @@ async function doRead(name: string, encoding: string) {
   } else {
     try {
       return await new Promise((resolve, reject) => {
-        readFile(name, encoding, (err, data) => {
+        fs.readFile(name, encoding, (err, data) => {
           if (err !== null) {
             reject(err);
           } else {
@@ -26,7 +26,7 @@ async function doRead(name: string, encoding: string) {
 
 export async function readParsable(name: string, encoding: string): Promise<string> {
   try {
-    return await doRead(name, encoding);
+    return await readFile(name, encoding);
   } catch (ex) {
     throw new Error(`Could not parse ${name}: ${ex.message}`);
   }

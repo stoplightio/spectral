@@ -1,8 +1,8 @@
-import { readRulesFromRulesets } from '../reader';
+import { readRuleset } from '../reader';
 
 describe('Rulesets reader', () => {
   it('should resolve oas2-schema', async () => {
-    const rules = await readRulesFromRulesets('spectral:oas2');
+    const { rules } = await readRuleset('spectral:oas2');
     expect(rules['oas2-schema']).not.toHaveProperty('then.functionOptions.schema.$ref');
     expect(rules['oas2-schema']).toHaveProperty(
       'then.functionOptions.schema',
@@ -15,7 +15,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should resolve oas3-schema', async () => {
-    const rules = await readRulesFromRulesets('spectral:oas3');
+    const { rules } = await readRuleset('spectral:oas3');
     expect(rules['oas3-schema']).not.toHaveProperty('then.functionOptions.schema.$ref');
     expect(rules['oas3-schema']).toHaveProperty(
       'then.functionOptions.schema',

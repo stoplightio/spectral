@@ -35,3 +35,4 @@
 oclif.manifest.json
 /binaries
 /rulesets
+/src/__tests__/__fixtures__/oas-functions.json

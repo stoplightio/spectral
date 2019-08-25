@@ -9,7 +9,7 @@ A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
 
 ![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
-## Features
+## Spectral Features
 
 - Create custom rules to lint JSON or YAML objects
 - Ready to use rules to validate and lint OpenAPI v2 _and_ v3 documents

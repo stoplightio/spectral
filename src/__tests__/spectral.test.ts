@@ -35,7 +35,7 @@ describe('spectral', () => {
 
     test('should support loading multiple built-in rulesets', async () => {
       const s = new Spectral();
-      await s.loadRuleset('spectral:oas2', 'spectral:oas3');
+      await s.loadRuleset(['spectral:oas2', 'spectral:oas3']);
 
       expect(s.rules).toEqual(
         [
@@ -57,7 +57,7 @@ describe('spectral', () => {
     });
   });
 
-  describe('addRules & mergeRules', () => {
+  describe('setRules & mergeRules', () => {
     test('should not mutate the passing in rules object', () => {
       const givenCustomRuleSet = {
         rule1: {
@@ -73,7 +73,7 @@ describe('spectral', () => {
       const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
 
       const s = new Spectral();
-      s.addRules(givenCustomRuleSet);
+      s.setRules(givenCustomRuleSet);
 
       s.mergeRules({
         rule1: {
@@ -87,7 +87,7 @@ describe('spectral', () => {
     test('should update/append on the current rules', () => {
       const s = new Spectral();
 
-      s.addRules({
+      s.setRules({
         // @ts-ignore
         rule1: {
           message: '',
@@ -119,33 +119,6 @@ describe('spectral', () => {
 
       expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
       expect(s.rules.rule1.severity).toBe(DiagnosticSeverity.Error);
-    });
-  });
-
-  describe('addRuleDeclarations', () => {
-    describe('boolean value', () => {
-      test('should update the name rule recommended property', () => {
-        const s = new Spectral();
-
-        s.addRules({
-          // @ts-ignore
-          rule1: {
-            message: '',
-            given: '$',
-            recommended: false,
-            then: {
-              function: RuleFunction.TRUTHY,
-            },
-          },
-        });
-
-        s.applyRuleDeclarations({
-          rule1: true,
-        });
-
-        expect(Object.keys(s.rules)).toEqual(['rule1']);
-        expect(s.rules.rule1.recommended).toBe(true);
-      });
     });
   });
 

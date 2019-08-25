@@ -5,7 +5,7 @@ import * as oas2Schema from '../schemas/main.json';
 describe('oas2-schema', () => {
   const s = new Spectral();
 
-  s.addRules({
+  s.setRules({
     'oas2-schema': Object.assign({}, ruleset.rules['oas2-schema'], {
       recommended: true,
       type: RuleType[ruleset.rules['oas2-schema'].type],

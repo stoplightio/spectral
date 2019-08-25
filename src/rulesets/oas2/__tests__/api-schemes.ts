@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('api-schemes', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'api-schemes': Object.assign(ruleset.rules['api-schemes'], {
       recommended: true,
       type: RuleType[ruleset.rules['api-schemes'].type],

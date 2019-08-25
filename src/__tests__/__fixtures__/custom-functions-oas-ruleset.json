@@ -1,0 +1,52 @@
+{
+  "extends": ["spectral:oas"],
+  "functions": [
+    "truthy",
+    [
+      "hasIn",
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "property": {
+            "type": ["number", "string"]
+          }
+        }
+      }
+    ]
+  ],
+  "rules": {
+    "true-info-contact": {
+      "message": "Info must contain Stoplight",
+      "given": "$.info.contact",
+      "type": "style",
+      "then": {
+        "function": "truthy"
+      }
+    },
+    "has-info-property": {
+      "message": "{{error}}",
+      "given": "$",
+      "recommended": true,
+      "type": "style",
+      "then": {
+        "function": "hasIn",
+        "functionOptions": {
+          "property": "info"
+        }
+      }
+    },
+    "has-info-property-invalid": {
+      "message": "{{error}}",
+      "given": "$",
+      "type": "style",
+      "then": {
+        "function": "hasIn",
+        "functionOptions": {
+          "property": "info",
+          "foo": true
+        }
+      }
+    }
+  }
+}
