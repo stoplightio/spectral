@@ -208,21 +208,26 @@ export class Spectral {
     this.setRules(ruleset.rules);
 
     this.setFunctions(
-      Object.entries(ruleset.functions).reduce<FunctionCollection>((fns, [key, { code, ref, name, schema }]) => {
-        if (code === void 0) {
-          if (ref !== void 0) {
-            ({ code } = ruleset.functions[ref]);
+      Object.entries(ruleset.functions).reduce<FunctionCollection>(
+        (fns, [key, { code, ref, name, schema }]) => {
+          if (code === void 0) {
+            if (ref !== void 0) {
+              ({ code } = ruleset.functions[ref]);
+            }
           }
-        }
 
-        if (code === void 0) {
-          // shall we log or sth?
+          if (code === void 0) {
+            // shall we log or sth?
+            return fns;
+          }
+
+          fns[key] = compileExportedFunction(code, name, schema);
           return fns;
-        }
-
-        fns[key] = compileExportedFunction(code, name, schema);
-        return fns;
-      }, {}),
+        },
+        {
+          ...defaultFunctions,
+        },
+      ),
     );
   }
 
