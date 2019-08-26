@@ -35,7 +35,7 @@ paths:
 
 Every operation must have a unique `operationId`. 
 
-Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, all sorts of things like that. Giving each one a unique name avoids all sorts of problems.
+Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, all sorts of things like that.
 
 **Recommended:** Yes
 
