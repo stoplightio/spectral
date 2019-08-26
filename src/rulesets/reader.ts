@@ -25,7 +25,7 @@ export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
     processedRulesets.clear(); // makes sure each separate ruleset starts with clear list
     const resolvedRuleset = await processRuleset(uri, uri);
     if (resolvedRuleset === null) continue;
-    mergeRules(base.rules, resolvedRuleset.rules);
+    Object.assign(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
   }
 
@@ -87,7 +87,7 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
       }
     }
 
-    mergeRules(rules, ruleset.rules);
+    mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
     if (Array.isArray(ruleset.formats)) {
       mergeFormats(rules, ruleset.formats);
     }

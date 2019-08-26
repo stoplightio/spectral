@@ -1,5 +1,6 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
-import { Rule } from '../../types';
+import { HumanReadableDiagnosticSeverity, Rule } from '../../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
 import { isValidRule } from '../validation';
@@ -20,10 +21,11 @@ export function mergeRules(
     if (rulesetSeverity !== undefined) {
       const severity = getSeverityLevel(source, name, rulesetSeverity);
       if (isValidRule(rule)) {
+        markRule(rule);
         rule.severity = severity;
         processRule(target, name, rule);
       } else {
-        processRule(target, name, severity);
+        processRule(target, name, typeof rule === 'boolean' ? rule : severity);
       }
     } else {
       processRule(target, name, rule);
@@ -79,7 +81,6 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
       break;
     case 'object':
-      normalizeRule(rule);
       if (Array.isArray(rule)) {
         processRule(rules, name, rule[0]);
 
@@ -91,8 +92,10 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
           updateRootRule(existingRule, null);
         }
       } else if (isValidRule(existingRule)) {
+        normalizeRule(rule, existingRule.severity);
         updateRootRule(existingRule, rule);
       } else {
+        normalizeRule(rule, getSeverityLevel(rules, name, rule));
         // new rule
         markRule(rule);
         rules[name] = rule;
@@ -104,12 +107,10 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
   }
 }
 
-function normalizeRule(rule: FileRule) {
-  if (isValidRule(rule)) {
-    if (rule.severity === undefined) {
-      rule.severity = DEFAULT_SEVERITY_LEVEL;
-    } else {
-      rule.severity = getDiagnosticSeverity(rule.severity);
-    }
+function normalizeRule(rule: Rule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined) {
+  if (rule.severity === void 0) {
+    rule.severity = severity === void 0 ? (rule.recommended ? DEFAULT_SEVERITY_LEVEL : -1) : severity;
+  } else {
+    rule.severity = getDiagnosticSeverity(rule.severity);
   }
 }

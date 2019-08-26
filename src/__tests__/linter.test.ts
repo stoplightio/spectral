@@ -541,9 +541,6 @@ responses:: !!foo
         path: ['components', 'schemas', 'foo', 'example'],
       }),
       expect.objectContaining({
-        code: 'model-description',
-      }),
-      expect.objectContaining({
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],

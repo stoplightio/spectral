@@ -1,4 +1,5 @@
 {
+  "extends": ["spectral:oas2", "spectral:oas3"],
   "formats": ["oas2", "oas3"],
   "functions": [
     "oasOp2xxResponse",

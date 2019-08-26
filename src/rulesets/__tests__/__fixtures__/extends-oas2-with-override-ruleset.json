@@ -5,6 +5,7 @@
     "operation-2xx-response": {
       "description": "should be overridden",
       "given": "$.info",
+      "recommended": true,
       "then": {
         "function": "truthy"
       }

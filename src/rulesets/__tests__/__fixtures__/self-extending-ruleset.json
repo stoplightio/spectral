@@ -4,6 +4,7 @@
     "foo-rule": {
       "message": "Foo",
       "given": "$",
+      "recommended": true,
       "then": {
         "function": "falsy"
       }

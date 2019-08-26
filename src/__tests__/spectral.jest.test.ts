@@ -16,24 +16,26 @@ describe('Spectral', () => {
       const s = new Spectral();
       await s.loadRuleset(path.join(__dirname, '__fixtures__/custom-oas-ruleset.json'));
 
-      expect(s.rules).toEqual({
-        ...[...Object.entries(oasRuleset.rules)].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
-          oasRules[name] = {
-            name,
-            ...rule,
-            formats: expect.arrayContaining([expect.any(String)]),
-            severity: expect.any(Number),
-            then: expect.any(Object),
-          };
+      expect(s.rules).toEqual(
+        expect.objectContaining({
+          ...[...Object.entries(oasRuleset.rules)].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
+            oasRules[name] = {
+              name,
+              ...rule,
+              formats: expect.arrayContaining([expect.any(String)]),
+              severity: expect.any(Number),
+              then: expect.any(Object),
+            };
 
-          return oasRules;
-        }, {}),
-        'info-matches-stoplight': {
-          ...customOASRuleset.rules['info-matches-stoplight'],
-          name: 'info-matches-stoplight',
-          severity: DiagnosticSeverity.Warning,
-        },
-      });
+            return oasRules;
+          }, {}),
+          'info-matches-stoplight': {
+            ...customOASRuleset.rules['info-matches-stoplight'],
+            name: 'info-matches-stoplight',
+            severity: DiagnosticSeverity.Warning,
+          },
+        }),
+      );
     });
 
     test('should support loading rulesets over http', async () => {
@@ -65,7 +67,7 @@ describe('Spectral', () => {
         'info-matches-stoplight': {
           ...ruleset.rules['info-matches-stoplight'],
           name: 'info-matches-stoplight',
-          severity: DiagnosticSeverity.Warning,
+          severity: -1,
         },
       });
     });
