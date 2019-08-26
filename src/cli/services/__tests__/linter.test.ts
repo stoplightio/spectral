@@ -38,7 +38,16 @@ describe('Linter service', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          range: {},
+          range: {
+            end: {
+              character: 14,
+              line: 5,
+            },
+            start: {
+              character: 10,
+              line: 5,
+            },
+          },
           source: expect.stringContaining('/__tests__/__fixtures__/gh-474/common.yaml'),
         }),
       ]),
@@ -60,7 +69,16 @@ describe('Linter service', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          range: {},
+          range: {
+            end: {
+              character: 14,
+              line: 5,
+            },
+            start: {
+              character: 10,
+              line: 5,
+            },
+          },
           source: expect.stringContaining('/__tests__/__fixtures__/gh-474/common.yaml'),
         }),
       ]),
