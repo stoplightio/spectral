@@ -43,10 +43,10 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
     mergeKeys: true,
   });
 
-  const { functions, rules } = await loadRulesets(
-    process.cwd(),
-    rulesetFile || (await getDefaultRulesetFile(process.cwd())),
-  );
+  const rulesetFiles = rulesetFile || (await getDefaultRulesetFile(process.cwd()));
+  const { functions, rules } = await (rulesetFiles
+    ? loadRulesets(process.cwd(), rulesetFiles)
+    : readRuleset('spectral:oas'));
 
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
@@ -76,8 +76,11 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
 
   if (flags.skipRule) {
     spectral.setRules(skipRules(rules, flags));
-    spectral.setFunctions(functions);
+  } else {
+    spectral.setRules(rules);
   }
+
+  spectral.setFunctions(functions);
 
   const parsedResult: IParsedResult = {
     source: targetUri,
