@@ -1,10 +1,6 @@
 import * as path from '@stoplight/path';
 import { findFile } from '../finder';
 
-// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
-// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
-declare var it: jest.It;
-
 describe('Rulesets finder', () => {
   it('should join relative path', () => {
     return expect(findFile(__dirname, './finder.jest.test.ts')).resolves.toEqual(

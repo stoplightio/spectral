@@ -1,9 +1,5 @@
 import { isOpenApiv2, isOpenApiv3, isOpenApiv3_1 } from '../lookups';
 
-// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
-// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
-declare var it: jest.It;
-
 describe('Format lookups', () => {
   describe('OpenAPI 2.0 aka Swagger', () => {
     it.each(['2.0.0', '2', '2.0'])('recognizes %s version correctly', version => {
