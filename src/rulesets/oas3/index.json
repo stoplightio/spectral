@@ -96,18 +96,6 @@
       "tags": [
         "schema"
       ]
-    },
-    "$ref-siblings": {
-      "description": "$ref cannot be placed among any other property",
-      "message": "{{error}}",
-      "type": "validation",
-      "severity": 0,
-      "recommended": true,
-      "unresolved": true,
-      "given": "$",
-      "then": {
-        "function": "refSiblings"
-      }
     }
   }
 }
