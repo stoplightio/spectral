@@ -1,4 +1,5 @@
 {
+  "extends": ["spectral:oas2", "spectral:oas3"],
   "formats": ["oas2", "oas3"],
   "functions": [
     "oasOp2xxResponse",
@@ -413,6 +414,20 @@
       "tags": [
         "api"
       ]
+    },
+    "valid-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?(@.example)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
     }
   }
 }

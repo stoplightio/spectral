@@ -9,9 +9,9 @@ describe('oasOpSecurityDefined', () => {
     const s = new Spectral();
     s.setFunctions({ oasOpSecurityDefined });
     s.setRules({
-      'operation-security-defined': Object.assign(oas2Rules['operation-security-defined'], {
+      'oas2-operation-security-defined': Object.assign(oas2Rules['oas2-operation-security-defined'], {
         recommended: true,
-        type: RuleType[oas2Rules['operation-security-defined'].type],
+        type: RuleType[oas2Rules['oas2-operation-security-defined'].type],
       }),
     });
 
@@ -53,7 +53,7 @@ describe('oasOpSecurityDefined', () => {
 
       expect(results).toEqual([
         {
-          code: 'operation-security-defined',
+          code: 'oas2-operation-security-defined',
           message: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
           path: ['paths', '/path', 'get', 'security', '0'],
           range: {
@@ -76,9 +76,9 @@ describe('oasOpSecurityDefined', () => {
     const s = new Spectral();
     s.setFunctions({ oasOpSecurityDefined });
     s.setRules({
-      'operation-security-defined': Object.assign(oas3Rules['operation-security-defined'], {
+      'oas3-operation-security-defined': Object.assign(oas3Rules['oas3-operation-security-defined'], {
         recommended: true,
-        type: RuleType[oas3Rules['operation-security-defined'].type],
+        type: RuleType[oas3Rules['oas3-operation-security-defined'].type],
       }),
     });
 
@@ -122,7 +122,7 @@ describe('oasOpSecurityDefined', () => {
 
       expect(results).toEqual([
         {
-          code: 'operation-security-defined',
+          code: 'oas3-operation-security-defined',
           message:
             'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
           path: ['paths', '/path', 'get', 'security', '0'],

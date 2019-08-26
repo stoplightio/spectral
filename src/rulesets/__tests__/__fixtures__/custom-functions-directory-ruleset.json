@@ -8,6 +8,7 @@
     "bar-rule": {
       "message": "should be OK",
       "given": "$.info",
+      "recommended": true,
       "then": {
         "function": "bar"
       }
@@ -15,6 +16,7 @@
     "truthy-rule": {
       "message": "should be OK",
       "given": "$.x",
+      "recommended": true,
       "then": {
         "function": "truthy"
       }

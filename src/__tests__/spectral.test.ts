@@ -16,19 +16,21 @@ describe('spectral', () => {
       await s.loadRuleset('spectral:oas2');
 
       expect(s.rules).toEqual(
-        [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (oasRules, [name, rule]) => {
-            oasRules[name] = {
-              name,
-              ...rule,
-              formats: expect.arrayContaining([expect.any(String)]),
-              severity: expect.any(Number),
-              then: expect.any(Object),
-            };
+        expect.objectContaining(
+          [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+            (oasRules, [name, rule]) => {
+              oasRules[name] = {
+                name,
+                ...rule,
+                formats: expect.arrayContaining([expect.any(String)]),
+                severity: expect.any(Number),
+                then: expect.any(Object),
+              };
 
-            return oasRules;
-          },
-          {},
+              return oasRules;
+            },
+            {},
+          ),
         ),
       );
     });

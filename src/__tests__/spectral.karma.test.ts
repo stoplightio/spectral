@@ -1,4 +1,3 @@
-import { DiagnosticSeverity } from '@stoplight/types';
 import { FetchMockSandbox } from 'fetch-mock';
 import { Spectral } from '../spectral';
 
@@ -45,7 +44,7 @@ describe('Spectral', () => {
         'info-matches-stoplight': {
           ...ruleset.rules['info-matches-stoplight'],
           name: 'info-matches-stoplight',
-          severity: DiagnosticSeverity.Warning,
+          severity: -1,
         },
       });
     });

@@ -73,7 +73,7 @@
         "function": "truthy"
       }
     },
-    "operation-security-defined": {
+    "oas2-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
       "recommended": true,
       "type": "validation",
@@ -89,20 +89,6 @@
       "tags": [
         "operation"
       ]
-    },
-    "valid-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "type": "validation",
-      "given": "$..[?(@.example)]",
-      "then": {
-        "function": "schemaPath",
-        "functionOptions": {
-          "field": "example",
-          "schemaPath": "$"
-        }
-      }
     },
     "oas2-anyOf": {
       "description": "OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.",

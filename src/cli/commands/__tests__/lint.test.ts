@@ -236,7 +236,7 @@ describe('lint', () => {
           expect(ctx.stdout).toContain(
             '46:24  warning  operation-description   Operation `description` must be present and non-empty string',
           );
-          expect(ctx.stdout).toContain('28 problems (0 errors, 28 warnings, 0 infos)');
+          expect(ctx.stdout).toContain('22 problems (0 errors, 22 warnings, 0 infos)');
           expect(ctx.stdout).toContain('OpenAPI 2.0 (Swagger) detected');
         });
     });
@@ -256,16 +256,16 @@ describe('lint', () => {
       .it('outputs warnings/errors in a parseable json format', ctx => {
         expect(JSON.parse(ctx.stdout)).toEqual([
           expect.objectContaining({
+            code: 'api-servers',
+            message: 'OpenAPI `servers` must be present and non-empty array.',
+          }),
+          expect.objectContaining({
             message: 'Info object should contain `contact` object.',
             code: 'info-contact',
           }),
           expect.objectContaining({
             code: 'info-description',
             message: 'OpenAPI object info `description` must be present and non-empty string.',
-          }),
-          expect.objectContaining({
-            code: 'api-servers',
-            message: 'OpenAPI `servers` must be present and non-empty array.',
           }),
         ]);
       });
@@ -357,22 +357,6 @@ describe('lint', () => {
       .it('outputs errors occurring in referenced files', ctx => {
         expect(JSON.parse(ctx.stdout)).toEqual([
           expect.objectContaining({
-            code: 'info-description',
-            message: 'OpenAPI object info `description` must be present and non-empty string.',
-            path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted file, but there is such in spec when working on resolved file
-            range: {
-              end: {
-                character: 22,
-                line: 5,
-              },
-              start: {
-                character: 21,
-                line: 5,
-              },
-            },
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
-          }),
-          expect.objectContaining({
             code: 'api-schemes',
             message: 'OpenAPI host `schemes` must be present and non-empty array.',
             path: [],
@@ -395,6 +379,22 @@ describe('lint', () => {
             },
             source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
           }),
+          expect.objectContaining({
+            code: 'info-description',
+            message: 'OpenAPI object info `description` must be present and non-empty string.',
+            path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted file, but there is such in spec when working on resolved file
+            range: {
+              end: {
+                character: 22,
+                line: 5,
+              },
+              start: {
+                character: 21,
+                line: 5,
+              },
+            },
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/info.json'),
+          }),
         ]);
       });
 
@@ -403,22 +403,6 @@ describe('lint', () => {
       .command(['lint', draftNestedRefSpec, '-q', '-f=json'])
       .it('outputs errors occurring in nested referenced files', ctx => {
         expect(JSON.parse(ctx.stdout)).toEqual([
-          expect.objectContaining({
-            code: 'info-description',
-            message: 'OpenAPI object info `description` must be present and non-empty string.',
-            path: ['info', 'description'],
-            range: {
-              end: {
-                character: 18,
-                line: 2,
-              },
-              start: {
-                character: 17,
-                line: 2,
-              },
-            },
-            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),
-          }),
           expect.objectContaining({
             code: 'api-schemes',
             message: 'OpenAPI host `schemes` must be present and non-empty array.',
@@ -438,6 +422,22 @@ describe('lint', () => {
               start: {
                 character: 0,
                 line: 0,
+              },
+            },
+            source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),
+          }),
+          expect.objectContaining({
+            code: 'info-description',
+            message: 'OpenAPI object info `description` must be present and non-empty string.',
+            path: ['info', 'description'],
+            range: {
+              end: {
+                character: 18,
+                line: 2,
+              },
+              start: {
+                character: 17,
+                line: 2,
               },
             },
             source: expect.stringContaining('src/cli/commands/__tests__/__fixtures__/refs/contact.json'),

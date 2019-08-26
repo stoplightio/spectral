@@ -9,6 +9,7 @@
       "message": "{{error}}",
       "given": "$",
       "type": "style",
+      "recommended": true,
       "then": {
         "function": "hasIn",
         "functionOptions": {
