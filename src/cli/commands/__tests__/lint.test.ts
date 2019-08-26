@@ -138,9 +138,20 @@ describe('lint', () => {
   });
 
   it('errors upon exception', async () => {
+    const error = new Error('Failure');
     (lint as jest.Mock).mockReset();
-    (lint as jest.Mock).mockRejectedValueOnce('Error');
+    (lint as jest.Mock).mockReturnValueOnce({
+      // could be mockRejectedValueOnce, but Node 8 does not like it (different ticking?), so here is the workaround
+      then() {
+        return this;
+      },
+      catch(fn: Function) {
+        fn(error);
+        return this;
+      },
+    });
+
     await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
-    expect(errorSpy).toBeCalledWith('Error');
+    expect(errorSpy).toBeCalledWith(error);
   });
 });
