@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { readRuleset } = require('../dist/rulesets');
 
-const dist = path.join(__dirname, '../rulesets/precompiled/')
+const dist = path.join(__dirname, '../rulesets/precompiled/');
 
 const rulesetNames = ['oas2', 'oas3', 'oas'];
 
