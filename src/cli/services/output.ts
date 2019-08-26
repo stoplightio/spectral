@@ -6,7 +6,7 @@ import { OutputFormat } from '../../types/config';
 
 const writeFileAsync = promisify(writeFile);
 
-export async function formatOutput(results: IRuleResult[], format: OutputFormat): Promise<string> {
+export function formatOutput(results: IRuleResult[], format: OutputFormat): string {
   return {
     json: () => json(results),
     stylish: () => stylish(results),

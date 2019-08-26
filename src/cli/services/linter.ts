@@ -1,9 +1,10 @@
 import { isAbsolute, resolve } from '@stoplight/path';
-import { IParserResult } from '@stoplight/types';
+import { IParserResult, Optional } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
+import { getDefaultRulesetFile } from '../../rulesets/loader';
 import { isOpenApiv2, isOpenApiv3 } from '../../rulesets/lookups';
 import { readRuleset } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
@@ -11,7 +12,14 @@ import { IParsedResult, RuleCollection } from '../../types';
 import { ILintConfig } from '../../types/config';
 import { IRuleset } from '../../types/ruleset';
 
-export async function loadRulesets(cwd: string, rulesetFiles: string | string[]): Promise<IRuleset> {
+export async function loadRulesets(cwd: string, rulesetFiles: string | string[] | null): Promise<IRuleset> {
+  if (rulesetFiles === null || rulesetFiles.length === 0) {
+    return {
+      functions: {},
+      rules: {},
+    };
+  }
+
   return readRuleset(
     (Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles]).map(
       file => (isAbsolute(file) ? file : resolve(cwd, file)),
@@ -19,7 +27,7 @@ export async function loadRulesets(cwd: string, rulesetFiles: string | string[])
   );
 }
 
-export async function lint(name: string, flags: ILintConfig, ruleset: IRuleset) {
+export async function lint(name: string, flags: ILintConfig, rulesetFile: Optional<string | string[]>) {
   if (flags.verbose) {
     console.info(`Linting ${name}`);
   }
@@ -35,11 +43,16 @@ export async function lint(name: string, flags: ILintConfig, ruleset: IRuleset) 
     mergeKeys: true,
   });
 
+  const { functions, rules } = await loadRulesets(
+    process.cwd(),
+    rulesetFile || (await getDefaultRulesetFile(process.cwd())),
+  );
+
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
   if (flags.verbose) {
-    if (ruleset.rules) {
-      console.info(`Found ${Object.keys(ruleset.rules).length} rules`);
+    if (rules) {
+      console.info(`Found ${Object.keys(rules).length} rules`);
     } else {
       console.info('No rules loaded, attempting to detect document type');
     }
@@ -62,8 +75,8 @@ export async function lint(name: string, flags: ILintConfig, ruleset: IRuleset) 
   });
 
   if (flags.skipRule) {
-    spectral.setRules(skipRules(ruleset.rules, flags));
-    spectral.setFunctions(ruleset.functions);
+    spectral.setRules(skipRules(rules, flags));
+    spectral.setFunctions(functions);
   }
 
   const parsedResult: IParsedResult = {
