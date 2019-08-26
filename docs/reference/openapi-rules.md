@@ -309,7 +309,7 @@ Seeing as operationId is often used for unique URLs in documentation systems, it
 
 **Bad Example**
 
-```
+```yaml
 paths:
   /pets:
     get:
