@@ -1,8 +1,10 @@
 import { safeStringify } from '@stoplight/json';
-import { Resolver } from '@stoplight/json-ref-resolver';
+import {
+  getLocationForJsonPath as getLocationForJsonPathJSON,
+  parseWithPointers as parseJSONWithPointers,
+} from '@stoplight/json';
+import { Cache, Resolver } from '@stoplight/json-ref-resolver';
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
-import { getLocationForJsonPath as getLocationForJsonPathJSON } from '@stoplight/json/getLocationForJsonPath';
-import { parseWithPointers as parseJSONWithPointers } from '@stoplight/json/parseWithPointers';
 import { extname } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
 import {
@@ -33,9 +35,11 @@ export class Spectral {
   private _rules: RuleCollection = {};
   private _functions: FunctionCollection = defaultFunctions;
   private _resolver: Resolver;
+  private _uriCache: Cache;
 
   constructor(opts?: IConstructorOpts) {
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+    this._uriCache = new Cache();
   }
 
   public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
@@ -58,6 +62,7 @@ export class Spectral {
     const resolved = new Resolved(
       parsedResult,
       await this._resolver.resolve(parsedResult.parsed.data, {
+        uriCache: this._uriCache,
         baseUri: documentUri,
         parseResolveResult: async resolveOpts => {
           const ref = resolveOpts.targetAuthority.toString();
