@@ -48,24 +48,33 @@ rules:
       function: "abc"
 ```
 
-Optionally, if you'd like to validate the function options, you can provide a JSON Schema.
-You can do it as follows
+If your function accepts options, you should provide a JSON Schema that describes those options.
+
+You can do it as follows:
 
 ```yaml
-functions: [[abc, { type: "string" }]] # can be any valid JSONSchema7
+functions:
+- - abc
+  # can be any valid JSONSchema7
+  - properties:
+      sort:
+        type: boolean
+        description: enforces that abc is sorted
 rules:
   my-rule:
     message: "{{error}}"
     given: "$.info"
     then:
       function: "abc"
+      functionOptions:
+        sort: true
 ```
 
 If for some reason, you do not want to place your functions in a directory called `functions`, you can specify a custom directory.
 
 ```yaml
-functions: [[abc, { type: "string" }]] # can be any valid JSONSchema7
-functionsDir: "./my-functions" # any path relative to the ruleset file is okay
+# any path relative to the ruleset file is okay
+functionsDir: "./my-functions"
 rules:
   my-rule:
     message: "{{error}}"
