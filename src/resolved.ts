@@ -15,7 +15,7 @@ export class Resolved {
   constructor(public spec: IParsedResult, resolveResult: IResolveResult, public parsedMap: IParseMap) {
     this.refMap = resolveResult.refMap;
     this.resolved = resolveResult.result;
-    this.unresolved = spec.parsed;
+    this.unresolved = spec.parsed.data;
     this.errors = resolveResult.errors;
     this.format = spec.format;
   }
