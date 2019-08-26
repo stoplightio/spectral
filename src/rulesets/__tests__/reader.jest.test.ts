@@ -246,7 +246,7 @@ describe('Rulesets reader', () => {
 
   it('should persist disabled properties of extended rulesets', () => {
     return expect(readRuleset(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
-      'rules.operation-security-defined',
+      'rules.oas2-operation-security-defined',
       {
         given: '$',
         recommended: true,

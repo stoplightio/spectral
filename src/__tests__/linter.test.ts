@@ -536,12 +536,12 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
-        code: 'model-description',
-      }),
-      expect.objectContaining({
         code: 'valid-example',
         message: '"foo.example" property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
+      }),
+      expect.objectContaining({
+        code: 'model-description',
       }),
       expect.objectContaining({
         code: 'oas3-schema',

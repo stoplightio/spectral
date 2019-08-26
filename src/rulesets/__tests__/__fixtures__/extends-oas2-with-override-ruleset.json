@@ -1,7 +1,7 @@
 {
   "extends": [["spectral:oas2", "all"]],
   "rules": {
-    "operation-security-defined": "off",
+    "oas2-operation-security-defined": "off",
     "operation-2xx-response": {
       "description": "should be overridden",
       "given": "$.info",

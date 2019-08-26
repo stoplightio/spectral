@@ -34,7 +34,7 @@
         "function": "truthy"
       }
     },
-    "operation-security-defined": {
+    "oas3-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
       "recommended": true,
       "type": "validation",
@@ -75,20 +75,6 @@
         "function": "pattern",
         "functionOptions": {
           "notMatch": "/$"
-        }
-      }
-    },
-    "valid-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "type": "validation",
-      "given": "$..[?(@.example)]",
-      "then": {
-        "function": "schemaPath",
-        "functionOptions": {
-          "field": "example",
-          "schemaPath": "$"
         }
       }
     },
