@@ -10,7 +10,7 @@ export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) 
   /**
    * This rule verifies:
    *
-   * 1. for every param defined in the path string ie /users/{userId}, var must be defined in either
+   * 1. for every param referenced in the path string ie /users/{userId}, var must be defined in either
    *    path.parameters, or operation.parameters object
    * 2. every path.parameters + operation.parameters property must be used in the path string
    */
