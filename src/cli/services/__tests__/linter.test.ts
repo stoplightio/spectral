@@ -24,6 +24,23 @@ function run(command: string) {
 }
 
 describe('Linter service', () => {
+  let logSpy: jest.SpyInstance;
+  let warnSpy: jest.SpyInstance;
+  let errorSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    const { log, warn, error } = console;
+    logSpy = jest.spyOn(console, 'log').mockImplementation(log);
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(warn);
+    errorSpy = jest.spyOn(console, 'error').mockImplementation(error);
+  });
+
+  afterEach(() => {
+    logSpy.mockRestore();
+    warnSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
   it('should handle relative path to a document', async () => {
     const results = await run('lint src/__tests__/__fixtures__/gh-474/spec.yaml');
     expect(results).toEqual(
