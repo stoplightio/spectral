@@ -9,7 +9,7 @@ const rulesetNames = ['oas2', 'oas3', 'oas'];
 
 try {
   fs.mkdirSync(dist);
-} catch {
+} catch (ex) {
 
 }
 
