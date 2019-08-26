@@ -101,7 +101,7 @@ linting ./openapi.yaml
 
     if (args.source) {
       try {
-        await lint(args.source, lintConfig, this, rules);
+        await lint(isAbsolute(args.source) ? args.source : resolve(cwd, args.source), lintConfig, this, rules);
       } catch (ex) {
         this.error(ex.message);
       }

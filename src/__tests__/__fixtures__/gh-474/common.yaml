@@ -1,0 +1,10 @@
+openapi: 3.0.0
+info:
+  title: Common schema definition
+  version: 1.0.0
+  contact:
+    name: null
+components:
+  schemas:
+    ResponseType:
+      type: string

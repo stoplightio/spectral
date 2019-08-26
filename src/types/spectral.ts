@@ -47,8 +47,8 @@ export interface IGivenNode {
   value: any;
 }
 
-export interface IParsedResult {
+export interface IParsedResult<R extends IParserResult = IParserResult<unknown, any, any, any>> {
   parsed: IParserResult;
-  getLocationForJsonPath: GetLocationForJsonPath<any, any>;
+  getLocationForJsonPath: GetLocationForJsonPath<R>;
   source?: string;
 }
