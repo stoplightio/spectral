@@ -20,7 +20,7 @@ Operation must have at least one `2xx` response. Any API operation (endpoint) ca
 
 **Recommended:** Yes
 
-**Good Example**
+**Bad Example**
 
 ```yaml
 paths:
@@ -281,7 +281,7 @@ Why? Well, you _can_ reference tags arbitrarily in operations, and definition is
     - Invoice Items
 ```
 
-Defining tags allows you to add more information like a `description`. (See [tag-description](#tag-description))
+Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
 
 **Recommended:** No
 
@@ -348,9 +348,9 @@ Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
 
 ### path-keys-no-trailing-slash
 
-**Recommended:** Yes
-
 Keep trailing slashes off of paths, as it can cause some confusion. Some web tooling (like mock servers, real servers, code generators, application frameworks, etc.) will treat `example.com/foo` and `example.com/foo/` as the same thing, but other tooling will not. Avoid any confusion by just documenting them without the slash, and maybe some tooling will let people shove a / on there when they're using it or maybe not, but at least the docs are suggesting how it should be done properly.
+
+**Recommended:** Yes
 
 ### path-not-include-query
 
@@ -359,7 +359,6 @@ Don't put query string items in the path, they belong in parameters with `in: qu
 **Recommended:** Yes
 
 ### tag-description
-
 
 Tags alone are not very descriptive. Give folks a bit more information to work with.
 
