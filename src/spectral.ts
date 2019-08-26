@@ -157,10 +157,6 @@ export class Spectral {
     }
   }
 
-  public setRules(rules: RuleCollection) {
-    this._rules = rules;
-  }
-
   public mergeRules(rules: PartialRuleCollection) {
     for (const name in rules) {
       if (!rules.hasOwnProperty(name)) continue;

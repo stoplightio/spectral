@@ -4,6 +4,8 @@ import * as yargs from 'yargs';
 
 import lintCommand from '../lint';
 
+jest.mock('../../services/output');
+
 // TODO Move these into relevant contexts, and if there are no shared contexts rejig tests to make them
 // const oas2PetstoreSpecPath = resolve(__dirname, '../../../__tests__/__fixtures__/petstore.oas2.json');
 // const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
@@ -16,10 +18,12 @@ import lintCommand from '../lint';
 // const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
 // const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 
-function run(command: string | string[]) {
-  const parser = yargs.command(lintCommand);
+function run(command: string) {
+  const parser = yargs.command(lintCommand).help();
   return new Promise(done => {
-    parser.parse(command, (_err: Error, commandPromise: Promise<unknown>) => commandPromise.then(done));
+    parser.parse(command, (err: Error, argv: any, output: string) => {
+      done(output);
+    });
   });
 }
 
@@ -30,14 +34,14 @@ describe('lint', () => {
   });
 
   it('should handle relative path to a document', async () => {
-    const output = await run(['lint', 'src/__tests__/__fixtures__/gh-474/spec.yaml']);
-    expect(output).not.toContain('invalid-ref');
-    expect(output).toContain(`/__tests__/__fixtures__/gh-474/common.yaml
- 6:11  error  oas3-schema  type should be string`);
+    const output = await run('lint src/__tests__/__fixtures__/gh-474/spec.yaml');
+    expect(output).toEqual('dsa');
+
+    // 6:11  error  oas3-schema  type should be string`);
   });
 
   it('should handle relative path to a document #2', async () => {
-    const output = await run(['lint', 'src/__tests__/__fixtures__/gh-474/spec-2.yaml']);
+    const output = await run('lint src/__tests__/__fixtures__/gh-474/spec-2.yaml');
     expect(output).not.toContain('invalid-ref');
     expect(output).toContain(`/__tests__/__fixtures__/gh-474/common.yaml
  6:11  error  oas3-schema  type should be string`);
@@ -48,7 +52,7 @@ describe('lint', () => {
       const document = resolve(__dirname, '__fixtures__/openapi-3.0-valid.yaml');
 
       it('outputs no issues', async () => {
-        const output = await run(['lint', document]);
+        const output = await run(`lint ${document}`);
         expect(output).toContain('No errors or warnings found!');
       });
     });
@@ -57,7 +61,7 @@ describe('lint', () => {
       const document = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 
       it('outputs warnings in default format', async () => {
-        const output = await run(['lint', document]);
+        const output = await run(`lint ${document}`);
         expect(output).toContain('OpenAPI 3.x detected');
         expect(output).toContain('OpenAPI `servers` must be present and non-empty array');
         expect(output).toContain('Info object should contain `contact` object');

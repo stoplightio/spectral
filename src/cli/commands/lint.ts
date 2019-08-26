@@ -1,27 +1,23 @@
-import { writeFile } from 'fs';
-import { promisify } from 'util';
-import { CommandModule } from 'yargs';
+import { CommandModule, showHelp } from 'yargs';
 
-import { IRuleResult } from '../..';
-import { json, stylish } from '../../formatters';
 import { getDefaultRulesetFile } from '../../rulesets/loader';
-import { RuleCollection } from '../../types';
 import { ILintConfig, OutputFormat } from '../../types/config';
+import { IRuleset } from '../../types/ruleset';
 import { lint, loadRulesets } from '../services/linter';
-
-const writeFileAsync = promisify(writeFile);
+import { formatOutput, writeOutput } from '../services/output';
 
 const lintCommand: CommandModule = {
-  describe: 'lint a JSON/YAML document from a file or URL',
-  command: `lint <document>`,
+  describe: 'Start a mock server with the given spec file',
+  command: 'lint <document>',
   builder: yargs =>
     yargs
       .positional('document', {
         description: 'Location of a JSON/YAML document. Can be either a file or a fetchable resource on the web.',
         type: 'string',
       })
+      .usage('boo')
       .fail(() => {
-        yargs.showHelp();
+        showHelp();
       })
       .options({
         encoding: {
@@ -71,17 +67,23 @@ const lintCommand: CommandModule = {
       document: string;
     };
 
+    showHelp('error');
+
     try {
       const cwd = process.cwd();
       const rulesetFile = ruleset || (await getDefaultRulesetFile(cwd));
 
-      let rules: RuleCollection = {};
+      let loadedRuleset: IRuleset = {
+        functions: {},
+        rules: {},
+      };
+
       if (!(rulesetFile === null || rulesetFile.length === 0)) {
-        rules = await loadRulesets(cwd, rulesetFile);
+        loadedRuleset = await loadRulesets(cwd, rulesetFile);
       }
 
       const config = { encoding, format, ruleset, quiet, verbose };
-      const results = await lint(document, config, rules);
+      const results = await lint(document, config, loadedRuleset);
 
       const formattedOutput = await formatOutput(results, format);
       await writeOutput(formattedOutput, output);
@@ -96,20 +98,6 @@ const lintCommand: CommandModule = {
 function fail(err: Error): void {
   console.error(err);
   process.exit(2);
-}
-
-async function formatOutput(results: IRuleResult[], format: OutputFormat): Promise<string> {
-  return {
-    json: () => json(results),
-    stylish: () => stylish(results),
-  }[format]();
-}
-
-async function writeOutput(outputStr: string, outputFile?: string) {
-  if (outputFile) {
-    return writeFileAsync(outputFile, outputStr);
-  }
-  console.log(outputStr);
 }
 
 export default lintCommand;
