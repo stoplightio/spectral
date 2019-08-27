@@ -40,7 +40,7 @@ export const runRules = (
 };
 
 const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
-  const target = rule.unresolved ? resolved.unresolved : resolved.resolved;
+  const target = rule.isResolved === false ? resolved.unresolved : resolved.resolved;
 
   const results: IRuleResult[] = [];
   const nodes: IGivenNode[] = [];

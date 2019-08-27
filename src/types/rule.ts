@@ -26,8 +26,9 @@ export interface IRule<T = string, O = any> {
   // Filter the target down to a subset[] with a JSON path
   given: string;
 
-  // If true, rule will operate on original (unresolved) data
-  unresolved?: boolean;
+  // If false, rule will operate on original (unresolved) data
+  // If undefined or true, resolved data will be supplied
+  isResolved?: boolean;
 
   when?: {
     // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object

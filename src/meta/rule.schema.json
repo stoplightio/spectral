@@ -68,7 +68,7 @@
                 "given": {
                     "type": "string"
                 },
-                "unresolved": {
+                "isResolved": {
                     "type": "boolean"
                 },
                 "severity": {

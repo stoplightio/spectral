@@ -436,7 +436,7 @@
       "type": "validation",
       "severity": 0,
       "recommended": true,
-      "unresolved": true,
+      "isResolved": false,
       "given": "$",
       "then": {
         "function": "refSiblings"
