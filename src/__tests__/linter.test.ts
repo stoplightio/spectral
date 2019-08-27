@@ -895,8 +895,8 @@ responses:: !!foo
     expect(results).toEqual(
       expect.arrayContaining([
         {
-          code: '$ref-siblings',
-          message: 'Property cannot be placed among $ref',
+          code: 'no-$ref-siblings',
+          message: '$ref cannot be placed next to any other properties',
           path: ['responses'],
           range: {
             end: {
@@ -911,8 +911,8 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
         },
         {
-          code: '$ref-siblings',
-          message: 'Property cannot be placed among $ref',
+          code: 'no-$ref-siblings',
+          message: '$ref cannot be placed next to any other properties',
           path: ['responses', '300', 'description'],
           range: {
             end: {
@@ -927,8 +927,8 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
         },
         {
-          code: '$ref-siblings',
-          message: 'Property cannot be placed among $ref',
+          code: 'no-$ref-siblings',
+          message: '$ref cannot be placed next to any other properties',
           path: ['responses', '300', 'abc'],
           range: {
             end: {

@@ -430,8 +430,8 @@
         }
       }
     },
-    "$ref-siblings": {
-      "description": "$ref cannot be placed among any other property",
+    "no-$ref-siblings": {
+      "description": "Property cannot be placed among $ref",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,

@@ -24,7 +24,7 @@ const refSiblings: IFunction = (data: unknown) => {
 
   for (const path of siblingIterator(data, [])) {
     results.push({
-      message: 'Property cannot be placed among $ref',
+      message: '$ref cannot be placed next to any other properties',
       path,
     });
   }

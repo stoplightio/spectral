@@ -8,9 +8,9 @@ describe('refSiblings', () => {
   const s = new Spectral();
   s.setFunctions({ refSiblings });
   s.setRules({
-    '$ref-siblings': Object.assign(oasRules['$ref-siblings'], {
+    'no-$ref-siblings': Object.assign(oasRules['no-$ref-siblings'], {
       recommended: true,
-      type: RuleType[oasRules['$ref-siblings'].type],
+      type: RuleType[oasRules['no-$ref-siblings'].type],
     }),
   });
 
@@ -67,8 +67,8 @@ describe('refSiblings', () => {
 
     expect(results).toEqual([
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['securityDefinitions', 'apikey'],
         range: {
           end: {
@@ -83,8 +83,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path'],
         range: {
           end: {
@@ -99,8 +99,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'post'],
         range: {
           end: {
@@ -115,8 +115,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get'],
         range: {
           end: {
@@ -131,8 +131,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get', 'security'],
         range: {
           end: {
@@ -182,8 +182,9 @@ describe('refSiblings', () => {
 
     expect(results).toEqual([
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+
+        message: '$ref cannot be placed next to any other properties',
         path: ['components', 'securityDefinitions', 'apikey'],
         range: {
           end: {
@@ -198,8 +199,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path'],
         range: {
           end: {
@@ -214,8 +215,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'post'],
         range: {
           end: {
@@ -230,8 +231,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get'],
         range: {
           end: {
@@ -246,8 +247,8 @@ describe('refSiblings', () => {
         severity: DiagnosticSeverity.Error,
       },
       {
-        code: '$ref-siblings',
-        message: 'Property cannot be placed among $ref',
+        code: 'no-$ref-siblings',
+        message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get', 'security'],
         range: {
           end: {
