@@ -90,6 +90,36 @@
         "operation"
       ]
     },
+    "valid-example-in-parameters": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..parameters..[?(@.in == 'body')]..[?(@property !== 'properties' && @.example && ( @.type || @.format || @.$ref ))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "valid-example-in-definitions": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..definitions..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
     "oas2-anyOf": {
       "description": "OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.",
       "message": "anyOf is not available in OpenAPI v2, it was added in OpenAPI v3",
