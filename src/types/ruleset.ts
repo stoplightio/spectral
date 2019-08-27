@@ -2,7 +2,7 @@ import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { HumanReadableDiagnosticSeverity, Rule } from './rule';
-import { FunctionCollection, RuleCollection } from './spectral';
+import { RuleCollection } from './spectral';
 
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 export type FileRulesetSeverity = 'off' | 'recommended' | 'all';
@@ -11,9 +11,18 @@ export type FileRule = Rule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleS
 
 export type FileRuleCollection = Dictionary<FileRule, string>;
 
+export interface IRulesetFunctionDefinition {
+  code?: string;
+  ref?: string;
+  schema: JSONSchema7 | null;
+  name: string;
+}
+
+export type RulesetFunctionCollection = Dictionary<IRulesetFunctionDefinition, string>;
+
 export interface IRuleset {
   rules: RuleCollection;
-  functions: FunctionCollection;
+  functions: RulesetFunctionCollection;
 }
 
 export interface IRulesetFile {
@@ -22,8 +31,4 @@ export interface IRulesetFile {
   rules: FileRuleCollection;
   functionsDir?: string;
   functions?: Array<string | [string, JSONSchema4 | JSONSchema6 | JSONSchema7]>;
-}
-
-export interface IRulesetFileMergingStrategy {
-  severity?: FileRulesetSeverity;
 }

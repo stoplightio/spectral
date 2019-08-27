@@ -5,7 +5,7 @@ import { ErrorObject } from 'ajv';
 const AJV = require('ajv');
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
-import { Rule } from '../types';
+import { IFunction, IFunctionPaths, IFunctionValues, Rule } from '../types';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
@@ -42,8 +42,8 @@ export function isValidRule(rule: FileRule): rule is Rule {
   return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
 }
 
-export function wrapIFunctionWithSchema(fn: Function, schema: JSONSchema7) {
-  return (data: unknown, opts: unknown, ...args: any[]) => {
+export function decorateIFunctionWithSchemaValidation(fn: IFunction, schema: JSONSchema7) {
+  return (data: unknown, opts: unknown, ...args: [IFunctionPaths, IFunctionValues]) => {
     if (!ajv.validate(schema, opts)) {
       throw new ValidationError(ajv.errors);
     }

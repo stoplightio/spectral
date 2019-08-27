@@ -1,25 +1,28 @@
 import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
 import { join } from '@stoplight/path';
+import { Optional } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { JSONSchema7 } from 'json-schema';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { FunctionCollection, IFunction } from '../types';
-import { FileRulesetSeverity, IRuleset } from '../types/ruleset';
-import { evaluateExport } from './evaluators';
+import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
-import { assertValidRuleset, wrapIFunctionWithSchema } from './validation';
+import { assertValidRuleset } from './validation';
 
-export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
+export interface IRulesetReadOptions {
+  timeout?: number;
+}
+
+export async function readRuleset(uris: string | string[], opts?: IRulesetReadOptions): Promise<IRuleset> {
   const base: IRuleset = {
     rules: {},
     functions: {},
   };
 
   const processedRulesets = new Set<string>();
-  const processRuleset = createRulesetProcessor(processedRulesets, new Cache());
+  const processRuleset = createRulesetProcessor(processedRulesets, new Cache(), opts);
 
   for (const uri of Array.isArray(uris) ? new Set([...uris]) : [uris]) {
     processedRulesets.clear(); // makes sure each separate ruleset starts with clear list
@@ -32,7 +35,11 @@ export async function readRuleset(uris: string | string[]): Promise<IRuleset> {
   return base;
 }
 
-const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache) => {
+const createRulesetProcessor = (
+  processedRulesets: Set<string>,
+  uriCache: ICache,
+  readOpts: Optional<IRulesetReadOptions>,
+) => {
   return async function processRuleset(
     baseUri: string,
     uri: string,
@@ -44,19 +51,27 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
     }
 
     processedRulesets.add(rulesetUri);
-    const { result } = await httpAndFileResolver.resolve(parse(await readParsable(rulesetUri, 'utf8')), {
-      baseUri: rulesetUri,
-      dereferenceInline: false,
-      uriCache,
-      async parseResolveResult(opts) {
-        try {
-          opts.result = parse(opts.result);
-        } catch {
-          // happens
-        }
-        return opts;
+    const { result } = await httpAndFileResolver.resolve(
+      parse(
+        await readParsable(rulesetUri, {
+          timeout: readOpts && readOpts.timeout,
+          encoding: 'utf-8',
+        }),
+      ),
+      {
+        baseUri: rulesetUri,
+        dereferenceInline: false,
+        uriCache,
+        async parseResolveResult(opts) {
+          try {
+            opts.result = parse(opts.result);
+          } catch {
+            // happens
+          }
+          return opts;
+        },
       },
-    });
+    );
     const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
     const rules = {};
     const functions = {};
@@ -82,7 +97,7 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
 
         if (extendedRuleset !== null) {
           mergeRules(rules, extendedRuleset.rules, parentSeverity);
-          mergeFunctions(functions, extendedRuleset.functions, rules);
+          Object.assign(functions, extendedRuleset.functions);
         }
       }
     }
@@ -97,7 +112,7 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
         rulesetUri,
         ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
       );
-      const resolvedFunctions: FunctionCollection = {};
+      const resolvedFunctions: RulesetFunctionCollection = {};
 
       await Promise.all(
         rulesetFunctions.map(async fn => {
@@ -105,16 +120,14 @@ const createRulesetProcessor = (processedRulesets: Set<string>, uriCache: ICache
           const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
 
           try {
-            const exportedFn = evaluateExport(
-              await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), 'utf-8'),
-            ) as IFunction;
-
-            resolvedFunctions[fnName] = fnSchema !== null ? wrapIFunctionWithSchema(exportedFn, fnSchema) : exportedFn;
-
-            Reflect.defineProperty(resolvedFunctions[fnName], 'name', {
-              configurable: true,
-              value: fnName,
-            });
+            resolvedFunctions[fnName] = {
+              name: fnName,
+              code: await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), {
+                timeout: readOpts && readOpts.timeout,
+                encoding: 'utf-8',
+              }),
+              schema: fnSchema,
+            };
           } catch (ex) {
             console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
           }
