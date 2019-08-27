@@ -7,7 +7,8 @@
     "oasOpIdUnique",
     "oasOpParams",
     "oasOpSecurityDefined",
-    "oasPathParam"
+    "oasPathParam",
+    "refSiblings"
   ],
   "rules": {
     "operation-2xx-response": {
@@ -427,6 +428,18 @@
           "field": "example",
           "schemaPath": "$"
         }
+      }
+    },
+    "no-$ref-siblings": {
+      "description": "Property cannot be placed among $ref",
+      "message": "{{error}}",
+      "type": "validation",
+      "severity": 0,
+      "recommended": true,
+      "resolved": false,
+      "given": "$",
+      "then": {
+        "function": "refSiblings"
       }
     }
   }

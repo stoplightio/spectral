@@ -40,6 +40,24 @@ While running it with this object, it will succeed:
 }
 ```
 
+By default, Spectral processes each rule on resolved document with all $refs resolved.
+If you would like to have an original input supplied to your rule, you can place `resolved` property as follows:
+
+```yaml
+rules:
+  my-rule-name:
+    description: Tags must have a description.
+    given: $.tags[*]
+    severity: error
+    resolved: false # note - if not specified or true, a resolved document will be given
+    then:
+      field: description
+      function: truthy
+```
+
+In most cases, you will want to operate on resolved document and therefore won't specify that property.
+You might find `resolved` useful if your rule requires access to $refs.
+
 ## Formats
 
 Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these two formats:

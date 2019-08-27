@@ -1,7 +1,8 @@
-import { JsonParserResult, safeStringify } from '@stoplight/json';
 import {
   getLocationForJsonPath as getLocationForJsonPathJSON,
+  JsonParserResult,
   parseWithPointers as parseJSONWithPointers,
+  safeStringify,
 } from '@stoplight/json';
 import { Cache, Resolver } from '@stoplight/json-ref-resolver';
 import { IUriParser } from '@stoplight/json-ref-resolver/types';
@@ -14,6 +15,7 @@ import {
 } from '@stoplight/yaml';
 import { merge, set } from 'lodash';
 
+import { IDiagnostic } from '@stoplight/types/dist';
 import deprecated from 'deprecated-decorator';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
@@ -83,48 +85,13 @@ export class Spectral {
       await this._resolver.resolve(parsedResult.parsed.data, {
         uriCache: this._uriCache,
         baseUri: documentUri,
-        parseResolveResult: async resolveOpts => {
-          const ref = resolveOpts.targetAuthority.toString();
-          const ext = extname(ref);
-
-          const content = String(resolveOpts.result);
-          let parsedRefResult:
-            | IParsedResult<YamlParserResult<unknown>>
-            | IParsedResult<JsonParserResult<unknown>>
-            | undefined;
-          if (ext === '.yml' || ext === '.yaml') {
-            parsedRefResult = {
-              parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
-              source: ref,
-              getLocationForJsonPath: getLocationForJsonPathYAML,
-            };
-          } else if (ext === '.json') {
-            parsedRefResult = {
-              parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
-              source: ref,
-              getLocationForJsonPath: getLocationForJsonPathJSON,
-            };
-          }
-
-          if (parsedRefResult !== undefined) {
-            resolveOpts.result = parsedRefResult.parsed.data;
-            if (parsedRefResult.parsed.diagnostics.length > 0) {
-              refDiagnostics.push(
-                ...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source),
-              );
-            }
-
-            this._processExternalRef(parsedRefResult, resolveOpts);
-          }
-
-          return resolveOpts;
-        },
+        parseResolveResult: this._parseResolveResult(refDiagnostics),
       }),
       this._parsedMap,
     );
 
     if (resolved.format === void 0) {
-      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.result));
+      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.resolved));
       resolved.format = foundFormat === void 0 ? null : foundFormat;
     }
 
@@ -136,7 +103,7 @@ export class Spectral {
     ];
 
     return {
-      resolved: resolved.result,
+      resolved: resolved.resolved,
       results: validationResults,
     };
   }
@@ -260,6 +227,41 @@ export class Spectral {
       }),
     );
   }
+
+  private _parseResolveResult = (refDiagnostics: IDiagnostic[]) => async (resolveOpts: IUriParser) => {
+    const ref = resolveOpts.targetAuthority.toString();
+    const ext = extname(ref);
+
+    const content = String(resolveOpts.result);
+    let parsedRefResult:
+      | IParsedResult<YamlParserResult<unknown>>
+      | IParsedResult<JsonParserResult<unknown>>
+      | undefined;
+    if (ext === '.yml' || ext === '.yaml') {
+      parsedRefResult = {
+        parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
+        source: ref,
+        getLocationForJsonPath: getLocationForJsonPathYAML,
+      };
+    } else if (ext === '.json') {
+      parsedRefResult = {
+        parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
+        source: ref,
+        getLocationForJsonPath: getLocationForJsonPathJSON,
+      };
+    }
+
+    if (parsedRefResult !== undefined) {
+      resolveOpts.result = parsedRefResult.parsed.data;
+      if (parsedRefResult.parsed.diagnostics.length > 0) {
+        refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source));
+      }
+
+      this._processExternalRef(parsedRefResult, resolveOpts);
+    }
+
+    return resolveOpts;
+  };
 }
 
 export const REF_METADATA = Symbol('external_ref_metadata');
