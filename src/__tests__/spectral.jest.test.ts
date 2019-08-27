@@ -1,6 +1,10 @@
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
+import { isOpenApiv2 } from '../rulesets/lookups';
 import { Spectral } from '../spectral';
 
 const oasRuleset = require('../rulesets/oas/index.json');
@@ -71,5 +75,79 @@ describe('Spectral', () => {
         },
       });
     });
+  });
+
+  test('reports issues for correct files', async () => {
+    const documentUri = path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json');
+    const spectral = new Spectral({ resolver: httpAndFileResolver });
+    await spectral.loadRuleset('spectral:oas');
+    spectral.registerFormat('oas2', isOpenApiv2);
+    const parsed = {
+      parsed: parseWithPointers(fs.readFileSync(documentUri, 'utf8')),
+      getLocationForJsonPath,
+    };
+
+    const results = await spectral.run(parsed, {
+      resolve: {
+        documentUri,
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'oas2-schema',
+        path: ['paths', '/todos/{todoId}', 'get', 'responses', '200'],
+        range: {
+          end: {
+            character: 10,
+            line: 42,
+          },
+          start: {
+            character: 17,
+            line: 27,
+          },
+        },
+      }),
+      expect.objectContaining({
+        code: 'oas2-schema',
+        path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'schema'],
+        range: {
+          end: {
+            character: 1,
+            line: 37,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
+      }),
+      expect.objectContaining({
+        code: 'oas2-schema',
+        path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'schema'],
+        range: {
+          end: {
+            character: 1,
+            line: 37,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
+      }),
+      expect.objectContaining({
+        code: 'path-params',
+        path: ['paths', '/todos/{todoId}'],
+        source: undefined,
+      }),
+      expect.objectContaining({
+        code: 'operation-description',
+        path: ['paths', '/todos/{todoId}', 'get'],
+        source: undefined,
+      }),
+    ]);
   });
 });
