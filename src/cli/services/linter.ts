@@ -60,7 +60,10 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
 
   spectral.registerFormat('oas2', document => {
     if (isOpenApiv2(document)) {
-      console.log('OpenAPI 2.0 (Swagger) detected');
+      if (!flags.quiet) {
+        console.log('OpenAPI 2.0 (Swagger) detected');
+      }
+
       return true;
     }
     return false;
@@ -68,7 +71,10 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
 
   spectral.registerFormat('oas3', document => {
     if (isOpenApiv3(document)) {
-      console.log('OpenAPI 3.x detected');
+      if (!flags.quiet) {
+        console.log('OpenAPI 3.x detected');
+      }
+
       return true;
     }
     return false;
