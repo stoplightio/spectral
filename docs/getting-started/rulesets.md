@@ -41,7 +41,7 @@ While running it with this object, it will succeed:
 ```
 
 By default, Spectral processes each rule on resolved document with all $refs resolved.
-If you would like to have an original input supplied to your rule, you can place `isResolved` property as follows:
+If you would like to have an original input supplied to your rule, you can place `resolved` property as follows:
 
 ```yaml
 rules:
@@ -49,14 +49,14 @@ rules:
     description: Tags must have a description.
     given: $.tags[*]
     severity: error
-    isResolved: false # note - if not specified or true, a resolved document will be given
+    resolved: false # note - if not specified or true, a resolved document will be given
     then:
       field: description
       function: truthy
 ```
 
 In most cases, you will want to operate on resolved document and therefore won't specify that property.
-You might find `isResolved` useful if your rule requires access to $refs.
+You might find `resolved` useful if your rule requires access to $refs.
 
 ## Formats
 

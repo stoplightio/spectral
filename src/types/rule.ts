@@ -28,7 +28,7 @@ export interface IRule<T = string, O = any> {
 
   // If false, rule will operate on original (unresolved) data
   // If undefined or true, resolved data will be supplied
-  isResolved?: boolean;
+  resolved?: boolean;
 
   when?: {
     // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object

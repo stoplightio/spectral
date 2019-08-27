@@ -97,7 +97,7 @@ export const lintNode = (
       targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
         const path = getRealJsonPath(
-          rule.isResolved === false ? resolved.unresolved : resolved.resolved,
+          rule.resolved === false ? resolved.unresolved : resolved.resolved,
           escapedJsonPath,
         );
         const location = resolved.getLocationForJsonPath(path, true);
