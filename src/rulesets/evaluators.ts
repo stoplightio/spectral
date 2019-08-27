@@ -1,4 +1,7 @@
 import { Optional } from '@stoplight/types';
+import { JSONSchema7 } from 'json-schema';
+import { IFunction } from '../types';
+import { decorateIFunctionWithSchemaValidation } from './validation';
 
 export type CJSExport = Partial<{ exports: object | ESCJSCompatibleExport }>;
 export type ESCJSCompatibleExport = Partial<{ default: unknown }>;
@@ -58,4 +61,17 @@ export const evaluateExport = (body: string): Function => {
   }
 
   return maybeFn;
+};
+
+export const compileExportedFunction = (code: string, name: string, schema: JSONSchema7 | null) => {
+  const exportedFn = evaluateExport(code) as IFunction;
+
+  const fn = schema !== null ? decorateIFunctionWithSchemaValidation(exportedFn, schema) : exportedFn;
+
+  Reflect.defineProperty(fn, 'name', {
+    configurable: true,
+    value: name,
+  });
+
+  return fn;
 };

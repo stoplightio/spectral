@@ -1,5 +1,5 @@
 import { JSONSchema7 } from 'json-schema';
-import { assertValidRuleset, ValidationError, wrapIFunctionWithSchema } from '../validation';
+import { assertValidRuleset, decorateIFunctionWithSchemaValidation, ValidationError } from '../validation';
 const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 
@@ -240,30 +240,30 @@ describe('Ruleset Validation', () => {
 describe('Function Validation', () => {
   it('throws if options supplied to fn does not meet schema', () => {
     const schema: JSONSchema7 = { type: 'string' };
-    const wrapped = wrapIFunctionWithSchema(Function, schema);
-    expect(() => wrapped({}, 2)).toThrow(ValidationError);
+    const wrapped = decorateIFunctionWithSchemaValidation(jest.fn(), schema);
+    expect(() => wrapped({}, 2, { given: [] }, { original: [], given: [] })).toThrow(ValidationError);
   });
 
   it('does not call supplied fn if options do not meet schema', () => {
     const schema: JSONSchema7 = { type: 'string' };
     const fn = jest.fn();
-    const wrapped = wrapIFunctionWithSchema(fn, schema);
+    const wrapped = decorateIFunctionWithSchemaValidation(fn, schema);
     try {
-      wrapped({}, 2);
+      wrapped({}, 2, { given: [] }, { original: [], given: [] });
     } catch {
       // will throw
     }
 
     expect(fn).not.toHaveBeenCalled();
-    expect(() => wrapped({}, 2)).toThrow(ValidationError);
+    expect(() => wrapped({}, {}, { given: [] }, { original: [], given: [] })).toThrow(ValidationError);
   });
 
-  it('calls supplied fn and passes all other arguments if options do not match schema', () => {
+  it('calls supplied fn and passes all other arguments if options do match schema', () => {
     const schema: JSONSchema7 = { type: 'string' };
     const fn = jest.fn();
-    const wrapped = wrapIFunctionWithSchema(fn, schema);
-    wrapped({}, '2', true, 1, []);
+    const wrapped = decorateIFunctionWithSchemaValidation(fn, schema);
+    wrapped({}, '2', { given: [] }, { original: [], given: [] });
 
-    expect(fn).toHaveBeenCalledWith({}, '2', true, 1, []);
+    expect(fn).toHaveBeenCalledWith({}, '2', { given: [] }, { original: [], given: [] });
   });
 });

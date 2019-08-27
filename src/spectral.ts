@@ -21,6 +21,8 @@ import { formatParserDiagnostics, formatResolverErrors } from './error-messages'
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
 import { readRuleset } from './rulesets';
+import { compileExportedFunction } from './rulesets/evaluators';
+import { IRulesetReadOptions } from './rulesets/reader';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
 import {
@@ -36,6 +38,7 @@ import {
   RuleCollection,
   RunRuleCollection,
 } from './types';
+import { IRuleset } from './types/ruleset';
 
 export * from './types';
 
@@ -164,10 +167,35 @@ export class Spectral {
     }
   }
 
-  public async loadRuleset(uris: string[] | string) {
-    const { rules, functions } = await readRuleset(uris);
-    this._addRules(rules);
-    this._addFunctions(functions);
+  public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions) {
+    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], options));
+  }
+
+  public setRuleset(ruleset: IRuleset) {
+    this.setRules(ruleset.rules);
+
+    this.setFunctions(
+      Object.entries(ruleset.functions).reduce<FunctionCollection>(
+        (fns, [key, { code, ref, name, schema }]) => {
+          if (code === void 0) {
+            if (ref !== void 0) {
+              ({ code } = ruleset.functions[ref]);
+            }
+          }
+
+          if (code === void 0) {
+            // shall we log or sth?
+            return fns;
+          }
+
+          fns[key] = compileExportedFunction(code, name, schema);
+          return fns;
+        },
+        {
+          ...defaultFunctions,
+        },
+      ),
+    );
   }
 
   public registerFormat(format: string, fn: FormatLookup) {

@@ -44,7 +44,7 @@
   "scripts": {
     "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./",
     "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "oclif-dev manifest && yarn build.oas-functions",
+    "postbuild": "oclif-dev manifest && yarn build.oas-functions && yarn compile-rulesets",
     "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
     "build.oas-functions": "rollup -c",
     "postbuild.oas-functions": "copyfiles -u 1 \"dist/rulesets/oas*/functions/*.js\" ./",
@@ -58,6 +58,7 @@
     "pretest.karma": "node ./scripts/generate-karma-fixtures.js",
     "test.karma": "karma start",
     "inline-version": "./scripts/inline-version.js",
+    "compile-rulesets": "node ./scripts/compile-rulesets.js",
     "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json"
   },
   "dependencies": {
@@ -69,6 +70,7 @@
     "@stoplight/path": "^1.1.0",
     "@stoplight/types": "^11.0.0",
     "@stoplight/yaml": "^3.0.0",
+    "abort-controller": "^3.0.0",
     "ajv": "^6.7",
     "ajv-oai": "^1.1.1",
     "better-ajv-errors": "stoplightio/better-ajv-errors#0c5be246c12c87993ba07b47479cff8257b9579b",
