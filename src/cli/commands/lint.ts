@@ -1,3 +1,4 @@
+import { Dictionary } from '@stoplight/types';
 import { CommandModule, showHelp } from 'yargs';
 
 import { ILintConfig, OutputFormat } from '../../types/config';
@@ -15,6 +16,13 @@ const lintCommand: CommandModule = {
       })
       .fail(() => {
         showHelp();
+      })
+      .check((argv: Dictionary<unknown>) => {
+        if (argv.format !== void 0 && argv.format !== OutputFormat.JSON && argv.format !== OutputFormat.STYLISH) {
+          return false;
+        }
+
+        return true;
       })
       .options({
         encoding: {
@@ -58,12 +66,11 @@ const lintCommand: CommandModule = {
       }),
 
   handler: args => {
-    const { document, encoding, format, output, ruleset, quiet, verbose } = (args as unknown) as ILintConfig & {
+    const { document, ruleset, format, output, ...config } = (args as unknown) as ILintConfig & {
       document: string;
     };
 
-    const config = { encoding, format, ruleset, quiet, verbose };
-    return lint(document, config, ruleset)
+    return lint(document, { format, output, ...config }, ruleset)
       .then(results => {
         const formattedOutput = formatOutput(results, format);
         return writeOutput(formattedOutput, output);

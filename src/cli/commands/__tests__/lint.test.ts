@@ -48,7 +48,7 @@ describe('lint', () => {
     (formatOutput as jest.Mock).mockReturnValueOnce('<formatted output>');
 
     (writeOutput as jest.Mock).mockClear();
-    (writeOutput as jest.Mock).mockResolvedValueOnce(void 0);
+    (writeOutput as jest.Mock).mockResolvedValueOnce(undefined);
 
     errorSpy = jest.spyOn(console, 'error');
   });
@@ -72,10 +72,10 @@ describe('lint', () => {
     await run(`lint ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
-      {
+      expect.objectContaining({
         encoding: 'utf8',
         format: 'stylish',
-      },
+      }),
       undefined,
     );
   });
@@ -85,10 +85,10 @@ describe('lint', () => {
     await run(`lint --encoding utf16 ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
-      {
+      expect.objectContaining({
         encoding: 'utf16',
         format: 'stylish',
-      },
+      }),
       undefined,
     );
   });
@@ -98,10 +98,10 @@ describe('lint', () => {
     await run(`lint -f json --encoding utf16 ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
-      {
+      expect.objectContaining({
         encoding: 'utf16',
         format: 'json',
-      },
+      }),
       undefined,
     );
   });
@@ -134,6 +134,22 @@ describe('lint', () => {
   it('writes formatted output to a file', async () => {
     await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
     expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
+  });
+
+  it('passes skip-rule to lint', async () => {
+    await run('lint --skip-rule foo --skip-rule bar ./__fixtures__/empty-oas2-document.json');
+
+    expect(lint).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ skipRule: ['foo', 'bar'] }),
+      undefined,
+    );
+  });
+
+  it('shows help if unknown format is passed', () => {
+    return expect(run('lint -f foo ./__fixtures__/empty-oas2-document.json')).resolves.toContain(
+      'lint a JSON/YAML document from a file or URL',
+    );
   });
 
   it('errors upon exception', async () => {
