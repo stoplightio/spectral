@@ -43,7 +43,6 @@ const lintCommand: CommandModule = {
         'skip-rule': {
           alias: 's',
           description: 'ignore certain rules if they are causing trouble',
-          array: true,
           type: 'string',
         },
         verbose: {

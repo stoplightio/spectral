@@ -100,7 +100,7 @@ const skipRules = (rules: RuleCollection, flags: ILintConfig): RuleCollection =>
   const invalidRules: string[] = [];
 
   if (flags.skipRule !== undefined) {
-    for (const rule of flags.skipRule) {
+    for (const rule of Array.isArray(flags.skipRule) ? flags.skipRule : [flags.skipRule]) {
       if (rule in rules) {
         delete rules[rule];
         skippedRules.push(rule);

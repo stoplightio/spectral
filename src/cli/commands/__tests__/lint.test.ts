@@ -110,7 +110,6 @@ describe('lint', () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
     const output = await run(`lint -r ${ruleset} ${doc}`);
-    console.log(output);
     expect(lint).toBeCalledWith(doc, expect.any(Object), ruleset);
   });
 
