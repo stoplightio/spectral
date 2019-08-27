@@ -2,7 +2,7 @@ import * as yargs from 'yargs';
 
 import lintCommand from './commands/lint';
 
-const _v = yargs
+export default yargs
   .scriptName('spectral')
   .parserConfiguration({
     'camel-case-expansion': true,
