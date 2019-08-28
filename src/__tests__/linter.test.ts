@@ -4,8 +4,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { mergeRules, readRuleset } from '../rulesets';
 import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
-import { Spectral } from '../spectral';
-import { RuleCollection } from '../types';
+import { RuleCollection, Spectral } from '../spectral';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
@@ -523,7 +522,7 @@ responses:: !!foo
     );
   });
 
-  xit('should remove all redundant ajv errors', async () => {
+  it('should remove all redundant ajv errors', async () => {
     await spectral.loadRuleset('spectral:oas3');
 
     const result = await spectral.run(invalidSchema);

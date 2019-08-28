@@ -126,6 +126,7 @@
     "valid-schema-example-in-parameters": {
       "summary": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
+      "recommended": true,
       "severity": 0,
       "type": "validation",
       "given": "$..parameters..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
@@ -141,6 +142,7 @@
       "summary": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
       "severity": 0,
+      "recommended": true,
       "type": "validation",
       "given": "$..headers..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
       "then": {
@@ -155,6 +157,7 @@
       "summary": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
       "severity": 0,
+      "recommended": true,
       "type": "validation",
       "given": "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
       "then": {
@@ -169,6 +172,7 @@
       "summary": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
       "severity": 0,
+      "recommended": true,
       "type": "validation",
       "given": "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
       "then": {
