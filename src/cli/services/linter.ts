@@ -44,15 +44,13 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
   });
 
   const rulesetFiles = rulesetFile || (await getDefaultRulesetFile(process.cwd()));
-  const { functions, rules } = await (rulesetFiles
-    ? loadRulesets(process.cwd(), rulesetFiles)
-    : readRuleset('spectral:oas'));
+  const ruleset = await (rulesetFiles ? loadRulesets(process.cwd(), rulesetFiles) : readRuleset('spectral:oas'));
 
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
   if (flags.verbose) {
-    if (rules) {
-      console.info(`Found ${Object.keys(rules).length} rules`);
+    if (ruleset) {
+      console.info(`Found ${Object.keys(ruleset.rules).length} rules`);
     } else {
       console.info('No rules loaded, attempting to detect document type');
     }
@@ -80,13 +78,11 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
     return false;
   });
 
-  if (flags.skipRule) {
-    spectral.setRules(skipRules(rules, flags));
-  } else {
-    spectral.setRules(rules);
-  }
+  spectral.setRuleset(ruleset);
 
-  spectral.setFunctions(functions);
+  if (flags.skipRule) {
+    spectral.setRules(skipRules(ruleset.rules, flags));
+  }
 
   const parsedResult: IParsedResult = {
     source: targetUri,
