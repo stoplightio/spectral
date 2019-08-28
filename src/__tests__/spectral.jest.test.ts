@@ -77,7 +77,7 @@ describe('Spectral', () => {
     });
   });
 
-  test('reports issues for correct files', async () => {
+  test('reports issues for correct files with correct ranges and paths', async () => {
     const documentUri = path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json');
     const spectral = new Spectral({ resolver: httpAndFileResolver });
     await spectral.loadRuleset('spectral:oas');
@@ -93,81 +93,84 @@ describe('Spectral', () => {
       },
     });
 
-    expect(results).toEqual([
-      expect.objectContaining({
-        code: 'oas2-schema',
-        path: ['paths', '/todos/{todoId}', 'get', 'responses', '200'],
-        range: {
-          end: {
-            character: 10,
-            line: 42,
+    expect(results).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'oas2-schema',
+          path: ['paths', '/todos/{todoId}', 'get', 'responses', '200'],
+          range: {
+            end: {
+              character: 11,
+              line: 31,
+            },
+            start: {
+              character: 17,
+              line: 16,
+            },
           },
-          start: {
-            character: 17,
-            line: 27,
+          source: undefined,
+        }),
+        expect.objectContaining({
+          code: 'oas2-schema',
+          path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'schema'],
+          range: {
+            end: {
+              character: 1,
+              line: 37,
+            },
+            start: {
+              character: 0,
+              line: 0,
+            },
           },
-        },
-      }),
-      expect.objectContaining({
-        code: 'oas2-schema',
-        path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'schema'],
-        range: {
-          end: {
-            character: 1,
-            line: 37,
+          source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
+        }),
+        expect.objectContaining({
+          code: 'path-params',
+          path: ['paths', '/todos/{todoId}'],
+          range: {
+            end: {
+              character: 5,
+              line: 34,
+            },
+            start: {
+              character: 23,
+              line: 10,
+            },
           },
-          start: {
-            character: 0,
-            line: 0,
+          source: undefined,
+        }),
+        expect.objectContaining({
+          code: 'info-contact',
+          path: ['info'],
+          range: {
+            end: {
+              character: 3,
+              line: 6,
+            },
+            start: {
+              character: 10,
+              line: 2,
+            },
           },
-        },
-        source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
-      }),
-      expect.objectContaining({
-        code: 'oas2-schema',
-        path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'schema'],
-        range: {
-          end: {
-            character: 1,
-            line: 37,
+          source: undefined,
+        }),
+        expect.objectContaining({
+          code: 'operation-description',
+          path: ['paths', '/todos/{todoId}', 'get'],
+          range: {
+            end: {
+              character: 7,
+              line: 33,
+            },
+            start: {
+              character: 13,
+              line: 11,
+            },
           },
-          start: {
-            character: 0,
-            line: 0,
-          },
-        },
-        source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
-      }),
-      expect.objectContaining({
-        code: 'path-params',
-        path: ['paths', '/todos/{todoId}'],
-        range: {
-          end: {
-            character: 5,
-            line: 45,
-          },
-          start: {
-            character: 23,
-            line: 19,
-          },
-        },
-        source: undefined,
-      }),
-      expect.objectContaining({
-        code: 'operation-description',
-        path: ['paths', '/todos/{todoId}', 'get'],
-        source: undefined,
-        range: {
-          end: {
-            character: 7,
-            line: 44,
-          },
-          start: {
-            character: 13,
-            line: 20,
-          },
-        },
-      }),
-    ]);
+          source: undefined,
+        }),
+      ]),
+    );
   });
 });
