@@ -20,7 +20,7 @@ responses:
 
 // create a new instance of spectral with all of the baked in rulesets
 const spectral = new Spectral();
-spectral.run(myOpenApiDocument).then(results => console.log(results);
+spectral.run(myOpenApiDocument).then(results => console.log(results));
 ```
 
 Please note that by default Spectral supports YAML 1.2 with merge keys extension.
