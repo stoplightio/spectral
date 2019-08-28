@@ -23,6 +23,8 @@ const spectral = new Spectral();
 spectral.run(myOpenApiDocument).then(results => console.log(results);
 ```
 
+Please note that by default Spectral supports YAML 1.2 with merge keys extension.
+
 This will run Spectral with no rules or functions, so it's not going to do anything. Find out how to add rules and functions below.
 
 ## Linting an Object
@@ -55,14 +57,12 @@ Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and t
 ```js
 const { Spectral } = require('@stoplight/spectral');
 const { parseWithPointers } = require("@stoplight/yaml");
-const { oas3Functions } = require('@stoplight/spectral/dist/rulesets/oas3');
 
 const myOpenApiDocument = {
   // any parsed open api document
 };
 
 const spectral = new Spectral();
-spectral.addFunctions(oas3Functions());
 spectral.loadRuleset('spectral:oas3') // spectral:oas2 for OAS 2.0 aka Swagger
   .then(() => spectral.run(myOpenApiDocument))
   .then(results => {
