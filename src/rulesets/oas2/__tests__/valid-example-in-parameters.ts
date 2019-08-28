@@ -1,24 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../../oas2/index.json';
+import * as ruleset from '../index.json';
 
 // @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
 // TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
 declare var test: jest.It;
 
-describe('valid-example', () => {
+describe('valid-example-in-parameters', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'valid-example-in-parameters': Object.assign(ruleset.rules['valid-example-in-parameters'], {
       recommended: true,
       type: RuleType[ruleset.rules['valid-example-in-parameters'].type],
-    }),
-  });
-
-  s.addRules({
-    'valid-example-in-definitions': Object.assign(ruleset.rules['valid-example-in-definitions'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['valid-example-in-definitions'].type],
     }),
   });
 
@@ -75,28 +68,31 @@ describe('valid-example', () => {
 
   test('will pass when complex example is used ', async () => {
     const results = await s.run({
-      definitions: {
-        xoxo: {
-          type: 'object',
-          properties: {
-            url: {
-              type: 'string',
+      parameters: [
+        {
+          in: 'body',
+          schema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+              },
+              width: {
+                type: 'integer',
+              },
+              height: {
+                type: 'integer',
+              },
             },
-            width: {
-              type: 'integer',
+            required: ['url'],
+            example: {
+              url: 'images/38.png',
+              width: 100,
+              height: 100,
             },
-            height: {
-              type: 'integer',
-            },
-          },
-          required: ['url'],
-          example: {
-            url: 'images/38.png',
-            width: 100,
-            height: 100,
           },
         },
-      },
+      ],
     });
 
     expect(results).toHaveLength(0);
@@ -104,112 +100,38 @@ describe('valid-example', () => {
 
   test('will error with totally invalid input', async () => {
     const results = await s.run({
-      definitions: {
-        xoxo: {
-          type: 'object',
-          properties: {
-            url: {
-              type: 'string',
+      parameters: [
+        {
+          in: 'body',
+          schema: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string',
+              },
+              width: {
+                type: 'integer',
+              },
+              height: {
+                type: 'integer',
+              },
             },
-            width: {
-              type: 'integer',
+            required: ['url'],
+            example: {
+              url2: 'images/38.png',
+              width: 'coffee',
+              height: false,
             },
-            height: {
-              type: 'integer',
-            },
-          },
-          required: ['url'],
-          example: {
-            url2: 'images/38.png',
-            width: 'coffee',
-            height: false,
           },
         },
-      },
+      ],
     });
 
     expect(results).toEqual([
       expect.objectContaining({
-        code: 'valid-example-in-definitions',
-        message: '"xoxo.example" property should have required property \'url\'',
+        code: 'valid-example-in-parameters',
+        message: '"schema.example" property should have required property \'url\'',
         severity: DiagnosticSeverity.Error,
-      }),
-    ]);
-  });
-
-  test('works fine with allOf $ref', async () => {
-    const results = await s.run({
-      definitions: {
-        halRoot: {
-          type: 'object',
-          allOf: [
-            {
-              $ref: '#/definitions/halResource',
-            },
-          ],
-          example: {
-            _links: {
-              self: {
-                href: '/',
-              },
-              products: {
-                href: '/products',
-              },
-              product: {
-                href: '/products/{product_id}',
-              },
-              users: {
-                href: '/users',
-              },
-            },
-          },
-        },
-        halResource: {
-          title: 'HAL Resource Object',
-          type: 'object',
-          properties: {
-            _links: {
-              type: 'object',
-              additionalProperties: {
-                allOf: [
-                  {
-                    $ref: '#/definitions/halLinkObject',
-                  },
-                  {
-                    type: 'array',
-                    items: [
-                      {
-                        $ref: '#/definitions/halLinkObject',
-                      },
-                    ],
-                  },
-                ],
-              },
-            },
-            _embedded: {
-              type: 'object',
-              additionalProperties: true,
-            },
-          },
-        },
-        halLinkObject: {
-          type: 'object',
-          required: ['href'],
-          properties: {
-            href: {
-              type: 'string',
-            },
-          },
-        },
-      },
-    });
-
-    expect(results).toEqual([
-      expect.objectContaining({
-        severity: DiagnosticSeverity.Error,
-        code: 'valid-example-in-definitions',
-        message: '"halRoot.example" property type should be array',
-        path: ['definitions', 'halRoot', 'example', '_links', 'self'],
       }),
     ]);
   });
@@ -299,8 +221,9 @@ describe('valid-example', () => {
 
   test('will not fail if an actual property is called example', async () => {
     const results = await s.run({
-      definitions: {
-        xoxo: {
+      parameters: [
+        {
+          in: 'body',
           type: 'object',
           properties: {
             example: {
@@ -312,16 +235,16 @@ describe('valid-example', () => {
             example: 'what is gonna happen',
           },
         },
-      },
+      ],
     });
 
     expect(results).toHaveLength(0);
   });
 
-  test('will not fail if an actual property is called example and there is also type property', async () => {
+  test('will not fail if an actual property is called example and there is also type/format property', async () => {
     const results = await s.run({
-      definitions: {
-        xoxo: {
+      parameters: [
+        {
           type: 'object',
           properties: {
             example: {
@@ -332,9 +255,10 @@ describe('valid-example', () => {
               type: 'number',
               example: 123,
             },
+            format: 'plain text',
           },
         },
-      },
+      ],
     });
 
     expect(results).toHaveLength(0);
@@ -396,16 +320,18 @@ describe('valid-example', () => {
     'does not report valid usage of %s format',
     async (format, example) => {
       const results = await s.run({
-        xoxo: {
-          type: 'object',
-          properties: {
-            ip_address: {
-              type: ['string', 'number'],
-              format,
-              example,
+        parameters: [
+          {
+            type: 'object',
+            properties: {
+              ip_address: {
+                type: ['string', 'number'],
+                format,
+                example,
+              },
             },
           },
-        },
+        ],
       });
 
       expect(results).toHaveLength(0);
