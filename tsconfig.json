@@ -21,7 +21,7 @@
     "resolveJsonModule": true,
     "outDir": "dist",
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "removeComments": true,
     "jsx": "react",
     "skipLibCheck": true,

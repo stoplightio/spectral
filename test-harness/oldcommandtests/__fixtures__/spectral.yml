@@ -1,0 +1,11 @@
+rules:
+  info-matches-stoplight:
+    message: Info must contain Stoplight
+    given: $.info
+    type: style
+    recommended: true
+    then:
+      field: title
+      function: pattern
+      functionOptions:
+        match: Stoplight
