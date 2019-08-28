@@ -262,7 +262,7 @@ describe('valid-example-in-definitions', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('will not fail if an actual property is called example and there is also type property', async () => {
+  test('will not fail if an actual property is called example and there is also type/format property', async () => {
     const results = await s.run({
       definitions: {
         xoxo: {
@@ -276,6 +276,7 @@ describe('valid-example-in-definitions', () => {
               type: 'number',
               example: 123,
             },
+            format: 'plain text',
           },
         },
       },
