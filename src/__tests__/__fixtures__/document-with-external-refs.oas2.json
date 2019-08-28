@@ -3,27 +3,16 @@
   "info": {
     "title": "To-dos",
     "version": "1.0",
-    "description": "This OpenAPI v2 (Swagger) file represents a real API that lives at http://todos.stoplight.io.\n\nIt exposes functionality to manage to-do lists.",
-    "contact": {
-      "name": "Stoplight",
-      "url": "https://stoplight.io"
-    },
-    "license": {
-      "name": "MIT"
-    }
+    "description": "This OpenAPI v2 (Swagger) file represents a real API that lives at http://todos.stoplight.io.\n\nIt exposes functionality to manage to-do lists."
   },
   "host": "todos.stoplight.io",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
     "/todos/{todoId}": {
       "get": {
         "operationId": "GET_todo",
         "summary": "Get Todo",
-        "tags": [
-          "Todos"
-        ],
+        "tags": ["Todos"],
         "responses": {
           "200": {
             "description": "",
