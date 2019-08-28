@@ -5,7 +5,7 @@ import * as fs from 'fs';
 const implicitStringOAS3Document = path.join(__dirname, './__fixtures__/implicit-strings.oas3.yaml');
 
 describe('Parsing', () => {
-  it('should parse treat YAML scalar values in document according to YAML 1.2', () => {
+  it('parses YAML scalar values according to YAML 1.2', () => {
     const { data } = parseWithPointers(fs.readFileSync(implicitStringOAS3Document, 'utf8'));
 
     expect(data).toHaveProperty(
