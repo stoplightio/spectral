@@ -40,9 +40,9 @@ export const runRules = (
 };
 
 const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
-  const { result: target } = resolved;
+  const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
-  let results: IRuleResult[] = [];
+  const results: IRuleResult[] = [];
   const nodes: IGivenNode[] = [];
 
   // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -79,7 +79,7 @@ const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollecti
           continue;
         }
 
-        results = results.concat(lintNode(node, rule, then, func, resolved));
+        results.push(...lintNode(node, rule, then, func, resolved));
       }
     } catch (e) {
       console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
