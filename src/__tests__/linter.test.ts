@@ -522,7 +522,7 @@ responses:: !!foo
     );
   });
 
-  it('should remove all redundant ajv errors', async () => {
+  test('should remove all redundant ajv errors', async () => {
     await spectral.loadRuleset('spectral:oas3');
 
     const result = await spectral.run(invalidSchema);
