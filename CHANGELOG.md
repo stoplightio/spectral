@@ -5,20 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.2] - 2019-08-31
+## [4.1.0] - 2019-0x-0x
 
+### Added
+- Rulesets can be loaded using `Spectral#loadRuleset` method
+- Custom functions can be registered directly in rulesets
+- Rulesets can be registered against document format
+- New rules: no-$ref-siblings, oas2-anyOf, oas2-oneOf
+- YAML's [merge keys](https://yaml.org/type/merge.html) are supported
+- $refs can be used in rulesets
+
+### Changed
+- We swapped oclif with yargs
+
+### Fixed
+- CLI: relative paths to documents are supported [#477](https://github.com/stoplightio/spectral/pull/477)
+- Graceful handling of circular rulesets
+- Improved path and ranges generation [#458](https://github.com/stoplightio/spectral/pull/458), [#459](https://github.com/stoplightio/spectral/pull/459)
+
+## [4.0.3] - 2019-08-26
+### Fixed
+
+- Resolve references to files with relative paths 
+
+## [4.0.2] - 2019-07-31
 ### Fixed
 
 - Tweaked JSON Path lookup for paths to avoid deep scan, speeding up linting for large documents [#413](https://github.com/stoplightio/spectral/pull/413)
 
-## [4.0.1] - 2019-08-16
-
+## [4.0.1] - 2019-07-16
 ### Fixed
 
 - NPM install for Windows users was failing due to a dependency not supporting Windows in their build script
 
-## [4.0.0] - 2019-08-09
-
+## [4.0.0] - 2019-07-09
 ### Added
 
 - Using the CLI with multiple, custom rulesets
