@@ -42,6 +42,7 @@
     "node": ">=8.3.0"
   },
   "scripts": {
+    "prebuild.binary": "yarn build",
     "build.binary": "pkg . --output ./cli-binaries/spectral-cli",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
