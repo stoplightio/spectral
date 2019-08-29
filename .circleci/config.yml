@@ -42,6 +42,15 @@ commands:
           name: Run node tests
           command: yarn test --coverage --maxWorkers=2
       - run:
+          name: Create the Spectral Binary
+          command: yarn build.binary
+      - run:
+          name: Create output directory
+          command: mkdir ./test-harness/tmp
+      - run:
+          name: Run harness tests
+          command: yarn test.harness
+      - run:
           name: Lint the code
           command: yarn lint
       - run:
