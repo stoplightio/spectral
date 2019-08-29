@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 
+/cli-binaries
+/rulesets
+/src/__tests__/__fixtures__/oas-functions.json
+/test-harness/tmp/
+
 # testing
 /coverage
 
@@ -33,6 +38,3 @@
 *-debug.log*
 *-error.log*
 oclif.manifest.json
-/binaries
-/rulesets
-/src/__tests__/__fixtures__/oas-functions.json
