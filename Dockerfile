@@ -2,7 +2,8 @@ FROM node:12 as compiler
 
 WORKDIR /usr/src/spectral
 
-COPY package.json yarn.lock tsconfig.build.json tsconfig.json /usr/src/spectral/
+COPY package.json tsconfig.rollup.json rollup.config.js yarn.lock tsconfig.build.json tsconfig.json /usr/src/spectral/
+COPY scripts/ /usr/src/spectral/scripts
 COPY src/ /usr/src/spectral/src/
 
 RUN yarn && yarn build
