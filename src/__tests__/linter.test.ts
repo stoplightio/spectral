@@ -4,8 +4,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { mergeRules, readRuleset } from '../rulesets';
 import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
-import { Spectral } from '../spectral';
-import { RuleCollection } from '../types';
+import { RuleCollection, Spectral } from '../spectral';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
@@ -150,7 +149,7 @@ describe('linter', () => {
     await spectral.loadRuleset('spectral:oas3');
     const { rules: oas3Rules } = await readRuleset('spectral:oas3');
     spectral.setRules(mergeRules(oas3Rules, {
-      'valid-example': 'off',
+      'valid-example-in-schemas': 'off',
       'model-description': -1,
     }) as RuleCollection);
 
@@ -536,7 +535,7 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
-        code: 'valid-example',
+        code: 'valid-example-in-schemas',
         message: '"foo.example" property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
@@ -556,7 +555,7 @@ responses:: !!foo
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'valid-example',
+          code: 'valid-example-in-parameters',
           message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),

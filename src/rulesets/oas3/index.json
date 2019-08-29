@@ -78,6 +78,111 @@
         }
       }
     },
+    "valid-oas-example-in-parameters": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..parameters..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
+    },
+    "valid-oas-example-in-headers": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..headers..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
+    },
+    "valid-oas-example-in-content": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..content..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
+    },
+    "valid-schema-example-in-parameters": {
+      "summary": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..parameters..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "valid-schema-example-in-headers": {
+      "summary": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "severity": 0,
+      "recommended": true,
+      "type": "validation",
+      "given": "$..headers..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "valid-example-in-schemas": {
+      "summary": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "severity": 0,
+      "recommended": true,
+      "type": "validation",
+      "given": "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "valid-schema-example-in-content": {
+      "summary": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "severity": 0,
+      "recommended": true,
+      "type": "validation",
+      "given": "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
     "oas3-schema": {
       "description": "Validate structure of OpenAPI v3 specification.",
       "message": "{{error}}",

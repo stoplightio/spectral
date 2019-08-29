@@ -142,18 +142,19 @@ schemaPath | a json path pointing to the json schema to use | yes
 
 <!-- title: example -->
 
-```yaml
-valid-example:
-  description: Examples must be valid against their defined schema.
-  message: "\"{{property}}\" property {{error}}"
-  recommended: true
-  type: validation
-  given: "$..[?(@.example)]"
-  then:
-    function: schemaPath
-    functionOptions:
-      field: example
-      schemaPath: "$"
+``` yaml
+  valid-oas-example-in-parameters:
+    description: Examples must be valid against their defined schema.
+    message: "{{error}}"
+    recommended: true
+    severity: 0
+    type: validation
+    given: "$..parameters..[?(@.example && @.schema)]"
+    then:
+      function: schemaPath
+      functionOptions:
+        field: example
+        schemaPath: "$.schema"
 ```
 
 ## truthy

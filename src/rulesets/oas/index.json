@@ -416,20 +416,6 @@
         "api"
       ]
     },
-    "valid-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "type": "validation",
-      "given": "$..[?(@.example)]",
-      "then": {
-        "function": "schemaPath",
-        "functionOptions": {
-          "field": "example",
-          "schemaPath": "$"
-        }
-      }
-    },
     "no-$ref-siblings": {
       "description": "Property cannot be placed among $ref",
       "message": "{{error}}",
