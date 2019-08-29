@@ -425,27 +425,40 @@ describe('Rulesets reader', () => {
 
   it('should load functions from custom directory', async () => {
     const ruleset = await readRuleset(customFunctionsDirectoryRuleset);
-    expect(ruleset.functions).toEqual({
-      bar: {
-        name: 'bar',
-        ref: 'random-id-0',
-        schema: null,
-      },
-      'random-id-0': {
-        name: 'bar',
-        code: barFunction,
-        schema: null,
-      },
-      truthy: {
-        name: 'truthy',
-        ref: 'random-id-1',
-        schema: null,
-      },
-      'random-id-1': {
-        name: 'truthy',
-        code: truthyFunction,
-        schema: null,
-      },
+    expect(Object.keys(ruleset.functions)).toHaveLength(4);
+    expect(ruleset.functions).toEqual(
+      expect.objectContaining({
+        bar: {
+          name: 'bar',
+          ref: expect.stringMatching(/^random-id-[01]$/),
+          schema: null,
+        },
+        truthy: {
+          name: 'truthy',
+          ref: expect.stringMatching(/^random-id-[01]$/),
+          schema: null,
+        },
+      }),
+    );
+
+    const [barRandomName, barFunctionDef] = Object.entries(ruleset.functions).find(
+      ([name, obj]) => ruleset.functions.bar.ref === name,
+    )!;
+    const [truthyRandomName, truthyFunctionDef] = Object.entries(ruleset.functions).find(
+      ([name, obj]) => ruleset.functions.truthy.ref === name,
+    )!;
+
+    // now let's verify unique properties include proper functions
+    expect(barFunctionDef).toEqual({
+      name: 'bar',
+      code: barFunction,
+      schema: null,
+    });
+
+    expect(truthyFunctionDef).toEqual({
+      name: 'truthy',
+      code: truthyFunction,
+      schema: null,
     });
 
     expect(ruleset.functions.bar).toHaveProperty('name', 'bar');
@@ -457,7 +470,7 @@ describe('Rulesets reader', () => {
         given: '$.info',
         severity: DiagnosticSeverity.Warning,
         then: {
-          function: 'random-id-0',
+          function: barRandomName,
         },
       }),
       'truthy-rule': expect.objectContaining({
@@ -465,7 +478,7 @@ describe('Rulesets reader', () => {
         given: '$.x',
         severity: DiagnosticSeverity.Warning,
         then: {
-          function: 'random-id-1',
+          function: truthyRandomName,
         },
       }),
     });
