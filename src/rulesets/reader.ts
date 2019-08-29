@@ -55,7 +55,7 @@ const createRulesetProcessor = (
       parse(
         await readParsable(rulesetUri, {
           timeout: readOpts && readOpts.timeout,
-          encoding: 'utf-8',
+          encoding: 'utf8',
         }),
       ),
       {
@@ -124,7 +124,7 @@ const createRulesetProcessor = (
               name: fnName,
               code: await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), {
                 timeout: readOpts && readOpts.timeout,
-                encoding: 'utf-8',
+                encoding: 'utf8',
               }),
               schema: fnSchema,
             };
