@@ -1,6 +1,5 @@
 import { IResolveError, IResolveResult } from '@stoplight/json-ref-resolver/types';
-import { Dictionary, ILocation, JsonPath } from '@stoplight/types';
-import { Segment } from '@stoplight/types/dist';
+import { Dictionary, ILocation, JsonPath, Segment } from '@stoplight/types';
 import { get } from 'lodash';
 import { IParseMap, REF_METADATA } from './spectral';
 import { IParsedResult } from './types';
@@ -35,7 +34,7 @@ export class Resolved {
       }
     }
 
-    if (target) {
+    if (target && target[REF_METADATA]) {
       return {
         path: [...get(target, [REF_METADATA, 'root'], []), ...newPath],
         doc: get(this.parsedMap.parsed, get(target, [REF_METADATA, 'ref']), this.spec),
@@ -43,7 +42,7 @@ export class Resolved {
     }
 
     return {
-      path: newPath,
+      path,
       doc: this.spec,
     };
   }
