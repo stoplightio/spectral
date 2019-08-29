@@ -18,11 +18,7 @@ type Replacement = {
 };
 
 function replaceVars(string: string, replacements: Replacement[]) {
-  let result = string;
-  replacements.forEach(replace => {
-    result = string.replace(replace.from, replace.to);
-  });
-  return result;
+  return replacements.reduce((str, replace) => str.replace(replace.from, replace.to), string);
 }
 
 describe('cli e2e tests', () => {
