@@ -12,12 +12,12 @@ const glob = globFs({ gitignore: true });
 
 const spectralBin = path.join(__dirname, '../cli-binaries/spectral-cli');
 
-interface IReplacement {
+type Replacement = {
   from: RegExp;
   to: string;
-}
+};
 
-function replaceVars(string: string, replacements: IReplacement[]) {
+function replaceVars(string: string, replacements: Replacement[]) {
   let result = string;
   replacements.forEach(replace => {
     result = string.replace(replace.from, replace.to);
@@ -26,21 +26,14 @@ function replaceVars(string: string, replacements: IReplacement[]) {
 }
 
 describe('cli e2e tests', () => {
-  const root = path.join(__dirname, './scenarios');
-
   const files = process.env.TESTS
     ? String(process.env.TESTS).split(',')
-    : glob.readdirSync('**/*.scenario', { cwd: root });
+    : glob.readdirSync('**/*.scenario', { cwd: path.join(__dirname, './scenarios') });
 
   files.forEach((file: string) => {
     const data = fs.readFileSync(path.join(__dirname, './scenarios/', file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
-    const replacements: IReplacement[] = [
-      {
-        from: /\{root\}/g,
-        to: root,
-      },
-    ];
+    const replacements: Replacement[] = [];
 
     let tmpFileHandle: tmp.FileSyncObject;
 
@@ -71,7 +64,7 @@ describe('cli e2e tests', () => {
       }
     });
 
-    test(`${file}${os.EOL}${scenario.test}`, done => {
+    test(`${file}${os.EOL}${scenario.test}`, () => {
       // TODO split on " " is going to break quoted args
       const args = scenario.command.split(' ').map(t => {
         const arg = t.trim();
@@ -95,14 +88,12 @@ describe('cli e2e tests', () => {
       if (expectedStderr) {
         expect(stderr).toEqual(expectedStderr);
       } else if (stderr) {
-        done(stderr);
+        throw new Error(stderr);
       }
 
       if (stdout) {
         expect(stdout).toEqual(expectedStdout);
       }
-
-      done();
     });
   });
 });
