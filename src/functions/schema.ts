@@ -1,21 +1,34 @@
 import * as AJV from 'ajv';
-import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
-const oasFormatValidator = require('ajv-oai/lib/format-validator');
 import { ValidateFunction } from 'ajv';
+import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import { IOutputError } from 'better-ajv-errors';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
+const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 interface IAJVOutputError extends IOutputError {
   path?: string;
 }
 
+const logger = {
+  warn(...args: any[]) {
+    const firstArg = args[0];
+    if (typeof firstArg === 'string') {
+      if (firstArg.startsWith('unknown format')) return;
+      console.warn(...args);
+    }
+  },
+  log: console.log,
+  error: console.error,
+};
+
 const ajv = new AJV({
   meta: false,
   schemaId: 'auto',
   jsonPointers: true,
   unknownFormats: 'ignore',
+  logger,
 });
 ajv.addMetaSchema(jsonSpecv4);
 // @ts-ignore
