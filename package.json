@@ -45,7 +45,6 @@
     "build.binary": "pkg . --output ./cli-binaries/spectral-cli",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
-    "commit": "git-cz",
     "compile-rulesets": "node ./scripts/compile-rulesets.js",
     "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",
@@ -86,7 +85,6 @@
     "typescript-json-schema": "~0.40"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^8.1.0",
     "@oclif/dev-cli": "^1.0",
     "@oclif/test": "^1.0",
     "@types/fetch-mock": "^7.3.1",
@@ -98,7 +96,6 @@
     "@types/node": "~12.7",
     "@types/text-table": "^0.2.0",
     "@types/yaml": "^1.0.2",
-    "commitlint": "^8.1.0",
     "copyfiles": "^2.1.1",
     "fetch-mock": "^7.3.9",
     "glob-fs": "^0.1.7",
@@ -136,16 +133,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   },
   "pkg": {
     "scripts": [
