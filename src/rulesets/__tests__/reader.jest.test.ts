@@ -25,6 +25,7 @@ const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/cus
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
 const fooExtendsBarRuleset = path.join(__dirname, './__fixtures__/foo-extends-bar-ruleset.json');
 const selfExtendingRuleset = path.join(__dirname, './__fixtures__/self-extending-ruleset.json');
+const simpleDisableRuleset = path.join(__dirname, './__fixtures__/simple-disable-ruleset.yaml');
 const fooCJSFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/functions/foo.cjs.js'), 'utf8');
 const barFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/bar.js'), 'utf8');
 const truthyFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/truthy.js'), 'utf8');
@@ -150,6 +151,15 @@ describe('Rulesets reader', () => {
             then: expect.any(Object),
           },
         }),
+      }),
+    );
+  });
+
+  it('should always disable a rule with false severity', () => {
+    return expect(readRuleset(simpleDisableRuleset)).resolves.toHaveProperty(
+      'rules.operation-description',
+      expect.objectContaining({
+        severity: -1,
       }),
     );
   });

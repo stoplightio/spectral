@@ -68,8 +68,12 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
     case 'boolean':
       if (isValidRule(existingRule)) {
         const rootRule = getRootRule(existingRule);
-        existingRule.severity = rootRule ? rootRule.severity : getSeverityLevel(rules, name, rule);
-        updateRootRule(existingRule, existingRule);
+        if (rule) {
+          existingRule.severity = rootRule ? rootRule.severity : getSeverityLevel(rules, name, rule);
+          updateRootRule(existingRule, existingRule);
+        } else {
+          existingRule.severity = -1;
+        }
       }
       break;
     case 'string':
