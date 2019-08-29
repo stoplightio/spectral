@@ -6,6 +6,27 @@ function runSchema(target: any, schemaObj: object) {
 }
 
 describe('schema', () => {
+  describe('when schema defines unknown format', () => {
+    const testSchema = {
+      type: 'string',
+      format: 'ISO-3166-1 alpha-2',
+    };
+
+    beforeEach(() => {
+      jest.spyOn(console, 'warn');
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    test('does not log a warning in the console', () => {
+      const input = 'some string';
+      expect(runSchema(input, testSchema)).toEqual([]);
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+  });
+
   describe('when schema defines a simple array', () => {
     const testSchema = {
       type: 'array',
