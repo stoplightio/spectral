@@ -168,37 +168,15 @@ export default (ruleName: string, path: string) => {
       [path]: {
         xoxo: {
           schema: {
-            type: 'object',
-            properties: {
-              ip_address: {
-                type: 'integer',
-                format: 'foo',
-              },
-            },
+            type: 'string',
+            format: 'foo',
           },
-          example: 2886989840,
+          example: 'abc',
         },
       },
     });
 
-    expect(results).toEqual([
-      expect.objectContaining({
-        code: ruleName,
-        message: '"xoxo.example" property type should be object',
-        path: [path, 'xoxo', 'example'],
-        range: {
-          end: {
-            character: 27,
-            line: 12,
-          },
-          start: {
-            character: 17,
-            line: 12,
-          },
-        },
-        severity: DiagnosticSeverity.Error,
-      }),
-    ]);
+    expect(results).toEqual([]);
   });
 
   test.each([['byte', '1'], ['int32', 2 ** 31], ['int64', 2 ** 63], ['float', 2 ** 128]])(
