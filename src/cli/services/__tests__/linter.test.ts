@@ -22,27 +22,20 @@ const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.y
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
 
 function run(command: string) {
-  const parser = yargs.command(lintCommand).help();
+  const parser = yargs.command(lintCommand);
   const { document, ruleset, ...opts } = (parser.parse(command) as unknown) as ILintConfig & { document: string };
   return lint(document, opts, ruleset);
 }
 
 describe('Linter service', () => {
   let logSpy: jest.SpyInstance;
-  let warnSpy: jest.SpyInstance;
-  let errorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    const { log, warn, error } = console;
-    logSpy = jest.spyOn(console, 'log').mockImplementation(log);
-    warnSpy = jest.spyOn(console, 'warn').mockImplementation(warn);
-    errorSpy = jest.spyOn(console, 'error').mockImplementation(error);
+    logSpy = jest.spyOn(console, 'log');
   });
 
   afterEach(() => {
     logSpy.mockRestore();
-    warnSpy.mockRestore();
-    errorSpy.mockRestore();
 
     nock.cleanAll();
   });

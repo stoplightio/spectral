@@ -51,7 +51,7 @@
     "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
-    "test": "jest"
+    "test": "jest --silent"
   },
   "dependencies": {
     "@stoplight/json": "^3.1.1",
