@@ -27,7 +27,7 @@ describe('path-keys-no-trailing-slash', () => {
     expect(results).toEqual([
       {
         code: 'path-keys-no-trailing-slash',
-        message: 'given keys should not end with a slash.',
+        message: 'paths should not end with a slash.',
         path: ['paths', '/path/'],
         range: {
           end: {

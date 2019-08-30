@@ -127,7 +127,7 @@ export class Spectral {
       delete this.functions[key];
     }
 
-    this._addFunctions({ ...functions });
+    this._addFunctions({ ...defaultFunctions, ...functions });
   }
 
   @deprecated('loadRuleset', '4.1')

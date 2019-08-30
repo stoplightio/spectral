@@ -3,10 +3,6 @@ import { assertValidRuleset, decorateIFunctionWithSchemaValidation, ValidationEr
 const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 
-// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
-// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
-declare var it: jest.It;
-
 describe('Ruleset Validation', () => {
   it('given primitive type should throw', () => {
     expect(assertValidRuleset.bind(null, null)).toThrow('Provided ruleset is not an object');
