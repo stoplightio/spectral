@@ -1,6 +1,0 @@
-====test====
-Errors when no document is provided
-====command====
-lint
-====stderr====
-›   Error: You must specify a document to lint

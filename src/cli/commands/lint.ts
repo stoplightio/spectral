@@ -72,11 +72,13 @@ const lintCommand: CommandModule = {
 
     return lint(document, { format, output, ...config }, ruleset)
       .then(results => {
+        if (results.length) {
+          process.exitCode = 1;
+        } else if (!config.quiet) {
+          console.log('No errors or warnings found!');
+        }
         const formattedOutput = formatOutput(results, format);
         return writeOutput(formattedOutput, output);
-      })
-      .then(() => {
-        process.exitCode = 1;
       })
       .catch(fail);
   },
