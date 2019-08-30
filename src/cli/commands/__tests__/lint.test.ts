@@ -69,6 +69,7 @@ describe('lint', () => {
 
   it('calls lint with document and default options', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
+    const ruleset = undefined;
     await run(`lint ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
@@ -76,12 +77,13 @@ describe('lint', () => {
         encoding: 'utf8',
         format: 'stylish',
       },
-      undefined,
+      ruleset,
     );
   });
 
   it('calls lint with document and custom encoding', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
+    const ruleset = undefined;
     await run(`lint --encoding utf16 ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
@@ -89,12 +91,13 @@ describe('lint', () => {
         encoding: 'utf16',
         format: 'stylish',
       },
-      undefined,
+      ruleset,
     );
   });
 
   it('calls lint with document and custom encoding and format', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
+    const ruleset = undefined;
     await run(`lint -f json --encoding utf16 ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
@@ -102,7 +105,7 @@ describe('lint', () => {
         encoding: 'utf16',
         format: 'json',
       },
-      undefined,
+      ruleset,
     );
   });
 
@@ -132,8 +135,8 @@ describe('lint', () => {
   });
 
   it('passes skip-rule to lint', async () => {
+    const ruleset = undefined;
     await run('lint --skip-rule foo --skip-rule bar ./__fixtures__/empty-oas2-document.json');
-
     expect(lint).toHaveBeenCalledWith(
       expect.any(String),
       {
@@ -141,7 +144,7 @@ describe('lint', () => {
         encoding: 'utf8',
         format: 'stylish',
       },
-      undefined,
+      ruleset,
     );
   });
 
