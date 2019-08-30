@@ -131,11 +131,6 @@ describe('lint', () => {
     expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
   });
 
-  it('writes formatted output to a file', async () => {
-    await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
-    expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
-  });
-
   it('passes skip-rule to lint', async () => {
     await run('lint --skip-rule foo --skip-rule bar ./__fixtures__/empty-oas2-document.json');
 
