@@ -40,7 +40,7 @@ describe('Linter service', () => {
     nock.cleanAll();
   });
 
-  it('should handle relative path to a document', async () => {
+  it('handles relative path to a document', async () => {
     const results = await run('lint src/__tests__/__fixtures__/gh-474/spec.yaml');
     expect(results).toEqual(
       expect.not.arrayContaining([
@@ -70,7 +70,7 @@ describe('Linter service', () => {
     );
   });
 
-  it('should handle relative path to a document #2', async () => {
+  it('handles relative path to a document #2', async () => {
     const results = await run('lint src/__tests__/__fixtures__/gh-474/spec-2.yaml');
 
     expect(results).toEqual(
@@ -146,17 +146,17 @@ describe('Linter service', () => {
 
   describe('--ruleset', () => {
     describe('extends feature', () => {
-      it('should extend a valid relative ruleset', () => {
+      it('extends a valid relative ruleset', () => {
         return expect(run(`lint ${validCustomOas3SpecPath} -r ${validNestedRulesetPath}`)).resolves.toEqual([]);
       });
 
-      it('should fail trying to extend an invalid relative ruleset', () => {
+      it('fails trying to extend an invalid relative ruleset', () => {
         return expect(run(`lint ${validCustomOas3SpecPath} -r ${invalidNestedRulesetPath}`)).rejects.toThrowError(
           ValidationError,
         );
       });
 
-      it('given remote nested ruleset should resolve', () => {
+      it('given remote nested ruleset, resolves', () => {
         nock('http://foo.local')
           .persist()
           .get('/ruleset-master.yaml')
