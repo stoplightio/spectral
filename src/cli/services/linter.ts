@@ -12,22 +12,18 @@ import { IParsedResult, RuleCollection } from '../../types';
 import { ILintConfig } from '../../types/config';
 import { IRuleset } from '../../types/ruleset';
 
-export async function loadRulesets(cwd: string, rulesetFiles: string | string[] | null): Promise<IRuleset> {
-  if (rulesetFiles === null || rulesetFiles.length === 0) {
+export async function loadRulesets(cwd: string, rulesetFiles: string[]): Promise<IRuleset> {
+  if (rulesetFiles.length === 0) {
     return {
       functions: {},
       rules: {},
     };
   }
 
-  return readRuleset(
-    (Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles]).map(
-      file => (isAbsolute(file) ? file : resolve(cwd, file)),
-    ),
-  );
+  return readRuleset(rulesetFiles.map(file => (isAbsolute(file) ? file : resolve(cwd, file))));
 }
 
-export async function lint(name: string, flags: ILintConfig, rulesetFile: Optional<string | string[]>) {
+export async function lint(name: string, flags: ILintConfig, rulesetFile: Optional<string[]>) {
   if (flags.verbose) {
     console.info(`Linting ${name}`);
   }
@@ -40,7 +36,9 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
   });
 
   const rulesetFiles = rulesetFile || (await getDefaultRulesetFile(process.cwd()));
-  const ruleset = await (rulesetFiles ? loadRulesets(process.cwd(), rulesetFiles) : readRuleset('spectral:oas'));
+  const ruleset = await (rulesetFiles
+    ? loadRulesets(process.cwd(), Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles])
+    : readRuleset('spectral:oas'));
 
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
