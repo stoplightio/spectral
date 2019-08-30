@@ -342,11 +342,7 @@
       "description": "Parameter objects should have a `description`.",
       "recommended": true,
       "type": "style",
-      "given": "$..[?(@property !== 'links' && @.parameters)]['parameters'][*]",
-      "when": {
-        "field": "in",
-        "pattern": "^(?!.*(in))"
-      },
+      "given": "$..[?(@property !== 'links' && @.parameters)]['parameters']..[?(@.in)]",
       "then": {
         "field": "description",
         "function": "truthy"
