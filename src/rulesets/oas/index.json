@@ -340,12 +340,12 @@
     },
     "parameter-description": {
       "description": "Parameter objects should have a `description`.",
-      "recommended": false,
+      "recommended": true,
       "type": "style",
-      "given": "$..parameters[*]",
+      "given": "$..[?(@property !== 'links' && @.parameters)]['parameters'][*]",
       "when": {
-        "field": "@key",
-        "pattern": "^(?!.*(\\$ref))"
+        "field": "in",
+        "pattern": "^(?!.*(in))"
       },
       "then": {
         "field": "description",
