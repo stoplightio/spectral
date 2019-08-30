@@ -32,11 +32,7 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
     console.info(`Linting ${name}`);
   }
 
-  let targetUri = name;
-  if (!/^https?:\/\//.test(name) && !isAbsolute(name)) {
-    // we always want the absolute path to the target file
-    targetUri = resolve(process.cwd(), name);
-  }
+  const targetUri = !/^https?:\/\//.test(name) && !isAbsolute(name) ? resolve(process.cwd(), name) : name;
 
   const spec: IParserResult = parseWithPointers(await readParsable(targetUri, { encoding: flags.encoding }), {
     ignoreDuplicateKeys: false,
@@ -112,16 +108,12 @@ const skipRules = (rules: RuleCollection, flags: ILintConfig): RuleCollection =>
     }
   }
 
-  if (invalidRules.length !== 0) {
-    if (!flags.quiet) {
-      console.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
-    }
+  if (invalidRules.length !== 0 && !flags.quiet) {
+    console.warn(`ignoring invalid ${invalidRules.length > 1 ? 'rules' : 'rule'} "${invalidRules.join(', ')}"`);
   }
 
   if (skippedRules.length !== 0 && flags.verbose) {
-    if (flags.verbose) {
-      console.info(`skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
-    }
+    console.info(`skipping ${skippedRules.length > 1 ? 'rules' : 'rule'} "${skippedRules.join(', ')}"`);
   }
 
   return rules;

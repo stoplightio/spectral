@@ -12,7 +12,7 @@ jest.mock('../../services/linter');
 function run(command: string) {
   const parser = yargs.command(lintCommand).help();
   return new Promise(done => {
-    parser.parse(command, (err: Error, argv: any, output: string) => {
+    parser.parse(command, (err: Error, argv: unknown, output: string) => {
       done(output);
     });
   });
@@ -116,7 +116,7 @@ describe('lint', () => {
   it('calls lint with document and multiple custom rulesets', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
-    const ruleset2 = 'custom-ruleset.json';
+    const ruleset2 = 'custom-ruleset-2.json';
     await run(`lint -r ${ruleset} -r ${ruleset2} ${doc}`);
     expect(lint).toBeCalledWith(doc, expect.any(Object), [ruleset, ruleset2]);
   });
