@@ -16,7 +16,7 @@ const serializeAJVErrors = (errors: ErrorObject[]) =>
 export class ValidationError extends AJV.ValidationError {
   public message: string;
 
-  constructor(errors: ErrorObject[]) {
+  constructor(public errors: ErrorObject[]) {
     super(errors);
     this.message = serializeAJVErrors(errors);
   }
