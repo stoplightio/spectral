@@ -72,10 +72,10 @@ describe('lint', () => {
     await run(`lint ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
-      expect.objectContaining({
+      {
         encoding: 'utf8',
         format: 'stylish',
-      }),
+      },
       undefined,
     );
   });
@@ -85,10 +85,10 @@ describe('lint', () => {
     await run(`lint --encoding utf16 ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
-      expect.objectContaining({
+      {
         encoding: 'utf16',
         format: 'stylish',
-      }),
+      },
       undefined,
     );
   });
@@ -98,10 +98,10 @@ describe('lint', () => {
     await run(`lint -f json --encoding utf16 ${doc}`);
     expect(lint).toBeCalledWith(
       doc,
-      expect.objectContaining({
+      {
         encoding: 'utf16',
         format: 'json',
-      }),
+      },
       undefined,
     );
   });
@@ -110,7 +110,7 @@ describe('lint', () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
     await run(`lint -r ${ruleset} ${doc}`);
-    expect(lint).toBeCalledWith(doc, expect.any(Object), ruleset);
+    expect(lint).toBeCalledWith(doc, expect.any(Object), [ruleset]);
   });
 
   it('calls lint with document and multiple custom rulesets', async () => {
@@ -141,7 +141,11 @@ describe('lint', () => {
 
     expect(lint).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({ skipRule: ['foo', 'bar'] }),
+      {
+        skipRule: ['foo', 'bar'],
+        encoding: 'utf8',
+        format: 'stylish',
+      },
       undefined,
     );
   });

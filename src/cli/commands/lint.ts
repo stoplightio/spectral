@@ -1,9 +1,12 @@
 import { Dictionary } from '@stoplight/types';
 import { CommandModule, showHelp } from 'yargs';
 
+import { pick } from 'lodash';
 import { ILintConfig, OutputFormat } from '../../types/config';
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
+
+const toArray = (args: unknown) => (Array.isArray(args) ? args : [args]);
 
 const lintCommand: CommandModule = {
   describe: 'lint a JSON/YAML document from a file or URL',
@@ -47,11 +50,13 @@ const lintCommand: CommandModule = {
           alias: 'r',
           description: 'path/URL to a ruleset file',
           type: 'string',
+          coerce: toArray,
         },
         'skip-rule': {
           alias: 's',
           description: 'ignore certain rules if they are causing trouble',
           type: 'string',
+          coerce: toArray,
         },
         verbose: {
           alias: 'v',
@@ -66,11 +71,15 @@ const lintCommand: CommandModule = {
       }),
 
   handler: args => {
-    const { document, ruleset, format, output, ...config } = (args as unknown) as ILintConfig & {
+    const { document, ruleset, format, output, encoding, ...config } = (args as unknown) as ILintConfig & {
       document: string;
     };
 
-    return lint(document, { format, output, ...config }, ruleset)
+    return lint(
+      document,
+      { format, output, encoding, ...pick(config, ['ruleset', 'skipRule', 'verbose', 'quiet']) },
+      ruleset,
+    )
       .then(results => {
         if (results.length) {
           process.exitCode = 1;
