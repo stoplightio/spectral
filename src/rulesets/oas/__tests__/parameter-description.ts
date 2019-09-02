@@ -155,4 +155,52 @@ describe('parameter-description', () => {
       }),
     ).not.rejects;
   });
+
+  describe('description for parameters in links', () => {
+    describe('$.components.links', () => {
+      test('does not validate description', async () => {
+        const results = await s.run({
+          openapi: '3.0.2',
+          components: {
+            links: {
+              address: {
+                operationId: 'getUserAddressByUUID',
+                parameters: {
+                  param: 'value',
+                },
+              },
+            },
+          },
+        });
+
+        expect(results).toEqual([]);
+      });
+    });
+
+    describe('links in a response', () => {
+      test('does not validate description', async () => {
+        const results = await s.run({
+          paths: {
+            '/pets': {
+              get: {
+                responses: {
+                  '200': {
+                    links: {
+                      abc: {
+                        parameters: {
+                          param: 'value',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        expect(results).toEqual([]);
+      });
+    });
+  });
 });

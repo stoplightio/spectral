@@ -340,9 +340,9 @@
     },
     "parameter-description": {
       "description": "Parameter objects should have a `description`.",
-      "recommended": true,
+      "recommended": false,
       "type": "style",
-      "given": "$..[?(@property !== 'links' && @.parameters)]['parameters']..[?(@.in)]",
+      "given": "$..[?(@path === \"$['parameters']\" || @path === \"$['components']['parameters']\" || @path === \"$['paths']\")]..[?(@.in)]",
       "then": {
         "field": "description",
         "function": "truthy"
