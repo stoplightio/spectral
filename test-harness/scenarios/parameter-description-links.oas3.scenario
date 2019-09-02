@@ -1,7 +1,7 @@
 ====test====
 Parameters in links are not validated to have description.
 ====document====
-openapi: "3.0.2"
+openapi: 3.0.2
 paths:
   /pets:
     get:
@@ -12,6 +12,9 @@ paths:
             abc:
               parameters:
                 xyz: 123
+                abc:
+                  in: header
+                  val: abc
 components:
   links:
     address:
