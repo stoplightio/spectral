@@ -156,9 +156,33 @@ describe('parameter-description', () => {
     ).not.rejects;
   });
 
+  describe('$.components.parameters', () => {
+    it('validates description', async () => {
+      const results = await s.run({
+        openapi: '3.0.2',
+        components: {
+          parameters: {
+            address: {
+              in: 'body',
+            },
+          },
+        },
+      });
+
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'parameter-description',
+          message: 'Parameter objects should have a `description`.',
+          path: ['components', 'parameters', 'address'],
+          severity: 1,
+        }),
+      ]);
+    });
+  });
+
   describe('description for parameters in links', () => {
     describe('$.components.links', () => {
-      test('does not validate description', async () => {
+      it('does not validate description', async () => {
         const results = await s.run({
           openapi: '3.0.2',
           components: {
@@ -166,7 +190,10 @@ describe('parameter-description', () => {
               address: {
                 operationId: 'getUserAddressByUUID',
                 parameters: {
-                  param: 'value',
+                  param: {
+                    value: 'value',
+                    in: 'header',
+                  },
                 },
               },
             },
@@ -178,7 +205,7 @@ describe('parameter-description', () => {
     });
 
     describe('links in a response', () => {
-      test('does not validate description', async () => {
+      it('does not validate description', async () => {
         const results = await s.run({
           paths: {
             '/pets': {
@@ -188,7 +215,10 @@ describe('parameter-description', () => {
                     links: {
                       abc: {
                         parameters: {
-                          param: 'value',
+                          param: {
+                            in: 'body',
+                            val: 2,
+                          },
                         },
                       },
                     },

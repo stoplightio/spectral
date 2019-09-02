@@ -342,7 +342,7 @@
       "description": "Parameter objects should have a `description`.",
       "recommended": false,
       "type": "style",
-      "given": "$..[?(@path === \"$['parameters']\" || @path === \"$['components']['parameters']\" || @path === \"$['paths']\")]..[?(@.in)]",
+      "given": "$..[?(@path === \"$['parameters']\" || (@.parameters && @parentProperty !== 'links'))]..[?(@.in)]",
       "then": {
         "field": "description",
         "function": "truthy"
