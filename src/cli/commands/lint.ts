@@ -8,6 +8,8 @@ import { formatOutput, writeOutput } from '../services/output';
 
 const toArray = (args: unknown) => (Array.isArray(args) ? args : [args]);
 
+const formatOptions = Object.values(OutputFormat);
+
 const lintCommand: CommandModule = {
   describe: 'lint a JSON/YAML document from a file or URL',
   command: 'lint <document>',
@@ -21,7 +23,7 @@ const lintCommand: CommandModule = {
         showHelp();
       })
       .check((argv: Dictionary<unknown>) => {
-        if (argv.format !== void 0 && argv.format !== OutputFormat.JSON && argv.format !== OutputFormat.STYLISH) {
+        if (argv.format !== void 0 && !(formatOptions as string[]).includes(String(argv.format))) {
           return false;
         }
 
@@ -37,7 +39,7 @@ const lintCommand: CommandModule = {
         format: {
           alias: 'f',
           description: 'formatter to use for outputting results',
-          options: [OutputFormat.STYLISH, OutputFormat.JSON],
+          options: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
         },
