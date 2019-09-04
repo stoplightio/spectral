@@ -27,8 +27,8 @@ lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-descriptio
 OpenAPI 2.0 (Swagger) detected
 
 {document}
-  5:9   warning  parameter-description  Parameter objects should have a `description`.
- 10:11  warning  parameter-description  Parameter objects should have a `description`.
- 17:13  warning  parameter-description  Parameter objects should have a `description`.
+  5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.
+ 10:11  warning  oas2-parameter-description  Parameter objects should have a `description`.
+ 17:13  warning  oas2-parameter-description  Parameter objects should have a `description`.
 
 ✖ 3 problems (0 errors, 3 warnings, 0 infos)

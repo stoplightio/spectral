@@ -1,7 +1,7 @@
 ====test====
 Parameters - Parameter Objects - are validated to have description.
 ====document====
-openapi: 3.0.0
+openapi: 3.0.2
 paths:
   /pets:
     parameters:
@@ -27,8 +27,8 @@ lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-descriptio
 OpenAPI 3.x detected
 
 {document}
-  5:9   warning  parameter-description  Parameter objects should have a `description`.
-  9:11  warning  parameter-description  Parameter objects should have a `description`.
- 16:15  warning  parameter-description  Parameter objects should have a `description`.
+  5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.
+  9:11  warning  oas3-parameter-description  Parameter objects should have a `description`.
+ 16:15  warning  oas3-parameter-description  Parameter objects should have a `description`.
 
 ✖ 3 problems (0 errors, 3 warnings, 0 infos)

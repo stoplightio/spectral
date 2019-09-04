@@ -73,11 +73,11 @@
         "function": "truthy"
       }
     },
-    "parameter-description": {
+    "oas2-parameter-description": {
       "description": "Parameter objects should have a `description`.",
-      "recommended": false,
+      "recommended": true,
       "type": "style",
-      "given": "$..parameters[?(@.in)]",
+      "given": "$..[?(@parentProperty === 'parameters' && @.in)]",
       "then": {
         "field": "description",
         "function": "truthy"

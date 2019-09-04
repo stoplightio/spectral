@@ -336,6 +336,8 @@ Operation should have non-empty `tags` array.
 
 ### parameter-description
 
+
+
 Parameter objects should have a `description`.
 
 **Recommended:** No
