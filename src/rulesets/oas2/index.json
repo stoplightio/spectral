@@ -75,7 +75,7 @@
     },
     "oas2-parameter-description": {
       "description": "Parameter objects should have a `description`.",
-      "recommended": true,
+      "recommended": false,
       "type": "style",
       "given": "$..[?(@parentProperty === 'parameters' && @.in)]",
       "then": {

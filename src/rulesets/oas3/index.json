@@ -36,7 +36,7 @@
     },
     "oas3-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
-      "recommended": true,
+      "recommended": false,
       "type": "validation",
       "given": "$",
       "then": {
