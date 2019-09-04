@@ -4150,10 +4150,10 @@ jest-watcher@^24.9.0:
     jest-util "^24.9.0"
     string-length "^2.0.0"
 
-jest-when@~2.6:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-2.6.2.tgz#ba0e0a1ad497387350e70c2eeb783008b198a079"
-  integrity sha512-fivO1rRScZVEkEQe2BcURx18wD8SbbcX3U/4mTmFRSA9CkPoNs492qakwnM+grLkXDV7ZURmyH1gXPbfF9/uXQ==
+jest-when@~2.7:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-2.7.0.tgz#9549185ae8847b47d5d40262f1c59a5143e89a0c"
+  integrity sha512-psU0pXdomBORY9TGuSut/k8vViVki9l92WggL0m5/Lk8zTrDYtcCpPIFdZQDKqXvmW5Jzoh7SCsLKITvBJ0jyQ==
   dependencies:
     bunyan "^1.8.12"
     expect "^24.8.0"
