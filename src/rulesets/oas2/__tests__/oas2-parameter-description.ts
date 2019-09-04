@@ -12,7 +12,7 @@ describe('oas2-parameter-description', () => {
     }),
   });
 
-  testParameterDescription(s);
+  testParameterDescription(s, 2);
 
   test('return errors if shared level parameter description is missing', async () => {
     const results = await s.run({

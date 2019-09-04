@@ -12,7 +12,7 @@ describe('oas3-parameter-description', () => {
     }),
   });
 
-  testParameterDescription(s);
+  testParameterDescription(s, 3);
 
   describe('$.components.parameters', () => {
     it('validates description', async () => {

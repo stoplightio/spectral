@@ -1,4 +1,6 @@
-export default (s: any) => {
+import { Spectral } from '../../../spectral';
+
+export default (s: Spectral, oasVersion: number) => {
   test('should work for shared level parameters', async () => {
     const results = await s.run({
       swagger: '2.0',
@@ -71,7 +73,7 @@ export default (s: any) => {
     });
     expect(results).toEqual([
       expect.objectContaining({
-        code: 'parameter-description',
+        code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'parameters', '0'],
         severity: 1,
@@ -98,7 +100,7 @@ export default (s: any) => {
     });
     expect(results).toEqual([
       expect.objectContaining({
-        code: 'parameter-description',
+        code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'get', 'parameters', '0'],
         severity: 1,
