@@ -1,16 +1,4 @@
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../../oas2/index.json';
-
-describe('parameter-description', () => {
-  const s = new Spectral();
-
-  s.setRules({
-    'parameter-description': Object.assign(ruleset.rules['parameter-description'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['parameter-description'].type],
-    }),
-  });
-
+export default (s: any) => {
   test('should work for shared level parameters', async () => {
     const results = await s.run({
       swagger: '2.0',
@@ -64,27 +52,6 @@ describe('parameter-description', () => {
       },
     });
     expect(results.length).toEqual(0);
-  });
-
-  test('return errors if shared level parameter description is missing', async () => {
-    const results = await s.run({
-      swagger: '2.0',
-      parameters: {
-        limit: {
-          name: 'limit',
-          in: 'query',
-          type: 'integer',
-        },
-      },
-    });
-    expect(results).toEqual([
-      expect.objectContaining({
-        code: 'parameter-description',
-        message: 'Parameter objects should have a `description`.',
-        path: ['parameters', 'limit'],
-        severity: 1,
-      }),
-    ]);
   });
 
   test('return errors if top level path parameter description is missing', async () => {
@@ -155,82 +122,4 @@ describe('parameter-description', () => {
       }),
     ).not.rejects;
   });
-
-  xdescribe('$.components.parameters', () => {
-    it('validates description', async () => {
-      const results = await s.run({
-        openapi: '3.0.2',
-        components: {
-          parameters: {
-            address: {
-              in: 'body',
-            },
-          },
-        },
-      });
-
-      expect(results).toEqual([
-        expect.objectContaining({
-          code: 'parameter-description',
-          message: 'Parameter objects should have a `description`.',
-          path: ['components', 'parameters', 'address'],
-          severity: 1,
-        }),
-      ]);
-    });
-  });
-
-  xdescribe('description for parameters in links', () => {
-    describe('$.components.links', () => {
-      it('does not validate description', async () => {
-        const results = await s.run({
-          openapi: '3.0.2',
-          components: {
-            links: {
-              address: {
-                operationId: 'getUserAddressByUUID',
-                parameters: {
-                  param: {
-                    value: 'value',
-                    in: 'header',
-                  },
-                },
-              },
-            },
-          },
-        });
-
-        expect(results).toEqual([]);
-      });
-    });
-
-    describe('links in a response', () => {
-      it('does not validate description', async () => {
-        const results = await s.run({
-          paths: {
-            '/pets': {
-              get: {
-                responses: {
-                  '200': {
-                    links: {
-                      abc: {
-                        parameters: {
-                          param: {
-                            in: 'body',
-                            val: 2,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        });
-
-        expect(results).toEqual([]);
-      });
-    });
-  });
-});
+};
