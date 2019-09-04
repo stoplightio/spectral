@@ -332,6 +332,8 @@ Operation `summary` should start with upper case and end with a dot.
 
 Operation should have non-empty `tags` array.
 
+**Recommended:** Yes
+
 ### path-declarations-must-exist
 
 Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
