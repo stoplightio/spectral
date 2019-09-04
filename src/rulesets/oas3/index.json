@@ -52,6 +52,19 @@
         "operation"
       ]
     },
+    "parameter-description": {
+      "description": "Parameter objects should have a `description`.",
+      "recommended": false,
+      "type": "style",
+      "given": "$..[?(@parentProperty !== 'links' && @.parameters)]['parameters']..[?(@.in)]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "parameters"
+      ]
+    },
     "server-not-example.com": {
       "description": "Server URL should not point at `example.com`.",
       "recommended": false,
