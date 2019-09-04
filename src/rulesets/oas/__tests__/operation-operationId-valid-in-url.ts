@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-operationId-valid-in-url', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-operationId-valid-in-url': Object.assign(ruleset.rules['operation-operationId-valid-in-url'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-operationId-valid-in-url'].type],

@@ -1,4 +1,15 @@
 {
+  "extends": ["spectral:oas2", "spectral:oas3"],
+  "formats": ["oas2", "oas3"],
+  "functions": [
+    "oasOp2xxResponse",
+    "oasOpFormDataConsumeCheck",
+    "oasOpIdUnique",
+    "oasOpParams",
+    "oasOpSecurityDefined",
+    "oasPathParam",
+    "refSiblings"
+  ],
   "rules": {
     "operation-2xx-response": {
       "description": "Operation must have at least one `2xx` response.",
@@ -51,7 +62,7 @@
       ]
     },
     "path-params": {
-      "description": "Path parameters are correct and valid.",
+      "description": "Path parameters should be defined and valid.",
       "message": "{{error}}",
       "type": "validation",
       "severity": 0,
@@ -345,7 +356,7 @@
       ]
     },
     "path-declarations-must-exist": {
-      "description": "given declarations cannot be empty, ex.`/given/{}` is invalid.",
+      "description": "Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.",
       "recommended": true,
       "type": "style",
       "given": "$.paths",
@@ -361,7 +372,7 @@
       ]
     },
     "path-keys-no-trailing-slash": {
-      "description": "given keys should not end with a slash.",
+      "description": "paths should not end with a slash.",
       "recommended": true,
       "type": "style",
       "given": "$.paths",
@@ -404,6 +415,18 @@
       "tags": [
         "api"
       ]
+    },
+    "no-$ref-siblings": {
+      "description": "Property cannot be placed among $ref",
+      "message": "{{error}}",
+      "type": "validation",
+      "severity": 0,
+      "recommended": true,
+      "resolved": false,
+      "given": "$",
+      "then": {
+        "function": "refSiblings"
+      }
     }
   }
 }

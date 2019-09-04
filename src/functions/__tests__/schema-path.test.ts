@@ -61,8 +61,8 @@ describe('schema', () => {
     };
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
-        path: [],
-        message: "should have required property 'url'",
+        path: ['example'],
+        message: `"example" property should have required property 'url'`,
       },
     ]);
   });
@@ -78,8 +78,8 @@ describe('schema', () => {
 
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
-        message: 'format should match format "url"',
-        path: [],
+        message: '"example" property format should match format "url"',
+        path: ['example'],
       },
     ]);
   });

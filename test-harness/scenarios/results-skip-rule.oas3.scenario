@@ -1,0 +1,18 @@
+====test====
+Can skip a rule with --skip-rule=info-contact
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+paths: {}
+====command====
+lint {document} --skip-rule=info-contact
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 1:1  warning  api-servers       OpenAPI `servers` must be present and non-empty array.
+ 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
+
+✖ 2 problems (0 errors, 2 warnings, 0 infos)

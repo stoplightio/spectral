@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-operationId', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-operationId': Object.assign(ruleset.rules['operation-operationId'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-operationId'].type],
@@ -38,7 +38,7 @@ describe('operation-operationId', () => {
       {
         code: 'operation-operationId',
         message: 'Operation should have an `operationId`.',
-        path: ['paths', '/todos', 'get', 'operationId'],
+        path: ['paths', '/todos', 'get'],
         range: {
           end: {
             character: 15,

@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-description', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-description': Object.assign(ruleset.rules['operation-description'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-description'].type],
@@ -38,7 +38,7 @@ describe('operation-description', () => {
       {
         code: 'operation-description',
         message: 'Operation `description` must be present and non-empty string.',
-        path: ['paths', '/todos', 'get', 'description'],
+        path: ['paths', '/todos', 'get'],
         range: {
           end: {
             character: 15,

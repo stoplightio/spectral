@@ -3,10 +3,6 @@ import { HumanReadableDiagnosticSeverity } from '../../types';
 import { FileRulesetSeverity } from '../../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
 
-// @oclif/test packages requires @types/mocha, therefore we have 2 packages coming up with similar typings
-// TS is confused and prefers the mocha ones, so we need to instrument it to pick up the Jest ones
-declare var test: jest.It;
-
 describe('Ruleset severity', () => {
   describe('getDiagnosticSeverity', () => {
     test.each([

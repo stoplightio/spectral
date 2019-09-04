@@ -2,23 +2,9 @@
 
 First of all, thanks for considering contributing to Spectral! ✨ It's people like you that make tools like Spectral awesome. 💖
 
-At Stoplight, we want contributing to Spectral to be an enjoyable and educational project for everyone. Contributions go beyond commits in pull requests. We are excited to receive contributions in the form of:
+At Stoplight, we want contributing to Spectral to be an enjoyable and educational experience for everyone. Contributions go beyond commits in pull requests. We are excited to receive contributions in the form of feature ideas, pull requests, triaging issues, reviewing pull requests, implementations of Spectral in your own projects, blog posts, talks referencing the project, tweets, and much more!
 
-- feature ideas
-- pull requests
-- triaging issues
-- reviewing pull requests
-- implementations of Spectral in your own projects
-- blog posts, talks referencing the project, tweets
-- and much more!
-
-If it is related to Spectral, we consider it a contribution. 
-
-If you are new to contributing to open source, GitHub has created a helpful guide with lots of resources [here](https://opensource.guide/how-to-contribute/). If you want more help, post in our [Community forum](https://community.stoplight.io/c/open-source) or send an email to [support@stoplight.io](mailto:support@stoplight.io). We are happy to help you out there. 
-
-We want to encourage everyone to be welcoming to newcomers and encourage new contributors from all backgrounds.
-
-To help create an environment where anyone could potentially be welcome to contribute, we have a Code of Conduct that applies to the project and adjacent spaces related to Spectral. 
+Basically, if it is related to Spectral, we consider it a contribution.
 
 ## Stoplight Community Code of Conduct
 
@@ -30,24 +16,50 @@ Our Code of Conduct exists because of that dedication, and we do not tolerate ha
 
 Yarn is a package manager for your code, similar to npm. While you can use npm to use Spectral in your own project, we use yarn for development of Spectral.
 
-1. If you don't already have the yarn package manager on your machine, install [yarn](https://yarnpkg.com/lang/en/docs/install/).
-2. Fork the [https://github.com/stoplightio/spectral](https://github.com/stoplightio/spectral) repo.
-3. Git clone your fork (i.e. git clone https://github.com/<your-username>/spectral.git) to your machine.
-4. Run `yarn` to install dependencies and setup the project.
-5. Use `yarn build && bin/run lint openapi.yml` to run Spectral from your local source tree.
-6. Run `git checkout -b [name_of_your_new_branch]` to create a new branch for your work. To help build nicer changelogs, we have a convention for branch names. Please start your branch with either `feature/{branch-name}`, `chore/{branch-name}`, or `fix/{branch-name}`. For example, if I was adding a CLI, I would make my branch name: `feature/add-cli`. 
-7. Make changes, write code and tests, etc. The fun stuff!
-8. Run `yarn test.prod` to test your changes.
-9. Ready to `git commit`? **Important:** We use a [commit message format](https://www.conventionalcommits.org/en/v1.0.0-beta.3/) to add more semantic meaning to our git history to create automated, rich changelogs, filter what tests to run, and more. After you have `git add`, run `yarn commit` to help you create this format, or you can put it together manually and then do a regular `git commit`. Commits outside of this format will be rejected.
-10. Don't forget to `git push` to your branch after you have committed changes. 
+1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your computer.
+2. Install yarn: `npm install -g yarn`
+3. In your terminal, navigate to the directory you cloned Spectral into.
+4. Install the dependencies: `yarn`
+5. Build Spectral: `yarn build`
+6. Run Spectral from your local installation: `bin/run lint openapi.yml`
+7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
+8. Make changes, add tests, and then run the tests: `yarn test.prod`
 
-Now, you are ready to make a pull request to the Stoplight repo! 😃
+Now, you are ready to commit & push your changes, and make a pull request to the Spectral repo! 😃
 
 If this is your first Pull Request on GitHub, here's some [help](https://egghead.io/lessons/javascript-how-to-create-a-pull-request-on-github). 
 
-We have a pull request template setup that you will fill out when you open your pull request. 
-
 > We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests. 
+
+## To run tests
+
+We run tests in the two envirnoments that Spectral supports - the browser, and node.js. Browser tests are run in a headless Chrome browser via the Karma test runner, while node.js tests are run via the Jest test runner.
+
+Tests should usually be written for both environments, but there are valid cases when you need to write separate tests for each test runner. To do so, just create a file with `*.karma.test.ts` suffix or `*.jest.test.ts`. A good example of Jest only tests are the tests covering Spectral's CLI functionality - something that obviously is not relevant to the browser context.
+
+Running all tests:
+
+```bash
+yarn test.prod
+```
+
+Running node.js (jest) tests:
+
+```bash
+yarn test
+```
+
+Running browser (karma) tests:
+
+```bash
+yarn test.karma
+```
+
+Running a specific test:
+
+```bash
+yarn test src/cli/commands/__tests__/lint.test.ts
+```
 
 ## Creating an issue
 
@@ -55,40 +67,12 @@ We want to keep issues in this repo focused on bug reports and feature requests.
 
 For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
 
-Before you open an issue, try to see if anyone else has already opened an issue that might be similar to your issue or feature request. Start by commenting there to see if you are having the same issue or feature request. 
-
-We have an issue template setup: 
-
-```
-### **I'm submitting a...**
-  - bug report
-  - feature request
-
-### What is the current behavior?
-
-If the current behavior is a bug, please provide the steps to reproduce and if possible a minimal demo of the problem.
-
-### What is the expected behavior?
-
-### What is the motivation / use case for changing the behavior?
-
-### Please tell us about your environment:
-
-  - Version: 2.0.0-beta.X
-  - Framework: [ ]
-  - Language: [all | TypeScript X.X | ES6/7 | ES5 | Dart]
-
-### Other information
-
-(e.g. detailed explanation, stacktraces, related issues, suggestions how to fix, links for us to have context, eg. stackoverflow, issues outside of the repo, forum, etc.)
-```
-
-We realize there is a lot of data requested here. We ask only that you do your best to provide as much information as possible so we can better help you.
+Before you open an issue, please search to see if anyone else has already opened an issue that might be similar to yours.
 
 ## Support
 
-For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
+For support or "how-to" type questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
 
-If you have found a bug, please create an issue. 
+If you have found a security issue, please email [security@stoplight.io](mailto:security@stoplight.io) directly.
 
 We try to respond to all pull requests and issues within 7 days.

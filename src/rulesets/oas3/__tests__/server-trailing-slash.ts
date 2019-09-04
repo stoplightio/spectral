@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('server-trailing-slash', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'server-trailing-slash': Object.assign(ruleset.rules['server-trailing-slash'], {
       recommended: true,
       type: RuleType[ruleset.rules['server-trailing-slash'].type],

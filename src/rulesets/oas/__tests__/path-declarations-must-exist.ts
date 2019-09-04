@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('path-declarations-must-exist', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'path-declarations-must-exist': Object.assign(ruleset.rules['path-declarations-must-exist'], {
       recommended: true,
       type: RuleType[ruleset.rules['path-declarations-must-exist'].type],
@@ -27,7 +27,7 @@ describe('path-declarations-must-exist', () => {
     expect(results).toEqual([
       {
         code: 'path-declarations-must-exist',
-        message: 'given declarations cannot be empty, ex.`/given/{}` is invalid.',
+        message: 'Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.',
         path: ['paths', '/path/{}'],
         range: {
           end: {

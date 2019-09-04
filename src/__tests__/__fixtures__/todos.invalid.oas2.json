@@ -82,7 +82,7 @@
           },
           {
             "name": "missing",
-            "in": "query",
+            "in": "body",
             "schema": {
               "$ref": "#/parameters/missing",
               "example": "test"

@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('model-description', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'model-description': Object.assign(ruleset.rules['model-description'], {
       recommended: true,
       type: RuleType[ruleset.rules['model-description'].type],
@@ -40,7 +40,7 @@ describe('model-description', () => {
       {
         code: 'model-description',
         message: 'Model `description` must be present and non-empty string.',
-        path: ['components', 'schemas', 'user', 'description'],
+        path: ['components', 'schemas', 'user'],
         range: {
           end: {
             character: 16,

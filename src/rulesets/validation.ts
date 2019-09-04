@@ -1,13 +1,26 @@
+import { JSONSchema7 } from 'json-schema';
 import { FileRule, IRulesetFile } from '../types/ruleset';
 
 import { ErrorObject } from 'ajv';
 const AJV = require('ajv');
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
-import { Rule } from '../types';
+import { IFunction, IFunctionPaths, IFunctionValues, Rule } from '../types';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
+
+const serializeAJVErrors = (errors: ErrorObject[]) =>
+  errors.map(({ message, dataPath }) => `${dataPath} ${message}`).join('\n');
+
+export class ValidationError extends AJV.ValidationError {
+  public message: string;
+
+  constructor(public errors: ErrorObject[]) {
+    super(errors);
+    this.message = serializeAJVErrors(errors);
+  }
+}
 
 export function assertValidRuleset(ruleset: unknown): IRulesetFile {
   if (ruleset === null || typeof ruleset !== 'object') {
@@ -19,9 +32,7 @@ export function assertValidRuleset(ruleset: unknown): IRulesetFile {
   }
 
   if (!validate(ruleset)) {
-    throw new Error(
-      (validate.errors as ErrorObject[]).map(({ message, dataPath }) => `${dataPath} ${message}`).join('\n'),
-    );
+    throw new ValidationError(validate.errors);
   }
 
   return ruleset as IRulesetFile;
@@ -29,4 +40,14 @@ export function assertValidRuleset(ruleset: unknown): IRulesetFile {
 
 export function isValidRule(rule: FileRule): rule is Rule {
   return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
+}
+
+export function decorateIFunctionWithSchemaValidation(fn: IFunction, schema: JSONSchema7) {
+  return (data: unknown, opts: unknown, ...args: [IFunctionPaths, IFunctionValues]) => {
+    if (!ajv.validate(schema, opts)) {
+      throw new ValidationError(ajv.errors);
+    }
+
+    return fn(data, opts, ...args);
+  };
 }

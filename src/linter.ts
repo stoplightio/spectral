@@ -3,6 +3,7 @@ import { get, has } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
+import { decodePointerFragment } from '@stoplight/json';
 import { Resolved } from './resolved';
 import { message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
@@ -66,7 +67,7 @@ export const lintNode = (
   }
 
   if (!targets.length) {
-    // must call then at least once, with no result
+    // must call then at least once, with no resolved
     targets.push({
       path: [],
       value: undefined,
@@ -94,7 +95,11 @@ export const lintNode = (
 
     results = results.concat(
       targetResults.map<IRuleResult>(result => {
-        const path = result.path || targetPath;
+        const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
+        const path = getRealJsonPath(
+          rule.resolved === false ? resolved.unresolved : resolved.resolved,
+          escapedJsonPath,
+        );
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
@@ -203,4 +208,14 @@ function keyAndOptionalPattern(key: string | number, pattern: string, value: any
     lint: false,
     value,
   };
+}
+
+function getRealJsonPath(data: unknown, path: JsonPath) {
+  if (data === null || typeof data !== 'object') return [];
+
+  while (path.length > 0 && !has(data, path)) {
+    path.pop();
+  }
+
+  return path;
 }

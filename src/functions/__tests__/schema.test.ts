@@ -1,3 +1,4 @@
+import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { schema } from '../schema';
 
 function runSchema(target: any, schemaObj: object) {
@@ -5,6 +6,27 @@ function runSchema(target: any, schemaObj: object) {
 }
 
 describe('schema', () => {
+  describe('when schema defines unknown format', () => {
+    const testSchema = {
+      type: 'string',
+      format: 'ISO-3166-1 alpha-2',
+    };
+
+    beforeEach(() => {
+      jest.spyOn(console, 'warn');
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    test('does not log a warning in the console', () => {
+      const input = 'some string';
+      expect(runSchema(input, testSchema)).toEqual([]);
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+  });
+
   describe('when schema defines a simple array', () => {
     const testSchema = {
       type: 'array',
@@ -120,5 +142,45 @@ describe('schema', () => {
       const input = 123;
       expect(runSchema(input, testSchema)).toEqual([]);
     });
+  });
+
+  describe('handles duplicate JSONSchema4 ids', () => {
+    const testSchema: JSONSchema4 = {
+      id: 'test',
+      type: 'string',
+    };
+
+    const testSchema2: JSONSchema4 = {
+      id: 'test',
+      type: 'number',
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        path: [],
+        message: 'type should be string',
+      },
+    ]);
+    expect(runSchema('a', testSchema2)).toEqual([]);
+  });
+
+  describe('handles duplicate JSONSchema6 ids', () => {
+    const testSchema: JSONSchema6 = {
+      $id: 'test',
+      type: 'string',
+    };
+
+    const testSchema2: JSONSchema6 = {
+      $id: 'test',
+      type: 'number',
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        path: [],
+        message: 'type should be string',
+      },
+    ]);
+    expect(runSchema('a', testSchema2)).toEqual([]);
   });
 });

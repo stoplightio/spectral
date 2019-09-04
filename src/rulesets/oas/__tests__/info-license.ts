@@ -3,7 +3,7 @@ import * as ruleset from '../index.json';
 
 describe('info-license', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'info-license': Object.assign(ruleset.rules['info-license'], {
       recommended: true,
       type: RuleType[ruleset.rules['info-license'].type],
@@ -34,7 +34,7 @@ describe('info-license', () => {
       {
         code: 'info-license',
         message: 'OpenAPI object info `license` must be present and non-empty string.',
-        path: ['info', 'license'],
+        path: ['info'],
         range: {
           end: {
             character: 28,

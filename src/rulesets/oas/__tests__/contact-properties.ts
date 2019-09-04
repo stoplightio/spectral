@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('contact-properties', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'contact-properties': Object.assign(ruleset.rules['contact-properties'], {
       recommended: true,
       type: RuleType[ruleset.rules['contact-properties'].type],
@@ -36,7 +36,7 @@ describe('contact-properties', () => {
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact', 'name'],
+        path: ['info', 'contact'],
         range: {
           end: {
             character: 17,
@@ -53,7 +53,7 @@ describe('contact-properties', () => {
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact', 'url'],
+        path: ['info', 'contact'],
         range: {
           end: {
             character: 17,
@@ -69,7 +69,7 @@ describe('contact-properties', () => {
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact', 'email'],
+        path: ['info', 'contact'],
         range: {
           end: {
             character: 17,

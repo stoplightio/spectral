@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 describe('parameter-description', () => {
   const s = new Spectral();
 
-  s.addRules({
+  s.setRules({
     'parameter-description': Object.assign(ruleset.rules['parameter-description'], {
       recommended: true,
       type: RuleType[ruleset.rules['parameter-description'].type],
@@ -81,7 +81,7 @@ describe('parameter-description', () => {
       expect.objectContaining({
         code: 'parameter-description',
         message: 'Parameter objects should have a `description`.',
-        path: ['parameters', 'limit', 'description'],
+        path: ['parameters', 'limit'],
         severity: 1,
       }),
     ]);
@@ -106,7 +106,7 @@ describe('parameter-description', () => {
       expect.objectContaining({
         code: 'parameter-description',
         message: 'Parameter objects should have a `description`.',
-        path: ['paths', '/todos', 'parameters', '0', 'description'],
+        path: ['paths', '/todos', 'parameters', '0'],
         severity: 1,
       }),
     ]);
@@ -133,7 +133,7 @@ describe('parameter-description', () => {
       expect.objectContaining({
         code: 'parameter-description',
         message: 'Parameter objects should have a `description`.',
-        path: ['paths', '/todos', 'get', 'parameters', '0', 'description'],
+        path: ['paths', '/todos', 'get', 'parameters', '0'],
         severity: 1,
       }),
     ]);

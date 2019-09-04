@@ -33,14 +33,23 @@ commands:
           command: |
             ./cc-test-reporter before-build
       - run:
-          name: Run browser tests
-          command: yarn test.karma
-      - run:
           name: Build the code
           command: yarn build
       - run:
+          name: Run browser tests
+          command: yarn test.karma
+      - run:
           name: Run node tests
           command: yarn test --coverage --maxWorkers=2
+      - run:
+          name: Create the Spectral Binary
+          command: yarn build.binary
+      - run:
+          name: Create output directory
+          command: mkdir ./test-harness/tmp
+      - run:
+          name: Run harness tests
+          command: yarn test.harness
       - run:
           name: Lint the code
           command: yarn lint
@@ -96,7 +105,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - binaries
+            - cli-binaries
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
@@ -108,7 +117,7 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/cli-binaries
 
 workflows:
   commit:

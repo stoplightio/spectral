@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('info-contact', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'info-contact': Object.assign(ruleset.rules['info-contact'], {
       recommended: true,
       type: RuleType[ruleset.rules['info-contact'].type],
@@ -30,7 +30,7 @@ describe('info-contact', () => {
       {
         code: 'info-contact',
         message: 'Info object should contain `contact` object.',
-        path: ['info', 'contact'],
+        path: ['info'],
         range: {
           end: {
             character: 20,

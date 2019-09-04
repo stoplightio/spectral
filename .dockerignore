@@ -6,3 +6,4 @@ img
 .circleci
 __mocks__
 __tests__
+test-harness

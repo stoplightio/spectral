@@ -3,7 +3,7 @@ import * as ruleset from '../index.json';
 
 describe('server-not-example.com', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'server-not-example.com': Object.assign(ruleset.rules['server-not-example.com'], {
       recommended: true,
       type: RuleType[ruleset.rules['server-not-example.com'].type],

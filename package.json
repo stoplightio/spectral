@@ -23,92 +23,95 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "bin": {
-    "spectral": "./bin/run"
-  },
-  "oclif": {
-    "commands": "./dist/cli/commands",
-    "bin": "spectral",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
+    "spectral": "./dist/cli/index.js"
   },
   "files": [
-    "bin/*",
     "dist/*",
-    "oclif.manifest.json",
     "rulesets/*"
   ],
   "engines": {
     "node": ">=8.3.0"
   },
   "scripts": {
-    "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/*.json\" ./",
+    "build.binary": "pkg . --output ./cli-binaries/spectral-cli",
+    "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "oclif-dev manifest",
-    "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
-    "commit": "git-cz",
-    "lint": "tslint 'src/**/*.ts'",
+    "compile-rulesets": "node ./scripts/compile-rulesets.js",
+    "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",
-    "test": "jest",
+    "lint": "tslint 'src/**/*.ts'",
+    "postbuild.oas-functions": "copyfiles -u 1 \"dist/rulesets/oas*/functions/*.js\" ./",
+    "postbuild": "yarn build.oas-functions && yarn compile-rulesets",
+    "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./",
+    "prebuild.binary": "yarn build",
+    "pretest.karma": "node ./scripts/generate-karma-fixtures.js",
+    "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json",
+    "test.harness": "jest -c ./jest.harness.config.js",
+    "test.karma": "karma start",
     "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
-    "test.karma": "karma start",
-    "inline-version": "./scripts/inline-version.js",
-    "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json"
+    "test": "jest --silent"
   },
   "dependencies": {
-    "@oclif/command": "^1.0",
-    "@oclif/config": "^1.12",
-    "@oclif/plugin-help": "^2.0",
-    "@stoplight/json": "^3.0.4",
-    "@stoplight/json-ref-resolver": "^2.1.2",
-    "@stoplight/path": "^1.1.0",
+    "@stoplight/json": "^3.1.1",
+    "@stoplight/json-ref-resolver": "^2.2.0",
+    "@stoplight/path": "^1.2.0",
     "@stoplight/types": "^11.0.0",
-    "@stoplight/yaml": "^3.0.0",
+    "@stoplight/yaml": "^3.1.0",
+    "abort-controller": "^3.0.0",
     "ajv": "^6.7",
     "ajv-oai": "^1.1.1",
     "better-ajv-errors": "stoplightio/better-ajv-errors#0c5be246c12c87993ba07b47479cff8257b9579b",
     "chalk": "^2.4.2",
-    "jsonpath-plus": "~0.20",
+    "deprecated-decorator": "^0.1.6",
+    "jsonpath-plus": "~1.0",
     "lodash": ">=4.17.5",
+    "nanoid": "^2.0.3",
     "node-fetch": "^2.6",
     "strip-ansi": "^5.2",
     "text-table": "^0.2",
-    "typescript-json-schema": "~0.38"
+    "typescript-json-schema": "~0.40",
+    "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^8.0.0",
-    "@oclif/dev-cli": "^1.0",
-    "@oclif/test": "^1.0",
+    "@commitlint/config-conventional": "^8.1.0",
     "@types/chalk": "^2.2.0",
-    "@types/jest": "^24.0.0",
+    "@types/fetch-mock": "^7.3.1",
+    "@types/jest": "^24.0.16",
     "@types/jest-when": "^2.4.0",
-    "@types/lodash": "^4.0.0",
-    "@types/node": "~12.6",
-    "@types/strip-ansi": "^5.2.1",
+    "@types/lodash": "^4.14.136",
+    "@types/nanoid": "^2.0.0",
+    "@types/nock": "^10.0.3",
+    "@types/node": "~12.7",
     "@types/text-table": "^0.2.0",
     "@types/yaml": "^1.0.2",
-    "commitlint": "^8.0.0",
-    "copyfiles": "^2.1.0",
-    "fs-extra": "^8.0.1",
+    "copyfiles": "^2.1.1",
+    "fetch-mock": "^7.3.9",
+    "glob-fs": "^0.1.7",
     "husky": "^3.0.0",
-    "jest": "~24.8",
+    "jest": "~24.9",
     "jest-mock": "^24.8.0",
     "jest-when": "~2.6",
-    "karma": "^4.1.0",
-    "karma-chrome-launcher": "^2.2.0",
+    "karma": "^4.2.0",
+    "karma-chrome-launcher": "^3.0.0",
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^4.1.1",
     "lint-staged": "^9.0.2",
     "nock": "~10.0.6",
-    "pkg": "~4.4",
+    "pkg": "^4.4.0",
     "recast": "^0.18.1",
+    "rollup": "^1.19.4",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript2": "^0.24.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.1.0",
-    "tslint": "~5.18",
-    "tslint-config-stoplight": "1.3.0",
-    "typescript": "3.5.2",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "~5.19",
+    "tslint-config-stoplight": "~1.3",
+    "typescript": "^3.5.3",
     "yaml": "~1.6"
   },
   "lint-staged": {
@@ -119,27 +122,16 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   },
   "pkg": {
     "scripts": [
       "./dist/**/*.js"
     ],
     "assets": [
-      "./oclif.manifest.json",
       "./dist/**/*.json"
     ]
-  }
+  },
+  "types": "dist/index.d.ts"
 }

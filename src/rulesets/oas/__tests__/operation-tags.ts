@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-tags', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-tags': Object.assign(ruleset.rules['operation-tags'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-tags'].type],
@@ -38,7 +38,7 @@ describe('operation-tags', () => {
       {
         code: 'operation-tags',
         message: 'Operation should have non-empty `tags` array.',
-        path: ['paths', '/todos', 'get', 'tags'],
+        path: ['paths', '/todos', 'get'],
         range: {
           end: {
             character: 15,

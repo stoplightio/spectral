@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('api-schemes', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'api-schemes': Object.assign(ruleset.rules['api-schemes'], {
       recommended: true,
       type: RuleType[ruleset.rules['api-schemes'].type],
@@ -29,7 +29,7 @@ describe('api-schemes', () => {
       {
         code: 'api-schemes',
         message: 'OpenAPI host `schemes` must be present and non-empty array.',
-        path: ['schemes'],
+        path: [],
         range: {
           end: {
             character: 13,

@@ -19,6 +19,12 @@ export const runRules = (
     const rule = rules[name];
     if (!rule) continue;
 
+    if (
+      rule.formats !== void 0 &&
+      (resolved.format === null || (resolved.format !== void 0 && !rule.formats.includes(resolved.format)))
+    )
+      continue;
+
     if (rule.severity !== undefined && getDiagnosticSeverity(rule.severity) === -1) {
       continue;
     }
@@ -34,9 +40,9 @@ export const runRules = (
 };
 
 const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
-  const { result: target } = resolved;
+  const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
-  let results: IRuleResult[] = [];
+  const results: IRuleResult[] = [];
   const nodes: IGivenNode[] = [];
 
   // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -73,7 +79,7 @@ const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollecti
           continue;
         }
 
-        results = results.concat(lintNode(node, rule, then, func, resolved));
+        results.push(...lintNode(node, rule, then, func, resolved));
       }
     } catch (e) {
       console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);

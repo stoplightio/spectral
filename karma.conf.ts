@@ -11,7 +11,7 @@ module.exports = (config: any) => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./karma-jest.ts', 'src/**/*.ts'],
+    files: ['./karma-jest.ts', './setupKarma.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
     // unit tests are excluded because most of them make use of jest.mock
@@ -22,11 +22,17 @@ module.exports = (config: any) => {
     preprocessors: {
       'src/**/*.ts': ['karma-typescript'],
       './karma-jest.ts': ['karma-typescript'],
+      './setupKarma.ts': ['karma-typescript'],
     },
 
     karmaTypescriptConfig: {
-      ...require('./tsconfig.json'),
+      ...require('./tsconfig.karma.json'),
       bundlerOptions: {
+        resolve: {
+          alias: {
+            'node-fetch': require.resolve('./__karma__/fetch'),
+          },
+        },
         acornOptions: {
           ecmaVersion: 9,
         },

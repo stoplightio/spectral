@@ -9,6 +9,6 @@ export interface ILintConfig {
   output?: string;
   ruleset?: string[];
   skipRule?: string[];
-  verbose: boolean;
+  verbose?: boolean;
   quiet?: boolean;
 }

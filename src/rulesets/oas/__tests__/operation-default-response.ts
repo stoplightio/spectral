@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-default-response', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-default-response': Object.assign(ruleset.rules['operation-default-response'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-default-response'].type],
@@ -44,7 +44,7 @@ describe('operation-default-response', () => {
       {
         code: 'operation-default-response',
         message: 'Operations must have a default response.',
-        path: ['paths', '/path', '/get', 'responses', 'default'],
+        path: ['paths', '/path', '/get', 'responses'],
         range: {
           end: {
             character: 19,

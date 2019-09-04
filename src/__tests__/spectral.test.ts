@@ -1,12 +1,65 @@
 import { Cache } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isParsedResult, Spectral } from '../spectral';
 import { IParsedResult, RuleFunction } from '../types';
 
 const merge = require('lodash/merge');
 
+const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
+const oas2Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas2/index.json')));
+const oas3Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas3/index.json')));
+
 describe('spectral', () => {
-  describe('addRules & mergeRules', () => {
+  describe('loadRuleset', () => {
+    test('should support loading built-in rulesets', async () => {
+      const s = new Spectral();
+      await s.loadRuleset('spectral:oas2');
+
+      expect(s.rules).toEqual(
+        expect.objectContaining(
+          [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
+            (oasRules, [name, rule]) => {
+              oasRules[name] = {
+                name,
+                ...rule,
+                formats: expect.arrayContaining([expect.any(String)]),
+                severity: expect.any(Number),
+                then: expect.any(Object),
+              };
+
+              return oasRules;
+            },
+            {},
+          ),
+        ),
+      );
+    });
+
+    test('should support loading multiple built-in rulesets', async () => {
+      const s = new Spectral();
+      await s.loadRuleset(['spectral:oas2', 'spectral:oas3']);
+
+      expect(s.rules).toEqual(
+        [
+          ...Object.entries(oasRuleset.rules),
+          ...Object.entries(oas2Ruleset.rules),
+          ...Object.entries(oas3Ruleset.rules),
+        ].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
+          oasRules[name] = {
+            name,
+            ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
+            severity: expect.any(Number),
+            then: expect.any(Object),
+          };
+
+          return oasRules;
+        }, {}),
+      );
+    });
+  });
+
+  describe('setRules & mergeRules', () => {
     test('should not mutate the passing in rules object', () => {
       const givenCustomRuleSet = {
         rule1: {
@@ -22,7 +75,7 @@ describe('spectral', () => {
       const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
 
       const s = new Spectral();
-      s.addRules(givenCustomRuleSet);
+      s.setRules(givenCustomRuleSet);
 
       s.mergeRules({
         rule1: {
@@ -36,7 +89,7 @@ describe('spectral', () => {
     test('should update/append on the current rules', () => {
       const s = new Spectral();
 
-      s.addRules({
+      s.setRules({
         // @ts-ignore
         rule1: {
           message: '',
@@ -68,33 +121,6 @@ describe('spectral', () => {
 
       expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
       expect(s.rules.rule1.severity).toBe(DiagnosticSeverity.Error);
-    });
-  });
-
-  describe('addRuleDeclarations', () => {
-    describe('boolean value', () => {
-      test('should update the name rule recommended property', () => {
-        const s = new Spectral();
-
-        s.addRules({
-          // @ts-ignore
-          rule1: {
-            message: '',
-            given: '$',
-            recommended: false,
-            then: {
-              function: RuleFunction.TRUTHY,
-            },
-          },
-        });
-
-        s.applyRuleDeclarations({
-          rule1: true,
-        });
-
-        expect(Object.keys(s.rules)).toEqual(['rule1']);
-        expect(s.rules.rule1.recommended).toBe(true);
-      });
     });
   });
 

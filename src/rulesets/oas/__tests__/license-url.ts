@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('license-url', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'license-url': Object.assign(ruleset.rules['license-url'], {
       recommended: true,
       type: RuleType[ruleset.rules['license-url'].type],
@@ -34,7 +34,7 @@ describe('license-url', () => {
       {
         code: 'license-url',
         message: 'License object should include `url`.',
-        path: ['info', 'license', 'url'],
+        path: ['info', 'license'],
         range: {
           end: {
             character: 19,

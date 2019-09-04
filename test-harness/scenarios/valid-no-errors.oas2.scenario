@@ -1,0 +1,19 @@
+====test====
+Valid OAS2 document returns no results
+====document====
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Stoplight
+  description: lots of text
+  contact:
+    name: fred
+host: localhost
+schemes: 
+  - http
+paths: {}
+====command====
+lint {document}
+====stdout====
+OpenAPI 2.0 (Swagger) detected
+No errors or warnings found!

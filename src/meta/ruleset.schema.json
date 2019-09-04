@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",    
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://stoplight.io/schemas/ruleset.schema.json",
     "type": "object",
     "properties": {
@@ -7,6 +7,13 @@
             "type": "object",
             "additionalProperties": {
                 "$ref": "rule.schema.json"
+            }
+        },
+        "formats": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
             }
         },
         "extends": {
@@ -25,6 +32,32 @@
                             {
                                 "type": "string",
                                 "enum": ["off", "recommended", "all"]
+                            }
+                        ],
+                        "additionalItems": false
+                    }
+                ]
+            }
+        },
+        "functionsDir": {
+            "type": "string"
+        },
+        "functions": {
+            "type": "array",
+            "items": {
+                "oneOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "array",
+                        "items": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "object",
+                                "$schema": "http://json-schema.org/draft-07/schema#"
                             }
                         ],
                         "additionalItems": false

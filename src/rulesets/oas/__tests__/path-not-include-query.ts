@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('path-not-include-query', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'path-not-include-query': Object.assign(ruleset.rules['path-not-include-query'], {
       recommended: true,
       type: RuleType[ruleset.rules['path-not-include-query'].type],

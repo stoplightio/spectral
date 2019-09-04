@@ -4,7 +4,7 @@ import * as ruleset from '../index.json';
 
 describe('operation-singular-tag', () => {
   const s = new Spectral();
-  s.addRules({
+  s.setRules({
     'operation-singular-tag': Object.assign(ruleset.rules['operation-singular-tag'], {
       recommended: true,
       type: RuleType[ruleset.rules['operation-singular-tag'].type],
