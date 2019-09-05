@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import testParameterDescription from '../../__tests__/shared/_parameter-description';
 import * as ruleset from '../index.json';
@@ -32,7 +33,7 @@ describe('oas3-parameter-description', () => {
           code: 'oas3-parameter-description',
           message: 'Parameter objects should have a `description`.',
           path: ['components', 'parameters', 'address'],
-          severity: 1,
+          severity: DiagnosticSeverity.Warning,
         }),
       ]);
     });

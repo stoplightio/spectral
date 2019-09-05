@@ -1,3 +1,4 @@
+import { DiagnosticSeverity } from '@stoplight/types';
 import { Spectral } from '../../../spectral';
 
 export default (s: Spectral, oasVersion: number) => {
@@ -76,7 +77,7 @@ export default (s: Spectral, oasVersion: number) => {
         code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'parameters', '0'],
-        severity: 1,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });
