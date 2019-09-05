@@ -24,6 +24,8 @@
     "declaration": true,
     "removeComments": true,
     "jsx": "react",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmitHelpers": true,
+    "importHelpers": true
   }
 }
