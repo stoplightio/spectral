@@ -36,7 +36,7 @@
     },
     "oas3-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
-      "recommended": false,
+      "recommended": true,
       "type": "validation",
       "given": "$",
       "then": {
@@ -54,9 +54,9 @@
     },
     "oas3-parameter-description": {
       "description": "Parameter objects should have a `description`.",
-      "recommended": true,
+      "recommended": false,
       "type": "style",
-      "given": "$..[?(@parentProperty !== 'links' && @.parameters)]['parameters']..[?(@.in)]",
+      "given": "$..[?(@parentProperty !== 'links' && @.parameters)]['parameters'].[?(@.in)]",
       "then": {
         "field": "description",
         "function": "truthy"
