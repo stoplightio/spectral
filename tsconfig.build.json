@@ -3,8 +3,6 @@
   "include": ["src"],
   "exclude": ["**/__*__/**"],
   "compilerOptions": {
-    "outDir": "dist",
-    "noEmitHelpers": false,
-    "importHelpers": false
+    "outDir": "dist"
   }
 }
