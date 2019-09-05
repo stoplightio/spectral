@@ -33,7 +33,7 @@
     "node": ">=8.3.0"
   },
   "scripts": {
-    "build.binary": "pkg . --output ./cli-binaries/spectral-cli",
+    "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
     "compile-rulesets": "node ./scripts/compile-rulesets.js",
@@ -71,6 +71,7 @@
     "node-fetch": "^2.6",
     "strip-ansi": "^5.2",
     "text-table": "^0.2",
+    "tslib": "^1.10.0",
     "typescript-json-schema": "~0.40",
     "yargs": "^14.0.0"
   },

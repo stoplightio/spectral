@@ -105,7 +105,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - cli-binaries
+            - binaries
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
@@ -117,7 +117,7 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/cli-binaries
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
 
 workflows:
   commit:
