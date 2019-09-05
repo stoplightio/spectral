@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 
-/cli-binaries
+/binaries
 /rulesets
 /src/__tests__/__fixtures__/oas-functions.json
 /test-harness/tmp/
