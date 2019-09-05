@@ -105,7 +105,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - cli-binaries
+            - binaries
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
