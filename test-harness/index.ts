@@ -10,7 +10,7 @@ import { parseScenarioFile } from './helpers';
 
 const glob = globFs({ gitignore: true });
 
-const spectralBin = path.join(__dirname, '../cli-binaries/spectral-cli');
+const spectralBin = path.join(__dirname, '../cli-binaries/spectral-cli-linux');
 
 type Replacement = {
   from: RegExp;
