@@ -73,6 +73,19 @@
         "function": "truthy"
       }
     },
+    "oas2-parameter-description": {
+      "description": "Parameter objects should have a `description`.",
+      "recommended": false,
+      "type": "style",
+      "given": "$..[?(@parentProperty === 'parameters' && @.in)]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "parameters"
+      ]
+    },
     "oas2-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
       "recommended": true,
