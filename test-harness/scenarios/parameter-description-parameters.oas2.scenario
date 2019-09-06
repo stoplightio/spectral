@@ -1,0 +1,47 @@
+====test====
+Parameters - Parameter Objects - are validated to have description.
+====document====
+swagger: "2.0"
+paths:
+  /pets:
+    parameters:
+      - name: abc
+        type: string
+        in: header
+      - name: xyz
+        type: string
+        in: header
+        description: xyz
+    get:
+      parameters:
+        - name: ok
+          type: string
+          in: query
+        - name: abc
+          type: string
+          in: query
+          description: abc
+      responses:
+        200:
+          description: abc
+parameters:
+  skipParam:
+    name: skip
+    in: query
+    type: boolean
+  status:
+    name: status
+    in: query
+    type: string
+    description: status
+====command====
+lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas2.yaml
+====stdout====
+OpenAPI 2.0 (Swagger) detected
+
+{document}
+  5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.
+ 14:11  warning  oas2-parameter-description  Parameter objects should have a `description`.
+ 25:13  warning  oas2-parameter-description  Parameter objects should have a `description`.
+
+✖ 3 problems (0 errors, 3 warnings, 0 infos)
