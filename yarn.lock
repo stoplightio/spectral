@@ -387,9 +387,9 @@
     safe-stable-stringify "^1.1"
 
 "@stoplight/path@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.2.0.tgz#0d0b828e10c2a492ab12c5fcffda2a4b4a4785b0"
-  integrity sha512-0GE2585RbYhR7HXTRK+AB/BBwOrqMAdAdBTzuJ5itFQwx3b/Qo0qi0y0Qis5vX6pswVm/6vlx5xBfSBYysI9BQ==
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.2.1.tgz#f39f408377a0d1a9c33a04ce08eb3a1691c457d6"
+  integrity sha512-W/wBpTw6ThKZGPcb1ztKz6ULnMVnLE/ygzqIjnqnmKcpNrKkSuBLtL7+oQYZSkteZfJAryloAt3plU3sTiekcQ==
 
 "@stoplight/types@^11.0.0":
   version "11.1.0"
