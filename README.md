@@ -42,6 +42,12 @@ After [installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/ge
 - [Using the JavaScript API](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/javascript.md)
 - [Creating custom functions](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/custom-functions.md)
 
+## Proxying
+
+To have requests made from Spectral be proxied through a server, you'd need to specify PROXY environment variable:
+
+`PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
+
 ## FAQs
 
 ### How is this different to AJV
