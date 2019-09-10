@@ -1,0 +1,36 @@
+====test====
+Will only fail if there is an error, and there is not. Can still see all warnings.
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Unique Operations
+paths:
+  /test:
+    get:
+      operationId: foo
+      responses:
+        200:
+          description: ok
+    post:
+      operationId: bar
+      responses:
+        200:
+          description: ok
+====command====
+lint {document} --fail-severity=error
+====status====
+0
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+  1:1   warning  api-servers            OpenAPI `servers` must be present and non-empty array.
+  2:6   warning  info-contact           Info object should contain `contact` object.
+  2:6   warning  info-description       OpenAPI object info `description` must be present and non-empty string.
+  7:9   warning  operation-description  Operation `description` must be present and non-empty string.
+  7:9   warning  operation-tags         Operation should have non-empty `tags` array.
+ 12:10  warning  operation-description  Operation `description` must be present and non-empty string.
+ 12:10  warning  operation-tags         Operation should have non-empty `tags` array.
+
+✖ 7 problems (0 errors, 7 warnings, 0 infos)
