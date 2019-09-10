@@ -1,0 +1,20 @@
+====test====
+Invalid OAS3 document outputs results when --format=junit
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+paths: {}
+====command====
+lint {document} --format=junit
+====stdout====
+OpenAPI 3.x detected
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+<testsuite package="org.spectral" time="0" tests="3" errors="3" name="{document}">
+<testcase time="0" name="org.spectral.api-servers" classname="{documentWithoutExt}"><error message="OpenAPI `servers` must be present and non-empty array."><![CDATA[line 1, col 1, Warning - OpenAPI `servers` must be present and non-empty array. (api-servers)]]></error></testcase>
+<testcase time="0" name="org.spectral.info-contact" classname="{documentWithoutExt}"><error message="Info object should contain `contact` object."><![CDATA[line 2, col 6, Warning - Info object should contain `contact` object. (info-contact)]]></error></testcase>
+<testcase time="0" name="org.spectral.info-description" classname="{documentWithoutExt}"><error message="OpenAPI object info `description` must be present and non-empty string."><![CDATA[line 2, col 6, Warning - OpenAPI object info `description` must be present and non-empty string. (info-description)]]></error></testcase>
+</testsuite>
+</testsuites>

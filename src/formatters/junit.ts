@@ -63,8 +63,8 @@ export const junit: Formatter = results => {
         output += `<testcase time="0" name="org.spectral.${result.code || 'unknown'}" classname="${classname}">`;
         output += `<error message="${xmlEscape(result.message)}">`;
         output += '<![CDATA[';
-        output += `line ${result.range.start.line}, col `;
-        output += `${result.range.start.character}, ${getMessageType(result)}`;
+        output += `line ${result.range.start.line + 1}, col `;
+        output += `${result.range.start.character + 1}, ${getMessageType(result)}`;
         output += ` - ${xmlEscape(result.message)}`;
         output += ` (${result.code})`;
         output += ']]>';

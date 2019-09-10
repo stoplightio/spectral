@@ -37,7 +37,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'should NOT have additional properties: type',
                     },
-                    _: 'line 35, col 21, Error - should NOT have additional properties: type (oas3-schema)',
+                    _: 'line 36, col 22, Error - should NOT have additional properties: type (oas3-schema)',
                   },
                 ],
               },
@@ -52,7 +52,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'should match exactly one schema in oneOf',
                     },
-                    _: 'line 35, col 21, Error - should match exactly one schema in oneOf (oas3-schema)',
+                    _: 'line 36, col 22, Error - should match exactly one schema in oneOf (oas3-schema)',
                   },
                 ],
               },
@@ -67,7 +67,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: "should have required property '$ref'",
                     },
-                    _: 'line 35, col 21, Error - should have required property &apos;$ref&apos; (oas3-schema)',
+                    _: 'line 36, col 22, Error - should have required property &apos;$ref&apos; (oas3-schema)',
                   },
                 ],
               },
