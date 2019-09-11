@@ -22,3 +22,9 @@ Other options include:
 > Note: The Spectral CLI supports both YAML and JSON.
 
 Currently, Spectral CLI supports validation of OpenAPI v2/v3 documents via our built-in ruleset, or you can create [custom rulesets](../getting-started/rulesets.md) to work with any JSON/YAML documents.
+
+## Proxying
+
+To have requests made from Spectral be proxied through a server, you'd need to specify PROXY environment variable:
+
+`PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
