@@ -543,12 +543,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/nock@^10.0.3":
-  version "10.0.3"
-  resolved "https://registry.yarnpkg.com/@types/nock/-/nock-10.0.3.tgz#dab1d18ffbccfbf2db811dab9584304eeb6e1c4c"
-  integrity sha512-OthuN+2FuzfZO3yONJ/QVjKmLEuRagS9TV9lEId+WHL9KhftYG+/2z+pxlr0UgVVXSpVD8woie/3fzQn8ft/Ow==
+"@types/nock@^11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@types/nock/-/nock-11.1.0.tgz#0a8c1056a31ba32a959843abccf99626dd90a538"
+  integrity sha512-jI/ewavBQ7X5178262JQR0ewicPAcJhXS/iFaNJl0VHLfyosZ/kwSrsa6VNQNSO8i9d8SqdRgOtZSOKJ/+iNMw==
   dependencies:
-    "@types/node" "*"
+    nock "*"
 
 "@types/node@*", "@types/node@^12.7.4", "@types/node@~12.7":
   version "12.7.5"
@@ -5148,7 +5148,7 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-nock@~11.3.2:
+nock@*, nock@~11.3.2:
   version "11.3.3"
   resolved "https://registry.yarnpkg.com/nock/-/nock-11.3.3.tgz#f4553d87ac8e501d7a995a50df7e24857f879f58"
   integrity sha512-SrRux5onbWf2ItpmietnLYis+C2QYF08hAo9wv/3QLqaLJVHBSVBTL0EvlD8Hjrm7lTH4vExTzr9gQUsPqy5Cg==
@@ -6456,9 +6456,9 @@ rollup-plugin-node-resolve@^5.2.0:
     rollup-pluginutils "^2.8.1"
 
 rollup-plugin-terser@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-5.1.1.tgz#e9d2545ec8d467f96ba99b9216d2285aad8d5b66"
-  integrity sha512-McIMCDEY8EU6Y839C09UopeRR56wXHGdvKKjlfiZG/GrP6wvZQ62u2ko/Xh1MNH2M9WDL+obAAHySljIZYCuPQ==
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-5.1.2.tgz#3e41256205cb75f196fc70d4634227d1002c255c"
+  integrity sha512-sWKBCOS+vUkRtHtEiJPAf+WnBqk/C402fBD9AVHxSIXMqjsY7MnYWKYEUqGixtr0c8+1DjzUEPlNgOYQPVrS1g==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     jest-worker "^24.6.0"
