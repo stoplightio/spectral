@@ -30,7 +30,7 @@ Currently, Spectral CLI supports validation of OpenAPI v2/v3 documents via our b
 
 ## Error Results
 
-Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. Be default all results will be shown regardless of severity, and the presence of any results will cause a failure status code of 1.
+Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, and the presence of any results will cause a failure status code of 1.
 
 The default behavior is can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=warn` would return a status code of 1 for any warning results or higher, so that would also include error. Using `--fail-severity=error` will only show errors.
 

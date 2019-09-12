@@ -25,7 +25,7 @@ export function mergeFunctions(
     if (typeof rule === 'object') {
       const ruleThen = Array.isArray(rule.then) ? rule.then : [rule.then];
       for (const then of ruleThen) {
-        // if function relies on global function, it will take the most recent defined one
+        // if function relies on global function, it will take the most recently defined one
         if (then.function in map) {
           then.function = map[then.function];
         }

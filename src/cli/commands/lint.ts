@@ -64,7 +64,7 @@ const lintCommand: CommandModule = {
           alias: 'F',
           description: 'results of this level or above will trigger a failure exit code',
           choices: ['error', 'warn', 'info', 'hint'],
-          default: 'hint', // BREAKING: raise this to warn in 5.0
+          default: 'hint', // TODO: BREAKING: raise this to warn in 5.0
           type: 'string',
         },
         'display-only-failures': {
@@ -137,7 +137,7 @@ const filterResultsBySeverity = (results: IRuleResult[], failSeverity: FailSever
 
 const severeEnoughToFail = (results: IRuleResult[], failSeverity: FailSeverity): boolean => {
   const diagnosticSeverity = getDiagnosticSeverity(failSeverity);
-  return !!results.find(r => r.severity <= diagnosticSeverity);
+  return results.some(r => r.severity <= diagnosticSeverity);
 };
 
 export default lintCommand;
