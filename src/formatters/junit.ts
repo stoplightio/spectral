@@ -61,7 +61,7 @@ export const junit: Formatter = results => {
 
       for (const result of validationResults) {
         output += `<testcase time="0" name="org.spectral.${result.code || 'unknown'}" classname="${classname}">`;
-        output += `<error message="${xmlEscape(result.message)}">`;
+        output += `<${getMessageType(result).toLowerCase()} message="${xmlEscape(result.message)}">`;
         output += '<![CDATA[';
         output += `line ${result.range.start.line + 1}, col `;
         output += `${result.range.start.character + 1}, ${getMessageType(result)}`;
