@@ -126,12 +126,24 @@ describe('lint', () => {
 
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
     await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
-    expect(formatOutput).toBeCalledWith(results, format);
+    // needed by Node 8 (different ticking?) - can be simplified once we drop support for version 8
+    await new Promise(resolve => {
+      setImmediate(() => {
+        expect(formatOutput).toBeCalledWith(results, format);
+        resolve();
+      });
+    });
   });
 
   it('writes formatted output to a file', async () => {
     await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
-    expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
+    // needed by Node 8 (different ticking?) - can be simplified once we drop support for version 8
+    await new Promise(resolve => {
+      setImmediate(() => {
+        expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
+        resolve();
+      });
+    });
   });
 
   it('passes skip-rule to lint', async () => {
