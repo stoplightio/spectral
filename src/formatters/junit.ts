@@ -60,15 +60,16 @@ export const junit: Formatter = results => {
       }" name="${source}">\n`;
 
       for (const result of validationResults) {
+        const tag = getMessageType(result).toLowerCase();
         output += `<testcase time="0" name="org.spectral.${result.code || 'unknown'}" classname="${classname}">`;
-        output += `<${getMessageType(result).toLowerCase()} message="${xmlEscape(result.message)}">`;
+        output += `<${tag} message="${xmlEscape(result.message)}">`;
         output += '<![CDATA[';
         output += `line ${result.range.start.line + 1}, col `;
         output += `${result.range.start.character + 1}, ${getMessageType(result)}`;
         output += ` - ${xmlEscape(result.message)}`;
         output += ` (${result.code})`;
         output += ']]>';
-        output += `</error>`;
+        output += `</${tag}>`;
         output += '</testcase>\n';
       }
 
