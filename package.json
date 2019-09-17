@@ -36,6 +36,8 @@
     "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
+    "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
+    "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
     "compile-rulesets": "node ./scripts/compile-rulesets.js",
     "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",

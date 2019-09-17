@@ -11,7 +11,7 @@ export interface IReadOptions {
 export async function readFile(name: string, opts: IReadOptions) {
   if (isURL(name)) {
     let response;
-    let timeout: NodeJS.Timeout | null = null;
+    let timeout: NodeJS.Timeout | number | null = null;
     try {
       if (opts.timeout) {
         const controller = new AbortController();

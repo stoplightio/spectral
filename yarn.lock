@@ -159,9 +159,9 @@
     minimist "^1.2.0"
 
 "@commitlint/config-conventional@^8.1.0":
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-8.1.0.tgz#ba61fbf0ad4df52da2b5ee3034470371a2cbf039"
-  integrity sha512-/JY+FNBnrT91qzDVIoV1Buiigvj7Le7ezFw+oRqu0nYREX03k7xnaG/7t7rUSvm7hM6dnLSOlaUsevjgMI9AEw==
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-8.2.0.tgz#886a5538e3708e017ec2871e0cbce00f635d3102"
+  integrity sha512-HuwlHQ3DyVhpK9GHgTMhJXD8Zp8PGIQVpQGYh/iTrEU6TVxdRC61BxIDZvfWatCaiG617Z/U8maRAFrqFM4TqA==
 
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
@@ -399,9 +399,9 @@
     "@types/json-schema" "^7.0.3"
 
 "@stoplight/yaml@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.1.0.tgz#1026dd99512b987f6686e9daa52f67bd36ab4285"
-  integrity sha512-Db+f9AJO95S+bWL4ODdItLNXaBE/ey5nYAB9K/i9IgBZgJ+lyQ1+L0HSduX627uzwZCqgMo0tySWrgVTi2scBQ==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.1.1.tgz#507192fbd5c92498d79f5a8654724a0256014b26"
+  integrity sha512-nc/mw3mNXoHj5rklcDpCci9uf82JB8YB+nRcVzs0YPFS02NYxVgC+4Qo2rvrOhH05Yk76gRaC6txZrInZgjs0Q==
   dependencies:
     "@stoplight/types" "^11.0.0"
     "@types/js-yaml" "3.12.1"
@@ -550,7 +550,7 @@
   dependencies:
     nock "*"
 
-"@types/node@*", "@types/node@^12.7.4", "@types/node@~12.7":
+"@types/node@*", "@types/node@^12.7.5", "@types/node@~12.7":
   version "12.7.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.5.tgz#e19436e7f8e9b4601005d73673b6dc4784ffcc2f"
   integrity sha512-9fq4jZVhPNW8r+UYKnxF1e2HkDWOWKM5bC2/7c9wPV835I0aOrVbS/Hw/pWPk2uKrNXQqg9Z959Kz+IYDd5p3w==
@@ -6319,12 +6319,12 @@ rollup-pluginutils@2.8.1, rollup-pluginutils@^2.8.1:
     estree-walker "^0.6.1"
 
 rollup@^1.19.4:
-  version "1.21.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.21.2.tgz#eaabd07d0bd309587ad8bebf731fca6fcb96f4d0"
-  integrity sha512-sCAHlcQ/PExU5t/kRwkEWHdhGmQrZ2IgdQzbjPVNfhWbKHMMZGYqkASVTpQqRPLtQKg15xzEscc+BnIK/TE7/Q==
+  version "1.21.4"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.21.4.tgz#00a41a30f90095db890301b226cbe2918e4cf54d"
+  integrity sha512-Pl512XVCmVzgcBz5h/3Li4oTaoDcmpuFZ+kdhS/wLreALz//WuDAMfomD3QEYl84NkDu6Z6wV9twlcREb4qQsw==
   dependencies:
     "@types/estree" "0.0.39"
-    "@types/node" "^12.7.4"
+    "@types/node" "^12.7.5"
     acorn "^7.0.0"
 
 rsvp@^4.8.4:
@@ -7097,9 +7097,9 @@ ts-jest@^24.0.2:
     yargs-parser "10.x"
 
 ts-node@^8.1.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.3.0.tgz#e4059618411371924a1fb5f3b125915f324efb57"
-  integrity sha512-dyNS/RqyVTDcmNM4NIBAeDMpsAdaQ+ojdf0GOLqE6nwJOgzEkdRNzJywhDfwnuvB10oa6NLVG1rUJQCpRN7qoQ==
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.4.1.tgz#270b0dba16e8723c9fa4f9b4775d3810fd994b4f"
+  integrity sha512-5LpRN+mTiCs7lI5EtbXmF/HfMeCjzt7DH9CZwtkr6SywStrNQC723wG+aOWFiLNn7zT3kD/RnFqi3ZUfr4l5Qw==
   dependencies:
     arg "^4.1.0"
     diff "^4.0.1"
