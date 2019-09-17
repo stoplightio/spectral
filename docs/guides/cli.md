@@ -37,3 +37,4 @@ Spectral has a few different error severities: `error`, `warn`, `info` and `hint
 The default behavior is can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=warn` would return a status code of 1 for any warning results or higher, so that would also include error. Using `--fail-severity=error` will only show errors.
 
 Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the fail severity.
+
