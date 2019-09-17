@@ -1,4 +1,5 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
+import { ICache } from '@stoplight/json-ref-resolver/types';
 import {
   DiagnosticSeverity,
   Dictionary,
@@ -30,6 +31,7 @@ export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IConstructorOpts {
   resolver?: Resolver;
+  resolverCache?: ICache;
 }
 
 export interface IRunOpts {

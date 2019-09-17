@@ -5,7 +5,7 @@ import {
   safeStringify,
 } from '@stoplight/json';
 import { Cache, Resolver } from '@stoplight/json-ref-resolver';
-import { IUriParser } from '@stoplight/json-ref-resolver/types';
+import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import {
@@ -44,7 +44,7 @@ export * from './types';
 
 export class Spectral {
   private _resolver: Resolver;
-  private _uriCache: Cache;
+  private _uriCache: ICache;
   public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
 
@@ -52,8 +52,8 @@ export class Spectral {
 
   constructor(opts?: IConstructorOpts) {
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+    this._uriCache = opts && opts.resolverCache ? opts.resolverCache : new Cache();
     this.formats = {};
-    this._uriCache = new Cache();
   }
 
   public async runWithResolved(
