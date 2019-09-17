@@ -49,6 +49,11 @@ describe('cli acceptance tests', () => {
           to: tmpFileHandle.name,
         });
 
+        replacements.push({
+          from: /\{documentWithoutExt\}/g,
+          to: tmpFileHandle.name.replace(/\.yml$/, ''),
+        });
+
         fs.writeFileSync(tmpFileHandle.name, scenario.document, { encoding: 'utf8' });
       }
     });
