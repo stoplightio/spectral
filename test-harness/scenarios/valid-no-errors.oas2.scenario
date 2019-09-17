@@ -16,4 +16,4 @@ paths: {}
 lint {document}
 ====stdout====
 OpenAPI 2.0 (Swagger) detected
-No errors or warnings found!
+No results with a severity of 'hint' or higher found!

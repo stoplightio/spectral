@@ -21,13 +21,12 @@ function replaceVars(string: string, replacements: Replacement[]) {
   return replacements.reduce((str, replace) => str.replace(replace.from, replace.to), string);
 }
 
-describe('cli e2e tests', () => {
-  const files = process.env.TESTS
-    ? String(process.env.TESTS).split(',')
-    : glob.readdirSync('**/*.scenario', { cwd: path.join(__dirname, './scenarios') });
+describe('cli acceptance tests', () => {
+  const cwd = path.join(__dirname, './scenarios');
+  const files = process.env.TESTS ? String(process.env.TESTS).split(',') : glob.readdirSync('**/*.scenario', { cwd });
 
   files.forEach((file: string) => {
-    const data = fs.readFileSync(path.join(__dirname, './scenarios/', file), { encoding: 'utf8' });
+    const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
     const replacements: Replacement[] = [];
 
@@ -60,7 +59,7 @@ describe('cli e2e tests', () => {
       }
     });
 
-    test(`${file}${os.EOL}${scenario.test}`, () => {
+    test(`./test-harness/scenarios/${file}${os.EOL}${scenario.test}`, () => {
       // TODO split on " " is going to break quoted args
       const args = scenario.command.split(' ').map(t => {
         const arg = t.trim();
@@ -76,10 +75,12 @@ describe('cli e2e tests', () => {
         windowsVerbatimArguments: false,
       });
 
+      const expectedStatus = replaceVars(scenario.status.trim(), replacements);
+      const expectedStdout = replaceVars(scenario.stdout.trim(), replacements);
+      const expectedStderr = replaceVars(scenario.stderr.trim(), replacements);
+      const status = commandHandle.status;
       const stderr = commandHandle.stderr.trim();
       const stdout = commandHandle.stdout.trim();
-      const expectedStderr = replaceVars(scenario.stderr.trim(), replacements);
-      const expectedStdout = replaceVars(scenario.stdout.trim(), replacements);
 
       if (expectedStderr) {
         expect(stderr).toEqual(expectedStderr);
@@ -89,6 +90,10 @@ describe('cli e2e tests', () => {
 
       if (stdout) {
         expect(stdout).toEqual(expectedStdout);
+      }
+
+      if (expectedStatus !== '') {
+        expect(`status:${status}`).toEqual(`status:${expectedStatus}`);
       }
     });
   });
