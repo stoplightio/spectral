@@ -27,8 +27,11 @@ import chalk from 'chalk';
 import stripAnsi from 'strip-ansi';
 import * as table from 'text-table';
 
-import { DiagnosticSeverity, Dictionary, IRange } from '@stoplight/types';
+import { DiagnosticSeverity, IRange } from '@stoplight/types';
 import { IRuleResult } from '../types';
+import { Formatter } from './types';
+import { groupBySource } from './utils/groupBySource';
+import { sortResults } from './utils/sortResults';
 
 // -----------------------------------------------------------------------------
 // Helpers
@@ -48,7 +51,7 @@ function pluralize(word: string, count: number): string {
 // Public Interface
 // -----------------------------------------------------------------------------
 
-export const stylish = (results: IRuleResult[]): string => {
+export const stylish: Formatter = results => {
   let output = '\n';
   let errorCount = 0;
   let warningCount = 0;
@@ -127,27 +130,8 @@ export const stylish = (results: IRuleResult[]): string => {
   return total > 0 ? output : '';
 };
 
-const groupBySource = (results: IRuleResult[]): Dictionary<IRuleResult[]> => {
-  return results.reduce((grouped: Dictionary<IRuleResult[]>, result: IRuleResult) => {
-    (grouped[result.source!] = grouped[result.source!] || []).push(result);
-    return grouped;
-  }, {});
-};
-
 const formatRange = (range?: IRange): string => {
   if (!range) return '';
 
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
-};
-
-const sortResults = (results: IRuleResult[]) => {
-  return [...results].sort((resultA, resultB) => {
-    const diff = resultA.range.start.line - resultB.range.start.line;
-
-    if (diff === 0) {
-      return resultA.range.start.character - resultB.range.start.character;
-    }
-
-    return diff;
-  });
 };
