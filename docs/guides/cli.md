@@ -24,9 +24,11 @@ Other options include:
   --quiet, -q                  no logging - output only                                     [boolean]
 ```
 
-> Note: The Spectral CLI supports both YAML and JSON.
+The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset. 
 
-Currently, Spectral CLI supports validation of OpenAPI v2/v3 documents via our built-in ruleset, or you can create [custom rulesets](../getting-started/rulesets.md) to work with any JSON/YAML documents.
+You can also provide your own ruleset file. By default, the Spectral CLI will look for a ruleset file called `.spectral.yml` or `.spectral.json` in the current working directory. You can tell spectral to use a different file by using the `--ruleset` CLI option.
+
+Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend and modify our [core OpenAPI ruleset](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md).
 
 ## Error Results
 
