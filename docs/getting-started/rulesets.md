@@ -12,6 +12,7 @@ rules:
     description: Tags must have a description.
     given: $.tags[*]
     severity: error
+    recommended: true
     then:
       field: description
       function: truthy
