@@ -338,23 +338,6 @@
         "operation"
       ]
     },
-    "parameter-description": {
-      "description": "Parameter objects should have a `description`.",
-      "recommended": false,
-      "type": "style",
-      "given": "$..parameters[*]",
-      "when": {
-        "field": "@key",
-        "pattern": "^(?!.*(\\$ref))"
-      },
-      "then": {
-        "field": "description",
-        "function": "truthy"
-      },
-      "tags": [
-        "parameters"
-      ]
-    },
     "path-declarations-must-exist": {
       "description": "Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.",
       "recommended": true,

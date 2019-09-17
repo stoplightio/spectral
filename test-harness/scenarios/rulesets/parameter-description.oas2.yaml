@@ -1,0 +1,3 @@
+extends: [[spectral:oas2, off]]
+rules:
+  oas2-parameter-description: true
