@@ -1,10 +1,10 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
 
-const fetch = require('node-fetch');
+import request from '../request';
 
 export const httpReader = {
   async resolve(ref: any) {
-    return (await fetch(String(ref))).text();
+    return (await request(String(ref))).text();
   },
 };
 

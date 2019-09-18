@@ -38,3 +38,9 @@ The default behavior is can be modified with the `--fail-severity=` option. Sett
 
 Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the fail severity.
 
+
+## Proxying
+
+To have requests made from Spectral be proxied through a server, you'd need to specify PROXY environment variable:
+
+`PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
