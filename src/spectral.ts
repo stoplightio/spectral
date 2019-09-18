@@ -4,8 +4,8 @@ import {
   parseWithPointers as parseJSONWithPointers,
   safeStringify,
 } from '@stoplight/json';
-import { Cache, Resolver } from '@stoplight/json-ref-resolver';
-import { IUriParser } from '@stoplight/json-ref-resolver/types';
+import { Resolver } from '@stoplight/json-ref-resolver';
+import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import {
@@ -43,8 +43,9 @@ import { IRuleset } from './types/ruleset';
 export * from './types';
 
 export class Spectral {
-  private _resolver: Resolver;
-  private _uriCache: Cache;
+  private readonly _resolver: Resolver;
+  private readonly _parsedMap: IParseMap;
+  private static readonly _parsedCache = new WeakMap<ICache, IParseMap>();
   public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
 
@@ -53,7 +54,19 @@ export class Spectral {
   constructor(opts?: IConstructorOpts) {
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
     this.formats = {};
-    this._uriCache = new Cache();
+
+    const _parsedMap = Spectral._parsedCache.get(this._resolver.uriCache);
+    if (_parsedMap) {
+      this._parsedMap = _parsedMap;
+    } else {
+      this._parsedMap = {
+        refs: {},
+        parsed: {},
+        pointers: {},
+      };
+
+      Spectral._parsedCache.set(this._resolver.uriCache, this._parsedMap);
+    }
   }
 
   public async runWithResolved(
@@ -83,7 +96,6 @@ export class Spectral {
     const resolved = new Resolved(
       parsedResult,
       await this._resolver.resolve(parsedResult.parsed.data, {
-        uriCache: this._uriCache,
         baseUri: documentUri,
         parseResolveResult: this._parseResolveResult(refDiagnostics),
       }),
@@ -201,12 +213,6 @@ export class Spectral {
   public registerFormat(format: string, fn: FormatLookup) {
     this.formats[format] = fn;
   }
-
-  private _parsedMap: IParseMap = {
-    refs: {},
-    parsed: {},
-    pointers: {},
-  };
 
   private _processExternalRef(parsedResult: IParsedResult, opts: IUriParser) {
     const ref = opts.targetAuthority.toString();

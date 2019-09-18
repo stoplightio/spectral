@@ -36,6 +36,8 @@
     "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
+    "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
+    "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
     "compile-rulesets": "node ./scripts/compile-rulesets.js",
     "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",
@@ -62,7 +64,7 @@
     "abort-controller": "^3.0.0",
     "ajv": "^6.7",
     "ajv-oai": "^1.1.1",
-    "better-ajv-errors": "stoplightio/better-ajv-errors#0c5be246c12c87993ba07b47479cff8257b9579b",
+    "better-ajv-errors": "0.6.6",
     "chalk": "^2.4.2",
     "deprecated-decorator": "^0.1.6",
     "jsonpath-plus": "~1.0",
@@ -88,6 +90,7 @@
     "@types/node": "~12.7",
     "@types/node-fetch": "^2.5.0",
     "@types/text-table": "^0.2.0",
+    "@types/xml2js": "^0.4.4",
     "@types/yaml": "^1.0.2",
     "copyfiles": "^2.1.1",
     "fetch-mock": "^7.3.9",
@@ -115,6 +118,7 @@
     "tslint": "~5.20",
     "tslint-config-stoplight": "~1.3",
     "typescript": "^3.5.3",
+    "xml2js": "^0.4.21",
     "yaml": "~1.6"
   },
   "lint-staged": {

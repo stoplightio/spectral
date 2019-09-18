@@ -102,4 +102,20 @@ describe('oasOp2xxResponse', () => {
       },
     ]);
   });
+
+  test('does not complain when no $.responses property', async () => {
+    const results = await s.run({
+      paths: {
+        '/test': {
+          get: {
+            operationId: '123',
+          },
+          post: {
+            operationId: '123',
+          },
+        },
+      },
+    });
+    expect(results).toEqual([]);
+  });
 });

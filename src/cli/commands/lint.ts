@@ -2,11 +2,15 @@ import { Dictionary } from '@stoplight/types';
 import { CommandModule, showHelp } from 'yargs';
 
 import { pick } from 'lodash';
-import { ILintConfig, OutputFormat } from '../../types/config';
+import { getDiagnosticSeverity } from '../../rulesets/severity';
+import { IRuleResult } from '../../types';
+import { FailSeverity, ILintConfig, OutputFormat } from '../../types/config';
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
 
 const toArray = (args: unknown) => (Array.isArray(args) ? args : [args]);
+
+const formatOptions = Object.values(OutputFormat);
 
 const lintCommand: CommandModule = {
   describe: 'lint a JSON/YAML document from a file or URL',
@@ -21,7 +25,7 @@ const lintCommand: CommandModule = {
         showHelp();
       })
       .check((argv: Dictionary<unknown>) => {
-        if (argv.format !== void 0 && argv.format !== OutputFormat.JSON && argv.format !== OutputFormat.STYLISH) {
+        if (argv.format !== void 0 && !(formatOptions as string[]).includes(String(argv.format))) {
           return false;
         }
 
@@ -37,7 +41,7 @@ const lintCommand: CommandModule = {
         format: {
           alias: 'f',
           description: 'formatter to use for outputting results',
-          options: [OutputFormat.STYLISH, OutputFormat.JSON],
+          options: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
         },
@@ -58,6 +62,19 @@ const lintCommand: CommandModule = {
           type: 'string',
           coerce: toArray,
         },
+        'fail-severity': {
+          alias: 'F',
+          description: 'results of this level or above will trigger a failure exit code',
+          choices: ['error', 'warn', 'info', 'hint'],
+          default: 'hint', // TODO: BREAKING: raise this to warn in 5.0
+          type: 'string',
+        },
+        'display-only-failures': {
+          alias: 'D',
+          description: 'only output results equal to or greater than --fail-severity',
+          type: 'boolean',
+          default: false,
+        },
         verbose: {
           alias: 'v',
           description: 'increase verbosity',
@@ -71,8 +88,19 @@ const lintCommand: CommandModule = {
       }),
 
   handler: args => {
-    const { document, ruleset, format, output, encoding, ...config } = (args as unknown) as ILintConfig & {
+    const {
+      document,
+      failSeverity,
+      displayOnlyFailures,
+      ruleset,
+      format,
+      output,
+      encoding,
+      ...config
+    } = (args as unknown) as ILintConfig & {
       document: string;
+      failSeverity: FailSeverity;
+      displayOnlyFailures: boolean;
     };
 
     return lint(
@@ -81,10 +109,16 @@ const lintCommand: CommandModule = {
       ruleset,
     )
       .then(results => {
+        if (displayOnlyFailures) {
+          return filterResultsBySeverity(results, failSeverity);
+        }
+        return results;
+      })
+      .then(results => {
         if (results.length) {
-          process.exitCode = 1;
+          process.exitCode = severeEnoughToFail(results, failSeverity) ? 1 : 0;
         } else if (!config.quiet) {
-          console.log('No errors or warnings found!');
+          console.log(`No results with a severity of '${failSeverity}' or higher found!`);
         }
         const formattedOutput = formatOutput(results, format);
         return writeOutput(formattedOutput, output);
@@ -93,9 +127,19 @@ const lintCommand: CommandModule = {
   },
 };
 
-function fail(err: Error) {
+const fail = (err: Error) => {
   console.error(err);
   process.exitCode = 2;
-}
+};
+
+const filterResultsBySeverity = (results: IRuleResult[], failSeverity: FailSeverity): IRuleResult[] => {
+  const diagnosticSeverity = getDiagnosticSeverity(failSeverity);
+  return results.filter(r => r.severity <= diagnosticSeverity);
+};
+
+const severeEnoughToFail = (results: IRuleResult[], failSeverity: FailSeverity): boolean => {
+  const diagnosticSeverity = getDiagnosticSeverity(failSeverity);
+  return results.some(r => r.severity <= diagnosticSeverity);
+};
 
 export default lintCommand;

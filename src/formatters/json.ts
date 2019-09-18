@@ -1,6 +1,6 @@
-import { IRuleResult } from '../types';
+import { Formatter } from './types';
 
-export const json = (results: IRuleResult[]): string => {
+export const json: Formatter = results => {
   const outputJson = results.map(result => {
     return {
       code: result.code,
