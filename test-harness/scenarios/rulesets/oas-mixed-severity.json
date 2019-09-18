@@ -1,0 +1,21 @@
+{
+  "extends": ["spectral:oas"],
+  "rules": {
+    "info-contact": "error",
+    "operation-description": "info",
+    "info-matches-stoplight": {
+      "message": "Info must contain Stoplight",
+      "given": "$.info",
+      "severity": "hint",
+      "type": "style",
+      "recommended": true,
+      "then": {
+        "field": "title",
+        "function": "pattern",
+        "functionOptions": {
+          "match": "Stoplight"
+        }
+      }
+    }
+  }
+}

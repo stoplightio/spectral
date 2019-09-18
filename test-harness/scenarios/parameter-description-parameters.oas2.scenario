@@ -44,4 +44,4 @@ OpenAPI 2.0 (Swagger) detected
  14:11  warning  oas2-parameter-description  Parameter objects should have a `description`.
  25:13  warning  oas2-parameter-description  Parameter objects should have a `description`.
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos)
+✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
