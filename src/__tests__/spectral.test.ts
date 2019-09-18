@@ -1,4 +1,3 @@
-import { Cache } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isParsedResult, Spectral } from '../spectral';
 import { IParsedResult, RuleFunction } from '../types';
@@ -127,6 +126,11 @@ describe('spectral', () => {
   describe('when a $ref appears', () => {
     test('will call the resolver with target', async () => {
       const fakeResolver = {
+        uriCache: {
+          get: jest.fn(),
+          set: jest.fn(),
+          has: jest.fn(),
+        },
         resolve: jest.fn(() => Promise.resolve([])),
       };
 
@@ -140,7 +144,6 @@ describe('spectral', () => {
 
       expect(fakeResolver.resolve).toBeCalledWith(target, {
         authority: undefined,
-        uriCache: expect.any(Cache),
         parseResolveResult: expect.any(Function),
       });
     });
