@@ -1071,17 +1071,18 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-better-ajv-errors@stoplightio/better-ajv-errors#0c5be246c12c87993ba07b47479cff8257b9579b:
-  version "0.6.4"
-  resolved "https://codeload.github.com/stoplightio/better-ajv-errors/tar.gz/0c5be246c12c87993ba07b47479cff8257b9579b"
+better-ajv-errors@0.6.6:
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/better-ajv-errors/-/better-ajv-errors-0.6.6.tgz#967f3075ca43455021c4802c92761dfbf843188e"
+  integrity sha512-CD5Xb75GtFpwcPnGH60MFlqwhMt0uUhKEjCTaWNXa3btSEQ0dbokn4WbyuMy/ykpfa0miJ2fEU5iQWIVSXIXgw==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@babel/runtime" "^7.0.0"
     chalk "^2.4.1"
-    core-js "^2.5.7"
+    core-js "^3.2.1"
     json-to-ast "^2.0.3"
     jsonpointer "^4.0.1"
-    leven "^2.1.0"
+    leven "^3.1.0"
 
 better-assert@~1.0.0:
   version "1.0.2"
@@ -1688,12 +1689,12 @@ copyfiles@^2.1.1:
     through2 "^2.0.1"
     yargs "^13.2.4"
 
-core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7, core-js@^2.6.9:
+core-js@^2.4.0, core-js@^2.5.0, core-js@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.9.tgz#6b4b214620c834152e179323727fc19741b084f2"
   integrity sha512-HOpZf6eXmnl7la+cUdMnLvUxKNqLUzJvgIziQ0DiF3JwSImNphIqdGqzj6hIKyX04MmV0poclQ7+wjWvxQyR2A==
 
-core-js@^3.1.3:
+core-js@^3.1.3, core-js@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.2.1.tgz#cd41f38534da6cc59f7db050fe67307de9868b09"
   integrity sha512-Qa5XSVefSVPRxy2XfUC13WbvqkxhkwB3ve+pgCQveNgYzbM/UxZeu1dcOX/xr4UmfUd+muuvsaxilQzCyUurMw==
@@ -4489,11 +4490,6 @@ left-pad@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/left-pad/-/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"
   integrity sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8ghrjyrvMCoEA==
-
-leven@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/leven/-/leven-2.1.0.tgz#c2e7a9f772094dee9d34202ae8acce4687875580"
-  integrity sha1-wuep93IJTe6dNCAq6KzORoeHVYA=
 
 leven@^3.1.0:
   version "3.1.0"
