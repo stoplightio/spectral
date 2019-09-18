@@ -1,4 +1,3 @@
-import { Cache } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isParsedResult, Spectral } from '../spectral';
 import { IParsedResult, RuleFunction } from '../types';
@@ -10,29 +9,6 @@ const oas2Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas2/index.js
 const oas3Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas3/index.json')));
 
 describe('spectral', () => {
-  test('should accept custom resolver cache', async () => {
-    const fakeResolver = {
-      resolve: jest.fn(() => Promise.resolve([])),
-    };
-    class FakeResolverCache extends Cache {}
-    const fakeResolverCache = new FakeResolverCache();
-
-    const s = new Spectral({
-      resolver: fakeResolver as any,
-      resolverCache: fakeResolverCache,
-    });
-
-    const target = { foo: 'bar' };
-
-    await s.run(target);
-
-    expect(fakeResolver.resolve).toBeCalledWith(target, {
-      authority: undefined,
-      uriCache: expect.any(FakeResolverCache),
-      parseResolveResult: expect.any(Function),
-    });
-  });
-
   describe('loadRuleset', () => {
     test('should support loading built-in rulesets', async () => {
       const s = new Spectral();
@@ -163,7 +139,6 @@ describe('spectral', () => {
 
       expect(fakeResolver.resolve).toBeCalledWith(target, {
         authority: undefined,
-        uriCache: expect.any(Cache),
         parseResolveResult: expect.any(Function),
       });
     });

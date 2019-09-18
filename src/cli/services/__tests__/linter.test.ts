@@ -1,6 +1,9 @@
+import { Cache, Resolver } from '@stoplight/json-ref-resolver';
+import { ICache } from '@stoplight/json-ref-resolver/types';
 import { resolve } from '@stoplight/path';
 import * as nock from 'nock';
 import * as yargs from 'yargs';
+import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 import { ValidationError } from '../../../rulesets/validation';
 import { ILintConfig } from '../../../types/config';
 import lintCommand from '../../commands/lint';
@@ -32,6 +35,7 @@ describe('Linter service', () => {
 
   beforeEach(() => {
     logSpy = jest.spyOn(console, 'log');
+    (httpAndFileResolver as Omit<Resolver, 'uriCache'> & { uriCache: ICache }).uriCache = new Cache();
   });
 
   afterEach(() => {
