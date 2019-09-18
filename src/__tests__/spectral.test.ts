@@ -126,6 +126,11 @@ describe('spectral', () => {
   describe('when a $ref appears', () => {
     test('will call the resolver with target', async () => {
       const fakeResolver = {
+        uriCache: {
+          get: jest.fn(),
+          set: jest.fn(),
+          has: jest.fn(),
+        },
         resolve: jest.fn(() => Promise.resolve([])),
       };
 
