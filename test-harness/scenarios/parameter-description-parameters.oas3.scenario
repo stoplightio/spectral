@@ -31,4 +31,4 @@ OpenAPI 3.x detected
   9:11  warning  oas3-parameter-description  Parameter objects should have a `description`.
  16:15  warning  oas3-parameter-description  Parameter objects should have a `description`.
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos)
+✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)

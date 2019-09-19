@@ -35,4 +35,4 @@ OpenAPI 3.x detected
  12:10  warning  operation-tags                Operation should have non-empty `tags` array.
  13:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.
 
-✖ 9 problems (2 errors, 7 warnings, 0 infos)
+✖ 9 problems (2 errors, 7 warnings, 0 infos, 0 hints)

@@ -33,4 +33,4 @@ OpenAPI 3.x detected
  12:10  warning  operation-description  Operation `description` must be present and non-empty string.
  12:10  warning  operation-tags         Operation should have non-empty `tags` array.
 
-✖ 7 problems (0 errors, 7 warnings, 0 infos)
+✖ 7 problems (0 errors, 7 warnings, 0 infos, 0 hints)
