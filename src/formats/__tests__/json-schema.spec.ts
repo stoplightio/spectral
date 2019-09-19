@@ -1,5 +1,6 @@
 import {
   isJSONSchema,
+  isJSONSchema2019_09,
   isJSONSchemaDraft4,
   isJSONSchemaDraft6,
   isJSONSchemaDraft7,
@@ -192,6 +193,42 @@ describe('JSON Schema format', () => {
       expect(isJSONSchemaDraft7({ type: 'string' })).toBe(false);
       expect(isJSONSchemaDraft7({})).toBe(false);
       expect(isJSONSchemaDraft7(null)).toBe(false);
+    });
+  });
+
+  describe('JSON Schema 2019-09', () => {
+    it.each([
+      'http://json-schema.org/draft/2019-09/schema#',
+      'https://json-schema.org/draft/2019-09/schema#',
+      'http://json-schema.org/draft/2019-09/schema',
+      'https://json-schema.org/draft/2019-09/schema',
+      'http://json-schema.org/draft/2019-09/hyper-schema#',
+      'https://json-schema.org/draft/2019-09/hyper-schema#',
+      'http://json-schema.org/draft/2019-09/hyper-schema',
+      'https://json-schema.org/draft/2019-09/hyper-schema',
+    ])('recognizes %s schema correctly', $schema => {
+      expect(isJSONSchema2019_09({ $schema })).toBe(true);
+    });
+
+    it.each([
+      'http://json-schema.org/schema#',
+      'https://json-schema.org/schema#',
+      'http://json-schema.org/hyper-schema#',
+      'http://json-schema.org/draft-06/schema#',
+      'http://json-schema.org/draft-06/hyper-schema#',
+    ])('does not recognize %s schema', $schema => {
+      expect(isJSONSchema2019_09({ $schema })).toBe(false);
+    });
+
+    it('does not recognize invalid document', () => {
+      expect(isJSONSchema2019_09({ $schema: '2.0' })).toBe(false);
+      expect(isJSONSchema2019_09({ $schema: 'json-schema' })).toBe(false);
+      expect(isJSONSchema2019_09({ $schema: 2 })).toBe(false);
+      expect(isJSONSchema2019_09({ swagger: null })).toBe(false);
+      expect(isJSONSchema2019_09({ allOf: [] })).toBe(false);
+      expect(isJSONSchema2019_09({ type: 'string' })).toBe(false);
+      expect(isJSONSchema2019_09({})).toBe(false);
+      expect(isJSONSchema2019_09(null)).toBe(false);
     });
   });
 });
