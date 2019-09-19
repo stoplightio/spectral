@@ -1,6 +1,6 @@
-import { isOpenApiv2, isOpenApiv3, isOpenApiv3_1 } from '../lookups';
+import { isOpenApiv2, isOpenApiv3, isOpenApiv3_1 } from '../openapi';
 
-describe('Format lookups', () => {
+describe('OpenAPI format', () => {
   describe('OpenAPI 2.0 aka Swagger', () => {
     it.each(['2.0.0', '2', '2.0'])('recognizes %s version correctly', version => {
       expect(isOpenApiv2({ swagger: version })).toBe(true);

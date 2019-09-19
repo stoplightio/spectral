@@ -2,8 +2,8 @@ import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
+import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { mergeRules, readRuleset } from '../rulesets';
-import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
 import { RuleCollection, Spectral } from '../spectral';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
