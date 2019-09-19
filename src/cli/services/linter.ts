@@ -2,13 +2,21 @@ import { isAbsolute, resolve } from '@stoplight/path';
 import { IParserResult, Optional } from '@stoplight/types';
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 
+import {
+  isJSONSchema,
+  isJSONSchemaDraft4,
+  isJSONSchemaDraft6,
+  isJSONSchemaDraft7,
+  isJSONSchemaLoose,
+  isOpenApiv2,
+  isOpenApiv3,
+} from '../../formats';
 import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { getDefaultRulesetFile } from '../../rulesets/loader';
-import { isOpenApiv2, isOpenApiv3 } from '../../rulesets/lookups';
 import { readRuleset } from '../../rulesets/reader';
 import { Spectral } from '../../spectral';
-import { IParsedResult, RuleCollection } from '../../types';
+import { FormatLookup, IParsedResult, RuleCollection } from '../../types';
 import { ILintConfig } from '../../types/config';
 import { IRuleset } from '../../types/ruleset';
 
@@ -22,6 +30,16 @@ export async function loadRulesets(cwd: string, rulesetFiles: string[]): Promise
 
   return readRuleset(rulesetFiles.map(file => (isAbsolute(file) ? file : resolve(cwd, file))));
 }
+
+const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
+  ['oas2', isOpenApiv2, 'OpenAPI 2.0 (Swagger) detected'],
+  ['oas3', isOpenApiv3, 'OpenAPI 3.x detected'],
+  ['json-schema', isJSONSchema, 'JSON Schema detected'],
+  ['json-schema-loose', isJSONSchemaLoose, 'JSON Schema (loose) detected'],
+  ['json-schema-draft4', isJSONSchemaDraft4, 'JSON Schema Draft 4 detected'],
+  ['json-schema-draft6', isJSONSchemaDraft6, 'JSON Schema Draft 6 detected'],
+  ['json-schema-draft7', isJSONSchemaDraft7, 'JSON Schema Draft 7 detected'],
+];
 
 export async function lint(name: string, flags: ILintConfig, rulesetFile: Optional<string[]>) {
   if (flags.verbose) {
@@ -50,27 +68,18 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
     }
   }
 
-  spectral.registerFormat('oas2', document => {
-    if (isOpenApiv2(document)) {
-      if (!flags.quiet) {
-        console.log('OpenAPI 2.0 (Swagger) detected');
+  for (const [format, lookup, message] of KNOWN_FORMATS) {
+    spectral.registerFormat(format, document => {
+      if (lookup(document)) {
+        if (!flags.quiet) {
+          console.log(message);
+        }
+
+        return true;
       }
-
-      return true;
-    }
-    return false;
-  });
-
-  spectral.registerFormat('oas3', document => {
-    if (isOpenApiv3(document)) {
-      if (!flags.quiet) {
-        console.log('OpenAPI 3.x detected');
-      }
-
-      return true;
-    }
-    return false;
-  });
+      return false;
+    });
+  }
 
   spectral.setRuleset(ruleset);
 
