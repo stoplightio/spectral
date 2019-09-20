@@ -6,6 +6,60 @@ function runSchema(target: any, schemaObj: object) {
 }
 
 describe('schema', () => {
+  describe('validates falsy values such as', () => {
+    test('empty string', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'number',
+      };
+
+      expect(runSchema('', testSchema)).toEqual([
+        {
+          message: 'type should be number',
+          path: [],
+        },
+      ]);
+    });
+
+    test('zero', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'string',
+      };
+
+      expect(runSchema(0, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: [],
+        },
+      ]);
+    });
+
+    test('false', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'string',
+      };
+
+      expect(runSchema(false, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: [],
+        },
+      ]);
+    });
+
+    test('null', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'string',
+      };
+
+      expect(runSchema(null, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: [],
+        },
+      ]);
+    });
+  });
+
   describe('when schema defines unknown format', () => {
     const testSchema = {
       type: 'string',
@@ -144,7 +198,7 @@ describe('schema', () => {
     });
   });
 
-  describe('handles duplicate JSONSchema4 ids', () => {
+  test('handles duplicate JSONSchema Draft 4 ids', () => {
     const testSchema: JSONSchema4 = {
       id: 'test',
       type: 'string',
@@ -164,7 +218,7 @@ describe('schema', () => {
     expect(runSchema('a', testSchema2)).toEqual([]);
   });
 
-  describe('handles duplicate JSONSchema6 ids', () => {
+  test('handles duplicate JSONSchema Draft 6 and 7 $ids', () => {
     const testSchema: JSONSchema6 = {
       $id: 'test',
       type: 'string',
@@ -182,5 +236,14 @@ describe('schema', () => {
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
+  });
+
+  test.each([4, 6, 7])('accepts draft %d', draft => {
+    const testSchema: JSONSchema6 = {
+      $schema: `http://json-schema.org/draft-0${draft}/schema#`,
+      type: 'string',
+    };
+
+    expect(runSchema.bind(null, 'd', testSchema)).not.toThrow();
   });
 });
