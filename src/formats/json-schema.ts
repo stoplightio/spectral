@@ -3,7 +3,7 @@ import { isObject } from '../utils/isObject';
 
 type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
 
-const KNOWN_JSON_SCHEMA_TYPES = ['any', 'array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
+const KNOWN_JSON_SCHEMA_TYPES = ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
 const KNOWN_JSON_SCHEMA_COMBINERS = ['allOf', 'oneOf', 'anyOf'];
 const $SCHEMA_DRAFT4_REGEX = /^https?:\/\/json-schema.org\/draft-04\/(?:hyper-)?schema#?$/;
 const $SCHEMA_DRAFT6_REGEX = /^https?:\/\/json-schema.org\/draft-06\/(?:hyper-)?schema#?$/;

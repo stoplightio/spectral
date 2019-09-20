@@ -49,7 +49,7 @@ describe('JSON Schema format', () => {
     });
 
     describe('by type', () => {
-      it.each(['any', 'array', 'boolean', 'integer', 'null', 'number', 'object', 'string'])(
+      it.each(['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'])(
         'recognizes %s type correctly',
         type => {
           expect(isJSONSchemaLoose({ type })).toBe(true);
