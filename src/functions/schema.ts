@@ -82,7 +82,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   const path = paths.target || paths.given;
 
-  if (!targetVal)
+  if (targetVal === void 0)
     return [
       {
         path,

@@ -6,6 +6,60 @@ function runSchema(target: any, schemaObj: object) {
 }
 
 describe('schema', () => {
+  describe('validates falsy values such as', () => {
+    test('empty string', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'number',
+      };
+
+      expect(runSchema('', testSchema)).toEqual([
+        {
+          message: 'type should be number',
+          path: [],
+        },
+      ]);
+    });
+
+    test('zero', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'string',
+      };
+
+      expect(runSchema(0, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: [],
+        },
+      ]);
+    });
+
+    test('false', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'string',
+      };
+
+      expect(runSchema(false, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: [],
+        },
+      ]);
+    });
+
+    test('null', () => {
+      const testSchema: JSONSchema6 = {
+        type: 'string',
+      };
+
+      expect(runSchema(null, testSchema)).toEqual([
+        {
+          message: 'type should be string',
+          path: [],
+        },
+      ]);
+    });
+  });
+
   describe('when schema defines unknown format', () => {
     const testSchema = {
       type: 'string',
