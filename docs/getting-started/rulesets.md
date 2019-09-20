@@ -226,4 +226,4 @@ Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
 ## Creating custom functions
 
-Learn more about [custom functions](./custom-functions.md). 
+Learn more about [custom functions](../guides/custom-functions.md).
