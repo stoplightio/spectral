@@ -1,16 +1,7 @@
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { Spectral } from '../../../spectral';
 
-describe('parameter-description', () => {
-  const s = new Spectral();
-
-  s.setRules({
-    'parameter-description': Object.assign(ruleset.rules['parameter-description'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['parameter-description'].type],
-    }),
-  });
-
+export default (s: Spectral, oasVersion: number) => {
   test('should work for shared level parameters', async () => {
     const results = await s.run({
       swagger: '2.0',
@@ -66,27 +57,6 @@ describe('parameter-description', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors if shared level parameter description is missing', async () => {
-    const results = await s.run({
-      swagger: '2.0',
-      parameters: {
-        limit: {
-          name: 'limit',
-          in: 'query',
-          type: 'integer',
-        },
-      },
-    });
-    expect(results).toEqual([
-      expect.objectContaining({
-        code: 'parameter-description',
-        message: 'Parameter objects should have a `description`.',
-        path: ['parameters', 'limit'],
-        severity: 1,
-      }),
-    ]);
-  });
-
   test('return errors if top level path parameter description is missing', async () => {
     const results = await s.run({
       swagger: '2.0',
@@ -104,10 +74,10 @@ describe('parameter-description', () => {
     });
     expect(results).toEqual([
       expect.objectContaining({
-        code: 'parameter-description',
+        code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'parameters', '0'],
-        severity: 1,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });
@@ -131,7 +101,7 @@ describe('parameter-description', () => {
     });
     expect(results).toEqual([
       expect.objectContaining({
-        code: 'parameter-description',
+        code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',
         path: ['paths', '/todos', 'get', 'parameters', '0'],
         severity: 1,
@@ -155,4 +125,4 @@ describe('parameter-description', () => {
       }),
     ).not.rejects;
   });
-});
+};

@@ -15,4 +15,4 @@ lint {document} --output=./test-harness/tmp/results-default-output.txt > /dev/nu
  2:6  warning  info-contact      Info object should contain `contact` object.
  2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos)
+✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)

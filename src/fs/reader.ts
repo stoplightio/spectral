@@ -1,7 +1,7 @@
 import { isURL } from '@stoplight/path';
-import * as fs from 'fs';
-const fetch = require('node-fetch');
 import AbortController from 'abort-controller';
+import * as fs from 'fs';
+import request from '../request';
 
 export interface IReadOptions {
   encoding: string;
@@ -11,16 +11,16 @@ export interface IReadOptions {
 export async function readFile(name: string, opts: IReadOptions) {
   if (isURL(name)) {
     let response;
-    let timeout: NodeJS.Timeout | null = null;
+    let timeout: NodeJS.Timeout | number | null = null;
     try {
       if (opts.timeout) {
         const controller = new AbortController();
         timeout = setTimeout(() => {
           controller.abort();
         }, opts.timeout);
-        response = await fetch(name, { signal: controller.signal });
+        response = await request(name, { signal: controller.signal });
       } else {
-        response = await fetch(name);
+        response = await request(name);
       }
 
       if (!response.ok) throw new Error(response.statusText);
