@@ -4,7 +4,7 @@ import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
 
 import {
   isJSONSchema,
-  isJSONSchema2019_09,
+  isJSONSchemaDraft2019_09,
   isJSONSchemaDraft4,
   isJSONSchemaDraft6,
   isJSONSchemaDraft7,
@@ -40,7 +40,7 @@ const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['json-schema-draft4', isJSONSchemaDraft4, 'JSON Schema Draft 4 detected'],
   ['json-schema-draft6', isJSONSchemaDraft6, 'JSON Schema Draft 6 detected'],
   ['json-schema-draft7', isJSONSchemaDraft7, 'JSON Schema Draft 7 detected'],
-  ['json-schema-2019-09', isJSONSchema2019_09, 'JSON Schema 2019-09 detected'],
+  ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09 detected'],
 ];
 
 export async function lint(name: string, flags: ILintConfig, rulesetFile: Optional<string[]>) {

@@ -8,7 +8,7 @@ const KNOWN_JSON_SCHEMA_COMBINERS = ['allOf', 'oneOf', 'anyOf'];
 const $SCHEMA_DRAFT4_REGEX = /^https?:\/\/json-schema.org\/draft-04\/(?:hyper-)?schema#?$/;
 const $SCHEMA_DRAFT6_REGEX = /^https?:\/\/json-schema.org\/draft-06\/(?:hyper-)?schema#?$/;
 const $SCHEMA_DRAFT7_REGEX = /^https?:\/\/json-schema.org\/draft-07\/(?:hyper-)?schema#?$/;
-const $SCHEMA_2019_09_REGEX = /^https?:\/\/json-schema.org\/draft\/2019-09\/(?:hyper-)?schema#?$/;
+const $SCHEMA_DRAFT_2019_09_REGEX = /^https?:\/\/json-schema.org\/draft\/2019-09\/(?:hyper-)?schema#?$/;
 
 const hasValidJSONSchemaType = (document: object | Partial<{ type: unknown }>) =>
   'type' in document && typeof document.type === 'string' && KNOWN_JSON_SCHEMA_TYPES.includes(document.type);
@@ -37,5 +37,5 @@ export const isJSONSchemaDraft6 = (document: unknown) =>
 export const isJSONSchemaDraft7 = (document: unknown) =>
   isJSONSchema(document) && $SCHEMA_DRAFT7_REGEX.test(document.$schema);
 
-export const isJSONSchema2019_09 = (document: unknown) =>
-  isJSONSchema(document) && $SCHEMA_2019_09_REGEX.test(document.$schema);
+export const isJSONSchemaDraft2019_09 = (document: unknown) =>
+  isJSONSchema(document) && $SCHEMA_DRAFT_2019_09_REGEX.test(document.$schema);
