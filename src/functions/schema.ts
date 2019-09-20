@@ -1,3 +1,4 @@
+import { decodePointerFragment } from '@stoplight/json';
 import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
@@ -97,16 +98,29 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
     const validator = validators.get(schemaObj);
     if (!validator(targetVal) && validator.errors) {
-      results.push(
-        ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
-          ({ error, path: errorPath }) => {
-            return {
+      try {
+        results.push(
+          ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
+            ({ error, path: errorPath }) => ({
               message: cleanAJVErrorMessage(error),
               path: [...path, ...(errorPath ? errorPath.replace(/^\//, '').split('/') : [])],
-            };
-          },
-        ),
-      );
+            }),
+          ),
+        );
+      } catch {
+        results.push(
+          ...validator.errors.map(({ message, dataPath }) => ({
+            message: message ? cleanAJVErrorMessage(message) : '',
+            path: [
+              ...path,
+              ...dataPath
+                .split('/')
+                .slice(1)
+                .map(decodePointerFragment),
+            ],
+          })),
+        );
+      }
     }
   } catch (ex) {
     if (ex instanceof AJV.MissingRefError) {
