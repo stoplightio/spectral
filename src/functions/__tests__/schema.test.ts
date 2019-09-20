@@ -246,4 +246,34 @@ describe('schema', () => {
 
     expect(runSchema.bind(null, 'd', testSchema)).not.toThrow();
   });
+
+  test('reports pretty enum errors for primitive values', () => {
+    const testSchema: JSONSchema6 = {
+      $schema: `http://json-schema.org/draft-06/schema#`,
+      type: 'string',
+      enum: ['foo', 'bar'],
+    };
+
+    expect(runSchema('baz', testSchema)).toEqual([
+      {
+        message: 'should be equal to one of the allowed values: foo, bar. Did you mean bar?',
+        path: [],
+      },
+    ]);
+  });
+
+  test('reports slightly less pretty enum errors for primitive values that are not similar to any values in enum', () => {
+    const testSchema: JSONSchema6 = {
+      $schema: `http://json-schema.org/draft-06/schema#`,
+      type: 'string',
+      enum: ['foo', 'bar'],
+    };
+
+    expect(runSchema('three', testSchema)).toEqual([
+      {
+        message: 'should be equal to one of the allowed values: foo, bar',
+        path: [],
+      },
+    ]);
+  });
 });
