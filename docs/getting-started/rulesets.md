@@ -65,7 +65,13 @@ Formats are an optional way to specify which API description formats a rule, or 
 
 - `oas2` (this is OpenAPI v2.0 - formerly known as Swagger)
 - `oas3` (this is OpenAPI v3.0)
-
+- `json-schema` (this is JSON Schema, detection based on the value of $schema property)
+- `json-schema-loose` (this is JSON Schema, loose check, no $schema required)
+- `json-schema-draft4` (this is JSON Schema Draft 4, detection based on the value of $schema property)
+- `json-schema-draft6` (this is JSON Schema Draft 6, detection based on the value of $schema property)
+- `json-schema-draft7` (this is JSON Schema Draft 7, detection based on the value of $schema property)
+- `json-schema-2019-09` (this is JSON Schema 2019-09, detection based on the value of $schema property)
+  
 Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
 
 ```yaml

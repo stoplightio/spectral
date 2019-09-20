@@ -1,6 +1,7 @@
 import { Optional } from '@stoplight/types';
 import { JSONSchema7 } from 'json-schema';
 import { IFunction } from '../types';
+import { isObject } from '../utils/isObject';
 import { decorateIFunctionWithSchemaValidation } from './validation';
 
 export type CJSExport = Partial<{ exports: object | ESCJSCompatibleExport }>;
@@ -27,8 +28,6 @@ const createDefine = (exports: CJSExport) => {
 
   return define;
 };
-
-const isObject = (thing: unknown): thing is object => thing !== null && typeof thing === 'object';
 
 const isESCJSCompatibleExport = (obj: unknown): obj is ESCJSCompatibleExport => isObject(obj) && 'default' in obj;
 
