@@ -144,7 +144,7 @@ describe('schema', () => {
     });
   });
 
-  describe('handles duplicate JSONSchema4 ids', () => {
+  test('handles duplicate JSONSchema Draft 4 ids', () => {
     const testSchema: JSONSchema4 = {
       id: 'test',
       type: 'string',
@@ -164,7 +164,7 @@ describe('schema', () => {
     expect(runSchema('a', testSchema2)).toEqual([]);
   });
 
-  describe('handles duplicate JSONSchema6 ids', () => {
+  test('handles duplicate JSONSchema Draft 6 and 7 $ids', () => {
     const testSchema: JSONSchema6 = {
       $id: 'test',
       type: 'string',
@@ -182,5 +182,14 @@ describe('schema', () => {
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
+  });
+
+  test.each([4, 6, 7])('accepts draft %d', draft => {
+    const testSchema: JSONSchema6 = {
+      $schema: `http://json-schema.org/draft-0${draft}/schema#`,
+      type: 'string',
+    };
+
+    expect(runSchema.bind(null, 'd', testSchema)).not.toThrow();
   });
 });

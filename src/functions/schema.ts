@@ -1,6 +1,8 @@
 import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
+import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
+import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
@@ -31,6 +33,8 @@ const ajv = new AJV({
   logger,
 });
 ajv.addMetaSchema(jsonSpecv4);
+ajv.addMetaSchema(jsonSpecv6);
+ajv.addMetaSchema(jsonSpecv7);
 // @ts-ignore
 ajv._opts.defaultMeta = jsonSpecv4.id;
 // @ts-ignore
