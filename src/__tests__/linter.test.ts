@@ -366,7 +366,7 @@ describe('linter', () => {
     expect(result).toEqual([]);
   });
 
-  test('should execute rules that matching all found formats', async () => {
+  test('should execute rules matching all found formats', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
     spectral.registerFormat('baz', () => true);
 
