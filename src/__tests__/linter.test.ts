@@ -366,7 +366,7 @@ describe('linter', () => {
     expect(result).toEqual([]);
   });
 
-  test('should prefer the first matched format', async () => {
+  test('should execute rules that matching all found formats', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
     spectral.registerFormat('baz', () => true);
 
@@ -399,10 +399,13 @@ describe('linter', () => {
       expect.objectContaining({
         code: 'rule1',
       }),
+      expect.objectContaining({
+        code: 'rule2',
+      }),
     ]);
   });
 
-  test('should not run any rule with defined formats if some formats are are registered but document format could not be associated', async () => {
+  test('should not run any rule with defined formats if some formats are registered but document format could not be associated', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
 
     spectral.setRules({
