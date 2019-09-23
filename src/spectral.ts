@@ -102,9 +102,9 @@ export class Spectral {
       this._parsedMap,
     );
 
-    if (resolved.format === void 0) {
-      const foundFormat = Object.keys(this.formats).find(format => this.formats[format](resolved.resolved));
-      resolved.format = foundFormat === void 0 ? null : foundFormat;
+    if (resolved.formats === void 0) {
+      const foundFormats = Object.keys(this.formats).filter(format => this.formats[format](resolved.resolved));
+      resolved.formats = foundFormats.length === 0 ? null : foundFormats;
     }
 
     const validationResults = [

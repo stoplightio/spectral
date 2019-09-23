@@ -61,7 +61,7 @@ You might find `resolved` useful if your rule requires access to $refs.
 
 ## Formats
 
-Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these two formats:
+Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these formats:
 
 - `oas2` (this is OpenAPI v2.0 - formerly known as Swagger)
 - `oas3` (this is OpenAPI v3.0)
