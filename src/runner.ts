@@ -5,6 +5,7 @@ const { JSONPath } = require('jsonpath-plus');
 import { lintNode } from './linter';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { FunctionCollection, IGivenNode, IRuleResult, IRunRule, RunRuleCollection } from './types';
+import { hasIntersectingElement } from './utils/';
 
 export const runRules = (
   resolved: Resolved,
@@ -21,11 +22,12 @@ export const runRules = (
 
     if (
       rule.formats !== void 0 &&
-      (resolved.format === null || (resolved.format !== void 0 && !rule.formats.includes(resolved.format)))
+      (resolved.formats === null ||
+        (resolved.formats !== void 0 && !hasIntersectingElement(rule.formats, resolved.formats)))
     )
       continue;
 
-    if (rule.severity !== undefined && getDiagnosticSeverity(rule.severity) === -1) {
+    if (rule.severity !== void 0 && getDiagnosticSeverity(rule.severity) === -1) {
       continue;
     }
 

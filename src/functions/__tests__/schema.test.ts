@@ -246,4 +246,73 @@ describe('schema', () => {
 
     expect(runSchema.bind(null, 'd', testSchema)).not.toThrow();
   });
+
+  describe('given a primitive value', () => {
+    describe('and an enum consisting of string values', () => {
+      const testSchema: JSONSchema6 = {
+        $schema: `http://json-schema.org/draft-06/schema#`,
+        type: 'string',
+        enum: ['foo', 'bar'],
+      };
+
+      it('reports pretty enum errors for a string', () => {
+        expect(runSchema('baz', testSchema)).toEqual([
+          {
+            message: 'should be equal to one of the allowed values: foo, bar. Did you mean bar?',
+            path: [],
+          },
+        ]);
+      });
+
+      it('reports pretty enum errors for a number', () => {
+        expect(runSchema(2, testSchema)).toEqual([
+          {
+            message: 'type should be string',
+            path: [],
+          },
+        ]);
+      });
+    });
+
+    describe('and an enum consisting of integer values', () => {
+      const testSchema: JSONSchema6 = {
+        $schema: `http://json-schema.org/draft-06/schema#`,
+        type: 'integer',
+        enum: [1, 3, 5, 10, 12],
+      };
+
+      it('reports pretty enum errors for a string', () => {
+        expect(runSchema('baz', testSchema)).toEqual([
+          {
+            message: 'type should be integer',
+            path: [],
+          },
+        ]);
+      });
+
+      it('reports pretty enum errors for a number', () => {
+        expect(runSchema(2, testSchema)).toEqual([
+          {
+            message: 'should be equal to one of the allowed values: 1, 3, 5, 10, 12',
+            path: [],
+          },
+        ]);
+      });
+    });
+  });
+
+  test('reports slightly less pretty enum errors for primitive values that are not similar to any values in enum', () => {
+    const testSchema: JSONSchema6 = {
+      $schema: `http://json-schema.org/draft-06/schema#`,
+      type: 'string',
+      enum: ['foo', 'bar'],
+    };
+
+    expect(runSchema('three', testSchema)).toEqual([
+      {
+        message: 'should be equal to one of the allowed values: foo, bar',
+        path: [],
+      },
+    ]);
+  });
 });

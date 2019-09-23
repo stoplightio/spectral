@@ -64,7 +64,7 @@
     "abort-controller": "^3.0.0",
     "ajv": "^6.7",
     "ajv-oai": "^1.1.1",
-    "better-ajv-errors": "0.6.6",
+    "better-ajv-errors": "^0.6.7",
     "chalk": "^2.4.2",
     "deprecated-decorator": "^0.1.6",
     "jsonpath-plus": "~1.0",
