@@ -1,61 +1,82 @@
+import * as http from 'http';
+import * as url from 'url';
+import { DEFAULT_REQUEST_OPTIONS } from '../request';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
+const ProxyAgent = require('proxy-agent');
+
+const PORT = 4001;
 
 describe('request', () => {
-  const oldProxyEnv = process.env.PROXY;
+  describe('when agent is set', () => {
+    let server: http.Server;
 
-  beforeEach(() => {
-    process.env = { PROXY: 'http://localhost:3000/' };
-  });
-
-  afterEach(() => {
-    process.env.proxy = oldProxyEnv;
-  });
-
-  describe('loading a ruleset', () => {
-    it('proxies the request', async () => {
-      const s = new Spectral();
-
-      try {
-        await s.loadRuleset('http://localhost:4000/custom-ruleset');
-      } catch (e) {
-        expect(e.message).toBe(
-          'Could not parse http://localhost:4000/custom-ruleset: request to http://localhost:4000/custom-ruleset failed, reason: connect ECONNREFUSED 127.0.0.1:3000',
-        );
-      }
-    });
-  });
-
-  describe('loading a $ref', () => {
-    it('proxies the request', async () => {
-      const spec = {
-        openapi: '3.0.2',
-        paths: {
-          '/pets': {
-            get: {
-              responses: {
-                '200': {
-                  description: 'abc',
-                  content: {
-                    'application/json': {
-                      schema: {
-                        $ref: 'http://localhost:8089/ok.json',
-                      },
-                    },
-                  },
+    beforeAll(() => {
+      // nock cannot mock proxied requests
+      server = http
+        .createServer((req, res) => {
+          const { pathname } = url.parse(String(req.url));
+          if (pathname === '/custom-ruleset') {
+            res.writeHead(403);
+          } else if (pathname === '/ok.json') {
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.write(
+              JSON.stringify({
+                info: {
+                  title: '',
+                  description: 'Foo',
                 },
-              },
-            },
+              }),
+            );
+          } else {
+            res.writeHead(404);
+          }
+
+          res.end();
+        })
+        .listen(PORT, '0.0.0.0');
+    });
+
+    afterAll(() => {
+      server.close();
+    });
+
+    beforeEach(() => {
+      DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(`http://localhost:${PORT}`);
+    });
+
+    afterEach(() => {
+      delete DEFAULT_REQUEST_OPTIONS.agent;
+    });
+
+    describe('loading a ruleset', () => {
+      it('proxies the request', () => {
+        const s = new Spectral();
+
+        return expect(s.loadRuleset('http://localhost:4000/custom-ruleset')).rejects.toHaveProperty(
+          'message',
+          'Could not parse http://localhost:4000/custom-ruleset: Forbidden',
+        );
+      });
+    });
+
+    describe('loading a $ref', () => {
+      it('proxies the request', () => {
+        const doc = {
+          info: {
+            $ref: 'http://localhost:8089/ok.json#/info',
           },
-        },
-      };
+        };
 
-      const s = new Spectral({ resolver: httpAndFileResolver });
-      const results = await s.run(spec);
+        const s = new Spectral({ resolver: httpAndFileResolver });
 
-      expect(results[0].message).toBe(
-        'FetchError: request to http://localhost:8089/ok.json failed, reason: connect ECONNREFUSED 127.0.0.1:3000',
-      );
+        return expect(s.runWithResolved(doc)).resolves.toHaveProperty('resolved', {
+          info: {
+            title: '',
+            description: 'Foo',
+          },
+        });
+      });
     });
   });
 });
