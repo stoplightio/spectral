@@ -7,7 +7,7 @@ import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
-import { escapeRegExp } from 'tslint/lib/utils';
+import { escapeRegExp } from 'lodash';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');

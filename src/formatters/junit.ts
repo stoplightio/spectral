@@ -25,7 +25,7 @@
 
 import { extname } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
-import { escapeRegExp } from 'tslint/lib/utils';
+import { escapeRegExp } from 'lodash';
 import { IRuleResult, SpectralDiagnosticSeverity } from '../types';
 import { Formatter } from './types';
 import { groupBySource } from './utils/groupBySource';
