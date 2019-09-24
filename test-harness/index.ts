@@ -78,6 +78,7 @@ describe('cli acceptance tests', () => {
         shell: true,
         encoding: 'utf8',
         windowsVerbatimArguments: false,
+        env: scenario.env,
       });
 
       const expectedStatus = replaceVars(scenario.status.trim(), replacements);
