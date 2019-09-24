@@ -1,4 +1,4 @@
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { IResolver } from '@stoplight/json-ref-resolver/types';
 import {
   DiagnosticSeverity,
   Dictionary,
@@ -29,7 +29,7 @@ export type SpectralDiagnosticSeverity = DiagnosticSeverity | -1;
 export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IConstructorOpts {
-  resolver?: Resolver;
+  resolver?: IResolver;
 }
 
 export interface IRunOpts {
