@@ -16,6 +16,7 @@ import { readParsable } from '../../fs/reader';
 import { httpAndFileResolver } from '../../resolvers/http-and-file';
 import { getDefaultRulesetFile } from '../../rulesets/loader';
 import { readRuleset } from '../../rulesets/reader';
+import { isRuleEnabled } from '../../runner';
 import { Spectral } from '../../spectral';
 import { FormatLookup, IParsedResult, RuleCollection } from '../../types';
 import { ILintConfig } from '../../types/config';
@@ -62,14 +63,6 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
 
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
-  if (flags.verbose) {
-    if (ruleset) {
-      console.info(`Found ${Object.keys(ruleset.rules).length} rules`);
-    } else {
-      console.info('No rules loaded, attempting to detect document type');
-    }
-  }
-
   for (const [format, lookup, message] of KNOWN_FORMATS) {
     spectral.registerFormat(format, document => {
       if (lookup(document)) {
@@ -84,6 +77,15 @@ export async function lint(name: string, flags: ILintConfig, rulesetFile: Option
   }
 
   spectral.setRuleset(ruleset);
+
+  if (flags.verbose) {
+    if (ruleset) {
+      const rules = Object.values(spectral.rules);
+      console.info(`Found ${rules.length} rules (${rules.filter(isRuleEnabled).length} enabled)`);
+    } else {
+      console.info('No rules loaded, attempting to detect document type');
+    }
+  }
 
   if (flags.skipRule) {
     spectral.setRules(skipRules(ruleset.rules, flags));
