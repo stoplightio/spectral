@@ -5,7 +5,7 @@ import {
   safeStringify,
 } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { ICache, IResolver, IUriParser } from '@stoplight/json-ref-resolver/types';
+import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import {
@@ -30,6 +30,7 @@ import {
   FunctionCollection,
   IConstructorOpts,
   IParsedResult,
+  IResolver,
   IRuleResult,
   IRunOpts,
   ISpectralFullResult,

@@ -1,7 +1,7 @@
-import { IResolveError, IResolveResult } from '@stoplight/json-ref-resolver/types';
+import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
 import { get, has } from 'lodash';
-import { IParseMap, REF_METADATA } from './spectral';
+import { IParseMap, REF_METADATA, ResolveResult } from './spectral';
 import { IParsedResult } from './types';
 
 const getDefaultRange = (): IRange => ({
@@ -16,18 +16,19 @@ const getDefaultRange = (): IRange => ({
 });
 
 export class Resolved {
-  public refMap: Dictionary<string>;
-  public resolved: unknown;
-  public unresolved: unknown;
-  public errors: IResolveError[];
+  public readonly refMap: Dictionary<string>;
+  public readonly resolved: unknown;
+  public readonly unresolved: unknown;
+  public readonly errors: IResolveError[];
   public formats?: string[] | null;
 
-  constructor(public spec: IParsedResult, resolveResult: IResolveResult, public parsedMap: IParseMap) {
+  constructor(public spec: IParsedResult, resolveResult: ResolveResult, public parsedMap: IParseMap) {
+    this.unresolved = spec.parsed.data;
+    this.formats = spec.formats;
+
     this.refMap = resolveResult.refMap;
     this.resolved = resolveResult.result;
-    this.unresolved = spec.parsed.data;
     this.errors = resolveResult.errors;
-    this.formats = spec.formats;
   }
 
   public getParsedForJsonPath(path: JsonPath) {
