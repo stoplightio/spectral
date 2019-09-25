@@ -8,7 +8,7 @@ export interface IReadOptions {
   timeout?: number;
 }
 
-export async function readFile(name: string, opts: IReadOptions) {
+export async function readFile(name: string, opts: IReadOptions): Promise<string> {
   if (isURL(name)) {
     let response;
     let timeout: NodeJS.Timeout | number | null = null;

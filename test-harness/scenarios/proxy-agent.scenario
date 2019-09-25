@@ -1,0 +1,15 @@
+====test====
+Requests for $refs are proxied when PROXY env variable is set
+====document====
+foo:
+  $ref: http://localhost:3002/foo.json#/ref
+====env====
+PROXY=http://localhost:3001
+====command====
+lint {document}
+====stdout====
+
+{document}
+ 2:9  error  invalid-ref  FetchError: request to http://localhost:3002/foo.json failed, reason: connect ECONNREFUSED 127.0.0.1:3001
+
+✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)

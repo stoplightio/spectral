@@ -1,11 +1,7 @@
-import { RequestInit } from 'node-fetch';
-import * as ProxyAgent from 'proxy-agent';
+import fetch, { RequestInit } from 'node-fetch';
 
-const fetch = require('node-fetch');
+export const DEFAULT_REQUEST_OPTIONS: RequestInit = {};
 
-export default (uri: string, opts: RequestInit = {}) => {
-  const options =
-    typeof process === 'object' && process.env.PROXY ? { ...opts, agent: new ProxyAgent(process.env.PROXY) } : opts;
-
-  return fetch(uri, options);
+export default async (uri: string, opts: RequestInit = {}) => {
+  return fetch(uri, { ...opts, ...DEFAULT_REQUEST_OPTIONS });
 };
