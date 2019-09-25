@@ -1,6 +1,7 @@
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isParsedResult, Spectral } from '../spectral';
-import { IParsedResult, RuleFunction } from '../types';
+import { IParsedResult, IResolver, RuleFunction } from '../types';
 
 const merge = require('lodash/merge');
 
@@ -124,27 +125,86 @@ describe('spectral', () => {
   });
 
   describe('when a $ref appears', () => {
-    test('will call the resolver with target', async () => {
-      const fakeResolver = {
-        uriCache: {
-          get: jest.fn(),
-          set: jest.fn(),
-          has: jest.fn(),
-        },
-        resolve: jest.fn(() => Promise.resolve([])),
-      };
+    describe('and a custom resolver is provided', () => {
+      test('will call the resolver with target', async () => {
+        const customResolver: IResolver = {
+          resolve: jest.fn(async () => ({
+            result: {},
+            refMap: {},
+            errors: [],
+          })),
+        };
 
-      const s = new Spectral({
-        resolver: fakeResolver as any,
+        const s = new Spectral({
+          resolver: customResolver,
+        });
+
+        const target = { foo: 'bar' };
+
+        await s.run(target);
+
+        expect(customResolver.resolve).toBeCalledWith(target, {
+          authority: undefined,
+          parseResolveResult: expect.any(Function),
+        });
       });
 
-      const target = { foo: 'bar' };
+      test('should handle lack of information about $refs gracefully', () => {
+        const customResolver: IResolver = {
+          resolve: jest.fn(async () => ({
+            result: {
+              foo: {
+                bar: {
+                  baz: '',
+                },
+              },
+            },
+            refMap: {},
+            errors: [],
+          })),
+        };
 
-      await s.run(target);
+        const s = new Spectral({
+          resolver: customResolver,
+        });
 
-      expect(fakeResolver.resolve).toBeCalledWith(target, {
-        authority: undefined,
-        parseResolveResult: expect.any(Function),
+        s.setRules({
+          'truthy-baz': {
+            given: '$.foo.bar.baz',
+            message: 'Baz must be truthy',
+            severity: DiagnosticSeverity.Error,
+            recommended: true,
+            then: {
+              function: 'truthy',
+            },
+          },
+        });
+
+        const target: IParsedResult = {
+          parsed: parseWithPointers(`{"foo":"bar"}`),
+          getLocationForJsonPath,
+          source: 'foo',
+        };
+
+        return expect(s.run(target)).resolves.toStrictEqual([
+          {
+            code: 'truthy-baz',
+            message: 'Baz must be truthy',
+            path: ['foo', 'bar', 'baz'],
+            range: {
+              end: {
+                character: 0,
+                line: 0,
+              },
+              start: {
+                character: 0,
+                line: 0,
+              },
+            },
+            severity: 0,
+            source: void 0,
+          },
+        ]);
       });
     });
   });
