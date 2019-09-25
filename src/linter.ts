@@ -116,18 +116,7 @@ export const lintNode = (
           path,
           severity: getDiagnosticSeverity(rule.severity),
           source: location.uri,
-          ...(location || {
-            range: {
-              start: {
-                character: 0,
-                line: 0,
-              },
-              end: {
-                character: 0,
-                line: 0,
-              },
-            },
-          }),
+          range: location.range,
         };
       }),
     );

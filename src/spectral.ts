@@ -30,6 +30,7 @@ import {
   FunctionCollection,
   IConstructorOpts,
   IParsedResult,
+  IResolver,
   IRuleResult,
   IRunOpts,
   ISpectralFullResult,
@@ -43,9 +44,9 @@ import { IRuleset } from './types/ruleset';
 export * from './types';
 
 export class Spectral {
-  private readonly _resolver: Resolver;
+  private readonly _resolver: IResolver;
   private readonly _parsedMap: IParseMap;
-  private static readonly _parsedCache = new WeakMap<ICache, IParseMap>();
+  private static readonly _parsedCache = new WeakMap<ICache | IResolver, IParseMap>();
   public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
 
@@ -55,7 +56,8 @@ export class Spectral {
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
     this.formats = {};
 
-    const _parsedMap = Spectral._parsedCache.get(this._resolver.uriCache);
+    const cacheKey = this._resolver instanceof Resolver ? this._resolver.uriCache : this._resolver;
+    const _parsedMap = Spectral._parsedCache.get(cacheKey);
     if (_parsedMap) {
       this._parsedMap = _parsedMap;
     } else {
@@ -65,7 +67,7 @@ export class Spectral {
         pointers: {},
       };
 
-      Spectral._parsedCache.set(this._resolver.uriCache, this._parsedMap);
+      Spectral._parsedCache.set(cacheKey, this._parsedMap);
     }
   }
 
