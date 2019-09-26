@@ -1,20 +1,15 @@
 import * as path from '@stoplight/path';
 import * as fs from 'fs';
-import { filesMap } from './map';
+import { IReadOptions, readParsable } from '../fs/reader';
+import { IRuleset } from '../types/ruleset';
 
 const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
-
-// DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
-// parameter can be renamed, but don't this if you don't need to
-function resolveSpectralVersion(pkg: string) {
-  return pkg;
-}
 
 function resolveFromNPM(pkg: string) {
   try {
     return require.resolve(pkg);
   } catch {
-    return path.join('https://unpkg.com/', resolveSpectralVersion(pkg));
+    return path.join('https://unpkg.com/', pkg);
   }
 }
 
@@ -40,27 +35,38 @@ async function resolveFromFS(from: string, to: string) {
   throw new Error('File does not exist');
 }
 
-export async function findFile(from: string, to: string) {
-  const mapped = filesMap.get(to);
+export async function resolveFile(base: string, pathname: string) {
+  const mapped = builtInRulesets.get(pathname);
+
   if (mapped !== void 0) {
-    to = mapped;
+    return mapped;
   }
 
-  if (path.isAbsolute(to)) {
-    return to;
+  if (path.isAbsolute(pathname)) {
+    return pathname;
   }
 
-  if (path.isURL(from) && mapped === void 0) {
-    return path.join(from, to);
+  if (path.isURL(base)) {
+    return path.join(base, pathname);
   }
 
   try {
-    return await resolveFromFS(from, to);
+    return await resolveFromFS(base, pathname);
   } catch {
     // fs lookup failed...
-    // we either given a npm module or the code is executed in a browser or other environment without fs access
-    return resolveFromNPM(to);
+    // we either given a npm module or th e code is executed in a browser or other environment without fs access
+    return resolveFromNPM(pathname);
   }
+}
+
+export async function getRulesetFile(base: string, pathname: string, opts: IReadOptions) {
+  const mapped = builtInRulesets.get(pathname);
+
+  if (mapped !== void 0 && typeof mapped === 'object') {
+    return mapped;
+  }
+
+  return await readParsable(await resolveFile(base, pathname), opts);
 }
 
 function exists(uri: string): Promise<boolean> {
@@ -70,3 +76,9 @@ function exists(uri: string): Promise<boolean> {
     });
   });
 }
+
+export const builtInRulesets = new Map<string, IRuleset>([
+  ['spectral:oas', require('./oas/index.json')],
+  ['spectral:oas2', require('./oas2/index.json')],
+  ['spectral:oas3', require('./oas3/index.json')],
+]);
