@@ -23,8 +23,9 @@
  * @author Jamund Ferguson
  */
 
+import { encodePointerFragment } from '@stoplight/json';
 import { extname } from '@stoplight/path';
-import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, JsonPath } from '@stoplight/types';
 import { escapeRegExp } from 'lodash';
 import { IRuleResult, SpectralDiagnosticSeverity } from '../types';
 import { Formatter } from './types';
@@ -41,6 +42,10 @@ const SEVERITY_MAP: Dictionary<string, SpectralDiagnosticSeverity> = {
 
 function getMessageType(result: IRuleResult) {
   return SEVERITY_MAP[result.severity];
+}
+
+function stringifyPath(path: JsonPath) {
+  return ['#', ...path.map(encodePointerFragment)].join('/');
 }
 
 export const junit: Formatter = results => {
@@ -62,7 +67,7 @@ export const junit: Formatter = results => {
       for (const result of validationResults) {
         const tag = getMessageType(result).toLowerCase();
         output += `<testcase time="0" name="org.spectral.${result.code || 'unknown'}" classname="${classname}">`;
-        output += `<${tag} message="${xmlEscape(result.message)}">`;
+        output += `<${tag} message="${xmlEscape(result.message)}" path="${stringifyPath(result.path)}">`;
         output += '<![CDATA[';
         output += `line ${result.range.start.line + 1}, col `;
         output += `${result.range.start.character + 1}, ${getMessageType(result)}`;
