@@ -1,6 +1,5 @@
 import { Optional } from '@stoplight/types';
-import { JSONSchema7 } from 'json-schema';
-import { IFunction } from '../types';
+import { IFunction, JSONSchema } from '../types';
 import { isObject } from '../utils/isObject';
 import { decorateIFunctionWithSchemaValidation } from './validation';
 
@@ -62,7 +61,7 @@ export const evaluateExport = (body: string): Function => {
   return maybeFn;
 };
 
-export const compileExportedFunction = (code: string, name: string, schema: JSONSchema7 | null) => {
+export const compileExportedFunction = (code: string, name: string, schema: JSONSchema | null) => {
   const exportedFn = evaluateExport(code) as IFunction;
 
   const fn = schema !== null ? decorateIFunctionWithSchemaValidation(exportedFn, schema) : exportedFn;

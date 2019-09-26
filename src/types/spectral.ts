@@ -7,6 +7,7 @@ import {
   IParserResult,
   JsonPath,
 } from '@stoplight/types';
+import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { IFunction, IRule, Rule } from '.';
 
 export type FunctionCollection = Dictionary<IFunction, string>;
@@ -67,3 +68,5 @@ export interface IResolver {
 
 export type FormatLookup = (document: unknown) => boolean;
 export type RegisteredFormats = Dictionary<FormatLookup, string>;
+
+export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
