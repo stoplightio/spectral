@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const pkg = require('../package.json');
 
-const target = path.join(__dirname, '..', 'src', 'rulesets', 'files.ts');
+const target = path.join(__dirname, '..', 'src', 'rulesets', 'finder.ts');
 
 const source = fs.readFileSync(target, 'utf8');
 const ast = recast.parse(source, {
