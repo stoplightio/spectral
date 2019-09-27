@@ -48,26 +48,42 @@ rules:
       function: "abc"
 ```
 
-If your function accepts options, you should provide a JSON Schema that describes those options.
+If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
 
 You can do it as follows:
 
 ```yaml
 functions:
-- - abc
+- - equals
   # can be any valid JSONSchema7
   - properties:
-      sort:
-        type: boolean
-        description: enforces that abc is sorted
+      value:
+        type: string
+        description: Value to check equality for
 rules:
   my-rule:
     message: "{{error}}"
     given: "$.info"
     then:
-      function: "abc"
+      function: "equals"
       functionOptions:
-        sort: true
+        value: "abc"
+```
+
+Where the function **functions/equals.js** might look like:
+
+```js
+module.exports = (targetVal, opts) => {
+  const { value } = opts;
+
+  if (targetVal !== value) {
+    return [
+      {
+        message: `Value must equal {value}.`,
+      },
+    ];
+  }
+};
 ```
 
 If for some reason, you do not want to place your functions in a directory called `functions`, you can specify a custom directory.
