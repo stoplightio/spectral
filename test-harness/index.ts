@@ -49,6 +49,11 @@ describe('cli acceptance tests', () => {
           to: tmpFileHandle.name,
         });
 
+        replacements.push({
+          from: /\{documentWithoutExt\}/g,
+          to: tmpFileHandle.name.replace(/\.yml$/, ''),
+        });
+
         fs.writeFileSync(tmpFileHandle.name, scenario.document, { encoding: 'utf8' });
       }
     });
@@ -73,6 +78,7 @@ describe('cli acceptance tests', () => {
         shell: true,
         encoding: 'utf8',
         windowsVerbatimArguments: false,
+        env: scenario.env,
       });
 
       const expectedStatus = replaceVars(scenario.status.trim(), replacements);

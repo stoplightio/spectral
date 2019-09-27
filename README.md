@@ -74,10 +74,11 @@ If you are using Spectral in your project and want to be listed in the examples 
 - [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
 - [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON, and a few helper functions such as `getJsonPathForPosition` or `getLocationForJsonPath`
 
-## Thanks :)
+## Thanks
 
-- [Phil Sturgeon](https://github.com/philsturgeon) for collaboration and creating Speccy
 - [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI and his work on Speccy
+- [Jamund Ferguson](https://github.com/xjamundx) for JUnit formatter
+- [Sindre Sorhus](https://github.com/sindresorhus) for Stylish formatter
 
 ## Support
 

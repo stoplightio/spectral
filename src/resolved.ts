@@ -1,22 +1,34 @@
-import { IResolveError, IResolveResult } from '@stoplight/json-ref-resolver/types';
-import { Dictionary, ILocation, JsonPath, Segment } from '@stoplight/types';
-import { get } from 'lodash';
-import { IParseMap, REF_METADATA } from './spectral';
+import { IResolveError } from '@stoplight/json-ref-resolver/types';
+import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
+import { get, has } from 'lodash';
+import { IParseMap, REF_METADATA, ResolveResult } from './spectral';
 import { IParsedResult } from './types';
 
-export class Resolved {
-  public refMap: Dictionary<string>;
-  public resolved: unknown;
-  public unresolved: unknown;
-  public errors: IResolveError[];
-  public format?: string | null;
+const getDefaultRange = (): IRange => ({
+  start: {
+    line: 0,
+    character: 0,
+  },
+  end: {
+    line: 0,
+    character: 0,
+  },
+});
 
-  constructor(public spec: IParsedResult, resolveResult: IResolveResult, public parsedMap: IParseMap) {
+export class Resolved {
+  public readonly refMap: Dictionary<string>;
+  public readonly resolved: unknown;
+  public readonly unresolved: unknown;
+  public readonly errors: IResolveError[];
+  public formats?: string[] | null;
+
+  constructor(public spec: IParsedResult, resolveResult: ResolveResult, public parsedMap: IParseMap) {
+    this.unresolved = spec.parsed.data;
+    this.formats = spec.formats;
+
     this.refMap = resolveResult.refMap;
     this.resolved = resolveResult.result;
-    this.unresolved = spec.parsed.data;
     this.errors = resolveResult.errors;
-    this.format = spec.format;
   }
 
   public getParsedForJsonPath(path: JsonPath) {
@@ -41,6 +53,10 @@ export class Resolved {
       };
     }
 
+    if (path.length > 0 && !has(this.spec.parsed.data, path)) {
+      return null;
+    }
+
     return {
       path,
       doc: this.spec,
@@ -49,23 +65,17 @@ export class Resolved {
 
   public getLocationForJsonPath(path: JsonPath, closest?: boolean): ILocation {
     const parsedResult = this.getParsedForJsonPath(path);
+    if (parsedResult === null) {
+      return {
+        range: getDefaultRange(),
+      };
+    }
+
     const location = parsedResult.doc.getLocationForJsonPath(parsedResult.doc.parsed, parsedResult.path, closest);
 
     return {
       ...(parsedResult.doc.source && { uri: parsedResult.doc.source }),
-      range:
-        location !== undefined
-          ? location.range
-          : {
-              start: {
-                line: 0,
-                character: 0,
-              },
-              end: {
-                line: 0,
-                character: 0,
-              },
-            },
+      range: location !== void 0 ? location.range : getDefaultRange(),
     };
   }
 }

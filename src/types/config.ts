@@ -5,6 +5,7 @@ export type FailSeverity = HumanReadableDiagnosticSeverity;
 export enum OutputFormat {
   JSON = 'json',
   STYLISH = 'stylish',
+  JUNIT = 'junit',
 }
 
 export interface ILintConfig {

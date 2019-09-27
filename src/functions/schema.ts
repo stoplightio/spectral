@@ -1,8 +1,13 @@
+import { decodePointerFragment } from '@stoplight/json';
+import { Optional } from '@stoplight/types';
 import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
+import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
+import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
+import { escapeRegExp } from 'lodash';
 import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
@@ -31,6 +36,8 @@ const ajv = new AJV({
   logger,
 });
 ajv.addMetaSchema(jsonSpecv4);
+ajv.addMetaSchema(jsonSpecv6);
+ajv.addMetaSchema(jsonSpecv7);
 // @ts-ignore
 ajv._opts.defaultMeta = jsonSpecv4.id;
 // @ts-ignore
@@ -71,14 +78,18 @@ const validators = new class extends WeakMap<JSONSchema4 | JSONSchema6, Validate
   }
 }();
 
-const cleanAJVErrorMessage = (message: string) => message.trim().replace(/^[^:]*:\s*/, '');
+const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>) => {
+  const cleanMessage =
+    typeof path === 'string' ? message.trim().replace(new RegExp(`^${escapeRegExp(path)}:\\s*`), '') : message.trim();
+  return `${cleanMessage}${typeof suggestion === 'string' && suggestion.length > 0 ? `. ${suggestion}` : ''}`;
+};
 
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
   const path = paths.target || paths.given;
 
-  if (!targetVal)
+  if (targetVal === void 0)
     return [
       {
         path,
@@ -93,16 +104,29 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
     const validator = validators.get(schemaObj);
     if (!validator(targetVal) && validator.errors) {
-      results.push(
-        ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
-          ({ error, path: errorPath }) => {
-            return {
-              message: cleanAJVErrorMessage(error),
+      try {
+        results.push(
+          ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
+            ({ suggestion, error, path: errorPath }) => ({
+              message: cleanAJVErrorMessage(error, errorPath, suggestion),
               path: [...path, ...(errorPath ? errorPath.replace(/^\//, '').split('/') : [])],
-            };
-          },
-        ),
-      );
+            }),
+          ),
+        );
+      } catch {
+        results.push(
+          ...validator.errors.map(({ message, dataPath }) => ({
+            message: message ? cleanAJVErrorMessage(message, dataPath, void 0) : '',
+            path: [
+              ...path,
+              ...dataPath
+                .split('/')
+                .slice(1)
+                .map(decodePointerFragment),
+            ],
+          })),
+        );
+      }
     }
   } catch (ex) {
     if (ex instanceof AJV.MissingRefError) {

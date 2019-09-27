@@ -1,0 +1,22 @@
+====test====
+Invalid OAS3 document outputs results when --format=junit
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+  foo:
+paths: {}
+====command====
+lint {document} --format=junit
+====stdout====
+OpenAPI 3.x detected
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+<testsuite package="org.spectral" time="0" tests="4" errors="4" name="{document}">
+<testcase time="0" name="org.spectral.api-servers" classname="{documentWithoutExt}"><warning message="OpenAPI `servers` must be present and non-empty array." path="#"><![CDATA[line 1, col 1, Warning - OpenAPI `servers` must be present and non-empty array. (api-servers)]]></warning></testcase>
+<testcase time="0" name="org.spectral.oas3-schema" classname="{documentWithoutExt}"><error message="/info Property foo is not expected to be here" path="#/info"><![CDATA[line 2, col 6, Error - /info Property foo is not expected to be here (oas3-schema)]]></error></testcase>
+<testcase time="0" name="org.spectral.info-contact" classname="{documentWithoutExt}"><warning message="Info object should contain `contact` object." path="#/info"><![CDATA[line 2, col 6, Warning - Info object should contain `contact` object. (info-contact)]]></warning></testcase>
+<testcase time="0" name="org.spectral.info-description" classname="{documentWithoutExt}"><warning message="OpenAPI object info `description` must be present and non-empty string." path="#/info"><![CDATA[line 2, col 6, Warning - OpenAPI object info `description` must be present and non-empty string. (info-description)]]></warning></testcase>
+</testsuite>
+</testsuites>

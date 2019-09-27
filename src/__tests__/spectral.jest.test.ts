@@ -3,8 +3,8 @@ import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
+import { isOpenApiv2 } from '../formats';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { isOpenApiv2 } from '../rulesets/lookups';
 import { Spectral } from '../spectral';
 
 const oasRuleset = require('../rulesets/oas/index.json');

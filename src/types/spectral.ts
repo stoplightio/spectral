@@ -1,4 +1,4 @@
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { IResolveOpts, IResolveResult } from '@stoplight/json-ref-resolver/types';
 import {
   DiagnosticSeverity,
   Dictionary,
@@ -29,7 +29,7 @@ export type SpectralDiagnosticSeverity = DiagnosticSeverity | -1;
 export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IConstructorOpts {
-  resolver?: Resolver;
+  resolver?: IResolver;
 }
 
 export interface IRunOpts {
@@ -56,7 +56,13 @@ export interface IParsedResult<R extends IParserResult = IParserResult<unknown, 
   parsed: IParserResult;
   getLocationForJsonPath: GetLocationForJsonPath<R>;
   source?: string;
-  format?: string;
+  formats?: string[];
+}
+
+export type ResolveResult = Omit<IResolveResult, 'runner'>;
+
+export interface IResolver {
+  resolve(source: unknown, opts?: IResolveOpts): Promise<ResolveResult>;
 }
 
 export type FormatLookup = (document: unknown) => boolean;
