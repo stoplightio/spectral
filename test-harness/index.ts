@@ -94,7 +94,7 @@ describe('cli acceptance tests', () => {
         throw new Error(stderr);
       }
 
-      if (stdout) {
+      if (stdout || expectedStdout) {
         expect(stdout).toEqual(expectedStdout);
       }
 
