@@ -67,7 +67,7 @@ lint {document} | grep "something"
 #### Things to keep in mind when creating the files:
 
 * 1 test per file, we do not support multiple splitting.
-* Be precise with the separators. They shuold be 4 *before* **AND** *after* the word. `====`
+* Be precise with the separators. They should be 4 *before* **AND** *after* the word. `====`
 * The 4 keywords are `test,spec,server,command,expect,expect-loose`, nothing else at the moment
 * You can run all the tests on the same port `4010`, but you can also choose another one
 * The `curl` command does not support piping stuff into other tools; so if you're trying to be cool and do `curl | grep`, well maybe next time.
