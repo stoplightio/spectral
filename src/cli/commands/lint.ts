@@ -13,12 +13,13 @@ const toArray = (args: unknown) => (Array.isArray(args) ? args : [args]);
 const formatOptions = Object.values(OutputFormat);
 
 const lintCommand: CommandModule = {
-  describe: 'lint a JSON/YAML document from a file or URL',
-  command: 'lint <document>',
+  describe: 'lint JSON/YAML documents from files or URLs',
+  command: 'lint <documents..>',
   builder: yargs =>
     yargs
-      .positional('document', {
-        description: 'Location of a JSON/YAML document. Can be either a file or a fetchable resource on the web.',
+      .positional('documents', {
+        description:
+          'Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.',
         type: 'string',
       })
       .fail(() => {
@@ -89,7 +90,7 @@ const lintCommand: CommandModule = {
 
   handler: args => {
     const {
-      document,
+      documents,
       failSeverity,
       displayOnlyFailures,
       ruleset,
@@ -98,16 +99,12 @@ const lintCommand: CommandModule = {
       encoding,
       ...config
     } = (args as unknown) as ILintConfig & {
-      document: string;
+      documents: string[];
       failSeverity: FailSeverity;
       displayOnlyFailures: boolean;
     };
 
-    return lint(
-      document,
-      { format, output, encoding, ...pick(config, ['ruleset', 'skipRule', 'verbose', 'quiet']) },
-      ruleset,
-    )
+    return lint(documents, { format, output, encoding, ruleset, ...pick(config, ['skipRule', 'verbose', 'quiet']) })
       .then(results => {
         if (displayOnlyFailures) {
           return filterResultsBySeverity(results, failSeverity);
