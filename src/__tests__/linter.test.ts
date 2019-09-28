@@ -57,7 +57,7 @@ describe('linter', () => {
     expect(result).toHaveLength(0);
   });
 
-  test('should return all properties', async () => {
+  test('should return all properties matching 4xx response code', async () => {
     const message = '4xx responses require a description';
 
     spectral.setFunctions({
@@ -76,11 +76,7 @@ describe('linter', () => {
 
     spectral.setRules({
       rule1: {
-        given: '$.responses[*]',
-        when: {
-          field: '@key',
-          pattern: '^4.*',
-        },
+        given: '$.responses.[?(@property >= 400 && @property < 500)]',
         then: {
           field: 'description',
           function: 'func1',
@@ -99,22 +95,24 @@ describe('linter', () => {
       },
     });
 
-    expect(result[0]).toMatchObject({
-      code: 'rule1',
-      message,
-      severity: DiagnosticSeverity.Warning,
-      path: ['responses', '404'],
-      range: {
-        end: {
-          line: 6,
-          character: 25,
-        },
-        start: {
-          character: 10,
-          line: 5,
+    expect(result).toEqual([
+      {
+        code: 'rule1',
+        message,
+        severity: DiagnosticSeverity.Warning,
+        path: ['responses', '404'],
+        range: {
+          end: {
+            line: 6,
+            character: 25,
+          },
+          start: {
+            character: 10,
+            line: 5,
+          },
         },
       },
-    });
+    ]);
   });
 
   test('should support rule overriding severity', async () => {
@@ -685,115 +683,6 @@ responses:: !!foo
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][2].given).toEqual([]);
         expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target);
-      });
-    });
-  });
-
-  describe('functional tests for the when statement', () => {
-    let fakeLintingFunction: any;
-
-    beforeEach(() => {
-      fakeLintingFunction = jest.fn();
-      spectral.setFunctions({
-        [fnName]: fakeLintingFunction,
-      });
-      spectral.setRules(rules);
-    });
-
-    describe('given no when', () => {
-      test('should simply lint anything it matches in the given', async () => {
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual(target.responses);
-      });
-    });
-
-    describe('given when with no pattern and regular field', () => {
-      test('should call linter if when field exists', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '200.description',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          '200': { description: 'a' },
-          '201': { description: 'b' },
-          '300': { description: 'c' },
-        });
-      });
-
-      test('should not call linter if when field not exist', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '302.description',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
-      });
-    });
-
-    describe('given "when" with a pattern and regular field', () => {
-      test('should NOT lint if pattern does not match', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '200.description',
-              pattern: 'X',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
-      });
-
-      test('should lint if pattern does match', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '200.description',
-              pattern: 'a',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          '200': { description: 'a' },
-          '201': { description: 'b' },
-          '300': { description: 'c' },
-        });
-      });
-    });
-
-    describe('given "when" with a pattern and @key field', () => {
-      test('should lint ONLY part of object that matches pattern', async () => {
-        spectral.mergeRules({
-          example: {
-            given: '$.responses[*]',
-            when: {
-              field: '@key',
-              pattern: '2..',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          description: 'a',
-        });
       });
     });
   });
