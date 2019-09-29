@@ -47,14 +47,6 @@ describe('alphabetical', () => {
       ]);
     });
 
-    test('given an unsorted array of numbers should return error', () => {
-      expect(runAlphabetical([10, 1])).toEqual([
-        {
-          message: 'properties are not in alphabetical order',
-        },
-      ]);
-    });
-
     test('given an array of objects should NOT return an error', () => {
       expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toEqual([]);
     });
