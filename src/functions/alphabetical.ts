@@ -13,17 +13,17 @@ const compare = (a: unknown, b: unknown): number => {
   return a.localeCompare(b);
 };
 
-const hasUnsortedItem = <T>(arr: T[], compareFn: (a: T, B: T) => number): boolean => {
+const getUnsortedItems = <T>(arr: T[], compareFn: (a: T, B: T) => number): null | [number, number] => {
   for (let i = 0; i < arr.length - 1; i += 1) {
     if (compareFn(arr[i], arr[i + 1]) >= 1) {
-      return true;
+      return [i, i + 1];
     }
   }
 
-  return false;
+  return null;
 };
 
-export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts) => {
+export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
   if (!isObject(targetVal)) {
@@ -38,7 +38,7 @@ export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts) => {
 
   const { keyedBy } = opts;
 
-  const isAlphabetical = !hasUnsortedItem<unknown>(
+  const unsortedItems = getUnsortedItems<unknown>(
     targetArray,
     keyedBy
       ? (a, b) => {
@@ -51,9 +51,16 @@ export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts) => {
         compare,
   );
 
-  if (!isAlphabetical) {
+  if (unsortedItems != null) {
+    const path = paths.target || paths.given;
+
     results.push({
-      message: 'properties are not in alphabetical order',
+      ...(!keyedBy && { path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]] }),
+      message: keyedBy
+        ? 'properties are not in alphabetical order'
+        : `at least 2 properties are not in alphabetical order: "${
+            targetArray[unsortedItems[0]]
+          }" should be placed after "${targetArray[unsortedItems[1]]}"`,
     });
   }
 
