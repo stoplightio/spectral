@@ -35,8 +35,7 @@ describe('oasPathParam', () => {
     expect(results).toEqual([
       {
         code: 'path-params',
-        message:
-          'The path "**/foo/{bar}**" uses a parameter "**{bar}**" that does not have a corresponding definition.\n\nTo fix, add a path parameter with the name "**bar**".',
+        message: 'The path "/foo/{bar}" uses a parameter "{bar}" that does not have a corresponding definition.',
         path: ['paths', '/foo/{bar}'],
         range: {
           end: {
@@ -131,9 +130,7 @@ describe('oasPathParam', () => {
     expect(results).toEqual([
       {
         code: 'path-params',
-        message: `The path "**/foo/{bar}/{bar}**" uses the parameter "**{bar}**" multiple times.\n
-Path parameters must be unique.\n
-To fix, update the path so that all parameter names are unique.`,
+        message: `The path "/foo/{bar}/{bar}" uses the parameter "{bar}" multiple times. Path parameters must be unique.`,
         path: ['paths', '/foo/{bar}/{bar}'],
         range: {
           end: {
@@ -174,7 +171,7 @@ To fix, update the path so that all parameter names are unique.`,
     expect(results).toEqual([
       {
         code: 'path-params',
-        message: `Path parameter \"**bar**\" must have a \`required\` that is set to \`true\`.\n\nTo fix, mark this parameter as required.`,
+        message: `Path parameter "bar" must have a "required" property that is set to "true".`,
         path: ['paths', '/foo/{bar}', 'parameters'],
         range: {
           end: {
@@ -220,7 +217,7 @@ To fix, update the path so that all parameter names are unique.`,
     expect(results).toEqual([
       {
         code: 'path-params',
-        message: `The paths \"**/foo/{boo}**\" and \"**/foo/{bar}**\" are equivalent.\n\nTo fix, remove one of the paths or merge them together.`,
+        message: `The paths "/foo/{boo}" and "/foo/{bar}" are equivalent.`,
         path: ['paths'],
         range: {
           end: {
