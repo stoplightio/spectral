@@ -1,4 +1,4 @@
-import { pointerToPath } from '@stoplight/json';
+import { decodePointerFragment, pointerToPath } from '@stoplight/json';
 import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
 import { get } from 'lodash';
@@ -72,7 +72,7 @@ export class Resolved {
 
     if (target && target[REF_METADATA]) {
       return {
-        path: [...get(target, [REF_METADATA, 'root'], []), ...newPath],
+        path: [...get(target, [REF_METADATA, 'root'], []).map(decodePointerFragment), ...newPath],
         doc: get(this.parsedMap.parsed, get(target, [REF_METADATA, 'ref']), this.spec),
       };
     }
