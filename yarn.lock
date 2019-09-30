@@ -391,25 +391,25 @@
   resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.2.1.tgz#f39f408377a0d1a9c33a04ce08eb3a1691c457d6"
   integrity sha512-W/wBpTw6ThKZGPcb1ztKz6ULnMVnLE/ygzqIjnqnmKcpNrKkSuBLtL7+oQYZSkteZfJAryloAt3plU3sTiekcQ==
 
-"@stoplight/types@^11.0.0", "@stoplight/types@^11.1.0":
+"@stoplight/types@^11.0.0", "@stoplight/types@^11.1.1":
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.1.tgz#a92d1833adb580a72439f42ba73de8f560fd68b4"
   integrity sha512-IU8U9y/uO548z15DX/Jl053u9VQG8gCwNtypuD4RtskUA7pvHZl4+zzGK3klgIcO6Ql3Jk4/fcrFaN9vjmdEWg==
   dependencies:
     "@types/json-schema" "^7.0.3"
 
-"@stoplight/yaml-ast-parser@0.0.43":
-  version "0.0.43"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.43.tgz#c39cf86e98e48d73c483be96622b2b622cc56b0c"
-  integrity sha512-3buZXhav0Uc4pD7QWCTfysDTW0syyf1Nj/F73fgAfhO9+Fd6Q6IVB0k1ApcHFQgIPTHQAq9Lu8+ngvlGIjG6ZQ==
+"@stoplight/yaml-ast-parser@0.0.44":
+  version "0.0.44"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.44.tgz#ed3c962564283e9983f7895a6effc3994286df5e"
+  integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
 "@stoplight/yaml@^3.1.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.2.0.tgz#a36257809e0e68289961623dbfc907b47f12664b"
-  integrity sha512-HAw0hGSQbYCXKRxRd6qnQ2bKiOmW5CKme6RRSnoMahQ5qG3VNN0RO3ouNQ4EEUzjSDveUkLfZHBfe0ywOxXprw==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.0.tgz#975f24ad01700a0d83676e2b35e5f2f53ffa1abe"
+  integrity sha512-Nd9/Fp5Q+HIsHBLa/jmE866mRR0FPjwaGRvG+0vqTSKGvqzq2HHgAQ2bKacD2mLm4BNZ4kYMDOlrodrhoRSgzA==
   dependencies:
-    "@stoplight/types" "^11.1.0"
-    "@stoplight/yaml-ast-parser" "0.0.43"
+    "@stoplight/types" "^11.1.1"
+    "@stoplight/yaml-ast-parser" "0.0.44"
     lodash "^4.17.15"
 
 "@types/babel__core@^7.1.0":
@@ -6476,9 +6476,9 @@ rollup-plugin-terser@^5.1.1:
     terser "^4.1.0"
 
 rollup-plugin-typescript2@^0.24.0:
-  version "0.24.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.24.2.tgz#832d52b2e9c0355f310e0145b2fb05a349c8414f"
-  integrity sha512-teMsD+jxRXj0voIEoyy1xAkQceBcM+cRsCZ0srrlq5ZM8kXvoVh7AMxDYC3I6QRTpJ2RAP03AyMtYmkf0ndoxA==
+  version "0.24.3"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.24.3.tgz#276fa33a9d584d500da62d3e5400307f4a46bdf2"
+  integrity sha512-D7yovQlhnRoz7pG/RF0ni+koxgzEShwfAGuOq6OVqKzcATHOvmUt2ePeYVdc9N0adcW1PcTzklUEM0oNWE/POw==
   dependencies:
     find-cache-dir "^3.0.0"
     fs-extra "8.1.0"
