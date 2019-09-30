@@ -21,7 +21,8 @@ describe('alphabetical', () => {
       }),
     ).toEqual([
       {
-        message: 'properties are not in alphabetical order',
+        message: 'at least 2 properties are not in alphabetical order: "c" should be placed after "b"',
+        path: ['$', 'c'],
       },
     ]);
   });
@@ -30,7 +31,8 @@ describe('alphabetical', () => {
     test('given an unsorted array of strings should return error', () => {
       expect(runAlphabetical(['b', 'a'])).toEqual([
         {
-          message: 'properties are not in alphabetical order',
+          message: 'at least 2 properties are not in alphabetical order: "b" should be placed after "a"',
+          path: ['$', 0],
         },
       ]);
     });
@@ -42,15 +44,8 @@ describe('alphabetical', () => {
     test('given an unsorted array of numbers should return error', () => {
       expect(runAlphabetical([10, 1])).toEqual([
         {
-          message: 'properties are not in alphabetical order',
-        },
-      ]);
-    });
-
-    test('given an unsorted array of numbers should return error', () => {
-      expect(runAlphabetical([10, 1])).toEqual([
-        {
-          message: 'properties are not in alphabetical order',
+          message: 'at least 2 properties are not in alphabetical order: "10" should be placed after "1"',
+          path: ['$', 0],
         },
       ]);
     });
