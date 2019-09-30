@@ -201,8 +201,68 @@ describe('spectral', () => {
                 line: 0,
               },
             },
-            severity: 0,
+            severity: DiagnosticSeverity.Error,
             source: void 0,
+          },
+        ]);
+      });
+
+      test('should recognize the source of local $refs', () => {
+        const s = new Spectral();
+        const source = 'foo.yaml';
+
+        const parsedResult: IParsedResult = {
+          getLocationForJsonPath,
+          source,
+          parsed: parseWithPointers(
+            JSON.stringify(
+              {
+                paths: {
+                  '/agreements': {
+                    get: {
+                      description: 'Get some Agreements',
+                      responses: {
+                        '200': {
+                          $ref: '#/responses/GetAgreementsOk',
+                        },
+                        default: {},
+                      },
+                      summary: 'List agreements',
+                      tags: ['agreements', 'pagination'],
+                    },
+                  },
+                },
+                responses: {
+                  GetAgreementsOk: {
+                    description: 'Successful operation',
+                    headers: {},
+                  },
+                },
+              },
+              null,
+              2,
+            ),
+          ),
+        };
+
+        s.setRules({
+          'pagination-responses-have-x-next-token': {
+            description: 'All collection endpoints have the X-Next-Token parameter in responses',
+            given: "$.paths..get.responses['200'].headers",
+            severity: 'error',
+            recommended: true,
+            then: { field: 'X-Next-Token', function: 'truthy' },
+          },
+        });
+
+        return expect(s.run(parsedResult)).resolves.toEqual([
+          {
+            code: 'pagination-responses-have-x-next-token',
+            message: 'All collection endpoints have the X-Next-Token parameter in responses',
+            path: ['paths', '/agreements', 'get', 'responses', '200', 'headers'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Error,
+            source,
           },
         ]);
       });

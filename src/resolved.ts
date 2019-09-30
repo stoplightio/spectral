@@ -1,8 +1,10 @@
+import { pointerToPath } from '@stoplight/json';
 import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
-import { get, has } from 'lodash';
+import { get } from 'lodash';
 import { IParseMap, REF_METADATA, ResolveResult } from './spectral';
 import { IParsedResult } from './types';
+import { hasRef, isObject } from './utils';
 
 const getDefaultRange = (): IRange => ({
   start: {
@@ -31,6 +33,28 @@ export class Resolved {
     this.errors = resolveResult.errors;
   }
 
+  public doesBelongToDoc(path: JsonPath): boolean {
+    if (path.length === 0) {
+      // todo: each rule and their function should be context-aware, meaning they should aware of the fact they operate on resolved content
+      // let's assume the error was reported correctly by any custom rule /shrug
+      return true;
+    }
+
+    let piece = this.unresolved;
+
+    for (let i = 0; i < path.length; i++) {
+      if (!isObject(piece)) return false;
+
+      if (path[i] in piece) {
+        piece = piece[path[i]];
+      } else if (hasRef(piece)) {
+        return this.doesBelongToDoc([...pointerToPath(piece.$ref), ...path.slice(i)]);
+      }
+    }
+
+    return true;
+  }
+
   public getParsedForJsonPath(path: JsonPath) {
     let target: object = this.parsedMap.refs;
     const newPath = [...path];
@@ -53,7 +77,7 @@ export class Resolved {
       };
     }
 
-    if (path.length > 0 && !has(this.spec.parsed.data, path)) {
+    if (!this.doesBelongToDoc(path)) {
       return null;
     }
 
