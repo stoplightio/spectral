@@ -5,7 +5,7 @@ lint
 ====stderr====
 spectral lint <documents..>
 
-lint a JSON/YAML document from a file or URL
+lint JSON/YAML documents from files or URLs
 
 Positionals:
   documents  Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.  [array] [required] [default: []]
