@@ -1,3 +1,4 @@
+import { normalize } from '@stoplight/path';
 import * as fg from 'fast-glob';
 
 export async function listFiles(pattens: string[]): Promise<string[]> {
@@ -17,5 +18,5 @@ export async function listFiles(pattens: string[]): Promise<string[]> {
     },
   );
 
-  return [...urls, ...(await fg(files, { dot: true, absolute: true }))];
+  return [...urls, ...(await fg(files, { dot: true, absolute: true })).map(normalize)]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
 }
