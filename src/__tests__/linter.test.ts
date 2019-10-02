@@ -874,8 +874,6 @@ responses:: !!foo
   });
 
   describe('evaluate {{value}} in validation messages', () => {
-    // todo: test nested refs
-
     test('should print primitive values', () => {
       spectral = new Spectral();
       spectral.setRules({
