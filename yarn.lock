@@ -404,9 +404,9 @@
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
 "@stoplight/yaml@^3.1.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.0.tgz#975f24ad01700a0d83676e2b35e5f2f53ffa1abe"
-  integrity sha512-Nd9/Fp5Q+HIsHBLa/jmE866mRR0FPjwaGRvG+0vqTSKGvqzq2HHgAQ2bKacD2mLm4BNZ4kYMDOlrodrhoRSgzA==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.1.tgz#858542847d2b11bd8b8214ef83016de4261e8b77"
+  integrity sha512-e58kiwt0ijuW5vamyat8u7G+0KP/Er8kmkAGrk/ljZT+0qGxkYgOo73t6kIuZXwWePAyi7OZ9XRp65tXSmk/Uw==
   dependencies:
     "@stoplight/types" "^11.1.1"
     "@stoplight/yaml-ast-parser" "0.0.44"
