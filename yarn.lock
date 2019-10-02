@@ -404,9 +404,9 @@
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
 "@stoplight/yaml@^3.1.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.0.tgz#975f24ad01700a0d83676e2b35e5f2f53ffa1abe"
-  integrity sha512-Nd9/Fp5Q+HIsHBLa/jmE866mRR0FPjwaGRvG+0vqTSKGvqzq2HHgAQ2bKacD2mLm4BNZ4kYMDOlrodrhoRSgzA==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.1.tgz#858542847d2b11bd8b8214ef83016de4261e8b77"
+  integrity sha512-e58kiwt0ijuW5vamyat8u7G+0KP/Er8kmkAGrk/ljZT+0qGxkYgOo73t6kIuZXwWePAyi7OZ9XRp65tXSmk/Uw==
   dependencies:
     "@stoplight/types" "^11.1.1"
     "@stoplight/yaml-ast-parser" "0.0.44"
@@ -526,9 +526,9 @@
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
 "@types/lodash@^4.14.136":
-  version "4.14.138"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.138.tgz#34f52640d7358230308344e579c15b378d91989e"
-  integrity sha512-A4uJgHz4hakwNBdHNPdxOTkYmXNgmUAKLbXZ7PKGslgeV0Mb8P3BlbYfPovExek1qnod4pDfRbxuzcVs3dlFLg==
+  version "4.14.141"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.141.tgz#d81f4d0c562abe28713406b571ffb27692a82ae6"
+  integrity sha512-v5NYIi9qEbFEUpCyikmnOYe4YlP8BMUdTcNCAquAKzu+FA7rZ1onj9x80mbnDdOW/K5bFf3Tv5kJplP33+gAbQ==
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -2585,13 +2585,14 @@ fb-watchman@^2.0.0:
     bser "^2.0.0"
 
 fetch-mock@^7.3.9:
-  version "7.3.9"
-  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-7.3.9.tgz#a80fd2a1728f72e0634ef7a9734bc61200096487"
-  integrity sha512-PgsTbiQBNapFz2P2UwDl3gowK3nZqfV4HdyDZ1dI4eTGGH9MLAeBglIPbyDbbNQoGYBOfla6/9uaiq7az2z4Aw==
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-7.4.0.tgz#34f2f5cca03de93af9b253ebb8a678b72563cb02"
+  integrity sha512-q2zrAJh2CcPf6yrDIRxAo18vs1yohETzTNVvtJsqznAAWS4XuJ5M8uaIfrw8odHm7wZJIfMdA6P3RObMNYSWXQ==
   dependencies:
     babel-polyfill "^6.26.0"
     core-js "^2.6.9"
     glob-to-regexp "^0.4.0"
+    lodash.isequal "^4.5.0"
     path-to-regexp "^2.2.1"
     whatwg-url "^6.5.0"
 
@@ -4718,6 +4719,11 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash.memoize@4.x:
   version "4.1.2"
