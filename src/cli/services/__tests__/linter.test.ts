@@ -380,6 +380,54 @@ describe('Linter service', () => {
           },
           source: expect.stringContaining('__tests__/__fixtures__/refs/contact.json'),
         }),
+        expect.objectContaining({
+          code: 'operation-description',
+          message: 'Operation `description` must be present and non-empty string.',
+          path: ['paths', '/test', 'get'],
+          range: {
+            end: {
+              character: 7,
+              line: 5,
+            },
+            start: {
+              character: 13,
+              line: 3,
+            },
+          },
+          source: expect.stringContaining('__tests__/__fixtures__/refs/paths.json'),
+        }),
+        expect.objectContaining({
+          code: 'operation-operationId',
+          message: 'Operation should have an `operationId`.',
+          path: ['paths', '/test', 'get'],
+          range: {
+            end: {
+              character: 7,
+              line: 5,
+            },
+            start: {
+              character: 13,
+              line: 3,
+            },
+          },
+          source: expect.stringContaining('__tests__/__fixtures__/refs/paths.json'),
+        }),
+        expect.objectContaining({
+          code: 'operation-tags',
+          message: 'Operation should have non-empty `tags` array.',
+          path: ['paths', '/test', 'get'],
+          range: {
+            end: {
+              character: 7,
+              line: 5,
+            },
+            start: {
+              character: 13,
+              line: 3,
+            },
+          },
+          source: expect.stringContaining('__tests__/__fixtures__/refs/paths.json'),
+        }),
       ]);
     });
   });

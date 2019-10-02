@@ -1,0 +1,9 @@
+{
+  "paths": {
+    "/test": {
+      "get": {
+        "response": "bar"
+      }
+    }
+  }
+}
