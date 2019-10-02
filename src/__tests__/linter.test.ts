@@ -873,6 +873,104 @@ responses:: !!foo
     });
   });
 
+  describe('resolve {{value}} in validation messages', () => {
+    // todo: test nested refs
+
+    test('should print primitive values', () => {
+      spectral = new Spectral();
+      spectral.setRules({
+        'header-parameter-names-kebab-case': {
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          description: 'A parameter in the header should be written in kebab-case',
+          message: '{{value}} is not kebab-cased: {{error}}',
+          given: "$..parameters[?(@.in === 'header')]",
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: '^[a-z0-9]+((-[a-z0-9]+)+)?$',
+            },
+          },
+        },
+      });
+
+      return expect(
+        spectral.run({
+          parameters: [
+            {
+              in: 'header',
+              name: 'fooA',
+            },
+          ],
+          foo: {
+            parameters: [
+              {
+                in: 'header',
+                name: 'd 1',
+              },
+            ],
+          },
+        }),
+      ).resolves.toEqual([
+        expect.objectContaining({
+          code: 'header-parameter-names-kebab-case',
+          message: '"fooA" is not kebab-cased: must match the pattern \'^[a-z0-9]+((-[a-z0-9]+)+)?$\'',
+          path: ['parameters', '0', 'name'],
+        }),
+
+        expect.objectContaining({
+          code: 'header-parameter-names-kebab-case',
+          message: '"d 1" is not kebab-cased: must match the pattern \'^[a-z0-9]+((-[a-z0-9]+)+)?$\'',
+          path: ['foo', 'parameters', '0', 'name'],
+        }),
+      ]);
+    });
+
+    test('should not attempt to print complex values', () => {
+      spectral = new Spectral();
+      spectral.setRules({
+        'empty-is-falsy': {
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          description: 'Should be falsy',
+          message: 'Value {{value}} should be falsy',
+          given: '$..empty',
+          then: {
+            function: 'falsy',
+          },
+        },
+      });
+
+      return expect(
+        spectral.run({
+          empty: {
+            a: 'b',
+          },
+          bar: {
+            empty: [13, { empty: 123 }],
+          },
+        }),
+      ).resolves.toEqual([
+        expect.objectContaining({
+          code: 'empty-is-falsy',
+          message: 'Value Object{} should be falsy',
+          path: ['empty'],
+        }),
+        expect.objectContaining({
+          code: 'empty-is-falsy',
+          message: 'Value Array[] should be falsy',
+          path: ['bar', 'empty'],
+        }),
+        expect.objectContaining({
+          code: 'empty-is-falsy',
+          message: 'Value 123 should be falsy',
+          path: ['bar', 'empty', '1', 'empty'], // todo: 1 should be a number
+        }),
+      ]);
+    });
+  });
+
   test('should report ref siblings', async () => {
     await spectral.loadRuleset('spectral:oas');
 

@@ -1,7 +1,11 @@
+import { Segment } from '@stoplight/types';
+
 export interface IMessageVars {
-  property: string | number;
+  property: Segment;
   error: string;
   description?: string;
+  value: unknown;
+  path: string;
 }
 
 export type MessageInterpolator = (str: string, values: IMessageVars) => string;
