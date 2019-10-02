@@ -33,7 +33,7 @@
     "node": ">=8.3.0"
   },
   "scripts": {
-    "build.binary": "pkg . --targets linux,macos --out-path ./binaries",
+    "build.binary": "pkg . --output ./binaries/spectral",
     "build.oas-functions": "rollup -c",
     "build": "tsc -p ./tsconfig.build.json",
     "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
