@@ -873,7 +873,7 @@ responses:: !!foo
     });
   });
 
-  describe('resolve {{value}} in validation messages', () => {
+  describe('evaluate {{value}} in validation messages', () => {
     // todo: test nested refs
 
     test('should print primitive values', () => {
@@ -965,10 +965,30 @@ responses:: !!foo
         expect.objectContaining({
           code: 'empty-is-falsy',
           message: 'Value 123 should be falsy',
-          path: ['bar', 'empty', '1', 'empty'], // todo: 1 should be a number
+          path: ['bar', 'empty', '1', 'empty'], // fixme: 1 should be a number
         }),
       ]);
     });
+  });
+
+  test('should evaluate {{path}} in validation messages', async () => {
+    await spectral.loadRuleset('spectral:oas3');
+    spectral.setRules({
+      'oas3-schema': {
+        ...spectral.rules['oas3-schema'],
+        message: 'Schema error at {{path}}',
+      },
+    });
+
+    return expect(spectral.run(invalidSchema)).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'oas3-schema',
+          message: 'Schema error at #/paths/~1pets/get/responses/200',
+          path: ['paths', '/pets', 'get', 'responses', '200'],
+        }),
+      ]),
+    );
   });
 
   test('should report ref siblings', async () => {
