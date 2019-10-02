@@ -116,6 +116,7 @@ export const lintNode = (
                   path: pathToPointer(path),
                   description: rule.description,
                   get value() {
+                    // let's make it `value` lazy
                     const value = resolved.getValueForJsonPath(path);
                     if (isObject(value)) {
                       return Array.isArray(value) ? 'Array[]' : 'Object{}';
