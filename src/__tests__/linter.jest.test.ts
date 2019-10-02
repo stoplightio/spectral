@@ -1,5 +1,5 @@
 import * as path from '@stoplight/path';
-import { isOpenApiv2, isOpenApiv3 } from '../rulesets/lookups';
+import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { Spectral } from '../spectral';
 
 const customFunctionOASRuleset = path.join(__dirname, './__fixtures__/custom-functions-oas-ruleset.json');

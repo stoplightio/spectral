@@ -1,51 +1,66 @@
-import { isEqual } from 'lodash';
-
 import { IAlphaRuleOptions, IFunction, IFunctionResult } from '../types';
+import { isObject } from '../utils';
 
-export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts) => {
+const compare = (a: unknown, b: unknown): number => {
+  if ((typeof a === 'number' || Number.isNaN(Number(a))) && (typeof b === 'number' || !Number.isNaN(Number(b)))) {
+    return Math.min(1, Math.max(-1, Number(a) - Number(b)));
+  }
+
+  if (typeof a !== 'string' || typeof b !== 'string') {
+    return 0;
+  }
+
+  return a.localeCompare(b);
+};
+
+const getUnsortedItems = <T>(arr: T[], compareFn: (a: T, B: T) => number): null | [number, number] => {
+  for (let i = 0; i < arr.length - 1; i += 1) {
+    if (compareFn(arr[i], arr[i + 1]) >= 1) {
+      return [i, i + 1];
+    }
+  }
+
+  return null;
+};
+
+export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
-  if (!targetVal) {
+  if (!isObject(targetVal)) {
     return results;
   }
 
-  let targetArray: any[] = targetVal;
-  if (!Array.isArray(targetVal)) {
-    targetArray = Object.keys(targetVal);
-  }
+  const targetArray: any[] | string[] = Array.isArray(targetVal) ? targetVal : Object.keys(targetVal);
 
-  // don't mutate original array
-  const copiedArray = targetArray.slice();
-
-  if (copiedArray.length < 2) {
+  if (targetArray.length < 2) {
     return results;
   }
 
   const { keyedBy } = opts;
 
-  // If we aren't expecting an object keyed by a specific property, then treat the
-  // object as a simple array.
-  if (keyedBy) {
-    copiedArray.sort((a, b) => {
-      if (typeof a !== 'object') {
-        return 0;
-      }
+  const unsortedItems = getUnsortedItems<unknown>(
+    targetArray,
+    keyedBy
+      ? (a, b) => {
+          if (!isObject(a) || !isObject(b)) return 0;
 
-      if (a[keyedBy] < b[keyedBy]) {
-        return -1;
-      } else if (a[keyedBy] > b[keyedBy]) {
-        return 1;
-      }
+          return compare(a[keyedBy], b[keyedBy]);
+        }
+      : // If we aren't expecting an object keyed by a specific property, then treat the
+        // object as a simple array.
+        compare,
+  );
 
-      return 0;
-    });
-  } else {
-    copiedArray.sort();
-  }
+  if (unsortedItems != null) {
+    const path = paths.target || paths.given;
 
-  if (!isEqual(targetArray, copiedArray)) {
     results.push({
-      message: 'properties are not in alphabetical order',
+      ...(!keyedBy && { path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]] }),
+      message: keyedBy
+        ? 'properties are not in alphabetical order'
+        : `at least 2 properties are not in alphabetical order: "${
+            targetArray[unsortedItems[0]]
+          }" should be placed after "${targetArray[unsortedItems[1]]}"`,
     });
   }
 

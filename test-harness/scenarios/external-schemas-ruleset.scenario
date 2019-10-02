@@ -1,0 +1,17 @@
+====test====
+Schemas referenced via $refs are resolved and used
+====document====
+openapi: 3.0.2
+info:
+  title: foo
+  description: baz
+====command====
+lint {document} --ruleset ./test-harness/scenarios/rulesets/external-schemas-ruleset.yaml
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 3:10  error  info-title        should be equal to one of the allowed values: Stoplight, Stoplight.io, StoplightIO. Did you mean Stoplight?
+ 4:16  error  info-description  should be equal to one of the allowed values: foo, foo-bar, bar-foo
+
+✖ 2 problems (2 errors, 0 warnings, 0 infos, 0 hints)

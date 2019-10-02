@@ -30,6 +30,8 @@ import * as table from 'text-table';
 import { DiagnosticSeverity, IRange } from '@stoplight/types';
 import { IRuleResult } from '../types';
 import { Formatter } from './types';
+import { getHighestSeverity } from './utils/getHighestSeverity';
+import { groupBySeverity } from './utils/groupBySeverity';
 import { groupBySource } from './utils/groupBySource';
 import { sortResults } from './utils/sortResults';
 
@@ -47,6 +49,38 @@ function pluralize(word: string, count: number): string {
   return count === 1 ? word : `${word}s`;
 }
 
+function formatRange(range?: IRange): string {
+  if (!range) return '';
+
+  return ` ${range.start.line + 1}:${range.start.character + 1}`;
+}
+
+const SEVERITY_COLORS = {
+  [DiagnosticSeverity.Error]: 'red',
+  [DiagnosticSeverity.Warning]: 'yellow',
+  [DiagnosticSeverity.Information]: 'blue',
+  [DiagnosticSeverity.Hint]: 'white',
+};
+
+function getColorForSeverity(severity: DiagnosticSeverity) {
+  return SEVERITY_COLORS[severity];
+}
+
+function getMessageType(severity: DiagnosticSeverity) {
+  const color = getColorForSeverity(severity);
+
+  switch (severity) {
+    case DiagnosticSeverity.Error:
+      return chalk[color]('error');
+    case DiagnosticSeverity.Warning:
+      return chalk[color]('warning');
+    case DiagnosticSeverity.Information:
+      return chalk[color]('information');
+    default:
+      return chalk[color]('hint');
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Public Interface
 // -----------------------------------------------------------------------------
@@ -56,41 +90,33 @@ export const stylish: Formatter = results => {
   let errorCount = 0;
   let warningCount = 0;
   let infoCount = 0;
-  let summaryColor = 'white';
+  let hintCount = 0;
+  const summaryColor = getColorForSeverity(getHighestSeverity(results));
 
   const groupedResults = groupBySource(results);
   Object.keys(groupedResults).map((path, index) => {
     const pathResults = groupedResults[path];
 
-    const errors = pathResults.filter((result: IRuleResult) => result.severity === DiagnosticSeverity.Error);
-    const warnings = pathResults.filter((result: IRuleResult) => result.severity === DiagnosticSeverity.Warning);
-    const infos = pathResults.filter((result: IRuleResult) => result.severity === DiagnosticSeverity.Information);
+    const {
+      [DiagnosticSeverity.Error]: errors,
+      [DiagnosticSeverity.Warning]: warnings,
+      [DiagnosticSeverity.Information]: infos,
+      [DiagnosticSeverity.Hint]: hints,
+    } = groupBySeverity(pathResults);
 
     errorCount += errors.length;
     warningCount += warnings.length;
     infoCount += infos.length;
+    hintCount += hints.length;
 
     output += `${chalk.underline(path)}\n`;
 
-    const pathTableData = sortResults(pathResults).map((result: IRuleResult) => {
-      let messageType;
-
-      if (result.severity === DiagnosticSeverity.Error) {
-        messageType = chalk.red('error');
-        summaryColor = 'red';
-      } else if (result.severity === DiagnosticSeverity.Warning) {
-        messageType = chalk.yellow('warning');
-
-        // we should always display red color for summary if there are any errors
-        if (summaryColor !== 'red') {
-          summaryColor = 'yellow';
-        }
-      } else {
-        messageType = chalk.yellow('white');
-      }
-
-      return [formatRange(result.range), messageType, result.code !== undefined ? result.code : '', result.message];
-    });
+    const pathTableData = sortResults(pathResults).map((result: IRuleResult) => [
+      formatRange(result.range),
+      getMessageType(result.severity),
+      result.code !== undefined ? result.code : '',
+      result.message,
+    ]);
 
     output += `${table(pathTableData, {
       align: ['c', 'r', 'l'],
@@ -105,7 +131,7 @@ export const stylish: Formatter = results => {
       .join('\n')}\n\n`;
   });
 
-  const total = errorCount + warningCount + infoCount;
+  const total = errorCount + warningCount + infoCount + hintCount;
 
   if (total > 0) {
     output += chalk[summaryColor].bold(
@@ -122,16 +148,13 @@ export const stylish: Formatter = results => {
         ', ',
         infoCount,
         pluralize(' info', infoCount),
+        ', ',
+        hintCount,
+        pluralize(' hint', hintCount),
         ')\n',
       ].join(''),
     );
   }
 
   return total > 0 ? output : '';
-};
-
-const formatRange = (range?: IRange): string => {
-  if (!range) return '';
-
-  return ` ${range.start.line + 1}:${range.start.character + 1}`;
 };
