@@ -25,24 +25,11 @@
 
 import { encodePointerFragment } from '@stoplight/json';
 import { extname } from '@stoplight/path';
-import { DiagnosticSeverity, Dictionary, JsonPath } from '@stoplight/types';
+import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { escapeRegExp } from 'lodash';
-import { IRuleResult, SpectralDiagnosticSeverity } from '../types';
 import { Formatter } from './types';
 import { groupBySource } from './utils/groupBySource';
 import { xmlEscape } from './utils/xmlEscape';
-
-const SEVERITY_MAP: Dictionary<string, SpectralDiagnosticSeverity> = {
-  [DiagnosticSeverity.Error]: 'Error',
-  [DiagnosticSeverity.Warning]: 'Warning',
-  [DiagnosticSeverity.Hint]: 'Hint',
-  [DiagnosticSeverity.Information]: 'Information',
-  [-1]: 'off',
-};
-
-function getMessageType(result: IRuleResult) {
-  return SEVERITY_MAP[result.severity];
-}
 
 function stringifyPath(path: JsonPath) {
   return ['#', ...path.map(encodePointerFragment)].join('/');
@@ -60,21 +47,23 @@ export const junit: Formatter = results => {
     const classname = source.replace(new RegExp(`${escapeRegExp(extname(source))}$`), '');
 
     if (validationResults.length > 0) {
-      output += `<testsuite package="org.spectral" time="0" tests="${validationResults.length}" errors="${
-        validationResults.length
-      }" name="${source}">\n`;
+      const filteredValidationResults = validationResults.filter(
+        result => result.severity === DiagnosticSeverity.Error,
+      );
 
-      for (const result of validationResults) {
-        const tag = getMessageType(result).toLowerCase();
+      output += `<testsuite package="org.spectral" time="0" tests="${
+        filteredValidationResults.length
+      }" errors="0" failures="${filteredValidationResults.length}" name="${source}">\n`;
+
+      for (const result of filteredValidationResults) {
         output += `<testcase time="0" name="org.spectral.${result.code || 'unknown'}" classname="${classname}">`;
-        output += `<${tag} message="${xmlEscape(result.message)}" path="${stringifyPath(result.path)}">`;
+        output += `<failure message="${xmlEscape(result.message)}">`;
         output += '<![CDATA[';
-        output += `line ${result.range.start.line + 1}, col `;
-        output += `${result.range.start.character + 1}, ${getMessageType(result)}`;
-        output += ` - ${xmlEscape(result.message)}`;
-        output += ` (${result.code})`;
+        output += `line ${result.range.start.line + 1}, col ${result.range.start.character + 1}, `;
+        output += `${xmlEscape(result.message)} (${result.code}) `;
+        output += `at path ${xmlEscape(stringifyPath(result.path))}`;
         output += ']]>';
-        output += `</${tag}>`;
+        output += `</failure>`;
         output += '</testcase>\n';
       }
 
