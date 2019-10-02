@@ -20,7 +20,8 @@ describe('JUnit formatter', () => {
         testsuite: [
           {
             $: {
-              errors: '3',
+              errors: '0',
+              failures: '3',
               name: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.invalid-schema.oas3.yaml',
               package: 'org.spectral',
               tests: '3',
@@ -33,13 +34,13 @@ describe('JUnit formatter', () => {
                   name: 'org.spectral.oas3-schema',
                   time: '0',
                 },
-                error: [
+                failure: [
                   {
                     $: {
                       message: 'should NOT have additional properties: type',
-                      path: '#/paths/~1pets/get/responses/200/headers/header-1',
                     },
-                    _: 'line 36, col 22, Error - should NOT have additional properties: type (oas3-schema)',
+                    _:
+                      'line 36, col 22, should NOT have additional properties: type (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
                   },
                 ],
               },
@@ -49,13 +50,13 @@ describe('JUnit formatter', () => {
                   name: 'org.spectral.oas3-schema',
                   time: '0',
                 },
-                error: [
+                failure: [
                   {
                     $: {
                       message: 'should match exactly one schema in oneOf',
-                      path: '#/paths/~1pets/get/responses/200/headers/header-1',
                     },
-                    _: 'line 36, col 22, Error - should match exactly one schema in oneOf (oas3-schema)',
+                    _:
+                      'line 36, col 22, should match exactly one schema in oneOf (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
                   },
                 ],
               },
@@ -65,13 +66,13 @@ describe('JUnit formatter', () => {
                   name: 'org.spectral.oas3-schema',
                   time: '0',
                 },
-                error: [
+                failure: [
                   {
                     $: {
                       message: "should have required property '$ref'",
-                      path: '#/paths/~1pets/get/responses/200/headers/header-1',
                     },
-                    _: 'line 36, col 22, Error - should have required property &apos;$ref&apos; (oas3-schema)',
+                    _:
+                      'line 36, col 22, should have required property &apos;$ref&apos; (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
                   },
                 ],
               },
@@ -82,70 +83,34 @@ describe('JUnit formatter', () => {
     });
   });
 
-  test('should produce valid paths', async () => {
+  test('should filter out non-error validation results', async () => {
     const result = await parse(junit(mixedErrors));
     expect(result).toEqual({
       testsuites: {
         testsuite: [
           {
             $: {
-              errors: '4',
+              errors: '0',
+              failures: '1',
               name: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json',
               package: 'org.spectral',
-              tests: '4',
+              tests: '1',
               time: '0',
             },
             testcase: [
               {
-                $: expect.objectContaining({
-                  name: 'org.spectral.info-contact',
-                }),
-                hint: [
-                  expect.objectContaining({
-                    $: {
-                      message: 'Info object should contain `contact` object.',
-                      path: '#',
-                    },
-                  }),
-                ],
-              },
-              {
-                $: expect.objectContaining({
-                  name: 'org.spectral.info-description',
-                }),
-                warning: [
-                  expect.objectContaining({
-                    $: {
-                      message: 'OpenAPI object info `description` must be present and non-empty string.',
-                      path: '#/',
-                    },
-                  }),
-                ],
-              },
-              {
-                $: expect.objectContaining({
-                  name: 'org.spectral.operation-description',
-                }),
-                information: [
-                  expect.objectContaining({
-                    $: {
-                      message: 'Operation `description` must be present and non-empty string.',
-                      path: '#/paths/~1pets/post',
-                    },
-                  }),
-                ],
-              },
-              {
-                $: expect.objectContaining({
+                $: {
+                  classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',
                   name: 'org.spectral.info-matches-stoplight',
-                }),
-                error: [
-                  expect.objectContaining({
+                  time: '0',
+                },
+                failure: [
+                  {
                     $: {
                       message: 'Info must contain Stoplight',
-                      path: '#/info/title',
                     },
-                  }),
+                    _: 'line 5, col 14, Info must contain Stoplight (info-matches-stoplight) at path #/info/title',
+                  },
                 ],
               },
             ],
