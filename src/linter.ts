@@ -96,10 +96,11 @@ export const lintNode = (
     results = results.concat(
       targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const path = getRealJsonPath(
+        const path = getClosestJsonPath(
           rule.resolved === false ? resolved.unresolved : resolved.resolved,
           escapedJsonPath,
         );
+        // todo: https://github.com/stoplightio/spectral/issues/608
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
@@ -199,7 +200,8 @@ function keyAndOptionalPattern(key: string | number, pattern: string, value: any
   };
 }
 
-function getRealJsonPath(data: unknown, path: JsonPath) {
+// todo: revisit -> https://github.com/stoplightio/spectral/issues/608
+function getClosestJsonPath(data: unknown, path: JsonPath) {
   if (data === null || typeof data !== 'object') return [];
 
   while (path.length > 0 && !has(data, path)) {

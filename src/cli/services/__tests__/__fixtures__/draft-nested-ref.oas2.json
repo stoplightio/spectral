@@ -3,5 +3,10 @@
   "host": "d",
   "info": {
     "$ref": "./refs/info-ref.json"
+  },
+  "paths": {
+    "/test": {
+      "$ref": "./refs/paths.json#/paths/~1test"
+    }
   }
 }
