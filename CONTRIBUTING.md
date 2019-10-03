@@ -18,10 +18,10 @@ Yarn is a package manager for your code, similar to npm. While you can use npm t
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your computer.
 2. Install yarn: `npm install -g yarn`
-3. In your terminal, navigate to the directory you cloned Spectral into.
+3. In your terminal, navigate to the directory you cloned Spectral into (check that you are on the `develop` branch).
 4. Install the dependencies: `yarn`
 5. Build Spectral: `yarn build`
-6. Run Spectral from your local installation: `bin/run lint openapi.yml`
+6. Run Spectral from your local installation: `node dist/cli/index.js lint [openapi_spec_file]`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
 8. Make changes, add tests, and then run the tests: `yarn test.prod`
 
