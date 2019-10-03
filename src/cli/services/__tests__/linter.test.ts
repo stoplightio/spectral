@@ -1,4 +1,4 @@
-import { resolve } from '@stoplight/path';
+import { join, resolve } from '@stoplight/path';
 import * as nock from 'nock';
 import * as yargs from 'yargs';
 import { ValidationError } from '../../../rulesets/validation';
@@ -23,8 +23,8 @@ const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-cont
 
 function run(command: string) {
   const parser = yargs.command(lintCommand);
-  const { document, ruleset, ...opts } = (parser.parse(command) as unknown) as ILintConfig & { document: string };
-  return lint(document, opts, ruleset);
+  const { documents, ...opts } = (parser.parse(command) as unknown) as ILintConfig & { documents: string[] };
+  return lint(documents, opts);
 }
 
 describe('Linter service', () => {
@@ -141,6 +141,228 @@ describe('Linter service', () => {
           expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'api-servers' })]));
         });
       });
+    });
+  });
+
+  describe('when a list of files is provided', () => {
+    // cwd is set to root of Spectral
+    const documents = [
+      join(process.cwd(), `src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json`),
+      join(process.cwd(), `src/__tests__/__fixtures__/petstore.oas3.json`),
+    ];
+
+    it('outputs issues for each file', () => {
+      return expect(run(['lint', ...documents].join(' '))).resolves.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-example-in-schemas',
+            path: ['components', 'schemas', 'foo', 'example'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'info-contact',
+            path: ['info'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'info-description',
+            path: ['info'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pets', 'get'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pets', 'post'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pets/{petId}', 'get'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe('when glob is provided', () => {
+    // cwd is set to root of Spectral
+    const documents = `src/__tests__/__fixtures__/petstore*.json`;
+
+    it('outputs issues for each file', () => {
+      return expect(run(`lint ${documents}`)).resolves.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-example-in-schemas',
+            path: ['components', 'schemas', 'foo', 'example'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas3-schema',
+            path: ['paths', '/pets', 'get', 'responses', '200'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/pet', 'post', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/pet', 'put', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/pet/{petId}', 'post', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/pet/{petId}', 'delete', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/store/order/{orderId}', 'delete', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/user', 'post', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/user/createWithArray', 'post', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/user/createWithList', 'post', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/user/logout', 'get', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/user/{username}', 'put', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            path: ['paths', '/user/{username}', 'delete', 'responses'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pet', 'post', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pet', 'put', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pet/{petId}', 'post', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pet/{petId}', 'delete', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pet/{petId}/uploadImage', 'post', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/store/order', 'post', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/user/createWithArray', 'post', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/user/createWithList', 'post', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/user/login', 'get', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/user/logout', 'get', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/user/{username}', 'get', 'description'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
+          }),
+          expect.objectContaining({
+            code: 'info-contact',
+            path: ['info'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'info-description',
+            path: ['info'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pets', 'get'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pets', 'post'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'operation-description',
+            path: ['paths', '/pets/{petId}', 'get'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas3.json'),
+          }),
+        ]),
+      );
     });
   });
 

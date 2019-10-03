@@ -59,69 +59,64 @@ describe('lint', () => {
 
   it('shows help when no document argument is passed', async () => {
     const output = await run('lint');
-    expect(output).toContain('document  Location of a JSON/YAML document');
+    expect(output).toContain('documents  Location of JSON/YAML documents');
   });
 
   it('shows help when invalid arguments are passed', async () => {
     const output = await run('lint --foo');
-    expect(output).toContain('lint a JSON/YAML document from a file or URL');
+    expect(output).toContain('documents  Location of JSON/YAML documents. Can be either a file, a glob or');
   });
 
   it('calls lint with document and default options', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    const ruleset = undefined;
     await run(`lint ${doc}`);
-    expect(lint).toBeCalledWith(
-      doc,
-      {
-        encoding: 'utf8',
-        format: 'stylish',
-      },
-      ruleset,
-    );
+    expect(lint).toBeCalledWith([doc], {
+      encoding: 'utf8',
+      format: 'stylish',
+    });
   });
 
   it('calls lint with document and custom encoding', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    const ruleset = undefined;
     await run(`lint --encoding utf16 ${doc}`);
-    expect(lint).toBeCalledWith(
-      doc,
-      {
-        encoding: 'utf16',
-        format: 'stylish',
-      },
-      ruleset,
-    );
+    expect(lint).toBeCalledWith([doc], {
+      encoding: 'utf16',
+      format: 'stylish',
+    });
   });
 
   it('calls lint with document and custom encoding and format', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    const ruleset = undefined;
     await run(`lint -f json --encoding utf16 ${doc}`);
-    expect(lint).toBeCalledWith(
-      doc,
-      {
-        encoding: 'utf16',
-        format: 'json',
-      },
-      ruleset,
-    );
+    expect(lint).toBeCalledWith([doc], {
+      encoding: 'utf16',
+      format: 'json',
+    });
   });
 
   it('calls lint with document and custom ruleset', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
     await run(`lint -r ${ruleset} ${doc}`);
-    expect(lint).toBeCalledWith(doc, expect.any(Object), [ruleset]);
+    expect(lint).toBeCalledWith(
+      [doc],
+      expect.objectContaining({
+        ruleset: [ruleset],
+      }),
+    );
   });
 
   it('calls lint with document and multiple custom rulesets', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
     const ruleset2 = 'custom-ruleset-2.json';
-    await run(`lint -r ${ruleset} -r ${ruleset2} ${doc}`);
-    expect(lint).toBeCalledWith(doc, expect.any(Object), [ruleset, ruleset2]);
+    await run(`lint --r ${ruleset} -r ${ruleset2} ${doc}`);
+    expect(lint).toBeCalledWith(
+      [doc],
+      expect.objectContaining({
+        ruleset: [ruleset, ruleset2],
+      }),
+    );
   });
 
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
@@ -147,22 +142,17 @@ describe('lint', () => {
   });
 
   it('passes skip-rule to lint', async () => {
-    const ruleset = undefined;
     await run('lint --skip-rule foo --skip-rule bar ./__fixtures__/empty-oas2-document.json');
-    expect(lint).toHaveBeenCalledWith(
-      expect.any(String),
-      {
-        skipRule: ['foo', 'bar'],
-        encoding: 'utf8',
-        format: 'stylish',
-      },
-      ruleset,
-    );
+    expect(lint).toHaveBeenCalledWith([expect.any(String)], {
+      skipRule: ['foo', 'bar'],
+      encoding: 'utf8',
+      format: 'stylish',
+    });
   });
 
   it('shows help if unknown format is passed', () => {
     return expect(run('lint -f foo ./__fixtures__/empty-oas2-document.json')).resolves.toContain(
-      'lint a JSON/YAML document from a file or URL',
+      'documents  Location of JSON/YAML documents. Can be either a file, a glob or',
     );
   });
 
