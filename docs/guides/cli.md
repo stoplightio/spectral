@@ -3,7 +3,7 @@
 Once installed, Spectral can be run via the command-line:
 
 ```bash
-spectral lint petstore.yaml
+spectral lint ./reference/**/*.oas*.{json,yml,yaml} petstore.yaml https://example.com/petstore/openapi-v2.json https://example.com/todos/openapi-v3.json
 ```
 
 Other options include:
