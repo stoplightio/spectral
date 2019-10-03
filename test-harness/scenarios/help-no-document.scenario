@@ -3,12 +3,12 @@ Errors when no document is provided
 ====command====
 lint
 ====stderr====
-spectral lint <document>
+spectral lint <documents..>
 
-lint a JSON/YAML document from a file or URL
+lint JSON/YAML documents from files or URLs
 
 Positionals:
-  document  Location of a JSON/YAML document. Can be either a file or a fetchable resource on the web.  [string] [required]
+  documents  Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.  [array] [required] [default: []]
 
 Options:
   --version                    Show version number  [boolean]

@@ -6,6 +6,18 @@ Once installed, Spectral can be run via the command-line:
 spectral lint petstore.yaml
 ```
 
+You can lint multiple files at the same time by passing on multiple arguments:
+
+```bash
+spectral lint petstore.yaml https://example.com/petstore/openapi-v2.json https://example.com/todos/openapi-v3.json
+```
+
+Alternatively you can use [glob syntax](https://github.com/mrmlnc/fast-glob#basic-syntax) to match multiple files at once:
+
+```bash
+spectral lint ./reference/**/*.oas*.{json,yml,yaml}
+```
+
 Other options include:
 
 ``` text
@@ -37,7 +49,6 @@ Spectral has a few different error severities: `error`, `warn`, `info` and `hint
 The default behavior is can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=warn` would return a status code of 1 for any warning results or higher, so that would also include error. Using `--fail-severity=error` will only show errors.
 
 Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the fail severity.
-
 
 ## Proxying
 

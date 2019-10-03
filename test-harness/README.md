@@ -40,18 +40,32 @@ lint --foo {document} --bar
 expected output
 ====stderr====
 optional/alternative to stdout for expected errors
+====status====
+(optional) expected exit code (`0` or `1`)
 ```
 
 ### A real example?
 
 ```
 ====test====
-Hello
+scenario-example
 ====document====
 openapi: 3.0.2
+servers:
+  - url: "localhost"
+info:
+  title: "my api"
+  description: "An example"
+  contact:
+    name: "Stoplight"
+  version: "1.0"
 paths:
   /todos:
     get:
+      tags:
+        - "example"
+      description: "Example endpoint"
+      operationId: getTodos
       responses:
         200:
           description: Get Todo Items
@@ -59,19 +73,23 @@ paths:
             'application/json':
               example: hello
 ====command====
-lint {document} | grep "something"
+lint {document}
 ====stdout====
+OpenAPI 3.x detected
+
+{document}
  2:6  warning  some-rule  This rule is complaining about something.
+
+✖ 1 problems (1 error, 0 warning, 0 infos, 0 hints)
 ```
 
 #### Things to keep in mind when creating the files:
 
 * 1 test per file, we do not support multiple splitting.
-* Be precise with the separators. They shuold be 4 *before* **AND** *after* the word. `====`
-* The 4 keywords are `test,spec,server,command,expect,expect-loose`, nothing else at the moment
+* Be precise with the separators. They should be 4 *before* **AND** *after* the word. `====`
+* The keywords are `test`, `document`, `command`, `status`, `stdout`, and `stderr`, nothing else at the moment
 * You can run all the tests on the same port `4010`, but you can also choose another one
-* The `curl` command does not support piping stuff into other tools; so if you're trying to be cool and do `curl | grep`, well maybe next time.
-* All the `curl` commands **must** have the `-i` flag, otherwise the trace parser won't understand the output
+* You can pipe your command to grep. For example, using `lint {document} | grep 'expected-rule-name'` can be used to test for the presence of a specific violation. But, beware of being overly specific here.
 
 ## Technical details
 
