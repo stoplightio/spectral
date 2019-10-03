@@ -10,7 +10,7 @@ import { parseScenarioFile } from './helpers';
 
 const glob = globFs({ gitignore: true });
 
-const spectralBin = path.join(__dirname, '../binaries/spectral-linux');
+const spectralBin = path.join(__dirname, '../binaries/spectral');
 
 type Replacement = {
   from: RegExp;
@@ -94,7 +94,7 @@ describe('cli acceptance tests', () => {
         throw new Error(stderr);
       }
 
-      if (stdout) {
+      if (stdout || expectedStdout) {
         expect(stdout).toEqual(expectedStdout);
       }
 
