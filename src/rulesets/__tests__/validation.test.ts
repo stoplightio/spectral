@@ -10,9 +10,17 @@ describe('Ruleset Validation', () => {
     expect(assertValidRuleset.bind(null, 'true')).toThrow('Provided ruleset is not an object');
   });
 
-  it('given object with no rules property should throw', () => {
-    expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules property');
-    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow('Ruleset must have rules property');
+  it('given object with no rules and no extends properties should throw', () => {
+    expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules or extends property');
+    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow('Ruleset must have rules or extends property');
+  });
+
+  it('given object with extends property only should emit no errors', () => {
+    expect(assertValidRuleset.bind(null, { extends: [] })).not.toThrow();
+  });
+
+  it('given object with rules property only should emit no errors', () => {
+    expect(assertValidRuleset.bind(null, { rules: {} })).not.toThrow();
   });
 
   it('given invalid ruleset should throw', () => {
