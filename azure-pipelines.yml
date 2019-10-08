@@ -6,6 +6,11 @@ trigger:
     include:
       - master
       - develop
+pr:
+  branches:
+    include:
+      - master
+      - develop
 jobs:
   - job: test
     displayName: Test
