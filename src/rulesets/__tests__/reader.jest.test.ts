@@ -14,6 +14,7 @@ const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info
 const github447 = path.join(__dirname, './__fixtures__/github-issue-447-fixture.yaml');
 const enabledAllRuleset = path.join(__dirname, './__fixtures__/enable-all-ruleset.json');
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
+const extendsOnlyRuleset = path.join(__dirname, './__fixtures__/extends-only-ruleset.json');
 const extendsAllOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
 const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas2-ruleset.json');
 const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
@@ -93,6 +94,39 @@ describe('Rulesets reader', () => {
         },
       }),
     );
+  });
+
+  it('given ruleset  with no custom rules extending other rulesets', async () => {
+    const { rules } = await readRuleset(extendsOnlyRuleset);
+
+    expect(rules).toEqual({
+      'bar-rule': {
+        given: '$.info',
+        message: 'should be OK',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: expect.stringMatching(/^random-id-\d$/),
+        },
+      },
+      'foo-rule': {
+        given: '$.info',
+        message: 'should be OK',
+        severity: -1,
+        then: {
+          function: expect.stringMatching(/^random-id-\d$/),
+        },
+      },
+      'truthy-rule': {
+        given: '$.x',
+        message: 'should be OK',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: expect.stringMatching(/^random-id-\d$/),
+        },
+      },
+    });
   });
 
   it('should inherit properties of extended rulesets', async () => {
