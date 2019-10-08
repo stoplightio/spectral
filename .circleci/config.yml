@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  stoplight: stoplight/cli@0.0.2
+
 commands:
   cached-dependencies:
     steps:
@@ -34,7 +37,7 @@ commands:
           command: yarn test --coverage --maxWorkers=2
       - run:
           name: Create the Spectral Binary
-          command: npx pkg . --targets linux,macos
+          command: yarn build.binary
       - run:
           name: Create output directory
           command: mkdir ./test-harness/tmp
@@ -88,11 +91,12 @@ jobs:
           else
             npm publish
           fi
-      - run: yarn build.binary
+      - run: npx pkg . --targets linux,macos
       - persist_to_workspace:
           root: ./
           paths:
             - binaries
+
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
@@ -122,6 +126,14 @@ workflows:
             tags:
               only: /^v.*/
       - upload_artifacts:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+          requires:
+            - release
+      - stoplight/analyze:
           filters:
             branches:
               ignore: /.*/
