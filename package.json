@@ -68,7 +68,7 @@
     "chalk": "^2.4.2",
     "deprecated-decorator": "^0.1.6",
     "fast-glob": "^3.0.4",
-    "jsonpath-plus": "~1.0",
+    "jsonpath-plus": "~1.1",
     "lodash": ">=4.17.5",
     "nanoid": "^2.0.3",
     "node-fetch": "^2.6",
