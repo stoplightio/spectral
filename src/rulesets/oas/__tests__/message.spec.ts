@@ -7,6 +7,8 @@ describe('message util', () => {
       message(template, {
         property: 'description',
         error: 'expected property to be truthy',
+        path: '',
+        value: void 0,
       }),
     ).toEqual('oops... "description" is missing;error: expected property to be truthy');
   });
@@ -17,6 +19,8 @@ describe('message util', () => {
       message(template, {
         property: 'baz',
         error: 'foo',
+        path: '',
+        value: void 0,
       }),
     ).toEqual('foofoobazfoofoo');
   });
@@ -27,6 +31,8 @@ describe('message util', () => {
       message(template, {
         property: 'description',
         error: 'expected property to be truthy',
+        path: '',
+        value: void 0,
       }),
     ).toEqual('missing :(');
   });
