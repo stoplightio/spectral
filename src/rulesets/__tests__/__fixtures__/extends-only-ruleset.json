@@ -1,0 +1,6 @@
+{
+  "extends": [
+    "./custom-functions-directory-ruleset.json",
+    "./foo-ruleset.json"
+  ]
+}

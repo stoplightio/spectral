@@ -102,7 +102,10 @@ const createRulesetProcessor = (
       }
     }
 
-    mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
+    if (ruleset.rules !== void 0) {
+      mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
+    }
+
     if (Array.isArray(ruleset.formats)) {
       mergeFormats(rules, ruleset.formats);
     }
