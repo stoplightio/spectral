@@ -1,14 +1,14 @@
 import { JsonPath } from '@stoplight/types';
 import { IFunction, IFunctionResult } from '../../../types';
+import { hasRef } from '../../../utils/hasRef';
 
 // function is needed because `$..$ref` or `$..[?(@.$ref)]` are not parsed correctly
 // and therefore lead to infinite recursion due to the dollar sign ('$' in '$ref')
 function* siblingIterator(obj: object, path: JsonPath): IterableIterator<JsonPath> {
-  const hasRef = '$ref' in obj;
   for (const key in obj) {
     if (!Object.hasOwnProperty.call(obj, key)) continue;
     const scopedPath = [...path, key];
-    if (hasRef && key !== '$ref') {
+    if (hasRef(obj) && key !== '$ref') {
       yield scopedPath;
     }
 

@@ -2,7 +2,13 @@
 
 import * as yargs from 'yargs';
 
+import { DEFAULT_REQUEST_OPTIONS } from '../request';
 import lintCommand from './commands/lint';
+
+if (process.env.PROXY) {
+  const ProxyAgent = require('proxy-agent');
+  DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(process.env.PROXY);
+}
 
 export default yargs
   .scriptName('spectral')

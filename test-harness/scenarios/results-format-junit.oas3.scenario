@@ -1,0 +1,19 @@
+====test====
+Invalid OAS3 document outputs results when --format=junit
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+  foo:
+paths: {}
+====command====
+lint {document} --format=junit
+====stdout====
+OpenAPI 3.x detected
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+<testsuite package="org.spectral" time="0" tests="1" errors="0" failures="1" name="{document}">
+<testcase time="0" name="org.spectral.oas3-schema" classname="{documentWithoutExt}"><failure message="/info Property foo is not expected to be here"><![CDATA[line 2, col 6, /info Property foo is not expected to be here (oas3-schema) at path #/info]]></failure></testcase>
+</testsuite>
+</testsuites>

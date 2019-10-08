@@ -3,11 +3,12 @@ import { get, has } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
-import { decodePointerFragment } from '@stoplight/json';
+import { decodePointerFragment, pathToPointer } from '@stoplight/json';
 import { Resolved } from './resolved';
 import { message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
+import { isObject } from './utils';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -96,10 +97,11 @@ export const lintNode = (
     results = results.concat(
       targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const path = getRealJsonPath(
+        const path = getClosestJsonPath(
           rule.resolved === false ? resolved.unresolved : resolved.resolved,
           escapedJsonPath,
         );
+        // todo: https://github.com/stoplightio/spectral/issues/608
         const location = resolved.getLocationForJsonPath(path, true);
 
         return {
@@ -111,23 +113,22 @@ export const lintNode = (
               : message(rule.message, {
                   error: result.message,
                   property: path.length > 0 ? path[path.length - 1] : '',
+                  path: pathToPointer(path),
                   description: rule.description,
+                  get value() {
+                    // let's make it `value` lazy
+                    const value = resolved.getValueForJsonPath(path);
+                    if (isObject(value)) {
+                      return Array.isArray(value) ? 'Array[]' : 'Object{}';
+                    }
+
+                    return JSON.stringify(value);
+                  },
                 }),
           path,
           severity: getDiagnosticSeverity(rule.severity),
           source: location.uri,
-          ...(location || {
-            range: {
-              start: {
-                character: 0,
-                line: 0,
-              },
-              end: {
-                character: 0,
-                line: 0,
-              },
-            },
-          }),
+          range: location.range,
         };
       }),
     );
@@ -210,7 +211,8 @@ function keyAndOptionalPattern(key: string | number, pattern: string, value: any
   };
 }
 
-function getRealJsonPath(data: unknown, path: JsonPath) {
+// todo: revisit -> https://github.com/stoplightio/spectral/issues/608
+function getClosestJsonPath(data: unknown, path: JsonPath) {
   if (data === null || typeof data !== 'object') return [];
 
   while (path.length > 0 && !has(data, path)) {

@@ -1,4 +1,4 @@
-const isObject = (thing: unknown): thing is object => thing !== null && typeof thing === 'object';
+import { isObject } from '../utils/isObject';
 
 type MaybeOAS2 = Partial<{ swagger: unknown }>;
 type MaybeOAS3 = Partial<{ openapi: unknown }>;

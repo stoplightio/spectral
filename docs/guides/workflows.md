@@ -34,8 +34,8 @@ Folks will forget to run Spectral, and that means they can commit broken or (low
 {
   "husky": {
     "hooks": {
-      "pre-commit": "spectral lint openapi.yaml",
-      "pre-push": "spectral lint openapi.yaml",
+      "pre-commit": "spectral lint ./reference/**/*.{json,yml,yaml}",
+      "pre-push": "spectral lint ./reference/**/*.{json,yml,yaml}",
       "...": "..."
     }
   }

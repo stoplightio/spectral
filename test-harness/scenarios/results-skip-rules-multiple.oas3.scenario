@@ -14,4 +14,4 @@ OpenAPI 3.x detected
 {document}
  1:1  warning  api-servers  OpenAPI `servers` must be present and non-empty array.
 
-✖ 1 problem (0 errors, 1 warning, 0 infos)
+✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)

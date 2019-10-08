@@ -1,7 +1,7 @@
-import { Cache } from '@stoplight/json-ref-resolver';
+import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isParsedResult, Spectral } from '../spectral';
-import { IParsedResult, RuleFunction } from '../types';
+import { IParsedResult, IResolver, RuleFunction } from '../types';
 
 const merge = require('lodash/merge');
 
@@ -125,23 +125,146 @@ describe('spectral', () => {
   });
 
   describe('when a $ref appears', () => {
-    test('will call the resolver with target', async () => {
-      const fakeResolver = {
-        resolve: jest.fn(() => Promise.resolve([])),
-      };
+    describe('and a custom resolver is provided', () => {
+      test('will call the resolver with target', async () => {
+        const customResolver: IResolver = {
+          resolve: jest.fn(async () => ({
+            result: {},
+            refMap: {},
+            errors: [],
+          })),
+        };
 
-      const s = new Spectral({
-        resolver: fakeResolver as any,
+        const s = new Spectral({
+          resolver: customResolver,
+        });
+
+        const target = { foo: 'bar' };
+
+        await s.run(target);
+
+        expect(customResolver.resolve).toBeCalledWith(target, {
+          authority: undefined,
+          parseResolveResult: expect.any(Function),
+        });
       });
 
-      const target = { foo: 'bar' };
+      test('should handle lack of information about $refs gracefully', () => {
+        const customResolver: IResolver = {
+          resolve: jest.fn(async () => ({
+            result: {
+              foo: {
+                bar: {
+                  baz: '',
+                },
+              },
+            },
+            refMap: {},
+            errors: [],
+          })),
+        };
 
-      await s.run(target);
+        const s = new Spectral({
+          resolver: customResolver,
+        });
 
-      expect(fakeResolver.resolve).toBeCalledWith(target, {
-        authority: undefined,
-        uriCache: expect.any(Cache),
-        parseResolveResult: expect.any(Function),
+        s.setRules({
+          'truthy-baz': {
+            given: '$.foo.bar.baz',
+            message: 'Baz must be truthy',
+            severity: DiagnosticSeverity.Error,
+            recommended: true,
+            then: {
+              function: 'truthy',
+            },
+          },
+        });
+
+        const target: IParsedResult = {
+          parsed: parseWithPointers(`{"foo":"bar"}`),
+          getLocationForJsonPath,
+          source: 'foo',
+        };
+
+        return expect(s.run(target)).resolves.toStrictEqual([
+          {
+            code: 'truthy-baz',
+            message: 'Baz must be truthy',
+            path: ['foo', 'bar', 'baz'],
+            range: {
+              end: {
+                character: 0,
+                line: 0,
+              },
+              start: {
+                character: 0,
+                line: 0,
+              },
+            },
+            severity: DiagnosticSeverity.Error,
+            source: void 0,
+          },
+        ]);
+      });
+
+      test('should recognize the source of local $refs', () => {
+        const s = new Spectral();
+        const source = 'foo.yaml';
+
+        const parsedResult: IParsedResult = {
+          getLocationForJsonPath,
+          source,
+          parsed: parseWithPointers(
+            JSON.stringify(
+              {
+                paths: {
+                  '/agreements': {
+                    get: {
+                      description: 'Get some Agreements',
+                      responses: {
+                        '200': {
+                          $ref: '#/responses/GetAgreementsOk',
+                        },
+                        default: {},
+                      },
+                      summary: 'List agreements',
+                      tags: ['agreements', 'pagination'],
+                    },
+                  },
+                },
+                responses: {
+                  GetAgreementsOk: {
+                    description: 'Successful operation',
+                    headers: {},
+                  },
+                },
+              },
+              null,
+              2,
+            ),
+          ),
+        };
+
+        s.setRules({
+          'pagination-responses-have-x-next-token': {
+            description: 'All collection endpoints have the X-Next-Token parameter in responses',
+            given: "$.paths..get.responses['200'].headers",
+            severity: 'error',
+            recommended: true,
+            then: { field: 'X-Next-Token', function: 'truthy' },
+          },
+        });
+
+        return expect(s.run(parsedResult)).resolves.toEqual([
+          {
+            code: 'pagination-responses-have-x-next-token',
+            message: 'All collection endpoints have the X-Next-Token parameter in responses',
+            path: ['paths', '/agreements', 'get', 'responses', '200', 'headers'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Error,
+            source,
+          },
+        ]);
       });
     });
   });

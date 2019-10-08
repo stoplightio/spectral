@@ -334,12 +334,6 @@ Operation should have non-empty `tags` array.
 
 **Recommended:** Yes
 
-### parameter-description
-
-Parameter objects should have a `description`.
-
-**Recommended:** No
-
 ### path-declarations-must-exist
 
 Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
@@ -451,6 +445,12 @@ Validate structure of OpenAPI v2 specification.
 
 **Recommended:** Yes
 
+### oas2-parameter-description
+
+Parameter objects should have a `description`.
+
+**Recommended:** No
+
 ## oas3
 
 These OpenAPI v3.0-only rules can be loaded with `extends: "spectral: oas3"` and include all the oas rules.
@@ -543,3 +543,9 @@ Examples must be valid against their defined schema.
 Validate structure of OpenAPI v3 specification.
 
 **Recommended:** Yes
+
+### oas3-parameter-description
+
+Parameter objects should have a `description`.
+
+**Recommended:** No

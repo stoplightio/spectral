@@ -1,0 +1,36 @@
+====test====
+The amount of enabled rules is printed in a parenthesis.
+====document====
+openapi: 3.0.2
+paths:
+  /pets:
+    parameters:
+      - name: abc
+        in: body
+    get:
+      parameters:
+        - name: ok
+          in: header
+      responses:
+        200:
+          description: abc
+components:
+  parameters:
+    skipParam:
+      name: skip
+      in: query
+      schema:
+        type: integer
+====command====
+lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml -v
+====stdout====
+Found 52 rules (1 enabled)
+Linting {document}
+OpenAPI 3.x detected
+
+{document}
+  5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.
+  9:11  warning  oas3-parameter-description  Parameter objects should have a `description`.
+ 16:15  warning  oas3-parameter-description  Parameter objects should have a `description`.
+
+✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
