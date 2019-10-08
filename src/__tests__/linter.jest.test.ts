@@ -1,5 +1,8 @@
 import * as path from '@stoplight/path';
+import { join } from '@stoplight/path';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
 const customFunctionOASRuleset = path.join(__dirname, './__fixtures__/custom-functions-oas-ruleset.json');
@@ -73,5 +76,67 @@ describe('Linter', () => {
         message: 'Object does not have field property',
       }),
     ]);
+  });
+
+  describe('evaluate {{value}} in validation messages', () => {
+    test('should print correct values for referenced files', async () => {
+      spectral = new Spectral({ resolver: httpAndFileResolver });
+
+      spectral.setRules({
+        'empty-is-falsy': {
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          description: 'Should be falsy',
+          message: 'Value {{value}} should be falsy',
+          given: '$..empty',
+          then: {
+            function: 'falsy',
+          },
+        },
+      });
+
+      return expect(
+        spectral.run(
+          {
+            empty: {
+              $ref: './__fixtures__/petstore.merge.keys.oas3.json#/info/contact/url',
+            },
+            bar: {
+              empty: {
+                $ref: './__fixtures__/petstore.oas3.json#/servers',
+              },
+            },
+            foo: {
+              empty: {
+                $ref: './__fixtures__/petstore.oas3.json#/info',
+              },
+            },
+          },
+          {
+            resolve: {
+              documentUri: join(__dirname, 'foo.json'),
+            },
+          },
+        ),
+      ).resolves.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'empty-is-falsy',
+            message: 'Value "https://example.com" should be falsy',
+            path: ['empty'],
+          }),
+          expect.objectContaining({
+            code: 'empty-is-falsy',
+            message: 'Value Array[] should be falsy',
+            path: ['bar', 'empty'],
+          }),
+          expect.objectContaining({
+            code: 'empty-is-falsy',
+            message: 'Value Object{} should be falsy',
+            path: ['foo', 'empty'],
+          }),
+        ]),
+      );
+    });
   });
 });

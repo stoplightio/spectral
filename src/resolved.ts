@@ -102,4 +102,9 @@ export class Resolved {
       range: location !== void 0 ? location.range : getDefaultRange(),
     };
   }
+
+  public getValueForJsonPath(path: JsonPath): unknown {
+    const parsedResult = this.getParsedForJsonPath(path);
+    return parsedResult === null ? void 0 : get(parsedResult.doc.parsed.data, parsedResult.path);
+  }
 }
