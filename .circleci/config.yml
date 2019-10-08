@@ -34,7 +34,7 @@ commands:
           command: yarn test --coverage --maxWorkers=2
       - run:
           name: Create the Spectral Binary
-          command: yarn build.binary
+          command: npx pkg . --targets linux,macos
       - run:
           name: Create output directory
           command: mkdir ./test-harness/tmp
