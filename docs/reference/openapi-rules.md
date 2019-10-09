@@ -246,11 +246,22 @@ info:
   title: 'some title with <script>alert("You are Hacked");</script>',
 ```
 
-### openapi-tags-alphabetical
+### openapi-tags
 
-OpenAPI object should have alphabetical `tags`. This will be sorted by the `name` property.
+OpenAPI object should have non-empty `tags` array, and the tags names should be ordered alphabetically.
 
-**Recommended:** No
+Why? Well, you _can_ reference tags arbitrarily in operations, and definition is optional...
+
+```yaml
+/invoices/{id}/items:
+  get:
+    tags:
+    - Invoice Items
+```
+
+Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
+
+**Recommended:** Yes
 
 **Bad Example**
 
@@ -267,23 +278,6 @@ tags:
   - name: 'Aardvark'
   - name: 'Badger'
 ```
-
-### openapi-tags
-
-OpenAPI object should have non-empty `tags` array.
-
-Why? Well, you _can_ reference tags arbitrarily in operations, and definition is optional...
-
-```yaml
-/invoices/{id}/items:
-  get:
-    tags:
-    - Invoice Items
-```
-
-Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
-
-**Recommended:** No
 
 ### operation-default-response
 

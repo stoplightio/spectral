@@ -11,16 +11,51 @@ describe('openapi-tags', () => {
     }),
   });
 
-  test('validate a correct object', async () => {
+  it('validate an array with a single object', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {},
       tags: [{ name: 'todos' }],
     });
-    expect(results.length).toEqual(0);
+    expect(results).toHaveLength(0);
   });
 
-  test('return errors if missing tags', async () => {
+  it('validates an array with two alphabetically ordered objects', async () => {
+    const results = await s.run({
+      swagger: '2.0',
+      paths: {},
+      tags: [{ name: 'a-tag' }, { name: 'b-tag' }],
+    });
+    expect(results).toHaveLength(0);
+  });
+
+  it('errors when tags is not in alphabetical order', async () => {
+    const results = await s.run({
+      swagger: '2.0',
+      paths: {},
+      tags: [{ name: 'b-tag' }, { name: 'a-tag' }],
+    });
+    expect(results).toEqual([
+      {
+        code: 'openapi-tags',
+        message: 'OpenAPI object should have alphabetical `tags`.',
+        path: ['tags'],
+        range: {
+          end: {
+            character: 21,
+            line: 8,
+          },
+          start: {
+            character: 9,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
+  });
+
+  it('return errors if missing tags', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {},

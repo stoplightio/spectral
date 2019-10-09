@@ -15,7 +15,7 @@ keyedBy | key to sort an object by | no
 <!-- title: example -->
 
 ```yaml
-openapi-tags-alphabetical:
+tags-alphabetical:
   description: OpenAPI object should have alphabetical `tags`.
   type: style
   given: "$"
