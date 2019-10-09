@@ -381,6 +381,11 @@
   resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.2.1.tgz#f39f408377a0d1a9c33a04ce08eb3a1691c457d6"
   integrity sha512-W/wBpTw6ThKZGPcb1ztKz6ULnMVnLE/ygzqIjnqnmKcpNrKkSuBLtL7+oQYZSkteZfJAryloAt3plU3sTiekcQ==
 
+"@stoplight/ref-resolvers@file:../ref-resolvers/dist":
+  version "0.0.0"
+  dependencies:
+    node-fetch "^2.6.0"
+
 "@stoplight/types@^11.0.0", "@stoplight/types@^11.1.1":
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.1.tgz#a92d1833adb580a72439f42ba73de8f560fd68b4"
@@ -5164,7 +5169,7 @@ nock@*, nock@~11.4.0:
     mkdirp "^0.5.0"
     propagate "^2.0.0"
 
-node-fetch@^2.6:
+node-fetch@^2.6, node-fetch@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
