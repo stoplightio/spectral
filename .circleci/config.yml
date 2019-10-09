@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  stoplight: stoplight/cli@0.0.2
+
 commands:
   cached-dependencies:
     steps:
@@ -93,6 +96,7 @@ jobs:
           root: ./
           paths:
             - binaries
+
   upload_artifacts:
     docker:
       - image: circleci/golang:1-stretch
@@ -122,6 +126,14 @@ workflows:
             tags:
               only: /^v.*/
       - upload_artifacts:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+          requires:
+            - release
+      - stoplight/analyze:
           filters:
             branches:
               ignore: /.*/

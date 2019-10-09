@@ -28,7 +28,7 @@ export interface IRuleset {
 export interface IRulesetFile {
   extends?: Array<string | [string, FileRulesetSeverity]>;
   formats?: string[];
-  rules: FileRuleCollection;
+  rules?: FileRuleCollection;
   functionsDir?: string;
   functions?: Array<string | [string, JSONSchema4 | JSONSchema6 | JSONSchema7]>;
 }
