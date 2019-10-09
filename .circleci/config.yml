@@ -91,7 +91,7 @@ jobs:
           else
             npm publish
           fi
-      - run: yarn build.binary
+      - run: npx pkg . --targets linux,macos
       - persist_to_workspace:
           root: ./
           paths:
