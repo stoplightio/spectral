@@ -1,0 +1,16 @@
+{
+  "openapi": "3.0.0",
+  "x-hook": {
+    "$ref": "./unusedComponentsSchema.indirect.2.json#/components/schemas/ExtHooked"
+  },
+  "components": {
+    "schemas": {
+      "Hooked": {
+        "type": "object"
+      },
+      "Unhooked": {
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "components": {
+    "schemas": {
+      "ExtHooked": {
+        "$ref": "./unusedComponentsSchema.indirect.1.json#/components/schemas/Hooked"
+      },
+      "ExtUnhookedOne": {
+        "$ref": "./unusedComponentsSchema.indirect.1.json#/components/schemas/Hooked"
+      },
+      "ExtUnhookedTwo": {
+        "type": "number"
+      }
+    }
+  }
+}

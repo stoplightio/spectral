@@ -542,6 +542,16 @@ servers:
   - url: https://example.com/api/
 ```
 
+### unused-components-schema
+
+Potential unused reusable `schema` entry has been detected.
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
+
 ### valid-example
 
 Examples must be valid against their defined schema.

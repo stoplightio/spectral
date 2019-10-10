@@ -1,0 +1,19 @@
+{
+  "openapi": "3.0.0",
+  "x-hook": {
+    "$ref": "./unusedComponentsSchema.remoteLocal.json#/components/schemas/RemoteLocal"
+  },
+  "x-also-hook": {
+    "$ref": "#/components/schemas/PureLocal"
+  },
+  "components": {
+    "schemas": {
+      "RemoteLocal": {
+        "type": "string"
+      },
+      "PureLocal": {
+        "type": "string"
+      }
+    }
+  }
+}
