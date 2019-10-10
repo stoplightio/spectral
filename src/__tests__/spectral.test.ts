@@ -1,5 +1,6 @@
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { DepGraph } from 'dependency-graph';
 import { isParsedResult, Spectral } from '../spectral';
 import { IParsedResult, IResolver, RuleFunction } from '../types';
 
@@ -131,6 +132,7 @@ describe('spectral', () => {
           resolve: jest.fn(async () => ({
             result: {},
             refMap: {},
+            graph: new DepGraph(),
             errors: [],
           })),
         };
@@ -160,6 +162,7 @@ describe('spectral', () => {
               },
             },
             refMap: {},
+            graph: new DepGraph(),
             errors: [],
           })),
         };
