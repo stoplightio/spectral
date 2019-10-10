@@ -7,7 +7,7 @@ const oas3Ruleset = JSON.parse(JSON.stringify(require('./rulesets/oas3/index.jso
 const oas3Schema = JSON.parse(JSON.stringify(require('./rulesets/oas3/schemas/main.json')));
 
 const oasFunctions = {
-  // import path used for require must be deterministic here at compile-time (not run-time), hence no loop can be used
+  // import path used for require must be deterministic at build-time (not run-time) in case of Karma, hence no loop can be used
   '': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas-functions.json'))),
   '2': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas2-functions.json'))),
   '3': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas3-functions.json'))),
