@@ -1,12 +1,10 @@
 import { schemaPath } from '../schema-path';
 
 function runSchemaPath(target: any, field: string, schemaPathStr: string) {
-  return schemaPath(
-    target,
-    { field, schemaPath: schemaPathStr },
-    { given: [], target: [] },
-    { given: null, original: target },
-  );
+  return schemaPath(target, { field, schemaPath: schemaPathStr }, { given: [], target: [] }, {
+    given: null,
+    original: target,
+  } as any);
 }
 
 describe('schema', () => {
