@@ -2,6 +2,8 @@
 const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
+const { parse } = require('@stoplight/yaml');
+const { httpAndFileResolver } = require('../dist/resolvers/http-and-file');
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
@@ -25,6 +27,7 @@ const assets = {};
 
 async function processDirectory(assets, dir) {
   await Promise.all((await readdirAsync(dir)).map(async name => {
+    if (name === 'schemas') return;
     const target = path.join(dir, name);
     const stats = await statAsync(target);
     if (stats.isDirectory()) {
@@ -32,7 +35,15 @@ async function processDirectory(assets, dir) {
     } else {
       let content = await readFileAsync(target, 'utf8');
       if (path.extname(name) === '.json') {
-        content = JSON.stringify(JSON.parse(content));
+        content = JSON.stringify((await httpAndFileResolver.resolve(JSON.parse(content), {
+          dereferenceRemote: true,
+          dereferenceInline: false,
+          baseUri: target,
+          parseResolveResult(opts) {
+            opts.result = parse(opts.result);
+            return opts;
+          },
+        })).result);
       }
 
       assets[`spectral://${path.relative(path.join(__dirname, '..'), target)}`] = content;
