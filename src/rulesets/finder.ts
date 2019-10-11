@@ -1,8 +1,6 @@
 import * as path from '@stoplight/path';
 import * as fs from 'fs';
-import { filesMap } from './map';
-
-const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
+import { FILES_MAP, STATIC_ASSETS } from '../assets';
 
 // DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
 // parameter can be renamed, but don't this if you don't need to
@@ -21,17 +19,12 @@ function resolveFromNPM(pkg: string) {
 async function resolveFromFS(from: string, to: string) {
   let targetPath: string;
 
-  // if a built-in ruleset starting with @stoplight/spectral is given,
-  // try to search in spectral source directory - we should be able to find it
-  // this path is often hit when spectral:oas(?:2|3)? shorthand is provided
-  if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/' && to.startsWith('@stoplight/spectral')) {
-    targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace('@stoplight/spectral/', './'));
-    if (await exists(targetPath)) {
-      return targetPath;
-    }
+  targetPath = path.resolve(from, to);
+
+  if (targetPath in STATIC_ASSETS) {
+    return targetPath;
   }
 
-  targetPath = path.resolve(from, to);
   // if it's not a built-in ruleset, try to resolve the file according to the provided path
   if (await exists(targetPath)) {
     return targetPath;
@@ -41,16 +34,17 @@ async function resolveFromFS(from: string, to: string) {
 }
 
 export async function findFile(from: string, to: string) {
-  const mapped = filesMap.get(to);
+  const mapped = FILES_MAP.get(to);
+
   if (mapped !== void 0) {
-    to = mapped;
+    return mapped;
   }
 
   if (path.isAbsolute(to)) {
     return to;
   }
 
-  if (path.isURL(from) && mapped === void 0) {
+  if (path.isURL(from)) {
     return path.join(from, to);
   }
 
