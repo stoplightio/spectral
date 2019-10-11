@@ -5,6 +5,8 @@ let accessSpy: jest.SpyInstance;
 
 const { readFile, access } = fs;
 
+jest.setTimeout(10 * 1000);
+
 beforeEach(() => {
   readFileSpy = jest.spyOn(fs, 'readFile');
   accessSpy = jest.spyOn(fs, 'access');

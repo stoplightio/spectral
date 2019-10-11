@@ -352,10 +352,10 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@stoplight/json-ref-resolver@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.2.0.tgz#f12fed6ca618d9cd6031f5d0405a3ae5ffd54fad"
-  integrity sha512-42z5MNkLKF7Ynq2rM8YSd6SoJvEX5k0ugQujpB8Co7K5m3vhq1LK+/faFhuMfuFy6As9BxVUnDbGchYERXK17Q==
+"@stoplight/json-ref-resolver@^2.3.0":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-2.3.1.tgz#de38b170da2ad7a0f0380c85c62895fe8a79310c"
+  integrity sha512-f5E0bmB7bd0dRD1pZiRSfDxtEkyrI1H7GYiFTKnQzOD0q1Tkavkcu57bWyr46JItX7D4jLLPB1MeHvSHvmh8rw==
   dependencies:
     "@stoplight/json" "^3.1.0"
     "@stoplight/types" "^11.0.0"
@@ -363,6 +363,7 @@
     fast-memoize "^2.5.1"
     immer "^3.2.0"
     lodash "^4.17.15"
+    tslib "^1.10.0"
     urijs "~1.19.1"
     vscode-uri "^2.0.3"
 
@@ -380,6 +381,13 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.2.1.tgz#f39f408377a0d1a9c33a04ce08eb3a1691c457d6"
   integrity sha512-W/wBpTw6ThKZGPcb1ztKz6ULnMVnLE/ygzqIjnqnmKcpNrKkSuBLtL7+oQYZSkteZfJAryloAt3plU3sTiekcQ==
+
+"@stoplight/ref-resolvers@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/ref-resolvers/-/ref-resolvers-1.1.0.tgz#c2835625bee4e9e2fbb458735dcf32f8925423df"
+  integrity sha512-FVInHW7/3yMV0EjhUeVVxuLXadk0dJRmzhWWDY+YOGYNVunFsUOt8Eh/4skeayON5+bXzJHK5gkbPKIrur29Og==
+  dependencies:
+    node-fetch "^2.6.0"
 
 "@stoplight/types@^11.0.0", "@stoplight/types@^11.1.1":
   version "11.1.1"
@@ -5159,7 +5167,7 @@ nock@*, nock@~11.4.0:
     mkdirp "^0.5.0"
     propagate "^2.0.0"
 
-node-fetch@^2.6:
+node-fetch@^2.6, node-fetch@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
@@ -7435,9 +7443,9 @@ typescript-json-schema@~0.40:
     yargs "^14.0.0"
 
 typescript@^3.5.3:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
-  integrity sha512-N7bceJL1CtRQ2RiG0AQME13ksR7DiuQh/QehubYcghzv20tnh+MQnQIuJddTmsbqYj+dztchykemz0zFzlvdQw==
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
+  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
 
 uglify-js@^3.1.4:
   version "3.6.0"

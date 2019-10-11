@@ -2,16 +2,24 @@
 const path = require('path');
 const fs = require('fs');
 
-const target = path.join(__dirname, '../src/__tests__/__fixtures__/oas-functions.json');
+const baseDir = path.join(__dirname, '../__karma__/__fixtures__/');
 
-const fnsPath = path.join(__dirname, '../rulesets/oas/functions')
-
-const files = fs.readdirSync(fnsPath);
-
-const bundledFns = {};
-
-for (const file of files) {
-  bundledFns[file] = fs.readFileSync(path.join(fnsPath, file), 'utf-8')
+if (!fs.existsSync(baseDir)) {
+  fs.mkdirSync(baseDir);
 }
 
-fs.writeFileSync(target, JSON.stringify(bundledFns, null, 2))
+for (const spec of ['', '2', '3']) {
+  const target = path.join(baseDir, `oas${spec}-functions.json`);
+  const fnsPath = path.join(__dirname, `../rulesets/oas${spec}/functions`);
+  const bundledFns = {};
+
+  if (fs.existsSync(fnsPath)) {
+    const files = fs.readdirSync(fnsPath);
+
+    for (const file of files) {
+      bundledFns[file] = fs.readFileSync(path.join(fnsPath, file), 'utf-8');
+    }
+  }
+
+  fs.writeFileSync(target, JSON.stringify(bundledFns, null, 2));
+}
