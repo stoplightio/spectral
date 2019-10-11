@@ -30,7 +30,7 @@
     "rulesets/*"
   ],
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=10.0"
   },
   "scripts": {
     "build.binary": "pkg . --output ./binaries/spectral",
@@ -57,8 +57,9 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.1.1",
-    "@stoplight/json-ref-resolver": "^2.2.0",
+    "@stoplight/json-ref-resolver": "^2.3.0",
     "@stoplight/path": "^1.2.0",
+    "@stoplight/ref-resolvers": "^1.1.0",
     "@stoplight/types": "^11.0.0",
     "@stoplight/yaml": "^3.1.0",
     "abort-controller": "^3.0.0",
