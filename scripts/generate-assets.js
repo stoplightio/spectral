@@ -46,7 +46,7 @@ async function processDirectory(assets, dir) {
         })).result);
       }
 
-      assets[`spectral://${path.relative(path.join(__dirname, '..'), target)}`] = content;
+      assets[path.join('@spectral', path.relative(path.join(__dirname, '..'), target))] = content;
     }
   }));
 }
