@@ -15,7 +15,7 @@ module.exports = [
   'oasPathParam',
   'refSiblings'
 ].map(fn => ({
-  input: path.resolve(BASE_PATH, 'dist/rulesets/oas/functions', `${fn}.js`),
+  input: path.resolve(BASE_PATH, 'dist/rulesets/oas-common/functions', `${fn}.js`),
   plugins: [
     typescript({
       tsconfig: path.join(BASE_PATH, './tsconfig.rollup.json'),
@@ -26,7 +26,7 @@ module.exports = [
     terser(),
   ],
   output: {
-    file: path.resolve(BASE_PATH, 'dist/rulesets/oas/functions', `${fn}.js`),
+    file: path.resolve(BASE_PATH, 'dist/rulesets/oas-common/functions', `${fn}.js`),
     format: 'cjs',
     exports: 'named'
   },

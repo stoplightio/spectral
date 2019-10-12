@@ -1,16 +1,14 @@
 import { FunctionCollection } from '../../types';
 import { readRuleset } from '../reader';
 
+import { oas2Functions } from '../oas2';
+import { oas3Functions } from '../oas3';
+
 export const commonOasFunctions = (): FunctionCollection => {
   console.warn('This is deprecated. Use loadRuleset method instead');
   return {
-    oasPathParam: require('./functions/oasPathParam').oasPathParam,
-    oasOp2xxResponse: require('./functions/oasOp2xxResponse').oasOp2xxResponse,
-    oasOpSecurityDefined: require('./functions/oasOpSecurityDefined').oasOpSecurityDefined, // used in oas2/oas3 differently see their rulesets for details
-    oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
-    oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
-    oasOpParams: require('./functions/oasOpParams').oasOpParams,
-    refSiblings: require('./functions/refSiblings').refSiblings,
+    ...oas2Functions(),
+    ...oas3Functions(),
   };
 };
 

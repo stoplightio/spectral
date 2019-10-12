@@ -1,7 +1,7 @@
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../index';
-import { rules as oasRules } from '../../../oas/index.json';
+import { rules as oasRules } from '../../index.json';
 import refSiblings from '../refSiblings';
 
 describe('refSiblings', () => {

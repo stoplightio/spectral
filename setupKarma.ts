@@ -1,5 +1,6 @@
 import { FetchMockSandbox } from 'fetch-mock';
 
+const oasCommonRuleset = JSON.parse(JSON.stringify(require('./rulesets/oas-common/index.json')));
 const oasRuleset = JSON.parse(JSON.stringify(require('./rulesets/oas/index.json')));
 const oas2Ruleset = JSON.parse(JSON.stringify(require('./rulesets/oas2/index.json')));
 const oas2Schema = JSON.parse(JSON.stringify(require('./rulesets/oas2/schemas/main.json')));
@@ -8,6 +9,7 @@ const oas3Schema = JSON.parse(JSON.stringify(require('./rulesets/oas3/schemas/ma
 
 const oasFunctions = {
   // import path used for require must be deterministic at build-time (not run-time) in case of Karma, hence no loop can be used
+  '-common': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas-common-functions.json'))),
   '': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas-functions.json'))),
   '2': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas2-functions.json'))),
   '3': JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas3-functions.json'))),
@@ -33,6 +35,11 @@ beforeEach(() => {
   fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas3/index.json', {
     status: 200,
     body: JSON.parse(JSON.stringify(oas3Ruleset)),
+  });
+
+  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas-common/index.json', {
+    status: 200,
+    body: JSON.parse(JSON.stringify(oasCommonRuleset)),
   });
 
   fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas2/schemas/main.json', {

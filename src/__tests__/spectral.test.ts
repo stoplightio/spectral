@@ -7,6 +7,7 @@ import { IParsedResult, IResolver, RuleFunction } from '../types';
 const merge = require('lodash/merge');
 
 const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
+const oasCommonRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas-common/index.json')));
 const oas2Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas2/index.json')));
 const oas3Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas3/index.json')));
 
@@ -43,6 +44,7 @@ describe('spectral', () => {
       expect(s.rules).toEqual(
         [
           ...Object.entries(oasRuleset.rules),
+          ...Object.entries(oasCommonRuleset.rules),
           ...Object.entries(oas2Ruleset.rules),
           ...Object.entries(oas3Ruleset.rules),
         ].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {

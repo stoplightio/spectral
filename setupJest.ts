@@ -13,7 +13,10 @@ beforeEach(() => {
 
   accessSpy.mockImplementation((path, type, cb) => {
     return access(
-      path.replace(/(src)\/(rulesets\/oas\d?\/(?!__tests__))/, (str: string, val: string, p: string) => `dist/${p}`),
+      path.replace(
+        /(src)\/(rulesets\/oas(\d?|-common)\/(?!__tests__))/,
+        (str: string, val: string, p: string) => `dist/${p}`,
+      ),
       type,
       cb,
     );
@@ -21,7 +24,10 @@ beforeEach(() => {
 
   readFileSpy.mockImplementation((path, encoding, cb) => {
     return readFile(
-      path.replace(/(src)\/(rulesets\/oas\d?\/(?!__tests__))/, (str: string, val: string, p: string) => `dist/${p}`),
+      path.replace(
+        /(src)\/(rulesets\/oas(\d?|-common)\/(?!__tests__))/,
+        (str: string, val: string, p: string) => `dist/${p}`,
+      ),
       encoding,
       cb,
     );

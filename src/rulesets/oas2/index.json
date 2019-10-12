@@ -1,5 +1,5 @@
 {
-  "extends": ["spectral:oas"],
+  "extends": ["../oas-common/index.json"],
   "formats": ["oas2"],
   "rules": {
     "api-host": {
