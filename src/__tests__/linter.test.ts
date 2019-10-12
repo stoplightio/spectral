@@ -150,7 +150,7 @@ describe('linter', () => {
     const { rules: oas3Rules } = await readRuleset('spectral:oas3');
     spectral.setRules(mergeRules(oas3Rules, {
       'valid-example-in-schemas': 'off',
-      'model-description': -1,
+      'components-schema-description': -1,
     }) as RuleCollection);
 
     const result = await spectral.run(invalidSchema);

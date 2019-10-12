@@ -63,7 +63,7 @@
         }
       }
     },
-    "model-description": {
+    "definition-description": {
       "description": "Definition `description` must be present and non-empty string.",
       "recommended": false,
       "type": "style",
