@@ -409,7 +409,7 @@ Server URL should not have a trailing slash.
 
 **Recommended:** Yes
 
-### model-description
+### definition-description
 
 Definition `description` must be present and non-empty string.
 
@@ -476,7 +476,7 @@ servers:
 If this is going out to the world, maybe have production and a general sandbox people can play with.
 
 
-### model-description
+### components-schema-description
 
 Model `description` must be present and non-empty string.
 
