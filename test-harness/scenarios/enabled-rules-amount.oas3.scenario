@@ -24,7 +24,7 @@ components:
 ====command====
 lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml -v
 ====stdout====
-Found 53 rules (1 enabled)
+Found 55 rules (1 enabled)
 Linting {document}
 OpenAPI 3.x detected
 

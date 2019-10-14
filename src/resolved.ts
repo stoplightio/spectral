@@ -1,6 +1,7 @@
 import { decodePointerFragment, pointerToPath } from '@stoplight/json';
 import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
+import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
 import { IParseMap, REF_METADATA, ResolveResult } from './spectral';
 import { IParsedResult } from './types';
@@ -19,6 +20,7 @@ const getDefaultRange = (): IRange => ({
 
 export class Resolved {
   public readonly refMap: Dictionary<string>;
+  public readonly graph: DepGraph<any>;
   public readonly resolved: unknown;
   public readonly unresolved: unknown;
   public readonly errors: IResolveError[];
@@ -29,6 +31,7 @@ export class Resolved {
     this.formats = spec.formats;
 
     this.refMap = resolveResult.refMap;
+    this.graph = resolveResult.graph;
     this.resolved = resolveResult.result;
     this.errors = resolveResult.errors;
   }

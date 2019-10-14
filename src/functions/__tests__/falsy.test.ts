@@ -11,7 +11,7 @@ function runFalsy(targetVal: any, targetPath?: any) {
     {
       given: null,
       original: null,
-    },
+    } as any,
   );
 }
 

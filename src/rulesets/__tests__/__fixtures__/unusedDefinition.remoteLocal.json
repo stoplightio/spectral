@@ -1,0 +1,17 @@
+{
+  "swagger": "2.0",
+  "x-hook": {
+    "$ref": "./unusedDefinition.remoteLocal.json#/definitions/RemoteLocal"
+  },
+  "x-also-hook": {
+    "$ref": "#/definitions/PureLocal"
+  },
+  "definitions": {
+    "RemoteLocal": {
+      "type": "string"
+    },
+    "PureLocal": {
+      "type": "string"
+    }
+  }
+}
