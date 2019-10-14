@@ -17,6 +17,7 @@ import { merge, set } from 'lodash';
 
 import { IDiagnostic } from '@stoplight/types/dist';
 import deprecated from 'deprecated-decorator';
+import { STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
@@ -69,6 +70,15 @@ export class Spectral {
 
       Spectral._parsedCache.set(cacheKey, this._parsedMap);
     }
+  }
+
+  public static registerStaticAssets(assets: Dictionary<string, string>) {
+    for (const key in STATIC_ASSETS) {
+      if (!Object.hasOwnProperty.call(STATIC_ASSETS, key)) continue;
+      delete STATIC_ASSETS[key];
+    }
+
+    Object.assign(STATIC_ASSETS, assets);
   }
 
   public async runWithResolved(

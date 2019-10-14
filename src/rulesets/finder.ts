@@ -1,6 +1,6 @@
 import * as path from '@stoplight/path';
 import * as fs from 'fs';
-import { FILES_MAP, STATIC_ASSETS } from '../assets';
+import { RESOLVE_ALIASES, STATIC_ASSETS } from '../assets';
 
 // DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
 // parameter can be renamed, but don't this if you don't need to
@@ -34,7 +34,7 @@ async function resolveFromFS(from: string, to: string) {
 }
 
 export async function findFile(from: string, to: string) {
-  const mapped = FILES_MAP.get(to);
+  const mapped = RESOLVE_ALIASES.get(to);
 
   if (mapped !== void 0) {
     return mapped;

@@ -7,7 +7,6 @@ import request from '../request';
 export interface IReadOptions {
   encoding: string;
   timeout?: number;
-  offline?: boolean;
 }
 
 export async function readFile(name: string, opts: IReadOptions): Promise<string> {
