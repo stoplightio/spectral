@@ -1,0 +1,14 @@
+{
+  "swagger": "2.0",
+  "x-hook": {
+    "$ref": "./unusedDefinition.indirect.2.json#/definitions/ExtHooked"
+  },
+  "definitions": {
+    "Hooked": {
+      "type": "object"
+    },
+    "Unhooked": {
+      "type": "object"
+    }
+  }
+}

@@ -2,7 +2,7 @@ import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { schema } from '../schema';
 
 function runSchema(target: any, schemaObj: object) {
-  return schema(target, { schema: schemaObj }, { given: [] }, { given: null, original: null });
+  return schema(target, { schema: schemaObj }, { given: [] }, { given: null, original: null } as any);
 }
 
 describe('schema', () => {

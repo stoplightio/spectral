@@ -167,6 +167,35 @@ The value must be `undefined`. When combined with `field: foo` on an object the 
 
 _**Note:** Due to the way YAML works, just having `foo: ` with no value set is not the same as being `undefined`. This would be `falsy`.
 
+## unreferencedReusableObject
+
+This function identifies unreferenced objects within a document.
+
+For it to properly operate, `given` should point to the member holding the potential reusable objects.
+
+_Warning:_ This function may identify false positives when used against a specification that acts as a library (a container storing reusable objects, leveraged by other specifications that reference those objects).
+
+<!-- title: functionOptions -->
+
+name | description | required?
+---------|----------|---------
+reusableObjectsLocation | a local json pointer to the document member holding the reusable objects (eg. `#/definitions` for an OAS2 document, `#/components/schemas` for an OAS3 document). | yes
+
+<!-- title: example -->
+
+``` yaml
+unused-definition:
+  description: Potentially unused definition has been detected.
+  recommended: true
+  type: style
+  resolved: false
+  given: "$.definitions"
+  then:
+    function: unreferencedReusableObject
+    functionOptions:
+      reusableObjectsLocation: "#/definitions"
+```
+
 ## xor
 
 Communicate that only one of these properties is allowed, and no more than one of them.

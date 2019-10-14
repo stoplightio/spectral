@@ -9,4 +9,5 @@ export const functions = {
   truthy: require('./truthy').truthy,
   undefined: require('./undefined').undefined,
   xor: require('./xor').xor,
+  unreferencedReusableObject: require('./unreferencedReusableObject').unreferencedReusableObject,
 };

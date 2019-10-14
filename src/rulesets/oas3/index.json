@@ -214,6 +214,19 @@
       "tags": [
         "schema"
       ]
+    },
+    "unused-components-schema": {
+      "description": "Potentially unused components schema has been detected.",
+      "recommended": true,
+      "type": "style",
+      "resolved": false,
+      "given": "$.components.schemas",
+      "then": {
+        "function": "unreferencedReusableObject",
+        "functionOptions": {
+          "reusableObjectsLocation": "#/components/schemas"
+        }
+      }
     }
   }
 }

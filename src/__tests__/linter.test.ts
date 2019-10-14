@@ -167,6 +167,16 @@ describe('linter', () => {
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'Pets'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'foo'],
+      }),
     ]);
   });
 
@@ -546,6 +556,16 @@ responses:: !!foo
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'Pets'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'foo'],
       }),
     ]);
   });

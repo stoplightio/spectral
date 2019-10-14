@@ -94,6 +94,7 @@
     "@types/text-table": "^0.2.0",
     "@types/xml2js": "^0.4.4",
     "copyfiles": "^2.1.1",
+    "dependency-graph": "^0.8.0",
     "fetch-mock": "^7.3.9",
     "glob-fs": "^0.1.7",
     "husky": "^3.0.0",
