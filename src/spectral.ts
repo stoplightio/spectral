@@ -17,7 +17,7 @@ import { merge, set } from 'lodash';
 
 import { IDiagnostic } from '@stoplight/types/dist';
 import deprecated from 'deprecated-decorator';
-import { STATIC_ASSETS } from './assets';
+import { RESOLVE_ALIASES, STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
@@ -41,6 +41,7 @@ import {
   RunRuleCollection,
 } from './types';
 import { IRuleset } from './types/ruleset';
+import { empty } from './utils';
 
 export * from './types';
 
@@ -73,12 +74,13 @@ export class Spectral {
   }
 
   public static registerStaticAssets(assets: Dictionary<string, string>) {
-    for (const key in STATIC_ASSETS) {
-      if (!Object.hasOwnProperty.call(STATIC_ASSETS, key)) continue;
-      delete STATIC_ASSETS[key];
-    }
-
+    empty(STATIC_ASSETS);
     Object.assign(STATIC_ASSETS, assets);
+  }
+
+  public static registerResolveAliases(aliases: Dictionary<string, string>) {
+    empty(RESOLVE_ALIASES);
+    Object.assign(RESOLVE_ALIASES, aliases);
   }
 
   public async runWithResolved(
@@ -146,10 +148,7 @@ export class Spectral {
   }
 
   public setFunctions(functions: FunctionCollection) {
-    for (const key in this.functions) {
-      if (!Object.hasOwnProperty.call(this.functions, key)) continue;
-      delete this.functions[key];
-    }
+    empty(this.functions);
 
     this._addFunctions({ ...defaultFunctions, ...functions });
   }
@@ -160,10 +159,7 @@ export class Spectral {
   }
 
   public setRules(rules: RuleCollection) {
-    for (const key in this.rules) {
-      if (!Object.hasOwnProperty.call(this.rules, key)) continue;
-      delete this.rules[key];
-    }
+    empty(this.rules);
 
     this._addRules({ ...rules });
   }

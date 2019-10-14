@@ -22,6 +22,12 @@ describe('Rulesets finder', () => {
     );
   });
 
+  it('should support spectral built-in rules', () => {
+    return expect(findFile('/b/c/d', '@stoplight/spectral/rulesets/oas2/index.json')).resolves.toEqual(
+      path.join(process.cwd(), 'src/rulesets/oas2/index.json'),
+    );
+  });
+
   it.each(['oas', 'oas2', 'oas3'])('should support spectral built-in %s ruleset shorthand', shorthand => {
     return expect(findFile('', `spectral:${shorthand}`)).resolves.toEqual(
       path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
