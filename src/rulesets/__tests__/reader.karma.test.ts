@@ -2,20 +2,16 @@ import { FetchMockSandbox } from 'fetch-mock';
 import { Spectral } from '../../spectral';
 import { readRuleset } from '../reader';
 
+declare const fetch: FetchMockSandbox;
+
 describe('Rulesets reader', () => {
-  let fetchMock: FetchMockSandbox;
-
-  beforeEach(() => {
-    fetchMock = require('fetch-mock').sandbox();
-    window.fetch = fetchMock;
-  });
-
   afterEach(() => {
-    window.fetch = fetch;
+    Spectral.registerStaticAssets({});
   });
 
   it('is able to load the whole ruleset from static file', async () => {
-    fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
+    fetch.resetBehavior();
+    fetch.get('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
       status: 404,
       body: {},
     });

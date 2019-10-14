@@ -46,6 +46,7 @@ describe('Rulesets reader', () => {
 
   afterEach(() => {
     nock.cleanAll();
+    nock.enableNetConnect();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
@@ -598,7 +599,6 @@ describe('Rulesets reader', () => {
   });
 
   it('is able to load the whole ruleset from static file', async () => {
-    nock.cleanAll();
     nock.disableNetConnect();
 
     const readFileSpy = jest.spyOn(fs, 'readFile');
