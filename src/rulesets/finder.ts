@@ -31,6 +31,12 @@ async function resolveFromFS(from: string, to: string) {
   }
 
   targetPath = path.resolve(from, to);
+
+  // if found in static assets, it's fine, as readParsable will handle it just fine
+  if (targetPath in STATIC_ASSETS) {
+    return targetPath;
+  }
+
   // if it's not a built-in ruleset, try to resolve the file according to the provided path
   if (await exists(targetPath)) {
     return targetPath;

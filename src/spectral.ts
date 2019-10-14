@@ -7,17 +7,16 @@ import {
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
-import { Dictionary } from '@stoplight/types';
+import { Dictionary, IDiagnostic } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
   parseWithPointers as parseYAMLWithPointers,
   YamlParserResult,
 } from '@stoplight/yaml';
+import deprecated from 'deprecated-decorator';
 import { merge, set } from 'lodash';
 
-import { IDiagnostic } from '@stoplight/types/dist';
-import deprecated from 'deprecated-decorator';
-import { RESOLVE_ALIASES, STATIC_ASSETS } from './assets';
+import { STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
 import { Resolved } from './resolved';
@@ -76,11 +75,6 @@ export class Spectral {
   public static registerStaticAssets(assets: Dictionary<string, string>) {
     empty(STATIC_ASSETS);
     Object.assign(STATIC_ASSETS, assets);
-  }
-
-  public static registerResolveAliases(aliases: Dictionary<string, string>) {
-    empty(RESOLVE_ALIASES);
-    Object.assign(RESOLVE_ALIASES, aliases);
   }
 
   public async runWithResolved(

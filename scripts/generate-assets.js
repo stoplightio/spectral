@@ -24,7 +24,6 @@ const assets = {};
   await writeFileAsync(target, JSON.stringify(assets, null, 2));
 })();
 
-
 async function processDirectory(assets, dir) {
   await Promise.all((await readdirAsync(dir)).map(async name => {
     if (name === 'schemas') return;
@@ -46,7 +45,7 @@ async function processDirectory(assets, dir) {
         })).result);
       }
 
-      assets[path.join('@spectral', path.relative(path.join(__dirname, '..'), target))] = content;
+      assets[path.join('@stoplight/spectral', path.relative(path.join(__dirname, '..'), target))] = content;
     }
   }));
 }
