@@ -6,7 +6,7 @@ import {
 } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
-import { extname } from '@stoplight/path';
+import { extname, normalize } from '@stoplight/path';
 import { Dictionary, IDiagnostic } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
@@ -90,6 +90,8 @@ export class Spectral {
           mergeKeys: true,
         }),
         getLocationForJsonPath: getLocationForJsonPathYAML,
+        // we need to normalize the path in case path with forward slashes is given
+        source: opts.resolve?.documentUri && normalize(opts.resolve.documentUri),
       };
     } else {
       parsedResult = target;

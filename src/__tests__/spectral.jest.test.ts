@@ -97,7 +97,7 @@ describe('Spectral', () => {
     );
   });
 
-  test('reports issues for correct files with correct ranges and paths', async () => {
+  test('should report issues for correct files with correct ranges and paths', async () => {
     const documentUri = path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json');
     const spectral = new Spectral({ resolver: httpAndFileResolver });
     await spectral.loadRuleset('spectral:oas');
@@ -189,6 +189,93 @@ describe('Spectral', () => {
             },
           },
           source: undefined,
+        }),
+      ]),
+    );
+  });
+
+  test('should recognize the source of remote $refs', () => {
+    const s = new Spectral({ resolver: httpAndFileResolver });
+    const documentUri = path.join(__dirname, './__fixtures__/gh-658/URIError.yaml');
+
+    s.setRules({
+      'schema-strings-maxLength': {
+        severity: DiagnosticSeverity.Warning,
+        recommended: true,
+        message: "String typed properties MUST be further described using 'maxLength'. Error: {{error}}",
+        given: "$..*[?(@.type === 'string')]",
+        then: {
+          field: 'maxLength',
+          function: 'truthy',
+        },
+      },
+    });
+
+    return expect(s.run(fs.readFileSync(documentUri, 'utf8'), { resolve: { documentUri } })).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'schema-strings-maxLength',
+          path: ['paths', '/test', 'get', 'responses', '200', 'content', 'application/json', 'schema'],
+          range: {
+            end: {
+              character: 28,
+              line: 23,
+            },
+            start: {
+              character: 21,
+              line: 22,
+            },
+          },
+          severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        }),
+        expect.objectContaining({
+          code: 'schema-strings-maxLength',
+          path: ['components', 'schemas', 'Baz', 'properties', 'error'],
+          range: {
+            end: {
+              character: 22,
+              line: 15,
+            },
+            start: {
+              character: 14,
+              line: 14,
+            },
+          },
+          severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        }),
+        expect.objectContaining({
+          code: 'schema-strings-maxLength',
+          path: ['components', 'schemas', 'Baz', 'properties', 'error_description'],
+          range: {
+            end: {
+              character: 22,
+              line: 17,
+            },
+            start: {
+              character: 26,
+              line: 16,
+            },
+          },
+          severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        }),
+        expect.objectContaining({
+          code: 'schema-strings-maxLength',
+          path: ['components', 'schemas', 'Baz', 'properties', 'status_code'],
+          range: {
+            end: {
+              character: 22,
+              line: 19,
+            },
+            start: {
+              character: 20,
+              line: 18,
+            },
+          },
+          severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
         }),
       ]),
     );

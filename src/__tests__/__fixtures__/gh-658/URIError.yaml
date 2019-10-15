@@ -1,0 +1,36 @@
+%YAML 1.2
+---
+openapi: 3.0.0
+
+info:
+  title: Hey Mum! I'm on GitHub!
+  description: Resource definition.
+  version: 1.0.0
+
+servers:
+  - url: https://boom.com
+
+paths:
+  "/test":
+    get:
+      summary: Dummy endpoint.
+      description: Cf. summary
+      responses:
+        "200":
+          description: All is good.
+          content:
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Error:
+      $ref: "#/components/schemas/Baz"
+    Baz:
+      $ref: ./lib.yaml#/components/schemas/Error

@@ -1,4 +1,4 @@
-import { decodePointerFragment, pointerToPath } from '@stoplight/json';
+import { decodePointerFragment } from '@stoplight/json';
 import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
 import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
@@ -36,7 +36,8 @@ export class Resolved {
     this.errors = resolveResult.errors;
   }
 
-  public doesBelongToDoc(path: JsonPath): boolean {
+  // this method detects whether given json path points to a place in original unresolved document
+  public doesBelongToSourceDoc(path: JsonPath): boolean {
     if (path.length === 0) {
       // todo: each rule and their function should be context-aware, meaning they should aware of the fact they operate on resolved content
       // let's assume the error was reported correctly by any custom rule /shrug
@@ -45,13 +46,32 @@ export class Resolved {
 
     let piece = this.unresolved;
 
-    for (let i = 0; i < path.length; i++) {
+    for (const segment of path) {
       if (!isObject(piece)) return false;
 
-      if (path[i] in piece) {
-        piece = piece[path[i]];
+      if (segment in piece) {
+        piece = piece[segment];
       } else if (hasRef(piece)) {
-        return this.doesBelongToDoc([...pointerToPath(piece.$ref), ...path.slice(i)]);
+        if (this.spec.source === void 0) return false;
+        let nodeData;
+        try {
+          nodeData = this.graph.getNodeData(this.spec.source);
+        } catch {
+          return false;
+        }
+
+        const { refMap } = nodeData;
+        let { $ref } = piece;
+
+        while ($ref in refMap) {
+          $ref = refMap[$ref];
+        }
+
+        return (
+          $ref.length === 0 ||
+          $ref[0] === '#' ||
+          $ref.slice(0, Math.max(0, Math.min($ref.length, $ref.indexOf('#')))) === this.spec.source
+        );
       }
     }
 
@@ -80,7 +100,7 @@ export class Resolved {
       };
     }
 
-    if (!this.doesBelongToDoc(path)) {
+    if (!this.doesBelongToSourceDoc(path)) {
       return null;
     }
 

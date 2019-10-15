@@ -1,0 +1,20 @@
+%YAML 1.2
+---
+openapi: 3.0.0
+
+info:
+  title: Library
+  description: Collection of reusable standard definitions.
+  version: 2.0.0
+paths: {}
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+        status_code:
+          type: string
