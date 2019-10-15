@@ -1,5 +1,5 @@
 import { decodePointerFragment, pointerToPath } from '@stoplight/json';
-import { IResolveError } from '@stoplight/json-ref-resolver/types';
+import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
 import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
@@ -20,7 +20,7 @@ const getDefaultRange = (): IRange => ({
 
 export class Resolved {
   public readonly refMap: Dictionary<string>;
-  public readonly graph: DepGraph<any>;
+  public readonly graph: DepGraph<IGraphNodeData>;
   public readonly resolved: unknown;
   public readonly unresolved: unknown;
   public readonly errors: IResolveError[];
