@@ -41,7 +41,7 @@
     "compile-rulesets": "node ./scripts/compile-rulesets.js",
     "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "tsc --noEmit && tslint 'src/**/*.ts'",
     "postbuild.oas-functions": "copyfiles -u 1 \"dist/rulesets/oas*/functions/*.js\" ./",
     "postbuild": "yarn build.oas-functions && yarn compile-rulesets",
     "prebuild": "copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./",
