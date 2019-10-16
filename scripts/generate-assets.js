@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const path = require('path');
+const path = require('@stoplight/path');
 const fs = require('fs');
 const { promisify } = require('util');
 const { parse } = require('@stoplight/yaml');
