@@ -1,5 +1,5 @@
 {
-  "extends": ["spectral:oas2", "spectral:oas3"],
+  "extends": ["../oas2/index.json", "../oas3/index.json"],
   "formats": ["oas2", "oas3"],
   "functions": [
     "oasOp2xxResponse",

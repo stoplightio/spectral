@@ -1,5 +1,4 @@
 {
-  "extends": ["spectral:oas"],
   "formats": ["oas3"],
   "rules": {
     "api-servers": {
