@@ -26,12 +26,12 @@ const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory)
   );
 };
 
-export const runRules = (
+export const runRules = async (
   documentInventory: DocumentInventory,
   rules: RunRuleCollection,
   functions: FunctionCollection,
   exceptions: RulesetExceptionCollection,
-): IRuleResult[] => {
+): Promise<IRuleResult[]> => {
   const results: IRuleResult[] = [];
 
   const isStdIn = isStdInSource(documentInventory);
@@ -63,7 +63,7 @@ export const runRules = (
     let ruleResults: IRuleResult[] = [];
 
     try {
-      ruleResults = runRule(documentInventory, rule, functions, exceptRuleByLocations[name]);
+      ruleResults = await runRule(documentInventory, rule, functions, exceptRuleByLocations[name]);
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }
@@ -74,29 +74,32 @@ export const runRules = (
   return results;
 };
 
-const runRule = (
+const runRule = async (
   resolved: DocumentInventory,
   rule: IRunRule,
   functions: FunctionCollection,
   exceptionLocations: IExceptionLocation[] | undefined,
-): IRuleResult[] => {
+): Promise<IRuleResult[]> => {
   const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
   const results: IRuleResult[] = [];
+  const promises: Array<Promise<void>> = [];
 
   for (const given of Array.isArray(rule.given) ? rule.given : [rule.given]) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
     if (given === '$') {
-      lint(
-        {
-          path: ['$'],
-          value: target,
-        },
-        resolved,
-        rule,
-        functions,
-        exceptionLocations,
-        results,
+      promises.push(
+        lint(
+          {
+            path: ['$'],
+            value: target,
+          },
+          resolved,
+          rule,
+          functions,
+          exceptionLocations,
+          results,
+        ),
       );
     } else {
       JSONPath({
@@ -104,33 +107,36 @@ const runRule = (
         json: target,
         resultType: 'all',
         callback: (result: any) => {
-          lint(
-            {
-              path: JSONPath.toPathArray(result.path),
-              value: result.value,
-            },
-            resolved,
-            rule,
-            functions,
-            exceptionLocations,
-            results,
+          promises.push(
+            lint(
+              {
+                path: JSONPath.toPathArray(result.path),
+                value: result.value,
+              },
+              resolved,
+              rule,
+              functions,
+              exceptionLocations,
+              results,
+            ),
           );
         },
       });
     }
   }
 
+  await Promise.all(promises);
   return results;
 };
 
-function lint(
+async function lint(
   node: IGivenNode,
   resolved: DocumentInventory,
   rule: IRunRule,
   functions: FunctionCollection,
   exceptionLocations: IExceptionLocation[] | undefined,
   results: IRuleResult[],
-): void {
+): Promise<void> {
   try {
     for (const then of Array.isArray(rule.then) ? rule.then : [rule.then]) {
       const func = functions[then.function];
@@ -139,7 +145,7 @@ function lint(
         continue;
       }
 
-      const validationResults = lintNode(node, rule, then, func, resolved, exceptionLocations);
+      const validationResults = await lintNode(node, rule, then, func, resolved, exceptionLocations);
 
       if (validationResults.length > 0) {
         results.push(...validationResults);

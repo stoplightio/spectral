@@ -99,7 +99,7 @@ export class Spectral {
     return {
       resolved: inventory.resolved,
       results: prepareResults(
-        [...validationResults, ...runRules(inventory, this.rules, this.functions, this.exceptions)],
+        [...validationResults, ...(await runRules(inventory, this.rules, this.functions, this.exceptions))],
         this._computeFingerprint,
       ),
     };

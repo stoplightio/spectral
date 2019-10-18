@@ -39,14 +39,14 @@ const isAKnownException = (violation: IRuleResult, locations: IExceptionLocation
 };
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
-export const lintNode = (
+export const lintNode = async (
   node: IGivenNode,
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
   inventory: DocumentInventory,
   exceptionLocations: IExceptionLocation[] | undefined,
-): IRuleResult[] => {
+): Promise<IRuleResult[]> => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const targets = getLintTargets(node.value, then.field);
   const results: IRuleResult[] = [];
@@ -55,7 +55,7 @@ export const lintNode = (
     const targetPath = givenPath.concat(target.path);
 
     const targetResults =
-      apply(
+      (await apply(
         target.value,
         then.functionOptions || {},
         {
@@ -67,7 +67,7 @@ export const lintNode = (
           given: node.value,
           documentInventory: inventory,
         },
-      ) || [];
+      )) || [];
 
     results.push(
       ...targetResults.map<IRuleResult>(result => {
