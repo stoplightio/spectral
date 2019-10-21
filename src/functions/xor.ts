@@ -10,7 +10,7 @@ export const xor: IFunction<IXorRuleOptions> = (targetVal, opts) => {
   const intersection = Object.keys(targetVal).filter(value => -1 !== properties.indexOf(value));
   if (intersection.length !== 1) {
     results.push({
-      message: `${properties[0]} and ${properties[1]} cannot both be defined`,
+      message: `${properties[0]} and ${properties[1]} cannot be both defined or both undefined`,
     });
   }
 
