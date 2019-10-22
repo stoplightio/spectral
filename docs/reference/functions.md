@@ -18,6 +18,7 @@ keyedBy | key to sort an object by | no
 openapi-tags-alphabetical:
   description: OpenAPI object should have alphabetical `tags`.
   type: style
+  recommended: true
   given: "$"
   then:
     field: tags
