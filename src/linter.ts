@@ -84,6 +84,7 @@ export const lintNode = (
         {
           original: node.value,
           given: node.value,
+          resolved,
         },
       ) || [];
 

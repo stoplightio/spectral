@@ -10,7 +10,7 @@ function runPattern(targetVal: any, options?: any) {
     {
       given: null,
       original: null,
-    },
+    } as any,
   );
 }
 

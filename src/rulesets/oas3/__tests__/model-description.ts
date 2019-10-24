@@ -2,12 +2,12 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
-describe('model-description', () => {
+describe('components-schema-description', () => {
   const s = new Spectral();
   s.setRules({
-    'model-description': Object.assign(ruleset.rules['model-description'], {
+    'components-schema-description': Object.assign(ruleset.rules['components-schema-description'], {
       recommended: true,
-      type: RuleType[ruleset.rules['model-description'].type],
+      type: RuleType[ruleset.rules['components-schema-description'].type],
     }),
   });
 
@@ -38,7 +38,7 @@ describe('model-description', () => {
     });
     expect(results).toEqual([
       {
-        code: 'model-description',
+        code: 'components-schema-description',
         message: 'Model `description` must be present and non-empty string.',
         path: ['components', 'schemas', 'user'],
         range: {

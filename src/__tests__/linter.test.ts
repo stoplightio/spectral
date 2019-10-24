@@ -148,7 +148,7 @@ describe('linter', () => {
     const { rules: oas3Rules } = await readRuleset('spectral:oas3');
     spectral.setRules(mergeRules(oas3Rules, {
       'valid-example-in-schemas': 'off',
-      'model-description': -1,
+      'components-schema-description': -1,
     }) as RuleCollection);
 
     const result = await spectral.run(invalidSchema);
@@ -164,6 +164,16 @@ describe('linter', () => {
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'Pets'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'foo'],
       }),
     ]);
   });
@@ -536,6 +546,9 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
+        code: 'operation-tag-defined',
+      }),
+      expect.objectContaining({
         code: 'valid-example-in-schemas',
         message: '"foo.example" property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
@@ -544,6 +557,16 @@ responses:: !!foo
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'Pets'],
+      }),
+      expect.objectContaining({
+        code: 'unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'foo'],
       }),
     ]);
   });
@@ -589,6 +612,12 @@ responses:: !!foo
 
   test('should support YAML merge keys', async () => {
     await spectral.loadRuleset('spectral:oas3');
+    spectral.setRules({
+      'operation-tag-defined': {
+        ...spectral.rules['operation-tag-defined'],
+        severity: 'off',
+      },
+    });
 
     const result = await spectral.run(petstoreMergeKeys);
 

@@ -1,4 +1,5 @@
 import { JsonPath } from '@stoplight/types';
+import { Resolved } from '../resolved';
 
 export type IFunction<O = any> = (
   targetValue: any,
@@ -15,6 +16,7 @@ export interface IFunctionPaths {
 export interface IFunctionValues {
   original: any;
   given: any;
+  resolved: Resolved;
 }
 
 export interface IFunctionResult {

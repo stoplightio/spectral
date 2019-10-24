@@ -2,7 +2,7 @@
   "include": ["src"],
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "es2017",
     "module": "commonjs",
     "lib": ["es2015", "es2016", "es2017", "dom"],
     "strict": true,

@@ -129,7 +129,7 @@ module.exports = (obj) => {
 };
 ```
 
-You do not need to provide any shim for `Object.entries` or use [regenerator](https://facebook.github.io/regenerator/) for `for of` loop. As stated, you cannot use ES Modules, so the following code is considered sa invalid and won't work correctly.
+You do not need to provide any shim for `Object.entries` or use [regenerator](https://facebook.github.io/regenerator/) for the `for of` loop. As stated, you cannot use ES Modules, so the following code is considered as invalid and won't work correctly.
 
 ```js
 export default (obj) => {
@@ -153,4 +153,4 @@ module.exports = (obj) => {
 
 If you have any module system, you need to use some bundler, preferably Rollup.js as it generates efficient bundles.
 
-We are still evaluating the idea of supporting ESModule and perhaps we decide to bring support for ES Modules at some point, yet for now you cannot use them.
+We are still evaluating the idea of supporting ESModule and perhaps we will decide to bring support for ES Modules at some point, yet for now you cannot use them.

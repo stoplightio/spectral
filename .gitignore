@@ -7,7 +7,7 @@
 
 /binaries
 /rulesets
-/src/__tests__/__fixtures__/oas-functions.json
+/__karma__/__fixtures__/
 /test-harness/tmp/
 
 # testing
