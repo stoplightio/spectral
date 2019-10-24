@@ -558,6 +558,13 @@ describe('Linter service', () => {
           },
           source: expect.stringContaining('__tests__/__fixtures__/refs/info.json'),
         }),
+        expect.objectContaining({
+          code: 'openapi-tags',
+          message: 'OpenAPI object should have non-empty `tags` array.',
+          path: [],
+          range: expect.any(Object),
+          source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
+        }),
       ]);
     });
 
@@ -601,6 +608,13 @@ describe('Linter service', () => {
             },
           },
           source: expect.stringContaining('__tests__/__fixtures__/refs/contact.json'),
+        }),
+        expect.objectContaining({
+          code: 'openapi-tags',
+          message: 'OpenAPI object should have non-empty `tags` array.',
+          path: [],
+          range: expect.any(Object),
+          source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
         }),
         expect.objectContaining({
           code: 'operation-description',
