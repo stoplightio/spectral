@@ -109,20 +109,6 @@
                         "validation"
                     ],
                     "type": "string"
-                },
-                "when": {
-                    "properties": {
-                        "field": {
-                            "type": "string"
-                        },
-                        "pattern": {
-                            "type": "string"
-                        }
-                    },
-                    "required": [
-                        "field"
-                    ],
-                    "type": "object"
                 }
             },
             "required": [
