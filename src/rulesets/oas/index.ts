@@ -10,6 +10,7 @@ export const commonOasFunctions = (): FunctionCollection => {
     oasOpIdUnique: require('./functions/oasOpIdUnique').oasOpIdUnique,
     oasOpFormDataConsumeCheck: require('./functions/oasOpFormDataConsumeCheck').oasOpFormDataConsumeCheck,
     oasOpParams: require('./functions/oasOpParams').oasOpParams,
+    oasTagDefined: require('./functions/oasTagDefined').oasTagDefined,
     refSiblings: require('./functions/refSiblings').refSiblings,
   };
 };

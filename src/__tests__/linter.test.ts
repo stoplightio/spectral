@@ -548,6 +548,9 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
+        code: 'operation-tag-defined',
+      }),
+      expect.objectContaining({
         code: 'valid-example-in-schemas',
         message: '"foo.example" property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
@@ -611,6 +614,12 @@ responses:: !!foo
 
   test('should support YAML merge keys', async () => {
     await spectral.loadRuleset('spectral:oas3');
+    spectral.setRules({
+      'operation-tag-defined': {
+        ...spectral.rules['operation-tag-defined'],
+        severity: 'off',
+      },
+    });
 
     const result = await spectral.run(petstoreMergeKeys);
 
