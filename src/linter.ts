@@ -19,14 +19,7 @@ export const lintNode = (
   resolved: Resolved,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
-  const conditioning = whatShouldBeLinted(givenPath, node.value, rule);
-
-  // If the 'when' condition is not satisfied, simply don't run the linter
-  if (!conditioning.lint) {
-    return [];
-  }
-
-  const targetValue = conditioning.value;
+  const targetValue = node.value;
 
   const targets: any[] = [];
   if (then && then.field) {
@@ -138,83 +131,9 @@ export const lintNode = (
   return results;
 };
 
-// TODO(SO-23): unit test idividually
-export const whatShouldBeLinted = (
-  path: JsonPath,
-  originalValue: any,
-  rule: IRunRule,
-): { lint: boolean; value: any } => {
-  const leaf = path[path.length - 1];
-
-  const when = rule.when;
-  if (!when) {
-    return {
-      lint: true,
-      value: originalValue,
-    };
-  }
-
-  const pattern = when.pattern;
-  const field = when.field;
-
-  // TODO: what if someone's field is called '@key'? should we use @@key?
-  const isKey = field === '@key';
-
-  if (!pattern) {
-    // isKey doesn't make sense without pattern
-    if (isKey) {
-      return {
-        lint: false,
-        value: originalValue,
-      };
-    }
-
-    return {
-      lint: has(originalValue, field),
-      value: originalValue,
-    };
-  }
-
-  if (isKey && pattern) {
-    return keyAndOptionalPattern(leaf, pattern, originalValue);
-  }
-
-  const fieldValue = String(get(originalValue, when.field));
-
-  return {
-    lint: fieldValue.match(pattern) !== null,
-    value: originalValue,
-  };
-};
-
-function keyAndOptionalPattern(key: string | number, pattern: string, value: any) {
-  /** arrays, look at the keys on the array object. note, this number check on id prop is not foolproof... */
-  if (typeof key === 'number' && typeof value === 'object') {
-    for (const k of Object.keys(value)) {
-      if (String(k).match(pattern)) {
-        return {
-          lint: true,
-          value,
-        };
-      }
-    }
-  } else if (String(key).match(pattern)) {
-    // objects
-    return {
-      lint: true,
-      value,
-    };
-  }
-
-  return {
-    lint: false,
-    value,
-  };
-}
-
 // todo: revisit -> https://github.com/stoplightio/spectral/issues/608
 function getClosestJsonPath(data: unknown, path: JsonPath) {
-  if (data === null || typeof data !== 'object') return [];
+  if (!isObject(data)) return [];
 
   while (path.length > 0 && !has(data, path)) {
     path.pop();

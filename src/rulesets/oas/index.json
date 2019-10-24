@@ -8,6 +8,7 @@
     "oasOpParams",
     "oasOpSecurityDefined",
     "oasPathParam",
+    "oasTagDefined",
     "refSiblings"
   ],
   "rules": {
@@ -56,6 +57,18 @@
       "given": "$",
       "then": {
         "function": "oasOpParams"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-tag-defined": {
+      "description": "Operation tags should be defined in global tags.",
+      "recommended": true,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasTagDefined"
       },
       "tags": [
         "operation"

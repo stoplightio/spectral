@@ -30,15 +30,6 @@ export interface IRule<T = string, O = any> {
   // If undefined or true, resolved data will be supplied
   resolved?: boolean;
 
-  when?: {
-    // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
-    // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
-    field: string;
-
-    // a regex pattern
-    pattern?: string;
-  };
-
   then: IThen<T, O> | Array<IThen<T, O>>;
 }
 

@@ -334,6 +334,12 @@ Operation should have non-empty `tags` array.
 
 **Recommended:** Yes
 
+### operation-tag-defined
+
+Operation tags should be defined in global tags.
+
+**Recommended:** Yes
+
 ### path-declarations-must-exist
 
 Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
