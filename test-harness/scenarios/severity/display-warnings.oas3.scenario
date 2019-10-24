@@ -1,5 +1,5 @@
 ====test====
-Fail severity is set to error but only warnings exist, 
+Fail severity is set to error but only warnings exist,
 so status should be success and output should show warnings
 ====document====
 openapi: '3.0.0'
@@ -47,9 +47,10 @@ lint {document} --fail-severity=error
 OpenAPI 3.x detected
 
 {document}
- 1:1  warning  api-servers            OpenAPI `servers` must be present and non-empty array.
- 2:6  warning  info-contact           Info object should contain `contact` object.
- 2:6  warning  info-description       OpenAPI object info `description` must be present and non-empty string.
- 9:9  warning  operation-description  Operation `description` must be present and non-empty string.
+  1:1   warning  api-servers            OpenAPI `servers` must be present and non-empty array.
+  2:6   warning  info-contact           Info object should contain `contact` object.
+  2:6   warning  info-description       OpenAPI object info `description` must be present and non-empty string.
+  9:9   warning  operation-description  Operation `description` must be present and non-empty string.
+ 13:11  warning  operation-tag-defined  Operation tags should be defined in global tags.
 
-✖ 4 problems (0 errors, 4 warnings, 0 infos, 0 hints)
+✖ 5 problems (0 errors, 5 warnings, 0 infos, 0 hints)
