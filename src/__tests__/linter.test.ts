@@ -149,6 +149,7 @@ describe('linter', () => {
     spectral.setRules(mergeRules(oas3Rules, {
       'valid-example-in-schemas': 'off',
       'components-schema-description': -1,
+      'openapi-tags': 'off',
     }) as RuleCollection);
 
     const result = await spectral.run(invalidSchema);
@@ -547,6 +548,9 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'operation-tag-defined',
+      }),
+      expect.objectContaining({
+        code: 'openapi-tags',
       }),
       expect.objectContaining({
         code: 'valid-example-in-schemas',

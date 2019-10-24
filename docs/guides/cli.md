@@ -29,7 +29,7 @@ Other options include:
   --ruleset, -r                path/URL to a ruleset file                                    [string]
   --skip-rule, -s              ignore certain rules if they are causing trouble              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
-                                [string] [choices: "error", "warn", "info", "hint"] [default: "hint"]
+                                [string] [choices: "error", "warn", "info", "hint"] [default: "warn"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
                                                                            [boolean] [default: false]
   --verbose, -v                increase verbosity                                           [boolean]
@@ -44,11 +44,11 @@ Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend
 
 ## Error Results
 
-Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, and the presence of any results will cause a failure status code of 1.
+Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, but since v5.0, only the presence of warnings or errors will cause a failure status code of 1.
 
-The default behavior is can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=warn` would return a status code of 1 for any warning results or higher, so that would also include error. Using `--fail-severity=error` will only show errors.
+The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` would return a failure status code of 1 for any info results or higher. Using `--fail-severity=error` will only cause a failure status code for errors.
 
-Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the fail severity.
+Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the specified fail severity.
 
 ## Proxying
 
