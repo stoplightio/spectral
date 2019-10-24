@@ -12,6 +12,8 @@ host: localhost
 schemes: 
   - http
 paths: {}
+tags:
+  - name: my-tag
 ====command====
 lint {document}
 ====stdout====
