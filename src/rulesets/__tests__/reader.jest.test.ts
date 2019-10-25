@@ -3,11 +3,13 @@ import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
+import { Spectral } from '../../spectral';
 import { IRule, Rule } from '../../types';
 import { readRuleset } from '../reader';
 const nanoid = require('nanoid');
 
 jest.mock('nanoid');
+jest.mock('fs');
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
 const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
@@ -44,6 +46,7 @@ describe('Rulesets reader', () => {
 
   afterEach(() => {
     nock.cleanAll();
+    nock.enableNetConnect();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
@@ -593,5 +596,42 @@ describe('Rulesets reader', () => {
 
   it('given invalid ruleset should output errors', () => {
     return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/should have required property/);
+  });
+
+  it('is able to load the whole ruleset from static file', async () => {
+    nock.disableNetConnect();
+
+    const readFileSpy = jest.spyOn(fs, 'readFile');
+
+    Spectral.registerStaticAssets(require('../../../rulesets/assets/assets.json'));
+
+    const { rules, functions } = await readRuleset('spectral:oas');
+
+    expect(rules).toMatchObject({
+      'openapi-tags': expect.objectContaining({
+        description: 'OpenAPI object should have non-empty `tags` array.',
+        formats: ['oas2', 'oas3'],
+      }),
+      'oas2-schema': expect.objectContaining({
+        description: 'Validate structure of OpenAPI v2 specification.',
+        formats: ['oas2'],
+      }),
+      'oas3-schema': expect.objectContaining({
+        description: 'Validate structure of OpenAPI v3 specification.',
+        formats: ['oas3'],
+      }),
+    });
+
+    expect(functions).toMatchObject({
+      oasOp2xxResponse: expect.any(Object),
+      oasOpFormDataConsumeCheck: expect.any(Object),
+      oasOpIdUnique: expect.any(Object),
+      oasOpParams: expect.any(Object),
+      oasOpSecurityDefined: expect.any(Object),
+      oasPathParam: expect.any(Object),
+    });
+
+    expect(readFileSpy).not.toBeCalled();
+    readFileSpy.mockRestore();
   });
 });
