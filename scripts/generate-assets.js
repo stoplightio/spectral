@@ -1,4 +1,14 @@
 #!/usr/bin/env node
+/**
+ * This script generates a list of assets that are needed to load spectral:oas ruleset.
+ * It contains all OAS custom functions and *resolved* rulesets.
+ * The assets are stores in a single filed call assets.json in the following format:
+ * `<require-call-path>: <content>`
+ * where the `require-call-path` is the path you'd normally pass to require(), i.e. `@stoplight/spectral/rulesets/oas/index.js` and `content` is the text data.
+ * Assets can be loaded using Spectral#registerStaticAssets statc method, i.e. `Spectral.registerStaticAssets(require('@stoplight/spectral/rulesets/assets/assets.json'))`;
+ * If you execute the code above, ruleset will be loaded fully offline, without a need to make any request.
+ */
+
 const path = require('@stoplight/path');
 const fs = require('fs');
 const { promisify } = require('util');
