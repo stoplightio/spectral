@@ -106,7 +106,7 @@
     "karma-jasmine": "^2.0.1",
     "karma-typescript": "^4.1.1",
     "lint-staged": "^9.0.2",
-    "nock": "~11.4.0",
+    "nock": "~11.6.0",
     "pkg": "^4.4.0",
     "recast": "^0.18.1",
     "rollup": "^1.19.4",
