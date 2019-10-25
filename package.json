@@ -89,7 +89,7 @@
     "@types/lodash": "^4.14.136",
     "@types/nanoid": "^2.0.0",
     "@types/nock": "^11.1.0",
-    "@types/node": "~12.7",
+    "@types/node": "~12.11",
     "@types/node-fetch": "^2.5.0",
     "@types/text-table": "^0.2.0",
     "@types/xml2js": "^0.4.4",
