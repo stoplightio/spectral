@@ -101,6 +101,31 @@ notMatch | if provided, value must _not_ match this regex | no
         notMatch: ".+\/$"
 ```
 
+## casing
+
+Regular expressions! 
+
+<!-- title: functionOptions -->
+
+name | description | required?
+---------|----------|---------
+type | the casing type to match against | yes
+
+<!-- title: example -->
+
+```yaml
+camel-case-name:
+  description: Name should camelCased.
+  type: style
+  given: "$.name"
+  then:
+    function: casing
+    functionOptions:
+      type: camel
+```
+
+Available types are: flat, camel, pascal, kebab, cobol, snake, macro.
+
 ## schema
 
 Use JSON Schema (draft 7) to treat the contents of the $given JSON Path as a JSON instance.

@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleFunction, RuleType } from './enums';
 
-export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | SchemaRule;
+export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | CasingRule | SchemaRule;
 
 export interface IRule<T = string, O = any> {
   type?: RuleType;
@@ -78,6 +78,11 @@ export interface IRulePatternOptions {
   notMatch?: string;
 }
 export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
+
+export interface ICasingOptions {
+  type: 'flat' | 'camel' | 'pascal' | 'kebab' | 'cobol' | 'snake' | 'macro';
+}
+export type CasingRule = IRule<RuleFunction.CASING, ICasingOptions>;
 
 export interface ISchemaOptions {
   schema: object;

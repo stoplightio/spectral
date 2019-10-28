@@ -1,5 +1,6 @@
 export const functions = {
   alphabetical: require('./alphabetical').alphabetical,
+  casing: require('./casing').casing,
   enumeration: require('./enumeration').enumeration,
   length: require('./length').length,
   pattern: require('./pattern').pattern,
