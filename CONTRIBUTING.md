@@ -24,7 +24,7 @@ Yarn is a package manager for your code, similar to npm. While you can use npm t
 6. Run Spectral from your local installation: `node dist/cli/index.js lint [openapi_spec_file]`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
 8. Make changes, add tests, and then run the tests: `yarn test.prod` and `yarn test.harness`
-9. Update the documentation if appropriate.  For example, if you added a new rule to an OpenAPI ruleset,
+9. Update the documentation if appropriate. For example, if you added a new rule to an OpenAPI ruleset,
 add a description of the rule in `docs/reference/openapi-rules.md`.
 
 Now, you are ready to commit & push your changes, and make a pull request to the Spectral repo! 😃
