@@ -18,6 +18,7 @@ rules:
       function: truthy
 ```
 
+Spectral has a built-in set of functions which you can reference in your rules. This example uses the `truthy` to create a rule that checks that the value is true.
 The example above adds a single rule that checks that tags objects have a description property defined.
 
 Running `spectral lint` on the following object with the ruleset above will result in an error being reported, since the tag does not have a description:
