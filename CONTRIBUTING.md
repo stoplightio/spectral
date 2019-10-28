@@ -23,7 +23,9 @@ Yarn is a package manager for your code, similar to npm. While you can use npm t
 5. Build Spectral: `yarn build`
 6. Run Spectral from your local installation: `node dist/cli/index.js lint [openapi_spec_file]`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
-8. Make changes, add tests, and then run the tests: `yarn test.prod`
+8. Make changes, add tests, and then run the tests: `yarn test.prod` and `yarn test.harness`
+9. Update the documentation if appropriate.  For example, if you added a new rule to an OpenAPI ruleset,
+add a description of the rule in `docs/reference/openapi-rules.md`.
 
 Now, you are ready to commit & push your changes, and make a pull request to the Spectral repo! 😃
 
@@ -33,7 +35,7 @@ If this is your first Pull Request on GitHub, here's some [help](https://egghead
 
 ## To run tests
 
-We run tests in the two envirnoments that Spectral supports - the browser, and node.js. Browser tests are run in a headless Chrome browser via the Karma test runner, while node.js tests are run via the Jest test runner.
+We run tests in the two environments that Spectral supports - the browser, and node.js. Browser tests are run in a headless Chrome browser via the Karma test runner, while node.js tests are run via the Jest test runner.
 
 Tests should usually be written for both environments, but there are valid cases when you need to write separate tests for each test runner. To do so, just create a file with `*.karma.test.ts` suffix or `*.jest.test.ts`. A good example of Jest only tests are the tests covering Spectral's CLI functionality - something that obviously is not relevant to the browser context.
 
@@ -59,6 +61,12 @@ Running a specific test:
 
 ```bash
 yarn test src/cli/commands/__tests__/lint.test.ts
+```
+
+Running the harness tests (these must pass or the PR merge will be blocked):
+
+```bash
+yarn test.harness
 ```
 
 ## Creating an issue
