@@ -123,6 +123,6 @@ export default (s: Spectral, oasVersion: number) => {
           },
         },
       }),
-    ).not.rejects;
+    ).resolves.toBeInstanceOf(Array);
   });
 };

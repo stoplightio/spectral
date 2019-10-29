@@ -1,8 +1,17 @@
-(global as any).jest = require('jest-mock');
-(global as any).expect = require('expect');
-(global as any).test = it;
+import { Expect } from 'expect/build/types';
+import * as JestMock from 'jest-mock';
 
-const message = "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
+declare var global: NodeJS.Global & {
+  jest: typeof JestMock;
+  expect: Expect;
+  test: jest.It;
+};
+
+global.jest = require('jest-mock');
+global.expect = require('expect');
+global.test = it;
+
+const message = () => "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
 
 expect.extend({
   toMatchSnapshot: () => ({ pass: false, message }),
