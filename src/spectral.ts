@@ -13,7 +13,6 @@ import {
   parseWithPointers as parseYAMLWithPointers,
   YamlParserResult,
 } from '@stoplight/yaml';
-import deprecated from 'deprecated-decorator';
 import { merge, set } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
@@ -132,33 +131,15 @@ export class Spectral {
     return (await this.runWithResolved(target, opts)).results;
   }
 
-  @deprecated('loadRuleset', '4.1')
-  public addFunctions(functions: FunctionCollection) {
-    this._addFunctions(functions);
-  }
-
-  public _addFunctions(functions: FunctionCollection) {
-    Object.assign(this.functions, functions);
-  }
-
   public setFunctions(functions: FunctionCollection) {
     empty(this.functions);
 
-    this._addFunctions({ ...defaultFunctions, ...functions });
-  }
-
-  @deprecated('loadRuleset', '4.1')
-  public addRules(rules: RuleCollection) {
-    this._addRules(rules);
+    Object.assign(this.functions, { ...defaultFunctions, ...functions });
   }
 
   public setRules(rules: RuleCollection) {
     empty(this.rules);
 
-    this._addRules({ ...rules });
-  }
-
-  private _addRules(rules: RuleCollection) {
     for (const name in rules) {
       if (!rules.hasOwnProperty(name)) continue;
       const rule = rules[name];
