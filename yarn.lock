@@ -369,9 +369,9 @@
     urijs "~1.19.1"
 
 "@stoplight/json@^3.1.1", "@stoplight/json@^3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.1.2.tgz#ae89d1974f0b6f8bc5778f792aeed4664c95ec62"
-  integrity sha512-7zt0zCN94m90X1sL7FrD7jXhPtkIup07MyG/00sELVrCvzb2wgNaiE+x2N7WSbk3Z0wS08e8B6kow81GQY+Isw==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.2.0.tgz#752f4b7d4aac05a11da6444a6dffc040095291ae"
+  integrity sha512-LYWv+VxEyIwxrztAUEm78bZaQGItKDUXLeF7ksMoew2gMMIv/YLrw/J/UlsH0DFWhHiAwTL2N9vkry+n37j1fw==
   dependencies:
     "@stoplight/types" "^11.0.0"
     jsonc-parser "~2.1.1"
