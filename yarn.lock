@@ -369,9 +369,9 @@
     urijs "~1.19.1"
 
 "@stoplight/json@^3.1.1", "@stoplight/json@^3.1.2":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.1.2.tgz#ae89d1974f0b6f8bc5778f792aeed4664c95ec62"
-  integrity sha512-7zt0zCN94m90X1sL7FrD7jXhPtkIup07MyG/00sELVrCvzb2wgNaiE+x2N7WSbk3Z0wS08e8B6kow81GQY+Isw==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.2.0.tgz#752f4b7d4aac05a11da6444a6dffc040095291ae"
+  integrity sha512-LYWv+VxEyIwxrztAUEm78bZaQGItKDUXLeF7ksMoew2gMMIv/YLrw/J/UlsH0DFWhHiAwTL2N9vkry+n37j1fw==
   dependencies:
     "@stoplight/types" "^11.0.0"
     jsonc-parser "~2.1.1"
@@ -508,9 +508,9 @@
     "@types/jest" "*"
 
 "@types/jest@*", "@types/jest@^24.0.16":
-  version "24.0.20"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.20.tgz#729d5fe8684e7fb06368d3bd557ac6d91289d861"
-  integrity sha512-M8ebEkOpykGdLoRrmew7UowTZ1DANeeP0HiSIChl/4DGgmnSC1ntitNtkyNSXjMTsZvXuaxJrxjImEnRWNPsPw==
+  version "24.0.21"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.21.tgz#2c0a25440e025bb265f4a17d8b79b11b231426bf"
+  integrity sha512-uyqFvx78Tuy0h5iLCPWRCvi5HhWwEqhIj30doitp191oYLqlCxUyAJHdWVm5+Nr271/vPnkyt6rWeEIjGowBTg==
   dependencies:
     "@types/jest-diff" "*"
 
@@ -555,10 +555,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@~12.11":
-  version "12.11.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.7.tgz#57682a9771a3f7b09c2497f28129a0462966524a"
-  integrity sha512-JNbGaHFCLwgHn/iCckiGSOZ1XYHsKFwREtzPwSGCVld1SGhOlmZw2D4ZI94HQCrBHbADzW9m4LER/8olJTRGHA==
+"@types/node@*", "@types/node@~12.12":
+  version "12.12.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.1.tgz#47d295109420cfd3381bdd7e4292976659bb9de8"
+  integrity sha512-m6VgTAkmFCu/uSgAvm4zta1nxMU9U02BFZY36FILD4R/fdRXM7v0EHY3BAg+MCgDmDTIUDj2986G+rMPi49+SQ==
 
 "@types/node@^8.0.7":
   version "8.10.54"
