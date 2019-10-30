@@ -20,6 +20,7 @@ rules:
 
 Spectral has a built-in set of functions such as `truthy` or `pattern`, which you can reference in your rules.
 The example above adds a single rule that checks that tags objects have a description property defined.
+Each rule is recommended by default unless the value of recommended is explicitly to to false. 
 
 Running `spectral lint` on the following object with the ruleset above will result in an error being reported, since the tag does not have a description:
 
