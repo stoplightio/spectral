@@ -21,6 +21,7 @@ export interface IRule<T = string, O = any> {
   tags?: string[];
 
   // some rules are more important than others, recommended rules will be enabled by default
+  // true by default
   recommended?: boolean;
 
   // Filter the target down to a subset[] with a JSON path

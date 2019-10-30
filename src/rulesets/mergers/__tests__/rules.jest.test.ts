@@ -203,6 +203,9 @@ describe('Ruleset rules merging', () => {
   it('picks up recommended rules', () => {
     const rules = {};
 
+    const test3 = JSON.parse(JSON.stringify(baseRule));
+    delete test3.recommended;
+
     mergeRules(
       rules,
       {
@@ -211,12 +214,14 @@ describe('Ruleset rules merging', () => {
           ...JSON.parse(JSON.stringify(baseRule)),
           recommended: false,
         },
+        test3,
       },
       'recommended',
     );
 
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Warning);
     expect(rules).toHaveProperty('test2.severity', -1);
+    expect(rules).toHaveProperty('test3.severity', DiagnosticSeverity.Warning);
   });
 
   it('sets warning as default severity level if a rule has no severity specified', () => {
