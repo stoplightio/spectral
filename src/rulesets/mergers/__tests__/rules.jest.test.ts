@@ -224,6 +224,41 @@ describe('Ruleset rules merging', () => {
     expect(rules).toHaveProperty('test3.severity', DiagnosticSeverity.Warning);
   });
 
+  it('rules with no severity and no recommended set are treated as warnings', () => {
+    const rules = {};
+
+    const rule = JSON.parse(JSON.stringify(baseRule));
+    delete rule.recommended;
+    delete rule.severity;
+
+    mergeRules(
+      rules,
+      {
+        rule,
+      },
+      'recommended',
+    );
+
+    expect(rules).toHaveProperty('rule.severity', DiagnosticSeverity.Warning);
+  });
+
+  it('rules with recommended set to false are disabled', () => {
+    const rules = {};
+
+    mergeRules(
+      rules,
+      {
+        rule: {
+          ...JSON.parse(JSON.stringify(baseRule)),
+          recommended: false,
+        },
+      },
+      'recommended',
+    );
+
+    expect(rules).toHaveProperty('rule.severity', -1);
+  });
+
   it('sets warning as default severity level if a rule has no severity specified', () => {
     const rules = {};
 
