@@ -53,7 +53,7 @@ export function getSeverityLevel(
     existingRule.severity !== undefined ? getDiagnosticSeverity(existingRule.severity) : DEFAULT_SEVERITY_LEVEL;
 
   if (newRule === 'recommended') {
-    return existingRule.recommended ? existingSeverity : -1;
+    return existingRule.recommended !== false ? existingSeverity : -1;
   }
 
   if (newRule === 'all') {
