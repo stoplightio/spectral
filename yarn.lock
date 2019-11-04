@@ -369,12 +369,12 @@
     urijs "~1.19.1"
 
 "@stoplight/json@^3.1.1", "@stoplight/json@^3.1.2":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.2.0.tgz#752f4b7d4aac05a11da6444a6dffc040095291ae"
-  integrity sha512-LYWv+VxEyIwxrztAUEm78bZaQGItKDUXLeF7ksMoew2gMMIv/YLrw/J/UlsH0DFWhHiAwTL2N9vkry+n37j1fw==
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.2.1.tgz#cbc8080f4a55744beb89668d058e48ba52da141b"
+  integrity sha512-RnXApQlP6GEUHIK8JRianStXTc4dHARpNP8VVGL/BbctTTlA3BO+Z1eILu35JdqvMG5sw6Og3TkQyQ85w6sSoA==
   dependencies:
-    "@stoplight/types" "^11.0.0"
-    jsonc-parser "~2.1.1"
+    "@stoplight/types" "^11.1.1"
+    jsonc-parser "~2.2.0"
     lodash "^4.17.15"
     safe-stable-stringify "^1.1"
 
@@ -4395,10 +4395,10 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
-jsonc-parser@~2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.1.1.tgz#83dc3d7a6e7186346b889b1280eefa04446c6d3e"
-  integrity sha512-VC0CjnWJylKB1iov4u76/W/5Ef0ydDkjtYWxoZ9t3HdWlSnZQwZL5MgFikaB/EtQ4RmMEw3tmQzuYnZA2/Ja1g==
+jsonc-parser@~2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-2.2.0.tgz#f206f87f9d49d644b7502052c04e82dd6392e9ef"
+  integrity sha512-4fLQxW1j/5fWj6p78vAlAafoCKtuBm6ghv+Ij5W2DrDx0qE+ZdEl2c6Ko1mgJNF5ftX1iEWQQ4Ap7+3GlhjkOA==
 
 jsonfile@^4.0.0:
   version "4.0.0"
