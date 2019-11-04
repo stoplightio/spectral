@@ -71,7 +71,7 @@ describe('Spectral', () => {
         'info-matches-stoplight': {
           ...ruleset.rules['info-matches-stoplight'],
           name: 'info-matches-stoplight',
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
         },
       });
     });

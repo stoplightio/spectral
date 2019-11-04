@@ -56,7 +56,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -78,7 +78,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -91,7 +91,7 @@ describe('Rulesets reader', () => {
           'require-info': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
         },
@@ -115,7 +115,7 @@ describe('Rulesets reader', () => {
       'foo-rule': {
         given: '$.info',
         message: 'should be OK',
-        severity: -1,
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: expect.stringMatching(/^random-id-\d$/),
         },
@@ -155,7 +155,7 @@ describe('Rulesets reader', () => {
         'valid-rule': {
           given: '$.info',
           message: 'should be OK',
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
           then: expect.any(Object),
         },
       }),
@@ -172,7 +172,7 @@ describe('Rulesets reader', () => {
                 ...rule,
                 formats: expect.arrayContaining([expect.any(String)]),
                 ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-                ...(!(rule as IRule).recommended && { severity: -1 }),
+                ...((rule as IRule).recommended === false && { severity: -1 }),
                 then: expect.any(Object),
               };
 
@@ -184,7 +184,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
         }),
@@ -212,8 +212,8 @@ describe('Rulesets reader', () => {
             const formattedRule: Rule = {
               ...(rule as Rule),
               formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-              ...(!(rule as IRule).recommended && { severity: -1 }),
+              ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+              ...((rule as IRule).recommended === false && { severity: -1 }),
               then: expect.any(Object),
             };
 
@@ -406,7 +406,7 @@ describe('Rulesets reader', () => {
           PascalCase: {
             given: '$',
             message: 'bar',
-            severity: -1, // turned off, cause it's not recommended
+            severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
             },
@@ -423,7 +423,7 @@ describe('Rulesets reader', () => {
           snake_case: {
             given: '$',
             message: 'foo',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
             },
@@ -452,7 +452,7 @@ describe('Rulesets reader', () => {
       'foo-rule': expect.objectContaining({
         message: 'should be OK',
         given: '$.info',
-        severity: -1,
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: 'random-id-0',
         },
@@ -539,7 +539,7 @@ describe('Rulesets reader', () => {
         'bar-rule': {
           given: '$.bar',
           message: 'Bar is truthy',
-          severity: -1, // rule was not recommended, hence the severity is set to false
+          severity: DiagnosticSeverity.Warning,
           then: {
             function: 'truthy',
           },
@@ -547,7 +547,7 @@ describe('Rulesets reader', () => {
         'foo-rule': {
           given: '$.foo',
           message: 'Foo is falsy',
-          severity: -1, // rule was not recommended, hence the severity is set to false
+          severity: DiagnosticSeverity.Warning,
           then: {
             function: 'falsy',
           },
