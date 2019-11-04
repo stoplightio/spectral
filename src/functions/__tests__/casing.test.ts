@@ -21,17 +21,17 @@ describe('casing', () => {
 
   describe('casing type', () => {
     describe('flat', () => {
-      test.each(['foo_test', 'Foo', '123', 'foo1', 'foo-bar'])('should recognize invalid target %s', target => {
+      test.each(['foo_test', 'Foo', '123', '1d', 'foo-bar'])('should recognize invalid target %s', target => {
         expect(runCasing(target, 'flat')).toEqual([{ message: 'must be flat case' }]);
       });
 
-      test.each(['foo', 'foobar'])('should recognize valid target %s', target => {
+      test.each(['foo', 'foobar', 'foo9bar', 'foo24baz', 'foo1'])('should recognize valid target %s', target => {
         expect(runCasing(target, 'flat')).toBeUndefined();
       });
     });
 
     describe('camel', () => {
-      test.each(['foo_test', 'Foo', '123', 'fooBarBaz1', 'foo1', 'foo-bar'])(
+      test.each(['foo_test', 'Foo', '1fooBarBaz', '123', 'foo1', 'foo-bar'])(
         'should recognize invalid target %s',
         target => {
           expect(runCasing(target, 'camel')).toEqual([{ message: 'must be camel case' }]);
@@ -44,14 +44,14 @@ describe('casing', () => {
     });
 
     describe('pascal', () => {
-      test.each(['foo_test', 'Foo1', '123', 'fooBarBaz1', 'fooBar', 'foo1', 'foo-bar'])(
+      test.each(['foo_test', '123', '1fooBarBaz', 'fooBarBaz1', 'fooBar', 'foo1', 'foo-bar'])(
         'should recognize invalid target %s',
         target => {
           expect(runCasing(target, 'pascal')).toEqual([{ message: 'must be pascal case' }]);
         },
       );
 
-      test.each(['Foo', 'FooBar', 'FooBarBaz'])('should recognize valid target %s', target => {
+      test.each(['Foo', 'FooBar', 'FooBarBaz', 'Foo1', 'FooBarBaz1'])('should recognize valid target %s', target => {
         expect(runCasing(target, 'pascal')).toBeUndefined();
       });
     });
@@ -64,9 +64,8 @@ describe('casing', () => {
         'fooBarBaz1',
         'fooBar',
         'foO',
-        'foo1',
         'foo-baR',
-        'foo-bar1',
+        '1foo-bar',
         'foo--bar',
         'foo-',
         '-foo',
@@ -74,46 +73,64 @@ describe('casing', () => {
         expect(runCasing(target, 'kebab')).toEqual([{ message: 'must be kebab case' }]);
       });
 
-      test.each(['foo', 'foo-bar', 'foo-bar-baz'])('should recognize valid target %s', target => {
-        expect(runCasing(target, 'kebab')).toBeUndefined();
-      });
+      test.each(['foo', 'foo-bar', 'foo-bar-baz', 'foo-bar1', 'foo1-2bar'])(
+        'should recognize valid target %s',
+        target => {
+          expect(runCasing(target, 'kebab')).toBeUndefined();
+        },
+      );
     });
 
     describe('cobol', () => {
-      test.each(['foo_test', 'Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAr', 'FOO--BAR', 'FOO-BAR1', 'FOO-', '-FOO'])(
+      test.each(['foo_test', 'Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAr', 'FOO--BAR', 'FOO-', '-FOO'])(
         'should recognize invalid target %s',
         target => {
           expect(runCasing(target, 'cobol')).toEqual([{ message: 'must be cobol case' }]);
         },
       );
 
-      test.each(['FOO', 'FOO-BAR', 'FOO-BAR-BAZ'])('should recognize valid target %s', target => {
-        expect(runCasing(target, 'cobol')).toBeUndefined();
-      });
+      test.each(['FOO', 'FOO-BAR', 'FOO-BAR-BAZ', 'FOO-BAR1', 'FOO2-3BAR1'])(
+        'should recognize valid target %s',
+        target => {
+          expect(runCasing(target, 'cobol')).toBeUndefined();
+        },
+      );
     });
 
     describe('snake', () => {
-      test.each(['Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAR', 'foo__bar', 'foo_bar1', 'foo_', '_foo'])(
+      test.each(['Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAR', 'foo__bar', '1foo_bar1', 'foo_', '_foo'])(
         'should recognize invalid target %s',
         target => {
           expect(runCasing(target, 'snake')).toEqual([{ message: 'must be snake case' }]);
         },
       );
 
-      test.each(['foo', 'foo_bar', 'foo_bar_baz'])('should recognize valid target %s', target => {
-        expect(runCasing(target, 'snake')).toBeUndefined();
-      });
+      test.each(['foo', 'foo_bar', 'foo_bar_baz', 'foo_bar1', 'foo2_4bar1'])(
+        'should recognize valid target %s',
+        target => {
+          expect(runCasing(target, 'snake')).toBeUndefined();
+        },
+      );
     });
 
     describe('macro', () => {
-      test.each(['foo_test', 'Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAR', 'FO__BAR', 'FOO_BAR1', 'FOO_', '_FOO'])(
-        'should recognize invalid target %s',
-        target => {
-          expect(runCasing(target, 'macro')).toEqual([{ message: 'must be macro case' }]);
-        },
-      );
+      test.each([
+        'foo_test',
+        'Foo1',
+        '123',
+        'fooBarBaz1',
+        'FOo',
+        'FOO-BAR',
+        'FO__BAR',
+        '1FOO_BAR1',
+        'FOO___BAR1',
+        'FOO_',
+        '_FOO',
+      ])('should recognize invalid target %s', target => {
+        expect(runCasing(target, 'macro')).toEqual([{ message: 'must be macro case' }]);
+      });
 
-      test.each(['FOO', 'FOO_BAR', 'FOO_BAR_BAZ'])('should recognize valid target %s', target => {
+      test.each(['FOO', 'FOO_BAR', 'FOO_BAR_BAZ', 'FOO_BAR1'])('should recognize valid target %s', target => {
         expect(runCasing(target, 'macro')).toBeUndefined();
       });
     });
