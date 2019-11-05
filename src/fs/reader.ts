@@ -1,6 +1,7 @@
 import { isURL } from '@stoplight/path';
 import AbortController from 'abort-controller';
 import * as fs from 'fs';
+import { STATIC_ASSETS } from '../assets';
 import request from '../request';
 
 export interface IReadOptions {
@@ -9,6 +10,10 @@ export interface IReadOptions {
 }
 
 export async function readFile(name: string, opts: IReadOptions): Promise<string> {
+  if (name in STATIC_ASSETS) {
+    return STATIC_ASSETS[name];
+  }
+
   if (isURL(name)) {
     let response;
     let timeout: NodeJS.Timeout | number | null = null;

@@ -1,0 +1,13 @@
+{
+  "definitions": {
+    "ExtHooked": {
+      "$ref": "./unusedDefinition.indirect.1.json#/definitions/Hooked"
+    },
+    "ExtUnhookedOne": {
+      "$ref": "./unusedDefinition.indirect.1.json#/definitions/Hooked"
+    },
+    "ExtUnhookedTwo": {
+      "type": "number"
+    }
+  }
+}

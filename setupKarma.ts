@@ -1,3 +1,4 @@
+import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import { FetchMockSandbox } from 'fetch-mock';
 
 const oasRuleset = JSON.parse(JSON.stringify(require('./rulesets/oas/index.json')));
@@ -53,6 +54,11 @@ beforeEach(() => {
       });
     }
   }
+
+  fetchMock.get('http://json-schema.org/draft-04/schema', {
+    status: 200,
+    body: JSON.parse(JSON.stringify(jsonSpecv4)),
+  });
 });
 
 afterEach(() => {

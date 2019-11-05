@@ -245,7 +245,7 @@ describe('Function Validation', () => {
   it('throws if options supplied to fn does not meet schema', () => {
     const schema: JSONSchema7 = { type: 'string' };
     const wrapped = decorateIFunctionWithSchemaValidation(jest.fn(), schema);
-    expect(() => wrapped({}, 2, { given: [] }, { original: [], given: [] })).toThrow(ValidationError);
+    expect(() => wrapped({}, 2, { given: [] }, { original: [], given: [] } as any)).toThrow(ValidationError);
   });
 
   it('does not call supplied fn if options do not meet schema', () => {
@@ -253,20 +253,20 @@ describe('Function Validation', () => {
     const fn = jest.fn();
     const wrapped = decorateIFunctionWithSchemaValidation(fn, schema);
     try {
-      wrapped({}, 2, { given: [] }, { original: [], given: [] });
+      wrapped({}, 2, { given: [] }, { original: [], given: [] } as any);
     } catch {
       // will throw
     }
 
     expect(fn).not.toHaveBeenCalled();
-    expect(() => wrapped({}, {}, { given: [] }, { original: [], given: [] })).toThrow(ValidationError);
+    expect(() => wrapped({}, {}, { given: [] }, { original: [], given: [] } as any)).toThrow(ValidationError);
   });
 
   it('calls supplied fn and passes all other arguments if options do match schema', () => {
     const schema: JSONSchema7 = { type: 'string' };
     const fn = jest.fn();
     const wrapped = decorateIFunctionWithSchemaValidation(fn, schema);
-    wrapped({}, '2', { given: [] }, { original: [], given: [] });
+    wrapped({}, '2', { given: [] }, { original: [], given: [] } as any);
 
     expect(fn).toHaveBeenCalledWith({}, '2', { given: [] }, { original: [], given: [] });
   });

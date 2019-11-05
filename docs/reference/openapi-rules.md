@@ -334,6 +334,12 @@ Operation should have non-empty `tags` array.
 
 **Recommended:** Yes
 
+### operation-tag-defined
+
+Operation tags should be defined in global tags.
+
+**Recommended:** Yes
+
 ### path-declarations-must-exist
 
 Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
@@ -418,6 +424,16 @@ Definition `description` must be present and non-empty string.
 ### operation-security-defined
 
 Operation `security` values must match a scheme defined in the `securityDefinitions` object.
+
+**Recommended:** Yes
+
+### unused-definition
+
+Potential unused reusable `definition` entry has been detected.
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
 
 **Recommended:** Yes
 
@@ -531,6 +547,16 @@ servers:
   - url: https://example.com/
   - url: https://example.com/api/
 ```
+
+### unused-components-schema
+
+Potential unused reusable `schema` entry has been detected.
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
 
 ### valid-example
 

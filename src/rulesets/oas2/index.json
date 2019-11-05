@@ -179,6 +179,19 @@
       "tags": [
         "schema"
       ]
+    },
+    "unused-definition": {
+      "description": "Potentially unused definition has been detected.",
+      "recommended": true,
+      "type": "style",
+      "resolved": false,
+      "given": "$.definitions",
+      "then": {
+        "function": "unreferencedReusableObject",
+        "functionOptions": {
+          "reusableObjectsLocation": "#/definitions"
+        }
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 import { alphabetical } from '../alphabetical';
 
 function runAlphabetical(target: any, keyedBy?: string) {
-  return alphabetical(target, { keyedBy }, { given: ['$'] }, { given: null, original: null });
+  return alphabetical(target, { keyedBy }, { given: ['$'] }, { given: null, original: null } as any);
 }
 
 describe('alphabetical', () => {
