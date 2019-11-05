@@ -120,7 +120,7 @@
     "tsconfig-paths": "^3.8.0",
     "tslint": "~5.20",
     "tslint-config-stoplight": "~1.3",
-    "typescript": "^3.5.3",
+    "typescript": "^3.7.2",
     "xml2js": "^0.4.21"
   },
   "lint-staged": {
