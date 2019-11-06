@@ -6486,9 +6486,9 @@ rollup-plugin-terser@^5.1.1:
     terser "^4.1.0"
 
 rollup-plugin-typescript2@^0.25.1:
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.25.1.tgz#f2058a3d7103c1cbc350aff2da607df6cc04113e"
-  integrity sha512-9Wocpsm8X53/57YmCkJqTJKh3m4qLdm7eHmCFkGuyARxVtkEa2pgOEHNAiJ8oKyNjN+GYYGEi9wm+u1nbuqO1g==
+  version "0.25.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.25.2.tgz#1a165df08560902da45b355413464caca1765d3a"
+  integrity sha512-+tpZj/ZIf2lwjyjX6xEW1S5Y38/21TB3p6poLodISIia8owMMfIKuFFnWcESE4FPBHkR8XPKqjY0PH9IUJJK+Q==
   dependencies:
     find-cache-dir "^3.0.0"
     fs-extra "8.1.0"
