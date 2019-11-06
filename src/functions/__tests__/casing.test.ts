@@ -1,8 +1,13 @@
 import { ICasingOptions } from '../../types';
 import { casing } from '../casing';
 
-function runCasing(target: unknown, type: ICasingOptions['type']) {
-  return casing(target, { type }, { given: ['$'] }, { given: null, original: null, resolved: {} as any });
+function runCasing(target: unknown, type: ICasingOptions['type'], disallowDigits?: boolean) {
+  return casing(
+    target,
+    { type, disallowDigits },
+    { given: ['$'] },
+    { given: null, original: null, resolved: {} as any },
+  );
 }
 
 describe('casing', () => {
@@ -21,43 +26,79 @@ describe('casing', () => {
 
   describe('casing type', () => {
     describe('flat', () => {
-      test.each(['foo_test', 'Foo', '123', '1d', 'foo-bar'])('should recognize invalid target %s', target => {
+      const invalid = ['foo_test', 'Foo', '123', '1d', 'foo-bar'];
+      const valid = ['foo', 'foobar'];
+      const validWithDigits = ['foo9bar', 'foo24baz', 'foo1'];
+
+      test.each(invalid)('should recognize invalid target %s', target => {
         expect(runCasing(target, 'flat')).toEqual([{ message: 'must be flat case' }]);
       });
 
-      test.each(['foo', 'foobar', 'foo9bar', 'foo24baz', 'foo1'])('should recognize valid target %s', target => {
+      test.each([...valid, ...validWithDigits])('should recognize valid target %s', target => {
         expect(runCasing(target, 'flat')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'flat', true)).toEqual([{ message: 'must be flat case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'flat', true)).toBeUndefined();
+        });
       });
     });
 
     describe('camel', () => {
-      test.each(['foo_test', 'Foo', '1fooBarBaz', '123', 'foo1', 'foo-bar'])(
-        'should recognize invalid target %s',
-        target => {
-          expect(runCasing(target, 'camel')).toEqual([{ message: 'must be camel case' }]);
-        },
-      );
+      const invalid = ['foo_test', 'Foo', '1fooBarBaz', '123', 'foo-bar'];
+      const valid = ['foo', 'fooBar', 'fooBarBaz'];
+      const validWithDigits = ['foo1', 'foo24Bar', 'fooBar0Baz323'];
 
-      test.each(['foo', 'fooBar', 'fooBarBaz'])('should recognize valid target %s', target => {
+      test.each(invalid)('should recognize invalid target %s', target => {
+        expect(runCasing(target, 'camel')).toEqual([{ message: 'must be camel case' }]);
+      });
+
+      test.each([valid, ...validWithDigits])('should recognize valid target %s', target => {
         expect(runCasing(target, 'camel')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'camel', true)).toEqual([{ message: 'must be camel case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'camel', true)).toBeUndefined();
+        });
       });
     });
 
     describe('pascal', () => {
-      test.each(['foo_test', '123', '1fooBarBaz', 'fooBarBaz1', 'fooBar', 'foo1', 'foo-bar'])(
-        'should recognize invalid target %s',
-        target => {
-          expect(runCasing(target, 'pascal')).toEqual([{ message: 'must be pascal case' }]);
-        },
-      );
+      const invalid = ['foo_test', '123', '1fooBarBaz', 'fooBarBaz1', 'fooBar', 'foo1', 'foo-bar'];
+      const valid = ['Foo', 'FooBar', 'FooBarBaz'];
+      const validWithDigits = ['Foo1', 'FooBarBaz1'];
 
-      test.each(['Foo', 'FooBar', 'FooBarBaz', 'Foo1', 'FooBarBaz1'])('should recognize valid target %s', target => {
+      test.each(invalid)('should recognize invalid target %s', target => {
+        expect(runCasing(target, 'pascal')).toEqual([{ message: 'must be pascal case' }]);
+      });
+
+      test.each([valid, ...validWithDigits])('should recognize valid target %s', target => {
         expect(runCasing(target, 'pascal')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'pascal', true)).toEqual([{ message: 'must be pascal case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'pascal', true)).toBeUndefined();
+        });
       });
     });
 
     describe('kebab', () => {
-      test.each([
+      const invalid = [
         'foo_test',
         'Foo1',
         '123',
@@ -69,52 +110,80 @@ describe('casing', () => {
         'foo--bar',
         'foo-',
         '-foo',
-      ])('should recognize invalid target %s', target => {
+      ];
+
+      const valid = ['foo', 'foo-bar', 'foo-bar-baz'];
+      const validWithDigits = ['foo-bar1', 'foo1-2bar'];
+
+      test.each(invalid)('should recognize invalid target %s', target => {
         expect(runCasing(target, 'kebab')).toEqual([{ message: 'must be kebab case' }]);
       });
 
-      test.each(['foo', 'foo-bar', 'foo-bar-baz', 'foo-bar1', 'foo1-2bar'])(
-        'should recognize valid target %s',
-        target => {
-          expect(runCasing(target, 'kebab')).toBeUndefined();
-        },
-      );
+      test.each([...valid, ...validWithDigits])('should recognize valid target %s', target => {
+        expect(runCasing(target, 'kebab')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'kebab', true)).toEqual([{ message: 'must be kebab case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'kebab', true)).toBeUndefined();
+        });
+      });
     });
 
     describe('cobol', () => {
-      test.each(['foo_test', 'Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAr', 'FOO--BAR', 'FOO-', '-FOO'])(
-        'should recognize invalid target %s',
-        target => {
-          expect(runCasing(target, 'cobol')).toEqual([{ message: 'must be cobol case' }]);
-        },
-      );
+      const invalid = ['foo_test', 'Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAr', 'FOO--BAR', 'FOO-', '-FOO'];
+      const valid = ['FOO', 'FOO-BAR', 'FOO-BAR-BAZ'];
+      const validWithDigits = ['FOO-BAR1', 'FOO2-3BAR1'];
 
-      test.each(['FOO', 'FOO-BAR', 'FOO-BAR-BAZ', 'FOO-BAR1', 'FOO2-3BAR1'])(
-        'should recognize valid target %s',
-        target => {
-          expect(runCasing(target, 'cobol')).toBeUndefined();
-        },
-      );
+      test.each(invalid)('should recognize invalid target %s', target => {
+        expect(runCasing(target, 'cobol')).toEqual([{ message: 'must be cobol case' }]);
+      });
+
+      test.each([...valid, ...validWithDigits])('should recognize valid target %s', target => {
+        expect(runCasing(target, 'cobol')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'cobol', true)).toEqual([{ message: 'must be cobol case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'cobol', true)).toBeUndefined();
+        });
+      });
     });
 
     describe('snake', () => {
-      test.each(['Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAR', 'foo__bar', '1foo_bar1', 'foo_', '_foo'])(
-        'should recognize invalid target %s',
-        target => {
-          expect(runCasing(target, 'snake')).toEqual([{ message: 'must be snake case' }]);
-        },
-      );
+      const invalid = ['Foo1', '123', 'fooBarBaz1', 'FOo', 'FOO-BAR', 'foo__bar', '1foo_bar1', 'foo_', '_foo'];
+      const valid = ['foo', 'foo_bar', 'foo_bar_baz'];
+      const validWithDigits = ['foo_bar1', 'foo2_4bar1'];
 
-      test.each(['foo', 'foo_bar', 'foo_bar_baz', 'foo_bar1', 'foo2_4bar1'])(
-        'should recognize valid target %s',
-        target => {
-          expect(runCasing(target, 'snake')).toBeUndefined();
-        },
-      );
+      test.each(invalid)('should recognize invalid target %s', target => {
+        expect(runCasing(target, 'snake')).toEqual([{ message: 'must be snake case' }]);
+      });
+
+      test.each([...valid, ...validWithDigits])('should recognize valid target %s', target => {
+        expect(runCasing(target, 'snake')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'snake', true)).toEqual([{ message: 'must be snake case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'snake', true)).toBeUndefined();
+        });
+      });
     });
 
     describe('macro', () => {
-      test.each([
+      const invalid = [
         'foo_test',
         'Foo1',
         '123',
@@ -126,12 +195,26 @@ describe('casing', () => {
         'FOO___BAR1',
         'FOO_',
         '_FOO',
-      ])('should recognize invalid target %s', target => {
+      ];
+      const valid = ['FOO', 'FOO_BAR', 'FOO_BAR_BAZ'];
+      const validWithDigits = ['FOO_BAR1', 'FOO2_4BAR1', 'FOO2_4_2'];
+
+      test.each(invalid)('should recognize invalid target %s', target => {
         expect(runCasing(target, 'macro')).toEqual([{ message: 'must be macro case' }]);
       });
 
-      test.each(['FOO', 'FOO_BAR', 'FOO_BAR_BAZ', 'FOO_BAR1'])('should recognize valid target %s', target => {
+      test.each([...valid, ...validWithDigits])('should recognize valid target %s', target => {
         expect(runCasing(target, 'macro')).toBeUndefined();
+      });
+
+      describe('when digits are disallowed', () => {
+        test.each([...invalid, ...validWithDigits])('should recognize invalid target %s', target => {
+          expect(runCasing(target, 'macro', true)).toEqual([{ message: 'must be macro case' }]);
+        });
+
+        test.each(valid)('should recognize valid target %s', target => {
+          expect(runCasing(target, 'macro', true)).toBeUndefined();
+        });
       });
     });
   });

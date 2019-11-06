@@ -110,6 +110,7 @@ Regular expressions!
 name | description | required?
 ---------|----------|---------
 type | the casing type to match against | yes
+disallowDigits | if not truthy, digits are allowed | no
 
 <!-- title: example -->
 

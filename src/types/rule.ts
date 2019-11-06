@@ -82,6 +82,7 @@ export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
 
 export interface ICasingOptions {
   type: 'flat' | 'camel' | 'pascal' | 'kebab' | 'cobol' | 'snake' | 'macro';
+  disallowDigits?: boolean;
 }
 export type CasingRule = IRule<RuleFunction.CASING, ICasingOptions>;
 
