@@ -697,14 +697,13 @@ aggregate-error@^3.0.0:
     indent-string "^3.2.0"
 
 ajv-oai@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ajv-oai/-/ajv-oai-1.1.1.tgz#5f3c19ebc6b1628465bc75436c1ade9031b3cab3"
-  integrity sha1-XzwZ68axYoRlvHVDbBrekDGzyrM=
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/ajv-oai/-/ajv-oai-1.1.2.tgz#9a1543a1fb484fe2c5f2c137799da3e70c97a32d"
+  integrity sha512-kh2AP40Ts4hjtZ1687XkiVcehkgRx+qFwDA46/svpw+MZSlWUoaHXEiGO/k/3CHMbSGzdOMBonTfS/Eayg7xHg==
   dependencies:
-    ajv "^6.1.1"
     decimal.js "^9.0.1"
 
-ajv@^6.1.1, ajv@^6.5.5, ajv@^6.7:
+ajv@^6.5.5, ajv@^6.7:
   version "6.10.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.10.2.tgz#d3cea04d6b017b2894ad69040fec8b623eb4bd52"
   integrity sha512-TXtUUEYHuaTEbLZWIKUr5pmBuhDLy+8KYtPYdcV8qC+pOZL+NKqYwvWSRrVXHn+ZmRRAu8vJTAznH7Oag6RVRw==
