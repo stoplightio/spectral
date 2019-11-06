@@ -391,9 +391,9 @@
     node-fetch "^2.6.0"
 
 "@stoplight/types@^11.0.0", "@stoplight/types@^11.1.1":
-  version "11.1.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.1.tgz#a92d1833adb580a72439f42ba73de8f560fd68b4"
-  integrity sha512-IU8U9y/uO548z15DX/Jl053u9VQG8gCwNtypuD4RtskUA7pvHZl4+zzGK3klgIcO6Ql3Jk4/fcrFaN9vjmdEWg==
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.2.0.tgz#1f9c9c6dcf481f21e68a01cfa6e81b1ea41d4faa"
+  integrity sha512-c4zMAaf+NusHxcfruYDnzBwX3VJ8h1E6KYW/11QqmtsmE+ua3tKYL3PNbrzWh7nz/Vmv0U8zoYMw42F1XxylaA==
   dependencies:
     "@types/json-schema" "^7.0.3"
 
@@ -2583,9 +2583,9 @@ fb-watchman@^2.0.0:
     bser "^2.0.0"
 
 fetch-mock@^7.3.9:
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-7.7.0.tgz#28c4cef45739b29419e9324637c84965abab979a"
-  integrity sha512-1EqaOdqexYqOx7tp77dltysWaNQybSzIqingcafmQK8w3aK13koNzuvqbEAiKhazo5N46mAkdRpQ6cWZQJUibw==
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-7.7.2.tgz#ea72e5aff753493fd4ccf67cbdae6aa1ff52d5ff"
+  integrity sha512-ZlRehtVmXaVhkIrH5fQz12czbowGmWCiGnEbsliHFs5aelzbiBLC2dtuQnvbRJB8krEiY2cgVfspMHu7V4WhnQ==
   dependencies:
     babel-polyfill "^6.26.0"
     core-js "^2.6.9"
@@ -6504,9 +6504,9 @@ rollup-pluginutils@2.8.1, rollup-pluginutils@^2.8.1:
     estree-walker "^0.6.1"
 
 rollup@^1.19.4:
-  version "1.26.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.26.2.tgz#33d1ad23ee94aff1057448bae267be51dab4bdc1"
-  integrity sha512-TLM8hlYP85TFFptYlXmr2VnhCLA8GaYXG4LBdWsHu9oBH/Wm5MMPAE9wsAnohfV21Dqq0ZvRHdmsKXomshaDSg==
+  version "1.26.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.26.3.tgz#3e71b8120a4ccc745a856e926cab0efbe0eead90"
+  integrity sha512-8MhY/M8gnv3Q/pQQSWYWzbeJ5J1C5anCNY5BK1kV8Yzw9RFS0FF4lbLt+uyPO3wLKWXSXrhAL5pWL85TZAh+Sw==
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"
