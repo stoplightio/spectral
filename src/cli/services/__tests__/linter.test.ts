@@ -364,6 +364,43 @@ describe('Linter service', () => {
         ]),
       );
     });
+
+    it('unixifies patterns', () => {
+      return expect(run(`lint src\\__tests__\\__fixtures__\\petstore.invalid-schema.*.json`)).resolves.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-example-in-schemas',
+            path: ['components', 'schemas', 'foo', 'example'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'unused-components-schema',
+            path: ['components', 'schemas', 'Pets'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas3-schema',
+            path: ['paths', '/pets', 'get', 'responses', '200'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+        ]),
+      );
+    });
   });
 
   describe('--ruleset', () => {
