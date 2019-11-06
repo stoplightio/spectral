@@ -5,7 +5,7 @@ export async function listFiles(pattens: string[]): Promise<string[]> {
   const { files, urls } = pattens.reduce<{ files: string[]; urls: string[] }>(
     (group, pattern) => {
       if (!/^https?:\/\//.test(pattern)) {
-        group.files.push(pattern);
+        group.files.push(pattern.replace(/\\/g, '/'));
       } else {
         group.urls.push(pattern);
       }
