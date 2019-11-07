@@ -1,7 +1,8 @@
+import * as path from '@stoplight/path';
 import * as fg from 'fast-glob';
 import { listFiles } from '../listFiles';
 
-jest.mock('fast-glob');
+jest.mock('fast-glob', () => jest.fn(async () => []));
 
 describe('listFiles CLI util', () => {
   it('unixify paths', () => {
@@ -10,5 +11,13 @@ describe('listFiles CLI util', () => {
       dot: true,
       absolute: true,
     });
+  });
+
+  it('returns file paths', async () => {
+    const list = [path.join(__dirname, 'foo/a.json'), path.join(__dirname, 'foo/b.json')];
+
+    ((fg as unknown) as jest.Mock).mockResolvedValueOnce([...list]);
+
+    expect(await listFiles(['./foo/*.json'])).toEqual(list);
   });
 });
