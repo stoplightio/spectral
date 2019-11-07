@@ -3,13 +3,17 @@ import { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { isParsedResult, Spectral } from '../spectral';
-import { IParsedResult, IResolver, RuleFunction } from '../types';
+import { IParsedResult, IResolver, IRunRule, RuleFunction } from '../types';
 
 const merge = require('lodash/merge');
 
 const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
 const oas2Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas2/index.json')));
 const oas3Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas3/index.json')));
+
+const oasRulesetRules: Dictionary<IRunRule, string> = oasRuleset.rules;
+const oas2RulesetRules: Dictionary<IRunRule, string> = oas2Ruleset.rules;
+const oas3RulesetRules: Dictionary<IRunRule, string> = oas3Ruleset.rules;
 
 describe('spectral', () => {
   describe('loadRuleset', () => {
@@ -19,20 +23,19 @@ describe('spectral', () => {
 
       expect(s.rules).toEqual(
         expect.objectContaining(
-          [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-            (oasRules, [name, rule]) => {
-              oasRules[name] = {
-                name,
-                ...rule,
-                formats: expect.arrayContaining([expect.any(String)]),
-                severity: expect.any(Number),
-                then: expect.any(Object),
-              };
+          [...Object.entries(oasRulesetRules), ...Object.entries(oas2RulesetRules)].reduce<
+            Dictionary<IRunRule, string>
+          >((oasRules, [name, rule]) => {
+            oasRules[name] = {
+              name,
+              ...rule,
+              formats: expect.arrayContaining([expect.any(String)]),
+              severity: expect.any(Number),
+              then: expect.any(Object),
+            };
 
-              return oasRules;
-            },
-            {},
-          ),
+            return oasRules;
+          }, {}),
         ),
       );
     });
@@ -43,10 +46,10 @@ describe('spectral', () => {
 
       expect(s.rules).toEqual(
         [
-          ...Object.entries(oasRuleset.rules),
-          ...Object.entries(oas2Ruleset.rules),
-          ...Object.entries(oas3Ruleset.rules),
-        ].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
+          ...Object.entries(oasRulesetRules),
+          ...Object.entries(oas2RulesetRules),
+          ...Object.entries(oas3RulesetRules),
+        ].reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
           oasRules[name] = {
             name,
             ...rule,

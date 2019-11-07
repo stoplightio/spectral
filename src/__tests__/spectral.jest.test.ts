@@ -5,9 +5,10 @@ import * as nock from 'nock';
 import * as path from 'path';
 import { isOpenApiv2 } from '../formats';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { Spectral } from '../spectral';
+import { IRunRule, Spectral } from '../spectral';
 
 const oasRuleset = require('../rulesets/oas/index.json');
+const oasRulesetRules: Dictionary<IRunRule, string> = oasRuleset.rules;
 const customOASRuleset = require('./__fixtures__/custom-oas-ruleset.json');
 
 describe('Spectral', () => {
@@ -22,7 +23,7 @@ describe('Spectral', () => {
 
       expect(s.rules).toEqual(
         expect.objectContaining({
-          ...[...Object.entries(oasRuleset.rules)].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
+          ...[...Object.entries(oasRulesetRules)].reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
             oasRules[name] = {
               name,
               ...rule,
