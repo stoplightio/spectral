@@ -112,6 +112,8 @@ name | description | required?
 type | the casing type to match against | yes
 disallowDigits | if not truthy, digits are allowed | no
 
+Available types are: flat, camel, pascal, kebab, cobol, snake, macro.
+
 <!-- title: example -->
 
 ```yaml
@@ -125,11 +127,9 @@ camel-case-name:
       type: camel
 ```
 
-Available types are: flat, camel, pascal, kebab, cobol, snake, macro.
-
 ## schema
 
-Use JSON Schema (draft 7) to treat the contents of the $given JSON Path as a JSON instance.
+Use JSON Schema (draft 4, 6 or 7) to treat the contents of the $given JSON Path as a JSON instance.
 
 <!-- title: functionOptions -->
 
