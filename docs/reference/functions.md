@@ -103,7 +103,7 @@ notMatch | if provided, value must _not_ match this regex | no
 
 ## casing
 
-Regular expressions! 
+Text must match a certain case, like `camelCase` or `snake_case`. 
 
 <!-- title: functionOptions -->
 
