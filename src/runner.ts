@@ -14,7 +14,7 @@ export const runRules = (
   rules: RunRuleCollection,
   functions: FunctionCollection,
 ): IRuleResult[] => {
-  let results: IRuleResult[] = [];
+  const results: IRuleResult[] = [];
 
   for (const name in rules) {
     if (!rules.hasOwnProperty(name)) continue;
@@ -34,7 +34,7 @@ export const runRules = (
     }
 
     try {
-      results = results.concat(runRule(resolved, rule, functions));
+      results.push(...runRule(resolved, rule, functions));
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }

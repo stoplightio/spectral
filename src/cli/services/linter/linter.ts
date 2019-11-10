@@ -17,7 +17,7 @@ import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { FormatLookup, IParsedResult } from '../../../types';
 import { ILintConfig } from '../../../types/config';
-import { getRuleset, listFiles, skipRules } from './utils';
+import { deduplicateResults, getRuleset, listFiles, skipRules } from './utils';
 
 const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['oas2', isOpenApiv2, 'OpenAPI 2.0 (Swagger) detected'],
@@ -91,5 +91,5 @@ export async function lint(documents: string[], flags: ILintConfig) {
     );
   }
 
-  return results;
+  return deduplicateResults(results);
 }
