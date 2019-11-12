@@ -101,9 +101,45 @@ notMatch | if provided, value must _not_ match this regex | no
         notMatch: ".+\/$"
 ```
 
+## casing
+
+Text must match a certain case, like `camelCase` or `snake_case`. 
+
+<!-- title: functionOptions -->
+
+name | description | required?
+---------|----------|---------
+type | the casing type to match against | yes
+disallowDigits | if not truthy, digits are allowed | no
+
+Available types are: 
+
+| name   | sample         |
+|--------|----------------|
+| flat   | verylongname   |
+| camel  | veryLongName   |
+| pascal | VeryLongName   |
+| kebab  | very-long-name |
+| cobol  | VERY-LONG-NAME |
+| snake  | very_long_name |
+| macro  | VERY_LONG_NAME |
+
+<!-- title: example -->
+
+```yaml
+camel-case-name:
+  description: Name should camelCased.
+  type: style
+  given: "$.name"
+  then:
+    function: casing
+    functionOptions:
+      type: camel
+```
+
 ## schema
 
-Use JSON Schema (draft 7) to treat the contents of the $given JSON Path as a JSON instance.
+Use JSON Schema (draft 4, 6 or 7) to treat the contents of the $given JSON Path as a JSON instance.
 
 <!-- title: functionOptions -->
 
