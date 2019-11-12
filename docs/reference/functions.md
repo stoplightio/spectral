@@ -112,7 +112,17 @@ name | description | required?
 type | the casing type to match against | yes
 disallowDigits | if not truthy, digits are allowed | no
 
-Available types are: flat, camel, pascal, kebab, cobol, snake, macro.
+Available types are: 
+
+| name   | sample         |
+|--------|----------------|
+| flat   | verylongname   |
+| camel  | veryLongName   |
+| pascal | VeryLongName   |
+| kebab  | very-long-name |
+| cobol  | VERY-LONG-NAME |
+| snake  | very_long_name |
+| macro  | VERY_LONG_NAME |
 
 <!-- title: example -->
 
