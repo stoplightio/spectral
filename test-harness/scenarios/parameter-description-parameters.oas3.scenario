@@ -22,7 +22,7 @@ components:
       schema:
         type: integer
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml
+{spectral} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml
 ====stdout====
 OpenAPI 3.x detected
 

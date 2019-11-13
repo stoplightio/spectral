@@ -7,7 +7,7 @@ info:
   title: Stoplight
 paths: {}
 ====command====
-lint {document}
+{spectral} lint {document}
 ====stdout====
 OpenAPI 3.x detected
 

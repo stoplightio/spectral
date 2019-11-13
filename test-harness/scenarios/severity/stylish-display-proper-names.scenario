@@ -84,7 +84,7 @@ The name of severity levels are display correctly by stylish formatter
 }
 
 ====command====
-lint --ruleset ./test-harness/scenarios/rulesets/oas-mixed-severity.json {document}
+{spectral} lint --ruleset ./rulesets/oas-mixed-severity.json {document}
 ====stdout====
 OpenAPI 3.x detected
 

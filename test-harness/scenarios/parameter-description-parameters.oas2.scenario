@@ -35,7 +35,7 @@ parameters:
     type: string
     description: status
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas2.yaml
+{spectral} lint {document} --ruleset ./rulesets/parameter-description.oas2.yaml
 ====stdout====
 OpenAPI 2.0 (Swagger) detected
 

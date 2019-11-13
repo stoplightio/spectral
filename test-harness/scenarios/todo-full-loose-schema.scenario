@@ -56,7 +56,7 @@ Loose JSON Schema can be validated
   ]
 }
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/loose-schema-ruleset.json
+{spectral} lint {document} --ruleset ./rulesets/loose-schema-ruleset.json
 ====stdout====
 JSON Schema (loose) detected
 
