@@ -30,7 +30,7 @@ const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09 detected'],
 ];
 
-export async function lint(documents: string[], flags: ILintConfig) {
+export async function lint(documents: Array<number | string>, flags: ILintConfig) {
   const spectral = new Spectral({ resolver: httpAndFileResolver });
 
   const ruleset = await getRuleset(flags.ruleset);
@@ -77,7 +77,7 @@ export async function lint(documents: string[], flags: ILintConfig) {
     });
 
     const parsedResult: IParsedResult = {
-      source: targetUri,
+      source: typeof targetUri === 'number' ? '<STDIN>' : targetUri,
       parsed: spec,
       getLocationForJsonPath,
     };
@@ -85,7 +85,7 @@ export async function lint(documents: string[], flags: ILintConfig) {
     results.push(
       ...(await spectral.run(parsedResult, {
         resolve: {
-          documentUri: targetUri,
+          documentUri: typeof targetUri === 'number' ? void 0 : targetUri,
         },
       })),
     );

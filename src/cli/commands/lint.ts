@@ -1,7 +1,8 @@
 import { Dictionary } from '@stoplight/types';
+import { pick } from 'lodash';
+import { ReadStream } from 'tty';
 import { CommandModule, showHelp } from 'yargs';
 
-import { pick } from 'lodash';
 import { getDiagnosticSeverity } from '../../rulesets/severity';
 import { IRuleResult } from '../../types';
 import { FailSeverity, ILintConfig, OutputFormat } from '../../types/config';
@@ -14,19 +15,35 @@ const formatOptions = Object.values(OutputFormat);
 
 const lintCommand: CommandModule = {
   describe: 'lint JSON/YAML documents from files or URLs',
-  command: 'lint <documents..>',
+  command: 'lint [documents..]',
   builder: yargs =>
     yargs
+      .strict()
       .positional('documents', {
         description:
           'Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.',
         type: 'string',
+        coerce(values) {
+          if (values.length > 0) {
+            return values;
+          }
+
+          if (process.stdin.isTTY) {
+            return [];
+          }
+
+          return [(process.stdin as ReadStream & { fd: 0 }).fd];
+        },
       })
       .fail(() => {
         showHelp();
       })
       .check((argv: Dictionary<unknown>) => {
         if (argv.format !== void 0 && !(formatOptions as string[]).includes(String(argv.format))) {
+          return false;
+        }
+
+        if (!Array.isArray(argv.documents) || argv.documents.length === 0) {
           return false;
         }
 
@@ -99,7 +116,7 @@ const lintCommand: CommandModule = {
       encoding,
       ...config
     } = (args as unknown) as ILintConfig & {
-      documents: string[];
+      documents: Array<number | string>;
       failSeverity: FailSeverity;
       displayOnlyFailures: boolean;
     };
