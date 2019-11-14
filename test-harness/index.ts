@@ -24,10 +24,8 @@ describe('cli acceptance tests', () => {
     const tmpFileHandles = new Map<string, tmp.FileResult>();
 
     beforeAll(async () => {
-      const assets = Array.isArray(scenario.document) ? scenario.document : [];
-
       await Promise.all(
-        assets.map(async ([asset, contents]) => {
+        scenario.assets.map(async ([asset, contents]) => {
           const tmpFileHandle = await tmpFile();
           tmpFileHandles.set(asset, tmpFileHandle);
 
@@ -54,10 +52,8 @@ describe('cli acceptance tests', () => {
       const command = applyReplacements(scenario.command, replacements);
       const { stderr, stdout, status } = await spawnNode(command, scenario.env);
 
-      const expectedStdout =
-        scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout.trim(), replacements);
-      const expectedStderr =
-        scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr.trim(), replacements);
+      const expectedStdout = scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout, replacements);
+      const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);
 
       if (expectedStderr !== void 0) {
         expect(stderr).toEqual(expectedStderr);
