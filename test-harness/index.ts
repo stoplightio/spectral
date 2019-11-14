@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import * as tmp from 'tmp';
 import { promisify } from 'util';
 import { applyReplacements, parseScenarioFile, tmpFile } from './helpers';
-import { spawnNode, spawnTTY } from './spawn';
+import { spawnNode } from './spawn';
 const writeFileAsync = promisify(fs.writeFile);
 
 const spectralBin = path.join(__dirname, '../binaries/spectral');
@@ -52,9 +52,7 @@ describe('cli acceptance tests', () => {
 
     test(scenario.test, async () => {
       const command = applyReplacements(scenario.command, replacements);
-      const { stderr, stdout, status } = await (scenario.tty
-        ? spawnTTY(command, scenario.env)
-        : spawnNode(command, scenario.env));
+      const { stderr, stdout, status } = await spawnNode(command, scenario.env);
 
       const expectedStdout =
         scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout.trim(), replacements);

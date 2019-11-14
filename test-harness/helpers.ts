@@ -8,18 +8,16 @@ export interface IScenarioFile {
   document: Optional<string[][]>;
   command: string;
   status: Optional<string>;
-  tty: boolean;
   stdout: Optional<string>;
   stderr: Optional<string>;
   env: typeof process.env;
 }
 
 export function parseScenarioFile(data: string): IScenarioFile {
-  const regex = /====(test|document|command|status|stdout|stderr|env|tty)====\r?\n/gi;
+  const regex = /====(test|document|command|status|stdout|stderr|env)====\r?\n/gi;
   const split = data.split(regex);
 
   const testIndex = split.findIndex(t => t === 'test');
-  const tty = split.findIndex(t => t === 'tty');
   const documentIndex = split.findIndex(t => t === 'document');
   // const assetsIndex = split.findIndex(t => t === 'assets');
   const commandIndex = split.findIndex(t => t === 'command');
@@ -34,7 +32,6 @@ export function parseScenarioFile(data: string): IScenarioFile {
     document: documentIndex === -1 ? void 0 : [['document', split[1 + documentIndex]]],
     command: split[1 + commandIndex],
     status: statusIndex === -1 ? void 0 : String(split[1 + statusIndex]).trim(),
-    tty: tty !== -1,
     stdout: stdoutIndex === -1 ? void 0 : split[1 + stdoutIndex],
     stderr: stderrIndex === -1 ? void 0 : split[1 + stderrIndex],
     env: envIndex === -1 ? process.env : getEnv(split[1 + envIndex]),
