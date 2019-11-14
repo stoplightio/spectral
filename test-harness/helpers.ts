@@ -11,9 +11,15 @@ export interface IScenarioFile {
   env: typeof process.env;
 }
 
-function getItem(input: string[], key: string): Optional<string> {
+function getItem(input: string[], key: string, required: boolean): string;
+function getItem(input: string[], key: string): Optional<string>;
+function getItem(input: string[], key: string, required?: boolean): Optional<string> | string {
   const index = input.findIndex(t => t === key);
   if (index === -1 || index === input.length - 1) {
+    if (required) {
+      throw new TypeError(`Expected "${key}" to be provided`);
+    }
+
     return;
   }
 
@@ -24,9 +30,9 @@ export function parseScenarioFile(data: string): IScenarioFile {
   const regex = /====(test|document|command|status|stdout|stderr|env|asset:[a-z0-9.\-]+)====\r?\n/gi;
   const split = data.split(regex);
 
-  const test = assertString(getItem(split, 'test'), 'test');
+  const test = getItem(split, 'test', true);
   const document = getItem(split, 'document');
-  const command = assertString(getItem(split, 'command'), 'command');
+  const command = getItem(split, 'command', true);
   const status = getItem(split, 'status');
   const stdout = getItem(split, 'stdout');
   const stderr = getItem(split, 'stderr');
@@ -53,14 +59,6 @@ export function parseScenarioFile(data: string): IScenarioFile {
     stderr,
     env: env === void 0 ? process.env : getEnv(env),
   };
-}
-
-function assertString(x: unknown, name: string): string {
-  if (typeof x !== 'string') {
-    throw new TypeError(`${name} expected to be provided`);
-  }
-
-  return x;
 }
 
 function getEnv(env: string): NodeJS.ProcessEnv {
