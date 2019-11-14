@@ -82,9 +82,30 @@ The name of severity levels are display correctly by stylish formatter
     }
   }
 }
-
+====asset:oas-mixed-severity.json====
+{
+  "extends": ["spectral:oas"],
+  "rules": {
+    "info-contact": "error",
+    "operation-description": "info",
+    "info-matches-stoplight": {
+      "message": "Info must contain Stoplight",
+      "given": "$.info",
+      "severity": "hint",
+      "type": "style",
+      "recommended": true,
+      "then": {
+        "field": "title",
+        "function": "pattern",
+        "functionOptions": {
+          "match": "Stoplight"
+        }
+      }
+    }
+  }
+}
 ====command====
-{spectral} lint --ruleset ./rulesets/oas-mixed-severity.json {document}
+{spectral} lint --ruleset {asset:oas-mixed-severity.json} {document}
 ====stdout====
 OpenAPI 3.x detected
 

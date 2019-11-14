@@ -83,7 +83,6 @@ Loose JSON Schema can be validated
     }
   }
 }
-
 ====command====
 {spectral} lint {document} --ruleset {asset:loose-schema-ruleset}
 ====stdout====
