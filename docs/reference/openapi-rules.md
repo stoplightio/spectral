@@ -120,7 +120,7 @@ info:
 
 Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
 
-**Recommended:** No
+**Recommended:** Yes
 
 **Bad Example**
 
@@ -222,7 +222,7 @@ info:
 
 This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack. 
 
-**Recommended:** No
+**Recommended:** Yes
 
 **Bad Example**
 
@@ -283,7 +283,7 @@ Why? Well, you _can_ reference tags arbitrarily in operations, and definition is
 
 Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
 
-**Recommended:** No
+**Recommended:** Yes
 
 ### operation-default-response
 
@@ -323,6 +323,11 @@ Use just one tag for an operation, which is helpful for some documentation syste
 **Recommended:** No
 
 ### operation-summary-formatted
+
+<!-- theme: warning -->
+> ### Removed in v5.0
+>
+> This rule was removed in Spectral v5.0, so if you are relying on it you can find the [old definition here](https://github.com/stoplightio/spectral/blob/v4.2.0/src/rulesets/oas/index.json#L312) and paste it into your [custom ruleset](../../getting-started/rulesets.md).
 
 Operation `summary` should start with upper case and end with a dot.
 
@@ -469,7 +474,7 @@ Parameter objects should have a `description`.
 
 ## oas3
 
-These OpenAPI v3.0-only rules can be loaded with `extends: "spectral: oas3"` and include all the oas rules.
+These OpenAPI v3.0-only rules can be loaded with `extends: "spectral:oas3"` and include all the oas rules.
 
 ### api-servers
 
