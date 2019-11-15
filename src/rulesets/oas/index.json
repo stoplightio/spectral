@@ -113,7 +113,8 @@
     },
     "example-value-or-externalValue": {
       "description": "Example should have either a `value` or `externalValue` field.",
-      "recommended": false,
+      "recommended": true,
+      "severity": "warn",
       "type": "style",
       "given": "$..example",
       "then": {
@@ -180,7 +181,7 @@
     },
     "no-eval-in-markdown": {
       "description": "Markdown descriptions should not contain `eval(`.",
-      "recommended": false,
+      "recommended": true,
       "type": "style",
       "given": "$..*",
       "then": [
@@ -316,22 +317,6 @@
         "function": "length",
         "functionOptions": {
           "max": 1
-        }
-      },
-      "tags": [
-        "operation"
-      ]
-    },
-    "operation-summary-formatted": {
-      "description": "Operation `summary` should start with upper case and end with a dot.",
-      "recommended": false,
-      "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
-      "then": {
-        "field": "summary",
-        "function": "pattern",
-        "functionOptions": {
-          "match": "^[A-Z].*\\.$"
         }
       },
       "tags": [
