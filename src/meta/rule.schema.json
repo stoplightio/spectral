@@ -1,140 +1,140 @@
 {
-    "$id": "http://stoplight.io/schemas/rule.schema.json",
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "definitions": {
-        "IThen<T,O>": {
-            "properties": {
-                "field": {
-                    "type": "string"
-                },
-                "function": {
-                    "$ref": "#/definitions/T"
-                },
-                "functionOptions": {
-                    "$ref": "#/definitions/O"
-                }
-            },
-            "required": [
-                "function"
-            ],
-            "type": "object"
+  "$id": "http://stoplight.io/schemas/rule.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "IThen<T,O>": {
+      "properties": {
+        "field": {
+          "type": "string"
         },
-        "O": {
-            "type": "object"
+        "function": {
+          "$ref": "#/definitions/T"
         },
-        "T": {
-            "type": "string"
-        },
-        "DiagnosticSeverity": {
-            "enum": [
-                -1,
-                0,
-                1,
-                2,
-                3
-            ],
-            "type": "number"
-        },
-        "HumanReadableSeverity": {
-            "type": "string",
-            "enum": [
-                "error",
-                "warn",
-                "info",
-                "hint",
-                "off"
-            ]
-        },
-        "Severity": {
-            "oneOf": [
-                {
-                    "$ref": "#/definitions/DiagnosticSeverity"
-                },
-                {
-                    "$ref": "#/definitions/HumanReadableSeverity"
-                }
-            ]
+        "functionOptions": {
+          "$ref": "#/definitions/O"
         }
+      },
+      "required": [
+        "function"
+      ],
+      "type": "object"
     },
-    "oneOf": [
+    "O": {
+      "type": "object"
+    },
+    "T": {
+      "type": "string"
+    },
+    "DiagnosticSeverity": {
+      "enum": [
+        -1,
+        0,
+        1,
+        2,
+        3
+      ],
+      "type": "number"
+    },
+    "HumanReadableSeverity": {
+      "type": "string",
+      "enum": [
+        "error",
+        "warn",
+        "info",
+        "hint",
+        "off"
+      ]
+    },
+    "Severity": {
+      "oneOf": [
         {
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "recommended": {
-                    "type": "boolean"
-                },
-                "given": {
-                    "type": "string"
-                },
-                "resolved": {
-                    "type": "boolean"
-                },
-                "severity": {
-                    "$ref": "#/definitions/Severity"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "tags": {
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array"
-                },
-                "formats": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "minItems": 1
-                    }
-                },
-                "then": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/IThen<T,O>"
-                        },
-                        {
-                            "items": {
-                                "$ref": "#/definitions/IThen<T,O>"
-                            },
-                            "type": "array"
-                        }
-                    ]
-                },
-                "type": {
-                    "enum": [
-                        "style",
-                        "validation"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [
-                "given",
-                "then"
-            ],
-            "type": "object"
+          "$ref": "#/definitions/DiagnosticSeverity"
         },
         {
-            "$ref": "#/definitions/HumanReadableSeverity"
-        },
-        {
-            "type": "boolean"
-        },
-        {
-            "type": "array",
-            "additionalItems": false,
-            "minItems": 1,
-            "items": [
-                {
-                    "$ref": "#/definitions/Severity"
-                },
-                {
-                    "type": "object"
-                }
-            ]
+          "$ref": "#/definitions/HumanReadableSeverity"
         }
-    ]
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "recommended": {
+          "type": "boolean"
+        },
+        "given": {
+          "type": "string"
+        },
+        "resolved": {
+          "type": "boolean"
+        },
+        "severity": {
+          "$ref": "#/definitions/Severity"
+        },
+        "message": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minItems": 1
+          }
+        },
+        "then": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/IThen<T,O>"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/IThen<T,O>"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "type": {
+          "enum": [
+            "style",
+            "validation"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "given",
+        "then"
+      ],
+      "type": "object"
+    },
+    {
+      "$ref": "#/definitions/HumanReadableSeverity"
+    },
+    {
+      "type": "boolean"
+    },
+    {
+      "type": "array",
+      "additionalItems": false,
+      "minItems": 1,
+      "items": [
+        {
+          "$ref": "#/definitions/Severity"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    }
+  ]
 }

@@ -14,8 +14,7 @@ const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
 const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
-const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/index.json');
-const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/index.json');
+const standardOasRulesetPath = resolve(__dirname, '../../../rulesets/oas/index.json');
 const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
 const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
@@ -384,12 +383,12 @@ describe('Linter service', () => {
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
-            code: 'valid-example-in-schemas',
+            code: 'oas3-valid-schema-example',
             path: ['components', 'schemas', 'foo', 'example'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
-            code: 'unused-components-schema',
+            code: 'oas3-unused-components-schema',
             path: ['components', 'schemas', 'Pets'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
@@ -479,9 +478,9 @@ describe('Linter service', () => {
 
       describe('when a standard oas3 ruleset provided through option', () => {
         it('outputs warnings', () => {
-          return expect(run(`lint ${invalidOas3SpecPath} -r ${standardOas3RulesetPath}`)).resolves.toEqual(
+          return expect(run(`lint ${invalidOas3SpecPath} -r ${standardOasRulesetPath}`)).resolves.toEqual(
             expect.arrayContaining([
-              expect.objectContaining({ code: 'api-servers' }),
+              expect.objectContaining({ code: 'oas3-api-servers' }),
               expect.objectContaining({ code: 'info-contact' }),
               expect.objectContaining({ code: 'info-description' }),
             ]),
@@ -491,7 +490,7 @@ describe('Linter service', () => {
 
       describe('when a standard oas2 ruleset provided through option', () => {
         it('outputs warnings', async () => {
-          const output = await run(`lint ${oas2PetstoreSpecPath} -r ${standardOas2RulesetPath}`);
+          const output = await run(`lint ${oas2PetstoreSpecPath} -r ${standardOasRulesetPath}`);
           expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'operation-description' })]));
           expect(output).toHaveLength(22);
         });
@@ -557,7 +556,7 @@ describe('Linter service', () => {
     it('outputs errors occurring in referenced files', () => {
       return expect(run(`lint ${draftRefSpec}`)).resolves.toEqual([
         expect.objectContaining({
-          code: 'api-schemes',
+          code: 'oas2-api-schemes',
           message: 'OpenAPI host `schemes` must be present and non-empty array.',
           path: [],
           range: expect.any(Object),
@@ -608,7 +607,7 @@ describe('Linter service', () => {
     it('outputs errors occurring in nested referenced files', () => {
       return expect(run(`lint ${draftNestedRefSpec}`)).resolves.toEqual([
         expect.objectContaining({
-          code: 'api-schemes',
+          code: 'oas2-api-schemes',
           message: 'OpenAPI host `schemes` must be present and non-empty array.',
           path: [],
           range: expect.any(Object),

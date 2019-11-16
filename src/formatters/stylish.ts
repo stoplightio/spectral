@@ -23,7 +23,7 @@
  * @author Sindre Sorhus
  */
 
-import chalk from 'chalk';
+import chalk = require('chalk');
 import stripAnsi from 'strip-ansi';
 import * as table from 'text-table';
 

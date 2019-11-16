@@ -22,7 +22,6 @@ const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/exten
 const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
 const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
 const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
-const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-ruleset.json');
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
 const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/custom-functions-directory-ruleset.json');
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
@@ -33,12 +32,7 @@ const fooCJSFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/func
 const barFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/bar.js'), 'utf8');
 const truthyFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/truthy.js'), 'utf8');
 const oasRuleset = require('../oas/index.json');
-const oas2Ruleset = require('../oas2/index.json');
-const oas3Ruleset = require('../oas3/index.json');
-
 const oasRulesetRules: Dictionary<IRule, string> = oasRuleset.rules;
-const oas2RulesetRules: Dictionary<IRule, string> = oas2Ruleset.rules;
-const oas3RulesetRules: Dictionary<IRule, string> = oas3Ruleset.rules;
 
 jest.setTimeout(10000);
 
@@ -142,19 +136,16 @@ describe('Rulesets reader', () => {
     // we pick up *all* rules only from spectral:oas and spectral:oas2 and keep their severity level or set a default one
     expect(rules).toEqual(
       expect.objectContaining({
-        ...[...Object.entries(oasRulesetRules), ...Object.entries(oas2RulesetRules)].reduce<Dictionary<IRule, string>>(
-          (oasRules, [name, rule]) => {
-            oasRules[name] = {
-              ...rule,
-              formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
-              then: expect.any(Object),
-            };
+        ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>((oasRules, [name, rule]) => {
+          oasRules[name] = {
+            ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
+            ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+            then: expect.any(Object),
+          };
 
-            return oasRules;
-          },
-          {},
-        ),
+          return oasRules;
+        }, {}),
 
         'valid-rule': {
           given: '$.info',
@@ -170,9 +161,7 @@ describe('Rulesets reader', () => {
     return expect(readRuleset(extendsUnspecifiedOas2Ruleset)).resolves.toEqual(
       expect.objectContaining({
         rules: expect.objectContaining({
-          ...[...Object.entries(oasRulesetRules), ...Object.entries(oas3RulesetRules)].reduce<
-            Dictionary<IRule, string>
-          >((rules, [name, rule]) => {
+          ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>((rules, [name, rule]) => {
             rules[name] = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
@@ -210,7 +199,7 @@ describe('Rulesets reader', () => {
 
     expect(readRules).toEqual(
       expect.objectContaining({
-        ...[...Object.entries(oasRulesetRules), ...Object.entries(oas3RulesetRules)].reduce<Dictionary<IRule, string>>(
+        ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>(
           (rules, [name, rule]) => {
             const formattedRule: IRule = {
               ...rule,
@@ -273,17 +262,14 @@ describe('Rulesets reader', () => {
     return expect(readRuleset(extendsDisabledOas2Ruleset)).resolves.toHaveProperty(
       'rules',
       expect.objectContaining({
-        ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              description: (rule as IRule).description,
-              severity: -1,
-            });
+        ...Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+          rules[name] = expect.objectContaining({
+            description: (rule as IRule).description,
+            severity: -1,
+          });
 
-            return rules;
-          },
-          {},
-        ),
+          return rules;
+        }, {}),
 
         'operation-operationId-unique': expect.objectContaining({
           // value of oasRuleset.rules['operation-operationId-unique']
@@ -331,17 +317,14 @@ describe('Rulesets reader', () => {
     const { rules: enabledRules } = await readRuleset(enabledAllRuleset);
     expect(enabledRules).toEqual(
       expect.objectContaining(
-        [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              description: (rule as IRule).description,
-              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-            });
+        Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+          rules[name] = expect.objectContaining({
+            description: (rule as IRule).description,
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+          });
 
-            return rules;
-          },
-          {},
-        ),
+          return rules;
+        }, {}),
       ),
     );
 
@@ -351,42 +334,6 @@ describe('Rulesets reader', () => {
         rule => rule.severity === -1 || rule.severity === 'off' || rule.severity === undefined,
       ),
     ).toHaveLength(0);
-  });
-
-  it('should limit the scope of formats to a ruleset', () => {
-    return expect(readRuleset(myOpenAPIRuleset)).resolves.toEqual(
-      expect.objectContaining({
-        rules: {
-          ...Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              formats: ['oas2', 'oas3'],
-            });
-
-            return rules;
-          }, {}),
-
-          ...Object.entries(oas2Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              formats: ['oas2'],
-            });
-
-            return rules;
-          }, {}),
-
-          ...Object.entries(oas3Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              formats: ['oas3'],
-            });
-
-            return rules;
-          }, {}),
-
-          'valid-rule': expect.objectContaining({
-            message: 'should be OK',
-          }),
-        },
-      }),
-    );
   });
 
   it('given spectral:oas ruleset, should not pick up unrecommended rules', () => {

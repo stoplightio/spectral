@@ -7,6 +7,7 @@ describe('example-value-or-externalValue', () => {
   s.setRules({
     'example-value-or-externalValue': Object.assign(ruleset.rules['example-value-or-externalValue'], {
       recommended: true,
+      severity: DiagnosticSeverity.Warning, // todo should be able to remove this line and accept "error"
       type: RuleType[ruleset.rules['example-value-or-externalValue'].type],
     }),
   });
@@ -43,7 +44,7 @@ describe('example-value-or-externalValue', () => {
     ]);
   });
 
-  test('return errors if both externalValue and value', async () => {
+  test('return warnings if both externalValue and value', async () => {
     const results = await s.run({ example: { externalValue: 'externalValue', value: 'value' } });
     expect(results).toEqual([
       {
@@ -60,7 +61,7 @@ describe('example-value-or-externalValue', () => {
             line: 1,
           },
         },
-        severity: 1,
+        severity: DiagnosticSeverity.Warning,
       },
     ]);
   });

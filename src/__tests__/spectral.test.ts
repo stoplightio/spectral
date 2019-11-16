@@ -7,25 +7,18 @@ import { IParsedResult, IResolver, IRunRule, RuleFunction } from '../types';
 
 const merge = require('lodash/merge');
 
-const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
-const oas2Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas2/index.json')));
-const oas3Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas3/index.json')));
-
+const oasRuleset = merge(require('../rulesets/oas/index.json'));
 const oasRulesetRules: Dictionary<IRunRule, string> = oasRuleset.rules;
-const oas2RulesetRules: Dictionary<IRunRule, string> = oas2Ruleset.rules;
-const oas3RulesetRules: Dictionary<IRunRule, string> = oas3Ruleset.rules;
 
 describe('spectral', () => {
   describe('loadRuleset', () => {
     test('should support loading built-in rulesets', async () => {
       const s = new Spectral();
-      await s.loadRuleset('spectral:oas2');
+      await s.loadRuleset('spectral:oas');
 
       expect(s.rules).toEqual(
         expect.objectContaining(
-          [...Object.entries(oasRulesetRules), ...Object.entries(oas2RulesetRules)].reduce<
-            Dictionary<IRunRule, string>
-          >((oasRules, [name, rule]) => {
+          Object.entries(oasRulesetRules).reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
             oasRules[name] = {
               name,
               ...rule,
@@ -39,36 +32,12 @@ describe('spectral', () => {
         ),
       );
     });
-
-    test('should support loading multiple built-in rulesets', async () => {
-      const s = new Spectral();
-      await s.loadRuleset(['spectral:oas2', 'spectral:oas3']);
-
-      expect(s.rules).toEqual(
-        [
-          ...Object.entries(oasRulesetRules),
-          ...Object.entries(oas2RulesetRules),
-          ...Object.entries(oas3RulesetRules),
-        ].reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
-          oasRules[name] = {
-            name,
-            ...rule,
-            formats: expect.arrayContaining([expect.any(String)]),
-            severity: expect.any(Number),
-            then: expect.any(Object),
-          };
-
-          return oasRules;
-        }, {}),
-      );
-    });
   });
 
   describe('setRules & mergeRules', () => {
     test('should not mutate the passing in rules object', () => {
       const givenCustomRuleSet = {
         rule1: {
-          summary: '',
           given: '$',
           then: {
             function: RuleFunction.TRUTHY,

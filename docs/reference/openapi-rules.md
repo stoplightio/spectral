@@ -1,18 +1,12 @@
 # OpenAPI Rules
 
-Spectral has three rulesets built in: 
+Spectral has a built-in "oas" ruleset, with OAS being shorthand for the [OpenAPI Specification](https://openapis.org/specification).
 
-- [oas](#oas)
-- [oas2](#oas2)
-- [oas3](#oas3)
+In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/rulesets.md#formats)).
 
-_OAS is shorthand for OpenAPI Specification._
+## OpenAPI v2 & v3
 
-In your ruleset file you can add `extends: "spectral:oas"` and you'll get everything from `spectral:oas2` and `spectral:oas3`, meaning you can lint either type of document and only the relevant rules will apply thanks to [formats](../getting-started/rulesets.md#formats).
-
-Let's look at the rules in these rulesets.
-
-## oas
+These rules apply to both OpenAPI v2 and v3.
 
 ### operation-2xx-response
 
@@ -386,53 +380,47 @@ tags:
 
 **Recommended:** No
 
-## oas2
+## OpenAPI v2.0-only
 
-These OpenAPI v2.0-only rules can be loaded with `extends: "spectral:oas2"` and include all the oas rules.
+These rules will only apply to OpenAPI v2.0 documents.
 
-### operation-formData-consume-check
+### oas2-operation-formData-consume-check
 
 Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
 
 **Recommended:** Yes
 
-### api-host
+### oas2-api-host
 
 OpenAPI `host` must be present and non-empty string.
 
 **Recommended:** Yes
 
-### api-schemes
+### oas2-api-schemes
 
 OpenAPI host `schemes` must be present and non-empty array.
 
 **Recommended:** Yes
 
-### host-not-example
+### oas2-host-not-example
 
-Server URL should not point at `example.com`.
+Server URL should not point at example.com.
 
 **Recommended:** No
 
-### host-trailing-slash
+### oas2-host-trailing-slash
 
 Server URL should not have a trailing slash.
 
 **Recommended:** Yes
 
-### definition-description
-
-Definition `description` must be present and non-empty string.
-
-**Recommended:** No
-
-### operation-security-defined
+### oas2-operation-security-defined
 
 Operation `security` values must match a scheme defined in the `securityDefinitions` object.
 
 **Recommended:** Yes
 
-### unused-definition
+### oas2-unused-definition
 
 Potential unused reusable `definition` entry has been detected.
 
@@ -442,25 +430,25 @@ specifications that reference those objects).
 
 **Recommended:** Yes
 
-### valid-example
+### oas2-valid-example
 
 Examples must be valid against their defined schema.
 
 **Recommended:** Yes
 
-### oas2-anyOf
+### oas2-oas2-anyOf
 
 OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.
 
 **Recommended:** Yes
 
-### oas2-oneOf
+### oas2-oas2-oneOf
 
 OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.
 
 **Recommended:** Yes
 
-### oas2-schema
+### oas2-oas2-schema
 
 Validate structure of OpenAPI v2 specification.
 
@@ -472,11 +460,11 @@ Parameter objects should have a `description`.
 
 **Recommended:** No
 
-## oas3
+## OpenAPI v3-only
 
-These OpenAPI v3.0-only rules can be loaded with `extends: "spectral:oas3"` and include all the oas rules.
+These rules will only be applied to OpenAPI v3.0 documents.
 
-### api-servers
+### oas3-api-servers
 
 OpenAPI `servers` must be present and non-empty array.
 
@@ -496,22 +484,21 @@ servers:
 
 If this is going out to the world, maybe have production and a general sandbox people can play with.
 
-
-### components-schema-description
+### oas3-components-schema-description
 
 Model `description` must be present and non-empty string.
 
 **Recommended:** No
 
-### operation-security-defined
+### oas3-operation-security-defined
 
 Operation `security` values must match a scheme defined in the `components.securitySchemes` object.
 
 **Recommended:** Yes
 
-### server-not-example.com
+### oas3-server-not-example.com
 
-Server URL should not point at `example.com`.
+Server URL should not point at example.com.
 
 **Recommended:** No
 
@@ -529,7 +516,7 @@ servers:
 
 We have example.com for documentation purposes here, but you should put in actual domains.
 
-### server-trailing-slash
+### oas3-server-trailing-slash
 
 Server URL should not have a trailing slash.
 
@@ -553,7 +540,7 @@ servers:
   - url: https://example.com/api/
 ```
 
-### unused-components-schema
+### oas3-unused-components-schema
 
 Potential unused reusable `schema` entry has been detected.
 
@@ -563,7 +550,7 @@ specifications that reference those objects).
 
 **Recommended:** Yes
 
-### valid-example
+### oas3-valid-example
 
 Examples must be valid against their defined schema.
 

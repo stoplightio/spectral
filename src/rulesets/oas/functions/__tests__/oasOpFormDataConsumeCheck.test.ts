@@ -5,16 +5,18 @@ import oasOpFormDataConsumeCheck from '../oasOpFormDataConsumeCheck';
 
 describe('oasOpFormDataConsumeCheck', () => {
   const s = new Spectral();
+  s.registerFormat('oas2', () => true);
   s.setFunctions({ oasOpFormDataConsumeCheck });
   s.setRules({
-    'operation-formData-consume-check': Object.assign(rules['operation-formData-consume-check'], {
+    'oas2-formData-consume-check': Object.assign(rules['oas2-formData-consume-check'], {
       recommended: true,
-      type: RuleType[rules['operation-formData-consume-check'].type],
+      type: RuleType[rules['oas2-formData-consume-check'].type],
     }),
   });
 
   test('validate a correct object', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/path1': {
           get: {
@@ -29,6 +31,7 @@ describe('oasOpFormDataConsumeCheck', () => {
 
   test('return errors on different path operations same id', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/path1': {
           get: {
@@ -41,7 +44,7 @@ describe('oasOpFormDataConsumeCheck', () => {
 
     expect(results).toEqual([
       {
-        code: 'operation-formData-consume-check',
+        code: 'oas2-formData-consume-check',
         message:
           'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
         path: ['paths', '/path1', 'get'],

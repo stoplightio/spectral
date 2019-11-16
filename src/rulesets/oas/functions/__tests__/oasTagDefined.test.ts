@@ -6,7 +6,7 @@ import oasTagDefined from '../oasTagDefined';
 
 describe('oasTagDefined', () => {
   const s = new Spectral();
-
+  s.registerFormat('oas2', () => true);
   s.setFunctions({ oasTagDefined });
   s.setRules({
     'operation-tag-defined': Object.assign(rules['operation-tag-defined'], {
@@ -17,6 +17,7 @@ describe('oasTagDefined', () => {
 
   test('validate a correct object', async () => {
     const results = await s.run({
+      swagger: 2.0,
       tags: [
         {
           name: 'tag1',
@@ -43,6 +44,7 @@ describe('oasTagDefined', () => {
 
   test('return errors on undefined tag', async () => {
     const results = await s.run({
+      swagger: 2.0,
       tags: [
         {
           name: 'tag1',
@@ -65,11 +67,11 @@ describe('oasTagDefined', () => {
         range: {
           end: {
             character: 16,
-            line: 10,
+            line: 11,
           },
           start: {
             character: 10,
-            line: 10,
+            line: 11,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -79,6 +81,7 @@ describe('oasTagDefined', () => {
 
   test('return errors on undefined tags among defined tags', async () => {
     const results = await s.run({
+      swagger: 2.0,
       tags: [
         {
           name: 'tag1',
@@ -104,11 +107,11 @@ describe('oasTagDefined', () => {
         range: {
           end: {
             character: 16,
-            line: 14,
+            line: 15,
           },
           start: {
             character: 10,
-            line: 14,
+            line: 15,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -120,11 +123,11 @@ describe('oasTagDefined', () => {
         range: {
           end: {
             character: 16,
-            line: 16,
+            line: 17,
           },
           start: {
             character: 10,
-            line: 16,
+            line: 17,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -134,6 +137,7 @@ describe('oasTagDefined', () => {
 
   test('resilient to no global tags or operation tags', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/path1': {
           get: {

@@ -147,8 +147,7 @@ describe('linter', () => {
     await spectral.loadRuleset('spectral:oas3');
     const { rules: oas3Rules } = await readRuleset('spectral:oas3');
     spectral.setRules(mergeRules(oas3Rules, {
-      'valid-example-in-schemas': 'off',
-      'components-schema-description': -1,
+      'oas3-valid-schema-example': 'off',
       'openapi-tags': 'off',
     }) as RuleCollection);
 
@@ -167,12 +166,12 @@ describe('linter', () => {
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'Pets'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'foo'],
       }),
@@ -563,12 +562,12 @@ responses:: !!foo
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'Pets'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'foo'],
       }),
@@ -583,7 +582,7 @@ responses:: !!foo
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'valid-example-in-parameters',
+          code: 'valid-parameter-example',
           message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),

@@ -20,7 +20,7 @@ expect.extend({
 
 // @ts-ignore
 test.each = input => (name: string, fn: Function) => {
-  // very simple stub-like implementation needed by src/rulesets/oas3/__tests__/valid-example.ts and src/rulesets/__tests__/validation.test.ts
+  // very simple stub-like implementation needed by src/rulesets/oas/__tests__/valid-example.ts and src/rulesets/__tests__/validation.test.ts
   for (const value of input) {
     if (Array.isArray(value)) {
       fn(...value);

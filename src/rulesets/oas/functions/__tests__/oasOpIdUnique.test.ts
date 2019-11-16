@@ -6,17 +6,19 @@ import oasOpIdUnique from '../oasOpIdUnique';
 
 describe('oasOpIdUnique', () => {
   const s = new Spectral();
-
+  s.registerFormat('oas2', () => true);
   s.setFunctions({ oasOpIdUnique });
   s.setRules({
     'operation-operationId-unique': Object.assign(rules['operation-operationId-unique'], {
       recommended: true,
+      severity: DiagnosticSeverity.Error, // TODO this should not need to be here
       type: RuleType[rules['operation-operationId-unique'].type],
     }),
   });
 
   test('validate a correct object', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/path1': {
           get: {
@@ -35,6 +37,7 @@ describe('oasOpIdUnique', () => {
 
   test('return errors on different path operations same id', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/path1': {
           get: {
@@ -87,6 +90,7 @@ describe('oasOpIdUnique', () => {
 
   test('return errors on same path operations same id', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/path1': {
           get: {

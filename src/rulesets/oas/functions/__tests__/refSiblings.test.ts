@@ -1,22 +1,23 @@
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../index';
-import { rules as oasRules } from '../../../oas/index.json';
+import { rules } from '../../index.json';
 import refSiblings from '../refSiblings';
 
 describe('refSiblings', () => {
   const s = new Spectral();
+  s.registerFormat('oas3', () => true);
   s.setFunctions({ refSiblings });
   s.setRules({
-    'no-$ref-siblings': Object.assign(oasRules['no-$ref-siblings'], {
+    'no-$ref-siblings': Object.assign(rules['no-$ref-siblings'], {
       recommended: true,
-      type: RuleType[oasRules['no-$ref-siblings'].type],
+      severity: DiagnosticSeverity.Error, // TODO this should not need to be here
+      type: RuleType[rules['no-$ref-siblings'].type],
     }),
   });
 
   test('does not report anything for valid object', async () => {
     const results = await s.run({
-      swagger: '2.0',
       securityDefinitions: {
         apikey: {},
       },
@@ -183,7 +184,6 @@ describe('refSiblings', () => {
     expect(results).toEqual([
       {
         code: 'no-$ref-siblings',
-
         message: '$ref cannot be placed next to any other properties',
         path: ['components', 'securityDefinitions', 'apikey'],
         range: {

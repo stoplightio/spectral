@@ -5,6 +5,7 @@ import oasOpParams from '../oasOpParams';
 
 describe('oasOpParams', () => {
   const s = new Spectral();
+  s.registerFormat('oas2', () => true);
   s.setFunctions({ oasOpParams });
   s.setRules({
     'operation-parameters': Object.assign(rules['operation-parameters'], {
@@ -15,6 +16,7 @@ describe('oasOpParams', () => {
 
   test('No error if no params', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {},
@@ -26,6 +28,7 @@ describe('oasOpParams', () => {
 
   test('No error if only one param operation level', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -39,6 +42,7 @@ describe('oasOpParams', () => {
 
   test('No error if same param on different operations', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -55,6 +59,7 @@ describe('oasOpParams', () => {
 
   test('Error if non-unique param on same operation', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -72,11 +77,11 @@ describe('oasOpParams', () => {
         range: {
           end: {
             character: 25,
-            line: 15,
+            line: 16,
           },
           start: {
             character: 12,
-            line: 3,
+            line: 4,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -86,6 +91,7 @@ describe('oasOpParams', () => {
 
   test('Error if non-unique $ref param on same operation', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -112,11 +118,11 @@ describe('oasOpParams', () => {
         range: {
           end: {
             character: 44,
-            line: 12,
+            line: 13,
           },
           start: {
             character: 12,
-            line: 3,
+            line: 4,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -126,6 +132,7 @@ describe('oasOpParams', () => {
 
   test('Errors if multiple non-unique param on same operation', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -145,6 +152,7 @@ describe('oasOpParams', () => {
 
   test('Error if multiple in:body', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -162,11 +170,11 @@ describe('oasOpParams', () => {
         range: {
           end: {
             character: 25,
-            line: 11,
+            line: 12,
           },
           start: {
             character: 12,
-            line: 3,
+            line: 4,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -176,6 +184,7 @@ describe('oasOpParams', () => {
 
   test('Error if both in:formData and in:body', async () => {
     const results = await s.run({
+      swagger: 2.0,
       paths: {
         '/foo': {
           get: {
@@ -192,11 +201,11 @@ describe('oasOpParams', () => {
         range: {
           end: {
             character: 25,
-            line: 11,
+            line: 12,
           },
           start: {
             character: 12,
-            line: 3,
+            line: 4,
           },
         },
         severity: DiagnosticSeverity.Warning,

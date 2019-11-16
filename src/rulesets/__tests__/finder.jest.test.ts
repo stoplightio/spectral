@@ -23,25 +23,22 @@ describe('Rulesets finder', () => {
   });
 
   it('should support spectral built-in rules', () => {
-    return expect(findFile('/b/c/d', '@stoplight/spectral/rulesets/oas2/index.json')).resolves.toEqual(
-      path.join(process.cwd(), 'src/rulesets/oas2/index.json'),
+    return expect(findFile('/b/c/d', '@stoplight/spectral/rulesets/oas/index.json')).resolves.toEqual(
+      path.join(process.cwd(), 'src/rulesets/oas/index.json'),
     );
   });
 
-  it.each(['oas', 'oas2', 'oas3'])('should support spectral built-in %s ruleset shorthand', shorthand => {
-    return expect(findFile('', `spectral:${shorthand}`)).resolves.toEqual(
-      path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
+  it('should support spectral built-in ruleset shorthand', () => {
+    return expect(findFile('', `spectral:oas`)).resolves.toEqual(
+      path.join(process.cwd(), `src/rulesets/oas/index.json`),
     );
   });
 
-  it.each(['oas', 'oas2', 'oas3'])(
-    'should resolve spectral built-in %s ruleset shorthand even if a base uri is provided',
-    shorthand => {
-      return expect(findFile('https://localhost:4000', `spectral:${shorthand}`)).resolves.toEqual(
-        path.join(process.cwd(), `src/rulesets/${shorthand}/index.json`),
-      );
-    },
-  );
+  it('should resolve spectral built-in ruleset shorthand even if a base uri is provided', () => {
+    return expect(findFile('https://localhost:4000', `spectral:oas`)).resolves.toEqual(
+      path.join(process.cwd(), `src/rulesets/oas/index.json`),
+    );
+  });
 
   it('should load local npm module if available', () => {
     return expect(findFile('', '@stoplight/json')).resolves.toEqual(require.resolve('@stoplight/json'));
