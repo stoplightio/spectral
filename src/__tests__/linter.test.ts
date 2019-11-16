@@ -144,12 +144,12 @@ describe('linter', () => {
   });
 
   test('should not report anything for disabled rules', async () => {
-    await spectral.loadRuleset('spectral:oas3');
-    const { rules: oas3Rules } = await readRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
+    const { rules: oasRules } = await readRuleset('spectral:oas');
     spectral.setRules(
-      mergeRules(oas3Rules, {
-        'valid-example-in-schemas': 'off',
-        'components-schema-description': -1,
+      mergeRules(oasRules, {
+        'oas3-valid-schema-example': 'off',
+        'operation-2xx-response': -1,
         'openapi-tags': 'off',
       }) as RuleCollection,
     );
@@ -169,12 +169,12 @@ describe('linter', () => {
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'Pets'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'foo'],
       }),
@@ -182,7 +182,7 @@ describe('linter', () => {
   });
 
   test('should output unescaped json paths', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
 
@@ -459,7 +459,7 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    await spectral.loadRuleset('spectral:oas2');
+    await spectral.loadRuleset('spectral:oas');
 
     const responses = `openapi: 2.0.0
 responses:: !!foo
@@ -512,7 +512,7 @@ responses:: !!foo
   });
 
   test('should report a valid line number for json paths containing escaped slashes', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(studioFixture);
 
@@ -537,7 +537,7 @@ responses:: !!foo
   });
 
   test('should remove all redundant ajv errors', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
 
@@ -555,7 +555,7 @@ responses:: !!foo
         code: 'openapi-tags',
       }),
       expect.objectContaining({
-        code: 'valid-example-in-schemas',
+        code: 'oas3-valid-schema-example',
         message: '"foo.example" property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
@@ -565,12 +565,12 @@ responses:: !!foo
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'Pets'],
       }),
       expect.objectContaining({
-        code: 'unused-components-schema',
+        code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'foo'],
       }),
@@ -578,14 +578,14 @@ responses:: !!foo
   });
 
   test('should report invalid schema $refs', async () => {
-    await spectral.loadRuleset('spectral:oas2');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(todosInvalid);
 
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'valid-example-in-parameters',
+          code: 'oas2-valid-parameter-example',
           message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
@@ -594,7 +594,7 @@ responses:: !!foo
   });
 
   test('should report invalid $refs', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
 
@@ -617,7 +617,7 @@ responses:: !!foo
   });
 
   test('should support YAML merge keys', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
     spectral.setRules({
       'operation-tag-defined': {
         ...spectral.rules['operation-tag-defined'],
@@ -914,7 +914,7 @@ responses:: !!foo
   });
 
   test('should evaluate {{path}} in validation messages', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
     spectral.setRules({
       'oas3-schema': {
         ...spectral.rules['oas3-schema'],

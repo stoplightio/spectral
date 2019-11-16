@@ -1,0 +1,12 @@
+{
+  "formats": ["oas3"],
+  "rules": {
+    "oas3-valid-rule": {
+      "message": "should be OK",
+      "given": "$.info",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}

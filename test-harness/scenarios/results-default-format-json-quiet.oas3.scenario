@@ -13,7 +13,7 @@ tags:
 ====stdout====
 [
 	{
-		"code": "api-servers",
+		"code": "oas3-api-servers",
 		"path": [],
 		"message": "OpenAPI `servers` must be present and non-empty array.",
 		"severity": 1,

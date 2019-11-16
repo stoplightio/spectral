@@ -150,7 +150,7 @@ schema | a valid JSON Schema document | yes
 <!-- title: example -->
 
 ```yaml
-api-servers:
+oas3-api-servers:
   description: "OpenAPI `servers` must be present and non-empty array."
   recommended: true
   type: "style"
