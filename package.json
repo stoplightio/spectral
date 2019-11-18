@@ -78,7 +78,7 @@
     "strip-ansi": "^5.2",
     "text-table": "^0.2",
     "tslib": "^1.10.0",
-    "yargs": "^14.2.0"
+    "yargs": "^15.0.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.2.0",
