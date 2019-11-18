@@ -202,7 +202,7 @@ The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically any
 
 The value must be `undefined`. When combined with `field: foo` on an object the `foo` property must be undefined.
 
-_**Note:** Due to the way YAML works, just having `foo: ` with no value set is not the same as being `undefined`. This would be `falsy`.
+_**Note:** Due to the way YAML works, just having `foo: ` with no value set is not the same as being `undefined`. This would be `falsy`._
 
 ## unreferencedReusableObject
 
