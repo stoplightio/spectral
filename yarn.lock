@@ -352,9 +352,9 @@
     any-observable "^0.3.0"
 
 "@stoplight/json-ref-resolver@^3.0.1":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-3.0.2.tgz#598c661ae60c38b050777f620a9d645879fe053c"
-  integrity sha512-+5amlmqxm64EYpp7PEBJiYXqtYck+IPHiWMpZcu7xP7+GUt/jwikqaskUxfPXvttzJXRPCqW+QvUllH5POIhQg==
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-3.0.3.tgz#7103ade1ca47af41677b464fa034aea539d406b0"
+  integrity sha512-Q4hC5LNTzZXdZvwVwmVyxw372lKt//y2KbbuBfde7TcFtOKOg6ez6FSuqSLpFIr3ewdHMfFgg968saCRb26Wrw==
   dependencies:
     "@stoplight/json" "^3.1.2"
     "@stoplight/path" "^1.3.0"
