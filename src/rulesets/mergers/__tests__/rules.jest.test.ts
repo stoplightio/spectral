@@ -289,13 +289,63 @@ describe('Ruleset rules merging', () => {
     });
 
     it('sets warning as a default', () => {
+      const newRules = mergeRules({}, rules, 'off');
+
       const custom = {
         rule: true,
         'rule-with-no-recommended': true,
         'optional-rule': true,
       };
 
-      expect(mergeRules(rules, custom)).toEqual({
+      expect(mergeRules(newRules, custom)).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+        }),
+      });
+    });
+
+    it('sets warning as a default even when all rules were disabled', () => {
+      const newRules = mergeRules({}, rules, 'off');
+
+      const custom = {
+        rule: true,
+        'rule-with-no-recommended': true,
+        'optional-rule': true,
+      };
+
+      expect(mergeRules(newRules, custom)).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+        }),
+      });
+    });
+
+    it('sets warning as a default even when all rules were disabled', () => {
+      const newRules = mergeRules({}, rules, 'off');
+
+      const custom = {
+        rule: true,
+        'rule-with-no-recommended': true,
+        'optional-rule': true,
+      };
+
+      expect(mergeRules(newRules, custom)).toEqual({
         rule: expect.objectContaining({
           recommended: true,
           severity: DiagnosticSeverity.Warning,
