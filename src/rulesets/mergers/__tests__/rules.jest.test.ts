@@ -91,6 +91,35 @@ describe('Ruleset rules merging', () => {
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Error);
   });
 
+  it('prefers the root definition severity level', () => {
+    const rules = {
+      test: JSON.parse(JSON.stringify(baseRule)),
+    };
+
+    mergeRules(rules, {
+      test: {
+        message: 'Operation must have at least one `2xx` response.',
+        given:
+          "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+        then: {
+          field: 'responses',
+          function: 'oasOp2xxResponse',
+        },
+        severity: 'error',
+      },
+    });
+
+    mergeRules(rules, {
+      test: false,
+    });
+
+    mergeRules(rules, {
+      test: true,
+    });
+
+    expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Error);
+  });
+
   it('includes new rules', () => {
     const rules = {};
 
@@ -217,6 +246,24 @@ describe('Ruleset rules merging', () => {
     );
 
     expect(rules).toHaveProperty('rule.severity', -1);
+  });
+
+  it('sets warning as default severity level if a rule has no severity specified', () => {
+    const rules = {};
+
+    const baseWithoutSeverity = JSON.parse(JSON.stringify(baseRule));
+    delete baseWithoutSeverity.severity;
+
+    mergeRules(rules, {
+      test: baseWithoutSeverity,
+      test2: {
+        ...JSON.parse(JSON.stringify(baseRule)),
+        severity: DiagnosticSeverity.Error,
+      },
+    });
+
+    expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Warning);
+    expect(rules).toHaveProperty('test2.severity', DiagnosticSeverity.Error);
   });
 
   it('picks up all rules', () => {
