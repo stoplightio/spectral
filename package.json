@@ -75,7 +75,7 @@
     "nanoid": "^2.1.6",
     "node-fetch": "^2.6",
     "proxy-agent": "^3.1.1",
-    "strip-ansi": "^5.2",
+    "strip-ansi": "^6.0",
     "text-table": "^0.2",
     "tslib": "^1.10.0",
     "yargs": "^14.2.0"
