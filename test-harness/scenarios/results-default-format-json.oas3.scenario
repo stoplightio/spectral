@@ -9,7 +9,7 @@ paths: {}
 tags:
   - name: test
 ====command====
-lint {document} --format=json
+{spectral} lint {document} --format=json
 ====stdout====
 OpenAPI 3.x detected
 [

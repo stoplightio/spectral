@@ -6,7 +6,7 @@ info:
   title: foo
   description: baz
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/external-schemas-ruleset.yaml
+{spectral} lint {document} --ruleset ./rulesets/external-schemas-ruleset.yaml
 ====stdout====
 OpenAPI 3.x detected
 

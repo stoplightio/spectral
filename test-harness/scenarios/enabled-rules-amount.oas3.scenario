@@ -22,7 +22,7 @@ components:
       schema:
         type: integer
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml -v
+{spectral} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml -v
 ====stdout====
 Found 56 rules (1 enabled)
 Linting {document}
