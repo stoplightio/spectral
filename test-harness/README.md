@@ -35,7 +35,7 @@ Test text, can be multi line.
 ====document====
 some JSON/YAML document
 ====command====
-lint --foo {document} --bar
+{spectral} lint --foo {document} --bar
 ====stdout====
 expected output
 ====stderr====
@@ -73,7 +73,7 @@ paths:
             'application/json':
               example: hello
 ====command====
-lint {document}
+{spectral} lint {document}
 ====stdout====
 OpenAPI 3.x detected
 

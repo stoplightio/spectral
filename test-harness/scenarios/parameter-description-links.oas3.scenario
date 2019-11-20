@@ -22,7 +22,7 @@ components:
       parameters:
         userUuid: abc
 ====command====
-lint --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml {document}
+{spectral} lint --ruleset ./rulesets/parameter-description.oas3.yaml {document}
 ====stdout====
 OpenAPI 3.x detected
 No results with a severity of 'warn' or higher found!
