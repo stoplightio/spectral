@@ -209,3 +209,44 @@ expect(result).toEqual([
   }),
 ]);
 ```
+
+### Using custom resolver
+
+Spectral lets you provide any custom $ref resolver. By default, http(s) and file protocols are resolved, relatively to the document Spectral lints against.
+If you'd like support any additional protocol or adjust the resolution, you are absolutely fine to do it.
+In order to achieve that, you need to create a custom json-ref-resolver instance.
+
+```js
+const path = require('path');
+const fs = require('fs');
+const { Spectral } = require('@stoplight/spectral');
+const { Resolver } = require('@stoplight/json-ref-resolver');
+
+const customFileResolver = new Resolver({
+  resolvers: {
+    file: {
+      resolve: ref => {
+        return new Promise((resolve, reject) => {
+          const basePath = process.cwd();
+          const refPath = ref.path();
+          fs.readFile(path.join(basePath, refPath), 'utf8', (err, data) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(data);
+            }
+          });
+        });
+      }
+    }
+  }
+});
+
+const spectral = new Spectral({ resolver: customFileResolver });
+
+// lint document as usual
+```
+
+The custom resolver we've just created will resolve all remote file refs relatively to the current working directory.
+
+More on that can be found in the [json-ref-resolver repo](https://github.com/stoplightio/json-ref-resolver).
