@@ -20,6 +20,8 @@ const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
 const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
+const fooResolver = resolve(__dirname, '__fixtures__/foo-resolver.js');
+const fooDocument = resolve(__dirname, '__fixtures__/foo-document.yaml');
 
 function run(command: string) {
   const parser = yargs.command(lintCommand);
@@ -700,6 +702,19 @@ describe('Linter service', () => {
             },
           },
           source: expect.stringContaining('__tests__/__fixtures__/refs/paths.json'),
+        }),
+      ]);
+    });
+  });
+
+  describe('--resolver', () => {
+    it('uses provided resolver for $ref resolving', async () => {
+      expect(await run(`lint --resolver ${fooResolver} ${fooDocument}`)).toEqual([
+        expect.objectContaining({
+          code: 'api-servers',
+        }),
+        expect.objectContaining({
+          code: 'openapi-tags',
         }),
       ]);
     });

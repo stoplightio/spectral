@@ -1,0 +1,17 @@
+====test====
+Prints meaningful error message when custom json-ref-resolver instance cannot be imported
+====document====
+$ref: custom://user.yaml
+====asset:ruleset====
+rules:
+  required-user:
+    given: $
+    then:
+      field: user
+      function: truthy
+====command====
+{bin} lint {document} --ruleset {asset:ruleset} --resolver ./resolvers/missing-resolver.js
+====status====
+2
+====stderr====
+Cannot find module '{__dirname}/scenarios/resolvers/missing-resolver.js'

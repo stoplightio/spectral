@@ -26,6 +26,7 @@ Other options include:
   --encoding, -e               text encoding to use                        [string] [default: "utf8"]
   --format, -f                 formatter to use for outputting results  [string] [default: "stylish"]
   --output, -o                 output to a file instead of stdout                            [string]
+  --resolver                   path to custom json-ref-resolver instance                     [string]
   --ruleset, -r                path/URL to a ruleset file                                    [string]
   --skip-rule, -s              ignore certain rules if they are causing trouble              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code

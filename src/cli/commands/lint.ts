@@ -71,6 +71,10 @@ const lintCommand: CommandModule = {
           description: 'output to a file instead of stdout',
           type: 'string',
         },
+        resolver: {
+          description: 'path to custom json-ref-resolver instance',
+          type: 'string',
+        },
         ruleset: {
           alias: 'r',
           description: 'path/URL to a ruleset file',
@@ -124,7 +128,13 @@ const lintCommand: CommandModule = {
       displayOnlyFailures: boolean;
     };
 
-    return lint(documents, { format, output, encoding, ruleset, ...pick(config, ['skipRule', 'verbose', 'quiet']) })
+    return lint(documents, {
+      format,
+      output,
+      encoding,
+      ruleset,
+      ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['skipRule', 'verbose', 'quiet', 'resolver']),
+    })
       .then(results => {
         if (displayOnlyFailures) {
           return filterResultsBySeverity(results, failSeverity);
@@ -144,8 +154,8 @@ const lintCommand: CommandModule = {
   },
 };
 
-const fail = (err: Error) => {
-  console.error(err);
+const fail = ({ message }: Error) => {
+  console.error(message);
   process.exitCode = 2;
 };
 

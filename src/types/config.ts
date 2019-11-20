@@ -12,6 +12,7 @@ export interface ILintConfig {
   encoding: string;
   format: OutputFormat;
   output?: string;
+  resolver?: string;
   ruleset?: string[];
   skipRule?: string[];
   verbose?: boolean;
