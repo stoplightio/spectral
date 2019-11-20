@@ -16,7 +16,9 @@ describe('readFile util', () => {
     });
 
     it('reads from file', async () => {
-      expect(await readFile(fileDescriptor, { encoding: 'utf8' })).toEqual(`line 1
+      const contents = await readFile(fileDescriptor, { encoding: 'utf8' });
+      // normalize line endings
+      expect(contents.replace(/\r\n/g, '\n')).toEqual(`line 1
 line 2
 end
 `);
