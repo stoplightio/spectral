@@ -83,17 +83,57 @@ OpenAPI 3.x detected
 ✖ 1 problems (1 error, 0 warning, 0 infos, 0 hints)
 ```
 
+#### Custom assets
+
+Apart from `{document}`, you are allowed to provide any extra fixture your test may require.
+An example of such a fixture could be a ruleset, but also a you would like to output Spectral validation results to.
+
+The syntax varies a bit from regular keywords and can be expressed in the following way `asset:<pattern>`
+where pattern is any string matching `[A-Za-z0-9.\-]` regular expression, for example `asset:my-ruleset` or `asset:petstore.oas2.json`.
+
+##### A real example?
+
+```
+====test====
+assets real-life example
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+paths: {}
+====asset:ruleset====
+extends: spectral:oas
+rules:
+  api-servers: error
+====command====
+{bin} lint {document} -r {asset:ruleset}
+====status====
+1
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 1:1    error  api-servers       OpenAPI `servers` must be present and non-empty array.
+ 1:1  warning  openapi-tags      OpenAPI object should have non-empty `tags` array.
+ 2:6  warning  info-contact      Info object should contain `contact` object.
+ 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
+
+✖ 4 problems (1 error, 3 warnings, 0 infos, 0 hints)
+```
+
+
 #### Things to keep in mind when creating the files:
 
 * 1 test per file, we do not support multiple splitting.
 * Be precise with the separators. They should be 4 *before* **AND** *after* the word. `====`
-* The keywords are `test`, `document`, `command`, `status`, `stdout`, and `stderr`, nothing else at the moment
+* The keywords are `test`, `document`, `command`, `env`, `asset:<pattern>`, `status`, `stdout`, and `stderr`, nothing else at the moment
 * You can run all the tests on the same port `4010`, but you can also choose another one
-* You can pipe your command to grep. For example, using `lint {document} | grep 'expected-rule-name'` can be used to test for the presence of a specific violation. But, beware of being overly specific here.
+* You can pipe your command to grep. For example, using `{bin} lint {document} | grep 'expected-rule-name'` can be used to test for the presence of a specific violation. But, beware of being overly specific here.
 
 ## Technical details
 
 * A RegExp is used to split the content
-* A temporary file with the document is stored on your disk
+* Temporary files with the document and/or any specified assets are stored on your disk
 * Spectral gets spawned with the specified arguments and output is matched
-* `{document}` can be used in command, stdout or stderr, and is replaced with the full file path
+* `{document}` and `{asset:<pattern>}` can be used in command, stdout or stderr, and is replaced with the full file path
