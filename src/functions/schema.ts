@@ -58,7 +58,7 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
   }
 }
 
-const validators = new class extends WeakMap<JSONSchema, ValidateFunction> {
+const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
   public get(schemaObj: JSONSchema) {
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
@@ -75,7 +75,7 @@ const validators = new class extends WeakMap<JSONSchema, ValidateFunction> {
 
     return validator;
   }
-}();
+})();
 
 const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>) => {
   const cleanMessage =

@@ -51,9 +51,7 @@ export const junit: Formatter = results => {
         result => result.severity === DiagnosticSeverity.Error,
       );
 
-      output += `<testsuite package="org.spectral" time="0" tests="${
-        filteredValidationResults.length
-      }" errors="0" failures="${filteredValidationResults.length}" name="${source}">\n`;
+      output += `<testsuite package="org.spectral" time="0" tests="${filteredValidationResults.length}" errors="0" failures="${filteredValidationResults.length}" name="${source}">\n`;
 
       for (const result of filteredValidationResults) {
         output += `<testcase time="0" name="org.spectral.${result.code || 'unknown'}" classname="${classname}">`;
