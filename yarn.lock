@@ -351,6 +351,13 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@stoplight/json-ref-readers@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-readers/-/json-ref-readers-1.1.1.tgz#7c6c7cce7ac01e840cf56eaee10f2476b6f4a644"
+  integrity sha512-yE6SpGaBlj+QM4ony1+ST1Unz4TimZglU1lSJOlyCrVrAC1VoFpoJ1exMnU8Cg/++YzmBN9qBa4jk9s0CBnrTA==
+  dependencies:
+    node-fetch "^2.6.0"
+
 "@stoplight/json-ref-resolver@^3.0.1":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-3.0.3.tgz#7103ade1ca47af41677b464fa034aea539d406b0"
@@ -381,13 +388,6 @@
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.3.0.tgz#da2282352a4eb23c09d5106b9d1650d30a9ca2ad"
   integrity sha512-t74/MHMgmFVMQhdQ/2Q766GryNTIW8McH8+vB25oeoBhYKTOrJ/wPDt+OCxIWHPUlcSi2fTWa4FKQ8qgmP2jVA==
-
-"@stoplight/ref-resolvers@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/ref-resolvers/-/ref-resolvers-1.1.0.tgz#c2835625bee4e9e2fbb458735dcf32f8925423df"
-  integrity sha512-FVInHW7/3yMV0EjhUeVVxuLXadk0dJRmzhWWDY+YOGYNVunFsUOt8Eh/4skeayON5+bXzJHK5gkbPKIrur29Og==
-  dependencies:
-    node-fetch "^2.6.0"
 
 "@stoplight/types@^11.1.1", "@stoplight/types@^11.2.0":
   version "11.3.0"
@@ -4974,7 +4974,6 @@ micromatch@^4.0.2:
 
 micromatch@jonschlinkert/micromatch#2.2.0:
   version "2.2.0"
-  uid "5017fd78202e04c684cc31d3c2fb1f469ea222ff"
   resolved "https://codeload.github.com/jonschlinkert/micromatch/tar.gz/5017fd78202e04c684cc31d3c2fb1f469ea222ff"
   dependencies:
     arr-diff "^1.0.1"

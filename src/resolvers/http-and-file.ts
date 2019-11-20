@@ -1,5 +1,5 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { createResolveHttp, resolveFile } from '@stoplight/ref-resolvers';
+import { createResolveHttp, resolveFile } from '@stoplight/json-ref-readers';
 import { DEFAULT_REQUEST_OPTIONS } from '../request';
 
 const resolveHttp = createResolveHttp(DEFAULT_REQUEST_OPTIONS);
