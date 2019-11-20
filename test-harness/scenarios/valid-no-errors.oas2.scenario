@@ -15,7 +15,7 @@ paths: {}
 tags:
   - name: my-tag
 ====command====
-{spectral} lint {document}
+{bin} lint {document}
 ====stdout====
 OpenAPI 2.0 (Swagger) detected
 No results with a severity of 'warn' or higher found!

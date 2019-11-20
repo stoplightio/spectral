@@ -105,7 +105,7 @@ The name of severity levels are display correctly by stylish formatter
   }
 }
 ====command====
-{spectral} lint --ruleset {asset:oas-mixed-severity.json} {document}
+{bin} lint --ruleset {asset:oas-mixed-severity.json} {document}
 ====stdout====
 OpenAPI 3.x detected
 

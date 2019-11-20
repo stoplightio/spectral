@@ -39,7 +39,7 @@ paths:
                   tag:
                     type: string
 ====command====
-{spectral} lint {document} --fail-severity=error -D
+{bin} lint {document} --fail-severity=error -D
 ====status====
 0
 ====stdout====

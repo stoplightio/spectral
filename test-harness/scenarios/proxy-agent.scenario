@@ -6,7 +6,7 @@ foo:
 ====env====
 PROXY=http://localhost:3001
 ====command====
-{spectral} lint {document}
+{bin} lint {document}
 ====stdout====
 
 {document}

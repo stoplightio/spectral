@@ -9,7 +9,7 @@ paths: {}
 tags:
   - name: test
 ====command====
-{spectral} lint --quiet {document} --format=json
+{bin} lint --quiet {document} --format=json
 ====stdout====
 [
 	{

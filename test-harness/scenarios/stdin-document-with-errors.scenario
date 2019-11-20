@@ -11,7 +11,7 @@ extends: spectral:oas
 rules:
   api-servers: error
 ====command====
-cat {document} | {spectral} lint -r {asset:ruleset}
+cat {document} | {bin} lint -r {asset:ruleset}
 ====status====
 1
 ====stdout====
