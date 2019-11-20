@@ -9,12 +9,31 @@ export interface IReadOptions {
   timeout?: number;
 }
 
-export async function readFile(name: string, opts: IReadOptions): Promise<string> {
-  if (name in STATIC_ASSETS) {
-    return STATIC_ASSETS[name];
-  }
+export async function readFile(name: string | number, opts: IReadOptions): Promise<string> {
+  if (typeof name === 'number') {
+    let result = '';
 
-  if (isURL(name)) {
+    const stream = fs.createReadStream('', { fd: name });
+    stream.setEncoding(opts.encoding);
+
+    stream.on('readable', () => {
+      let chunk: string | null;
+
+      // tslint:disable-next-line:no-conditional-assignment
+      while ((chunk = stream.read()) !== null) {
+        result += chunk;
+      }
+    });
+
+    return new Promise<string>((resolve, reject) => {
+      stream.on('error', reject);
+      stream.on('end', () => {
+        resolve(result);
+      });
+    });
+  } else if (name in STATIC_ASSETS) {
+    return STATIC_ASSETS[name];
+  } else if (isURL(name)) {
     let response;
     let timeout: NodeJS.Timeout | number | null = null;
     try {
@@ -58,7 +77,7 @@ export async function readFile(name: string, opts: IReadOptions): Promise<string
   }
 }
 
-export async function readParsable(name: string, opts: IReadOptions): Promise<string> {
+export async function readParsable(name: string | number, opts: IReadOptions): Promise<string> {
   try {
     return await readFile(name, opts);
   } catch (ex) {

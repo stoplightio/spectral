@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import { stylish } from '../stylish';
 
 const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');
