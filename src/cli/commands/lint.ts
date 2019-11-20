@@ -28,6 +28,9 @@ const lintCommand: CommandModule = {
             return values;
           }
 
+          // https://stackoverflow.com/questions/39801643/detect-if-node-receives-stdin
+          // https://twitter.com/MylesBorins/status/782009479382626304
+          // https://nodejs.org/dist/latest/docs/api/tty.html#tty_readstream_istty
           if (process.stdin.isTTY) {
             return [];
           }
