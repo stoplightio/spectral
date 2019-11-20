@@ -1,4 +1,4 @@
-import { join, resolve } from 'path';
+import { join, resolve } from '@stoplight/path';
 import * as nock from 'nock';
 import * as yargs from 'yargs';
 import { ValidationError } from '../../../rulesets/validation';

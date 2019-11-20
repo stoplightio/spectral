@@ -1,4 +1,4 @@
-import { isAbsolute, resolve } from 'path';
+import { isAbsolute, resolve } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { readRuleset } from '../../../../rulesets';
 import { getDefaultRulesetFile } from '../../../../rulesets/loader';

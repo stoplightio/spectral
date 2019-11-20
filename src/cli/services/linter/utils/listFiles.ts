@@ -1,4 +1,4 @@
-import { normalize } from 'path';
+import { normalize } from '@stoplight/path';
 import * as fg from 'fast-glob';
 
 export async function listFiles(pattens: string[]): Promise<string[]> {

@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import * as fg from 'fast-glob';
 import { listFiles } from '../listFiles';
 
