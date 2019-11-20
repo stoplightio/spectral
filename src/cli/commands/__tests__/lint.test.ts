@@ -20,6 +20,7 @@ function run(command: string) {
 
 describe('lint', () => {
   let errorSpy: jest.SpyInstance;
+  const { isTTY } = process.stdin;
 
   const results: IRuleResult[] = [
     {
@@ -55,11 +56,28 @@ describe('lint', () => {
 
   afterEach(() => {
     errorSpy.mockRestore();
+    process.stdin.isTTY = isTTY;
   });
 
-  it('shows help when no document argument is passed', async () => {
+  it('shows help when no document and no STDIN are present', async () => {
+    process.stdin.isTTY = true;
     const output = await run('lint');
     expect(output).toContain('documents  Location of JSON/YAML documents');
+  });
+
+  describe('when STDIN is present', () => {
+    it('does not show help when documents are missing', async () => {
+      const output = await run('lint');
+      expect(output).not.toContain('documents  Location of JSON/YAML documents');
+    });
+
+    it('calls with lint with STDIN file descriptor', async () => {
+      await run('lint');
+      expect(lint).toBeCalledWith([0], {
+        encoding: 'utf8',
+        format: 'stylish',
+      });
+    });
   });
 
   it('shows help when invalid arguments are passed', async () => {
