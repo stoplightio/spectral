@@ -24,7 +24,7 @@
  */
 
 import chalk from 'chalk';
-import stripAnsi from 'strip-ansi';
+import stripAnsi = require('strip-ansi');
 import * as table from 'text-table';
 
 import { DiagnosticSeverity, IRange } from '@stoplight/types';
