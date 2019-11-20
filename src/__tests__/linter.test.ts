@@ -146,11 +146,13 @@ describe('linter', () => {
   test('should not report anything for disabled rules', async () => {
     await spectral.loadRuleset('spectral:oas3');
     const { rules: oas3Rules } = await readRuleset('spectral:oas3');
-    spectral.setRules(mergeRules(oas3Rules, {
-      'valid-example-in-schemas': 'off',
-      'components-schema-description': -1,
-      'openapi-tags': 'off',
-    }) as RuleCollection);
+    spectral.setRules(
+      mergeRules(oas3Rules, {
+        'valid-example-in-schemas': 'off',
+        'components-schema-description': -1,
+        'openapi-tags': 'off',
+      }) as RuleCollection,
+    );
 
     const result = await spectral.run(invalidSchema);
 
