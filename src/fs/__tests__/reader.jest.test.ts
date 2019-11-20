@@ -5,26 +5,26 @@ import { readFile } from '../reader';
 
 describe('readFile util', () => {
   describe('when a file descriptor is supplied', () => {
-    let fd: number;
+    let fileDescriptor: number;
 
     beforeEach(() => {
-      fd = fs.openSync(join(__dirname, '__fixtures__/simple'), 'r');
+      fileDescriptor = fs.openSync(join(__dirname, '__fixtures__/simple'), 'r');
     });
 
     afterEach(() => {
-      delete STATIC_ASSETS[fd];
+      delete STATIC_ASSETS[fileDescriptor];
     });
 
     it('reads from file', async () => {
-      expect(await readFile(fd, { encoding: 'utf8' })).toEqual(`line 1
+      expect(await readFile(fileDescriptor, { encoding: 'utf8' })).toEqual(`line 1
 line 2
 end
 `);
     });
 
     it('always skips static assets', async () => {
-      STATIC_ASSETS[fd] = 'test';
-      expect(await readFile(fd, { encoding: 'utf8' })).not.toEqual('test');
+      STATIC_ASSETS[fileDescriptor] = 'test';
+      expect(await readFile(fileDescriptor, { encoding: 'utf8' })).not.toEqual('test');
     });
 
     it('throws when fd cannot be accessed', () => {
