@@ -6,10 +6,10 @@ describe('deduplicateResults util', () => {
   it('deduplicate exact validation results', () => {
     expect(deduplicateResults(duplicateValidationResults)).toEqual([
       expect.objectContaining({
-        code: 'valid-schema-example-in-content',
+        code: 'valid-example-in-schemas',
       }),
       expect.objectContaining({
-        code: 'valid-example-in-schemas',
+        code: 'valid-schema-example-in-content',
       }),
     ]);
   });
@@ -22,11 +22,22 @@ describe('deduplicateResults util', () => {
 
     expect(deduplicateResults(duplicateValidationResultsWithNoSource)).toEqual([
       expect.objectContaining({
-        code: 'valid-schema-example-in-content',
-      }),
-      expect.objectContaining({
         code: 'valid-example-in-schemas',
       }),
+      expect.objectContaining({
+        code: 'valid-schema-example-in-content',
+      }),
     ]);
+  });
+
+  it('deduplicate list of only duplicates', () => {
+    const onlyDuplicates = [
+      { ...duplicateValidationResults[0] },
+      { ...duplicateValidationResults[0] },
+      { ...duplicateValidationResults[0] },
+      { ...duplicateValidationResults[0] },
+    ];
+
+    expect(deduplicateResults(onlyDuplicates).length).toBe(1);
   });
 });

@@ -1,26 +1,26 @@
-import { IRange } from '@stoplight/types/dist';
+import { compareResults } from '../../../../formatters/utils/sortResults';
 import { IRuleResult } from '../../../../types';
 
-type Dictionary<T, K extends PropertyKey> = { [key in K]: T };
+export const deduplicateResults = (results: IRuleResult[]): IRuleResult[] => {
+  const filtered: IRuleResult[] = [];
 
-const ARTIFICIAL_ROOT = Symbol('root');
+  const totalResults = results.length;
 
-const serializeRange = ({ start, end }: IRange) => `${start.line}:${start.character}:${end.line}:${end.character}`;
-const getIdentifier = (result: IRuleResult) => `${result.path.join('/')}${result.code}${serializeRange(result.range)}`;
+  if (totalResults < 2) {
+    return [...results];
+  }
 
-export const deduplicateResults = (results: IRuleResult[]) => {
-  const seen: Dictionary<Dictionary<string, string>, symbol> = {};
+  const sorted = [...results].sort(compareResults);
 
-  return results.filter(result => {
-    const source = result.source === void 0 ? ARTIFICIAL_ROOT : result.source;
-    const identifier = getIdentifier(result);
-    if (!(source in seen)) {
-      seen[source] = {};
-    } else if (identifier in seen[source]) {
-      return false;
+  filtered.push(sorted[0]);
+
+  for (let i = 1; i < totalResults; i++) {
+    if (compareResults(sorted[i], sorted[i - 1]) === 0) {
+      continue;
     }
 
-    seen[source][identifier] = true;
-    return true;
-  });
+    filtered.push(sorted[i]);
+  }
+
+  return filtered;
 };
