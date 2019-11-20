@@ -233,57 +233,62 @@ export default (ruleName: string, path: string) => {
     expect(results).toEqual([]);
   });
 
-  test.each([['byte', '1'], ['int32', 2 ** 31], ['int64', 2 ** 63], ['float', 2 ** 128]])(
-    'reports invalid usage of %s format',
-    async (format, example) => {
-      const results = await s.run({
-        [path]: {
-          xoxo: {
-            schema: {
-              type: 'object',
-              properties: {
-                ip_address: {
-                  type: ['string', 'number'],
-                  format,
-                  example,
-                },
+  test.each([
+    ['byte', '1'],
+    ['int32', 2 ** 31],
+    ['int64', 2 ** 63],
+    ['float', 2 ** 128],
+  ])('reports invalid usage of %s format', async (format, example) => {
+    const results = await s.run({
+      [path]: {
+        xoxo: {
+          schema: {
+            type: 'object',
+            properties: {
+              ip_address: {
+                type: ['string', 'number'],
+                format,
+                example,
               },
             },
           },
         },
-      });
+      },
+    });
 
-      expect(results).toEqual([
-        expect.objectContaining({
-          severity: DiagnosticSeverity.Error,
-          code: ruleName,
-          message: `"ip_address.example" property format should match format "${format}"`, // hm, ip_address is likely to be more meaningful no?
-        }),
-      ]);
-    },
-  );
+    expect(results).toEqual([
+      expect.objectContaining({
+        severity: DiagnosticSeverity.Error,
+        code: ruleName,
+        message: `"ip_address.example" property format should match format "${format}"`, // hm, ip_address is likely to be more meaningful no?
+      }),
+    ]);
+  });
 
-  test.each([['byte', 'MTI3'], ['int32', 2 ** 30], ['int64', 2 ** 40], ['float', 2 ** 64], ['double', 2 ** 1028]])(
-    'does not report valid usage of %s format',
-    async (format, example) => {
-      const results = await s.run({
-        [path]: {
-          xoxo: {
-            schema: {
-              type: 'object',
-              properties: {
-                ip_address: {
-                  type: ['string', 'number'],
-                  format,
-                  example,
-                },
+  test.each([
+    ['byte', 'MTI3'],
+    ['int32', 2 ** 30],
+    ['int64', 2 ** 40],
+    ['float', 2 ** 64],
+    ['double', 2 ** 1028],
+  ])('does not report valid usage of %s format', async (format, example) => {
+    const results = await s.run({
+      [path]: {
+        xoxo: {
+          schema: {
+            type: 'object',
+            properties: {
+              ip_address: {
+                type: ['string', 'number'],
+                format,
+                example,
               },
             },
           },
         },
-      });
+      },
+    });
 
-      expect(results).toHaveLength(0);
-    },
-  );
+    expect(results).toHaveLength(0);
+  });
 };
