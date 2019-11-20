@@ -402,6 +402,159 @@ describe('Rulesets reader', () => {
     );
   });
 
+  it('given ruleset with extends set to all, should enable all rules', () => {
+    return expect(
+      readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset.json')),
+    ).resolves.toStrictEqual({
+      functions: {},
+      rules: {
+        'contact-name-matches-stoplight': {
+          given: '$.info.contact',
+          message: 'Contact name must contain Stoplight',
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'description-matches-stoplight': {
+          given: '$.info',
+          message: 'Description must contain Stoplight',
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          then: {
+            field: 'description',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'title-matches-stoplight': {
+          given: '$.info',
+          message: 'Title must contain Stoplight',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'title',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+      },
+    });
+  });
+
+  it('given ruleset with extends set to recommended, should enable recommended rules', () => {
+    return expect(
+      readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset-recommended.json')),
+    ).resolves.toStrictEqual({
+      functions: {},
+      rules: {
+        'contact-name-matches-stoplight': {
+          given: '$.info.contact',
+          message: 'Contact name must contain Stoplight',
+          recommended: false,
+          severity: -1,
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'description-matches-stoplight': {
+          given: '$.info',
+          message: 'Description must contain Stoplight',
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          then: {
+            field: 'description',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'title-matches-stoplight': {
+          given: '$.info',
+          message: 'Title must contain Stoplight',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'title',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+      },
+    });
+  });
+
+  it('given ruleset with extends set to off, should disable all rules', () => {
+    return expect(
+      readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/ruleset-c.json')),
+    ).resolves.toStrictEqual({
+      functions: {},
+      rules: {
+        'contact-name-matches-stoplight': {
+          given: '$.info.contact',
+          message: 'Contact name must contain Stoplight',
+          recommended: false,
+          severity: -1,
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'description-matches-stoplight': {
+          given: '$.info',
+          message: 'Description must contain Stoplight',
+          severity: -1,
+          recommended: true,
+          then: {
+            field: 'description',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'title-matches-stoplight': {
+          given: '$.info',
+          message: 'Title must contain Stoplight',
+          severity: -1,
+          then: {
+            field: 'title',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+      },
+    });
+  });
+
   it('should support local rulesets', () => {
     return expect(readRuleset(extendsRelativeRuleset)).resolves.toEqual(
       expect.objectContaining({

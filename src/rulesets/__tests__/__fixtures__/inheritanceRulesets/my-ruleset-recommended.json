@@ -1,0 +1,3 @@
+{
+  "extends": [["./my-ruleset.json", "recommended"]]
+}

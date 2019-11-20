@@ -1,5 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { IRule } from '../../../types';
+import { FileRuleCollection } from '../../../types/ruleset';
 import { mergeRules } from '../rules';
 
 describe('Ruleset rules merging', () => {
@@ -132,18 +133,6 @@ describe('Ruleset rules merging', () => {
         severity: DiagnosticSeverity.Warning,
       },
     });
-  });
-
-  it('supports array-ish syntax', () => {
-    const rules = {
-      test: JSON.parse(JSON.stringify(baseRule)),
-    };
-
-    mergeRules(rules, {
-      test: ['off'],
-    });
-
-    expect(rules).toHaveProperty('test.severity', -1);
   });
 
   it('supports array-ish syntax', () => {
@@ -322,6 +311,121 @@ describe('Ruleset rules merging', () => {
     );
 
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Hint);
+  });
+
+  describe('inheriting rules with no explicit severity levels', () => {
+    let rules: FileRuleCollection;
+
+    beforeEach(() => {
+      rules = {
+        rule: {
+          given: '',
+          then: { function: '' },
+          recommended: true,
+        },
+        'rule-with-no-recommended': {
+          given: '',
+          then: { function: '' },
+        },
+        'optional-rule': {
+          given: '',
+          then: { function: '' },
+          recommended: false,
+        },
+      };
+    });
+
+    it('sets warning as a default', () => {
+      const newRules = mergeRules({}, rules);
+
+      const custom = {
+        rule: true,
+        'rule-with-no-recommended': true,
+        'optional-rule': true,
+      };
+
+      expect(mergeRules(newRules, custom)).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+        }),
+      });
+    });
+
+    it('sets warning as a default even when all rules were disabled', () => {
+      const newRules = mergeRules({}, rules, 'off');
+
+      const custom = {
+        rule: true,
+        'rule-with-no-recommended': true,
+        'optional-rule': true,
+      };
+
+      expect(mergeRules(newRules, custom)).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+        }),
+      });
+    });
+
+    it('respects ruleset severity', () => {
+      expect(mergeRules({}, rules, 'all')).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+        }),
+      });
+
+      expect(mergeRules({}, rules, 'recommended')).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: DiagnosticSeverity.Warning,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: -1,
+        }),
+      });
+
+      expect(mergeRules({}, rules, 'off')).toEqual({
+        rule: expect.objectContaining({
+          recommended: true,
+          severity: -1,
+        }),
+        'rule-with-no-recommended': expect.objectContaining({
+          severity: -1,
+        }),
+        'optional-rule': expect.objectContaining({
+          recommended: false,
+          severity: -1,
+        }),
+      });
+    });
   });
 
   it('given invalid rule value should throw', () => {
