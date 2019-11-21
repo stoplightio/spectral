@@ -23,8 +23,8 @@
  * @author Sindre Sorhus
  */
 
-import chalk from 'chalk';
-import stripAnsi from 'strip-ansi';
+import * as chalk from 'chalk';
+import stripAnsi = require('strip-ansi');
 import * as table from 'text-table';
 
 import { DiagnosticSeverity, IRange } from '@stoplight/types';

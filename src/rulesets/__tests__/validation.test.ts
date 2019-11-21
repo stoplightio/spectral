@@ -189,7 +189,10 @@ describe('Ruleset Validation', () => {
   it('recognizes valid array of functions with object only', () => {
     expect(
       assertValidRuleset.bind(null, {
-        functions: [['foo', {}], ['baz', {}]],
+        functions: [
+          ['foo', {}],
+          ['baz', {}],
+        ],
         rules: {},
       }),
     ).not.toThrow();

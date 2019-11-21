@@ -1,14 +1,14 @@
 ====test====
 Errors when no document is provided
 ====command====
-{spectral} lint
-====stderr====
-spectral lint <documents..>
+./scripts/faketty.bash {spectral} lint
+====stdout====
+spectral lint [documents..]
 
 lint JSON/YAML documents from files or URLs
 
 Positionals:
-  documents  Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.  [array] [required] [default: []]
+  documents  Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.  [array] [default: []]
 
 Options:
   --version                    Show version number  [boolean]
