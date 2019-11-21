@@ -18,7 +18,7 @@ describe('cli acceptance tests', () => {
     const scenario = parseScenarioFile(data);
     const replacements: Dictionary<string> = {
       __dirname,
-      spectral: spectralBin,
+      bin: spectralBin,
     };
 
     const tmpFileHandles = new Map<string, tmp.FileResult>();

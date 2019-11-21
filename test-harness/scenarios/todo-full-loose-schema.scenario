@@ -84,7 +84,7 @@ Loose JSON Schema can be validated
   }
 }
 ====command====
-{spectral} lint {document} --ruleset {asset:loose-schema-ruleset}
+{bin} lint {document} --ruleset {asset:loose-schema-ruleset}
 ====stdout====
 JSON Schema (loose) detected
 

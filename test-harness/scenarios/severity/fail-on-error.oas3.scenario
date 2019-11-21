@@ -18,7 +18,7 @@ paths:
         200:
           description: ok
 ====command====
-{spectral} lint {document} --fail-severity=error
+{bin} lint {document} --fail-severity=error
 ====status====
 1
 ====stdout====

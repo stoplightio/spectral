@@ -8,7 +8,7 @@ info:
   title: Stoplight
 paths: {}
 ====command====
-{spectral} lint {document} --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
+{bin} lint {document} --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
 ====asset:output.txt====
 ====stdout====
 {document}

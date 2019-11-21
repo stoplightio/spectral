@@ -1,7 +1,7 @@
 ====test====
 Errors when no document is provided
 ====command====
-./scripts/faketty.bash {spectral} lint
+./scripts/faketty.bash {bin} lint
 ====stdout====
 spectral lint [documents..]
 
