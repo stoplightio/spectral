@@ -1,10 +1,10 @@
-import { Resolved } from './resolved';
-
 const { JSONPath } = require('jsonpath-plus');
+import { Optional } from '@stoplight/types';
 
 import { lintNode } from './linter';
+import { Resolved } from './resolved';
 import { getDiagnosticSeverity } from './rulesets/severity';
-import { FunctionCollection, IGivenNode, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
+import { FunctionCollection, IGivenNode, IRule, IRuleResult, IRunRule, IThen, RunRuleCollection } from './types';
 import { hasIntersectingElement } from './utils/';
 
 export const isRuleEnabled = (rule: IRule) => rule.severity !== void 0 && getDiagnosticSeverity(rule.severity) !== -1;
@@ -47,48 +47,89 @@ const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollecti
   const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
   const results: IRuleResult[] = [];
-  const nodes: IGivenNode[] = [];
 
-  // don't have to spend time running jsonpath if given is $ - can just use the root object
-  if (rule.given && rule.given !== '$') {
-    try {
+  for (const given of Array.isArray(rule.given) ? rule.given : [rule.given]) {
+    // don't have to spend time running jsonpath if given is $ - can just use the root object
+    if (given === '$') {
+      const validationResults = lint(
+        {
+          path: ['$'],
+          value: target,
+        },
+        resolved,
+        rule,
+        functions,
+      );
+
+      if (validationResults && validationResults.length > 0) {
+        results.push(...validationResults);
+      }
+    } else {
       JSONPath({
-        path: rule.given,
+        path: given,
         json: target,
         resultType: 'all',
         callback: (result: any) => {
-          nodes.push({
-            path: JSONPath.toPathArray(result.path),
-            value: result.value,
-          });
+          const validationResults = lint(
+            {
+              path: JSONPath.toPathArray(result.path),
+              value: result.value,
+            },
+            resolved,
+            rule,
+            functions,
+          );
+
+          if (validationResults && validationResults.length > 0) {
+            results.push(...validationResults);
+          }
         },
       });
-    } catch (e) {
-      console.error(e);
-    }
-  } else {
-    nodes.push({
-      path: ['$'],
-      value: target,
-    });
-  }
-
-  for (const node of nodes) {
-    try {
-      const thens = Array.isArray(rule.then) ? rule.then : [rule.then];
-      for (const then of thens) {
-        const func = functions[then.function];
-        if (!func) {
-          console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);
-          continue;
-        }
-
-        results.push(...lintNode(node, rule, then, func, resolved));
-      }
-    } catch (e) {
-      console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
     }
   }
 
   return results;
 };
+
+function lint(
+  node: IGivenNode,
+  resolved: Resolved,
+  rule: IRunRule,
+  functions: FunctionCollection,
+): Optional<IRuleResult[]> {
+  try {
+    if (Array.isArray(rule.then)) {
+      const results: IRuleResult[] = [];
+      for (const then of rule.then) {
+        const validationResults = runThen(node, resolved, rule, then, functions);
+        if (validationResults && validationResults.length > 0) {
+          results.push(...validationResults);
+        }
+      }
+
+      return results;
+    }
+
+    return runThen(node, resolved, rule, rule.then, functions);
+  } catch (e) {
+    console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
+  }
+
+  return;
+}
+
+function runThen(
+  node: IGivenNode,
+  resolved: Resolved,
+  rule: IRunRule,
+  then: IThen,
+  functions: FunctionCollection,
+): Optional<IRuleResult[]> {
+  const func = functions[then.function];
+  if (!func) {
+    console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);
+    return;
+  }
+
+  return lintNode(node, rule, then, func, resolved);
+}
