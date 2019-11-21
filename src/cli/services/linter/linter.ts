@@ -64,7 +64,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     spectral.setRules(skipRules(ruleset.rules, flags));
   }
 
-  const targetUris = await listFiles(documents);
+  const [targetUris, filesNotFound] = await listFiles(documents);
   const results: IRuleResult[] = [];
 
   for (const targetUri of targetUris) {
@@ -87,6 +87,22 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
       })),
     );
   }
+
+  filesNotFound.forEach(fileNotFound => {
+    const errorFileNotFound: IRuleResult = {
+      code: 'file-not-found',
+      message: 'File not found: ' + fileNotFound,
+      path: [],
+      severity: 0,
+      source: 'File not found',
+      range: {
+        start: { line: 1, character: 1 },
+        end: { line: 1, character: 1 },
+      },
+    };
+
+    results.push(errorFileNotFound);
+  });
 
   return results;
 }

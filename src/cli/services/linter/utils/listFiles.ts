@@ -1,7 +1,13 @@
 import { normalize } from '@stoplight/path';
 import * as fg from 'fast-glob';
 
-export async function listFiles(pattens: Array<number | string>): Promise<Array<number | string>> {
+async function asyncForEach(array: any, callback: any) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
+export async function listFiles(pattens: Array<number | string>): Promise<Array<Array<number | string>>> {
   const { files, fileDescriptors, urls } = pattens.reduce<{
     files: string[];
     urls: string[];
@@ -25,5 +31,18 @@ export async function listFiles(pattens: Array<number | string>): Promise<Array<
     },
   );
 
-  return [...urls, ...fileDescriptors, ...(await fg(files, { dot: true, absolute: true })).map(normalize)]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
+  const filesFound: string[] = [];
+  const fileSearchWithoutResult: string[] = [];
+
+  await asyncForEach(files, async (fileSearch: string) => {
+    let resultFg;
+
+    resultFg = [...(await fg(fileSearch, { dot: true, absolute: true })).map(normalize)];
+    if (resultFg.length === 0) {
+      fileSearchWithoutResult.push(fileSearch);
+    }
+    filesFound.push(...resultFg);
+  });
+
+  return [[...urls, ...fileDescriptors, ...filesFound], fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
 }
