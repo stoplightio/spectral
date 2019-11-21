@@ -18,6 +18,6 @@ describe('listFiles CLI util', () => {
 
     ((fg as unknown) as jest.Mock).mockResolvedValueOnce([...list]);
 
-    expect(await listFiles(['./foo/*.json'])).toEqual(list);
+    expect(await listFiles(['./foo/*.json'])).toEqual([list, []]);
   });
 });
