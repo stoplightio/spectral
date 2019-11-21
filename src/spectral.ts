@@ -7,7 +7,7 @@ import {
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname } from '@stoplight/path';
-import { Dictionary, IDiagnostic } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, IDiagnostic } from '@stoplight/types';
 import {
   getLocationForJsonPath as getLocationForJsonPathYAML,
   parseWithPointers as parseYAMLWithPointers,
@@ -109,21 +109,24 @@ export class Spectral {
       this._parsedMap,
     );
 
-    if (resolved.formats === void 0) {
-      const foundFormats = Object.keys(this.formats).filter(format => this.formats[format](resolved.resolved));
-      resolved.formats = foundFormats.length === 0 ? null : foundFormats;
-    }
+    const validationResults = [...refDiagnostics, ...results, ...formatResolverErrors(resolved)];
 
-    const validationResults = [
-      ...refDiagnostics,
-      ...results,
-      ...formatResolverErrors(resolved),
-      ...runRules(resolved, this.rules, this.functions),
-    ];
+    if (resolved.formats === void 0) {
+      const registeredFormats = Object.keys(this.formats);
+      const foundFormats = registeredFormats.filter(format => this.formats[format](resolved.resolved));
+      if (foundFormats.length === 0) {
+        resolved.formats = null;
+        if (registeredFormats.length > 0) {
+          validationResults.push(Spectral._generateUnrecognizedFormatError(parsedResult));
+        }
+      } else {
+        resolved.formats = foundFormats;
+      }
+    }
 
     return {
       resolved: resolved.resolved,
-      results: validationResults,
+      results: [...validationResults, ...runRules(resolved, this.rules, this.functions)],
     };
   }
 
@@ -251,6 +254,20 @@ export class Spectral {
 
     return resolveOpts;
   };
+
+  private static _generateUnrecognizedFormatError(parsedResult: IParsedResult): IRuleResult {
+    return {
+      range: parsedResult.getLocationForJsonPath(parsedResult.parsed, [], true)?.range || {
+        start: { character: 0, line: 0 },
+        end: { character: 0, line: 0 },
+      },
+      message: 'Provided file format does not match any of the registered formats',
+      code: 'unrecognized-format',
+      severity: DiagnosticSeverity.Information,
+      source: parsedResult.source,
+      path: [],
+    };
+  }
 }
 
 export const REF_METADATA = Symbol('external_ref_metadata');

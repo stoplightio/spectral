@@ -41,8 +41,6 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.registerFormat('oas3', isOpenApiv3);
-    spectral.registerFormat('oas2', isOpenApiv2);
   });
 
   test('should not lint if passed in value is not an object', async () => {
@@ -144,6 +142,8 @@ describe('linter', () => {
   });
 
   test('should not report anything for disabled rules', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas3');
     const { rules: oas3Rules } = await readRuleset('spectral:oas3');
     spectral.setRules(
@@ -182,6 +182,8 @@ describe('linter', () => {
   });
 
   test('should output unescaped json paths', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas3');
 
     const result = await spectral.run(invalidSchema);
@@ -452,6 +454,13 @@ describe('linter', () => {
     });
 
     expect(result).toEqual([
+      {
+        message: 'Provided file format does not match any of the registered formats',
+        path: [],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Information,
+        code: 'unrecognized-format',
+      },
       expect.objectContaining({
         code: 'rule3',
       }),
@@ -512,6 +521,8 @@ responses:: !!foo
   });
 
   test('should report a valid line number for json paths containing escaped slashes', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas3');
 
     const result = await spectral.run(studioFixture);
@@ -537,6 +548,8 @@ responses:: !!foo
   });
 
   test('should remove all redundant ajv errors', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas3');
 
     const result = await spectral.run(invalidSchema);
@@ -578,6 +591,8 @@ responses:: !!foo
   });
 
   test('should report invalid schema $refs', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas2');
 
     const result = await spectral.run(todosInvalid);
@@ -894,6 +909,8 @@ responses:: !!foo
   });
 
   test('should evaluate {{path}} in validation messages', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas3');
     spectral.setRules({
       'oas3-schema': {
@@ -914,6 +931,8 @@ responses:: !!foo
   });
 
   test('should report ref siblings', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas');
 
     const results = await spectral.run({

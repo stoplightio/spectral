@@ -10,6 +10,7 @@ PROXY=http://localhost:3001
 ====stdout====
 
 {document}
- 2:9  error  invalid-ref  FetchError: request to http://localhost:3002/foo.json failed, reason: connect ECONNREFUSED 127.0.0.1:3001
+ 1:1  information  unrecognized-format  Provided file format does not match any of the registered formats
+ 2:9        error  invalid-ref          FetchError: request to http://localhost:3002/foo.json failed, reason: connect ECONNREFUSED 127.0.0.1:3001
 
-✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)
+✖ 2 problems (1 error, 0 warnings, 1 info, 0 hints)
