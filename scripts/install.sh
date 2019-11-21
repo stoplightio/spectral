@@ -11,20 +11,20 @@ if [ "$UNAME" != "Linux" ] && [ "$UNAME" != "Darwin" ] ; then
 fi
 
 if [ "$UNAME" = "Darwin" ] ; then
-  PLATFORM="macos"
+  FILENAME="spectral-macos"
 elif [ "$UNAME" = "Linux" ] ; then
-  PLATFORM="linux"
+  FILENAME="spectral"
 fi
 
-URL="https://github.com/stoplightio/spectral/releases/latest/download/spectral-$PLATFORM"
-SRC=$(pwd)/spectral-$PLATFORM
+URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
+SRC="$(pwd)/${FILENAME}"
 DEST=/usr/local/bin/spectral
 
 STATUS=$(curl -sL -w %{http_code} -o $SRC $URL)
 if [ $STATUS -ge 200 ] & [ $STATUS -le 308 ]; then
   mv $SRC $DEST
   chmod +x $DEST
-  echo "Spectral installation was successful"
+  echo "Spectral was installed to: ${DEST}"
 else
   rm $SRC
   echo "Error requesting. Download binary from ${URL}"
