@@ -120,9 +120,15 @@ Now all the rules in this ruleset will only be applied if the specified format i
 
 Custom formats can be registered via the [JS API](../guides/javascript.md), but the CLI is limited to using the predefined ones.
 
+## Given
+
+The `given` keyword is, besides `then`, the only required property on each rule definition. 
+It can be any valid JSONPath expression or an array of JSONPath expressions.
+[JSONPath Online Evaluator](http://jsonpath.com/) is a helpful tool to determine what `given` path you want.
+
 ## Severity
 
-The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`.
+The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`. The default value is `warn`.
 
 ## Then
 
