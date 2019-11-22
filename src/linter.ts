@@ -68,7 +68,7 @@ export const lintNode = (
     });
   }
 
-  let results: IRuleResult[] = [];
+  const results: IRuleResult[] = [];
 
   for (const target of targets) {
     const targetPath = givenPath.concat(target.path);
@@ -88,8 +88,8 @@ export const lintNode = (
         },
       ) || [];
 
-    results = results.concat(
-      targetResults.map<IRuleResult>(result => {
+    results.push(
+      ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
         const path = getClosestJsonPath(
           rule.resolved === false ? resolved.unresolved : resolved.resolved,
