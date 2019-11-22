@@ -1,4 +1,5 @@
 import * as path from '@stoplight/path';
+import { normalize } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import * as fg from 'fast-glob';
 import * as fs from 'fs';
@@ -17,7 +18,7 @@ describe('cli acceptance tests', () => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
     const replacements: Dictionary<string> = {
-      __dirname,
+      __dirname: normalize(__dirname),
       bin: spectralBin,
     };
 
