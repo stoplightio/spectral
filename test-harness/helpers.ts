@@ -4,6 +4,7 @@ import * as tmp from 'tmp';
 export interface IScenarioFile {
   test: string;
   assets: string[][];
+  tmpAssets: string[][];
   command: string;
   status: Optional<string>;
   stdout: Optional<string>;
@@ -26,7 +27,7 @@ function getItem(input: string[], key: string, required?: boolean): Optional<str
   return input[index + 1].trim();
 }
 
-export function parseScenarioFile(data: string): IScenarioFile {
+export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
   const regex = /====(test|document|command|status|stdout|stderr|env|asset:[a-z0-9.\-]+)====\r?\n/gi;
   const split = data.split(regex);
 
@@ -58,6 +59,7 @@ export function parseScenarioFile(data: string): IScenarioFile {
     stdout,
     stderr,
     env: env === void 0 ? process.env : getEnv(env),
+    tmpAssets: [],
   };
 }
 

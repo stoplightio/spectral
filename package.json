@@ -52,6 +52,7 @@
     "pretest": "node ./scripts/generate-assets.js",
     "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json",
     "test.harness": "jest -c ./jest.harness.config.js",
+    "test.harness.generate": "ts-node test-harness/generate.js",
     "test.karma": "karma start",
     "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
@@ -126,6 +127,7 @@
     "tslint-config-stoplight": "~1.4",
     "typescript": "^3.7.2",
     "typescript-json-schema": "~0.40.0",
+    "unique-slug": "^2.0.2",
     "xml2js": "^0.4.22"
   },
   "lint-staged": {

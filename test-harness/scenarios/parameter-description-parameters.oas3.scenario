@@ -26,9 +26,10 @@ components:
 ====stdout====
 OpenAPI 3.x detected
 
-{document}
-  5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.
-  9:11  warning  oas3-parameter-description  Parameter objects should have a `description`.
- 16:15  warning  oas3-parameter-description  Parameter objects should have a `description`.
+[4m{document}[24m
+  5:9   [33mwarning[39m  oas3-parameter-description  Parameter objects should have a `description`.
+  9:11  [33mwarning[39m  oas3-parameter-description  Parameter objects should have a `description`.
+ 16:15  [33mwarning[39m  oas3-parameter-description  Parameter objects should have a `description`.
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
+[33m[1m✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)[22m[39m
+[33m[1m[22m[39m

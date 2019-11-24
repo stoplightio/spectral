@@ -8,7 +8,7 @@
 /binaries
 /rulesets
 /__karma__/__fixtures__/
-/test-harness/tmp/
+/test-harness/__tests__/
 
 # testing
 /coverage

@@ -8,8 +8,8 @@ info:
   title: Stoplight
 paths: {}
 ====command====
-{bin} lint {document} --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
-====asset:output.txt====
+{bin} lint {document} --output={asset:output.txt} > /dev/null; cat {tmp:output.txt}
+====tmp:output.txt====
 ====stdout====
 {document}
  1:1  warning  api-servers       OpenAPI `servers` must be present and non-empty array.
