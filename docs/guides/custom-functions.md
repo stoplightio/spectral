@@ -48,7 +48,7 @@ If a particular rule has a `field` property in `then`, that path will be exposed
 ### otherValues
 
 `otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSONPath expression.
-`otherValues.resolved` servers for internal purposes, therefore we discourage using it in custom functions.
+`otherValues.resolved` serves for internal purposes, therefore we discourage using it in custom functions.
 
 Custom functions take exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
 
