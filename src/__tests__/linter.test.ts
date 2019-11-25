@@ -700,6 +700,26 @@ responses:: !!foo
         expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
         expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
       });
+
+      test('given array of paths, should pass each given path through to lint function', async () => {
+        spectral.setRules({
+          example: {
+            message: '',
+            given: ['$.responses', '$..200'],
+            then: {
+              function: fnName,
+            },
+          },
+        });
+
+        await spectral.run(target);
+
+        expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
+        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
+        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
+        expect(fakeLintingFunction.mock.calls[1][2].given).toEqual(['responses', '200']);
+        expect(fakeLintingFunction.mock.calls[1][3].given).toEqual(target.responses['200']);
+      });
     });
 
     describe('when given path is not set', () => {

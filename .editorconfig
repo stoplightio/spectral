@@ -3,7 +3,7 @@ root = true
 [*]
 charset = utf-8
 
-[*.{ts,js,yaml}]
+[*.{ts,js,yaml,scenario}]
 indent_style = space
 indent_size = 2
 

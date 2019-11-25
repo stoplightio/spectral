@@ -1,8 +1,7 @@
-import { Resolved } from './resolved';
-
 const { JSONPath } = require('jsonpath-plus');
 
 import { lintNode } from './linter';
+import { Resolved } from './resolved';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { FunctionCollection, IGivenNode, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
 import { hasIntersectingElement } from './utils/';
@@ -26,8 +25,9 @@ export const runRules = (
       rule.formats !== void 0 &&
       (resolved.formats === null ||
         (resolved.formats !== void 0 && !hasIntersectingElement(rule.formats, resolved.formats)))
-    )
+    ) {
       continue;
+    }
 
     if (!isRuleEnabled(rule)) {
       continue;
@@ -47,48 +47,66 @@ const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollecti
   const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
   const results: IRuleResult[] = [];
-  const nodes: IGivenNode[] = [];
 
-  // don't have to spend time running jsonpath if given is $ - can just use the root object
-  if (rule.given && rule.given !== '$') {
-    try {
+  for (const given of Array.isArray(rule.given) ? rule.given : [rule.given]) {
+    // don't have to spend time running jsonpath if given is $ - can just use the root object
+    if (given === '$') {
+      lint(
+        {
+          path: ['$'],
+          value: target,
+        },
+        resolved,
+        rule,
+        functions,
+        results,
+      );
+    } else {
       JSONPath({
-        path: rule.given,
+        path: given,
         json: target,
         resultType: 'all',
         callback: (result: any) => {
-          nodes.push({
-            path: JSONPath.toPathArray(result.path),
-            value: result.value,
-          });
+          lint(
+            {
+              path: JSONPath.toPathArray(result.path),
+              value: result.value,
+            },
+            resolved,
+            rule,
+            functions,
+            results,
+          );
         },
       });
-    } catch (e) {
-      console.error(e);
-    }
-  } else {
-    nodes.push({
-      path: ['$'],
-      value: target,
-    });
-  }
-
-  for (const node of nodes) {
-    try {
-      const thens = Array.isArray(rule.then) ? rule.then : [rule.then];
-      for (const then of thens) {
-        const func = functions[then.function];
-        if (!func) {
-          console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);
-          continue;
-        }
-
-        results.push(...lintNode(node, rule, then, func, resolved));
-      }
-    } catch (e) {
-      console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
     }
   }
 
   return results;
 };
+
+function lint(
+  node: IGivenNode,
+  resolved: Resolved,
+  rule: IRunRule,
+  functions: FunctionCollection,
+  results: IRuleResult[],
+): void {
+  try {
+    for (const then of Array.isArray(rule.then) ? rule.then : [rule.then]) {
+      const func = functions[then.function];
+      if (!func) {
+        console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);
+        continue;
+      }
+
+      const validationResults = lintNode(node, rule, then, func, resolved);
+
+      if (validationResults.length > 0) {
+        results.push(...validationResults);
+      }
+    }
+  } catch (e) {
+    console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
+  }
+}
