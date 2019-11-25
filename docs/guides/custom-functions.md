@@ -13,6 +13,43 @@ export type IFunction<O = any> = (
 ) => void | IFunctionResult[];
 ```
 
+### targetValue
+ 
+`targetValue` the value the custom function is provided with and is supposed to lint against.
+It's based on `given` JSONPath expression defined on the rule and optionally `field` if placed on `then`.
+For instance, given the following partial of OpenAPI 3.0 document
+```yaml
+openapi: 3.0.0
+info:
+  title: foo
+```
+and the following `given` JSONPath expression `$`, `targetValue` would be a JS object literal containing `openapi` and `info` properties.
+If you changed the path to `$.info.title`, `targetValue` would equal `"foo"`.
+
+### options
+
+Options corresponds to `functionOptions` that's defined in `then` property of each rule.
+Each rule can specify options that each function should receive. This can be done as follows
+
+```yaml
+operation-id-kebab-case:
+  given: "$"
+  then:
+    function: pattern
+    functionOptions:  # this object be passed down as options to the custom function
+      match: ^[a-z][a-z0-9\-]*$
+```
+
+### paths
+
+`paths.given` contains JSONPath expression you set in a rule - in `given` field.
+If a particular rule has a `field` property in `then`, that path will be exposed as `paths.target`.
+
+### otherValues
+
+`otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSONPath expression.
+`otherValues.resolved` servers for internal purposes, therefore we discourage using it in custom functions.
+
 Custom functions take exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
 
 The process of creating a function involves 2 steps:
