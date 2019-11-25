@@ -24,6 +24,7 @@
  */
 import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
+import * as eol from 'eol';
 import * as fs from 'fs';
 import { template } from 'lodash';
 import { IRuleResult } from '../../types';
@@ -41,9 +42,9 @@ import {
 // Helpers
 // ------------------------------------------------------------------------------
 
-const pageTemplate = template(fs.readFileSync(path.join(__dirname, 'html-template-page.html'), 'utf8'));
-const messageTemplate = template(fs.readFileSync(path.join(__dirname, 'html-template-message.html'), 'utf8'));
-const resultTemplate = template(fs.readFileSync(path.join(__dirname, 'html-template-result.html'), 'utf8'));
+const pageTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-page.html'), 'utf8')));
+const messageTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-message.html'), 'utf8')));
+const resultTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-result.html'), 'utf8')));
 
 function renderMessages(messages: IRuleResult[], parentIndex: number) {
   return sortResults(messages)

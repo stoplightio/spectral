@@ -70,6 +70,7 @@
     "ajv-oai": "^1.1.5",
     "better-ajv-errors": "^0.6.7",
     "chalk": "^3.0.0",
+    "eol": "^0.9.1",
     "fast-glob": "^3.1.0",
     "jsonpath-plus": "~2.0",
     "lodash": ">=4.17.5",
