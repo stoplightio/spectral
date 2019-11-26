@@ -77,6 +77,7 @@ If you are using Spectral in your project and want to be listed in the examples 
 - [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI and his work on Speccy
 - [Jamund Ferguson](https://github.com/xjamundx) for JUnit formatter
 - [Sindre Sorhus](https://github.com/sindresorhus) for Stylish formatter
+- Julian Laval for HTML formatter
 
 ## Support
 
