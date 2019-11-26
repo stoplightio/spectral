@@ -43,9 +43,10 @@
     "inline-version": "./scripts/inline-version.js",
     "lint.fix": "yarn lint --fix",
     "lint": "tsc --noEmit && tslint 'src/**/*.ts'",
+    "copy.html-templates": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
     "postbuild.oas-functions": "copyfiles -u 1 \"dist/rulesets/oas*/functions/*.js\" ./",
     "postbuild": "yarn build.oas-functions && yarn generate-assets",
-    "prebuild": "yarn build.clean && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./",
+    "prebuild": "yarn build.clean && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/oas*/**/*.json\" ./ && yarn copy.html-templates",
     "prebuild.binary": "yarn build",
     "pretest.karma": "node ./scripts/generate-karma-fixtures.js && yarn pretest",
     "pretest": "node ./scripts/generate-assets.js",
@@ -59,9 +60,9 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.2.1",
+    "@stoplight/json-ref-readers": "^1.1.1",
     "@stoplight/json-ref-resolver": "^3.0.1",
     "@stoplight/path": "^1.3.0",
-    "@stoplight/json-ref-readers": "^1.1.1",
     "@stoplight/types": "^11.2.0",
     "@stoplight/yaml": "^3.3.2",
     "abort-controller": "^3.0.0",
@@ -69,6 +70,7 @@
     "ajv-oai": "^1.1.5",
     "better-ajv-errors": "^0.6.7",
     "chalk": "^3.0.0",
+    "eol": "^0.9.1",
     "fast-glob": "^3.1.0",
     "jsonpath-plus": "~2.0",
     "lodash": ">=4.17.5",
@@ -108,6 +110,7 @@
     "karma-typescript": "^4.1.1",
     "lint-staged": "^9.4.2",
     "nock": "~11.7.0",
+    "node-html-parser": "^1.1.16",
     "pkg": "^4.4.0",
     "recast": "^0.18.5",
     "rimraf": "^3.0.0",
@@ -141,7 +144,8 @@
       "./dist/**/*.js"
     ],
     "assets": [
-      "./dist/**/*.json"
+      "./dist/**/*.json",
+      "./dist/cli/**/*.html"
     ]
   },
   "types": "dist/index.d.ts"
