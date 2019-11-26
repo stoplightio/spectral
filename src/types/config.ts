@@ -6,6 +6,7 @@ export enum OutputFormat {
   JSON = 'json',
   STYLISH = 'stylish',
   JUNIT = 'junit',
+  HTML = 'html',
 }
 
 export interface ILintConfig {
