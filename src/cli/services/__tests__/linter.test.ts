@@ -708,14 +708,26 @@ describe('Linter service', () => {
 
   describe('--resolver', () => {
     it('uses provided resolver for $ref resolving', async () => {
-      expect(await run(`lint --resolver ${fooResolver} ${fooDocument}`)).toEqual([
-        expect.objectContaining({
-          code: 'oas3-api-servers',
-        }),
-        expect.objectContaining({
-          code: 'openapi-tags',
-        }),
-      ]);
+      expect(await run(`lint --resolver ${fooResolver} ${fooDocument}`)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'info-contact',
+            source: 'foo://openapi-3.0-no-contact.yaml/',
+          }),
+          expect.objectContaining({
+            code: 'info-description',
+            source: 'foo://openapi-3.0-no-contact.yaml/',
+          }),
+          expect.objectContaining({
+            code: 'oas3-api-servers',
+            source: 'foo://openapi-3.0-no-contact.yaml/',
+          }),
+          expect.objectContaining({
+            code: 'openapi-tags',
+            source: 'foo://openapi-3.0-no-contact.yaml/',
+          }),
+        ]),
+      );
     });
   });
 });

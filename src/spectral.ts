@@ -198,23 +198,28 @@ export class Spectral {
   }
 
   private _processExternalRef(parsedResult: IParsedResult, opts: IUriParser) {
-    const ref = opts.targetAuthority.toString();
+    const ref = opts.targetAuthority.href();
     this._parsedMap.parsed[ref] = parsedResult;
     this._parsedMap.pointers[ref] = opts.parentPath;
-    const parentRef = opts.parentAuthority.toString();
+    const parentRef = opts.parentAuthority.href();
 
-    set(
-      this._parsedMap.refs,
-      [...(this._parsedMap.pointers[parentRef] ? this._parsedMap.pointers[parentRef] : []), ...opts.parentPath],
-      Object.defineProperty({}, REF_METADATA, {
-        enumerable: false,
-        writable: false,
-        value: {
-          ref,
-          root: opts.fragment.split('/').slice(1),
-        },
-      }),
-    );
+    const path = [...(this._parsedMap.pointers?.[parentRef] || []), ...opts.parentPath];
+
+    let target;
+    if (path.length === 0) {
+      // path is empty for top-level $refs, i.e. the $ref in src/cli/services/__tests__/__fixtures__/foo-document.yaml
+      target = this._parsedMap.refs;
+    } else {
+      target = {};
+      set(this._parsedMap.refs, path, target);
+    }
+
+    Object.defineProperty(target, REF_METADATA, {
+      value: {
+        ref,
+        root: opts.fragment.split('/').slice(1),
+      },
+    });
   }
 
   private _parseResolveResult = (refDiagnostics: IDiagnostic[]) => async (resolveOpts: IUriParser) => {
