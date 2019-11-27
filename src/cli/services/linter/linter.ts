@@ -12,12 +12,12 @@ import {
   isOpenApiv3,
 } from '../../../formats';
 import { readParsable } from '../../../fs/reader';
-import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { FormatLookup, IParsedResult } from '../../../types';
 import { ILintConfig } from '../../../types/config';
 import { deduplicateResults, getRuleset, listFiles, skipRules } from './utils';
+import { getResolver } from './utils/getResolver';
 
 const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['oas2', isOpenApiv2, 'OpenAPI 2.0 (Swagger) detected'],
@@ -31,7 +31,9 @@ const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
 ];
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig) {
-  const spectral = new Spectral({ resolver: httpAndFileResolver });
+  const spectral = new Spectral({
+    resolver: getResolver(flags.resolver),
+  });
 
   const ruleset = await getRuleset(flags.ruleset);
   spectral.setRuleset(ruleset);
@@ -64,7 +66,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   }
 
   const targetUris = await listFiles(documents);
-  const results: IRuleResult[] = []; // todo: shall we display results as they come in?
+  const results: IRuleResult[] = [];
 
   for (const targetUri of targetUris) {
     if (flags.verbose) {
