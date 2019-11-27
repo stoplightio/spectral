@@ -3,7 +3,7 @@ import { Optional } from '@stoplight/types';
 import { httpAndFileResolver } from '../../../../resolvers/http-and-file';
 
 export const getResolver = (resolver: Optional<string>) => {
-  if (resolver !== void 0) {
+  if (resolver) {
     try {
       return require(isAbsolute(resolver) ? resolver : join(process.cwd(), resolver));
     } catch ({ message }) {
