@@ -26,6 +26,7 @@
 .env.production.local
 .vscode
 .idea
+.nvmrc
 .nyc_output
 .DS_Store
 .awcache
