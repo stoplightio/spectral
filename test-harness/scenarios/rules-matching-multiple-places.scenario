@@ -32,9 +32,10 @@ rules:
 ====status====
 1
 ====stdout====
-{document}
-  6:15  error  valid-user-properties     must match the pattern '/^string$/'
- 10:15  error  valid-user-properties     must match the pattern '/^string$/'
- 11:11  error  require-user-and-address  schemas.address is not truthy
+[4m{document}[24m
+  6:15  [31merror[39m  valid-user-properties     must match the pattern '/^string$/'
+ 10:15  [31merror[39m  valid-user-properties     must match the pattern '/^string$/'
+ 11:11  [31merror[39m  require-user-and-address  schemas.address is not truthy
 
-✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)
+[31m[1m✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)[22m[39m
+[31m[1m[22m[39m

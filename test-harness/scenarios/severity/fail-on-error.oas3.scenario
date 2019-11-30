@@ -24,16 +24,17 @@ paths:
 ====stdout====
 OpenAPI 3.x detected
 
-{document}
-  1:1   warning  api-servers                   OpenAPI `servers` must be present and non-empty array.
-  1:1   warning  openapi-tags                  OpenAPI object should have non-empty `tags` array.
-  2:6   warning  info-contact                  Info object should contain `contact` object.
-  2:6   warning  info-description              OpenAPI object info `description` must be present and non-empty string.
-  7:9   warning  operation-description         Operation `description` must be present and non-empty string.
-  7:9   warning  operation-tags                Operation should have non-empty `tags` array.
-  8:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.
- 12:10  warning  operation-description         Operation `description` must be present and non-empty string.
- 12:10  warning  operation-tags                Operation should have non-empty `tags` array.
- 13:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.
+[4m{document}[24m
+  1:1   [33mwarning[39m  api-servers                   OpenAPI `servers` must be present and non-empty array.
+  1:1   [33mwarning[39m  openapi-tags                  OpenAPI object should have non-empty `tags` array.
+  2:6   [33mwarning[39m  info-contact                  Info object should contain `contact` object.
+  2:6   [33mwarning[39m  info-description              OpenAPI object info `description` must be present and non-empty string.
+  7:9   [33mwarning[39m  operation-description         Operation `description` must be present and non-empty string.
+  7:9   [33mwarning[39m  operation-tags                Operation should have non-empty `tags` array.
+  8:20    [31merror[39m  operation-operationId-unique  Every operation must have a unique `operationId`.
+ 12:10  [33mwarning[39m  operation-description         Operation `description` must be present and non-empty string.
+ 12:10  [33mwarning[39m  operation-tags                Operation should have non-empty `tags` array.
+ 13:20    [31merror[39m  operation-operationId-unique  Every operation must have a unique `operationId`.
 
-✖ 10 problems (2 errors, 8 warnings, 0 infos, 0 hints)
+[31m[1m✖ 10 problems (2 errors, 8 warnings, 0 infos, 0 hints)[22m[39m
+[31m[1m[22m[39m

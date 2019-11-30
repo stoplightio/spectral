@@ -17,10 +17,11 @@ cat {document} | {bin} lint -r {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
 
-<STDIN>
- 1:1    error  api-servers       OpenAPI `servers` must be present and non-empty array.
- 1:1  warning  openapi-tags      OpenAPI object should have non-empty `tags` array.
- 2:6  warning  info-contact      Info object should contain `contact` object.
- 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
+[4m<STDIN>[24m
+ 1:1    [31merror[39m  api-servers       OpenAPI `servers` must be present and non-empty array.
+ 1:1  [33mwarning[39m  openapi-tags      OpenAPI object should have non-empty `tags` array.
+ 2:6  [33mwarning[39m  info-contact      Info object should contain `contact` object.
+ 2:6  [33mwarning[39m  info-description  OpenAPI object info `description` must be present and non-empty string.
 
-✖ 4 problems (1 error, 3 warnings, 0 infos, 0 hints)
+[31m[1m✖ 4 problems (1 error, 3 warnings, 0 infos, 0 hints)[22m[39m
+[31m[1m[22m[39m

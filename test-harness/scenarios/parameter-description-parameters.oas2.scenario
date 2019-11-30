@@ -39,9 +39,10 @@ parameters:
 ====stdout====
 OpenAPI 2.0 (Swagger) detected
 
-{document}
-  5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.
- 14:11  warning  oas2-parameter-description  Parameter objects should have a `description`.
- 25:13  warning  oas2-parameter-description  Parameter objects should have a `description`.
+[4m{document}[24m
+  5:9   [33mwarning[39m  oas2-parameter-description  Parameter objects should have a `description`.
+ 14:11  [33mwarning[39m  oas2-parameter-description  Parameter objects should have a `description`.
+ 25:13  [33mwarning[39m  oas2-parameter-description  Parameter objects should have a `description`.
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
+[33m[1m✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)[22m[39m
+[33m[1m[22m[39m

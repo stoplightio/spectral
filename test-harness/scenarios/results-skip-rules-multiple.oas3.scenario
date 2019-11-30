@@ -11,8 +11,9 @@ paths: {}
 ====stdout====
 OpenAPI 3.x detected
 
-{document}
- 1:1  warning  api-servers   OpenAPI `servers` must be present and non-empty array.
- 1:1  warning  openapi-tags  OpenAPI object should have non-empty `tags` array.
+[4m{document}[24m
+ 1:1  [33mwarning[39m  api-servers   OpenAPI `servers` must be present and non-empty array.
+ 1:1  [33mwarning[39m  openapi-tags  OpenAPI object should have non-empty `tags` array.
 
-✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)
+[33m[1m✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)[22m[39m
+[33m[1m[22m[39m
