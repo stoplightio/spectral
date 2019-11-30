@@ -2,14 +2,12 @@
 import { basename, dirname, join } from '@stoplight/path';
 import * as fg from 'fast-glob';
 import * as fs from 'fs';
-const uniqueSlug = require('unique-slug');
 
 import { parseScenarioFile } from '../helpers';
 import { FIXTURES_ROOT, SCENARIOS_ROOT, TESTS_ROOT } from './consts';
 import { generate } from './generate';
 
 fs.mkdirSync(TESTS_ROOT, { recursive: true });
-fs.rmdirSync(FIXTURES_ROOT, { recursive: true });
 fs.mkdirSync(FIXTURES_ROOT, { recursive: true });
 
 (async () => {
@@ -19,16 +17,10 @@ fs.mkdirSync(FIXTURES_ROOT, { recursive: true });
     const scenarioPath = join(SCENARIOS_ROOT, entry as string);
     const source = await fs.promises.readFile(scenarioPath, 'utf8');
     const scenario = parseScenarioFile(source);
-    const assets = scenario.assets === void 0 ? [] : await writeAssets(scenario.assets);
+    const assets = scenario.assets === void 0 ? [] : await writeAssets(entry as string, scenario.assets);
 
     const testFilename = `${basename(entry as string, true)}.test.ts`;
-    const testDirname = dirname(entry as string);
-    let testRoot = TESTS_ROOT;
-
-    if (testDirname !== '.') {
-      testRoot = join(TESTS_ROOT, testDirname);
-      await fs.promises.mkdir(testRoot, { recursive: true });
-    }
+    const testRoot = await getDirectory(entry as string, TESTS_ROOT);
 
     const code = generate({
       assets,
@@ -40,16 +32,34 @@ fs.mkdirSync(FIXTURES_ROOT, { recursive: true });
   }
 })();
 
-async function writeAssets(assets: string[][]) {
+async function writeAssets(scenario: string, assets: string[][]) {
   const list = [];
   const promises: Array<Promise<void>> = [];
 
   for (const [name, content] of assets) {
-    const filename = uniqueSlug();
+    const filename = `${scenario}-${name.replace(/:/g, '-')}`;
+
+    const testFilename = basename(filename);
     list.push([name, filename]);
-    promises.push(fs.promises.writeFile(join(FIXTURES_ROOT, filename), content));
+
+    promises.push(
+      getDirectory(scenario, FIXTURES_ROOT).then(testRoot =>
+        fs.promises.writeFile(join(testRoot, testFilename), content),
+      ),
+    );
   }
 
   await Promise.all(promises);
   return list;
+}
+
+async function getDirectory(entry: string, dir: string): Promise<string> {
+  const entryDirname = dirname(entry);
+
+  if (entryDirname !== '.') {
+    dir = join(dir, entryDirname);
+    await fs.promises.mkdir(dir, { recursive: true });
+  }
+
+  return dir;
 }

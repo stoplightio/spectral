@@ -127,7 +127,6 @@
     "tslint-config-stoplight": "~1.4",
     "typescript": "^3.7.2",
     "typescript-json-schema": "~0.40.0",
-    "unique-slug": "^2.0.2",
     "xml2js": "^0.4.22"
   },
   "lint-staged": {
