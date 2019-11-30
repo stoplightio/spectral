@@ -28,7 +28,7 @@ function getItem(input: string[], key: string, required?: boolean): Optional<str
 }
 
 export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
-  const regex = /====(test|document|command|status|stdout|stderr|env|asset:[a-z0-9.\-]+)====\r?\n/gi;
+  const regex = /====(test|document|command|status|stdout|stderr|env|(?:tmp-)?asset:[a-z0-9.\-]+)====\r?\n/gi;
   const split = data.split(regex);
 
   const test = getItem(split, 'test', true);
@@ -47,6 +47,14 @@ export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
     return filtered;
   }, []);
 
+  const tmpAssets = split.reduce<string[][]>((filtered, item, i) => {
+    if (item.startsWith('tmp-asset')) {
+      filtered.push([item, split[i + 1].trim()]);
+    }
+
+    return filtered;
+  }, []);
+
   if (document !== void 0) {
     assets.push(['document', document]);
   }
@@ -59,7 +67,7 @@ export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
     stdout,
     stderr,
     env: env === void 0 ? process.env : getEnv(env),
-    tmpAssets: void 0,
+    tmpAssets: tmpAssets.length > 0 ? tmpAssets : void 0,
   };
 }
 

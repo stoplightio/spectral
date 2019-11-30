@@ -36,9 +36,9 @@ describe(/* @inject SCENARIO_NAME */ '<scenario>', () => {
     scenario = parseScenarioFile(await fs.promises.readFile(scenarioFilepath, 'utf8'));
 
     // @given scenario.tmpAssets
-    if (scenario.tmpAssets.length > 0) {
+    if (scenario.tmpAssets!.length > 0) {
       await Promise.all(
-        scenario.tmpAssets.map(async ([asset, contents]) => {
+        scenario.tmpAssets!.map(async ([asset, contents]) => {
           const tmpFileHandle = await tmpFile();
           tmpFileHandles.set(asset, tmpFileHandle);
 
