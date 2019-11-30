@@ -4,7 +4,7 @@ import * as tmp from 'tmp';
 export interface IScenarioFile {
   test: string;
   assets: string[][];
-  tmpAssets: Optional<string[][]>;
+  tmpAssets: string[][];
   command: string;
   status: Optional<string>;
   stdout: Optional<string>;
@@ -39,21 +39,20 @@ export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
   const stderr = getItem(split, 'stderr');
   const env = getItem(split, 'env');
 
-  const assets = split.reduce<string[][]>((filtered, item, i) => {
-    if (item.startsWith('asset')) {
-      filtered.push([item, split[i + 1].trim()]);
-    }
+  const { assets, tmpAssets } = split.reduce<Pick<IScenarioFile, 'assets' | 'tmpAssets'>>(
+    (filtered, item, i) => {
+      if (!/^(?:tmp-)?asset:/.test(item)) return filtered;
 
-    return filtered;
-  }, []);
+      const arr = item.startsWith('tmp-asset') ? filtered.tmpAssets : filtered.assets;
+      arr.push([item, split[i + 1].trim()]);
 
-  const tmpAssets = split.reduce<string[][]>((filtered, item, i) => {
-    if (item.startsWith('tmp-asset')) {
-      filtered.push([item, split[i + 1].trim()]);
-    }
-
-    return filtered;
-  }, []);
+      return filtered;
+    },
+    {
+      assets: [],
+      tmpAssets: [],
+    },
+  );
 
   if (document !== void 0) {
     assets.push(['document', document]);
@@ -62,12 +61,12 @@ export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
   return {
     test,
     assets,
+    tmpAssets,
     command,
     status,
     stdout,
     stderr,
     env: env === void 0 ? process.env : getEnv(env),
-    tmpAssets: tmpAssets.length > 0 ? tmpAssets : void 0,
   };
 }
 

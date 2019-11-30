@@ -33,7 +33,6 @@ export function generate({ assets, scenario, scenarioName }: Input) {
   );
 
   populateAssets(ast.program.body, assets);
-  processTestBlock(ast.program.body, scenario);
   rewriteImports(ast.program.body, join(SCENARIOS_ROOT, scenarioName));
 
   return recast.print(ast, { quote: 'single' }).code;
@@ -54,20 +53,6 @@ function populateAssets(body: n.Program['body'], assets: Input['assets']) {
 
   for (const [assetName, fileName] of assets) {
     node.elements.push(b.arrayExpression([b.stringLiteral(assetName), b.stringLiteral(join(FIXTURES_ROOT, fileName))]));
-  }
-}
-
-function processTestBlock(body: n.Program['body'], scenario: IScenarioFile) {
-  const describeNode = body.find(
-    child =>
-      n.ExpressionStatement.check(child) &&
-      n.CallExpression.check(child.expression) &&
-      n.Identifier.check(child.expression.callee) &&
-      child.expression.callee.name === 'describe',
-  );
-
-  if (describeNode === void 0) {
-    throw new TypeError('Describe block is missing');
   }
 }
 
@@ -97,13 +82,8 @@ function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: ISc
 
       path.parentPath.node.comments.pop();
 
-      try {
-        if (evalExpression(expr[1], { ...consts, scenario }) === void 0) {
-          path.parentPath.parentPath.replace(b.emptyStatement());
-        }
-      } catch (ex) {
-        console.error(ex);
-        return false;
+      if (!evalExpression(expr[1], { ...consts, scenario })) {
+        path.parentPath.parentPath.replace(b.emptyStatement());
       }
 
       return void this.traverse(path);
