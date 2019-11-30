@@ -73,33 +73,34 @@ function populateAssets(body: n.Program['body'], assets: Input['assets']) {
 
 function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: IScenarioFile) {
   visit(node, {
-    visitStringLiteral(path) {
-      const comments = path.node.comments;
-      if (comments && comments.length > 0) {
-        const expr = parseCommentExpression(comments[comments.length - 1].value);
-        if (!Array.isArray(expr) || expr[0] !== '@inject') return false;
-        comments.pop();
-
-        if (!(expr[1] in consts)) {
-          path.replace(b.unaryExpression('void', b.numericLiteral(0)));
-        } else {
-          path.node.value = consts[expr[1]];
-        }
-      }
-
-      return false;
-    },
-
-    // combine with above?
     visitComment(path) {
       const expr = parseCommentExpression(path.value.value);
 
-      if (!Array.isArray(expr) || expr[0] !== '@given') return void this.traverse(path);
+      if (!Array.isArray(expr)) return void this.traverse(path);
 
       path.parentPath.node.comments.pop();
 
-      if (!evalExpression(expr[1], { ...consts, scenario })) {
-        path.parentPath.parentPath.replace(b.emptyStatement());
+      const parentPath = path.parentPath.parentPath;
+
+      switch (expr[0]) {
+        case '@inject':
+          if (!(expr[1] in consts)) {
+            parentPath.replace(b.unaryExpression('void', b.numericLiteral(0)));
+          } else if (n.StringLiteral.check(parentPath.node)) {
+            parentPath.node.value = consts[expr[1]];
+          } else {
+            throw new Error('Could not inject string. Make sure to place the comment before the string');
+          }
+
+          break;
+        case '@given':
+          if (!evalExpression(expr[1], { ...consts, scenario })) {
+            path.parentPath.parentPath.replace(b.emptyStatement());
+          }
+
+          break;
+        default:
+          throw new Error('Unknown keyword');
       }
 
       return void this.traverse(path);
