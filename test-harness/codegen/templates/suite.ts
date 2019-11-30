@@ -5,15 +5,15 @@ import {
   applyReplacements,
   IScenarioFile,
   parseScenarioFile,
-  /* @given scenario.tmpAssets.length > 0 */ tmpFile,
+  /* given: scenario.tmpAssets.length > 0 */ tmpFile,
 } from '../../helpers';
 import { spawnNode } from '../../spawn';
 
-// @given scenario.tmpAssets.length > 0
+// given: scenario.tmpAssets.length > 0
 import * as tmp from 'tmp';
 
-const spectralBin = /* @inject SPECTRAL_BIN */ '';
-const scenarioFilepath = /* @inject SCENARIO_FILE_PATH */ '';
+const spectralBin = /* inject: SPECTRAL_BIN */ '';
+const scenarioFilepath = /* inject: SCENARIO_FILE_PATH */ '';
 
 const assets = new Map<string, string>();
 
@@ -26,16 +26,16 @@ for (const [id, name] of assets.entries()) {
   generateReplacement(id, name);
 }
 
-describe(/* @inject SCENARIO_NAME */ '<scenario>', () => {
+describe(/* inject: SCENARIO_NAME */ '<scenario>', () => {
   let scenario: IScenarioFile;
 
-  // @given scenario.tmpAssets.length > 0
+  // given: scenario.tmpAssets.length > 0
   const tmpFileHandles = new Map<string, tmp.FileResult>();
 
   beforeAll(async () => {
     scenario = parseScenarioFile(await fs.promises.readFile(scenarioFilepath, 'utf8'));
 
-    // @given scenario.tmpAssets.length > 0
+    // given: scenario.tmpAssets.length > 0
     await Promise.all(
       scenario.tmpAssets.map(async ([asset, contents]) => {
         const tmpFileHandle = await tmpFile();
@@ -48,7 +48,7 @@ describe(/* @inject SCENARIO_NAME */ '<scenario>', () => {
     );
   });
 
-  // @given scenario.tmpAssets.length > 0
+  // given: scenario.tmpAssets.length > 0
   afterAll(() => {
     for (const { removeCallback } of tmpFileHandles.values()) {
       removeCallback();
@@ -57,17 +57,17 @@ describe(/* @inject SCENARIO_NAME */ '<scenario>', () => {
     tmpFileHandles.clear();
   });
 
-  test(/* @inject TEST_NAME */ '<test>', async () => {
+  test(/* inject: TEST_NAME */ '<test>', async () => {
     const command = applyReplacements(scenario.command, replacements);
     const spawnReturn = await spawnNode(command, scenario.env);
 
-    // @given scenario.stderr !== void 0
+    // given: scenario.stderr !== void 0
     expect(spawnReturn.stderr).toEqual(applyReplacements(scenario.stderr!, replacements));
 
-    // @given scenario.stdout !== void 0
+    // given: scenario.stdout !== void 0
     expect(spawnReturn.stdout).toEqual(applyReplacements(scenario.stdout!, replacements));
 
-    // @given scenario.status !== void 0
+    // given: scenario.status !== void 0
     expect(`status:${spawnReturn.status}`).toEqual(`status:${scenario.status}`);
   });
 });

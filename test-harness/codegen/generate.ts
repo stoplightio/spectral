@@ -1,6 +1,7 @@
 import { basename, join, relative } from '@stoplight/path';
 import { Dictionary, Optional } from '@stoplight/types';
 import { builders as b, namedTypes as n, visit } from 'ast-types';
+import * as k from 'ast-types/gen/kinds';
 import * as fs from 'fs';
 import * as recast from 'recast';
 import * as vm from 'vm';
@@ -38,7 +39,7 @@ export function generate({ assets, scenario, scenarioName }: Input) {
   return recast.print(ast, { quote: 'single' }).code;
 }
 
-function populateAssets(body: n.Program['body'], assets: Input['assets']) {
+function populateAssets(body: k.StatementKind[], assets: Input['assets']) {
   if (assets.length === 0) {
     return;
   }
@@ -71,16 +72,12 @@ function populateAssets(body: n.Program['body'], assets: Input['assets']) {
   }
 }
 
-const exprCache = new WeakMap<vm.Context, Dictionary<Function, string>>();
-
 function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: IScenarioFile) {
   const sandbox = vm.createContext({});
 
-  exprCache.set(sandbox, {});
-
   visit(node, {
     visitComment(path) {
-      const expr = parseCommentExpression(path.value.value);
+      const expr = parseComment(path.value.value);
 
       if (!Array.isArray(expr)) return void this.traverse(path);
 
@@ -89,18 +86,18 @@ function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: ISc
       const parentPath = path.parentPath.parentPath;
 
       switch (expr[0]) {
-        case '@inject':
-          if (!(expr[1] in consts)) {
+        case 'inject':
+          if (!n.Identifier.check(expr[1]) || !(expr[1].name in consts)) {
             parentPath.replace(b.unaryExpression('void', b.numericLiteral(0)));
-          } else if (n.StringLiteral.check(parentPath.node)) {
-            parentPath.node.value = consts[expr[1]];
+          } else if (n.Literal.check(parentPath.node)) {
+            parentPath.node.value = consts[expr[1].name];
           } else {
-            throw new Error('Could not inject string. Make sure to place the comment before the string');
+            throw new Error('Could not inject string. Make sure to place the comment before the literal');
           }
 
           break;
-        case '@given':
-          if (!evalExpression(expr[1], { ...consts, scenario }, sandbox)) {
+        case 'given':
+          if (!evalExpression(expr[1] as k.ExpressionKind, { ...consts, scenario }, sandbox)) {
             path.parentPath.parentPath.replace(b.emptyStatement());
           }
 
@@ -112,50 +109,37 @@ function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: ISc
       return void this.traverse(path);
     },
   });
-
-  exprCache.delete(sandbox);
 }
 
-function parseCommentExpression(expr: string): undefined | null | [string, string] {
-  expr = expr.trim();
-  const spaceMatch = /\s/.exec(expr);
+function parseComment(expr: string): Optional<[string, k.ExpressionKind]> {
+  try {
+    const body = recast.parse(expr).program.body;
+    if (body.length === 0 || !n.LabeledStatement.check(body[0])) return;
 
-  if (spaceMatch === null) return;
+    const [
+      {
+        label: { name: keyword },
+        body: { expression },
+      },
+    ] = body;
 
-  const keyword = expr.slice(0, spaceMatch.index);
-  if (!keyword.startsWith('@')) {
+    return [keyword, expression];
+  } catch {
     return;
   }
-
-  return [keyword, expr.slice(spaceMatch.index).trimLeft()];
 }
 
-function evalExpression(expr: string, scope: object, context: vm.Context) {
-  const cached = exprCache.get(context)!;
-
-  if (expr in cached) {
-    return cached[expr](scope);
-  }
-
-  const fn = vm.compileFunction(
-    recast.print(
-      b.withStatement(
-        b.identifier('scope'),
-        b.blockStatement([b.returnStatement(recast.parse(expr).program.body[0].expression)]),
-      ),
-    ).code,
+function evalExpression(expr: k.ExpressionKind, scope: object, context: vm.Context) {
+  return vm.compileFunction(
+    recast.print(b.withStatement(b.identifier('scope'), b.blockStatement([b.returnStatement(expr)]))).code,
     ['scope'],
     {
       parsingContext: context,
     },
-  );
-
-  cached[expr] = fn;
-
-  return fn(scope);
+  )(scope);
 }
 
-function rewriteImports(body: n.Program['body'], scenarioFilePath: string) {
+function rewriteImports(body: k.StatementKind[], scenarioFilePath: string) {
   for (const child of body) {
     if (!n.ImportDeclaration.check(child)) continue;
 
