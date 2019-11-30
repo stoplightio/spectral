@@ -1,9 +1,9 @@
 import { basename, join, relative } from '@stoplight/path';
-import { Optional } from '@stoplight/types';
-import { Dictionary } from '@stoplight/types/dist';
+import { Dictionary, Optional } from '@stoplight/types';
 import { builders as b, namedTypes as n, visit } from 'ast-types';
 import * as fs from 'fs';
 import * as recast from 'recast';
+import * as vm from 'vm';
 import { IScenarioFile } from '../helpers';
 import { FIXTURES_ROOT, SCENARIOS_ROOT, SPECTRAL_BIN } from './consts';
 
@@ -71,7 +71,13 @@ function populateAssets(body: n.Program['body'], assets: Input['assets']) {
   }
 }
 
+const exprCache = new WeakMap<vm.Context, Dictionary<Function, string>>();
+
 function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: IScenarioFile) {
+  const sandbox = vm.createContext({});
+
+  exprCache.set(sandbox, {});
+
   visit(node, {
     visitComment(path) {
       const expr = parseCommentExpression(path.value.value);
@@ -94,7 +100,7 @@ function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: ISc
 
           break;
         case '@given':
-          if (!evalExpression(expr[1], { ...consts, scenario })) {
+          if (!evalExpression(expr[1], { ...consts, scenario }, sandbox)) {
             path.parentPath.parentPath.replace(b.emptyStatement());
           }
 
@@ -106,6 +112,8 @@ function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: ISc
       return void this.traverse(path);
     },
   });
+
+  exprCache.delete(sandbox);
 }
 
 function parseCommentExpression(expr: string): undefined | null | [string, string] {
@@ -122,22 +130,36 @@ function parseCommentExpression(expr: string): undefined | null | [string, strin
   return [keyword, expr.slice(spaceMatch.index).trimLeft()];
 }
 
-function evalExpression(expr: string, scope: object) {
-  return Function(
-    'scope',
+function evalExpression(expr: string, scope: object, context: vm.Context) {
+  const cached = exprCache.get(context)!;
+
+  if (expr in cached) {
+    return cached[expr](scope);
+  }
+
+  const fn = vm.compileFunction(
     recast.print(
       b.withStatement(
         b.identifier('scope'),
         b.blockStatement([b.returnStatement(recast.parse(expr).program.body[0].expression)]),
       ),
     ).code,
-  )(scope);
+    ['scope'],
+    {
+      parsingContext: context,
+    },
+  );
+
+  cached[expr] = fn;
+
+  return fn(scope);
 }
 
 function rewriteImports(body: n.Program['body'], scenarioFilePath: string) {
   for (const child of body) {
     if (!n.ImportDeclaration.check(child)) continue;
 
+    // typings are tad incorrect here, since ModuleSpecifier must be a StringLiteral, see https://tc39.es/ecma262/#sec-imports
     const source = child.source as n.StringLiteral;
 
     if (source.value.startsWith('.')) {
