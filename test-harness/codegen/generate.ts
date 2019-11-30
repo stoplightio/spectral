@@ -1,4 +1,4 @@
-import { join, relative } from '@stoplight/path';
+import { basename, join, relative } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { Dictionary } from '@stoplight/types/dist';
 import { builders as b, namedTypes as n, visit } from 'ast-types';
@@ -75,6 +75,7 @@ function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: ISc
       return false;
     },
 
+    // combine with above?
     visitComment(path) {
       const expr = parseCommentExpression(path.value.value);
 
@@ -124,7 +125,7 @@ function rewriteImports(body: n.Program['body'], scenarioFilePath: string) {
     const source = child.source as n.StringLiteral;
 
     if (source.value.startsWith('.')) {
-      source.value = relative(join(scenarioFilePath, '..'), join(SCENARIOS_ROOT, '..', source.value));
+      source.value = relative(join(scenarioFilePath, '..'), join(SCENARIOS_ROOT, '..', basename(source.value)));
     }
   }
 }

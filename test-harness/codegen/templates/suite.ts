@@ -6,8 +6,8 @@ import {
   IScenarioFile,
   parseScenarioFile,
   /* @given scenario.tmpAssets.length > 0 */ tmpFile,
-} from './helpers';
-import { spawnNode } from './spawn';
+} from '../../helpers';
+import { spawnNode } from '../../spawn';
 
 // @given scenario.tmpAssets.length > 0
 import * as tmp from 'tmp';
