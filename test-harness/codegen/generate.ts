@@ -45,11 +45,26 @@ function populateAssets(body: n.Program['body'], assets: Input['assets']) {
 
   const node = b.arrayExpression([]);
 
-  (body.find(
-    // @ts-ignore
-    child => n.VariableDeclaration.check(child) && child.kind === 'const' && child.declarations[0].id.name === 'assets',
-    // @ts-ignore
-  ) as Optional<n.VariableDeclaration>)?.declarations?.[0].init.arguments.push(node);
+  const variableDeclaration = body.find(child => {
+    if (!n.VariableDeclaration.check(child) || child.kind !== 'const' || child.declarations.length === 0) return false;
+    const declarator = child.declarations[0];
+
+    return (
+      n.VariableDeclarator.check(declarator) && n.Identifier.check(declarator.id) && declarator.id.name === 'assets'
+    );
+  }) as Optional<n.VariableDeclaration>;
+
+  if (!variableDeclaration) {
+    throw new Error('Assets could not be populated');
+  }
+
+  const variableDeclarator = variableDeclaration.declarations[0] as n.VariableDeclarator;
+
+  if (!n.NewExpression.check(variableDeclarator.init)) {
+    throw new Error('Assets could not be populated');
+  }
+
+  variableDeclarator.init.arguments.push(node);
 
   for (const [assetName, fileName] of assets) {
     node.elements.push(b.arrayExpression([b.stringLiteral(assetName), b.stringLiteral(join(FIXTURES_ROOT, fileName))]));
