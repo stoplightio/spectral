@@ -4,7 +4,7 @@ import * as tmp from 'tmp';
 export interface IScenarioFile {
   test: string;
   assets: string[][];
-  tmpAssets: string[][];
+  tmpAssets: Optional<string[][]>;
   command: string;
   status: Optional<string>;
   stdout: Optional<string>;
@@ -59,7 +59,7 @@ export function parseScenarioFile(data: string): Readonly<IScenarioFile> {
     stdout,
     stderr,
     env: env === void 0 ? process.env : getEnv(env),
-    tmpAssets: [],
+    tmpAssets: void 0,
   };
 }
 
