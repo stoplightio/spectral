@@ -12,14 +12,11 @@ import { spawnNode } from '../../spawn';
 // given: scenario.tmpAssets.length > 0
 import * as tmp from 'tmp';
 
-const spectralBin = /* inject: SPECTRAL_BIN */ '';
-const scenarioFilepath = /* inject: SCENARIO_FILE_PATH */ '';
-
 const assets = new Map<string, string>();
 
 const replacements: Dictionary<string> = {
   __dirname,
-  bin: spectralBin,
+  bin: /* inject: SPECTRAL_BIN */ '',
 };
 
 for (const [id, name] of assets.entries()) {
@@ -33,7 +30,7 @@ describe(/* inject: SCENARIO_NAME */ '<scenario>', () => {
   const tmpFileHandles = new Map<string, tmp.FileResult>();
 
   beforeAll(async () => {
-    scenario = parseScenarioFile(await fs.promises.readFile(scenarioFilepath, 'utf8'));
+    scenario = parseScenarioFile(await fs.promises.readFile(/* inject: SCENARIO_FILE_PATH */ '', 'utf8'));
 
     // given: scenario.tmpAssets.length > 0
     await Promise.all(
