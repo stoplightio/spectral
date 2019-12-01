@@ -43,7 +43,7 @@ commands:
           command: mkdir ./test-harness/tmp
       - run:
           name: Run harness tests
-          command: yarn test.harness
+          command: yarn test.harness.generate && yarn test.harness
       - run:
           name: Lint the code
           command: yarn lint
