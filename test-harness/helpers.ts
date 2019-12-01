@@ -114,7 +114,7 @@ export const applyReplacements = (str: string, values: Dictionary<string>) => {
   // tslint:disable-next-line:no-conditional-assignment
   while ((result = BRACES.exec(str))) {
     if (!(result[1] in values)) continue;
-    const newValue = String(values[result[1]] || '');
+    const newValue = String(values[result[1]]);
     str = `${str.slice(0, result.index)}${newValue}${str.slice(BRACES.lastIndex)}`;
     BRACES.lastIndex = result.index + newValue.length;
   }
