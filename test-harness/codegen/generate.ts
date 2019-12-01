@@ -17,12 +17,11 @@ export type Input = {
 };
 
 export function generate({ assets, scenario, scenarioName }: Input) {
-  // todo: parse once and mutate?
   const ast = recast.parse(template, {
     parser: require('recast/parsers/typescript'),
   }) as n.File;
 
-  injectConsts(
+  processComments(
     ast,
     {
       SPECTRAL_BIN,
@@ -72,7 +71,7 @@ function populateAssets(body: k.StatementKind[], assets: Input['assets']) {
   }
 }
 
-function injectConsts(node: n.ASTNode, consts: Dictionary<string>, scenario: IScenarioFile) {
+function processComments(node: n.ASTNode, consts: Dictionary<string>, scenario: IScenarioFile) {
   const sandbox = vm.createContext({});
 
   visit(node, {
