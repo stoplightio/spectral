@@ -15,8 +15,11 @@ import * as tmp from 'tmp';
 const assets = new Map<string, string>();
 
 const replacements: Dictionary<string> = {
-  __dirname,
+  __dirname: /* inject: SCENARIOS_ROOT */ '',
   bin: /* inject: SPECTRAL_BIN */ '',
+  get date() {
+    return String(new Date());
+  },
 };
 
 for (const [id, name] of assets.entries()) {

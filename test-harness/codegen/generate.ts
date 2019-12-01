@@ -27,6 +27,7 @@ export function generate({ assets, scenario, scenarioName }: Input) {
       SPECTRAL_BIN,
       SCENARIO_NAME: scenarioName,
       SCENARIO_FILE_PATH: join(SCENARIOS_ROOT, scenarioName),
+      SCENARIOS_ROOT,
       TEST_NAME: scenario.test,
     },
     scenario,

@@ -14,4 +14,4 @@ rules:
 ====status====
 2
 ====stderr====
-Cannot find module '{__dirname}/scenarios/resolvers/missing-resolver.js'
+Cannot find module '{__dirname}/resolvers/missing-resolver.js'
