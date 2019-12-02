@@ -1,4 +1,4 @@
-import { message } from '../../message';
+import { message } from '../message';
 
 describe('message util', () => {
   test('interpolates correctly', () => {
@@ -11,6 +11,18 @@ describe('message util', () => {
         value: void 0,
       }),
     ).toEqual('oops... "description" is missing;error: expected property to be truthy');
+  });
+
+  test.each([0, false, null, undefined])('interpolates %s value correctly', value => {
+    const template = 'Value must not equal {{value}}';
+    expect(
+      message(template, {
+        property: 'description',
+        error: 'expected property to be truthy',
+        path: '',
+        value,
+      }),
+    ).toEqual(`Value must not equal ${value}`);
   });
 
   test('handles siblings', () => {
