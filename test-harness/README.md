@@ -105,7 +105,7 @@ paths: {}
 ====asset:ruleset====
 extends: spectral:oas
 rules:
-  api-servers: error
+  oas3-api-servers: error
 ====command====
 {bin} lint {document} -r {asset:ruleset}
 ====status====
@@ -114,7 +114,7 @@ rules:
 OpenAPI 3.x detected
 
 {document}
- 1:1    error  api-servers       OpenAPI `servers` must be present and non-empty array.
+ 1:1    error  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
  1:1  warning  openapi-tags      OpenAPI object should have non-empty `tags` array.
  2:6  warning  info-contact      Info object should contain `contact` object.
  2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.

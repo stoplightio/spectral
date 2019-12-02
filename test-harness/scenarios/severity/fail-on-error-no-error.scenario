@@ -25,7 +25,7 @@ paths:
 OpenAPI 3.x detected
 
 {document}
-  1:1   warning  api-servers            OpenAPI `servers` must be present and non-empty array.
+  1:1   warning  oas3-api-servers       OpenAPI `servers` must be present and non-empty array.
   1:1   warning  openapi-tags           OpenAPI object should have non-empty `tags` array.
   2:6   warning  info-contact           Info object should contain `contact` object.
   2:6   warning  info-description       OpenAPI object info `description` must be present and non-empty string.
