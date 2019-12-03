@@ -1,14 +1,13 @@
-import { Dictionary } from '@stoplight/types';
+import { Dictionary, Optional } from '@stoplight/types';
 import { IRuleResult } from '../types';
 import { Formatter } from './types';
 import { getSeverityName, groupBySource, sortResults } from './utils';
 
-function escapeString(str?: string | number) {
-  if (!str) {
+function escapeString(str: Optional<string | number>) {
+  if (str === void 0) {
     return '';
   }
-  return str
-    .toString()
+  return String(str)
     .replace(/\|/g, '||')
     .replace(/'/g, "|'")
     .replace(/\n/g, '|n')
