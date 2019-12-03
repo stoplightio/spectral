@@ -28,9 +28,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "500":
+          description: No Bueno.
+          content:
+            application/json:
+              schema:
+                $ref: "./lib.yaml#/components/schemas/Error"
 components:
   schemas:
     Error:
       $ref: "#/components/schemas/Baz"
     Baz:
       $ref: ./lib.yaml#/components/schemas/Error
+    Foo:
+      type: string

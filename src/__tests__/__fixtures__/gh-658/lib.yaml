@@ -14,7 +14,11 @@ components:
       properties:
         error:
           type: string
+          maxLength: 1
         error_description:
           type: string
+          maxLength: 1
         status_code:
           type: string
+        test:
+          $ref: ./URIError.yaml#/components/schemas/Foo

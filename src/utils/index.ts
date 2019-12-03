@@ -1,4 +1,5 @@
 export * from './empty';
-export * from './hasRef';
 export * from './hasIntersectingElement';
 export * from './isObject';
+export * from './refs';
+export * from './hasRef';

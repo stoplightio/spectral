@@ -1,11 +1,20 @@
-import { decodePointerFragment } from '@stoplight/json';
+import { pointerToPath } from '@stoplight/json';
 import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
-import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
+import { resolve } from '@stoplight/path';
+import { Dictionary, ILocation, IRange, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
-import { IParseMap, REF_METADATA, ResolveResult } from './spectral';
+import { IParseMap, ResolveResult } from './spectral';
 import { IParsedResult } from './types';
-import { hasRef, isObject } from './utils';
+import {
+  extractSourceFromRef,
+  getEndRef,
+  hasRef,
+  isAbsoluteRef,
+  isLocalRef,
+  safePointerToPath,
+  traverseObjUntilRef,
+} from './utils';
 
 const getDefaultRange = (): IRange => ({
   start: {
@@ -36,78 +45,55 @@ export class Resolved {
     this.errors = resolveResult.errors;
   }
 
-  // this method detects whether given json path points to a place in original unresolved document
-  public doesBelongToSourceDoc(path: JsonPath): boolean {
-    if (path.length === 0) {
-      // todo: each rule and their function should be context-aware, meaning they should aware of the fact they operate on resolved content
-      // let's assume the error was reported correctly by any custom rule /shrug
-      return true;
-    }
-
-    let piece = this.unresolved;
-
-    for (const segment of path) {
-      if (!isObject(piece)) return false;
-
-      if (segment in piece) {
-        piece = piece[segment];
-      } else if (hasRef(piece)) {
-        if (this.spec.source === void 0) return false;
-        let nodeData;
-        try {
-          nodeData = this.graph.getNodeData(this.spec.source);
-        } catch {
-          return false;
-        }
-
-        const { refMap } = nodeData;
-        let { $ref } = piece;
-
-        while ($ref in refMap) {
-          $ref = refMap[$ref];
-        }
-
-        return (
-          $ref.length === 0 ||
-          $ref[0] === '#' ||
-          $ref.slice(0, Math.max(0, Math.min($ref.length, $ref.indexOf('#')))) === this.spec.source
-        );
-      }
-    }
-
-    return true;
-  }
-
   public getParsedForJsonPath(path: JsonPath) {
-    let target: object = this.parsedMap.refs;
-    const newPath = [...path];
-    let segment: Segment;
+    try {
+      const newPath: JsonPath = [...path];
+      let $ref = traverseObjUntilRef(this.unresolved, newPath);
 
-    while (newPath.length > 0) {
-      segment = newPath.shift()!;
-      if (segment && segment in target) {
-        target = target[segment];
-      } else {
-        newPath.unshift(segment);
-        break;
+      if ($ref === null) {
+        return {
+          path,
+          doc: this.spec,
+        };
       }
-    }
 
-    if (target && target[REF_METADATA]) {
-      return {
-        path: [...get(target, [REF_METADATA, 'root'], []).map(decodePointerFragment), ...newPath],
-        doc: get(this.parsedMap.parsed, get(target, [REF_METADATA, 'ref']), this.spec),
-      };
-    }
+      let source = this.spec.source;
 
-    if (!this.doesBelongToSourceDoc(path)) {
+      while (true) {
+        if (source === void 0) return null;
+
+        $ref = getEndRef(this.graph.getNodeData(source).refMap, $ref);
+
+        if ($ref === null) return null;
+
+        if (isLocalRef($ref)) {
+          return {
+            path: pointerToPath($ref),
+            doc: source === this.spec.source ? this.spec : this.parsedMap.parsed[source],
+          };
+        }
+
+        const extractedSource = extractSourceFromRef($ref)!;
+        source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
+
+        const doc = source === this.spec.source ? this.spec : this.parsedMap.parsed[source];
+        const { parsed } = doc;
+        const scopedPath = [...safePointerToPath($ref), ...newPath];
+
+        const obj = scopedPath.length === 0 || hasRef(parsed.data) ? parsed.data : get(parsed.data, scopedPath);
+
+        if (hasRef(obj)) {
+          $ref = obj.$ref;
+        } else {
+          return {
+            doc,
+            path: scopedPath,
+          };
+        }
+      }
+    } catch {
       return null;
     }
-
-    return {
-      path,
-      doc: this.spec,
-    };
   }
 
   public getLocationForJsonPath(path: JsonPath, closest?: boolean): ILocation {

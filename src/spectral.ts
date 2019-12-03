@@ -13,7 +13,7 @@ import {
   parseWithPointers as parseYAMLWithPointers,
   YamlParserResult,
 } from '@stoplight/yaml';
-import { merge, set } from 'lodash';
+import { merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
@@ -199,28 +199,8 @@ export class Spectral {
     this.formats[format] = fn;
   }
 
-  private _processExternalRef(parsedResult: IParsedResult, opts: IUriParser) {
-    const ref = opts.targetAuthority.toString();
-    this._parsedMap.parsed[ref] = parsedResult;
-    this._parsedMap.pointers[ref] = opts.parentPath;
-    const parentRef = opts.parentAuthority.toString();
-
-    set(
-      this._parsedMap.refs,
-      [...(this._parsedMap.pointers[parentRef] ? this._parsedMap.pointers[parentRef] : []), ...opts.parentPath],
-      Object.defineProperty({}, REF_METADATA, {
-        enumerable: false,
-        writable: false,
-        value: {
-          ref,
-          root: opts.fragment.split('/').slice(1),
-        },
-      }),
-    );
-  }
-
   private _parseResolveResult = (refDiagnostics: IDiagnostic[]) => async (resolveOpts: IUriParser) => {
-    const ref = resolveOpts.targetAuthority.toString();
+    const ref = resolveOpts.targetAuthority.href().replace(/\/$/, '');
     const ext = extname(ref);
 
     const content = String(resolveOpts.result);
@@ -242,20 +222,18 @@ export class Spectral {
       };
     }
 
-    if (parsedRefResult !== undefined) {
+    if (parsedRefResult !== void 0) {
       resolveOpts.result = parsedRefResult.parsed.data;
       if (parsedRefResult.parsed.diagnostics.length > 0) {
         refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source));
       }
 
-      this._processExternalRef(parsedRefResult, resolveOpts);
+      this._parsedMap.parsed[ref] = parsedRefResult;
     }
 
     return resolveOpts;
   };
 }
-
-export const REF_METADATA = Symbol('external_ref_metadata');
 
 export const isParsedResult = (obj: any): obj is IParsedResult => {
   if (!obj || typeof obj !== 'object') return false;
