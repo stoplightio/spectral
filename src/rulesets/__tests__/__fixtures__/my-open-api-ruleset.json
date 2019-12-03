@@ -1,7 +1,11 @@
 {
-  "extends": ["spectral:oas2", "spectral:oas3"],
+  "extends": [
+    "./custom-oas-ruleset.json",
+    "./custom-oas2-ruleset.json",
+    "./custom-oas3-ruleset.json"
+  ],
   "rules": {
-    "valid-rule": {
+    "my-valid-rule": {
       "message": "should be OK",
       "given": "$.info",
       "then": {

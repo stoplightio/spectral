@@ -1,4 +1,4 @@
-extends: spectral:oas3
+extends: spectral:oas
 rules:
   operation-operationId: error
   operation-tags: hint

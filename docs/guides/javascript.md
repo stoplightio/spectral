@@ -107,21 +107,22 @@ openapi: 3.0.0
 `
 
 const spectral = new Spectral();
-spectral.registerFormat('oas2', isOpenApiv2);
-spectral.registerFormat('oas3', isOpenApiv3);spectral.loadRuleset('spectral:oas3') // spectral:oas2 for OAS 2.0 aka Swagger
+spectral.registerFormat('oas2', isOpenApiv2); // spectral:oas2 for OpenAPI v2.0
+spectral.registerFormat('oas3', isOpenApiv3);
+spectral.loadRuleset('spectral:oas')
   .then(() => spectral.run(myOpenApiDocument))
   .then(results => {
     console.log('here are the results', results);
   });
 ``` 
 
-The OpenAPI rules are opinionated. There might be some rules that you prefer to change. We encourage you to create your rules to fit your use case. We welcome additions to the existing rulesets as well!
+The OpenAPI rules are opinionated. There might be some rules that you prefer to change, or disable. We encourage you to create your rules to fit your use case, and we welcome additions to the existing rulesets as well!
 
 ## Advanced
 
 ### Creating a custom format
 
-Spectral supports two core formats: `oas2` and `oas3`. Using `registerFormat` you can add support for autodetecting other formats. You might want to do this for a ruleset which is run against multiple major versions of description format like RAML v0.8 and v1.0.
+Spectral supports two core formats: `oas2` and `oas3`. Using `registerFormat` you can add support for auto-detecting other formats. You might want to do this for a ruleset which is run against multiple major versions of description format like RAML v0.8 and v1.0.
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
