@@ -7,6 +7,8 @@ export enum OutputFormat {
   STYLISH = 'stylish',
   JUNIT = 'junit',
   HTML = 'html',
+  TEXT = 'text',
+  TEAMCITY = 'teamcity',
 }
 
 export interface ILintConfig {
