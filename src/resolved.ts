@@ -1,6 +1,6 @@
 import { pointerToPath } from '@stoplight/json';
 import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
-import { resolve } from '@stoplight/path';
+import { normalize, resolve } from '@stoplight/path';
 import { Dictionary, ILocation, IRange, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
@@ -35,7 +35,7 @@ export class Resolved {
   public formats?: string[] | null;
 
   public get source() {
-    return this.parsed.source;
+    return this.parsed.source ? normalize(this.parsed.source) : this.parsed.source;
   }
 
   constructor(
