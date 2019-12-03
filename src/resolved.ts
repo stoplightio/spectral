@@ -4,8 +4,7 @@ import { resolve } from '@stoplight/path';
 import { Dictionary, ILocation, IRange, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
-import { IParseMap, ResolveResult } from './spectral';
-import { IParsedResult } from './types';
+import { IParsedResult, ResolveResult } from './types';
 import {
   extractSourceFromRef,
   getEndRef,
@@ -35,9 +34,17 @@ export class Resolved {
   public readonly errors: IResolveError[];
   public formats?: string[] | null;
 
-  constructor(public spec: IParsedResult, resolveResult: ResolveResult, public parsedMap: IParseMap) {
-    this.unresolved = spec.parsed.data;
-    this.formats = spec.formats;
+  public get source() {
+    return this.parsed.source;
+  }
+
+  constructor(
+    protected parsed: IParsedResult,
+    resolveResult: ResolveResult,
+    public parsedRefs: Dictionary<IParsedResult>,
+  ) {
+    this.unresolved = parsed.parsed.data;
+    this.formats = parsed.formats;
 
     this.refMap = resolveResult.refMap;
     this.graph = resolveResult.graph;
@@ -53,11 +60,11 @@ export class Resolved {
       if ($ref === null) {
         return {
           path,
-          doc: this.spec,
+          doc: this.parsed,
         };
       }
 
-      let source = this.spec.source;
+      let { source } = this;
 
       while (true) {
         if (source === void 0) return null;
@@ -69,14 +76,14 @@ export class Resolved {
         if (isLocalRef($ref)) {
           return {
             path: pointerToPath($ref),
-            doc: source === this.spec.source ? this.spec : this.parsedMap.parsed[source],
+            doc: source === this.parsed.source ? this.parsed : this.parsedRefs[source],
           };
         }
 
         const extractedSource = extractSourceFromRef($ref)!;
         source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
 
-        const doc = source === this.spec.source ? this.spec : this.parsedMap.parsed[source];
+        const doc = source === this.parsed.source ? this.parsed : this.parsedRefs[source];
         const { parsed } = doc;
         const scopedPath = [...safePointerToPath($ref), ...newPath];
 
@@ -108,7 +115,7 @@ export class Resolved {
 
     return {
       ...(parsedResult.doc.source && { uri: parsedResult.doc.source }),
-      range: location !== void 0 ? location.range : getDefaultRange(),
+      range: location?.range || getDefaultRange(),
     };
   }
 
