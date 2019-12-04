@@ -98,7 +98,7 @@
     "@types/xml2js": "^0.4.5",
     "copyfiles": "^2.1.1",
     "dependency-graph": "^0.8.0",
-    "fetch-mock": "^7.7.3",
+    "fetch-mock": "^8.0.0",
     "glob-fs": "^0.1.7",
     "husky": "^3.0.9",
     "jest": "~24.9",
