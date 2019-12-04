@@ -367,10 +367,20 @@
     tslib "^1.10.0"
     urijs "~1.19.1"
 
-"@stoplight/json@^3.1.2", "@stoplight/json@^3.2.1":
+"@stoplight/json@^3.1.2":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.2.1.tgz#cbc8080f4a55744beb89668d058e48ba52da141b"
   integrity sha512-RnXApQlP6GEUHIK8JRianStXTc4dHARpNP8VVGL/BbctTTlA3BO+Z1eILu35JdqvMG5sw6Og3TkQyQ85w6sSoA==
+  dependencies:
+    "@stoplight/types" "^11.1.1"
+    jsonc-parser "~2.2.0"
+    lodash "^4.17.15"
+    safe-stable-stringify "^1.1"
+
+"@stoplight/json@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.3.0.tgz#25d35daf0f189039d17fa1bbf6b2bd4da157a2e6"
+  integrity sha512-lseHw4Tr7SpmfumNdNSsxn/KlrTFZ2EyyVDUXCn10CVDzHYPfVIngVeYPbLc8c5RRvhow6S0zmBK0m9rXPFZiQ==
   dependencies:
     "@stoplight/types" "^11.1.1"
     jsonc-parser "~2.2.0"
@@ -394,10 +404,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.44.tgz#ed3c962564283e9983f7895a6effc3994286df5e"
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
-"@stoplight/yaml@^3.3.2":
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.2.tgz#001049ed4a8733fca43cc60efe6bcd046abef210"
-  integrity sha512-KfrEsl3bA8mtoIklVvS4Hg8OrOYYtqi+K0IsQ7lJbZLVaUA4wMwDGwz85a6YWeo1OuVe8tumM6OynrFIjFutNA==
+"@stoplight/yaml@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.4.0.tgz#5adea8f0569ed1f3a9867c84079155637fcab26c"
+  integrity sha512-d1eA2A8XLxn2R4MsQ7QTvxneJHufo1LDcmAnMIjpLdv1y6oQ2u4xeVC7qdijv0wgCMb9VDBZpSoudPG6yP3faw==
   dependencies:
     "@stoplight/types" "^11.1.1"
     "@stoplight/yaml-ast-parser" "0.0.44"

@@ -1,0 +1,33 @@
+====test====
+Responses can be sorted alphabetically
+====document====
+openapi: 3.0.2
+info:
+  title: Test Spec
+  version: 0.0.0
+paths:
+  /foo:
+    get:
+      operationId: get-foo
+      responses:
+        '400':
+          description: ''
+        '200':
+          description: ''
+====asset:ruleset====
+rules:
+  response-order:
+    message: Responses should be in alphabetical order
+    recommended: true
+    given: $.paths.*.*.responses
+    then:
+      function: alphabetical
+====command====
+{bin} lint {document} --ruleset {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 10:15  warning  response-order  Responses should be in alphabetical order
+
+✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
