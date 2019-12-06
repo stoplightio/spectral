@@ -31,7 +31,7 @@ export class Resolved {
   }
 
   constructor(
-    protected parsed: IParsedResult,
+    public readonly parsed: IParsedResult,
     resolveResult: ResolveResult,
     public parsedRefs: Dictionary<IParsedResult>,
   ) {

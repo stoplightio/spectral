@@ -91,12 +91,22 @@ export const lintNode = (
     results.push(
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const path = getClosestJsonPath(
-          rule.resolved === false ? resolved.unresolved : resolved.resolved,
-          escapedJsonPath,
+        const parsed = resolved.getParsedForJsonPath(
+          // todo: scope path there in parsed for jsonpath
+          getClosestJsonPath(rule.resolved === false ? resolved.unresolved : resolved.resolved, escapedJsonPath),
         );
-        // todo: https://github.com/stoplightio/spectral/issues/608
-        const location = resolved.getLocationForJsonPath(path, true);
+
+        const path = parsed?.path || escapedJsonPath;
+        const range = parsed?.doc.getLocationForJsonPath(parsed.doc.parsed, path, true)?.range || {
+          start: {
+            line: 0,
+            character: 0,
+          },
+          end: {
+            line: 0,
+            character: 0,
+          },
+        };
 
         return {
           code: rule.name,
@@ -110,8 +120,8 @@ export const lintNode = (
                   path: pathToPointer(path),
                   description: rule.description,
                   get value() {
-                    // let's make it `value` lazy
-                    const value = resolved.getValueForJsonPath(path);
+                    // let's make `value` lazy
+                    const value = get(parsed?.doc.parsed.data, path);
                     if (isObject(value)) {
                       return Array.isArray(value) ? 'Array[]' : 'Object{}';
                     }
@@ -121,8 +131,8 @@ export const lintNode = (
                 }),
           path,
           severity: getDiagnosticSeverity(rule.severity),
-          source: location.uri,
-          range: location.range,
+          source: parsed?.doc.source,
+          range,
         };
       }),
     );

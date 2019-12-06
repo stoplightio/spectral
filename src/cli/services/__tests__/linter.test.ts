@@ -575,7 +575,7 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'oas2-schema',
           message: '/info Property foo is not expected to be here',
-          path: ['info'],
+          path: ['definitions', 'info'],
           range: {
             end: {
               character: 5,
@@ -591,7 +591,7 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'info-description',
           message: 'OpenAPI object info `description` must be present and non-empty string.',
-          path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted file, but there is such in spec when working on resolved file
+          path: ['definitions', 'info', 'description'],
           range: {
             end: {
               character: 22,
@@ -626,7 +626,7 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'oas2-schema',
           message: "/info should have required property 'title'",
-          path: ['info'],
+          path: [],
           range: {
             end: {
               character: 1,
@@ -642,7 +642,7 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'info-description',
           message: 'OpenAPI object info `description` must be present and non-empty string.',
-          path: ['info', 'description'],
+          path: ['description'],
           range: {
             end: {
               character: 18,

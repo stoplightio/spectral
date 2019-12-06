@@ -123,17 +123,17 @@ describe('Linter', () => {
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value "https://example.com" should be falsy',
-            path: ['empty'],
+            path: ['info', 'contact', 'url'],
           }),
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value Array[] should be falsy',
-            path: ['bar', 'empty'],
+            path: ['servers'],
           }),
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value Object{} should be falsy',
-            path: ['foo', 'empty'],
+            path: ['info'],
           }),
         ]),
       );
