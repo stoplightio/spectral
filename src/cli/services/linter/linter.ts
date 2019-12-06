@@ -1,5 +1,5 @@
 import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
+import { getLocationForJsonPath } from '@stoplight/yaml';
 
 import {
   isJSONSchema,
@@ -12,6 +12,7 @@ import {
   isOpenApiv3,
 } from '../../../formats';
 import { readParsable } from '../../../fs/reader';
+import { parseYaml } from '../../../parsers';
 import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { FormatLookup, IParsedResult } from '../../../types';
@@ -73,10 +74,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
       console.info(`Linting ${targetUri}`);
     }
 
-    const spec: IParserResult = parseWithPointers(await readParsable(targetUri, { encoding: flags.encoding }), {
-      ignoreDuplicateKeys: false,
-      mergeKeys: true,
-    });
+    const spec: IParserResult = parseYaml(await readParsable(targetUri, { encoding: flags.encoding }));
 
     const parsedResult: IParsedResult = {
       source: typeof targetUri === 'number' ? '<STDIN>' : targetUri,

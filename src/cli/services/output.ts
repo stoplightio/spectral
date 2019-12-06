@@ -1,7 +1,7 @@
 import { Dictionary } from '@stoplight/types';
 import { writeFile } from 'fs';
 import { promisify } from 'util';
-import { html, json, junit, stylish } from '../../formatters';
+import { html, json, junit, stylish, teamcity, text } from '../../formatters';
 import { Formatter } from '../../formatters/types';
 import { IRuleResult } from '../../types';
 import { OutputFormat } from '../../types/config';
@@ -13,6 +13,8 @@ const formatters: Dictionary<Formatter, OutputFormat> = {
   stylish,
   junit,
   html,
+  text,
+  teamcity,
 };
 
 export function formatOutput(results: IRuleResult[], format: OutputFormat): string {

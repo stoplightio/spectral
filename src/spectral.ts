@@ -1,23 +1,15 @@
-import {
-  getLocationForJsonPath as getLocationForJsonPathJSON,
-  JsonParserResult,
-  parseWithPointers as parseJSONWithPointers,
-  safeStringify,
-} from '@stoplight/json';
+import { getLocationForJsonPath as getLocationForJsonPathJson, JsonParserResult, safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname, normalize } from '@stoplight/path';
 import { Dictionary, IDiagnostic, Optional } from '@stoplight/types';
-import {
-  getLocationForJsonPath as getLocationForJsonPathYAML,
-  parseWithPointers as parseYAMLWithPointers,
-  YamlParserResult,
-} from '@stoplight/yaml';
+import { getLocationForJsonPath as getLocationForJsonPathYaml, YamlParserResult } from '@stoplight/yaml';
 import { merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
 import { functions as defaultFunctions } from './functions';
+import { parseJson, parseYaml } from './parsers';
 import { Resolved } from './resolved';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction } from './rulesets/evaluators';
@@ -81,11 +73,8 @@ export class Spectral {
     let parsedResult: IParsedResult | IParsedResult<YamlParserResult<unknown>>;
     if (!isParsedResult(target)) {
       parsedResult = {
-        parsed: parseYAMLWithPointers(typeof target === 'string' ? target : safeStringify(target, undefined, 2), {
-          ignoreDuplicateKeys: false,
-          mergeKeys: true,
-        }),
-        getLocationForJsonPath: getLocationForJsonPathYAML,
+        parsed: parseYaml(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
+        getLocationForJsonPath: getLocationForJsonPathYaml,
         // we need to normalize the path in case path with forward slashes is given
         source: opts.resolve?.documentUri && normalize(opts.resolve.documentUri),
       };
@@ -203,15 +192,15 @@ export class Spectral {
     let parsedRefResult: Optional<IParsedResult<YamlParserResult<unknown>> | IParsedResult<JsonParserResult<unknown>>>;
     if (ext === '.yml' || ext === '.yaml') {
       parsedRefResult = {
-        parsed: parseYAMLWithPointers(content, { ignoreDuplicateKeys: false }),
+        parsed: parseYaml(content),
         source: ref,
-        getLocationForJsonPath: getLocationForJsonPathYAML,
+        getLocationForJsonPath: getLocationForJsonPathYaml,
       };
     } else if (ext === '.json') {
       parsedRefResult = {
-        parsed: parseJSONWithPointers(content, { ignoreDuplicateKeys: false }),
+        parsed: parseJson(content),
         source: ref,
-        getLocationForJsonPath: getLocationForJsonPathJSON,
+        getLocationForJsonPath: getLocationForJsonPathJson,
       };
     }
 

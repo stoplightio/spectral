@@ -367,10 +367,20 @@
     tslib "^1.10.0"
     urijs "~1.19.1"
 
-"@stoplight/json@^3.1.2", "@stoplight/json@^3.2.1":
+"@stoplight/json@^3.1.2":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.2.1.tgz#cbc8080f4a55744beb89668d058e48ba52da141b"
   integrity sha512-RnXApQlP6GEUHIK8JRianStXTc4dHARpNP8VVGL/BbctTTlA3BO+Z1eILu35JdqvMG5sw6Og3TkQyQ85w6sSoA==
+  dependencies:
+    "@stoplight/types" "^11.1.1"
+    jsonc-parser "~2.2.0"
+    lodash "^4.17.15"
+    safe-stable-stringify "^1.1"
+
+"@stoplight/json@^3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.3.0.tgz#25d35daf0f189039d17fa1bbf6b2bd4da157a2e6"
+  integrity sha512-lseHw4Tr7SpmfumNdNSsxn/KlrTFZ2EyyVDUXCn10CVDzHYPfVIngVeYPbLc8c5RRvhow6S0zmBK0m9rXPFZiQ==
   dependencies:
     "@stoplight/types" "^11.1.1"
     jsonc-parser "~2.2.0"
@@ -394,10 +404,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.44.tgz#ed3c962564283e9983f7895a6effc3994286df5e"
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
-"@stoplight/yaml@^3.3.2":
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.3.2.tgz#001049ed4a8733fca43cc60efe6bcd046abef210"
-  integrity sha512-KfrEsl3bA8mtoIklVvS4Hg8OrOYYtqi+K0IsQ7lJbZLVaUA4wMwDGwz85a6YWeo1OuVe8tumM6OynrFIjFutNA==
+"@stoplight/yaml@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.4.0.tgz#5adea8f0569ed1f3a9867c84079155637fcab26c"
+  integrity sha512-d1eA2A8XLxn2R4MsQ7QTvxneJHufo1LDcmAnMIjpLdv1y6oQ2u4xeVC7qdijv0wgCMb9VDBZpSoudPG6yP3faw==
   dependencies:
     "@stoplight/types" "^11.1.1"
     "@stoplight/yaml-ast-parser" "0.0.44"
@@ -6488,9 +6498,9 @@ rollup-plugin-terser@^5.1.2:
     terser "^4.1.0"
 
 rollup-plugin-typescript2@^0.25.2:
-  version "0.25.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.25.2.tgz#1a165df08560902da45b355413464caca1765d3a"
-  integrity sha512-+tpZj/ZIf2lwjyjX6xEW1S5Y38/21TB3p6poLodISIia8owMMfIKuFFnWcESE4FPBHkR8XPKqjY0PH9IUJJK+Q==
+  version "0.25.3"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.25.3.tgz#a5fb2f0f85488789334ce540abe6c7011cbdf40f"
+  integrity sha512-ADkSaidKBovJmf5VBnZBZe+WzaZwofuvYdzGAKTN/J4hN7QJCFYAq7IrH9caxlru6T5qhX41PNFS1S4HqhsGQg==
   dependencies:
     find-cache-dir "^3.0.0"
     fs-extra "8.1.0"
@@ -7465,10 +7475,10 @@ type-is@~1.6.17:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typescript-json-schema@~0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.40.0.tgz#4815092e5acf1662a94aa140924809ff5922da7c"
-  integrity sha512-C8D3Ca6+1x3caWOR+u45Shn3KqkRZi5M3+E8ePpEmYMqOh3xhhLdq+39pqT0Bf8+fCgAmpTFSJMT6Xwqbm0Tkw==
+typescript-json-schema@~0.41.0:
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.41.0.tgz#8dbe1798023ae50e803b3f9d53a6d10aaf5a9d74"
+  integrity sha512-ThW7KtuMUR+kZ9Id0G+hJ0YLp3DWPjL6NkrOqAyaKttO3839wF4jiYKm7mZcpUe1BcHs12pfbEo40+qYQtm4yA==
   dependencies:
     "@types/json-schema" "^7.0.3"
     glob "~7.1.4"
@@ -7477,9 +7487,9 @@ typescript-json-schema@~0.40.0:
     yargs "^14.0.0"
 
 typescript@^3.5.3, typescript@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
-  integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.3.tgz#b36840668a16458a7025b9eabfad11b66ab85c69"
+  integrity sha512-Mcr/Qk7hXqFBXMN7p7Lusj1ktCBydylfQM/FZCk5glCNQJrCUKPkMHdo9R0MTFWsC/4kPFvDS0fDPvukfCkFsw==
 
 uglify-js@^3.1.4:
   version "3.6.8"
