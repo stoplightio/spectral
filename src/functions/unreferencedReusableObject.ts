@@ -1,5 +1,6 @@
+import { isObject } from 'lodash';
 import { IFunction } from '../types';
-import { isObject, safePointerToPath } from '../utils';
+import { safePointerToPath } from '../utils';
 
 export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: string }> = (
   data,

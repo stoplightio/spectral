@@ -1,6 +1,4 @@
-import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath } from '@stoplight/yaml';
-
+import { Document } from '../../../document';
 import {
   isJSONSchema,
   isJSONSchemaDraft2019_09,
@@ -12,10 +10,10 @@ import {
   isOpenApiv3,
 } from '../../../formats';
 import { readParsable } from '../../../fs/reader';
-import { parseYaml } from '../../../parsers';
+import * as Parsers from '../../../parsers';
 import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
-import { FormatLookup, IParsedResult } from '../../../types';
+import { FormatLookup } from '../../../types';
 import { ILintConfig } from '../../../types/config';
 import { getRuleset, listFiles, skipRules } from './utils';
 import { getResolver } from './utils/getResolver';
@@ -74,16 +72,14 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
       console.info(`Linting ${targetUri}`);
     }
 
-    const spec: IParserResult = parseYaml(await readParsable(targetUri, { encoding: flags.encoding }));
-
-    const parsedResult: IParsedResult = {
-      source: typeof targetUri === 'number' ? '<STDIN>' : targetUri,
-      parsed: spec,
-      getLocationForJsonPath,
-    };
+    const document = new Document(
+      await readParsable(targetUri, { encoding: flags.encoding }),
+      Parsers.Yaml,
+      typeof targetUri === 'number' ? '<STDIN>' : targetUri,
+    );
 
     results.push(
-      ...(await spectral.run(parsedResult, {
+      ...(await spectral.run(document, {
         ignoreUnknownFormat: flags.ignoreUnknownFormat,
         resolve: {
           documentUri: typeof targetUri === 'number' ? void 0 : targetUri,

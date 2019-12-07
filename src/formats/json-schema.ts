@@ -1,5 +1,5 @@
+import { isObject } from 'lodash';
 import { JSONSchema } from '../types';
-import { isObject } from '../utils/isObject';
 
 const KNOWN_JSON_SCHEMA_TYPES = ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
 const KNOWN_JSON_SCHEMA_COMBINERS = ['allOf', 'oneOf', 'anyOf'];

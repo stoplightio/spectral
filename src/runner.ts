@@ -1,7 +1,7 @@
 const { JSONPath } = require('jsonpath-plus');
 
+import { DocumentInventory } from './documentInventory';
 import { lintNode } from './linter';
-import { Resolved } from './resolved';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { FunctionCollection, IGivenNode, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
 import { hasIntersectingElement } from './utils/';
@@ -9,7 +9,7 @@ import { hasIntersectingElement } from './utils/';
 export const isRuleEnabled = (rule: IRule) => rule.severity !== void 0 && getDiagnosticSeverity(rule.severity) !== -1;
 
 export const runRules = (
-  resolved: Resolved,
+  documentInventory: DocumentInventory,
   rules: RunRuleCollection,
   functions: FunctionCollection,
 ): IRuleResult[] => {
@@ -23,8 +23,8 @@ export const runRules = (
 
     if (
       rule.formats !== void 0 &&
-      (resolved.formats === null ||
-        (resolved.formats !== void 0 && !hasIntersectingElement(rule.formats, resolved.formats)))
+      (documentInventory.formats === null ||
+        (documentInventory.formats !== void 0 && !hasIntersectingElement(rule.formats, documentInventory.formats)))
     ) {
       continue;
     }
@@ -34,7 +34,7 @@ export const runRules = (
     }
 
     try {
-      results.push(...runRule(resolved, rule, functions));
+      results.push(...runRule(documentInventory, rule, functions));
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }
@@ -43,7 +43,7 @@ export const runRules = (
   return results;
 };
 
-const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
+const runRule = (resolved: DocumentInventory, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
   const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
   const results: IRuleResult[] = [];
@@ -87,7 +87,7 @@ const runRule = (resolved: Resolved, rule: IRunRule, functions: FunctionCollecti
 
 function lint(
   node: IGivenNode,
-  resolved: Resolved,
+  resolved: DocumentInventory,
   rule: IRunRule,
   functions: FunctionCollection,
   results: IRuleResult[],
