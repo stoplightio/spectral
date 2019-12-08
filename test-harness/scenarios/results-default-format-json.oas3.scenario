@@ -9,12 +9,12 @@ paths: {}
 tags:
   - name: test
 ====command====
-{spectral} lint {document} --format=json
+{bin} lint {document} --format=json
 ====stdout====
 OpenAPI 3.x detected
 [
 	{
-		"code": "api-servers",
+		"code": "oas3-api-servers",
 		"path": [],
 		"message": "OpenAPI `servers` must be present and non-empty array.",
 		"severity": 1,

@@ -21,7 +21,7 @@ describe('example-value-or-externalValue', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors if missing externalValue and value', async () => {
+  test('return warnings if missing externalValue and value', async () => {
     const results = await s.run({ example: {} });
     expect(results).toEqual([
       {
@@ -43,7 +43,7 @@ describe('example-value-or-externalValue', () => {
     ]);
   });
 
-  test('return errors if both externalValue and value', async () => {
+  test('return warnings if both externalValue and value', async () => {
     const results = await s.run({ example: { externalValue: 'externalValue', value: 'value' } });
     expect(results).toEqual([
       {
@@ -60,7 +60,7 @@ describe('example-value-or-externalValue', () => {
             line: 1,
           },
         },
-        severity: 1,
+        severity: DiagnosticSeverity.Warning,
       },
     ]);
   });

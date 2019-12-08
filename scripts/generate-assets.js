@@ -30,7 +30,7 @@ const target = path.join(baseDir, `assets.json`);
 const assets = {};
 
 (async () => {
-  await Promise.all(['', '2', '3'].map(spec => processDirectory(assets, path.join(__dirname, `../rulesets/oas${spec}`))));
+  await processDirectory(assets, path.join(__dirname, '../rulesets/oas'));
   await writeFileAsync(target, JSON.stringify(assets, null, 2));
 })();
 

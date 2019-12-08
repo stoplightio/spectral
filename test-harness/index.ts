@@ -1,4 +1,5 @@
 import * as path from '@stoplight/path';
+import { normalize } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import * as fg from 'fast-glob';
 import * as fs from 'fs';
@@ -17,8 +18,8 @@ describe('cli acceptance tests', () => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
     const replacements: Dictionary<string> = {
-      __dirname,
-      spectral: spectralBin,
+      __dirname: normalize(__dirname),
+      bin: spectralBin,
     };
 
     const tmpFileHandles = new Map<string, tmp.FileResult>();
@@ -51,6 +52,7 @@ describe('cli acceptance tests', () => {
     test(scenario.test, async () => {
       const command = applyReplacements(scenario.command, replacements);
       const { stderr, stdout, status } = await spawnNode(command, scenario.env);
+      replacements.date = String(new Date()); // this may introduce random failures, but hopefully they don't occur too often
 
       const expectedStdout = scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout, replacements);
       const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);

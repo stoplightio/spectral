@@ -78,6 +78,25 @@ describe('Spectral', () => {
     });
   });
 
+  test('should support combining built-in ruleset with a custom one', async () => {
+    const s = new Spectral();
+    await s.loadRuleset(['spectral:oas', path.join(__dirname, './__fixtures__/bare-oas-ruleset.json')]);
+
+    expect(Object.values(s.rules)).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'oas2-schema',
+        }),
+        expect.objectContaining({
+          name: 'oas3-schema',
+        }),
+        expect.objectContaining({
+          name: 'info-matches-stoplight',
+        }),
+      ]),
+    );
+  });
+
   test('reports issues for correct files with correct ranges and paths', async () => {
     const documentUri = path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json');
     const spectral = new Spectral({ resolver: httpAndFileResolver });

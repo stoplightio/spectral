@@ -22,9 +22,9 @@ components:
       schema:
         type: integer
 ====command====
-{spectral} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml -v
+{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml -v
 ====stdout====
-Found 56 rules (1 enabled)
+Found 53 rules (1 enabled)
 Linting {document}
 OpenAPI 3.x detected
 

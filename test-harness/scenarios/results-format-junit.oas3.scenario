@@ -8,7 +8,7 @@ info:
   foo:
 paths: {}
 ====command====
-{spectral} lint {document} --format=junit
+{bin} lint {document} --format=junit
 ====stdout====
 OpenAPI 3.x detected
 <?xml version="1.0" encoding="utf-8"?>

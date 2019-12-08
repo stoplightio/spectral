@@ -26,6 +26,7 @@ Other options include:
   --encoding, -e               text encoding to use                        [string] [default: "utf8"]
   --format, -f                 formatter to use for outputting results  [string] [default: "stylish"]
   --output, -o                 output to a file instead of stdout                            [string]
+  --resolver                   path to custom json-ref-resolver instance                     [string]
   --ruleset, -r                path/URL to a ruleset file                                    [string]
   --skip-rule, -s              ignore certain rules if they are causing trouble              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
@@ -55,3 +56,24 @@ Changing the fail severity will not effect output. To change what results Spectr
 To have requests made from Spectral be proxied through a server, you'd need to specify PROXY environment variable:
 
 `PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
+
+## Custom $ref resolving
+
+If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver. 
+
+### Example
+
+Assuming the filename is called `my-resolver.js` and the content looks as follows, the path should look more or less like `--resolver=./my-resolver.js`.
+
+```js
+const { Resolver } = require('@stoplight/json-ref-resolver');
+
+module.exports = new Resolver({
+  resolvers: {
+    // pass any resolver for protocol you need
+  }
+});
+```
+
+
+You can learn more about $ref resolving in the [JS section](./javascript.md#using-custom-resolver).

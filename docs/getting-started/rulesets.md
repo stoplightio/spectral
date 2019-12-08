@@ -78,9 +78,8 @@ Specifying the format is optional, so you can completely ignore this if all the 
 
 ```yaml
 rules:
-  api-servers:
+  oas3-api-servers:
     description: "OpenAPI `servers` must be present and non-empty array."
-    recommended: true
     formats: ["oas3"]
     given: "$"
     then:
@@ -101,7 +100,7 @@ Alternatively, formats can be specified at the ruleset level:
 ```yaml
 formats: ["oas3"]
 rules:
-  api-servers:
+  oas3-api-servers:
     description: "OpenAPI `servers` must be present and non-empty array."
     recommended: true
     given: "$"
@@ -120,9 +119,15 @@ Now all the rules in this ruleset will only be applied if the specified format i
 
 Custom formats can be registered via the [JS API](../guides/javascript.md), but the CLI is limited to using the predefined ones.
 
+## Given
+
+The `given` keyword is, besides `then`, the only required property on each rule definition. 
+It can be any valid JSONPath expression or an array of JSONPath expressions.
+[JSONPath Online Evaluator](http://jsonpath.com/) is a helpful tool to determine what `given` path you want.
+
 ## Severity
 
-The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`.
+The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`. The default value is `warn`.
 
 ## Then
 
@@ -157,12 +162,10 @@ responses:
 
 ## Extending rules
 
-Rulesets can extend other rulesets. For example, Spectral comes with two built in rulesets - one for OpenAPI v2 (`spectral:oas2`), and one for OpenAPI v3 (`spectral:oas3`). 
-
-Use the `extends` property in your ruleset file to build upon or customize other rulesets.
+Rulesets can extend other rulesets using the `extends` property. This can be used to build upon or customize other rulesets.
 
 ```yaml
-extends: spectral:oas2
+extends: spectral:oas
 rules:
   my-rule-name:
     description: Tags must have a description.
@@ -187,45 +190,62 @@ extends:
 Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
 
 ```yaml
-extends: [[spectral:oas2, off]]
+extends: [[spectral:oas, off]]
 rules:
-  # This rule is defined in the spectral:oas2 ruleset. We're passing `true` to turn it on and inherit the severity defined in the spectral:oas2 ruleset.
+  # This rule is defined in the spectral:oas ruleset. We're passing `true` to turn it on and inherit the severity defined in the spectral:oas ruleset.
   operation-operationId-unique: true
 ```
 
-The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas2` ruleset.
+The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
 
 ## Disabling rules
 
 This example shows the opposite of the "Enabling Specific rules" example. Sometimes you might want to enable all rules by default, and disable a few.
 
 ```yaml
-extends: [[spectral:oas2, all]]
+extends: [[spectral:oas, all]]
 rules:
   operation-operationId-unique: false
 ```
 
-The example above will run all of the rules defined in the `spectral:oas2` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
+The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
-The current recommended rules are marked with the property `recommended: true` in their respective rulesets:
+- [Rules relevant to OpenAPI v2 and v3](../reference/openapi-rules.md)
 
-- [Rules relevant to both OpenAPI v2 and v3](https://github.com/stoplightio/spectral/tree/master/src/rulesets/oas/index.json)
-- [Rules specific to only OpenAPI v2](https://github.com/stoplightio/spectral/tree/master/src/rulesets/oas2/index.json)
-- [Rules specific to only OpenAPI v3](https://github.com/stoplightio/spectral/tree/master/src/rulesets/oas3/index.json)
 
 ## Changing rule severity
 
 ```yaml
-extends: spectral:oas2
+extends: spectral:oas
 rules:
   operation-2xx-response: warn
 ```
 
-The example above will run the recommended rules from the `spectral:oas2` ruleset, but report `operation-2xx-response` as a warning rather than as an error (as is the default behavior in the `spectral:oas2` ruleset).
+The example above will run the recommended rules from the `spectral:oas` ruleset, but report `operation-2xx-response` as a warning rather than as an error (as is the default behavior in the `spectral:oas` ruleset).
 
 Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
+## Enriching rule messages
 
+To help you create meaningful error messages, Spectral comes with a couple of placeholders that are evaluated at runtime.
+
+- {{error}} - the error returned by function
+- {{description}} - the description set on the rule
+- {{path}} - the whole error path
+- {{property}} - the last segment of error path
+- {{value}} - the linted value
+
+### Examples
+
+```yaml
+message: "{{error}}" # will output the message generated by then.function 
+
+message: "The value of '{{property}}' property must equal 'foo'"
+
+message: "{{value}} is greater than 0"
+
+message: "{{path}} cannot point at remote reference"
+```
 ## Creating custom functions
 
 Learn more about [custom functions](../guides/custom-functions.md).
