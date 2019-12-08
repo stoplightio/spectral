@@ -4,7 +4,7 @@ Reports unrecognized formats
 openapi: 4.0.0
 info: {}
 ====command====
-{spectral} lint {document}
+{bin} lint {document}
 ====stdout====
 {document}
  1:1  information  unrecognized-format  Provided file format does not match any of the registered formats

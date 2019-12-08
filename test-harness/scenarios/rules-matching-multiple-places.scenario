@@ -33,8 +33,9 @@ rules:
 1
 ====stdout====
 {document}
-  6:15  error  valid-user-properties     must match the pattern '/^string$/'
- 10:15  error  valid-user-properties     must match the pattern '/^string$/'
- 11:11  error  require-user-and-address  schemas.address is not truthy
+  1:1   information  unrecognized-format       Provided file format does not match any of the registered formats
+  6:15        error  valid-user-properties     must match the pattern '/^string$/'
+ 10:15        error  valid-user-properties     must match the pattern '/^string$/'
+ 11:11        error  require-user-and-address  schemas.address is not truthy
 
-✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)
+✖ 4 problems (3 errors, 0 warnings, 1 info, 0 hints)

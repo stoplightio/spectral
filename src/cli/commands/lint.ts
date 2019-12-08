@@ -100,6 +100,11 @@ const lintCommand: CommandModule = {
           type: 'boolean',
           default: false,
         },
+        'ignore-unknown-format': {
+          description: 'do not warn about unmatched formats',
+          type: 'boolean',
+          default: false,
+        },
         verbose: {
           alias: 'v',
           description: 'increase verbosity',
@@ -121,6 +126,7 @@ const lintCommand: CommandModule = {
       format,
       output,
       encoding,
+      ignoreUnknownFormat,
       ...config
     } = (args as unknown) as ILintConfig & {
       documents: Array<number | string>;
@@ -132,6 +138,7 @@ const lintCommand: CommandModule = {
       format,
       output,
       encoding,
+      ignoreUnknownFormat,
       ruleset,
       ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['skipRule', 'verbose', 'quiet', 'resolver']),
     })

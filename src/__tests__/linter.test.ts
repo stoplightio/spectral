@@ -467,6 +467,32 @@ describe('linter', () => {
     ]);
   });
 
+  test('given ignoreUnknownFormat, should not warn about unmatched formats', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+
+    spectral.setRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run(
+      {
+        'bar-foo': true,
+        x: true,
+        y: '',
+      },
+      { ignoreUnknownFormat: true },
+    );
+
+    expect(result).toEqual([]);
+  });
+
   test('should include parser diagnostics', async () => {
     await spectral.loadRuleset('spectral:oas');
 

@@ -76,6 +76,7 @@ describe('lint', () => {
       expect(lint).toBeCalledWith([0], {
         encoding: 'utf8',
         format: 'stylish',
+        ignoreUnknownFormat: false,
       });
     });
   });
@@ -91,6 +92,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf8',
       format: 'stylish',
+      ignoreUnknownFormat: false,
     });
   });
 
@@ -100,6 +102,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf16',
       format: 'stylish',
+      ignoreUnknownFormat: false,
     });
   });
 
@@ -109,6 +112,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf16',
       format: 'json',
+      ignoreUnknownFormat: false,
     });
   });
 
@@ -165,6 +169,16 @@ describe('lint', () => {
       skipRule: ['foo', 'bar'],
       encoding: 'utf8',
       format: 'stylish',
+      ignoreUnknownFormat: false,
+    });
+  });
+
+  it('passes ignore-unknown-format to lint', async () => {
+    await run('lint --ignore-unknown-format ./__fixtures__/empty-oas2-document.json');
+    expect(lint).toHaveBeenCalledWith([expect.any(String)], {
+      encoding: 'utf8',
+      format: 'stylish',
+      ignoreUnknownFormat: true,
     });
   });
 

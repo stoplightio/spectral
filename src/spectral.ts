@@ -103,7 +103,7 @@ export class Spectral {
     if (resolved.formats === void 0) {
       const registeredFormats = Object.keys(this.formats);
       const foundFormats = registeredFormats.filter(format => this.formats[format](resolved.resolved));
-      if (foundFormats.length === 0) {
+      if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         resolved.formats = null;
         if (registeredFormats.length > 0) {
           validationResults.push(Spectral._generateUnrecognizedFormatError(parsedResult));
