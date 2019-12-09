@@ -6,7 +6,7 @@ paths:
   /pets:
     get:
       responses:
-        200:
+        '200':
           description: Expected response to a valid request
           links:
             abc:
