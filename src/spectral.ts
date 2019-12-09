@@ -106,7 +106,7 @@ export class Spectral {
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         resolved.formats = null;
         if (registeredFormats.length > 0) {
-          validationResults.push(Spectral._generateUnrecognizedFormatError(parsedResult));
+          validationResults.push(this._generateUnrecognizedFormatError(parsedResult));
         }
       } else {
         resolved.formats = foundFormats;
@@ -244,15 +244,18 @@ export class Spectral {
     return resolveOpts;
   };
 
-  private static _generateUnrecognizedFormatError(parsedResult: IParsedResult): IRuleResult {
+  private _generateUnrecognizedFormatError(parsedResult: IParsedResult): IRuleResult {
     return {
       range: parsedResult.getLocationForJsonPath(parsedResult.parsed, [], true)?.range || {
         start: { character: 0, line: 0 },
         end: { character: 0, line: 0 },
       },
-      message: 'Provided file format does not match any of the registered formats',
+
+      message: `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(
+        ', ',
+      )}]`,
       code: 'unrecognized-format',
-      severity: DiagnosticSeverity.Information,
+      severity: DiagnosticSeverity.Warning,
       source: parsedResult.source,
       path: [],
     };

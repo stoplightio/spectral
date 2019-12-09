@@ -420,6 +420,7 @@ describe('linter', () => {
 
   test('should not run any rule with defined formats if some formats are registered but document format could not be associated', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+    spectral.registerFormat('markdown', () => false);
 
     spectral.setRules({
       rule1: {
@@ -455,10 +456,10 @@ describe('linter', () => {
 
     expect(result).toEqual([
       {
-        message: 'Provided file format does not match any of the registered formats',
+        message: 'The provided document does not match any of the registered formats [foo-bar, markdown]',
         path: [],
         range: expect.any(Object),
-        severity: DiagnosticSeverity.Information,
+        severity: DiagnosticSeverity.Warning,
         code: 'unrecognized-format',
       },
       expect.objectContaining({
