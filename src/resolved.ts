@@ -1,19 +1,11 @@
-import { pointerToPath } from '@stoplight/json';
+import { extractSourceFromRef, hasRef, isLocalRef, pointerToPath } from '@stoplight/json';
 import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
 import { normalize, resolve } from '@stoplight/path';
 import { Dictionary, ILocation, IRange, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
 import { IParsedResult, ResolveResult } from './types';
-import {
-  extractSourceFromRef,
-  getEndRef,
-  hasRef,
-  isAbsoluteRef,
-  isLocalRef,
-  safePointerToPath,
-  traverseObjUntilRef,
-} from './utils';
+import { getEndRef, isAbsoluteRef, safePointerToPath, traverseObjUntilRef } from './utils';
 
 const getDefaultRange = (): IRange => ({
   start: {

@@ -1,24 +1,6 @@
-import { extractSourceFromRef, traverseObjUntilRef } from '..';
+import { traverseObjUntilRef } from '..';
 
 describe('$ref utils', () => {
-  describe('extractSourceFromRef', () => {
-    it.each`
-      ref                       | expected
-      ${1}                      | ${null}
-      ${'../foo.json#'}         | ${'../foo.json'}
-      ${'../foo.json#/'}        | ${'../foo.json'}
-      ${'../foo.json#/foo/bar'} | ${'../foo.json'}
-      ${'../foo.json'}          | ${'../foo.json'}
-      ${'foo.json'}             | ${'foo.json'}
-      ${'http://foo.com#/foo'}  | ${'http://foo.com'}
-      ${''}                     | ${null}
-      ${'#'}                    | ${null}
-      ${'#/foo/bar'}            | ${null}
-    `('returns proper $expected source for $ref', ({ ref, expected }) => {
-      expect(extractSourceFromRef(ref)).toEqual(expected);
-    });
-  });
-
   describe('traverseObjUntilRef', () => {
     it('given a broken json path, throws', () => {
       const obj = {

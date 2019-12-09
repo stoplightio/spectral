@@ -1,24 +1,7 @@
-import { pointerToPath } from '@stoplight/json';
+import { extractPointerFromRef, hasRef, pointerToPath } from '@stoplight/json';
 import { isAbsolute } from '@stoplight/path';
 import { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { hasRef } from './hasRef';
-
-export const isLocalRef = (pointer: string) => pointer.length > 0 && pointer[0] === '#';
-
-export const extractSourceFromRef = (ref: unknown): string | null => {
-  if (typeof ref !== 'string' || ref.length === 0 || isLocalRef(ref)) {
-    return null;
-  }
-
-  const index = ref.indexOf('#');
-
-  if (index === -1) {
-    return ref;
-  }
-
-  return ref.slice(0, index);
-};
 
 export const isAbsoluteRef = (ref: string) => isAbsolute(ref) || /^[a-z]+:\/\//i.test(ref);
 
@@ -57,10 +40,6 @@ export const getEndRef = (refMap: Dictionary<string>, $ref: string): string => {
 };
 
 export const safePointerToPath = (pointer: string): JsonPath => {
-  const index = pointer.indexOf('#');
-  if (index === -1) {
-    return [];
-  }
-
-  return pointerToPath(pointer.slice(index));
+  const rawPointer = extractPointerFromRef(pointer);
+  return rawPointer ? pointerToPath(rawPointer) : [];
 };
