@@ -1,5 +1,4 @@
-import { JsonPath } from '@stoplight/types';
-import { get, has } from 'lodash';
+import { get, isObject } from 'lodash';
 
 const { JSONPath } = require('jsonpath-plus');
 
@@ -8,7 +7,7 @@ import { Resolved } from './resolved';
 import { message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
-import { isObject } from './utils';
+import { getClosestJsonPath } from './utils';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -92,7 +91,6 @@ export const lintNode = (
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
         const parsed = resolved.getParsedForJsonPath(
-          // todo: scope path there in parsed for jsonpath
           getClosestJsonPath(rule.resolved === false ? resolved.unresolved : resolved.resolved, escapedJsonPath),
         );
 
@@ -140,14 +138,3 @@ export const lintNode = (
 
   return results;
 };
-
-// todo: revisit -> https://github.com/stoplightio/spectral/issues/608
-function getClosestJsonPath(data: unknown, path: JsonPath) {
-  if (!isObject(data)) return [];
-
-  while (path.length > 0 && !has(data, path)) {
-    path.pop();
-  }
-
-  return path;
-}
