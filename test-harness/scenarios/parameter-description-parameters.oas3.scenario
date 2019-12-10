@@ -12,7 +12,7 @@ paths:
         - name: ok
           in: header
       responses:
-        200:
+        '200':
           description: abc
 components:
   parameters:

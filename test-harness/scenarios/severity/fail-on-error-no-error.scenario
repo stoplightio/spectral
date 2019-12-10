@@ -10,12 +10,12 @@ paths:
     get:
       operationId: foo
       responses:
-        200:
+        '200':
           description: ok
     post:
       operationId: bar
       responses:
-        200:
+        '200':
           description: ok
 ====command====
 {bin} lint {document} --fail-severity=error

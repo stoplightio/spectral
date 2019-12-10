@@ -386,10 +386,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.44.tgz#ed3c962564283e9983f7895a6effc3994286df5e"
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
-"@stoplight/yaml@^3.4.0":
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.4.0.tgz#5adea8f0569ed1f3a9867c84079155637fcab26c"
-  integrity sha512-d1eA2A8XLxn2R4MsQ7QTvxneJHufo1LDcmAnMIjpLdv1y6oQ2u4xeVC7qdijv0wgCMb9VDBZpSoudPG6yP3faw==
+"@stoplight/yaml@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.5.0.tgz#ed5462c6b0b82ad492c42740bb816d343f4ed0ab"
+  integrity sha512-q4HlH4+U5GGL+LHImbz7w29q3M0fMF5c6jE/PbSth5MNBvUNXAX8rxyWWt017LadH8VIoDgnam/0dO/or5SCvQ==
   dependencies:
     "@stoplight/types" "^11.1.1"
     "@stoplight/yaml-ast-parser" "0.0.44"
