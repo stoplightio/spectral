@@ -41,6 +41,8 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
   });
 
   test('should not lint if passed in value is not an object', async () => {
@@ -52,7 +54,7 @@ describe('linter', () => {
 
     const result = await spectral.run('123');
 
-    expect(result).toHaveLength(0);
+    expect(result).toEqual(0);
   });
 
   test('should return all properties matching 4xx response code', async () => {
@@ -82,16 +84,19 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      responses: {
-        '200': {
-          name: 'ok',
-        },
-        '404': {
-          name: 'not found',
+    const result = await spectral.run(
+      {
+        responses: {
+          '200': {
+            name: 'ok',
+          },
+          '404': {
+            name: 'not found',
+          },
         },
       },
-    });
+      { ignoreUnknownFormat: true },
+    );
 
     expect(result).toEqual([
       {
@@ -142,8 +147,6 @@ describe('linter', () => {
   });
 
   test('should not report anything for disabled rules', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas');
     const { rules: oasRules } = await readRuleset('spectral:oas');
     spectral.setRules(
@@ -157,6 +160,9 @@ describe('linter', () => {
     const result = await spectral.run(invalidSchema);
 
     expect(result).toEqual([
+      expect.objectContaining({
+        code: 'unrecognized-format',
+      }),
       expect.objectContaining({
         code: 'invalid-ref',
       }),
@@ -182,8 +188,6 @@ describe('linter', () => {
   });
 
   test('should output unescaped json paths', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
