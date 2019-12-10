@@ -250,7 +250,7 @@ describe('spectral', () => {
           },
         });
 
-        return expect(s.run(parsedResult)).resolves.toEqual([
+        return expect(s.run(parsedResult, { resolve: { documentUri: source } })).resolves.toEqual([
           {
             code: 'pagination-responses-have-x-next-token',
             message: 'All collection endpoints have the X-Next-Token parameter in responses',

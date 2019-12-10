@@ -1,5 +1,5 @@
 import { IFunction } from '../types';
-import { isObject } from '../utils';
+import { isObject, safePointerToPath } from '../utils';
 
 export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: string }> = (
   data,
@@ -15,7 +15,7 @@ export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: st
     );
   }
 
-  const normalizedSource = otherValues.resolved.spec.source === undefined ? '' : otherValues.resolved.spec.source;
+  const normalizedSource = otherValues.resolved.source ?? '';
 
   const defined = Object.keys(data).map(name => `${normalizedSource}${opts.reusableObjectsLocation}/${name}`);
 
@@ -24,10 +24,7 @@ export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: st
   return orphans.map(orphanPath => {
     return {
       message: 'Potential orphaned reusable object has been detected.',
-      path: orphanPath
-        .split('#')[1]
-        .split('/')
-        .slice(1),
+      path: safePointerToPath(orphanPath),
     };
   });
 };

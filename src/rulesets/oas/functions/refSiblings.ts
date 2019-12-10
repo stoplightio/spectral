@@ -1,6 +1,6 @@
+import { hasRef } from '@stoplight/json';
 import { JsonPath } from '@stoplight/types';
 import { IFunction, IFunctionResult } from '../../../types';
-import { hasRef } from '../../../utils/hasRef';
 
 // function is needed because `$..$ref` or `$..[?(@.$ref)]` are not parsed correctly
 // and therefore lead to infinite recursion due to the dollar sign ('$' in '$ref')
