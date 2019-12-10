@@ -1,11 +1,11 @@
-import { decodePointerFragment, pointerToPath } from '@stoplight/json';
+import { extractSourceFromRef, hasRef, isLocalRef, pointerToPath } from '@stoplight/json';
 import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
-import { Dictionary, ILocation, IRange, JsonPath, Segment } from '@stoplight/types';
+import { normalize, resolve } from '@stoplight/path';
+import { Dictionary, ILocation, IRange, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
-import { IParseMap, REF_METADATA, ResolveResult } from './spectral';
-import { IParsedResult } from './types';
-import { hasRef, isObject } from './utils';
+import { IParsedResult, ResolveResult } from './types';
+import { getEndRef, isAbsoluteRef, safePointerToPath, traverseObjUntilRef } from './utils';
 
 const getDefaultRange = (): IRange => ({
   start: {
@@ -26,9 +26,17 @@ export class Resolved {
   public readonly errors: IResolveError[];
   public formats?: string[] | null;
 
-  constructor(public spec: IParsedResult, resolveResult: ResolveResult, public parsedMap: IParseMap) {
-    this.unresolved = spec.parsed.data;
-    this.formats = spec.formats;
+  public get source() {
+    return this.parsed.source ? normalize(this.parsed.source) : this.parsed.source;
+  }
+
+  constructor(
+    protected parsed: IParsedResult,
+    resolveResult: ResolveResult,
+    public parsedRefs: Dictionary<IParsedResult>,
+  ) {
+    this.unresolved = parsed.parsed.data;
+    this.formats = parsed.formats;
 
     this.refMap = resolveResult.refMap;
     this.graph = resolveResult.graph;
@@ -36,58 +44,55 @@ export class Resolved {
     this.errors = resolveResult.errors;
   }
 
-  public doesBelongToDoc(path: JsonPath): boolean {
-    if (path.length === 0) {
-      // todo: each rule and their function should be context-aware, meaning they should aware of the fact they operate on resolved content
-      // let's assume the error was reported correctly by any custom rule /shrug
-      return true;
-    }
-
-    let piece = this.unresolved;
-
-    for (let i = 0; i < path.length; i++) {
-      if (!isObject(piece)) return false;
-
-      if (path[i] in piece) {
-        piece = piece[path[i]];
-      } else if (hasRef(piece)) {
-        return this.doesBelongToDoc([...pointerToPath(piece.$ref), ...path.slice(i)]);
-      }
-    }
-
-    return true;
-  }
-
   public getParsedForJsonPath(path: JsonPath) {
-    let target: object = this.parsedMap.refs;
-    const newPath = [...path];
-    let segment: Segment;
+    try {
+      const newPath: JsonPath = [...path];
+      let $ref = traverseObjUntilRef(this.unresolved, newPath);
 
-    while (newPath.length > 0) {
-      segment = newPath.shift()!;
-      if (segment && segment in target) {
-        target = target[segment];
-      } else {
-        newPath.unshift(segment);
-        break;
+      if ($ref === null) {
+        return {
+          path,
+          doc: this.parsed,
+        };
       }
-    }
 
-    if (target && target[REF_METADATA]) {
-      return {
-        path: [...get(target, [REF_METADATA, 'root'], []).map(decodePointerFragment), ...newPath],
-        doc: get(this.parsedMap.parsed, get(target, [REF_METADATA, 'ref']), this.spec),
-      };
-    }
+      let { source } = this;
 
-    if (!this.doesBelongToDoc(path)) {
+      while (true) {
+        if (source === void 0) return null;
+
+        $ref = getEndRef(this.graph.getNodeData(source).refMap, $ref);
+
+        if ($ref === null) return null;
+
+        if (isLocalRef($ref)) {
+          return {
+            path: pointerToPath($ref),
+            doc: source === this.parsed.source ? this.parsed : this.parsedRefs[source],
+          };
+        }
+
+        const extractedSource = extractSourceFromRef($ref)!;
+        source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
+
+        const doc = source === this.parsed.source ? this.parsed : this.parsedRefs[source];
+        const { parsed } = doc;
+        const scopedPath = [...safePointerToPath($ref), ...newPath];
+
+        const obj = scopedPath.length === 0 || hasRef(parsed.data) ? parsed.data : get(parsed.data, scopedPath);
+
+        if (hasRef(obj)) {
+          $ref = obj.$ref;
+        } else {
+          return {
+            doc,
+            path: scopedPath,
+          };
+        }
+      }
+    } catch {
       return null;
     }
-
-    return {
-      path,
-      doc: this.spec,
-    };
   }
 
   public getLocationForJsonPath(path: JsonPath, closest?: boolean): ILocation {
@@ -102,7 +107,7 @@ export class Resolved {
 
     return {
       ...(parsedResult.doc.source && { uri: parsedResult.doc.source }),
-      range: location !== void 0 ? location.range : getDefaultRange(),
+      range: location?.range || getDefaultRange(),
     };
   }
 

@@ -97,7 +97,7 @@ describe('Spectral', () => {
     );
   });
 
-  test('reports issues for correct files with correct ranges and paths', async () => {
+  test('should report issues for correct files with correct ranges and paths', async () => {
     const documentUri = path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json');
     const spectral = new Spectral({ resolver: httpAndFileResolver });
     await spectral.loadRuleset('spectral:oas');
@@ -105,6 +105,7 @@ describe('Spectral', () => {
     const parsed = {
       parsed: parseWithPointers(fs.readFileSync(documentUri, 'utf8')),
       getLocationForJsonPath,
+      source: documentUri,
     };
 
     const results = await spectral.run(parsed, {
@@ -128,7 +129,7 @@ describe('Spectral', () => {
               line: 16,
             },
           },
-          source: undefined,
+          source: documentUri,
         }),
         expect.objectContaining({
           code: 'oas2-schema',
@@ -158,7 +159,7 @@ describe('Spectral', () => {
               line: 10,
             },
           },
-          source: undefined,
+          source: documentUri,
         }),
         expect.objectContaining({
           code: 'info-contact',
@@ -173,7 +174,7 @@ describe('Spectral', () => {
               line: 2,
             },
           },
-          source: undefined,
+          source: documentUri,
         }),
         expect.objectContaining({
           code: 'operation-description',
@@ -188,9 +189,221 @@ describe('Spectral', () => {
               line: 11,
             },
           },
-          source: undefined,
+          source: documentUri,
         }),
       ]),
     );
+  });
+
+  test('should recognize the source of remote $refs', async () => {
+    const s = new Spectral({ resolver: httpAndFileResolver });
+    const documentUri = path.join(__dirname, './__fixtures__/gh-658/URIError.yaml');
+
+    s.setRules({
+      'schema-strings-maxLength': {
+        severity: DiagnosticSeverity.Warning,
+        recommended: true,
+        message: "String typed properties MUST be further described using 'maxLength'. Error: {{error}}",
+        given: "$..[?(@.type === 'string')]",
+        then: {
+          field: 'maxLength',
+          function: 'truthy',
+        },
+      },
+    });
+
+    const results = await s.run(fs.readFileSync(documentUri, 'utf8'), { resolve: { documentUri } });
+
+    return expect(results).toEqual([
+      expect.objectContaining({
+        path: ['paths', '/test', 'get', 'responses', '200', 'content', 'application/json', 'schema'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        range: {
+          end: {
+            character: 28,
+            line: 23,
+          },
+          start: {
+            character: 21,
+            line: 22,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: [
+          'paths',
+          '/test',
+          'get',
+          'responses',
+          '400',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'status_code',
+        ],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 21,
+          },
+          start: {
+            character: 20,
+            line: 20,
+          },
+        },
+      }),
+      expect.objectContaining({
+        path: [
+          'paths',
+          '/test',
+          'get',
+          'responses',
+          '400',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'test',
+        ],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        range: {
+          end: {
+            character: 18,
+            line: 43,
+          },
+          start: {
+            character: 8,
+            line: 42,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: [
+          'paths',
+          '/test',
+          'get',
+          'responses',
+          '500',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'status_code',
+        ],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 21,
+          },
+          start: {
+            character: 20,
+            line: 20,
+          },
+        },
+      }),
+      expect.objectContaining({
+        path: [
+          'paths',
+          '/test',
+          'get',
+          'responses',
+          '500',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'test',
+        ],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        range: {
+          end: {
+            character: 18,
+            line: 43,
+          },
+          start: {
+            character: 8,
+            line: 42,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: ['components', 'schemas', 'Foo'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        range: {
+          end: {
+            character: 18,
+            line: 43,
+          },
+          start: {
+            character: 8,
+            line: 42,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: ['components', 'schemas', 'Error', 'properties', 'status_code'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 21,
+          },
+          start: {
+            character: 20,
+            line: 20,
+          },
+        },
+      }),
+      expect.objectContaining({
+        path: ['components', 'schemas', 'Error', 'properties', 'test'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        range: {
+          end: {
+            character: 18,
+            line: 43,
+          },
+          start: {
+            character: 8,
+            line: 42,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: ['components', 'schemas', 'Baz', 'properties', 'status_code'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 21,
+          },
+          start: {
+            character: 20,
+            line: 20,
+          },
+        },
+      }),
+      expect.objectContaining({
+        path: ['components', 'schemas', 'Baz', 'properties', 'test'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
+        range: {
+          end: {
+            character: 18,
+            line: 43,
+          },
+          start: {
+            character: 8,
+            line: 42,
+          },
+        },
+      }),
+    ]);
   });
 });
