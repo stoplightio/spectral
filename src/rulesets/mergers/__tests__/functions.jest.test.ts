@@ -1,9 +1,9 @@
 import { RuleCollection } from '../../../types';
 import { RulesetFunctionCollection } from '../../../types/ruleset';
 import { mergeFunctions } from '../functions';
-const nanoid = require('nanoid');
+const nanoid = require('nanoid/non-secure');
 
-jest.mock('nanoid');
+jest.mock('nanoid/non-secure');
 
 describe('Ruleset functions merging', () => {
   beforeEach(() => {
