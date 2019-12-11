@@ -245,7 +245,7 @@ describe('Spectral', () => {
         },
       }),
       expect.objectContaining({
-        path: ['components', 'schemas', 'Foo', 'properties', 'test'],
+        path: ['components', 'schemas', 'Foo'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
         range: {
           end: {
@@ -274,7 +274,7 @@ describe('Spectral', () => {
         },
       }),
       expect.objectContaining({
-        path: ['components', 'schemas', 'Foo', 'properties', 'test'],
+        path: ['components', 'schemas', 'Foo'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
         range: {
           end: {
@@ -318,7 +318,7 @@ describe('Spectral', () => {
         },
       }),
       expect.objectContaining({
-        path: ['components', 'schemas', 'Foo', 'properties', 'test'],
+        path: ['components', 'schemas', 'Foo'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
         range: {
           end: {
@@ -347,7 +347,7 @@ describe('Spectral', () => {
         },
       }),
       expect.objectContaining({
-        path: ['components', 'schemas', 'Foo', 'properties', 'test'],
+        path: ['components', 'schemas', 'Foo'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
         range: {
           end: {

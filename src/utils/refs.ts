@@ -44,7 +44,7 @@ export const safePointerToPath = (pointer: string): JsonPath => {
   return rawPointer ? pointerToPath(rawPointer) : [];
 };
 
-export function getClosestJsonPath(data: unknown, path: JsonPath) {
+export const getClosestJsonPath = (data: unknown, path: JsonPath) => {
   const closestPath: JsonPath = [];
 
   if (!isObject(data)) return closestPath;
@@ -59,4 +59,4 @@ export function getClosestJsonPath(data: unknown, path: JsonPath) {
   }
 
   return closestPath;
-}
+};

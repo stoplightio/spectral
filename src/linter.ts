@@ -3,7 +3,7 @@ import { get, isObject } from 'lodash';
 const { JSONPath } = require('jsonpath-plus');
 
 import { decodePointerFragment, pathToPointer } from '@stoplight/json';
-import { Resolved } from './resolved';
+import { getDefaultRange, Resolved } from './resolved';
 import { message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
@@ -90,21 +90,10 @@ export const lintNode = (
     results.push(
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const parsed = resolved.getParsedForJsonPath(
-          getClosestJsonPath(rule.resolved === false ? resolved.unresolved : resolved.resolved, escapedJsonPath),
-        );
-
-        const path = parsed?.path || escapedJsonPath;
-        const range = parsed?.doc.getLocationForJsonPath(parsed.doc.parsed, path, true)?.range || {
-          start: {
-            line: 0,
-            character: 0,
-          },
-          end: {
-            line: 0,
-            character: 0,
-          },
-        };
+        const parsed = resolved.getParsedForJsonPath(escapedJsonPath);
+        const path = parsed?.path || getClosestJsonPath(resolved.unresolved, escapedJsonPath);
+        const doc = parsed?.doc || resolved.parsed;
+        const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();
 
         return {
           code: rule.name,
