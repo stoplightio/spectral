@@ -4,7 +4,7 @@ const { JSONPath } = require('jsonpath-plus');
 
 import { decodePointerFragment, pathToPointer } from '@stoplight/json';
 import { getDefaultRange, Resolved } from './resolved';
-import { message } from './rulesets/message';
+import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
 import { getClosestJsonPath } from './utils';
@@ -91,31 +91,34 @@ export const lintNode = (
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
         const parsed = resolved.getParsedForJsonPath(escapedJsonPath);
-        const path = parsed?.path || getClosestJsonPath(resolved.unresolved, escapedJsonPath);
+        const path = parsed?.path || getClosestJsonPath(resolved.resolved, escapedJsonPath);
         const doc = parsed?.doc || resolved.parsed;
         const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();
+
+        const vars: IMessageVars = {
+          property: path.length > 0 ? path[path.length - 1] : '',
+          path: pathToPointer(path),
+          error: result.message,
+          ...(parsed?.missingPropertyPath && { fullPath: pathToPointer(parsed.missingPropertyPath) }),
+          description: rule.description,
+          get value() {
+            // let's make `value` lazy
+            const value = get(parsed?.doc.parsed.data, path);
+            if (isObject(value)) {
+              return Array.isArray(value) ? 'Array[]' : 'Object{}';
+            }
+
+            return JSON.stringify(value);
+          },
+        };
+
+        const resultMessage = message(result.message, vars);
+        vars.error = resultMessage;
 
         return {
           code: rule.name,
 
-          message:
-            rule.message === undefined
-              ? rule.description || result.message
-              : message(rule.message, {
-                  error: result.message,
-                  property: path.length > 0 ? path[path.length - 1] : '',
-                  path: pathToPointer(path),
-                  description: rule.description,
-                  get value() {
-                    // let's make `value` lazy
-                    const value = get(parsed?.doc.parsed.data, path);
-                    if (isObject(value)) {
-                      return Array.isArray(value) ? 'Array[]' : 'Object{}';
-                    }
-
-                    return JSON.stringify(value);
-                  },
-                }),
+          message: rule.message === undefined ? rule.description || resultMessage : message(rule.message, vars),
           path,
           severity: getDiagnosticSeverity(rule.severity),
           source: parsed?.doc.source,

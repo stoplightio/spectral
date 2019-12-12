@@ -185,7 +185,7 @@ describe('spectral', () => {
           {
             code: 'truthy-baz',
             message: 'Baz must be truthy',
-            path: ['foo'],
+            path: ['foo', 'bar', 'baz'],
             range: {
               end: {
                 character: 12,

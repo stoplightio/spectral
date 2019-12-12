@@ -1,4 +1,4 @@
-import { extractSourceFromRef, hasRef, isLocalRef, pointerToPath } from '@stoplight/json';
+import { extractSourceFromRef, hasRef, isLocalRef } from '@stoplight/json';
 import { IGraphNodeData, IResolveError } from '@stoplight/json-ref-resolver/types';
 import { normalize, resolve } from '@stoplight/path';
 import { Dictionary, ILocation, IRange, JsonPath } from '@stoplight/types';
@@ -47,15 +47,18 @@ export class Resolved {
   public getParsedForJsonPath(path: JsonPath) {
     try {
       const newPath: JsonPath = getClosestJsonPath(this.resolved, path);
-      const propertyPath = path.slice(Math.max(0, newPath.length - 1));
       let $ref = traverseObjUntilRef(this.unresolved, newPath);
 
       if ($ref === null) {
         return {
           path: getClosestJsonPath(this.unresolved, path),
           doc: this.parsed,
+          missingPropertyPath: path,
         };
       }
+
+      const missingPropertyPath =
+        newPath.length === 0 ? [] : path.slice(path.lastIndexOf(newPath[newPath.length - 1]) + 1);
 
       let { source } = this;
 
@@ -66,31 +69,32 @@ export class Resolved {
 
         if ($ref === null) return null;
 
-        if (isLocalRef($ref)) {
-          const resolvedDoc = source === this.parsed.source ? this.parsed : this.parsedRefs[source];
-          return {
-            path: getClosestJsonPath(resolvedDoc.parsed.data, [...pointerToPath($ref), ...propertyPath]),
-            doc: resolvedDoc,
-          };
-        }
-
-        const extractedSource = extractSourceFromRef($ref)!;
-        source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
-
-        const doc = source === this.parsed.source ? this.parsed : this.parsedRefs[source];
-        const { parsed } = doc;
         const scopedPath = [...safePointerToPath($ref), ...newPath];
+        let resolvedDoc;
 
-        const obj = scopedPath.length === 0 || hasRef(parsed.data) ? parsed.data : get(parsed.data, scopedPath);
-
-        if (hasRef(obj)) {
-          $ref = obj.$ref;
+        if (isLocalRef($ref)) {
+          resolvedDoc = source === this.parsed.source ? this.parsed : this.parsedRefs[source];
         } else {
-          return {
-            doc,
-            path: getClosestJsonPath(doc.parsed.data, [...scopedPath, ...propertyPath]),
-          };
+          const extractedSource = extractSourceFromRef($ref)!;
+          source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
+
+          resolvedDoc = source === this.parsed.source ? this.parsed : this.parsedRefs[source];
+          const { parsed } = resolvedDoc;
+
+          const obj = scopedPath.length === 0 || hasRef(parsed.data) ? parsed.data : get(parsed.data, scopedPath);
+
+          if (hasRef(obj)) {
+            $ref = obj.$ref;
+            continue;
+          }
         }
+
+        const closestPath = getClosestJsonPath(resolvedDoc.parsed.data, scopedPath);
+        return {
+          doc: resolvedDoc,
+          path: closestPath,
+          missingPropertyPath: [...closestPath, ...missingPropertyPath],
+        };
       }
     } catch {
       return null;

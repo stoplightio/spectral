@@ -4,7 +4,7 @@ export const truthy: IFunction = (targetVal, _opts, paths): void | IFunctionResu
   if (!targetVal) {
     return [
       {
-        message: `${paths.target ? paths.target.join('.') : 'property'} is not truthy`,
+        message: '{{fullPath}} property is not truthy',
       },
     ];
   }
