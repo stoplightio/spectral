@@ -45,16 +45,14 @@ describe('linter', () => {
     spectral.registerFormat('oas3', isOpenApiv3);
   });
 
-  test('should not lint if passed in value is not an object', async () => {
+  test('should not throw if passed in value is not an object', () => {
     const fakeLintingFunction = jest.fn();
     spectral.setFunctions({
       [fnName]: fakeLintingFunction,
     });
     spectral.setRules(rules);
 
-    const result = await spectral.run('123');
-
-    expect(result).toEqual(0);
+    return expect(spectral.run('123', { ignoreUnknownFormat: true })).resolves.toBeTruthy();
   });
 
   test('should return all properties matching 4xx response code', async () => {
@@ -139,9 +137,12 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      x: true,
-    });
+    const result = await spectral.run(
+      {
+        x: true,
+      },
+      { ignoreUnknownFormat: true },
+    );
 
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
   });
@@ -160,9 +161,6 @@ describe('linter', () => {
     const result = await spectral.run(invalidSchema);
 
     expect(result).toEqual([
-      expect.objectContaining({
-        code: 'unrecognized-format',
-      }),
       expect.objectContaining({
         code: 'invalid-ref',
       }),
@@ -221,10 +219,13 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      x: false,
-      y: '',
-    });
+    const result = await spectral.run(
+      {
+        x: false,
+        y: '',
+      },
+      { ignoreUnknownFormat: true },
+    );
 
     expect(result).toEqual([
       expect.objectContaining({
@@ -345,6 +346,10 @@ describe('linter', () => {
 
     expect(result).toEqual([
       expect.objectContaining({
+        code: 'unrecognized-format',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
+      }),
+      expect.objectContaining({
         code: 'rule3',
       }),
     ]);
@@ -460,7 +465,7 @@ describe('linter', () => {
 
     expect(result).toEqual([
       {
-        message: 'The provided document does not match any of the registered formats [foo-bar, markdown]',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar, markdown]',
         path: [],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
@@ -678,10 +683,13 @@ responses:: !!foo
 
   describe('reports duplicated properties for', () => {
     test('JSON format', async () => {
-      const result = await spectral.run({
-        parsed: parseWithPointers('{"foo":true,"foo":false}', { ignoreDuplicateKeys: false }),
-        getLocationForJsonPath,
-      });
+      const result = await spectral.run(
+        {
+          parsed: parseWithPointers('{"foo":true,"foo":false}', { ignoreDuplicateKeys: false }),
+          getLocationForJsonPath,
+        },
+        { ignoreUnknownFormat: true },
+      );
 
       expect(result).toEqual([
         {
@@ -704,7 +712,7 @@ responses:: !!foo
     });
 
     test('YAML format', async () => {
-      const result = await spectral.run(`foo: bar\nfoo: baz`);
+      const result = await spectral.run(`foo: bar\nfoo: baz`, { ignoreUnknownFormat: true });
 
       expect(result).toEqual([
         {
@@ -728,11 +736,14 @@ responses:: !!foo
   });
 
   test('should report invalid YAML mapping keys', async () => {
-    const results = await spectral.run(`responses:
+    const results = await spectral.run(
+      `responses:
   200:
     description: ''
   '400':
-    description: ''`);
+    description: ''`,
+      { ignoreUnknownFormat: true },
+    );
 
     expect(results).toEqual([
       {
