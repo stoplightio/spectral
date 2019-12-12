@@ -727,6 +727,33 @@ responses:: !!foo
     });
   });
 
+  test('should report invalid YAML mapping keys', async () => {
+    const results = await spectral.run(`responses:
+  200:
+    description: ''
+  '400':
+    description: ''`);
+
+    expect(results).toEqual([
+      {
+        code: 'parser',
+        message: 'Mapping key must be a string scalar rather than number',
+        path: ['responses', '200'],
+        range: {
+          end: {
+            character: 5,
+            line: 1,
+          },
+          start: {
+            character: 2,
+            line: 1,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+      },
+    ]);
+  });
+
   describe('functional tests for the given property', () => {
     let fakeLintingFunction: any;
 

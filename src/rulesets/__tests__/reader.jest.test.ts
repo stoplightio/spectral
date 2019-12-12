@@ -6,9 +6,9 @@ import * as nock from 'nock';
 import { Spectral } from '../../spectral';
 import { IRule, RuleType } from '../../types';
 import { readRuleset } from '../reader';
-const nanoid = require('nanoid');
+const nanoid = require('nanoid/non-secure');
 
-jest.mock('nanoid');
+jest.mock('nanoid/non-secure');
 jest.mock('fs');
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');

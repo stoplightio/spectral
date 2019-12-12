@@ -22,7 +22,7 @@ paths:
           in: query
           description: abc
       responses:
-        200:
+        '200':
           description: abc
 parameters:
   skipParam:
