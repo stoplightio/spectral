@@ -1,7 +1,7 @@
 import { Dictionary } from '@stoplight/types/dist';
 import { RuleCollection } from '../../types';
 import { RulesetFunctionCollection } from '../../types/ruleset';
-const nanoid = require('nanoid');
+const nanoid = require('nanoid/non-secure');
 
 export function mergeFunctions(
   target: RulesetFunctionCollection,
