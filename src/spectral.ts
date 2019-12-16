@@ -1,10 +1,12 @@
+const md5 = require('blueimp-md5');
+
 import { getLocationForJsonPath as getLocationForJsonPathJson, JsonParserResult, safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname, normalize } from '@stoplight/path';
 import { Dictionary, IDiagnostic, Optional } from '@stoplight/types';
 import { getLocationForJsonPath as getLocationForJsonPathYaml, YamlParserResult } from '@stoplight/yaml';
-import { merge } from 'lodash';
+import { memoize, merge, uniqBy } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
@@ -31,20 +33,24 @@ import {
   RunRuleCollection,
 } from './types';
 import { IRuleset } from './types/ruleset';
-import { empty } from './utils';
+import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty } from './utils';
+
+memoize.Cache = WeakMap;
 
 export * from './types';
 
 export class Spectral {
+  public functions: FunctionCollection = { ...defaultFunctions };
+  public rules: RunRuleCollection = {};
+  public formats: RegisteredFormats;
+
+  private readonly _computeFingerprint: ComputeFingerprintFunc;
   private readonly _resolver: IResolver;
   private readonly _parsedRefs: Dictionary<IParsedResult>;
   private static readonly _parsedCache = new WeakMap<ICache | IResolver, Dictionary<IParsedResult>>();
-  public functions: FunctionCollection = { ...defaultFunctions };
-  public rules: RunRuleCollection = {};
-
-  public formats: RegisteredFormats;
 
   constructor(opts?: IConstructorOpts) {
+    this._computeFingerprint = memoize(opts?.computeFingerprint || defaultComputeResultFingerprint);
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
     this.formats = {};
 
@@ -108,9 +114,19 @@ export class Spectral {
       ...runRules(resolved, this.rules, this.functions),
     ];
 
+    // add fingerprint func to each result, to uniquely identify and group them
+    const computeFingerprint = this._computeFingerprint;
+    for (const r of validationResults) {
+      Object.defineProperty(r, 'fingerprint', {
+        get() {
+          return computeFingerprint(r, md5);
+        },
+      });
+    }
+
     return {
       resolved: resolved.resolved,
-      results: validationResults,
+      results: uniqBy(validationResults, 'fingerprint'),
     };
   }
 
