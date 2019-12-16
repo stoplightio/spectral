@@ -76,10 +76,10 @@ spectral.registerFormat('oas3', isOpenApiv3);
 const {
   Spectral,
   isJSONSchema,
-  isJSONSchemaDraft4, 
+  isJSONSchemaDraft4,
   isJSONSchemaDraft6,
-  isJSONSchemaDraft7, 
-  isJSONSchemaDraft2019_09, 
+  isJSONSchemaDraft7,
+  isJSONSchemaDraft2019_09,
   isJSONSchemaLoose,
 } = require('@stoplight/spectral');
 
@@ -96,7 +96,7 @@ Learn more about predefined formats in the (ruleset documentation)[../getting-st
 
 ## Loading Rules
 
-Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`. 
+Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`.
 
 ```js
 const { Spectral, isOpenApiv2, isOpenApiv3 } = require('@stoplight/spectral');
@@ -114,7 +114,7 @@ spectral.loadRuleset('spectral:oas')
   .then(results => {
     console.log('here are the results', results);
   });
-``` 
+```
 
 The OpenAPI rules are opinionated. There might be some rules that you prefer to change, or disable. We encourage you to create your rules to fit your use case, and we welcome additions to the existing rulesets as well!
 
@@ -153,7 +153,7 @@ spectral
   .then(result => {
     expect(result).toEqual([
       expect.objectContaining({
-       code: 'rule1',   
+       code: 'rule1',
      }),
    ]);
   });
@@ -161,9 +161,12 @@ spectral
 
 ### Using custom resolver
 
-Spectral lets you provide any custom $ref resolver. By default, http(s) and file protocols are resolved, relatively to the document Spectral lints against.
-If you'd like support any additional protocol or adjust the resolution, you are absolutely fine to do it.
-In order to achieve that, you need to create a custom json-ref-resolver instance.
+Spectral lets you provide any custom $ref resolver. By default, http(s) and file protocols are resolved, relatively to
+the document Spectral lints against. If you'd like support any additional protocol or adjust the resolution, you are
+absolutely fine to do it. In order to achieve that, you need to create a custom json-ref-resolver instance.
+
+You can find more information about how to create custom resolvers in
+the [@stoplight/json-ref-resolver](https://github.com/stoplightio/json-ref-resolver) repository.
 
 ```js
 const path = require('path');
@@ -199,3 +202,28 @@ const spectral = new Spectral({ resolver: customFileResolver });
 The custom resolver we've just created will resolve all remote file refs relatively to the current working directory.
 
 More on that can be found in the [json-ref-resolver repo](https://github.com/stoplightio/json-ref-resolver).
+
+### Using custom de-duplication strategy
+
+By default, Spectral will de-duplicate results based on the result code and document location. You can customize this
+behavior with the `computeFingerprint` option. For example, here is the default fingerprint implementation:
+
+The final reported results are de-duplicated based on their computed fingerprint.
+
+```ts
+const spectral = new Spectral({
+  computeFingerprint: (rule: IRuleResult, hash) => {
+    let id = String(rule.code);
+
+    if (rule.path && rule.path.length) {
+      id += JSON.stringify(rule.path);
+    } else if (rule.range) {
+      id += JSON.stringify(rule.range);
+    }
+
+    if (rule.source) id += rule.source;
+
+    return hash(id);
+  },
+});
+```
