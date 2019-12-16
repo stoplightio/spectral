@@ -40,7 +40,7 @@ describe('oas2-valid-definition-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-definition-example',
-        message: '"xoxo.example" property type should be string',
+        message: 'property type should be string',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -104,7 +104,7 @@ describe('oas2-valid-definition-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-definition-example',
-        message: '"xoxo.example" property should have required property \'url\'',
+        message: "property should have required property 'url'",
         severity: DiagnosticSeverity.Error,
       }),
     ]);

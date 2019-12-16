@@ -1,10 +1,10 @@
 import { IFunction, IFunctionResult } from '../types';
 
-export const undefined: IFunction = (targetVal, _opts, paths): void | IFunctionResult[] => {
+export const undefined: IFunction = (targetVal): void | IFunctionResult[] => {
   if (typeof targetVal !== 'undefined') {
     return [
       {
-        message: `${paths.target ? paths.target.join('.') : 'property'} should be undefined`,
+        message: '{{missingPropertyPath}} property should not be undefined',
       },
     ];
   }

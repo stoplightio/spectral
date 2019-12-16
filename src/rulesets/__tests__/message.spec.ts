@@ -8,7 +8,7 @@ describe('message util', () => {
         property: 'description',
         error: 'expected property to be truthy',
         path: '',
-        fullPath: '',
+        givenPath: '',
         value: void 0,
       }),
     ).toEqual('oops... "description" is missing;error: expected property to be truthy');
@@ -21,7 +21,7 @@ describe('message util', () => {
         property: 'description',
         error: 'expected property to be truthy',
         path: '',
-        fullPath: '',
+        givenPath: '',
         value,
       }),
     ).toEqual(`Value must not equal ${value}`);
@@ -34,7 +34,7 @@ describe('message util', () => {
         property: 'baz',
         error: 'foo',
         path: '',
-        fullPath: '',
+        givenPath: '',
         value: void 0,
       }),
     ).toEqual('foofoobazfoofoo');
@@ -47,7 +47,7 @@ describe('message util', () => {
         property: 'description',
         error: 'expected property to be truthy',
         path: '',
-        fullPath: '',
+        givenPath: '',
         value: void 0,
       }),
     ).toEqual('missing :(');

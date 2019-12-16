@@ -6,7 +6,7 @@ export interface IMessageVars {
   description?: string;
   value: unknown;
   path: string;
-  fullPath?: string;
+  givenPath?: string;
 }
 
 export type MessageInterpolator = (str: string, values: IMessageVars) => string;

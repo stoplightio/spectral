@@ -92,7 +92,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     return [
       {
         path,
-        message: `${paths ? path.join('.') : 'property'} does not exist`,
+        message: `{{givenPath}} property does not exist`,
       },
     ];
 

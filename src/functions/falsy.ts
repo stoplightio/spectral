@@ -1,10 +1,10 @@
 import { IFunction, IFunctionResult } from '../types';
 
-export const falsy: IFunction = (targetVal, _opts, paths): void | IFunctionResult[] => {
+export const falsy: IFunction = (targetVal): void | IFunctionResult[] => {
   if (!!targetVal) {
     return [
       {
-        message: `${paths.target ? paths.target.join('.') : 'property'} is not falsy`,
+        message: '{{givenPath}} property is not false',
       },
     ];
   }
