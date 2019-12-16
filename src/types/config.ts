@@ -18,6 +18,7 @@ export interface ILintConfig {
   resolver?: string;
   ruleset?: string[];
   skipRule?: string[];
+  ignoreUnknownFormat: boolean;
   verbose?: boolean;
   quiet?: boolean;
 }
