@@ -78,7 +78,7 @@ describe('Linter', () => {
     ]);
   });
 
-  describe('evaluate {{value}} in validation messages', () => {
+  describe('evaluate "value" in validation messages', () => {
     test('should print correct values for referenced files', async () => {
       spectral = new Spectral({ resolver: httpAndFileResolver });
 

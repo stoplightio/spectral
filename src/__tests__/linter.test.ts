@@ -96,7 +96,7 @@ describe('linter', () => {
     });
 
     expect(result).toEqual([
-      {
+      expect.objectContaining({
         code: 'rule1',
         message,
         severity: DiagnosticSeverity.Warning,
@@ -111,7 +111,7 @@ describe('linter', () => {
             line: 5,
           },
         },
-      },
+      }),
     ]);
   });
 
