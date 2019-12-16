@@ -52,7 +52,7 @@ describe('linter', () => {
     });
     spectral.setRules(rules);
 
-    return expect(spectral.run('123', { ignoreUnknownFormat: true })).resolves.toBeTruthy();
+    return expect(spectral.run('123')).resolves.toBeTruthy();
   });
 
   test('should return all properties matching 4xx response code', async () => {
@@ -429,7 +429,6 @@ describe('linter', () => {
 
   test('should not run any rule with defined formats if some formats are registered but document format could not be associated', async () => {
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
-    spectral.registerFormat('markdown', () => false);
 
     spectral.setRules({
       rule1: {
@@ -465,7 +464,7 @@ describe('linter', () => {
 
     expect(result).toEqual([
       {
-        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar, markdown]',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar]',
         path: [],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
@@ -474,6 +473,29 @@ describe('linter', () => {
       expect.objectContaining({
         code: 'rule3',
       }),
+    ]);
+  });
+
+  test('given a string input, should warn about unmatched formats', async () => {
+    const result = await spectral.run('test');
+
+    expect(result).toEqual([
+      {
+        code: 'unrecognized-format',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
+        path: [],
+        range: {
+          end: {
+            character: 4,
+            line: 0,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
     ]);
   });
 
