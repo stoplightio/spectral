@@ -17,18 +17,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI: custom resolver can be provided leveraging --resolver flag [#717](https://github.com/stoplightio/spectral/issues/717)
 - CLI: input can be provided via STDIN [#757](https://github.com/stoplightio/spectral/issues/757)
 - Implemented ignoreUnsupportedFormats to make it easier to detect unrecognized formats [#678](https://github.com/stoplightio/spectral/issues/678)
+- Rule's Given can be an array now [#799](https://github.com/stoplightio/spectral/pull/799)
+- Casing built-in function is added [#564](https://github.com/stoplightio/spectral/issues/564)
 
 ### Changed
-- Improved source error detection [#685](https://github.com/stoplightio/spectral/pull/685)
+- Improved error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
 - Built-in OAS rule `openapi-tags` is now recommended [#706](https://github.com/stoplightio/spectral/pull/706)
 - CLI: Default `--fail-severity` is now `warn`, so getting an `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
 - When was removed from Rule [#585](https://github.com/stoplightio/spectral/issues/585)
+- Rules are recommended by default [#719](https://github.com/stoplightio/spectral/pull/719)
+- Rulesets no longer need to have `rules` placed [#652](https://github.com/stoplightio/spectral/pull/652)
 
 ### Fixed
 - Circular remote references with JSON pointers are resolved correctly [json-ref-resolver#141](https://github.com/stoplightio/json-ref-resolver/pull/141)
 - Local root JSON pointers are resolved correctly [json-ref-resolver#146](https://github.com/stoplightio/json-ref-resolver/pull/146) 
 - Unixify glob patterns under Windows [#679](https://github.com/stoplightio/spectral/issues/679)
 - Improved duplicate keys detection [#751](https://github.com/stoplightio/spectral/issues/751)
+- Spectral should be usable in non-secure environments [#846](https://github.com/stoplightio/spectral/pull/846)
+- Falsy values are printed in messages [#824](https://github.com/stoplightio/spectral/pull/824)
 
 
 ## [4.2.0] - 2019-10-08
