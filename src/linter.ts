@@ -116,8 +116,7 @@ export const lintNode = (
 
         return {
           code: rule.name,
-
-          message: rule.message === undefined ? rule.description || resultMessage : message(rule.message, vars),
+          message: rule.message === void 0 ? rule.description || resultMessage : message(rule.message, vars),
           path,
           severity: getDiagnosticSeverity(rule.severity),
           source: parsed?.doc.source,
