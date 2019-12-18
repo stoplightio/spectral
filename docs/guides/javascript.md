@@ -76,10 +76,10 @@ spectral.registerFormat('oas3', isOpenApiv3);
 const {
   Spectral,
   isJSONSchema,
-  isJSONSchemaDraft4, 
+  isJSONSchemaDraft4,
   isJSONSchemaDraft6,
-  isJSONSchemaDraft7, 
-  isJSONSchemaDraft2019_09, 
+  isJSONSchemaDraft7,
+  isJSONSchemaDraft2019_09,
   isJSONSchemaLoose,
 } = require('@stoplight/spectral');
 
@@ -96,7 +96,7 @@ Learn more about predefined formats in the (ruleset documentation)[../getting-st
 
 ## Loading Rules
 
-Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`. 
+Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`.
 
 ```js
 const { Spectral, isOpenApiv2, isOpenApiv3 } = require('@stoplight/spectral');
@@ -114,9 +114,44 @@ spectral.loadRuleset('spectral:oas')
   .then(results => {
     console.log('here are the results', results);
   });
-``` 
+```
 
 The OpenAPI rules are opinionated. There might be some rules that you prefer to change, or disable. We encourage you to create your rules to fit your use case, and we welcome additions to the existing rulesets as well!
+
+Custom rulesets can also be loaded using `spectral.loadRuleset()` by specifying the exact path to the ruleset file.
+
+```js
+const { Spectral, isOpenApiv2, isOpenApiv3 } = require('@stoplight/spectral');
+
+const myOpenApiDocument = `
+openapi: 3.0.0
+# here goes the rest of document
+`
+
+const spectral = new Spectral();
+spectral.registerFormat('oas2', isOpenApiv2);
+spectral.registerFormat('oas3', isOpenApiv3);
+
+spectral.loadRuleset(__dirname + '/path/to/my-ruleset.yaml')
+  .then(() => spectral.run(myOpenApiDocument))
+  .then(results => {
+    console.log('here are the results', results);
+  });
+```
+
+Alternatively, if your ruleset is stored in a plain JSON file that doesn't extend any other rulesets, you can also consider using `setRuleset`, as follows
+
+```js
+const { Spectral } = require('@stoplight/spectral');
+const ruleset = require('./my-ruleset.json');
+
+const spectral = new Spectral();
+spectral.setRuleset(ruleset);
+spectral.run(myOpenApiDocument)
+  .then(results => {
+    console.log('here are the results', results);
+  });
+```
 
 ## Advanced
 
@@ -153,7 +188,7 @@ spectral
   .then(result => {
     expect(result).toEqual([
       expect.objectContaining({
-       code: 'rule1',   
+       code: 'rule1',
      }),
    ]);
   });
