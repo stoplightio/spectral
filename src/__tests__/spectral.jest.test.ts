@@ -232,9 +232,6 @@ describe('Spectral', () => {
 
       expect.objectContaining({
         path: ['components', 'schemas', 'Error', 'properties', 'status_code'],
-        message:
-          "String typed properties MUST be further described using 'maxLength'. Error: #/components/schemas/Error/properties/status_code/maxLength property is not truthy",
-
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
         range: {
           end: {
@@ -250,8 +247,6 @@ describe('Spectral', () => {
       expect.objectContaining({
         path: ['components', 'schemas', 'Foo'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
-        message:
-          "String typed properties MUST be further described using 'maxLength'. Error: #/components/schemas/Foo/maxLength property is not truthy",
         range: {
           end: {
             character: 18,

@@ -35,6 +35,6 @@ rules:
 {document}
   6:15  error  valid-user-properties     must match the pattern '/^string$/'
  10:15  error  valid-user-properties     must match the pattern '/^string$/'
- 11:11  error  require-user-and-address  #/schemas/address is not truthy
+ 11:11  error  require-user-and-address  schemas.address is not truthy
 
 ✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)

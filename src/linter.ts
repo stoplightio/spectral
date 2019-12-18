@@ -99,7 +99,6 @@ export const lintNode = (
           property: path.length > 0 ? path[path.length - 1] : '',
           path: pathToPointer(path),
           error: result.message,
-          ...(parsed?.missingPropertyPath && { fullPath: pathToPointer(parsed.missingPropertyPath) }),
           description: rule.description,
           get value() {
             // let's make `value` lazy
