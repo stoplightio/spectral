@@ -84,6 +84,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
 
     results.push(
       ...(await spectral.run(parsedResult, {
+        ignoreUnknownFormat: flags.ignoreUnknownFormat,
         resolve: {
           documentUri: typeof targetUri === 'number' ? void 0 : targetUri,
         },

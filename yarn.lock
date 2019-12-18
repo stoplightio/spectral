@@ -492,9 +492,9 @@
     "@types/jest" "*"
 
 "@types/jest@*", "@types/jest@^24.0.22":
-  version "24.0.23"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.23.tgz#046f8e2ade026fe831623e361a36b6fb9a4463e4"
-  integrity sha512-L7MBvwfNpe7yVPTXLn32df/EK+AMBFAFvZrRuArGs7npEWnlziUXK+5GMIUTI4NIuwok3XibsjXCs5HxviYXjg==
+  version "24.0.24"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.24.tgz#0f2f523dc77cc1bc6bef34eaf287ede887a73f05"
+  integrity sha512-vgaG968EDPSJPMunEDdZvZgvxYSmeH8wKqBlHSkBt1pV2XlLEVDzsj1ZhLuI4iG4Pv841tES61txSBF0obh4CQ==
   dependencies:
     jest-diff "^24.3.0"
 
@@ -1996,9 +1996,9 @@ depd@~1.1.2:
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
 dependency-graph@^0.8.0, dependency-graph@~0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.8.0.tgz#2da2d35ed852ecc24a5d6c17788ba57c3708755b"
-  integrity sha512-DCvzSq2UiMsuLnj/9AL484ummEgLtZIcRS7YvtO38QnpX3vqh9nJ8P+zhu8Ja+SmLrBHO2iDbva20jq38qvBkQ==
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/dependency-graph/-/dependency-graph-0.8.1.tgz#9b8cae3aa2c7bd95ccb3347a09a2d1047a6c3c5a"
+  integrity sha512-g213uqF8fyk40W8SBjm079n3CZB4qSpCrA2ye1fLGzH/4HEgB6tzuW2CbLE7leb4t45/6h44Ud59Su1/ROTfqw==
 
 des.js@^1.0.0:
   version "1.0.0"
@@ -5024,9 +5024,9 @@ nan@^2.12.1, nan@^2.14.0:
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
 nanoid@^2.1.6:
-  version "2.1.7"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.7.tgz#d775e3e7c6470bbaaae3da9a647a80e228e0abf7"
-  integrity sha512-fmS3qwDldm4bE01HCIRqNk+f255CNjnAoeV3Zzzv0KemObHKqYgirVaZA9DtKcjogicWjYcHkJs4D5A8CjnuVQ==
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.8.tgz#2dbb0224231b246e3b4c819de7bfea6384dabf08"
+  integrity sha512-g1z+n5s26w0TGKh7gjn7HCqurNKMZWzH08elXzh/gM/csQHd/UqDV6uxMghQYg9IvqRPm1QpeMk50YMofHvEjQ==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -5772,9 +5772,9 @@ pkg-fetch@^2.6.4:
     unique-temp-dir "^1.0.0"
 
 pkg@^4.4.0:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.4.1.tgz#16790b2ab13485000f650b1f3fdfa5412af09f27"
-  integrity sha512-dT+wOFIwWIxuUbc5lxzGffZHEyMllf9b32l0RQTb5m/sIsU2qzBKQewHIgVDKcdOJGx2R/+dMdBbrup4UKTlJA==
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.4.2.tgz#c9c5bf13501d33df5cad02397a14f0bbf48aac15"
+  integrity sha512-FEFX43fzHVyEl7fBTTaKxjN3OsWowNfcDGO7+NaxfUsMTMvy8aQX6DscjgoTNnbOehObRK/UqMUGKXt3mvnArg==
   dependencies:
     "@babel/parser" "^7.7.5"
     "@babel/runtime" "^7.7.5"
@@ -6418,9 +6418,9 @@ rollup-pluginutils@2.8.1, rollup-pluginutils@^2.8.1:
     estree-walker "^0.6.1"
 
 rollup@^1.26.4:
-  version "1.27.5"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.27.5.tgz#d100fb0ffd8353575cb2057152547b9abfddfe59"
-  integrity sha512-8rfVdzuTg2kt8ObD9LNJpEwUN7B6lsl3sHc5fddtgICpLjpYeSf4m2+RftBzcCaBTMi1iYX3Ez8zFT4Gj2nJjg==
+  version "1.27.13"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.27.13.tgz#d6d3500512daacbf8de54d2800de62d893085b90"
+  integrity sha512-hDi7M07MpmNSDE8YVwGVFA8L7n8jTLJ4lG65nMAijAyqBe//rtu4JdxjUBE7JqXfdpqxqDTbCDys9WcqdpsQvw==
   dependencies:
     "@types/estree" "*"
     "@types/node" "*"

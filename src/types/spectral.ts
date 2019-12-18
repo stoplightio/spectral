@@ -34,6 +34,7 @@ export interface IConstructorOpts {
 }
 
 export interface IRunOpts {
+  ignoreUnknownFormat?: boolean;
   resolve?: {
     documentUri?: string;
   };
