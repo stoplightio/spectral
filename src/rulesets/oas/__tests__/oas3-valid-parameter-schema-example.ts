@@ -87,7 +87,7 @@ describe('oas3-valid-parameter-schema-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas3-valid-parameter-schema-example',
-        message: '"c.example" property type should be string',
+        message: 'property type should be string',
         path: [
           'paths',
           '/pet',
@@ -169,7 +169,7 @@ describe('oas3-valid-parameter-schema-example', () => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: 'oas3-valid-parameter-schema-example',
-        message: '"schema.example" property type should be string',
+        message: 'property type should be string',
       }),
     ]);
   });
@@ -247,7 +247,7 @@ describe('oas3-valid-parameter-schema-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas3-valid-parameter-schema-example',
-        message: '"abc.example" property type should be number',
+        message: 'property type should be number',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -284,7 +284,7 @@ describe('oas3-valid-parameter-schema-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas3-valid-parameter-schema-example',
-        message: '"schema.example" property should have required property \'url\'',
+        message: "property should have required property 'url'",
         severity: DiagnosticSeverity.Error,
       }),
     ]);

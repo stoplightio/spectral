@@ -642,7 +642,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-valid-schema-example',
-        message: '"foo.example" property type should be number',
+        message: 'property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
@@ -659,7 +659,7 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas2-valid-parameter-example',
-          message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
+          message: "property can't resolve reference #/parameters/missing from id #",
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
       ]),

@@ -41,7 +41,7 @@ describe('oas3-valid-oas-parameter-example', () => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: 'oas3-valid-oas-parameter-example',
-        message: '"0.example" property type should be string',
+        message: 'property type should be string',
       }),
     ]);
   });
@@ -119,7 +119,7 @@ describe('oas3-valid-oas-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas3-valid-oas-parameter-example',
-        message: '"Abc.example" property should have required property \'abc\'',
+        message: "property should have required property 'abc'",
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -156,7 +156,7 @@ describe('oas3-valid-oas-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas3-valid-oas-parameter-example',
-        message: '"0.example" property should have required property \'url\'',
+        message: "property should have required property 'url'",
         severity: DiagnosticSeverity.Error,
       }),
     ]);
