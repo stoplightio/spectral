@@ -1,7 +1,6 @@
 import * as path from '@stoplight/path';
 import { join } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
@@ -13,8 +12,6 @@ describe('Linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.registerFormat('oas3', isOpenApiv3);
-    spectral.registerFormat('oas2', isOpenApiv2);
   });
 
   it('should make use of custom functions', async () => {

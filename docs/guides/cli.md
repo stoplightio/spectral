@@ -33,6 +33,7 @@ Other options include:
                                 [string] [choices: "error", "warn", "info", "hint"] [default: "warn"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
                                                                            [boolean] [default: false]
+  --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
   --verbose, -v                increase verbosity                                           [boolean]
   --quiet, -q                  no logging - output only                                     [boolean]
 ```

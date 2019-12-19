@@ -99,7 +99,6 @@ export const lintNode = (
           property: path.length > 0 ? path[path.length - 1] : '',
           path: pathToPointer(path),
           error: result.message,
-          ...(parsed?.missingPropertyPath && { fullPath: pathToPointer(parsed.missingPropertyPath) }),
           description: rule.description,
           get value() {
             // let's make `value` lazy
@@ -117,8 +116,7 @@ export const lintNode = (
 
         return {
           code: rule.name,
-
-          message: rule.message === undefined ? rule.description || resultMessage : message(rule.message, vars),
+          message: rule.message === void 0 ? rule.description || resultMessage : message(rule.message, vars),
           path,
           severity: getDiagnosticSeverity(rule.severity),
           source: parsed?.doc.source,

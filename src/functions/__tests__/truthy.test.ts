@@ -23,7 +23,7 @@ describe('truthy', () => {
   test('should return an error message if target value is falsy', () => {
     expect(runTruthy(false)).toEqual([
       {
-        message: '{{fullPath}} property is not truthy',
+        message: 'property is not truthy',
       },
     ]);
   });
@@ -31,7 +31,15 @@ describe('truthy', () => {
   test('should return an error message if target value is null', () => {
     expect(runTruthy(null)).toEqual([
       {
-        message: '{{fullPath}} property is not truthy',
+        message: 'property is not truthy',
+      },
+    ]);
+  });
+
+  test('should return a detailed error message if target path is set', () => {
+    expect(runTruthy(null, ['a', 'b'])).toEqual([
+      {
+        message: 'a.b is not truthy',
       },
     ]);
   });

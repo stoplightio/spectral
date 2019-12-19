@@ -4,7 +4,7 @@ import { getLocationForJsonPath as getLocationForJsonPathJson, JsonParserResult,
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname, normalize } from '@stoplight/path';
-import { Dictionary, IDiagnostic, Optional } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, IDiagnostic, Optional } from '@stoplight/types';
 import { getLocationForJsonPath as getLocationForJsonPathYaml, YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge, uniqBy } from 'lodash';
 
@@ -102,17 +102,22 @@ export class Spectral {
       this._parsedRefs,
     );
 
+    let validationResults = [...refDiagnostics, ...results, ...formatResolverErrors(resolved)];
+
     if (resolved.formats === void 0) {
-      const foundFormats = Object.keys(this.formats).filter(format => this.formats[format](resolved.resolved));
-      resolved.formats = foundFormats.length === 0 ? null : foundFormats;
+      const registeredFormats = Object.keys(this.formats);
+      const foundFormats = registeredFormats.filter(format => this.formats[format](resolved.resolved));
+      if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
+        resolved.formats = null;
+        if (registeredFormats.length > 0) {
+          validationResults.push(this._generateUnrecognizedFormatError(parsedResult));
+        }
+      } else {
+        resolved.formats = foundFormats;
+      }
     }
 
-    const validationResults = [
-      ...refDiagnostics,
-      ...results,
-      ...formatResolverErrors(resolved),
-      ...runRules(resolved, this.rules, this.functions),
-    ];
+    validationResults = validationResults.concat(runRules(resolved, this.rules, this.functions));
 
     // add fingerprint func to each result, to uniquely identify and group them
     const computeFingerprint = this._computeFingerprint;
@@ -231,6 +236,23 @@ export class Spectral {
 
     return resolveOpts;
   };
+
+  private _generateUnrecognizedFormatError(parsedResult: IParsedResult): IRuleResult {
+    return {
+      range: parsedResult.getLocationForJsonPath(parsedResult.parsed, [], true)?.range || {
+        start: { character: 0, line: 0 },
+        end: { character: 0, line: 0 },
+      },
+
+      message: `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(
+        ', ',
+      )}]`,
+      code: 'unrecognized-format',
+      severity: DiagnosticSeverity.Warning,
+      source: parsedResult.source,
+      path: [],
+    };
+  }
 }
 
 export const isParsedResult = (obj: any): obj is IParsedResult => {
