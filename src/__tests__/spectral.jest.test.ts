@@ -218,6 +218,21 @@ describe('Spectral', () => {
 
     return expect(results).toEqual([
       expect.objectContaining({
+        path: ['components', 'schemas', 'Error', 'properties', 'status_code'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 21,
+          },
+          start: {
+            character: 20,
+            line: 20,
+          },
+        },
+      }),
+
+      expect.objectContaining({
         path: ['paths', '/test', 'get', 'responses', '200', 'content', 'application/json', 'schema'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
         range: {
@@ -232,20 +247,6 @@ describe('Spectral', () => {
         },
       }),
 
-      expect.objectContaining({
-        path: ['components', 'schemas', 'Error', 'properties', 'status_code'],
-        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
-        range: {
-          end: {
-            character: 22,
-            line: 21,
-          },
-          start: {
-            character: 20,
-            line: 20,
-          },
-        },
-      }),
       expect.objectContaining({
         path: ['components', 'schemas', 'Foo'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/URIError.yaml'),
