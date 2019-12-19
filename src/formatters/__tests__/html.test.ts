@@ -1,7 +1,8 @@
 import { HTMLElement, parse } from 'node-html-parser';
+import { sortResults } from '../../utils';
 import { html } from '../html';
 
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('HTML formatter', () => {
   test('should display proper severity levels', () => {

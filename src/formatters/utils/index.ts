@@ -5,5 +5,4 @@ export * from './getSummary';
 export * from './groupBySeverity';
 export * from './groupBySource';
 export * from './pluralize';
-export * from './sortResults';
 export * from './xmlEscape';

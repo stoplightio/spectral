@@ -1,4 +1,4 @@
-import { IRuleResult } from '../../types';
+import { IRuleResult } from '../types';
 
 const compareCode = (left: string | number | undefined, right: string | number | undefined): number => {
   if (left === void 0 && right === void 0) {

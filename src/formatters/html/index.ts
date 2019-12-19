@@ -29,14 +29,7 @@ import * as fs from 'fs';
 import { template } from 'lodash';
 import { IRuleResult } from '../../types';
 import { Formatter } from '../types';
-import {
-  getHighestSeverity,
-  getSeverityName,
-  getSummary,
-  getSummaryForSource,
-  groupBySource,
-  sortResults,
-} from '../utils';
+import { getHighestSeverity, getSeverityName, getSummary, getSummaryForSource, groupBySource } from '../utils';
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -47,7 +40,7 @@ const messageTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'ht
 const resultTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-result.html'), 'utf8')));
 
 function renderMessages(messages: IRuleResult[], parentIndex: number) {
-  return sortResults(messages)
+  return messages
     .map(message => {
       const line = message.range.start.line + 1;
       const character = message.range.start.character + 1;

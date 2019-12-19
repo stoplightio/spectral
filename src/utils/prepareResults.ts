@@ -2,8 +2,8 @@ const md5 = require('blueimp-md5');
 
 import { uniqBy } from 'lodash';
 
-import { compareResults } from '../formatters/utils/sortResults';
 import { IRuleResult } from '../types';
+import { compareResults } from './sortResults';
 
 export type ComputeFingerprintFunc = (rule: IRuleResult, hash: (val: string) => string) => string;
 

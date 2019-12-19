@@ -605,7 +605,7 @@ responses:: !!foo
     );
   });
 
-  test.only('should remove all redundant ajv errors', async () => {
+  test('should remove all redundant ajv errors', async () => {
     spectral.registerFormat('oas2', isOpenApiv2);
     spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas');
