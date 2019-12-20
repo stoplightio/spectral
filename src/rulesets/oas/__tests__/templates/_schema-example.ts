@@ -43,7 +43,7 @@ export default (ruleName: string, path: string) => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: ruleName,
-        message: 'property type should be string',
+        message: '"example" property type should be string',
       }),
     ]);
   });
@@ -93,7 +93,7 @@ export default (ruleName: string, path: string) => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'property type should be string',
+        message: '"example" property type should be string',
         path: [path, 'xoxo', '0', 'schema', 'properties', 'a', 'properties', 'b', 'properties', 'c', 'example'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Error,
@@ -174,7 +174,7 @@ export default (ruleName: string, path: string) => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'property type should be number',
+        message: '"example" property type should be number',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -212,7 +212,7 @@ export default (ruleName: string, path: string) => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: "property should have required property 'url'",
+        message: `"example" property should have required property 'url'`, // todo: consistent quotes
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -268,7 +268,7 @@ export default (ruleName: string, path: string) => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: ruleName,
-        message: `property format should match format "${format}"`,
+        message: `"example" property format should match format "${format}"`,
       }),
     ]);
   });

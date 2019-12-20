@@ -92,7 +92,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     return [
       {
         path,
-        message: `{{missingPropertyPath}} property does not exist`,
+        message: `"{{property}}" property does not exist`,
       },
     ];
 

@@ -4,7 +4,7 @@ export const falsy: IFunction = (targetVal): void | IFunctionResult[] => {
   if (!!targetVal) {
     return [
       {
-        message: '{{missingPropertyPath}} property is not falsy',
+        message: '"{{property}}" property is not falsy',
       },
     ];
   }

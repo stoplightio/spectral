@@ -27,7 +27,7 @@ describe('falsy', () => {
   test('returns error message if target value is not falsy', () => {
     expect(runFalsy(true)).toEqual([
       {
-        message: '{{missingPropertyPath}} property is not falsy',
+        message: '"{{property}}" property is not falsy',
       },
     ]);
   });

@@ -4,7 +4,7 @@ export const undefined: IFunction = (targetVal): void | IFunctionResult[] => {
   if (typeof targetVal !== 'undefined') {
     return [
       {
-        message: '{{missingPropertyPath}} property should be undefined',
+        message: '"{{property}}" property should be undefined',
       },
     ];
   }

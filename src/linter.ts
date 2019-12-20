@@ -1,13 +1,12 @@
+import { decodePointerFragment } from '@stoplight/json';
 import { get, isObject } from 'lodash';
-
-const { JSONPath } = require('jsonpath-plus');
-
-import { decodePointerFragment, pathToPointer } from '@stoplight/json';
 import { getDefaultRange, Resolved } from './resolved';
 import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
-import { getClosestJsonPath } from './utils';
+import { getClosestJsonPath, printPath, PrintStyle } from './utils';
+
+const { JSONPath } = require('jsonpath-plus');
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -96,15 +95,14 @@ export const lintNode = (
         const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();
 
         const vars: IMessageVars = {
-          property: path.length > 0 ? path[path.length - 1] : '',
-          path: pathToPointer(path),
+          property:
+            parsed?.missingPropertyPath && parsed.missingPropertyPath.length > path.length
+              ? printPath(parsed.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)
+              : path.length > 0
+              ? path[path.length - 1]
+              : '',
           error: result.message,
-          ...(parsed?.missingPropertyPath && {
-            missingPropertyPath:
-              parsed.missingPropertyPath.length > path.length
-                ? pathToPointer(parsed.missingPropertyPath.slice(path.length))
-                : '',
-          }),
+          path: printPath(path, PrintStyle.EscapedPointer),
           description: rule.description,
           get value() {
             // let's make `value` lazy

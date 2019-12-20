@@ -42,7 +42,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     errors &&
     errors.map(error => ({
       ...error,
-      message: `{{missingPropertyPath}} property ${error.message}`,
+      message: `"{{property}}" property ${error.message}`,
     }))
   );
 };
