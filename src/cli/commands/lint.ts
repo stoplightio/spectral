@@ -91,7 +91,7 @@ const lintCommand: CommandModule = {
           alias: 'F',
           description: 'results of this level or above will trigger a failure exit code',
           choices: ['error', 'warn', 'info', 'hint'],
-          default: 'warn',
+          default: 'error',
           type: 'string',
         },
         'display-only-failures': {
