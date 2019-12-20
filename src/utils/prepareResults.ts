@@ -10,7 +10,7 @@ export type ComputeFingerprintFunc = (rule: IRuleResult, hash: (val: string) => 
 export const defaultComputeResultFingerprint: ComputeFingerprintFunc = (rule, hash) => {
   let id = String(rule.code);
 
-  if (rule.path && rule.path.length) {
+  if (rule.path.length) {
     id += JSON.stringify(rule.path);
   } else if (rule.range) {
     id += JSON.stringify(rule.range);
