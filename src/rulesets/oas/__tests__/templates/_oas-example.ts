@@ -209,7 +209,7 @@ export default (ruleName: string, path: string) => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: ruleName,
-        message: `property format should match format "${format}"`, // hm, ip_address is likely to be more meaningful no?
+        message: `property format should match format "${format}"`,
       }),
     ]);
   });
