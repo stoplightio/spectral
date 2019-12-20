@@ -30,9 +30,7 @@ export const prepareResults = (results: IRuleResult[], computeFingerprint: Compu
 const decorateResultsWithFingerprint = (results: IRuleResult[], computeFingerprint: ComputeFingerprintFunc) => {
   for (const r of results) {
     Object.defineProperty(r, 'fingerprint', {
-      get() {
-        return computeFingerprint(r, md5);
-      },
+      value: computeFingerprint(r, md5),
     });
   }
 

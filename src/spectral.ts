@@ -100,7 +100,7 @@ export class Spectral {
       this._parsedRefs,
     );
 
-    let validationResults = [...refDiagnostics, ...results, ...formatResolverErrors(resolved)];
+    const validationResults = [...refDiagnostics, ...results, ...formatResolverErrors(resolved)];
 
     if (resolved.formats === void 0) {
       const registeredFormats = Object.keys(this.formats);
@@ -115,11 +115,12 @@ export class Spectral {
       }
     }
 
-    validationResults = validationResults.concat(runRules(resolved, this.rules, this.functions));
-
     return {
       resolved: resolved.resolved,
-      results: prepareResults(validationResults, this._computeFingerprint),
+      results: prepareResults(
+        [...validationResults, ...runRules(resolved, this.rules, this.functions)],
+        this._computeFingerprint,
+      ),
     };
   }
 
