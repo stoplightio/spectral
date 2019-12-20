@@ -60,7 +60,7 @@ describe('schema', () => {
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
         path: ['example'],
-        message: `"{{property}}" property should have required property 'url'`,
+        message: `"{{property}}" property should have required property "url"`,
       },
     ]);
   });

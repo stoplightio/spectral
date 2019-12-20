@@ -212,7 +212,7 @@ export default (ruleName: string, path: string) => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: `"example" property should have required property 'url'`, // todo: consistent quotes
+        message: `"example" property should have required property "url"`,
         severity: DiagnosticSeverity.Error,
       }),
     ]);

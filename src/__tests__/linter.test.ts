@@ -163,7 +163,7 @@ describe('linter', () => {
     expect(result).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        message: `/paths//pets/get/responses/200 should have required property "$ref"`,
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
@@ -194,7 +194,7 @@ describe('linter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: "/paths//pets/get/responses/200 should have required property '$ref'",
+          message: `/paths//pets/get/responses/200 should have required property "$ref"`,
           path: ['paths', '/pets', 'get', 'responses', '200'],
         }),
       ]),
@@ -621,7 +621,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        message: `/paths//pets/get/responses/200 should have required property "$ref"`,
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
