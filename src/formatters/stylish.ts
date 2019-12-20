@@ -30,14 +30,7 @@ import * as table from 'text-table';
 
 import { IRuleResult } from '../types';
 import { Formatter } from './types';
-import {
-  getColorForSeverity,
-  getHighestSeverity,
-  getSeverityName,
-  getSummary,
-  groupBySource,
-  sortResults,
-} from './utils';
+import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
 
 // -----------------------------------------------------------------------------
 // Helpers
@@ -71,7 +64,7 @@ export const stylish: Formatter = results => {
 
     output += `${chalk.underline(path)}\n`;
 
-    const pathTableData = sortResults(pathResults).map((result: IRuleResult) => [
+    const pathTableData = pathResults.map((result: IRuleResult) => [
       formatRange(result.range),
       getMessageType(result.severity),
       result.code ?? '',

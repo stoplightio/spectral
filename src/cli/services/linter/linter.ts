@@ -17,7 +17,7 @@ import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { FormatLookup, IParsedResult } from '../../../types';
 import { ILintConfig } from '../../../types/config';
-import { deduplicateResults, getRuleset, listFiles, skipRules } from './utils';
+import { getRuleset, listFiles, skipRules } from './utils';
 import { getResolver } from './utils/getResolver';
 
 const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
@@ -92,5 +92,5 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     );
   }
 
-  return deduplicateResults(results);
+  return results;
 }

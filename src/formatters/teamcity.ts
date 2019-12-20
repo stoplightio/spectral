@@ -1,7 +1,7 @@
 import { Dictionary, Optional } from '@stoplight/types';
 import { IRuleResult } from '../types';
 import { Formatter } from './types';
-import { getSeverityName, groupBySource, sortResults } from './utils';
+import { getSeverityName, groupBySource } from './utils';
 
 function escapeString(str: Optional<string | number>) {
   if (str === void 0) {
@@ -35,9 +35,7 @@ function inspection(result: IRuleResult) {
 }
 
 function renderResults(results: IRuleResult[], parentIndex: number) {
-  return sortResults(results)
-    .map(result => `${inspectionType(result)}\n${inspection(result)}`)
-    .join('\n');
+  return results.map(result => `${inspectionType(result)}\n${inspection(result)}`).join('\n');
 }
 
 function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>) {
