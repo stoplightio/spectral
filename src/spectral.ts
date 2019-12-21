@@ -4,7 +4,7 @@ import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname, normalize } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary, IDiagnostic, Optional } from '@stoplight/types';
 import { getLocationForJsonPath as getLocationForJsonPathYaml, YamlParserResult } from '@stoplight/yaml';
-import { merge } from 'lodash';
+import { memoize, merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
 import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
@@ -31,20 +31,24 @@ import {
   RunRuleCollection,
 } from './types';
 import { IRuleset } from './types/ruleset';
-import { empty } from './utils';
+import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, prepareResults } from './utils';
+
+memoize.Cache = WeakMap;
 
 export * from './types';
 
 export class Spectral {
+  public functions: FunctionCollection = { ...defaultFunctions };
+  public rules: RunRuleCollection = {};
+  public formats: RegisteredFormats;
+
+  private readonly _computeFingerprint: ComputeFingerprintFunc;
   private readonly _resolver: IResolver;
   private readonly _parsedRefs: Dictionary<IParsedResult>;
   private static readonly _parsedCache = new WeakMap<ICache | IResolver, Dictionary<IParsedResult>>();
-  public functions: FunctionCollection = { ...defaultFunctions };
-  public rules: RunRuleCollection = {};
-
-  public formats: RegisteredFormats;
 
   constructor(opts?: IConstructorOpts) {
+    this._computeFingerprint = memoize(opts?.computeFingerprint || defaultComputeResultFingerprint);
     this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
     this.formats = {};
 
@@ -113,7 +117,10 @@ export class Spectral {
 
     return {
       resolved: resolved.resolved,
-      results: [...validationResults, ...runRules(resolved, this.rules, this.functions)],
+      results: prepareResults(
+        [...validationResults, ...runRules(resolved, this.rules, this.functions)],
+        this._computeFingerprint,
+      ),
     };
   }
 

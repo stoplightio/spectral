@@ -1,9 +1,10 @@
 import { promisify } from 'util';
 import { Parser } from 'xml2js';
+import { sortResults } from '../../utils';
 import { junit } from '../junit';
 
-const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');
-const mixedErrors = require('./__fixtures__/mixed-errors-with-different-paths.json');
+const oas3SchemaErrors = sortResults(require('./__fixtures__/oas3-schema-errors.json'));
+const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('JUnit formatter', () => {
   let parse: Parser['parseString'];

@@ -1,6 +1,7 @@
+import { sortResults } from '../../utils';
 import { text } from '../text';
 
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('Text formatter', () => {
   test('should format messages', () => {

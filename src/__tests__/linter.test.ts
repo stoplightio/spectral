@@ -97,7 +97,7 @@ describe('linter', () => {
     );
 
     expect(result).toEqual([
-      {
+      expect.objectContaining({
         code: 'rule1',
         message,
         severity: DiagnosticSeverity.Warning,
@@ -112,7 +112,7 @@ describe('linter', () => {
             line: 5,
           },
         },
-      },
+      }),
     ]);
   });
 
@@ -162,15 +162,15 @@ describe('linter', () => {
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
       }),
       expect.objectContaining({
         code: 'oas3-unused-components-schema',
@@ -614,26 +614,21 @@ responses:: !!foo
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
+        code: 'openapi-tags',
       }),
       expect.objectContaining({
         code: 'operation-tag-defined',
       }),
       expect.objectContaining({
-        code: 'openapi-tags',
-      }),
-      expect.objectContaining({
-        code: 'oas3-valid-schema-example',
-        message: '"foo.example" property type should be number',
-        path: ['components', 'schemas', 'foo', 'example'],
-      }),
-      expect.objectContaining({
         code: 'oas3-schema',
         message: "/paths//pets/get/responses/200 should have required property '$ref'",
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
       }),
       expect.objectContaining({
         code: 'oas3-unused-components-schema',
@@ -644,6 +639,11 @@ responses:: !!foo
         code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'foo'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-valid-schema-example',
+        message: '"foo.example" property type should be number',
+        path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
   });
