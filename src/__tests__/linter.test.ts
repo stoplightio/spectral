@@ -659,7 +659,7 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas2-valid-parameter-example',
-          message: `"example" property can't resolve reference #/parameters/missing from id #`,
+          message: "can't resolve reference #/parameters/missing from id #",
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
       ]),

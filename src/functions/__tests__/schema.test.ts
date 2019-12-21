@@ -27,7 +27,7 @@ describe('schema', () => {
 
       expect(runSchema(0, testSchema)).toEqual([
         {
-          message: 'type should be string',
+          message: `"{{property}}" property type should be string`,
           path: [],
         },
       ]);
@@ -40,7 +40,7 @@ describe('schema', () => {
 
       expect(runSchema(false, testSchema)).toEqual([
         {
-          message: 'type should be string',
+          message: `"{{property}}" property type should be string`,
           path: [],
         },
       ]);
@@ -53,7 +53,7 @@ describe('schema', () => {
 
       expect(runSchema(null, testSchema)).toEqual([
         {
-          message: 'type should be string',
+          message: `"{{property}}" property type should be string`,
           path: [],
         },
       ]);
@@ -140,7 +140,7 @@ describe('schema', () => {
         ),
       ).toEqual([
         {
-          message: 'type should be string',
+          message: `"{{property}}" property type should be string`,
           path: ['foo', 'bar'],
         },
       ]);
@@ -174,7 +174,7 @@ describe('schema', () => {
       const input = 'not an email';
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'format should match format "email"',
+          message: `"{{property}}" property format should match format "email"`,
           path: [],
         }),
       ]);
@@ -212,7 +212,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: 'type should be string',
+        message: `"{{property}}" property type should be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -232,7 +232,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: 'type should be string',
+        message: `"{{property}}" property type should be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -258,7 +258,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: 'should be equal to one of the allowed values: foo, bar. Did you mean bar?',
+            message: `"{{property}}" property should be equal to one of the allowed values: foo, bar. Did you mean bar?`,
             path: [],
           },
         ]);
@@ -267,7 +267,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: 'type should be string',
+            message: `"{{property}}" property type should be string`,
             path: [],
           },
         ]);
@@ -293,7 +293,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: 'should be equal to one of the allowed values: 1, 3, 5, 10, 12',
+            message: `"{{property}}" property should be equal to one of the allowed values: 1, 3, 5, 10, 12`,
             path: [],
           },
         ]);
@@ -310,7 +310,7 @@ describe('schema', () => {
 
     expect(runSchema('three', testSchema)).toEqual([
       {
-        message: 'should be equal to one of the allowed values: foo, bar',
+        message: `"{{property}}" property should be equal to one of the allowed values: foo, bar`,
         path: [],
       },
     ]);

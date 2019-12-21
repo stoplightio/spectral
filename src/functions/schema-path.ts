@@ -37,12 +37,5 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     }
   }
 
-  const errors = schema(relevantObject, { schema: schemaObject }, paths, otherValues);
-  return (
-    errors &&
-    errors.map(error => ({
-      ...error,
-      message: `"{{property}}" property ${error.message}`,
-    }))
-  );
+  return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
 };

@@ -78,9 +78,10 @@ const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
 })();
 
 const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>) => {
-  // todo: handle /xyz paths
   const cleanMessage =
-    typeof path === 'string' ? message.trim().replace(new RegExp(`^${escapeRegExp(path)}:\\s*`), '') : message.trim();
+    typeof path === 'string'
+      ? message.trim().replace(new RegExp(`^${escapeRegExp(path)}:?\\s*`), '"{{property}}" property ')
+      : message.trim();
   return `${cleanMessage.replace(/'/g, `"`)}${
     typeof suggestion === 'string' && suggestion.length > 0 ? `. ${suggestion}` : ''
   }`;
