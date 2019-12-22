@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Built-in OAS rule `openapi-tags` is now recommended [#706](https://github.com/stoplightio/spectral/pull/706)
-- CLI: Default `--fail-severity` is now `warn`, so getting an `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
+- CLI: Default `--fail-severity` is now `error`, so getting a  `warn`, `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
 
 ## [4.2.0] - 2019-10-08
 
