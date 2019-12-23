@@ -8,34 +8,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.0.0] - 2019-12-xx
 
 ### Features
-- Invalid JSON pointers are reported as errors now [json-ref-resolver#140](https://github.com/stoplightio/json-ref-resolver/pull/140) and [json-ref-resolver#147](https://github.com/stoplightio/json-ref-resolver/pull/147)
 - Properties are iterated in the order they appear in the document [#730](https://github.com/stoplightio/spectral/issues/730)
 - Non-JSON-ish YAML mapping keys are reported [#726](https://github.com/stoplightio/spectral/issues/726)
-- CLI: new formatter - HTML [#389](https://github.com/stoplightio/spectral/issues/389)
 - CLI: new formatter - text [#822](https://github.com/stoplightio/spectral/issues/822)
 - CLI: new formatter - teamcity [#823](https://github.com/stoplightio/spectral/issues/823)
+- CLI: new formatter - HTML [#389](https://github.com/stoplightio/spectral/issues/389)
 - CLI: custom resolver can be provided leveraging --resolver flag [#717](https://github.com/stoplightio/spectral/issues/717)
 - CLI: input can be provided via STDIN [#757](https://github.com/stoplightio/spectral/issues/757)
-- Implemented ignoreUnsupportedFormats to make it easier to detect unrecognized formats [#678](https://github.com/stoplightio/spectral/issues/678)
+- Implement ignoreUnsupportedFormats to make it easier to detect unrecognized formats [#678](https://github.com/stoplightio/spectral/issues/678)
 - Rule's Given can be an array now [#799](https://github.com/stoplightio/spectral/pull/799)
 - Casing built-in function is added [#564](https://github.com/stoplightio/spectral/issues/564)
+- Add `operation-tag-defined` to oas ruleset [#704](https://github.com/stoplightio/spectral/pull/704)
 
 ### Changed
-- Improved error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
+- BREAKING: oas2 and oas3 are a part of oas ruleset [#773](https://github.com/stoplightio/spectral/pull/773)
+- BREAKING: Deprecated Spectral#addRules and Spectral#addFunctions are dropped [#561](https://github.com/stoplightio/spectral/issues/561)
+- BREAKING: Certain oas rules such as `example-value-or-externalValue` and `openapi-tags` are enabled by default [#725](https://github.com/stoplightio/spectral/issues/725)
+- BREAKING: `model-description` and `operation-summary-formatted` are deleted [#725](https://github.com/stoplightio/spectral/issues/725)
+- BREAKING: When is removed from Rule [#585](https://github.com/stoplightio/spectral/issues/585)
+- BREAKING: Rules are recommended by default [#719](https://github.com/stoplightio/spectral/pull/719)
+- Improve error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
+- Error paths point at unresolved document [#839](https://github.com/stoplightio/spectral/pull/839)
+- Validation messages contain more consistent error paths [#867](https://github.com/stoplightio/spectral/pull/867)
 - Built-in OAS rule `openapi-tags` is now recommended [#706](https://github.com/stoplightio/spectral/pull/706)
-- CLI: Default `--fail-severity` is now `warn`, so getting an `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
-- When was removed from Rule [#585](https://github.com/stoplightio/spectral/issues/585)
-- Rules are recommended by default [#719](https://github.com/stoplightio/spectral/pull/719)
+- CLI: Default `--fail-severity` is now `error`, so getting an `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
 - Rulesets no longer need to have `rules` placed [#652](https://github.com/stoplightio/spectral/pull/652)
 
 ### Fixed
 - Circular remote references with JSON pointers are resolved correctly [json-ref-resolver#141](https://github.com/stoplightio/json-ref-resolver/pull/141)
 - Local root JSON pointers are resolved correctly [json-ref-resolver#146](https://github.com/stoplightio/json-ref-resolver/pull/146) 
+- Invalid JSON pointers are reported as errors now [json-ref-resolver#140](https://github.com/stoplightio/json-ref-resolver/pull/140) and [json-ref-resolver#147](https://github.com/stoplightio/json-ref-resolver/pull/147)
 - Unixify glob patterns under Windows [#679](https://github.com/stoplightio/spectral/issues/679)
 - Improved duplicate keys detection [#751](https://github.com/stoplightio/spectral/issues/751)
-- Spectral should be usable in non-secure environments [#846](https://github.com/stoplightio/spectral/pull/846)
-- Falsy values are printed in messages [#824](https://github.com/stoplightio/spectral/pull/824)
-
+- Spectral should be usable in browsers with no crypto module available [#846](https://github.com/stoplightio/spectral/pull/846)
+- Falsy values are printed in validation messages [#824](https://github.com/stoplightio/spectral/pull/824)
+- Validation results are no longer duplicate [#680](https://github.com/stoplightio/spectral/issues/680), [#737](https://github.com/stoplightio/spectral/pull/737) and [#856](https://github.com/stoplightio/spectral/pull/856)
 
 ## [4.2.0] - 2019-10-08
 
