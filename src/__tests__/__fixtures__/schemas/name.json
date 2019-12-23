@@ -1,0 +1,6 @@
+{
+  "type": "string",
+  "maxLength": {
+    "$ref": "./broken-length.json"
+  }
+}
