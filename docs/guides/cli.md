@@ -46,9 +46,9 @@ Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend
 
 ## Error Results
 
-Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, but since v5.0, only the presence of warnings or errors will cause a failure status code of 1.
+Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, but since v5.0, only the presence of errors will cause a failure status code of 1. Seeing results and getting a failure code for it are now two different things.
 
-The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` would return a failure status code of 1 for any info results or higher. Using `--fail-severity=error` will only cause a failure status code for errors.
+The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` would return a failure status code of 1 for any info results or higher. Using `--fail-severity=warn` will cause a failure status code for errors or warnings.
 
 Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the specified fail severity.
 
