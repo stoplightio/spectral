@@ -125,7 +125,7 @@
     "tsconfig-paths": "^3.9.0",
     "tslint": "~5.20",
     "tslint-config-stoplight": "~1.4",
-    "typescript": "^3.7.2",
+    "typescript": "^3.7.4",
     "typescript-json-schema": "~0.41.0",
     "xml2js": "^0.4.22"
   },
