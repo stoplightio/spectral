@@ -27,7 +27,7 @@ describe('falsy', () => {
   test('returns error message if target value is not falsy', () => {
     expect(runFalsy(true)).toEqual([
       {
-        message: 'property is not falsy',
+        message: '{{property|gravis|append-property}}is not falsy',
       },
     ]);
   });

@@ -1,13 +1,12 @@
-import { get, isObject } from 'lodash';
-
-const { JSONPath } = require('jsonpath-plus');
-
-import { decodePointerFragment, pathToPointer } from '@stoplight/json';
+import { decodePointerFragment } from '@stoplight/json';
+import { get } from 'lodash';
 import { getDefaultRange, Resolved } from './resolved';
 import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
-import { getClosestJsonPath } from './utils';
+import { getClosestJsonPath, printPath, PrintStyle } from './utils';
+
+const { JSONPath } = require('jsonpath-plus');
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -94,21 +93,19 @@ export const lintNode = (
         const path = parsed?.path || getClosestJsonPath(resolved.resolved, escapedJsonPath);
         const doc = parsed?.doc || resolved.parsed;
         const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();
+        const value = path.length === 0 ? parsed?.doc.parsed.data : get(parsed?.doc.parsed.data, path);
 
         const vars: IMessageVars = {
-          property: path.length > 0 ? path[path.length - 1] : '',
-          path: pathToPointer(path),
+          property:
+            parsed?.missingPropertyPath && parsed.missingPropertyPath.length > path.length
+              ? printPath(parsed.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)
+              : path.length > 0
+              ? path[path.length - 1]
+              : '',
           error: result.message,
+          path: printPath(path, PrintStyle.EscapedPointer),
           description: rule.description,
-          get value() {
-            // let's make `value` lazy
-            const value = get(parsed?.doc.parsed.data, path);
-            if (isObject(value)) {
-              return Array.isArray(value) ? 'Array[]' : 'Object{}';
-            }
-
-            return JSON.stringify(value);
-          },
+          value,
         };
 
         const resultMessage = message(result.message, vars);
@@ -116,7 +113,7 @@ export const lintNode = (
 
         return {
           code: rule.name,
-          message: rule.message === void 0 ? rule.description || resultMessage : message(rule.message, vars),
+          message: (rule.message === void 0 ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
           path,
           severity: getDiagnosticSeverity(rule.severity),
           source: parsed?.doc.source,

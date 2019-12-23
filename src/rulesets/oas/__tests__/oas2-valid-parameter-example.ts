@@ -57,7 +57,7 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-parameter-example',
-        message: '"schema.example" property type should be string',
+        message: '`example` property type should be string',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -127,7 +127,7 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-parameter-example',
-        message: '"schema.example" property should have required property \'url\'',
+        message: 'object should have required property `url`',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -194,7 +194,7 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-parameter-example',
-        message: '"c.example" property type should be string',
+        message: '`example` property type should be string',
         path: [
           'paths',
           '/pet',
