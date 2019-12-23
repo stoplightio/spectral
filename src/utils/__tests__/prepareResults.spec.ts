@@ -1,10 +1,10 @@
-import { deduplicateResults } from '../deduplicateResults';
+import { defaultComputeResultFingerprint, prepareResults } from '../prepareResults';
 
 import * as duplicateValidationResults from './__fixtures__/duplicate-validation-results.json';
 
-describe('deduplicateResults util', () => {
+describe('prepareResults util', () => {
   it('deduplicate exact validation results', () => {
-    expect(deduplicateResults(duplicateValidationResults)).toEqual([
+    expect(prepareResults(duplicateValidationResults, defaultComputeResultFingerprint)).toEqual([
       expect.objectContaining({
         code: 'valid-example-in-schemas',
       }),
@@ -20,7 +20,7 @@ describe('deduplicateResults util', () => {
       source: void 0,
     }));
 
-    expect(deduplicateResults(duplicateValidationResultsWithNoSource)).toEqual([
+    expect(prepareResults(duplicateValidationResultsWithNoSource, defaultComputeResultFingerprint)).toEqual([
       expect.objectContaining({
         code: 'valid-example-in-schemas',
       }),
@@ -38,6 +38,6 @@ describe('deduplicateResults util', () => {
       { ...duplicateValidationResults[0] },
     ];
 
-    expect(deduplicateResults(onlyDuplicates).length).toBe(1);
+    expect(prepareResults(onlyDuplicates, defaultComputeResultFingerprint).length).toBe(1);
   });
 });

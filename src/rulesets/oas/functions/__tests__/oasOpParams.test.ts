@@ -144,7 +144,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.length).toEqual(2);
+    expect(results.length).toEqual(1);
   });
 
   test('Error if multiple in:body', async () => {

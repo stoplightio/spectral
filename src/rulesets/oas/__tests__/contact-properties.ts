@@ -47,39 +47,6 @@ describe('contact-properties', () => {
             line: 4,
           },
         },
-        severity: 1,
-        source: undefined,
-      },
-      {
-        code: 'contact-properties',
-        message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact'],
-        range: {
-          end: {
-            character: 17,
-            line: 4,
-          },
-          start: {
-            character: 14,
-            line: 4,
-          },
-        },
-        severity: DiagnosticSeverity.Warning,
-      },
-      {
-        code: 'contact-properties',
-        message: 'Contact object should have `name`, `url` and `email`.',
-        path: ['info', 'contact'],
-        range: {
-          end: {
-            character: 17,
-            line: 4,
-          },
-          start: {
-            character: 14,
-            line: 4,
-          },
-        },
         severity: DiagnosticSeverity.Warning,
       },
     ]);

@@ -65,17 +65,17 @@ describe('Linter', () => {
     await spectral.loadRuleset(customDirectoryFunctionsRuleset);
     expect(await spectral.run({})).toEqual([
       expect.objectContaining({
-        code: 'has-info-property',
-        message: 'info property is missing',
-      }),
-      expect.objectContaining({
         code: 'has-field-property',
         message: 'Object does not have field property',
+      }),
+      expect.objectContaining({
+        code: 'has-info-property',
+        message: 'info property is missing',
       }),
     ]);
   });
 
-  describe('evaluate {{value}} in validation messages', () => {
+  describe('evaluate "value" in validation messages', () => {
     test('should print correct values for referenced files', async () => {
       spectral = new Spectral({ resolver: httpAndFileResolver });
 
@@ -120,17 +120,17 @@ describe('Linter', () => {
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value "https://example.com" should be falsy',
-            path: ['empty'],
+            path: ['info', 'contact', 'url'],
           }),
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value Array[] should be falsy',
-            path: ['bar', 'empty'],
+            path: ['servers'],
           }),
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value Object{} should be falsy',
-            path: ['foo', 'empty'],
+            path: ['info'],
           }),
         ]),
       );
