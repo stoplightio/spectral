@@ -4,7 +4,7 @@ export const undefined: IFunction = (targetVal): void | IFunctionResult[] => {
   if (typeof targetVal !== 'undefined') {
     return [
       {
-        message: '"{{property}}" property should be undefined',
+        message: '{{property|gravis|append-property}}should be undefined',
       },
     ];
   }

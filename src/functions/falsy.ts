@@ -4,7 +4,7 @@ export const falsy: IFunction = (targetVal): void | IFunctionResult[] => {
   if (!!targetVal) {
     return [
       {
-        message: '"{{property}}" property is not falsy',
+        message: '{{property|gravis|append-property}}is not falsy',
       },
     ];
   }
