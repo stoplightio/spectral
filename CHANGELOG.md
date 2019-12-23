@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.0.0] - 2019-12-xx
 
 ### Features
-- Properties are iterated in the order they appear in the document [#730](https://github.com/stoplightio/spectral/issues/730)
+- Alphabetical rule function now supports numeric keys [#730](https://github.com/stoplightio/spectral/issues/730)
 - Non-JSON-ish YAML mapping keys are reported [#726](https://github.com/stoplightio/spectral/issues/726)
 - CLI: new formatter - text [#822](https://github.com/stoplightio/spectral/issues/822)
 - CLI: new formatter - teamcity [#823](https://github.com/stoplightio/spectral/issues/823)
@@ -18,21 +18,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement ignoreUnsupportedFormats to make it easier to detect unrecognized formats [#678](https://github.com/stoplightio/spectral/issues/678)
 - Rule's Given can be an array now [#799](https://github.com/stoplightio/spectral/pull/799)
 - Casing built-in function is added [#564](https://github.com/stoplightio/spectral/issues/564)
-- Add `operation-tag-defined` to oas ruleset [#704](https://github.com/stoplightio/spectral/pull/704)
+- New oas rule - `operation-tag-defined` [#704](https://github.com/stoplightio/spectral/pull/704)
 
 ### Changed
-- BREAKING: oas2 and oas3 are a part of oas ruleset [#773](https://github.com/stoplightio/spectral/pull/773)
-- BREAKING: Deprecated Spectral#addRules and Spectral#addFunctions are dropped [#561](https://github.com/stoplightio/spectral/issues/561)
-- BREAKING: Certain oas rules such as `example-value-or-externalValue` and `openapi-tags` are enabled by default [#725](https://github.com/stoplightio/spectral/issues/725)
-- BREAKING: `model-description` and `operation-summary-formatted` are deleted [#725](https://github.com/stoplightio/spectral/issues/725)
-- BREAKING: When is removed from Rule [#585](https://github.com/stoplightio/spectral/issues/585)
-- BREAKING: Rules are recommended by default [#719](https://github.com/stoplightio/spectral/pull/719)
-- Improve error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
+- BREAKING: The oas2 and oas3 rulesets have been merged into a single oas ruleset [#773](https://github.com/stoplightio/spectral/pull/773)
+- BREAKING: Deprecated Spectral#addRules and Spectral#addFunctions have been removed [#561](https://github.com/stoplightio/spectral/issues/561)
+- BREAKING: Some oas rules, such as `example-value-or-externalValue` and `openapi-tags`, are now included in the recommended rulset [#725](https://github.com/stoplightio/spectral/issues/725) [#706](https://github.com/stoplightio/spectral/pull/706)
+- BREAKING: The `model-description` and `operation-summary-formatted` rules have been removed [#725](https://github.com/stoplightio/spectral/issues/725)
+- BREAKING: The `when` rule property has been removed [#585](https://github.com/stoplightio/spectral/issues/585)
+- BREAKING: Rules are set to recommended by default [#719](https://github.com/stoplightio/spectral/pull/719)
+- Improved error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
 - Error paths point at unresolved document [#839](https://github.com/stoplightio/spectral/pull/839)
 - Validation messages contain more consistent error paths [#867](https://github.com/stoplightio/spectral/pull/867)
-- Built-in OAS rule `openapi-tags` is now recommended [#706](https://github.com/stoplightio/spectral/pull/706)
 - CLI: Default `--fail-severity` is now `error`, so getting an `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
-- Rulesets no longer need to have `rules` placed [#652](https://github.com/stoplightio/spectral/pull/652)
+- Rulesets no longer require a `rules` property [#652](https://github.com/stoplightio/spectral/pull/652)
 
 ### Fixed
 - Circular remote references with JSON pointers are resolved correctly [json-ref-resolver#141](https://github.com/stoplightio/json-ref-resolver/pull/141)
