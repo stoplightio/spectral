@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
 - Error paths point at unresolved document [#839](https://github.com/stoplightio/spectral/pull/839)
 - Validation messages contain more consistent error paths [#867](https://github.com/stoplightio/spectral/pull/867)
-- CLI: Default `--fail-severity` is now `error`, so getting an `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
+- CLI: Default `--fail-severity` is now `error`, so getting a  `warn`, `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
 - Rulesets no longer require a `rules` property [#652](https://github.com/stoplightio/spectral/pull/652)
 
 ### Fixed
