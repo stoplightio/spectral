@@ -163,7 +163,7 @@ describe('linter', () => {
     expect(result).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
-        message: `/paths//pets/get/responses/200 should have required property "$ref"`,
+        message: `\`200\` property should have required property \`$ref\``,
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
@@ -194,7 +194,7 @@ describe('linter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: `/paths//pets/get/responses/200 should have required property "$ref"`,
+          message: `\`200\` property should have required property \`$ref\``,
           path: ['paths', '/pets', 'get', 'responses', '200'],
         }),
       ]),
@@ -621,7 +621,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: `/paths//pets/get/responses/200 should have required property "$ref"`,
+        message: `\`200\` property should have required property \`$ref\``,
         path: ['paths', '/pets', 'get', 'responses', '200'],
       }),
       expect.objectContaining({
@@ -642,7 +642,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-valid-schema-example',
-        message: '"example" property type should be number',
+        message: '`example` property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
@@ -931,7 +931,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'A parameter in the header should be written in kebab-case',
-          message: '{{value}} is not kebab-cased: {{error}}',
+          message: '{{value|to-string}} is not kebab-cased: {{error}}',
           given: "$..parameters[?(@.in === 'header')]",
           then: {
             field: 'name',
@@ -982,7 +982,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value}} should be falsy',
+          message: 'Value {{value|to-string}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',

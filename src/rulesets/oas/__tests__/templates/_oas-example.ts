@@ -43,7 +43,7 @@ export default (ruleName: string, path: string) => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: ruleName,
-        message: '"example" property type should be string',
+        message: '`example` property type should be string',
       }),
     ]);
   });
@@ -158,7 +158,7 @@ export default (ruleName: string, path: string) => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: `"example" property should have required property "url"`,
+        message: 'object should have required property `url`',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
@@ -209,7 +209,7 @@ export default (ruleName: string, path: string) => {
       expect.objectContaining({
         severity: DiagnosticSeverity.Error,
         code: ruleName,
-        message: `"example" property format should match format "${format}"`,
+        message: `\`example\` property format should match format \`${format}\``,
       }),
     ]);
   });

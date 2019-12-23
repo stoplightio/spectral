@@ -77,12 +77,29 @@ const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
   }
 })();
 
-const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>) => {
-  const cleanMessage =
-    typeof path === 'string'
-      ? message.trim().replace(new RegExp(`^${escapeRegExp(path)}:?\\s*`), '"{{property}}" property ')
-      : message.trim();
-  return `${cleanMessage.replace(/'/g, `"`)}${
+const replaceProperty = (substring: string, group1: string) => {
+  if (group1) {
+    return 'property ';
+  }
+
+  return '{{property|gravis|append-property|optional-typeof}}';
+};
+
+const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>, type: string) => {
+  let cleanMessage = message.trim();
+
+  if (path) {
+    cleanMessage = message.replace(
+      new RegExp(`^${escapeRegExp(decodePointerFragment(path))}:?\\s*(Property\\s+)?`),
+      replaceProperty,
+    );
+  } else if (cleanMessage.startsWith(':')) {
+    cleanMessage = cleanMessage.replace(/:\s*/, replaceProperty);
+  } else {
+    cleanMessage = `${type} ${cleanMessage}`;
+  }
+
+  return `${cleanMessage.replace(/['"]/g, '`')}${
     typeof suggestion === 'string' && suggestion.length > 0 ? `. ${suggestion}` : ''
   }`;
 };
@@ -96,7 +113,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     return [
       {
         path,
-        message: `"{{property}}" property does not exist`,
+        message: `{{property|double-quotes|append-property}}does not exist`,
       },
     ];
 
@@ -111,7 +128,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
         results.push(
           ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
             ({ suggestion, error, path: errorPath }) => ({
-              message: cleanAJVErrorMessage(error, errorPath, suggestion),
+              message: cleanAJVErrorMessage(error, errorPath, suggestion, typeof targetVal),
               path: [...path, ...(errorPath ? errorPath.replace(/^\//, '').split('/') : [])],
             }),
           ),
@@ -119,7 +136,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       } catch {
         results.push(
           ...validator.errors.map(({ message, dataPath }) => ({
-            message: message ? cleanAJVErrorMessage(message, dataPath, void 0) : '',
+            message: message ? cleanAJVErrorMessage(message, dataPath, void 0, typeof targetVal) : '',
             path: [
               ...path,
               ...dataPath

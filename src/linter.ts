@@ -1,5 +1,5 @@
 import { decodePointerFragment } from '@stoplight/json';
-import { get, isObject } from 'lodash';
+import { get } from 'lodash';
 import { getDefaultRange, Resolved } from './resolved';
 import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
@@ -93,6 +93,7 @@ export const lintNode = (
         const path = parsed?.path || getClosestJsonPath(resolved.resolved, escapedJsonPath);
         const doc = parsed?.doc || resolved.parsed;
         const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();
+        const value = path.length === 0 ? parsed?.doc.parsed.data : get(parsed?.doc.parsed.data, path);
 
         const vars: IMessageVars = {
           property:
@@ -104,15 +105,7 @@ export const lintNode = (
           error: result.message,
           path: printPath(path, PrintStyle.EscapedPointer),
           description: rule.description,
-          get value() {
-            // let's make `value` lazy
-            const value = get(parsed?.doc.parsed.data, path);
-            if (isObject(value)) {
-              return Array.isArray(value) ? 'Array[]' : 'Object{}';
-            }
-
-            return JSON.stringify(value);
-          },
+          value,
         };
 
         const resultMessage = message(result.message, vars);
