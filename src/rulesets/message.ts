@@ -1,4 +1,6 @@
 import { Segment } from '@stoplight/types';
+import { isObject } from 'lodash';
+import { Replacer } from '../utils/replacer';
 
 export interface IMessageVars {
   property: Segment;
@@ -6,23 +8,27 @@ export interface IMessageVars {
   description?: string;
   value: unknown;
   path: string;
-  fullPath?: string;
 }
 
 export type MessageInterpolator = (str: string, values: IMessageVars) => string;
 
-const BRACES = /{{([^}]+)}}/g;
+const MessageReplacer = new Replacer<IMessageVars>(2);
 
-export const message: MessageInterpolator = (str, values) => {
-  BRACES.lastIndex = 0;
-  let result: RegExpExecArray | null = null;
+MessageReplacer.addTransformer('double-quotes', (id, value) => (value ? `"${value}"` : ''));
+MessageReplacer.addTransformer('single-quotes', (id, value) => (value ? `'${value}'` : ''));
+MessageReplacer.addTransformer('gravis', (id, value) => (value ? `\`${value}\`` : ''));
 
-  // tslint:disable-next-line:no-conditional-assignment
-  while ((result = BRACES.exec(str))) {
-    const newValue = result[1] in values ? String(values[result[1]]) : '';
-    str = `${str.slice(0, result.index)}${newValue}${str.slice(BRACES.lastIndex)}`;
-    BRACES.lastIndex = result.index + newValue.length;
+MessageReplacer.addTransformer('append-property', (id, value) => (value ? `${value} property ` : ''));
+MessageReplacer.addTransformer('optional-typeof', (id, value, values) =>
+  value ? String(value) : `${typeof values.value} `,
+);
+
+MessageReplacer.addTransformer('to-string', (id, value) => {
+  if (isObject(value)) {
+    return Array.isArray(value) ? 'Array[]' : 'Object{}';
   }
 
-  return str;
-};
+  return JSON.stringify(value);
+});
+
+export const message: MessageInterpolator = MessageReplacer.print.bind(MessageReplacer);

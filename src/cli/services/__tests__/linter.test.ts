@@ -574,7 +574,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '/info Property foo is not expected to be here',
+          message: 'property foo is not expected to be here',
           path: ['definitions', 'info'],
           range: {
             end: {
@@ -625,7 +625,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: "/info should have required property 'title'",
+          message: `object should have required property \`title\``,
           path: [],
           range: {
             end: {

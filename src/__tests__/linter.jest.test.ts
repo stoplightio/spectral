@@ -84,7 +84,7 @@ describe('Linter', () => {
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value}} should be falsy',
+          message: 'Value {{value|to-string}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',
