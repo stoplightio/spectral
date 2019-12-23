@@ -18,4 +18,4 @@ tags:
 {bin} lint {document}
 ====stdout====
 OpenAPI 2.0 (Swagger) detected
-No results with a severity of 'warn' or higher found!
+No results with a severity of 'error' or higher found!

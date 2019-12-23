@@ -6,4 +6,4 @@ info: {}
 ====command====
 {bin} lint {document} --ignore-unknown-format
 ====stdout====
-No results with a severity of 'warn' or higher found!
+No results with a severity of 'error' or higher found!
