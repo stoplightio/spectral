@@ -1,7 +1,8 @@
+import { parseYaml } from '../../parsers';
 import { alphabetical } from '../alphabetical';
 
 function runAlphabetical(target: any, keyedBy?: string) {
-  return alphabetical(target, { keyedBy }, { given: ['$'] }, { given: null, original: null });
+  return alphabetical(target, { keyedBy }, { given: ['$'] }, { given: null, original: null } as any);
 }
 
 describe('alphabetical', () => {
@@ -23,6 +24,21 @@ describe('alphabetical', () => {
       {
         message: 'at least 2 properties are not in alphabetical order: "c" should be placed after "b"',
         path: ['$', 'c'],
+      },
+    ]);
+  });
+
+  test('given an object with unsorted properties with numeric keys', () => {
+    const doc = parseYaml(`
+'400':
+  description: ''
+'200':
+  description: ''`).data;
+
+    expect(runAlphabetical(doc)).toEqual([
+      {
+        message: 'at least 2 properties are not in alphabetical order: "400" should be placed after "200"',
+        path: ['$', '400'],
       },
     ]);
   });

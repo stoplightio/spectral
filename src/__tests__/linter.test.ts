@@ -41,23 +41,21 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.registerFormat('oas3', isOpenApiv3);
     spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
   });
 
-  test('should not lint if passed in value is not an object', async () => {
+  test('should not throw if passed in value is not an object', () => {
     const fakeLintingFunction = jest.fn();
     spectral.setFunctions({
       [fnName]: fakeLintingFunction,
     });
     spectral.setRules(rules);
 
-    const result = await spectral.run('123');
-
-    expect(result).toHaveLength(0);
+    return expect(spectral.run('123')).resolves.toBeTruthy();
   });
 
-  test('should return all properties', async () => {
+  test('should return all properties matching 4xx response code', async () => {
     const message = '4xx responses require a description';
 
     spectral.setFunctions({
@@ -76,11 +74,7 @@ describe('linter', () => {
 
     spectral.setRules({
       rule1: {
-        given: '$.responses[*]',
-        when: {
-          field: '@key',
-          pattern: '^4.*',
-        },
+        given: '$.responses.[?(@property >= 400 && @property < 500)]',
         then: {
           field: 'description',
           function: 'func1',
@@ -88,33 +82,38 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      responses: {
-        '200': {
-          name: 'ok',
-        },
-        '404': {
-          name: 'not found',
+    const result = await spectral.run(
+      {
+        responses: {
+          '200': {
+            name: 'ok',
+          },
+          '404': {
+            name: 'not found',
+          },
         },
       },
-    });
+      { ignoreUnknownFormat: true },
+    );
 
-    expect(result[0]).toMatchObject({
-      code: 'rule1',
-      message,
-      severity: DiagnosticSeverity.Warning,
-      path: ['responses', '404'],
-      range: {
-        end: {
-          line: 6,
-          character: 25,
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+        message,
+        severity: DiagnosticSeverity.Warning,
+        path: ['responses', '404'],
+        range: {
+          end: {
+            line: 6,
+            character: 25,
+          },
+          start: {
+            character: 10,
+            line: 5,
+          },
         },
-        start: {
-          character: 10,
-          line: 5,
-        },
-      },
-    });
+      }),
+    ]);
   });
 
   test('should support rule overriding severity', async () => {
@@ -138,40 +137,56 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      x: true,
-    });
+    const result = await spectral.run(
+      {
+        x: true,
+      },
+      { ignoreUnknownFormat: true },
+    );
 
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
   });
 
   test('should not report anything for disabled rules', async () => {
-    await spectral.loadRuleset('spectral:oas3');
-    const { rules: oas3Rules } = await readRuleset('spectral:oas3');
-    spectral.setRules(mergeRules(oas3Rules, {
-      'valid-example-in-schemas': 'off',
-      'model-description': -1,
-    }) as RuleCollection);
+    await spectral.loadRuleset('spectral:oas');
+    const { rules: oasRules } = await readRuleset('spectral:oas');
+    spectral.setRules(
+      mergeRules(oasRules, {
+        'oas3-valid-schema-example': 'off',
+        'operation-2xx-response': -1,
+        'openapi-tags': 'off',
+      }) as RuleCollection,
+    );
 
     const result = await spectral.run(invalidSchema);
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
         code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        message: `\`200\` property should have required property \`$ref\``,
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'oas3-unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'Pets'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'foo'],
       }),
     ]);
   });
 
   test('should output unescaped json paths', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
 
@@ -179,7 +194,7 @@ describe('linter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: "/paths//pets/get/responses/200 should have required property '$ref'",
+          message: `\`200\` property should have required property \`$ref\``,
           path: ['paths', '/pets', 'get', 'responses', '200'],
         }),
       ]),
@@ -204,10 +219,13 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      x: false,
-      y: '',
-    });
+    const result = await spectral.run(
+      {
+        x: false,
+        y: '',
+      },
+      { ignoreUnknownFormat: true },
+    );
 
     expect(result).toEqual([
       expect.objectContaining({
@@ -328,6 +346,10 @@ describe('linter', () => {
 
     expect(result).toEqual([
       expect.objectContaining({
+        code: 'unrecognized-format',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
+      }),
+      expect.objectContaining({
         code: 'rule3',
       }),
     ]);
@@ -441,14 +463,70 @@ describe('linter', () => {
     });
 
     expect(result).toEqual([
+      {
+        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar]',
+        path: [],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+        code: 'unrecognized-format',
+      },
       expect.objectContaining({
         code: 'rule3',
       }),
     ]);
   });
 
+  test('given a string input, should warn about unmatched formats', async () => {
+    const result = await spectral.run('test');
+
+    expect(result).toEqual([
+      {
+        code: 'unrecognized-format',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
+        path: [],
+        range: {
+          end: {
+            character: 4,
+            line: 0,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
+  });
+
+  test('given ignoreUnknownFormat, should not warn about unmatched formats', async () => {
+    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+
+    spectral.setRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run(
+      {
+        'bar-foo': true,
+        x: true,
+        y: '',
+      },
+      { ignoreUnknownFormat: true },
+    );
+
+    expect(result).toEqual([]);
+  });
+
   test('should include parser diagnostics', async () => {
-    await spectral.loadRuleset('spectral:oas2');
+    await spectral.loadRuleset('spectral:oas');
 
     const responses = `openapi: 2.0.0
 responses:: !!foo
@@ -501,7 +579,9 @@ responses:: !!foo
   });
 
   test('should report a valid line number for json paths containing escaped slashes', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(studioFixture);
 
@@ -526,40 +606,60 @@ responses:: !!foo
   });
 
   test('should remove all redundant ajv errors', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'invalid-ref',
+        code: 'openapi-tags',
       }),
       expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'valid-example-in-schemas',
-        message: '"foo.example" property type should be number',
-        path: ['components', 'schemas', 'foo', 'example'],
+        code: 'operation-tag-defined',
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        message: `\`200\` property should have required property \`$ref\``,
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'oas3-unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'Pets'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-unused-components-schema',
+        message: 'Potentially unused components schema has been detected.',
+        path: ['components', 'schemas', 'foo'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-valid-schema-example',
+        message: '`example` property type should be number',
+        path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
   });
 
   test('should report invalid schema $refs', async () => {
-    await spectral.loadRuleset('spectral:oas2');
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(todosInvalid);
 
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'valid-example-in-parameters',
-          message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
+          code: 'oas2-valid-parameter-example',
+          message: "can't resolve reference #/parameters/missing from id #",
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
       ]),
@@ -567,7 +667,7 @@ responses:: !!foo
   });
 
   test('should report invalid $refs', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
 
     const result = await spectral.run(invalidSchema);
 
@@ -590,7 +690,13 @@ responses:: !!foo
   });
 
   test('should support YAML merge keys', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    await spectral.loadRuleset('spectral:oas');
+    spectral.setRules({
+      'operation-tag-defined': {
+        ...spectral.rules['operation-tag-defined'],
+        severity: 'off',
+      },
+    });
 
     const result = await spectral.run(petstoreMergeKeys);
 
@@ -599,10 +705,13 @@ responses:: !!foo
 
   describe('reports duplicated properties for', () => {
     test('JSON format', async () => {
-      const result = await spectral.run({
-        parsed: parseWithPointers('{"foo":true,"foo":false}', { ignoreDuplicateKeys: false }),
-        getLocationForJsonPath,
-      });
+      const result = await spectral.run(
+        {
+          parsed: parseWithPointers('{"foo":true,"foo":false}', { ignoreDuplicateKeys: false }),
+          getLocationForJsonPath,
+        },
+        { ignoreUnknownFormat: true },
+      );
 
       expect(result).toEqual([
         {
@@ -625,7 +734,7 @@ responses:: !!foo
     });
 
     test('YAML format', async () => {
-      const result = await spectral.run(`foo: bar\nfoo: baz`);
+      const result = await spectral.run(`foo: bar\nfoo: baz`, { ignoreUnknownFormat: true });
 
       expect(result).toEqual([
         {
@@ -648,6 +757,36 @@ responses:: !!foo
     });
   });
 
+  test('should report invalid YAML mapping keys', async () => {
+    const results = await spectral.run(
+      `responses:
+  200:
+    description: ''
+  '400':
+    description: ''`,
+      { ignoreUnknownFormat: true },
+    );
+
+    expect(results).toEqual([
+      {
+        code: 'parser',
+        message: 'Mapping key must be a string scalar rather than number',
+        path: ['responses', '200'],
+        range: {
+          end: {
+            character: 5,
+            line: 1,
+          },
+          start: {
+            character: 2,
+            line: 1,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+      },
+    ]);
+  });
+
   describe('functional tests for the given property', () => {
     let fakeLintingFunction: any;
 
@@ -667,6 +806,26 @@ responses:: !!foo
         expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
         expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
       });
+
+      test('given array of paths, should pass each given path through to lint function', async () => {
+        spectral.setRules({
+          example: {
+            message: '',
+            given: ['$.responses', '$..200'],
+            then: {
+              function: fnName,
+            },
+          },
+        });
+
+        await spectral.run(target);
+
+        expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
+        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
+        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
+        expect(fakeLintingFunction.mock.calls[1][2].given).toEqual(['responses', '200']);
+        expect(fakeLintingFunction.mock.calls[1][3].given).toEqual(target.responses['200']);
+      });
     });
 
     describe('when given path is not set', () => {
@@ -685,115 +844,6 @@ responses:: !!foo
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
         expect(fakeLintingFunction.mock.calls[0][2].given).toEqual([]);
         expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target);
-      });
-    });
-  });
-
-  describe('functional tests for the when statement', () => {
-    let fakeLintingFunction: any;
-
-    beforeEach(() => {
-      fakeLintingFunction = jest.fn();
-      spectral.setFunctions({
-        [fnName]: fakeLintingFunction,
-      });
-      spectral.setRules(rules);
-    });
-
-    describe('given no when', () => {
-      test('should simply lint anything it matches in the given', async () => {
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual(target.responses);
-      });
-    });
-
-    describe('given when with no pattern and regular field', () => {
-      test('should call linter if when field exists', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '200.description',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          '200': { description: 'a' },
-          '201': { description: 'b' },
-          '300': { description: 'c' },
-        });
-      });
-
-      test('should not call linter if when field not exist', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '302.description',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
-      });
-    });
-
-    describe('given "when" with a pattern and regular field', () => {
-      test('should NOT lint if pattern does not match', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '200.description',
-              pattern: 'X',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(0);
-      });
-
-      test('should lint if pattern does match', async () => {
-        spectral.mergeRules({
-          example: {
-            when: {
-              field: '200.description',
-              pattern: 'a',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          '200': { description: 'a' },
-          '201': { description: 'b' },
-          '300': { description: 'c' },
-        });
-      });
-    });
-
-    describe('given "when" with a pattern and @key field', () => {
-      test('should lint ONLY part of object that matches pattern', async () => {
-        spectral.mergeRules({
-          example: {
-            given: '$.responses[*]',
-            when: {
-              field: '@key',
-              pattern: '2..',
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
-        expect(fakeLintingFunction.mock.calls[0][0]).toEqual({
-          description: 'a',
-        });
       });
     });
   });
@@ -881,7 +931,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'A parameter in the header should be written in kebab-case',
-          message: '{{value}} is not kebab-cased: {{error}}',
+          message: '{{value|to-string}} is not kebab-cased: {{error}}',
           given: "$..parameters[?(@.in === 'header')]",
           then: {
             field: 'name',
@@ -932,7 +982,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value}} should be falsy',
+          message: 'Value {{value|to-string}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',
@@ -970,7 +1020,9 @@ responses:: !!foo
   });
 
   test('should evaluate {{path}} in validation messages', async () => {
-    await spectral.loadRuleset('spectral:oas3');
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+    await spectral.loadRuleset('spectral:oas');
     spectral.setRules({
       'oas3-schema': {
         ...spectral.rules['oas3-schema'],
@@ -990,6 +1042,8 @@ responses:: !!foo
   });
 
   test('should report ref siblings', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
     await spectral.loadRuleset('spectral:oas');
 
     const results = await spectral.run({

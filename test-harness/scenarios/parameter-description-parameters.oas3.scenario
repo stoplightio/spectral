@@ -12,7 +12,7 @@ paths:
         - name: ok
           in: header
       responses:
-        200:
+        '200':
           description: abc
 components:
   parameters:
@@ -22,7 +22,7 @@ components:
       schema:
         type: integer
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml
+{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml
 ====stdout====
 OpenAPI 3.x detected
 

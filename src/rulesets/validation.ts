@@ -1,11 +1,11 @@
-import { JSONSchema7 } from 'json-schema';
 import { FileRule, IRulesetFile } from '../types/ruleset';
 
 import { ErrorObject } from 'ajv';
 const AJV = require('ajv');
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
-import { IFunction, IFunctionPaths, IFunctionValues, Rule } from '../types';
+import { IFunction, IFunctionPaths, IFunctionValues, JSONSchema, Rule } from '../types';
+import { isObject } from '../utils';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
@@ -23,12 +23,12 @@ export class ValidationError extends AJV.ValidationError {
 }
 
 export function assertValidRuleset(ruleset: unknown): IRulesetFile {
-  if (ruleset === null || typeof ruleset !== 'object') {
+  if (!isObject(ruleset)) {
     throw new Error('Provided ruleset is not an object');
   }
 
-  if (!('rules' in ruleset!)) {
-    throw new Error('Ruleset must have rules property');
+  if (!('rules' in ruleset) && !('extends' in ruleset)) {
+    throw new Error('Ruleset must have rules or extends property');
   }
 
   if (!validate(ruleset)) {
@@ -42,7 +42,7 @@ export function isValidRule(rule: FileRule): rule is Rule {
   return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
 }
 
-export function decorateIFunctionWithSchemaValidation(fn: IFunction, schema: JSONSchema7) {
+export function decorateIFunctionWithSchemaValidation(fn: IFunction, schema: JSONSchema) {
   return (data: unknown, opts: unknown, ...args: [IFunctionPaths, IFunctionValues]) => {
     if (!ajv.validate(schema, opts)) {
       throw new ValidationError(ajv.errors);

@@ -1,105 +1,74 @@
-import { spawnSync } from 'child_process';
+import * as path from '@stoplight/path';
+import { normalize } from '@stoplight/path';
+import { Dictionary } from '@stoplight/types';
+import * as fg from 'fast-glob';
 import * as fs from 'fs';
-// @ts-ignore
-import * as globFs from 'glob-fs';
-import * as os from 'os';
-import * as path from 'path';
-// @ts-ignore
 import * as tmp from 'tmp';
-import { parseScenarioFile } from './helpers';
-
-const glob = globFs({ gitignore: true });
+import { promisify } from 'util';
+import { applyReplacements, parseScenarioFile, tmpFile } from './helpers';
+import { spawnNode } from './spawn';
+const writeFileAsync = promisify(fs.writeFile);
 
 const spectralBin = path.join(__dirname, '../binaries/spectral');
-
-type Replacement = {
-  from: RegExp;
-  to: string;
-};
-
-function replaceVars(string: string, replacements: Replacement[]) {
-  return replacements.reduce((str, replace) => str.replace(replace.from, replace.to), string);
-}
+const cwd = path.join(__dirname, './scenarios');
+const files = process.env.TESTS ? String(process.env.TESTS).split(',') : fg.sync('**/*.scenario', { cwd });
 
 describe('cli acceptance tests', () => {
-  const cwd = path.join(__dirname, './scenarios');
-  const files = process.env.TESTS ? String(process.env.TESTS).split(',') : glob.readdirSync('**/*.scenario', { cwd });
-
-  files.forEach((file: string) => {
+  describe.each(files)('%s file', file => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
-    const replacements: Replacement[] = [];
+    const replacements: Dictionary<string> = {
+      __dirname: normalize(__dirname),
+      bin: spectralBin,
+    };
 
-    let tmpFileHandle: tmp.FileSyncObject;
+    const tmpFileHandles = new Map<string, tmp.FileResult>();
 
-    beforeAll(() => {
-      if (scenario.document) {
-        tmpFileHandle = tmp.fileSync({
-          postfix: '.yml',
-          dir: undefined,
-          name: undefined,
-          prefix: undefined,
-          tries: 10,
-          template: undefined,
-          unsafeCleanup: undefined,
-        });
+    beforeAll(async () => {
+      await Promise.all(
+        scenario.assets.map(async ([asset, contents]) => {
+          const tmpFileHandle = await tmpFile();
+          tmpFileHandles.set(asset, tmpFileHandle);
 
-        replacements.push({
-          from: /\{document\}/g,
-          to: tmpFileHandle.name,
-        });
+          replacements[asset] = tmpFileHandle.name;
+          replacements[`${asset}|no-ext`] = tmpFileHandle.name.replace(
+            new RegExp(`${path.extname(tmpFileHandle.name)}$`),
+            '',
+          );
 
-        replacements.push({
-          from: /\{documentWithoutExt\}/g,
-          to: tmpFileHandle.name.replace(/\.yml$/, ''),
-        });
-
-        fs.writeFileSync(tmpFileHandle.name, scenario.document, { encoding: 'utf8' });
-      }
+          await writeFileAsync(tmpFileHandle.name, contents, { encoding: 'utf8' }); // todo: apply replacements to contents
+        }),
+      );
     });
 
     afterAll(() => {
-      if (scenario.document) {
-        tmpFileHandle.removeCallback(undefined, undefined, undefined, undefined);
+      for (const { removeCallback } of tmpFileHandles.values()) {
+        removeCallback();
       }
+
+      tmpFileHandles.clear();
     });
 
-    test(`./test-harness/scenarios/${file}${os.EOL}${scenario.test}`, () => {
-      // TODO split on " " is going to break quoted args
-      const args = scenario.command.split(' ').map(t => {
-        const arg = t.trim();
-        if (scenario.document && arg === '{document}') {
-          return tmpFileHandle.name;
-        }
-        return arg;
-      });
+    test(scenario.test, async () => {
+      const command = applyReplacements(scenario.command, replacements);
+      const { stderr, stdout, status } = await spawnNode(command, scenario.env);
+      replacements.date = String(new Date()); // this may introduce random failures, but hopefully they don't occur too often
 
-      const commandHandle = spawnSync(spectralBin, args, {
-        shell: true,
-        encoding: 'utf8',
-        windowsVerbatimArguments: false,
-        env: scenario.env,
-      });
+      const expectedStdout = scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout, replacements);
+      const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);
 
-      const expectedStatus = replaceVars(scenario.status.trim(), replacements);
-      const expectedStdout = replaceVars(scenario.stdout.trim(), replacements);
-      const expectedStderr = replaceVars(scenario.stderr.trim(), replacements);
-      const status = commandHandle.status;
-      const stderr = commandHandle.stderr.trim();
-      const stdout = commandHandle.stdout.trim();
-
-      if (expectedStderr) {
+      if (expectedStderr !== void 0) {
         expect(stderr).toEqual(expectedStderr);
       } else if (stderr) {
         throw new Error(stderr);
       }
 
-      if (stdout || expectedStdout) {
+      if (expectedStdout !== void 0) {
         expect(stdout).toEqual(expectedStdout);
       }
 
-      if (expectedStatus !== '') {
-        expect(`status:${status}`).toEqual(`status:${expectedStatus}`);
+      if (scenario.status !== void 0) {
+        expect(`status:${status}`).toEqual(`status:${scenario.status}`);
       }
     });
   });

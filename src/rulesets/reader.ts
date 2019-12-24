@@ -3,7 +3,6 @@ import { ICache } from '@stoplight/json-ref-resolver/types';
 import { join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
-import { JSONSchema7 } from 'json-schema';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
@@ -102,7 +101,10 @@ const createRulesetProcessor = (
       }
     }
 
-    mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
+    if (ruleset.rules !== void 0) {
+      mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
+    }
+
     if (Array.isArray(ruleset.formats)) {
       mergeFormats(rules, ruleset.formats);
     }
@@ -117,7 +119,7 @@ const createRulesetProcessor = (
       await Promise.all(
         rulesetFunctions.map(async fn => {
           const fnName = Array.isArray(fn) ? fn[0] : fn;
-          const fnSchema = Array.isArray(fn) ? (fn[1] as JSONSchema7) : null;
+          const fnSchema = Array.isArray(fn) ? fn[1] : null;
 
           try {
             resolvedFunctions[fnName] = {

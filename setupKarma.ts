@@ -1,12 +1,10 @@
+import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import { FetchMockSandbox } from 'fetch-mock';
 
 const oasRuleset = JSON.parse(JSON.stringify(require('./rulesets/oas/index.json')));
-const oas2Ruleset = JSON.parse(JSON.stringify(require('./rulesets/oas2/index.json')));
-const oas2Schema = JSON.parse(JSON.stringify(require('./rulesets/oas2/schemas/main.json')));
-const oas3Ruleset = JSON.parse(JSON.stringify(require('./rulesets/oas3/index.json')));
-const oas3Schema = JSON.parse(JSON.stringify(require('./rulesets/oas3/schemas/main.json')));
-
-const oasFunctions = JSON.parse(JSON.stringify(require('./src/__tests__/__fixtures__/oas-functions.json')));
+const oasFunctions = JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas-functions.json')));
+const oas2Schema = JSON.parse(JSON.stringify(require('./rulesets/oas/schemas/schema.oas2.json')));
+const oas3Schema = JSON.parse(JSON.stringify(require('./rulesets/oas/schemas/schema.oas3.json')));
 
 const { fetch } = window;
 let fetchMock: FetchMockSandbox;
@@ -20,22 +18,12 @@ beforeEach(() => {
     body: JSON.parse(JSON.stringify(oasRuleset)),
   });
 
-  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas2/index.json', {
-    status: 200,
-    body: JSON.parse(JSON.stringify(oas2Ruleset)),
-  });
-
-  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas3/index.json', {
-    status: 200,
-    body: JSON.parse(JSON.stringify(oas3Ruleset)),
-  });
-
-  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas2/schemas/main.json', {
+  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas/schemas/schema.oas2.json', {
     status: 200,
     body: JSON.parse(JSON.stringify(oas2Schema)),
   });
 
-  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas3/schemas/main.json', {
+  fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas/schemas/schema.oas3.json', {
     status: 200,
     body: JSON.parse(JSON.stringify(oas3Schema)),
   });
@@ -46,6 +34,11 @@ beforeEach(() => {
       body: fn,
     });
   }
+
+  fetchMock.get('http://json-schema.org/draft-04/schema', {
+    status: 200,
+    body: JSON.parse(JSON.stringify(jsonSpecv4)),
+  });
 });
 
 afterEach(() => {

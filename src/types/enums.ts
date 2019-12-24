@@ -5,6 +5,7 @@ export enum RuleType {
 
 export enum RuleFunction {
   ALPHABETICAL = 'alphabetical',
+  CASING = 'casing',
   LENGTH = 'length',
   PATTERN = 'pattern',
   ENUM = 'enumeration',

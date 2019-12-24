@@ -1,5 +1,4 @@
 {
-  "extends": ["spectral:oas2", "spectral:oas3"],
   "formats": ["oas2", "oas3"],
   "functions": [
     "oasOp2xxResponse",
@@ -8,6 +7,7 @@
     "oasOpParams",
     "oasOpSecurityDefined",
     "oasPathParam",
+    "oasTagDefined",
     "refSiblings"
   ],
   "rules": {
@@ -24,9 +24,10 @@
         "operation"
       ]
     },
-    "operation-formData-consume-check": {
+    "oas2-operation-formData-consume-check": {
       "description": "Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.",
       "recommended": true,
+      "formats": ["oas2"],
       "type": "validation",
       "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
@@ -56,6 +57,18 @@
       "given": "$",
       "then": {
         "function": "oasOpParams"
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "operation-tag-defined": {
+      "description": "Operation tags should be defined in global tags.",
+      "recommended": true,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasTagDefined"
       },
       "tags": [
         "operation"
@@ -100,7 +113,7 @@
     },
     "example-value-or-externalValue": {
       "description": "Example should have either a `value` or `externalValue` field.",
-      "recommended": false,
+      "recommended": true,
       "type": "style",
       "given": "$..example",
       "then": {
@@ -167,7 +180,7 @@
     },
     "no-eval-in-markdown": {
       "description": "Markdown descriptions should not contain `eval(`.",
-      "recommended": false,
+      "recommended": true,
       "type": "style",
       "given": "$..*",
       "then": [
@@ -227,7 +240,7 @@
     },
     "openapi-tags": {
       "description": "OpenAPI object should have non-empty `tags` array.",
-      "recommended": false,
+      "recommended": true,
       "type": "style",
       "given": "$",
       "then": {
@@ -303,22 +316,6 @@
         "function": "length",
         "functionOptions": {
           "max": 1
-        }
-      },
-      "tags": [
-        "operation"
-      ]
-    },
-    "operation-summary-formatted": {
-      "description": "Operation `summary` should start with upper case and end with a dot.",
-      "recommended": false,
-      "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
-      "then": {
-        "field": "summary",
-        "function": "pattern",
-        "functionOptions": {
-          "match": "^[A-Z].*\\.$"
         }
       },
       "tags": [
@@ -409,6 +406,432 @@
       "given": "$",
       "then": {
         "function": "refSiblings"
+      }
+    },
+    "oas2-api-host": {
+      "description": "OpenAPI `host` must be present and non-empty string.",
+      "recommended": true,
+      "formats": ["oas2"],
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "host",
+        "function": "truthy"
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "oas2-api-schemes": {
+      "description": "OpenAPI host `schemes` must be present and non-empty array.",
+      "recommended": true,
+      "formats": ["oas2"],
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "schemes",
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "oas2-host-not-example": {
+      "description": "Host URL should not point at example.com.",
+      "recommended": false,
+      "formats": ["oas2"],
+      "given": "$",
+      "type": "style",
+      "then": {
+        "field": "host",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "example\\.com"
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "oas2-host-trailing-slash": {
+      "description": "Server URL should not have a trailing slash.",
+      "recommended": true,
+      "formats": ["oas2"],
+      "given": "$",
+      "type": "style",
+      "then": {
+        "field": "host",
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "/$"
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "oas2-parameter-description": {
+      "description": "Parameter objects should have a `description`.",
+      "recommended": false,
+      "formats": ["oas2"],
+      "given": "$..[?(@parentProperty === 'parameters' && @.in)]",
+      "type": "style",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "parameters"
+      ]
+    },
+    "oas2-operation-security-defined": {
+      "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
+      "recommended": true,
+      "formats": ["oas2"],
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasOpSecurityDefined",
+        "functionOptions": {
+          "schemesPath": [
+            "securityDefinitions"
+          ]
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "oas2-valid-parameter-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "formats": ["oas2"],
+      "severity": 0,
+      "type": "validation",
+      "given": "$..parameters..[?(@.in == 'body')]..[?(@property !== 'properties' && @.example && ( @.type || @.format || @.$ref ))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "oas2-valid-definition-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "formats": ["oas2"],
+      "severity": 0,
+      "type": "validation",
+      "given": "$..definitions..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "oas2-anyOf": {
+      "description": "OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.",
+      "message": "anyOf is not available in OpenAPI v2, it was added in OpenAPI v3",
+      "recommended": true,
+      "formats": ["oas2"],
+      "type": "validation",
+      "given": "$..[?(@.anyOf)]",
+      "then": {
+        "field": "anyOf",
+        "function": "undefined"
+      },
+      "tags": [
+        "schema"
+      ]
+    },
+    "oas2-oneOf": {
+      "description": "OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.",
+      "message": "oneOf is not available in OpenAPI v2, it was added in OpenAPI v3",
+      "recommended": true,
+      "formats": ["oas2"],
+      "type": "validation",
+      "given": "$..[?(@.oneOf)]",
+      "then": {
+        "field": "oneOf",
+        "function": "undefined"
+      },
+      "tags": [
+        "schema"
+      ]
+    },
+    "oas2-schema": {
+      "description": "Validate structure of OpenAPI v2 specification.",
+      "message": "{{error}}",
+      "recommended": true,
+      "formats": ["oas2"],
+      "severity": 0,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "$ref": "./schemas/schema.oas2.json"
+          }
+        }
+      },
+      "tags": [
+        "schema"
+      ]
+    },
+    "oas2-unused-definition": {
+      "description": "Potentially unused definition has been detected.",
+      "recommended": true,
+      "resolved": false,
+      "formats": ["oas2"],
+      "type": "style",
+      "given": "$.definitions",
+      "then": {
+        "function": "unreferencedReusableObject",
+        "functionOptions": {
+          "reusableObjectsLocation": "#/definitions"
+        }
+      }
+    },
+    "oas3-api-servers": {
+      "description": "OpenAPI `servers` must be present and non-empty array.",
+      "recommended": true,
+      "formats": ["oas3"],
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "items": {
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      },
+      "tags": [
+        "api"
+      ]
+    },
+    "oas3-operation-security-defined": {
+      "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
+      "recommended": true,
+      "formats": ["oas3"],
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasOpSecurityDefined",
+        "functionOptions": {
+          "schemesPath": [
+            "components",
+            "securitySchemes"
+          ]
+        }
+      },
+      "tags": [
+        "operation"
+      ]
+    },
+    "oas3-parameter-description": {
+      "description": "Parameter objects should have a `description`.",
+      "recommended": false,
+      "formats": ["oas3"],
+      "type": "style",
+      "given": "$..[?(@parentProperty !== 'links' && @.parameters)]['parameters'].[?(@.in)]",
+      "then": {
+        "field": "description",
+        "function": "truthy"
+      },
+      "tags": [
+        "parameters"
+      ]
+    },
+    "oas3-server-not-example.com": {
+      "description": "Server URL should not point at example.com.",
+      "recommended": false,
+      "formats": ["oas3"],
+      "type": "style",
+      "given": "$.servers[*].url",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "example\\.com"
+        }
+      }
+    },
+    "oas3-server-trailing-slash": {
+      "description": "Server URL should not have a trailing slash.",
+      "recommended": true,
+      "formats": ["oas3"],
+      "type": "style",
+      "given": "$.servers[*].url",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "/$"
+        }
+      }
+    },
+    "oas3-valid-oas-parameter-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "type": "validation",
+      "given": "$..parameters..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
+    },
+    "oas3-valid-oas-header-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "formats": ["oas3"],
+      "type": "validation",
+      "given": "$..headers..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
+    },
+    "oas3-valid-oas-content-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "formats": ["oas3"],
+      "type": "validation",
+      "given": "$..content..[?(@.example && @.schema)]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$.schema"
+        }
+      }
+    },
+    "oas3-valid-parameter-schema-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "formats": ["oas3"],
+      "type": "validation",
+      "given": "$..parameters..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "oas3-valid-header-schema-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "severity": 0,
+      "formats": ["oas3"],
+      "type": "validation",
+      "given": "$..headers..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "oas3-valid-schema-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "severity": 0,
+      "formats": ["oas3"],
+      "recommended": true,
+      "type": "validation",
+      "given": "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "oas3-valid-content-schema-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "severity": 0,
+      "formats": ["oas3"],
+      "recommended": true,
+      "type": "validation",
+      "given": "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "then": {
+        "function": "schemaPath",
+        "functionOptions": {
+          "field": "example",
+          "schemaPath": "$"
+        }
+      }
+    },
+    "oas3-schema": {
+      "description": "Validate structure of OpenAPI v3 specification.",
+      "message": "{{error}}",
+      "severity": 0,
+      "formats": ["oas3"],
+      "recommended": true,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "$ref": "./schemas/schema.oas3.json"
+          }
+        }
+      },
+      "tags": [
+        "schema"
+      ]
+    },
+    "oas3-unused-components-schema": {
+      "description": "Potentially unused components schema has been detected.",
+      "recommended": true,
+      "formats": ["oas3"],
+      "type": "style",
+      "resolved": false,
+      "given": "$.components.schemas",
+      "then": {
+        "function": "unreferencedReusableObject",
+        "functionOptions": {
+          "reusableObjectsLocation": "#/components/schemas"
+        }
       }
     }
   }

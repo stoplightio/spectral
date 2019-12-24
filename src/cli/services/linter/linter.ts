@@ -1,5 +1,5 @@
 import { IParserResult } from '@stoplight/types';
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/yaml';
+import { getLocationForJsonPath } from '@stoplight/yaml';
 
 import {
   isJSONSchema,
@@ -12,12 +12,13 @@ import {
   isOpenApiv3,
 } from '../../../formats';
 import { readParsable } from '../../../fs/reader';
-import { httpAndFileResolver } from '../../../resolvers/http-and-file';
+import { parseYaml } from '../../../parsers';
 import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { FormatLookup, IParsedResult } from '../../../types';
 import { ILintConfig } from '../../../types/config';
 import { getRuleset, listFiles, skipRules } from './utils';
+import { getResolver } from './utils/getResolver';
 
 const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['oas2', isOpenApiv2, 'OpenAPI 2.0 (Swagger) detected'],
@@ -30,8 +31,10 @@ const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09 detected'],
 ];
 
-export async function lint(documents: string[], flags: ILintConfig) {
-  const spectral = new Spectral({ resolver: httpAndFileResolver });
+export async function lint(documents: Array<number | string>, flags: ILintConfig) {
+  const spectral = new Spectral({
+    resolver: getResolver(flags.resolver),
+  });
 
   const ruleset = await getRuleset(flags.ruleset);
   spectral.setRuleset(ruleset);
@@ -64,28 +67,26 @@ export async function lint(documents: string[], flags: ILintConfig) {
   }
 
   const targetUris = await listFiles(documents);
-  const results: IRuleResult[] = []; // todo: shall we display results as they come in?
+  const results: IRuleResult[] = [];
 
   for (const targetUri of targetUris) {
     if (flags.verbose) {
       console.info(`Linting ${targetUri}`);
     }
 
-    const spec: IParserResult = parseWithPointers(await readParsable(targetUri, { encoding: flags.encoding }), {
-      ignoreDuplicateKeys: false,
-      mergeKeys: true,
-    });
+    const spec: IParserResult = parseYaml(await readParsable(targetUri, { encoding: flags.encoding }));
 
     const parsedResult: IParsedResult = {
-      source: targetUri,
+      source: typeof targetUri === 'number' ? '<STDIN>' : targetUri,
       parsed: spec,
       getLocationForJsonPath,
     };
 
     results.push(
       ...(await spectral.run(parsedResult, {
+        ignoreUnknownFormat: flags.ignoreUnknownFormat,
         resolve: {
-          documentUri: targetUri,
+          documentUri: typeof targetUri === 'number' ? void 0 : targetUri,
         },
       })),
     );

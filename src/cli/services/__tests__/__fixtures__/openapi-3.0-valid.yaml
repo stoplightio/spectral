@@ -10,3 +10,5 @@ servers:
   - description: thing
     url: http://localhost
 paths: {}
+tags:
+  - name: my-tag

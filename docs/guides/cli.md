@@ -26,12 +26,14 @@ Other options include:
   --encoding, -e               text encoding to use                        [string] [default: "utf8"]
   --format, -f                 formatter to use for outputting results  [string] [default: "stylish"]
   --output, -o                 output to a file instead of stdout                            [string]
+  --resolver                   path to custom json-ref-resolver instance                     [string]
   --ruleset, -r                path/URL to a ruleset file                                    [string]
   --skip-rule, -s              ignore certain rules if they are causing trouble              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
-                                [string] [choices: "error", "warn", "info", "hint"] [default: "hint"]
+                                [string] [choices: "error", "warn", "info", "hint"] [default: "warn"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
                                                                            [boolean] [default: false]
+  --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
   --verbose, -v                increase verbosity                                           [boolean]
   --quiet, -q                  no logging - output only                                     [boolean]
 ```
@@ -44,14 +46,35 @@ Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend
 
 ## Error Results
 
-Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, and the presence of any results will cause a failure status code of 1.
+Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, but since v5.0, only the presence of errors will cause a failure status code of 1. Seeing results and getting a failure code for it are now two different things.
 
-The default behavior is can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=warn` would return a status code of 1 for any warning results or higher, so that would also include error. Using `--fail-severity=error` will only show errors.
+The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` would return a failure status code of 1 for any info results or higher. Using `--fail-severity=warn` will cause a failure status code for errors or warnings.
 
-Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the fail severity.
+Changing the fail severity will not effect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the specified fail severity.
 
 ## Proxying
 
 To have requests made from Spectral be proxied through a server, you'd need to specify PROXY environment variable:
 
 `PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
+
+## Custom $ref resolving
+
+If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver. 
+
+### Example
+
+Assuming the filename is called `my-resolver.js` and the content looks as follows, the path should look more or less like `--resolver=./my-resolver.js`.
+
+```js
+const { Resolver } = require('@stoplight/json-ref-resolver');
+
+module.exports = new Resolver({
+  resolvers: {
+    // pass any resolver for protocol you need
+  }
+});
+```
+
+
+You can learn more about $ref resolving in the [JS section](./javascript.md#using-custom-resolver).

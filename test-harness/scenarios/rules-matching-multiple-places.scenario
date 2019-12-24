@@ -1,0 +1,41 @@
+====test====
+Rules matching multiple properties in the document
+====document====
+schemas:
+  user:
+    type: object
+    properties:
+      name:
+        type: number
+      age:
+        type: number
+      occupation:
+        type: boolean
+  address:
+====command====
+{bin} lint {document} -r {asset:ruleset}
+====asset:ruleset====
+rules:
+  valid-user-properties:
+    severity: error
+    given: [$.schemas.user.properties.name, $.schemas.user.properties.occupation]
+    then:
+      field: type
+      function: pattern
+      functionOptions:
+        match: /^string$/
+  require-user-and-address:
+    severity: error
+    given: [$.schemas.user, $.schemas.address]
+    then:
+      function: truthy
+====status====
+1
+====stdout====
+{document}
+  1:1   warning  unrecognized-format       The provided document does not match any of the registered formats [oas2, oas3, json-schema, json-schema-loose, json-schema-draft4, json-schema-draft6, json-schema-draft7, json-schema-2019-09]
+  6:15    error  valid-user-properties     must match the pattern '/^string$/'
+ 10:15    error  valid-user-properties     must match the pattern '/^string$/'
+ 11:11    error  require-user-and-address  `address` property is not truthy
+
+✖ 4 problems (3 errors, 1 warning, 0 infos, 0 hints)

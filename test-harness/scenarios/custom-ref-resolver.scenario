@@ -1,0 +1,15 @@
+====test====
+Custom json-ref-resolver instance is used for $ref resolving
+====document====
+$ref: custom://user.yaml
+====asset:ruleset====
+rules:
+  required-user:
+    given: $
+    then:
+      field: user
+      function: truthy
+====command====
+{bin} lint {document} --ruleset {asset:ruleset} --resolver ./resolvers/custom.js --ignore-unknown-format
+====stdout====
+No results with a severity of 'error' or higher found!

@@ -6,9 +6,8 @@ import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
-import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { escapeRegExp } from 'lodash';
-import { IFunction, IFunctionResult, ISchemaOptions } from '../types';
+import { IFunction, IFunctionResult, ISchemaOptions, JSONSchema } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
@@ -49,7 +48,7 @@ ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
 ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
 ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
-function getSchemaId(schemaObj: JSONSchema4 | JSONSchema6): void | string {
+function getSchemaId(schemaObj: JSONSchema): void | string {
   if ('$id' in schemaObj) {
     return schemaObj.$id;
   }
@@ -59,8 +58,8 @@ function getSchemaId(schemaObj: JSONSchema4 | JSONSchema6): void | string {
   }
 }
 
-const validators = new class extends WeakMap<JSONSchema4 | JSONSchema6, ValidateFunction> {
-  public get(schemaObj: JSONSchema4 | JSONSchema6) {
+const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
+  public get(schemaObj: JSONSchema) {
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
     if (validator !== void 0) {
@@ -76,12 +75,33 @@ const validators = new class extends WeakMap<JSONSchema4 | JSONSchema6, Validate
 
     return validator;
   }
-}();
+})();
 
-const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>) => {
-  const cleanMessage =
-    typeof path === 'string' ? message.trim().replace(new RegExp(`^${escapeRegExp(path)}:\\s*`), '') : message.trim();
-  return `${cleanMessage}${typeof suggestion === 'string' && suggestion.length > 0 ? `. ${suggestion}` : ''}`;
+const replaceProperty = (substring: string, group1: string) => {
+  if (group1) {
+    return 'property ';
+  }
+
+  return '{{property|gravis|append-property|optional-typeof}}';
+};
+
+const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>, type: string) => {
+  let cleanMessage = message.trim();
+
+  if (path) {
+    cleanMessage = message.replace(
+      new RegExp(`^${escapeRegExp(decodePointerFragment(path))}:?\\s*(Property\\s+)?`),
+      replaceProperty,
+    );
+  } else if (cleanMessage.startsWith(':')) {
+    cleanMessage = cleanMessage.replace(/:\s*/, replaceProperty);
+  } else {
+    cleanMessage = `${type} ${cleanMessage}`;
+  }
+
+  return `${cleanMessage.replace(/['"]/g, '`')}${
+    typeof suggestion === 'string' && suggestion.length > 0 ? `. ${suggestion}` : ''
+  }`;
 };
 
 export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
@@ -93,7 +113,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
     return [
       {
         path,
-        message: `${paths ? path.join('.') : 'property'} does not exist`,
+        message: `{{property|double-quotes|append-property}}does not exist`,
       },
     ];
 
@@ -108,7 +128,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
         results.push(
           ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
             ({ suggestion, error, path: errorPath }) => ({
-              message: cleanAJVErrorMessage(error, errorPath, suggestion),
+              message: cleanAJVErrorMessage(error, errorPath, suggestion, typeof targetVal),
               path: [...path, ...(errorPath ? errorPath.replace(/^\//, '').split('/') : [])],
             }),
           ),
@@ -116,7 +136,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
       } catch {
         results.push(
           ...validator.errors.map(({ message, dataPath }) => ({
-            message: message ? cleanAJVErrorMessage(message, dataPath, void 0) : '',
+            message: message ? cleanAJVErrorMessage(message, dataPath, void 0, typeof targetVal) : '',
             path: [
               ...path,
               ...dataPath

@@ -2,7 +2,7 @@ import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { schema } from '../schema';
 
 function runSchema(target: any, schemaObj: object) {
-  return schema(target, { schema: schemaObj }, { given: [] }, { given: null, original: null });
+  return schema(target, { schema: schemaObj }, { given: [] }, { given: null, original: null } as any);
 }
 
 describe('schema', () => {
@@ -14,7 +14,7 @@ describe('schema', () => {
 
       expect(runSchema('', testSchema)).toEqual([
         {
-          message: 'type should be number',
+          message: '{{property|gravis|append-property|optional-typeof}}type should be number',
           path: [],
         },
       ]);
@@ -27,7 +27,7 @@ describe('schema', () => {
 
       expect(runSchema(0, testSchema)).toEqual([
         {
-          message: 'type should be string',
+          message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
           path: [],
         },
       ]);
@@ -40,7 +40,7 @@ describe('schema', () => {
 
       expect(runSchema(false, testSchema)).toEqual([
         {
-          message: 'type should be string',
+          message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
           path: [],
         },
       ]);
@@ -53,7 +53,7 @@ describe('schema', () => {
 
       expect(runSchema(null, testSchema)).toEqual([
         {
-          message: 'type should be string',
+          message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
           path: [],
         },
       ]);
@@ -94,7 +94,7 @@ describe('schema', () => {
       const input = { foo: 'bar' };
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'type should be array',
+          message: '{{property|gravis|append-property|optional-typeof}}type should be array',
           path: [],
         }),
       ]);
@@ -104,7 +104,7 @@ describe('schema', () => {
       const input = ['1', '2'];
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'maxItems should NOT have more than 1 items',
+          message: '{{property|gravis|append-property|optional-typeof}}maxItems should NOT have more than 1 items',
           path: [],
         }),
       ]);
@@ -140,7 +140,7 @@ describe('schema', () => {
         ),
       ).toEqual([
         {
-          message: 'type should be string',
+          message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
           path: ['foo', 'bar'],
         },
       ]);
@@ -157,7 +157,7 @@ describe('schema', () => {
         ),
       ).toEqual([
         {
-          message: '/foo Property baz is not expected to be here',
+          message: 'property baz is not expected to be here',
           path: ['foo'],
         },
       ]);
@@ -174,7 +174,7 @@ describe('schema', () => {
       const input = 'not an email';
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'format should match format "email"',
+          message: '{{property|gravis|append-property|optional-typeof}}format should match format `email`',
           path: [],
         }),
       ]);
@@ -212,7 +212,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: 'type should be string',
+        message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -232,7 +232,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: 'type should be string',
+        message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -258,7 +258,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: 'should be equal to one of the allowed values: foo, bar. Did you mean bar?',
+            message: `string should be equal to one of the allowed values: foo, bar. Did you mean bar?`,
             path: [],
           },
         ]);
@@ -267,7 +267,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: 'type should be string',
+            message: `{{property|gravis|append-property|optional-typeof}}type should be string`,
             path: [],
           },
         ]);
@@ -284,7 +284,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: 'type should be integer',
+            message: '{{property|gravis|append-property|optional-typeof}}type should be integer',
             path: [],
           },
         ]);
@@ -293,7 +293,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: 'should be equal to one of the allowed values: 1, 3, 5, 10, 12',
+            message: `number should be equal to one of the allowed values: 1, 3, 5, 10, 12`,
             path: [],
           },
         ]);
@@ -310,7 +310,7 @@ describe('schema', () => {
 
     expect(runSchema('three', testSchema)).toEqual([
       {
-        message: 'should be equal to one of the allowed values: foo, bar',
+        message: `string should be equal to one of the allowed values: foo, bar`,
         path: [],
       },
     ]);

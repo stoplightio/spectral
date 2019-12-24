@@ -13,6 +13,43 @@ export type IFunction<O = any> = (
 ) => void | IFunctionResult[];
 ```
 
+### targetValue
+ 
+`targetValue` the value the custom function is provided with and is supposed to lint against.
+It's based on `given` JSONPath expression defined on the rule and optionally `field` if placed on `then`.
+For instance, given the following partial of OpenAPI 3.0 document
+```yaml
+openapi: 3.0.0
+info:
+  title: foo
+```
+and the following `given` JSONPath expression `$`, `targetValue` would be a JS object literal containing `openapi` and `info` properties.
+If you changed the path to `$.info.title`, `targetValue` would equal `"foo"`.
+
+### options
+
+Options corresponds to `functionOptions` that's defined in `then` property of each rule.
+Each rule can specify options that each function should receive. This can be done as follows
+
+```yaml
+operation-id-kebab-case:
+  given: "$"
+  then:
+    function: pattern
+    functionOptions:  # this object be passed down as options to the custom function
+      match: ^[a-z][a-z0-9\-]*$
+```
+
+### paths
+
+`paths.given` contains JSONPath expression you set in a rule - in `given` field.
+If a particular rule has a `field` property in `then`, that path will be exposed as `paths.target`.
+
+### otherValues
+
+`otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSONPath expression.
+`otherValues.resolved` serves for internal purposes, therefore we discourage using it in custom functions.
+
 Custom functions take exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
 
 The process of creating a function involves 2 steps:
@@ -129,7 +166,7 @@ module.exports = (obj) => {
 };
 ```
 
-You do not need to provide any shim for `Object.entries` or use [regenerator](https://facebook.github.io/regenerator/) for `for of` loop. As stated, you cannot use ES Modules, so the following code is considered sa invalid and won't work correctly.
+You do not need to provide any shim for `Object.entries` or use [regenerator](https://facebook.github.io/regenerator/) for the `for of` loop. As stated, you cannot use ES Modules, so the following code is considered as invalid and won't work correctly.
 
 ```js
 export default (obj) => {
@@ -153,4 +190,4 @@ module.exports = (obj) => {
 
 If you have any module system, you need to use some bundler, preferably Rollup.js as it generates efficient bundles.
 
-We are still evaluating the idea of supporting ESModule and perhaps we decide to bring support for ES Modules at some point, yet for now you cannot use them.
+We are still evaluating the idea of supporting ESModule and perhaps we will decide to bring support for ES Modules at some point, yet for now you cannot use them.

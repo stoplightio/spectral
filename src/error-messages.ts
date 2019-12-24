@@ -53,7 +53,7 @@ export const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
         message: prettyPrintResolverErrorMessage(error.message),
         severity: DiagnosticSeverity.Error,
         range: location.range,
-        source: resolved.spec.source,
+        source: error.uriStack.length > 0 ? error.uriStack[error.uriStack.length - 1] : resolved.source,
       });
     }
 

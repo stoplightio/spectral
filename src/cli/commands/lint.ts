@@ -1,7 +1,8 @@
 import { Dictionary } from '@stoplight/types';
+import { pick } from 'lodash';
+import { ReadStream } from 'tty';
 import { CommandModule, showHelp } from 'yargs';
 
-import { pick } from 'lodash';
 import { getDiagnosticSeverity } from '../../rulesets/severity';
 import { IRuleResult } from '../../types';
 import { FailSeverity, ILintConfig, OutputFormat } from '../../types/config';
@@ -14,19 +15,38 @@ const formatOptions = Object.values(OutputFormat);
 
 const lintCommand: CommandModule = {
   describe: 'lint JSON/YAML documents from files or URLs',
-  command: 'lint <documents..>',
+  command: 'lint [documents..]',
   builder: yargs =>
     yargs
+      .strict()
       .positional('documents', {
         description:
           'Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.',
         type: 'string',
+        coerce(values) {
+          if (values.length > 0) {
+            return values;
+          }
+
+          // https://stackoverflow.com/questions/39801643/detect-if-node-receives-stdin
+          // https://twitter.com/MylesBorins/status/782009479382626304
+          // https://nodejs.org/dist/latest/docs/api/tty.html#tty_readstream_istty
+          if (process.stdin.isTTY) {
+            return [];
+          }
+
+          return [(process.stdin as ReadStream & { fd: 0 }).fd];
+        },
       })
       .fail(() => {
         showHelp();
       })
       .check((argv: Dictionary<unknown>) => {
         if (argv.format !== void 0 && !(formatOptions as string[]).includes(String(argv.format))) {
+          return false;
+        }
+
+        if (!Array.isArray(argv.documents) || argv.documents.length === 0) {
           return false;
         }
 
@@ -51,6 +71,10 @@ const lintCommand: CommandModule = {
           description: 'output to a file instead of stdout',
           type: 'string',
         },
+        resolver: {
+          description: 'path to custom json-ref-resolver instance',
+          type: 'string',
+        },
         ruleset: {
           alias: 'r',
           description: 'path/URL to a ruleset file',
@@ -67,12 +91,17 @@ const lintCommand: CommandModule = {
           alias: 'F',
           description: 'results of this level or above will trigger a failure exit code',
           choices: ['error', 'warn', 'info', 'hint'],
-          default: 'hint', // TODO: BREAKING: raise this to warn in 5.0
+          default: 'error',
           type: 'string',
         },
         'display-only-failures': {
           alias: 'D',
           description: 'only output results equal to or greater than --fail-severity',
+          type: 'boolean',
+          default: false,
+        },
+        'ignore-unknown-format': {
+          description: 'do not warn about unmatched formats',
           type: 'boolean',
           default: false,
         },
@@ -97,14 +126,22 @@ const lintCommand: CommandModule = {
       format,
       output,
       encoding,
+      ignoreUnknownFormat,
       ...config
     } = (args as unknown) as ILintConfig & {
-      documents: string[];
+      documents: Array<number | string>;
       failSeverity: FailSeverity;
       displayOnlyFailures: boolean;
     };
 
-    return lint(documents, { format, output, encoding, ruleset, ...pick(config, ['skipRule', 'verbose', 'quiet']) })
+    return lint(documents, {
+      format,
+      output,
+      encoding,
+      ignoreUnknownFormat,
+      ruleset,
+      ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['skipRule', 'verbose', 'quiet', 'resolver']),
+    })
       .then(results => {
         if (displayOnlyFailures) {
           return filterResultsBySeverity(results, failSeverity);
@@ -124,8 +161,8 @@ const lintCommand: CommandModule = {
   },
 };
 
-const fail = (err: Error) => {
-  console.error(err);
+const fail = ({ message }: Error) => {
+  console.error(message);
   process.exitCode = 2;
 };
 

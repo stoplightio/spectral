@@ -7,7 +7,9 @@ import {
   IParserResult,
   JsonPath,
 } from '@stoplight/types';
+import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { IFunction, IRule, Rule } from '.';
+import { ComputeFingerprintFunc } from '../utils';
 
 export type FunctionCollection = Dictionary<IFunction, string>;
 export type RuleCollection = Dictionary<Rule, string>;
@@ -30,9 +32,11 @@ export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IConstructorOpts {
   resolver?: IResolver;
+  computeFingerprint?: ComputeFingerprintFunc;
 }
 
 export interface IRunOpts {
+  ignoreUnknownFormat?: boolean;
   resolve?: {
     documentUri?: string;
   };
@@ -67,3 +71,5 @@ export interface IResolver {
 
 export type FormatLookup = (document: unknown) => boolean;
 export type RegisteredFormats = Dictionary<FormatLookup, string>;
+
+export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;

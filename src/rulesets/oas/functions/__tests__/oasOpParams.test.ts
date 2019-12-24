@@ -58,7 +58,11 @@ describe('oasOpParams', () => {
       paths: {
         '/foo': {
           get: {
-            parameters: [{ in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }, { in: 'query', name: 'foo' }],
+            parameters: [
+              { in: 'query', name: 'foo' },
+              { in: 'query', name: 'foo' },
+              { in: 'query', name: 'foo' },
+            ],
           },
           put: {},
         },
@@ -140,7 +144,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.length).toEqual(2);
+    expect(results.length).toEqual(1);
   });
 
   test('Error if multiple in:body', async () => {
@@ -148,7 +152,10 @@ describe('oasOpParams', () => {
       paths: {
         '/foo': {
           get: {
-            parameters: [{ in: 'body', name: 'foo' }, { in: 'body', name: 'bar' }],
+            parameters: [
+              { in: 'body', name: 'foo' },
+              { in: 'body', name: 'bar' },
+            ],
           },
           put: {},
         },
@@ -179,7 +186,10 @@ describe('oasOpParams', () => {
       paths: {
         '/foo': {
           get: {
-            parameters: [{ in: 'body', name: 'foo' }, { in: 'formData', name: 'bar' }],
+            parameters: [
+              { in: 'body', name: 'foo' },
+              { in: 'formData', name: 'bar' },
+            ],
           },
         },
       },

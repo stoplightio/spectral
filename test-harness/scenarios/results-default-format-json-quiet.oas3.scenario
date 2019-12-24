@@ -6,12 +6,14 @@ info:
   version: 1.0.0
   title: Stoplight
 paths: {}
+tags:
+  - name: test
 ====command====
-lint --quiet {document} --format=json 
+{bin} lint --quiet {document} --format=json
 ====stdout====
 [
 	{
-		"code": "api-servers",
+		"code": "oas3-api-servers",
 		"path": [],
 		"message": "OpenAPI `servers` must be present and non-empty array.",
 		"severity": 1,
@@ -21,8 +23,8 @@ lint --quiet {document} --format=json
 				"character": 0
 			},
 			"end": {
-				"line": 4,
-				"character": 9
+				"line": 6,
+				"character": 14
 			}
 		},
 		"source": "{document}"

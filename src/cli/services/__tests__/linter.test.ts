@@ -14,12 +14,13 @@ const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
 const validNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
 const invalidNestedRulesetPath = resolve(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
-const standardOas3RulesetPath = resolve(__dirname, '../../../rulesets/oas3/index.json');
-const standardOas2RulesetPath = resolve(__dirname, '../../../rulesets/oas2/index.json');
+const standardOasRulesetPath = resolve(__dirname, '../../../rulesets/oas/index.json');
 const draftRefSpec = resolve(__dirname, './__fixtures__/draft-ref.oas2.json');
 const draftNestedRefSpec = resolve(__dirname, './__fixtures__/draft-nested-ref.oas2.json');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
 const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-contact.yaml');
+const fooResolver = resolve(__dirname, '__fixtures__/foo-resolver.js');
+const fooDocument = resolve(__dirname, '__fixtures__/foo-document.yaml');
 
 function run(command: string) {
   const parser = yargs.command(lintCommand);
@@ -54,6 +55,7 @@ describe('Linter service', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
+          path: ['info', 'contact', 'name'],
           range: {
             end: {
               character: 14,
@@ -118,7 +120,7 @@ describe('Linter service', () => {
         expect(logSpy).toHaveBeenCalledWith('OpenAPI 3.x detected');
         expect(output).toEqual(
           expect.arrayContaining([
-            expect.objectContaining({ code: 'api-servers' }),
+            expect.objectContaining({ code: 'oas3-api-servers' }),
             expect.objectContaining({ code: 'info-contact' }),
           ]),
         );
@@ -128,17 +130,17 @@ describe('Linter service', () => {
         it('output other warnings but not info-contact', async () => {
           const output = await run(`lint --skip-rule=info-contact ${document}`);
 
-          expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'api-servers' })]));
+          expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'oas3-api-servers' })]));
           expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'info-contact' })]));
         });
       });
 
-      describe('and --skip-rule=info-contact --skip-rule=api-servers is set', () => {
-        it('outputs neither info-contact or api-servers', async () => {
-          const output = await run(`lint --skip-rule=info-contact --skip-rule=api-servers ${document}`);
+      describe('and --skip-rule=info-contact --skip-rule=oas3-api-servers is set', () => {
+        it('outputs neither info-contact or oas3-api-servers', async () => {
+          const output = await run(`lint --skip-rule=info-contact --skip-rule=oas3-api-servers ${document}`);
 
           expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'info-contact' })]));
-          expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'api-servers' })]));
+          expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'oas3-api-servers' })]));
         });
       });
     });
@@ -165,7 +167,7 @@ describe('Linter service', () => {
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
-            code: 'valid-example-in-schemas',
+            code: 'oas3-valid-schema-example',
             path: ['components', 'schemas', 'foo', 'example'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
@@ -217,7 +219,7 @@ describe('Linter service', () => {
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
-            code: 'valid-example-in-schemas',
+            code: 'oas3-valid-schema-example',
             path: ['components', 'schemas', 'foo', 'example'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
@@ -364,6 +366,43 @@ describe('Linter service', () => {
         ]),
       );
     });
+
+    it('unixifies patterns', () => {
+      return expect(run(`lint src\\__tests__\\__fixtures__\\petstore.invalid-schema.*.json`)).resolves.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'invalid-ref',
+            path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas3-valid-schema-example',
+            path: ['components', 'schemas', 'foo', 'example'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas3-unused-components-schema',
+            path: ['components', 'schemas', 'Pets'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+          expect.objectContaining({
+            code: 'oas3-schema',
+            path: ['paths', '/pets', 'get', 'responses', '200'],
+            source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
+          }),
+        ]),
+      );
+    });
   });
 
   describe('--ruleset', () => {
@@ -442,9 +481,9 @@ describe('Linter service', () => {
 
       describe('when a standard oas3 ruleset provided through option', () => {
         it('outputs warnings', () => {
-          return expect(run(`lint ${invalidOas3SpecPath} -r ${standardOas3RulesetPath}`)).resolves.toEqual(
+          return expect(run(`lint ${invalidOas3SpecPath} -r ${standardOasRulesetPath}`)).resolves.toEqual(
             expect.arrayContaining([
-              expect.objectContaining({ code: 'api-servers' }),
+              expect.objectContaining({ code: 'oas3-api-servers' }),
               expect.objectContaining({ code: 'info-contact' }),
               expect.objectContaining({ code: 'info-description' }),
             ]),
@@ -454,7 +493,7 @@ describe('Linter service', () => {
 
       describe('when a standard oas2 ruleset provided through option', () => {
         it('outputs warnings', async () => {
-          const output = await run(`lint ${oas2PetstoreSpecPath} -r ${standardOas2RulesetPath}`);
+          const output = await run(`lint ${oas2PetstoreSpecPath} -r ${standardOasRulesetPath}`);
           expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'operation-description' })]));
           expect(output).toHaveLength(22);
         });
@@ -520,16 +559,23 @@ describe('Linter service', () => {
     it('outputs errors occurring in referenced files', () => {
       return expect(run(`lint ${draftRefSpec}`)).resolves.toEqual([
         expect.objectContaining({
-          code: 'api-schemes',
+          code: 'oas2-api-schemes',
           message: 'OpenAPI host `schemes` must be present and non-empty array.',
           path: [],
           range: expect.any(Object),
           source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
         }),
         expect.objectContaining({
+          code: 'openapi-tags',
+          message: 'OpenAPI object should have non-empty `tags` array.',
+          path: [],
+          range: expect.any(Object),
+          source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
+        }),
+        expect.objectContaining({
           code: 'oas2-schema',
-          message: '/info Property foo is not expected to be here',
-          path: ['info'],
+          message: 'property foo is not expected to be here',
+          path: ['definitions', 'info'],
           range: {
             end: {
               character: 5,
@@ -540,12 +586,12 @@ describe('Linter service', () => {
               line: 3,
             },
           },
-          source: expect.stringContaining('__tests__/__fixtures__/refs/info.json'),
+          source: expect.stringContaining('/__tests__/__fixtures__/refs/info.json'),
         }),
         expect.objectContaining({
           code: 'info-description',
           message: 'OpenAPI object info `description` must be present and non-empty string.',
-          path: ['info', 'description'], // todo: relative path or absolute path? there is no such path in linted file, but there is such in spec when working on resolved file
+          path: ['definitions', 'info', 'description'],
           range: {
             end: {
               character: 22,
@@ -564,16 +610,23 @@ describe('Linter service', () => {
     it('outputs errors occurring in nested referenced files', () => {
       return expect(run(`lint ${draftNestedRefSpec}`)).resolves.toEqual([
         expect.objectContaining({
-          code: 'api-schemes',
+          code: 'oas2-api-schemes',
           message: 'OpenAPI host `schemes` must be present and non-empty array.',
           path: [],
           range: expect.any(Object),
           source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
         }),
         expect.objectContaining({
+          code: 'openapi-tags',
+          message: 'OpenAPI object should have non-empty `tags` array.',
+          path: [],
+          range: expect.any(Object),
+          source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
+        }),
+        expect.objectContaining({
           code: 'oas2-schema',
-          message: "/info should have required property 'title'",
-          path: ['info'],
+          message: `object should have required property \`title\``,
+          path: [],
           range: {
             end: {
               character: 1,
@@ -589,7 +642,7 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'info-description',
           message: 'OpenAPI object info `description` must be present and non-empty string.',
-          path: ['info', 'description'],
+          path: ['description'],
           range: {
             end: {
               character: 18,
@@ -651,6 +704,31 @@ describe('Linter service', () => {
           source: expect.stringContaining('__tests__/__fixtures__/refs/paths.json'),
         }),
       ]);
+    });
+  });
+
+  describe('--resolver', () => {
+    it('uses provided resolver for $ref resolving', async () => {
+      expect(await run(`lint --resolver ${fooResolver} ${fooDocument}`)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'info-contact',
+            source: 'foo://openapi-3.0-no-contact.yaml',
+          }),
+          expect.objectContaining({
+            code: 'info-description',
+            source: 'foo://openapi-3.0-no-contact.yaml',
+          }),
+          expect.objectContaining({
+            code: 'oas3-api-servers',
+            source: 'foo://openapi-3.0-no-contact.yaml',
+          }),
+          expect.objectContaining({
+            code: 'openapi-tags',
+            source: 'foo://openapi-3.0-no-contact.yaml',
+          }),
+        ]),
+      );
     });
   });
 });

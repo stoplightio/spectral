@@ -1,7 +1,6 @@
-import * as path from '@stoplight/path';
-import { join } from '@stoplight/path';
+import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { isOpenApiv2, isOpenApiv3 } from '../formats';
+import * as path from 'path';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
@@ -13,8 +12,6 @@ describe('Linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.registerFormat('oas3', isOpenApiv3);
-    spectral.registerFormat('oas2', isOpenApiv2);
   });
 
   it('should make use of custom functions', async () => {
@@ -68,17 +65,51 @@ describe('Linter', () => {
     await spectral.loadRuleset(customDirectoryFunctionsRuleset);
     expect(await spectral.run({})).toEqual([
       expect.objectContaining({
-        code: 'has-info-property',
-        message: 'info property is missing',
-      }),
-      expect.objectContaining({
         code: 'has-field-property',
         message: 'Object does not have field property',
+      }),
+      expect.objectContaining({
+        code: 'has-info-property',
+        message: 'info property is missing',
       }),
     ]);
   });
 
-  describe('evaluate {{value}} in validation messages', () => {
+  it('should report resolving errors for correct files', async () => {
+    spectral = new Spectral({ resolver: httpAndFileResolver });
+
+    const documentUri = path.join(__dirname, './__fixtures__/schemas/doc.json');
+    const result = await spectral.run(
+      {
+        $ref: './user.json',
+      },
+      {
+        ignoreUnknownFormat: true,
+        resolve: {
+          documentUri,
+        },
+      },
+    );
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: `ENOENT: no such file or directory, open '${path.join(documentUri, '../broken-age.yaml')}'`,
+          path: ['age', '$ref'],
+          source: normalize(path.join(documentUri, '../user.json')),
+        }),
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: `ENOENT: no such file or directory, open '${path.join(documentUri, '../broken-length.json')}'`,
+          path: ['maxLength', '$ref'],
+          source: normalize(path.join(documentUri, '../name.json')),
+        }),
+      ]),
+    );
+  });
+
+  describe('evaluate "value" in validation messages', () => {
     test('should print correct values for referenced files', async () => {
       spectral = new Spectral({ resolver: httpAndFileResolver });
 
@@ -87,7 +118,7 @@ describe('Linter', () => {
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value}} should be falsy',
+          message: 'Value {{value|to-string}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',
@@ -114,7 +145,7 @@ describe('Linter', () => {
           },
           {
             resolve: {
-              documentUri: join(__dirname, 'foo.json'),
+              documentUri: path.join(__dirname, 'foo.json'),
             },
           },
         ),
@@ -123,17 +154,17 @@ describe('Linter', () => {
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value "https://example.com" should be falsy',
-            path: ['empty'],
+            path: ['info', 'contact', 'url'],
           }),
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value Array[] should be falsy',
-            path: ['bar', 'empty'],
+            path: ['servers'],
           }),
           expect.objectContaining({
             code: 'empty-is-falsy',
             message: 'Value Object{} should be falsy',
-            path: ['foo', 'empty'],
+            path: ['info'],
           }),
         ]),
       );

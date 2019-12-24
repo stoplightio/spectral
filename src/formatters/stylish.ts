@@ -23,31 +23,18 @@
  * @author Sindre Sorhus
  */
 
-import chalk from 'chalk';
-import stripAnsi from 'strip-ansi';
+import { DiagnosticSeverity, IRange } from '@stoplight/types';
+import * as chalk from 'chalk';
+import stripAnsi = require('strip-ansi');
 import * as table from 'text-table';
 
-import { DiagnosticSeverity, IRange } from '@stoplight/types';
 import { IRuleResult } from '../types';
 import { Formatter } from './types';
-import { getHighestSeverity } from './utils/getHighestSeverity';
-import { groupBySeverity } from './utils/groupBySeverity';
-import { groupBySource } from './utils/groupBySource';
-import { sortResults } from './utils/sortResults';
+import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
 
 // -----------------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------------
-
-/**
- * Given a word and a count, append an s if count is not one.
- * @param {string} word A word in its singular form.
- * @param {number} count A number controlling whether word should be pluralized.
- * @returns {string} The original word with an s on the end if count is not one.
- */
-function pluralize(word: string, count: number): string {
-  return count === 1 ? word : `${word}s`;
-}
 
 function formatRange(range?: IRange): string {
   if (!range) return '';
@@ -55,30 +42,11 @@ function formatRange(range?: IRange): string {
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
 }
 
-const SEVERITY_COLORS = {
-  [DiagnosticSeverity.Error]: 'red',
-  [DiagnosticSeverity.Warning]: 'yellow',
-  [DiagnosticSeverity.Information]: 'blue',
-  [DiagnosticSeverity.Hint]: 'white',
-};
-
-function getColorForSeverity(severity: DiagnosticSeverity) {
-  return SEVERITY_COLORS[severity];
-}
-
 function getMessageType(severity: DiagnosticSeverity) {
   const color = getColorForSeverity(severity);
+  const name = getSeverityName(severity);
 
-  switch (severity) {
-    case DiagnosticSeverity.Error:
-      return chalk[color]('error');
-    case DiagnosticSeverity.Warning:
-      return chalk[color]('warning');
-    case DiagnosticSeverity.Information:
-      return chalk[color]('information');
-    default:
-      return chalk[color]('hint');
-  }
+  return chalk[color](name);
 }
 
 // -----------------------------------------------------------------------------
@@ -87,34 +55,19 @@ function getMessageType(severity: DiagnosticSeverity) {
 
 export const stylish: Formatter = results => {
   let output = '\n';
-  let errorCount = 0;
-  let warningCount = 0;
-  let infoCount = 0;
-  let hintCount = 0;
-  const summaryColor = getColorForSeverity(getHighestSeverity(results));
-
   const groupedResults = groupBySource(results);
-  Object.keys(groupedResults).map((path, index) => {
+  const summaryColor = getColorForSeverity(getHighestSeverity(results));
+  const summaryText = getSummary(groupedResults);
+
+  Object.keys(groupedResults).map(path => {
     const pathResults = groupedResults[path];
-
-    const {
-      [DiagnosticSeverity.Error]: errors,
-      [DiagnosticSeverity.Warning]: warnings,
-      [DiagnosticSeverity.Information]: infos,
-      [DiagnosticSeverity.Hint]: hints,
-    } = groupBySeverity(pathResults);
-
-    errorCount += errors.length;
-    warningCount += warnings.length;
-    infoCount += infos.length;
-    hintCount += hints.length;
 
     output += `${chalk.underline(path)}\n`;
 
-    const pathTableData = sortResults(pathResults).map((result: IRuleResult) => [
+    const pathTableData = pathResults.map((result: IRuleResult) => [
       formatRange(result.range),
       getMessageType(result.severity),
-      result.code !== undefined ? result.code : '',
+      result.code ?? '',
       result.message,
     ]);
 
@@ -131,30 +84,11 @@ export const stylish: Formatter = results => {
       .join('\n')}\n\n`;
   });
 
-  const total = errorCount + warningCount + infoCount + hintCount;
-
-  if (total > 0) {
-    output += chalk[summaryColor].bold(
-      [
-        '\u2716 ',
-        total,
-        pluralize(' problem', total),
-        ' (',
-        errorCount,
-        pluralize(' error', errorCount),
-        ', ',
-        warningCount,
-        pluralize(' warning', warningCount),
-        ', ',
-        infoCount,
-        pluralize(' info', infoCount),
-        ', ',
-        hintCount,
-        pluralize(' hint', hintCount),
-        ')\n',
-      ].join(''),
-    );
+  if (summaryText === null) {
+    return '';
   }
 
-  return total > 0 ? output : '';
+  output += chalk[summaryColor].bold(`\u2716 ${summaryText}\n`);
+
+  return output;
 };

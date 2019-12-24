@@ -1,18 +1,12 @@
 # OpenAPI Rules
 
-Spectral has three rulesets built in: 
+Spectral has a built-in "oas" ruleset, with OAS being shorthand for the [OpenAPI Specification](https://openapis.org/specification).
 
-- [oas](#oas)
-- [oas2](#oas2)
-- [oas3](#oas3)
+In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/rulesets.md#formats)).
 
-_OAS is shorthand for OpenAPI Specification._
+## OpenAPI v2 & v3
 
-In your ruleset file you can add `extends: "spectral:oas"` and you'll get everything from `spectral:oas2` and `spectral:oas3`, meaning you can lint either type of document and only the relevant rules will apply thanks to [formats](../getting-started/rulesets.md#formats).
-
-Let's look at the rules in these rulesets.
-
-## oas
+These rules apply to both OpenAPI v2 and v3.
 
 ### operation-2xx-response
 
@@ -120,7 +114,7 @@ info:
 
 Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
 
-**Recommended:** No
+**Recommended:** Yes
 
 **Bad Example**
 
@@ -222,7 +216,7 @@ info:
 
 This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack. 
 
-**Recommended:** No
+**Recommended:** Yes
 
 **Bad Example**
 
@@ -283,7 +277,7 @@ Why? Well, you _can_ reference tags arbitrarily in operations, and definition is
 
 Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
 
-**Recommended:** No
+**Recommended:** Yes
 
 ### operation-default-response
 
@@ -324,6 +318,11 @@ Use just one tag for an operation, which is helpful for some documentation syste
 
 ### operation-summary-formatted
 
+<!-- theme: warning -->
+> ### Removed in v5.0
+>
+> This rule was removed in Spectral v5.0, so if you are relying on it you can find the [old definition here](https://github.com/stoplightio/spectral/blob/v4.2.0/src/rulesets/oas/index.json#L312) and paste it into your [custom ruleset](../getting-started/rulesets.md).
+
 Operation `summary` should start with upper case and end with a dot.
 
 **Recommended:** No
@@ -331,6 +330,12 @@ Operation `summary` should start with upper case and end with a dot.
 ### operation-tags
 
 Operation should have non-empty `tags` array.
+
+**Recommended:** Yes
+
+### operation-tag-defined
+
+Operation tags should be defined in global tags.
 
 **Recommended:** Yes
 
@@ -375,53 +380,57 @@ tags:
 
 **Recommended:** No
 
-## oas2
+## OpenAPI v2.0-only
 
-These OpenAPI v2.0-only rules can be loaded with `extends: "spectral:oas2"` and include all the oas rules.
+These rules will only apply to OpenAPI v2.0 documents.
 
-### operation-formData-consume-check
+### oas2-operation-formData-consume-check
 
 Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
 
 **Recommended:** Yes
 
-### api-host
+### oas2-api-host
 
 OpenAPI `host` must be present and non-empty string.
 
 **Recommended:** Yes
 
-### api-schemes
+### oas2-api-schemes
 
 OpenAPI host `schemes` must be present and non-empty array.
 
 **Recommended:** Yes
 
-### host-not-example
+### oas2-host-not-example
 
-Server URL should not point at `example.com`.
+Server URL should not point at example.com.
 
 **Recommended:** No
 
-### host-trailing-slash
+### oas2-host-trailing-slash
 
 Server URL should not have a trailing slash.
 
 **Recommended:** Yes
 
-### model-description
-
-Definition `description` must be present and non-empty string.
-
-**Recommended:** No
-
-### operation-security-defined
+### oas2-operation-security-defined
 
 Operation `security` values must match a scheme defined in the `securityDefinitions` object.
 
 **Recommended:** Yes
 
-### valid-example
+### oas2-unused-definition
+
+Potential unused reusable `definition` entry has been detected.
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
+
+### oas2-valid-example
 
 Examples must be valid against their defined schema.
 
@@ -451,11 +460,11 @@ Parameter objects should have a `description`.
 
 **Recommended:** No
 
-## oas3
+## OpenAPI v3-only
 
-These OpenAPI v3.0-only rules can be loaded with `extends: "spectral: oas3"` and include all the oas rules.
+These rules will only be applied to OpenAPI v3.0 documents.
 
-### api-servers
+### oas3-api-servers
 
 OpenAPI `servers` must be present and non-empty array.
 
@@ -475,22 +484,15 @@ servers:
 
 If this is going out to the world, maybe have production and a general sandbox people can play with.
 
-
-### model-description
-
-Model `description` must be present and non-empty string.
-
-**Recommended:** No
-
-### operation-security-defined
+### oas3-operation-security-defined
 
 Operation `security` values must match a scheme defined in the `components.securitySchemes` object.
 
 **Recommended:** Yes
 
-### server-not-example.com
+### oas3-server-not-example.com
 
-Server URL should not point at `example.com`.
+Server URL should not point at example.com.
 
 **Recommended:** No
 
@@ -508,7 +510,7 @@ servers:
 
 We have example.com for documentation purposes here, but you should put in actual domains.
 
-### server-trailing-slash
+### oas3-server-trailing-slash
 
 Server URL should not have a trailing slash.
 
@@ -532,7 +534,17 @@ servers:
   - url: https://example.com/api/
 ```
 
-### valid-example
+### oas3-unused-components-schema
+
+Potential unused reusable `schema` entry has been detected.
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
+
+### oas3-valid-example
 
 Examples must be valid against their defined schema.
 

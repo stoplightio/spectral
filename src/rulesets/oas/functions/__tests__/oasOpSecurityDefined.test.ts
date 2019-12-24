@@ -1,17 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../index';
-import { rules as oas2Rules } from '../../../oas2/index.json';
-import { rules as oas3Rules } from '../../../oas3/index.json';
+import { rules as oasRules } from '../../../oas/index.json';
 import oasOpSecurityDefined from '../oasOpSecurityDefined';
 
 describe('oasOpSecurityDefined', () => {
   describe('oas2', () => {
     const s = new Spectral();
+    s.registerFormat('oas2', () => true);
     s.setFunctions({ oasOpSecurityDefined });
     s.setRules({
-      'oas2-operation-security-defined': Object.assign(oas2Rules['oas2-operation-security-defined'], {
+      'oas2-operation-security-defined': Object.assign(oasRules['oas2-operation-security-defined'], {
         recommended: true,
-        type: RuleType[oas2Rules['oas2-operation-security-defined'].type],
+        type: RuleType[oasRules['oas2-operation-security-defined'].type],
       }),
     });
 
@@ -37,6 +37,7 @@ describe('oasOpSecurityDefined', () => {
 
     test('return errors on invalid object', async () => {
       const results = await s.run({
+        swagger: '2.0',
         securityDefinitions: {},
         paths: {
           '/path': {
@@ -52,38 +53,30 @@ describe('oasOpSecurityDefined', () => {
       });
 
       expect(results).toEqual([
-        {
+        expect.objectContaining({
           code: 'oas2-operation-security-defined',
           message: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
           path: ['paths', '/path', 'get', 'security', '0'],
-          range: {
-            end: {
-              character: 24,
-              line: 7,
-            },
-            start: {
-              character: 10,
-              line: 6,
-            },
-          },
           severity: DiagnosticSeverity.Warning,
-        },
+        }),
       ]);
     });
   });
 
   describe('oas3', () => {
     const s = new Spectral();
+    s.registerFormat('oas3', () => true);
     s.setFunctions({ oasOpSecurityDefined });
     s.setRules({
-      'oas3-operation-security-defined': Object.assign(oas3Rules['oas3-operation-security-defined'], {
+      'oas3-operation-security-defined': Object.assign(oasRules['oas3-operation-security-defined'], {
         recommended: true,
-        type: RuleType[oas3Rules['oas3-operation-security-defined'].type],
+        type: RuleType[oasRules['oas3-operation-security-defined'].type],
       }),
     });
 
     test('validate a correct object (just in body)', async () => {
       const results = await s.run({
+        openapi: '3.0.2',
         components: {
           securitySchemes: {
             apikey: {},
@@ -106,6 +99,7 @@ describe('oasOpSecurityDefined', () => {
 
     test('return errors on invalid object', async () => {
       const results = await s.run({
+        openapi: '3.0.2',
         components: {},
         paths: {
           '/path': {
@@ -121,23 +115,13 @@ describe('oasOpSecurityDefined', () => {
       });
 
       expect(results).toEqual([
-        {
+        expect.objectContaining({
           code: 'oas3-operation-security-defined',
           message:
             'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
           path: ['paths', '/path', 'get', 'security', '0'],
-          range: {
-            end: {
-              character: 24,
-              line: 7,
-            },
-            start: {
-              character: 10,
-              line: 6,
-            },
-          },
           severity: DiagnosticSeverity.Warning,
-        },
+        }),
       ]);
     });
   });

@@ -1,50 +1,44 @@
 import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
+import { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { DepGraph } from 'dependency-graph';
 import { isParsedResult, Spectral } from '../spectral';
-import { IParsedResult, IResolver, RuleFunction } from '../types';
+import { IParsedResult, IResolver, IRunRule, RuleFunction } from '../types';
 
 const merge = require('lodash/merge');
 
 const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
-const oas2Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas2/index.json')));
-const oas3Ruleset = JSON.parse(JSON.stringify(require('../rulesets/oas3/index.json')));
+const oasRulesetRules: Dictionary<IRunRule, string> = oasRuleset.rules;
 
 describe('spectral', () => {
   describe('loadRuleset', () => {
     test('should support loading built-in rulesets', async () => {
       const s = new Spectral();
-      await s.loadRuleset('spectral:oas2');
+      await s.loadRuleset('spectral:oas');
 
       expect(s.rules).toEqual(
         expect.objectContaining(
-          [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-            (oasRules, [name, rule]) => {
-              oasRules[name] = {
-                name,
-                ...rule,
-                formats: expect.arrayContaining([expect.any(String)]),
-                severity: expect.any(Number),
-                then: expect.any(Object),
-              };
+          Object.entries(oasRulesetRules).reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
+            oasRules[name] = {
+              name,
+              ...rule,
+              formats: expect.arrayContaining([expect.any(String)]),
+              severity: expect.any(Number),
+              then: expect.any(Object),
+            };
 
-              return oasRules;
-            },
-            {},
-          ),
+            return oasRules;
+          }, {}),
         ),
       );
     });
 
-    test('should support loading multiple built-in rulesets', async () => {
+    test('should support loading multiple times the built-in ruleset', async () => {
       const s = new Spectral();
-      await s.loadRuleset(['spectral:oas2', 'spectral:oas3']);
+      await s.loadRuleset(['spectral:oas', 'spectral:oas']);
 
       expect(s.rules).toEqual(
-        [
-          ...Object.entries(oasRuleset.rules),
-          ...Object.entries(oas2Ruleset.rules),
-          ...Object.entries(oas3Ruleset.rules),
-        ].reduce<Dictionary<unknown>>((oasRules, [name, rule]) => {
+        Object.entries(oasRulesetRules).reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
           oasRules[name] = {
             name,
             ...rule,
@@ -63,7 +57,6 @@ describe('spectral', () => {
     test('should not mutate the passing in rules object', () => {
       const givenCustomRuleSet = {
         rule1: {
-          summary: '',
           given: '$',
           then: {
             function: RuleFunction.TRUTHY,
@@ -131,6 +124,7 @@ describe('spectral', () => {
           resolve: jest.fn(async () => ({
             result: {},
             refMap: {},
+            graph: new DepGraph<IGraphNodeData>(),
             errors: [],
           })),
         };
@@ -160,6 +154,7 @@ describe('spectral', () => {
               },
             },
             refMap: {},
+            graph: new DepGraph<IGraphNodeData>(),
             errors: [],
           })),
         };
@@ -193,11 +188,11 @@ describe('spectral', () => {
             path: ['foo', 'bar', 'baz'],
             range: {
               end: {
-                character: 0,
+                character: 12,
                 line: 0,
               },
               start: {
-                character: 0,
+                character: 7,
                 line: 0,
               },
             },
@@ -255,11 +250,11 @@ describe('spectral', () => {
           },
         });
 
-        return expect(s.run(parsedResult)).resolves.toEqual([
+        return expect(s.run(parsedResult, { resolve: { documentUri: source } })).resolves.toEqual([
           {
             code: 'pagination-responses-have-x-next-token',
             message: 'All collection endpoints have the X-Next-Token parameter in responses',
-            path: ['paths', '/agreements', 'get', 'responses', '200', 'headers'],
+            path: ['responses', 'GetAgreementsOk', 'headers'],
             range: expect.any(Object),
             severity: DiagnosticSeverity.Error,
             source,

@@ -53,7 +53,7 @@ function updateRootRule(root: Rule, newRule: Rule | null) {
   Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
 }
 
-function getRootRule(rule: Rule): Rule {
+function getRootRule(rule: Rule): Rule | null {
   return rule[ROOT_DESCRIPTOR] !== undefined ? rule[ROOT_DESCRIPTOR] : null;
 }
 
@@ -68,11 +68,16 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
     case 'boolean':
       if (isValidRule(existingRule)) {
         const rootRule = getRootRule(existingRule);
-        if (rule) {
-          existingRule.severity = rootRule ? rootRule.severity : getSeverityLevel(rules, name, rule);
+        if (!rule) {
+          existingRule.severity = -1;
+        } else if (rootRule === null) {
+          existingRule.severity = getSeverityLevel(rules, name, rule);
+          updateRootRule(existingRule, existingRule);
+        } else if ('severity' in rootRule) {
+          existingRule.severity = rootRule.severity;
           updateRootRule(existingRule, existingRule);
         } else {
-          existingRule.severity = -1;
+          existingRule.severity = DiagnosticSeverity.Warning;
         }
       }
       break;
@@ -113,7 +118,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 
 function normalizeRule(rule: Rule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined) {
   if (rule.severity === void 0) {
-    rule.severity = severity === void 0 ? (rule.recommended ? DEFAULT_SEVERITY_LEVEL : -1) : severity;
+    rule.severity = severity === void 0 ? (rule.recommended !== false ? DEFAULT_SEVERITY_LEVEL : -1) : severity;
   } else {
     rule.severity = getDiagnosticSeverity(rule.severity);
   }

@@ -3,21 +3,24 @@ import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
-import { IRule, Rule } from '../../types';
+import { Spectral } from '../../spectral';
+import { IRule, RuleType } from '../../types';
 import { readRuleset } from '../reader';
-const nanoid = require('nanoid');
+const nanoid = require('nanoid/non-secure');
 
-jest.mock('nanoid');
+jest.mock('nanoid/non-secure');
+jest.mock('fs');
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
 const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
 const github447 = path.join(__dirname, './__fixtures__/github-issue-447-fixture.yaml');
 const enabledAllRuleset = path.join(__dirname, './__fixtures__/enable-all-ruleset.json');
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');
-const extendsAllOas2Ruleset = path.join(__dirname, './__fixtures__/extends-oas2-ruleset.json');
-const extendsUnspecifiedOas2Ruleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas2-ruleset.json');
-const extendsDisabledOas2Ruleset = path.join(__dirname, './__fixtures__/extends-disabled-oas2-ruleset.yaml');
-const extendsOas2WithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas2-with-override-ruleset.json');
+const extendsOnlyRuleset = path.join(__dirname, './__fixtures__/extends-only-ruleset.json');
+const extendsAllOasRuleset = path.join(__dirname, './__fixtures__/extends-oas-ruleset.json');
+const extendsUnspecifiedOasRuleset = path.join(__dirname, './__fixtures__/extends-unspecified-oas-ruleset.json');
+const extendsDisabledOasRuleset = path.join(__dirname, './__fixtures__/extends-disabled-oas-ruleset.yaml');
+const extendsOasWithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas-with-override-ruleset.json');
 const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
 const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-ruleset.json');
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
@@ -30,8 +33,7 @@ const fooCJSFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/func
 const barFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/bar.js'), 'utf8');
 const truthyFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/truthy.js'), 'utf8');
 const oasRuleset = require('../oas/index.json');
-const oas2Ruleset = require('../oas2/index.json');
-const oas3Ruleset = require('../oas3/index.json');
+const oasRulesetRules: Dictionary<IRule, string> = oasRuleset.rules;
 
 jest.setTimeout(10000);
 
@@ -43,6 +45,7 @@ describe('Rulesets reader', () => {
 
   afterEach(() => {
     nock.cleanAll();
+    nock.enableNetConnect();
   });
 
   it('given flat, valid ruleset file should return rules', async () => {
@@ -52,7 +55,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -74,7 +77,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -87,7 +90,7 @@ describe('Rulesets reader', () => {
           'require-info': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
         },
@@ -95,30 +98,60 @@ describe('Rulesets reader', () => {
     );
   });
 
+  it('given ruleset  with no custom rules extending other rulesets', async () => {
+    const { rules } = await readRuleset(extendsOnlyRuleset);
+
+    expect(rules).toEqual({
+      'bar-rule': {
+        given: '$.info',
+        message: 'should be OK',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: expect.stringMatching(/^random-id-\d$/),
+        },
+      },
+      'foo-rule': {
+        given: '$.info',
+        message: 'should be OK',
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: expect.stringMatching(/^random-id-\d$/),
+        },
+      },
+      'truthy-rule': {
+        given: '$.x',
+        message: 'should be OK',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: expect.stringMatching(/^random-id-\d$/),
+        },
+      },
+    });
+  });
+
   it('should inherit properties of extended rulesets', async () => {
-    const { rules } = await readRuleset(extendsAllOas2Ruleset);
+    const { rules } = await readRuleset(extendsAllOasRuleset);
 
     // we pick up *all* rules only from spectral:oas and spectral:oas2 and keep their severity level or set a default one
     expect(rules).toEqual(
       expect.objectContaining({
-        ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (oasRules, [name, rule]) => {
-            oasRules[name] = {
-              ...rule,
-              formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
-              then: expect.any(Object),
-            };
+        ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>((oasRules, [name, rule]) => {
+          oasRules[name] = {
+            ...rule,
+            formats: expect.arrayContaining([expect.any(String)]),
+            ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+            then: expect.any(Object),
+          };
 
-            return oasRules;
-          },
-          {},
-        ),
+          return oasRules;
+        }, {}),
 
         'valid-rule': {
           given: '$.info',
           message: 'should be OK',
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
           then: expect.any(Object),
         },
       }),
@@ -126,28 +159,25 @@ describe('Rulesets reader', () => {
   });
 
   it('should inherit properties of extended rulesets and disable not recommended ones', () => {
-    return expect(readRuleset(extendsUnspecifiedOas2Ruleset)).resolves.toEqual(
+    return expect(readRuleset(extendsUnspecifiedOasRuleset)).resolves.toEqual(
       expect.objectContaining({
         rules: expect.objectContaining({
-          ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-            (rules, [name, rule]) => {
-              rules[name] = {
-                ...rule,
-                formats: expect.arrayContaining([expect.any(String)]),
-                ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-                ...(!(rule as IRule).recommended && { severity: -1 }),
-                then: expect.any(Object),
-              };
+          ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>((rules, [name, rule]) => {
+            rules[name] = {
+              ...rule,
+              formats: expect.arrayContaining([expect.any(String)]),
+              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+              ...((rule as IRule).recommended === false && { severity: -1 }),
+              then: expect.any(Object),
+            };
 
-              return rules;
-            },
-            {},
-          ),
+            return rules;
+          }, {}),
 
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
         }),
@@ -170,13 +200,13 @@ describe('Rulesets reader', () => {
 
     expect(readRules).toEqual(
       expect.objectContaining({
-        ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas3Ruleset.rules)].reduce<Dictionary<unknown>>(
+        ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>(
           (rules, [name, rule]) => {
-            const formattedRule: Rule = {
-              ...(rule as Rule),
+            const formattedRule: IRule = {
+              ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-              ...(!(rule as IRule).recommended && { severity: -1 }),
+              ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+              ...((rule as IRule).recommended === false && { severity: -1 }),
               then: expect.any(Object),
             };
 
@@ -205,7 +235,7 @@ describe('Rulesets reader', () => {
                   match: '^[A-Z][a-zA-Z0-9]*$',
                 },
               },
-              type: 'style',
+              type: RuleType.STYLE,
             },
             'operation-id-kebab-case': {
               description: 'operationId MUST be written in kebab-case',
@@ -221,7 +251,7 @@ describe('Rulesets reader', () => {
                   match: '^[a-z][a-z0-9\\-]*$',
                 },
               },
-              type: 'style',
+              type: RuleType.STYLE,
             },
           },
         ),
@@ -230,20 +260,17 @@ describe('Rulesets reader', () => {
   });
 
   it('should set severity of disabled rules to off', () => {
-    return expect(readRuleset(extendsDisabledOas2Ruleset)).resolves.toHaveProperty(
+    return expect(readRuleset(extendsDisabledOasRuleset)).resolves.toHaveProperty(
       'rules',
       expect.objectContaining({
-        ...[...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              description: (rule as IRule).description,
-              severity: -1,
-            });
+        ...Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+          rules[name] = expect.objectContaining({
+            description: (rule as IRule).description,
+            severity: -1,
+          });
 
-            return rules;
-          },
-          {},
-        ),
+          return rules;
+        }, {}),
 
         'operation-operationId-unique': expect.objectContaining({
           // value of oasRuleset.rules['operation-operationId-unique']
@@ -259,7 +286,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should override properties of extended rulesets', () => {
-    return expect(readRuleset(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty('rules.operation-2xx-response', {
+    return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty('rules.operation-2xx-response', {
       description: 'should be overridden',
       given: '$.info',
       formats: expect.arrayContaining([expect.any(String)]),
@@ -272,7 +299,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should persist disabled properties of extended rulesets', () => {
-    return expect(readRuleset(extendsOas2WithOverrideRuleset)).resolves.toHaveProperty(
+    return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty(
       'rules.oas2-operation-security-defined',
       {
         given: '$',
@@ -291,17 +318,14 @@ describe('Rulesets reader', () => {
     const { rules: enabledRules } = await readRuleset(enabledAllRuleset);
     expect(enabledRules).toEqual(
       expect.objectContaining(
-        [...Object.entries(oasRuleset.rules), ...Object.entries(oas2Ruleset.rules)].reduce<Dictionary<unknown>>(
-          (rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              description: (rule as IRule).description,
-              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-            });
+        Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
+          rules[name] = expect.objectContaining({
+            description: (rule as IRule).description,
+            ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+          });
 
-            return rules;
-          },
-          {},
-        ),
+          return rules;
+        }, {}),
       ),
     );
 
@@ -313,40 +337,16 @@ describe('Rulesets reader', () => {
     ).toHaveLength(0);
   });
 
-  it('should limit the scope of formats to a ruleset', () => {
-    return expect(readRuleset(myOpenAPIRuleset)).resolves.toEqual(
-      expect.objectContaining({
-        rules: {
-          ...Object.entries(oasRuleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              formats: ['oas2', 'oas3'],
-            });
+  it('should limit the scope of formats to a ruleset', async () => {
+    const rules = (await readRuleset(myOpenAPIRuleset)).rules;
 
-            return rules;
-          }, {}),
+    expect(Object.keys(rules)).toHaveLength(4);
 
-          ...Object.entries(oas2Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              formats: ['oas2'],
-            });
+    expect(rules['my-valid-rule'].formats).toBeUndefined();
 
-            return rules;
-          }, {}),
-
-          ...Object.entries(oas3Ruleset.rules).reduce<Dictionary<unknown>>((rules, [name, rule]) => {
-            rules[name] = expect.objectContaining({
-              formats: ['oas3'],
-            });
-
-            return rules;
-          }, {}),
-
-          'valid-rule': expect.objectContaining({
-            message: 'should be OK',
-          }),
-        },
-      }),
-    );
+    expect(rules['generic-valid-rule'].formats).toEqual(['oas2', 'oas3']);
+    expect(rules['oas2-valid-rule'].formats).toEqual(['oas2']);
+    expect(rules['oas3-valid-rule'].formats).toEqual(['oas3']);
   });
 
   it('given spectral:oas ruleset, should not pick up unrecommended rules', () => {
@@ -362,6 +362,159 @@ describe('Rulesets reader', () => {
     );
   });
 
+  it('given ruleset with extends set to all, should enable all rules', () => {
+    return expect(
+      readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset.json')),
+    ).resolves.toStrictEqual({
+      functions: {},
+      rules: {
+        'contact-name-matches-stoplight': {
+          given: '$.info.contact',
+          message: 'Contact name must contain Stoplight',
+          recommended: false,
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'description-matches-stoplight': {
+          given: '$.info',
+          message: 'Description must contain Stoplight',
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          then: {
+            field: 'description',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'title-matches-stoplight': {
+          given: '$.info',
+          message: 'Title must contain Stoplight',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'title',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+      },
+    });
+  });
+
+  it('given ruleset with extends set to recommended, should enable recommended rules', () => {
+    return expect(
+      readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset-recommended.json')),
+    ).resolves.toStrictEqual({
+      functions: {},
+      rules: {
+        'contact-name-matches-stoplight': {
+          given: '$.info.contact',
+          message: 'Contact name must contain Stoplight',
+          recommended: false,
+          severity: -1,
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'description-matches-stoplight': {
+          given: '$.info',
+          message: 'Description must contain Stoplight',
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          then: {
+            field: 'description',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'title-matches-stoplight': {
+          given: '$.info',
+          message: 'Title must contain Stoplight',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'title',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+      },
+    });
+  });
+
+  it('given ruleset with extends set to off, should disable all rules', () => {
+    return expect(
+      readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/ruleset-c.json')),
+    ).resolves.toStrictEqual({
+      functions: {},
+      rules: {
+        'contact-name-matches-stoplight': {
+          given: '$.info.contact',
+          message: 'Contact name must contain Stoplight',
+          recommended: false,
+          severity: -1,
+          then: {
+            field: 'name',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'description-matches-stoplight': {
+          given: '$.info',
+          message: 'Description must contain Stoplight',
+          severity: -1,
+          recommended: true,
+          then: {
+            field: 'description',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+        'title-matches-stoplight': {
+          given: '$.info',
+          message: 'Title must contain Stoplight',
+          severity: -1,
+          then: {
+            field: 'title',
+            function: 'pattern',
+            functionOptions: {
+              match: 'Stoplight',
+            },
+          },
+          type: 'style',
+        },
+      },
+    });
+  });
+
   it('should support local rulesets', () => {
     return expect(readRuleset(extendsRelativeRuleset)).resolves.toEqual(
       expect.objectContaining({
@@ -369,7 +522,7 @@ describe('Rulesets reader', () => {
           PascalCase: {
             given: '$',
             message: 'bar',
-            severity: -1, // turned off, cause it's not recommended
+            severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
             },
@@ -386,7 +539,7 @@ describe('Rulesets reader', () => {
           snake_case: {
             given: '$',
             message: 'foo',
-            severity: -1,
+            severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
             },
@@ -415,7 +568,7 @@ describe('Rulesets reader', () => {
       'foo-rule': expect.objectContaining({
         message: 'should be OK',
         given: '$.info',
-        severity: -1,
+        severity: DiagnosticSeverity.Warning,
         then: {
           function: 'random-id-0',
         },
@@ -502,7 +655,7 @@ describe('Rulesets reader', () => {
         'bar-rule': {
           given: '$.bar',
           message: 'Bar is truthy',
-          severity: -1, // rule was not recommended, hence the severity is set to false
+          severity: DiagnosticSeverity.Warning,
           then: {
             function: 'truthy',
           },
@@ -510,7 +663,7 @@ describe('Rulesets reader', () => {
         'foo-rule': {
           given: '$.foo',
           message: 'Foo is falsy',
-          severity: -1, // rule was not recommended, hence the severity is set to false
+          severity: DiagnosticSeverity.Warning,
           then: {
             function: 'falsy',
           },
@@ -559,5 +712,42 @@ describe('Rulesets reader', () => {
 
   it('given invalid ruleset should output errors', () => {
     return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/should have required property/);
+  });
+
+  it('is able to load the whole ruleset from static file', async () => {
+    nock.disableNetConnect();
+
+    const readFileSpy = jest.spyOn(fs, 'readFile');
+
+    Spectral.registerStaticAssets(require('../../../rulesets/assets/assets.json'));
+
+    const { rules, functions } = await readRuleset('spectral:oas');
+
+    expect(rules).toMatchObject({
+      'openapi-tags': expect.objectContaining({
+        description: 'OpenAPI object should have non-empty `tags` array.',
+        formats: ['oas2', 'oas3'],
+      }),
+      'oas2-schema': expect.objectContaining({
+        description: 'Validate structure of OpenAPI v2 specification.',
+        formats: ['oas2'],
+      }),
+      'oas3-schema': expect.objectContaining({
+        description: 'Validate structure of OpenAPI v3 specification.',
+        formats: ['oas3'],
+      }),
+    });
+
+    expect(functions).toMatchObject({
+      oasOp2xxResponse: expect.any(Object),
+      oasOpFormDataConsumeCheck: expect.any(Object),
+      oasOpIdUnique: expect.any(Object),
+      oasOpParams: expect.any(Object),
+      oasOpSecurityDefined: expect.any(Object),
+      oasPathParam: expect.any(Object),
+    });
+
+    expect(readFileSpy).not.toBeCalled();
+    readFileSpy.mockRestore();
   });
 });

@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleFunction, RuleType } from './enums';
 
-export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | SchemaRule;
+export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | CasingRule | SchemaRule;
 
 export interface IRule<T = string, O = any> {
   type?: RuleType;
@@ -21,23 +21,15 @@ export interface IRule<T = string, O = any> {
   tags?: string[];
 
   // some rules are more important than others, recommended rules will be enabled by default
+  // true by default
   recommended?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
-  given: string;
+  given: string | string[];
 
   // If false, rule will operate on original (unresolved) data
   // If undefined or true, resolved data will be supplied
   resolved?: boolean;
-
-  when?: {
-    // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
-    // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
-    field: string;
-
-    // a regex pattern
-    pattern?: string;
-  };
 
   then: IThen<T, O> | Array<IThen<T, O>>;
 }
@@ -87,6 +79,12 @@ export interface IRulePatternOptions {
   notMatch?: string;
 }
 export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
+
+export interface ICasingOptions {
+  type: 'flat' | 'camel' | 'pascal' | 'kebab' | 'cobol' | 'snake' | 'macro';
+  disallowDigits?: boolean;
+}
+export type CasingRule = IRule<RuleFunction.CASING, ICasingOptions>;
 
 export interface ISchemaOptions {
   schema: object;

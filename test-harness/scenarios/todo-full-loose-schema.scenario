@@ -55,8 +55,36 @@ Loose JSON Schema can be validated
     }
   ]
 }
+====asset:loose-schema-ruleset====
+{
+  "formats": ["json-schema-loose"],
+  "rules": {
+    "no-root-all-of": {
+      "description": "No root allOf combiner",
+      "message": "{{description}}",
+      "recommended": true,
+      "severity": "error",
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "field": "allOf",
+        "function": "falsy"
+      }
+    },
+    "no-empty-description": {
+      "description": "Description must not be empty",
+      "message": "{{description}}",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..description",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/loose-schema-ruleset.json
+{bin} lint {document} --ruleset {asset:loose-schema-ruleset}
 ====stdout====
 JSON Schema (loose) detected
 

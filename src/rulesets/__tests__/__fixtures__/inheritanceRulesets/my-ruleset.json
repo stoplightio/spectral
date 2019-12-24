@@ -1,0 +1,3 @@
+{
+  "extends": [["./ruleset-c.json", "all"]]
+}

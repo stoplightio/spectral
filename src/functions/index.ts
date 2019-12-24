@@ -1,5 +1,6 @@
 export const functions = {
   alphabetical: require('./alphabetical').alphabetical,
+  casing: require('./casing').casing,
   enumeration: require('./enumeration').enumeration,
   length: require('./length').length,
   pattern: require('./pattern').pattern,
@@ -9,4 +10,5 @@ export const functions = {
   truthy: require('./truthy').truthy,
   undefined: require('./undefined').undefined,
   xor: require('./xor').xor,
+  unreferencedReusableObject: require('./unreferencedReusableObject').unreferencedReusableObject,
 };

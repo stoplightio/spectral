@@ -1,7 +1,8 @@
 import { IRuleResult } from '../../types';
+import { sortResults } from '../../utils';
 import { json } from '../json';
 
-const results: IRuleResult[] = [
+const results: IRuleResult[] = sortResults([
   {
     code: 'operation-description',
     message: 'paths./pets.get.description is not truthy',
@@ -36,7 +37,7 @@ const results: IRuleResult[] = [
       },
     },
   },
-];
+]);
 
 describe('JSON formatter', () => {
   test('should include ranges', () => {

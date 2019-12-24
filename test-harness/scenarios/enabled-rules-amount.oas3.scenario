@@ -12,7 +12,7 @@ paths:
         - name: ok
           in: header
       responses:
-        200:
+        '200':
           description: abc
 components:
   parameters:
@@ -22,9 +22,9 @@ components:
       schema:
         type: integer
 ====command====
-lint {document} --ruleset ./test-harness/scenarios/rulesets/parameter-description.oas3.yaml -v
+{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml -v
 ====stdout====
-Found 52 rules (1 enabled)
+Found 53 rules (1 enabled)
 Linting {document}
 OpenAPI 3.x detected
 
