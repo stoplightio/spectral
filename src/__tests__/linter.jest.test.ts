@@ -1,6 +1,6 @@
-import * as path from '@stoplight/path';
-import { join } from '@stoplight/path';
+import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as path from 'path';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
@@ -75,6 +75,40 @@ describe('Linter', () => {
     ]);
   });
 
+  it('should report resolving errors for correct files', async () => {
+    spectral = new Spectral({ resolver: httpAndFileResolver });
+
+    const documentUri = path.join(__dirname, './__fixtures__/schemas/doc.json');
+    const result = await spectral.run(
+      {
+        $ref: './user.json',
+      },
+      {
+        ignoreUnknownFormat: true,
+        resolve: {
+          documentUri,
+        },
+      },
+    );
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: `ENOENT: no such file or directory, open '${path.join(documentUri, '../broken-age.yaml')}'`,
+          path: ['age', '$ref'],
+          source: normalize(path.join(documentUri, '../user.json')),
+        }),
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: `ENOENT: no such file or directory, open '${path.join(documentUri, '../broken-length.json')}'`,
+          path: ['maxLength', '$ref'],
+          source: normalize(path.join(documentUri, '../name.json')),
+        }),
+      ]),
+    );
+  });
+
   describe('evaluate "value" in validation messages', () => {
     test('should print correct values for referenced files', async () => {
       spectral = new Spectral({ resolver: httpAndFileResolver });
@@ -111,7 +145,7 @@ describe('Linter', () => {
           },
           {
             resolve: {
-              documentUri: join(__dirname, 'foo.json'),
+              documentUri: path.join(__dirname, 'foo.json'),
             },
           },
         ),

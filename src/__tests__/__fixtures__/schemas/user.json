@@ -1,0 +1,8 @@
+{
+  "name": {
+    "$ref": "./name.json"
+  },
+  "age": {
+    "$ref": "./broken-age.yaml"
+  }
+}
