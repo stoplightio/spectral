@@ -23,17 +23,12 @@
  * @author Jamund Ferguson
  */
 
-import { encodePointerFragment } from '@stoplight/json';
 import { extname } from '@stoplight/path';
-import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { escapeRegExp } from 'lodash';
+import { printPath, PrintStyle } from '../utils';
 import { Formatter } from './types';
-import { groupBySource } from './utils/groupBySource';
-import { xmlEscape } from './utils/xmlEscape';
-
-function stringifyPath(path: JsonPath) {
-  return ['#', ...path.map(encodePointerFragment)].join('/');
-}
+import { groupBySource, xmlEscape } from './utils';
 
 export const junit: Formatter = results => {
   let output = '';
@@ -59,7 +54,7 @@ export const junit: Formatter = results => {
         output += '<![CDATA[';
         output += `line ${result.range.start.line + 1}, col ${result.range.start.character + 1}, `;
         output += `${xmlEscape(result.message)} (${result.code}) `;
-        output += `at path ${xmlEscape(stringifyPath(result.path))}`;
+        output += `at path ${xmlEscape(printPath(result.path, PrintStyle.EscapedPointer))}`;
         output += ']]>';
         output += `</failure>`;
         output += '</testcase>\n';

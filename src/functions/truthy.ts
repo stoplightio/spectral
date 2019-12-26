@@ -1,10 +1,10 @@
 import { IFunction, IFunctionResult } from '../types';
 
-export const truthy: IFunction = (targetVal, _opts, paths): void | IFunctionResult[] => {
+export const truthy: IFunction = (targetVal): void | IFunctionResult[] => {
   if (!targetVal) {
     return [
       {
-        message: `${paths.target ? paths.target.join('.') : 'property'} is not truthy`,
+        message: '{{property|gravis|append-property}}is not truthy',
       },
     ];
   }

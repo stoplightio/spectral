@@ -1,10 +1,10 @@
 import { Dictionary } from '@stoplight/types';
 import { IRuleResult } from '../types';
 import { Formatter } from './types';
-import { getSeverityName, groupBySource, sortResults } from './utils';
+import { getSeverityName, groupBySource } from './utils';
 
 function renderResults(results: IRuleResult[], parentIndex: number) {
-  return sortResults(results)
+  return results
     .map(result => {
       const line = result.range.start.line + 1;
       const character = result.range.start.character + 1;

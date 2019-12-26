@@ -97,7 +97,7 @@ describe('linter', () => {
     );
 
     expect(result).toEqual([
-      {
+      expect.objectContaining({
         code: 'rule1',
         message,
         severity: DiagnosticSeverity.Warning,
@@ -112,7 +112,7 @@ describe('linter', () => {
             line: 5,
           },
         },
-      },
+      }),
     ]);
   });
 
@@ -162,15 +162,15 @@ describe('linter', () => {
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
         code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        message: `\`200\` property should have required property \`$ref\``,
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
       }),
       expect.objectContaining({
         code: 'oas3-unused-components-schema',
@@ -194,7 +194,7 @@ describe('linter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: "/paths//pets/get/responses/200 should have required property '$ref'",
+          message: `\`200\` property should have required property \`$ref\``,
           path: ['paths', '/pets', 'get', 'responses', '200'],
         }),
       ]),
@@ -614,26 +614,21 @@ responses:: !!foo
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
+        code: 'openapi-tags',
       }),
       expect.objectContaining({
         code: 'operation-tag-defined',
       }),
       expect.objectContaining({
-        code: 'openapi-tags',
-      }),
-      expect.objectContaining({
-        code: 'oas3-valid-schema-example',
-        message: '"foo.example" property type should be number',
-        path: ['components', 'schemas', 'foo', 'example'],
-      }),
-      expect.objectContaining({
         code: 'oas3-schema',
-        message: "/paths//pets/get/responses/200 should have required property '$ref'",
+        message: `\`200\` property should have required property \`$ref\``,
         path: ['paths', '/pets', 'get', 'responses', '200'],
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
       }),
       expect.objectContaining({
         code: 'oas3-unused-components-schema',
@@ -644,6 +639,11 @@ responses:: !!foo
         code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'foo'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-valid-schema-example',
+        message: '`example` property type should be number',
+        path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
   });
@@ -659,7 +659,7 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas2-valid-parameter-example',
-          message: '"schema.example" property can\'t resolve reference #/parameters/missing from id #',
+          message: "can't resolve reference #/parameters/missing from id #",
           path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
         }),
       ]),
@@ -931,7 +931,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'A parameter in the header should be written in kebab-case',
-          message: '{{value}} is not kebab-cased: {{error}}',
+          message: '{{value|to-string}} is not kebab-cased: {{error}}',
           given: "$..parameters[?(@.in === 'header')]",
           then: {
             field: 'name',
@@ -982,7 +982,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value}} should be falsy',
+          message: 'Value {{value|to-string}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',

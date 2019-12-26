@@ -36,6 +36,6 @@ rules:
   1:1   warning  unrecognized-format       The provided document does not match any of the registered formats [oas2, oas3, json-schema, json-schema-loose, json-schema-draft4, json-schema-draft6, json-schema-draft7, json-schema-2019-09]
   6:15    error  valid-user-properties     must match the pattern '/^string$/'
  10:15    error  valid-user-properties     must match the pattern '/^string$/'
- 11:11    error  require-user-and-address  schemas.address is not truthy
+ 11:11    error  require-user-and-address  `address` property is not truthy
 
 ✖ 4 problems (3 errors, 1 warning, 0 infos, 0 hints)
