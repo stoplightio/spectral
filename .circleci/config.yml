@@ -85,7 +85,7 @@ jobs:
           else
             npm publish
           fi
-      - run: npx pkg . --targets linux,macos
+      - run: npx pkg . --targets linux,macos --out-path ./binaries
       - persist_to_workspace:
           root: ./
           paths:

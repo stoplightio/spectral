@@ -5,11 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [5.0.0] - 2019-12-24
+
+### Features
+- Alphabetical rule function now supports numeric keys [#730](https://github.com/stoplightio/spectral/issues/730)
+- Non-JSON-ish YAML mapping keys are reported [#726](https://github.com/stoplightio/spectral/issues/726)
+- CLI: new formatter - text [#822](https://github.com/stoplightio/spectral/issues/822)
+- CLI: new formatter - teamcity [#823](https://github.com/stoplightio/spectral/issues/823)
+- CLI: new formatter - HTML [#389](https://github.com/stoplightio/spectral/issues/389)
+- CLI: custom resolver can be provided leveraging --resolver flag [#717](https://github.com/stoplightio/spectral/issues/717)
+- CLI: input can be provided via STDIN [#757](https://github.com/stoplightio/spectral/issues/757)
+- Implement ignoreUnsupportedFormats to make it easier to detect unrecognized formats [#678](https://github.com/stoplightio/spectral/issues/678)
+- Rule's Given can be an array now [#799](https://github.com/stoplightio/spectral/pull/799)
+- Casing built-in function is added [#564](https://github.com/stoplightio/spectral/issues/564)
+- New oas rule - `operation-tag-defined` [#704](https://github.com/stoplightio/spectral/pull/704)
 
 ### Changed
-- Built-in OAS rule `openapi-tags` is now recommended [#706](https://github.com/stoplightio/spectral/pull/706)
+- BREAKING: The oas2 and oas3 rulesets have been merged into a single oas ruleset [#773](https://github.com/stoplightio/spectral/pull/773)
+- BREAKING: Deprecated Spectral#addRules and Spectral#addFunctions have been removed [#561](https://github.com/stoplightio/spectral/issues/561)
+- BREAKING: Some oas rules, such as `example-value-or-externalValue` and `openapi-tags`, are now included in the recommended rulset [#725](https://github.com/stoplightio/spectral/issues/725) [#706](https://github.com/stoplightio/spectral/pull/706)
+- BREAKING: The `model-description` and `operation-summary-formatted` rules have been removed [#725](https://github.com/stoplightio/spectral/issues/725)
+- BREAKING: The `when` rule property has been removed [#585](https://github.com/stoplightio/spectral/issues/585)
+- BREAKING: Rules are set to recommended by default [#719](https://github.com/stoplightio/spectral/pull/719)
+- Improved error source detection [#685](https://github.com/stoplightio/spectral/pull/685)
+- Error paths point at unresolved document [#839](https://github.com/stoplightio/spectral/pull/839)
+- Validation messages contain more consistent error paths [#867](https://github.com/stoplightio/spectral/pull/867)
 - CLI: Default `--fail-severity` is now `error`, so getting a  `warn`, `info` or a `hint` will not return a exit status code [#706](https://github.com/stoplightio/spectral/pull/706)
+- Rulesets no longer require a `rules` property [#652](https://github.com/stoplightio/spectral/pull/652)
+
+### Fixed
+- Circular remote references with JSON pointers are resolved correctly [json-ref-resolver#141](https://github.com/stoplightio/json-ref-resolver/pull/141)
+- Local root JSON pointers are resolved correctly [json-ref-resolver#146](https://github.com/stoplightio/json-ref-resolver/pull/146) 
+- Invalid JSON pointers are reported as errors now [json-ref-resolver#140](https://github.com/stoplightio/json-ref-resolver/pull/140) and [json-ref-resolver#147](https://github.com/stoplightio/json-ref-resolver/pull/147)
+- Unixify glob patterns under Windows [#679](https://github.com/stoplightio/spectral/issues/679)
+- Improved duplicate keys detection [#751](https://github.com/stoplightio/spectral/issues/751)
+- Spectral should be usable in browsers with no crypto module available [#846](https://github.com/stoplightio/spectral/pull/846)
+- Falsy values are printed in validation messages [#824](https://github.com/stoplightio/spectral/pull/824)
+- Validation results are no longer duplicate [#680](https://github.com/stoplightio/spectral/issues/680), [#737](https://github.com/stoplightio/spectral/pull/737) and [#856](https://github.com/stoplightio/spectral/pull/856)
 
 ## [4.2.0] - 2019-10-08
 
