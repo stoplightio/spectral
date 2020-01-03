@@ -122,6 +122,7 @@ Custom rulesets can also be loaded using `spectral.loadRuleset()` by specifying 
 
 ```js
 const { Spectral, isOpenApiv2, isOpenApiv3 } = require('@stoplight/spectral');
+const { join } = require('path');
 
 const myOpenApiDocument = `
 openapi: 3.0.0
