@@ -133,7 +133,7 @@ const spectral = new Spectral();
 spectral.registerFormat('oas2', isOpenApiv2);
 spectral.registerFormat('oas3', isOpenApiv3);
 
-spectral.loadRuleset(__dirname + '/path/to/my-ruleset.yaml')
+spectral.loadRuleset(join(__dirname './path/to/my-ruleset.yaml'));
   .then(() => spectral.run(myOpenApiDocument))
   .then(results => {
     console.log('here are the results', results);
