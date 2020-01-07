@@ -84,7 +84,7 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^8.2.0",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/chalk": "^2.2.0",
     "@types/fetch-mock": "^7.3.1",
     "@types/jest": "^24.0.25",
