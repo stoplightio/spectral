@@ -1,0 +1,35 @@
+====test====
+Operation security defined, allow optional / no auth security
+====document====
+openapi: 3.0.2
+paths:
+  /pets:
+    get:
+      security:
+        - {}
+      responses:
+        '200':
+          description: abc
+    post:
+      security:
+        - {}
+        - Bearer: []
+      responses:
+        '200':
+          description: abc
+    delete:
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: abc
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+====command====
+{bin} lint {document} --ruleset ./rulesets/operation-security-defined.oas3.yaml
+====stdout====
+OpenAPI 3.x detected
+No results with a severity of 'error' or higher found!
