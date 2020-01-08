@@ -1,4 +1,11 @@
-import { IFunction, IFunctionResult, IXorRuleOptions } from '../types';
+import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+
+export interface IXorRuleOptions {
+  /** test to verify if one (but not all) of the provided keys are present in object */
+  properties: string[];
+}
+
+export type XorRule = IRule<RuleFunction.XOR, IXorRuleOptions>;
 
 export const xor: IFunction<IXorRuleOptions> = (targetVal, opts) => {
   const results: IFunctionResult[] = [];

@@ -7,10 +7,18 @@
  * The primary use case for this was validating OpenAPI examples
  * against their schema, but this could be used for other things.
  */
-import { IFunction, ISchemaPathOptions } from '../types';
+import { IFunction, IRule, RuleFunction } from '../types';
 import { schema } from './schema';
 
 const { JSONPath } = require('jsonpath-plus');
+
+export interface ISchemaPathOptions {
+  schemaPath: string;
+  // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
+  field?: string;
+}
+
+export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
   if (!targetVal || typeof targetVal !== 'object') return [];
