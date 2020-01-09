@@ -118,7 +118,8 @@
       "given": [
         "$..content.*.examples.*",
         "$.components.examples.*",
-        "$..parameters.*.examples.*"
+        "$..parameters.*.examples.*",
+        "$..headers.*.examples.*"
       ],
       "then": {
         "function": "xor",
