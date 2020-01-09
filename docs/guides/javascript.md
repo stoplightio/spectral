@@ -114,6 +114,42 @@ spectral.loadRuleset('spectral:oas')
 
 The OpenAPI rules are opinionated. There might be some rules that you prefer to change, or disable. We encourage you to create your rules to fit your use case, and we welcome additions to the existing rulesets as well!
 
+Custom rulesets can also be loaded using `spectral.loadRuleset()` by specifying the exact path to the ruleset file.
+
+```js
+const { Spectral, isOpenApiv2, isOpenApiv3 } = require('@stoplight/spectral');
+const { join } = require('path');
+
+const myOpenApiDocument = `
+openapi: 3.0.0
+# here goes the rest of document
+`
+
+const spectral = new Spectral();
+spectral.registerFormat('oas2', isOpenApiv2);
+spectral.registerFormat('oas3', isOpenApiv3);
+
+spectral.loadRuleset(join(__dirname './path/to/my-ruleset.yaml'));
+  .then(() => spectral.run(myOpenApiDocument))
+  .then(results => {
+    console.log('here are the results', results);
+  });
+```
+
+Alternatively, if your ruleset is stored in a plain JSON file that doesn't extend any other rulesets, you can also consider using `setRuleset`, as follows
+
+```js
+const { Spectral } = require('@stoplight/spectral');
+const ruleset = require('./my-ruleset.json');
+
+const spectral = new Spectral();
+spectral.setRuleset(ruleset);
+spectral.run(myOpenApiDocument)
+  .then(results => {
+    console.log('here are the results', results);
+  });
+```
+
 ## Advanced
 
 ### Creating a custom format
