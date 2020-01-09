@@ -178,7 +178,7 @@ export class Spectral {
       )}]`,
       code: 'unrecognized-format',
       severity: DiagnosticSeverity.Warning,
-      source: document.source,
+      ...(document.source !== null && { source: document.source }),
       path: [],
     };
   }

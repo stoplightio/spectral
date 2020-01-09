@@ -7,19 +7,21 @@ import { IRuleResult } from './types';
 import { startsWithProtocol } from './utils';
 
 export interface IDocument<D = unknown> {
-  readonly source: Optional<string>;
+  readonly source: string | null;
   readonly diagnostics: ReadonlyArray<IRuleResult>;
   formats?: string[] | null;
   getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange>;
   data: D;
 }
 
-const normalizeSource = (source: Optional<string>) =>
-  source && !startsWithProtocol(source) ? normalize(source) : source;
+const normalizeSource = (source: Optional<string>): string | null => {
+  if (source === void 0) return null;
+  return source && !startsWithProtocol(source) ? normalize(source) : source;
+};
 
 export class Document<D = unknown, R extends IParserResult = IParserResult<D>> implements IDocument<D> {
   protected readonly parserResult: R;
-  public readonly source: Optional<string>;
+  public readonly source: string | null;
   public readonly diagnostics: ReadonlyArray<IRuleResult>;
   public formats?: string[] | null;
 
@@ -53,7 +55,7 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> i
 }
 
 export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult> implements IDocument<D> {
-  public readonly source: Optional<string>;
+  public readonly source: string | null;
   public readonly diagnostics: ReadonlyArray<IRuleResult>;
   public formats?: string[] | null;
 

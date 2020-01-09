@@ -96,6 +96,7 @@ export const lintNode = (
         const document = associatedItem?.document || inventory.document;
         const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;
         const value = path.length === 0 ? document.data : get(document.data, path);
+        const source = associatedItem?.document.source;
 
         const vars: IMessageVars = {
           property:
@@ -118,7 +119,7 @@ export const lintNode = (
           message: (rule.message === void 0 ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
           path,
           severity: getDiagnosticSeverity(rule.severity),
-          source: associatedItem?.document.source,
+          ...(source !== null && { source }),
           range,
         };
       }),

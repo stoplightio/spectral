@@ -54,7 +54,7 @@ export class DocumentInventory {
 
   public async resolve() {
     const resolveResult = await this.resolver.resolve(this.document.data, {
-      baseUri: this.document.source,
+      ...(this.document.source !== null && { baseUri: this.document.source }),
       parseResolveResult: this.parseResolveResult,
     });
 
@@ -82,7 +82,7 @@ export class DocumentInventory {
       let { source } = this;
 
       while (true) {
-        if (source === void 0) return null;
+        if (source === null) return null;
 
         $ref = getEndRef(this.graph.getNodeData(source).refMap, $ref);
 

@@ -68,7 +68,7 @@ describe('Error messages', () => {
         },
       ];
 
-      expect(formatParserDiagnostics(cloneDeep(diagnostics), void 0)).toEqual([
+      expect(formatParserDiagnostics(cloneDeep(diagnostics), null)).toEqual([
         {
           ...diagnostics[0],
           path: ['test'],
@@ -145,7 +145,7 @@ describe('Error messages', () => {
         },
       ];
 
-      expect(formatParserDiagnostics(cloneDeep(diagnostics), void 0)).toEqual([
+      expect(formatParserDiagnostics(cloneDeep(diagnostics), null)).toEqual([
         {
           ...diagnostics[0],
           path: [],
