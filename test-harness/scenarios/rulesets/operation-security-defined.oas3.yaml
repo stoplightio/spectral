@@ -1,3 +1,0 @@
-extends: [[spectral:oas, off]]
-rules:
-  oas3-operation-security-defined: error
