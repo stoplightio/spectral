@@ -1,12 +1,24 @@
 import { normalize } from '@stoplight/path';
-import { DeepReadonly, IParserResult, IRange, JsonPath, Optional } from '@stoplight/types';
+import { DeepReadonly, GetLocationForJsonPath, IParserResult, IRange, JsonPath, Optional } from '@stoplight/types';
+import { isObjectLike } from 'lodash';
 import { formatParserDiagnostics } from './errorMessages';
 import { IParser } from './parsers/types';
 import { IRuleResult } from './types';
 import { startsWithProtocol } from './utils';
 
-export class Document<D = unknown, R extends IParserResult = IParserResult<D>> {
-  public readonly parserResult: R;
+export interface IDocument<D = unknown> {
+  readonly source: Optional<string>;
+  readonly diagnostics: ReadonlyArray<IRuleResult>;
+  formats?: string[] | null;
+  getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange>;
+  data: D;
+}
+
+const normalizeSource = (source: Optional<string>) =>
+  source && !startsWithProtocol(source) ? normalize(source) : source;
+
+export class Document<D = unknown, R extends IParserResult = IParserResult<D>> implements IDocument<D> {
+  protected readonly parserResult: R;
   public readonly source: Optional<string>;
   public readonly diagnostics: ReadonlyArray<IRuleResult>;
   public formats?: string[] | null;
@@ -14,7 +26,7 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> {
   constructor(protected readonly input: string, protected readonly parser: IParser<R>, source?: string) {
     this.parserResult = parser.parse(input);
     // we need to normalize the path in case path with forward slashes is given
-    this.source = source && !startsWithProtocol(source) ? normalize(source) : source;
+    this.source = normalizeSource(source);
     this.diagnostics = formatParserDiagnostics(this.parserResult.diagnostics, this.source);
   }
 
@@ -39,3 +51,33 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> {
     return this.parserResult.data;
   }
 }
+
+export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult> implements IDocument<D> {
+  public readonly source: Optional<string>;
+  public readonly diagnostics: ReadonlyArray<IRuleResult>;
+  public formats?: string[] | null;
+
+  constructor(protected readonly parserResult: R, source?: string) {
+    // we need to normalize the path in case path with forward slashes is given
+    this.source = normalizeSource(source);
+    this.diagnostics = formatParserDiagnostics(this.parserResult.parsed.diagnostics, this.source);
+  }
+
+  public getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange> {
+    return this.parserResult.getLocationForJsonPath(this.parserResult.parsed, path, closest)?.range;
+  }
+
+  public get data() {
+    return this.parserResult.parsed.data;
+  }
+}
+
+export interface IParsedResult<R extends IParserResult = IParserResult<unknown, any, any, any>> {
+  parsed: IParserResult;
+  getLocationForJsonPath: GetLocationForJsonPath<R>;
+  source?: string;
+  formats?: string[];
+}
+
+export const isParsedResult = (obj: any): obj is IParsedResult =>
+  isObjectLike(obj?.parsed) && typeof obj.getLocationForJsonPath === 'function';

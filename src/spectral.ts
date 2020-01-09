@@ -1,11 +1,11 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary, IParserResult } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
-import { Document } from './document';
+import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
 import { functions as defaultFunctions } from './functions';
 import * as Parsers from './parsers';
@@ -54,10 +54,15 @@ export class Spectral {
     Object.assign(STATIC_ASSETS, assets);
   }
 
-  public async runWithResolved(target: Document | object | string, opts: IRunOpts = {}): Promise<ISpectralFullResult> {
-    const document: Document<unknown, IParserResult<unknown, any, any, any>> =
+  public async runWithResolved(
+    target: IParsedResult | IDocument | object | string,
+    opts: IRunOpts = {},
+  ): Promise<ISpectralFullResult> {
+    const document: IDocument =
       target instanceof Document
         ? target
+        : isParsedResult(target)
+        ? new ParsedDocument(target)
         : new Document<unknown, YamlParserResult<unknown>>(
             typeof target === 'string' ? target : safeStringify(target, undefined, 2),
             Parsers.Yaml,
@@ -95,7 +100,7 @@ export class Spectral {
     };
   }
 
-  public async run(target: Document | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
+  public async run(target: IParsedResult | Document | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
     return (await this.runWithResolved(target, opts)).results;
   }
 
@@ -165,7 +170,7 @@ export class Spectral {
     this.formats[format] = fn;
   }
 
-  private _generateUnrecognizedFormatError(document: Document<unknown>): IRuleResult {
+  private _generateUnrecognizedFormatError(document: IDocument): IRuleResult {
     return {
       range: document.getRangeForJsonPath([], true) || Document.DEFAULT_RANGE,
       message: `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(

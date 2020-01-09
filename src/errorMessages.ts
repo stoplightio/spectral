@@ -1,7 +1,7 @@
 import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, IDiagnostic, JsonPath, Optional, Segment } from '@stoplight/types';
 import { uniqBy } from 'lodash';
-import { Document } from './document';
+import { Document, IDocument } from './document';
 import { IRuleResult } from './types';
 
 const toUpperCase = (word: string) => word.toUpperCase();
@@ -44,7 +44,7 @@ export function formatParserDiagnostics(
   }));
 }
 
-export const formatResolverErrors = (document: Document, diagnostics: IResolveError[]): IRuleResult[] => {
+export const formatResolverErrors = (document: IDocument, diagnostics: IResolveError[]): IRuleResult[] => {
   return uniqBy(diagnostics, 'message').map<IRuleResult>(error => {
     const path = [...(error.path || []), '$ref'];
     const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;

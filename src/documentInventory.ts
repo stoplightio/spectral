@@ -5,7 +5,7 @@ import { extname, resolve } from '@stoplight/path';
 import { Dictionary, IParserResult, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { get } from 'lodash';
-import { Document } from './document';
+import { Document, IDocument } from './document';
 
 import { formatParserDiagnostics, formatResolverErrors } from './errorMessages';
 import * as Parsers from './parsers';
@@ -14,7 +14,7 @@ import { IResolver, IRuleResult } from './types';
 import { getClosestJsonPath, getEndRef, isAbsoluteRef, safePointerToPath, traverseObjUntilRef } from './utils';
 
 export type DocumentInventoryItem = {
-  document: Document;
+  document: IDocument;
   path: JsonPath;
   missingPropertyPath: JsonPath;
 };
@@ -41,7 +41,7 @@ export class DocumentInventory {
     return this.document.formats;
   }
 
-  constructor(public readonly document: Document<unknown>, protected resolver: IResolver) {
+  constructor(public readonly document: IDocument<unknown>, protected resolver: IResolver) {
     const cacheKey = resolver instanceof Resolver ? resolver.uriCache : resolver;
     const cachedDocuments = DocumentInventory._cachedRemoteDocuments.get(cacheKey);
     if (cachedDocuments) {
