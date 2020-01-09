@@ -44,7 +44,17 @@ export class Resolved {
     this.errors = resolveResult.errors;
   }
 
-  public getParsedForJsonPath(path: JsonPath) {
+  public getParsedForJsonPath(path: JsonPath, resolved: boolean) {
+    if (!resolved) {
+      const newPath: JsonPath = getClosestJsonPath(this.unresolved, path);
+
+      return {
+        path: newPath,
+        doc: this.parsed,
+        missingPropertyPath: path,
+      };
+    }
+
     try {
       const newPath: JsonPath = getClosestJsonPath(this.resolved, path);
       let $ref = traverseObjUntilRef(this.unresolved, newPath);
@@ -101,24 +111,19 @@ export class Resolved {
     }
   }
 
-  public getLocationForJsonPath(path: JsonPath, closest?: boolean): ILocation {
-    const parsedResult = this.getParsedForJsonPath(path);
+  public getLocationForJsonPath(path: JsonPath, resolved: boolean): ILocation {
+    const parsedResult = this.getParsedForJsonPath(path, resolved);
     if (parsedResult === null) {
       return {
         range: getDefaultRange(),
       };
     }
 
-    const location = parsedResult.doc.getLocationForJsonPath(parsedResult.doc.parsed, parsedResult.path, closest);
+    const location = parsedResult.doc.getLocationForJsonPath(parsedResult.doc.parsed, parsedResult.path, true);
 
     return {
       ...(parsedResult.doc.source && { uri: parsedResult.doc.source }),
       range: location?.range || getDefaultRange(),
     };
-  }
-
-  public getValueForJsonPath(path: JsonPath): unknown {
-    const parsedResult = this.getParsedForJsonPath(path);
-    return parsedResult === null ? void 0 : get(parsedResult.doc.parsed.data, parsedResult.path);
   }
 }

@@ -89,7 +89,7 @@ export const lintNode = (
     results.push(
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const parsed = resolved.getParsedForJsonPath(escapedJsonPath);
+        const parsed = resolved.getParsedForJsonPath(escapedJsonPath, rule.resolved !== false);
         const path = parsed?.path || getClosestJsonPath(resolved.resolved, escapedJsonPath);
         const doc = parsed?.doc || resolved.parsed;
         const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();

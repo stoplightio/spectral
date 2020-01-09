@@ -44,7 +44,7 @@ export function formatParserDiagnostics(diagnostics: IDiagnostic[], source?: str
 export const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
   return uniqBy(resolved.errors, 'message').reduce<IRuleResult[]>((errors, error) => {
     const path = [...error.path, '$ref'];
-    const location = resolved.getLocationForJsonPath(path);
+    const location = resolved.getLocationForJsonPath(path, false);
 
     if (location) {
       errors.push({
