@@ -115,7 +115,11 @@
       "description": "Example should have either a `value` or `externalValue` field.",
       "recommended": true,
       "type": "style",
-      "given": "$..examples.*",
+      "given": [
+        "$..content.*.examples.*",
+        "$.components.examples.*",
+        "$..parameters.*.examples.*"
+      ],
       "then": {
         "function": "xor",
         "functionOptions": {
