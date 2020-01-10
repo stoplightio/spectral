@@ -1,8 +1,8 @@
 # Custom Functions
 
-If the built-in functions are not enough, Spectral allows you to write and use your own custom functions.
+If the built-in functions are not enough for your [custom ruleset](../getting-started/rulesets.md), Spectral allows you to write and use your own custom functions.
 
-A custom function might be any JS function compliant with [IFunction](https://github.com/stoplightio/spectral/blob/90a0864863fa232bf367a26dace61fd9f93198db/src/types/function.ts#L3#L8) type.
+A custom function might be any JavaScript function compliant with [IFunction](https://github.com/stoplightio/spectral/blob/90a0864863fa232bf367a26dace61fd9f93198db/src/types/function.ts#L3#L8) type.
 
 ```ts
 export type IFunction<O = any> = (
@@ -16,19 +16,23 @@ export type IFunction<O = any> = (
 ### targetValue
  
 `targetValue` the value the custom function is provided with and is supposed to lint against.
-It's based on `given` JSONPath expression defined on the rule and optionally `field` if placed on `then`.
-For instance, given the following partial of OpenAPI 3.0 document
+
+It's based on `given` [JSONPath][jsonpath] expression defined on the rule and optionally `field` if placed on `then`.
+
+For example, a rule might have `given` with a JSONPath expression of `$`, and the following partial of OpenAPI 3.0 document:
+
 ```yaml
 openapi: 3.0.0
 info:
   title: foo
 ```
-and the following `given` JSONPath expression `$`, `targetValue` would be a JS object literal containing `openapi` and `info` properties.
-If you changed the path to `$.info.title`, `targetValue` would equal `"foo"`.
+
+In this example, `targetValue` would be a JS object literal containing `openapi` and `info` properties. If you changed `given` to `$.info.title`, then `targetValue` would equal `"foo"`.
 
 ### options
 
 Options corresponds to `functionOptions` that's defined in `then` property of each rule.
+
 Each rule can specify options that each function should receive. This can be done as follows
 
 ```yaml
@@ -42,12 +46,14 @@ operation-id-kebab-case:
 
 ### paths
 
-`paths.given` contains JSONPath expression you set in a rule - in `given` field.
+`paths.given` contains [JSONPath][jsonpath] expression you set in a rule - in `given` field.
+
 If a particular rule has a `field` property in `then`, that path will be exposed as `paths.target`.
 
 ### otherValues
 
 `otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSONPath expression.
+
 `otherValues.resolved` serves for internal purposes, therefore we discourage using it in custom functions.
 
 Custom functions take exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
@@ -107,7 +113,7 @@ rules:
         value: "abc"
 ```
 
-Where the function **functions/equals.js** might look like:
+Where the function `functions/equals.js` might look like:
 
 ```js
 module.exports = (targetVal, opts) => {
@@ -126,6 +132,7 @@ module.exports = (targetVal, opts) => {
 If for some reason, you do not want to place your functions in a directory called `functions`, you can specify a custom directory.
 
 ```yaml
+functions: [abc]
 # any path relative to the ruleset file is okay
 functionsDir: "./my-functions"
 rules:
@@ -148,7 +155,7 @@ Spectral is meant to support a variety of environments, so ideally your function
 
 If you need to access environment specific APIs, make sure you provide an alternative for other environments. A good example of such a situation is `fetch` - a function available natively in a browser context, but missing in Node.js.
 
-To keep your code cross-platform, you'd need to use a cross platform package such as `node-fetch` or `isomorphic-fetch`, both of which implement spec-compliant fetch API and work in Node.js.
+To keep your code cross-platform, you'd need to use a cross platform package such as [node-fetch](https://www.npmjs.com/package/node-fetch) or [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch), both of which implement spec-compliant fetch API and work in Node.js.
 
 ## Code Transpilation
 
@@ -191,3 +198,5 @@ module.exports = (obj) => {
 If you have any module system, you need to use some bundler, preferably Rollup.js as it generates efficient bundles.
 
 We are still evaluating the idea of supporting ESModule and perhaps we will decide to bring support for ES Modules at some point, yet for now you cannot use them.
+
+[jsonpath]: https://jsonpath.com/
