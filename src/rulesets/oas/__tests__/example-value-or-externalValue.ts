@@ -12,41 +12,43 @@ describe('example-value-or-externalValue', () => {
   });
 
   test('validate if just externalValue', async () => {
-    const results = await s.run({ examples: { first: { externalValue: 'value' } } });
+    const results = await s.run({ components: { examples: { first: { externalValue: 'value' } } } });
     expect(results.length).toEqual(0);
   });
 
   test('validate if just value', async () => {
-    const results = await s.run({ examples: { first: { value: 'value' } } });
+    const results = await s.run({ components: { examples: { first: { value: 'value' } } } });
     expect(results.length).toEqual(0);
   });
 
   test('multiple examples - validate all value or externalValue', async () => {
     const results = await s.run({
-      examples: {
-        first: { value: 'value1' },
-        second: { externalValue: 'external-value2' },
-        third: { value: 'value3' },
+      components: {
+        examples: {
+          first: { value: 'value1' },
+          second: { externalValue: 'external-value2' },
+          third: { value: 'value3' },
+        },
       },
     });
     expect(results.length).toEqual(0);
   });
 
   test('return warnings if missing externalValue and value', async () => {
-    const results = await s.run({ examples: { first: {} } });
+    const results = await s.run({ components: { examples: { first: {} } } });
     expect(results).toEqual([
       {
         code: 'example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
-        path: ['examples', 'first'],
+        path: ['components', 'examples', 'first'],
         range: {
           end: {
-            character: 15,
-            line: 2,
+            character: 17,
+            line: 3,
           },
           start: {
-            character: 12,
-            line: 2,
+            character: 14,
+            line: 3,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -56,21 +58,21 @@ describe('example-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if missing externalValue and value in one', async () => {
     const results = await s.run({
-      examples: { first: { value: 'value1' }, second: { externalValue: 'external-value2' }, third: {} },
+      components: { examples: { first: { value: 'value1' }, second: { externalValue: 'external-value2' }, third: {} } },
     });
     expect(results).toEqual([
       {
         code: 'example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
-        path: ['examples', 'third'],
+        path: ['components', 'examples', 'third'],
         range: {
           end: {
-            character: 15,
-            line: 8,
+            character: 17,
+            line: 9,
           },
           start: {
-            character: 12,
-            line: 8,
+            character: 14,
+            line: 9,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -79,20 +81,22 @@ describe('example-value-or-externalValue', () => {
   });
 
   test('return warnings if both externalValue and value', async () => {
-    const results = await s.run({ examples: { first: { externalValue: 'externalValue', value: 'value' } } });
+    const results = await s.run({
+      components: { examples: { first: { externalValue: 'externalValue', value: 'value' } } },
+    });
     expect(results).toEqual([
       {
         code: 'example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
-        path: ['examples', 'first'],
+        path: ['components', 'examples', 'first'],
         range: {
           end: {
-            character: 22,
-            line: 4,
+            character: 24,
+            line: 5,
           },
           start: {
-            character: 12,
-            line: 2,
+            character: 14,
+            line: 3,
           },
         },
         severity: DiagnosticSeverity.Warning,
@@ -102,25 +106,27 @@ describe('example-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if both externalValue and value in one', async () => {
     const results = await s.run({
-      examples: {
-        first: { value: 'value1' },
-        second: { externalValue: 'external-value2', value: 'value2' },
-        third: { externalValue: 'external-value3' },
+      components: {
+        examples: {
+          first: { value: 'value1' },
+          second: { externalValue: 'external-value2', value: 'value2' },
+          third: { externalValue: 'external-value3' },
+        },
       },
     });
     expect(results).toEqual([
       {
         code: 'example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
-        path: ['examples', 'second'],
+        path: ['components', 'examples', 'second'],
         range: {
           end: {
-            character: 23,
-            line: 7,
+            character: 25,
+            line: 8,
           },
           start: {
-            character: 13,
-            line: 5,
+            character: 15,
+            line: 6,
           },
         },
         severity: DiagnosticSeverity.Warning,
