@@ -25,9 +25,9 @@ export const oasOpSecurityDefined: IFunction<{
 
           for (const index in security) {
             if (security[index]) {
-              const securityKey = Object.keys(security[index])[0];
+              const securityKeys = Object.keys(security[index]);
 
-              if (!allDefs.includes(securityKey)) {
+              if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
                 results.push({
                   message: 'operation referencing undefined security scheme',
                   path: ['paths', path, operation, 'security', index],
