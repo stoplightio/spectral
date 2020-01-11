@@ -1,3 +1,6 @@
+import * as Parsers from './parsers';
+
 export * from './spectral';
 export * from './formats';
-export * from './parsers';
+export { Parsers };
+export { Document, ParsedDocument } from './document';

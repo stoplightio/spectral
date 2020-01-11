@@ -1,8 +1,9 @@
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FetchMockSandbox } from 'fetch-mock';
+import { Document } from '../../../document';
 import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
 import { RuleType, Spectral } from '../../../index';
+import * as Parsers from '../../../parsers';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 import { rules } from '../index.json';
 
@@ -81,10 +82,7 @@ describe('unusedComponentsSchema - Http remote references', () => {
       }
     }`;
 
-    const results = await s.run({
-      parsed: parseWithPointers(doc),
-      getLocationForJsonPath,
-    });
+    const results = await s.run(new Document(doc, Parsers.Json));
 
     expect(results).toEqual([
       {

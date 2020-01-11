@@ -1,6 +1,7 @@
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
+import { Document } from '../../../../document';
 import { RuleType, Spectral } from '../../../../index';
+import * as Parsers from '../../../../parsers';
 import { rules as oasRules } from '../../../oas/index.json';
 import refSiblings from '../refSiblings';
 
@@ -60,10 +61,7 @@ describe('refSiblings', () => {
   }
 }`;
 
-    const results = await s.run({
-      parsed: parseWithPointers(doc),
-      getLocationForJsonPath,
-    });
+    const results = await s.run(new Document(doc, Parsers.Json));
 
     expect(results).toEqual([
       {
@@ -175,10 +173,7 @@ describe('refSiblings', () => {
   }
 }`;
 
-    const results = await s.run({
-      parsed: parseWithPointers(doc),
-      getLocationForJsonPath,
-    });
+    const results = await s.run(new Document(doc, Parsers.Json));
 
     expect(results).toEqual([
       {

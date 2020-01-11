@@ -1,12 +1,5 @@
 import { IResolveOpts, IResolveResult } from '@stoplight/json-ref-resolver/types';
-import {
-  DiagnosticSeverity,
-  Dictionary,
-  GetLocationForJsonPath,
-  IDiagnostic,
-  IParserResult,
-  JsonPath,
-} from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, IDiagnostic, JsonPath } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { IFunction, IRule, Rule } from '.';
 import { ComputeFingerprintFunc } from '../utils';
@@ -54,13 +47,6 @@ export interface ISpectralFullResult {
 export interface IGivenNode {
   path: JsonPath;
   value: any;
-}
-
-export interface IParsedResult<R extends IParserResult = IParserResult<unknown, any, any, any>> {
-  parsed: IParserResult;
-  getLocationForJsonPath: GetLocationForJsonPath<R>;
-  source?: string;
-  formats?: string[];
 }
 
 export type ResolveResult = Omit<IResolveResult, 'runner'>;
