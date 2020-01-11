@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { formatParserDiagnostics } from '../error-messages';
+import { formatParserDiagnostics } from '../errorMessages';
 
 describe('Error messages', () => {
   describe('parser diagnostics', () => {
@@ -68,7 +68,7 @@ describe('Error messages', () => {
         },
       ];
 
-      expect(formatParserDiagnostics(cloneDeep(diagnostics))).toEqual([
+      expect(formatParserDiagnostics(cloneDeep(diagnostics), null)).toEqual([
         {
           ...diagnostics[0],
           path: ['test'],
@@ -145,7 +145,7 @@ describe('Error messages', () => {
         },
       ];
 
-      expect(formatParserDiagnostics(cloneDeep(diagnostics))).toEqual([
+      expect(formatParserDiagnostics(cloneDeep(diagnostics), null)).toEqual([
         {
           ...diagnostics[0],
           path: [],

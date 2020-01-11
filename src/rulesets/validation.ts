@@ -2,10 +2,10 @@ import { FileRule, IRulesetFile } from '../types/ruleset';
 
 import { ErrorObject } from 'ajv';
 const AJV = require('ajv');
+import { isObject } from 'lodash';
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
 import { IFunction, IFunctionPaths, IFunctionValues, JSONSchema, Rule } from '../types';
-import { isObject } from '../utils';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
