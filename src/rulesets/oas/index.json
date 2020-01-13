@@ -116,10 +116,13 @@
       "recommended": true,
       "type": "style",
       "given": [
-        "$..content.*.examples.*",
         "$.components.examples.*",
-        "$..parameters.*.examples.*",
-        "$..headers.*.examples.*"
+        "$.paths..content.*.examples.*",
+        "$.components..content.*.examples.*",
+        "$.paths..parameters.*.examples.*",
+        "$.components..parameters.*.examples.*",
+        "$.paths..headers.*.examples.*",
+        "$.components..headers.*.examples.*"
       ],
       "then": {
         "function": "xor",
