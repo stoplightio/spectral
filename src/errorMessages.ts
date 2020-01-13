@@ -1,7 +1,7 @@
-import { DiagnosticSeverity, IDiagnostic, Segment } from '@stoplight/types';
-import { JsonPath } from '@stoplight/types/dist';
+import { IResolveError } from '@stoplight/json-ref-resolver/types';
+import { DiagnosticSeverity, IDiagnostic, JsonPath, Segment } from '@stoplight/types';
 import { uniqBy } from 'lodash';
-import { Resolved } from './resolved';
+import { Document, IDocument } from './document';
 import { IRuleResult } from './types';
 
 const toUpperCase = (word: string) => word.toUpperCase();
@@ -31,32 +31,29 @@ const getPropertyKey = (path: JsonPath | undefined): Segment | void => {
   }
 };
 
-export function formatParserDiagnostics(diagnostics: IDiagnostic[], source?: string): IRuleResult[] {
+export function formatParserDiagnostics(diagnostics: ReadonlyArray<IDiagnostic>, source: string | null): IRuleResult[] {
   return diagnostics.map(diagnostic => ({
     ...diagnostic,
     code: 'parser',
     message: getDiagnosticErrorMessage(diagnostic),
     path: diagnostic.path || [],
-    source,
+    ...(source !== null && { source }),
   }));
 }
 
-export const formatResolverErrors = (resolved: Resolved): IRuleResult[] => {
-  return uniqBy(resolved.errors, 'message').reduce<IRuleResult[]>((errors, error) => {
+export const formatResolverErrors = (document: IDocument, diagnostics: IResolveError[]): IRuleResult[] => {
+  return uniqBy(diagnostics, 'message').map<IRuleResult>(error => {
     const path = [...error.path, '$ref'];
-    const location = resolved.getLocationForJsonPath(path, false);
+    const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;
+    const source = error.uriStack.length > 0 ? error.uriStack[error.uriStack.length - 1] : document.source;
 
-    if (location) {
-      errors.push({
-        code: 'invalid-ref',
-        path,
-        message: prettyPrintResolverErrorMessage(error.message),
-        severity: DiagnosticSeverity.Error,
-        range: location.range,
-        source: error.uriStack.length > 0 ? error.uriStack[error.uriStack.length - 1] : resolved.source,
-      });
-    }
-
-    return errors;
-  }, []);
+    return {
+      code: 'invalid-ref',
+      path,
+      message: prettyPrintResolverErrorMessage(error.message),
+      severity: DiagnosticSeverity.Error,
+      range,
+      ...(source !== null && { source }),
+    };
+  });
 };

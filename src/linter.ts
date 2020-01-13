@@ -1,6 +1,8 @@
 import { decodePointerFragment } from '@stoplight/json';
 import { get } from 'lodash';
-import { getDefaultRange, Resolved } from './resolved';
+
+import { Document } from './document';
+import { DocumentInventory } from './documentInventory';
 import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
@@ -14,7 +16,7 @@ export const lintNode = (
   rule: IRunRule,
   then: IThen<string, any>,
   apply: IFunction,
-  resolved: Resolved,
+  inventory: DocumentInventory,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const targetValue = node.value;
@@ -59,7 +61,7 @@ export const lintNode = (
   }
 
   if (!targets.length) {
-    // must call then at least once, with no resolved
+    // must call then at least once, with no document
     targets.push({
       path: [],
       value: undefined,
@@ -82,23 +84,24 @@ export const lintNode = (
         {
           original: node.value,
           given: node.value,
-          resolved,
+          resolved: inventory,
         },
       ) || [];
 
     results.push(
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const parsed = resolved.getParsedForJsonPath(escapedJsonPath, rule.resolved !== false);
-        const path = parsed?.path || getClosestJsonPath(resolved.resolved, escapedJsonPath);
-        const doc = parsed?.doc || resolved.parsed;
-        const range = doc.getLocationForJsonPath(doc.parsed, path, true)?.range || getDefaultRange();
-        const value = path.length === 0 ? parsed?.doc.parsed.data : get(parsed?.doc.parsed.data, path);
+        const associatedItem = inventory.findAssociatedItemForPath(escapedJsonPath, rule.resolved !== false);
+        const path = associatedItem?.path || getClosestJsonPath(inventory.resolved, escapedJsonPath);
+        const document = associatedItem?.document || inventory.document;
+        const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;
+        const value = path.length === 0 ? document.data : get(document.data, path);
+        const source = associatedItem?.document.source;
 
         const vars: IMessageVars = {
           property:
-            parsed?.missingPropertyPath && parsed.missingPropertyPath.length > path.length
-              ? printPath(parsed.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)
+            associatedItem?.missingPropertyPath && associatedItem.missingPropertyPath.length > path.length
+              ? printPath(associatedItem.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)
               : path.length > 0
               ? path[path.length - 1]
               : '',
@@ -116,7 +119,7 @@ export const lintNode = (
           message: (rule.message === void 0 ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
           path,
           severity: getDiagnosticSeverity(rule.severity),
-          source: parsed?.doc.source,
+          ...(source !== null && { source }),
           range,
         };
       }),

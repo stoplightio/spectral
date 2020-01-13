@@ -1,16 +1,14 @@
-import { getLocationForJsonPath as getLocationForJsonPathJson, JsonParserResult, safeStringify } from '@stoplight/json';
+import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
-import { extname, normalize } from '@stoplight/path';
-import { DiagnosticSeverity, Dictionary, IDiagnostic, Optional } from '@stoplight/types';
-import { getLocationForJsonPath as getLocationForJsonPathYaml, YamlParserResult } from '@stoplight/yaml';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
-import { formatParserDiagnostics, formatResolverErrors } from './error-messages';
+import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
+import { DocumentInventory } from './documentInventory';
 import { functions as defaultFunctions } from './functions';
-import { parseJson, parseYaml } from './parsers';
-import { Resolved } from './resolved';
+import * as Parsers from './parsers';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction } from './rulesets/evaluators';
 import { IRulesetReadOptions } from './rulesets/reader';
@@ -20,7 +18,6 @@ import {
   FormatLookup,
   FunctionCollection,
   IConstructorOpts,
-  IParsedResult,
   IResolver,
   IRuleResult,
   IRunOpts,
@@ -38,29 +35,18 @@ memoize.Cache = WeakMap;
 export * from './types';
 
 export class Spectral {
+  private readonly _resolver: IResolver;
+
   public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
   public formats: RegisteredFormats;
 
   private readonly _computeFingerprint: ComputeFingerprintFunc;
-  private readonly _resolver: IResolver;
-  private readonly _parsedRefs: Dictionary<IParsedResult>;
-  private static readonly _parsedCache = new WeakMap<ICache | IResolver, Dictionary<IParsedResult>>();
 
   constructor(opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint || defaultComputeResultFingerprint);
-    this._resolver = opts && opts.resolver ? opts.resolver : new Resolver();
+    this._resolver = opts?.resolver || new Resolver();
     this.formats = {};
-
-    const cacheKey = this._resolver instanceof Resolver ? this._resolver.uriCache : this._resolver;
-    const _parsedRefs = Spectral._parsedCache.get(cacheKey);
-    if (_parsedRefs) {
-      this._parsedRefs = _parsedRefs;
-    } else {
-      this._parsedRefs = {};
-
-      Spectral._parsedCache.set(cacheKey, this._parsedRefs);
-    }
   }
 
   public static registerStaticAssets(assets: Dictionary<string, string>) {
@@ -69,62 +55,52 @@ export class Spectral {
   }
 
   public async runWithResolved(
-    target: IParsedResult | object | string,
+    target: IParsedResult | IDocument | object | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
-    let results: IRuleResult[] = [];
+    const document: IDocument =
+      target instanceof Document
+        ? target
+        : isParsedResult(target)
+        ? new ParsedDocument(target)
+        : new Document<unknown, YamlParserResult<unknown>>(
+            typeof target === 'string' ? target : safeStringify(target, undefined, 2),
+            Parsers.Yaml,
+            opts.resolve?.documentUri,
+          );
 
-    let parsedResult: IParsedResult | IParsedResult<YamlParserResult<unknown>>;
-    if (!isParsedResult(target)) {
-      parsedResult = {
-        parsed: parseYaml(typeof target === 'string' ? target : safeStringify(target, undefined, 2)),
-        getLocationForJsonPath: getLocationForJsonPathYaml,
-        // we need to normalize the path in case path with forward slashes is given
-        source: opts.resolve?.documentUri && normalize(opts.resolve.documentUri),
-      };
-    } else {
-      parsedResult = target;
+    if (document.source === void 0 && opts.resolve?.documentUri !== void 0) {
+      (document as Omit<Document, 'source'> & { source: string }).source = opts.resolve?.documentUri;
     }
 
-    results = results.concat(formatParserDiagnostics(parsedResult.parsed.diagnostics, parsedResult.source));
+    const inventory = new DocumentInventory(document, this._resolver);
+    await inventory.resolve();
 
-    const documentUri = opts.resolve && opts.resolve.documentUri;
-    const refDiagnostics: IRuleResult[] = [];
+    const validationResults: IRuleResult[] = [...inventory.diagnostics, ...document.diagnostics, ...inventory.errors];
 
-    const resolved = new Resolved(
-      parsedResult,
-      await this._resolver.resolve(parsedResult.parsed.data, {
-        baseUri: documentUri,
-        parseResolveResult: this._parseResolveResult(refDiagnostics),
-      }),
-      this._parsedRefs,
-    );
-
-    const validationResults = [...refDiagnostics, ...results, ...formatResolverErrors(resolved)];
-
-    if (resolved.formats === void 0) {
+    if (document.formats === void 0) {
       const registeredFormats = Object.keys(this.formats);
-      const foundFormats = registeredFormats.filter(format => this.formats[format](resolved.resolved));
+      const foundFormats = registeredFormats.filter(format => this.formats[format](inventory.resolved));
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
-        resolved.formats = null;
+        document.formats = null;
         if (registeredFormats.length > 0) {
-          validationResults.push(this._generateUnrecognizedFormatError(parsedResult));
+          validationResults.push(this._generateUnrecognizedFormatError(document));
         }
       } else {
-        resolved.formats = foundFormats;
+        document.formats = foundFormats;
       }
     }
 
     return {
-      resolved: resolved.resolved,
+      resolved: inventory.resolved,
       results: prepareResults(
-        [...validationResults, ...runRules(resolved, this.rules, this.functions)],
+        [...validationResults, ...runRules(inventory, this.rules, this.functions)],
         this._computeFingerprint,
       ),
     };
   }
 
-  public async run(target: IParsedResult | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
+  public async run(target: IParsedResult | Document | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
     return (await this.runWithResolved(target, opts)).results;
   }
 
@@ -194,60 +170,16 @@ export class Spectral {
     this.formats[format] = fn;
   }
 
-  private _parseResolveResult = (refDiagnostics: IDiagnostic[]) => async (resolveOpts: IUriParser) => {
-    const ref = resolveOpts.targetAuthority.href().replace(/\/$/, '');
-    const ext = extname(ref);
-
-    const content = String(resolveOpts.result);
-    let parsedRefResult: Optional<IParsedResult<YamlParserResult<unknown>> | IParsedResult<JsonParserResult<unknown>>>;
-    if (ext === '.yml' || ext === '.yaml') {
-      parsedRefResult = {
-        parsed: parseYaml(content),
-        source: ref,
-        getLocationForJsonPath: getLocationForJsonPathYaml,
-      };
-    } else if (ext === '.json') {
-      parsedRefResult = {
-        parsed: parseJson(content),
-        source: ref,
-        getLocationForJsonPath: getLocationForJsonPathJson,
-      };
-    }
-
-    if (parsedRefResult !== void 0) {
-      resolveOpts.result = parsedRefResult.parsed.data;
-      if (parsedRefResult.parsed.diagnostics.length > 0) {
-        refDiagnostics.push(...formatParserDiagnostics(parsedRefResult.parsed.diagnostics, parsedRefResult.source));
-      }
-
-      this._parsedRefs[ref] = parsedRefResult;
-    }
-
-    return resolveOpts;
-  };
-
-  private _generateUnrecognizedFormatError(parsedResult: IParsedResult): IRuleResult {
+  private _generateUnrecognizedFormatError(document: IDocument): IRuleResult {
     return {
-      range: parsedResult.getLocationForJsonPath(parsedResult.parsed, [], true)?.range || {
-        start: { character: 0, line: 0 },
-        end: { character: 0, line: 0 },
-      },
-
+      range: document.getRangeForJsonPath([], true) || Document.DEFAULT_RANGE,
       message: `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(
         ', ',
       )}]`,
       code: 'unrecognized-format',
       severity: DiagnosticSeverity.Warning,
-      source: parsedResult.source,
+      ...(document.source !== null && { source: document.source }),
       path: [],
     };
   }
 }
-
-export const isParsedResult = (obj: any): obj is IParsedResult => {
-  if (!obj || typeof obj !== 'object') return false;
-  if (!obj.parsed || typeof obj.parsed !== 'object') return false;
-  if (!obj.getLocationForJsonPath || typeof obj.getLocationForJsonPath !== 'function') return false;
-
-  return true;
-};

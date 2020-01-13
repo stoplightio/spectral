@@ -1,11 +1,12 @@
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
 import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as nock from 'nock';
 
+import { Document } from '../../../document';
 import { readParsable } from '../../../fs/reader';
 import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
-import { IParsedResult, RuleType, Spectral } from '../../../index';
+import { RuleType, Spectral } from '../../../index';
+import * as Parsers from '../../../parsers';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 import { rules } from '../index.json';
 
@@ -84,10 +85,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
       }
     }`;
 
-      const results = await s.run({
-        parsed: parseWithPointers(doc),
-        getLocationForJsonPath,
-      });
+      const results = await s.run(new Document(doc, Parsers.Json));
 
       expect(results).toEqual([
         {
@@ -114,19 +112,8 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
     test('when analyzing a directly self-referencing document from the filesystem', async () => {
       const fixturePath = path.join(__dirname, '../../__tests__/__fixtures__/unusedComponentsSchema.remoteLocal.json');
 
-      const spec = parseWithPointers(await readParsable(fixturePath, { encoding: 'utf8' }));
-
-      const parsedResult: IParsedResult = {
-        source: fixturePath,
-        parsed: spec,
-        getLocationForJsonPath,
-      };
-
-      const results = await s.run(parsedResult, {
-        resolve: {
-          documentUri: fixturePath,
-        },
-      });
+      const spec = await readParsable(fixturePath, { encoding: 'utf8' });
+      const results = await s.run(new Document(spec, Parsers.Json, fixturePath));
 
       expect(results).toEqual([]);
     });
@@ -134,19 +121,8 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
     test('when analyzing an indirectly self-referencing document from the filesystem', async () => {
       const fixturePath = path.join(__dirname, '../../__tests__/__fixtures__/unusedComponentsSchema.indirect.1.json');
 
-      const spec = parseWithPointers(await readParsable(fixturePath, { encoding: 'utf8' }));
-
-      const parsedResult: IParsedResult = {
-        source: fixturePath,
-        parsed: spec,
-        getLocationForJsonPath,
-      };
-
-      const results = await s.run(parsedResult, {
-        resolve: {
-          documentUri: fixturePath,
-        },
-      });
+      const spec = await readParsable(fixturePath, { encoding: 'utf8' });
+      const results = await s.run(new Document(spec, Parsers.Json, fixturePath));
 
       expect(results).toEqual([
         {

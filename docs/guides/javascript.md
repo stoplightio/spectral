@@ -7,22 +7,18 @@ Assuming it has been installed as a Node module via NPM/Yarn, it can be used to 
 ## Linting a YAML string
 
 ```js
-const { Spectral } = require('@stoplight/spectral');
-const { getLocationForJsonPath, parseWithPointers } = require("@stoplight/yaml");
+const { Spectral, Document, Parsers } = require('@stoplight/spectral');
 
-const myOpenApiDocument = parseWithPointers(`responses:
+const myOpenApiDocument = new Document(`responses:
   '200':
     description: ''
     schema:
       $ref: '#/definitions/error-response'
-`);
+`, Parsers.Yaml);
 
 const spectral = new Spectral();
 spectral
-  .run({
-    parsed: myOpenApiDocument,
-    getLocationForJsonPath,
-  })
+  .run(myOpenApiDocument)
   .then(console.log);
 ```
 
@@ -33,7 +29,7 @@ Find out how to add formats, rules and functions below.
 
 ## Linting an Object
 
-Instead of passing a string to `parseWithPointers`, you can pass in JavaScript object, with or without `$ref`'s.
+Instead of passing a string to `Document`, you can pass in JavaScript object, with or without `$ref`'s.
 
 ```js
 const { Spectral } = require('@stoplight/spectral');

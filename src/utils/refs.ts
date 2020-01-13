@@ -2,8 +2,9 @@ import { extractPointerFromRef, hasRef, pointerToPath } from '@stoplight/json';
 import { isAbsolute } from '@stoplight/path';
 import { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
+import { startsWithProtocol } from './startsWithProtocol';
 
-export const isAbsoluteRef = (ref: string) => isAbsolute(ref) || /^[a-z]+:\/\//i.test(ref);
+export const isAbsoluteRef = (ref: string) => isAbsolute(ref) || startsWithProtocol(ref);
 
 export const traverseObjUntilRef = (obj: unknown, path: JsonPath): string | null => {
   let piece: unknown = obj;
