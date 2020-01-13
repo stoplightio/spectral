@@ -107,10 +107,17 @@ Text must match a certain case, like `camelCase` or `snake_case`.
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-type | the casing type to match against | yes
-disallowDigits | if not truthy, digits are allowed | no
+name                   | description                                             | required?
+-----------------------|---------------------------------------------------------|----------
+type                   | the casing type to match against                        | yes
+disallowDigits         | if not truthy, digits are allowed                       | no
+separator.char         | additional char to separate groups of words             | no
+separator.allowLeading | can the group separator char be used at the first char? | no
+
+**Note:** In advanced scenarios, `separator.char` and `separator.allowLeading` can be leveraged to validate certain naming conventions.
+For instance, the following naming style could be enforced:
+ - Headers _(eg. `X-YourMighty-Header`)_: type: `pascal`, separator.char: `-`
+ - Camel cased paths _(eg. `/path/toThe/amazingResource`)_: type: `camel`, separator.char: `/`, separator.allowLeading: `true`
 
 Available types are: 
 
