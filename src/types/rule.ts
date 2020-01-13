@@ -1,7 +1,24 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleFunction, RuleType } from './enums';
+import { AlphaRule } from '../functions/alphabetical';
+import { CasingRule } from '../functions/casing';
+import { LengthRule } from '../functions/length';
+import { PatternRule } from '../functions/pattern';
+import { SchemaRule } from '../functions/schema';
+import { SchemaPathRule } from '../functions/schema-path';
+import { TruthyRule } from '../functions/truthy';
+import { XorRule } from '../functions/xor';
+import { RuleType } from './enums';
 
-export type Rule = IRule | TruthyRule | XorRule | LengthRule | AlphaRule | PatternRule | CasingRule | SchemaRule;
+export type Rule =
+  | IRule
+  | TruthyRule
+  | XorRule
+  | LengthRule
+  | AlphaRule
+  | PatternRule
+  | CasingRule
+  | SchemaRule
+  | SchemaPathRule;
 
 export interface IRule<T = string, O = any> {
   type?: RuleType;
@@ -45,57 +62,5 @@ export interface IThen<T = string, O = any> {
   // Options passed to the function
   functionOptions?: O;
 }
-
-export type TruthyRule = IRule<RuleFunction.TRUTHY>;
-
-export interface IXorRuleOptions {
-  /** test to verify if one (but not all) of the provided keys are present in object */
-  properties: string[];
-}
-export type XorRule = IRule<RuleFunction.XOR, IXorRuleOptions>;
-
-export interface ILengthRuleOptions {
-  min?: number;
-  max?: number;
-}
-export type LengthRule = IRule<RuleFunction.LENGTH, ILengthRuleOptions>;
-
-export interface IEnumRuleOptions {
-  values: Array<string | number>;
-}
-export type EnumRule = IRule<RuleFunction.ENUM, IEnumRuleOptions>;
-
-export interface IAlphaRuleOptions {
-  /** if sorting array of objects, which key to use for comparison */
-  keyedBy?: string;
-}
-export type AlphaRule = IRule<RuleFunction.ALPHABETICAL, IAlphaRuleOptions>;
-
-export interface IRulePatternOptions {
-  /** regex that target must match */
-  match?: string;
-
-  /** regex that target must not match */
-  notMatch?: string;
-}
-export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
-
-export interface ICasingOptions {
-  type: 'flat' | 'camel' | 'pascal' | 'kebab' | 'cobol' | 'snake' | 'macro';
-  disallowDigits?: boolean;
-}
-export type CasingRule = IRule<RuleFunction.CASING, ICasingOptions>;
-
-export interface ISchemaOptions {
-  schema: object;
-}
-export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
-
-export interface ISchemaPathOptions {
-  schemaPath: string;
-  // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
-  field?: string;
-}
-export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';

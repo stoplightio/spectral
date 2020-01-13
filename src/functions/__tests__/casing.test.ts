@@ -1,5 +1,4 @@
-import { ICasingOptions } from '../../types';
-import { casing } from '../casing';
+import { casing, ICasingOptions } from '../casing';
 
 function runCasing(target: unknown, type: ICasingOptions['type'], disallowDigits?: boolean) {
   return casing(

@@ -1,5 +1,12 @@
 import { Dictionary } from '@stoplight/types';
-import { ICasingOptions, IFunction } from '../types';
+import { IFunction, IRule, RuleFunction } from '../types';
+
+export interface ICasingOptions {
+  type: 'flat' | 'camel' | 'pascal' | 'kebab' | 'cobol' | 'snake' | 'macro';
+  disallowDigits?: boolean;
+}
+
+export type CasingRule = IRule<RuleFunction.CASING, ICasingOptions>;
 
 const CASES: Dictionary<RegExp, ICasingOptions['type']> = {
   flat: /^[a-z]+$/,
