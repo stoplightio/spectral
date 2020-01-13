@@ -264,3 +264,7 @@ example-value-or-externalValue:
       - externalValue
       - value
 ```
+
+## typedEnum
+
+When both a `type` and `enum` are defined for a property, the enum values must respect the type.

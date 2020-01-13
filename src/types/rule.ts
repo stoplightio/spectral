@@ -6,6 +6,7 @@ import { PatternRule } from '../functions/pattern';
 import { SchemaRule } from '../functions/schema';
 import { SchemaPathRule } from '../functions/schema-path';
 import { TruthyRule } from '../functions/truthy';
+import { TypedEnumRule } from '../functions/typedEnum';
 import { XorRule } from '../functions/xor';
 import { RuleType } from './enums';
 
@@ -18,7 +19,8 @@ export type Rule =
   | PatternRule
   | CasingRule
   | SchemaRule
-  | SchemaPathRule;
+  | SchemaPathRule
+  | TypedEnumRule;
 
 export interface IRule<T = string, O = any> {
   type?: RuleType;
