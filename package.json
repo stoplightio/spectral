@@ -111,7 +111,7 @@
     "karma-typescript": "^4.1.1",
     "lint-staged": "^9.4.2",
     "nock": "~11.7.0",
-    "node-html-parser": "^1.1.16",
+    "node-html-parser": "^1.1.17",
     "pkg": "^4.4.0",
     "recast": "^0.18.5",
     "rimraf": "^3.0.0",
