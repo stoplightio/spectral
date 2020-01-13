@@ -43,7 +43,7 @@ export function formatParserDiagnostics(diagnostics: ReadonlyArray<IDiagnostic>,
 
 export const formatResolverErrors = (document: IDocument, diagnostics: IResolveError[]): IRuleResult[] => {
   return uniqBy(diagnostics, 'message').map<IRuleResult>(error => {
-    const path = [...(error.path || []), '$ref'];
+    const path = [...error.path, '$ref'];
     const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;
     const source = error.uriStack.length > 0 ? error.uriStack[error.uriStack.length - 1] : document.source;
 

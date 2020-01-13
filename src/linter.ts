@@ -91,7 +91,7 @@ export const lintNode = (
     results.push(
       ...targetResults.map<IRuleResult>(result => {
         const escapedJsonPath = (result.path || targetPath).map(segment => decodePointerFragment(String(segment)));
-        const associatedItem = inventory.findAssociatedItemForPath(escapedJsonPath);
+        const associatedItem = inventory.findAssociatedItemForPath(escapedJsonPath, rule.resolved !== false);
         const path = associatedItem?.path || getClosestJsonPath(inventory.resolved, escapedJsonPath);
         const document = associatedItem?.document || inventory.document;
         const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;

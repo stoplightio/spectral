@@ -63,7 +63,17 @@ export class DocumentInventory {
     this.errors = formatResolverErrors(this.document, resolveResult.errors);
   }
 
-  public findAssociatedItemForPath(path: JsonPath): DocumentInventoryItem | null {
+  public findAssociatedItemForPath(path: JsonPath, resolved: boolean): DocumentInventoryItem | null {
+    if (!resolved) {
+      const newPath: JsonPath = getClosestJsonPath(this.unresolved, path);
+
+      return {
+        document: this.document,
+        path: newPath,
+        missingPropertyPath: path,
+      };
+    }
+
     try {
       const newPath: JsonPath = getClosestJsonPath(this.resolved, path);
       let $ref = traverseObjUntilRef(this.unresolved, newPath);
