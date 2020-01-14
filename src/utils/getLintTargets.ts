@@ -34,7 +34,6 @@ export const getLintTargets = (targetValue: unknown, field: Optional<string>): I
       });
     } else {
       // lodash lookup
-      // const value = get(targetValue, field);
       targets.push({
         path: toPath(field),
         value: get(targetValue, field),
