@@ -38,6 +38,7 @@ const ajv = new AJV({
   schemaId: 'auto',
   jsonPointers: true,
   unknownFormats: 'ignore',
+  nullable: true,
   logger,
 });
 ajv.addMetaSchema(jsonSpecv4);
