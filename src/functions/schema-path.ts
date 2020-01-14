@@ -7,10 +7,11 @@
  * The primary use case for this was validating OpenAPI examples
  * against their schema, but this could be used for other things.
  */
-import { IFunction, IRule, RuleFunction } from '../types';
-import { schema } from './schema';
+import { JSONPath } from 'jsonpath-plus';
 
-const { JSONPath } = require('jsonpath-plus');
+import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+import { getLintTargets } from '../utils';
+import { schema } from './schema';
 
 export interface ISchemaPathOptions {
   schemaPath: string;
@@ -21,29 +22,29 @@ export interface ISchemaPathOptions {
 export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
-  if (!targetVal || typeof targetVal !== 'object') return [];
-
-  const { original: object } = otherValues;
-
   // The subsection of the targetVal which contains the good bit
-  const relevantObject = opts.field ? object[opts.field] : object;
-  if (!relevantObject) return [];
-  const { target, given } = paths;
+  const relevantItems = getLintTargets(targetVal, opts.field);
 
   // The subsection of the targetValue which contains the schema for us to validate the good bit against
-  let schemaObject;
-  try {
-    schemaObject = JSONPath({ path: opts.schemaPath, json: object })[0];
-  } catch (error) {
-    console.error(error);
-  }
+  const schemaObject = JSONPath({ path: opts.schemaPath, json: targetVal })[0];
 
-  if (opts.field) {
-    given.push(opts.field);
-    if (target) {
-      target.push(opts.field);
+  const results: IFunctionResult[] = [];
+
+  for (const relevantItem of relevantItems) {
+    const result = schema(
+      relevantItem.value,
+      { schema: schemaObject },
+      {
+        given: paths.given,
+        target: [...(paths.target || paths.given), ...relevantItem.path],
+      },
+      otherValues,
+    );
+
+    if (result !== void 0) {
+      results.push(...result);
     }
   }
 
-  return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
+  return results;
 };

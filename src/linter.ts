@@ -6,9 +6,7 @@ import { DocumentInventory } from './documentInventory';
 import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
-import { getClosestJsonPath, printPath, PrintStyle } from './utils';
-
-const { JSONPath } = require('jsonpath-plus');
+import { getClosestJsonPath, getLintTargets, printPath, PrintStyle } from './utils';
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -19,55 +17,7 @@ export const lintNode = (
   inventory: DocumentInventory,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
-  const targetValue = node.value;
-
-  const targets: any[] = [];
-  if (then && then.field) {
-    if (then.field === '@key') {
-      for (const key of Object.keys(targetValue)) {
-        targets.push({
-          path: key,
-          value: key,
-        });
-      }
-    } else if (then.field[0] === '$') {
-      try {
-        JSONPath({
-          path: then.field,
-          json: targetValue,
-          resultType: 'all',
-          callback: (result: any) => {
-            targets.push({
-              path: JSONPath.toPathArray(result.path),
-              value: result.value,
-            });
-          },
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      // lodash lookup
-      targets.push({
-        path: typeof then.field === 'string' ? then.field.split('.') : then.field,
-        value: get(targetValue, then.field),
-      });
-    }
-  } else {
-    targets.push({
-      path: [],
-      value: targetValue,
-    });
-  }
-
-  if (!targets.length) {
-    // must call then at least once, with no document
-    targets.push({
-      path: [],
-      value: undefined,
-    });
-  }
-
+  const targets = getLintTargets(node.value, then.field);
   const results: IRuleResult[] = [];
 
   for (const target of targets) {
