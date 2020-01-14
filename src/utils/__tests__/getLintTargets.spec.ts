@@ -69,7 +69,7 @@ describe('getLintTargets', () => {
       ]);
     });
 
-    it('given non-existing property, returns the whole document', () => {
+    it('given non-existing property, returns the whole input', () => {
       expect(getLintTargets({ a: null }, 'b')).toStrictEqual([
         {
           path: ['b'],
