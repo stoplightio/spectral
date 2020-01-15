@@ -1,4 +1,5 @@
 export * from './empty';
+export * from './getLintTargets';
 export * from './hasIntersectingElement';
 export * from './refs';
 export * from './prepareResults';
