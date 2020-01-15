@@ -80,7 +80,7 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
 }
 
 const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
-  public get(schemaObj: JSONSchema, oasVersion?: number) {
+  public get(schemaObj: JSONSchema, oasVersion: number = 0) {
     const ajv = getAjv(oasVersion);
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
