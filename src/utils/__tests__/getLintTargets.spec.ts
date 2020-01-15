@@ -69,7 +69,7 @@ describe('getLintTargets', () => {
       ]);
     });
 
-    it('given non-existing property, returns the whole input', () => {
+    it('given non-existing property, returns lint target with undefined value', () => {
       expect(getLintTargets({ a: null }, 'b')).toStrictEqual([
         {
           path: ['b'],
