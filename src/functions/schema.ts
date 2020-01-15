@@ -4,18 +4,15 @@ import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
-import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { escapeRegExp } from 'lodash';
-import * as oasSpec2 from '../rulesets/oas/schemas/schema.oas2.json';
-import * as oasSpec3 from '../rulesets/oas/schemas/schema.oas3.json';
 import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 export interface ISchemaOptions {
   schema: object;
-  // The oasVersion, either 2 or 3
+  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, or undefined / 0 for JSON Schema
   oasVersion?: number;
 }
 
@@ -45,48 +42,20 @@ function getAjv(oasVersion: number = 0): AJV.Ajv {
   }
 
   const ajvOpts: object = {
-    meta: false,
+    meta: true, // Add default meta schemas (draft 7 at the moment)
     schemaId: 'auto',
     jsonPointers: true,
     unknownFormats: 'ignore',
+    nullable: oasVersion >= 2, // Support nullable for OAS
     logger,
   };
   const ajv = new AJV(ajvOpts);
+  // We need v4 for OpenAPI and it doesn't hurt to have v6 as well.
   ajv.addMetaSchema(jsonSpecv4);
-
-  let defaultMeta;
-  if (oasVersion >= 2 && oasVersion < 4) {
-    let oasSpec;
-    let schemaPath;
-    if (oasVersion === 2) {
-      oasSpec = oasSpec2;
-      schemaPath = '#/definitions/schema';
-    } else {
-      oasSpec = oasSpec3;
-      schemaPath = '#/definitions/Schema';
-    }
-
-    ajv.addMetaSchema(oasSpec);
-    const oasSchemaType = {
-      id: 'https://stoplight.io/oas/' + oasVersion + '/schemaType',
-      $schema: 'http://json-schema.org/draft-04/schema#',
-      allOf: [
-        {
-          $ref: oasSpec.id + schemaPath,
-        },
-      ],
-    };
-    ajv.addMetaSchema(oasSchemaType);
-    defaultMeta = oasSchemaType.id;
-  } else {
-    // Backward compatibility: For all other cases than OAS2 or 3
-    ajv.addMetaSchema(jsonSpecv6);
-    ajv.addMetaSchema(jsonSpecv7);
-    defaultMeta = jsonSpecv4.id;
-  }
+  ajv.addMetaSchema(jsonSpecv6);
 
   // @ts-ignore
-  ajv._opts.defaultMeta = defaultMeta;
+  ajv._opts.defaultMeta = jsonSpecv4.id;
   // @ts-ignore
   ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
 
@@ -96,6 +65,7 @@ function getAjv(oasVersion: number = 0): AJV.Ajv {
   ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
   ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
+  ajvInstances[oasVersion] = ajv;
   return ajv;
 }
 

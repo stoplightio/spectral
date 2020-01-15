@@ -16,7 +16,7 @@ export interface ISchemaPathOptions {
   schemaPath: string;
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   field?: string;
-  // The oasVersion, either 2 or 3
+  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, or undefined / 0 for JSON Schema
   oasVersion?: number;
 }
 
