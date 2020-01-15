@@ -531,7 +531,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$",
+          "oasVersion": 2
         }
       }
     },
@@ -547,7 +548,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$",
+          "oasVersion": 2
         }
       }
     },
@@ -708,7 +710,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$.schema"
+          "schemaPath": "$.schema",
+          "oasVersion": 3
         }
       }
     },
@@ -724,7 +727,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$.schema"
+          "schemaPath": "$.schema",
+          "oasVersion": 3
         }
       }
     },
@@ -740,7 +744,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$.schema"
+          "schemaPath": "$.schema",
+          "oasVersion": 3
         }
       }
     },
@@ -756,7 +761,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$",
+          "oasVersion": 3
         }
       }
     },
@@ -772,7 +778,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$",
+          "oasVersion": 3
         }
       }
     },
@@ -788,7 +795,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$",
+          "oasVersion": 3
         }
       }
     },
@@ -804,7 +812,8 @@
         "function": "schemaPath",
         "functionOptions": {
           "field": "example",
-          "schemaPath": "$"
+          "schemaPath": "$",
+          "oasVersion": 3
         }
       }
     },

@@ -16,6 +16,8 @@ export interface ISchemaPathOptions {
   schemaPath: string;
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   field?: string;
+  // The oasVersion, either 2 or 3
+  oasVersion?: number;
 }
 
 export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
@@ -45,5 +47,5 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     }
   }
 
-  return schema(relevantObject, { schema: schemaObject }, paths, otherValues);
+  return schema(relevantObject, { schema: schemaObject, oasVersion: opts.oasVersion }, paths, otherValues);
 };

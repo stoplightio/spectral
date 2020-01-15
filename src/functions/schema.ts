@@ -7,12 +7,16 @@ import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { escapeRegExp } from 'lodash';
+import * as oasSpec2 from '../rulesets/oas/schemas/schema.oas2.json';
+import * as oasSpec3 from '../rulesets/oas/schemas/schema.oas3.json';
 import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 export interface ISchemaOptions {
   schema: object;
+  // The oasVersion, either 2 or 3
+  oasVersion?: number;
 }
 
 export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
@@ -33,27 +37,67 @@ const logger = {
   error: console.error,
 };
 
-const ajv = new AJV({
-  meta: false,
-  schemaId: 'auto',
-  jsonPointers: true,
-  unknownFormats: 'ignore',
-  nullable: true,
-  logger,
-});
-ajv.addMetaSchema(jsonSpecv4);
-ajv.addMetaSchema(jsonSpecv6);
-ajv.addMetaSchema(jsonSpecv7);
-// @ts-ignore
-ajv._opts.defaultMeta = jsonSpecv4.id;
-// @ts-ignore
-ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
+const ajvInstances = {};
 
-ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });
-ajv.addFormat('int64', { type: 'number', validate: oasFormatValidator.int64 });
-ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
-ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
-ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
+function getAjv(oasVersion: number = 0): AJV.Ajv {
+  if (typeof ajvInstances[oasVersion] !== 'undefined') {
+    return ajvInstances[oasVersion];
+  }
+
+  const ajvOpts: object = {
+    meta: false,
+    schemaId: 'auto',
+    jsonPointers: true,
+    unknownFormats: 'ignore',
+    logger,
+  };
+  const ajv = new AJV(ajvOpts);
+  ajv.addMetaSchema(jsonSpecv4);
+
+  let defaultMeta;
+  if (oasVersion >= 2 && oasVersion < 4) {
+    let oasSpec;
+    let schemaPath;
+    if (oasVersion === 2) {
+      oasSpec = oasSpec2;
+      schemaPath = '#/definitions/schema';
+    } else {
+      oasSpec = oasSpec3;
+      schemaPath = '#/definitions/Schema';
+    }
+
+    ajv.addMetaSchema(oasSpec);
+    const oasSchemaType = {
+      id: 'https://stoplight.io/oas/' + oasVersion + '/schemaType',
+      $schema: 'http://json-schema.org/draft-04/schema#',
+      allOf: [
+        {
+          $ref: oasSpec.id + schemaPath,
+        },
+      ],
+    };
+    ajv.addMetaSchema(oasSchemaType);
+    defaultMeta = oasSchemaType.id;
+  } else {
+    // Backward compatibility: For all other cases than OAS2 or 3
+    ajv.addMetaSchema(jsonSpecv6);
+    ajv.addMetaSchema(jsonSpecv7);
+    defaultMeta = jsonSpecv4.id;
+  }
+
+  // @ts-ignore
+  ajv._opts.defaultMeta = defaultMeta;
+  // @ts-ignore
+  ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
+
+  ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });
+  ajv.addFormat('int64', { type: 'number', validate: oasFormatValidator.int64 });
+  ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
+  ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
+  ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
+
+  return ajv;
+}
 
 function getSchemaId(schemaObj: JSONSchema): void | string {
   if ('$id' in schemaObj) {
@@ -66,7 +110,8 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
 }
 
 const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
-  public get(schemaObj: JSONSchema) {
+  public get(schemaObj: JSONSchema, oasVersion?: number) {
+    const ajv = getAjv(oasVersion);
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
     if (validator !== void 0) {
@@ -129,7 +174,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   try {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
-    const validator = validators.get(schemaObj);
+    const validator = validators.get(schemaObj, opts.oasVersion);
     if (!validator(targetVal) && validator.errors) {
       try {
         results.push(
