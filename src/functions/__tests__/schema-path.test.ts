@@ -7,17 +7,21 @@ function runSchemaPath(target: any, field: string, schemaPathStr: string) {
   } as any);
 }
 
-describe('schema', () => {
+describe('schema-path', () => {
   // Check the example field matches the contents of schema
   const fieldToCheck = 'example';
   const path = '$.schema';
 
-  test('will pass when example is valid', () => {
+  test.each([
+    ['turtle', 'string'],
+    [0, 'number'],
+    [null, 'null'],
+  ])('will pass when %s example is valid', (example, type) => {
     const target = {
       schema: {
-        type: 'string',
+        type,
       },
-      example: 'turtle',
+      example,
     };
 
     expect(runSchemaPath(target, fieldToCheck, path)).toHaveLength(0);
@@ -65,6 +69,56 @@ describe('schema', () => {
     ]);
   });
 
+  test('will error with invalid falsy input', () => {
+    const target = {
+      schema: {
+        type: 'string',
+      },
+      example: null,
+    };
+    expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
+      {
+        path: ['example'],
+        message: '{{property|gravis|append-property|optional-typeof}}type should be string',
+      },
+    ]);
+  });
+
+  test('will error with invalid array-ish input', () => {
+    const target = {
+      schema: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+          },
+        },
+      },
+      examples: {
+        'application/json': {
+          id: 1,
+          name: 'get food',
+          completed: false,
+        },
+        'application/yaml': {
+          id: 1,
+          name: 'get food',
+          completed: false,
+        },
+      },
+    };
+    expect(runSchemaPath(target, '$.examples.*', path)).toEqual([
+      {
+        message: '{{property|gravis|append-property|optional-typeof}}type should be string',
+        path: ['examples', 'application/json', 'id'],
+      },
+      {
+        message: '{{property|gravis|append-property|optional-typeof}}type should be string',
+        path: ['examples', 'application/yaml', 'id'],
+      },
+    ]);
+  });
+
   test('will error formats', () => {
     const target = {
       schema: {
@@ -92,7 +146,12 @@ describe('schema', () => {
         },
         notNonsense: 'turtle',
       };
-      expect(runSchemaPath(target, invalidFieldToCheck, path)).toHaveLength(0);
+      expect(runSchemaPath(target, invalidFieldToCheck, path)).toEqual([
+        {
+          message: '{{property|double-quotes|append-property}}does not exist',
+          path: ['nonsense'],
+        },
+      ]);
     });
   });
 });
