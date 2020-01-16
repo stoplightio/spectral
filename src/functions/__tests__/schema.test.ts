@@ -1,7 +1,8 @@
+import { Optional } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { schema } from '../schema';
 
-function runSchema(target: any, schemaObj: object, oasVersion: number = 0) {
+function runSchema(target: any, schemaObj: object, oasVersion?: Optional<number>) {
   return schema(target, { schema: schemaObj, oasVersion }, { given: [] }, { given: null, original: null } as any);
 }
 

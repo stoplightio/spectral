@@ -7,6 +7,7 @@
  * The primary use case for this was validating OpenAPI examples
  * against their schema, but this could be used for other things.
  */
+import { Optional } from '@stoplight/types';
 import { IFunction, IRule, RuleFunction } from '../types';
 import { schema } from './schema';
 
@@ -16,8 +17,8 @@ export interface ISchemaPathOptions {
   schemaPath: string;
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   field?: string;
-  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, or undefined / 0 for JSON Schema
-  oasVersion?: number;
+  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
+  oasVersion?: Optional<number>;
 }
 
 export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;

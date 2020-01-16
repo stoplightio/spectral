@@ -12,8 +12,8 @@ const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 export interface ISchemaOptions {
   schema: object;
-  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, or undefined / 0 for JSON Schema
-  oasVersion?: number;
+  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
+  oasVersion?: Optional<number>;
 }
 
 export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
@@ -36,9 +36,10 @@ const logger = {
 
 const ajvInstances = {};
 
-function getAjv(oasVersion: number = 0): AJV.Ajv {
-  if (typeof ajvInstances[oasVersion] !== 'undefined') {
-    return ajvInstances[oasVersion];
+function getAjv(oasVersion?: Optional<number>): AJV.Ajv {
+  const type: string = oasVersion && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema';
+  if (typeof ajvInstances[type] !== 'undefined') {
+    return ajvInstances[type];
   }
 
   const ajvOpts: object = {
@@ -46,7 +47,7 @@ function getAjv(oasVersion: number = 0): AJV.Ajv {
     schemaId: 'auto',
     jsonPointers: true,
     unknownFormats: 'ignore',
-    nullable: oasVersion >= 2, // Support nullable for OAS
+    nullable: oasVersion === 3, // Support nullable for OAS3
     logger,
   };
   const ajv = new AJV(ajvOpts);
@@ -65,7 +66,7 @@ function getAjv(oasVersion: number = 0): AJV.Ajv {
   ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
   ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
-  ajvInstances[oasVersion] = ajv;
+  ajvInstances[type] = ajv;
   return ajv;
 }
 
@@ -80,7 +81,7 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
 }
 
 const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
-  public get(schemaObj: JSONSchema, oasVersion: number = 0) {
+  public get(schemaObj: JSONSchema, oasVersion?: Optional<number>) {
     const ajv = getAjv(oasVersion);
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
