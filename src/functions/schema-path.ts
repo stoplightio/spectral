@@ -7,11 +7,13 @@
  * The primary use case for this was validating OpenAPI examples
  * against their schema, but this could be used for other things.
  */
+import { JSONPath } from 'jsonpath-plus';
+
 import { Optional } from '@stoplight/types';
+
 import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
 import { getLintTargets } from '../utils';
 import { schema } from './schema';
-import { JSONPath } from 'jsonpath-plus';
 
 export interface ISchemaPathOptions {
   schemaPath: string;
@@ -37,7 +39,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
       relevantItem.value,
       {
         schema: schemaObject,
-        oasVersion: opts.oasVersion
+        oasVersion: opts.oasVersion,
       },
       {
         given: paths.given,
