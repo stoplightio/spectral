@@ -1,4 +1,14 @@
-import { IFunction, IFunctionResult, IRulePatternOptions } from '../types';
+import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+
+export interface IRulePatternOptions {
+  /** regex that target must match */
+  match?: string;
+
+  /** regex that target must not match */
+  notMatch?: string;
+}
+
+export type PatternRule = IRule<RuleFunction.PATTERN, IRulePatternOptions>;
 
 function test(value: string, regex: RegExp | string) {
   let re;

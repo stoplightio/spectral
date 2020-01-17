@@ -1,5 +1,12 @@
-import { IAlphaRuleOptions, IFunction, IFunctionResult } from '../types';
-import { isObject } from '../utils';
+import { isObject } from 'lodash';
+import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+
+export interface IAlphaRuleOptions {
+  /** if sorting array of objects, which key to use for comparison */
+  keyedBy?: string;
+}
+
+export type AlphaRule = IRule<RuleFunction.ALPHABETICAL, IAlphaRuleOptions>;
 
 const compare = (a: unknown, b: unknown): number => {
   if ((typeof a === 'number' || Number.isNaN(Number(a))) && (typeof b === 'number' || !Number.isNaN(Number(b)))) {

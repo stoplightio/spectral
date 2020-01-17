@@ -7,9 +7,15 @@ import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { escapeRegExp } from 'lodash';
-import { IFunction, IFunctionResult, ISchemaOptions, JSONSchema } from '../types';
+import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
+
+export interface ISchemaOptions {
+  schema: object;
+}
+
+export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
 
 interface IAJVOutputError extends IOutputError {
   path?: string;

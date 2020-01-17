@@ -1,9 +1,13 @@
-import { getLocationForJsonPath, parseWithPointers } from '@stoplight/json';
+import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
+
+import { Document } from '../document';
 import { isOpenApiv2 } from '../formats';
+import { pattern } from '../functions/pattern';
+import * as Parsers from '../parsers';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { IRunRule, Spectral } from '../spectral';
 
@@ -98,21 +102,13 @@ describe('Spectral', () => {
   });
 
   test('should report issues for correct files with correct ranges and paths', async () => {
-    const documentUri = path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json');
+    const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json'));
     const spectral = new Spectral({ resolver: httpAndFileResolver });
     await spectral.loadRuleset('spectral:oas');
     spectral.registerFormat('oas2', isOpenApiv2);
-    const parsed = {
-      parsed: parseWithPointers(fs.readFileSync(documentUri, 'utf8')),
-      getLocationForJsonPath,
-      source: documentUri,
-    };
+    const document = new Document(fs.readFileSync(documentUri, 'utf8'), Parsers.Json, documentUri);
 
-    const results = await spectral.run(parsed, {
-      resolve: {
-        documentUri,
-      },
-    });
+    const results = await spectral.run(document);
 
     expect(results).toEqual(
       expect.arrayContaining([
@@ -193,6 +189,90 @@ describe('Spectral', () => {
         }),
       ]),
     );
+  });
+
+  test('properly decorates results with metadata pertaining to the document being linted', async () => {
+    const s = new Spectral({ resolver: httpAndFileResolver });
+    s.setFunctions({ pattern });
+    s.setRules({
+      'unsecure-remote-reference': {
+        message: '$ref must not point at unsecured remotes',
+        given: '$..$ref',
+        recommended: true,
+        resolved: false,
+        then: {
+          function: 'pattern',
+          functionOptions: {
+            notMatch: '^http:',
+          },
+        },
+      },
+    });
+
+    nock('http://oas3.library.com')
+      .get('/defs.json')
+      .reply(
+        200,
+        JSON.stringify({
+          openapi: '3.0.0',
+          components: {
+            schemas: {
+              ExternalHttp: {
+                type: 'number',
+              },
+              ExternalUnhooked: {
+                type: 'object',
+              },
+            },
+          },
+        }),
+      );
+
+    const doc = {
+      openapi: '3.0.0',
+      paths: {
+        '/path': {
+          post: {
+            parameters: [
+              {
+                $ref: '#/components/schemas/Hooked',
+              },
+              {
+                $ref: 'http://oas3.library.com/defs.json#/components/schemas/ExternalHttp',
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Hooked: {
+            type: 'object',
+          },
+          Unhooked: {
+            type: 'object',
+          },
+        },
+      },
+    };
+
+    const targetUri = 'test.json';
+
+    const parsedResult = new Document(JSON.stringify(doc), Parsers.Json, targetUri);
+
+    const results = await s.run(parsedResult, {
+      resolve: {
+        documentUri: 'test.json',
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'unsecure-remote-reference',
+        path: ['paths', '/path', 'post', 'parameters', '1', '$ref'],
+        source: targetUri,
+      }),
+    ]);
   });
 
   test('should recognize the source of remote $refs, and de-dupe results by fingerprint', async () => {
