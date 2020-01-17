@@ -42,7 +42,7 @@ function getAjv(oasVersion?: Optional<number>): AJV.Ajv {
     return ajvInstances[type];
   }
 
-  const ajvOpts: object = {
+  const ajvOpts: AJV.Options = {
     meta: true, // Add default meta schemas (draft 7 at the moment)
     schemaId: 'auto',
     jsonPointers: true,
