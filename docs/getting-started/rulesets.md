@@ -18,9 +18,12 @@ rules:
       function: truthy
 ```
 
-Spectral has a built-in set of functions such as `truthy` or `pattern`, which you can reference in your rules.
-The example above adds a single rule that checks that tags objects have a description property defined.
-Since v5.0, each rule is recommended by default. Prior to that the default was to be not recommended. It is best to be explicit and set `recommended: true` or `recommended: false` if a ruleset is likely to be used across multiple versions.
+Spectral has a built-in set of functions such as `truthy` or `pattern`, which you can reference in your rules. Rules then target certain chunks of the JSON/YAML with the `given` keyword, which is a [JSONPath](http://jsonpath.com/) (actually, we use [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
+
+The example above adds a single rule that looks at the root level "tags" objects children to make sure they all have a description property.
+
+<!-- theme: info -->
+> Since v5.0, each rule is recommended by default. Prior to that the default was to be not recommended. It is best to be explicit and set `recommended: true` or `recommended: false` if a ruleset is likely to be used across multiple versions.
 
 Running `spectral lint` on the following object with the ruleset above will result in an error being reported, since the tag does not have a description:
 

@@ -1,9 +1,10 @@
 ![Spectral logo](img/spectral-banner.png)
 
+[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral)
+[![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral)
 [![Buy us a tree](https://img.shields.io/badge/Buy%20us%20a%20tree-%F0%9F%8C%B3-lightgreen)](https://offset.earth/stoplightinc)
-[![CircleCI](https://circleci.com/gh/stoplightio/spectral.svg?style=svg)](https://circleci.com/gh/stoplightio/spectral)
 
-A flexible JSON linter with out of the box support for OpenAPI v2 and v3.
+A flexible JSON/YAML linter, with out of the box support for OpenAPI v2 and v3.
 
 ![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
