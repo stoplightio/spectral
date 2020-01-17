@@ -21,6 +21,8 @@ export interface ISchemaPathOptions {
   field?: string;
   // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
   oasVersion?: Optional<number>;
+  // Whether to ignore circular schemas (true) or not (false)
+  ignoreCircular?: boolean
 }
 
 export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
@@ -33,6 +35,10 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
   const schemaObject = JSONPath({ path: opts.schemaPath, json: targetVal })[0];
 
   const results: IFunctionResult[] = [];
+
+  if (opts.ignoreCircular && JSONPath({ path: "$..$ref", json: schemaObject }).length > 0) {
+    return results;
+  }
 
   for (const relevantItem of relevantItems) {
     const result = schema(
