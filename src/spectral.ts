@@ -7,10 +7,10 @@ import { memoize, merge } from 'lodash';
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import { functions as defaultFunctions } from './functions';
+import { DefaultFunctions, functions as defaultFunctions } from './functions';
 import * as Parsers from './parsers';
 import { readRuleset } from './rulesets';
-import { compileExportedFunction } from './rulesets/evaluators';
+import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
@@ -19,6 +19,7 @@ import {
   FormatLookup,
   FunctionCollection,
   IConstructorOpts,
+  IFunctionContext,
   IResolver,
   IRuleResult,
   IRunOpts,
@@ -39,7 +40,7 @@ export * from './types';
 export class Spectral {
   private readonly _resolver: IResolver;
 
-  public functions: FunctionCollection = { ...defaultFunctions };
+  public functions: FunctionCollection & DefaultFunctions = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
   public exceptions: RulesetExceptionCollection = {};
   public formats: RegisteredFormats;
@@ -168,7 +169,11 @@ export class Spectral {
             return fns;
           }
 
-          fns[key] = compileExportedFunction(code, name, source, schema);
+          const context: IFunctionContext = {
+            functions: this.functions,
+          };
+
+          fns[key] = setFunctionContext(context, compileExportedFunction(code, name, source, schema));
           return fns;
         },
         {
