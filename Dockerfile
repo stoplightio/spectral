@@ -32,6 +32,4 @@ COPY package.json /usr/src/spectral/
 COPY --from=compiler /usr/src/spectral/dist /usr/src/spectral/dist
 COPY --from=dependencies /usr/src/spectral/node_modules/ /usr/src/spectral/node_modules/
 
-WORKDIR /usr/src/spectral/
-
-ENTRYPOINT [ "node", "dist/cli/index.js" ]
+ENTRYPOINT [ "node", "/usr/src/spectral/dist/cli/index.js" ]
