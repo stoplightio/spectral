@@ -4,7 +4,6 @@ import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
-import * as jsonSpecv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { escapeRegExp } from 'lodash';
 import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
@@ -13,6 +12,8 @@ const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 export interface ISchemaOptions {
   schema: object;
+  // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
+  oasVersion?: Optional<number>;
 }
 
 export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
@@ -33,26 +34,41 @@ const logger = {
   error: console.error,
 };
 
-const ajv = new AJV({
-  meta: false,
-  schemaId: 'auto',
-  jsonPointers: true,
-  unknownFormats: 'ignore',
-  logger,
-});
-ajv.addMetaSchema(jsonSpecv4);
-ajv.addMetaSchema(jsonSpecv6);
-ajv.addMetaSchema(jsonSpecv7);
-// @ts-ignore
-ajv._opts.defaultMeta = jsonSpecv4.id;
-// @ts-ignore
-ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
+const ajvInstances = {};
 
-ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });
-ajv.addFormat('int64', { type: 'number', validate: oasFormatValidator.int64 });
-ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
-ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
-ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
+function getAjv(oasVersion?: Optional<number>): AJV.Ajv {
+  const type: string = oasVersion && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema';
+  if (typeof ajvInstances[type] !== 'undefined') {
+    return ajvInstances[type];
+  }
+
+  const ajvOpts: AJV.Options = {
+    meta: true, // Add default meta schemas (draft 7 at the moment)
+    schemaId: 'auto',
+    jsonPointers: true,
+    unknownFormats: 'ignore',
+    nullable: oasVersion === 3, // Support nullable for OAS3
+    logger,
+  };
+  const ajv = new AJV(ajvOpts);
+  // We need v4 for OpenAPI and it doesn't hurt to have v6 as well.
+  ajv.addMetaSchema(jsonSpecv4);
+  ajv.addMetaSchema(jsonSpecv6);
+
+  // @ts-ignore
+  ajv._opts.defaultMeta = jsonSpecv4.id;
+  // @ts-ignore
+  ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
+
+  ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });
+  ajv.addFormat('int64', { type: 'number', validate: oasFormatValidator.int64 });
+  ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
+  ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
+  ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
+
+  ajvInstances[type] = ajv;
+  return ajv;
+}
 
 function getSchemaId(schemaObj: JSONSchema): void | string {
   if ('$id' in schemaObj) {
@@ -65,7 +81,8 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
 }
 
 const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
-  public get(schemaObj: JSONSchema) {
+  public get(schemaObj: JSONSchema, oasVersion?: Optional<number>) {
+    const ajv = getAjv(oasVersion);
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
     if (validator !== void 0) {
@@ -128,7 +145,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   try {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
-    const validator = validators.get(schemaObj);
+    const validator = validators.get(schemaObj, opts.oasVersion);
     if (!validator(targetVal) && validator.errors) {
       try {
         results.push(
