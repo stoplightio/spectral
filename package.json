@@ -109,7 +109,7 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-jasmine": "^3.1.0",
     "karma-typescript": "^4.1.1",
-    "lint-staged": "^9.4.2",
+    "lint-staged": "^10.0.1",
     "nock": "~11.7.2",
     "node-html-parser": "^1.1.18",
     "pkg": "^4.4.0",
