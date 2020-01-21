@@ -28,4 +28,4 @@ export const functions = {
   typedEnum,
 };
 
-export type DefaultFunctions = typeof functions;
+export type CoreFunctions = typeof functions;

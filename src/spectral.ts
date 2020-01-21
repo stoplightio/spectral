@@ -7,7 +7,7 @@ import { memoize, merge } from 'lodash';
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import { DefaultFunctions, functions as defaultFunctions } from './functions';
+import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
@@ -40,7 +40,7 @@ export * from './types';
 export class Spectral {
   private readonly _resolver: IResolver;
 
-  public functions: FunctionCollection & DefaultFunctions = { ...defaultFunctions };
+  public functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
   public rules: RunRuleCollection = {};
   public exceptions: RulesetExceptionCollection = {};
   public formats: RegisteredFormats;
@@ -111,7 +111,7 @@ export class Spectral {
   public setFunctions(functions: FunctionCollection) {
     empty(this.functions);
 
-    Object.assign(this.functions, { ...defaultFunctions, ...functions });
+    Object.assign(this.functions, { ...coreFunctions, ...functions });
   }
 
   public setRules(rules: RuleCollection) {
@@ -177,7 +177,7 @@ export class Spectral {
           return fns;
         },
         {
-          ...defaultFunctions,
+          ...coreFunctions,
         },
       ),
     );

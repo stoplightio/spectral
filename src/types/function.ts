@@ -1,9 +1,9 @@
 import { JsonPath } from '@stoplight/types';
 import { DocumentInventory } from '../documentInventory';
-import { DefaultFunctions } from '../functions';
+import { CoreFunctions } from '../functions';
 
 export interface IFunctionContext {
-  functions: DefaultFunctions;
+  functions: CoreFunctions;
 }
 
 export type IFunction<O = any> = (
