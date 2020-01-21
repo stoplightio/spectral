@@ -1702,10 +1702,10 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
-copyfiles@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/copyfiles/-/copyfiles-2.1.1.tgz#d430e122d7880f92c45d372208b0af03b0c39db6"
-  integrity sha512-y6DZHve80whydXzBal7r70TBgKMPKesVRR1Sn/raUu7Jh/i7iSLSyGvYaq0eMJ/3Y/CKghwzjY32q1WzEnpp3Q==
+copyfiles@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/copyfiles/-/copyfiles-2.2.0.tgz#d9fc6c06f299337fb7eeb7ea5887e9d7188d9d47"
+  integrity sha512-iJbHJI+8OKqsq+4JF0rqgRkZzo++jqO6Wf4FUU1JM41cJF6JcY5968XyF4tm3Kkm7ZOMrqlljdm8N9oyY5raGw==
   dependencies:
     glob "^7.0.5"
     minimatch "^3.0.3"
@@ -7396,10 +7396,10 @@ typescript-json-schema@~0.42.0:
     typescript "^3.5.3"
     yargs "^14.0.0"
 
-typescript@^3.5.3, typescript@^3.7.4:
-  version "3.7.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.4.tgz#1743a5ec5fef6a1fa9f3e4708e33c81c73876c19"
-  integrity sha512-A25xv5XCtarLwXpcDNZzCGvW2D1S3/bACratYBx2sax8PefsFhlYmkQicKHvpYflFS8if4zne5zT5kpJ7pzuvw==
+typescript@^3.5.3, typescript@^3.7.5:
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.5.tgz#0692e21f65fd4108b9330238aac11dd2e177a1ae"
+  integrity sha512-/P5lkRXkWHNAbcJIiHPfRoKqyd7bsyCma1hZNUGfn20qm64T6ZBlrzprymeu918H+mB/0rIg2gGK/BXkhhYgBw==
 
 uglify-js@^3.1.4:
   version "3.6.8"
