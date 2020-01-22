@@ -416,6 +416,16 @@
         "function": "refSiblings"
       }
     },
+    "typed-enum": {
+      "description": "Enum values should respect the specified type.",
+      "message": "{{error}}",
+      "recommended": true,
+      "type": "validation",
+      "given": "$..[?(@.enum && @.type)]",
+      "then": {
+        "function": "typedEnum"
+      }
+    },
     "oas2-api-host": {
       "description": "OpenAPI `host` must be present and non-empty string.",
       "recommended": true,

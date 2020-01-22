@@ -1,0 +1,36 @@
+====test====
+Identify enum values that does not respect the specified type
+====asset:ruleset====
+extends: [[spectral:oas, off]]
+
+rules:
+  typed-enum: error
+====document====
+openapi: 3.0.2
+components:
+  schemas:
+    a_model:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique asset identifier
+          enum:
+            - 12
+            - Tap, tap, tap...
+            - Is thing thing on?
+            - 12254
+            - You certainly wonder
+            - Why I gathered you all today...
+====command====
+{bin} lint {document} --ruleset {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 12:15  error  typed-enum  Enum value `Tap, tap, tap...` does not respect the specified type `integer`.
+ 13:15  error  typed-enum  Enum value `Is thing thing on?` does not respect the specified type `integer`.
+ 15:15  error  typed-enum  Enum value `You certainly wonder` does not respect the specified type `integer`.
+ 16:15  error  typed-enum  Enum value `Why I gathered you all today...` does not respect the specified type `integer`.
+
+✖ 4 problems (4 errors, 0 warnings, 0 infos, 0 hints)
