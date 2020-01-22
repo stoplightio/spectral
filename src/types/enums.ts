@@ -13,4 +13,5 @@ export enum RuleFunction {
   SCHEMAPATH = 'schemaPath',
   TRUTHY = 'truthy',
   XOR = 'xor',
+  TYPED_ENUM = 'typedEnum',
 }

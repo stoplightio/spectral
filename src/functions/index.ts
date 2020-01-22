@@ -11,4 +11,5 @@ export const functions = {
   undefined: require('./undefined').undefined,
   xor: require('./xor').xor,
   unreferencedReusableObject: require('./unreferencedReusableObject').unreferencedReusableObject,
+  typedEnum: require('./typedEnum').typedEnum,
 };
