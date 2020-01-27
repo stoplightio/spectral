@@ -115,7 +115,7 @@
     "pkg": "^4.4.0",
     "recast": "^0.18.5",
     "rimraf": "^3.0.0",
-    "rollup": "^1.29.0",
+    "rollup": "^1.30.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.2.0",
