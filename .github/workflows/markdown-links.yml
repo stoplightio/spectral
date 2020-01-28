@@ -13,4 +13,4 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 1
-    - uses: gaurav-nelson/github-action-markdown-link-check@master
+    - uses: planetscale/github-action-markdown-link-check@master
