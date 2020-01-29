@@ -123,7 +123,7 @@
     "ts-jest": "^25.0.0",
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
-    "tslint": "~5.20",
+    "tslint": "~6.0",
     "tslint-config-stoplight": "~1.4",
     "typescript": "^3.7.5",
     "typescript-json-schema": "~0.42.0",
