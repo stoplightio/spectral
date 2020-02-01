@@ -14,5 +14,10 @@
         }
       }
     }
+  },
+  "except": {
+    "/test/file.json#/info": ["info-contact", "info-description"],
+    "/test/file.json#": [ "oas3-api-servers"],
+    "another.yaml#": ["dummy-rule", "info-contact"]
   }
 }

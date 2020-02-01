@@ -11,6 +11,7 @@ import { functions as defaultFunctions } from './functions';
 import * as Parsers from './parsers';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction } from './rulesets/evaluators';
+import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
 import { runRules } from './runner';
@@ -27,7 +28,7 @@ import {
   RuleCollection,
   RunRuleCollection,
 } from './types';
-import { IRuleset } from './types/ruleset';
+import { IRuleset, RulesetExceptionCollection } from './types/ruleset';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, prepareResults } from './utils';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 
@@ -40,6 +41,7 @@ export class Spectral {
 
   public functions: FunctionCollection = { ...defaultFunctions };
   public rules: RunRuleCollection = {};
+  public exceptions: RulesetExceptionCollection = {};
   public formats: RegisteredFormats;
 
   private readonly _computeFingerprint: ComputeFingerprintFunc;
@@ -95,7 +97,7 @@ export class Spectral {
     return {
       resolved: inventory.resolved,
       results: prepareResults(
-        [...validationResults, ...runRules(inventory, this.rules, this.functions)],
+        [...validationResults, ...runRules(inventory, this.rules, this.functions, this.exceptions)],
         this._computeFingerprint,
       ),
     };
@@ -136,6 +138,15 @@ export class Spectral {
     }
   }
 
+  private setExceptions(exceptions: RulesetExceptionCollection) {
+    const target: RulesetExceptionCollection = {};
+    mergeExceptions(target, exceptions);
+
+    empty(this.exceptions);
+
+    Object.assign(this.exceptions, target);
+  }
+
   public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions) {
     this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], options));
   }
@@ -165,6 +176,8 @@ export class Spectral {
         },
       ),
     );
+
+    this.setExceptions(ruleset.exceptions);
   }
 
   public registerFormat(format: string, fn: FormatLookup) {

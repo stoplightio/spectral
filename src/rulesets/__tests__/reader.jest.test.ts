@@ -29,6 +29,10 @@ const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset
 const fooExtendsBarRuleset = path.join(__dirname, './__fixtures__/foo-extends-bar-ruleset.json');
 const selfExtendingRuleset = path.join(__dirname, './__fixtures__/self-extending-ruleset.json');
 const simpleDisableRuleset = path.join(__dirname, './__fixtures__/simple-disable-ruleset.yaml');
+const standaloneExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/standalone.yaml');
+const simpleExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/simple.yaml');
+const inheritingExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/inheriting.yaml');
+const invalidExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/invalid.yaml');
 const fooCJSFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/functions/foo.cjs.js'), 'utf8');
 const barFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/bar.js'), 'utf8');
 const truthyFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/truthy.js'), 'utf8');
@@ -366,6 +370,7 @@ describe('Rulesets reader', () => {
     return expect(
       readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset.json')),
     ).resolves.toStrictEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'contact-name-matches-stoplight': {
@@ -417,6 +422,7 @@ describe('Rulesets reader', () => {
     return expect(
       readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset-recommended.json')),
     ).resolves.toStrictEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'contact-name-matches-stoplight': {
@@ -468,6 +474,7 @@ describe('Rulesets reader', () => {
     return expect(
       readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/ruleset-c.json')),
     ).resolves.toStrictEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'contact-name-matches-stoplight': {
@@ -645,11 +652,13 @@ describe('Rulesets reader', () => {
     return expect(readRuleset(rulesetWithMissingFunctions)).resolves.toEqual({
       rules: {},
       functions: {},
+      exceptions: {},
     });
   });
 
   it('should handle ruleset with circular extensions', () => {
     return expect(readRuleset(fooExtendsBarRuleset)).resolves.toEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'bar-rule': {
@@ -674,6 +683,7 @@ describe('Rulesets reader', () => {
 
   it('should handle ruleset that extends itself', () => {
     return expect(readRuleset(selfExtendingRuleset)).resolves.toEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'foo-rule': {
@@ -749,5 +759,42 @@ describe('Rulesets reader', () => {
 
     expect(readFileSpy).not.toBeCalled();
     readFileSpy.mockRestore();
+  });
+
+  describe('Exceptions loading', () => {
+    it('should handle loading a standalone ruleset', async () => {
+      const ruleset = await readRuleset(standaloneExceptRuleset);
+
+      expect(Object.entries(ruleset.exceptions)).toEqual([
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
+        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
+      ]);
+    });
+
+    it('should throw when ruleset contains invalid exceptions', () => {
+      expect(readRuleset(invalidExceptRuleset)).rejects.toThrow('is not a valid uri');
+    });
+
+    it('should handle loading a ruleset deriving from a built-in one', async () => {
+      const ruleset = await readRuleset(simpleExceptRuleset);
+
+      expect(Object.entries(ruleset.exceptions)).toEqual([
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
+        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
+      ]);
+    });
+
+    it('should handle loading a ruleset deriving from another one', async () => {
+      const ruleset = await readRuleset(inheritingExceptRuleset);
+
+      expect(Object.entries(ruleset.exceptions)).toEqual([
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
+        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/four.yaml#$'), ['my-rule-4']],
+      ]);
+    });
   });
 });

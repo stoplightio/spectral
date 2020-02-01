@@ -1,0 +1,5 @@
+extends: [[spectral:oas, off]]
+except:
+  "one.yaml#": ["my-rule-1"]
+  "../two.yaml#": ["my-rule-2"]
+  "sub/three.yaml#": ["my-rule-3"]

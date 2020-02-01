@@ -1,0 +1,17 @@
+%YAML 1.2
+---
+openapi: 3.0.2
+info:
+  title: Random title
+  description: Random description
+  version: 0.0.1
+  contact:
+    email: random@random.com
+paths: {}
+servers:
+  - url: https://www.random.com
+components:
+  schemas:
+    TheRemoteType:
+      description: A strongly typed string
+      type: string
