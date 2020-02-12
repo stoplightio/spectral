@@ -110,7 +110,7 @@
     "karma-jasmine": "^3.1.0",
     "karma-typescript": "^4.1.1",
     "lint-staged": "^10.0.4",
-    "nock": "~11.7.2",
+    "nock": "~11.8.2",
     "node-html-parser": "^1.1.19",
     "pkg": "^4.4.0",
     "recast": "^0.18.5",
