@@ -30,11 +30,10 @@ describe('cli acceptance tests', () => {
           const tmpFileHandle = await tmpFile();
           tmpFileHandles.set(asset, tmpFileHandle);
 
-          replacements[asset] = tmpFileHandle.name;
-          replacements[`${asset}|no-ext`] = tmpFileHandle.name.replace(
-            new RegExp(`${path.extname(tmpFileHandle.name)}$`),
-            '',
-          );
+          const normalizedName = normalize(tmpFileHandle.name);
+
+          replacements[asset] = normalizedName;
+          replacements[`${asset}|no-ext`] = normalizedName.replace(new RegExp(`${path.extname(normalizedName)}$`), '');
 
           await writeFileAsync(tmpFileHandle.name, contents, { encoding: 'utf8' }); // todo: apply replacements to contents
         }),
