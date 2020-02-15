@@ -5,7 +5,7 @@ import * as fg from 'fast-glob';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import { promisify } from 'util';
-import { applyReplacements, parseScenarioFile, tmpFile } from './helpers';
+import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
 const writeFileAsync = promisify(fs.writeFile);
 
@@ -57,13 +57,13 @@ describe('cli acceptance tests', () => {
       const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);
 
       if (expectedStderr !== void 0) {
-        expect(stderr).toEqual(expectedStderr);
+        expect(stderr).toEqual(normalizeLineEndings(expectedStderr));
       } else if (stderr) {
         throw new Error(stderr);
       }
 
       if (expectedStdout !== void 0) {
-        expect(stdout).toEqual(expectedStdout);
+        expect(stdout).toEqual(normalizeLineEndings(expectedStdout));
       }
 
       if (scenario.status !== void 0) {

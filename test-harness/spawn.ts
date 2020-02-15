@@ -2,6 +2,7 @@ import { join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import * as child_process from 'child_process';
 import { Transform } from 'stream';
+import { normalizeLineEndings } from './helpers';
 
 const cwd = join(__dirname, 'scenarios');
 
@@ -64,8 +65,8 @@ export const spawnNode: SpawnFn = async (script, env) => {
   });
 
   return {
-    stderr: stderrText.replace(/\r?\n/g, '\n'),
-    stdout: stdoutText.replace(/\r?\n/g, '\n'),
+    stderr: normalizeLineEndings(stderrText),
+    stdout: normalizeLineEndings(stdoutText),
     status,
   };
 };
