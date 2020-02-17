@@ -5241,10 +5241,10 @@ node-fetch@^2.6, node-fetch@^2.6.0:
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
-node-html-parser@^1.1.19:
-  version "1.1.19"
-  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-1.1.19.tgz#551ddbea531433d849da98a31d7421c96f9df318"
-  integrity sha512-X7spStiBKw9HQfUdBpT8v4MZf2x4qCLu9w31meeqM9Egpne2B78bxZjC4b1ie6NgFMvyY1qdgjI9+scieXmkeA==
+node-html-parser@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/node-html-parser/-/node-html-parser-1.2.5.tgz#6656f1fdd7e9b262b38ce9fc6a07ca750409b282"
+  integrity sha512-EYtr1DX/I2jr1lrnzriC/tb9H+y2TmkcK8P4rL/MT98fesvLKxWR0Ru89IhSid77ZXYzJt35ucH2i5QWgq68/Q==
   dependencies:
     he "1.1.1"
 
