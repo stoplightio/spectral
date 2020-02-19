@@ -30,7 +30,7 @@ const assetsPath = path.join(baseDir, `assets.json`);
 const generatedAssets = {};
 
 (async () => {
-  for (const kind of ['oas']) {
+  for (const kind of ['oas', 'asyncapi']) {
     await processDirectory(generatedAssets, path.join(__dirname, `../rulesets/${kind}`));
     await writeFileAsync(assetsPath, JSON.stringify(generatedAssets, null, 2));
   }
@@ -39,7 +39,7 @@ const generatedAssets = {};
 async function processDirectory(assets: Record<string, string>, dir: string) {
   await Promise.all(
     (await readdirAsync(dir)).map(async (name: string) => {
-      if (name === 'schemas') return;
+      if (['schemas', '__tests__'].includes(name)) return;
       const target = path.join(dir, name);
       const stats = await statAsync(target);
       if (stats.isDirectory()) {

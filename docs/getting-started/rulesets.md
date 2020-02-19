@@ -117,6 +117,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `json-schema-draft6` (this is JSON Schema Draft 6, detection based on the value of $schema property)
 - `json-schema-draft7` (this is JSON Schema Draft 7, detection based on the value of $schema property)
 - `json-schema-2019-09` (this is JSON Schema 2019-09, detection based on the value of $schema property)
+- `asyncapi2` (this is AsyncAPI v2.0.0)
 
 Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
 
@@ -167,6 +168,10 @@ Custom formats can be registered via the [JS API](../guides/javascript.md), but 
 
 Rulesets can extend other rulesets using the `extends` property. This can be used to build upon or customize other rulesets.
 
+_Note:_ Spectral core rulesets are
+ - `spectral:oas`: OpenAPI v2/v3 rules
+ - `spectral:asyncapi`: AsyncAPI v2 rules
+
 ```yaml
 extends: spectral:oas
 rules:
@@ -178,7 +183,7 @@ rules:
       function: truthy
 ```
 
-The example above will apply the core rules from the built in OpenAPI v2 ruleset AND apply the custom `my-rule-name` rule.
+The example above will apply the core rules from the built in OpenAPI v2/v3 ruleset AND apply the custom `my-rule-name` rule.
 
 Extends can be a single string or an array of strings, and can contain either local file paths or URLs.
 
@@ -248,6 +253,7 @@ rules:
 The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
 - [Rules relevant to OpenAPI v2 and v3](../reference/openapi-rules.md)
+- [Rules relevant to AsyncAPI v2](../reference/asyncapi-rules.md)
 
 ## Selectively silencing some results
 

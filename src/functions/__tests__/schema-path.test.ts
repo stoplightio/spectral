@@ -119,6 +119,35 @@ describe('schema-path', () => {
     ]);
   });
 
+  test('will pass with valid array input', () => {
+    const target = {
+      schema: {
+        type: 'string',
+        examples: ['one', 'another'],
+      },
+    };
+    expect(runSchemaPath(target, '$.schema.examples.*', path)).toHaveLength(0);
+  });
+
+  test('will error with invalid array input', () => {
+    const target = {
+      schema: {
+        type: 'string',
+        examples: [3, 'one', 17],
+      },
+    };
+    expect(runSchemaPath(target, '$.schema.examples.*', path)).toEqual([
+      {
+        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        path: ['schema', 'examples', '0'],
+      },
+      {
+        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        path: ['schema', 'examples', '2'],
+      },
+    ]);
+  });
+
   test('will error formats', () => {
     const target = {
       schema: {

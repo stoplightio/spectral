@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as nock from 'nock';
 
 import { Document } from '../../document';
-import { isOpenApiv2, isOpenApiv3 } from '../../formats';
+import { isAsyncApiv2, isOpenApiv2, isOpenApiv3 } from '../../formats';
 import { readParsable } from '../../fs/reader';
 import { Spectral } from '../../index';
 import * as Parsers from '../../parsers';
@@ -29,6 +29,14 @@ const knownRulesets: ITestCases = {
       {
         fixture: '../../__tests__/__fixtures__/petstore.oas3.json',
         format: { name: 'oas3', lookupFn: isOpenApiv3 },
+      },
+    ],
+  },
+  'spectral:asyncapi': {
+    fixtures: [
+      {
+        fixture: '../../__tests__/__fixtures__/streetlights.asyncapi2.json',
+        format: { name: 'asyncapi2', lookupFn: isAsyncApiv2 },
       },
     ],
   },
@@ -82,6 +90,8 @@ describe('Online vs Offline context', () => {
     },
   );
 
+  const ordinalSort = (arr: string[]) => arr.sort((a, b) => a.localeCompare(b));
+
   test('all rulesets are accounted for', async () => {
     const dir = path.join(__dirname, '../../../rulesets/');
 
@@ -105,6 +115,6 @@ describe('Online vs Offline context', () => {
     });
 
     // Will fail when a ruleset has not been added to the `knownRulesets` variable
-    expect(discoveredRulesets).toEqual(Object.keys(knownRulesets));
+    expect(ordinalSort(discoveredRulesets)).toEqual(ordinalSort(Object.keys(knownRulesets)));
   });
 });

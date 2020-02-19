@@ -21,6 +21,7 @@ export interface ISchemaPathOptions {
   field?: string;
   // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
   oasVersion?: Optional<number>;
+  allErrors?: boolean;
 }
 
 export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
@@ -40,6 +41,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
       {
         schema: schemaObject,
         oasVersion: opts.oasVersion,
+        allErrors: opts.allErrors,
       },
       {
         given: paths.given,

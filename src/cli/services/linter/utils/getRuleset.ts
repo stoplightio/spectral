@@ -21,5 +21,5 @@ export async function getRuleset(rulesetFile: Optional<string[]>) {
 
   return await (rulesetFiles
     ? loadRulesets(process.cwd(), Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles])
-    : readRuleset('spectral:oas'));
+    : readRuleset(['spectral:oas', 'spectral:asyncapi']));
 }
