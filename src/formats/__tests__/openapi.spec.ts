@@ -2,7 +2,7 @@ import { isOpenApiv2, isOpenApiv3, isOpenApiv3_1 } from '../openapi';
 
 describe('OpenAPI format', () => {
   describe('OpenAPI 2.0 aka Swagger', () => {
-    it.each(['2.0.0', '2', '2.0'])('recognizes %s version correctly', version => {
+    it.each(['2.0'])('recognizes %s version correctly', version => {
       expect(isOpenApiv2({ swagger: version })).toBe(true);
     });
 
@@ -11,6 +11,9 @@ describe('OpenAPI format', () => {
       expect(isOpenApiv2({ openapi: null })).toBe(false);
       expect(isOpenApiv2({ swagger: null })).toBe(false);
       expect(isOpenApiv2({ swagger: '3.0' })).toBe(false);
+      expect(isOpenApiv2({ swagger: 2 })).toBe(false);
+      expect(isOpenApiv2({ swagger: '2' })).toBe(false);
+      expect(isOpenApiv2({ swagger: '2.0.0' })).toBe(false);
       expect(isOpenApiv2({ swagger: '1.0' })).toBe(false);
       expect(isOpenApiv2({})).toBe(false);
       expect(isOpenApiv2(null)).toBe(false);
@@ -24,6 +27,8 @@ describe('OpenAPI format', () => {
 
     it('does not recognize invalid document', () => {
       expect(isOpenApiv3({ openapi: '4.0' })).toBe(false);
+      expect(isOpenApiv3({ openapi: 3 })).toBe(false);
+      expect(isOpenApiv3({ openapi: 3.0 })).toBe(false);
       expect(isOpenApiv3({ openapi: '2.0' })).toBe(false);
       expect(isOpenApiv3({ openapi: null })).toBe(false);
       expect(isOpenApiv3({ swagger: null })).toBe(false);
@@ -41,6 +46,7 @@ describe('OpenAPI format', () => {
     it('does not recognize invalid document', () => {
       expect(isOpenApiv3_1({ openapi: '4.0' })).toBe(false);
       expect(isOpenApiv3_1({ openapi: 3.0 })).toBe(false);
+      expect(isOpenApiv3_1({ openapi: 3.1 })).toBe(false);
       expect(isOpenApiv3_1({ openapi: '2.0' })).toBe(false);
       expect(isOpenApiv3_1({ openapi: null })).toBe(false);
       expect(isOpenApiv3_1({ swagger: null })).toBe(false);
