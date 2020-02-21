@@ -8,7 +8,7 @@ if (!fs.existsSync(baseDir)) {
   fs.mkdirSync(baseDir);
 }
 
-for (const spec of ['', '2', '3']) {
+for (const spec of ['']) {
   const target = path.join(baseDir, `oas${spec}-functions.json`);
   const fnsPath = path.join(__dirname, `../rulesets/oas${spec}/functions`);
   const bundledFns = {};
