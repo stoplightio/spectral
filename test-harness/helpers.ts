@@ -99,16 +99,17 @@ export function tmpFile(opts?: tmp.TmpNameOptions): Promise<tmp.FileResult> {
 const BRACES = /{([^}]+)}/g;
 
 export const applyReplacements = (str: string, values: Dictionary<string>) => {
-  BRACES.lastIndex = 0;
-  let result: RegExpExecArray | null;
+  const replacer = (match: string, identifier: string): string => {
+    if (!(identifier in values)) {
+      return match;
+    }
 
-  // tslint:disable-next-line:no-conditional-assignment
-  while ((result = BRACES.exec(str))) {
-    if (!(result[1] in values)) continue;
-    const newValue = String(values[result[1]] || '');
-    str = `${str.slice(0, result.index)}${newValue}${str.slice(BRACES.lastIndex)}`;
-    BRACES.lastIndex = result.index + newValue.length;
-  }
+    return values[identifier];
+  };
 
-  return str;
+  return str.replace(BRACES, replacer);
+};
+
+export const normalizeLineEndings = (str: string): string => {
+  return str.replace(/\r?\n/g, '\n');
 };

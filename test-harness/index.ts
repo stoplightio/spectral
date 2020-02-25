@@ -5,7 +5,7 @@ import * as fg from 'fast-glob';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import { promisify } from 'util';
-import { applyReplacements, parseScenarioFile, tmpFile } from './helpers';
+import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
 const writeFileAsync = promisify(fs.writeFile);
 
@@ -30,11 +30,10 @@ describe('cli acceptance tests', () => {
           const tmpFileHandle = await tmpFile();
           tmpFileHandles.set(asset, tmpFileHandle);
 
-          replacements[asset] = tmpFileHandle.name;
-          replacements[`${asset}|no-ext`] = tmpFileHandle.name.replace(
-            new RegExp(`${path.extname(tmpFileHandle.name)}$`),
-            '',
-          );
+          const normalizedName = normalize(tmpFileHandle.name);
+
+          replacements[asset] = normalizedName;
+          replacements[`${asset}|no-ext`] = normalizedName.replace(new RegExp(`${path.extname(normalizedName)}$`), '');
 
           await writeFileAsync(tmpFileHandle.name, contents, { encoding: 'utf8' }); // todo: apply replacements to contents
         }),
@@ -58,13 +57,13 @@ describe('cli acceptance tests', () => {
       const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);
 
       if (expectedStderr !== void 0) {
-        expect(stderr).toEqual(expectedStderr);
+        expect(stderr).toEqual(normalizeLineEndings(expectedStderr));
       } else if (stderr) {
         throw new Error(stderr);
       }
 
       if (expectedStdout !== void 0) {
-        expect(stdout).toEqual(expectedStdout);
+        expect(stdout).toEqual(normalizeLineEndings(expectedStdout));
       }
 
       if (scenario.status !== void 0) {
