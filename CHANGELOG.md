@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixes
 - Improved Example Object validation [#882](https://github.com/stoplightio/spectral/pull/882)
 - `oas3-operation-security-defined` rule supports optional authentication [#895](https://github.com/stoplightio/spectral/pull/895)
-- Generate more correct paths to error [#900](https://github.com/stoplightio/spectral/pull/900)
+- Generate more correct paths when reporting an error [#900](https://github.com/stoplightio/spectral/pull/900)
 - `example-value-or-externalValue` no longer reports false positives [#899](https://github.com/stoplightio/spectral/pull/899)
 - `schema-path` function does not bail out falsy values and JSON path expression provided as a field of rule [#917](https://github.com/stoplightio/spectral/pull/917) 
 - `oas3-valid-(content-)schema-example` rules handle nullable correctly [#914](https://github.com/stoplightio/spectral/pull/914)
