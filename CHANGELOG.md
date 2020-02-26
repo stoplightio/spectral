@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.0.1] - 2019-02-25
 
 ### Features
-- Implement a new`typed-enum` rule to detect enum value that do not respect specified type [#913](https://github.com/stoplightio/spectral/pull/913)
+- Implement a new `typed-enum` rule to detect enum value that do not respect specified type [#913](https://github.com/stoplightio/spectral/pull/913)
 
 ### Changed
 - API: introduced document [#876](https://github.com/stoplightio/spectral/pull/876) - note, this is **not** a breaking change
