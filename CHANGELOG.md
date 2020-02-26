@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 2019-02-26
+
+### Features
+- Implement a new `typed-enum` rule to detect enum value that do not respect specified type [#913](https://github.com/stoplightio/spectral/pull/913)
+
+### Added
+- API: introduced document [#876](https://github.com/stoplightio/spectral/pull/876) - note, this is **not** a breaking change
+- Introduce optional enhancers to casing function [#884](https://github.com/stoplightio/spectral/pull/884)
+
+### Fixes
+- Improved Example Object validation [#882](https://github.com/stoplightio/spectral/pull/882)
+- `oas3-operation-security-defined` rule supports optional authentication [#895](https://github.com/stoplightio/spectral/pull/895)
+- Generate more correct paths when reporting an error [#900](https://github.com/stoplightio/spectral/pull/900)
+- `example-value-or-externalValue` no longer reports false positives [#899](https://github.com/stoplightio/spectral/pull/899)
+- `schema-path` accepts a JSON Path expression as a field selector [#917](https://github.com/stoplightio/spectral/pull/917) 
+- `schema-path` handles invalid values gracefully [#917](https://github.com/stoplightio/spectral/pull/917) 
+- `oas3-valid-(content-)schema-example` rules handle nullable correctly [#914](https://github.com/stoplightio/spectral/pull/914)
+
 ## [5.0.0] - 2019-12-24
 
 ### Features
