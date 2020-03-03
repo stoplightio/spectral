@@ -33,6 +33,30 @@ If this is your first Pull Request on GitHub, here's some [help](https://egghead
 
 > We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests. 
 
+### Contributing from a Windows based environment
+
+Spectral is a cross-platform tool and we do our best to ensure it honors specifics
+of the underlying operating system it's being run on.
+
+From a contributing standpoint, we also aim to make it easier for everyone to help
+move the product forward. This section is dedicated to people that primarily work
+on a Windows based environment.
+
+The recommended IDE to contribute to Spectral is **[VisualStudio Code](https://code.visualstudio.com/)** (aka. vscode).
+
+The repository is configured to checkout files using LF as line ending terminators and vscode honors this just fine.
+
+Upon opening Spectral folder under vscode, some workspace recommended extensions will be proposed to be installed.
+Please accept and install them as they will make your contributing journey nicer.
+
+- **[EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)**: Applies some minor file normalization when saving files
+- **[Jest runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)**: Provides you with easy way to troubleshoot and debug failing tests
+- **[Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)**: Makes it easy to locally test and tweak your code in a Linux container based development environment.
+
+Most of the time, working natively from vscode will work fine. However, it may happen that the CI cringes because a test fails when ran in a Linux context. The repository contains a ready to use pre-configured Linux based development container for that exact purpose. Activate the vscode Command Palette (`Ctrl + Shift + P`), type `>reopen co` and select `Remote-Containers: Reopen in Container`. Bam! You're now in a Linux environment. And you terminal is now a native `bash`.
+
+Would you want to switch back to the standard experience, using the Command Palette, type `>reopen lo` and select `Remote-Containers: Reopen locally`. Welcome back to the Windows world!
+
 ## To run tests
 
 We run tests in the two environments that Spectral supports - the browser, and node.js. Browser tests are run in a headless Chrome browser via the Karma test runner, while node.js tests are run via the Jest test runner.
