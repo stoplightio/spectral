@@ -29,6 +29,7 @@ import {
 } from './types';
 import { IRuleset } from './types/ruleset';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, prepareResults } from './utils';
+import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 
 memoize.Cache = WeakMap;
 
@@ -171,15 +172,11 @@ export class Spectral {
   }
 
   private _generateUnrecognizedFormatError(document: IDocument): IRuleResult {
-    return {
-      range: document.getRangeForJsonPath([], true) || Document.DEFAULT_RANGE,
-      message: `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(
-        ', ',
-      )}]`,
-      code: 'unrecognized-format',
-      severity: DiagnosticSeverity.Warning,
-      ...(document.source !== null && { source: document.source }),
-      path: [],
-    };
+    return generateDocumentWideResult(
+      document,
+      `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(', ')}]`,
+      DiagnosticSeverity.Warning,
+      'unrecognized-format',
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Document } from '../../../document';
+import { Document, StdIn } from '../../../document';
 import {
   isJSONSchema,
   isJSONSchemaDraft2019_09,
@@ -75,7 +75,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     const document = new Document(
       await readParsable(targetUri, { encoding: flags.encoding }),
       Parsers.Yaml,
-      typeof targetUri === 'number' ? '<STDIN>' : targetUri,
+      typeof targetUri === 'number' ? StdIn : targetUri,
     );
 
     results.push(
