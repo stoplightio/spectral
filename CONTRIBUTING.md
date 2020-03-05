@@ -17,11 +17,11 @@ Our Code of Conduct exists because of that dedication, and we do not tolerate ha
 Yarn is a package manager for your code, similar to npm. While you can use npm to use Spectral in your own project, we use yarn for development of Spectral.
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your computer.
-2. Install yarn: `npm install -g yarn`
+2. Install yarn: Refer to the [installation documentation](https://classic.yarnpkg.com/en/docs/install/) according to your developement operating system
 3. In your terminal, navigate to the directory you cloned Spectral into (check that you are on the `develop` branch).
 4. Install the dependencies: `yarn`
 5. Build Spectral: `yarn build`
-6. Run Spectral from your local installation: `node dist/cli/index.js lint [openapi_spec_file]`
+6. Run Spectral from your local installation: `yarn cli lint [openapi_spec_file]`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
 8. Make changes, add tests, and then run the tests: `yarn test.prod` and `yarn test.harness`
 9. Update the documentation if appropriate. For example, if you added a new rule to an OpenAPI ruleset,
@@ -32,6 +32,30 @@ Now, you are ready to commit & push your changes, and make a pull request to the
 If this is your first Pull Request on GitHub, here's some [help](https://egghead.io/lessons/javascript-how-to-create-a-pull-request-on-github). 
 
 > We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests. 
+
+### Contributing from a Windows based environment
+
+Spectral is a cross-platform tool and we do our best to ensure it honors specifics
+of the underlying operating system it's being run on.
+
+From a contributing standpoint, we also aim to make it easier for everyone to help
+move the product forward. This section is dedicated to people that primarily work
+on a Windows based environment.
+
+The recommended IDE to contribute to Spectral is **[VisualStudio Code](https://code.visualstudio.com/)** (aka. vscode).
+
+The repository is configured to checkout files using LF as line ending terminators and vscode honors this just fine.
+
+Upon opening Spectral folder under vscode, some workspace recommended extensions will be proposed to be installed.
+Please accept and install them as they will make your contributing journey nicer.
+
+- **[EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)**: Applies some minor file normalization when saving files
+- **[Jest runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)**: Provides you with easy way to troubleshoot and debug failing tests
+- **[Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)**: Makes it easy to locally test and tweak your code in a Linux container based development environment.
+
+Most of the time, working natively from vscode will work fine. However, it may happen that the CI cringes because a test fails when ran in a Linux context. The repository contains a ready to use pre-configured Linux based development container for that exact purpose. Activate the vscode Command Palette (`Ctrl + Shift + P`), type `>reopen co` and select `Remote-Containers: Reopen in Container`. Bam! You're now in a Linux environment. And you terminal is now a native `bash`.
+
+Would you want to switch back to the standard experience, using the Command Palette, type `>reopen lo` and select `Remote-Containers: Reopen locally`. Welcome back to the Windows world!
 
 ## To run tests
 
