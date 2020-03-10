@@ -8,6 +8,7 @@ import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
+import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset } from './validation';
 
 export interface IRulesetReadOptions {
@@ -18,6 +19,7 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
   const base: IRuleset = {
     rules: {},
     functions: {},
+    exceptions: {},
   };
 
   const processedRulesets = new Set<string>();
@@ -29,6 +31,7 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
     if (resolvedRuleset === null) continue;
     Object.assign(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
+    Object.assign(base.exceptions, resolvedRuleset.exceptions);
   }
 
   return base;
@@ -74,9 +77,11 @@ const createRulesetProcessor = (
     const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
     const rules = {};
     const functions = {};
+    const exceptions = {};
     const newRuleset: IRuleset = {
       rules,
       functions,
+      exceptions,
     };
 
     const extendedRulesets = ruleset.extends;
@@ -97,12 +102,17 @@ const createRulesetProcessor = (
         if (extendedRuleset !== null) {
           mergeRules(rules, extendedRuleset.rules, parentSeverity);
           Object.assign(functions, extendedRuleset.functions);
+          mergeExceptions(exceptions, extendedRuleset.exceptions, baseUri);
         }
       }
     }
 
     if (ruleset.rules !== void 0) {
       mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
+    }
+
+    if (ruleset.except !== void 0) {
+      mergeExceptions(exceptions, ruleset.except, baseUri);
     }
 
     if (Array.isArray(ruleset.formats)) {

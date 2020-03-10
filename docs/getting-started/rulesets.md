@@ -249,6 +249,28 @@ The example above will run all of the rules defined in the `spectral:oas` rulese
 
 - [Rules relevant to OpenAPI v2 and v3](../reference/openapi-rules.md)
 
+## Selectively silencing some results
+
+From time to time, you want to ignore some specific results without turning off 
+the rule entirely. This may happen, for instance, when working with legacy APIs.
+
+The ruleset can be extended for that purpose through the optional `except` property.
+
+`except` describes a map of locations (expressed as Json paths) and rules that should be ignored.
+
+Locations be can either described as relative to the ruleset or absolute paths.
+
+```yaml
+extends: spectral:oas
+
+except:
+  "subfolder/one.yaml#"
+    - oas3-api-servers
+  "/tmp/docs/one.yaml#/info":
+    - info-contact
+    - info-description
+```
+
 ## Creating custom functions
 
 Learn more about [custom functions](../guides/custom-functions.md).

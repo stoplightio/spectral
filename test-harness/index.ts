@@ -26,7 +26,7 @@ describe('cli acceptance tests', () => {
 
     beforeAll(async () => {
       await Promise.all(
-        scenario.assets.map(async ([asset, contents]) => {
+        scenario.assets.map(async ([asset]) => {
           const tmpFileHandle = await tmpFile();
           tmpFileHandles.set(asset, tmpFileHandle);
 
@@ -34,8 +34,13 @@ describe('cli acceptance tests', () => {
 
           replacements[asset] = normalizedName;
           replacements[`${asset}|no-ext`] = normalizedName.replace(new RegExp(`${path.extname(normalizedName)}$`), '');
+        }),
+      );
 
-          await writeFileAsync(tmpFileHandle.name, contents, { encoding: 'utf8' }); // todo: apply replacements to contents
+      await Promise.all(
+        scenario.assets.map(async ([asset, contents]) => {
+          const replaced = applyReplacements(contents, replacements);
+          await writeFileAsync(replacements[asset], replaced, { encoding: 'utf8' });
         }),
       );
     });

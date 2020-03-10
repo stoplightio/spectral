@@ -1,12 +1,15 @@
 import { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
-import { merge } from 'lodash';
+import { escapeRegExp, merge } from 'lodash';
 
 import { Document } from '../document';
 import * as Parsers from '../parsers';
 import { Spectral } from '../spectral';
 import { IResolver, IRunRule, RuleFunction } from '../types';
+import { RulesetExceptionCollection } from '../types/ruleset';
+
+import { buildRulesetExceptionCollectionFrom } from '../../setupTests';
 
 const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
 const oasRulesetRules: Dictionary<IRunRule, string> = oasRuleset.rules;
@@ -255,6 +258,51 @@ describe('spectral', () => {
             source,
           },
         ]);
+      });
+    });
+  });
+
+  describe('setRuleset', () => {
+    const s = new Spectral();
+
+    describe('exceptions handling', () => {
+      it.each([['one.yaml#'], ['one.yaml#/'], ['one.yaml#/toto'], ['down/one.yaml#/toto'], ['../one.yaml#/toto']])(
+        'throws on relative locations  (location: "%s")',
+        location => {
+          const exceptions = buildRulesetExceptionCollectionFrom(location);
+
+          expect(() => {
+            s.setRuleset({ rules: {}, functions: {}, exceptions });
+          }).toThrow(new RegExp(`.+\`${escapeRegExp(location)}\`.+is not a valid uri.+Only absolute Uris are allowed`));
+        },
+      );
+
+      it.each([
+        ['https://dot.com/one.yaml#/toto', 'https://dot.com/one.yaml#/toto'],
+        ['/local/one.yaml#/toto', '/local/one.yaml#/toto'],
+        ['c:/one.yaml#/toto', 'c:/one.yaml#/toto'],
+        ['c:\\one.yaml#/toto', 'c:/one.yaml#/toto'],
+      ])('normalizes absolute locations (location: "%s")', (location, expected) => {
+        const exceptions = buildRulesetExceptionCollectionFrom(location);
+
+        s.setRuleset({ rules: {}, functions: {}, exceptions });
+
+        const locs = Object.keys(s.exceptions);
+        expect(locs).toEqual([expected]);
+      });
+
+      it('normalizes exceptions', () => {
+        const exceptions: RulesetExceptionCollection = {
+          '/test/file.yaml#/a': ['f', 'c', 'd', 'a'],
+          '/test/file.yaml#/b': ['1', '3', '3', '2'],
+        };
+
+        s.setRuleset({ rules: {}, functions: {}, exceptions });
+
+        expect(s.exceptions).toEqual({
+          '/test/file.yaml#/a': ['a', 'c', 'd', 'f'],
+          '/test/file.yaml#/b': ['1', '2', '3'],
+        });
       });
     });
   });

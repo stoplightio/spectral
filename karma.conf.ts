@@ -11,7 +11,7 @@ module.exports = (config: any) => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./karma-jest.ts', './setupKarma.ts', 'src/**/*.ts'],
+    files: ['./karma-jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
     exclude: ['src/cli/**', 'src/formatters/**', 'src/config/__tests__/config.test.ts', 'src/**/*.jest.test.ts'],
@@ -22,6 +22,7 @@ module.exports = (config: any) => {
       'src/**/*.ts': ['karma-typescript'],
       './karma-jest.ts': ['karma-typescript'],
       './setupKarma.ts': ['karma-typescript'],
+      './setupTests.ts': ['karma-typescript'],
     },
 
     karmaTypescriptConfig: {

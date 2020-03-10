@@ -1,0 +1,26 @@
+====test====
+Do not report exceptions
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+paths: {}
+====asset:ruleset====
+extends: spectral:oas
+
+except:
+  "{document}#":
+    - oas3-api-servers
+  "{document}#/info":
+    - info-contact
+====command====
+{bin} lint {document} -r {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 1:1  warning  openapi-tags      OpenAPI object should have non-empty `tags` array.
+ 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
+
+✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)

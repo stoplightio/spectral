@@ -9,6 +9,7 @@ async function loadRulesets(cwd: string, rulesetFiles: string[]): Promise<IRules
     return {
       functions: {},
       rules: {},
+      exceptions: {},
     };
   }
 
