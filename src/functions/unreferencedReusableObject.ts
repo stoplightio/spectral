@@ -16,11 +16,11 @@ export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: st
     );
   }
 
-  const normalizedSource = otherValues.resolved.source ?? '';
+  const normalizedSource = otherValues.documentInventory.source ?? '';
 
   const defined = Object.keys(data).map(name => `${normalizedSource}${opts.reusableObjectsLocation}/${name}`);
 
-  const orphans = defined.filter(defPath => !otherValues.resolved.graph.hasNode(defPath));
+  const orphans = defined.filter(defPath => !otherValues.documentInventory.graph.hasNode(defPath));
 
   return orphans.map(orphanPath => {
     return {

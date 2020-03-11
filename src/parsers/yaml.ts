@@ -1,4 +1,4 @@
-import { getLocationForJsonPath, parseWithPointers, YamlParserResult } from '@stoplight/yaml';
+import { getLocationForJsonPath, parseWithPointers, trapAccess, YamlParserResult } from '@stoplight/yaml';
 import { IParser } from './types';
 
 export const parseYaml = (input: string) =>
@@ -11,4 +11,5 @@ export const parseYaml = (input: string) =>
 export const Yaml: IParser<YamlParserResult<unknown>> = {
   parse: parseYaml,
   getLocationForJsonPath,
+  trapAccess,
 };

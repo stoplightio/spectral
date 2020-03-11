@@ -6,7 +6,7 @@ function runCasing(target: unknown, type: CasingType, disallowDigits?: boolean, 
     target,
     { type, disallowDigits, separator },
     { given: ['$'] },
-    { given: null, original: null, resolved: {} as any },
+    { given: null, original: null, documentInventory: {} as any },
   );
 }
 

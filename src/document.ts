@@ -13,6 +13,7 @@ export interface IDocument<D = unknown> {
   readonly diagnostics: ReadonlyArray<IRuleResult>;
   formats?: string[] | null;
   getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange>;
+  trapAccess<T extends object = object>(obj: T): T;
   data: D;
 }
 
@@ -36,6 +37,10 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> i
 
   public getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange> {
     return this.parser.getLocationForJsonPath(this.parserResult, path, closest)?.range;
+  }
+
+  public trapAccess<T extends object = object>(obj: T): T {
+    return this.parser.trapAccess<T>(obj);
   }
 
   public static get DEFAULT_RANGE(): DeepReadonly<IRange> {
@@ -65,6 +70,10 @@ export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult
     // we need to normalize the path in case path with forward slashes is given
     this.source = normalizeSource(source);
     this.diagnostics = formatParserDiagnostics(this.parserResult.parsed.diagnostics, this.source);
+  }
+
+  public trapAccess<T extends object = object>(obj: T): T {
+    return obj;
   }
 
   public getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange> {

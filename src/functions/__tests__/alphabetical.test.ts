@@ -1,8 +1,21 @@
+import { safeStringify } from '@stoplight/json';
+import { Parsers } from '../../';
+import { Document } from '../../document';
+import { DocumentInventory } from '../../documentInventory';
 import { parseYaml } from '../../parsers';
 import { alphabetical } from '../alphabetical';
 
 function runAlphabetical(target: any, keyedBy?: string) {
-  return alphabetical(target, { keyedBy }, { given: ['$'] }, { given: null, original: null } as any);
+  return alphabetical(
+    target,
+    { keyedBy },
+    { given: ['$'] },
+    {
+      given: null,
+      original: null,
+      documentInventory: new DocumentInventory(new Document(safeStringify(target), Parsers.Json), {} as any),
+    },
+  );
 }
 
 describe('alphabetical', () => {
@@ -87,5 +100,35 @@ describe('alphabetical', () => {
     test('given an array primitives should not return error', () => {
       expect(runAlphabetical([100, 1], 'a')).toEqual([]);
     });
+  });
+
+  test('is able to trap object again', () => {
+    const document = new Document(
+      `'404':
+'200':`,
+      Parsers.Yaml,
+    );
+
+    Object.defineProperty(document, 'data', {
+      value: Object.defineProperties({}, Object.getOwnPropertyDescriptors(document.data)),
+    });
+
+    expect(
+      alphabetical(
+        document.data,
+        {},
+        { given: ['$'] },
+        {
+          given: null,
+          original: null,
+          documentInventory: new DocumentInventory(document, {} as any),
+        },
+      ),
+    ).toEqual([
+      {
+        message: 'at least 2 properties are not in alphabetical order: "404" should be placed after "200"',
+        path: ['$', '404'],
+      },
+    ]);
   });
 });

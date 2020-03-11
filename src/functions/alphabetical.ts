@@ -30,14 +30,22 @@ const getUnsortedItems = <T>(arr: T[], compareFn: (a: T, B: T) => number): null 
   return null;
 };
 
-export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts, paths) => {
+export const alphabetical: IFunction<IAlphaRuleOptions> = (targetVal, opts, paths, { documentInventory }) => {
   const results: IFunctionResult[] = [];
 
   if (!isObject(targetVal)) {
     return results;
   }
 
-  const targetArray: any[] | string[] = Array.isArray(targetVal) ? targetVal : Object.keys(targetVal);
+  let targetArray: any[] | string[] = [];
+
+  if (Array.isArray(targetVal)) {
+    targetArray = targetVal;
+  } else {
+    targetVal =
+      documentInventory.findAssociatedItemForPath(paths.given, true)?.document.trapAccess(targetVal) || targetVal;
+    targetArray = Object.keys(targetVal);
+  }
 
   if (targetArray.length < 2) {
     return results;
