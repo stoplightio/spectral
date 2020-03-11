@@ -1,0 +1,8 @@
+{
+  "formats": {
+    "markdown": {
+      "rootDir": "docs",
+      "include": ["docs/**", "README.md", "CHANGELOG.md"]
+    }
+  }
+}
