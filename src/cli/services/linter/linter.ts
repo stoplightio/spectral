@@ -1,3 +1,4 @@
+import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
 import { Document, STDIN } from '../../../document';
 import {
   isJSONSchema,
@@ -64,7 +65,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     spectral.setRules(skipRules(ruleset.rules, flags));
   }
 
-  const [targetUris, filesNotFound] = await listFiles(documents);
+  const [targetUris, unmatchedPatterns] = await listFiles(documents);
   const results: IRuleResult[] = [];
 
   for (const targetUri of targetUris) {
@@ -88,21 +89,20 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     );
   }
 
-  filesNotFound.forEach(fileNotFound => {
+  for (const unmatchedPattern of unmatchedPatterns) {
     const errorFileNotFound: IRuleResult = {
-      code: 'file-not-found',
-      message: 'File not found: ' + fileNotFound,
+      code: 'unmatched-glob-pattern',
+      message: `Glob pattern \`${unmatchedPattern}\` did not match any files`,
       path: [],
-      severity: 0,
-      source: 'File not found',
+      severity: DiagnosticSeverity.Error,
       range: {
-        start: { line: 1, character: 1 },
-        end: { line: 1, character: 1 },
+        start: { line: 0, character: 0 },
+        end: { line: 0, character: 0 },
       },
     };
 
-    results.push(errorFileNotFound);
-  });
+    results.unshift(errorFileNotFound);
+  }
 
   return results;
 }
