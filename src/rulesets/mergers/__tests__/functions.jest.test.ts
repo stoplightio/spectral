@@ -18,6 +18,7 @@ describe('Ruleset functions merging', () => {
         name: 'foo',
         code: 'foo()',
         schema: null,
+        source: null,
       },
     };
 
@@ -37,6 +38,7 @@ describe('Ruleset functions merging', () => {
       name: 'foo',
       code: 'foo()',
       schema: null,
+      source: null,
     });
   });
 
@@ -46,6 +48,7 @@ describe('Ruleset functions merging', () => {
         name: 'foo',
         code: 'foo()',
         schema: null,
+        source: null,
       },
     };
     const sources: RulesetFunctionCollection = {
@@ -53,6 +56,7 @@ describe('Ruleset functions merging', () => {
         name: 'foo.c',
         code: 'foo.a()',
         schema: null,
+        source: 'foo',
       },
     };
 
@@ -62,11 +66,13 @@ describe('Ruleset functions merging', () => {
       name: 'foo.c',
       code: 'foo.a()',
       schema: null,
+      source: 'foo',
     });
     expect(target).toHaveProperty('foo', {
       name: 'foo.c',
       ref: 'random-id-0',
       schema: null,
+      source: 'foo',
     });
   });
 
@@ -76,6 +82,7 @@ describe('Ruleset functions merging', () => {
         name: 'foo',
         code: 'foo()',
         schema: null,
+        source: null,
       },
     };
 
@@ -84,11 +91,13 @@ describe('Ruleset functions merging', () => {
         name: 'foo',
         code: 'a.foo.c();',
         schema: null,
+        source: null,
       },
       bar: {
         name: 'bar',
         code: 'bar()',
         schema: null,
+        source: null,
       },
     };
 
@@ -112,11 +121,13 @@ describe('Ruleset functions merging', () => {
       name: 'foo',
       code: 'a.foo.c();',
       schema: null,
+      source: null,
     });
     expect(target).toHaveProperty('random-id-1', {
       name: 'bar',
       code: 'bar()',
       schema: null,
+      source: null,
     });
   });
 

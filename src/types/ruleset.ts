@@ -15,6 +15,7 @@ export interface IRulesetFunctionDefinition {
   ref?: string;
   schema: JSONSchema | null;
   name: string;
+  source: string | null;
 }
 
 export type RulesetFunctionCollection = Dictionary<IRulesetFunctionDefinition, string>;
