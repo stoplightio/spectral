@@ -1,4 +1,4 @@
-import { isAbsolute, join, stripRoot } from '@stoplight/path';
+import { join, stripRoot } from '@stoplight/path';
 import { Dictionary, Optional } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { IFunction, JSONSchema } from '../types';
@@ -45,7 +45,7 @@ function stubRequire(): NodeJS.Require {
 function proxyRequire(source: string): NodeJS.Require {
   const actualRequire = require;
   function req(p: string) {
-    if (!isAbsolute(p)) {
+    if (p.startsWith('.')) {
       p = join(source, '..', stripRoot(p));
     }
 
@@ -55,8 +55,15 @@ function proxyRequire(source: string): NodeJS.Require {
   return Object.defineProperties(req, Object.getOwnPropertyDescriptors(actualRequire));
 }
 
+const isRequiredSupported =
+  typeof require === 'function' &&
+  typeof require.main === 'object' &&
+  require.main !== null &&
+  'paths' in require.main &&
+  'cache' in require;
+
 const createRequire = (source: string | null): NodeJS.Require => {
-  if (typeof require === 'undefined') {
+  if (!isRequiredSupported) {
     return stubRequire();
   }
 
