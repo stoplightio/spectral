@@ -1,7 +1,9 @@
 import { normalize } from '@stoplight/path';
 import * as fg from 'fast-glob';
 
-export async function listFiles(pattens: Array<number | string>): Promise<[Array<number | string>, string[]]> {
+export async function listFiles(
+  pattens: Array<number | string>,
+): Promise<[Array<number | string>, Array<number | string>]> {
   const { files, fileDescriptors, urls } = pattens.reduce<{
     files: string[];
     urls: string[];

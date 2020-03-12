@@ -1,4 +1,4 @@
-import { DiagnosticSeverity, IParserResult } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { Document, STDIN } from '../../../document';
 import {
   isJSONSchema,
