@@ -183,7 +183,7 @@ export default (obj) => {
 };
 ```
 
-The following code won't work properly either:
+Require calls will work only in Node.js, therefore it's strongly discouraged to use them unless you don't plan to distribute your ruleset among other users:
 
  ```js
 const foo = require('./foo'); // require is not available (see note below)
