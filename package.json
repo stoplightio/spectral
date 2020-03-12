@@ -64,7 +64,7 @@
     "@stoplight/json-ref-resolver": "^3.0.6",
     "@stoplight/path": "^1.3.0",
     "@stoplight/types": "^11.2.0",
-    "@stoplight/yaml": "^3.5.0",
+    "@stoplight/yaml": "^3.6.0",
     "abort-controller": "^3.0.0",
     "ajv": "^6.10",
     "ajv-oai": "^1.1.5",
