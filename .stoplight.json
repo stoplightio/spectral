@@ -2,7 +2,9 @@
   "formats": {
     "markdown": {
       "rootDir": "docs",
-      "include": ["docs/**", "README.md", "CHANGELOG.md"]
-    }
+      "include": ["docs/**", "README.md", "CHANGELOG.md"],
+    },
+    "openapi": null,
+    "json_schema": null,
   }
 }
