@@ -586,10 +586,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.44.tgz#ed3c962564283e9983f7895a6effc3994286df5e"
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
-"@stoplight/yaml@^3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.5.0.tgz#ed5462c6b0b82ad492c42740bb816d343f4ed0ab"
-  integrity sha512-q4HlH4+U5GGL+LHImbz7w29q3M0fMF5c6jE/PbSth5MNBvUNXAX8rxyWWt017LadH8VIoDgnam/0dO/or5SCvQ==
+"@stoplight/yaml@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.6.0.tgz#ed1257ea7861b3a96d6e870013a9530f013150f1"
+  integrity sha512-38EhZjNsVwuwrxPawr5R3Q1QhO3l/MTLD5F/d0v7vIrvWgde6GJzdh6rmWbrKJttEqqwuqX8mpLjWihWB7Qm1A==
   dependencies:
     "@stoplight/types" "^11.1.1"
     "@stoplight/yaml-ast-parser" "0.0.44"
@@ -5783,10 +5783,10 @@ pkg-fetch@^2.6.4:
     semver "^6.3.0"
     unique-temp-dir "^1.0.0"
 
-pkg@^4.4.3:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.4.3.tgz#b9adefa9b7f6954abd2b6265564a1ed83ae81b7a"
-  integrity sha512-1M0KNVLxNUzr0CGMhccPxx02G05GL3h9czbQGLswRB2gOvHeKAbld+1S5SGDNLOoFt+IYNNxqHtBhZA6Rer7QQ==
+pkg@^4.4.4:
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.4.4.tgz#3a8d5143c2176f183b2b956d7d9002f7daa2a33d"
+  integrity sha512-YBdBtnAIhseJ2K66V19tNlCY/oRaKhFroYxhDuY7msEOLCBklDSNfc7lhoBJGQ7T73VeU4Uzm5V05tcqSeM1Vg==
   dependencies:
     "@babel/parser" "^7.7.5"
     "@babel/runtime" "^7.7.5"

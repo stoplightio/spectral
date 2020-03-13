@@ -775,7 +775,7 @@ responses:: !!foo
             line: 1,
           },
         },
-        severity: DiagnosticSeverity.Error,
+        severity: DiagnosticSeverity.Warning,
       },
     ]);
   });
