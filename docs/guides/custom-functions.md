@@ -186,7 +186,7 @@ export default (obj) => {
 Require calls will work only in Node.js, therefore it's strongly discouraged to use them unless you don't plan to distribute your ruleset among other users:
 
  ```js
-const foo = require('./foo'); // require is not available (see note below)
+const foo = require('./foo');
 
 module.exports = (obj) => {
   for (const [key, value] of Object.entries(obj)) {
