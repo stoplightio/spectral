@@ -183,7 +183,7 @@ export default (obj) => {
 };
 ```
 
-Require calls will work only in Node.js, therefore it's strongly discouraged to use them unless you don't plan to distribute your ruleset among other users:
+Require calls will work only in Node.js, and will cause errors for anyone trying to use the ruleset in the browser. If your ruleset is definitely going to only be used in the context of NodeJS then using them is ok, but if you are distributing your rulesets to the public we recommend avoiding the use of `require()` to increase portability.
 
  ```js
 const foo = require('./foo');
