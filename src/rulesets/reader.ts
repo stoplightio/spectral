@@ -130,15 +130,17 @@ const createRulesetProcessor = (
         rulesetFunctions.map(async fn => {
           const fnName = Array.isArray(fn) ? fn[0] : fn;
           const fnSchema = Array.isArray(fn) ? fn[1] : null;
+          const source = await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`);
 
           try {
             resolvedFunctions[fnName] = {
               name: fnName,
-              code: await readFile(await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`), {
+              code: await readFile(source, {
                 timeout: readOpts && readOpts.timeout,
                 encoding: 'utf8',
               }),
               schema: fnSchema,
+              source,
             };
           } catch (ex) {
             console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);

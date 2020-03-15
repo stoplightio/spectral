@@ -66,6 +66,22 @@ describe('Linter', () => {
     );
   });
 
+  it('should support require calls', async () => {
+    await spectral.loadRuleset(customFunctionOASRuleset);
+    expect(
+      await spectral.run({
+        info: {},
+        paths: {},
+      }),
+    ).toEqual([
+      expect.objectContaining({
+        code: 'has-bar-get-operation',
+        message: 'Object does not have undefined property',
+        path: ['paths'],
+      }),
+    ]);
+  });
+
   it('should respect the scope of defined functions (ruleset-based)', async () => {
     await spectral.loadRuleset(customDirectoryFunctionsRuleset);
     expect(await spectral.run({})).toEqual([

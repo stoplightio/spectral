@@ -2,6 +2,7 @@
   "extends": ["spectral:oas"],
   "functions": [
     "truthy",
+    "deepHasIn",
     [
       "hasIn",
       {
@@ -46,6 +47,17 @@
         "functionOptions": {
           "property": "info",
           "foo": true
+        }
+      }
+    },
+    "has-bar-get-operation": {
+      "message": "{{error}}",
+      "given": "$.paths",
+      "type": "style",
+      "then": {
+        "function": "deepHasIn",
+        "functionOptions": {
+          "path": "/bar.get"
         }
       }
     }

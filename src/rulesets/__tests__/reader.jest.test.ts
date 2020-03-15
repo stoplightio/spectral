@@ -563,11 +563,13 @@ describe('Rulesets reader', () => {
         name: 'foo.cjs',
         ref: 'random-id-0',
         schema: null,
+        source: path.join(fooRuleset, '../functions/foo.cjs.js'),
       },
       'random-id-0': {
         name: 'foo.cjs',
         code: fooCJSFunction,
         schema: null,
+        source: path.join(fooRuleset, '../functions/foo.cjs.js'),
       },
     });
 
@@ -592,11 +594,13 @@ describe('Rulesets reader', () => {
           name: 'bar',
           ref: expect.stringMatching(/^random-id-[01]$/),
           schema: null,
+          source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/bar.js'),
         },
         truthy: {
           name: 'truthy',
           ref: expect.stringMatching(/^random-id-[01]$/),
           schema: null,
+          source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/truthy.js'),
         },
       }),
     );
@@ -613,12 +617,14 @@ describe('Rulesets reader', () => {
       name: 'bar',
       code: barFunction,
       schema: null,
+      source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/bar.js'),
     });
 
     expect(truthyFunctionDef).toEqual({
       name: 'truthy',
       code: truthyFunction,
       schema: null,
+      source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/truthy.js'),
     });
 
     expect(ruleset.functions.bar).toHaveProperty('name', 'bar');
