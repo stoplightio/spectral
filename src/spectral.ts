@@ -156,7 +156,7 @@ export class Spectral {
 
     this.setFunctions(
       Object.entries(ruleset.functions).reduce<FunctionCollection>(
-        (fns, [key, { code, ref, name, schema }]) => {
+        (fns, [key, { code, ref, name, source, schema }]) => {
           if (code === void 0) {
             if (ref !== void 0) {
               ({ code } = ruleset.functions[ref]);
@@ -168,7 +168,7 @@ export class Spectral {
             return fns;
           }
 
-          fns[key] = compileExportedFunction(code, name, schema);
+          fns[key] = compileExportedFunction(code, name, source, schema);
           return fns;
         },
         {

@@ -18,6 +18,7 @@ export function mergeFunctions(
       name: def.name,
       schema: def.schema,
       ref: newName,
+      source: def.source,
     };
   }
 
