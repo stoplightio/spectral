@@ -13,22 +13,24 @@ describe('Code evaluators', () => {
           `module.exports = () => require('path').join('/', 'hello!')`,
           path.join(__dirname, '__fixtures__/a.js'),
         )(),
-      ).toEqual('/hello!');
+      ).toEqual(require('path').join('/', 'hello!'));
 
       expect(
         evaluateExport(
           `module.exports = () => require('@stoplight/path').join('/', 'hello!')`,
           path.join(__dirname, '__fixtures__/a.js'),
         )(),
-      ).toEqual('/hello!');
+      ).toEqual(path.join('/', 'hello!'));
     });
 
     it('supports require.resolve', () => {
       expect(
-        evaluateExport(
-          `module.exports = () => require.resolve('./foo', { paths: ['${path.join(__dirname, '__fixtures__')}'] } )`,
-          null,
-        )(),
+        path.normalize(
+          evaluateExport(
+            `module.exports = () => require.resolve('./foo', { paths: ['${path.join(__dirname, '__fixtures__')}'] } )`,
+            null,
+          )(),
+        ),
       ).toEqual(path.join(__dirname, '__fixtures__/foo.js'));
     });
 
