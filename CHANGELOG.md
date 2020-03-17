@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] - 2019-03-18
+
+### Features
+- Rule exceptions are supported [#747](https://github.com/stoplightio/spectral/issues/747)
+- Allow require calls in Node.JS [#1011](https://github.com/stoplightio/spectral/pull/1011)
+
+### Changed
+- YAMLIncomaptibleValue diagnostics are now considered warnings [#1009](https://github.com/stoplightio/spectral/pull/1009) 
+
+### Fixed
+- Alphabetical rule works correctly for $refs [#979](https://github.com/stoplightio/spectral/issues/979)
+
 ## [5.1.0] - 2019-02-26
 
 ### Features
