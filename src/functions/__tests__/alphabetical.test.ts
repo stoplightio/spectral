@@ -103,11 +103,7 @@ describe('alphabetical', () => {
   });
 
   test('is able to trap object again', () => {
-    const document = new Document(
-      `'404':
-'200':`,
-      Parsers.Yaml,
-    );
+    const document = new Document(`'404':\n'200':`, Parsers.Yaml);
 
     Object.defineProperty(document, 'data', {
       value: Object.defineProperties({}, Object.getOwnPropertyDescriptors(document.data)),
