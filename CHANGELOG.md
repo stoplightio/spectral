@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.2.0] - 2019-03-18
 
-### Features
+### Added
 - Rule exceptions are supported [#747](https://github.com/stoplightio/spectral/issues/747)
 - Allow require calls in Node.JS [#1011](https://github.com/stoplightio/spectral/pull/1011)
 
@@ -19,14 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.1.0] - 2019-02-26
 
-### Features
+### Added 
 - Implement a new `typed-enum` rule to detect enum value that do not respect specified type [#913](https://github.com/stoplightio/spectral/pull/913)
-
-### Added
 - API: introduced document [#876](https://github.com/stoplightio/spectral/pull/876) - note, this is **not** a breaking change
 - Introduce optional enhancers to casing function [#884](https://github.com/stoplightio/spectral/pull/884)
 
-### Fixes
+### Fixed
 - Improved Example Object validation [#882](https://github.com/stoplightio/spectral/pull/882)
 - `oas3-operation-security-defined` rule supports optional authentication [#895](https://github.com/stoplightio/spectral/pull/895)
 - Generate more correct paths when reporting an error [#900](https://github.com/stoplightio/spectral/pull/900)
@@ -37,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.0.0] - 2019-12-24
 
-### Features
+### Added
 - Alphabetical rule function now supports numeric keys [#730](https://github.com/stoplightio/spectral/issues/730)
 - Non-JSON-ish YAML mapping keys are reported [#726](https://github.com/stoplightio/spectral/issues/726)
 - CLI: new formatter - text [#822](https://github.com/stoplightio/spectral/issues/822)
@@ -75,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.0] - 2019-10-08
 
-### Features
+### Added
 - CLI: glob patterns and multiple paths are allowed [#534](https://github.com/stoplightio/spectral/issues/534)
 - CLI: control fail severity and result display [#368](https://github.com/stoplightio/spectral/issues/368)
 - CLI: new formatter - JUnit [#478](https://github.com/stoplightio/spectral/issues/478)
