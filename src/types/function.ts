@@ -16,7 +16,7 @@ export interface IFunctionPaths {
 export interface IFunctionValues {
   original: any;
   given: any;
-  resolved: DocumentInventory;
+  documentInventory: DocumentInventory;
 }
 
 export interface IFunctionResult {
