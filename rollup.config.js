@@ -30,7 +30,7 @@ module.exports = functions.map(fn => ({
     resolve(),
     commonjs({
       namedExports: {
-        'node_modules/lodash/lodash.js': ['isObject', 'trimStart'],
+        'node_modules/lodash/lodash.js': ['isObject', 'trimStart', 'cloneDeep', 'get', 'set'],
         'node_modules/@stoplight/types/dist/index.js': ['DiagnosticSeverity'],
       },
     }),
