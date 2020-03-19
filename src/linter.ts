@@ -1,6 +1,7 @@
 import { decodePointerFragment } from '@stoplight/json';
 import { get } from 'lodash';
 
+import { JsonPath } from '@stoplight/types';
 import { Document } from './document';
 import { DocumentInventory } from './documentInventory';
 import { IMessageVars, message } from './rulesets/message';
@@ -9,23 +10,29 @@ import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
 import { getClosestJsonPath, getLintTargets, printPath, PrintStyle } from './utils';
 import { IExceptionLocation } from './utils/pivotExceptions';
 
+const arePathsEqual = (one: JsonPath, another: JsonPath): boolean => {
+  if (one.length !== another.length) {
+    return false;
+  }
+
+  for (let i = 0; i < one.length; i++) {
+    if (one[i] !== another[i]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const isAKnownException = (violation: IRuleResult, locations: IExceptionLocation[]): boolean => {
   for (const location of locations) {
     if (violation.source !== location.source) {
       continue;
     }
 
-    if (violation.path.length !== location.path.length) {
-      continue;
+    if (arePathsEqual(violation.path, location.path)) {
+      return true;
     }
-
-    for (let i = 0; i < violation.path.length; i++) {
-      if (location.path[i] !== violation.path[i]) {
-        continue;
-      }
-    }
-
-    return true;
   }
 
   return false;
