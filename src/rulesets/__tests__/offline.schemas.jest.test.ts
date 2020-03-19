@@ -85,7 +85,7 @@ describe('Online vs Offline context', () => {
   test('all rulesets are accounted for', async () => {
     const dir = path.join(__dirname, '../../../rulesets/');
 
-    // Would that fail, run  `yarn generate-assets` ;-)
+    // Would that fail, run  `yarn build` ;-)
     expect(fs.existsSync(dir)).toBeTruthy();
 
     const discoveredRulesets: string[] = [];
