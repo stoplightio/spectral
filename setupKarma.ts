@@ -11,6 +11,11 @@ let fetchMock: FetchMockSandbox;
 
 beforeEach(() => {
   fetchMock = require('fetch-mock').sandbox();
+  fetchMock.catch((url, _opts) => {
+    console.warn(`Url '${url}' hasn't been found. Have you forgotten to mock it in 'setupKarma.ts'?`);
+    return 404;
+  });
+
   window.fetch = fetchMock;
 
   fetchMock.get('https://unpkg.com/@stoplight/spectral/rulesets/oas/index.json', {
