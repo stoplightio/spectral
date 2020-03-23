@@ -6,10 +6,9 @@ import * as nock from 'nock';
 import { Spectral } from '../../spectral';
 import { IRule, RuleType } from '../../types';
 import { readRuleset } from '../reader';
-const nanoid = require('nanoid/non-secure');
 
-jest.mock('nanoid/non-secure');
 jest.mock('fs');
+jest.mock('nanoid/non-secure');
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
 const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
@@ -42,11 +41,6 @@ const oasRulesetRules: Dictionary<IRule, string> = oasRuleset.rules;
 jest.setTimeout(10000);
 
 describe('Rulesets reader', () => {
-  beforeEach(() => {
-    let seed = 0;
-    (nanoid as jest.Mock).mockImplementation(() => `random-id-${seed++}`);
-  });
-
   afterEach(() => {
     nock.cleanAll();
     nock.enableNetConnect();
