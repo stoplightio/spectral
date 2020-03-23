@@ -1,0 +1,34 @@
+====test====
+Custom function is able to require a module
+====document====
+{}
+====asset:fn.js====
+const fs = require('fs');
+const path = require('path');
+const dir = path.join('{asset:fn.js}', '../node_modules', 'foo');
+
+fs.mkdirSync(dir, { recursive: true });
+fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ main: './index.js' }));
+fs.writeFileSync(path.join(dir, 'index.js'), 'module.exports = Function()');
+
+try {
+  require('foo'); // this will throw if foo cannot be resolved
+} finally {
+  fs.unlinkSync(path.join(dir, 'package.json'));
+  fs.unlinkSync(path.join(dir, 'index.js'));
+  fs.rmdirSync(dir);
+}
+
+module.exports = () => void 0;
+====asset:ruleset====
+functions: ["{asset:fn.js|filename|no-ext}"]
+functionsDir: "."
+rules:
+  has-property:
+    given: $
+    then:
+      function: "{asset:fn.js|filename|no-ext}"
+====command====
+{bin} lint {document} --ruleset {asset:ruleset} --ignoreUnknownFormat
+====status====
+0
