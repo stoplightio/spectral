@@ -230,6 +230,82 @@ describe('Linter', () => {
       );
     });
 
+    it('should not swallow results', async () => {
+      // Cf. https://github.com/stoplightio/spectral/issues/1018
+
+      const document = {
+        openapi: '3.0.2',
+        paths: {
+          '/a.one': { get: 17 },
+          '/a.two': { get: 18 },
+          '/a.three': { get: 19 },
+          '/b.one': { get: 17 },
+          '/b.two': { get: 18 },
+          '/b.three': { get: 19 },
+        },
+      };
+
+      await spectral.loadRuleset(customOASRuleset);
+      spectral.registerFormat('oas3', isOpenApiv3);
+
+      const res = await spectral.run(document, {
+        resolve: {
+          documentUri: '/test/file.json',
+        },
+      });
+
+      expect(res).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            message: 'Operation must have at least one `2xx` response.',
+            path: ['paths', '/a.one', 'get'],
+            source: '/test/file.json',
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            message: 'Operation must have at least one `2xx` response.',
+            path: ['paths', '/a.three', 'get'],
+            source: '/test/file.json',
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            message: 'Operation must have at least one `2xx` response.',
+            path: ['paths', '/b.one', 'get'],
+            source: '/test/file.json',
+          }),
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            message: 'Operation must have at least one `2xx` response.',
+            path: ['paths', '/b.two', 'get'],
+            source: '/test/file.json',
+          }),
+        ]),
+      );
+
+      expect(res).toEqual(
+        expect.not.arrayContaining([
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            message: 'Operation must have at least one `2xx` response.',
+            path: ['paths', '/a.two', 'get'],
+            source: '/test/file.json',
+          }),
+        ]),
+      );
+
+      expect(res).toEqual(
+        expect.not.arrayContaining([
+          expect.objectContaining({
+            code: 'operation-2xx-response',
+            message: 'Operation must have at least one `2xx` response.',
+            path: ['paths', '/b.three', 'get'],
+            source: '/test/file.json',
+          }),
+        ]),
+      );
+    });
+
     describe('resolving', () => {
       const document = {
         openapi: '3.0.2',
