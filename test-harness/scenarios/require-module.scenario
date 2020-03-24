@@ -5,18 +5,20 @@ Custom function is able to require a module
 ====asset:fn.js====
 const fs = require('fs');
 const path = require('path');
-const dir = path.join('{asset:fn.js}', '../node_modules', 'foo');
+const nodeModulesDir = path.join('{asset:fn.js}', '../node_modules');
+const packageDir = path.join(nodeModulesDir, 'foo');
 
-fs.mkdirSync(dir, { recursive: true });
-fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ main: './index.js' }));
-fs.writeFileSync(path.join(dir, 'index.js'), 'module.exports = Function()');
+fs.mkdirSync(packageDir, { recursive: true });
+fs.writeFileSync(path.join(packageDir, 'package.json'), JSON.stringify({ main: './index.js' }));
+fs.writeFileSync(path.join(packageDir, 'index.js'), 'module.exports = Function()');
 
 try {
   require('foo'); // this will throw if foo cannot be resolved
 } finally {
-  fs.unlinkSync(path.join(dir, 'package.json'));
-  fs.unlinkSync(path.join(dir, 'index.js'));
-  fs.rmdirSync(dir);
+  fs.unlinkSync(path.join(packageDir, 'package.json'));
+  fs.unlinkSync(path.join(packageDir, 'index.js'));
+  fs.rmdirSync(packageDir);
+  fs.rmdirSync(nodeModulesDir);
 }
 
 module.exports = () => void 0;
