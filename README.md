@@ -61,17 +61,10 @@ If you are interested in contributing to Spectral itself, check out our [contrib
 
 If you are using Spectral in your project and want to be listed in the examples section, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
 
-### Example Implementations
+### Integrations
 
-- [Stoplight's Custom Style and Validation Rules](https://docs.stoplight.io/modeling/modeling-with-openapi/style-validation-rules) uses Spectral to validate and lint OpenAPI documents on the Stoplight platform
-- [Spectral GitHub Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot that lints your repo's OpenAPI document that uses the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
-- [Spectral GitHub Action](https://github.com/XVincentX/spectral-action), a GitHub Action that lints your repo's OpenAPI document, built by [Vincenzo Chianese](https://github.com/XVincentX/)
-
-## Helpful Links
-
-- [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `given` path you want
-- [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
-- [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON, and a few helper functions such as `getJsonPathForPosition` or `getLocationForJsonPath`
+- [Stoplight Studio](https://stoplight.io/studio) uses Spectral to validate and lint OpenAPI documents.
+- [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/)
 
 ## Thanks
 
@@ -79,6 +72,7 @@ If you are using Spectral in your project and want to be listed in the examples 
 - [Jamund Ferguson](https://github.com/xjamundx) for JUnit formatter
 - [Sindre Sorhus](https://github.com/sindresorhus) for Stylish formatter
 - Julian Laval for HTML formatter
+- [@nulltoken](https://github.com/nulltoken) for a whole bunch of amazing features
 
 ## Support
 
