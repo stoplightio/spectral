@@ -97,7 +97,7 @@ You can do it as follows:
 
 ```yaml
 functions:
-- - equals
+- equals
   # can be any valid JSONSchema7
   - properties:
       value:
