@@ -5,9 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.2.0] - 2019-03-18
+
+### Added
+- Rule exceptions are supported [#747](https://github.com/stoplightio/spectral/issues/747)
+- Allow require calls in Node.JS [#1011](https://github.com/stoplightio/spectral/pull/1011)
+
+### Changed
+- YAMLIncomaptibleValue diagnostics are now considered warnings [#1009](https://github.com/stoplightio/spectral/pull/1009) 
+
+### Fixed
+- Alphabetical rule works correctly for $refs [#979](https://github.com/stoplightio/spectral/issues/979)
+
+## [5.1.0] - 2019-02-26
+
+### Added 
+- Implement a new `typed-enum` rule to detect enum value that do not respect specified type [#913](https://github.com/stoplightio/spectral/pull/913)
+- API: introduced document [#876](https://github.com/stoplightio/spectral/pull/876) - note, this is **not** a breaking change
+- Introduce optional enhancers to casing function [#884](https://github.com/stoplightio/spectral/pull/884)
+
+### Fixed
+- Improved Example Object validation [#882](https://github.com/stoplightio/spectral/pull/882)
+- `oas3-operation-security-defined` rule supports optional authentication [#895](https://github.com/stoplightio/spectral/pull/895)
+- Generate more correct paths when reporting an error [#900](https://github.com/stoplightio/spectral/pull/900)
+- `example-value-or-externalValue` no longer reports false positives [#899](https://github.com/stoplightio/spectral/pull/899)
+- `schema-path` accepts a JSON Path expression as a field selector [#917](https://github.com/stoplightio/spectral/pull/917) 
+- `schema-path` handles invalid values gracefully [#917](https://github.com/stoplightio/spectral/pull/917) 
+- `oas3-valid-(content-)schema-example` rules handle nullable correctly [#914](https://github.com/stoplightio/spectral/pull/914)
+
 ## [5.0.0] - 2019-12-24
 
-### Features
+### Added
 - Alphabetical rule function now supports numeric keys [#730](https://github.com/stoplightio/spectral/issues/730)
 - Non-JSON-ish YAML mapping keys are reported [#726](https://github.com/stoplightio/spectral/issues/726)
 - CLI: new formatter - text [#822](https://github.com/stoplightio/spectral/issues/822)
@@ -45,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.0] - 2019-10-08
 
-### Features
+### Added
 - CLI: glob patterns and multiple paths are allowed [#534](https://github.com/stoplightio/spectral/issues/534)
 - CLI: control fail severity and result display [#368](https://github.com/stoplightio/spectral/issues/368)
 - CLI: new formatter - JUnit [#478](https://github.com/stoplightio/spectral/issues/478)

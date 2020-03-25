@@ -1,0 +1,3 @@
+extends: ["./standalone.yaml"]
+except:
+  "four.yaml#": ["my-rule-4"]

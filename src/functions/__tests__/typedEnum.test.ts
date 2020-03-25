@@ -7,7 +7,7 @@ function runTypedEnum(targetVal: any, reportingThreshold: any) {
     targetVal,
     { reportingThreshold },
     { given: ['$'] },
-    { given: null, original: null, resolved: {} as any },
+    { given: null, original: null, documentInventory: {} as any },
   );
 }
 

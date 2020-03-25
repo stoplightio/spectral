@@ -1,19 +1,46 @@
 const { JSONPath } = require('jsonpath-plus');
+import { DiagnosticSeverity } from '@stoplight/types';
 
+import { STDIN } from './document';
 import { DocumentInventory } from './documentInventory';
 import { lintNode } from './linter';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { FunctionCollection, IGivenNode, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
+import { RulesetExceptionCollection } from './types/ruleset';
 import { hasIntersectingElement } from './utils/';
+import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
+import { IExceptionLocation, pivotExceptions } from './utils/pivotExceptions';
 
 export const isRuleEnabled = (rule: IRule) => rule.severity !== void 0 && getDiagnosticSeverity(rule.severity) !== -1;
+
+const isStdInSource = (inventory: DocumentInventory): boolean => {
+  return inventory.document.source === STDIN;
+};
+
+const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory): IRuleResult => {
+  return generateDocumentWideResult(
+    documentInventory.document,
+    'The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.',
+    DiagnosticSeverity.Warning,
+    'except-but-stdin',
+  );
+};
 
 export const runRules = (
   documentInventory: DocumentInventory,
   rules: RunRuleCollection,
   functions: FunctionCollection,
+  exceptions: RulesetExceptionCollection,
 ): IRuleResult[] => {
   const results: IRuleResult[] = [];
+
+  const isStdIn = isStdInSource(documentInventory);
+
+  if (isStdIn && Object.keys(exceptions).length > 0) {
+    results.push(generateDefinedExceptionsButStdIn(documentInventory));
+  }
+
+  const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
 
   for (const name in rules) {
     if (!rules.hasOwnProperty(name)) continue;
@@ -33,17 +60,26 @@ export const runRules = (
       continue;
     }
 
+    let ruleResults: IRuleResult[] = [];
+
     try {
-      results.push(...runRule(documentInventory, rule, functions));
+      ruleResults = runRule(documentInventory, rule, functions, exceptRuleByLocations[name]);
     } catch (e) {
       console.error(`Unable to run rule '${name}':\n${e}`);
     }
+
+    results.push(...ruleResults);
   }
 
   return results;
 };
 
-const runRule = (resolved: DocumentInventory, rule: IRunRule, functions: FunctionCollection): IRuleResult[] => {
+const runRule = (
+  resolved: DocumentInventory,
+  rule: IRunRule,
+  functions: FunctionCollection,
+  exceptionLocations: IExceptionLocation[] | undefined,
+): IRuleResult[] => {
   const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
 
   const results: IRuleResult[] = [];
@@ -59,6 +95,7 @@ const runRule = (resolved: DocumentInventory, rule: IRunRule, functions: Functio
         resolved,
         rule,
         functions,
+        exceptionLocations,
         results,
       );
     } else {
@@ -75,6 +112,7 @@ const runRule = (resolved: DocumentInventory, rule: IRunRule, functions: Functio
             resolved,
             rule,
             functions,
+            exceptionLocations,
             results,
           );
         },
@@ -90,6 +128,7 @@ function lint(
   resolved: DocumentInventory,
   rule: IRunRule,
   functions: FunctionCollection,
+  exceptionLocations: IExceptionLocation[] | undefined,
   results: IRuleResult[],
 ): void {
   try {
@@ -100,7 +139,7 @@ function lint(
         continue;
       }
 
-      const validationResults = lintNode(node, rule, then, func, resolved);
+      const validationResults = lintNode(node, rule, then, func, resolved, exceptionLocations);
 
       if (validationResults.length > 0) {
         results.push(...validationResults);

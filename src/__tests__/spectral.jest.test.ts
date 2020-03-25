@@ -45,6 +45,16 @@ describe('Spectral', () => {
           },
         }),
       );
+
+      Object.keys(s.exceptions).forEach(p => expect(path.isAbsolute(p)).toEqual(true));
+
+      expect(Object.entries(s.exceptions)).toEqual([
+        [expect.stringMatching('^/test/file.json#/info$'), ['info-contact', 'info-description']],
+        [expect.stringMatching('^/test/file.json#$'), ['oas3-api-servers']],
+        [expect.stringMatching('^/test/file.json#/paths/~1a.two/get$'), ['operation-2xx-response']],
+        [expect.stringMatching('^/test/file.json#/paths/~1b.three/get$'), ['operation-2xx-response']],
+        [expect.stringMatching('/__tests__/__fixtures__/another.yaml#$'), ['dummy-rule', 'info-contact']],
+      ]);
     });
 
     test('should support loading rulesets over http', async () => {

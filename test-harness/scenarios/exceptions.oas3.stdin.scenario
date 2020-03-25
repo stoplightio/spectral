@@ -1,0 +1,29 @@
+====test====
+Do not report exceptions when document comes through stdin
+====document====
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Stoplight
+paths: {}
+====asset:ruleset====
+extends: spectral:oas
+
+except:
+  "{document}#":
+    - oas3-api-servers
+  "{document}#/info":
+    - info-contact
+====command====
+cat {document} | {bin} lint -r {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+<STDIN>
+ 1:1  warning  except-but-stdin  The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.
+ 1:1  warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
+ 1:1  warning  openapi-tags      OpenAPI object should have non-empty `tags` array.
+ 2:6  warning  info-contact      Info object should contain `contact` object.
+ 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
+
+✖ 5 problems (0 errors, 5 warnings, 0 infos, 0 hints)

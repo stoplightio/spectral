@@ -5,7 +5,7 @@ import * as fg from 'fast-glob';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import { promisify } from 'util';
-import { applyReplacements, parseScenarioFile, tmpFile } from './helpers';
+import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
 const writeFileAsync = promisify(fs.writeFile);
 
@@ -26,17 +26,26 @@ describe('cli acceptance tests', () => {
 
     beforeAll(async () => {
       await Promise.all(
-        scenario.assets.map(async ([asset, contents]) => {
-          const tmpFileHandle = await tmpFile();
+        scenario.assets.map(async ([asset]) => {
+          const ext = path.extname(asset);
+          const tmpFileHandle = await tmpFile({
+            ...(ext && { postfix: ext }),
+          });
+
           tmpFileHandles.set(asset, tmpFileHandle);
 
-          replacements[asset] = tmpFileHandle.name;
-          replacements[`${asset}|no-ext`] = tmpFileHandle.name.replace(
-            new RegExp(`${path.extname(tmpFileHandle.name)}$`),
-            '',
-          );
+          const normalizedName = normalize(tmpFileHandle.name);
 
-          await writeFileAsync(tmpFileHandle.name, contents, { encoding: 'utf8' }); // todo: apply replacements to contents
+          replacements[asset] = normalizedName;
+          replacements[`${asset}|no-ext`] = normalizedName.replace(new RegExp(`${path.extname(normalizedName)}$`), '');
+          replacements[`${asset}|filename|no-ext`] = path.basename(normalizedName, true);
+        }),
+      );
+
+      await Promise.all(
+        scenario.assets.map(async ([asset, contents]) => {
+          const replaced = applyReplacements(contents, replacements);
+          await writeFileAsync(replacements[asset], replaced, { encoding: 'utf8' });
         }),
       );
     });
@@ -58,13 +67,13 @@ describe('cli acceptance tests', () => {
       const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);
 
       if (expectedStderr !== void 0) {
-        expect(stderr).toEqual(expectedStderr);
+        expect(stderr).toEqual(normalizeLineEndings(expectedStderr));
       } else if (stderr) {
         throw new Error(stderr);
       }
 
       if (expectedStdout !== void 0) {
-        expect(stdout).toEqual(expectedStdout);
+        expect(stdout).toEqual(normalizeLineEndings(expectedStdout));
       }
 
       if (scenario.status !== void 0) {

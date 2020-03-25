@@ -1,0 +1,92 @@
+====test====
+Can ignore circular refs results (reference scenario)
+====document====
+openapi: 3.0.2
+info:
+  title: Circular circurlarity
+  description: This is a description
+  version: draft
+  contact: 
+    email: me@me.com
+paths:
+  /self_referencing_graphs:
+    get:
+      description: A good one.
+      responses:
+        '200':
+          description: Hello
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/descriptor'
+              example:
+                A weird example.
+  /cyclic_graphs:
+    get:
+      description: A good one.
+      responses:
+        '200':
+          description: Hello
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/descriptor'
+              example:
+                A weird example.
+  /looping_graphs:
+    get:
+      description: A good one.
+      responses:
+        '200':
+          description: Hello
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/descriptor'
+              example:
+                A weird example.
+components:
+  schemas:
+    links:
+      type: object
+      properties:
+        id:
+          type: string
+        references:
+          type: array
+          items:
+            $ref: '#/components/schemas/links'
+    descriptor:
+      type: object
+      properties:
+        id:
+          type: string
+        links:
+          $ref: '#/components/schemas/links'
+      example:
+        processes:
+          - id: 17
+            summary: Enhanced Index
+====asset:ruleset====
+extends: spectral:oas
+====command====
+{bin} lint {document} -r {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+  1:1   warning  oas3-api-servers                   OpenAPI `servers` must be present and non-empty array.
+  1:1   warning  openapi-tags                       OpenAPI object should have non-empty `tags` array.
+  10:9  warning  operation-operationId              Operation should have an `operationId`.
+  10:9  warning  operation-tags                     Operation should have non-empty `tags` array.
+ 20:17    error  oas3-valid-oas-content-example     can't resolve reference #/components/schemas/links from id #
+  22:9  warning  operation-operationId              Operation should have an `operationId`.
+  22:9  warning  operation-tags                     Operation should have non-empty `tags` array.
+ 32:17    error  oas3-valid-oas-content-example     can't resolve reference #/components/schemas/links from id #
+  34:9  warning  operation-operationId              Operation should have an `operationId`.
+  34:9  warning  operation-tags                     Operation should have non-empty `tags` array.
+ 44:17    error  oas3-valid-oas-content-example     can't resolve reference #/components/schemas/links from id #
+ 63:15    error  oas3-valid-content-schema-example  can't resolve reference #/components/schemas/links from id #
+ 63:15    error  oas3-valid-schema-example          can't resolve reference #/components/schemas/links from id #
+
+✖ 13 problems (5 errors, 8 warnings, 0 infos, 0 hints)

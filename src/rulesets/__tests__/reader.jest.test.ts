@@ -6,10 +6,9 @@ import * as nock from 'nock';
 import { Spectral } from '../../spectral';
 import { IRule, RuleType } from '../../types';
 import { readRuleset } from '../reader';
-const nanoid = require('nanoid/non-secure');
 
-jest.mock('nanoid/non-secure');
 jest.mock('fs');
+jest.mock('nanoid/non-secure');
 
 const validFlatRuleset = path.join(__dirname, './__fixtures__/valid-flat-ruleset.json');
 const validRequireInfo = path.join(__dirname, './__fixtures__/valid-require-info-ruleset.yaml');
@@ -29,6 +28,10 @@ const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset
 const fooExtendsBarRuleset = path.join(__dirname, './__fixtures__/foo-extends-bar-ruleset.json');
 const selfExtendingRuleset = path.join(__dirname, './__fixtures__/self-extending-ruleset.json');
 const simpleDisableRuleset = path.join(__dirname, './__fixtures__/simple-disable-ruleset.yaml');
+const standaloneExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/standalone.yaml');
+const simpleExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/simple.yaml');
+const inheritingExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/inheriting.yaml');
+const invalidExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/invalid.yaml');
 const fooCJSFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/functions/foo.cjs.js'), 'utf8');
 const barFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/bar.js'), 'utf8');
 const truthyFunction = fs.readFileSync(path.join(__dirname, './__fixtures__/customFunctions/truthy.js'), 'utf8');
@@ -38,11 +41,6 @@ const oasRulesetRules: Dictionary<IRule, string> = oasRuleset.rules;
 jest.setTimeout(10000);
 
 describe('Rulesets reader', () => {
-  beforeEach(() => {
-    let seed = 0;
-    (nanoid as jest.Mock).mockImplementation(() => `random-id-${seed++}`);
-  });
-
   afterEach(() => {
     nock.cleanAll();
     nock.enableNetConnect();
@@ -366,6 +364,7 @@ describe('Rulesets reader', () => {
     return expect(
       readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset.json')),
     ).resolves.toStrictEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'contact-name-matches-stoplight': {
@@ -417,6 +416,7 @@ describe('Rulesets reader', () => {
     return expect(
       readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/my-ruleset-recommended.json')),
     ).resolves.toStrictEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'contact-name-matches-stoplight': {
@@ -468,6 +468,7 @@ describe('Rulesets reader', () => {
     return expect(
       readRuleset(path.join(__dirname, './__fixtures__/inheritanceRulesets/ruleset-c.json')),
     ).resolves.toStrictEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'contact-name-matches-stoplight': {
@@ -556,11 +557,13 @@ describe('Rulesets reader', () => {
         name: 'foo.cjs',
         ref: 'random-id-0',
         schema: null,
+        source: path.join(fooRuleset, '../functions/foo.cjs.js'),
       },
       'random-id-0': {
         name: 'foo.cjs',
         code: fooCJSFunction,
         schema: null,
+        source: path.join(fooRuleset, '../functions/foo.cjs.js'),
       },
     });
 
@@ -585,11 +588,13 @@ describe('Rulesets reader', () => {
           name: 'bar',
           ref: expect.stringMatching(/^random-id-[01]$/),
           schema: null,
+          source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/bar.js'),
         },
         truthy: {
           name: 'truthy',
           ref: expect.stringMatching(/^random-id-[01]$/),
           schema: null,
+          source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/truthy.js'),
         },
       }),
     );
@@ -606,12 +611,14 @@ describe('Rulesets reader', () => {
       name: 'bar',
       code: barFunction,
       schema: null,
+      source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/bar.js'),
     });
 
     expect(truthyFunctionDef).toEqual({
       name: 'truthy',
       code: truthyFunction,
       schema: null,
+      source: path.join(customFunctionsDirectoryRuleset, '../customFunctions/truthy.js'),
     });
 
     expect(ruleset.functions.bar).toHaveProperty('name', 'bar');
@@ -645,11 +652,13 @@ describe('Rulesets reader', () => {
     return expect(readRuleset(rulesetWithMissingFunctions)).resolves.toEqual({
       rules: {},
       functions: {},
+      exceptions: {},
     });
   });
 
   it('should handle ruleset with circular extensions', () => {
     return expect(readRuleset(fooExtendsBarRuleset)).resolves.toEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'bar-rule': {
@@ -674,6 +683,7 @@ describe('Rulesets reader', () => {
 
   it('should handle ruleset that extends itself', () => {
     return expect(readRuleset(selfExtendingRuleset)).resolves.toEqual({
+      exceptions: {},
       functions: {},
       rules: {
         'foo-rule': {
@@ -749,5 +759,42 @@ describe('Rulesets reader', () => {
 
     expect(readFileSpy).not.toBeCalled();
     readFileSpy.mockRestore();
+  });
+
+  describe('Exceptions loading', () => {
+    it('should handle loading a standalone ruleset', async () => {
+      const ruleset = await readRuleset(standaloneExceptRuleset);
+
+      expect(Object.entries(ruleset.exceptions)).toEqual([
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
+        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
+      ]);
+    });
+
+    it('should throw when ruleset contains invalid exceptions', () => {
+      expect(readRuleset(invalidExceptRuleset)).rejects.toThrow('is not a valid uri');
+    });
+
+    it('should handle loading a ruleset deriving from a built-in one', async () => {
+      const ruleset = await readRuleset(simpleExceptRuleset);
+
+      expect(Object.entries(ruleset.exceptions)).toEqual([
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
+        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
+      ]);
+    });
+
+    it('should handle loading a ruleset deriving from another one', async () => {
+      const ruleset = await readRuleset(inheritingExceptRuleset);
+
+      expect(Object.entries(ruleset.exceptions)).toEqual([
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
+        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
+        [expect.stringMatching('/__tests__/__fixtures__/exceptions/four.yaml#$'), ['my-rule-4']],
+      ]);
+    });
   });
 });

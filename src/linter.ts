@@ -1,12 +1,42 @@
 import { decodePointerFragment } from '@stoplight/json';
 import { get } from 'lodash';
 
+import { JsonPath } from '@stoplight/types';
 import { Document } from './document';
 import { DocumentInventory } from './documentInventory';
 import { IMessageVars, message } from './rulesets/message';
 import { getDiagnosticSeverity } from './rulesets/severity';
 import { IFunction, IGivenNode, IRuleResult, IRunRule, IThen } from './types';
 import { getClosestJsonPath, getLintTargets, printPath, PrintStyle } from './utils';
+import { IExceptionLocation } from './utils/pivotExceptions';
+
+const arePathsEqual = (one: JsonPath, another: JsonPath): boolean => {
+  if (one.length !== another.length) {
+    return false;
+  }
+
+  for (let i = 0; i < one.length; i++) {
+    if (one[i] !== another[i]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const isAKnownException = (violation: IRuleResult, locations: IExceptionLocation[]): boolean => {
+  for (const location of locations) {
+    if (violation.source !== location.source) {
+      continue;
+    }
+
+    if (arePathsEqual(violation.path, location.path)) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 // TODO(SO-23): unit test but mock whatShouldBeLinted
 export const lintNode = (
@@ -15,6 +45,7 @@ export const lintNode = (
   then: IThen<string, any>,
   apply: IFunction,
   inventory: DocumentInventory,
+  exceptionLocations: IExceptionLocation[] | undefined,
 ): IRuleResult[] => {
   const givenPath = node.path[0] === '$' ? node.path.slice(1) : node.path;
   const targets = getLintTargets(node.value, then.field);
@@ -34,7 +65,7 @@ export const lintNode = (
         {
           original: node.value,
           given: node.value,
-          resolved: inventory,
+          documentInventory: inventory,
         },
       ) || [];
 
@@ -76,5 +107,10 @@ export const lintNode = (
     );
   }
 
-  return results;
+  if (exceptionLocations === undefined) {
+    return results;
+  }
+
+  const filtered = results.filter(r => !isAKnownException(r, exceptionLocations));
+  return filtered;
 };

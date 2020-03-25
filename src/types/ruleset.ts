@@ -15,13 +15,16 @@ export interface IRulesetFunctionDefinition {
   ref?: string;
   schema: JSONSchema | null;
   name: string;
+  source: string | null;
 }
 
 export type RulesetFunctionCollection = Dictionary<IRulesetFunctionDefinition, string>;
+export type RulesetExceptionCollection = Dictionary<string[], string>;
 
 export interface IRuleset {
   rules: RuleCollection;
   functions: RulesetFunctionCollection;
+  exceptions: RulesetExceptionCollection;
 }
 
 export interface IRulesetFile {
@@ -30,4 +33,5 @@ export interface IRulesetFile {
   rules?: FileRuleCollection;
   functionsDir?: string;
   functions?: Array<string | [string, JSONSchema]>;
+  except?: RulesetExceptionCollection;
 }

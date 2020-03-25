@@ -205,6 +205,21 @@ schemaPath | a json path pointing to the json schema to use | yes
 
 The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (targetVal)`.
 
+<!-- title: example -->
+
+``` yaml
+important-fields:
+  description: Absolutely must have a title and a description
+  message: "Missing the {{property}}"
+  given: "$"
+  then:
+    - field: "title"
+      function: truthy
+
+    - field: "description"
+      function: truthy
+```
+
 ## undefined
 
 The value must be `undefined`. When combined with `field: foo` on an object the `foo` property must be undefined.

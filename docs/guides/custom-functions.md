@@ -183,10 +183,10 @@ export default (obj) => {
 };
 ```
 
-The following code won't work properly either:
+Require calls will work only in Node.js, and will cause errors for anyone trying to use the ruleset in the browser. If your ruleset is definitely going to only be used in the context of NodeJS then using them is ok, but if you are distributing your rulesets to the public we recommend avoiding the use of `require()` to increase portability.
 
  ```js
-const foo = require('./foo'); // require is not available (see note below)
+const foo = require('./foo');
 
 module.exports = (obj) => {
   for (const [key, value] of Object.entries(obj)) {

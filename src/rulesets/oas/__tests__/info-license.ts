@@ -33,7 +33,7 @@ describe('info-license', () => {
     expect(results).toEqual([
       {
         code: 'info-license',
-        message: 'OpenAPI object info `license` must be present and non-empty string.',
+        message: 'OpenAPI object `info` should contain a `license` object.',
         path: ['info'],
         range: {
           end: {

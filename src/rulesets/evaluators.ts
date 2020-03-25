@@ -1,11 +1,80 @@
-import { Optional } from '@stoplight/types';
+import { join, stripRoot } from '@stoplight/path';
+import { Dictionary, Optional } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { IFunction, JSONSchema } from '../types';
 import { decorateIFunctionWithSchemaValidation } from './validation';
 
-export type CJSExport = Partial<{ exports: object | ESCJSCompatibleExport }>;
+export type CJSExport = Partial<{ exports: object | ESCJSCompatibleExport; require: NodeJS.Require }>;
 export type ESCJSCompatibleExport = Partial<{ default: unknown }>;
 export type ContextExport = Partial<{ returnExports: unknown }>;
+
+function requireUnavailable() {
+  throw new ReferenceError('require() is supported only in the Node.JS environment');
+}
+
+function stubRequire(): NodeJS.Require {
+  function req() {
+    requireUnavailable();
+  }
+
+  const descriptors: Dictionary<PropertyDescriptor, keyof NodeJS.Require> = {
+    resolve: {
+      enumerable: true,
+      get: requireUnavailable,
+    },
+
+    main: {
+      enumerable: true,
+      get: requireUnavailable,
+    },
+
+    cache: {
+      enumerable: true,
+      get: requireUnavailable,
+    },
+
+    extensions: {
+      enumerable: true,
+      get: requireUnavailable,
+    },
+  };
+
+  return Object.defineProperties(req, descriptors);
+}
+
+function proxyRequire(source: string): NodeJS.Require {
+  const actualRequire = require;
+  function req(p: string) {
+    if (p.startsWith('.')) {
+      p = join(source, '..', stripRoot(p));
+    } else {
+      p = require.resolve(p, { paths: [join(source, '..')] });
+    }
+
+    return actualRequire.call(null, p);
+  }
+
+  return Object.defineProperties(req, Object.getOwnPropertyDescriptors(actualRequire));
+}
+
+const isRequiredSupported =
+  typeof require === 'function' &&
+  typeof require.main === 'object' &&
+  require.main !== null &&
+  'paths' in require.main &&
+  'cache' in require;
+
+const createRequire = (source: string | null): NodeJS.Require => {
+  if (!isRequiredSupported) {
+    return stubRequire();
+  }
+
+  if (source === null) {
+    return require;
+  }
+
+  return proxyRequire(source);
+};
 
 const createDefine = (exports: CJSExport) => {
   const define = (nameOrFactory: string | string[] | Function, factory: Function): Optional<CJSExport> => {
@@ -32,15 +101,17 @@ const isESCJSCompatibleExport = (obj: unknown): obj is ESCJSCompatibleExport => 
 
 // note: this code is hand-crafted and cover cases we want to support
 // be aware of using it in your own project if you need to support a variety of module systems
-export const evaluateExport = (body: string): Function => {
+export const evaluateExport = (body: string, source: string | null): Function => {
+  const req = createRequire(source);
   const mod: CJSExport = {
     exports: {},
+    require: req,
   };
   const exports: ESCJSCompatibleExport | unknown = {};
   const root: ContextExport = {};
   const define = createDefine(mod);
 
-  Function('module, exports, define', String(body)).call(root, mod, exports, define);
+  Function('module, exports, define, require', String(body)).call(root, mod, exports, define, req);
 
   let maybeFn: unknown;
 
@@ -61,8 +132,13 @@ export const evaluateExport = (body: string): Function => {
   return maybeFn;
 };
 
-export const compileExportedFunction = (code: string, name: string, schema: JSONSchema | null) => {
-  const exportedFn = evaluateExport(code) as IFunction;
+export const compileExportedFunction = (
+  code: string,
+  name: string,
+  source: string | null,
+  schema: JSONSchema | null,
+) => {
+  const exportedFn = evaluateExport(code, source) as IFunction;
 
   const fn = schema !== null ? decorateIFunctionWithSchemaValidation(exportedFn, schema) : exportedFn;
 

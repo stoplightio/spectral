@@ -1,5 +1,5 @@
 {
-  "include": ["src", "./karma*.ts", "./setupKarma.ts"],
+  "include": ["src", "./karma*.ts", "./setupKarma.ts", "./setupTests.ts"],
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es6",
