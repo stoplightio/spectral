@@ -1,16 +1,10 @@
 import { RuleCollection } from '../../../types';
 import { RulesetFunctionCollection } from '../../../types/ruleset';
 import { mergeFunctions } from '../functions';
-const nanoid = require('nanoid/non-secure');
 
 jest.mock('nanoid/non-secure');
 
 describe('Ruleset functions merging', () => {
-  beforeEach(() => {
-    let seed = 0;
-    (nanoid as jest.Mock).mockImplementation(() => `random-id-${seed++}`);
-  });
-
   it('re-writes function names', () => {
     const target = {};
     const sources: RulesetFunctionCollection = {

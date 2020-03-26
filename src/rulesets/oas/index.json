@@ -161,7 +161,7 @@
       ]
     },
     "info-license": {
-      "description": "OpenAPI object info `license` must be present and non-empty string.",
+      "description": "OpenAPI object `info` should contain a `license` object.",
       "recommended": false,
       "type": "style",
       "given": "$",

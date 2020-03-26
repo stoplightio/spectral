@@ -47,6 +47,8 @@ function proxyRequire(source: string): NodeJS.Require {
   function req(p: string) {
     if (p.startsWith('.')) {
       p = join(source, '..', stripRoot(p));
+    } else {
+      p = require.resolve(p, { paths: [join(source, '..')] });
     }
 
     return actualRequire.call(null, p);

@@ -27,13 +27,18 @@ describe('cli acceptance tests', () => {
     beforeAll(async () => {
       await Promise.all(
         scenario.assets.map(async ([asset]) => {
-          const tmpFileHandle = await tmpFile();
+          const ext = path.extname(asset);
+          const tmpFileHandle = await tmpFile({
+            ...(ext && { postfix: ext }),
+          });
+
           tmpFileHandles.set(asset, tmpFileHandle);
 
           const normalizedName = normalize(tmpFileHandle.name);
 
           replacements[asset] = normalizedName;
           replacements[`${asset}|no-ext`] = normalizedName.replace(new RegExp(`${path.extname(normalizedName)}$`), '');
+          replacements[`${asset}|filename|no-ext`] = path.basename(normalizedName, true);
         }),
       );
 

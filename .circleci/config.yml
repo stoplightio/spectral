@@ -129,8 +129,6 @@ workflows:
       - stoplight/analyze:
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+              only: master
           requires:
             - release

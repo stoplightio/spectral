@@ -2,7 +2,7 @@
 
 [![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral)
 [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral)
-[![Buy us a tree](https://img.shields.io/badge/Buy%20us%20a%20tree-%F0%9F%8C%B3-lightgreen)](https://offset.earth/stoplightinc)
+[![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/stoplightio/spectral)
 
 A flexible JSON/YAML linter, with out of the box support for OpenAPI v2 and v3.
 
@@ -61,17 +61,16 @@ If you are interested in contributing to Spectral itself, check out our [contrib
 
 If you are using Spectral in your project and want to be listed in the examples section, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
 
-### Example Implementations
+### Integrations
 
-- [Stoplight's Custom Style and Validation Rules](https://docs.stoplight.io/modeling/modeling-with-openapi/style-validation-rules) uses Spectral to validate and lint OpenAPI documents on the Stoplight platform
-- [Spectral GitHub Bot](https://github.com/tbarn/spectral-bot), a GitHub pull request bot that lints your repo's OpenAPI document that uses the [Probot](https://probot.github.io) framework, built by [Taylor Barnett](https://github.com/tbarn)
-- [Spectral GitHub Action](https://github.com/XVincentX/spectral-action), a GitHub Action that lints your repo's OpenAPI document, built by [Vincenzo Chianese](https://github.com/XVincentX/)
+- [Stoplight Studio](https://stoplight.io/studio) uses Spectral to validate and lint OpenAPI documents.
+- [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/)
 
-## Helpful Links
+## Licence
 
-- [JSONPath Online Evaluator](http://jsonpath.com/), a helpful tool to determine what `given` path you want
-- [stoplightio/json](https://github.com/stoplightio/json), a library of useful functions for when working with JSON
-- [stoplightio/yaml](https://github.com/stoplightio/yaml), a library of useful functions for when working with YAML, including parsing YAML into JSON, and a few helper functions such as `getJsonPathForPosition` or `getLocationForJsonPath`
+Spectral is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
+
+This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
 
 ## Thanks
 
@@ -79,6 +78,7 @@ If you are using Spectral in your project and want to be listed in the examples 
 - [Jamund Ferguson](https://github.com/xjamundx) for JUnit formatter
 - [Sindre Sorhus](https://github.com/sindresorhus) for Stylish formatter
 - Julian Laval for HTML formatter
+- [@nulltoken](https://github.com/nulltoken) for a whole bunch of amazing features
 
 ## Support
 
