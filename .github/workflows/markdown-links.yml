@@ -12,5 +12,5 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        folder-path: "./docs/"
+        folder-path: "docs"
     - uses: gaurav-nelson/github-action-markdown-link-check@master
