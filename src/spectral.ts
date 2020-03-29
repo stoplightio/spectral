@@ -72,7 +72,7 @@ export class Spectral {
             opts.resolve?.documentUri,
           );
 
-    if (document.source === void 0 && opts.resolve?.documentUri !== void 0) {
+    if (document.source === null && opts.resolve?.documentUri !== void 0) {
       (document as Omit<Document, 'source'> & { source: string }).source = opts.resolve?.documentUri;
     }
 

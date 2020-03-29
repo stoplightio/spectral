@@ -1,6 +1,7 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
+import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { mergeRules, readRuleset } from '../rulesets';
 import { RuleCollection, Spectral } from '../spectral';
@@ -1129,6 +1130,70 @@ responses:: !!foo
 
       expect(resolved).toEqual(result);
       expect(results).toEqual([expect.objectContaining({ code: 'no-info' })]);
+    });
+  });
+
+  describe('legacy parsed document', () => {
+    beforeEach(() => {
+      spectral.setRules({
+        'falsy-document': {
+          // some dumb rule to have some error
+          given: '$',
+          then: {
+            function: 'falsy',
+          },
+        },
+      });
+    });
+
+    test('should set parsed.source as the source of document', async () => {
+      const parsedResult: IParsedResult = {
+        parsed: {
+          data: {},
+          diagnostics: [],
+          ast: {},
+          lineMap: [],
+        },
+        getLocationForJsonPath: jest.fn(),
+        source: 'foo',
+      };
+
+      const results = await spectral.run(parsedResult, {
+        ignoreUnknownFormat: true,
+      });
+
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'falsy-document',
+          source: 'foo',
+        }),
+      ]);
+    });
+
+    test('given missing source on parsedResult, should try to set resolveUri as source of the document', async () => {
+      const parsedResult: IParsedResult = {
+        parsed: {
+          data: {},
+          diagnostics: [],
+          ast: {},
+          lineMap: [],
+        },
+        getLocationForJsonPath: jest.fn(),
+      };
+
+      const results = await spectral.run(parsedResult, {
+        ignoreUnknownFormat: true,
+        resolve: {
+          documentUri: 'foo',
+        },
+      });
+
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'falsy-document',
+          source: 'foo',
+        }),
+      ]);
     });
   });
 });
