@@ -1,3 +1,5 @@
+<!-- markdown-link-check-disable -->
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -162,3 +164,5 @@ CLI: missing tslib [#524](https://github.com/stoplightio/spectral/issues/524)
 
 - Configuration files were briefly available in 3.x but removed in v4.0
 - CLI `--max-results` flag is removed
+
+<!-- markdown-link-check-enable-->

@@ -12,5 +12,5 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        fetch-depth: 1
-    - uses: planetscale/github-action-markdown-link-check@master
+        folder-path: "./docs/"
+    - uses: gaurav-nelson/github-action-markdown-link-check@master
