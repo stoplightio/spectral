@@ -2,7 +2,6 @@
 
 [![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral)
 [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral)
-[![Treeware](https://img.shields.io/badge/treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/stoplightio/spectral)
 [![Treeware (Trees)](https://img.shields.io/treeware/trees/stoplightio/spectral)](https://plant.treeware.earth/stoplightio/spectral)
 
 A flexible JSON/YAML linter, with out of the box support for OpenAPI v2 and v3.
