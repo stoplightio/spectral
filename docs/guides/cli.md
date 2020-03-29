@@ -34,6 +34,7 @@ Other options include:
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
                                                                            [boolean] [default: false]
   --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
+  --ignore-unmatched-globs     do not warn about unmatched glob patterns    [boolean] [default: true]
   --verbose, -v                increase verbosity                                           [boolean]
   --quiet, -q                  no logging - output only                                     [boolean]
 ```
