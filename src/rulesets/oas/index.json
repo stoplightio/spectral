@@ -253,7 +253,13 @@
       "given": "$",
       "then": {
         "field": "tags",
-        "function": "truthy"
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
       },
       "tags": [
         "api"

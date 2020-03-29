@@ -44,4 +44,30 @@ describe('openapi-tags', () => {
       },
     ]);
   });
+
+  test('return errors if empty tags', async () => {
+    const results = await s.run({
+      swagger: '2.0',
+      paths: {},
+      tags: [],
+    });
+    expect(results).toEqual([
+      {
+        code: 'openapi-tags',
+        message: 'OpenAPI object should have non-empty `tags` array.',
+        path: ['tags'],
+        range: {
+          start: {
+            character: 9,
+            line: 3,
+          },
+          end: {
+            character: 12,
+            line: 3,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
+  });
 });
