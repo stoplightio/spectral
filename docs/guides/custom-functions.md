@@ -97,7 +97,7 @@ You can do it as follows:
 
 ```yaml
 functions:
-- - equals
+- equals
   # can be any valid JSONSchema7
   - properties:
       value:
@@ -144,6 +144,78 @@ rules:
 ```
 
 Spectral would look for functions in a `my-functions` directory now.
+
+## Returning multiple results
+
+Many functions will return a single message, but its possible for a function to return multiple.
+
+For example, if a rule is created to make sure something is unique, it could either:
+
+- return a single error for the entire array which lists offending values in a comma separated list
+- return a single error for the array value which contains the first offending non-unique item
+- return multiple errors for each duplicate value located
+
+How exactly you chose to implement messages depends on the rule at hand and probably personal preference too.
+
+It's worth keeping in mind, Spectral will attempt to deduplicate messages when they bear the same `code` and target the same `path`.
+As such, when your custom function is susceptible to return more than one result, you have to specify a different `path`
+for each result. 
+
+Below a sample function that checks tags bear unique names.
+
+**my-ruleset.yaml**
+
+```yaml
+functions: [uniqueTagNames]
+rules:
+  unique-tag-names:
+    message: "Tags should have distinct names: {{error}}"
+    given: "$.tags"
+    then:
+      function: "uniqueTagNames"
+```
+
+**functions/uniqueTagNames.js**
+
+```js
+const NAME_PROPERTY = 'name';
+
+module.exports = (targetVal, _opts, paths) => {
+    if (!Array.isArray(targetVal)) {
+        return;
+    }
+
+    const seen = [];
+    const results = [];
+
+    const rootPath = paths.target !== void 0 ? paths.target : paths.given;
+
+    for (let i = 0; i < targetVal.length; i++) {
+        if (targetVal[i] === null || typeof targetVal[i] !== 'object') {
+           continue;
+        }
+
+        const tagName = targetVal[i][NAME_PROPERTY];
+
+        if (tagName === void 0) {
+            continue;
+        }
+
+        if (seen.includes(tagName)) {
+            results.push(
+                {
+                    message: `Duplicate tag name '${tagName}'`,
+                    path: [...rootPath, i, NAME_PROPERTY]
+                },
+            );
+        } else {
+            seen.push(tagName);
+        }
+    }
+
+    return results;
+};
+```
 
 ## Inheritance
 
