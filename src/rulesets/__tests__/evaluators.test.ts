@@ -1,4 +1,4 @@
-import { evaluateExport } from '../evaluators';
+import { evaluateExport, setFunctionContext } from '../evaluators';
 
 describe('Code evaluators', () => {
   describe('Export evaluator', () => {
@@ -58,6 +58,21 @@ describe('Code evaluators', () => {
     it('throws error default export is not a function', () => {
       expect(() => evaluateExport(`module.exports = 2`, null)).toThrow();
       expect(() => evaluateExport(`this.returnExports = {}`, null)).toThrow();
+    });
+  });
+
+  describe('setFunctionContext', () => {
+    it('binds context to given function', () => {
+      const context = { a: true };
+      const fn = setFunctionContext(context, jest.fn().mockReturnThis());
+      expect(fn()).toStrictEqual({ a: true });
+    });
+
+    it('deep-copies provided context', () => {
+      const context = { a: true };
+      const fn = setFunctionContext(context, jest.fn().mockReturnThis());
+      const fn2 = setFunctionContext(context, jest.fn().mockReturnThis());
+      expect(fn()).not.toBe(fn2());
     });
   });
 });

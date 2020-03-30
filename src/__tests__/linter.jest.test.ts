@@ -96,6 +96,18 @@ describe('Linter', () => {
     ]);
   });
 
+  it('should expose all available functions to custom functions', async () => {
+    await spectral.loadRuleset(customDirectoryFunctionsRuleset);
+    expect(await spectral.run({ bar: 2 })).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'validate-bar',
+          message: '`bar` property should be a string',
+        }),
+      ]),
+    );
+  });
+
   it('should report resolving errors for correct files', async () => {
     spectral = new Spectral({ resolver: httpAndFileResolver });
 

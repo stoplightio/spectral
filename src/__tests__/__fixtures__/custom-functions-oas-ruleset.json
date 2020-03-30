@@ -2,6 +2,7 @@
   "extends": ["spectral:oas"],
   "functions": [
     "truthy",
+    "validateBar",
     "deepHasIn",
     [
       "hasIn",
@@ -58,6 +59,18 @@
         "function": "deepHasIn",
         "functionOptions": {
           "path": "/bar.get"
+        }
+      }
+    },
+    "validate-bar": {
+      "message": "`bar` property should be a string",
+      "given": "$",
+      "then": {
+        "function": "validateBar",
+        "functionOptions": {
+          "schema": {
+            "type": "string"
+          }
         }
       }
     }
