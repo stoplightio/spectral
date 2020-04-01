@@ -7,6 +7,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.0] - 2019-04-01
+
+### Added
+- Built-in functions can now be accessed in custom functions [#925](https://github.com/stoplightio/spectral/pull/925)
+- CLI: `--show-unmatched-globs` flag  [#747](https://github.com/stoplightio/spectral/issues/747)
+
+### Changed
+- `typed-enum` function is a part of the OpenAPI ruleset [#924](https://github.com/stoplightio/spectral/issues/924)
+- `openapi-tags` rule fit its description [#1038](https://github.com/stoplightio/spectral/pull/1038)
+
+### Fixed
+- Ruleset exceptions used to slip certain errors through cracks [#1018](https://github.com/stoplightio/spectral/issues/1018)
+- Correct misleading `info-license` message [#1031](https://github.com/stoplightio/spectral/pull/1031)
+- Requiring packages located under node_modules is possible [#1029](https://github.com/stoplightio/spectral/pull/1029)
+- Set proper document source if legacy parsed result is given [#1040](https://github.com/stoplightio/spectral/pull/1040)
+
 ## [5.2.0] - 2019-03-18
 
 ### Added
@@ -14,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow require calls in Node.JS [#1011](https://github.com/stoplightio/spectral/pull/1011)
 
 ### Changed
-- YAMLIncomaptibleValue diagnostics are now considered warnings [#1009](https://github.com/stoplightio/spectral/pull/1009) 
+- YAMLIncompatibleValue diagnostics are now considered warnings [#1009](https://github.com/stoplightio/spectral/pull/1009) 
 
 ### Fixed
 - Alphabetical rule works correctly for $refs [#979](https://github.com/stoplightio/spectral/issues/979)
