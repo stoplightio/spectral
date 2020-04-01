@@ -19,7 +19,7 @@ export interface ILintConfig {
   ruleset?: string[];
   skipRule?: string[];
   ignoreUnknownFormat: boolean;
-  ignoreUnmatchedGlobs: boolean;
+  showUnmatchedGlobs: boolean;
   verbose?: boolean;
   quiet?: boolean;
 }

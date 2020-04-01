@@ -77,7 +77,7 @@ describe('lint', () => {
         encoding: 'utf8',
         format: 'stylish',
         ignoreUnknownFormat: false,
-        ignoreUnmatchedGlobs: true,
+        showUnmatchedGlobs: false,
       });
     });
   });
@@ -94,7 +94,7 @@ describe('lint', () => {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      ignoreUnmatchedGlobs: true,
+      showUnmatchedGlobs: false,
     });
   });
 
@@ -105,7 +105,7 @@ describe('lint', () => {
       encoding: 'utf16',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      ignoreUnmatchedGlobs: true,
+      showUnmatchedGlobs: false,
     });
   });
 
@@ -116,7 +116,7 @@ describe('lint', () => {
       encoding: 'utf16',
       format: 'json',
       ignoreUnknownFormat: false,
-      ignoreUnmatchedGlobs: true,
+      showUnmatchedGlobs: false,
     });
   });
 
@@ -174,7 +174,7 @@ describe('lint', () => {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      ignoreUnmatchedGlobs: true,
+      showUnmatchedGlobs: false,
     });
   });
 
@@ -184,17 +184,17 @@ describe('lint', () => {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: true,
-      ignoreUnmatchedGlobs: true,
+      showUnmatchedGlobs: false,
     });
   });
 
-  it('passes ignore-unmatched-globs to lint', async () => {
-    await run('lint --ignore-unmatched-globs=false ./__fixtures__/empty-oas2-document.json');
+  it('passes show-unmatched-globs to lint', async () => {
+    await run('lint --show-unmatched-globs ./__fixtures__/empty-oas2-document.json');
     expect(lint).toHaveBeenCalledWith([expect.any(String)], {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      ignoreUnmatchedGlobs: false,
+      showUnmatchedGlobs: true,
     });
   });
 

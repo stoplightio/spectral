@@ -105,10 +105,10 @@ const lintCommand: CommandModule = {
           type: 'boolean',
           default: false,
         },
-        'ignore-unmatched-globs': {
-          description: 'do not warn about unmatched glob patterns',
+        'show-unmatched-globs': {
+          description: 'show unmatched glob patterns',
           type: 'boolean',
-          default: true,
+          default: false,
         },
         verbose: {
           alias: 'v',
@@ -132,7 +132,7 @@ const lintCommand: CommandModule = {
       output,
       encoding,
       ignoreUnknownFormat,
-      ignoreUnmatchedGlobs,
+      showUnmatchedGlobs,
       ...config
     } = (args as unknown) as ILintConfig & {
       documents: Array<number | string>;
@@ -145,7 +145,7 @@ const lintCommand: CommandModule = {
       output,
       encoding,
       ignoreUnknownFormat,
-      ignoreUnmatchedGlobs,
+      showUnmatchedGlobs,
       ruleset,
       ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['skipRule', 'verbose', 'quiet', 'resolver']),
     })
