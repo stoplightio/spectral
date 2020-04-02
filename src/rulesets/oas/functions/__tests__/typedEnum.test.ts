@@ -1,9 +1,11 @@
+import { functions } from '../../../../functions';
 import { typedEnum } from '../typedEnum';
 
 const defaultReportingThreshold = 3;
 
 function runTypedEnum(targetVal: any, reportingThreshold: any) {
-  return typedEnum(
+  return typedEnum.call(
+    { functions },
     targetVal,
     { reportingThreshold },
     { given: ['$'] },

@@ -8,6 +8,7 @@
     "oasOpSecurityDefined",
     "oasPathParam",
     "oasTagDefined",
+    "typedEnum",
     "refSiblings"
   ],
   "rules": {

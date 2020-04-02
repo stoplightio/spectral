@@ -1,10 +1,11 @@
-import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
-import { schema } from './schema';
+import { IFunction, IFunctionContext } from '../../../types';
 
-export type TypedEnumRule = IRule<RuleFunction.TYPED_ENUM>;
-
-export const typedEnum: IFunction = (targetVal, opts, paths, otherValues): void | IFunctionResult[] => {
-  const { enum: enumValues, ...initialSchema } = targetVal;
+export const typedEnum: IFunction = function(this: IFunctionContext, targetVal, opts, paths, otherValues) {
+  // do not use rest spread operator here, as this causes the whole tslib gets injected despite proper target set...
+  // obviously, having tslib inlined makes the code size quite larger (around 4x after compression - 1.8K vs 7.4K).
+  const { enum: enumValues } = targetVal;
+  const initialSchema = Object.assign({}, targetVal);
+  delete initialSchema.enum;
 
   if (!Array.isArray(enumValues)) {
     return;
@@ -16,7 +17,7 @@ export const typedEnum: IFunction = (targetVal, opts, paths, otherValues): void 
   const incorrectValues: Array<{ index: number; val: unknown }> = [];
 
   enumValues.forEach((val, index) => {
-    const res = schema(val, schemaObject, paths, otherValues);
+    const res = this.functions.schema(val, schemaObject, paths, otherValues);
 
     if (res !== undefined && res.length !== 0) {
       incorrectValues.push({ index, val });
@@ -38,3 +39,5 @@ export const typedEnum: IFunction = (targetVal, opts, paths, otherValues): void 
     };
   });
 };
+
+export default typedEnum;
