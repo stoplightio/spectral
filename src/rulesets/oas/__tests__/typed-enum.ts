@@ -1,11 +1,13 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { typedEnum } from '../../../functions/typedEnum';
+import { functions } from '../../../functions';
 import { RuleType, Spectral } from '../../../index';
+import { setFunctionContext } from '../../evaluators';
+import { typedEnum } from '../functions/typedEnum';
 import { rules } from '../index.json';
 
 describe('typed-enum', () => {
   const s = new Spectral();
-  s.setFunctions({ typedEnum });
+  s.setFunctions({ typedEnum: setFunctionContext({ functions }, typedEnum) });
   s.setRules({
     'typed-enum': Object.assign(rules['typed-enum'], {
       recommended: true,
