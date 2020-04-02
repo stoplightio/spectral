@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `typed-enum` function is a part of the OpenAPI ruleset [#924](https://github.com/stoplightio/spectral/issues/924)
-- `openapi-tags` rule fit its description [#1038](https://github.com/stoplightio/spectral/pull/1038)
+- `openapi-tags` rule has been fixed to make it fit its description [#1038](https://github.com/stoplightio/spectral/pull/1038)
 
 ### Fixed
 - Ruleset exceptions used to slip certain errors through cracks [#1018](https://github.com/stoplightio/spectral/issues/1018)
