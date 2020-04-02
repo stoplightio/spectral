@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [5.3.0] - 2019-04-01
 
 ### Added
-- Built-in functions can now be accessed in custom functions [#925](https://github.com/stoplightio/spectral/pull/925)
+- Built-in functions can now be accessed from custom functions [#925](https://github.com/stoplightio/spectral/pull/925)
 - CLI: `--show-unmatched-globs` flag  [#747](https://github.com/stoplightio/spectral/issues/747)
 
 ### Changed
