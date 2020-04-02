@@ -66,9 +66,9 @@ export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult
   public readonly diagnostics: ReadonlyArray<IRuleResult>;
   public formats?: string[] | null;
 
-  constructor(protected readonly parserResult: R, source?: string) {
+  constructor(protected readonly parserResult: R) {
     // we need to normalize the path in case path with forward slashes is given
-    this.source = normalizeSource(source);
+    this.source = normalizeSource(parserResult.source);
     this.diagnostics = formatParserDiagnostics(this.parserResult.parsed.diagnostics, this.source);
   }
 

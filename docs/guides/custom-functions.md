@@ -2,6 +2,22 @@
 
 If the built-in functions are not enough for your [custom ruleset](../getting-started/rulesets.md), Spectral allows you to write and use your own custom functions.
 
+Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
+This indicates that almost any arbitrary code can be executed.
+Potential risks include:
+- data / credentials infiltration,
+- data tampering,
+- running cpu-intensive tasks, i.e. crypto-mining.
+
+While the risk is relatively low, you should be careful about including **external rulesets** you are not in charge of, in particular these that leverage custom functions.
+You are strongly encouraged to review the custom functions a given ruleset provides.
+What you should hunt for is:
+- obfuscated code,
+- calls untrusted external library,
+- places where remote code is executed.
+
+If you notice any weirdness, consider forking the ruleset and removal of any evil-looking code.
+
 A custom function might be any JavaScript function compliant with [IFunction](https://github.com/stoplightio/spectral/blob/90a0864863fa232bf367a26dace61fd9f93198db/src/types/function.ts#L3#L8) type.
 
 ```ts

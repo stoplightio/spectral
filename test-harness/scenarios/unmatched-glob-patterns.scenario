@@ -1,0 +1,7 @@
+====test====
+Reports unmatched glob patterns
+====command====
+{bin} lint ./*oops.{yml,yaml,json} --show-unmatched-globs
+====stdout====
+Glob pattern `./*oops.{yml,yaml,json}` did not match any files
+No results with a severity of 'error' or higher found!

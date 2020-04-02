@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - uses: gaurav-nelson/github-action-markdown-link-check@master
       with:
-        fetch-depth: 1
-    - uses: planetscale/github-action-markdown-link-check@master
+        folder-path: 'docs'

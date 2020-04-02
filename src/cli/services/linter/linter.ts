@@ -64,8 +64,12 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     spectral.setRules(skipRules(ruleset.rules, flags));
   }
 
-  const targetUris = await listFiles(documents);
+  const [targetUris, unmatchedPatterns] = await listFiles(documents, !flags.showUnmatchedGlobs);
   const results: IRuleResult[] = [];
+
+  for (const unmatchedPattern of unmatchedPatterns) {
+    console.log(`Glob pattern \`${unmatchedPattern}\` did not match any files`);
+  }
 
   for (const targetUri of targetUris) {
     if (flags.verbose) {

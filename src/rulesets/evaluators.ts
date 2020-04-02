@@ -147,5 +147,13 @@ export const compileExportedFunction = (
     value: name,
   });
 
+  Object.freeze(fn);
   return fn;
 };
+
+export function setFunctionContext(context: unknown, fn: Function) {
+  return Function.prototype.bind.call(
+    fn,
+    Object.freeze(Object.defineProperties({}, Object.getOwnPropertyDescriptors(context))),
+  );
+}

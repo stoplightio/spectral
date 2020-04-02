@@ -1,5 +1,10 @@
 import { JsonPath } from '@stoplight/types';
 import { DocumentInventory } from '../documentInventory';
+import { CoreFunctions } from '../functions';
+
+export interface IFunctionContext {
+  functions: CoreFunctions;
+}
 
 export type IFunction<O = any> = (
   targetValue: any,

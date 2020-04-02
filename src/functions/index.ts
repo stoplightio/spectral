@@ -1,15 +1,29 @@
+import { alphabetical } from './alphabetical';
+import { casing } from './casing';
+import { enumeration } from './enumeration';
+import { falsy } from './falsy';
+import { length } from './length';
+import { pattern } from './pattern';
+import { schema } from './schema';
+import { schemaPath } from './schema-path';
+import { truthy } from './truthy';
+import { undefined } from './undefined';
+import { unreferencedReusableObject } from './unreferencedReusableObject';
+import { xor } from './xor';
+
 export const functions = {
-  alphabetical: require('./alphabetical').alphabetical,
-  casing: require('./casing').casing,
-  enumeration: require('./enumeration').enumeration,
-  length: require('./length').length,
-  pattern: require('./pattern').pattern,
-  falsy: require('./falsy').falsy,
-  schema: require('./schema').schema,
-  schemaPath: require('./schema-path').schemaPath,
-  truthy: require('./truthy').truthy,
-  undefined: require('./undefined').undefined,
-  xor: require('./xor').xor,
-  unreferencedReusableObject: require('./unreferencedReusableObject').unreferencedReusableObject,
-  typedEnum: require('./typedEnum').typedEnum,
+  alphabetical,
+  casing,
+  enumeration,
+  length,
+  pattern,
+  falsy,
+  schema,
+  schemaPath,
+  truthy,
+  undefined,
+  xor,
+  unreferencedReusableObject,
 };
+
+export type CoreFunctions = typeof functions;
