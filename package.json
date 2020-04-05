@@ -77,6 +77,7 @@
     "lodash": ">=4.17.5",
     "nanoid": "^2.1.11",
     "node-fetch": "^2.6",
+    "promise.allsettled": "^1.0.2",
     "proxy-agent": "^3.1.1",
     "strip-ansi": "^6.0",
     "text-table": "^0.2",
