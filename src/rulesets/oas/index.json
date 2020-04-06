@@ -112,29 +112,6 @@
         "api"
       ]
     },
-    "example-value-or-externalValue": {
-      "description": "Example should have either a `value` or `externalValue` field.",
-      "recommended": true,
-      "type": "style",
-      "given": [
-        "$.components.examples.*",
-        "$.paths..content.*.examples.*",
-        "$.components..content.*.examples.*",
-        "$.paths..parameters.*.examples.*",
-        "$.components..parameters.*.examples.*",
-        "$.paths..headers.*.examples.*",
-        "$.components..headers.*.examples.*"
-      ],
-      "then": {
-        "function": "xor",
-        "functionOptions": {
-          "properties": [
-            "externalValue",
-            "value"
-          ]
-        }
-      }
-    },
     "info-contact": {
       "description": "Info object should contain `contact` object.",
       "recommended": true,
@@ -656,6 +633,30 @@
       "tags": [
         "api"
       ]
+    },
+    "oas3-example-value-or-externalValue": {
+      "description": "Example should have either a `value` or `externalValue` field.",
+      "recommended": true,
+      "formats": ["oas3"],
+      "type": "style",
+      "given": [
+        "$.components.examples.*",
+        "$.paths..content.*.examples.*",
+        "$.components..content.*.examples.*",
+        "$.paths..parameters.*.examples.*",
+        "$.components..parameters.*.examples.*",
+        "$.paths..headers.*.examples.*",
+        "$.components..headers.*.examples.*"
+      ],
+      "then": {
+        "function": "xor",
+        "functionOptions": {
+          "properties": [
+            "externalValue",
+            "value"
+          ]
+        }
+      }
     },
     "oas3-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
