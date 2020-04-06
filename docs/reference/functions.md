@@ -268,10 +268,10 @@ properties | the properties to check | yes
 <!-- title: example -->
 
 ```yaml
-example-value-or-externalValue:
+components-example-value-or-externalValue:
   description: Example should have either a `value` or `externalValue` field.
   type: style
-  given: "$..example"
+  given: "$.components.examples.*"
   then:
     function: xor
     functionOptions:
