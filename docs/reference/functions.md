@@ -257,7 +257,7 @@ unused-definition:
 
 ## xor
 
-Communicate that only one of these properties is allowed, and no more than one of them.
+Communicate that one of these properties is required, and no more than one is allowed to be defined.
 
 <!-- title: functionOptions -->
 
