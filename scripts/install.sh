@@ -13,7 +13,7 @@ fi
 if [ "$UNAME" = "Darwin" ] ; then
   FILENAME="spectral-macos"
 elif [ "$UNAME" = "Linux" ] ; then
-  FILENAME="spectral"
+  FILENAME="spectral-linux"
 fi
 
 URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
