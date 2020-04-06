@@ -581,10 +581,10 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest-when@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@types/jest-when/-/jest-when-2.7.0.tgz#538d5a3d069aedb496ce42aed76404fc8673bf27"
-  integrity sha512-oahwfICJSaEmmtyN7JeOg6P7ey+GKigzk26zdKLxYLewmr2F3WeDPo/U+kVpIxPuZG3EiVFdRy97q9N9DoEkSg==
+"@types/jest-when@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@types/jest-when/-/jest-when-2.7.1.tgz#0b04a33a48a17370c390e9830a975822b3ac5e32"
+  integrity sha512-PRrGzDkU859cdkFL2KwWN4fRLRDGIUkRNT0StbthhKmj+naU4wImpoJeMnhjprvSou4pKAzU0dKfdQvjceJVhg==
   dependencies:
     "@types/jest" "*"
 
