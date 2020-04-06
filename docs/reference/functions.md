@@ -257,7 +257,7 @@ unused-definition:
 
 ## xor
 
-Communicate that only one of these properties is allowed, and no more than one of them.
+Communicate that one of these properties is required, and no more than one is allowed to be defined.
 
 <!-- title: functionOptions -->
 
@@ -268,10 +268,10 @@ properties | the properties to check | yes
 <!-- title: example -->
 
 ```yaml
-example-value-or-externalValue:
+components-example-value-or-externalValue:
   description: Example should have either a `value` or `externalValue` field.
   type: style
-  given: "$..example"
+  given: "$.components.examples.*"
   then:
     function: xor
     functionOptions:
