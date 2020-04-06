@@ -2090,10 +2090,10 @@ dom-serialize@^2.2.0:
     extend "^3.0.0"
     void-elements "^2.0.0"
 
-domain-browser@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-3.5.0.tgz#3a11f5df52fd9d60d7f1c79a62fde2d158c42b09"
-  integrity sha512-zrzUu6auyZWRexjCEPJnfWc30Hupxh2lJZOJAF3qa2bCuD4O/55t0FvQt3ZMhEw++gjNkwdkOVZh8yA32w/Vfw==
+domain-browser@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-4.0.0.tgz#45021cf8d2928f116b89a3308c3c30b746776909"
+  integrity sha512-q9seD1JK98fzT69I0sAzp0cxb6gUS1grmCaq6cLxTbm9msb9eqYFXGJU94VOIOi2nKmYmKdUFkTnGvIViuX9qA==
 
 domexception@^1.0.1:
   version "1.0.1"
@@ -4282,10 +4282,10 @@ karma-jasmine@^3.1.1:
   dependencies:
     jasmine-core "^3.5.0"
 
-karma-typescript@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/karma-typescript/-/karma-typescript-5.0.1.tgz#9caf1bc4aa416c8860ed32f8e452397472d7fb64"
-  integrity sha512-/AqfeOODqqtB145Lm3Kbx8o05BXxSgSS7WckxYgehkz1oA0/9pdpGRm8VlMqI7UXoLg/YrpZoIztIxpL7Jls/w==
+karma-typescript@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/karma-typescript/-/karma-typescript-5.0.2.tgz#f5c118b0d7d3ba2711afaebbc48e583f39eae1f6"
+  integrity sha512-cq3ETrnYMynLvUt29bqZhKMCHHDcqx0v0SfcsFqQsn/WWbMqXHNZq9dOLVXt6t3PiqfL0SLGq317LSNVmgLtqw==
   dependencies:
     acorn "^7.1.0"
     acorn-walk "^7.0.0"
@@ -4300,7 +4300,7 @@ karma-typescript@^5.0.1:
     convert-source-map "^1.7.0"
     crypto-browserify "^3.12.0"
     diff "^4.0.1"
-    domain-browser "^3.5.0"
+    domain-browser "^4.0.0"
     events "^3.0.0"
     glob "^7.1.6"
     https-browserify "^1.0.0"
