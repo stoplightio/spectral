@@ -12,7 +12,7 @@ export type IFunction<O = any> = (
   options: O,
   paths: IFunctionPaths,
   otherValues: IFunctionValues,
-) => void | IFunctionResult[];
+) => void | IFunctionResult[] | Promise<void | IFunctionResult[]>;
 
 export interface IFunctionPaths {
   given: JsonPath;
