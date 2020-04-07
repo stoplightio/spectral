@@ -14,7 +14,7 @@ export type MessageInterpolator = (str: string, values: IMessageVars) => string;
 
 const MessageReplacer = new Replacer<IMessageVars>(2);
 
-MessageReplacer.addTransformer('double-quotes', (id, value) => (value ? `"  ${value}"` : ''));
+MessageReplacer.addTransformer('double-quotes', (id, value) => (value ? `"${value}"` : ''));
 MessageReplacer.addTransformer('single-quotes', (id, value) => (value ? `'${value}'` : ''));
 MessageReplacer.addTransformer('gravis', (id, value) => (value ? `\`${value}\`` : ''));
 MessageReplacer.addTransformer('capitalize', (id, value) => capitalize(String(value)));
