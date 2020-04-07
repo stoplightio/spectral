@@ -225,7 +225,7 @@ describe('Linter service', () => {
           }),
           expect.objectContaining({
             code: 'oas3-schema',
-            path: ['paths', '/pets', 'get', 'responses', '200'],
+            path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
@@ -397,7 +397,7 @@ describe('Linter service', () => {
           }),
           expect.objectContaining({
             code: 'oas3-schema',
-            path: ['paths', '/pets', 'get', 'responses', '200'],
+            path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
         ]),
@@ -574,7 +574,23 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: 'property foo is not expected to be here',
+          message: 'Property `foo` is not expected to be here',
+          path: ['paths'],
+          range: {
+            end: {
+              character: 13,
+              line: 8,
+            },
+            start: {
+              character: 10,
+              line: 6,
+            },
+          },
+          source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
+        }),
+        expect.objectContaining({
+          code: 'oas2-schema',
+          message: 'Property `foo` is not expected to be here',
           path: ['definitions', 'info'],
           range: {
             end: {
@@ -591,6 +607,22 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'info-description',
           message: 'OpenAPI object info `description` must be present and non-empty string.',
+          path: ['definitions', 'info', 'description'],
+          range: {
+            end: {
+              character: 22,
+              line: 5,
+            },
+            start: {
+              character: 21,
+              line: 5,
+            },
+          },
+          source: expect.stringContaining('__tests__/__fixtures__/refs/info.json'),
+        }),
+        expect.objectContaining({
+          code: 'oas2-schema',
+          message: '`description` property type should be string',
           path: ['definitions', 'info', 'description'],
           range: {
             end: {
@@ -654,6 +686,22 @@ describe('Linter service', () => {
             },
           },
           source: expect.stringContaining('__tests__/__fixtures__/refs/contact.json'),
+        }),
+        expect.objectContaining({
+          code: 'oas2-schema',
+          message: 'Property `response` is not expected to be here',
+          path: ['paths', '/test', 'get'],
+          range: {
+            end: {
+              character: 7,
+              line: 5,
+            },
+            start: {
+              character: 13,
+              line: 3,
+            },
+          },
+          source: expect.stringContaining('__tests__/__fixtures__/refs/paths.json'),
         }),
         expect.objectContaining({
           code: 'operation-description',

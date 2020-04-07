@@ -14,6 +14,10 @@ export interface ISchemaOptions {
   schema: object;
   // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
   oasVersion?: Optional<number>;
+  allErrors?: boolean;
+
+  // this is used by oasDocumentSchema function, to be removed once we sort out
+  prepareResults?(errors: AJV.ErrorObject[]): void;
 }
 
 export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
@@ -36,7 +40,7 @@ const logger = {
 
 const ajvInstances = {};
 
-function getAjv(oasVersion?: Optional<number>): AJV.Ajv {
+function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV.Ajv {
   const type: string = oasVersion && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema';
   if (typeof ajvInstances[type] !== 'undefined') {
     return ajvInstances[type];
@@ -45,6 +49,7 @@ function getAjv(oasVersion?: Optional<number>): AJV.Ajv {
   const ajvOpts: AJV.Options = {
     meta: true, // Add default meta schemas (draft 7 at the moment)
     schemaId: 'auto',
+    allErrors,
     jsonPointers: true,
     unknownFormats: 'ignore',
     nullable: oasVersion === 3, // Support nullable for OAS3
@@ -81,8 +86,8 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
 }
 
 const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
-  public get(schemaObj: JSONSchema, oasVersion?: Optional<number>) {
-    const ajv = getAjv(oasVersion);
+  public get({ schema: schemaObj, oasVersion, allErrors }: ISchemaOptions) {
+    const ajv = getAjv(oasVersion, allErrors);
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
     if (validator !== void 0) {
@@ -100,9 +105,9 @@ const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
   }
 })();
 
-const replaceProperty = (substring: string, group1: string) => {
-  if (group1) {
-    return 'property ';
+const replaceProperty = (substring: string, _: Optional<number | string>, propertyName: Optional<string>) => {
+  if (typeof _ === 'string' && propertyName !== void 0) {
+    return `Property \`${propertyName}\``;
   }
 
   return '{{property|gravis|append-property|optional-typeof}}';
@@ -113,7 +118,7 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
 
   if (path) {
     cleanMessage = message.replace(
-      new RegExp(`^${escapeRegExp(decodePointerFragment(path))}:?\\s*(Property\\s+)?`),
+      new RegExp(`^${escapeRegExp(decodePointerFragment(path))}:?\\s*(?:(Property\\s+)([^\\s]+))?`),
       replaceProperty,
     );
   } else if (cleanMessage.startsWith(':')) {
@@ -145,8 +150,10 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   try {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
-    const validator = validators.get(schemaObj, opts.oasVersion);
+    const validator = validators.get(opts);
     if (!validator(targetVal) && validator.errors) {
+      opts.prepareResults?.(validator.errors);
+
       try {
         results.push(
           ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(

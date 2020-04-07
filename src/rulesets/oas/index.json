@@ -1,6 +1,7 @@
 {
   "formats": ["oas2", "oas3"],
   "functions": [
+    "oasDocumentSchema",
     "oasOp2xxResponse",
     "oasOpFormDataConsumeCheck",
     "oasOpIdUnique",
@@ -586,8 +587,9 @@
       "type": "validation",
       "given": "$",
       "then": {
-        "function": "schema",
+        "function": "oasDocumentSchema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.oas2.json"
           }
@@ -844,8 +846,9 @@
       "type": "validation",
       "given": "$",
       "then": {
-        "function": "schema",
+        "function": "oasDocumentSchema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.oas3.json"
           }

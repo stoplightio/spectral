@@ -158,13 +158,16 @@ describe('linter', () => {
       }) as RuleCollection,
     );
 
+    // @ts-ignore
+    spectral.rules['oas3-schema'].then.function = 'oasDocumentSchema';
+
     const result = await spectral.run(invalidSchema);
 
     expect(result).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
-        message: `\`200\` property should have required property \`$ref\``,
-        path: ['paths', '/pets', 'get', 'responses', '200'],
+        message: 'Property `type` is not expected to be here',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'invalid-ref',
@@ -194,8 +197,8 @@ describe('linter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: `\`200\` property should have required property \`$ref\``,
-          path: ['paths', '/pets', 'get', 'responses', '200'],
+          message: 'Property `type` is not expected to be here',
+          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
         }),
       ]),
     );
@@ -621,8 +624,8 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: `\`200\` property should have required property \`$ref\``,
-        path: ['paths', '/pets', 'get', 'responses', '200'],
+        message: 'Property `type` is not expected to be here',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'invalid-ref',
@@ -1028,8 +1031,8 @@ responses:: !!foo
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: 'Schema error at #/paths/~1pets/get/responses/200',
-          path: ['paths', '/pets', 'get', 'responses', '200'],
+          message: 'Schema error at #/paths/~1pets/get/responses/200/headers/header-1',
+          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
         }),
       ]),
     );

@@ -1,0 +1,42 @@
+====test====
+The amount of enabled rules is printed in a parenthesis.
+====document====
+openapi: 3.0.1
+info:
+  title: Example $ref error
+  version: 1.0.0
+paths:
+  /user:
+    get:
+      operationId: getUser
+      parameters:
+        - type: string
+          name: module_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Module ID
+      responses:
+        "200":
+          description: An Example
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id: 12345
+====asset:ruleset====
+extends: [[spectral:oas, off]]
+rules:
+  oas3-schema: error
+====command====
+{bin} lint {document} --ruleset {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 10:11  error  oas3-schema  Property `type` is not expected to be here
+ 25:28  error  oas3-schema  `user_id` property type should be object
+
+✖ 2 problems (2 errors, 0 warnings, 0 infos, 0 hints)

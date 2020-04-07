@@ -158,7 +158,7 @@ describe('schema', () => {
         ),
       ).toEqual([
         {
-          message: 'property baz is not expected to be here',
+          message: 'Property `baz` is not expected to be here',
           path: ['foo'],
         },
       ]);
