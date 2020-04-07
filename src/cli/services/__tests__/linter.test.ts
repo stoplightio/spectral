@@ -657,7 +657,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: `object should have required property \`title\``,
+          message: `Object should have required property \`title\``,
           path: [],
           range: {
             end: {

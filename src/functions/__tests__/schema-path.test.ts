@@ -64,7 +64,7 @@ describe('schema-path', () => {
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
         path: ['example'],
-        message: 'object should have required property `url`',
+        message: 'Object should have required property `url`',
       },
     ]);
   });
@@ -79,7 +79,7 @@ describe('schema-path', () => {
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
         path: ['example'],
-        message: '{{property|gravis|append-property|optional-typeof}}type should be string',
+        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
       },
     ]);
   });
@@ -109,11 +109,11 @@ describe('schema-path', () => {
     };
     expect(runSchemaPath(target, '$.examples.*', path)).toEqual([
       {
-        message: '{{property|gravis|append-property|optional-typeof}}type should be string',
+        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
         path: ['examples', 'application/json', 'id'],
       },
       {
-        message: '{{property|gravis|append-property|optional-typeof}}type should be string',
+        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
         path: ['examples', 'application/yaml', 'id'],
       },
     ]);
@@ -130,7 +130,7 @@ describe('schema-path', () => {
 
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
-        message: '{{property|gravis|append-property|optional-typeof}}format should match format `url`',
+        message: '{{property|gravis|append-property|optional-typeof|capitalize}}format should match format `url`',
         path: ['example'],
       },
     ]);
@@ -148,7 +148,7 @@ describe('schema-path', () => {
       };
       expect(runSchemaPath(target, invalidFieldToCheck, path)).toEqual([
         {
-          message: '{{property|double-quotes|append-property}}does not exist',
+          message: '{{property|gravis|append-property}}does not exist',
           path: ['nonsense'],
         },
       ]);

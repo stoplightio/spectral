@@ -5,7 +5,7 @@ import { ValidateFunction } from 'ajv';
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import { IOutputError } from 'better-ajv-errors';
-import { escapeRegExp } from 'lodash';
+import { capitalize, escapeRegExp } from 'lodash';
 import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
@@ -110,7 +110,7 @@ const replaceProperty = (substring: string, _: Optional<number | string>, proper
     return `Property \`${propertyName}\``;
   }
 
-  return '{{property|gravis|append-property|optional-typeof}}';
+  return '{{property|gravis|append-property|optional-typeof|capitalize}}';
 };
 
 const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>, type: string) => {
@@ -124,7 +124,7 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
   } else if (cleanMessage.startsWith(':')) {
     cleanMessage = cleanMessage.replace(/:\s*/, replaceProperty);
   } else {
-    cleanMessage = `${type} ${cleanMessage}`;
+    cleanMessage = `${capitalize(type)} ${cleanMessage}`;
   }
 
   return `${cleanMessage.replace(/['"]/g, '`')}${
@@ -137,13 +137,14 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   const path = paths.target || paths.given;
 
-  if (targetVal === void 0)
+  if (targetVal === void 0) {
     return [
       {
         path,
-        message: `{{property|double-quotes|append-property}}does not exist`,
+        message: `{{property|gravis|append-property}}does not exist`,
       },
     ];
+  }
 
   // we already access a resolved object in src/functions/schema-path.ts
   const { schema: schemaObj } = opts;
