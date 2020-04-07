@@ -317,4 +317,14 @@ describe('schema', () => {
       },
     ]);
   });
+
+  test('pretty-prints path-less property', () => {
+    const input = { foo: true };
+    expect(runSchema(input, { additionalProperties: false })).toEqual([
+      expect.objectContaining({
+        message: 'Property `foo` is not expected to be here',
+        path: [],
+      }),
+    ]);
+  });
 });

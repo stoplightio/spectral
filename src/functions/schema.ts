@@ -123,6 +123,8 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
     );
   } else if (cleanMessage.startsWith(':')) {
     cleanMessage = cleanMessage.replace(/:\s*/, replaceProperty);
+  } else if (cleanMessage.startsWith('Property ')) {
+    cleanMessage = cleanMessage.replace(/(Property\s+)([^\s]+)/, replaceProperty);
   } else {
     cleanMessage = `${capitalize(type)} ${cleanMessage}`;
   }
