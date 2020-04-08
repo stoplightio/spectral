@@ -105,7 +105,7 @@
     "glob-fs": "^0.1.7",
     "husky": "^4.2.3",
     "jest": "~25.2",
-    "jest-mock": "^25.2.3",
+    "jest-mock": "^25.2.6",
     "jest-when": "~2.7",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
