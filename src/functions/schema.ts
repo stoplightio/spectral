@@ -105,8 +105,12 @@ const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
   }
 })();
 
-const replaceProperty = (substring: string, _: Optional<number | string>, propertyName: Optional<string>) => {
-  if (typeof _ === 'string' && propertyName !== void 0) {
+const replaceProperty = (
+  substring: string,
+  potentialProperty: Optional<number | string>,
+  propertyName: Optional<string>,
+) => {
+  if (typeof potentialProperty === 'string' && propertyName !== void 0) {
     return `Property \`${propertyName}\``;
   }
 
