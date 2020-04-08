@@ -44,7 +44,7 @@ describe('oas2-schema', () => {
     expect(results).toEqual([
       {
         code: 'oas2-schema',
-        message: `\`get\` property should have required property \`responses\``,
+        message: `\`get\` property should have required property \`responses\`.`,
         path: ['paths', '/test', 'get'],
         range: {
           end: {

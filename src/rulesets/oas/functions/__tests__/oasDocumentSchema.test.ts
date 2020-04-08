@@ -66,7 +66,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
-          message: '`200` property should have required property `description`',
+          message: '`200` property should have required property `description`.',
           path: ['paths', '/user', 'get', 'responses', '200'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),

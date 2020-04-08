@@ -580,7 +580,7 @@
     },
     "oas2-schema": {
       "description": "Validate structure of OpenAPI v2 specification.",
-      "message": "{{error}}",
+      "message": "{{error}}.",
       "recommended": true,
       "formats": ["oas2"],
       "severity": 0,
@@ -839,7 +839,7 @@
     },
     "oas3-schema": {
       "description": "Validate structure of OpenAPI v3 specification.",
-      "message": "{{error}}",
+      "message": "{{error}}.",
       "severity": 0,
       "formats": ["oas3"],
       "recommended": true,

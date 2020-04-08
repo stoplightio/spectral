@@ -36,7 +36,7 @@ rules:
 OpenAPI 3.x detected
 
 {document}
- 10:11  error  oas3-schema  Property `type` is not expected to be here
- 25:28  error  oas3-schema  `user_id` property type should be object
+ 10:11  error  oas3-schema  Property `type` is not expected to be here.
+ 25:28  error  oas3-schema  `user_id` property type should be object.
 
 ✖ 2 problems (2 errors, 0 warnings, 0 infos, 0 hints)

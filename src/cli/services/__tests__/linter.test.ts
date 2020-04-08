@@ -574,7 +574,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: 'Property `foo` is not expected to be here',
+          message: 'Property `foo` is not expected to be here.',
           path: ['paths'],
           range: {
             end: {
@@ -590,7 +590,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: 'Property `foo` is not expected to be here',
+          message: 'Property `foo` is not expected to be here.',
           path: ['definitions', 'info'],
           range: {
             end: {
@@ -622,7 +622,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '`description` property type should be string',
+          message: '`description` property type should be string.',
           path: ['definitions', 'info', 'description'],
           range: {
             end: {
@@ -657,7 +657,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: `Object should have required property \`title\``,
+          message: `Object should have required property \`title\`.`,
           path: [],
           range: {
             end: {
@@ -689,7 +689,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: 'Property `response` is not expected to be here',
+          message: 'Property `response` is not expected to be here.',
           path: ['paths', '/test', 'get'],
           range: {
             end: {

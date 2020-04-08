@@ -166,7 +166,7 @@ describe('linter', () => {
     expect(result).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
-        message: 'Property `type` is not expected to be here',
+        message: 'Property `type` is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
@@ -197,7 +197,7 @@ describe('linter', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas3-schema',
-          message: 'Property `type` is not expected to be here',
+          message: 'Property `type` is not expected to be here.',
           path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
         }),
       ]),
@@ -624,7 +624,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: 'Property `type` is not expected to be here',
+        message: 'Property `type` is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
