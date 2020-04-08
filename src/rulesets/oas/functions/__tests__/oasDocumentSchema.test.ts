@@ -43,6 +43,42 @@ describe('oasDocumentSchema', () => {
     });
   });
 
+  describe('given OpenAPI 2 document', () => {
+    test('validate security definitions', async () => {
+      expect(
+        await s.run({
+          swagger: '2.0',
+          info: {
+            title: 'response example',
+            version: '1.0',
+          },
+          paths: {
+            '/user': {
+              get: {
+                responses: {
+                  200: {
+                    description: 'dummy description',
+                  },
+                },
+              },
+            },
+          },
+          securityDefinitions: {
+            basic: null,
+          },
+        }),
+      ).toEqual([
+        {
+          code: 'oas2-schema',
+          message: 'Invalid security definition.',
+          path: ['securityDefinitions', 'basic'],
+          severity: DiagnosticSeverity.Error,
+          range: expect.any(Object),
+        },
+      ]);
+    });
+  });
+
   describe('given OpenAPI 3 document', () => {
     test('validate parameters', async () => {
       expect(
@@ -79,6 +115,44 @@ describe('oasDocumentSchema', () => {
           code: 'oas3-schema',
           message: '`type` property type should be string.',
           path: ['paths', '/user', 'get', 'parameters', '0', 'schema', 'type'],
+          severity: DiagnosticSeverity.Error,
+          range: expect.any(Object),
+        },
+      ]);
+    });
+
+    test('validate security schemes', async () => {
+      expect(
+        await s.run({
+          openapi: '3.0.1',
+          info: {
+            title: 'response example',
+            version: '1.0',
+          },
+          paths: {
+            '/user': {
+              get: {
+                responses: {
+                  200: {
+                    description: 'dummy description',
+                  },
+                },
+              },
+            },
+          },
+          components: {
+            securitySchemes: {
+              basic: {
+                foo: 2,
+              },
+            },
+          },
+        }),
+      ).toEqual([
+        {
+          code: 'oas3-schema',
+          message: 'Invalid security scheme.',
+          path: ['components', 'securitySchemes', 'basic'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
         },
