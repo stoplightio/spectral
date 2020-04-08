@@ -30,7 +30,7 @@ export type IFunction<O = any> = (
 ```
 
 ### targetValue
- 
+
 `targetValue` the value the custom function is provided with and is supposed to lint against.
 
 It's based on `given` [JSONPath][jsonpath] expression defined on the rule and optionally `field` if placed on `then`.
@@ -175,7 +175,7 @@ How exactly you chose to implement messages depends on the rule at hand and prob
 
 It's worth keeping in mind, Spectral will attempt to deduplicate messages when they bear the same `code` and target the same `path`.
 As such, when your custom function is susceptible to return more than one result, you have to specify a different `path`
-for each result. 
+for each result.
 
 Below a sample function that checks tags bear unique names.
 

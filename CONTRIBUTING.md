@@ -8,7 +8,7 @@ Basically, if it is related to Spectral, we consider it a contribution.
 
 ## Stoplight Community Code of Conduct
 
-The Stoplight Community is dedicated to providing a safe, inclusive, welcoming, and harassment-free space and experience for all community participants, regardless of gender identity and expression, sexual orientation, disability, physical appearance, socioeconomic status, body size, ethnicity, nationality, level of experience, age, religion (or lack thereof), or other identity markers. 
+The Stoplight Community is dedicated to providing a safe, inclusive, welcoming, and harassment-free space and experience for all community participants, regardless of gender identity and expression, sexual orientation, disability, physical appearance, socioeconomic status, body size, ethnicity, nationality, level of experience, age, religion (or lack thereof), or other identity markers.
 
 Our Code of Conduct exists because of that dedication, and we do not tolerate harassment in any form. See our reporting guidelines [here](https://github.com/stoplightio/code-of-conduct/blob/master/incident-reporting.md). Our full Code of Conduct can be found at this [link](https://github.com/stoplightio/code-of-conduct/blob/master/long-form-code-of-conduct.md#long-form-code-of-conduct).
 
@@ -29,9 +29,9 @@ add a description of the rule in `docs/reference/openapi-rules.md`.
 
 Now, you are ready to commit & push your changes, and make a pull request to the Spectral repo! 😃
 
-If this is your first Pull Request on GitHub, here's some [help](https://egghead.io/lessons/javascript-how-to-create-a-pull-request-on-github). 
+If this is your first Pull Request on GitHub, here's some [help](https://egghead.io/lessons/javascript-how-to-create-a-pull-request-on-github).
 
-> We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests. 
+> We try to respond to all pull requests and issues within 7 days. We welcome feedback from everyone involved in the project in open pull requests.
 
 ### Contributing from a Windows based environment
 
@@ -95,7 +95,7 @@ yarn test.harness
 
 ## Creating an issue
 
-We want to keep issues in this repo focused on bug reports and feature requests. 
+We want to keep issues in this repo focused on bug reports and feature requests.
 
 For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
 

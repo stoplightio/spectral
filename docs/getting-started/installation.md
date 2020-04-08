@@ -1,7 +1,7 @@
 
 # Installation
 
-For many, the easiest way to install Spectral is as a node module. 
+For many, the easiest way to install Spectral is as a node module.
 
 ```bash
 npm install -g @stoplight/spectral
