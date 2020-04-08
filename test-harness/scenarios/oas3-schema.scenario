@@ -5,6 +5,8 @@ openapi: 3.0.1
 info:
   title: Example $ref error
   version: 1.0.0
+  contact:
+    foo: me
 paths:
   /user:
     get:
@@ -17,6 +19,11 @@ paths:
           schema:
             type: string
           description: Module ID
+        - name: module_id
+          in: bar
+          required: true
+          schema:
+            type: [string, number]
       responses:
         "200":
           description: An Example
@@ -26,6 +33,15 @@ paths:
                 type: object
                 properties:
                   user_id: 12345
+            application/yaml:
+              schema:
+                type: object
+                properties:
+        "400":
+          description: []
+  /address:
+    get:
+      responses: {}
 ====asset:ruleset====
 extends: [[spectral:oas, off]]
 rules:
@@ -36,7 +52,12 @@ rules:
 OpenAPI 3.x detected
 
 {document}
- 10:11  error  oas3-schema  Property `type` is not expected to be here.
- 25:28  error  oas3-schema  `user_id` property type should be object.
+  5:11  error  oas3-schema  Property `foo` is not expected to be here.
+ 12:11  error  oas3-schema  Property `type` is not expected to be here.
+ 23:18  error  oas3-schema  `type` property type should be string.
+ 32:28  error  oas3-schema  `user_id` property type should be object.
+ 36:28  error  oas3-schema  `properties` property type should be object.
+ 38:23  error  oas3-schema  `description` property type should be string.
+ 41:17  error  oas3-schema  `responses` property minProperties should NOT have fewer than 1 properties.
 
-✖ 2 problems (2 errors, 0 warnings, 0 infos, 0 hints)
+✖ 7 problems (7 errors, 0 warnings, 0 infos, 0 hints)
