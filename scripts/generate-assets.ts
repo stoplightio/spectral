@@ -1,10 +1,10 @@
 /**
- * This script generates a list of assets that are needed to load spectral:oas ruleset.
- * It contains all OAS custom functions and *resolved* rulesets.
- * The assets are stores in a single filed call assets.json in the following format:
+ * This script generates a list of assets that are needed to load the built-in rulesets.
+ * It contains all custom functions and *resolved* rulesets.
+ * The assets are stored in a single file named `assets.json` in the following format:
  * `<require-call-path>: <content>`
  * where the `require-call-path` is the path you'd normally pass to require(), i.e. `@stoplight/spectral/rulesets/oas/index.js` and `content` is the text data.
- * Assets can be loaded using Spectral#registerStaticAssets statc method, i.e. `Spectral.registerStaticAssets(require('@stoplight/spectral/rulesets/assets/assets.json'))`;
+ * Assets can be loaded using Spectral#registerStaticAssets static method, i.e. `Spectral.registerStaticAssets(require('@stoplight/spectral/rulesets/assets/assets.json'))`;
  * If you execute the code above, ruleset will be loaded fully offline, without a need to make any request.
  */
 
@@ -30,8 +30,10 @@ const assetsPath = path.join(baseDir, `assets.json`);
 const generatedAssets = {};
 
 (async () => {
-  await processDirectory(generatedAssets, path.join(__dirname, '../rulesets/oas'));
-  await writeFileAsync(assetsPath, JSON.stringify(generatedAssets, null, 2));
+  for (const kind of ['oas']) {
+    await processDirectory(generatedAssets, path.join(__dirname, `../rulesets/${kind}`));
+    await writeFileAsync(assetsPath, JSON.stringify(generatedAssets, null, 2));
+  }
 })();
 
 async function processDirectory(assets: Record<string, string>, dir: string) {
@@ -52,8 +54,12 @@ async function processDirectory(assets: Record<string, string>, dir: string) {
                 dereferenceInline: false,
                 baseUri: target,
                 parseResolveResult(opts) {
-                  return new Promise<IUriParserResult>(resolve => {
-                    resolve({ result: parse(opts.result) });
+                  return new Promise<IUriParserResult>((resolve, reject) => {
+                    try {
+                      resolve({ result: parse(opts.result) });
+                    } catch (e) {
+                      reject(e);
+                    }
                   });
                 },
               })

@@ -39,7 +39,7 @@ Other options include:
   --quiet, -q                  no logging - output only                                     [boolean]
 ```
 
-The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset. 
+The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset.
 
 You can also provide your own ruleset file. By default, the Spectral CLI will look for a ruleset file called `.spectral.yml` or `.spectral.json` in the current working directory. You can tell spectral to use a different file by using the `--ruleset` CLI option.
 
@@ -61,7 +61,7 @@ To have requests made from Spectral be proxied through a server, you'd need to s
 
 ## Custom $ref resolving
 
-If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver. 
+If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
 
 ### Example
 

@@ -104,7 +104,7 @@ openapi: 3.0.0
 `
 
 const spectral = new Spectral();
-spectral.registerFormat('oas2', isOpenApiv2); // spectral:oas2 for OpenAPI v2.0
+spectral.registerFormat('oas2', isOpenApiv2);
 spectral.registerFormat('oas3', isOpenApiv3);
 spectral.loadRuleset('spectral:oas')
   .then(() => spectral.run(myOpenApiDocument))
