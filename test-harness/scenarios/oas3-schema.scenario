@@ -1,5 +1,5 @@
 ====test====
-The amount of enabled rules is printed in a parenthesis.
+Prints reasonable error messages for oas3-schema errors.
 ====document====
 openapi: 3.0.1
 info:
