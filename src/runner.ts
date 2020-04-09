@@ -1,6 +1,6 @@
 const allSettled = require('promise.allsettled');
 const { JSONPath } = require('jsonpath-plus');
-import { Optional } from '@stoplight/types';
+import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import { flatMap } from 'lodash';
 import { STDIN } from './document';
 import { DocumentInventory } from './documentInventory';
@@ -9,6 +9,7 @@ import { getDiagnosticSeverity } from './rulesets/severity';
 import { FunctionCollection, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
 import { RulesetExceptionCollection } from './types/ruleset';
 import { hasIntersectingElement } from './utils/';
+import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 import { IExceptionLocation, pivotExceptions } from './utils/pivotExceptions';
 
 export const isRuleEnabled = (rule: IRule) => rule.severity !== void 0 && getDiagnosticSeverity(rule.severity) !== -1;
@@ -24,18 +25,24 @@ export interface IRunningContext {
   exceptions: RulesetExceptionCollection;
 }
 
+const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory): IRuleResult => {
+  return generateDocumentWideResult(
+    documentInventory.document,
+    'The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.',
+    DiagnosticSeverity.Warning,
+    'except-but-stdin',
+  );
+};
+
 export const runRules = async (context: IRunningContext): Promise<IRuleResult[]> => {
   const { documentInventory, rules, exceptions } = context;
 
-  const results: Array<Promise<IRuleResult[]>> = [];
+  const results: Array<IRuleResult | Promise<IRuleResult[]>> = [];
   const isStdIn = isStdInSource(documentInventory);
   const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
 
   if (isStdIn && Object.keys(exceptions).length > 0) {
-    // todo: use @stoplight/reporter
-    console.warn(
-      'The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.',
-    );
+    results.push(generateDefinedExceptionsButStdIn(documentInventory));
   }
 
   for (const rule of Object.values(rules)) {
