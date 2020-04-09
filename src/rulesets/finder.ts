@@ -2,7 +2,8 @@ import * as path from '@stoplight/path';
 import * as fs from 'fs';
 import { RESOLVE_ALIASES, STATIC_ASSETS } from '../assets';
 
-const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
+// let's point at dist directory that has all relevant files (including custom functions) transpiled
+const SPECTRAL_SRC_ROOT = path.join(__dirname, '../../dist');
 // DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
 // parameter can be renamed, but don't this if you don't need to
 function resolveSpectralVersion(pkg: string) {
@@ -75,7 +76,7 @@ export async function findFile(from: string, to: string) {
 
 function exists(uri: string): Promise<boolean> {
   return new Promise<boolean>(resolve => {
-    fs.access(uri, fs.constants.F_OK, err => {
+    fs.stat(uri, err => {
       resolve(err === null);
     });
   });
