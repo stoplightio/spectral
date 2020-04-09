@@ -1,6 +1,6 @@
 # Core Functions
 
-Rules use "functions" and those can be custom defined. To save everyone the effort of writing functions for common tasks, Spectral comes with a few bundled out of the box. 
+Rules use "functions" and those can be custom defined. To save everyone the effort of writing functions for common tasks, Spectral comes with a few bundled out of the box.
 
 ## alphabetical
 
@@ -56,7 +56,7 @@ whitelisted-tags:
 
 ## falsy
 
-The value should be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (!!targetVal)`. 
+The value should be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (!!targetVal)`.
 
 ## length
 
@@ -79,7 +79,7 @@ operation-singular-tag:
 
 ## pattern
 
-Regular expressions! 
+Regular expressions!
 
 <!-- title: functionOptions -->
 
@@ -103,7 +103,7 @@ notMatch | if provided, value must _not_ match this regex | no
 
 ## casing
 
-Text must match a certain case, like `camelCase` or `snake_case`. 
+Text must match a certain case, like `camelCase` or `snake_case`.
 
 <!-- title: functionOptions -->
 
@@ -119,7 +119,7 @@ For instance, the following naming style could be enforced:
  - Headers _(eg. `X-YourMighty-Header`)_: type: `pascal`, separator.char: `-`
  - Camel cased paths _(eg. `/path/toThe/amazingResource`)_: type: `camel`, separator.char: `/`, separator.allowLeading: `true`
 
-Available types are: 
+Available types are:
 
 | name   | sample         |
 |--------|----------------|

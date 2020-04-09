@@ -13,7 +13,7 @@ Seeing these errors and warnings will help nudge the developer towards creating 
 
 ## Linting Code-First Workflows
 
-Using Spectral gets a little tricky for developers who are following a code-first (a.k.a "design-second") workflow. If the API description documents live in YAML or JSON files then its fine, and the design-first workflow can be used: with new changes being linted. 
+Using Spectral gets a little tricky for developers who are following a code-first (a.k.a "design-second") workflow. If the API description documents live in YAML or JSON files then its fine, and the design-first workflow can be used: with new changes being linted.
 
 If the API description documents live in some other format, maybe as comments or annotations inside code, Spectral has no way to read that. Hopefully that annotations-based tool has some sort of export option on the CLI. Here's an example for those using [go-swagger](https://github.com/go-swagger/go-swagger).
 
@@ -21,7 +21,7 @@ If the API description documents live in some other format, maybe as comments or
 swagger generate spec -o ./tmp/openapi.json && spectral lint ./tmp/openapi.json
 ```
 
-Sadly by the time you've already written your code, if Spectral points anything out related to your actual API, and not providing feedback on the API description document itself, figuring out what to do next might be troublesome. 
+Sadly by the time you've already written your code, if Spectral points anything out related to your actual API, and not providing feedback on the API description document itself, figuring out what to do next might be troublesome.
 
 For example if the API has a bunch of URLs with underscores, then becoming consistent is either a case of waiting for the next major version and changing things in there, or taking a more evolution-based approach, aliasing `/example_url` to `/example-url`, then look into [deprecating the old URL](https://apisyouwonthate.com/blog/api-evolution-for-rest-http-apis/).
 

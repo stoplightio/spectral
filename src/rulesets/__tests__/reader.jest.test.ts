@@ -132,7 +132,7 @@ describe('Rulesets reader', () => {
   it('should inherit properties of extended rulesets', async () => {
     const { rules } = await readRuleset(extendsAllOasRuleset);
 
-    // we pick up *all* rules only from spectral:oas and spectral:oas2 and keep their severity level or set a default one
+    // we pick up *all* rules only from spectral:oas and keep their severity level or set a default one
     expect(rules).toEqual(
       expect.objectContaining({
         ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>((oasRules, [name, rule]) => {
