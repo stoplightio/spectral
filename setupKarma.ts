@@ -33,12 +33,16 @@ beforeEach(() => {
     body: JSON.parse(JSON.stringify(oas3Schema)),
   });
 
-  for (const [name, fn] of Object.entries<string>(oasFunctions)) {
-    fetchMock.get(`https://unpkg.com/@stoplight/spectral/rulesets/oas/functions/${name}`, {
-      status: 200,
-      body: fn,
-    });
-  }
+  [
+    ['oas', oasFunctions],
+  ].forEach(([rulesetName, funcs]) => {
+    for (const [name, fn] of Object.entries<string>(funcs)) {
+      fetchMock.get(`https://unpkg.com/@stoplight/spectral/rulesets/${rulesetName}/functions/${name}`, {
+        status: 200,
+        body: fn,
+      });
+    }
+  });
 
   fetchMock.get('http://json-schema.org/draft-04/schema', {
     status: 200,
