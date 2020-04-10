@@ -194,6 +194,38 @@ describe('oasPathParam', () => {
     ]);
   });
 
+  test('Error if $ref operation parameter definition is not required', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          get: {
+            parameters: [
+              {
+                $ref: '#/definitions/barParam',
+              },
+            ],
+          },
+        },
+      },
+      definitions: {
+        barParam: {
+          name: 'bar',
+          in: 'path',
+          required: false,
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'path-params',
+        message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
+        path: ['paths', '/foo/{bar}', 'get', 'parameters', '0'],
+        severity: DiagnosticSeverity.Error,
+      }),
+    ]);
+  });
+
   test('Error if paths are functionally equivalent', async () => {
     const results = await s.run({
       paths: {
@@ -237,6 +269,122 @@ describe('oasPathParam', () => {
         },
         severity: DiagnosticSeverity.Error,
       },
+    ]);
+  });
+
+  test('Error if path parameter definition is set (at the global and/or operation level), but unused', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo': {
+          parameters: [
+            {
+              name: 'boo',
+              in: 'path',
+              required: true,
+            },
+          ],
+          get: {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+              },
+            ],
+          },
+          put: {
+            parameters: [
+              {
+                name: 'baz',
+                in: 'path',
+                required: true,
+              },
+              {
+                name: 'qux',
+                in: 'path',
+                required: true,
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Parameter `boo` is not used in the path `/foo`.',
+        path: ['paths', '/foo', 'parameters'],
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Parameter `bar` is not used in the path `/foo`.',
+        path: ['paths', '/foo', 'get', 'parameters', '0'],
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Parameter `baz` is not used in the path `/foo`.',
+        path: ['paths', '/foo', 'put', 'parameters', '0'],
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Parameter `qux` is not used in the path `/foo`.',
+        path: ['paths', '/foo', 'put', 'parameters', '1'],
+        severity: DiagnosticSeverity.Error,
+      }),
+    ]);
+  });
+
+  test('Error if path parameter are defined multiple times', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{boo}/{qux}': {
+          parameters: [
+            {
+              name: 'boo',
+              in: 'path',
+              required: true,
+            },
+            {
+              name: 'boo',
+              in: 'path',
+              required: true,
+            },
+          ],
+          put: {
+            parameters: [
+              {
+                name: 'qux',
+                in: 'path',
+                required: true,
+              },
+              {
+                name: 'qux',
+                in: 'path',
+                required: true,
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Path parameter `boo` is defined multiple times. Path parameters must be unique.',
+        path: ['paths', '/foo/{boo}/{qux}', 'parameters'],
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Path parameter `qux` is defined multiple times. Path parameters must be unique.',
+        path: ['paths', '/foo/{boo}/{qux}', 'put', 'parameters', '1'],
+        severity: DiagnosticSeverity.Error,
+      }),
     ]);
   });
 });
