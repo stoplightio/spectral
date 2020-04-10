@@ -37,16 +37,16 @@ describe('oasPathParam', () => {
     expect(results).toEqual([
       {
         code: 'path-params',
-        message: 'The path `/foo/{bar}` uses a parameter `{bar}` that does not have a corresponding definition.',
-        path: ['paths', '/foo/{bar}'],
+        message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
+        path: ['paths', '/foo/{bar}', 'get'],
         range: {
           end: {
             character: 15,
             line: 3,
           },
           start: {
-            character: 17,
-            line: 2,
+            character: 12,
+            line: 3,
           },
         },
         severity: DiagnosticSeverity.Error,
@@ -115,6 +115,34 @@ describe('oasPathParam', () => {
     });
 
     expect(results).toHaveLength(0);
+  });
+
+  test('Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          get: {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+              },
+            ],
+          },
+          put: {},
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
+        path: ['paths', '/foo/{bar}', 'put'],
+        severity: DiagnosticSeverity.Error,
+      }),
+    ]);
   });
 
   test('Error if duplicate path parameters with same name are used', async () => {
@@ -341,7 +369,7 @@ describe('oasPathParam', () => {
   test('Error if path parameter are defined multiple times', async () => {
     const results = await s.run({
       paths: {
-        '/foo/{boo}/{qux}': {
+        '/foo/{boo}/{bar}/{qux}': {
           parameters: [
             {
               name: 'boo',
@@ -353,7 +381,26 @@ describe('oasPathParam', () => {
               in: 'path',
               required: true,
             },
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+            },
           ],
+          get: {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+              },
+              {
+                name: 'qux',
+                in: 'path',
+                required: true,
+              },
+            ],
+          },
           put: {
             parameters: [
               {
@@ -376,15 +423,47 @@ describe('oasPathParam', () => {
       expect.objectContaining({
         code: 'path-params',
         message: 'Path parameter `boo` is defined multiple times. Path parameters must be unique.',
-        path: ['paths', '/foo/{boo}/{qux}', 'parameters', '1'],
+        path: ['paths', '/foo/{boo}/{bar}/{qux}', 'parameters', '1'],
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'path-params',
+        message: 'Path parameter `bar` is defined multiple times. Path parameters must be unique.',
+        path: ['paths', '/foo/{boo}/{bar}/{qux}', 'get', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
         code: 'path-params',
         message: 'Path parameter `qux` is defined multiple times. Path parameters must be unique.',
-        path: ['paths', '/foo/{boo}/{qux}', 'put', 'parameters', '1'],
+        path: ['paths', '/foo/{boo}/{bar}/{qux}', 'put', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       }),
     ]);
+  });
+
+  test('No error if two parameters bear the same name but target different locations', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{boo}': {
+          parameters: [
+            {
+              name: 'boo',
+              in: 'path',
+              required: true,
+            },
+          ],
+          get: {
+            parameters: [
+              {
+                name: 'boo',
+                in: 'header',
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([]);
   });
 });

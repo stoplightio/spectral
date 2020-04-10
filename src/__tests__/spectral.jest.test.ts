@@ -154,15 +154,15 @@ describe('Spectral', () => {
         }),
         expect.objectContaining({
           code: 'path-params',
-          path: ['paths', '/todos/{todoId}'],
+          path: ['paths', '/todos/{todoId}', 'get'],
           range: {
             end: {
-              character: 5,
-              line: 34,
+              character: 7,
+              line: 33,
             },
             start: {
-              character: 23,
-              line: 10,
+              character: 13,
+              line: 11,
             },
           },
           source: documentUri,

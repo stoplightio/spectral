@@ -1,6 +1,88 @@
+import { Segment } from '@stoplight/types';
 import { IFunction, IFunctionResult, Rule } from '../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
+
+interface IParam {
+  in?: string;
+  name?: string;
+  required?: boolean;
+}
+
+interface INamedPathParam {
+  in: 'path';
+  name: string;
+  required?: boolean;
+}
+
+const isNamedPathParam = (p: IParam): p is INamedPathParam => {
+  return p.in !== void 0 && p.in === 'path' && p.name !== void 0;
+};
+
+const isUnknownNamedPathParam = (
+  p: IParam,
+  path: Segment[],
+  results: IFunctionResult[],
+  seens: Array<Record<string, unknown>>,
+): p is INamedPathParam => {
+  if (!isNamedPathParam(p)) {
+    return false;
+  }
+
+  if (!p.required) {
+    results.push(generateResult(requiredMessage(p.name), path));
+  }
+
+  for (const seen of seens) {
+    if (p.name in seen) {
+      results.push(generateResult(uniqueDefinitionMessage(p.name), path));
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const ensureAllDefinedPathParamsAreUsedInPath = (
+  path: string,
+  params: Record<string, Segment[]>,
+  expected: Record<string, unknown>,
+  results: IFunctionResult[],
+) => {
+  for (const p in params) {
+    if (!params[p]) {
+      continue;
+    }
+
+    if (!(p in expected)) {
+      const resPath = params[p];
+      results.push(generateResult(`Parameter \`${p}\` is not used in the path \`${path}\`.`, resPath));
+    }
+  }
+};
+
+const ensureAllExpectedParamsinPathAreDefined = (
+  path: string,
+  params: Record<string, Segment[]>,
+  expected: Record<string, unknown>,
+  operationPath: Segment[],
+  results: IFunctionResult[],
+) => {
+  for (const p in expected) {
+    if (!expected[p]) {
+      continue;
+    }
+
+    if (!(p in params)) {
+      results.push(
+        generateResult(
+          `The operation does not define the parameter \`{${p}}\` expected by path \`${path}\`.`,
+          operationPath,
+        ),
+      );
+    }
+  }
+};
 
 export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) => {
   const results: IFunctionResult[] = [];
@@ -62,31 +144,18 @@ export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) 
     }
 
     // find parameters set within the top-level 'parameters' object
-    const topParams: object = {};
-    if (object.paths[path].parameters) {
-      for (const i in object.paths[path].parameters) {
-        if (!object.paths[path].parameters[i]) continue;
+    const topParams = {};
+    for (const i in object.paths[path].parameters) {
+      if (!object.paths[path].parameters[i]) continue;
 
-        const p = object.paths[path].parameters[i];
-        if (p.in && p.in === 'path' && p.name) {
-          if (!p.required) {
-            results.push(generateResult(requiredMessage(p.name), [...paths.given, 'paths', path, 'parameters', i]));
-          }
+      const p: IParam = object.paths[path].parameters[i];
+      const fullParameterPath = [...paths.given, 'paths', path, 'parameters', i];
 
-          if (topParams[p.name]) {
-            // name has already been specified
-            results.push(
-              generateResult(uniqueDefinitionMessage(p.name), [...paths.given, 'paths', path, 'parameters', i]),
-            );
-            continue;
-          }
-          topParams[p.name] = [...paths.given, 'paths', path, 'parameters', i];
-        }
+      if (isUnknownNamedPathParam(p, fullParameterPath, results, [topParams])) {
+        topParams[p.name] = fullParameterPath;
       }
     }
 
-    // find parameters set at the operation level
-    const operationParams = {};
     for (const op in object.paths[path]) {
       if (!object.paths[path][op]) continue;
 
@@ -94,63 +163,25 @@ export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) 
         continue;
       }
 
+      const operationParams = {};
       const parameters = object.paths[path][op].parameters;
-      if (parameters) {
-        // temporary store for tracking parameters specified across operations (to make sure
-        // parameters are not defined multiple times under the same operation)
-        const tmp = {};
 
-        for (const i in parameters) {
-          if (!parameters.hasOwnProperty(i)) continue;
+      const operationPath = [...paths.given, 'paths', path, op];
 
-          const p = parameters[i];
-          if (p.in && p.in === 'path' && p.name) {
-            const parameterPath = ['paths', path, op, 'parameters', i];
-            if (!p.required) {
-              results.push(generateResult(requiredMessage(p.name), [...paths.given, ...parameterPath]));
-            }
+      for (const i in parameters) {
+        if (!parameters.hasOwnProperty(i)) continue;
 
-            if (tmp[p.name]) {
-              results.push(generateResult(uniqueDefinitionMessage(p.name), [...paths.given, ...parameterPath]));
-              continue;
-            } else if (operationParams[p.name]) {
-              continue;
-            }
+        const p: IParam = parameters[i];
+        const fullParameterPath = [...operationPath, 'parameters', i];
 
-            tmp[p.name] = {};
-            operationParams[p.name] = parameterPath;
-          }
+        if (isUnknownNamedPathParam(p, fullParameterPath, results, [topParams, operationParams])) {
+          operationParams[p.name] = fullParameterPath;
         }
       }
-    }
 
-    // verify templated path elements are present in either top-level or operation parameters
-    for (const p in pathElements) {
-      if (!pathElements[p]) continue;
-
-      if (!topParams[p] && !operationParams[p]) {
-        results.push(
-          generateResult(
-            `The path \`${path}\` uses a parameter \`{${p}}\` that does not have a corresponding definition.`,
-            [...paths.given, 'paths', path],
-          ),
-        );
-      }
-    }
-
-    // verify parameters defined in either top-level or operation parameters are set in path
-    // template
-    for (const paramObj of [topParams, operationParams]) {
-      for (const p in paramObj) {
-        if (!paramObj[p]) continue;
-
-        if (!pathElements[p]) {
-          const resPath = paramObj[p];
-          results.push(
-            generateResult(`Parameter \`${p}\` is not used in the path \`${path}\`.`, [...paths.given, ...resPath]),
-          );
-        }
-      }
+      const definedParams = { ...topParams, ...operationParams };
+      ensureAllDefinedPathParamsAreUsedInPath(path, definedParams, pathElements, results);
+      ensureAllExpectedParamsinPathAreDefined(path, definedParams, pathElements, operationPath, results);
     }
   }
 
