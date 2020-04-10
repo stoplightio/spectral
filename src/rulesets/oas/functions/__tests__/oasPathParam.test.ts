@@ -178,15 +178,15 @@ describe('oasPathParam', () => {
       {
         code: 'path-params',
         message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
-        path: ['paths', '/foo/{bar}', 'parameters'],
+        path: ['paths', '/foo/{bar}', 'parameters', '0'],
         range: {
           end: {
             character: 42,
             line: 5,
           },
           start: {
-            character: 19,
-            line: 3,
+            character: 8,
+            line: 4,
           },
         },
         severity: DiagnosticSeverity.Error,
@@ -314,7 +314,7 @@ describe('oasPathParam', () => {
       expect.objectContaining({
         code: 'path-params',
         message: 'Parameter `boo` is not used in the path `/foo`.',
-        path: ['paths', '/foo', 'parameters'],
+        path: ['paths', '/foo', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
@@ -376,7 +376,7 @@ describe('oasPathParam', () => {
       expect.objectContaining({
         code: 'path-params',
         message: 'Path parameter `boo` is defined multiple times. Path parameters must be unique.',
-        path: ['paths', '/foo/{boo}/{qux}', 'parameters'],
+        path: ['paths', '/foo/{boo}/{qux}', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({

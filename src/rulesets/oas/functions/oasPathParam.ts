@@ -64,20 +64,23 @@ export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) 
     // find parameters set within the top-level 'parameters' object
     const topParams: object = {};
     if (object.paths[path].parameters) {
-      for (const p of object.paths[path].parameters) {
+      for (const i in object.paths[path].parameters) {
+        if (!object.paths[path].parameters[i]) continue;
+
+        const p = object.paths[path].parameters[i];
         if (p.in && p.in === 'path' && p.name) {
           if (!p.required) {
-            results.push(generateResult(requiredMessage(p.name), [...paths.given, 'paths', path, 'parameters']));
+            results.push(generateResult(requiredMessage(p.name), [...paths.given, 'paths', path, 'parameters', i]));
           }
 
           if (topParams[p.name]) {
             // name has already been specified
             results.push(
-              generateResult(uniqueDefinitionMessage(p.name), [...paths.given, 'paths', path, 'parameters']),
+              generateResult(uniqueDefinitionMessage(p.name), [...paths.given, 'paths', path, 'parameters', i]),
             );
             continue;
           }
-          topParams[p.name] = [...paths.given, 'paths', path, 'parameters'];
+          topParams[p.name] = [...paths.given, 'paths', path, 'parameters', i];
         }
       }
     }
