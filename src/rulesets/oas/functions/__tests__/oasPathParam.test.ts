@@ -14,14 +14,15 @@ describe('oasPathParam', () => {
   });
 
   test('No error if templated path is not used', async () => {
-    const results = s.run({
+    const results = await s.run({
       paths: {
         '/foo': {
           get: {},
         },
       },
     });
-    expect(results).resolves.toHaveLength(0);
+
+    expect(results).toHaveLength(0);
   });
 
   test('Error if no path parameter definition', async () => {
@@ -32,6 +33,7 @@ describe('oasPathParam', () => {
         },
       },
     });
+
     expect(results).toEqual([
       {
         code: 'path-params',
@@ -53,7 +55,7 @@ describe('oasPathParam', () => {
   });
 
   test('No error if path parameter definition is used (at the path level)', async () => {
-    const results = s.run({
+    const results = await s.run({
       paths: {
         '/foo/{bar}': {
           parameters: [
@@ -67,11 +69,12 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results).resolves.toHaveLength(0);
+
+    expect(results).toHaveLength(0);
   });
 
   test('No error if $ref path parameter definition is used (at the path level)', async () => {
-    const results = s.run({
+    const results = await s.run({
       paths: {
         '/foo/{bar}': {
           parameters: [
@@ -90,11 +93,12 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results).resolves.toHaveLength(0);
+
+    expect(results).toHaveLength(0);
   });
 
   test('No error if path parameter definition is set (at the operation level)', async () => {
-    const results = s.run({
+    const results = await s.run({
       paths: {
         '/foo/{bar}': {
           get: {
@@ -109,7 +113,8 @@ describe('oasPathParam', () => {
         },
       },
     });
-    expect(results).resolves.toHaveLength(0);
+
+    expect(results).toHaveLength(0);
   });
 
   test('Error if duplicate path parameters with same name are used', async () => {
@@ -127,6 +132,7 @@ describe('oasPathParam', () => {
         },
       },
     });
+
     expect(results).toEqual([
       {
         code: 'path-params',
