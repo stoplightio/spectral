@@ -4,6 +4,7 @@ import { CoreFunctions } from '../functions';
 
 export interface IFunctionContext {
   functions: CoreFunctions;
+  cache: Map<unknown, unknown>;
 }
 
 export type IFunction<O = any> = (

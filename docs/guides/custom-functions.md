@@ -233,6 +233,18 @@ module.exports = (targetVal, _opts, paths) => {
 };
 ```
 
+Furthermore, if your function performs any fs calls to obtain dictionaries and similar, you may want to leverage cache.
+Each custom function is provided with its **own** cache instance that has a function-live lifespan.
+What does "function-live lifespan" mean? It means the cache is persisted for the whole life of a particular function.
+The cache will be retained between subsequent function calls and is never invalidated unless you compile the function again, i.e. load a ruleset again.
+In other words:
+- if you Spectral programmatically via JS API and your ruleset remains unchanged, all subsequent `spectral.run` calls will invoke custom functions with the same cache instance.
+As soon as you set a ruleset using `setRuleset` or `loadRuleset` method, each custom function will receive a new cache instance.
+- if you are a CLI user, the cache will never be invalidated.
+
+Please bear in mind that while you are welcome to store certain kind of data, using cache for exchanging information between subsequent function calls it strongly discouraged.
+Spectral does not guarantee any particular order of execution meaning the functions can be executed in random order, depending on the rules you have, and the document you lint.
+
 ## Inheritance
 
 Core functions can be overridden with custom rulesets, so if you'd like to make your own truthy go ahead. Custom functions are only available in the ruleset which defines them, so loading a foo in one ruleset will not clobber a foo in another ruleset.
