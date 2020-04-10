@@ -360,7 +360,13 @@ describe('Linter', () => {
 
         const rules = {
           'strings-maxLength': testRuleset.rules['strings-maxLength'],
-          'oas3-schema': testRuleset.rules['oas3-schema'],
+          'oas3-schema': {
+            ...testRuleset.rules['oas3-schema'],
+            then: {
+              ...testRuleset.rules['oas3-schema'].then,
+              function: 'oasDocumentSchema',
+            },
+          },
         };
 
         spectral.setRuleset({ rules, exceptions: {}, functions: {} });
@@ -397,7 +403,13 @@ describe('Linter', () => {
 
         const rules = {
           'no-yaml-remote-reference': testRuleset.rules['no-yaml-remote-reference'],
-          'oas3-schema': testRuleset.rules['oas3-schema'],
+          'oas3-schema': {
+            ...testRuleset.rules['oas3-schema'],
+            then: {
+              ...testRuleset.rules['oas3-schema'].then,
+              function: 'oasDocumentSchema',
+            },
+          },
         };
 
         spectral.setRuleset({ rules, exceptions: {}, functions: {} });

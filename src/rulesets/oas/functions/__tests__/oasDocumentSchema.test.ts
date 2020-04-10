@@ -3,8 +3,9 @@ import { isOpenApiv2, isOpenApiv3, RuleType, Spectral } from '../../../..';
 import { functions } from '../../../../functions';
 import { setFunctionContext } from '../../../evaluators';
 import { rules } from '../../index.json';
-import oasDocumentSchema from '../oasDocumentSchema';
+import oasDocumentSchema, { prepareResults } from '../oasDocumentSchema';
 
+import { ErrorObject } from 'ajv';
 import * as oas2Schema from '../../schemas/schema.oas2.json';
 import * as oas3Schema from '../../schemas/schema.oas3.json';
 
@@ -185,6 +186,160 @@ describe('oasDocumentSchema', () => {
           path: ['paths', '/user', 'get', 'responses', '200'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
+        },
+      ]);
+    });
+  });
+
+  describe('prepareResults', () => {
+    test('given oneOf error one of which is required $ref property missing, picks only one error', () => {
+      const errors: ErrorObject[] = [
+        {
+          keyword: 'type',
+          dataPath: '/paths/test/post/parameters/0/schema/type',
+          schemaPath: '#/properties/type/type',
+          params: { type: 'string' },
+          message: 'should be string',
+        },
+        {
+          keyword: 'required',
+          dataPath: '/paths/test/post/parameters/0/schema',
+          schemaPath: '#/definitions/Reference/required',
+          params: { missingProperty: '$ref' },
+          message: "should have required property '$ref'",
+        },
+        {
+          keyword: 'oneOf',
+          dataPath: '/paths/test/post/parameters/0/schema',
+          schemaPath: '#/properties/schema/oneOf',
+          params: { passingSchemas: null },
+          message: 'should match exactly one schema in oneOf',
+        },
+      ];
+
+      prepareResults(errors);
+
+      expect(errors).toStrictEqual([
+        {
+          keyword: 'type',
+          dataPath: '/paths/test/post/parameters/0/schema/type',
+          schemaPath: '#/properties/type/type',
+          params: { type: 'string' },
+          message: 'should be string',
+        },
+      ]);
+    });
+
+    test('given oneOf error one without any $ref property missing, picks all errors', () => {
+      const errors: ErrorObject[] = [
+        {
+          keyword: 'type',
+          dataPath: '/paths/test/post/parameters/0/schema/type',
+          schemaPath: '#/properties/type/type',
+          params: { type: 'string' },
+          message: 'should be string',
+        },
+        {
+          keyword: 'type',
+          dataPath: '/paths/test/post/parameters/1/schema/type',
+          schemaPath: '#/properties/type/type',
+          params: { type: 'string' },
+          message: 'should be string',
+        },
+        {
+          keyword: 'oneOf',
+          dataPath: '/paths/test/post/parameters/0/schema',
+          schemaPath: '#/properties/schema/oneOf',
+          params: { passingSchemas: null },
+          message: 'should match exactly one schema in oneOf',
+        },
+      ];
+
+      prepareResults(errors);
+
+      expect(errors).toStrictEqual([
+        {
+          keyword: 'type',
+          dataPath: '/paths/test/post/parameters/0/schema/type',
+          schemaPath: '#/properties/type/type',
+          params: { type: 'string' },
+          message: 'should be string',
+        },
+        {
+          dataPath: '/paths/test/post/parameters/1/schema/type',
+          keyword: 'type',
+          message: 'should be string',
+          params: {
+            type: 'string',
+          },
+          schemaPath: '#/properties/type/type',
+        },
+        {
+          dataPath: '/paths/test/post/parameters/0/schema',
+          keyword: 'oneOf',
+          message: 'should match exactly one schema in oneOf',
+          params: {
+            passingSchemas: null,
+          },
+          schemaPath: '#/properties/schema/oneOf',
+        },
+      ]);
+    });
+
+    test('given errors with different data paths, picks all errors', () => {
+      const errors: ErrorObject[] = [
+        {
+          keyword: 'type',
+          dataPath: '/paths/test/post/parameters/0/schema/type',
+          schemaPath: '#/properties/type/type',
+          params: { type: 'string' },
+          message: 'should be string',
+        },
+        {
+          keyword: 'required',
+          dataPath: '/paths/foo/post/parameters/0/schema',
+          schemaPath: '#/definitions/Reference/required',
+          params: { missingProperty: '$ref' },
+          message: "should have required property '$ref'",
+        },
+        {
+          keyword: 'oneOf',
+          dataPath: '/paths/baz/post/parameters/0/schema',
+          schemaPath: '#/properties/schema/oneOf',
+          params: { passingSchemas: null },
+          message: 'should match exactly one schema in oneOf',
+        },
+      ];
+
+      prepareResults(errors);
+
+      expect(errors).toStrictEqual([
+        {
+          dataPath: '/paths/test/post/parameters/0/schema/type',
+          keyword: 'type',
+          message: 'should be string',
+          params: {
+            type: 'string',
+          },
+          schemaPath: '#/properties/type/type',
+        },
+        {
+          dataPath: '/paths/foo/post/parameters/0/schema',
+          keyword: 'required',
+          message: "should have required property '$ref'",
+          params: {
+            missingProperty: '$ref',
+          },
+          schemaPath: '#/definitions/Reference/required',
+        },
+        {
+          dataPath: '/paths/baz/post/parameters/0/schema',
+          keyword: 'oneOf',
+          message: 'should match exactly one schema in oneOf',
+          params: {
+            passingSchemas: null,
+          },
+          schemaPath: '#/properties/schema/oneOf',
         },
       ]);
     });

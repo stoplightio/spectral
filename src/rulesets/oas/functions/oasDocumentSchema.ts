@@ -22,7 +22,7 @@ const ERROR_MAP = [
 ];
 
 // /shrug
-function prepareResults(errors: AJV.ErrorObject[]) {
+export function prepareResults(errors: AJV.ErrorObject[]) {
   for (let i = 0; i < errors.length; i++) {
     const error = errors[i];
 
