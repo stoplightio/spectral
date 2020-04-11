@@ -24,19 +24,19 @@ describe('Rulesets finder', () => {
 
   it('should support spectral built-in rules', () => {
     return expect(findFile('/b/c/d', '@stoplight/spectral/rulesets/oas/index.json')).resolves.toEqual(
-      path.join(process.cwd(), 'src/rulesets/oas/index.json'),
+      path.join(process.cwd(), 'dist/rulesets/oas/index.json'),
     );
   });
 
   it('should support spectral built-in ruleset shorthand', () => {
     return expect(findFile('', `spectral:oas`)).resolves.toEqual(
-      path.join(process.cwd(), `src/rulesets/oas/index.json`),
+      path.join(process.cwd(), `dist/rulesets/oas/index.json`),
     );
   });
 
   it('should resolve spectral built-in ruleset shorthand even if a base uri is provided', () => {
     return expect(findFile('https://localhost:4000', `spectral:oas`)).resolves.toEqual(
-      path.join(process.cwd(), `src/rulesets/oas/index.json`),
+      path.join(process.cwd(), `dist/rulesets/oas/index.json`),
     );
   });
 
