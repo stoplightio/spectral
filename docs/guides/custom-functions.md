@@ -3,7 +3,7 @@
 If the built-in functions are not enough for your [custom ruleset](../getting-started/rulesets.md), Spectral allows you to write and use your own custom functions.
 
 As of Spectral 5.4.0, custom functions can also be asynchronous. 
-Be aware that linting should be deterministic. That being said, please refrain from introducing any logic that is prone to non-deterministic behavior, i.e. contacting external service you have no control of, and hence cannot predict the response.
+Ideally linting should always be deterministic, which means if its run 10 times it should return the same results 10 times. To ensure this is the case, please refrain from introducing any logic that is prone to non-deterministic behavior. Examples of this might be contacting external service you have no control over, or that might be unstable, or change the way it responds over time.
 While, it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchanging information, i.e. obtaining a dictionary file, with locally running server, etc.
 
 Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
