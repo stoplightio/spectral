@@ -10,11 +10,12 @@ import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
 import request from './request';
-import { Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
+import { transformJsonPathsExpressions } from './runner/compile';
+import { OptimizedRule, Rule } from './runner/rule';
 import { Runner, RunnerRuntime } from './runner';
 import {
   FormatLookup,
@@ -129,7 +130,12 @@ export class Spectral {
     empty(this.rules);
 
     for (const [name, rule] of Object.entries(rules)) {
-      this.rules[name] = new Rule(name, rule);
+      const expressions = transformJsonPathsExpressions(rule.given);
+      if (expressions === null) {
+        this.rules[name] = new Rule(name, rule);
+      } else {
+        this.rules[name] = new OptimizedRule(name, rule, Array.isArray(expressions) ? expressions : [expressions]);
+      }
     }
   }
 

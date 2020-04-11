@@ -2,7 +2,7 @@ import { IResolveOpts, IResolveResult } from '@stoplight/json-ref-resolver/types
 import { DiagnosticSeverity, Dictionary, IDiagnostic, JsonPath } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { IFunction, IRule } from '.';
-import { Rule } from '../rule';
+import { Rule } from '../runner/rule';
 import { ComputeFingerprintFunc } from '../utils';
 
 export type FunctionCollection = Dictionary<IFunction<any>, string>;

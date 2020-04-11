@@ -9,6 +9,7 @@
 /rulesets
 /__karma__/__fixtures__/
 /test-harness/tmp/
+/src/runner/parser/parser.js
 
 # testing
 /coverage

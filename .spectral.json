@@ -1,0 +1,12 @@
+{
+  "extends": "spectral:oas",
+  "rules": {
+    "oas3-valid-oas-parameter-example": "off",
+    "oas3-valid-oas-header-example": "off",
+    "oas3-valid-oas-content-example": "off",
+    "oas3-valid-parameter-schema-example": "off",
+    "oas3-valid-header-schema-example": "off",
+    "oas3-valid-schema-example": "off",
+    "oas3-valid-content-schema-example": "off"
+  }
+}
