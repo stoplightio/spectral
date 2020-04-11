@@ -240,10 +240,22 @@ The cache will be retained between subsequent function calls and is never invali
 In other words:
 - if you Spectral programmatically via JS API and your ruleset remains unchanged, all subsequent `spectral.run` calls will invoke custom functions with the same cache instance.
 As soon as you set a ruleset using `setRuleset` or `loadRuleset` method, each custom function will receive a new cache instance.
-- if you are a CLI user, the cache will never be invalidated.
+- if you are a CLI user, the cache will never be invalidated during the timespan of process.
 
 Please bear in mind that while you are welcome to store certain kind of data, using cache for exchanging information between subsequent function calls it strongly discouraged.
 Spectral does not guarantee any particular order of execution meaning the functions can be executed in random order, depending on the rules you have, and the document you lint.
+
+```js
+module.exports = function () {
+  if (!this.cache.has('cached-item')) {
+    this.cache.set('cached-item', anyValue);
+  }
+
+  const cached = this.cache.get('cached-item');
+
+  // the rest of function
+}
+```
 
 ## Inheritance
 
