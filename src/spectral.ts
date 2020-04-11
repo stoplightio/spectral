@@ -10,12 +10,12 @@ import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
 import request from './request';
+import { Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
-import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
-import { runRules } from './runner';
+import { runRules } from './runner/runner';
 import {
   FormatLookup,
   FunctionCollection,
@@ -126,25 +126,14 @@ export class Spectral {
   public setRules(rules: RuleCollection) {
     empty(this.rules);
 
-    for (const name in rules) {
-      if (!rules.hasOwnProperty(name)) continue;
-      const rule = rules[name];
-
-      this.rules[name] = {
-        name,
-        ...rule,
-        severity: rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
-      };
+    for (const [name, rule] of Object.entries(rules)) {
+      this.rules[name] = new Rule(name, rule);
     }
   }
 
   public mergeRules(rules: PartialRuleCollection) {
-    for (const name in rules) {
-      if (!rules.hasOwnProperty(name)) continue;
-      const rule = rules[name];
-      if (rule) {
-        this.rules[name] = merge(this.rules[name], rule);
-      }
+    for (const [name, rule] of Object.entries(rules)) {
+      this.rules[name] = merge(this.rules[name], rule);
     }
   }
 

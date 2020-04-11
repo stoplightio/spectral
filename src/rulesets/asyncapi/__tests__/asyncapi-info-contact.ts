@@ -1,12 +1,12 @@
 import { cloneDeep } from 'lodash';
 
 import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
+import { Rule } from '../../../rule';
 import { Spectral } from '../../../spectral';
-import { IRunRule } from '../../../types';
 
 const ruleName = 'asyncapi-info-contact';
 let s: Spectral;
-let rule: IRunRule;
+let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
   beforeEach(async () => {

@@ -1,19 +1,22 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
-import { InvalidUriError } from '../../rulesets/mergers/exceptions';
-import { IRunRule } from '../../types';
+import { InvalidUriError } from '../../../rulesets/mergers/exceptions';
 import { IExceptionLocation, pivotExceptions } from '../pivotExceptions';
 
-import { buildRulesetExceptionCollectionFrom } from '../../../setupTests';
+import { buildRulesetExceptionCollectionFrom } from '../../../../setupTests';
+import { Rule } from '../../../rule';
 
 describe('pivotExceptions', () => {
-  const dummyRule: IRunRule = {
-    name: '',
-    severity: DiagnosticSeverity.Error,
-    given: '',
-    then: {
-      function: 'truthy',
-    },
-  };
+  let dummyRule: Rule;
+
+  beforeEach(() => {
+    dummyRule = new Rule('', {
+      severity: DiagnosticSeverity.Error,
+      given: '',
+      then: {
+        function: 'truthy',
+      },
+    });
+  });
 
   it('ignores exceptions for rules that are not part of the run', () => {
     const exceptions = {

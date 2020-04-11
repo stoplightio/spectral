@@ -5,7 +5,7 @@ import { Replacer } from '../utils/replacer';
 export interface IMessageVars {
   property: Segment;
   error: string;
-  description?: string;
+  description: string | null;
   value: unknown;
   path: string;
 }

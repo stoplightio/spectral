@@ -1,4 +1,5 @@
-import { IRule, Spectral } from '../spectral';
+import { IRule } from '..';
+import { Spectral } from '../spectral';
 import { IRuleResult } from '../types';
 
 const applyRuleToObject = async (r: IRule, o: object): Promise<IRuleResult[]> => {

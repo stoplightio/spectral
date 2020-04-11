@@ -735,7 +735,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
     expect(Object.keys(spectral.rules)).toHaveLength(3);
 
-    expect(Object.entries(spectral.rules).map(([name, rule]) => [name, rule.recommended])).toEqual([
+    expect(Object.entries(spectral.rules).map(([name, rule]) => [name, rule.enabled])).toEqual([
       ['explicitly-recommended', true],
       ['implicitly-recommended', true],
       ['explicitly-not-recommended', false],

@@ -1,8 +1,8 @@
 import { extractPointerFromRef, extractSourceFromRef, pointerToPath } from '@stoplight/json';
 import { Dictionary, JsonPath } from '@stoplight/types';
-import { InvalidUriError } from '../rulesets/mergers/exceptions';
-import { IRunRule } from '../types';
-import { RulesetExceptionCollection } from '../types/ruleset';
+import { InvalidUriError } from '../../rulesets/mergers/exceptions';
+import { RunRuleCollection } from '../../types';
+import { RulesetExceptionCollection } from '../../types/ruleset';
 
 export interface IExceptionLocation {
   source: string;
@@ -11,7 +11,7 @@ export interface IExceptionLocation {
 
 export const pivotExceptions = (
   exceptions: RulesetExceptionCollection,
-  runRules: Dictionary<IRunRule, string>,
+  runRules: RunRuleCollection,
 ): Dictionary<IExceptionLocation[], string> => {
   const dic: Dictionary<IExceptionLocation[], string> = {};
 
