@@ -171,6 +171,7 @@ export class Spectral {
 
           const context: IFunctionContext = {
             functions: this.functions,
+            cache: new Map(),
           };
 
           fns[key] = setFunctionContext(context, compileExportedFunction(code, name, source, schema));
