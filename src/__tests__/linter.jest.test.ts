@@ -1,14 +1,15 @@
 import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as nock from 'nock';
 import * as path from 'path';
-import { isOpenApiv3 } from '../formats';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { Spectral } from '../spectral';
 
+import { isOpenApiv3 } from '../formats';
 import { functions } from '../functions';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { readRuleset } from '../rulesets';
 import { setFunctionContext } from '../rulesets/evaluators';
 import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
+import { Spectral } from '../spectral';
 import { IRuleset, RulesetExceptionCollection } from '../types/ruleset';
 
 const customFunctionOASRuleset = path.join(__dirname, './__fixtures__/custom-functions-oas-ruleset.json');
@@ -24,6 +25,7 @@ describe('Linter', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    nock.cleanAll();
   });
 
   it('should make use of custom functions', async () => {
@@ -73,116 +75,161 @@ describe('Linter', () => {
     );
   });
 
-  it('should expose function-live lifespan cache to custom functions', async () => {
-    const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
+  describe('custom functions', () => {
+    it('should have access to function-live lifespan cache', async () => {
+      const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
 
-    await spectral.setRuleset({
-      exceptions: {},
-      rules: {
-        foo: {
-          given: '$',
-          then: {
-            function: 'fn',
+      await spectral.setRuleset({
+        exceptions: {},
+        rules: {
+          foo: {
+            given: '$',
+            then: {
+              function: 'fn',
+            },
+          },
+          bar: {
+            given: '$',
+            then: {
+              function: 'fn',
+            },
           },
         },
-        bar: {
-          given: '$',
-          then: {
-            function: 'fn',
-          },
-        },
-      },
-      functions: {
-        fn: {
-          source: null,
-          name: 'fn',
-          schema: null,
-          code: `module.exports = function() {
+        functions: {
+          fn: {
+            source: null,
+            name: 'fn',
+            schema: null,
+            code: `module.exports = function() {
 console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 }`,
+          },
         },
-      },
+      });
+
+      await spectral.run({});
+
+      // verifies whether the 2 subsequent calls passed the same cache instance as the first argument
+      expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[1][0]);
+
+      await spectral.run({});
+
+      expect(logSpy.mock.calls[2][0]).toBe(logSpy.mock.calls[3][0]);
+      expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[2][0]);
     });
 
-    await spectral.run({});
+    it('should have access to cache that is not shared among them', async () => {
+      const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
 
-    // verifies whether the 2 subsequent calls passed the same cache instance as the first argument
-    expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[1][0]);
-
-    await spectral.run({});
-
-    expect(logSpy.mock.calls[2][0]).toBe(logSpy.mock.calls[3][0]);
-    expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[2][0]);
-  });
-
-  it('should expose cache to custom functions that is not shared among them', async () => {
-    const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
-
-    await spectral.setRuleset({
-      exceptions: {},
-      rules: {
-        foo: {
-          given: '$',
-          then: {
-            function: 'fn',
+      await spectral.setRuleset({
+        exceptions: {},
+        rules: {
+          foo: {
+            given: '$',
+            then: {
+              function: 'fn',
+            },
+          },
+          bar: {
+            given: '$',
+            then: {
+              function: 'fn-2',
+            },
           },
         },
-        bar: {
-          given: '$',
-          then: {
-            function: 'fn-2',
+        functions: {
+          fn: {
+            source: null,
+            name: 'fn',
+            schema: null,
+            code: `module.exports = function() {
+console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
+}`,
+          },
+          'fn-2': {
+            source: null,
+            name: 'fn-2',
+            schema: null,
+            code: `module.exports = function() {
+console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
+}`,
           },
         },
-      },
-      functions: {
-        fn: {
-          source: null,
-          name: 'fn',
-          schema: null,
-          code: `module.exports = function() {
-console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
-}`,
-        },
-        'fn-2': {
-          source: null,
-          name: 'fn-2',
-          schema: null,
-          code: `module.exports = function() {
-console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
-}`,
-        },
-      },
+      });
+
+      await spectral.run({});
+
+      // verifies whether the 2 subsequent calls **DID NOT** pass the same cache instance as the first argument
+      expect(logSpy.mock.calls[0][0]).not.toBe(logSpy.mock.calls[1][0]);
+
+      await spectral.run({});
+
+      // verifies whether the 2 subsequent calls **DID NOT** pass the same cache instance as the first argument
+      expect(logSpy.mock.calls[2][0]).not.toBe(logSpy.mock.calls[3][0]);
+
+      // verifies whether the 2 subsequent calls to the same function passe the same cache instance as the first argument
+      expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[2][0]);
+      expect(logSpy.mock.calls[1][0]).toBe(logSpy.mock.calls[3][0]);
     });
 
-    await spectral.run({});
+    it('should support require calls', async () => {
+      await spectral.loadRuleset(customFunctionOASRuleset);
+      expect(
+        await spectral.run({
+          info: {},
+          paths: {},
+        }),
+      ).toEqual([
+        expect.objectContaining({
+          code: 'has-bar-get-operation',
+          message: 'Object does not have undefined property',
+          path: ['paths'],
+        }),
+      ]);
+    });
 
-    // verifies whether the 2 subsequent calls **DID NOT** pass the same cache instance as the first argument
-    expect(logSpy.mock.calls[0][0]).not.toBe(logSpy.mock.calls[1][0]);
+    it('should be able to call any available function', async () => {
+      await spectral.loadRuleset(customDirectoryFunctionsRuleset);
+      expect(await spectral.run({ bar: 2 })).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: 'validate-bar',
+            message: '`bar` property should be a string',
+          }),
+        ]),
+      );
+    });
 
-    await spectral.run({});
+    it('should be able to make a request using fetch', async () => {
+      const scope = nock('https://stoplight.io')
+        .get('/')
+        .once()
+        .reply(200);
 
-    // verifies whether the 2 subsequent calls **DID NOT** pass the same cache instance as the first argument
-    expect(logSpy.mock.calls[2][0]).not.toBe(logSpy.mock.calls[3][0]);
+      spectral.setRuleset({
+        exceptions: {},
+        functions: {
+          fn: {
+            source: null,
+            schema: null,
+            name: 'fn',
+            code: `module.exports = () => void fetch('https://stoplight.io')`,
+          },
+        },
+        rules: {
+          empty: {
+            given: '$',
+            then: {
+              function: 'fn',
+            },
+          },
+        },
+      });
 
-    // verifies whether the 2 subsequent calls to the same function passe the same cache instance as the first argument
-    expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[2][0]);
-    expect(logSpy.mock.calls[1][0]).toBe(logSpy.mock.calls[3][0]);
-  });
+      await spectral.run({});
 
-  it('should support require calls', async () => {
-    await spectral.loadRuleset(customFunctionOASRuleset);
-    expect(
-      await spectral.run({
-        info: {},
-        paths: {},
-      }),
-    ).toEqual([
-      expect.objectContaining({
-        code: 'has-bar-get-operation',
-        message: 'Object does not have undefined property',
-        path: ['paths'],
-      }),
-    ]);
+      expect(scope.isDone()).toBe(true);
+    });
   });
 
   it('should respect the scope of defined functions (ruleset-based)', async () => {
@@ -197,18 +244,6 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         message: 'info property is missing',
       }),
     ]);
-  });
-
-  it('should expose all available functions to custom functions', async () => {
-    await spectral.loadRuleset(customDirectoryFunctionsRuleset);
-    expect(await spectral.run({ bar: 2 })).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'validate-bar',
-          message: '`bar` property should be a string',
-        }),
-      ]),
-    );
   });
 
   it('should report resolving errors for correct files', async () => {

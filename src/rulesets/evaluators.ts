@@ -101,7 +101,7 @@ const isESCJSCompatibleExport = (obj: unknown): obj is ESCJSCompatibleExport => 
 
 // note: this code is hand-crafted and cover cases we want to support
 // be aware of using it in your own project if you need to support a variety of module systems
-export const evaluateExport = (body: string, source: string | null): Function => {
+export const evaluateExport = (body: string, source: string | null, inject: Dictionary<unknown> = {}): Function => {
   const req = createRequire(source);
   const mod: CJSExport = {
     exports: {},
@@ -111,7 +111,14 @@ export const evaluateExport = (body: string, source: string | null): Function =>
   const root: ContextExport = {};
   const define = createDefine(mod);
 
-  Function('module, exports, define, require', String(body)).call(root, mod, exports, define, req);
+  Function('module', 'exports', 'define', 'require', ...Object.keys(inject), String(body)).call(
+    root,
+    mod,
+    exports,
+    define,
+    req,
+    ...Object.values(inject),
+  );
 
   let maybeFn: unknown;
 
@@ -132,13 +139,16 @@ export const evaluateExport = (body: string, source: string | null): Function =>
   return maybeFn;
 };
 
-export const compileExportedFunction = (
-  code: string,
-  name: string,
-  source: string | null,
-  schema: JSONSchema | null,
-) => {
-  const exportedFn = evaluateExport(code, source) as IFunction;
+export type CompileOptions = {
+  code: string;
+  name: string;
+  source: string | null;
+  schema: JSONSchema | null;
+  inject: Dictionary<unknown>;
+};
+
+export const compileExportedFunction = ({ code, name, source, schema, inject }: CompileOptions) => {
+  const exportedFn = evaluateExport(code, source, inject) as IFunction;
 
   const fn = schema !== null ? decorateIFunctionWithSchemaValidation(exportedFn, schema) : exportedFn;
 

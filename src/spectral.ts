@@ -9,6 +9,7 @@ import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } fr
 import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
+import request from './request';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
@@ -174,7 +175,18 @@ export class Spectral {
             cache: new Map(),
           };
 
-          fns[key] = setFunctionContext(context, compileExportedFunction(code, name, source, schema));
+          fns[key] = setFunctionContext(
+            context,
+            compileExportedFunction({
+              code,
+              name,
+              source,
+              schema,
+              inject: {
+                fetch: request,
+              },
+            }),
+          );
           return fns;
         },
         {
