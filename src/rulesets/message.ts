@@ -1,5 +1,5 @@
 import { Segment } from '@stoplight/types';
-import { isObject } from 'lodash';
+import { capitalize, isObject } from 'lodash';
 import { Replacer } from '../utils/replacer';
 
 export interface IMessageVars {
@@ -17,6 +17,7 @@ const MessageReplacer = new Replacer<IMessageVars>(2);
 MessageReplacer.addTransformer('double-quotes', (id, value) => (value ? `"${value}"` : ''));
 MessageReplacer.addTransformer('single-quotes', (id, value) => (value ? `'${value}'` : ''));
 MessageReplacer.addTransformer('gravis', (id, value) => (value ? `\`${value}\`` : ''));
+MessageReplacer.addTransformer('capitalize', (id, value) => capitalize(String(value)));
 
 MessageReplacer.addTransformer('append-property', (id, value) => (value ? `${value} property ` : ''));
 MessageReplacer.addTransformer('optional-typeof', (id, value, values) =>

@@ -1,0 +1,63 @@
+====test====
+Prints reasonable error messages for oas3-schema errors.
+====document====
+openapi: 3.0.1
+info:
+  title: Example $ref error
+  version: 1.0.0
+  contact:
+    foo: me
+paths:
+  /user:
+    get:
+      operationId: getUser
+      parameters:
+        - type: string
+          name: module_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Module ID
+        - name: module_id
+          in: bar
+          required: true
+          schema:
+            type: [string, number]
+      responses:
+        "200":
+          description: An Example
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id: 12345
+            application/yaml:
+              schema:
+                type: object
+                properties:
+        "400":
+          description: []
+  /address:
+    get:
+      responses: {}
+====asset:ruleset====
+extends: [[spectral:oas, off]]
+rules:
+  oas3-schema: error
+====command====
+{bin} lint {document} --ruleset {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+  5:11  error  oas3-schema  Property `foo` is not expected to be here.
+ 12:11  error  oas3-schema  Property `type` is not expected to be here.
+ 23:18  error  oas3-schema  `type` property type should be string.
+ 32:28  error  oas3-schema  `user_id` property type should be object.
+ 36:28  error  oas3-schema  `properties` property type should be object.
+ 38:23  error  oas3-schema  `description` property type should be string.
+ 41:17  error  oas3-schema  `responses` property minProperties should NOT have fewer than 1 properties.
+
+✖ 7 problems (7 errors, 0 warnings, 0 infos, 0 hints)

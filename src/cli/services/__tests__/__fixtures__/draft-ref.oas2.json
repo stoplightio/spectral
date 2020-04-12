@@ -5,6 +5,7 @@
     "$ref": "./refs/info.json#/definitions/info"
   },
   "paths": {
-    "test": {}
+    "/test": {},
+    "foo": {}
   }
 }

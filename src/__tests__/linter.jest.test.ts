@@ -5,7 +5,10 @@ import { isOpenApiv3 } from '../formats';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
+import { functions } from '../functions';
 import { readRuleset } from '../rulesets';
+import { setFunctionContext } from '../rulesets/evaluators';
+import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
 import { IRuleset, RulesetExceptionCollection } from '../types/ruleset';
 
 const customFunctionOASRuleset = path.join(__dirname, './__fixtures__/custom-functions-oas-ruleset.json');
@@ -457,10 +460,17 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const rules = {
           'strings-maxLength': testRuleset.rules['strings-maxLength'],
-          'oas3-schema': testRuleset.rules['oas3-schema'],
+          'oas3-schema': {
+            ...testRuleset.rules['oas3-schema'],
+            then: {
+              ...testRuleset.rules['oas3-schema'].then,
+              function: 'oasDocumentSchema',
+            },
+          },
         };
 
         spectral.setRuleset({ rules, exceptions: {}, functions: {} });
+        spectral.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
 
         const first = await spectral.run(document, opts);
 
@@ -476,6 +486,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         const exceptions = extractExceptionFrom(testRuleset, 'strings-maxLength', 0);
 
         spectral.setRuleset({ rules, exceptions, functions: {} });
+        spectral.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
 
         const second = await spectral.run(document, opts);
 
@@ -492,10 +503,17 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const rules = {
           'no-yaml-remote-reference': testRuleset.rules['no-yaml-remote-reference'],
-          'oas3-schema': testRuleset.rules['oas3-schema'],
+          'oas3-schema': {
+            ...testRuleset.rules['oas3-schema'],
+            then: {
+              ...testRuleset.rules['oas3-schema'].then,
+              function: 'oasDocumentSchema',
+            },
+          },
         };
 
         spectral.setRuleset({ rules, exceptions: {}, functions: {} });
+        spectral.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
 
         const first = await spectral.run(document, opts);
 
@@ -511,6 +529,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         const exceptions = extractExceptionFrom(testRuleset, 'no-yaml-remote-reference', 1);
 
         spectral.setRuleset({ rules, exceptions, functions: {} });
+        spectral.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
 
         const second = await spectral.run(document, opts);
 

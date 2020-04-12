@@ -1,6 +1,7 @@
 {
   "formats": ["oas2", "oas3"],
   "functions": [
+    "oasDocumentSchema",
     "oasOp2xxResponse",
     "oasOpFormDataConsumeCheck",
     "oasOpIdUnique",
@@ -579,15 +580,16 @@
     },
     "oas2-schema": {
       "description": "Validate structure of OpenAPI v2 specification.",
-      "message": "{{error}}",
+      "message": "{{error}}.",
       "recommended": true,
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
       "given": "$",
       "then": {
-        "function": "schema",
+        "function": "oasDocumentSchema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.oas2.json"
           }
@@ -837,15 +839,16 @@
     },
     "oas3-schema": {
       "description": "Validate structure of OpenAPI v3 specification.",
-      "message": "{{error}}",
+      "message": "{{error}}.",
       "severity": 0,
       "formats": ["oas3"],
       "recommended": true,
       "type": "validation",
       "given": "$",
       "then": {
-        "function": "schema",
+        "function": "oasDocumentSchema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.oas3.json"
           }

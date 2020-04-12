@@ -226,7 +226,7 @@ describe('oas3-valid-schema-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas3-valid-schema-example',
-        message: 'object should have required property `url`',
+        message: 'Object should have required property `url`',
         severity: DiagnosticSeverity.Error,
       }),
     ]);
