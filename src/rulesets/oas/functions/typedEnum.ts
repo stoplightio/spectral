@@ -19,7 +19,7 @@ export const typedEnum: IFunction = function(this: IFunctionContext, targetVal, 
   enumValues.forEach((val, index) => {
     const res = this.functions.schema(val, schemaObject, paths, otherValues);
 
-    if (res !== undefined && res.length !== 0) {
+    if (Array.isArray(res) && res.length !== 0) {
       incorrectValues.push({ index, val });
     }
   });
