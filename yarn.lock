@@ -5451,10 +5451,10 @@ pkg-fetch@^2.6.6:
     semver "^6.3.0"
     unique-temp-dir "^1.0.0"
 
-pkg@^4.4.6:
-  version "4.4.6"
-  resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.4.6.tgz#14d8c072754605d4aa681c4c27aa8a4c0eb32bf6"
-  integrity sha512-dZtS9w/pe/QBI0hDeXddZ0ENxjySEC9GzI1CuDnPjUid6VpTdiYdn40itOgHqvApVWHN6fuRqlnwpKFTCzi3fQ==
+pkg@^4.4.7:
+  version "4.4.7"
+  resolved "https://registry.yarnpkg.com/pkg/-/pkg-4.4.7.tgz#8efbf392009339a3fa1cf552beefcb4a6b9ebe65"
+  integrity sha512-yDGEg2k09AOxV3KfJpKoEQkhckVN2woV/4Cm2iNnRUgJeSHcodxylertz49ePcJyknUyUFjTYDkogfK/188mag==
   dependencies:
     "@babel/parser" "^7.9.4"
     "@babel/runtime" "^7.9.2"
