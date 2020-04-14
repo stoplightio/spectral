@@ -104,7 +104,7 @@
     "dependency-graph": "^0.8.0",
     "fetch-mock": "^7.7.3",
     "glob-fs": "^0.1.7",
-    "husky": "^4.2.3",
+    "husky": "^4.2.5",
     "jest": "~25.3",
     "jest-mock": "^25.2.6",
     "jest-when": "~2.7",
