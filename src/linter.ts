@@ -64,7 +64,7 @@ export const lintNode = async (
 
       const targetResults = await func(
         target.value,
-        then.functionOptions,
+        then.functionOptions || {},
         {
           given: givenPath,
           target: targetPath,
