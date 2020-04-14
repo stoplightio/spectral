@@ -130,10 +130,7 @@
     "xml2js": "^0.4.23"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "tslint --fix",
-      "git add"
-    ]
+    "*.{ts,tsx}": "tslint --fix"
   },
   "husky": {
     "hooks": {
