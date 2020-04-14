@@ -2,7 +2,7 @@
 
 If the built-in functions are not enough for your [custom ruleset](../getting-started/rulesets.md), Spectral allows you to write and use your own custom functions.
 
-As of Spectral 5.4.0, custom functions can also be asynchronous. 
+As of Spectral 5.4.0, custom functions can also be asynchronous.
 
 <!-- theme: warning -->
 
@@ -112,6 +112,43 @@ rules:
     given: "$.info"
     then:
       function: "abc"
+```
+
+#### Async Function Example
+
+**functions/dictionary.js**
+
+```js
+const CACHE_KEY = 'dictionary';
+
+module.exports = async function (targetVal) {
+  if (!this.cache.has(CACHE_KEY)) {
+    const res = await fetch('https://dictionary.com/evil');
+    if (res.ok) {
+      this.cache.set(CACHE_KEY, await res.json());
+    } else {
+      // you can either re-try or just throw an error
+    }
+  }
+
+  const dictionary = this.cache.get(CACHE_KEY);
+
+  if (dictionary.includes(targetVal)) {
+    return [{ message: `\`${targetVal}\` is a forbidden word.` }];
+  }
+};
+```
+
+**my-ruleset.yaml**
+
+```yaml
+functions: [dictionary]
+rules:
+  my-rule:
+    message: "{{error}}"
+    given: ["$.info.title", "$.info.description"]
+    then:
+      function: "dictionary"
 ```
 
 If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
