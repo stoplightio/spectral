@@ -40,7 +40,6 @@ export function compile(path: string): CompiledExpression | null {
 
       if (scope === 'descendant') {
         deep = true;
-        segments.push('?.*');
       }
 
       switch (operation) {
@@ -49,13 +48,21 @@ export function compile(path: string): CompiledExpression | null {
             case 'root':
               break;
             case 'identifier':
-              segments.push(escapeRegExp(expression.value));
+              if (scope === 'descendant' && segments.length > 0) {
+                // todo: verify this one here
+                segments.push(`(?:.*)?${escapeRegExp(expression.value)}`);
+              } else {
+                segments.push(escapeRegExp(expression.value));
+              }
+
               break;
             case 'wildcard':
               singleMatch = false;
 
               if (scope !== 'descendant') {
                 segments.push('[^/]*');
+              } else {
+                segments.push('.*');
               }
 
               break;
@@ -79,8 +86,8 @@ export function compile(path: string): CompiledExpression | null {
     }
 
     let value: RegExp;
-    if (ast.length === 2 && ast[1].scope === 'descendant') {
-      value = new RegExp(`(?:^|\\/)${segments[1]}$`);
+    if (ast[1].scope === 'descendant') {
+      value = new RegExp(`(?:^|\\/)${segments.join('\\/')}$`);
     } else {
       value = new RegExp(`^${segments.join('\\/')}$`);
     }

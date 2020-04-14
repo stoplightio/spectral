@@ -10,7 +10,9 @@
     "oasPathParam",
     "oasTagDefined",
     "typedEnum",
-    "refSiblings"
+    "refSiblings",
+    "validSchemaExample",
+    "validSchemaPrimitiveExample"
   ],
   "rules": {
     "operation-2xx-response": {
@@ -414,9 +416,9 @@
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
-      "given": "$..parameters..[?(@.in == 'body')]..[?(@property !== 'properties' && @.example && ( @.type || @.format || @.$ref ))]",
+      "given": "$..parameters..[?(@.in == 'body')]..*",
       "then": {
-        "function": "schemaPath",
+        "function": "validSchemaPrimitiveExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$",
@@ -431,9 +433,9 @@
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
-      "given": "$..definitions..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "given": "$..definitions..*",
       "then": {
-        "function": "schemaPath",
+        "function": "validSchemaPrimitiveExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$",
@@ -521,13 +523,7 @@
       "formats": ["oas3"],
       "type": "style",
       "given": [
-        "$.components.examples.*",
-        "$.paths..content.*.examples.*",
-        "$.components..content.*.examples.*",
-        "$.paths..parameters.*.examples.*",
-        "$.components..parameters.*.examples.*",
-        "$.paths..headers.*.examples.*",
-        "$.components..headers.*.examples.*"
+        "$..examples.*"
       ],
       "then": {
         "function": "xor",
@@ -598,10 +594,9 @@
       "recommended": true,
       "severity": 0,
       "type": "validation",
-      "given": "$..parameters..",
+      "given": "$..parameters..*",
       "then": {
-        "field": "$.[?(@.example && @.schema)]",
-        "function": "schemaPath",
+        "function": "validSchemaExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$.schema",
@@ -616,10 +611,9 @@
       "severity": 0,
       "formats": ["oas3"],
       "type": "validation",
-      "given": "$..headers..",
+      "given": "$..headers..*",
       "then": {
-        "field": "$.[?(@.example && @.schema)]",
-        "function": "schemaPath",
+        "function": "validSchemaExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$.schema",
@@ -634,9 +628,9 @@
       "severity": 0,
       "formats": ["oas3"],
       "type": "validation",
-      "given": "$..content..[?(@.example && @.schema)]",
+      "given": "$..content..*",
       "then": {
-        "function": "schemaPath",
+        "function": "validSchemaExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$.schema",
@@ -651,9 +645,9 @@
       "severity": 0,
       "formats": ["oas3"],
       "type": "validation",
-      "given": "$..parameters..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "given": "$..parameters..*",
       "then": {
-        "function": "schemaPath",
+        "function": "validSchemaPrimitiveExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$",
@@ -668,9 +662,9 @@
       "severity": 0,
       "formats": ["oas3"],
       "type": "validation",
-      "given": "$..headers..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "given": "$..headers..*",
       "then": {
-        "function": "schemaPath",
+        "function": "validSchemaPrimitiveExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$",
@@ -685,9 +679,9 @@
       "formats": ["oas3"],
       "recommended": true,
       "type": "validation",
-      "given": "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
+      "given": "$.components.schemas..*",
       "then": {
-        "function": "schemaPath",
+        "function": "validSchemaPrimitiveExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$",
@@ -702,10 +696,9 @@
       "formats": ["oas3"],
       "recommended": true,
       "type": "validation",
-      "given": "$..content..",
+      "given": "$..content..*",
       "then": {
-        "field": "$.[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref))]",
-        "function": "schemaPath",
+        "function": "validSchemaPrimitiveExample",
         "functionOptions": {
           "field": "example",
           "schemaPath": "$",
