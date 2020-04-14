@@ -144,7 +144,7 @@ module.exports = async function (targetVal) {
 ```yaml
 functions: [dictionary]
 rules:
-  my-rule:
+  no-evil-words:
     message: "{{error}}"
     given: ["$.info.title", "$.info.description"]
     then:
