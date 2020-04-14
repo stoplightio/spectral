@@ -282,3 +282,66 @@ except:
 ## Creating custom functions
 
 Learn more about [custom functions](../guides/custom-functions.md).
+
+## Distributing
+
+You are very welcome to share your rulesets with the world. To help you out distribute your rulesets among the others, Spectral provides a few way to load rulesets.
+
+### NPM
+
+Your `package.json`.
+
+```json
+{
+  "name": "example-spectral-ruleset",
+  "version": "0.0.0",
+  "description": "Example Spectral ruleset",
+  "main": "index.json",
+  "scripts": {},
+  "license": "ISC"
+}
+```
+
+Actual ruleset called `index.json`
+
+```json
+{
+  "functions": ["min"],
+  "rules": {
+    "valid-foo-value": {
+      "given": "$",
+      "then": {
+        "field": "foo",
+        "function": "min",
+        "functionOptions": {
+          "value": 1
+        }
+      }
+    }
+  }
+}
+```
+
+And, optionally, a custom function, `functions/min.js`
+
+```js
+'use strict';
+
+module.exports = function (targetVal, { min }) {
+  if (typeof targetVal !== 'number') {
+    return [
+      {
+        message: 'Value is not a number.',
+      },
+    ];
+  }
+
+  if (targetVal < min) {
+    return [
+      {
+        message: `Value is lower than ${min}`,
+      },
+    ];
+  }
+}
+```
