@@ -22,6 +22,8 @@ const extendsDisabledOasRuleset = path.join(__dirname, './__fixtures__/extends-d
 const extendsOasWithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas-with-override-ruleset.json');
 const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
 const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-ruleset.json');
+const extendsNPMRuleset = path.join(__dirname, './__fixtures__/ruleset-extends-npm.json');
+const extendsNPMVersionedRuleset = path.join(__dirname, './__fixtures__/ruleset-extends-npm-versioned.json');
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
 const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/custom-functions-directory-ruleset.json');
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
@@ -545,6 +547,122 @@ describe('Rulesets reader', () => {
         },
       }),
     );
+  });
+
+  it('should support loading rulesets distributed via npm', () => {
+    const minFnCode = `module.exports = () => void 'foo'`;
+
+    nock('https://unpkg.com')
+      .get('/example-spectral-ruleset')
+      .reply(
+        200,
+        JSON.stringify({
+          functions: ['min'],
+          rules: {
+            'valid-foo-value': {
+              given: '$',
+              then: {
+                field: 'foo',
+                function: 'min',
+                functionOptions: {
+                  value: 1,
+                },
+              },
+            },
+          },
+        }),
+      )
+      .get('/example-spectral-ruleset/functions/min.js')
+      .reply(200, minFnCode);
+
+    return expect(readRuleset(extendsNPMRuleset)).resolves.toEqual({
+      rules: {
+        'valid-foo-value': {
+          given: '$',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'foo',
+            function: 'random-id-0',
+            functionOptions: {
+              value: 1,
+            },
+          },
+        },
+      },
+      functions: {
+        min: {
+          name: 'min',
+          ref: 'random-id-0',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
+        },
+        'random-id-0': {
+          code: minFnCode,
+          name: 'min',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
+        },
+      },
+      exceptions: {},
+    });
+  });
+
+  it('should support loading rulesets distributed via npm with version specified', () => {
+    const minFnCode = `module.exports = () => void 'foo'`;
+
+    nock('https://unpkg.com')
+      .get('/example-spectral-ruleset@0.0.3')
+      .reply(
+        200,
+        JSON.stringify({
+          functions: ['min'],
+          rules: {
+            'valid-foo-value': {
+              given: '$',
+              then: {
+                field: 'foo',
+                function: 'min',
+                functionOptions: {
+                  value: 1,
+                },
+              },
+            },
+          },
+        }),
+      )
+      .get('/example-spectral-ruleset@0.0.3/functions/min.js')
+      .reply(200, minFnCode);
+
+    return expect(readRuleset(extendsNPMVersionedRuleset)).resolves.toEqual({
+      rules: {
+        'valid-foo-value': {
+          given: '$',
+          severity: DiagnosticSeverity.Warning,
+          then: {
+            field: 'foo',
+            function: 'random-id-0',
+            functionOptions: {
+              value: 1,
+            },
+          },
+        },
+      },
+      functions: {
+        min: {
+          name: 'min',
+          ref: 'random-id-0',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
+        },
+        'random-id-0': {
+          code: minFnCode,
+          name: 'min',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
+        },
+      },
+      exceptions: {},
+    });
   });
 
   it('given a ruleset with custom functions should return rules and resolved functions', async () => {
