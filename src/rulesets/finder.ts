@@ -30,7 +30,7 @@ async function resolveFromFS(from: string, to: string) {
 
   // if a built-in ruleset starting with @stoplight/spectral is given,
   // try to search in spectral source directory - we should be able to find it
-  // this path is often hit when spectral:oas(?:2|3)? shorthand is provided
+  // this path is often hit when a built-in ruleset shorthand is provided
   if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/' && to.startsWith(SPECTRAL_PKG_NAME)) {
     targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace(SPECTRAL_PKG_NAME, './'));
     if (await exists(targetPath)) {
