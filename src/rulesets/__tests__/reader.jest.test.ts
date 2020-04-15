@@ -279,7 +279,6 @@ describe('Rulesets reader', () => {
           type: 'validation',
           severity: DiagnosticSeverity.Error,
           given: '$',
-          tags: ['operation'],
         }),
       }),
     );
@@ -292,7 +291,6 @@ describe('Rulesets reader', () => {
       formats: expect.arrayContaining([expect.any(String)]),
       recommended: true,
       severity: DiagnosticSeverity.Warning,
-      tags: ['operation'],
       then: expect.any(Object),
       type: 'style',
     });
@@ -307,7 +305,6 @@ describe('Rulesets reader', () => {
         formats: expect.arrayContaining([expect.any(String)]),
         severity: -1,
         description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
-        tags: ['operation'],
         then: expect.any(Object),
         type: 'validation',
       },
