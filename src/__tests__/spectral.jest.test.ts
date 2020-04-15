@@ -32,6 +32,7 @@ describe('Spectral', () => {
               name,
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
+              recommended: expect.any(Boolean),
               severity: expect.any(Number),
               then: expect.any(Object),
             };
@@ -86,6 +87,7 @@ describe('Spectral', () => {
         'info-matches-stoplight': {
           ...ruleset.rules['info-matches-stoplight'],
           name: 'info-matches-stoplight',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
         },
       });
