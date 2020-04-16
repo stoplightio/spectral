@@ -2,8 +2,8 @@
 
 When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, but probably wherever they are being made.
 
-- Run [Spectral CLI](./cli.md) against design docs and get feedback very early on.
-- Run Spectral in [Stoplight Studio](https://stoplight.io/spectral/) automatically as you work, without switching to the CLI.
+- Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
+- Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) automatically as you work, without switching to the CLI.
 
 ## Linting Design-First Workflows
 
@@ -42,7 +42,7 @@ Folks will forget to run Spectral, and that means they can commit broken or (low
 }
 ```
 
-See our [CLI documentation](./cli.md) to see what other arguments and options can be used.
+See our [CLI documentation](./2-cli.md) to see what other arguments and options can be used.
 
 ## Continuous Integration
 
@@ -62,4 +62,3 @@ jobs:
 ```
 
 We plan to add JUnit/xUnit test results in a future version, so tools like CircleCI can show test results in a more visual way. For now, the commands exit code will alert CI that there was a problem, and the console output will say why.
-
