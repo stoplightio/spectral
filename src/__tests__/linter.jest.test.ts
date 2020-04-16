@@ -2,6 +2,7 @@ import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as nock from 'nock';
 import * as path from 'path';
+import * as timers from 'timers';
 
 import { isOpenApiv3 } from '../formats';
 import { functions } from '../functions';
@@ -230,6 +231,153 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       await spectral.run({});
 
       expect(scope.isDone()).toBe(true);
+    });
+
+    describe('async functions', () => {
+      const fnName = 'asyncFn';
+
+      beforeEach(() => {
+        jest.useFakeTimers();
+
+        spectral.setRules({
+          'async-foo': {
+            given: '$',
+            severity: DiagnosticSeverity.Warning,
+            then: {
+              function: fnName,
+            },
+          },
+        });
+      });
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      it('should handle basic example', async () => {
+        spectral.setFunctions({
+          [fnName]() {
+            return new Promise(resolve => {
+              setTimeout(resolve, 200, [
+                {
+                  message: 'Error reported by async fn',
+                },
+              ]);
+            });
+          },
+        });
+
+        const result = spectral.run({
+          swagger: '2.0',
+        });
+
+        await new Promise(timers.setImmediate);
+
+        jest.advanceTimersByTime(200);
+
+        expect(await result).toEqual([
+          {
+            code: 'async-foo',
+            message: 'Error reported by async fn',
+            path: [],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+          },
+        ]);
+      });
+
+      it('should handle rejections', async () => {
+        spectral.setFunctions({
+          [fnName]() {
+            return new Promise((resolve, reject) => {
+              setTimeout(reject, 1000, new Error('Some unknown error'));
+            });
+          },
+        });
+
+        const result = spectral.run({
+          swagger: '2.0',
+        });
+
+        await new Promise(timers.setImmediate);
+
+        jest.advanceTimersByTime(1000);
+
+        expect(await result).toEqual([]);
+      });
+
+      it('should be able to make actual requests', async () => {
+        spectral.setRuleset({
+          exceptions: {},
+          functions: {
+            [fnName]: {
+              name: fnName,
+              schema: null,
+              source: null,
+              code: `module.exports = async function (targetVal) {
+  if (!this.cache.has('dictionary')) {
+    const res = await fetch('https://dictionary.com/evil');
+    if (res.ok) {
+      this.cache.set('dictionary', await res.json());
+    } else {
+      // you can either re-try or just throw an error
+    }
+  }
+
+  const dictionary = this.cache.get('dictionary');
+
+  if (dictionary.includes(targetVal)) {
+    return [{ message: '\`' + targetVal + '\`' + ' is a forbidden word.' }];
+  }
+}`,
+            },
+          },
+          rules: {
+            'no-evil-words': {
+              given: '$..*@string()',
+              severity: DiagnosticSeverity.Warning,
+              then: {
+                function: fnName,
+              },
+            },
+          },
+        });
+
+        nock('https://dictionary.com')
+          .persist()
+          .get('/evil')
+          .reply(200, JSON.stringify(['foo', 'bar', 'baz']));
+
+        const results = await spectral.run({
+          swagger: '2.0',
+          info: {
+            contact: {
+              email: 'foo',
+              author: 'baz',
+            },
+          },
+          paths: {
+            '/user': {},
+          },
+        });
+
+        expect(results).toEqual([
+          {
+            code: 'no-evil-words',
+            message: '`foo` is a forbidden word.',
+            path: ['info', 'contact', 'email'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+          },
+          {
+            code: 'no-evil-words',
+            message: '`baz` is a forbidden word.',
+            path: ['info', 'contact', 'author'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+          },
+        ]);
+      });
     });
   });
 

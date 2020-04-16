@@ -2,6 +2,13 @@
 
 If the built-in functions are not enough for your [custom ruleset](../getting-started/rulesets.md), Spectral allows you to write and use your own custom functions.
 
+As of Spectral 5.4.0, custom functions can also be asynchronous.
+
+<!-- theme: warning -->
+
+> Ideally linting should always be deterministic, which means if its run 10 times it should return the same results 10 times. To ensure this is the case, please refrain from introducing any logic that is prone to non-deterministic behavior. Examples of this might be contacting external service you have no control over, or that might be unstable, or change the way it responds over time.
+> While, it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchanging information, i.e. obtaining a dictionary file, with a locally running server, etc.
+
 Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
 This indicates that almost any arbitrary code can be executed.
 Potential risks include:
@@ -105,6 +112,43 @@ rules:
     given: "$.info"
     then:
       function: "abc"
+```
+
+#### Async Function Example
+
+**functions/dictionary.js**
+
+```js
+const CACHE_KEY = 'dictionary';
+
+module.exports = async function (targetVal) {
+  if (!this.cache.has(CACHE_KEY)) {
+    const res = await fetch('https://dictionary.com/evil');
+    if (res.ok) {
+      this.cache.set(CACHE_KEY, await res.json());
+    } else {
+      // you can either re-try or just throw an error
+    }
+  }
+
+  const dictionary = this.cache.get(CACHE_KEY);
+
+  if (dictionary.includes(targetVal)) {
+    return [{ message: `\`${targetVal}\` is a forbidden word.` }];
+  }
+};
+```
+
+**my-ruleset.yaml**
+
+```yaml
+functions: [dictionary]
+rules:
+  no-evil-words:
+    message: "{{error}}"
+    given: ["$.info.title", "$.info.description"]
+    then:
+      function: "dictionary"
 ```
 
 If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
