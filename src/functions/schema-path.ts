@@ -48,7 +48,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
       otherValues,
     );
 
-    if (result !== void 0) {
+    if (Array.isArray(result)) {
       results.push(...result);
     }
   }

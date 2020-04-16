@@ -1,11 +1,12 @@
+const allSettled = require('promise.allsettled');
 const { JSONPath } = require('jsonpath-plus');
-import { DiagnosticSeverity } from '@stoplight/types';
-
+import { DiagnosticSeverity, Optional } from '@stoplight/types';
+import { flatMap } from 'lodash';
 import { STDIN } from './document';
 import { DocumentInventory } from './documentInventory';
 import { lintNode } from './linter';
 import { getDiagnosticSeverity } from './rulesets/severity';
-import { FunctionCollection, IGivenNode, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
+import { FunctionCollection, IRule, IRuleResult, IRunRule, RunRuleCollection } from './types';
 import { RulesetExceptionCollection } from './types/ruleset';
 import { hasIntersectingElement } from './utils/';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
@@ -17,6 +18,13 @@ const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
 };
 
+export interface IRunningContext {
+  documentInventory: DocumentInventory;
+  rules: RunRuleCollection;
+  functions: FunctionCollection;
+  exceptions: RulesetExceptionCollection;
+}
+
 const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory): IRuleResult => {
   return generateDocumentWideResult(
     documentInventory.document,
@@ -26,27 +34,19 @@ const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory)
   );
 };
 
-export const runRules = (
-  documentInventory: DocumentInventory,
-  rules: RunRuleCollection,
-  functions: FunctionCollection,
-  exceptions: RulesetExceptionCollection,
-): IRuleResult[] => {
-  const results: IRuleResult[] = [];
+export const runRules = async (context: IRunningContext): Promise<IRuleResult[]> => {
+  const { documentInventory, rules, exceptions } = context;
 
+  const results: Array<IRuleResult | Promise<IRuleResult[]>> = [];
   const isStdIn = isStdInSource(documentInventory);
+  const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
 
   if (isStdIn && Object.keys(exceptions).length > 0) {
     results.push(generateDefinedExceptionsButStdIn(documentInventory));
   }
 
-  const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
-
-  for (const name in rules) {
-    if (!rules.hasOwnProperty(name)) continue;
-
-    const rule = rules[name];
-    if (!rule) continue;
+  for (const rule of Object.values(rules)) {
+    if (!isRuleEnabled(rule)) continue;
 
     if (
       rule.formats !== void 0 &&
@@ -56,47 +56,41 @@ export const runRules = (
       continue;
     }
 
-    if (!isRuleEnabled(rule)) {
-      continue;
-    }
-
-    let ruleResults: IRuleResult[] = [];
-
-    try {
-      ruleResults = runRule(documentInventory, rule, functions, exceptRuleByLocations[name]);
-    } catch (e) {
-      console.error(`Unable to run rule '${name}':\n${e}`);
-    }
-
-    results.push(...ruleResults);
+    runRule(context, rule, exceptRuleByLocations[rule.name], results);
   }
 
-  return results;
+  return flatMap<PromiseSettledResult<IRuleResult[]>, IRuleResult>(await allSettled(results), result => {
+    if (result.status === 'fulfilled') {
+      return result.value;
+    } else {
+      // todo: use @stoplight/reporter
+      console.warn(result.reason);
+      return [];
+    }
+  });
 };
 
 const runRule = (
-  resolved: DocumentInventory,
+  context: IRunningContext,
   rule: IRunRule,
-  functions: FunctionCollection,
-  exceptionLocations: IExceptionLocation[] | undefined,
-): IRuleResult[] => {
-  const target = rule.resolved === false ? resolved.unresolved : resolved.resolved;
-
-  const results: IRuleResult[] = [];
+  exceptRuleByLocations: Optional<IExceptionLocation[]>,
+  results: Array<IRuleResult | Promise<IRuleResult[]>>,
+): void => {
+  const target = rule.resolved === false ? context.documentInventory.unresolved : context.documentInventory.resolved;
 
   for (const given of Array.isArray(rule.given) ? rule.given : [rule.given]) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
     if (given === '$') {
-      lint(
-        {
-          path: ['$'],
-          value: target,
-        },
-        resolved,
-        rule,
-        functions,
-        exceptionLocations,
-        results,
+      results.push(
+        lintNode(
+          context,
+          {
+            path: ['$'],
+            value: target,
+          },
+          rule,
+          exceptRuleByLocations,
+        ),
       );
     } else {
       JSONPath({
@@ -104,48 +98,19 @@ const runRule = (
         json: target,
         resultType: 'all',
         callback: (result: any) => {
-          lint(
-            {
-              path: JSONPath.toPathArray(result.path),
-              value: result.value,
-            },
-            resolved,
-            rule,
-            functions,
-            exceptionLocations,
-            results,
+          results.push(
+            lintNode(
+              context,
+              {
+                path: JSONPath.toPathArray(result.path),
+                value: result.value,
+              },
+              rule,
+              exceptRuleByLocations,
+            ),
           );
         },
       });
     }
   }
-
-  return results;
 };
-
-function lint(
-  node: IGivenNode,
-  resolved: DocumentInventory,
-  rule: IRunRule,
-  functions: FunctionCollection,
-  exceptionLocations: IExceptionLocation[] | undefined,
-  results: IRuleResult[],
-): void {
-  try {
-    for (const then of Array.isArray(rule.then) ? rule.then : [rule.then]) {
-      const func = functions[then.function];
-      if (!func) {
-        console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);
-        continue;
-      }
-
-      const validationResults = lintNode(node, rule, then, func, resolved, exceptionLocations);
-
-      if (validationResults.length > 0) {
-        results.push(...validationResults);
-      }
-    }
-  } catch (e) {
-    console.warn(`Encountered error when running rule '${rule.name}' on node at path '${node.path}':\n${e}`);
-  }
-}
