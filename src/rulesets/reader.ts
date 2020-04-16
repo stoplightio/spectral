@@ -6,7 +6,7 @@ import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
-import { findFile } from './finder';
+import { findFile, isNPMSource } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset } from './validation';
@@ -122,7 +122,8 @@ const createRulesetProcessor = (
     if (rulesetFunctions !== void 0) {
       const rulesetFunctionsBaseDir = join(
         rulesetUri,
-        ruleset.functionsDir !== void 0 ? join('..', ruleset.functionsDir) : '../functions',
+        isNPMSource(rulesetUri) ? '.' : '..',
+        ruleset.functionsDir !== void 0 ? ruleset.functionsDir : 'functions',
       );
       const resolvedFunctions: RulesetFunctionCollection = {};
 
