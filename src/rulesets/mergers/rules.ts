@@ -117,6 +117,10 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
 }
 
 function normalizeRule(rule: Rule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined) {
+  if (rule.recommended === void 0) {
+    rule.recommended = true;
+  }
+
   if (rule.severity === void 0) {
     rule.severity = severity === void 0 ? (rule.recommended !== false ? DEFAULT_SEVERITY_LEVEL : -1) : severity;
   } else {

@@ -27,6 +27,7 @@ describe('spectral', () => {
               name,
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
+              recommended: expect.any(Boolean),
               severity: expect.any(Number),
               then: expect.any(Object),
             };
@@ -47,6 +48,7 @@ describe('spectral', () => {
             name,
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
+            recommended: expect.any(Boolean),
             severity: expect.any(Number),
             then: expect.any(Object),
           };

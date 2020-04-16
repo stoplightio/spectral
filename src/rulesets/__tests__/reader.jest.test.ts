@@ -56,6 +56,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
+            recommended: true,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -78,6 +79,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
+            recommended: true,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -91,6 +93,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
+            recommended: true,
             then: expect.any(Object),
           },
         },
@@ -114,6 +117,7 @@ describe('Rulesets reader', () => {
       'foo-rule': {
         given: '$.info',
         message: 'should be OK',
+        recommended: true,
         severity: DiagnosticSeverity.Warning,
         then: {
           function: expect.stringMatching(/^random-id-\d$/),
@@ -142,6 +146,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+            ...((rule as IRule).recommended === void 0 && { recommended: true }),
             then: expect.any(Object),
           };
 
@@ -151,6 +156,7 @@ describe('Rulesets reader', () => {
         'valid-rule': {
           given: '$.info',
           message: 'should be OK',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: expect.any(Object),
         },
@@ -168,6 +174,7 @@ describe('Rulesets reader', () => {
               formats: expect.arrayContaining([expect.any(String)]),
               ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
               ...((rule as IRule).recommended === false && { severity: -1 }),
+              ...((rule as IRule).recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
             };
 
@@ -177,6 +184,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
+            recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
@@ -207,6 +215,7 @@ describe('Rulesets reader', () => {
               formats: expect.arrayContaining([expect.any(String)]),
               ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
               ...((rule as IRule).recommended === false && { severity: -1 }),
+              ...((rule as IRule).recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
             };
 
@@ -398,6 +407,7 @@ describe('Rulesets reader', () => {
           given: '$.info',
           message: 'Title must contain Stoplight',
           severity: DiagnosticSeverity.Warning,
+          recommended: true,
           then: {
             field: 'title',
             function: 'pattern',
@@ -449,6 +459,7 @@ describe('Rulesets reader', () => {
         'title-matches-stoplight': {
           given: '$.info',
           message: 'Title must contain Stoplight',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
             field: 'title',
@@ -502,6 +513,7 @@ describe('Rulesets reader', () => {
           given: '$.info',
           message: 'Title must contain Stoplight',
           severity: -1,
+          recommended: true,
           then: {
             field: 'title',
             function: 'pattern',
@@ -522,6 +534,7 @@ describe('Rulesets reader', () => {
           PascalCase: {
             given: '$',
             message: 'bar',
+            recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
@@ -539,6 +552,7 @@ describe('Rulesets reader', () => {
           snake_case: {
             given: '$',
             message: 'foo',
+            recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
@@ -580,6 +594,7 @@ describe('Rulesets reader', () => {
         'valid-foo-value': {
           given: '$',
           severity: DiagnosticSeverity.Warning,
+          recommended: true,
           then: {
             field: 'foo',
             function: 'random-id-0',
@@ -638,6 +653,7 @@ describe('Rulesets reader', () => {
         'valid-foo-value': {
           given: '$',
           severity: DiagnosticSeverity.Warning,
+          recommended: true,
           then: {
             field: 'foo',
             function: 'random-id-0',
@@ -779,6 +795,7 @@ describe('Rulesets reader', () => {
         'bar-rule': {
           given: '$.bar',
           message: 'Bar is truthy',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
             function: 'truthy',
@@ -787,6 +804,7 @@ describe('Rulesets reader', () => {
         'foo-rule': {
           given: '$.foo',
           message: 'Foo is falsy',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
             function: 'falsy',
