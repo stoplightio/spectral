@@ -15,6 +15,7 @@ import { IRuleset, RulesetExceptionCollection } from '../types/ruleset';
 const customFunctionOASRuleset = path.join(__dirname, './__fixtures__/custom-functions-oas-ruleset.json');
 const customOASRuleset = path.join(__dirname, './__fixtures__/custom-oas-ruleset.json');
 const customDirectoryFunctionsRuleset = path.join(__dirname, './__fixtures__/custom-directory-function-ruleset.json');
+const recommendedRulesetPath = path.join(__dirname, './__fixtures__/recommended-ruleset.json');
 
 describe('Linter', () => {
   let spectral: Spectral;
@@ -575,5 +576,32 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         ]);
       });
     });
+  });
+
+  test('should only run recommended rules, whether implicitly or explictly', async () => {
+    const target = {
+      openapi: '3.0.2',
+    };
+
+    await spectral.loadRuleset(recommendedRulesetPath);
+
+    expect(Object.keys(spectral.rules)).toHaveLength(3);
+
+    expect(Object.entries(spectral.rules).map(([name, rule]) => [name, rule.recommended])).toEqual([
+      ['explicitly-recommended', true],
+      ['implicitly-recommended', true],
+      ['explicitly-not-recommended', false],
+    ]);
+
+    const res = await spectral.run(target);
+
+    expect(res).toEqual([
+      expect.objectContaining({
+        code: 'explicitly-recommended',
+      }),
+      expect.objectContaining({
+        code: 'implicitly-recommended',
+      }),
+    ]);
   });
 });
