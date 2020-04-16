@@ -34,9 +34,6 @@ export interface IRule<T = string, O = any> {
   // The severity of results this rule generates
   severity?: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
 
-  // Tags attached to the rule, which can be used for organizational purposes
-  tags?: string[];
-
   // some rules are more important than others, recommended rules will be enabled by default
   // true by default
   recommended?: boolean;

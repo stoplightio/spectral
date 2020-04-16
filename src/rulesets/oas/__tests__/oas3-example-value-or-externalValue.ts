@@ -2,12 +2,13 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
-describe('example-value-or-externalValue', () => {
+describe('oas3-example-value-or-externalValue', () => {
   const s = new Spectral();
+  s.registerFormat('oas3', () => true);
   s.setRules({
-    'example-value-or-externalValue': Object.assign(ruleset.rules['example-value-or-externalValue'], {
+    'oas3-example-value-or-externalValue': Object.assign(ruleset.rules['oas3-example-value-or-externalValue'], {
       recommended: true,
-      type: RuleType[ruleset.rules['example-value-or-externalValue'].type],
+      type: RuleType[ruleset.rules['oas3-example-value-or-externalValue'].type],
     }),
   });
 
@@ -77,7 +78,7 @@ describe('example-value-or-externalValue', () => {
     const results = await s.run({ components: { examples: { first: {} } } });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'first'],
         range: {
@@ -101,7 +102,7 @@ describe('example-value-or-externalValue', () => {
     });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'third'],
         range: {
@@ -125,7 +126,7 @@ describe('example-value-or-externalValue', () => {
     });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'first'],
         range: {
@@ -155,7 +156,7 @@ describe('example-value-or-externalValue', () => {
     });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'second'],
         range: {
@@ -189,7 +190,7 @@ describe('example-value-or-externalValue', () => {
     });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['components', 'headers', 'headerName', 'examples', 'second'],
         range: {
@@ -223,7 +224,7 @@ describe('example-value-or-externalValue', () => {
     });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['components', 'parameters', 'parameterName', 'examples', 'second'],
         range: {
@@ -265,7 +266,7 @@ describe('example-value-or-externalValue', () => {
     });
     expect(results).toEqual([
       {
-        code: 'example-value-or-externalValue',
+        code: 'oas3-example-value-or-externalValue',
         message: 'Example should have either a `value` or `externalValue` field.',
         path: ['paths', '/path', 'get', 'responses', '200', 'content', 'application/json', 'examples', 'second'],
         range: {

@@ -27,7 +27,7 @@ paths:
 
 ### operation-operationId-unique
 
-Every operation must have a unique `operationId`. 
+Every operation must have a unique `operationId`.
 
 Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, all sorts of things like that.
 
@@ -40,12 +40,12 @@ paths:
   /pet:
     patch:
       operationId: "update-pet"
-      responses: 
+      responses:
         200:
           description: ok
     put:
       operationId: "update-pet"
-      responses: 
+      responses:
         200:
           description: ok
 ```
@@ -57,12 +57,12 @@ paths:
   /pet:
     patch:
       operationId: "update-pet"
-      responses: 
+      responses:
         200:
           description: ok
     put:
       operationId: "replace-pet"
-      responses: 
+      responses:
         200:
           description: ok
 ```
@@ -90,7 +90,7 @@ Path parameters are correct and valid.
 
 ### contact-properties
 
-The [info-contact](#info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url` and `email`. 
+The [info-contact](#info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url` and `email`.
 
 Putting in the name of the developer/team/department/company responsible for the API, along with the support email and help-desk/GitHub Issues/whatever URL means people know where to go for help. This can mean more money in the bank, instead of developers just wandering off or complaining online.
 
@@ -110,33 +110,9 @@ info:
     url: goarmy.com/apis/support
 ```
 
-### example-value-or-externalValue
-
-Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
-
-**Recommended:** Yes
-
-**Bad Example**
-
-```yaml
-paths:
-  /pet:
-    put:
-      operationId: "relace-pet"
-      requestBody:
-        content:
-          'application/json':
-            examples: 
-              foo:
-                summary: A foo example
-                value: {"foo": "bar"}
-                externalValue: 'http://example.org/foo.json' 
-                # marp! no, can only have one or the other
-```
-
 ### info-contact
 
-Info object should contain `contact` object. 
+Info object should contain `contact` object.
 
 Hopefully your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
 
@@ -149,7 +125,7 @@ openapi: "3.0.2"
 info:
   title: Awesome API
   version: "1.0"
-  contact: 
+  contact:
     name: A-Team
     email: a-team@goarmy.com
 ```
@@ -181,9 +157,9 @@ info:
 
 The `info` object should have a `license` key.
 
-It can be hard to pick a license, so if you don't have a lawyer around you can use [TLDRLegal](https://tldrlegal.com/) and [Choose a License](https://choosealicense.com/) to help give you an idea. 
+It can be hard to pick a license, so if you don't have a lawyer around you can use [TLDRLegal](https://tldrlegal.com/) and [Choose a License](https://choosealicense.com/) to help give you an idea.
 
-How useful this is in court is not entirely known, but having a license is better than not having a license. 
+How useful this is in court is not entirely known, but having a license is better than not having a license.
 
 **Recommended:** Yes
 
@@ -214,7 +190,7 @@ info:
 
 ### no-eval-in-markdown
 
-This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack. 
+This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack.
 
 **Recommended:** Yes
 
@@ -249,7 +225,7 @@ OpenAPI object should have alphabetical `tags`. This will be sorted by the `name
 **Bad Example**
 
 ```yaml
-tags: 
+tags:
   - name: 'Badger'
   - name: 'Aardvark'
 ```
@@ -257,7 +233,7 @@ tags:
 **Good Example**
 
 ```yaml
-tags: 
+tags:
   - name: 'Aardvark'
   - name: 'Badger'
 ```
@@ -362,7 +338,7 @@ Don't put query string items in the path, they belong in parameters with `in: qu
 Tags alone are not very descriptive. Give folks a bit more information to work with.
 
 ```yaml
-tags: 
+tags:
   - name: 'Aardvark'
     description: Funny nosed pig-head racoon.
   - name: 'Badger'
@@ -382,7 +358,7 @@ tags:
 
 ### typed-enum
 
-Enum values should respect the `type` specifier. 
+Enum values should respect the `type` specifier.
 
 **Recommended:** Yes
 
@@ -522,6 +498,30 @@ servers:
 ```
 
 If this is going out to the world, maybe have production and a general sandbox people can play with.
+
+### oas3-example-value-or-externalValue
+
+Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+paths:
+  /pet:
+    put:
+      operationId: "replace-pet"
+      requestBody:
+        content:
+          'application/json':
+            examples:
+              foo:
+                summary: A foo example
+                value: {"foo": "bar"}
+                externalValue: 'http://example.org/foo.json'
+                # marp! no, can only have one or the other
+```
 
 ### oas3-operation-security-defined
 

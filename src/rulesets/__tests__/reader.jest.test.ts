@@ -22,6 +22,8 @@ const extendsDisabledOasRuleset = path.join(__dirname, './__fixtures__/extends-d
 const extendsOasWithOverrideRuleset = path.join(__dirname, './__fixtures__/extends-oas-with-override-ruleset.json');
 const extendsRelativeRuleset = path.join(__dirname, './__fixtures__/extends-relative-ruleset.json');
 const myOpenAPIRuleset = path.join(__dirname, './__fixtures__/my-open-api-ruleset.json');
+const extendsNPMRuleset = path.join(__dirname, './__fixtures__/ruleset-extends-npm.json');
+const extendsNPMVersionedRuleset = path.join(__dirname, './__fixtures__/ruleset-extends-npm-versioned.json');
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
 const customFunctionsDirectoryRuleset = path.join(__dirname, './__fixtures__/custom-functions-directory-ruleset.json');
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
@@ -54,6 +56,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
+            recommended: true,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -76,6 +79,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
+            recommended: true,
             then: expect.any(Object),
           },
           'valid-rule-recommended': {
@@ -89,6 +93,7 @@ describe('Rulesets reader', () => {
             given: '$.info',
             message: 'should be OK',
             severity: DiagnosticSeverity.Warning,
+            recommended: true,
             then: expect.any(Object),
           },
         },
@@ -112,6 +117,7 @@ describe('Rulesets reader', () => {
       'foo-rule': {
         given: '$.info',
         message: 'should be OK',
+        recommended: true,
         severity: DiagnosticSeverity.Warning,
         then: {
           function: expect.stringMatching(/^random-id-\d$/),
@@ -132,7 +138,7 @@ describe('Rulesets reader', () => {
   it('should inherit properties of extended rulesets', async () => {
     const { rules } = await readRuleset(extendsAllOasRuleset);
 
-    // we pick up *all* rules only from spectral:oas and spectral:oas2 and keep their severity level or set a default one
+    // we pick up *all* rules only from spectral:oas and keep their severity level or set a default one
     expect(rules).toEqual(
       expect.objectContaining({
         ...Object.entries(oasRulesetRules).reduce<Dictionary<IRule, string>>((oasRules, [name, rule]) => {
@@ -140,6 +146,7 @@ describe('Rulesets reader', () => {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
             ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+            ...((rule as IRule).recommended === void 0 && { recommended: true }),
             then: expect.any(Object),
           };
 
@@ -149,6 +156,7 @@ describe('Rulesets reader', () => {
         'valid-rule': {
           given: '$.info',
           message: 'should be OK',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: expect.any(Object),
         },
@@ -166,6 +174,7 @@ describe('Rulesets reader', () => {
               formats: expect.arrayContaining([expect.any(String)]),
               ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
               ...((rule as IRule).recommended === false && { severity: -1 }),
+              ...((rule as IRule).recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
             };
 
@@ -175,6 +184,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             message: 'should be OK',
+            recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: expect.any(Object),
           },
@@ -205,6 +215,7 @@ describe('Rulesets reader', () => {
               formats: expect.arrayContaining([expect.any(String)]),
               ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
               ...((rule as IRule).recommended === false && { severity: -1 }),
+              ...((rule as IRule).recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
             };
 
@@ -277,7 +288,6 @@ describe('Rulesets reader', () => {
           type: 'validation',
           severity: DiagnosticSeverity.Error,
           given: '$',
-          tags: ['operation'],
         }),
       }),
     );
@@ -290,7 +300,6 @@ describe('Rulesets reader', () => {
       formats: expect.arrayContaining([expect.any(String)]),
       recommended: true,
       severity: DiagnosticSeverity.Warning,
-      tags: ['operation'],
       then: expect.any(Object),
       type: 'style',
     });
@@ -305,7 +314,6 @@ describe('Rulesets reader', () => {
         formats: expect.arrayContaining([expect.any(String)]),
         severity: -1,
         description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
-        tags: ['operation'],
         then: expect.any(Object),
         type: 'validation',
       },
@@ -399,6 +407,7 @@ describe('Rulesets reader', () => {
           given: '$.info',
           message: 'Title must contain Stoplight',
           severity: DiagnosticSeverity.Warning,
+          recommended: true,
           then: {
             field: 'title',
             function: 'pattern',
@@ -450,6 +459,7 @@ describe('Rulesets reader', () => {
         'title-matches-stoplight': {
           given: '$.info',
           message: 'Title must contain Stoplight',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
             field: 'title',
@@ -503,6 +513,7 @@ describe('Rulesets reader', () => {
           given: '$.info',
           message: 'Title must contain Stoplight',
           severity: -1,
+          recommended: true,
           then: {
             field: 'title',
             function: 'pattern',
@@ -523,6 +534,7 @@ describe('Rulesets reader', () => {
           PascalCase: {
             given: '$',
             message: 'bar',
+            recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
@@ -540,6 +552,7 @@ describe('Rulesets reader', () => {
           snake_case: {
             given: '$',
             message: 'foo',
+            recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: {
               function: 'truthy',
@@ -548,6 +561,124 @@ describe('Rulesets reader', () => {
         },
       }),
     );
+  });
+
+  it('should support loading rulesets distributed via npm', () => {
+    const minFnCode = `module.exports = () => void 'foo'`;
+
+    nock('https://unpkg.com')
+      .get('/example-spectral-ruleset')
+      .reply(
+        200,
+        JSON.stringify({
+          functions: ['min'],
+          rules: {
+            'valid-foo-value': {
+              given: '$',
+              then: {
+                field: 'foo',
+                function: 'min',
+                functionOptions: {
+                  value: 1,
+                },
+              },
+            },
+          },
+        }),
+      )
+      .get('/example-spectral-ruleset/functions/min.js')
+      .reply(200, minFnCode);
+
+    return expect(readRuleset(extendsNPMRuleset)).resolves.toEqual({
+      rules: {
+        'valid-foo-value': {
+          given: '$',
+          severity: DiagnosticSeverity.Warning,
+          recommended: true,
+          then: {
+            field: 'foo',
+            function: 'random-id-0',
+            functionOptions: {
+              value: 1,
+            },
+          },
+        },
+      },
+      functions: {
+        min: {
+          name: 'min',
+          ref: 'random-id-0',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
+        },
+        'random-id-0': {
+          code: minFnCode,
+          name: 'min',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
+        },
+      },
+      exceptions: {},
+    });
+  });
+
+  it('should support loading rulesets distributed via npm with version specified', () => {
+    const minFnCode = `module.exports = () => void 'foo'`;
+
+    nock('https://unpkg.com')
+      .get('/example-spectral-ruleset@0.0.3')
+      .reply(
+        200,
+        JSON.stringify({
+          functions: ['min'],
+          rules: {
+            'valid-foo-value': {
+              given: '$',
+              then: {
+                field: 'foo',
+                function: 'min',
+                functionOptions: {
+                  value: 1,
+                },
+              },
+            },
+          },
+        }),
+      )
+      .get('/example-spectral-ruleset@0.0.3/functions/min.js')
+      .reply(200, minFnCode);
+
+    return expect(readRuleset(extendsNPMVersionedRuleset)).resolves.toEqual({
+      rules: {
+        'valid-foo-value': {
+          given: '$',
+          severity: DiagnosticSeverity.Warning,
+          recommended: true,
+          then: {
+            field: 'foo',
+            function: 'random-id-0',
+            functionOptions: {
+              value: 1,
+            },
+          },
+        },
+      },
+      functions: {
+        min: {
+          name: 'min',
+          ref: 'random-id-0',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
+        },
+        'random-id-0': {
+          code: minFnCode,
+          name: 'min',
+          schema: null,
+          source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
+        },
+      },
+      exceptions: {},
+    });
   });
 
   it('given a ruleset with custom functions should return rules and resolved functions', async () => {
@@ -664,6 +795,7 @@ describe('Rulesets reader', () => {
         'bar-rule': {
           given: '$.bar',
           message: 'Bar is truthy',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
             function: 'truthy',
@@ -672,6 +804,7 @@ describe('Rulesets reader', () => {
         'foo-rule': {
           given: '$.foo',
           message: 'Foo is falsy',
+          recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
             function: 'falsy',

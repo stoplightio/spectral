@@ -59,6 +59,28 @@ describe('Code evaluators', () => {
       expect(() => evaluateExport(`module.exports = 2`, null)).toThrow();
       expect(() => evaluateExport(`this.returnExports = {}`, null)).toThrow();
     });
+
+    describe('inject', () => {
+      it('can expose any arbitrary value', () => {
+        const fetch = jest.fn();
+        const url = 'https://foo.bar';
+        const fn = evaluateExport(`module.exports = () => fetch(url, { headers })`, null, {
+          fetch,
+          url,
+          headers: {
+            auth: 'Basic bar',
+          },
+        });
+
+        fn();
+
+        expect(fetch).toBeCalledWith(url, {
+          headers: {
+            auth: 'Basic bar',
+          },
+        });
+      });
+    });
   });
 
   describe('setFunctionContext', () => {

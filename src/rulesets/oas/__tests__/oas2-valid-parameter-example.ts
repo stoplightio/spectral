@@ -127,7 +127,7 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-parameter-example',
-        message: 'object should have required property `url`',
+        message: 'Object should have required property `url`',
         severity: DiagnosticSeverity.Error,
       }),
     ]);

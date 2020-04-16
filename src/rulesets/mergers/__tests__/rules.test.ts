@@ -1,4 +1,4 @@
-import { DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { IRule } from '../../../types';
 import { FileRuleCollection } from '../../../types/ruleset';
 import { mergeRules } from '../rules';
@@ -190,7 +190,7 @@ describe('Ruleset rules merging', () => {
   });
 
   it('picks up recommended rules', () => {
-    const rules = {};
+    const rules: Dictionary<IRule, string> = {};
 
     const test3 = JSON.parse(JSON.stringify(baseRule));
     delete test3.recommended;
@@ -207,6 +207,10 @@ describe('Ruleset rules merging', () => {
       },
       'recommended',
     );
+
+    expect(rules.test.recommended).toBe(true);
+    expect(rules.test2.recommended).toBe(false);
+    expect(rules.test3.recommended).toBe(true);
 
     expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Warning);
     expect(rules).toHaveProperty('test2.severity', -1);

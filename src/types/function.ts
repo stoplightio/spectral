@@ -4,6 +4,7 @@ import { CoreFunctions } from '../functions';
 
 export interface IFunctionContext {
   functions: CoreFunctions;
+  cache: Map<unknown, unknown>;
 }
 
 export type IFunction<O = any> = (
@@ -11,7 +12,7 @@ export type IFunction<O = any> = (
   options: O,
   paths: IFunctionPaths,
   otherValues: IFunctionValues,
-) => void | IFunctionResult[];
+) => void | IFunctionResult[] | Promise<void | IFunctionResult[]>;
 
 export interface IFunctionPaths {
   given: JsonPath;

@@ -18,6 +18,6 @@ Rules can be comprised of one of more functions, to facilitate any style guide.
 - Tags must be plural
 - Tags must be singular
 
-Spectral comes bundled with a [bunch of functions](../reference/functions.md) and a default style guide for [OpenAPI v2 and v3](./openapi.md), which you can extend, cherry-pick, or disable entirely. 
+Spectral comes bundled with a [bunch of functions](../reference/functions.md) and a default style guide for [OpenAPI v2 and v3](./openapi.md), which you can extend, cherry-pick, or disable entirely.
 
-Learn more about [rulesets](./rulesets.md). 
+Learn more about [rulesets](./rulesets.md).

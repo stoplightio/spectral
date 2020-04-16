@@ -9,6 +9,7 @@ import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } fr
 import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
+import request from './request';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
@@ -98,7 +99,15 @@ export class Spectral {
     return {
       resolved: inventory.resolved,
       results: prepareResults(
-        [...validationResults, ...runRules(inventory, this.rules, this.functions, this.exceptions)],
+        [
+          ...validationResults,
+          ...(await runRules({
+            documentInventory: inventory,
+            rules: this.rules,
+            functions: this.functions,
+            exceptions: this.exceptions,
+          })),
+        ],
         this._computeFingerprint,
       ),
     };
@@ -171,9 +180,21 @@ export class Spectral {
 
           const context: IFunctionContext = {
             functions: this.functions,
+            cache: new Map(),
           };
 
-          fns[key] = setFunctionContext(context, compileExportedFunction(code, name, source, schema));
+          fns[key] = setFunctionContext(
+            context,
+            compileExportedFunction({
+              code,
+              name,
+              source,
+              schema,
+              inject: {
+                fetch: request,
+              },
+            }),
+          );
           return fns;
         },
         {

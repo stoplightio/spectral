@@ -2,6 +2,13 @@
 
 If the built-in functions are not enough for your [custom ruleset](../getting-started/rulesets.md), Spectral allows you to write and use your own custom functions.
 
+As of Spectral 5.4.0, custom functions can also be asynchronous.
+
+<!-- theme: warning -->
+
+> Ideally linting should always be deterministic, which means if its run 10 times it should return the same results 10 times. To ensure this is the case, please refrain from introducing any logic that is prone to non-deterministic behavior. Examples of this might be contacting external service you have no control over, or that might be unstable, or change the way it responds over time.
+> While, it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchanging information, i.e. obtaining a dictionary file, with a locally running server, etc.
+
 Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
 This indicates that almost any arbitrary code can be executed.
 Potential risks include:
@@ -30,7 +37,7 @@ export type IFunction<O = any> = (
 ```
 
 ### targetValue
- 
+
 `targetValue` the value the custom function is provided with and is supposed to lint against.
 
 It's based on `given` [JSONPath][jsonpath] expression defined on the rule and optionally `field` if placed on `then`.
@@ -107,6 +114,43 @@ rules:
       function: "abc"
 ```
 
+#### Async Function Example
+
+**functions/dictionary.js**
+
+```js
+const CACHE_KEY = 'dictionary';
+
+module.exports = async function (targetVal) {
+  if (!this.cache.has(CACHE_KEY)) {
+    const res = await fetch('https://dictionary.com/evil');
+    if (res.ok) {
+      this.cache.set(CACHE_KEY, await res.json());
+    } else {
+      // you can either re-try or just throw an error
+    }
+  }
+
+  const dictionary = this.cache.get(CACHE_KEY);
+
+  if (dictionary.includes(targetVal)) {
+    return [{ message: `\`${targetVal}\` is a forbidden word.` }];
+  }
+};
+```
+
+**my-ruleset.yaml**
+
+```yaml
+functions: [dictionary]
+rules:
+  no-evil-words:
+    message: "{{error}}"
+    given: ["$.info.title", "$.info.description"]
+    then:
+      function: "dictionary"
+```
+
 If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
 
 You can do it as follows:
@@ -175,7 +219,7 @@ How exactly you chose to implement messages depends on the rule at hand and prob
 
 It's worth keeping in mind, Spectral will attempt to deduplicate messages when they bear the same `code` and target the same `path`.
 As such, when your custom function is susceptible to return more than one result, you have to specify a different `path`
-for each result. 
+for each result.
 
 Below a sample function that checks tags bear unique names.
 
@@ -231,6 +275,30 @@ module.exports = (targetVal, _opts, paths) => {
 
     return results;
 };
+```
+
+Furthermore, if your function performs any fs calls to obtain dictionaries and similar, you may want to leverage cache.
+Each custom function is provided with its **own** cache instance that has a function-live lifespan.
+What does "function-live lifespan" mean? It means the cache is persisted for the whole life of a particular function.
+The cache will be retained between subsequent function calls and is never invalidated unless you compile the function again, i.e. load a ruleset again.
+In other words:
+- if you Spectral programmatically via JS API and your ruleset remains unchanged, all subsequent `spectral.run` calls will invoke custom functions with the same cache instance.
+As soon as you set a ruleset using `setRuleset` or `loadRuleset` method, each custom function will receive a new cache instance.
+- if you are a CLI user, the cache will never be invalidated during the timespan of process.
+
+Please bear in mind that while you are welcome to store certain kind of data, using cache for exchanging information between subsequent function calls it strongly discouraged.
+Spectral does not guarantee any particular order of execution meaning the functions can be executed in random order, depending on the rules you have, and the document you lint.
+
+```js
+module.exports = function () {
+  if (!this.cache.has('cached-item')) {
+    this.cache.set('cached-item', anyValue);
+  }
+
+  const cached = this.cache.get('cached-item');
+
+  // the rest of function
+}
 ```
 
 ## Inheritance

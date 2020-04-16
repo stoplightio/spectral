@@ -2,7 +2,11 @@ import * as path from '@stoplight/path';
 import * as fs from 'fs';
 import { RESOLVE_ALIASES, STATIC_ASSETS } from '../assets';
 
-const SPECTRAL_SRC_ROOT = path.join(__dirname, '..');
+const NPM_PKG_ROOT = 'https://unpkg.com/';
+const SPECTRAL_PKG_NAME = '@stoplight/spectral';
+
+// let's point at dist directory that has all relevant files (including custom functions) transpiled
+const SPECTRAL_SRC_ROOT = path.join(__dirname, '../../dist');
 // DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
 // parameter can be renamed, but don't this if you don't need to
 function resolveSpectralVersion(pkg: string) {
@@ -13,8 +17,12 @@ function resolveFromNPM(pkg: string) {
   try {
     return require.resolve(pkg);
   } catch {
-    return path.join('https://unpkg.com/', resolveSpectralVersion(pkg));
+    return path.join(NPM_PKG_ROOT, resolveSpectralVersion(pkg));
   }
+}
+
+export function isNPMSource(src: string) {
+  return src.startsWith(NPM_PKG_ROOT) && !src.includes(`${NPM_PKG_ROOT}${SPECTRAL_PKG_NAME}`); // we ignore spectral on purpose, since they undergo a slightly different process
 }
 
 async function resolveFromFS(from: string, to: string) {
@@ -22,9 +30,9 @@ async function resolveFromFS(from: string, to: string) {
 
   // if a built-in ruleset starting with @stoplight/spectral is given,
   // try to search in spectral source directory - we should be able to find it
-  // this path is often hit when spectral:oas(?:2|3)? shorthand is provided
-  if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/' && to.startsWith('@stoplight/spectral')) {
-    targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace('@stoplight/spectral/', './'));
+  // this path is often hit when a built-in ruleset shorthand is provided
+  if (SPECTRAL_SRC_ROOT.length > 0 && SPECTRAL_SRC_ROOT !== '/' && to.startsWith(SPECTRAL_PKG_NAME)) {
+    targetPath = path.join(SPECTRAL_SRC_ROOT, to.replace(SPECTRAL_PKG_NAME, './'));
     if (await exists(targetPath)) {
       return targetPath;
     }
@@ -75,7 +83,7 @@ export async function findFile(from: string, to: string) {
 
 function exists(uri: string): Promise<boolean> {
   return new Promise<boolean>(resolve => {
-    fs.access(uri, fs.constants.F_OK, err => {
+    fs.stat(uri, err => {
       resolve(err === null);
     });
   });

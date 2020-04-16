@@ -1,6 +1,7 @@
 {
   "formats": ["oas2", "oas3"],
   "functions": [
+    "oasDocumentSchema",
     "oasOp2xxResponse",
     "oasOpFormDataConsumeCheck",
     "oasOpIdUnique",
@@ -20,10 +21,7 @@
       "then": {
         "field": "responses",
         "function": "oasOp2xxResponse"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "oas2-operation-formData-consume-check": {
       "description": "Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.",
@@ -33,10 +31,7 @@
       "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "function": "oasOpFormDataConsumeCheck"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-operationId-unique": {
       "description": "Every operation must have a unique `operationId`.",
@@ -46,10 +41,7 @@
       "given": "$",
       "then": {
         "function": "oasOpIdUnique"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-parameters": {
       "description": "Operation parameters are unique and non-repeating.",
@@ -58,10 +50,7 @@
       "given": "$",
       "then": {
         "function": "oasOpParams"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-tag-defined": {
       "description": "Operation tags should be defined in global tags.",
@@ -70,10 +59,7 @@
       "given": "$",
       "then": {
         "function": "oasTagDefined"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "path-params": {
       "description": "Path parameters should be defined and valid.",
@@ -84,10 +70,7 @@
       "given": "$",
       "then": {
         "function": "oasPathParam"
-      },
-      "tags": [
-        "given"
-      ]
+      }
     },
     "contact-properties": {
       "description": "Contact object should have `name`, `url` and `email`.",
@@ -107,33 +90,7 @@
           "field": "email",
           "function": "truthy"
         }
-      ],
-      "tags": [
-        "api"
       ]
-    },
-    "example-value-or-externalValue": {
-      "description": "Example should have either a `value` or `externalValue` field.",
-      "recommended": true,
-      "type": "style",
-      "given": [
-        "$.components.examples.*",
-        "$.paths..content.*.examples.*",
-        "$.components..content.*.examples.*",
-        "$.paths..parameters.*.examples.*",
-        "$.components..parameters.*.examples.*",
-        "$.paths..headers.*.examples.*",
-        "$.components..headers.*.examples.*"
-      ],
-      "then": {
-        "function": "xor",
-        "functionOptions": {
-          "properties": [
-            "externalValue",
-            "value"
-          ]
-        }
-      }
     },
     "info-contact": {
       "description": "Info object should contain `contact` object.",
@@ -143,10 +100,7 @@
       "then": {
         "field": "info.contact",
         "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "info-description": {
       "description": "OpenAPI object info `description` must be present and non-empty string.",
@@ -156,10 +110,7 @@
       "then": {
         "field": "info.description",
         "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "info-license": {
       "description": "OpenAPI object `info` should contain a `license` object.",
@@ -169,10 +120,7 @@
       "then": {
         "field": "info.license",
         "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "license-url": {
       "description": "License object should include `url`.",
@@ -182,10 +130,7 @@
       "then": {
         "field": "info.license.url",
         "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "no-eval-in-markdown": {
       "description": "Markdown descriptions should not contain `eval(`.",
@@ -242,10 +187,7 @@
         "functionOptions": {
           "keyedBy": "name"
         }
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "openapi-tags": {
       "description": "OpenAPI object should have non-empty `tags` array.",
@@ -261,10 +203,7 @@
             "minItems": 1
           }
         }
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "operation-default-response": {
       "description": "Operations must have a default response.",
@@ -274,10 +213,7 @@
       "then": {
         "field": "default",
         "function": "truthy"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-description": {
       "description": "Operation `description` must be present and non-empty string.",
@@ -287,10 +223,7 @@
       "then": {
         "field": "description",
         "function": "truthy"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-operationId": {
       "description": "Operation should have an `operationId`.",
@@ -300,10 +233,7 @@
       "then": {
         "field": "operationId",
         "function": "truthy"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-operationId-valid-in-url": {
       "description": "operationId may only use characters that are valid when used in a URL.",
@@ -316,10 +246,7 @@
         "functionOptions": {
           "match": "^[A-Za-z0-9-._~:/?#\\[\\]@!\\$&'()*+,;=]*$"
         }
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-singular-tag": {
       "description": "Operation may only have one tag.",
@@ -332,10 +259,7 @@
         "functionOptions": {
           "max": 1
         }
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "operation-tags": {
       "description": "Operation should have non-empty `tags` array.",
@@ -345,10 +269,7 @@
       "then": {
         "field": "tags",
         "function": "truthy"
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "path-declarations-must-exist": {
       "description": "Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.",
@@ -361,10 +282,7 @@
         "functionOptions": {
           "notMatch": "{}"
         }
-      },
-      "tags": [
-        "given"
-      ]
+      }
     },
     "path-keys-no-trailing-slash": {
       "description": "paths should not end with a slash.",
@@ -377,10 +295,7 @@
         "functionOptions": {
           "notMatch": ".+\\/$"
         }
-      },
-      "tags": [
-        "given"
-      ]
+      }
     },
     "path-not-include-query": {
       "description": "given keys should not include a query string.",
@@ -393,10 +308,7 @@
         "functionOptions": {
           "notMatch": "\\?"
         }
-      },
-      "tags": [
-        "given"
-      ]
+      }
     },
     "tag-description": {
       "description": "Tag object should have a `description`.",
@@ -406,10 +318,7 @@
       "then": {
         "field": "description",
         "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "no-$ref-siblings": {
       "description": "Property cannot be placed among $ref",
@@ -442,10 +351,7 @@
       "then": {
         "field": "host",
         "function": "truthy"
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "oas2-api-schemes": {
       "description": "OpenAPI host `schemes` must be present and non-empty array.",
@@ -465,10 +371,7 @@
             "type": "array"
           }
         }
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "oas2-host-not-example": {
       "description": "Host URL should not point at example.com.",
@@ -482,10 +385,7 @@
         "functionOptions": {
           "notMatch": "example\\.com"
         }
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "oas2-host-trailing-slash": {
       "description": "Server URL should not have a trailing slash.",
@@ -499,10 +399,7 @@
         "functionOptions": {
           "notMatch": "/$"
         }
-      },
-      "tags": [
-        "api"
-      ]
+      }
     },
     "oas2-parameter-description": {
       "description": "Parameter objects should have a `description`.",
@@ -513,10 +410,7 @@
       "then": {
         "field": "description",
         "function": "truthy"
-      },
-      "tags": [
-        "parameters"
-      ]
+      }
     },
     "oas2-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `securityDefinitions` object.",
@@ -531,10 +425,7 @@
             "securityDefinitions"
           ]
         }
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "oas2-valid-parameter-example": {
       "description": "Examples must be valid against their defined schema.",
@@ -580,10 +471,7 @@
       "then": {
         "field": "anyOf",
         "function": "undefined"
-      },
-      "tags": [
-        "schema"
-      ]
+      }
     },
     "oas2-oneOf": {
       "description": "OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.",
@@ -595,30 +483,25 @@
       "then": {
         "field": "oneOf",
         "function": "undefined"
-      },
-      "tags": [
-        "schema"
-      ]
+      }
     },
     "oas2-schema": {
       "description": "Validate structure of OpenAPI v2 specification.",
-      "message": "{{error}}",
+      "message": "{{error}}.",
       "recommended": true,
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
       "given": "$",
       "then": {
-        "function": "schema",
+        "function": "oasDocumentSchema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.oas2.json"
           }
         }
-      },
-      "tags": [
-        "schema"
-      ]
+      }
     },
     "oas2-unused-definition": {
       "description": "Potentially unused definition has been detected.",
@@ -652,10 +535,31 @@
             "type": "array"
           }
         }
-      },
-      "tags": [
-        "api"
-      ]
+      }
+    },
+    "oas3-example-value-or-externalValue": {
+      "description": "Example should have either a `value` or `externalValue` field.",
+      "recommended": true,
+      "formats": ["oas3"],
+      "type": "style",
+      "given": [
+        "$.components.examples.*",
+        "$.paths..content.*.examples.*",
+        "$.components..content.*.examples.*",
+        "$.paths..parameters.*.examples.*",
+        "$.components..parameters.*.examples.*",
+        "$.paths..headers.*.examples.*",
+        "$.components..headers.*.examples.*"
+      ],
+      "then": {
+        "function": "xor",
+        "functionOptions": {
+          "properties": [
+            "externalValue",
+            "value"
+          ]
+        }
+      }
     },
     "oas3-operation-security-defined": {
       "description": "Operation `security` values must match a scheme defined in the `components.securitySchemes` object.",
@@ -671,10 +575,7 @@
             "securitySchemes"
           ]
         }
-      },
-      "tags": [
-        "operation"
-      ]
+      }
     },
     "oas3-parameter-description": {
       "description": "Parameter objects should have a `description`.",
@@ -685,10 +586,7 @@
       "then": {
         "field": "description",
         "function": "truthy"
-      },
-      "tags": [
-        "parameters"
-      ]
+      }
     },
     "oas3-server-not-example.com": {
       "description": "Server URL should not point at example.com.",
@@ -836,23 +734,21 @@
     },
     "oas3-schema": {
       "description": "Validate structure of OpenAPI v3 specification.",
-      "message": "{{error}}",
+      "message": "{{error}}.",
       "severity": 0,
       "formats": ["oas3"],
       "recommended": true,
       "type": "validation",
       "given": "$",
       "then": {
-        "function": "schema",
+        "function": "oasDocumentSchema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.oas3.json"
           }
         }
-      },
-      "tags": [
-        "schema"
-      ]
+      }
     },
     "oas3-unused-components-schema": {
       "description": "Potentially unused components schema has been detected.",
