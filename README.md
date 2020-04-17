@@ -29,19 +29,17 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-For more installation options, see [Getting Started > Installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md)
+Find more [installation methods](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md) in our documentation.
 
-## Getting Started
+## Documentation
 
-After [installation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md) take a look at our [getting started documentation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/concepts.md).
+Take a look at our [getting started documentation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/concepts.md), then peek through some of our guides:
 
-- [Adding a rule](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule)
-- [Extending rulesets](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#extending-rules)
-- [Enable only specific rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#enabling-rules)
-- [Disable specific rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#disabling-rules)
-- [Changing the severity of a rule](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#changing-rule-severity)
-- [Using the JavaScript API](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/javascript.md)
-- [Creating custom functions](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/custom-functions.md)
+- [Different Workflows](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
+- [Using the command-line interface](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
+- [Using the JavaScript API](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
+- [Custom Rulesets](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw em out and make your own.
+- [Custom Functions](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
 
 ## FAQs
 
@@ -55,24 +53,25 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 ### What is the difference between Spectral and Speccy
 
-[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2 and v3) through the use of [JSONPath](http://goessner.net/articles/JsonPath/) `given` parameters. Some rule types have been enhanced to be a little more flexible along with being able to create your own rules based on the built-in functions, and we've added the ability to define custom functions too.
+[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI).
+
+Speccy has been abandoned, but Spectral is steaming ahead, adding loads of functionality like custom functions, exceptions, and AsyncAPI support.
 
 ## Contributing
 
-If you are interested in contributing to Spectral itself, check out our [contributing docs](CONTRIBUTING.md) to get started.
-
-If you are using Spectral in your project and want to be listed in the examples section, we encourage you to open an [issue](https://github.com/stoplightio/spectral/issues).
+If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Integrations
 
 - [Stoplight Studio](https://stoplight.io/studio) uses Spectral to validate and lint OpenAPI documents.
-- [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/)
+- [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
+- [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
 
 ## Licence
 
 Spectral is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
 
-This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
+This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral) - the office has enough coffee already!
 
 ## Thanks
 

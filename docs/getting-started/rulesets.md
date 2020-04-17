@@ -37,7 +37,7 @@ Rulesets can extend other rulesets using the `extends` property, allowing you to
 extends: spectral:oas
 ```
 
-Extends can be reference for any [distributed ruleset](../guides/distributing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
+Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
 
 ```yaml
 extends:
@@ -46,7 +46,7 @@ extends:
 - some-npm-module
 ```
 
-The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/custom-rulesets.md).
+The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
 
 ### Formats
 
@@ -124,4 +124,4 @@ Spectral comes with two rulesets included:
  - `spectral:oas` - OpenAPI v2/v3 rules
  - `spectral:asyncapi` - AsyncAPI v2 rules
 
-You can also make your own: read more about [Custom Rulesets](../guides/custom-rulesets.md).
+You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
