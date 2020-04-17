@@ -2,19 +2,31 @@ import { decodePointerFragment } from '@stoplight/json';
 import { Optional } from '@stoplight/types';
 import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
-import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
-import * as jsonSpecv6 from 'ajv/lib/refs/json-schema-draft-06.json';
+import * as jsonSpecV4 from 'ajv/lib/refs/json-schema-draft-04.json';
+import * as jsonSpecV6 from 'ajv/lib/refs/json-schema-draft-06.json';
+import * as jsonSpecV7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { capitalize, escapeRegExp } from 'lodash';
 import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
+export interface ISchemaFunction extends IFunction<ISchemaOptions> {
+  Ajv: typeof AJV;
+  specs: {
+    v4: typeof jsonSpecV4;
+    v6: typeof jsonSpecV6;
+    v7: typeof jsonSpecV7;
+  };
+  createAJVInstance(opts: AJV.Options): AJV.Ajv;
+}
+
 export interface ISchemaOptions {
   schema: object;
   // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
   oasVersion?: Optional<number>;
   allErrors?: boolean;
+  ajv?: ValidateFunction;
 
   // this is used by oasDocumentSchema function, to be removed once we sort out
   prepareResults?(errors: AJV.ErrorObject[]): void;
@@ -55,21 +67,16 @@ function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV
     nullable: oasVersion === 3, // Support nullable for OAS3
     logger,
   };
-  const ajv = new AJV(ajvOpts);
+
+  const ajv = schema.createAJVInstance(ajvOpts);
   // We need v4 for OpenAPI and it doesn't hurt to have v6 as well.
-  ajv.addMetaSchema(jsonSpecv4);
-  ajv.addMetaSchema(jsonSpecv6);
+  ajv.addMetaSchema(jsonSpecV4);
+  ajv.addMetaSchema(jsonSpecV6);
 
   // @ts-ignore
-  ajv._opts.defaultMeta = jsonSpecv4.id;
+  ajv._opts.defaultMeta = jsonSpecV4.id;
   // @ts-ignore
   ajv._refs['http://json-schema.org/schema'] = 'http://json-schema.org/draft-04/schema';
-
-  ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });
-  ajv.addFormat('int64', { type: 'number', validate: oasFormatValidator.int64 });
-  ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
-  ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
-  ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
 
   ajvInstances[type] = ajv;
   return ajv;
@@ -138,7 +145,7 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
   }`;
 };
 
-export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
+export const schema: ISchemaFunction = (targetVal, opts, paths) => {
   const results: IFunctionResult[] = [];
 
   const path = paths.target || paths.given;
@@ -157,7 +164,7 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
 
   try {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
-    const validator = validators.get(opts);
+    const validator = opts.ajv ?? validators.get(opts);
     if (!validator(targetVal) && validator.errors) {
       opts.prepareResults?.(validator.errors);
 
@@ -197,4 +204,23 @@ export const schema: IFunction<ISchemaOptions> = (targetVal, opts, paths) => {
   }
 
   return results;
+};
+
+schema.Ajv = AJV;
+schema.createAJVInstance = (opts: AJV.Options) => {
+  const ajv = new AJV(opts);
+
+  ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });
+  ajv.addFormat('int64', { type: 'number', validate: oasFormatValidator.int64 });
+  ajv.addFormat('float', { type: 'number', validate: oasFormatValidator.float });
+  ajv.addFormat('double', { type: 'number', validate: oasFormatValidator.double });
+  ajv.addFormat('byte', { type: 'string', validate: oasFormatValidator.byte });
+
+  return ajv;
+};
+
+schema.specs = {
+  v4: jsonSpecV4,
+  v6: jsonSpecV6,
+  v7: jsonSpecV7,
 };
