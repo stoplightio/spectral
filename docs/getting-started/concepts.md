@@ -2,7 +2,7 @@
 
 The power of integrating linting into the design-first workflow, or any workflow which involves API descriptions, is often overlooked.
 
-Linting is not just about checking to see if you OpenAPI or JSON Schema documents are technically correct according to the specifications, they are for enforcing style guides! These style guides, much like eslint, can help catch a lot more than just "invalid syntax".
+Linting is not just about checking to see if some OpenAPI or JSON Schema documents are technically correct according to the specifications, they are for enforcing style guides! These style guides, much like eslint, can help catch a lot more than just "invalid syntax".
 
 To achieve this functionality, Spectral has three key concepts: "Rulesets", "Rules", and "Functions".
 
