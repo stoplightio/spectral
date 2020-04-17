@@ -1,4 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import { normalizeSeverityFromJsonRuleset } from '../../../../../setupTests';
 import { RuleType, Spectral } from '../../../../index';
 import { rules } from '../../index.json';
 import oasPathParam from '../oasPathParam';
@@ -9,6 +10,7 @@ describe('oasPathParam', () => {
   s.setRules({
     'path-params': Object.assign(rules['path-params'], {
       recommended: true,
+      severity: normalizeSeverityFromJsonRuleset(rules['path-params'].severity),
       type: RuleType[rules['path-params'].type],
     }),
   });

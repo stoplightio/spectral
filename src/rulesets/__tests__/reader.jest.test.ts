@@ -3,6 +3,7 @@ import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
+import { normalizeSeverityFromJsonRuleset } from '../../../setupTests';
 import { Spectral } from '../../spectral';
 import { IRule, RuleType } from '../../types';
 import { readRuleset } from '../reader';
@@ -145,7 +146,7 @@ describe('Rulesets reader', () => {
           oasRules[name] = {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
-            ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+            severity: normalizeSeverityFromJsonRuleset(rule.severity),
             ...((rule as IRule).recommended === void 0 && { recommended: true }),
             then: expect.any(Object),
           };
@@ -172,7 +173,7 @@ describe('Rulesets reader', () => {
             rules[name] = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
+              severity: normalizeSeverityFromJsonRuleset(rule.severity),
               ...((rule as IRule).recommended === false && { severity: -1 }),
               ...((rule as IRule).recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
@@ -213,7 +214,7 @@ describe('Rulesets reader', () => {
             const formattedRule: IRule = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+              severity: normalizeSeverityFromJsonRuleset(rule.severity),
               ...((rule as IRule).recommended === false && { severity: -1 }),
               ...((rule as IRule).recommended === void 0 && { recommended: true }),
               then: expect.any(Object),

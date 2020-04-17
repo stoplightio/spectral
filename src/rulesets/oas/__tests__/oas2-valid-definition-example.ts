@@ -1,4 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import { normalizeSeverityFromJsonRuleset } from '../../../../setupTests';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
@@ -8,6 +9,7 @@ describe('oas2-valid-definition-example', () => {
   s.setRules({
     'oas2-valid-definition-example': Object.assign(ruleset.rules['oas2-valid-definition-example'], {
       recommended: true,
+      severity: normalizeSeverityFromJsonRuleset(ruleset.rules['oas2-valid-definition-example'].severity),
       type: RuleType[ruleset.rules['oas2-valid-definition-example'].type],
     }),
   });

@@ -1,6 +1,7 @@
 import { RuleType, Spectral } from '../../../../index';
 
 import { DiagnosticSeverity } from '@stoplight/types';
+import { normalizeSeverityFromJsonRuleset } from '../../../../../setupTests';
 import { rules } from '../../index.json';
 import oasOpIdUnique from '../oasOpIdUnique';
 
@@ -11,6 +12,7 @@ describe('oasOpIdUnique', () => {
   s.setRules({
     'operation-operationId-unique': Object.assign(rules['operation-operationId-unique'], {
       recommended: true,
+      severity: normalizeSeverityFromJsonRuleset(rules['operation-operationId-unique'].severity),
       type: RuleType[rules['operation-operationId-unique'].type],
     }),
   });

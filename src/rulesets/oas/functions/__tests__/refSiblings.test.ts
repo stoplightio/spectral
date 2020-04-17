@@ -1,4 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import { normalizeSeverityFromJsonRuleset } from '../../../../../setupTests';
 import { Document } from '../../../../document';
 import { RuleType, Spectral } from '../../../../index';
 import * as Parsers from '../../../../parsers';
@@ -11,6 +12,7 @@ describe('refSiblings', () => {
   s.setRules({
     'no-$ref-siblings': Object.assign(oasRules['no-$ref-siblings'], {
       recommended: true,
+      severity: normalizeSeverityFromJsonRuleset(oasRules['no-$ref-siblings'].severity),
       type: RuleType[oasRules['no-$ref-siblings'].type],
     }),
   });

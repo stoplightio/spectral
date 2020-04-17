@@ -1,3 +1,4 @@
+import { normalizeSeverityFromJsonRuleset } from '../../../../setupTests';
 import { functions } from '../../../functions';
 import { RuleType, Spectral } from '../../../spectral';
 import { setFunctionContext } from '../../evaluators';
@@ -15,6 +16,7 @@ describe('oas2-schema', () => {
     s.setRules({
       'oas2-schema': Object.assign({}, ruleset.rules['oas2-schema'], {
         recommended: true,
+        severity: normalizeSeverityFromJsonRuleset(ruleset.rules['oas2-schema'].severity),
         type: RuleType[ruleset.rules['oas2-schema'].type],
         then: {
           ...ruleset.rules['oas2-schema'].then,

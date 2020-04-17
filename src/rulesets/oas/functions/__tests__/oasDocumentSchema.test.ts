@@ -6,6 +6,7 @@ import { rules } from '../../index.json';
 import oasDocumentSchema, { prepareResults } from '../oasDocumentSchema';
 
 import { ErrorObject } from 'ajv';
+import { normalizeSeverityFromJsonRuleset } from '../../../../../setupTests';
 import * as oas2Schema from '../../schemas/schema.oas2.json';
 import * as oas3Schema from '../../schemas/schema.oas3.json';
 
@@ -21,6 +22,7 @@ describe('oasDocumentSchema', () => {
     s.setRules({
       'oas2-schema': {
         ...rules['oas2-schema'],
+        severity: normalizeSeverityFromJsonRuleset(rules['oas2-schema'].severity),
         type: RuleType[rules['oas2-schema'].type],
         then: {
           ...rules['oas2-schema'].then,
@@ -32,6 +34,7 @@ describe('oasDocumentSchema', () => {
       },
       'oas3-schema': {
         ...rules['oas3-schema'],
+        severity: normalizeSeverityFromJsonRuleset(rules['oas3-schema'].severity),
         type: RuleType[rules['oas3-schema'].type],
         then: {
           ...rules['oas3-schema'].then,
