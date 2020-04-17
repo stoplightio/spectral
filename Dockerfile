@@ -24,7 +24,6 @@ RUN ./bin/node-prune
 ###############################################################
 FROM node:12-alpine
 
-WORKDIR /usr/src/spectral
 ENV NODE_ENV production
 
 COPY package.json /usr/src/spectral/
@@ -32,6 +31,7 @@ COPY package.json /usr/src/spectral/
 COPY --from=compiler /usr/src/spectral/dist /usr/src/spectral/dist
 COPY --from=dependencies /usr/src/spectral/node_modules/ /usr/src/spectral/node_modules/
 
-WORKDIR /usr/src/spectral/
+RUN ln -s /usr/src/spectral/dist/cli/index.js /usr/bin/spectral \
+    && chmod +x /usr/bin/spectral
 
-ENTRYPOINT [ "node", "dist/cli/index.js" ]
+ENTRYPOINT [ "spectral" ]
