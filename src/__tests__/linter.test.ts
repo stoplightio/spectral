@@ -479,6 +479,7 @@ describe('linter', () => {
     ]);
   });
 
+  // TODO: Find a way to cover formats more extensively
   test('given a string input, should warn about unmatched formats', async () => {
     const result = await spectral.run('test');
 

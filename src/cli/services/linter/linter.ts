@@ -1,5 +1,6 @@
 import { Document, STDIN } from '../../../document';
 import {
+  isAsyncApiv2,
   isJSONSchema,
   isJSONSchemaDraft2019_09,
   isJSONSchemaDraft4,
@@ -21,6 +22,7 @@ import { getResolver } from './utils/getResolver';
 const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['oas2', isOpenApiv2, 'OpenAPI 2.0 (Swagger) detected'],
   ['oas3', isOpenApiv3, 'OpenAPI 3.x detected'],
+  ['asyncapi2', isAsyncApiv2, 'AsyncAPI 2.x detected'],
   ['json-schema', isJSONSchema, 'JSON Schema detected'],
   ['json-schema-loose', isJSONSchemaLoose, 'JSON Schema (loose) detected'],
   ['json-schema-draft4', isJSONSchemaDraft4, 'JSON Schema Draft 4 detected'],

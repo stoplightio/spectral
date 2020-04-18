@@ -65,15 +65,12 @@ const createRulesetProcessor = (
         dereferenceInline: false,
         uriCache,
         async parseResolveResult(opts) {
-          try {
-            opts.result = parse(opts.result);
-          } catch {
-            // happens
-          }
+          opts.result = parse(opts.result);
           return opts;
         },
       },
     );
+
     const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
     const rules = {};
     const functions = {};

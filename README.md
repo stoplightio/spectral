@@ -4,14 +4,16 @@
 [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral)
 [![Treeware (Trees)](https://img.shields.io/treeware/trees/stoplightio/spectral)](https://plant.treeware.earth/stoplightio/spectral)
 
-A flexible JSON/YAML linter, with out of the box support for OpenAPI v2 and v3.
+A flexible JSON/YAML linter, with out of the box support for OpenAPI v2/v3 and AsyncAPI v2.
 
 ![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
 ## Spectral Features
 
 - Create custom rules to lint JSON or YAML objects
-- Ready to use rules to validate and lint OpenAPI v2 _and_ v3 documents
+- Ready-to-use rules to validate and lint:
+  - OpenAPI v2 _and_ v3 documents
+  - AsyncAPI v2 documents
 - Use JSON path to apply rules to specific parts of your objects
 - Built-in set of functions to help [create custom rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Create custom functions for advanced use cases

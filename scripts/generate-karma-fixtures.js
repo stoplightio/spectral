@@ -8,7 +8,7 @@ if (!fs.existsSync(baseDir)) {
   fs.mkdirSync(baseDir);
 }
 
-for (const rulesetName of ['oas']) {
+for (const rulesetName of ['oas', 'asyncapi']) {
   const target = path.join(baseDir, `${rulesetName}-functions.json`);
   const fnsPath = path.join(__dirname, `../rulesets/${rulesetName}/functions`);
   const bundledFns = {};
