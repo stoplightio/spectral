@@ -533,7 +533,7 @@
     tslib "^1.10.0"
     urijs "~1.19.1"
 
-"@stoplight/json@^3.1.2", "@stoplight/json@^3.6.0":
+"@stoplight/json@3.6.0", "@stoplight/json@^3.1.2":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.6.0.tgz#51ab4c677ec5aadcffd5c6ed67b6dbf51a5f93ba"
   integrity sha512-6hJN735r+aPzHP28HnBj30uC+RGyf/ZWEtAMlrXI4DntzocWvhgDqxLuLgOlmXkMd/4OAlD7fJQ/cI2RXNuWvQ==
@@ -561,7 +561,7 @@
   resolved "https://registry.yarnpkg.com/@stoplight/yaml-ast-parser/-/yaml-ast-parser-0.0.44.tgz#ed3c962564283e9983f7895a6effc3994286df5e"
   integrity sha512-PdY8p2Ufgtorf4d2DbKMfknILMa8KwuyyMMR/2lgK1mLaU8F5PKWYc+h9hIzC+ar0bh7m9h2rINo32m7ADfVyA==
 
-"@stoplight/yaml@^3.7.0":
+"@stoplight/yaml@3.7.0":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@stoplight/yaml/-/yaml-3.7.0.tgz#76cb3a0b7f9344eb7c7f2eefde175bc9b391040c"
   integrity sha512-lYs577C0tqs3WHtused0hclE+YHVshgeZT8i6kkqSIt1GUP3Hbe4AwZDEvFgZ9+9pa0JGlmKMrm0PJfvfKFxkw==
