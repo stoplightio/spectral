@@ -285,7 +285,7 @@ As soon as you set a ruleset using `setRuleset()` or `loadRuleset()` method, eac
 
 - Using the CLI, the cache will be invalidated when the process terminates.
 
-You can store any kind of data, using cache for exchanging information between subsequent function calls it strongly discouraged. Also, Spectral does not guarantee any particular order of execution meaning the functions can be executed in random order, depending on the rules you have, and the document you lint.
+You can store any kind of data, using cache for exchanging information between subsequent function calls is strongly discouraged. Also, Spectral does not guarantee any particular order of execution meaning the functions can be executed in random order, depending on the rules you have, and the document you lint.
 
 ## Changing Directory
 
