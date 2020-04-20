@@ -88,15 +88,17 @@ When extending another ruleset, you can actually extend and modify rules it has 
 ```yaml
 extends: spectral:oas
 rules:
-  my-rule-name:
-    description: Tags must have a description.
+  tag-description:
+    description: Please provide a description for each tag.
     given: $.tags[*]
     then:
       field: description
       function: truthy
 ```
 
-This can help improve error messages, change severities of messages, and all sorts. Let's take a look.
+This provides a new description, and changes recommended to true, but anything can be changed.
+
+If you're just looking change the severity of the rule, there is a handy shortcut.
 
 ### Changing rule severity
 
