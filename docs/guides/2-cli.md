@@ -80,4 +80,4 @@ module.exports = new Resolver({
 ```
 
 
-You can learn more about $ref resolving in the [JS section](./javascript.md#using-custom-resolver).
+You can learn more about $ref resolving in the [JS section](./3-javascript.md#using-custom-resolver).

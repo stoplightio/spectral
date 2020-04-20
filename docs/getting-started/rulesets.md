@@ -1,53 +1,16 @@
 # Rulesets
 
-Rulesets are collections of rules, in a YAML or JSON file. These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
+Rulesets are collections of rules written in JSON or YAML, which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
 
-## Adding a rule
+These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
 
-Add your own rules under the `rules` property in your `.spectral.yml` ruleset file.
+## Anatomy of a Ruleset
 
-```yaml
-rules:
-  my-rule-name:
-    description: Tags must have a description.
-    given: $.tags[*]
-    severity: error
-    recommended: true
-    then:
-      field: description
-      function: truthy
-```
+A ruleset is a JSON or YAML file (often the file will be called `.spectral.yaml`), and there are two main parts.
 
-Spectral has a built-in set of functions such as `truthy` or `pattern`, which you can reference in your rules. Rules then target certain chunks of the JSON/YAML with the `given` keyword, which is a [JSONPath](http://jsonpath.com/) (actually, we use [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
+### Rules
 
-The example above adds a single rule that looks at the root level "tags" objects children to make sure they all have a description property.
-
-<!-- theme: info -->
-> Since v5.0, each rule is recommended by default. Prior to that the default was to be not recommended. It is best to be explicit and set `recommended: true` or `recommended: false` if a ruleset is likely to be used across multiple versions.
-
-Running `spectral lint` on the following object with the ruleset above will result in an error being reported, since the tag does not have a description:
-
-```json
-{
-  "tags": [{
-    "name": "animals"
-  }]
-}
-```
-
-While running it with this object, it will succeed:
-
-```json
-{
-  "tags": [{
-    "name": "animals",
-    "description": "come in all shapes and sizes"
-  }]
-}
-```
-
-By default, Spectral processes each rule on resolved document with all $refs resolved.
-If you would like to have an original input supplied to your rule, you can place `resolved` property as follows:
+Rules might look a bit like this:
 
 ```yaml
 rules:
@@ -55,69 +18,49 @@ rules:
     description: Tags must have a description.
     given: $.tags[*]
     severity: error
-    resolved: false # note - if not specified or true, a resolved document will be given
     then:
       field: description
       function: truthy
 ```
 
-In most cases, you will want to operate on resolved document and therefore won't specify that property.
-You might find `resolved` useful if your rule requires access to $refs.
+Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
-### Given
+Rules then target certain chunks of the JSON/YAML with the `given` keyword, which is a [JSONPath](http://jsonpath.com/) (actually, we use [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
 
-The `given` property is one of only two on required properties on each rule definition (the other being `then`).
-It can be any valid JSONPath expression or an array of JSONPath expressions.
-[JSONPath Online Evaluator](http://jsonpath.com/) is a helpful tool to determine what `given` path you want.
+The example above adds a single rule that looks at the root level `tags` object's children to make sure they all have a `description` property.
 
-### Severity
+### Extending Rulesets
 
-The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`. The default value is `warn`.
-
-### Then
-
-The Then part of the rules explains what to do with the `given` JSON Path, and involves two required keywords:
+Rulesets can extend other rulesets using the `extends` property, allowing you to pull in other rulesets.
 
 ```yaml
-then:
-  field: description
-  function: truthy
+extends: spectral:oas
 ```
 
-The `field` keyword is optional, and is for applying the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSON Path. The value can also be `@key` to apply the rule to a keys of an object.
+Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
 
 ```yaml
-given: '$.responses'
-then:
-  field: '@key'
-  function: pattern
-  functionOptions:
-    match: '^[0-9]+$'
+extends:
+- ./config/spectral.json
+- https://example.org/api/style.yaml
+- some-npm-module
 ```
 
-The above pattern based rule would error on `456avbas` as it is not numeric.
+The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
 
-```yaml
-responses:
-  123:
-    foo: bar
-  456avbas:
-    foo: bar
-```
-
-## Formats
+### Formats
 
 Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these formats:
 
-- `oas2` (this is OpenAPI v2.0 - formerly known as Swagger)
-- `oas3` (this is OpenAPI v3.0)
-- `json-schema` (this is JSON Schema, detection based on the value of $schema property)
-- `json-schema-loose` (this is JSON Schema, loose check, no $schema required)
-- `json-schema-draft4` (this is JSON Schema Draft 4, detection based on the value of $schema property)
-- `json-schema-draft6` (this is JSON Schema Draft 6, detection based on the value of $schema property)
-- `json-schema-draft7` (this is JSON Schema Draft 7, detection based on the value of $schema property)
-- `json-schema-2019-09` (this is JSON Schema 2019-09, detection based on the value of $schema property)
-- `asyncapi2` (this is AsyncAPI v2.0.0)
+- `asyncapi2` (AsyncAPI v2.0)
+- `oas2` (OpenAPI v2.0)
+- `oas3` (OpenAPI v3.0)
+- `json-schema` (`$schema` says this is some JSON Schema draft)
+- `json-schema-loose` (looks like JSON Schema, but no `$schema` found)
+- `json-schema-draft4` (`$schema` says this is JSON Schema Draft 04)
+- `json-schema-draft6` (`$schema` says this is JSON Schema Draft 06)
+- `json-schema-draft7` (`$schema` says this is JSON Schema Draft 07)
+- `json-schema-2019-09` (`$schema` says this is JSON Schema 2019-09)
 
 Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
 
@@ -138,238 +81,47 @@ rules:
           type: array
 ```
 
-Seeing as the `servers` array only appeared in OpenAPI v3.0, we don't want this rule appearing when Spectral lints OpenAPI v2.0 documents.
+Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats.
 
-Alternatively, formats can be specified at the ruleset level:
+Formats can be specified at the ruleset level:
 
 ```yaml
 formats: ["oas3"]
 rules:
   oas3-api-servers:
     description: "OpenAPI `servers` must be present and non-empty array."
-    recommended: true
     given: "$"
     then:
-      field: servers
-      function: schema
-      functionOptions:
-        schema:
-          items:
-            type: object
-          minItems: 1
-          type: array
+      # ...
 ```
 
 Now all the rules in this ruleset will only be applied if the specified format is detected.
 
-Custom formats can be registered via the [JS API](../guides/javascript.md), but the CLI is limited to using the predefined ones.
-
-## Extending rules
-
-Rulesets can extend other rulesets using the `extends` property. This can be used to build upon or customize other rulesets.
-
-_Note:_ Spectral core rulesets are
- - `spectral:oas`: OpenAPI v2/v3 rules
- - `spectral:asyncapi`: AsyncAPI v2 rules
+If you'd like to use one ruleset for multiple formats but some rules only apply to one format, you can place the `formats` keyword at the rule level instead:
 
 ```yaml
-extends: spectral:oas
 rules:
-  my-rule-name:
-    description: Tags must have a description.
-    given: $.tags[*]
+  oas3-api-servers:
+    description: "OpenAPI `servers` must be present and non-empty array."
+    formats: ["oas3"]
+    given: "$"
     then:
-      field: description
-      function: truthy
+      # ...
+  oas2-hosts:
+    description: "OpenAPI `servers` must be present and non-empty array."
+    formats: ["oas2"]
+    given: "$"
+    then:
+      # ...
 ```
 
-The example above will apply the core rules from the built in OpenAPI v2/v3 ruleset AND apply the custom `my-rule-name` rule.
+Custom formats can be registered via the [JS API](../guides/3-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
 
-Extends can be a single string or an array of strings, and can contain either local file paths or URLs.
+## Core Rulesets
 
-```yaml
-extends:
-- ./config/spectral.json
-- https://example.org/api/style.yaml
-```
+Spectral comes with two rulesets included:
 
-## Enriching rule messages
+ - `spectral:oas` - OpenAPI v2/v3 rules
+ - `spectral:asyncapi` - AsyncAPI v2 rules
 
-To help you create meaningful error messages, Spectral comes with a couple of placeholders that are evaluated at runtime.
-
-- `{{error}}` - the error returned by function
-- `{{description}}` - the description set on the rule
-- `{{path}}` - the whole error path
-- `{{property}}` - the last segment of error path
-- `{{value}}` - the linted value
-
-### Examples
-
-```yaml
-message: "{{error}}" # will output the message generated by then.function
-
-message: "The value of '{{property}}' property must equal 'foo'"
-
-message: "{{value}} is greater than 0"
-
-message: "{{path}} cannot point at remote reference"
-```
-
-## Changing rule severity
-
-```yaml
-extends: spectral:oas
-rules:
-  operation-2xx-response: warn
-```
-
-The example above will run the recommended rules from the `spectral:oas` ruleset, but report `operation-2xx-response` as a warning rather than as an error (as is the default behavior in the `spectral:oas` ruleset).
-
-Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
-
-## Enabling rules
-
-Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
-
-```yaml
-extends: [[spectral:oas, off]]
-rules:
-  # This rule is defined in the spectral:oas ruleset. We're passing `true` to turn it on and inherit the severity defined in the spectral:oas ruleset.
-  operation-operationId-unique: true
-```
-
-The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
-
-## Disabling rules
-
-This example shows the opposite of the "Enabling Specific rules" example. Sometimes you might want to enable all rules by default, and disable a few.
-
-```yaml
-extends: [[spectral:oas, all]]
-rules:
-  operation-operationId-unique: false
-```
-
-The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
-
-- [Rules relevant to OpenAPI v2 and v3](../reference/openapi-rules.md)
-- [Rules relevant to AsyncAPI v2](../reference/asyncapi-rules.md)
-
-## Selectively silencing some results
-
-From time to time, you want to ignore some specific results without turning off
-the rule entirely. This may happen, for instance, when working with legacy APIs.
-
-The ruleset can be extended for that purpose through the optional `except` property.
-
-`except` describes a map of locations (expressed as paths and [JSON Pointers](https://tools.ietf.org/html/rfc6901))
-and rules that should be ignored.
-
-Locations be can either described as relative to the ruleset or absolute paths.
-
-```yaml
-extends: spectral:oas
-
-except:
-  "subfolder/one.yaml#"
-    - oas3-api-servers
-  "/tmp/docs/one.yaml#/info":
-    - info-contact
-    - info-description
-```
-
-<!-- theme: info -->
-> As per the [RFC 6901](https://tools.ietf.org/html/rfc6901#section-3), special characters
-> `~` and `/` have to be escaped to `~0` and `~1` respectively. For instance, the location of the `get` method from a
-> `/todos` path in an openapi document `/root/here.yaml` would be expressed as `/root/here.yaml#/paths/~1todos/get`.
->
-> _Hint:_ Running Spectral cli with the `--format json` parameter is pretty useful to find out the path segments of each result.
-
-## Creating custom functions
-
-Learn more about [custom functions](../guides/custom-functions.md).
-
-## Distributing
-
-You are very welcome to share your rulesets with the world. To help you out distribute your rulesets among the others, Spectral provides a few ways to load rulesets from a variety of resources.
-At the moment, besides serving them from a local filesystem or server (http/https), you are able to publish your rulesets to [npm](https://www.npmjs.com/).
-
-### NPM
-
-This should be the preferable choice of distributing the rulesets.
-Not only it lets you serve files without a need for hosting your own server or uploading it somewhere else, but also supports versioning out of the box.
-You can find more documentation on how the packaging and publishing process looks like in their [docs](https://docs.npmjs.com/packages-and-modules/).
-This is a very basic example showing how the directory structure as well as package.json may look like.
-
-Your `package.json`.
-
-```json
-{
-  "name": "example-spectral-ruleset",
-  "version": "0.0.0",
-  "description": "Example Spectral ruleset",
-  "main": "index.json",
-  "scripts": {},
-  "license": "ISC"
-}
-```
-
-Actual ruleset called `index.json`
-
-```json
-{
-  "functions": ["min"],
-  "rules": {
-    "valid-foo-value": {
-      "given": "$",
-      "then": {
-        "field": "foo",
-        "function": "min",
-        "functionOptions": {
-          "value": 1
-        }
-      }
-    }
-  }
-}
-```
-
-And, optionally, a custom function, `functions/min.js`
-
-```js
-'use strict';
-
-module.exports = function (targetVal, { min }) {
-  if (typeof targetVal !== 'number') {
-    return [
-      {
-        message: 'Value is not a number.',
-      },
-    ];
-  }
-
-  if (targetVal < min) {
-    return [
-      {
-        message: `Value is lower than ${min}`,
-      },
-    ];
-  }
-}
-```
-
-The end ruleset can extend your ruleset as follows
-
-```json
-{
-  "extends": ["example-spectral-ruleset"]
-}
-```
-
-Pegging a ruleset on given version can be done in the following manner:
-
-```json
-{
-  "extends": ["example-spectral-ruleset@0.0.2"]
-}
-```
+You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
