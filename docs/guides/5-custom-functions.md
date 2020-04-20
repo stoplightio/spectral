@@ -316,7 +316,7 @@ Potential risks include:
 - data tampering,
 - running cpu-intensive tasks, i.e. crypto-mining.
 
-While the risk is relatively low, you should be careful about including **external rulesets** you are not in charge of, in particular these that leverage custom functions.
+While the risk is relatively low, you should be careful about including **external rulesets** you are not in charge of, in particular those that leverage custom functions.
 You are strongly encouraged to review the custom functions a given ruleset provides.
 What you should hunt for is:
 - obfuscated code,
