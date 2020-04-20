@@ -1,5 +1,5 @@
 import { Segment } from '@stoplight/types';
-import { IFunction, IFunctionResult, Rule } from '../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
@@ -84,7 +84,7 @@ const ensureAllExpectedParamsinPathAreDefined = (
   }
 };
 
-export const oasPathParam: IFunction<Rule> = (targetVal, _options, paths, vals) => {
+export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
   const results: IFunctionResult[] = [];
 
   const { original: object } = vals;

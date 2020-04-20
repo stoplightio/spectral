@@ -1,24 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { AlphaRule } from '../functions/alphabetical';
-import { CasingRule } from '../functions/casing';
-import { LengthRule } from '../functions/length';
-import { PatternRule } from '../functions/pattern';
-import { SchemaRule } from '../functions/schema';
-import { SchemaPathRule } from '../functions/schema-path';
-import { TruthyRule } from '../functions/truthy';
-import { XorRule } from '../functions/xor';
 import { RuleType } from './enums';
-
-export type Rule =
-  | IRule
-  | TruthyRule
-  | XorRule
-  | LengthRule
-  | AlphaRule
-  | PatternRule
-  | CasingRule
-  | SchemaRule
-  | SchemaPathRule;
 
 export interface IRule<T = string, O = any> {
   type?: RuleType;

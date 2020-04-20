@@ -1,6 +1,6 @@
-import { IFunction, IFunctionResult, Rule } from '../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
-export const oasOpIdUnique: IFunction<Rule> = (targetVal, _options, functionPaths) => {
+export const oasOpIdUnique: IFunction = (targetVal, _options, functionPaths) => {
   const results: IFunctionResult[] = [];
 
   const { paths = {} } = targetVal;

@@ -6,7 +6,7 @@ import { escapeRegExp, merge } from 'lodash';
 import { Document } from '../document';
 import * as Parsers from '../parsers';
 import { Spectral } from '../spectral';
-import { IResolver, IRunRule, RuleFunction } from '../types';
+import { IResolver, IRunRule } from '../types';
 import { RulesetExceptionCollection } from '../types/ruleset';
 
 import { buildRulesetExceptionCollectionFrom } from '../../setupTests';
@@ -73,7 +73,7 @@ describe('spectral', () => {
         rule1: {
           given: '$',
           then: {
-            function: RuleFunction.TRUTHY,
+            function: 'truthy',
           },
         },
       };
@@ -103,7 +103,7 @@ describe('spectral', () => {
           given: '$',
           severity: DiagnosticSeverity.Warning,
           then: {
-            function: RuleFunction.TRUTHY,
+            function: 'truthy',
           },
         },
       });
@@ -113,7 +113,7 @@ describe('spectral', () => {
           message: '',
           given: '$',
           then: {
-            function: RuleFunction.TRUTHY,
+            function: 'truthy',
           },
         },
       });

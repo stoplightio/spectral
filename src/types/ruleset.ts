@@ -1,12 +1,12 @@
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { HumanReadableDiagnosticSeverity, Rule } from './rule';
+import { HumanReadableDiagnosticSeverity, IRule } from './rule';
 import { JSONSchema, RuleCollection } from './spectral';
 
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 export type FileRulesetSeverity = 'off' | 'recommended' | 'all';
 
-export type FileRule = Rule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, object];
+export type FileRule = IRule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, object];
 
 export type FileRuleCollection = Dictionary<FileRule, string>;
 

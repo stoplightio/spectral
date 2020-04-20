@@ -1,11 +1,9 @@
-import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+import { IFunction, IFunctionResult } from '../types';
 
 export interface ILengthRuleOptions {
   min?: number;
   max?: number;
 }
-
-export type LengthRule = IRule<RuleFunction.LENGTH, ILengthRuleOptions>;
 
 export const length: IFunction<ILengthRuleOptions> = (targetVal, opts) => {
   const results: IFunctionResult[] = [];

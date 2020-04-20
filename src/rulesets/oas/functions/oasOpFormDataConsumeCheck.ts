@@ -1,6 +1,6 @@
-import { IFunction, IFunctionResult, Rule } from '../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
-export const oasOpFormDataConsumeCheck: IFunction<Rule> = targetVal => {
+export const oasOpFormDataConsumeCheck: IFunction = targetVal => {
   const results: IFunctionResult[] = [];
 
   const parameters = targetVal.parameters;

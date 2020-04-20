@@ -1,9 +1,9 @@
 // This function will check an API doc to verify that any tag that appears on
 // an operation is also present in the global tags array.
 
-import { IFunction, IFunctionResult, Rule } from '../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
-export const oasTagDefined: IFunction<Rule> = (targetVal, _options, functionPaths) => {
+export const oasTagDefined: IFunction = targetVal => {
   const results: IFunctionResult[] = [];
 
   const globalTags = (targetVal.tags || []).map(({ name }: { name: string }) => name);
