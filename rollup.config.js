@@ -3,13 +3,14 @@ import * as path from 'path';
 import * as fs from 'fs';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json'
 import { terser } from 'rollup-plugin-terser';
 
 const BASE_PATH = process.cwd();
 
 const functions = [];
 
-const builtIns = ['oas']
+const builtIns = ['oas', 'asyncapi']
 
 for (const rulesetName of builtIns) {
   const targetDir = path.join(BASE_PATH, `dist/rulesets/${rulesetName}/functions/`);
@@ -43,6 +44,7 @@ module.exports = functions.map(fn => ({
         'node_modules/@stoplight/types/dist/index.js': ['DiagnosticSeverity'],
       },
     }),
+    json(),
     terser(),
   ],
   output: {

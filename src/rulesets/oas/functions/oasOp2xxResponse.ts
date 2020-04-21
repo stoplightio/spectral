@@ -1,6 +1,6 @@
-import { IFunction, IFunctionResult, Rule } from '../../../types';
+import { IFunction, IFunctionResult } from '../../../types';
 
-export const oasOp2xxResponse: IFunction<Rule> = targetVal => {
+export const oasOp2xxResponse: IFunction = targetVal => {
   if (!targetVal) {
     return;
   }

@@ -5,7 +5,7 @@ const AJV = require('ajv');
 import { isObject } from 'lodash';
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
-import { IFunction, IFunctionPaths, IFunctionValues, JSONSchema, Rule } from '../types';
+import { IFunction, IFunctionPaths, IFunctionValues, IRule, JSONSchema } from '../types';
 
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
@@ -38,7 +38,7 @@ export function assertValidRuleset(ruleset: unknown): IRulesetFile {
   return ruleset as IRulesetFile;
 }
 
-export function isValidRule(rule: FileRule): rule is Rule {
+export function isValidRule(rule: FileRule): rule is IRule {
   return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
 }
 

@@ -6,6 +6,7 @@ function resolveSpectralRuleset(ruleset: string) {
 
 export const RESOLVE_ALIASES: Dictionary<string, string> = {
   'spectral:oas': resolveSpectralRuleset('oas'),
+  'spectral:asyncapi': resolveSpectralRuleset('asyncapi'),
 };
 
 export const STATIC_ASSETS: Dictionary<string> = {};

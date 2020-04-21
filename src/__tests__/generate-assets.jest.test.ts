@@ -19,6 +19,7 @@ describe('generate-assets', () => {
     const testCases = [
       ['oas', 'oas2-schema', 'title', 'A JSON Schema for Swagger 2.0 API.'],
       ['oas', 'oas3-schema', 'description', 'Validation schema for OpenAPI Specification 3.0.X.'],
+      ['asyncapi', 'asyncapi-schema', 'title', 'AsyncAPI 2.0.0 schema.'],
     ];
 
     it.each(testCases)(
@@ -34,5 +35,11 @@ describe('generate-assets', () => {
         expect(schema[schemaKey]).toEqual(schemaValue);
       },
     );
+  });
+
+  it('Does not contain test files', () => {
+    Object.keys(assets).forEach(key => {
+      expect(key).not.toMatch('__tests__');
+    });
   });
 });

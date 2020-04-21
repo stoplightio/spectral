@@ -1,7 +1,7 @@
 import { Dictionary } from '@stoplight/types';
 import { AssertionError } from 'assert';
 import { escapeRegExp } from 'lodash';
-import { IFunction, IRule, RuleFunction } from '../types';
+import { IFunction } from '../types';
 
 export enum CasingType {
   flat = 'flat',
@@ -21,8 +21,6 @@ export interface ICasingOptions {
     allowLeading?: boolean;
   };
 }
-
-export type CasingRule = IRule<RuleFunction.CASING, ICasingOptions>;
 
 const CASES: Dictionary<string, CasingType> = {
   [CasingType.flat]: '[a-z][a-z{__DIGITS__}]*',

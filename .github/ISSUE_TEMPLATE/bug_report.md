@@ -13,7 +13,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 
-1. Given this OpenAPI document '...'
+1. Given this OpenAPI/AsyncAPI document '...'
 2. Run this CLI command '....'
 3. See error
 

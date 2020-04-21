@@ -153,6 +153,7 @@ Use JSON Schema (draft 4, 6 or 7) to treat the contents of the $given JSON Path 
 name | description | required?
 ---------|----------|---------
 schema | a valid JSON Schema document | yes
+allErrors | returns all errors when `true`; otherwise only returns the first error | no
 
 <!-- title: example -->
 
@@ -183,6 +184,7 @@ name | description | required?
 ---------|----------|---------
 field | the field to check | yes
 schemaPath | a json path pointing to the json schema to use | yes
+allErrors | returns all errors when `true`; otherwise only returns the first error | no
 
 <!-- title: example -->
 

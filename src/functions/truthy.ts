@@ -1,6 +1,4 @@
-import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
-
-export type TruthyRule = IRule<RuleFunction.TRUTHY>;
+import { IFunction, IFunctionResult } from '../types';
 
 export const truthy: IFunction = (targetVal): void | IFunctionResult[] => {
   if (!targetVal) {

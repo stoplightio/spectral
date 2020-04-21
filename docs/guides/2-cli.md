@@ -43,7 +43,9 @@ The Spectral CLI supports loading documents as YAML or JSON, and validation of O
 
 You can also provide your own ruleset file. By default, the Spectral CLI will look for a ruleset file called `.spectral.yml` or `.spectral.json` in the current working directory. You can tell spectral to use a different file by using the `--ruleset` CLI option.
 
-Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend and modify our [core OpenAPI ruleset](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md).
+Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend and modify our core rulesets:
+- [OpenAPI ruleset](../reference/openapi-rules.md)
+- [AsyncAPI ruleset](../reference/asyncapi-rules.md)
 
 ## Error Results
 
@@ -78,4 +80,4 @@ module.exports = new Resolver({
 ```
 
 
-You can learn more about $ref resolving in the [JS section](./javascript.md#using-custom-resolver).
+You can learn more about $ref resolving in the [JS section](./3-javascript.md#using-custom-resolver).
