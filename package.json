@@ -93,7 +93,7 @@
     "@types/fetch-mock": "^7.3.1",
     "@types/jest": "^25.2.1",
     "@types/jest-when": "^2.7.1",
-    "@types/lodash": "^4.14.146",
+    "@types/lodash": "^4.14.150",
     "@types/nanoid": "^2.1.0",
     "@types/nock": "^11.1.0",
     "@types/node": "~13.1",
