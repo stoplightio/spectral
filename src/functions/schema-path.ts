@@ -11,7 +11,7 @@ import { JSONPath } from 'jsonpath-plus';
 
 import { Optional } from '@stoplight/types';
 
-import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+import { IFunction, IFunctionResult } from '../types';
 import { getLintTargets } from '../utils';
 import { schema } from './schema';
 
@@ -23,8 +23,6 @@ export interface ISchemaPathOptions {
   oasVersion?: Optional<number>;
   allErrors?: boolean;
 }
-
-export type SchemaPathRule = IRule<RuleFunction.SCHEMAPATH, ISchemaPathOptions>;
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
   // The subsection of the targetVal which contains the good bit

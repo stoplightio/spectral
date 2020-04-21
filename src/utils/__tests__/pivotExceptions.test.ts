@@ -1,6 +1,6 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { InvalidUriError } from '../../rulesets/mergers/exceptions';
-import { IRunRule, RuleFunction } from '../../types';
+import { IRunRule } from '../../types';
 import { IExceptionLocation, pivotExceptions } from '../pivotExceptions';
 
 import { buildRulesetExceptionCollectionFrom } from '../../../setupTests';
@@ -11,7 +11,7 @@ describe('pivotExceptions', () => {
     severity: DiagnosticSeverity.Error,
     given: '',
     then: {
-      function: RuleFunction.TRUTHY,
+      function: 'truthy',
     },
   };
 

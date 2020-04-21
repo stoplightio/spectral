@@ -1,10 +1,9 @@
-import { Spectral } from '../spectral';
-import { IRuleResult, Rule, RuleFunction } from '../types';
+import { IRule, Spectral } from '../spectral';
+import { IRuleResult } from '../types';
 
-const applyRuleToObject = async (r: Rule, o: object): Promise<IRuleResult[]> => {
+const applyRuleToObject = async (r: IRule, o: object): Promise<IRuleResult[]> => {
   const s = new Spectral();
   s.setRules({
-    // @ts-ignore
     testRule: r,
   });
   return await s.run(o);
@@ -19,7 +18,7 @@ describe('functions', () => {
             message: '',
             given: '$.info',
             then: {
-              function: RuleFunction.XOR,
+              function: 'xor',
               functionOptions: { properties: ['yada-yada', 'whatever'] },
             },
           },
@@ -42,7 +41,7 @@ describe('functions', () => {
             message: '',
             given: '$.info',
             then: {
-              function: RuleFunction.XOR,
+              function: 'xor',
               functionOptions: { properties: ['version', 'title'] },
             },
           },
@@ -65,7 +64,7 @@ describe('functions', () => {
             message: '',
             given: '$.info',
             then: {
-              function: RuleFunction.XOR,
+              function: 'xor',
               functionOptions: { properties: ['something', 'title'] },
             },
           },
@@ -91,7 +90,7 @@ describe('functions', () => {
             given: '$.info',
             then: {
               field: 'termsOfService',
-              function: RuleFunction.PATTERN,
+              function: 'pattern',
               functionOptions: {
                 match: '^orange.*$',
               },
@@ -114,7 +113,7 @@ describe('functions', () => {
             given: '$.responses',
             then: {
               field: '@key',
-              function: RuleFunction.PATTERN,
+              function: 'pattern',
               functionOptions: { match: '^[0-9]+$' },
             },
           },
@@ -142,7 +141,7 @@ describe('functions', () => {
             message: '',
             given: '$.info.termsOfService',
             then: {
-              function: RuleFunction.PATTERN,
+              function: 'pattern',
               functionOptions: {
                 match: '^http.*$',
               },
@@ -165,7 +164,7 @@ describe('functions', () => {
             given: '$.responses',
             then: {
               field: '@key',
-              function: RuleFunction.PATTERN,
+              function: 'pattern',
               functionOptions: { match: '^[0-9]+$' },
             },
           },
@@ -215,11 +214,11 @@ describe('functions', () => {
             given: '$..val',
             then: [
               {
-                function: RuleFunction.LENGTH,
+                function: 'length',
                 functionOptions: { max: 2 },
               },
               {
-                function: RuleFunction.LENGTH,
+                function: 'length',
                 functionOptions: { max: 3 },
               },
             ],
@@ -239,11 +238,11 @@ describe('functions', () => {
             given: '$..val',
             then: [
               {
-                function: RuleFunction.LENGTH,
+                function: 'length',
                 functionOptions: { min: 3 },
               },
               {
-                function: RuleFunction.LENGTH,
+                function: 'length',
                 functionOptions: { min: 4 },
               },
             ],
@@ -262,7 +261,7 @@ describe('functions', () => {
             message: '',
             given: '$..val',
             then: {
-              function: RuleFunction.LENGTH,
+              function: 'length',
               functionOptions: { min: 3, max: 3 },
             },
           },

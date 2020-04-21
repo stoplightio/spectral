@@ -4,8 +4,6 @@ const _get = require('lodash/get');
 
 import { IFunction, IFunctionResult } from '../../../types';
 
-export type functionName = 'oasOpSecurityDefined';
-
 export const oasOpSecurityDefined: IFunction<{
   schemesPath: JsonPath;
 }> = (targetVal, options) => {

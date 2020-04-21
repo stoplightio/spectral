@@ -1,10 +1,8 @@
-import { IFunction, IFunctionResult, IRule, RuleFunction } from '../types';
+import { IFunction, IFunctionResult } from '../types';
 
 export interface IEnumRuleOptions {
   values: Array<string | number>;
 }
-
-export type EnumRule = IRule<RuleFunction.ENUM, IEnumRuleOptions>;
 
 export const enumeration: IFunction<IEnumRuleOptions> = (targetVal, opts) => {
   const results: IFunctionResult[] = [];

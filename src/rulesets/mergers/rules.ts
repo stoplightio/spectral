@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
-import { HumanReadableDiagnosticSeverity, Rule } from '../../types';
+import { HumanReadableDiagnosticSeverity, IRule } from '../../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
 import { isValidRule } from '../validation';
@@ -37,7 +37,7 @@ export function mergeRules(
 
 const ROOT_DESCRIPTOR = Symbol('root-descriptor');
 
-function markRule(rule: Rule) {
+function markRule(rule: IRule) {
   if (!(ROOT_DESCRIPTOR in rule)) {
     Object.defineProperty(rule, ROOT_DESCRIPTOR, {
       configurable: false,
@@ -48,16 +48,16 @@ function markRule(rule: Rule) {
   }
 }
 
-function updateRootRule(root: Rule, newRule: Rule | null) {
+function updateRootRule(root: IRule, newRule: IRule | null) {
   markRule(root);
   Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
 }
 
-function getRootRule(rule: Rule): Rule | null {
+function getRootRule(rule: IRule): IRule | null {
   return rule[ROOT_DESCRIPTOR] !== undefined ? rule[ROOT_DESCRIPTOR] : null;
 }
 
-function copyRule(rule: Rule) {
+function copyRule(rule: IRule) {
   return cloneDeep(rule);
 }
 
@@ -116,7 +116,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
   }
 }
 
-function normalizeRule(rule: Rule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined) {
+function normalizeRule(rule: IRule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined) {
   if (rule.recommended === void 0) {
     rule.recommended = true;
   }

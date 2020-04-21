@@ -7,7 +7,7 @@ import * as jsonSpecV6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as jsonSpecV7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { IOutputError } from 'better-ajv-errors';
 import { capitalize, escapeRegExp } from 'lodash';
-import { IFunction, IFunctionResult, IRule, JSONSchema, RuleFunction } from '../types';
+import { IFunction, IFunctionResult, JSONSchema } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
 const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
@@ -31,8 +31,6 @@ export interface ISchemaOptions {
   // this is used by oasDocumentSchema function, to be removed once we sort out
   prepareResults?(errors: AJV.ErrorObject[]): void;
 }
-
-export type SchemaRule = IRule<RuleFunction.SCHEMA, ISchemaOptions>;
 
 interface IAJVOutputError extends IOutputError {
   path?: string;
