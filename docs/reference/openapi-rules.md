@@ -499,7 +499,7 @@ servers:
 
 If this is going out to the world, maybe have production and a general sandbox people can play with.
 
-### oas3-example-value-or-externalValue
+### oas3-examples-value-or-externalValue
 
 Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
 

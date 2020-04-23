@@ -270,8 +270,8 @@ properties | the properties to check | yes
 <!-- title: example -->
 
 ```yaml
-components-example-value-or-externalValue:
-  description: Example should have either a `value` or `externalValue` field.
+components-examples-value-or-externalValue:
+  description: Examples should have either a `value` or `externalValue` field.
   type: style
   given: "$.components.examples.*"
   then:

@@ -537,8 +537,8 @@
         }
       }
     },
-    "oas3-example-value-or-externalValue": {
-      "description": "Example should have either a `value` or `externalValue` field.",
+    "oas3-examples-value-or-externalValue": {
+      "description": "Examples should have either a `value` or `externalValue` field.",
       "recommended": true,
       "formats": ["oas3"],
       "type": "style",
