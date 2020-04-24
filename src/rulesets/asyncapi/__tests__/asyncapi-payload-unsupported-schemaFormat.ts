@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
 import { Spectral } from '../../../spectral';
 import { IRunRule } from '../../../types';
+import { supportedSchemaFormats } from '../functions/asyncApi2PayloadValidation';
 
 const ruleName = 'asyncapi-payload-unsupported-schemaFormat';
 let s: Spectral;
@@ -35,11 +36,18 @@ describe(`Rule '${ruleName}'`, () => {
     },
   };
 
-  test('validates a correct object', async () => {
-    const results = await s.run(doc, { ignoreUnknownFormat: false });
+  test.each(supportedSchemaFormats)(
+    'validates a correct object (schemaFormat: "%s")',
+    async (schemaFormat: string | undefined) => {
+      const clone = cloneDeep(doc);
 
-    expect(results).toEqual([]);
-  });
+      clone.components.messages.aMessage.schemaFormat = schemaFormat;
+
+      const results = await s.run(clone, { ignoreUnknownFormat: false });
+
+      expect(results).toEqual([]);
+    },
+  );
 
   test('return result if components.messages.{message}.schemaFormat is set to a non supported value', async () => {
     const clone = cloneDeep(doc);
@@ -51,7 +59,8 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+        message:
+          'Message schema validation is only supported with default unspecified `schemaFormat`, or well known AsyncAPI2 mime types.',
         path: ['components', 'messages', 'aMessage', 'schemaFormat'],
         severity: rule.severity,
       }),
@@ -68,7 +77,8 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+        message:
+          'Message schema validation is only supported with default unspecified `schemaFormat`, or well known AsyncAPI2 mime types.',
         path: ['components', 'messageTraits', 'aTrait', 'schemaFormat'],
         severity: rule.severity,
       }),
@@ -87,7 +97,8 @@ describe(`Rule '${ruleName}'`, () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: ruleName,
-          message: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+          message:
+            'Message schema validation is only supported with default unspecified `schemaFormat`, or well known AsyncAPI2 mime types.',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'schemaFormat'],
           severity: rule.severity,
         }),

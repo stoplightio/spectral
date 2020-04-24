@@ -223,11 +223,36 @@ application/vnd.aai.asyncapi;version=2.0.0
 application/vnd.aai.asyncapi+json;version=2.0.0
 application/vnd.aai.asyncapi+yaml;version=2.0.0
 
-At this point, explicitly setting `schemaFormat` is not supported by Spectral, so if you use it this rule will emit an info message and skip validating the payload.
+At this point, explicitly setting `schemaFormat` to any other value is not supported by Spectral.
+Would that happen, this rule will emit an info message and skip validating the payload.
 
 Other formats such as OpenAPI Schema Object, JSON Schema Draft 07 and Avro will be added in various upcoming versions.
 
 **Recommended:** Yes
+
+**Good Examples**
+
+``` yaml
+message:
+  payload:
+    ...
+```
+
+``` yaml
+message:
+  schemaFormat: application/vnd.aai.asyncapi;version=2.0.0
+  payload:
+    ...
+```
+
+**Bad Example**
+
+``` yaml
+message:
+  schemaFormat: application/vnd.apache.avro;version=1.9.0
+  payload:
+    ...
+```
 
 ### asyncapi-payload
 

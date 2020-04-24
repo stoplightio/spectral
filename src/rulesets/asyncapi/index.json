@@ -212,18 +212,24 @@
       }
     },
     "asyncapi-payload-unsupported-schemaFormat": {
-      "description": "Message schema validation is only supported with default unspecified `schemaFormat`.",
+      "description": "Message schema validation is only supported with default unspecified `schemaFormat`, or well known AsyncAPI2 mime types.",
       "severity": "info",
       "recommended": true,
       "type": "validation",
       "given": [
-        "$.components.messageTraits.*",
-        "$.components.messages.*",
-        "$.channels.*.[publish,subscribe].message"
+        "$.components.messageTraits.*.schemaFormat",
+        "$.components.messages.*.schemaFormat",
+        "$.channels.*.[publish,subscribe].message.schemaFormat"
       ],
       "then": {
-        "field": "schemaFormat",
-        "function": "undefined"
+        "function": "enumeration",
+        "functionOptions": {
+          "values": [
+            "application/vnd.aai.asyncapi;version=2.0.0",
+            "application/vnd.aai.asyncapi+json;version=2.0.0",
+            "application/vnd.aai.asyncapi+yaml;version=2.0.0"
+          ]
+        }
       }
     },
     "asyncapi-payload": {
@@ -233,9 +239,9 @@
       "recommended": true,
       "type": "validation",
       "given": [
-        "$.components.messageTraits[?(@.schemaFormat === void 0)].payload",
-        "$.components.messages[?(@.schemaFormat === void 0)].payload",
-        "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload"
+        "$.components.messageTraits.*.payload^",
+        "$.components.messages.*.payload^",
+        "$.channels.*.[publish,subscribe].message.payload^"
       ],
       "then": {
         "function": "asyncApi2PayloadValidation",
