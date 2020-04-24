@@ -3,7 +3,8 @@
     "asyncapi2"
   ],
   "functions" : [
-    "asyncApi2PayloadValidation"
+    "asyncApi2PayloadValidation",
+    "asyncApi2SchemaPath"
   ],
   "rules": {
     "asyncapi-channel-no-empty-parameter": {
@@ -178,16 +179,15 @@
       "recommended": true,
       "type": "validation",
       "given": [
-        "$.components.messageTraits[?(@.schemaFormat === void 0)].payload.default^",
-        "$.components.messages[?(@.schemaFormat === void 0)].payload.default^",
-        "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.default^"
+        "$.components.messageTraits.*.payload.default^^",
+        "$.components.messages.*.payload.default^^",
+        "$.channels.*.[publish,subscribe].message.payload.default^^"
       ],
       "then": {
-        "function": "schemaPath",
+        "function": "asyncApi2SchemaPath",
         "functionOptions": {
-          "field": "default",
-          "schemaPath": "$",
-          "allErrors": true
+          "field": "$.payload.default",
+          "schemaPath": "$.payload"
         }
       }
     },

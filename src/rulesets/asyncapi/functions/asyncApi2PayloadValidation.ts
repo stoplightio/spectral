@@ -15,6 +15,10 @@ export const supportedSchemaFormats = [
   'application/vnd.aai.asyncapi+yaml;version=2.0.0',
 ];
 
+export const isSchemaFormatSupported = (schemaFormat: string): boolean => {
+  return supportedSchemaFormats.includes(schemaFormat);
+};
+
 const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction, asyncApi2Schema: any): ValidateFunction => {
   if (validator !== void 0) {
     return validator;
@@ -45,7 +49,7 @@ export const asyncApi2PayloadValidation: IFunction<IAsyncApi2PayloadValidationOp
   paths,
   otherValues,
 ) {
-  if (!supportedSchemaFormats.includes(targetVal.schemaFormat)) {
+  if (!isSchemaFormatSupported(targetVal.schemaFormat)) {
     // silently ignore unsupported schemaFormat values
     return [];
   }
