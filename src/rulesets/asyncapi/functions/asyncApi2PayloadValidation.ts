@@ -2,14 +2,13 @@ import { ValidateFunction } from 'ajv';
 
 import { ISchemaFunction } from '../../../functions/schema';
 import { IFunction, IFunctionContext } from '../../../types';
-import * as asyncApi2Schema from '../schemas/schema.asyncapi2.json';
 
 const fakeSchemaObjectId = 'asyncapi2#schemaObject';
 const asyncApi2SchemaObject = { $ref: fakeSchemaObjectId };
 
 let validator: ValidateFunction;
 
-const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction): ValidateFunction => {
+const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction, asyncApi2Schema: any): ValidateFunction => {
   if (validator !== void 0) {
     return validator;
   }
@@ -28,14 +27,18 @@ const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction): Validat
   return validator;
 };
 
-export const asyncApi2PayloadValidation: IFunction = function(
+export interface IAsyncApi2PayloadValidationOptions {
+  asyncApi2Schema: object;
+}
+
+export const asyncApi2PayloadValidation: IFunction<IAsyncApi2PayloadValidationOptions> = function(
   this: IFunctionContext,
   targetVal,
-  _opts,
+  opts,
   paths,
   otherValues,
 ) {
-  const ajvValidationFn = buildAsyncApi2SchemaObjectValidator(this.functions.schema);
+  const ajvValidationFn = buildAsyncApi2SchemaObjectValidator(this.functions.schema, opts.asyncApi2Schema);
 
   const results = this.functions.schema(
     targetVal,

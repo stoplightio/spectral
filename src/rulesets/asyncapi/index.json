@@ -238,7 +238,12 @@
         "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload"
       ],
       "then": {
-        "function": "asyncApi2PayloadValidation"
+        "function": "asyncApi2PayloadValidation",
+        "functionOptions": {
+          "asyncApi2Schema": {
+            "$ref": "./schemas/schema.asyncapi2.json"
+          }
+        }
       }
     },
     "asyncapi-schema-default": {

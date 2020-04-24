@@ -1,11 +1,12 @@
 import { functions } from '../../../../functions';
+import * as asyncApi2Schema from '../../schemas/schema.asyncapi2.json';
 import { asyncApi2PayloadValidation } from '../asyncApi2PayloadValidation';
 
-function runPayloadValidation(targetVal: any, field: string) {
+function runPayloadValidation(targetVal: any) {
   return asyncApi2PayloadValidation.call(
     { functions },
     targetVal,
-    { field },
+    { asyncApi2Schema },
     { given: ['$', 'components', 'messages', 'aMessage'] },
     { given: null, original: null, documentInventory: {} as any },
   );
@@ -18,7 +19,7 @@ describe('asyncApi2PayloadValidation', () => {
       deprecated: 14,
     };
 
-    const results = runPayloadValidation(payload, '$');
+    const results = runPayloadValidation(payload);
 
     expect(results).toEqual([
       {
