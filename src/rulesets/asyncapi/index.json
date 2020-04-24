@@ -198,15 +198,15 @@
       "recommended": true,
       "type": "validation",
       "given": [
-        "$.components.messageTraits[?(@.schemaFormat === void 0)].payload.examples^",
-        "$.components.messages[?(@.schemaFormat === void 0)].payload.examples^",
-        "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.examples^"
+        "$.components.messageTraits.*.payload.examples^^",
+        "$.components.messages.*.payload.examples^^",
+        "$.channels.*.[publish,subscribe].message.payload.examples^^"
       ],
       "then": {
-        "function": "schemaPath",
+        "function": "asyncApi2SchemaPath",
         "functionOptions": {
-          "field": "$.examples.*",
-          "schemaPath": "$",
+          "field": "$.payload.examples.*",
+          "schemaPath": "$.payload",
           "allErrors": true
         }
       }

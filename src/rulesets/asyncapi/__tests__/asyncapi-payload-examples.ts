@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
 import { Spectral } from '../../../spectral';
 import { IRunRule } from '../../../types';
+import { supportedSchemaFormats } from '../functions/asyncApi2PayloadValidation';
 
 const ruleName = 'asyncapi-payload-examples';
 let s: Spectral;
@@ -54,8 +55,38 @@ describe(`Rule '${ruleName}'`, () => {
     },
   };
 
-  test('validates a correct object', async () => {
-    const results = await s.run(doc, { ignoreUnknownFormat: false });
+  test.each(supportedSchemaFormats)(
+    'validates a correct object (schemaFormat: "%s")',
+    async (schemaFormat: string | undefined) => {
+      const clone = cloneDeep(doc);
+
+      clone.components.messages.aMessage.schemaFormat = schemaFormat;
+      clone.components.messageTraits.aTrait.schemaFormat = schemaFormat;
+      clone.channels['users/{userId}/signedUp'].publish.message.schemaFormat = schemaFormat;
+      clone.channels['users/{userId}/signedUp'].subscribe.message.schemaFormat = schemaFormat;
+
+      const results = await s.run(clone, { ignoreUnknownFormat: false });
+
+      expect(results).toEqual([]);
+    },
+  );
+
+  test('silently ignore invalid examples values when the schemaFormat is unsupported', async () => {
+    const clone = cloneDeep(doc);
+
+    clone.components.messages.aMessage.schemaFormat = 'application/nope';
+    clone.components.messages.aMessage.payload.examples[1] = { seventeen: 17 };
+
+    clone.components.messageTraits.aTrait.schemaFormat = 'application/nope';
+    clone.components.messageTraits.aTrait.payload.examples[1] = { seventeen: 17 };
+
+    clone.channels['users/{userId}/signedUp'].publish.message.schemaFormat = 'application/nope';
+    clone.channels['users/{userId}/signedUp'].publish.message.payload.examples[1] = { seventeen: 17 };
+
+    clone.channels['users/{userId}/signedUp'].subscribe.message.schemaFormat = 'application/nope';
+    clone.channels['users/{userId}/signedUp'].subscribe.message.payload.examples[1] = { seventeen: 17 };
+
+    const results = await s.run(clone, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([]);
   });
