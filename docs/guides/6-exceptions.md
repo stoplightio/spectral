@@ -11,7 +11,7 @@ Locations be can either described as relative to the ruleset or absolute paths.
 extends: spectral:oas
 
 except:
-  "subfolder/one.yaml#"
+  "subfolder/one.yaml#":
     - oas3-api-servers
   "/tmp/docs/one.yaml#/info":
     - info-contact
