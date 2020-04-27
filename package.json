@@ -116,7 +116,7 @@
     "lint-staged": "^10.1.7",
     "nock": "~12.0.2",
     "node-html-parser": "^1.2.7",
-    "pkg": "^4.4.7",
+    "pkg": "^4.4.8",
     "recast": "^0.18.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.2",
