@@ -5,14 +5,16 @@ import { isObject } from 'lodash';
 import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { Rule } from '../rule';
-import { IRuleResult } from '../types';
+import { IGivenNode, IRuleResult } from '../types';
 import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
-import { traverse, TraverseCallback } from './traverse';
+import { OptimizedRule, Rule } from './rule';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
 import { IExceptionLocation, pivotExceptions } from './utils';
+
+const { traverse } = require('nimma');
 
 const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
@@ -25,35 +27,6 @@ const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory)
     DiagnosticSeverity.Warning,
     'except-but-stdin',
   );
-};
-
-export const runRules = async (context: IRunnerPublicContext): Promise<IRuleResult[]> => {
-  const { documentInventory, rules, exceptions } = context;
-
-  const runnerContext: IRunnerInternalContext = {
-    ...context,
-    results: [],
-    promises: [],
-  };
-
-  const isStdIn = isStdInSource(documentInventory);
-  const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
-
-  if (isStdIn && Object.keys(exceptions).length > 0) {
-    runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
-  }
-
-  const relevantRules = Object.values(rules).filter(
-    rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
-  );
-
-
-
-  if (runnerContext.promises.length > 0) {
-    await Promise.all(runnerContext.promises);
-  }
-
-  return runnerContext.results;
 };
 
 const runRule = (
@@ -144,21 +117,24 @@ export class Runner {
     const optimizedUnresolvedRules: OptimizedRule[] = [];
     const unoptimizedRules: Rule[] = [];
 
+    const traverseCb = (rule: OptimizedRule, node: IGivenNode) => {
+      lintNode(runnerContext, node, rule, exceptRuleByLocations[rule.name]);
+    };
+
     for (const rule of relevantRules) {
       if (!(rule instanceof OptimizedRule)) {
         unoptimizedRules.push(rule);
-      } else if (rule.resolved) {
-        rule.completed = false;
+        continue;
+      }
+
+      if (rule.resolved) {
         optimizedRules.push(rule);
       } else {
-        rule.completed = false;
         optimizedUnresolvedRules.push(rule);
       }
-    }
 
-    const traverseCb: TraverseCallback = (rule, node) => {
-      lintNode(runnerContext, node, rule, exceptRuleByLocations[rule.name]);
-    };
+      rule.hookup(traverseCb);
+    }
 
     if (optimizedRules.length > 0) {
       traverse(Object(runnerContext.documentInventory.resolved), optimizedRules, traverseCb);

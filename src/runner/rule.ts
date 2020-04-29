@@ -1,11 +1,11 @@
 import { Optional } from '@stoplight/types';
 
+// @ts-ignore
+import { JSONPathExpression } from 'nimma';
 import { IDocument } from '../document';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from '../rulesets/severity';
-import { IRule, IThen, SpectralDiagnosticSeverity } from '../types';
+import { IGivenNode, IRule, IThen, SpectralDiagnosticSeverity } from '../types';
 import { hasIntersectingElement } from '../utils';
-import { CompiledExpression } from './compile';
-import { TraverseCache } from './traverse';
 
 export class Rule {
   public readonly name: string;
@@ -44,37 +44,28 @@ export class Rule {
 }
 
 export class OptimizedRule extends Rule {
-  public completed = false;
+  protected expr: JSONPathExpression;
+  public matches: any;
+  public onMatch() {
+    // stub
+  }
 
-  constructor(name: string, rule: IRule, protected compiledExpressions: CompiledExpression[]) {
+  constructor(name: string, rule: IRule) {
     super(name, rule);
+    this.expr = new JSONPathExpression(rule.given, this.onMatch);
+    this.matches = this.expr.matches;
+    if (this.matches === null) {
+      throw new Error('Cannot optimize');
+    }
   }
 
-  protected static matchesPath(path: string, pattern: RegExp, cache: TraverseCache) {
-    const cachedValue = cache.get(pattern);
-    if (cachedValue !== void 0) {
-      return cachedValue;
-    }
-
-    const match = pattern.test(path);
-    cache.set(pattern, match);
-    return match;
-  }
-
-  public matchesPath(path: string, cache: TraverseCache): boolean {
-    if (this.completed) return false;
-
-    for (const expression of this.compiledExpressions) {
-      const matched = OptimizedRule.matchesPath(path, expression.value, cache);
-      if (matched) {
-        if (expression.singleMatch) {
-          this.completed = true;
-        }
-
-        return true;
-      }
-    }
-
-    return false;
+  public hookup(cb: (rule: OptimizedRule, node: IGivenNode) => void) {
+    // @ts-ignore
+    this.onMatch = (value, path) => {
+      cb(this, {
+        path,
+        value,
+      });
+    };
   }
 }

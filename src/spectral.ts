@@ -14,7 +14,6 @@ import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
-import { transformJsonPathsExpressions } from './runner/compile';
 import { OptimizedRule, Rule } from './runner/rule';
 import { Runner, RunnerRuntime } from './runner';
 import {
@@ -130,11 +129,10 @@ export class Spectral {
     empty(this.rules);
 
     for (const [name, rule] of Object.entries(rules)) {
-      const expressions = transformJsonPathsExpressions(rule.given);
-      if (expressions === null) {
+      try {
+        this.rules[name] = new OptimizedRule(name, rule);
+      } catch {
         this.rules[name] = new Rule(name, rule);
-      } else {
-        this.rules[name] = new OptimizedRule(name, rule, Array.isArray(expressions) ? expressions : [expressions]);
       }
     }
   }

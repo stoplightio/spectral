@@ -556,7 +556,7 @@
       "recommended": false,
       "formats": ["oas3"],
       "type": "style",
-      "given": "$..[?(@parentProperty !== 'links' && @.parameters)]['parameters'].[?(@.in)]",
+      "given": "$..[?(@parentProperty !== 'links' && @.parameters)]['parameters'][*][?(@.in)]",
       "then": {
         "field": "description",
         "function": "truthy"

@@ -112,7 +112,7 @@ describe('linter', () => {
 
     spectral.setRules({
       rule1: {
-        given: '$.responses.[?(@property >= 400 && @property < 500)]',
+        given: '$.responses[?(@property >= 400 && @property < 500)]',
         then: {
           field: 'description',
           function: 'func1',
