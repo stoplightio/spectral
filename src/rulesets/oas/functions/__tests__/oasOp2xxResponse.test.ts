@@ -4,13 +4,17 @@ import { rules } from '../../index.json';
 import oasOp2xxResponse from '../oasOp2xxResponse';
 
 describe('oasOp2xxResponse', () => {
-  const s = new Spectral();
-  s.setFunctions({ oasOp2xxResponse });
-  s.setRules({
-    'operation-2xx-response': Object.assign(rules['operation-2xx-response'], {
-      recommended: true,
-      type: RuleType[rules['operation-2xx-response'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+    s.setFunctions({ oasOp2xxResponse });
+    s.setRules({
+      'operation-2xx-response': Object.assign(rules['operation-2xx-response'], {
+        recommended: true,
+        type: RuleType[rules['operation-2xx-response'].type],
+      }),
+    });
   });
 
   test('validate a correct object', async () => {

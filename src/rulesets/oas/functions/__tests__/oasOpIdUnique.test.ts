@@ -5,14 +5,17 @@ import { rules } from '../../index.json';
 import oasOpIdUnique from '../oasOpIdUnique';
 
 describe('oasOpIdUnique', () => {
-  const s = new Spectral();
+  let s: Spectral;
 
-  s.setFunctions({ oasOpIdUnique });
-  s.setRules({
-    'operation-operationId-unique': Object.assign(rules['operation-operationId-unique'], {
-      recommended: true,
-      type: RuleType[rules['operation-operationId-unique'].type],
-    }),
+  beforeEach(() => {
+    s = new Spectral();
+    s.setFunctions({ oasOpIdUnique });
+    s.setRules({
+      'operation-operationId-unique': Object.assign(rules['operation-operationId-unique'], {
+        recommended: true,
+        type: RuleType[rules['operation-operationId-unique'].type],
+      }),
+    });
   });
 
   test('validate a correct object', async () => {

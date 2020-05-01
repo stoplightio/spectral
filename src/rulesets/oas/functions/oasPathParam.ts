@@ -115,6 +115,7 @@ export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
         generateResult(`The paths \`${uniquePaths[normalized]}\` and \`${path}\` are equivalent.`, [
           ...paths.given,
           'paths',
+          path,
         ]),
       );
     } else {

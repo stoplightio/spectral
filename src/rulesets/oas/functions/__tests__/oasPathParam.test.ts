@@ -4,13 +4,17 @@ import { rules } from '../../index.json';
 import oasPathParam from '../oasPathParam';
 
 describe('oasPathParam', () => {
-  const s = new Spectral();
-  s.setFunctions({ oasPathParam });
-  s.setRules({
-    'path-params': Object.assign(rules['path-params'], {
-      recommended: true,
-      type: RuleType[rules['path-params'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+    s.setFunctions({ oasPathParam });
+    s.setRules({
+      'path-params': Object.assign(rules['path-params'], {
+        recommended: true,
+        type: RuleType[rules['path-params'].type],
+      }),
+    });
   });
 
   test('No error if templated path is not used', async () => {
@@ -284,15 +288,15 @@ describe('oasPathParam', () => {
       {
         code: 'path-params',
         message: `The paths \`/foo/{boo}\` and \`/foo/{bar}\` are equivalent.`,
-        path: ['paths'],
+        path: ['paths', '/foo/{bar}'],
         range: {
           end: {
             character: 15,
             line: 20,
           },
           start: {
-            character: 10,
-            line: 1,
+            character: 17,
+            line: 12,
           },
         },
         severity: DiagnosticSeverity.Error,

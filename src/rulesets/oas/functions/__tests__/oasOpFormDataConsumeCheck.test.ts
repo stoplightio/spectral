@@ -4,14 +4,18 @@ import { rules } from '../../index.json';
 import oasOpFormDataConsumeCheck from '../oasOpFormDataConsumeCheck';
 
 describe('oasOpFormDataConsumeCheck', () => {
-  const s = new Spectral();
-  s.registerFormat('oas2', () => true);
-  s.setFunctions({ oasOpFormDataConsumeCheck });
-  s.setRules({
-    'oas2-operation-formData-consume-check': Object.assign(rules['oas2-operation-formData-consume-check'], {
-      recommended: true,
-      type: RuleType[rules['oas2-operation-formData-consume-check'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+    s.registerFormat('oas2', () => true);
+    s.setFunctions({ oasOpFormDataConsumeCheck });
+    s.setRules({
+      'oas2-operation-formData-consume-check': Object.assign(rules['oas2-operation-formData-consume-check'], {
+        recommended: true,
+        type: RuleType[rules['oas2-operation-formData-consume-check'].type],
+      }),
+    });
   });
 
   test('validate a correct object', async () => {
