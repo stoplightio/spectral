@@ -1,8 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { functions } from '../../../functions';
 import { RuleType, Spectral } from '../../../spectral';
-import { setFunctionContext } from '../../evaluators';
-import validSchemaPrimitiveExample from '../functions/validSchemaPrimitiveExample';
 import * as ruleset from '../index.json';
 
 describe('oas3-valid-parameter-schema-example', () => {
@@ -16,9 +13,6 @@ describe('oas3-valid-parameter-schema-example', () => {
         recommended: true,
         type: RuleType[ruleset.rules['oas3-valid-parameter-schema-example'].type],
       }),
-    });
-    s.setFunctions({
-      validSchemaPrimitiveExample: setFunctionContext({ functions }, validSchemaPrimitiveExample),
     });
   });
 

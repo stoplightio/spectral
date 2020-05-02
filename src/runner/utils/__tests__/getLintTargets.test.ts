@@ -1,4 +1,4 @@
-import { getLintTargets } from '../../runner/utils/getLintTargets';
+import { getLintTargets } from '../getLintTargets';
 
 describe('getLintTargets', () => {
   describe('when @key is given as field', () => {
