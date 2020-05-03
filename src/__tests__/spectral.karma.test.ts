@@ -42,12 +42,13 @@ describe('Spectral', () => {
       await s.loadRuleset('https://localhost:4000/custom-ruleset');
 
       expect(s.rules).toEqual({
-        'info-matches-stoplight': {
-          ...ruleset.rules['info-matches-stoplight'],
+        'info-matches-stoplight': expect.objectContaining({
+          given: ['$.info'],
           name: 'info-matches-stoplight',
-          recommended: true,
+          message: 'Info must contain Stoplight',
+          enabled: true,
           severity: DiagnosticSeverity.Warning,
-        },
+        }),
       });
     });
   });

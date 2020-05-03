@@ -12,7 +12,6 @@ import {
 } from '../../../formats';
 import { readParsable } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
-import { isRuleEnabled } from '../../../runner';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { FormatLookup } from '../../../types';
 import { ILintConfig } from '../../../types/config';
@@ -56,7 +55,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   if (flags.verbose) {
     if (ruleset) {
       const rules = Object.values(spectral.rules);
-      console.info(`Found ${rules.length} rules (${rules.filter(isRuleEnabled).length} enabled)`);
+      console.info(`Found ${rules.length} rules (${rules.filter(rule => rule.enabled).length} enabled)`);
     } else {
       console.info('No rules loaded, attempting to detect document type');
     }

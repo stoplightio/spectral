@@ -11,8 +11,8 @@ import { JSONPath } from 'jsonpath-plus';
 
 import { Optional } from '@stoplight/types';
 
+import { getLintTargets } from '../runner/utils/getLintTargets';
 import { IFunction, IFunctionResult } from '../types';
-import { getLintTargets } from '../utils';
 import { schema } from './schema';
 
 export interface ISchemaPathOptions {

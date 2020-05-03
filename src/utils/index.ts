@@ -1,5 +1,5 @@
 export * from './empty';
-export * from './getLintTargets';
+export * from './decodeSegmentFragment';
 export * from './hasIntersectingElement';
 export * from './refs';
 export * from './prepareResults';

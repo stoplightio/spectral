@@ -1,6 +1,7 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
+import { omit } from 'lodash';
 import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { mergeRules, readRuleset } from '../rulesets';
@@ -150,16 +151,20 @@ describe('linter', () => {
   test('should not report anything for disabled rules', async () => {
     await spectral.loadRuleset('spectral:oas');
     const { rules: oasRules } = await readRuleset('spectral:oas');
-    spectral.setRules(
-      mergeRules(oasRules, {
+    spectral.setRules({
+      ...mergeRules(oasRules, {
         'oas3-valid-schema-example': 'off',
         'operation-2xx-response': -1,
         'openapi-tags': 'off',
-      }) as RuleCollection,
-    );
-
-    // @ts-ignore
-    spectral.rules['oas3-schema'].then.function = 'oasDocumentSchema';
+        'operation-tag-defined': 'off',
+      }),
+      ...omit(spectral.rules, [
+        'oas3-valid-schema-example',
+        'operation-2xx-response',
+        'openapi-tags',
+        'operation-tag-defined',
+      ]),
+    } as RuleCollection);
 
     const result = await spectral.run(invalidSchema);
 
@@ -530,9 +535,7 @@ describe('linter', () => {
   });
 
   test('should include parser diagnostics', async () => {
-    await spectral.loadRuleset('spectral:oas');
-
-    const responses = `openapi: 2.0.0
+    const responses = `
 responses:: !!foo
   400:
     description: a
@@ -542,7 +545,7 @@ responses:: !!foo
      description: c
 `;
 
-    const result = await spectral.run(responses);
+    const result = await spectral.run(responses, { ignoreUnknownFormat: true });
 
     expect(result).toEqual(
       expect.arrayContaining([
@@ -671,26 +674,22 @@ responses:: !!foo
   });
 
   test('should report invalid $refs', async () => {
-    await spectral.loadRuleset('spectral:oas');
-
     const result = await spectral.run(invalidSchema);
 
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'invalid-ref',
-          message: "No resolver defined for scheme 'file' in ref ./models/pet.yaml",
-          path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
-          severity: DiagnosticSeverity.Error,
-        }),
-        expect.objectContaining({
-          code: 'invalid-ref',
-          message: "No resolver defined for scheme 'file' in ref ../common/models/error.yaml",
-          path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
-          severity: DiagnosticSeverity.Error,
-        }),
-      ]),
-    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'invalid-ref',
+        message: "No resolver defined for scheme 'file' in ref ./models/pet.yaml",
+        path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+        severity: DiagnosticSeverity.Error,
+      }),
+      expect.objectContaining({
+        code: 'invalid-ref',
+        message: "No resolver defined for scheme 'file' in ref ../common/models/error.yaml",
+        path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+        severity: DiagnosticSeverity.Error,
+      }),
+    ]);
   });
 
   test('should support YAML merge keys', async () => {
@@ -698,6 +697,8 @@ responses:: !!foo
     spectral.setRules({
       'operation-tag-defined': {
         ...spectral.rules['operation-tag-defined'],
+        message: spectral.rules['operation-tag-defined'].message ?? '',
+        description: spectral.rules['operation-tag-defined'].description ?? '',
         severity: 'off',
       },
     });
@@ -1024,6 +1025,7 @@ responses:: !!foo
     spectral.setRules({
       'oas3-schema': {
         ...spectral.rules['oas3-schema'],
+        description: spectral.rules['oas3-schema'].description ?? '',
         message: 'Schema error at {{path}}',
       },
     });

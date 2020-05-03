@@ -1,20 +1,19 @@
 import { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
-import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { escapeRegExp, merge } from 'lodash';
 
+import { buildRulesetExceptionCollectionFrom } from '../../setupTests';
 import { Document } from '../document';
 import * as Parsers from '../parsers';
-import { Spectral } from '../spectral';
-import { IResolver, IRunRule } from '../types';
+import { RunRuleCollection, Spectral } from '../spectral';
+import { IResolver, RuleCollection } from '../types';
 import { RulesetExceptionCollection } from '../types/ruleset';
-
-import { buildRulesetExceptionCollectionFrom } from '../../setupTests';
 
 const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
 const asyncApiRuleset = JSON.parse(JSON.stringify(require('../rulesets/asyncapi/index.json')));
-const oasRulesetRules: Dictionary<IRunRule, string> = oasRuleset.rules;
-const asyncApiRulesetRules: Dictionary<IRunRule, string> = asyncApiRuleset.rules;
+const oasRulesetRules: RuleCollection = oasRuleset.rules;
+const asyncApiRulesetRules: RuleCollection = asyncApiRuleset.rules;
 
 describe('spectral', () => {
   describe('loadRuleset', () => {
@@ -27,15 +26,17 @@ describe('spectral', () => {
 
       expect(s.rules).toEqual(
         expect.objectContaining(
-          Object.entries(rules).reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
-            oasRules[name] = {
+          Object.entries(rules).reduce<RunRuleCollection>((oasRules, [name, rule]) => {
+            oasRules[name] = expect.objectContaining({
               name,
-              ...rule,
+              given: expect.anything(),
               formats: expect.arrayContaining([expect.any(String)]),
-              recommended: expect.any(Boolean),
+              enabled: expect.any(Boolean),
               severity: expect.any(Number),
-              then: expect.any(Object),
-            };
+              then: expect.any(Array),
+              message: rule.message ?? null,
+              description: rule.description ?? null,
+            });
 
             return oasRules;
           }, {}),
@@ -51,15 +52,17 @@ describe('spectral', () => {
       await s.loadRuleset([rulesetName, rulesetName]);
 
       expect(s.rules).toEqual(
-        Object.entries(expectedRules).reduce<Dictionary<IRunRule, string>>((oasRules, [name, rule]) => {
-          oasRules[name] = {
+        Object.entries(expectedRules).reduce<RunRuleCollection>((oasRules, [name, rule]) => {
+          oasRules[name] = expect.objectContaining({
             name,
-            ...rule,
+            given: expect.anything(),
             formats: expect.arrayContaining([expect.any(String)]),
-            recommended: expect.any(Boolean),
+            enabled: expect.any(Boolean),
             severity: expect.any(Number),
-            then: expect.any(Object),
-          };
+            then: expect.any(Array),
+            message: rule.message ?? null,
+            description: rule.description ?? null,
+          });
 
           return oasRules;
         }, {}),
