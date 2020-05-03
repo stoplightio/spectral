@@ -6,10 +6,10 @@ import { IMessageVars, message } from '../rulesets/message';
 import { getDiagnosticSeverity } from '../rulesets/severity';
 import { IFunctionResult, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
-import { IExceptionLocation } from '../utils/pivotExceptions';
-import { Rule } from './rule';
+import { Rule } from '../rule';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets } from './utils/getLintTargets';
+import { IExceptionLocation } from './utils/pivotExceptions';
 
 const arePathsEqual = (one: JsonPath, another: JsonPath): boolean => {
   if (one.length !== another.length) {

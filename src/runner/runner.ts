@@ -1,20 +1,18 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
-import { isObject } from 'lodash';
+import { flatMap } from 'lodash';
+import { JSONPathExpression, traverse } from 'nimma';
 
 import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
-import { Rule } from '../rule';
 import { IGivenNode, IRuleResult } from '../types';
 import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
-import { OptimizedRule, Rule } from './rule';
 import { RunnerRuntime } from './runtime';
+import { OptimizedRule, Rule } from '../rule';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
 import { IExceptionLocation, pivotExceptions } from './utils';
-
-const { traverse } = require('nimma');
 
 const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
@@ -137,11 +135,11 @@ export class Runner {
     }
 
     if (optimizedRules.length > 0) {
-      traverse(Object(runnerContext.documentInventory.resolved), optimizedRules, traverseCb);
+      traverse(Object(runnerContext.documentInventory.resolved), flatMap(optimizedRules, pickExpressions));
     }
 
     if (optimizedUnresolvedRules.length > 0) {
-      traverse(Object(runnerContext.documentInventory.unresolved), optimizedUnresolvedRules, traverseCb);
+      traverse(Object(runnerContext.documentInventory.unresolved), flatMap(optimizedUnresolvedRules, pickExpressions));
     }
 
     for (const rule of unoptimizedRules) {
@@ -166,4 +164,8 @@ export class Runner {
   public getResults(computeFingerprint: ComputeFingerprintFunc) {
     return prepareResults(this.results, computeFingerprint);
   }
+}
+
+function pickExpressions({ expressions }: OptimizedRule): JSONPathExpression[] {
+  return expressions;
 }

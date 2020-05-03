@@ -10,11 +10,11 @@ import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
 import request from './request';
+import { OptimizedRule, Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
-import { OptimizedRule, Rule } from './runner/rule';
 import { Runner, RunnerRuntime } from './runner';
 import {
   FormatLookup,

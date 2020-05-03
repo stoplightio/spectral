@@ -1,8 +1,9 @@
 import { Optional } from '@stoplight/types';
+import { JSONPathExpression } from 'nimma';
 
 import { IDocument } from './document';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
-import { IRule, IThen, SpectralDiagnosticSeverity } from './types';
+import { IGivenNode, IRule, IThen, SpectralDiagnosticSeverity } from './types';
 import { hasIntersectingElement } from './utils';
 
 export class Rule {
@@ -38,5 +39,36 @@ export class Rule {
     }
 
     return Array.isArray(formats) && hasIntersectingElement(this.formats, formats);
+  }
+}
+
+export class OptimizedRule extends Rule {
+  public readonly expressions: JSONPathExpression[];
+
+  private static stub() {
+    // stub
+  }
+
+  constructor(name: string, rule: IRule) {
+    super(name, rule);
+    this.expressions = this.given.map(given => {
+      const expr = new JSONPathExpression(given, OptimizedRule.stub, OptimizedRule.stub);
+      if (expr.matches === null) {
+        throw new Error('Cannot optimize');
+      }
+
+      return expr;
+    });
+  }
+
+  public hookup(cb: (rule: OptimizedRule, node: IGivenNode) => void) {
+    for (const expr of this.expressions) {
+      expr.onMatch = (value, path) => {
+        cb(this, {
+          path,
+          value,
+        });
+      };
+    }
   }
 }
