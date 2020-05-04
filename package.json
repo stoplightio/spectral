@@ -122,7 +122,7 @@
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.0",
     "ts-jest": "^25.0.0",
-    "ts-node": "^8.9.1",
+    "ts-node": "^8.10.1",
     "tsconfig-paths": "^3.9.0",
     "tslint": "~5.20",
     "tslint-config-stoplight": "~1.4",
