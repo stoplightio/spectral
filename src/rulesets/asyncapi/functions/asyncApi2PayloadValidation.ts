@@ -28,7 +28,7 @@ const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction): Validat
   return validator;
 };
 
-export const asyncApi2PayloadValidation: IFunction = function(
+export const asyncApi2PayloadValidation: IFunction<any> = function(
   this: IFunctionContext,
   targetVal,
   _opts,

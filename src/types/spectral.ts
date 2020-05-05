@@ -5,7 +5,7 @@ import { IFunction, IRule } from '.';
 import { Rule } from '../rule';
 import { ComputeFingerprintFunc } from '../utils';
 
-export type FunctionCollection = Dictionary<IFunction, string>;
+export type FunctionCollection = Dictionary<IFunction<any> | IFunction, string>;
 export type RuleCollection = Dictionary<IRule, string>;
 export type PartialRuleCollection = Dictionary<Partial<IRule>, string>;
 export type RunRuleCollection = Dictionary<Rule, string>;

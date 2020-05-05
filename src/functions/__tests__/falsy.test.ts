@@ -3,7 +3,7 @@ import { falsy } from '../falsy';
 function runFalsy(targetVal: any, targetPath?: any) {
   return falsy(
     targetVal,
-    null,
+    void 0,
     {
       given: ['$'],
       target: targetPath,

@@ -10,7 +10,7 @@ import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { readRuleset } from '../rulesets';
 import { setFunctionContext } from '../rulesets/evaluators';
 import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
-import { Spectral } from '../spectral';
+import { IFunctionResult, Spectral } from '../spectral';
 import { IRuleset, RulesetExceptionCollection } from '../types/ruleset';
 
 const customFunctionOASRuleset = path.join(__dirname, './__fixtures__/custom-functions-oas-ruleset.json');
@@ -257,7 +257,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       it('should handle basic example', async () => {
         spectral.setFunctions({
           [fnName]() {
-            return new Promise(resolve => {
+            return new Promise<IFunctionResult[]>(resolve => {
               setTimeout(resolve, 200, [
                 {
                   message: 'Error reported by async fn',
@@ -289,7 +289,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       it('should handle rejections', async () => {
         spectral.setFunctions({
           [fnName]() {
-            return new Promise((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
               setTimeout(reject, 1000, new Error('Some unknown error'));
             });
           },

@@ -1,6 +1,6 @@
 import { IFunction, IFunctionContext } from '../../../types';
 
-export const typedEnum: IFunction = function(this: IFunctionContext, targetVal, opts, paths, otherValues) {
+export const typedEnum: IFunction<any> = function(this: IFunctionContext, targetVal, opts, paths, otherValues) {
   // do not use rest spread operator here, as this causes the whole tslib gets injected despite proper target set...
   // obviously, having tslib inlined makes the code size quite larger (around 4x after compression - 1.8K vs 7.4K).
   const { enum: enumValues } = targetVal;

@@ -1,150 +1,419 @@
 {
-    "$id": "http://stoplight.io/schemas/rule.schema.json",
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "definitions": {
-        "IThen<T,O>": {
-            "properties": {
-                "field": {
-                    "type": "string"
-                },
-                "function": {
-                    "$ref": "#/definitions/T"
-                },
-                "functionOptions": {
-                    "$ref": "#/definitions/O"
-                }
-            },
-            "required": [
-                "function"
-            ],
-            "type": "object"
-        },
-        "O": {
-            "type": "object"
-        },
-        "T": {
-            "type": "string"
-        },
-        "DiagnosticSeverity": {
-            "enum": [
-                -1,
-                0,
-                1,
-                2,
-                3
-            ],
-            "type": "number"
-        },
-        "HumanReadableSeverity": {
-            "type": "string",
-            "enum": [
-                "error",
-                "warn",
-                "info",
-                "hint",
-                "off"
-            ]
-        },
-        "Severity": {
-            "oneOf": [
-                {
-                    "$ref": "#/definitions/DiagnosticSeverity"
-                },
-                {
-                    "$ref": "#/definitions/HumanReadableSeverity"
-                }
-            ]
-        }
-    },
-    "oneOf": [
+  "$id": "http://stoplight.io/schemas/rule.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Then": {
+      "allOf": [
         {
+          "properties": {
+            "field": {
+              "type": "string"
+            }
+          }
+        },
+
+        {
+          "if": {
+            "function": {
+              "const": "alphabetical"
+            }
+          },
+          "then": {
+            "functionOptions": {
+              "additionalProperties": false,
+              "properties": {
+                "keyedBy": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        },
+
+        {
+          "if": {
             "properties": {
-                "description": {
-                    "type": "string"
+              "function": {
+                "const": "casing"
+              }
+            }
+          },
+          "then": {
+            "functionOptions": {
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["flat", "camel", "pascal", "kebab", "cobol", "snake", "macro"]
                 },
-                "recommended": {
-                    "type": "boolean"
+                "disallowDigits": {
+                  "type": "boolean"
                 },
-                "given": {
-                    "oneOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }
-                    ]
-                },
-                "resolved": {
-                    "type": "boolean"
-                },
-                "severity": {
-                    "$ref": "#/definitions/Severity"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "tags": {
-                    "items": {
-                        "type": "string"
+                "separator": {
+                  "properties": {
+                    "char": {
+                      "type": "string",
+                      "maxLength": 1
                     },
-                    "type": "array"
-                },
-                "formats": {
+                    "allowLeading": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["char"],
+                  "type": "object"
+                }
+              },
+              "required": ["type"],
+              "type": "object"
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "const": "enumeration"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "values": {
                     "type": "array",
                     "items": {
-                        "type": "string",
-                        "minItems": 1
+                      "type": ["string", "number"]
                     }
+                  }
                 },
-                "then": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/definitions/IThen<T,O>"
-                        },
-                        {
-                            "items": {
-                                "$ref": "#/definitions/IThen<T,O>"
-                            },
-                            "type": "array"
-                        }
-                    ]
+                "required": ["values"]
+              }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "const": "length"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  }
                 },
-                "type": {
-                    "enum": [
-                        "style",
-                        "validation"
-                    ],
+                "minProperties": 1
+              }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "const": "pattern"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "match": {
                     "type": "string"
-                }
-            },
-            "required": [
-                "given",
-                "then"
-            ],
-            "type": "object"
-        },
-        {
-            "$ref": "#/definitions/HumanReadableSeverity"
-        },
-        {
-            "type": "boolean"
-        },
-        {
-            "type": "array",
-            "additionalItems": false,
-            "minItems": 1,
-            "items": [
-                {
-                    "$ref": "#/definitions/Severity"
+                  },
+                  "notMatch": {
+                    "type": "string"
+                  }
                 },
-                {
+                "minProperties": 1
+              }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "const": "schema"
+              }
+            }
+          },
+          "then": {
+            "required": ["functionOptions"],
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "schema": {
                     "type": "object"
-                }
-            ]
+                  },
+                  "oasVersion": {
+                    "enum": [
+                      2,
+                      3,
+                      3.1
+                    ],
+                    "type": "number"
+                  },
+                  "allErrors": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "schema"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "const": "schema-path"
+              }
+            }
+          },
+          "then": {
+            "required": ["functionOptions"],
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "schemaPath": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string"
+                  },
+                  "oasVersion": {
+                    "enum": [
+                      2,
+                      3,
+                      3.1
+                    ],
+                    "type": "number"
+                  },
+                  "allErrors": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "schemaPath"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "const": "unreferencedReusableObject"
+              }
+            }
+          },
+          "then": {
+            "required": ["functionOptions"],
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "reusableObjectsLocation": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reusableObjectsLocation"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "type": "string",
+                "const": [
+                  "truthy",
+                  "falsy",
+                  "undefined"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "additionalProperties": false
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
+                "type": "string"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "functionOptions": {
+                "type": "object"
+              }
+            }
+          }
         }
-    ]
+      ],
+
+      "type": "object"
+    },
+    "DiagnosticSeverity": {
+      "enum": [
+        -1,
+        0,
+        1,
+        2,
+        3
+      ],
+      "type": "number"
+    },
+    "HumanReadableSeverity": {
+      "type": "string",
+      "enum": [
+        "error",
+        "warn",
+        "info",
+        "hint",
+        "off"
+      ]
+    },
+    "Severity": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/DiagnosticSeverity"
+        },
+        {
+          "$ref": "#/definitions/HumanReadableSeverity"
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "recommended": {
+          "type": "boolean"
+        },
+        "given": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "resolved": {
+          "type": "boolean"
+        },
+        "severity": {
+          "$ref": "#/definitions/Severity"
+        },
+        "message": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minItems": 1
+          }
+        },
+        "then": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Then"
+            },
+            {
+              "items": {
+                "$ref": "#/definitions/Then"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "type": {
+          "enum": [
+            "style",
+            "validation"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "given",
+        "then"
+      ],
+      "type": "object"
+    },
+    {
+      "$ref": "#/definitions/HumanReadableSeverity"
+    },
+    {
+      "type": "boolean"
+    },
+    {
+      "type": "array",
+      "additionalItems": false,
+      "minItems": 1,
+      "items": [
+        {
+          "$ref": "#/definitions/Severity"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    }
+  ]
 }
