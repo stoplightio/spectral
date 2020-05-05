@@ -56,6 +56,7 @@
                     "type": "boolean"
                   },
                   "separator": {
+                    "additionalProperties": false,
                     "properties": {
                       "char": {
                         "type": "string",
@@ -72,7 +73,8 @@
                 "required": ["type"],
                 "type": "object"
               }
-            }
+            },
+            "required": ["functionOptions"]
           }
         },
 
@@ -96,9 +98,11 @@
                     }
                   }
                 },
+                "type": "object",
                 "required": ["values"]
               }
-            }
+            },
+            "required": ["functionOptions"]
           }
         },
 
@@ -122,9 +126,11 @@
                     "type": "number"
                   }
                 },
-                "minProperties": 1
+                "minProperties": 1,
+                "type": "object"
               }
-            }
+            },
+            "required": ["functionOptions"]
           }
         },
 
@@ -148,9 +154,11 @@
                     "type": "string"
                   }
                 },
-                "minProperties": 1
+                "minProperties": 1,
+                "type": "object"
               }
-            }
+            },
+            "required": ["functionOptions"]
           }
         },
 
