@@ -5,14 +5,17 @@ import { rules } from '../../index.json';
 import oasTagDefined from '../oasTagDefined';
 
 describe('oasTagDefined', () => {
-  const s = new Spectral();
+  let s: Spectral;
 
-  s.setFunctions({ oasTagDefined });
-  s.setRules({
-    'operation-tag-defined': Object.assign(rules['operation-tag-defined'], {
-      recommended: true,
-      type: RuleType[rules['operation-tag-defined'].type],
-    }),
+  beforeEach(() => {
+    s = new Spectral();
+    s.setFunctions({ oasTagDefined });
+    s.setRules({
+      'operation-tag-defined': Object.assign(rules['operation-tag-defined'], {
+        recommended: true,
+        type: RuleType[rules['operation-tag-defined'].type],
+      }),
+    });
   });
 
   test('validate a correct object', async () => {
