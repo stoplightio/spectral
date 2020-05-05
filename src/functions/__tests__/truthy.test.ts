@@ -3,7 +3,7 @@ import { truthy } from '../truthy';
 function runTruthy(targetVal: any, targetPath?: any) {
   return truthy(
     targetVal,
-    void 0,
+    null,
     {
       given: ['$'],
       target: targetPath,

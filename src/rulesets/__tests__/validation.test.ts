@@ -256,6 +256,217 @@ describe('Ruleset Validation', () => {
       }).toThrow(ValidationError);
     });
   });
+
+  describe('then validation', () => {
+    describe('alphabetical function', () => {
+      it('given valid then, does not complain', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'alphabetical',
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  field: 'test',
+                  function: 'alphabetical',
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  field: 'test',
+                  function: 'alphabetical',
+                  functionOptions: {
+                    keyedBy: 'bar',
+                  },
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  field: 'test',
+                  function: 'alphabetical',
+                  functionOptions: null,
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+      });
+
+      it('does not complain about empty functionOptions', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'alphabetical',
+                  functionOptions: {},
+                },
+              },
+            },
+          }),
+        ).not.toThrow(ValidationError);
+      });
+
+      it('complains about extra options', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'alphabetical',
+                  functionOptions: {
+                    foo: true,
+                  },
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+
+      it('complains about invalid keyedBy', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'alphabetical',
+                  functionOptions: {
+                    keyedBy: 2,
+                  },
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+    });
+
+    describe.each(['truthy', 'falsy', 'undefined'])('%s function', name => {
+      it('given valid then, does not complain', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: name,
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  field: 'test',
+                  function: name,
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+      });
+
+      it('complains about the presence of functionOptions', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: name,
+                  functionOptions: {},
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+    });
+
+    describe('custom function', () => {
+      it('given valid then, does not complain', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'foo',
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  field: 'test',
+                  function: 'foo',
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+      });
+
+      it('complains about non-object functionOptions', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'foo',
+                  functionOptions: true,
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+    });
+  });
 });
 
 describe('Function Validation', () => {

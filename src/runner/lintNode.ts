@@ -40,7 +40,7 @@ export const lintNode = (
       try {
         targetResults = func(
           target.value,
-          then.functionOptions || {},
+          then.functionOptions ?? null,
           {
             given: givenPath,
             target: targetPath,

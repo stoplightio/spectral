@@ -7,9 +7,9 @@ export interface IFunctionContext {
   cache: Map<unknown, unknown>;
 }
 
-export type IFunction<O extends object | undefined = undefined> = (
+export type IFunction<O extends object | null = null> = (
   targetValue: any,
-  options: O extends undefined ? undefined : O,
+  options: O extends null ? null : O,
   paths: IFunctionPaths,
   otherValues: IFunctionValues,
 ) => void | IFunctionResult[] | Promise<void | IFunctionResult[]>;
