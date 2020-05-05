@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../../index';
+import { Document, Parsers, RuleType, Spectral } from '../../../../index';
 import { rules } from '../../index.json';
 import oasPathParam from '../oasPathParam';
 
@@ -259,30 +259,35 @@ describe('oasPathParam', () => {
   });
 
   test('Error if paths are functionally equivalent', async () => {
-    const results = await s.run({
-      paths: {
-        '/foo/{boo}': {
-          parameters: [
-            {
-              name: 'boo',
-              in: 'path',
-              required: true,
-            },
-          ],
-          get: {},
-        },
-        '/foo/{bar}': {
-          parameters: [
-            {
-              name: 'bar',
-              in: 'path',
-              required: true,
-            },
-          ],
-          get: {},
-        },
-      },
-    });
+    const results = await s.run(
+      new Document(
+        `{
+  "paths": {
+    "/foo/{boo}": {
+      "parameters": [
+        {
+          "name": "boo",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {}
+    },
+    "/foo/{bar}": {
+      "parameters": [
+        {
+          "name": "bar",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {}
+    }
+  }
+}`,
+        Parsers.Json,
+      ),
+    );
 
     expect(results).toEqual([
       {
@@ -291,11 +296,11 @@ describe('oasPathParam', () => {
         path: ['paths', '/foo/{bar}'],
         range: {
           end: {
-            character: 15,
-            line: 20,
+            character: 5,
+            line: 21,
           },
           start: {
-            character: 17,
+            character: 18,
             line: 12,
           },
         },
