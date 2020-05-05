@@ -266,6 +266,7 @@ describe('Ruleset Validation', () => {
       'schema',
       'schema-path',
       'unreferencedReusableObject',
+      'xor',
     ])('%s function', name => {
       it('complains about empty options', () => {
         expect(
@@ -848,25 +849,25 @@ describe('Ruleset Validation', () => {
         ).toThrow(ValidationError);
       });
     });
-    describe('schema-path function', () => {
-      it.each([{ match: 'foo' }, { notMatch: 'foo' }, { match: 'foo', notMatch: 'bar' }])(
-        'given valid then %s',
-        functionOptions => {
-          expect(
-            assertValidRuleset.bind(null, {
-              rules: {
-                rule: {
-                  given: '$',
-                  then: {
-                    function: 'pattern',
-                    functionOptions,
+
+    describe('unreferencedReusableObject function', () => {
+      it('given valid then, does not complain', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'unreferencedReusableObject',
+                  functionOptions: {
+                    reusableObjectsLocation: 'foo',
                   },
                 },
               },
-            }),
-          ).not.toThrow();
-        },
-      );
+            },
+          }),
+        ).not.toThrow();
+      });
 
       it('complains about extra options', () => {
         expect(
@@ -875,9 +876,9 @@ describe('Ruleset Validation', () => {
               rule: {
                 given: '$',
                 then: {
-                  function: 'pattern',
+                  function: 'unreferencedReusableObject',
                   functionOptions: {
-                    match: 'foo',
+                    reusableObjectsLocation: 'foo',
                     foo: true,
                   },
                 },
@@ -887,24 +888,96 @@ describe('Ruleset Validation', () => {
         ).toThrow(ValidationError);
       });
 
-      it.each([{ match: 2 }, { notMatch: null }, { match: 4, notMatch: 'bar' }])(
-        'complains about invalid options %s',
-        functionOptions => {
-          expect(
-            assertValidRuleset.bind(null, {
-              rules: {
-                rule: {
-                  given: '$',
-                  then: {
-                    function: 'pattern',
-                    functionOptions,
+      it('complains about invalid options', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'unreferencedReusableObject',
+                  functionOptions: {
+                    reusableObjectsLocation: 2,
                   },
                 },
               },
-            }),
-          ).toThrow(ValidationError);
-        },
-      );
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+    });
+
+    describe('xor function', () => {
+      it('given valid then, does not complain', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'xor',
+                  functionOptions: {
+                    properties: ['foo', 'bar'],
+                  },
+                },
+              },
+            },
+          }),
+        ).not.toThrow();
+      });
+
+      it('complains about extra options', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'xor',
+                  functionOptions: {
+                    properties: ['foo', 2],
+                    foo: true,
+                  },
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+
+      it('complains about too few properties', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'xor',
+                  functionOptions: {
+                    properties: ['foo'],
+                  },
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
+
+      it.each([[null], 2, null])('complains about invalid properties %s', functionOptions => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {
+              rule: {
+                given: '$',
+                then: {
+                  function: 'xor',
+                  functionOptions,
+                },
+              },
+            },
+          }),
+        ).toThrow(ValidationError);
+      });
     });
 
     describe('custom function', () => {

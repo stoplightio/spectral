@@ -272,6 +272,35 @@
           "if": {
             "properties": {
               "function": {
+                "const": "xor"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "functionOptions": {
+                "additionalProperties": false,
+                "properties": {
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 2
+                  }
+                },
+                "type": "object",
+                "required": ["properties"]
+              }
+            },
+            "required": ["functionOptions"]
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "function": {
                 "type": "string",
                 "enum": [
                   "truthy",
