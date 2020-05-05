@@ -29,3 +29,6 @@ test.each = input => (name: string, fn: Function) => {
     }
   }
 };
+
+// @ts-ignore
+describe.each = test.each;
