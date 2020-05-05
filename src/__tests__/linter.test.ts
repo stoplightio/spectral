@@ -5,7 +5,7 @@ import { omit } from 'lodash';
 import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { mergeRules, readRuleset } from '../rulesets';
-import { IFunctionResult, RuleCollection, Spectral } from '../spectral';
+import { RuleCollection, Spectral } from '../spectral';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
@@ -60,7 +60,7 @@ describe('linter', () => {
     const message = '4xx responses require a description';
 
     spectral.setFunctions({
-      func1: (val: unknown): IFunctionResult[] | void => {
+      func1: (val: unknown) => {
         if (!val) {
           return [
             {
