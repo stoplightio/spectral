@@ -3,13 +3,18 @@ import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
 
 describe('oas3-valid-oas-parameter-example', () => {
-  const s = new Spectral();
-  s.registerFormat('oas3', () => true);
-  s.setRules({
-    'oas3-valid-oas-parameter-example': Object.assign(ruleset.rules['oas3-valid-oas-parameter-example'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['oas3-valid-oas-parameter-example'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+
+    s.registerFormat('oas3', () => true);
+    s.setRules({
+      'oas3-valid-oas-parameter-example': Object.assign(ruleset.rules['oas3-valid-oas-parameter-example'], {
+        recommended: true,
+        type: RuleType[ruleset.rules['oas3-valid-oas-parameter-example'].type],
+      }),
+    });
   });
 
   test('will pass when simple example is valid', async () => {

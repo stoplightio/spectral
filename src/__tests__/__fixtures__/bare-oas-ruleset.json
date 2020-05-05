@@ -13,5 +13,12 @@
         }
       }
     }
+  },
+  "except": {
+    "/test/file.json#/info": ["info-contact", "info-description"],
+    "/test/file.json#": [ "oas3-api-servers"],
+    "/test/file.json#/paths/~1a.two/get": ["operation-2xx-response"],
+    "/test/file.json#/paths/~1b.three/get": ["operation-2xx-response"],
+    "another.yaml#": ["dummy-rule", "info-contact"]
   }
 }

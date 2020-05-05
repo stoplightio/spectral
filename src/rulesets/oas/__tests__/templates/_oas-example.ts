@@ -3,13 +3,17 @@ import { RuleType, Spectral } from '../../../../spectral';
 import { rules } from '../../index.json';
 
 export default (ruleName: string, path: string) => {
-  const s = new Spectral();
-  s.registerFormat('oas3', () => true);
-  s.setRules({
-    [ruleName]: Object.assign(rules[ruleName], {
-      recommended: true,
-      type: RuleType[rules[ruleName].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+    s.registerFormat('oas3', () => true);
+    s.setRules({
+      [ruleName]: Object.assign(rules[ruleName], {
+        recommended: true,
+        type: RuleType[rules[ruleName].type],
+      }),
+    });
   });
 
   test('will pass when simple example is valid', async () => {
