@@ -1,16 +1,20 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../../index';
+import { Document, Parsers, RuleType, Spectral } from '../../../../index';
 import { rules } from '../../index.json';
 import oasPathParam from '../oasPathParam';
 
 describe('oasPathParam', () => {
-  const s = new Spectral();
-  s.setFunctions({ oasPathParam });
-  s.setRules({
-    'path-params': Object.assign(rules['path-params'], {
-      recommended: true,
-      type: RuleType[rules['path-params'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+    s.setFunctions({ oasPathParam });
+    s.setRules({
+      'path-params': Object.assign(rules['path-params'], {
+        recommended: true,
+        type: RuleType[rules['path-params'].type],
+      }),
+    });
   });
 
   test('No error if templated path is not used', async () => {
@@ -255,44 +259,49 @@ describe('oasPathParam', () => {
   });
 
   test('Error if paths are functionally equivalent', async () => {
-    const results = await s.run({
-      paths: {
-        '/foo/{boo}': {
-          parameters: [
-            {
-              name: 'boo',
-              in: 'path',
-              required: true,
-            },
-          ],
-          get: {},
-        },
-        '/foo/{bar}': {
-          parameters: [
-            {
-              name: 'bar',
-              in: 'path',
-              required: true,
-            },
-          ],
-          get: {},
-        },
-      },
-    });
+    const results = await s.run(
+      new Document(
+        `{
+  "paths": {
+    "/foo/{boo}": {
+      "parameters": [
+        {
+          "name": "boo",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {}
+    },
+    "/foo/{bar}": {
+      "parameters": [
+        {
+          "name": "bar",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {}
+    }
+  }
+}`,
+        Parsers.Json,
+      ),
+    );
 
     expect(results).toEqual([
       {
         code: 'path-params',
         message: `The paths \`/foo/{boo}\` and \`/foo/{bar}\` are equivalent.`,
-        path: ['paths'],
+        path: ['paths', '/foo/{bar}'],
         range: {
           end: {
-            character: 15,
-            line: 20,
+            character: 5,
+            line: 21,
           },
           start: {
-            character: 10,
-            line: 1,
+            character: 18,
+            line: 12,
           },
         },
         severity: DiagnosticSeverity.Error,

@@ -4,13 +4,17 @@ import { rules } from '../../index.json';
 import oasOpParams from '../oasOpParams';
 
 describe('oasOpParams', () => {
-  const s = new Spectral();
-  s.setFunctions({ oasOpParams });
-  s.setRules({
-    'operation-parameters': Object.assign(rules['operation-parameters'], {
-      recommended: true,
-      type: RuleType[rules['operation-parameters'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(() => {
+    s = new Spectral();
+    s.setFunctions({ oasOpParams });
+    s.setRules({
+      'operation-parameters': Object.assign(rules['operation-parameters'], {
+        recommended: true,
+        type: RuleType[rules['operation-parameters'].type],
+      }),
+    });
   });
 
   test('No error if no params', async () => {
