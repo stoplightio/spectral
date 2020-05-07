@@ -6,11 +6,9 @@ export interface ILengthRuleOptions {
 }
 
 export const length: IFunction<ILengthRuleOptions> = (targetVal, opts) => {
-  const results: IFunctionResult[] = [];
+  if (targetVal === void 0 || targetVal === null) return;
 
   const { min, max } = opts;
-
-  if (!targetVal) return results;
 
   let value;
   const valueType = typeof targetVal;
@@ -24,7 +22,9 @@ export const length: IFunction<ILengthRuleOptions> = (targetVal, opts) => {
     value = targetVal.length;
   }
 
-  if (typeof value === 'undefined') return results;
+  if (typeof value === 'undefined') return;
+
+  const results: IFunctionResult[] = [];
 
   if (typeof min !== 'undefined' && value < min) {
     results.push({

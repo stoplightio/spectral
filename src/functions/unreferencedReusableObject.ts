@@ -8,13 +8,7 @@ export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: st
   _paths,
   otherValues,
 ) => {
-  if (!isObject(data)) return [];
-
-  if (!opts.reusableObjectsLocation.startsWith('#')) {
-    throw new Error(
-      "Function option 'reusableObjectsLocation' doesn't look like containing a valid local json pointer.",
-    );
-  }
+  if (!isObject(data)) return;
 
   const normalizedSource = otherValues.documentInventory.source ?? '';
 

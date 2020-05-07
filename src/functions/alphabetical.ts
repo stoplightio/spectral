@@ -1,5 +1,5 @@
 import { isObject } from 'lodash';
-import { IFunction, IFunctionResult } from '../types';
+import { IFunction } from '../types';
 
 export interface IAlphaRuleOptions {
   /** if sorting array of objects, which key to use for comparison */
@@ -29,13 +29,9 @@ const getUnsortedItems = <T>(arr: T[], compareFn: (a: T, B: T) => number): null 
 };
 
 export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opts, paths, { documentInventory }) => {
-  const results: IFunctionResult[] = [];
+  if (!isObject(targetVal)) return;
 
-  if (!isObject(targetVal)) {
-    return results;
-  }
-
-  let targetArray: any[] | string[] = [];
+  let targetArray: any[] | string[];
 
   if (Array.isArray(targetVal)) {
     targetArray = targetVal;
@@ -46,14 +42,14 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
   }
 
   if (targetArray.length < 2) {
-    return results;
+    return;
   }
 
   const keyedBy = opts?.keyedBy;
 
   const unsortedItems = getUnsortedItems<unknown>(
     targetArray,
-    keyedBy
+    keyedBy !== void 0
       ? (a, b) => {
           if (!isObject(a) || !isObject(b)) return 0;
 
@@ -66,16 +62,19 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
 
   if (unsortedItems != null) {
     const path = paths.target || paths.given;
-
-    results.push({
-      ...(!keyedBy && { path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]] }),
-      message: keyedBy
-        ? 'properties are not in alphabetical order'
-        : `at least 2 properties are not in alphabetical order: "${
-            targetArray[unsortedItems[0]]
-          }" should be placed after "${targetArray[unsortedItems[1]]}"`,
-    });
+    return [
+      {
+        ...(!keyedBy && {
+          path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]],
+        }),
+        message: keyedBy
+          ? 'properties are not in alphabetical order'
+          : `at least 2 properties are not in alphabetical order: "${
+              targetArray[unsortedItems[0]]
+            }" should be placed after "${targetArray[unsortedItems[1]]}"`,
+      },
+    ];
   }
 
-  return results;
+  return;
 };

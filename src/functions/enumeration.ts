@@ -5,11 +5,11 @@ export interface IEnumRuleOptions {
 }
 
 export const enumeration: IFunction<IEnumRuleOptions> = (targetVal, opts) => {
-  const results: IFunctionResult[] = [];
+  if (targetVal === void 0) return;
 
   const { values } = opts;
 
-  if (!targetVal) return results;
+  const results: IFunctionResult[] = [];
 
   if (!values.includes(targetVal)) {
     results.push({
