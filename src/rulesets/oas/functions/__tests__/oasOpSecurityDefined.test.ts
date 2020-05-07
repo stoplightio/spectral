@@ -5,14 +5,18 @@ import oasOpSecurityDefined from '../oasOpSecurityDefined';
 
 describe('oasOpSecurityDefined', () => {
   describe('oas2', () => {
-    const s = new Spectral();
-    s.registerFormat('oas2', () => true);
-    s.setFunctions({ oasOpSecurityDefined });
-    s.setRules({
-      'oas2-operation-security-defined': Object.assign(oasRules['oas2-operation-security-defined'], {
-        recommended: true,
-        type: RuleType[oasRules['oas2-operation-security-defined'].type],
-      }),
+    let s: Spectral;
+
+    beforeEach(() => {
+      s = new Spectral();
+      s.registerFormat('oas2', () => true);
+      s.setFunctions({ oasOpSecurityDefined });
+      s.setRules({
+        'oas2-operation-security-defined': Object.assign(oasRules['oas2-operation-security-defined'], {
+          recommended: true,
+          type: RuleType[oasRules['oas2-operation-security-defined'].type],
+        }),
+      });
     });
 
     test('validate a correct object (just in body)', async () => {
