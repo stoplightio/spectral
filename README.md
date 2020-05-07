@@ -67,7 +67,7 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 - [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
 
-## Licence
+## License
 
 Spectral is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
 
