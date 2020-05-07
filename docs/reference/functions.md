@@ -8,9 +8,9 @@ Enforce alphabetical content, for simple arrays, or for objects by passing a key
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-keyedBy | key to sort an object by | no
+| name    | description              | type     | required? |
+| ------- | ------------------------ | -------- | --------- |
+| keyedBy | key to sort an object by | `string` | no        |
 
 <!-- title: example -->
 
@@ -33,9 +33,9 @@ Does the field value exist in this set of possible values?
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-values | an array of possible values | yes
+| name   | description                 | type                   | required? |
+| ------ | --------------------------- | ---------------------- | --------- |
+| values | an array of possible values | `Array<number,string>` | yes       |
 
 <!-- title: example -->
 
@@ -83,22 +83,22 @@ Regular expressions!
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-match | if provided, value must match this regex | no
-notMatch | if provided, value must _not_ match this regex | no
+| name     | description                                    | type     | required? |
+| -------- | ---------------------------------------------- | -------- | --------- |
+| match    | if provided, value must match this regex       | `string` | no        |
+| notMatch | if provided, value must _not_ match this regex | `string` | no        |
 
 <!-- title: example -->
 
 ```yaml
-  path-no-trailing-slash:
-    description: Paths should not end with `#/`.
-    type: style
-    given: "$.paths[*]~"
-    then:
-      function: pattern
-      functionOptions:
-        notMatch: ".+\/$"
+path-no-trailing-slash:
+  description: Paths should not end with `#/`.
+  type: style
+  given: "$.paths[*]~"
+  then:
+    function: pattern
+    functionOptions:
+      notMatch: ".+\/$"
 ```
 
 ## casing
@@ -107,22 +107,23 @@ Text must match a certain case, like `camelCase` or `snake_case`.
 
 <!-- title: functionOptions -->
 
-name                   | description                                             | required?
------------------------|---------------------------------------------------------|----------
-type                   | the casing type to match against                        | yes
-disallowDigits         | if not truthy, digits are allowed                       | no
-separator.char         | additional char to separate groups of words             | no
-separator.allowLeading | can the group separator char be used at the first char? | no
+| name                   | description                                             | type         | required? |
+| ---------------------- | ------------------------------------------------------- | ------------ | --------- |
+| type                   | the casing type to match against                        | `CasingType` | yes       |
+| disallowDigits         | if not truthy, digits are allowed                       | `boolean`    | no        |
+| separator.char         | additional char to separate groups of words             | `string`     | no        |
+| separator.allowLeading | can the group separator char be used at the first char? | `boolean`    | no        |
 
 **Note:** In advanced scenarios, `separator.char` and `separator.allowLeading` can be leveraged to validate certain naming conventions.
 For instance, the following naming style could be enforced:
- - Headers _(eg. `X-YourMighty-Header`)_: type: `pascal`, separator.char: `-`
- - Camel cased paths _(eg. `/path/toThe/amazingResource`)_: type: `camel`, separator.char: `/`, separator.allowLeading: `true`
+
+- Headers _(eg. `X-YourMighty-Header`)_: type: `pascal`, separator.char: `-`
+- Camel cased paths _(eg. `/path/toThe/amazingResource`)_: type: `camel`, separator.char: `/`, separator.allowLeading: `true`
 
 Available types are:
 
 | name   | sample         |
-|--------|----------------|
+| ------ | -------------- |
 | flat   | verylongname   |
 | camel  | veryLongName   |
 | pascal | VeryLongName   |
@@ -146,14 +147,14 @@ camel-case-name:
 
 ## schema
 
-Use JSON Schema (draft 4, 6 or 7) to treat the contents of the $given JSON Path as a JSON instance.
+Use JSON Schema (draft 4, 6 or 7) to treat the contents of the \$given JSON Path as a JSON instance.
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-schema | a valid JSON Schema document | yes
-allErrors | returns all errors when `true`; otherwise only returns the first error | no
+| name      | description                                                            | type         | required? |
+| --------- | ---------------------------------------------------------------------- | ------------ | --------- |
+| schema    | a valid JSON Schema document                                           | `JSONSchema` | yes       |
+| allErrors | returns all errors when `true`; otherwise only returns the first error | `boolean`    | no        |
 
 <!-- title: example -->
 
@@ -180,27 +181,27 @@ The schema-path rule is very meta. It is an extension of the schema rule, but it
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-field | the field to check | yes
-schemaPath | a json path pointing to the json schema to use | yes
-allErrors | returns all errors when `true`; otherwise only returns the first error | no
+| name       | description                                                            | type      | required? |
+| ---------- | ---------------------------------------------------------------------- | --------- | --------- |
+| field      | the field to check                                                     | `string`  | yes       |
+| schemaPath | a json path pointing to the json schema to use                         | `string`  | yes       |
+| allErrors  | returns all errors when `true`; otherwise only returns the first error | `boolean` | no        |
 
 <!-- title: example -->
 
-``` yaml
-  valid-oas-example-in-parameters:
-    description: Examples must be valid against their defined schema.
-    message: "{{error}}"
-    recommended: true
-    severity: 0
-    type: validation
-    given: "$..parameters..[?(@.example && @.schema)]"
-    then:
-      function: schemaPath
-      functionOptions:
-        field: example
-        schemaPath: "$.schema"
+```yaml
+valid-oas-example-in-parameters:
+  description: Examples must be valid against their defined schema.
+  message: "{{error}}"
+  recommended: true
+  severity: 0
+  type: validation
+  given: "$..parameters..[?(@.example && @.schema)]"
+  then:
+    function: schemaPath
+    functionOptions:
+      field: example
+      schemaPath: "$.schema"
 ```
 
 ## truthy
@@ -209,7 +210,7 @@ The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically any
 
 <!-- title: example -->
 
-``` yaml
+```yaml
 important-fields:
   description: Absolutely must have a title and a description
   message: "Missing the {{property}}"
@@ -226,7 +227,7 @@ important-fields:
 
 The value must be `undefined`. When combined with `field: foo` on an object the `foo` property must be undefined.
 
-_**Note:** Due to the way YAML works, just having `foo: ` with no value set is not the same as being `undefined`. This would be `falsy`._
+_**Note:** Due to the way YAML works, just having `foo:` with no value set is not the same as being `undefined`. This would be `falsy`._
 
 ## unreferencedReusableObject
 
@@ -238,13 +239,13 @@ _Warning:_ This function may identify false positives when used against a specif
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-reusableObjectsLocation | a local json pointer to the document member holding the reusable objects (eg. `#/definitions` for an OAS2 document, `#/components/schemas` for an OAS3 document). | yes
+| name                    | description                                                                                                                                                       | type     | required? |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- |
+| reusableObjectsLocation | a local json pointer to the document member holding the reusable objects (eg. `#/definitions` for an OAS2 document, `#/components/schemas` for an OAS3 document). | `string` | yes       |
 
 <!-- title: example -->
 
-``` yaml
+```yaml
 unused-definition:
   description: Potentially unused definition has been detected.
   recommended: true
@@ -263,9 +264,9 @@ Communicate that one of these properties is required, and no more than one is al
 
 <!-- title: functionOptions -->
 
-name | description | required?
----------|----------|---------
-properties | the properties to check | yes
+| name       | description             | type       | required? |
+| ---------- | ----------------------- | ---------- | --------- |
+| properties | the properties to check | `string[]` | yes       |
 
 <!-- title: example -->
 
@@ -278,8 +279,8 @@ components-examples-value-or-externalValue:
     function: xor
     functionOptions:
       properties:
-      - externalValue
-      - value
+        - externalValue
+        - value
 ```
 
 ## typedEnum
