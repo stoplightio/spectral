@@ -143,7 +143,7 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
   }`;
 };
 
-export const schema: ISchemaFunction = (targetVal, opts, paths) => {
+export const schema: ISchemaFunction = (targetVal, opts, paths, { context }) => {
   const results: IFunctionResult[] = [];
 
   const path = paths.target || paths.given;
@@ -191,13 +191,16 @@ export const schema: ISchemaFunction = (targetVal, opts, paths) => {
       }
     }
   } catch (ex) {
-    if (ex instanceof AJV.MissingRefError) {
+    if (!(ex instanceof AJV.MissingRefError)) {
+      throw ex;
+    } else if (context === 'unresolved') {
+      // let's ignore any $ref errors if schema fn is provided with already resolved content,
+      // if our resolver fails to resolve them,
+      // ajv is unlikely to do it either, since it won't have access to the whole document, but a small portion of it
       results.push({
         message: ex.message,
         path,
       });
-    } else {
-      throw ex;
     }
   }
 

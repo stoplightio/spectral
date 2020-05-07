@@ -7,7 +7,7 @@ function runPayloadValidation(targetVal: any) {
     targetVal,
     null,
     { given: ['$', 'components', 'messages', 'aMessage'] },
-    { given: null, original: null, documentInventory: {} as any },
+    { given: null, original: null, documentInventory: {} as any, context: 'resolved' },
   );
 }
 

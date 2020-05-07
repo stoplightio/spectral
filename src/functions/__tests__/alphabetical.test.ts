@@ -14,6 +14,7 @@ function runAlphabetical(target: any, keyedBy?: string) {
       given: null,
       original: null,
       documentInventory: new DocumentInventory(new Document(safeStringify(target), Parsers.Json), {} as any),
+      context: 'resolved',
     },
   );
 }
@@ -118,6 +119,7 @@ describe('alphabetical', () => {
           given: null,
           original: null,
           documentInventory: new DocumentInventory(document, {} as any),
+          context: 'resolved',
         },
       ),
     ).toEqual([

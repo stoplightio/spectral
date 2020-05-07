@@ -23,6 +23,7 @@ export interface IFunctionValues {
   original: any;
   given: any;
   documentInventory: DocumentInventory;
+  context: 'resolved' | 'unresolved';
 }
 
 export interface IFunctionResult {
