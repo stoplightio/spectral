@@ -6,7 +6,7 @@ import { IParser } from './parsers/types';
 import { IRuleResult } from './types';
 import { startsWithProtocol } from './utils';
 
-export const STDIN: string = '<STDIN>';
+export const STDIN = '<STDIN>';
 
 export interface IDocument<D = unknown> {
   readonly source: string | null;

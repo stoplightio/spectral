@@ -49,8 +49,8 @@ export class Spectral {
   private readonly _computeFingerprint: ComputeFingerprintFunc;
 
   constructor(opts?: IConstructorOpts) {
-    this._computeFingerprint = memoize(opts?.computeFingerprint || defaultComputeResultFingerprint);
-    this._resolver = opts?.resolver || new Resolver();
+    this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
+    this._resolver = opts?.resolver ?? new Resolver();
     this.formats = {};
   }
 

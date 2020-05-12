@@ -463,7 +463,9 @@ describe('Linter service', () => {
         expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
         expect(output).toEqual(
           expect.not.arrayContaining([
-            expect.objectContaining({ message: 'Info object should contain `contact` object' }),
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
           ]),
         );
       });
@@ -521,7 +523,11 @@ describe('Linter service', () => {
       });
 
       return expect(run('lint http://foo.local/openapi')).resolves.toEqual(
-        expect.arrayContaining([expect.objectContaining({ message: 'Info object should contain `contact` object.' })]),
+        expect.arrayContaining([
+          expect.objectContaining({
+            message: 'Info object should contain `contact` object.',
+          }),
+        ]),
       );
     });
   });
