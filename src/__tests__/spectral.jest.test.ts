@@ -61,9 +61,7 @@ describe('Spectral', () => {
         },
       };
 
-      nock('https://localhost:4000')
-        .get('/custom-ruleset')
-        .reply(200, JSON.stringify(ruleset));
+      nock('https://localhost:4000').get('/custom-ruleset').reply(200, JSON.stringify(ruleset));
 
       const s = new Spectral();
       await s.loadRuleset('https://localhost:4000/custom-ruleset');

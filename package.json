@@ -41,8 +41,9 @@
     "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
     "generate-assets": "node -r ts-node/register ./scripts/generate-assets.ts",
     "inline-version": "./scripts/inline-version.js",
+    "prelint": "tsc --noEmit",
     "lint.fix": "yarn lint --fix",
-    "lint": "tsc --noEmit && tslint 'src/**/*.ts'",
+    "lint": "tslint 'src/**/*.ts'",
     "copy.html-templates": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
     "postbuild.functions": "copyfiles -u 1 \"dist/rulesets/{oas,asyncapi}/functions/*.js\" ./",
     "postbuild": "yarn build.functions && yarn generate-assets",
@@ -57,6 +58,9 @@
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
     "test": "jest --silent"
+  },
+  "resolutions": {
+    "prettier": "^2.0.2"
   },
   "dependencies": {
     "@stoplight/json": "3.6.0",
@@ -116,6 +120,7 @@
     "nock": "~12.0.2",
     "node-html-parser": "^1.2.7",
     "pkg": "^4.4.8",
+    "prettier": "^2.0.2",
     "recast": "^0.18.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.7.6",

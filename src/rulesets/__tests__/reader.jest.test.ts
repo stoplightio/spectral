@@ -776,9 +776,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should not fail if function cannot be loaded', () => {
-    nock('https://unpkg.com')
-      .get('/boo.js')
-      .reply(404);
+    nock('https://unpkg.com').get('/boo.js').reply(404);
 
     return expect(readRuleset(rulesetWithMissingFunctions)).resolves.toEqual({
       rules: {},
@@ -833,9 +831,7 @@ describe('Rulesets reader', () => {
   });
 
   it('given non-existent ruleset should output error', () => {
-    nock('https://unpkg.com')
-      .get('/oneParentRuleset')
-      .reply(404);
+    nock('https://unpkg.com').get('/oneParentRuleset').reply(404);
 
     return expect(readRuleset('oneParentRuleset')).rejects.toThrowError(
       'Could not parse https://unpkg.com/oneParentRuleset: Not Found',
@@ -843,10 +839,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should reject if request is not finished within a specified timeout', () => {
-    nock('https://unpkg.com')
-      .get('/oneParentRuleset')
-      .delay(10000)
-      .reply(200);
+    nock('https://unpkg.com').get('/oneParentRuleset').delay(10000).reply(200);
 
     const ruleset = readRuleset('oneParentRuleset', { timeout: 100 });
 
