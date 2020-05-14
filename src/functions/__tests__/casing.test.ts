@@ -1,4 +1,3 @@
-import { AssertionError } from 'assert';
 import { casing, CasingType } from '../casing';
 
 function runCasing(target: unknown, type: CasingType, disallowDigits?: boolean, separator?: any) {
@@ -18,10 +17,6 @@ describe('casing', () => {
 
   test('given empty string target should return nothing', () => {
     expect(runCasing('', CasingType.camel)).toBeUndefined();
-  });
-
-  test('given unknown case type should return nothing', () => {
-    expect(() => runCasing('2', 'foo' as any)).toThrowError(AssertionError);
   });
 
   describe('casing type', () => {
@@ -220,39 +215,6 @@ describe('casing', () => {
   });
 
   describe('casing with custom separator configuration', () => {
-    describe('parameters validation', () => {
-      const casingTypes = Object.keys(CasingType);
-
-      test.each([...casingTypes])(
-        'with "%s" type - throws when allowLeadingSeparator option is used without specifying separator',
-        type => {
-          expect(() =>
-            runCasing('irrelevant value', CasingType[type], undefined, { char: undefined, allowLeading: true }),
-          ).toThrow(AssertionError);
-        },
-      );
-
-      const invalidSepLengthCombinations = Object.values(casingTypes).reduce<Array<[string, number]>>(
-        (combinations, type) => {
-          for (const len of [0, 2, 3, 17]) {
-            combinations.push([type, len]);
-          }
-
-          return combinations;
-        },
-        [],
-      );
-
-      test.each(invalidSepLengthCombinations)(
-        'with type "%s" - throws when separator value is "%i" (not exactly one char long)',
-        (type, len) => {
-          expect(() => runCasing('irrelevant value', CasingType[type], undefined, { char: '-'.repeat(len) })).toThrow(
-            AssertionError,
-          );
-        },
-      );
-    });
-
     const baseData: Array<[string, string, string, string]> = [[CasingType.flat, 'flat', 'flat01', 'Nope']];
 
     const testCases: Array<[string, boolean, string, boolean, string, string, string]> = [];

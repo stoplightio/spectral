@@ -6,7 +6,7 @@
         "rules": {
             "type": "object",
             "additionalProperties": {
-                "$ref": "rule.schema.json"
+                "$ref": "rule.schema.json#"
             }
         },
         "formats": {

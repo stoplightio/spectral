@@ -24,7 +24,7 @@ export interface ISchemaFunction extends IFunction<ISchemaOptions> {
 export interface ISchemaOptions {
   schema: object;
   // The oasVersion, either 2 or 3 for OpenAPI Spec versions, could also be 3.1 or a larger number if there's a need for it, otherwise JSON Schema
-  oasVersion?: Optional<number>;
+  oasVersion?: Optional<2 | 3 | 3.1>;
   allErrors?: boolean;
   ajv?: ValidateFunction;
 

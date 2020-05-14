@@ -1,13 +1,11 @@
 import { functions } from '../../../../functions';
 import { typedEnum } from '../typedEnum';
 
-const defaultReportingThreshold = 3;
-
-function runTypedEnum(targetVal: any, reportingThreshold: any) {
+function runTypedEnum(targetVal: any) {
   return typedEnum.call(
     { functions },
     targetVal,
-    { reportingThreshold },
+    null,
     { given: ['$'] },
     { given: null, original: null, documentInventory: {} as any },
   );
@@ -21,7 +19,7 @@ describe('typedEnum', () => {
         enum: enumContent,
       };
 
-      expect(runTypedEnum(schema, defaultReportingThreshold)).toBeUndefined();
+      expect(runTypedEnum(schema)).toBeUndefined();
     });
   });
 
@@ -31,7 +29,7 @@ describe('typedEnum', () => {
       enum: [],
     };
 
-    expect(runTypedEnum(schema, defaultReportingThreshold)).toBeUndefined();
+    expect(runTypedEnum(schema)).toBeUndefined();
   });
 
   describe('basic', () => {
@@ -41,7 +39,7 @@ describe('typedEnum', () => {
         enum: [123, 456],
       };
 
-      expect(runTypedEnum(schema, defaultReportingThreshold)).toBeUndefined();
+      expect(runTypedEnum(schema)).toBeUndefined();
     });
 
     test('is undefined when all enum values respect the type', () => {
@@ -50,7 +48,7 @@ describe('typedEnum', () => {
         enum: [123, 456],
       };
 
-      expect(runTypedEnum(schema, defaultReportingThreshold)).toBeUndefined();
+      expect(runTypedEnum(schema)).toBeUndefined();
     });
 
     test.each([undefined])('is undefined when type is "%s"', (typeValue: unknown) => {
@@ -59,7 +57,7 @@ describe('typedEnum', () => {
         enum: [123, 456],
       };
 
-      expect(runTypedEnum(schema, defaultReportingThreshold)).toBeUndefined();
+      expect(runTypedEnum(schema)).toBeUndefined();
     });
 
     test('identifies enum values which do not respect the type', () => {
@@ -68,7 +66,7 @@ describe('typedEnum', () => {
         enum: [123, 'a string!', 456, 'and another one!'],
       };
 
-      expect(runTypedEnum(schema, defaultReportingThreshold)).toEqual([
+      expect(runTypedEnum(schema)).toEqual([
         {
           message: 'Enum value `a string!` does not respect the specified type `integer`.',
           path: ['$', 'enum', 1],
@@ -97,7 +95,7 @@ describe('typedEnum', () => {
           enum: valids,
         };
 
-        expect(runTypedEnum(schema, defaultReportingThreshold)).toBeUndefined();
+        expect(runTypedEnum(schema)).toBeUndefined();
       },
     );
 
@@ -109,7 +107,7 @@ describe('typedEnum', () => {
           enum: [valids[0], invalid],
         };
 
-        const results = runTypedEnum(schema, defaultReportingThreshold);
+        const results = runTypedEnum(schema);
 
         expect(results[0].message).toContain(`value \`${invalid}\``);
       },

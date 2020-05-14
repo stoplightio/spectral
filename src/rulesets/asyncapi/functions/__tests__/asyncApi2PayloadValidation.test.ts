@@ -1,11 +1,11 @@
 import { functions } from '../../../../functions';
 import { asyncApi2PayloadValidation } from '../asyncApi2PayloadValidation';
 
-function runPayloadValidation(targetVal: any, field: string) {
+function runPayloadValidation(targetVal: any) {
   return asyncApi2PayloadValidation.call(
     { functions },
     targetVal,
-    { field },
+    null,
     { given: ['$', 'components', 'messages', 'aMessage'] },
     { given: null, original: null, documentInventory: {} as any },
   );
@@ -18,7 +18,7 @@ describe('asyncApi2PayloadValidation', () => {
       deprecated: 14,
     };
 
-    const results = runPayloadValidation(payload, '$');
+    const results = runPayloadValidation(payload);
 
     expect(results).toEqual([
       {

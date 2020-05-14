@@ -1,5 +1,4 @@
 import { Dictionary } from '@stoplight/types';
-import { AssertionError } from 'assert';
 import { escapeRegExp } from 'lodash';
 import { IFunction } from '../types';
 
@@ -37,8 +36,6 @@ export const casing: IFunction<ICasingOptions> = (targetVal, opts) => {
     return;
   }
 
-  assertValidOptions(opts);
-
   const casingValidator = buildFrom(CASES[opts.type], opts);
 
   if (casingValidator.test(targetVal)) {
@@ -51,26 +48,6 @@ export const casing: IFunction<ICasingOptions> = (targetVal, opts) => {
     },
   ];
 };
-
-function assertValidOptions(opts: ICasingOptions): asserts opts is ICasingOptions {
-  if (!(opts.type in CASES)) {
-    throw new AssertionError({ message: `Invalid '${opts.type}' type value.` });
-  }
-
-  if (opts.separator === undefined) {
-    return;
-  }
-
-  if (opts.separator.allowLeading !== undefined && opts.separator.char === undefined) {
-    throw new AssertionError({
-      message: "'separator.allowLeading' can only be valued when 'separator.char' is defined.",
-    });
-  }
-
-  if (opts.separator.char.length !== 1) {
-    throw new AssertionError({ message: "When valued, 'separator.char' should only be one character long." });
-  }
-}
 
 const DIGITS_PATTERN = '0-9';
 
