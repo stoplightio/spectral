@@ -30,6 +30,8 @@ const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09 detected'],
 ];
 
+export const BUILTIN_FORMATS: Array<[string, FormatLookup]> = KNOWN_FORMATS.map(kf => [kf[0], kf[1]]);
+
 export async function lint(documents: Array<number | string>, flags: ILintConfig) {
   const spectral = new Spectral({
     resolver: getResolver(flags.resolver),
