@@ -1,36 +1,11 @@
 import { Document, STDIN } from '../../../document';
-import {
-  isAsyncApiv2,
-  isJSONSchema,
-  isJSONSchemaDraft2019_09,
-  isJSONSchemaDraft4,
-  isJSONSchemaDraft6,
-  isJSONSchemaDraft7,
-  isJSONSchemaLoose,
-  isOpenApiv2,
-  isOpenApiv3,
-} from '../../../formats';
+import { KNOWN_FORMATS } from '../../../formats';
 import { readParsable } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
 import { IRuleResult, Spectral } from '../../../spectral';
-import { FormatLookup } from '../../../types';
 import { ILintConfig } from '../../../types/config';
 import { getRuleset, listFiles, skipRules } from './utils';
 import { getResolver } from './utils/getResolver';
-
-const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
-  ['oas2', isOpenApiv2, 'OpenAPI 2.0 (Swagger) detected'],
-  ['oas3', isOpenApiv3, 'OpenAPI 3.x detected'],
-  ['asyncapi2', isAsyncApiv2, 'AsyncAPI 2.x detected'],
-  ['json-schema', isJSONSchema, 'JSON Schema detected'],
-  ['json-schema-loose', isJSONSchemaLoose, 'JSON Schema (loose) detected'],
-  ['json-schema-draft4', isJSONSchemaDraft4, 'JSON Schema Draft 4 detected'],
-  ['json-schema-draft6', isJSONSchemaDraft6, 'JSON Schema Draft 6 detected'],
-  ['json-schema-draft7', isJSONSchemaDraft7, 'JSON Schema Draft 7 detected'],
-  ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09 detected'],
-];
-
-export const BUILTIN_FORMATS: Array<[string, FormatLookup]> = KNOWN_FORMATS.map(kf => [kf[0], kf[1]]);
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig) {
   const spectral = new Spectral({
@@ -40,11 +15,11 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   const ruleset = await getRuleset(flags.ruleset);
   spectral.setRuleset(ruleset);
 
-  for (const [format, lookup, message] of KNOWN_FORMATS) {
+  for (const [format, lookup, prettyName] of KNOWN_FORMATS) {
     spectral.registerFormat(format, document => {
       if (lookup(document)) {
         if (!flags.quiet) {
-          console.log(message);
+          console.log(`${prettyName} detected`);
         }
 
         return true;
