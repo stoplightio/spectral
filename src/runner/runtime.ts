@@ -4,6 +4,7 @@ import StrictEventEmitter from 'strict-event-emitter-types';
 type Revokable = () => void;
 
 export type SpectralEvents = {
+  setup(): void;
   beforeTeardown(): void;
   afterTeardown(): void;
 };

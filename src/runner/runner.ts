@@ -81,6 +81,8 @@ export class Runner {
   }
 
   public async run(context: IRunnerPublicContext): Promise<void> {
+    this.runtime.emit('setup');
+
     const { inventory: documentInventory } = this;
 
     const { rules, exceptions } = context;
