@@ -6,8 +6,9 @@ import { Rule } from '../rule';
 import { IRuleResult } from '../types';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
+import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
-import { IExceptionLocation, pivotExceptions } from './utils/pivotExceptions';
+import { ComputeFingerprintFunc, IExceptionLocation, pivotExceptions, prepareResults } from './utils';
 
 const { JSONPath } = require('jsonpath-plus');
 
@@ -22,41 +23,6 @@ const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory)
     DiagnosticSeverity.Warning,
     'except-but-stdin',
   );
-};
-
-export const runRules = async (context: IRunnerPublicContext): Promise<IRuleResult[]> => {
-  const { documentInventory, rules, exceptions } = context;
-
-  const runnerContext: IRunnerInternalContext = {
-    ...context,
-    results: [],
-    promises: [],
-  };
-
-  const isStdIn = isStdInSource(documentInventory);
-  const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
-
-  if (isStdIn && Object.keys(exceptions).length > 0) {
-    runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
-  }
-
-  const relevantRules = Object.values(rules).filter(
-    rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
-  );
-
-  for (const rule of relevantRules) {
-    try {
-      runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
-    } catch (ex) {
-      console.error(ex);
-    }
-  }
-
-  if (runnerContext.promises.length > 0) {
-    await Promise.all(runnerContext.promises);
-  }
-
-  return runnerContext.results;
 };
 
 const runRule = (
@@ -98,3 +64,63 @@ const runRule = (
     }
   }
 };
+
+export class Runner {
+  public readonly results: IRuleResult[];
+
+  constructor(protected readonly runtime: RunnerRuntime, protected readonly inventory: DocumentInventory) {
+    this.results = [...this.inventory.diagnostics, ...this.document.diagnostics, ...this.inventory.errors];
+  }
+
+  protected get document() {
+    return this.inventory.document;
+  }
+
+  public addResult(result: IRuleResult) {
+    this.results.push(result);
+  }
+
+  public async run(context: IRunnerPublicContext): Promise<void> {
+    const { inventory: documentInventory } = this;
+
+    const { rules, exceptions } = context;
+
+    const runnerContext: IRunnerInternalContext = {
+      ...context,
+      documentInventory,
+      results: this.results,
+      promises: [],
+    };
+
+    const isStdIn = isStdInSource(documentInventory);
+    const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
+
+    if (isStdIn && Object.keys(exceptions).length > 0) {
+      runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
+    }
+
+    const relevantRules = Object.values(rules).filter(
+      rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
+    );
+
+    for (const rule of relevantRules) {
+      try {
+        runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
+      } catch (ex) {
+        console.error(ex);
+      }
+    }
+
+    this.runtime.emit('beforeTeardown');
+
+    if (runnerContext.promises.length > 0) {
+      await Promise.all(runnerContext.promises);
+    }
+
+    this.runtime.emit('afterTeardown');
+  }
+
+  public getResults(computeFingerprint: ComputeFingerprintFunc) {
+    return prepareResults(this.results, computeFingerprint);
+  }
+}

@@ -15,7 +15,7 @@ import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
 import { IRulesetReadOptions } from './rulesets/reader';
-import { runRules } from './runner/runner';
+import { Runner, RunnerRuntime } from './runner';
 import {
   FormatLookup,
   FunctionCollection,
@@ -31,7 +31,7 @@ import {
   RunRuleCollection,
 } from './types';
 import { IRuleset, RulesetExceptionCollection } from './types/ruleset';
-import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, prepareResults } from './utils';
+import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty } from './utils';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 
 memoize.Cache = WeakMap;
@@ -46,12 +46,15 @@ export class Spectral {
   public exceptions: RulesetExceptionCollection = {};
   public formats: RegisteredFormats;
 
+  protected readonly runtime: RunnerRuntime;
+
   private readonly _computeFingerprint: ComputeFingerprintFunc;
 
   constructor(opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint || defaultComputeResultFingerprint);
     this._resolver = opts?.resolver || new Resolver();
     this.formats = {};
+    this.runtime = new RunnerRuntime();
   }
 
   public static registerStaticAssets(assets: Dictionary<string, string>) {
@@ -59,20 +62,22 @@ export class Spectral {
     Object.assign(STATIC_ASSETS, assets);
   }
 
+  protected parseDocument(target: IParsedResult | IDocument | object | string): IDocument {
+    return target instanceof Document
+      ? target
+      : isParsedResult(target)
+      ? new ParsedDocument(target)
+      : new Document<unknown, YamlParserResult<unknown>>(
+          typeof target === 'string' ? target : safeStringify(target, undefined, 2),
+          Parsers.Yaml,
+        );
+  }
+
   public async runWithResolved(
     target: IParsedResult | IDocument | object | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
-    const document: IDocument =
-      target instanceof Document
-        ? target
-        : isParsedResult(target)
-        ? new ParsedDocument(target)
-        : new Document<unknown, YamlParserResult<unknown>>(
-            typeof target === 'string' ? target : safeStringify(target, undefined, 2),
-            Parsers.Yaml,
-            opts.resolve?.documentUri,
-          );
+    const document = this.parseDocument(target);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
       (document as Omit<Document, 'source'> & { source: string }).source = opts.resolve?.documentUri;
@@ -81,7 +86,7 @@ export class Spectral {
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 
-    const validationResults: IRuleResult[] = [...inventory.diagnostics, ...document.diagnostics, ...inventory.errors];
+    const runner = new Runner(this.runtime, inventory);
 
     if (document.formats === void 0) {
       const registeredFormats = Object.keys(this.formats);
@@ -89,27 +94,24 @@ export class Spectral {
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         document.formats = null;
         if (registeredFormats.length > 0) {
-          validationResults.push(this._generateUnrecognizedFormatError(document));
+          runner.addResult(this._generateUnrecognizedFormatError(document));
         }
       } else {
         document.formats = foundFormats;
       }
     }
 
+    await runner.run({
+      rules: this.rules,
+      functions: this.functions,
+      exceptions: this.exceptions,
+    });
+
+    const results = runner.getResults(this._computeFingerprint);
+
     return {
       resolved: inventory.resolved,
-      results: prepareResults(
-        [
-          ...validationResults,
-          ...(await runRules({
-            documentInventory: inventory,
-            rules: this.rules,
-            functions: this.functions,
-            exceptions: this.exceptions,
-          })),
-        ],
-        this._computeFingerprint,
-      ),
+      results,
     };
   }
 
@@ -119,6 +121,7 @@ export class Spectral {
 
   public setFunctions(functions: FunctionCollection) {
     empty(this.functions);
+    this.runtime.collect();
 
     Object.assign(this.functions, { ...coreFunctions, ...functions });
   }
@@ -181,6 +184,7 @@ export class Spectral {
               schema,
               inject: {
                 fetch: request,
+                spectral: this.runtime.spawn(),
               },
             }),
           );

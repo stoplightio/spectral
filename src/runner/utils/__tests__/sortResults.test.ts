@@ -1,5 +1,5 @@
 import { DiagnosticSeverity, IPosition } from '@stoplight/types';
-import { IRuleResult } from '../../types';
+import { IRuleResult } from '../../../types';
 import { comparePosition, compareResults, sortResults } from '../sortResults';
 
 const results: IRuleResult[] = [
