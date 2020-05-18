@@ -60,7 +60,7 @@ describe('linter', () => {
     const message = '4xx responses require a description';
 
     spectral.setFunctions({
-      func1: val => {
+      func1: (val: unknown) => {
         if (!val) {
           return [
             {

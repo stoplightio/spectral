@@ -42,7 +42,7 @@ export function isValidRule(rule: FileRule): rule is IRule {
   return typeof rule === 'object' && rule !== null && !Array.isArray(rule) && ('given' in rule || 'then' in rule);
 }
 
-export function decorateIFunctionWithSchemaValidation(fn: IFunction, schema: JSONSchema) {
+export function decorateIFunctionWithSchemaValidation(fn: IFunction<any>, schema: JSONSchema) {
   return (data: unknown, opts: unknown, ...args: [IFunctionPaths, IFunctionValues]) => {
     if (!ajv.validate(schema, opts)) {
       throw new ValidationError(ajv.errors);
