@@ -9,6 +9,7 @@ import { RuleCollection, Spectral } from '../spectral';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
+const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
 const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
 
 const fnName = 'fake';
@@ -652,6 +653,25 @@ responses:: !!foo
         path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
+  });
+
+  test('should report invalid schema $refs', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+    await spectral.loadRuleset('spectral:oas');
+
+    const result = await spectral.run(todosInvalid);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'invalid-ref',
+          message: "'#/parameters/missing' does not exist",
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', '$ref'],
+          severity: DiagnosticSeverity.Error,
+        }),
+      ]),
+    );
   });
 
   test('should report invalid $refs', async () => {
