@@ -179,13 +179,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
         results.push(
           ...validator.errors.map(({ message, dataPath }) => ({
             message: message ? cleanAJVErrorMessage(message, dataPath, void 0, typeof targetVal) : '',
-            path: [
-              ...path,
-              ...dataPath
-                .split('/')
-                .slice(1)
-                .map(decodePointerFragment),
-            ],
+            path: [...path, ...dataPath.split('/').slice(1).map(decodePointerFragment)],
           })),
         );
       }

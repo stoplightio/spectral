@@ -178,7 +178,7 @@ const filterResultsBySeverity = (results: IRuleResult[], failSeverity: FailSever
   return results.filter(r => r.severity <= diagnosticSeverity);
 };
 
-const severeEnoughToFail = (results: IRuleResult[], failSeverity: FailSeverity): boolean => {
+export const severeEnoughToFail = (results: IRuleResult[], failSeverity: FailSeverity): boolean => {
   const diagnosticSeverity = getDiagnosticSeverity(failSeverity);
   return results.some(r => r.severity <= diagnosticSeverity);
 };
