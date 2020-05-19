@@ -107,7 +107,7 @@ jobs:
 workflows:
   commit:
     jobs:
-      # - test-node-latest TODO bring it back when circle supports node-13
+      - test-node-latest
       - test-node-12
       - test-node-10
   release:
