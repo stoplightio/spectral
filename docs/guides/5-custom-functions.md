@@ -365,7 +365,6 @@ async function makeRequest(words) {
 }
 ```
 
-
 ## Changing Directory
 
 Want to place your functions in somewhere other than the `functions/` directory? Use the `functionsDir` keyword in your ruleset.
