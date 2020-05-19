@@ -731,10 +731,10 @@ describe('Rulesets reader', () => {
     );
 
     const [barRandomName, barFunctionDef] = Object.entries(ruleset.functions).find(
-      ([name, obj]) => ruleset.functions.bar.ref === name,
+      ([name]) => ruleset.functions.bar.ref === name,
     )!;
     const [truthyRandomName, truthyFunctionDef] = Object.entries(ruleset.functions).find(
-      ([name, obj]) => ruleset.functions.truthy.ref === name,
+      ([name]) => ruleset.functions.truthy.ref === name,
     )!;
 
     // now let's verify unique properties include proper functions

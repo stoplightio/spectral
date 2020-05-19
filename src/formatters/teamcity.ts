@@ -40,7 +40,7 @@ function renderResults(results: IRuleResult[]) {
 
 function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>) {
   return Object.keys(groupedResults)
-    .map((source) => renderResults(groupedResults[source]))
+    .map(source => renderResults(groupedResults[source]))
     .join('\n');
 }
 
