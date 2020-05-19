@@ -1,9 +1,19 @@
-import { Optional } from '@stoplight/types';
+import { DeepPartial, Optional } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
+import { IFunctionValues } from '../../types';
 import { schema } from '../schema';
 
-function runSchema(target: any, schemaObj: object, oasVersion?: Optional<2 | 3 | 3.1>) {
-  return schema(target, { schema: schemaObj, oasVersion }, { given: [] }, { given: null, original: null } as any);
+function runSchema(
+  target: any,
+  schemaObj: object,
+  oasVersion?: Optional<2 | 3 | 3.1>,
+  context?: DeepPartial<IFunctionValues>,
+) {
+  return schema(target, { schema: schemaObj, oasVersion }, { given: [] }, {
+    given: null,
+    original: null,
+    ...context,
+  } as IFunctionValues);
 }
 
 describe('schema', () => {
@@ -321,10 +331,25 @@ describe('schema', () => {
   test('pretty-prints path-less property', () => {
     const input = { foo: true };
     expect(runSchema(input, { additionalProperties: false })).toEqual([
-      expect.objectContaining({
+      {
         message: 'Property `foo` is not expected to be here',
         path: [],
-      }),
+      },
     ]);
+  });
+
+  describe('when schema has a $ref left', () => {
+    test('given unresolved context, reports an error', () => {
+      expect(runSchema({}, { $ref: '#/foo' }, void 0, { rule: { resolved: false } })).toEqual([
+        {
+          message: "can't resolve reference #/foo from id #",
+          path: [],
+        },
+      ]);
+    });
+
+    test('given resolved context, ignores', () => {
+      expect(runSchema({}, { $ref: '#/bar' }, void 0, { rule: { resolved: true } })).toEqual([]);
+    });
   });
 });

@@ -5,7 +5,7 @@ import { Document } from '../document';
 import { Rule } from '../rule';
 import { IMessageVars, message } from '../rulesets/message';
 import { getDiagnosticSeverity } from '../rulesets/severity';
-import { IFunctionResult, IGivenNode } from '../types';
+import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets, IExceptionLocation, isAKnownException } from './utils';
@@ -16,10 +16,11 @@ export const lintNode = (
   rule: Rule,
   exceptionLocations: Optional<IExceptionLocation[]>,
 ): void => {
-  const fnContext = {
+  const fnContext: IFunctionValues = {
     original: node.value,
     given: node.value,
     documentInventory: context.documentInventory,
+    rule,
   };
 
   const givenPath = node.path.length > 0 && node.path[0] === '$' ? node.path.slice(1) : node.path;

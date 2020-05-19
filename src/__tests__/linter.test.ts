@@ -665,9 +665,10 @@ responses:: !!foo
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          code: 'oas2-valid-parameter-example',
-          message: "can't resolve reference #/parameters/missing from id #",
-          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', 'example'],
+          code: 'invalid-ref',
+          message: "'#/parameters/missing' does not exist",
+          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', '$ref'],
+          severity: DiagnosticSeverity.Error,
         }),
       ]),
     );

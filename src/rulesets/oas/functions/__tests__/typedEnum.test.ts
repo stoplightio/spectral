@@ -7,7 +7,7 @@ function runTypedEnum(targetVal: any) {
     targetVal,
     null,
     { given: ['$'] },
-    { given: null, original: null, documentInventory: {} as any },
+    { given: null, original: null, documentInventory: {} as any, rule: {} as any },
   );
 }
 
