@@ -294,6 +294,7 @@ You can store any kind of data, using cache for exchanging information between s
 <!-- theme: info -->
 
 > This is a fairly advanced feature you should not need for most of the time.
+> Please do not use it unless you really do need to.
 
 Each custom function has access to `spectral` that, similarly to `fetch`, is exposed globally,
 At the moment, the instance has one method implemented, namely `on`.
