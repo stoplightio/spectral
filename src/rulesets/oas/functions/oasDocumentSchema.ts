@@ -59,7 +59,12 @@ function applyManualReplacements(errors: IFunctionResult[]) {
   }
 }
 
-export const oasDocumentSchema: IFunction<ISchemaOptions> = function(this: IFunctionContext, targetVal, opts, ...args) {
+export const oasDocumentSchema: IFunction<ISchemaOptions> = function (
+  this: IFunctionContext,
+  targetVal,
+  opts,
+  ...args
+) {
   const errors = this.functions.schema.call(this, targetVal, { ...opts, prepareResults }, ...args);
 
   if (Array.isArray(errors)) {
