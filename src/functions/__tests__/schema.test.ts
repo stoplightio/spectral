@@ -1,4 +1,4 @@
-import { Optional } from '@stoplight/types';
+import { DeepPartial, Optional } from '@stoplight/types';
 import { JSONSchema4, JSONSchema6 } from 'json-schema';
 import { IFunctionValues } from '../../types';
 import { schema } from '../schema';
@@ -7,7 +7,7 @@ function runSchema(
   target: any,
   schemaObj: object,
   oasVersion?: Optional<2 | 3 | 3.1>,
-  context?: Partial<IFunctionValues>,
+  context?: DeepPartial<IFunctionValues>,
 ) {
   return schema(target, { schema: schemaObj, oasVersion }, { given: [] }, {
     given: null,
@@ -340,7 +340,7 @@ describe('schema', () => {
 
   describe('when schema has a $ref left', () => {
     test('given unresolved context, reports an error', () => {
-      expect(runSchema({}, { $ref: '#/foo' }, void 0, { context: 'unresolved' })).toEqual([
+      expect(runSchema({}, { $ref: '#/foo' }, void 0, { rule: { resolved: false } })).toEqual([
         {
           message: "can't resolve reference #/foo from id #",
           path: [],
@@ -349,7 +349,7 @@ describe('schema', () => {
     });
 
     test('given resolved context, ignores', () => {
-      expect(runSchema({}, { $ref: '#/bar' }, void 0, { context: 'resolved' })).toEqual([]);
+      expect(runSchema({}, { $ref: '#/bar' }, void 0, { rule: { resolved: true } })).toEqual([]);
     });
   });
 });

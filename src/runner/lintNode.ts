@@ -20,7 +20,7 @@ export const lintNode = (
     original: node.value,
     given: node.value,
     documentInventory: context.documentInventory,
-    context: rule.resolved ? 'resolved' : 'unresolved',
+    rule,
   };
 
   const givenPath = node.path.length > 0 && node.path[0] === '$' ? node.path.slice(1) : node.path;
