@@ -56,6 +56,46 @@ export type IFunction<O = any> = (
 ) => void | IFunctionResult[];
 ```
 
+### Validating options
+
+If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
+
+You can do it as follows:
+
+```yaml
+functions:
+- equals
+  # can be any valid JSON Schema Draft 07
+  - properties:
+      value:
+        type: string
+        description: Value to check equality for
+rules:
+  my-rule:
+    message: "{{error}}"
+    given: "$.info"
+    then:
+      function: "equals"
+      functionOptions:
+        value: "abc"
+```
+
+Where the function `functions/equals.js` might look like:
+
+```js
+module.exports = (targetVal, opts) => {
+  const { value } = opts;
+
+  if (targetVal !== value) {
+    return [
+      {
+        message: `Value must equal {value}.`,
+      },
+    ];
+  }
+};
+```
+
 ### targetValue
 
 `targetValue` the value the custom function is provided with and is supposed to lint against.
@@ -176,7 +216,7 @@ It's worth keeping in mind, Spectral will attempt to deduplicate messages when t
 
 As such, when your custom function is susceptible to return more than one result, you have to specify a different `path` for each result.
 
-### Async Functions
+## Async Functions
 
 As of Spectral 5.4.0, custom functions can also be asynchronous.
 
@@ -220,45 +260,7 @@ rules:
       function: "dictionary"
 ```
 
-If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
-
-You can do it as follows:
-
-```yaml
-functions:
-- equals
-  # can be any valid JSON Schema Draft 07
-  - properties:
-      value:
-        type: string
-        description: Value to check equality for
-rules:
-  my-rule:
-    message: "{{error}}"
-    given: "$.info"
-    then:
-      function: "equals"
-      functionOptions:
-        value: "abc"
-```
-
-Where the function `functions/equals.js` might look like:
-
-```js
-module.exports = (targetVal, opts) => {
-  const { value } = opts;
-
-  if (targetVal !== value) {
-    return [
-      {
-        message: `Value must equal {value}.`,
-      },
-    ];
-  }
-};
-```
-
-## Caching
+### Caching
 
 Performs anything slow inside a function (like `fs` calls), you may want to leverage cache.
 
@@ -287,6 +289,83 @@ As soon as you set a ruleset using `setRuleset()` or `loadRuleset()` method, eac
 
 You can store any kind of data, using cache for exchanging information between subsequent function calls is strongly discouraged. Also, Spectral does not guarantee any particular order of execution meaning the functions can be executed in random order, depending on the rules you have, and the document you lint.
 
+### Lifecycle events
+
+<!-- theme: info -->
+
+> This is a fairly advanced feature you should not need for most of the time.
+
+Each custom function has access to `spectral` that, similarly to `fetch`, is exposed globally,
+At the moment, the instance has one method implemented, namely `on`.
+The method lets you subscribe to certain events that are emitted by Spectral during the linting process.
+At the time of writing this document, these events are:
+- setup - emitted before the linting process kicks in
+- beforeTeardown - after all rules have been executed (still possible to alter results at this point)
+- afterTeardown - linting done, no more actions possible.
+
+In practice, `setup` and `afterTeardown` should be used to clear any state, while `beforeTeardown` is the right even to perform any deferred operation.
+
+Example:
+
+```js
+let state = null;
+const _catch = () => null;
+
+spectral.on('setup', () => {
+  let resolve;
+  let reject;
+  const request = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  })
+    .catch(_catch)
+
+  state = {
+    words: [],
+    request,
+    resolve,
+    reject,
+  };
+});
+
+spectral.on('beforeTeardown', () => {
+  if (state.words.length > 0) {
+    makeRequest(state.words)
+      .then(state.resolve)
+      .catch(state.reject);
+  } else {
+    state.reject();
+  }
+});
+
+spectral.on('afterTeardown', () => {
+  state = null;
+});
+
+module.exports = async function (targetVal) {
+  if (!state.words.includes(targetVal)) {
+    state.words.push(targetVal);
+  }
+
+  const dictionary = await state.request;
+
+  if (Array.isArray(dictionary) && dictionary.includes(targetVal)) {
+    return [{ message: '`' + targetVal + '`' + ' is a forbidden word.' }];
+  }
+}
+
+async function makeRequest(words) {
+  // note, you may need to serialize words differently and/or make requests in chunks if you have plenty of words to be validated
+  const res = await fetch(`https://example.com/evil?words=${words.join(',')}`);
+  if (res.ok) {
+   throw new Error(res.statusText);
+  }
+
+  return res.json();
+}
+```
+
+
 ## Changing Directory
 
 Want to place your functions in somewhere other than the `functions/` directory? Use the `functionsDir` keyword in your ruleset.
@@ -303,8 +382,7 @@ rules:
       function: "abc"
 ```
 
-
-### Security Concerns
+## Security Concerns
 
 Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
 
@@ -324,8 +402,6 @@ What you should hunt for is:
 - places where remote code is executed.
 
 If you notice any weirdness, consider forking the ruleset and removal of any evil-looking code.
-
-
 
 ## Inheritance
 
