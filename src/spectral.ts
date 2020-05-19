@@ -121,7 +121,6 @@ export class Spectral {
 
   public setFunctions(functions: FunctionCollection) {
     empty(this.functions);
-    this.runtime.collect();
 
     Object.assign(this.functions, { ...coreFunctions, ...functions });
   }
@@ -154,6 +153,8 @@ export class Spectral {
   }
 
   public setRuleset(ruleset: IRuleset) {
+    this.runtime.revoke();
+
     this.setRules(ruleset.rules);
 
     this.setFunctions(

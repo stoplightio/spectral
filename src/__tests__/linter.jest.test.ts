@@ -1,5 +1,6 @@
 import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
 import * as timers from 'timers';
@@ -344,6 +345,72 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           .persist()
           .get('/evil')
           .reply(200, JSON.stringify(['foo', 'bar', 'baz']));
+
+        const results = await spectral.run({
+          swagger: '2.0',
+          info: {
+            contact: {
+              email: 'foo',
+              author: 'baz',
+            },
+          },
+          paths: {
+            '/user': {},
+          },
+        });
+
+        expect(results).toEqual([
+          {
+            code: 'no-evil-words',
+            message: '`foo` is a forbidden word.',
+            path: ['info', 'contact', 'email'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+          },
+          {
+            code: 'no-evil-words',
+            message: '`baz` is a forbidden word.',
+            path: ['info', 'contact', 'author'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+          },
+        ]);
+      });
+
+      it('should be able to defer request and make it in beforeTeardown step', async () => {
+        spectral.setRuleset({
+          exceptions: {},
+          functions: {
+            [fnName]: {
+              name: fnName,
+              schema: null,
+              source: null,
+              code: await fs.promises.readFile(
+                path.join(__dirname, './__fixtures__/asyncFunctions/lifecycle.js'),
+                'utf8',
+              ),
+            },
+          },
+          rules: {
+            'no-evil-words': {
+              given: '$..*@string()',
+              severity: DiagnosticSeverity.Warning,
+              then: {
+                function: fnName,
+              },
+            },
+          },
+        });
+
+        const forbiddenWords = ['foo', 'baz'];
+
+        nock('https://dictionary.com')
+          .get('/evil')
+          .query(query => 'words' in query)
+          .reply(uri => {
+            const [, words] = uri.match(/words\=([^/&]+)$/)!;
+            return [200, words.split(',').filter(word => forbiddenWords.includes(word.toLowerCase()))];
+          });
 
         const results = await spectral.run({
           swagger: '2.0',

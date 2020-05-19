@@ -4,11 +4,12 @@ import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { Rule } from '../rule';
 import { IRuleResult } from '../types';
+import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
-import { ComputeFingerprintFunc, IExceptionLocation, pivotExceptions, prepareResults } from './utils';
+import { IExceptionLocation, pivotExceptions } from './utils';
 
 const { JSONPath } = require('jsonpath-plus');
 
@@ -115,11 +116,13 @@ export class Runner {
 
     this.runtime.emit('beforeTeardown');
 
-    if (runnerContext.promises.length > 0) {
-      await Promise.all(runnerContext.promises);
+    try {
+      if (runnerContext.promises.length > 0) {
+        await Promise.all(runnerContext.promises);
+      }
+    } finally {
+      this.runtime.emit('afterTeardown');
     }
-
-    this.runtime.emit('afterTeardown');
   }
 
   public getResults(computeFingerprint: ComputeFingerprintFunc) {

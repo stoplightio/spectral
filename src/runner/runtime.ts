@@ -1,5 +1,4 @@
-import { createEventEmitter, IEventEmitterInstance } from '@stoplight/lifecycle';
-import StrictEventEmitter from 'strict-event-emitter-types';
+import { createEventEmitter, IDisposable } from '@stoplight/lifecycle';
 
 type Revokable = () => void;
 
@@ -24,7 +23,7 @@ export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
     return proxy;
   }
 
-  public collect() {
+  public revoke() {
     let revokable;
     // tslint:disable-next-line:no-conditional-assignment
     while ((revokable = this.revokables.shift())) {
@@ -32,9 +31,17 @@ export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
     }
   }
 
-  public spawn(): Pick<StrictEventEmitter<IEventEmitterInstance, SpectralEvents>, 'on'> {
-    return this.persist({
-      on: this.on.bind(this),
-    });
+  public spawn(): Pick<RunnerRuntime, 'on'> {
+    return this.persist(
+      Object.freeze({
+        on: this.hijackDisposable(this.on),
+      }),
+    );
+  }
+
+  protected hijackDisposable<F extends (...args: any[]) => IDisposable>(fn: F): F {
+    return ((...args) => {
+      this.revokables.push(fn.apply(this, args).dispose);
+    }) as F;
   }
 }
