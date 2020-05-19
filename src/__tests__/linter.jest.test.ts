@@ -203,10 +203,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
     });
 
     it('should be able to make a request using fetch', async () => {
-      const scope = nock('https://stoplight.io')
-        .get('/')
-        .once()
-        .reply(200);
+      const scope = nock('https://stoplight.io').get('/').once().reply(200);
 
       spectral.setRuleset({
         exceptions: {},
