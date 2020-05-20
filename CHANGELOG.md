@@ -7,6 +7,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.0] - 2019-05-20
+
+### Added
+- New AsyncAPI 2 ruleset and format [#965](https://github.com/stoplightio/spectral/issues/965)
+- Custom functions can be async [#694](https://github.com/stoplightio/spectral/issues/694)
+- Expose fetch and cache to custom functions [#1078](https://github.com/stoplightio/spectral/pull/1078), [#1079](https://github.com/stoplightio/spectral/pull/1079)
+
+### Changed
+- Rename `oas3-example-value-or-externalValue` rule to `oas3-examples-value-or-externalValue` [#1098](https://github.com/stoplightio/spectral/pull/1098)
+- Drop useless oas rule tags [#1095](https://github.com/stoplightio/spectral/pull/1095)
+- AJV: swallow missing references [#1147](https://github.com/stoplightio/spectral/pull/1147)
+- Improve ruleset validation [#1144](https://github.com/stoplightio/spectral/pull/1144)
+- Allow running spectral from any directory in Docker [#1022](https://github.com/stoplightio/spectral/pull/1022)
+
+### Fixed
+- Improve `oas2-schema` and `oas3-schema` rules [#403](https://github.com/stoplightio/spectral/issues/403)
+- Make `example-value-or-externalValue` only target oas3 document [#883](https://github.com/stoplightio/spectral/issues/883)
+- `path-params` rule detects undefined parameters across operations [#1076](https://github.com/stoplightio/spectral/issues/1076)
+- Load custom functions from NPM correctly [#1093](https://github.com/stoplightio/spectral/pull/1093)
+- `path-params` reports an actual endpoint path [#1130](https://github.com/stoplightio/spectral/issues/1130)
+
 ## [5.3.0] - 2019-04-02
 
 ### Added
