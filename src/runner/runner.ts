@@ -45,7 +45,11 @@ export const runRules = async (context: IRunnerPublicContext): Promise<IRuleResu
   );
 
   for (const rule of relevantRules) {
-    runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
+    try {
+      runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
+    } catch (ex) {
+      console.error(ex);
+    }
   }
 
   if (runnerContext.promises.length > 0) {

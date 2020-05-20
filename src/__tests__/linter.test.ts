@@ -56,6 +56,43 @@ describe('linter', () => {
     return expect(spectral.run('123')).resolves.toBeTruthy();
   });
 
+  test('should run all rules despite of invalid JSON path expressions', async () => {
+    spectral.setRules({
+      rule1: {
+        given: '$.bar[?(@.in==foo)]',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.foo',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const results = await spectral.run(
+      {
+        bar: {
+          in: {},
+        },
+        foo: null,
+      },
+      { ignoreUnknownFormat: true },
+    );
+
+    return expect(results).toEqual([
+      {
+        code: 'rule2',
+        message: '`foo` property is not truthy',
+        path: ['foo'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
+  });
+
   test('should return all properties matching 4xx response code', async () => {
     const message = '4xx responses require a description';
 
