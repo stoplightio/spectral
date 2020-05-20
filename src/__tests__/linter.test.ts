@@ -56,7 +56,7 @@ describe('linter', () => {
     return expect(spectral.run('123')).resolves.toBeTruthy();
   });
 
-  test('should run all rules despite of invalid JSON path expressions', () => {
+  test('should run all rules despite of invalid JSON path expressions', async () => {
     spectral.setRules({
       rule1: {
         given: '$.bar[?(@.in==foo)]',
@@ -72,17 +72,17 @@ describe('linter', () => {
       },
     });
 
-    return expect(
-      spectral.run(
-        {
-          bar: {
-            in: {},
-          },
-          foo: null,
+    const results = await spectral.run(
+      {
+        bar: {
+          in: {},
         },
-        { ignoreUnknownFormat: true },
-      ),
-    ).resolves.toEqual([
+        foo: null,
+      },
+      { ignoreUnknownFormat: true },
+    );
+
+    return expect(results).toEqual([
       {
         code: 'rule2',
         message: '`foo` property is not truthy',
