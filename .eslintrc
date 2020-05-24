@@ -17,10 +17,8 @@
   ],
   "rules": {
     "func-names": "off",
-    "sort-keys": "warn",
-
     "no-constant-condition": "warn",
-    "no-param-reassign": "warn",
+    "no-param-reassign": "off",
     "no-restricted-syntax": "off",
     "no-continue": "off",
     "no-labels": "off",
@@ -46,7 +44,8 @@
         "ignoreRestSiblings": true
       }
     ],
-    "@typescript-eslint/interface-name-prefix": "warn",
+    "@typescript-eslint/no-var-requires": "warn",
+    "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "warn"
   },
   "overrides": [
@@ -67,8 +66,7 @@
         "sort-keys": "off",
 
         "@typescript-eslint/ban-ts-ignore": "warn",
-        "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/no-var-requires": "warn"
+        "@typescript-eslint/no-floating-promises": "off"
       }
     },
     {
@@ -76,7 +74,6 @@
         "**/__tests__/**/*.jest.test.{ts,js}"
       ],
       "env": {
-        "node": true,
         "jest": true
       }
     },
@@ -95,8 +92,14 @@
       ],
       "env": {
         "node": true
-      },
+      }
+    },
+    {
+      "files": [
+        "test-harness/**/*.js"
+      ],
       "rules": {
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]

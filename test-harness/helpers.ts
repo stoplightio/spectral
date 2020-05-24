@@ -27,7 +27,7 @@ function getItem(input: string[], key: string, required?: boolean): Optional<str
 }
 
 export function parseScenarioFile(data: string): IScenarioFile {
-  const regex = /====(test|document|command|status|stdout|stderr|env|asset:[a-z0-9.\-]+)====\r?\n/gi;
+  const regex = /====(test|document|command|status|stdout|stderr|env|asset:[a-z0-9.-]+)====\r?\n/gi;
   const split = data.split(regex);
 
   const test = getItem(split, 'test', true);

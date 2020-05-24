@@ -1,5 +1,7 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
-import { JSONPathCallback } from 'jsonpath-plus';
+import { JSONPath, JSONPathCallback, JSONPathClass } from 'jsonpath-plus';
+import { isObject } from 'lodash';
+
 import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { Rule } from '../rule';
@@ -8,8 +10,6 @@ import { generateDocumentWideResult } from '../utils/generateDocumentWideResult'
 import { lintNode } from './lintNode';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
 import { IExceptionLocation, pivotExceptions } from './utils/pivotExceptions';
-
-const { JSONPath } = require('jsonpath-plus');
 
 const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
@@ -66,6 +66,8 @@ const runRule = (
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
 
+  if (!isObject(target)) return;
+
   for (const given of rule.given) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
     if (given === '$') {
@@ -87,7 +89,7 @@ const runRule = (
           lintNode(
             context,
             {
-              path: JSONPath.toPathArray(result.path),
+              path: JSONPathClass.toPathArray(result.path),
               value: result.value,
             },
             rule,

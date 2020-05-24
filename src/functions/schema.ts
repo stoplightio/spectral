@@ -71,6 +71,7 @@ function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV
   ajv.addMetaSchema(jsonSpecV4);
   ajv.addMetaSchema(jsonSpecV6);
 
+  /* eslint @typescript-eslint/ban-ts-ignore: 0 */
   // @ts-ignore
   ajv._opts.defaultMeta = jsonSpecV4.id;
   // @ts-ignore
