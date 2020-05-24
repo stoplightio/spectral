@@ -13,6 +13,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended"
   ],
   "rules": {
@@ -21,10 +22,9 @@
     "no-param-reassign": "off",
     "no-restricted-syntax": "off",
     "no-continue": "off",
-    "no-labels": "off",
     "no-label-var": "off",
     "no-void": "off",
-    "no-undefined": "warn",
+    "no-undefined": "off",
 
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/strict-boolean-expressions": "warn",
@@ -46,6 +46,7 @@
     ],
     "@typescript-eslint/no-var-requires": "warn",
     "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/require-await": "off",
     "@typescript-eslint/explicit-function-return-type": "warn"
   },
   "overrides": [
@@ -63,12 +64,15 @@
         "**/__tests__/*.{ts,js}"
       ],
       "rules": {
-        "sort-keys": "off",
-
-        "@typescript-eslint/ban-ts-ignore": "warn",
-        "@typescript-eslint/no-floating-promises": "off"
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/unbound-method": "off"
       }
     },
+
     {
       "files": [
         "**/__tests__/**/*.jest.test.{ts,js}"
@@ -77,6 +81,7 @@
         "jest": true
       }
     },
+
     {
       "files": [
         "**/__tests__/**/*.karma.test.{ts,js}"
@@ -86,6 +91,7 @@
         "jasmine": true
       }
     },
+
     {
       "files": [
         "test-harness/**/*.{ts,js}"
@@ -94,6 +100,7 @@
         "node": true
       }
     },
+
     {
       "files": [
         "test-harness/**/*.js"

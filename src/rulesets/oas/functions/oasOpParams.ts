@@ -31,11 +31,11 @@ export const oasOpParams: IFunction = (targetVal, _options, _paths, vals) => {
       const inBody = {};
 
       if (params.length > 1) {
-        for (const paramIndex in params) {
+        for (const paramIndex of params.keys()) {
           // skip params that are refs
           if (!params[paramIndex] || params[paramIndex].$ref) continue;
 
-          for (const compareIndex in params) {
+          for (const compareIndex of params.keys()) {
             // don't run rules on itself or pairs that are already tested
             if (paramIndex <= compareIndex || params[compareIndex].$ref) continue;
 

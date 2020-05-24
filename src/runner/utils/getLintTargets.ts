@@ -22,7 +22,7 @@ export const getLintTargets = (targetValue: unknown, field: Optional<string>): I
           value: key,
         });
       }
-    } else if (field[0] === '$') {
+    } else if (field.startsWith('$')) {
       JSONPath({
         path: field,
         json: targetValue,

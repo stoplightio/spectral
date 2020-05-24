@@ -203,6 +203,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
 };
 
 schema.Ajv = AJV;
+// eslint-disable-next-line @typescript-eslint/unbound-method
 schema.createAJVInstance = (opts: AJV.Options) => {
   const ajv = new AJV(opts);
 
