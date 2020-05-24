@@ -1,5 +1,5 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
-import { JSONPath, JSONPathCallback, JSONPathClass } from 'jsonpath-plus';
+import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
 import { isObject } from 'lodash';
 
 import { STDIN } from '../document';
@@ -89,7 +89,9 @@ const runRule = (
           lintNode(
             context,
             {
-              path: JSONPathClass.toPathArray(result.path),
+              // @ts-expect-error
+              // this is needed due to broken typings in jsonpath-plus (JSONPathClass.toPathArray is correct from typings point of view, but JSONPathClass is not exported, so it fails at runtime)
+              path: JSONPath.toPathArray(result.path),
               value: result.value,
             },
             rule,

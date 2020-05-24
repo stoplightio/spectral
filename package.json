@@ -130,7 +130,7 @@
     "ts-jest": "^25.0.0",
     "ts-node": "^8.10.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.3",
     "xml2js": "^0.4.23"
   },
   "lint-staged": {

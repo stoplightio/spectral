@@ -4,4 +4,4 @@ beforeEach(() => {
   seed = 0;
 });
 
-module.exports = jest.fn(() => `random-id-${seed++}`);
+module.exports.nanoid = jest.fn(() => `random-id-${seed++}`);
