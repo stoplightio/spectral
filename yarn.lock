@@ -4401,10 +4401,10 @@ karma-jasmine@^3.1.1:
   dependencies:
     jasmine-core "^3.5.0"
 
-karma-typescript@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/karma-typescript/-/karma-typescript-5.0.2.tgz#f5c118b0d7d3ba2711afaebbc48e583f39eae1f6"
-  integrity sha512-cq3ETrnYMynLvUt29bqZhKMCHHDcqx0v0SfcsFqQsn/WWbMqXHNZq9dOLVXt6t3PiqfL0SLGq317LSNVmgLtqw==
+karma-typescript@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/karma-typescript/-/karma-typescript-5.0.3.tgz#3b2b5cfde328748fa9f077fea25f90c36db53fed"
+  integrity sha512-Irs767Oc5BCMPLbZ+VdJmIxLL+1fB3L9dye8oQHDfHXFuYBx+uir5FDLzNNXFgDRUMYxEFT1T1eucAcb56v+0A==
   dependencies:
     acorn "^7.1.0"
     acorn-walk "^7.0.0"
