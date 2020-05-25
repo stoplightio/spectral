@@ -1,10 +1,12 @@
 import { Dictionary, Optional } from '@stoplight/types';
 import * as tmp from 'tmp';
 
+const IS_WINDOWS = process.platform === 'win32';
+
 export interface IScenarioFile {
   test: string;
   assets: string[][];
-  command: string;
+  command: Optional<string>;
   status: Optional<string>;
   stdout: Optional<string>;
   stderr: Optional<string>;
@@ -27,16 +29,28 @@ function getItem(input: string[], key: string, required?: boolean): Optional<str
 }
 
 export function parseScenarioFile(data: string): IScenarioFile {
-  const regex = /====(test|document|command|status|stdout|stderr|env|asset:[a-z0-9.\-]+)====\r?\n/gi;
+  const regex = /====(test|document|command(?:-(?:nix|win))?|status|stdout|stderr|env|asset:[a-z0-9.\-]+)====\r?\n/gi;
   const split = data.split(regex);
 
   const test = getItem(split, 'test', true);
   const document = getItem(split, 'document');
-  const command = getItem(split, 'command', true);
+  let command = getItem(split, 'command');
+  const commandWindows = getItem(split, 'command-win');
+  const commandUnix = getItem(split, 'command-nix');
   const status = getItem(split, 'status');
   const stdout = getItem(split, 'stdout');
   const stderr = getItem(split, 'stderr');
   const env = getItem(split, 'env');
+
+  if (command === void 0) {
+    if (commandWindows !== void 0 && commandUnix !== void 0) {
+      throw new Error('No ====command==== provided');
+    }
+
+    command = IS_WINDOWS ? commandWindows : commandUnix;
+  } else if (commandWindows !== void 0 || commandUnix !== void 0) {
+    throw new Error('===command==== cannot be used along ====command-nix==== or ====command-win====');
+  }
 
   const assets = split.reduce<string[][]>((filtered, item, i) => {
     if (item.startsWith('asset')) {
