@@ -129,7 +129,7 @@ export class Spectral {
     empty(this.rules);
 
     for (const [name, rule] of Object.entries(rules)) {
-      if (this.opts?.useNimma) {
+      if (this.opts?.useNimma || (typeof global === 'object' && global?.process?.env?.USE_NIMMA)) {
         try {
           this.rules[name] = new OptimizedRule(name, rule);
         } catch {

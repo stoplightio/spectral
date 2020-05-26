@@ -2,11 +2,11 @@ import { get } from 'lodash';
 
 import { JsonPath, Optional } from '@stoplight/types';
 import { Document } from '../document';
+import { Rule } from '../rule';
 import { IMessageVars, message } from '../rulesets/message';
 import { getDiagnosticSeverity } from '../rulesets/severity';
 import { IFunctionResult, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
-import { Rule } from '../rule';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets } from './utils/getLintTargets';
 import { IExceptionLocation } from './utils/pivotExceptions';

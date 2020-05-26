@@ -5,12 +5,12 @@ import { JSONPathExpression, traverse } from 'nimma';
 
 import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
+import { OptimizedRule, Rule } from '../rule';
 import { IGivenNode, IRuleResult } from '../types';
 import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
-import { OptimizedRule, Rule } from '../rule';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
 import { IExceptionLocation, pivotExceptions } from './utils';
 

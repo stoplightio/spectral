@@ -34,7 +34,6 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
   const schemaObject = JSONPath({ path: opts!.schemaPath, json: targetVal });
   if (!Array.isArray(schemaObject) || schemaObject.length === 0) return;
 
-
   // The subsection of the targetVal which contains the good bit
   const relevantItems = getLintTargets(targetVal, opts.field);
 
