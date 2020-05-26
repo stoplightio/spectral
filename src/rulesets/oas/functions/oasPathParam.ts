@@ -128,7 +128,7 @@ export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
       const match = pathRegex.exec(path);
 
       if (match && match.length > 0) {
-        const p = match[0].replace(/[\{\}]/g, '');
+        const p = match[0].replace(/[{}]/g, '');
         if (pathElements[p]) {
           results.push(
             generateResult(
@@ -170,7 +170,7 @@ export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
       const operationPath = [...paths.given, 'paths', path, op];
 
       for (const i in parameters) {
-        if (!parameters.hasOwnProperty(i)) continue;
+        if (!Object.hasOwnProperty.call(parameters, i)) continue;
 
         const p: IParam = parameters[i];
         const fullParameterPath = [...operationPath, 'parameters', i];

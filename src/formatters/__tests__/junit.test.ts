@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 import { Parser } from 'xml2js';
 import { sortResults } from '../../utils';
 import { junit } from '../junit';
@@ -7,11 +6,11 @@ const oas3SchemaErrors = sortResults(require('./__fixtures__/oas3-schema-errors.
 const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('JUnit formatter', () => {
-  let parse: Parser['parseString'];
+  let parse: Parser['parseStringPromise'];
 
   beforeEach(() => {
     const parser = new Parser();
-    parse = promisify(parser.parseString.bind(parser));
+    parse = parser.parseStringPromise.bind(parser);
   });
 
   test('should produce valid report', async () => {

@@ -19,7 +19,6 @@ export async function readFile(name: string | number, opts: IReadOptions): Promi
     stream.on('readable', () => {
       let chunk: string | null;
 
-      // tslint:disable-next-line:no-conditional-assignment
       while ((chunk = stream.read()) !== null) {
         result += chunk;
       }

@@ -30,6 +30,7 @@
  * @private
  */
 export const xmlEscape = (s: string) => {
+  // eslint-disable-next-line no-control-regex
   return `${s}`.replace(/[<>&"'\x00-\x1F\x7F\u0080-\uFFFF]/gu, c => {
     switch (c) {
       case '<':

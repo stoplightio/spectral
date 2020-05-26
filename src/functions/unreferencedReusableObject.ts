@@ -2,12 +2,9 @@ import { isObject } from 'lodash';
 import { IFunction } from '../types';
 import { safePointerToPath } from '../utils';
 
-export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: string }> = (
-  data,
-  opts,
-  _paths,
-  otherValues,
-) => {
+export const unreferencedReusableObject: IFunction<{
+  reusableObjectsLocation: string;
+}> = (data, opts, _paths, otherValues) => {
   if (!isObject(data)) return [];
 
   if (!opts.reusableObjectsLocation.startsWith('#')) {

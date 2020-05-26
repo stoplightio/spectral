@@ -7,15 +7,19 @@ module.exports = new Resolver({
     foo: {
       resolve(ref) {
         return new Promise((resolve, reject) => {
-          fs.readFile(path.join(__dirname, ref.hostname()), 'utf8', (err, data) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(data);
-            }
-          });
+          fs.readFile(
+            path.join(__dirname, ref.hostname()),
+            'utf8',
+            (err, data) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(data);
+              }
+            },
+          );
         });
-      }
+      },
     },
   },
 });

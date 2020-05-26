@@ -287,7 +287,9 @@ describe('Spectral', () => {
       },
     });
 
-    const results = await s.run(fs.readFileSync(documentUri, 'utf8'), { resolve: { documentUri } });
+    const results = await s.run(fs.readFileSync(documentUri, 'utf8'), {
+      resolve: { documentUri },
+    });
 
     expect(results.length).toEqual(3);
 

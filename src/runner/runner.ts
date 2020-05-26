@@ -1,5 +1,7 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
-import { JSONPathCallback } from 'jsonpath-plus';
+import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
+import { isObject } from 'lodash';
+
 import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { Rule } from '../rule';
@@ -10,8 +12,6 @@ import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
 import { IExceptionLocation, pivotExceptions } from './utils';
-
-const { JSONPath } = require('jsonpath-plus');
 
 const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
@@ -32,6 +32,8 @@ const runRule = (
   exceptRuleByLocations: Optional<IExceptionLocation[]>,
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
+
+  if (!isObject(target)) return;
 
   for (const given of rule.given) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -54,6 +56,8 @@ const runRule = (
           lintNode(
             context,
             {
+              // @ts-expect-error
+              // this is needed due to broken typings in jsonpath-plus (JSONPathClass.toPathArray is correct from typings point of view, but JSONPathClass is not exported, so it fails at runtime)
               path: JSONPath.toPathArray(result.path),
               value: result.value,
             },

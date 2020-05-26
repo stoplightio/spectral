@@ -95,20 +95,20 @@ function processTargetResults(
   targetPath: JsonPath,
 ): void {
   for (const result of results) {
-    const escapedJsonPath = (result.path || targetPath).map(decodeSegmentFragment);
+    const escapedJsonPath = (result.path ?? targetPath).map(decodeSegmentFragment);
     const associatedItem = context.documentInventory.findAssociatedItemForPath(
       escapedJsonPath,
       rule.resolved !== false,
     );
-    const path = associatedItem?.path || getClosestJsonPath(context.documentInventory.resolved, escapedJsonPath);
+    const path = associatedItem?.path ?? getClosestJsonPath(context.documentInventory.resolved, escapedJsonPath);
     const source = associatedItem?.document.source;
 
     if (exceptionLocations !== void 0 && isAKnownException(path, source, exceptionLocations)) {
       continue;
     }
 
-    const document = associatedItem?.document || context.documentInventory.document;
-    const range = document.getRangeForJsonPath(path, true) || Document.DEFAULT_RANGE;
+    const document = associatedItem?.document ?? context.documentInventory.document;
+    const range = document.getRangeForJsonPath(path, true) ?? Document.DEFAULT_RANGE;
     const value = path.length === 0 ? document.data : get(document.data, path);
 
     const vars: IMessageVars = {
