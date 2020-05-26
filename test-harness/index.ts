@@ -18,7 +18,10 @@ describe('cli acceptance tests', () => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
 
-    if (scenario.command === void 0) return;
+    if (scenario.command === void 0) {
+      test.todo(scenario.test);
+      return;
+    }
 
     const replacements: Dictionary<string> = {
       __dirname: normalize(__dirname),
