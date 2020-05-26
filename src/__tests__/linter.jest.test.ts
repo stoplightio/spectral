@@ -408,7 +408,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           .get('/evil')
           .query(query => 'words' in query)
           .reply(uri => {
-            const [, words] = uri.match(/words\=([^/&]+)$/)!;
+            const [, words] = /words=([^/&]+)$/.exec(uri)!;
             return [200, words.split(',').filter(word => forbiddenWords.includes(word.toLowerCase()))];
           });
 
