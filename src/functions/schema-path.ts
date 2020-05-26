@@ -25,17 +25,11 @@ export interface ISchemaPathOptions {
 }
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
-  if (!opts) {
-    // todo: nicer validation
-    throw new Error('No options provided');
-  }
-
-  // The subsection of the targetValue which contains the schema for us to validate the good bit against
-  const schemaObject = JSONPath({ path: opts!.schemaPath, json: targetVal });
-  if (!Array.isArray(schemaObject) || schemaObject.length === 0) return;
-
   // The subsection of the targetVal which contains the good bit
   const relevantItems = getLintTargets(targetVal, opts.field);
+
+  // The subsection of the targetValue which contains the schema for us to validate the good bit against
+  const schemaObject = JSONPath({ path: opts.schemaPath, json: targetVal })[0];
 
   const results: IFunctionResult[] = [];
 
@@ -43,7 +37,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     const result = schema(
       relevantItem.value,
       {
-        schema: schemaObject[0],
+        schema: schemaObject,
         oasVersion: opts.oasVersion,
         allErrors: opts.allErrors,
       },

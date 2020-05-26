@@ -9,7 +9,7 @@ export const oasOpSecurityDefined: IFunction<{
 }> = (targetVal, options) => {
   const results: IFunctionResult[] = [];
 
-  const { schemesPath } = options!;
+  const { schemesPath } = options;
 
   const { paths = {} } = targetVal;
   const schemes = _get(targetVal, schemesPath) || {};

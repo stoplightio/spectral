@@ -7,7 +7,6 @@ export default (ruleName: string, path: string) => {
 
   beforeEach(() => {
     s = new Spectral();
-
     s.registerFormat('oas3', () => true);
     s.setRules({
       [ruleName]: Object.assign(rules[ruleName], {

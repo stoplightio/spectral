@@ -7,7 +7,7 @@ export interface IEnumRuleOptions {
 export const enumeration: IFunction<IEnumRuleOptions> = (targetVal, opts) => {
   if (targetVal === void 0) return;
 
-  const { values } = opts!; // todo: validate
+  const { values } = opts;
 
   const results: IFunctionResult[] = [];
 

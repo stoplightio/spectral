@@ -33,7 +33,7 @@ export const pattern: IFunction<IRulePatternOptions> = (targetVal, opts) => {
 
   const results: IFunctionResult[] = [];
 
-  const { match, notMatch } = opts!; // todo: avoid this and do validation.
+  const { match, notMatch } = opts;
 
   if (match) {
     if (test(targetVal, match) !== true) {
