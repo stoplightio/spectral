@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Improve `oas2-schema` and `oas3-schema` rules [#403](https://github.com/stoplightio/spectral/issues/403)
 - Make `example-value-or-externalValue` only target oas3 document [#883](https://github.com/stoplightio/spectral/issues/883)
-- `path-params` rule detects undefined parameters across operations [#1076](https://github.com/stoplightio/spectral/issues/1076)
+- `path-params` rule now properly detects undefined parameters across operations [#1076](https://github.com/stoplightio/spectral/issues/1076)
 - Load custom functions from NPM correctly [#1093](https://github.com/stoplightio/spectral/pull/1093)
 - `path-params` reports an actual endpoint path [#1130](https://github.com/stoplightio/spectral/issues/1130)
 
