@@ -54,11 +54,10 @@
     "schema.update": "yarn typescript-json-schema --id \"http://stoplight.io/schemas/rule.schema.json\" --required tsconfig.json IRule --out ./src/meta/rule.schema.json",
     "test.harness": "jest -c ./jest.harness.config.js",
     "test.karma": "karma start",
-    "test.jest": "jest --silent",
-    "test": "yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
-    "test.prod": "yarn build && yarn lint && yarn test && cross-env USE_NIMMA=true yarn test",
+    "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
-    "test.watch": "yarn test --watch"
+    "test.watch": "yarn test --watch",
+    "test": "jest --silent"
   },
   "dependencies": {
     "@stoplight/json": "3.6.0",
@@ -107,7 +106,6 @@
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "copyfiles": "^2.2.0",
-    "cross-env": "^7.0.2",
     "dependency-graph": "^0.8.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
