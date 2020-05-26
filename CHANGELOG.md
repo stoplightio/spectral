@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.4.0] - 2019-05-20
+## [5.4.0] - 2019-05-26
 
 ### Added
 - New AsyncAPI 2 ruleset and format [#965](https://github.com/stoplightio/spectral/issues/965)
@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expose fetch and cache to custom functions [#1078](https://github.com/stoplightio/spectral/pull/1078), [#1079](https://github.com/stoplightio/spectral/pull/1079)
 
 ### Changed
-- Rename `oas3-example-value-or-externalValue` rule to `oas3-examples-value-or-externalValue` [#1098](https://github.com/stoplightio/spectral/pull/1098)
+- Drop `example-value-or-externalValue` rule and introduce `oas3-examples-value-or-externalValue` [#883](https://github.com/stoplightio/spectral/issues/883), [#1098](https://github.com/stoplightio/spectral/pull/1098)
 - Drop useless oas rule tags [#1095](https://github.com/stoplightio/spectral/pull/1095)
 - AJV: swallow missing references [#1147](https://github.com/stoplightio/spectral/pull/1147)
 - Improve ruleset validation [#1144](https://github.com/stoplightio/spectral/pull/1144)
@@ -23,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Improve `oas2-schema` and `oas3-schema` rules [#403](https://github.com/stoplightio/spectral/issues/403)
-- Make `example-value-or-externalValue` only target oas3 document [#883](https://github.com/stoplightio/spectral/issues/883)
 - `path-params` rule now properly detects undefined parameters across operations [#1076](https://github.com/stoplightio/spectral/issues/1076)
 - Load custom functions from NPM correctly [#1093](https://github.com/stoplightio/spectral/pull/1093)
 - `path-params` reports an actual endpoint path [#1130](https://github.com/stoplightio/spectral/issues/1130)
