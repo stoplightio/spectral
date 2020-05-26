@@ -1,5 +1,5 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { omit } from 'lodash';
 import { IParsedResult } from '../document';
@@ -841,11 +841,18 @@ responses:: !!foo
 
     describe('when given path is set', () => {
       test('should pass given path through to lint function', async () => {
+        let path: JsonPath | null = null;
+        let given: unknown;
+        (fakeLintingFunction as jest.Mock).mockImplementation((_targetVal, _opts, paths, values) => {
+          path = [...paths.given];
+          given = values.given;
+        });
+
         await spectral.run(target);
 
         expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
-        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
+        expect(path).toEqual(['responses']);
+        expect(given).toEqual(target.responses);
       });
 
       test('given array of paths, should pass each given path through to lint function', async () => {
