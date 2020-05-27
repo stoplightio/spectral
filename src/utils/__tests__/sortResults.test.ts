@@ -133,7 +133,7 @@ describe('sortResults', () => {
     const shuffled = results
       .map((v, i) => ({ ...v, pos: indices[i] }))
       .sort((a, b) => a.pos - b.pos)
-      .map((v, i) => {
+      .map(v => {
         delete v.pos;
         return v;
       });

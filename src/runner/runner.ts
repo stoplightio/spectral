@@ -1,15 +1,17 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
-import { JSONPathCallback } from 'jsonpath-plus';
+import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
+import { isObject } from 'lodash';
+
 import { STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { Rule } from '../rule';
 import { IRuleResult } from '../types';
+import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
+import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
-import { IExceptionLocation, pivotExceptions } from './utils/pivotExceptions';
-
-const { JSONPath } = require('jsonpath-plus');
+import { IExceptionLocation, pivotExceptions } from './utils';
 
 const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
@@ -24,47 +26,14 @@ const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory)
   );
 };
 
-export const runRules = async (context: IRunnerPublicContext): Promise<IRuleResult[]> => {
-  const { documentInventory, rules, exceptions } = context;
-
-  const runnerContext: IRunnerInternalContext = {
-    ...context,
-    results: [],
-    promises: [],
-  };
-
-  const isStdIn = isStdInSource(documentInventory);
-  const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
-
-  if (isStdIn && Object.keys(exceptions).length > 0) {
-    runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
-  }
-
-  const relevantRules = Object.values(rules).filter(
-    rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
-  );
-
-  for (const rule of relevantRules) {
-    try {
-      runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
-    } catch (ex) {
-      console.error(ex);
-    }
-  }
-
-  if (runnerContext.promises.length > 0) {
-    await Promise.all(runnerContext.promises);
-  }
-
-  return runnerContext.results;
-};
-
 const runRule = (
   context: IRunnerInternalContext,
   rule: Rule,
   exceptRuleByLocations: Optional<IExceptionLocation[]>,
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
+
+  if (!isObject(target)) return;
 
   for (const given of rule.given) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -87,6 +56,8 @@ const runRule = (
           lintNode(
             context,
             {
+              // @ts-expect-error
+              // this is needed due to broken typings in jsonpath-plus (JSONPathClass.toPathArray is correct from typings point of view, but JSONPathClass is not exported, so it fails at runtime)
               path: JSONPath.toPathArray(result.path),
               value: result.value,
             },
@@ -98,3 +69,67 @@ const runRule = (
     }
   }
 };
+
+export class Runner {
+  public readonly results: IRuleResult[];
+
+  constructor(protected readonly runtime: RunnerRuntime, protected readonly inventory: DocumentInventory) {
+    this.results = [...this.inventory.diagnostics, ...this.document.diagnostics, ...this.inventory.errors];
+  }
+
+  protected get document() {
+    return this.inventory.document;
+  }
+
+  public addResult(result: IRuleResult) {
+    this.results.push(result);
+  }
+
+  public async run(context: IRunnerPublicContext): Promise<void> {
+    this.runtime.emit('setup');
+
+    const { inventory: documentInventory } = this;
+
+    const { rules, exceptions } = context;
+
+    const runnerContext: IRunnerInternalContext = {
+      ...context,
+      documentInventory,
+      results: this.results,
+      promises: [],
+    };
+
+    const isStdIn = isStdInSource(documentInventory);
+    const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
+
+    if (isStdIn && Object.keys(exceptions).length > 0) {
+      runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
+    }
+
+    const relevantRules = Object.values(rules).filter(
+      rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
+    );
+
+    for (const rule of relevantRules) {
+      try {
+        runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
+      } catch (ex) {
+        console.error(ex);
+      }
+    }
+
+    this.runtime.emit('beforeTeardown');
+
+    try {
+      if (runnerContext.promises.length > 0) {
+        await Promise.all(runnerContext.promises);
+      }
+    } finally {
+      this.runtime.emit('afterTeardown');
+    }
+  }
+
+  public getResults(computeFingerprint: ComputeFingerprintFunc) {
+    return prepareResults(this.results, computeFingerprint);
+  }
+}

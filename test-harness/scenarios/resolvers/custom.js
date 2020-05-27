@@ -5,7 +5,7 @@ module.exports = new Resolver({
     custom: {
       async resolve() {
         return `{ "user": "Stoplight" }`;
-      }
-    }
-  }
+      },
+    },
+  },
 });

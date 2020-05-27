@@ -56,6 +56,46 @@ export type IFunction<O = any> = (
 ) => void | IFunctionResult[];
 ```
 
+### Validating options
+
+If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
+
+You can do it as follows:
+
+```yaml
+functions:
+- equals
+  # can be any valid JSON Schema Draft 07
+  - properties:
+      value:
+        type: string
+        description: Value to check equality for
+rules:
+  my-rule:
+    message: "{{error}}"
+    given: "$.info"
+    then:
+      function: "equals"
+      functionOptions:
+        value: "abc"
+```
+
+Where the function `functions/equals.js` might look like:
+
+```js
+module.exports = (targetVal, opts) => {
+  const { value } = opts;
+
+  if (targetVal !== value) {
+    return [
+      {
+        message: `Value must equal {value}.`,
+      },
+    ];
+  }
+};
+```
+
 ### targetValue
 
 `targetValue` the value the custom function is provided with and is supposed to lint against.
@@ -176,7 +216,7 @@ It's worth keeping in mind, Spectral will attempt to deduplicate messages when t
 
 As such, when your custom function is susceptible to return more than one result, you have to specify a different `path` for each result.
 
-### Async Functions
+## Async Functions
 
 As of Spectral 5.4.0, custom functions can also be asynchronous.
 
@@ -220,45 +260,7 @@ rules:
       function: "dictionary"
 ```
 
-If you are writing a function that accepts options, you should provide a JSON Schema that describes those options.
-
-You can do it as follows:
-
-```yaml
-functions:
-- equals
-  # can be any valid JSON Schema Draft 07
-  - properties:
-      value:
-        type: string
-        description: Value to check equality for
-rules:
-  my-rule:
-    message: "{{error}}"
-    given: "$.info"
-    then:
-      function: "equals"
-      functionOptions:
-        value: "abc"
-```
-
-Where the function `functions/equals.js` might look like:
-
-```js
-module.exports = (targetVal, opts) => {
-  const { value } = opts;
-
-  if (targetVal !== value) {
-    return [
-      {
-        message: `Value must equal {value}.`,
-      },
-    ];
-  }
-};
-```
-
-## Caching
+### Caching
 
 Performs anything slow inside a function (like `fs` calls), you may want to leverage cache.
 
@@ -303,8 +305,7 @@ rules:
       function: "abc"
 ```
 
-
-### Security Concerns
+## Security Concerns
 
 Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
 
@@ -324,8 +325,6 @@ What you should hunt for is:
 - places where remote code is executed.
 
 If you notice any weirdness, consider forking the ruleset and removal of any evil-looking code.
-
-
 
 ## Inheritance
 

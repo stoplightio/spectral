@@ -7,7 +7,9 @@ export interface ILintTarget {
   value: unknown;
 }
 
-const { toPathArray } = JSONPath as typeof JSONPath & { toPathArray(path: string): string[] };
+const { toPathArray } = JSONPath as typeof JSONPath & {
+  toPathArray(path: string): string[];
+};
 
 export const getLintTargets = (targetValue: unknown, field: Optional<string>): ILintTarget[] => {
   const targets: ILintTarget[] = [];
@@ -20,7 +22,7 @@ export const getLintTargets = (targetValue: unknown, field: Optional<string>): I
           value: key,
         });
       }
-    } else if (field[0] === '$') {
+    } else if (field.startsWith('$')) {
       JSONPath({
         path: field,
         json: targetValue,

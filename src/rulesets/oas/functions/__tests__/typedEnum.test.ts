@@ -89,7 +89,7 @@ describe('typedEnum', () => {
 
     test.each(testCases)(
       'does not report anything when all the definitions are valid for type "%s"',
-      async (type: string, valids: unknown[], invalid: unknown) => {
+      async (type: string, valids: unknown[]) => {
         const schema = {
           type,
           enum: valids,

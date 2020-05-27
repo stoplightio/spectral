@@ -51,7 +51,9 @@ describe('cli acceptance tests', () => {
       await Promise.all(
         scenario.assets.map(async ([asset, contents]) => {
           const replaced = applyReplacements(contents, replacements);
-          await writeFileAsync(replacements[asset], replaced, { encoding: 'utf8' });
+          await writeFileAsync(replacements[asset], replaced, {
+            encoding: 'utf8',
+          });
         }),
       );
     });
