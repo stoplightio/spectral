@@ -4,7 +4,10 @@ import { isObject } from 'lodash';
 import { IFunction, JSONSchema } from '../types';
 import { decorateIFunctionWithSchemaValidation } from './validation';
 
-export type CJSExport = Partial<{ exports: object | ESCJSCompatibleExport; require: NodeJS.Require }>;
+export type CJSExport = Partial<{
+  exports: object | ESCJSCompatibleExport;
+  require: NodeJS.Require;
+}>;
 export type ESCJSCompatibleExport = Partial<{ default: unknown }>;
 export type ContextExport = Partial<{ returnExports: unknown }>;
 

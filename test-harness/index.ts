@@ -17,6 +17,12 @@ describe('cli acceptance tests', () => {
   describe.each(files)('%s file', file => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
+
+    if (scenario.command === void 0) {
+      test.todo(scenario.test);
+      return;
+    }
+
     const replacements: Dictionary<string> = {
       __dirname: normalize(__dirname),
       bin: spectralBin,
@@ -45,7 +51,9 @@ describe('cli acceptance tests', () => {
       await Promise.all(
         scenario.assets.map(async ([asset, contents]) => {
           const replaced = applyReplacements(contents, replacements);
-          await writeFileAsync(replacements[asset], replaced, { encoding: 'utf8' });
+          await writeFileAsync(replacements[asset], replaced, {
+            encoding: 'utf8',
+          });
         }),
       );
     });
@@ -59,7 +67,7 @@ describe('cli acceptance tests', () => {
     });
 
     test(scenario.test, async () => {
-      const command = applyReplacements(scenario.command, replacements);
+      const command = applyReplacements(scenario.command!, replacements);
       const { stderr, stdout, status } = await spawnNode(command, scenario.env);
       replacements.date = String(new Date()); // this may introduce random failures, but hopefully they don't occur too often
 

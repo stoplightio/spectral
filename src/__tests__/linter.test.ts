@@ -748,7 +748,9 @@ responses:: !!foo
 
   describe('reports duplicated properties for', () => {
     test('JSON format', async () => {
-      const result = await spectral.run('{"foo":true,"foo":false}', { ignoreUnknownFormat: true });
+      const result = await spectral.run('{"foo":true,"foo":false}', {
+        ignoreUnknownFormat: true,
+      });
 
       expect(result).toEqual([
         {
@@ -771,7 +773,9 @@ responses:: !!foo
     });
 
     test('YAML format', async () => {
-      const result = await spectral.run(`foo: bar\nfoo: baz`, { ignoreUnknownFormat: true });
+      const result = await spectral.run(`foo: bar\nfoo: baz`, {
+        ignoreUnknownFormat: true,
+      });
 
       expect(result).toEqual([
         {

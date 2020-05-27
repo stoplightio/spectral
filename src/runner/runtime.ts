@@ -41,6 +41,7 @@ export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
 
   protected hijackDisposable<F extends (...args: any[]) => IDisposable>(fn: F): F {
     return ((...args) => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       this.revokables.push(fn.apply(this, args).dispose);
     }) as F;
   }

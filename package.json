@@ -43,7 +43,7 @@
     "inline-version": "./scripts/inline-version.js",
     "prelint": "tsc --noEmit",
     "lint.fix": "yarn lint --fix",
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "eslint --cache --cache-location .cache/ src/**/*.{ts,js} test-harness/**/*.{ts,js}",
     "copy.html-templates": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
     "postbuild.functions": "copyfiles -u 1 \"dist/rulesets/{oas,asyncapi}/functions/*.js\" ./",
     "postbuild": "yarn build.functions && yarn generate-assets",
@@ -58,9 +58,6 @@
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
     "test": "jest --silent"
-  },
-  "resolutions": {
-    "prettier": "^2.0.2"
   },
   "dependencies": {
     "@stoplight/json": "3.6.0",
@@ -105,8 +102,13 @@
     "@types/text-table": "^0.2.1",
     "@types/tmp": "^0.2.0",
     "@types/xml2js": "^0.4.5",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "copyfiles": "^2.2.0",
     "dependency-graph": "^0.8.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "fetch-mock": "^7.7.3",
     "glob-fs": "^0.1.7",
     "husky": "^4.2.5",
@@ -130,14 +132,13 @@
     "ts-jest": "^25.0.0",
     "ts-node": "^8.10.1",
     "tsconfig-paths": "^3.9.0",
-    "tslint": "~5.20",
-    "tslint-config-stoplight": "~1.4",
-    "typescript": "^3.9.2",
-    "typescript-json-schema": "~0.42.0",
+    "typescript": "^3.9.3",
     "xml2js": "^0.4.23"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "tslint --fix"
+    "*.{ts,tsx}": [
+      "eslint --fix --cache --cache-location .cache"
+    ]
   },
   "husky": {
     "hooks": {

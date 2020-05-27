@@ -41,7 +41,7 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
     targetArray = targetVal;
   } else {
     targetVal =
-      documentInventory.findAssociatedItemForPath(paths.given, true)?.document.trapAccess(targetVal) || targetVal;
+      documentInventory.findAssociatedItemForPath(paths.given, true)?.document.trapAccess(targetVal) ?? targetVal;
     targetArray = Object.keys(targetVal);
   }
 
@@ -65,10 +65,12 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
   );
 
   if (unsortedItems != null) {
-    const path = paths.target || paths.given;
+    const path = paths.target ?? paths.given;
 
     results.push({
-      ...(!keyedBy && { path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]] }),
+      ...(!keyedBy && {
+        path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]],
+      }),
       message: keyedBy
         ? 'properties are not in alphabetical order'
         : `at least 2 properties are not in alphabetical order: "${
