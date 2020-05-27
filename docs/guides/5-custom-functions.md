@@ -338,7 +338,7 @@ If your document is huge enough, and JSON path expression is loose (meaning it m
 ```
 // bad
 module.exports = (targetVal, { excludedWords }) => {
-  const results = []; // the array is always allocate, even if targetVal is perfectly valid
+  const results = []; // the array is always allocated, even if targetVal is perfectly valid
 
   if (excludedWords.includes('foo')) {
      results.push({ error: 'Forbidden word used' });
