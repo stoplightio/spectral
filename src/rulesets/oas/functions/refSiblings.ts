@@ -13,7 +13,9 @@ function getParentValue(document: unknown, path: JsonPath): unknown {
   let piece = document;
 
   for (let i = 0; i < path.length - 1; i += 1) {
-    if (!isObject(piece)) return null;
+    if (!isObject(piece)) {
+      return null;
+    }
 
     piece = piece[path[i]];
   }
@@ -24,16 +26,22 @@ function getParentValue(document: unknown, path: JsonPath): unknown {
 const refSiblings: IFunction = (targetVal, opts, paths, { documentInventory }) => {
   const value = getParentValue(documentInventory.unresolved, paths.given);
 
-  if (!isObject(value)) return;
+  if (!isObject(value)) {
+    return;
+  }
 
   const keys = Object.keys(value);
-  if (keys.length === 1) return;
+  if (keys.length === 1) {
+    return;
+  }
 
   const results: IFunctionResult[] = [];
   const actualObjPath = paths.given.slice(0, -1);
 
   for (const key of keys) {
-    if (key === '$ref') continue;
+    if (key === '$ref') {
+      continue;
+    }
     results.push({
       message: '$ref cannot be placed next to any other properties',
       path: [...actualObjPath, key],
