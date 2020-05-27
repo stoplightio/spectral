@@ -145,8 +145,8 @@ describe('Rulesets reader', () => {
           oasRules[name] = {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
-            ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
-            ...((rule as IRule).recommended === void 0 && { recommended: true }),
+            ...(rule.severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+            ...(rule.recommended === void 0 && { recommended: true }),
             then: expect.any(Object),
           };
 
@@ -172,9 +172,9 @@ describe('Rulesets reader', () => {
             rules[name] = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === undefined && { severity: DiagnosticSeverity.Warning }),
-              ...((rule as IRule).recommended === false && { severity: -1 }),
-              ...((rule as IRule).recommended === void 0 && { recommended: true }),
+              ...(rule.severity === undefined && { severity: DiagnosticSeverity.Warning }),
+              ...(rule.recommended === false && { severity: -1 }),
+              ...(rule.recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
             };
 
@@ -213,9 +213,9 @@ describe('Rulesets reader', () => {
             const formattedRule: IRule = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              ...((rule as IRule).severity === void 0 && { severity: DiagnosticSeverity.Warning }),
-              ...((rule as IRule).recommended === false && { severity: -1 }),
-              ...((rule as IRule).recommended === void 0 && { recommended: true }),
+              ...(rule.severity === void 0 && { severity: DiagnosticSeverity.Warning }),
+              ...(rule.recommended === false && { severity: -1 }),
+              ...(rule.recommended === void 0 && { recommended: true }),
               then: expect.any(Object),
             };
 
@@ -731,10 +731,10 @@ describe('Rulesets reader', () => {
     );
 
     const [barRandomName, barFunctionDef] = Object.entries(ruleset.functions).find(
-      ([name, obj]) => ruleset.functions.bar.ref === name,
+      ([name]) => ruleset.functions.bar.ref === name,
     )!;
     const [truthyRandomName, truthyFunctionDef] = Object.entries(ruleset.functions).find(
-      ([name, obj]) => ruleset.functions.truthy.ref === name,
+      ([name]) => ruleset.functions.truthy.ref === name,
     )!;
 
     // now let's verify unique properties include proper functions

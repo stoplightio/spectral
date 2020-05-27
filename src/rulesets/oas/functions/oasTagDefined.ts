@@ -15,7 +15,7 @@ export const oasTagDefined: IFunction = targetVal => {
   for (const path in paths) {
     if (Object.keys(paths[path]).length > 0) {
       for (const operation in paths[path]) {
-        if (validOperationKeys.indexOf(operation) > -1) {
+        if (validOperationKeys.includes(operation)) {
           const { tags = [] } = paths[path][operation];
           tags.forEach((tag: string, index: number) => {
             if (globalTags.indexOf(tag) === -1) {

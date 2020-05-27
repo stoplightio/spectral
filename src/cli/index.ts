@@ -6,6 +6,7 @@ import { DEFAULT_REQUEST_OPTIONS } from '../request';
 import lintCommand from './commands/lint';
 
 if (process.env.PROXY) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const ProxyAgent = require('proxy-agent');
   DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(process.env.PROXY);
 }

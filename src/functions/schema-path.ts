@@ -43,7 +43,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
       },
       {
         given: paths.given,
-        target: [...(paths.target || paths.given), ...relevantItem.path],
+        target: [...(paths.target ?? paths.given), ...relevantItem.path],
       },
       otherValues,
     );

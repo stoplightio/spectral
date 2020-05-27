@@ -82,7 +82,7 @@ describe('Linter', () => {
     it('should have access to function-live lifespan cache', async () => {
       const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
 
-      await spectral.setRuleset({
+      spectral.setRuleset({
         exceptions: {},
         rules: {
           foo: {
@@ -124,7 +124,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
     it('should have access to cache that is not shared among them', async () => {
       const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
 
-      await spectral.setRuleset({
+      spectral.setRuleset({
         exceptions: {},
         rules: {
           foo: {
@@ -408,7 +408,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           .get('/evil')
           .query(query => 'words' in query)
           .reply(uri => {
-            const [, words] = uri.match(/words\=([^/&]+)$/)!;
+            const [, words] = /words=([^/&]+)$/.exec(uri)!;
             return [200, words.split(',').filter(word => forbiddenWords.includes(word.toLowerCase()))];
           });
 

@@ -71,6 +71,7 @@ function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV
   ajv.addMetaSchema(jsonSpecV4);
   ajv.addMetaSchema(jsonSpecV6);
 
+  /* eslint @typescript-eslint/ban-ts-ignore: 0 */
   // @ts-ignore
   ajv._opts.defaultMeta = jsonSpecV4.id;
   // @ts-ignore
@@ -144,7 +145,7 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
 };
 
 export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
-  const path = paths.target || paths.given;
+  const path = paths.target ?? paths.given;
 
   if (targetVal === void 0) {
     return [
@@ -202,6 +203,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
 };
 
 schema.Ajv = AJV;
+// eslint-disable-next-line @typescript-eslint/unbound-method
 schema.createAJVInstance = (opts: AJV.Options) => {
   const ajv = new AJV(opts);
 

@@ -56,7 +56,7 @@ const createRulesetProcessor = (
     const { result } = await httpAndFileResolver.resolve(
       parse(
         await readParsable(rulesetUri, {
-          timeout: readOpts && readOpts.timeout,
+          timeout: readOpts?.timeout,
           encoding: 'utf8',
         }),
       ),
@@ -134,7 +134,7 @@ const createRulesetProcessor = (
             resolvedFunctions[fnName] = {
               name: fnName,
               code: await readFile(source, {
-                timeout: readOpts && readOpts.timeout,
+                timeout: readOpts?.timeout,
                 encoding: 'utf8',
               }),
               schema: fnSchema,

@@ -74,5 +74,10 @@ export const getSummary = (groupedResults: Dictionary<IRuleResult[]>): string | 
     hintCount += hints.length;
   }
 
-  return printSummary({ errors: errorCount, warnings: warningCount, infos: infoCount, hints: hintCount });
+  return printSummary({
+    errors: errorCount,
+    warnings: warningCount,
+    infos: infoCount,
+    hints: hintCount,
+  });
 };

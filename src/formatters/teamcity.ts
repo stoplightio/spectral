@@ -34,13 +34,13 @@ function inspection(result: IRuleResult) {
   return `##teamcity[inspection typeId='${code}' file='${result.source}' line='${line}' message='${severity} -- ${message}']`;
 }
 
-function renderResults(results: IRuleResult[], parentIndex: number) {
+function renderResults(results: IRuleResult[]) {
   return results.map(result => `${inspectionType(result)}\n${inspection(result)}`).join('\n');
 }
 
 function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>) {
   return Object.keys(groupedResults)
-    .map((source, index) => renderResults(groupedResults[source], index))
+    .map(source => renderResults(groupedResults[source]))
     .join('\n');
 }
 

@@ -37,7 +37,7 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
     targetArray = targetVal;
   } else {
     targetVal =
-      documentInventory.findAssociatedItemForPath(paths.given, true)?.document.trapAccess(targetVal) || targetVal;
+      documentInventory.findAssociatedItemForPath(paths.given, true)?.document.trapAccess(targetVal) ?? targetVal;
     targetArray = Object.keys(targetVal);
   }
 
@@ -61,7 +61,7 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
   );
 
   if (unsortedItems != null) {
-    const path = paths.target || paths.given;
+    const path = paths.target ?? paths.given;
     return [
       {
         ...(!keyedBy && {

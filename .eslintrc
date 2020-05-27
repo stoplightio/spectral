@@ -1,0 +1,113 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.eslint.json"
+  },
+  "env": {
+    "es6": true,
+    "shared-node-browser": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "func-names": "off",
+    "no-constant-condition": "warn",
+    "no-param-reassign": "off",
+    "no-restricted-syntax": "off",
+    "no-continue": "off",
+    "no-label-var": "off",
+    "no-void": "off",
+    "no-undefined": "off",
+
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/strict-boolean-expressions": "warn",
+    "@typescript-eslint/prefer-regexp-exec": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-for-of": "error",
+    "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
+    "@typescript-eslint/no-throw-literal": "error",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "@typescript-eslint/no-var-requires": "warn",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/explicit-function-return-type": "warn"
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/rulesets/*/functions/**/*.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+
+    {
+      "files": [
+        "**/__tests__/*.{ts,js}"
+      ],
+      "rules": {
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/unbound-method": "off"
+      }
+    },
+
+    {
+      "files": [
+        "**/__tests__/**/*.jest.test.{ts,js}"
+      ],
+      "env": {
+        "jest": true
+      }
+    },
+
+    {
+      "files": [
+        "**/__tests__/**/*.karma.test.{ts,js}"
+      ],
+      "env": {
+        "browser": true,
+        "jasmine": true
+      }
+    },
+
+    {
+      "files": [
+        "test-harness/**/*.{ts,js}"
+      ],
+      "env": {
+        "node": true
+      }
+    },
+
+    {
+      "files": [
+        "test-harness/**/*.js"
+      ],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
+}
