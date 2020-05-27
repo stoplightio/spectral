@@ -1,6 +1,6 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 
@@ -62,7 +62,10 @@ export class Spectral {
     Object.assign(STATIC_ASSETS, assets);
   }
 
-  protected parseDocument(target: IParsedResult | IDocument | object | string): IDocument {
+  protected parseDocument(
+    target: IParsedResult | IDocument | object | string,
+    documentUri: Optional<string>,
+  ): IDocument {
     return target instanceof Document
       ? target
       : isParsedResult(target)
@@ -70,6 +73,7 @@ export class Spectral {
       : new Document<unknown, YamlParserResult<unknown>>(
           typeof target === 'string' ? target : safeStringify(target, undefined, 2),
           Parsers.Yaml,
+          documentUri,
         );
   }
 
@@ -77,7 +81,7 @@ export class Spectral {
     target: IParsedResult | IDocument | object | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
-    const document = this.parseDocument(target);
+    const document = this.parseDocument(target, opts.resolve?.documentUri);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
       (document as Omit<Document, 'source'> & { source: string }).source = opts.resolve?.documentUri;
