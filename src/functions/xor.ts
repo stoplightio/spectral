@@ -6,11 +6,11 @@ export interface IXorRuleOptions {
 }
 
 export const xor: IFunction<IXorRuleOptions> = (targetVal, opts) => {
-  const results: IFunctionResult[] = [];
-
   const { properties } = opts;
 
-  if (!targetVal || typeof targetVal !== 'object' || properties.length !== 2) return results;
+  if (targetVal === null || typeof targetVal !== 'object' || properties.length !== 2) return;
+
+  const results: IFunctionResult[] = [];
 
   const intersection = Object.keys(targetVal).filter(value => -1 !== properties.indexOf(value));
   if (intersection.length !== 1) {

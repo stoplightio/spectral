@@ -860,7 +860,7 @@ describe('Ruleset Validation', () => {
                 then: {
                   function: 'unreferencedReusableObject',
                   functionOptions: {
-                    reusableObjectsLocation: 'foo',
+                    reusableObjectsLocation: '#',
                   },
                 },
               },
@@ -888,7 +888,7 @@ describe('Ruleset Validation', () => {
         ).toThrow(ValidationError);
       });
 
-      it('complains about invalid options', () => {
+      it.each([2, '', 'd'])('complains about invalid options %s', reusableObjectsLocation => {
         expect(
           assertValidRuleset.bind(null, {
             rules: {
@@ -897,7 +897,7 @@ describe('Ruleset Validation', () => {
                 then: {
                   function: 'unreferencedReusableObject',
                   functionOptions: {
-                    reusableObjectsLocation: 2,
+                    reusableObjectsLocation,
                   },
                 },
               },

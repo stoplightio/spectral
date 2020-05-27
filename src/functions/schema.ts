@@ -145,8 +145,6 @@ const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestio
 };
 
 export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
-  const results: IFunctionResult[] = [];
-
   const path = paths.target ?? paths.given;
 
   if (targetVal === void 0) {
@@ -157,6 +155,8 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
       },
     ];
   }
+
+  const results: IFunctionResult[] = [];
 
   // we already access a resolved object in src/functions/schema-path.ts
   const { schema: schemaObj } = opts;

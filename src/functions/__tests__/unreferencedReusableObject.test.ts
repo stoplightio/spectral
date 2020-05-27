@@ -12,7 +12,7 @@ describe('unreferencedReusableObject', () => {
     expect(() => runUnreferencedReusableObject({}, 'Nope')).toThrow();
   });
 
-  test('given a non object data should return empty array', () => {
-    expect(runUnreferencedReusableObject('Nope', '#')).toEqual([]);
+  test('given a non object data should return nothing', () => {
+    expect(runUnreferencedReusableObject('Nope', '#')).toBeUndefined();
   });
 });

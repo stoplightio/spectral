@@ -330,6 +330,33 @@ If you notice any weirdness, consider forking the ruleset and removal of any evi
 
 Core functions can be overridden with custom rulesets, so if you'd like to make your own truthy go ahead. Custom functions are only available in the ruleset which defines them, so loading a foo in one ruleset will not clobber a foo in another ruleset.
 
+## Performance tips
+
+- try to avoid allocating objects as much as possible if your custom function might is very generic, and therefore is expected to be used by plenty of rules.
+If your document is huge enough, and JSON path expression is loose (meaning it matches a lot of properties), your function might be called hundreds of thousands of times.
+
+```
+// bad
+module.exports = (targetVal, { excludedWords }) => {
+  const results = []; // the array is always allocated, even if targetVal is perfectly valid
+
+  if (excludedWords.includes('foo')) {
+     results.push({ error: 'Forbidden word used' });
+  }
+
+  return results;
+}
+```
+
+```
+// better, no temporary array if targetVal is valid
+module.exports = (targetVal, { excludedWords }) => {
+  if (excludedWords.includes('foo')) {
+     return [{ error: 'Forbidden word used' }];
+  }
+}
+```
+
 ## Supporting Multiple Environments
 
 Spectral is meant to support a variety of environments, so ideally your function should behave similarly in Node.js and browser contexts. Do not rely on globals or functions specific to a particular environment. For example, do not expect the browser `window` global to always be available, since this global is not available in Node.js environments.

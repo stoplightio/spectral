@@ -20,12 +20,12 @@ function runAlphabetical(target: any, keyedBy?: string) {
 }
 
 describe('alphabetical', () => {
-  test('given falsy target should return empty array', () => {
-    expect(runAlphabetical(false)).toEqual([]);
+  test('given falsy target should return nothing', () => {
+    expect(runAlphabetical(false)).toBeUndefined();
   });
 
-  test('given single element target should return empty array', () => {
-    expect(runAlphabetical(['a'])).toEqual([]);
+  test('given single element target should return nothing', () => {
+    expect(runAlphabetical(['a'])).toBeUndefined();
   });
 
   test('given an object and keys not in order return an error message', () => {
@@ -68,7 +68,7 @@ describe('alphabetical', () => {
     });
 
     test('given a sorted array of strings should NOT return error', () => {
-      expect(runAlphabetical(['a', 'ab'])).toEqual([]);
+      expect(runAlphabetical(['a', 'ab'])).toBeUndefined();
     });
 
     test('given an unsorted array of numbers should return error', () => {
@@ -81,7 +81,7 @@ describe('alphabetical', () => {
     });
 
     test('given an array of objects should NOT return an error', () => {
-      expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toEqual([]);
+      expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toBeUndefined();
     });
   });
 
@@ -95,11 +95,11 @@ describe('alphabetical', () => {
     });
 
     test('given an array of objects with sorted prop values to NOT return an error', () => {
-      expect(runAlphabetical([{ a: '1' }, { a: '2' }, { a: '2' }], 'a')).toEqual([]);
+      expect(runAlphabetical([{ a: '1' }, { a: '2' }, { a: '2' }], 'a')).toBeUndefined();
     });
 
     test('given an array primitives should not return error', () => {
-      expect(runAlphabetical([100, 1], 'a')).toEqual([]);
+      expect(runAlphabetical([100, 1], 'a')).toBeUndefined();
     });
   });
 

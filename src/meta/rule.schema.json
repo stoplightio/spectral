@@ -256,7 +256,9 @@
                 "additionalProperties": false,
                 "properties": {
                   "reusableObjectsLocation": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^#"
                   }
                 },
                 "required": [

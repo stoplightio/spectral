@@ -29,9 +29,9 @@ function test(value: string, regex: RegExp | string) {
 }
 
 export const pattern: IFunction<IRulePatternOptions> = (targetVal, opts) => {
-  const results: IFunctionResult[] = [];
+  if (typeof targetVal !== 'string') return;
 
-  if (!targetVal || typeof targetVal !== 'string') return results;
+  const results: IFunctionResult[] = [];
 
   const { match, notMatch } = opts;
 
