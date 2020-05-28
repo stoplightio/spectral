@@ -1,11 +1,11 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
-import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
+import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
 import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
@@ -62,10 +62,7 @@ export class Spectral {
     Object.assign(STATIC_ASSETS, assets);
   }
 
-  protected parseDocument(
-    target: IParsedResult | IDocument | object | string,
-    documentUri: Optional<string>,
-  ): IDocument {
+  protected parseDocument(target: IParsedResult | IDocument | object | string): IDocument {
     return target instanceof Document
       ? target
       : isParsedResult(target)
@@ -73,7 +70,6 @@ export class Spectral {
       : new Document<unknown, YamlParserResult<unknown>>(
           typeof target === 'string' ? target : safeStringify(target, undefined, 2),
           Parsers.Yaml,
-          documentUri,
         );
   }
 
@@ -81,10 +77,10 @@ export class Spectral {
     target: IParsedResult | IDocument | object | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
-    const document = this.parseDocument(target, opts.resolve?.documentUri);
+    const document = this.parseDocument(target);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
-      (document as Omit<Document, 'source'> & { source: string }).source = opts.resolve?.documentUri;
+      (document as Omit<Document, 'source'> & { source: string }).source = normalizeSource(opts.resolve.documentUri);
     }
 
     const inventory = new DocumentInventory(document, this._resolver);
