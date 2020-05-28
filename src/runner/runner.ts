@@ -1,9 +1,9 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
-import { flatMap } from 'lodash';
+import { flatMap, isObject } from 'lodash';
 import { JSONPathExpression, traverse } from 'nimma';
 
-import { STDIN } from '../document';
+import { IDocument, STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { OptimizedRule, Rule } from '../rule';
 import { IGivenNode, IRuleResult } from '../types';
@@ -34,7 +34,9 @@ const runRule = (
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
 
-  if (!isObject(target)) return;
+  if (!isObject(target)) {
+    return;
+  }
 
   for (const given of rule.given) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -78,11 +80,11 @@ export class Runner {
     this.results = [...this.inventory.diagnostics, ...this.document.diagnostics, ...this.inventory.errors];
   }
 
-  protected get document() {
+  protected get document(): IDocument {
     return this.inventory.document;
   }
 
-  public addResult(result: IRuleResult) {
+  public addResult(result: IRuleResult): void {
     this.results.push(result);
   }
 
@@ -161,7 +163,7 @@ export class Runner {
     }
   }
 
-  public getResults(computeFingerprint: ComputeFingerprintFunc) {
+  public getResults(computeFingerprint: ComputeFingerprintFunc): IRuleResult[] {
     return prepareResults(this.results, computeFingerprint);
   }
 }

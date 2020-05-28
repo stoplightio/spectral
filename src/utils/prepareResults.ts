@@ -7,12 +7,12 @@ import { compareResults } from './sortResults';
 
 export type ComputeFingerprintFunc = (rule: IRuleResult, hash: (val: string) => string) => string;
 
-export const defaultComputeResultFingerprint: ComputeFingerprintFunc = (rule, hash) => {
+export const defaultComputeResultFingerprint: ComputeFingerprintFunc = (rule, hash): string => {
   let id = String(rule.code);
 
-  if (rule.path.length) {
+  if (rule.path.length > 0) {
     id += JSON.stringify(rule.path);
-  } else if (rule.range) {
+  } else {
     id += JSON.stringify(rule.range);
   }
 
@@ -21,13 +21,16 @@ export const defaultComputeResultFingerprint: ComputeFingerprintFunc = (rule, ha
   return hash(id);
 };
 
-export const prepareResults = (results: IRuleResult[], computeFingerprint: ComputeFingerprintFunc) => {
+export const prepareResults = (results: IRuleResult[], computeFingerprint: ComputeFingerprintFunc): IRuleResult[] => {
   decorateResultsWithFingerprint(results, computeFingerprint);
 
   return sortResults(deduplicateResults(results));
 };
 
-const decorateResultsWithFingerprint = (results: IRuleResult[], computeFingerprint: ComputeFingerprintFunc) => {
+const decorateResultsWithFingerprint = (
+  results: IRuleResult[],
+  computeFingerprint: ComputeFingerprintFunc,
+): IRuleResult[] => {
   for (const r of results) {
     Object.defineProperty(r, 'fingerprint', {
       value: computeFingerprint(r, md5),

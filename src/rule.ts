@@ -42,17 +42,17 @@ export class Rule {
   }
 }
 
+function stub(): void {
+  // nada
+}
+
 export class OptimizedRule extends Rule {
   public readonly expressions: JSONPathExpression[];
-
-  private static stub() {
-    // stub
-  }
 
   constructor(name: string, rule: IRule) {
     super(name, rule);
     this.expressions = this.given.map(given => {
-      const expr = new JSONPathExpression(given, OptimizedRule.stub, OptimizedRule.stub);
+      const expr = new JSONPathExpression(given, stub, stub);
       if (expr.matches === null) {
         throw new Error('Cannot optimize');
       }
