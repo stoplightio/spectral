@@ -118,6 +118,7 @@
     "jest-when": "~2.7",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
+    "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.1.1",
     "karma-typescript": "^5.0.3",
     "lint-staged": "^10.2.6",

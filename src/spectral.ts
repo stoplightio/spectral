@@ -133,7 +133,13 @@ export class Spectral {
     empty(this.rules);
 
     for (const [name, rule] of Object.entries(rules)) {
-      if (this.opts?.useNimma || (typeof global === 'object' && global?.process?.env?.USE_NIMMA)) {
+      if (
+        this.opts?.useNimma ||
+        (typeof global === 'object' && global?.process?.env?.USE_NIMMA) ||
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore, this is for Karma
+        (typeof window === 'object' && window?.__env__?.USE_NIMMA)
+      ) {
         try {
           this.rules[name] = new OptimizedRule(name, rule);
         } catch {

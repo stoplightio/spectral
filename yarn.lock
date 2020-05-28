@@ -4602,6 +4602,11 @@ karma-chrome-launcher@^3.1.0:
   dependencies:
     which "^1.2.1"
 
+karma-env-preprocessor@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/karma-env-preprocessor/-/karma-env-preprocessor-0.1.1.tgz#bbe8c87d59c00edb76070bd3c31b4b39d5dc7e15"
+  integrity sha1-u+jIfVnADtt2BwvTwxtLOdXcfhU=
+
 karma-jasmine@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-3.1.1.tgz#f592b253e7619a8d84559d7daf473a647498ade8"
