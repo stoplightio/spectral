@@ -5,7 +5,7 @@ import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 
 import { STATIC_ASSETS } from './assets';
-import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
+import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
 import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
@@ -80,7 +80,7 @@ export class Spectral {
     const document = this.parseDocument(target);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
-      (document as Omit<Document, 'source'> & { source: string }).source = opts.resolve?.documentUri;
+      (document as Omit<Document, 'source'> & { source: string }).source = normalizeSource(opts.resolve.documentUri);
     }
 
     const inventory = new DocumentInventory(document, this._resolver);
