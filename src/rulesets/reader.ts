@@ -1,6 +1,6 @@
 import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
-import { join } from '@stoplight/path';
+import { extname, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
@@ -13,6 +13,14 @@ import { assertValidRuleset } from './validation';
 
 export interface IRulesetReadOptions {
   timeout?: number;
+}
+
+function parseContent(content: string, source: string): unknown {
+  if (extname(source) === '.json') {
+    return JSON.parse(content);
+  }
+
+  return parse(content);
 }
 
 export async function readRuleset(uris: string | string[], opts?: IRulesetReadOptions): Promise<IRuleset> {
@@ -54,18 +62,19 @@ const createRulesetProcessor = (
 
     processedRulesets.add(rulesetUri);
     const { result } = await httpAndFileResolver.resolve(
-      parse(
+      parseContent(
         await readParsable(rulesetUri, {
           timeout: readOpts?.timeout,
           encoding: 'utf8',
         }),
+        rulesetUri,
       ),
       {
         baseUri: rulesetUri,
         dereferenceInline: false,
         uriCache,
         async parseResolveResult(opts) {
-          opts.result = parse(opts.result);
+          opts.result = parseContent(opts.result, opts.targetAuthority.pathname());
           return opts;
         },
       },
