@@ -17,10 +17,13 @@ export interface IDocument<D = unknown> {
   data: D;
 }
 
-const normalizeSource = (source: Optional<string>): string | null => {
+export function normalizeSource(source: undefined): null;
+export function normalizeSource(source: string): string;
+export function normalizeSource(source: Optional<string>): string | null;
+export function normalizeSource(source: Optional<string>): string | null {
   if (source === void 0) return null;
-  return source && !startsWithProtocol(source) ? normalize(source) : source;
-};
+  return source.length > 0 && !startsWithProtocol(source) ? normalize(source) : source;
+}
 
 export class Document<D = unknown, R extends IParserResult = IParserResult<D>> implements IDocument<D> {
   protected readonly parserResult: R;
