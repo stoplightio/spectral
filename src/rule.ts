@@ -54,7 +54,7 @@ export class OptimizedRule extends Rule {
     this.expressions = this.given.map(given => {
       const expr = new JSONPathExpression(given, stub, stub);
       if (expr.matches === null) {
-        throw new Error('Cannot optimize');
+        throw new Error(`Rule "${name}": cannot optimize ${given}`);
       }
 
       return expr;
