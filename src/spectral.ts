@@ -31,7 +31,7 @@ import {
   RunRuleCollection,
 } from './types';
 import { IRuleset, RulesetExceptionCollection } from './types/ruleset';
-import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty } from './utils';
+import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 
 memoize.Cache = WeakMap;
@@ -123,23 +123,17 @@ export class Spectral {
     return (await this.runWithResolved(target, opts)).results;
   }
 
-  public setFunctions(functions: FunctionCollection) {
+  public setFunctions(functions: FunctionCollection): void {
     empty(this.functions);
 
     Object.assign(this.functions, { ...coreFunctions, ...functions });
   }
 
-  public setRules(rules: RuleCollection) {
+  public setRules(rules: RuleCollection): void {
     empty(this.rules);
 
     for (const [name, rule] of Object.entries(rules)) {
-      if (
-        this.opts?.useNimma ||
-        (typeof global === 'object' && global?.process?.env?.USE_NIMMA) ||
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore, this is for Karma
-        (typeof window === 'object' && window?.__env__?.USE_NIMMA)
-      ) {
+      if (this.opts?.useNimma === true || isNimmaEnvVariableSet()) {
         try {
           this.rules[name] = new OptimizedRule(name, rule);
         } catch {
@@ -151,7 +145,7 @@ export class Spectral {
     }
   }
 
-  public mergeRules(rules: PartialRuleCollection) {
+  public mergeRules(rules: PartialRuleCollection): void {
     for (const [name, rule] of Object.entries(rules)) {
       this.rules[name] = merge(this.rules[name], rule);
     }

@@ -1,6 +1,7 @@
 export * from './empty';
 export * from './decodeSegmentFragment';
 export * from './hasIntersectingElement';
+export * from './isNimmaEnvVariableSet';
 export * from './refs';
 export * from './prepareResults';
 export * from './printPath';
