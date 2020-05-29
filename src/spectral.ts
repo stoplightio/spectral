@@ -1,6 +1,6 @@
 import { safeStringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 
@@ -10,7 +10,7 @@ import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
 import request from './request';
-import { Rule } from './rule';
+import { OptimizedRule, Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
 import { mergeExceptions } from './rulesets/mergers/exceptions';
@@ -31,7 +31,7 @@ import {
   RunRuleCollection,
 } from './types';
 import { IRuleset, RulesetExceptionCollection } from './types/ruleset';
-import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty } from './utils';
+import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 
 memoize.Cache = WeakMap;
@@ -50,7 +50,7 @@ export class Spectral {
 
   private readonly _computeFingerprint: ComputeFingerprintFunc;
 
-  constructor(opts?: IConstructorOpts) {
+  constructor(protected readonly opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
     this._resolver = opts?.resolver ?? new Resolver();
     this.formats = {};
@@ -62,7 +62,10 @@ export class Spectral {
     Object.assign(STATIC_ASSETS, assets);
   }
 
-  protected parseDocument(target: IParsedResult | IDocument | object | string): IDocument {
+  protected parseDocument(
+    target: IParsedResult | IDocument | object | string,
+    documentUri: Optional<string>,
+  ): IDocument {
     return target instanceof Document
       ? target
       : isParsedResult(target)
@@ -70,6 +73,7 @@ export class Spectral {
       : new Document<unknown, YamlParserResult<unknown>>(
           typeof target === 'string' ? target : safeStringify(target, undefined, 2),
           Parsers.Yaml,
+          documentUri,
         );
   }
 
@@ -77,7 +81,7 @@ export class Spectral {
     target: IParsedResult | IDocument | object | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
-    const document = this.parseDocument(target);
+    const document = this.parseDocument(target, opts.resolve?.documentUri);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
       (document as Omit<Document, 'source'> & { source: string }).source = normalizeSource(opts.resolve.documentUri);
@@ -119,21 +123,29 @@ export class Spectral {
     return (await this.runWithResolved(target, opts)).results;
   }
 
-  public setFunctions(functions: FunctionCollection) {
+  public setFunctions(functions: FunctionCollection): void {
     empty(this.functions);
 
     Object.assign(this.functions, { ...coreFunctions, ...functions });
   }
 
-  public setRules(rules: RuleCollection) {
+  public setRules(rules: RuleCollection): void {
     empty(this.rules);
 
     for (const [name, rule] of Object.entries(rules)) {
-      this.rules[name] = new Rule(name, rule);
+      if (this.opts?.useNimma === true || isNimmaEnvVariableSet()) {
+        try {
+          this.rules[name] = new OptimizedRule(name, rule);
+        } catch {
+          this.rules[name] = new Rule(name, rule);
+        }
+      } else {
+        this.rules[name] = new Rule(name, rule);
+      }
     }
   }
 
-  public mergeRules(rules: PartialRuleCollection) {
+  public mergeRules(rules: PartialRuleCollection): void {
     for (const [name, rule] of Object.entries(rules)) {
       this.rules[name] = merge(this.rules[name], rule);
     }

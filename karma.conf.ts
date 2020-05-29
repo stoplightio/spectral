@@ -19,11 +19,15 @@ module.exports = (config: any) => {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.ts': ['karma-typescript'],
+      'src/**/*.ts': ['karma-typescript', 'env'],
       './karma-jest.ts': ['karma-typescript'],
       './setupKarma.ts': ['karma-typescript'],
       './setupTests.ts': ['karma-typescript'],
     },
+
+    envPreprocessor: [
+      'USE_NIMMA',
+    ],
 
     karmaTypescriptConfig: {
       ...require('./tsconfig.karma.json'),

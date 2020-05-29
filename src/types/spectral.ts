@@ -22,6 +22,7 @@ export type RuleDeclarationCollection = Dictionary<boolean, string>;
 export interface IConstructorOpts {
   resolver?: IResolver;
   computeFingerprint?: ComputeFingerprintFunc;
+  useNimma?: boolean;
 }
 
 export interface IRunOpts {

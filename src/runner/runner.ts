@@ -1,11 +1,12 @@
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
-import { isObject } from 'lodash';
+import { flatMap, isObject } from 'lodash';
+import { JSONPathExpression, traverse } from 'nimma';
 
-import { STDIN } from '../document';
+import { IDocument, STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
-import { Rule } from '../rule';
-import { IRuleResult } from '../types';
+import { OptimizedRule, Rule } from '../rule';
+import { IGivenNode, IRuleResult } from '../types';
 import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
@@ -33,7 +34,9 @@ const runRule = (
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
 
-  if (!isObject(target)) return;
+  if (!isObject(target)) {
+    return;
+  }
 
   for (const given of rule.given) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
@@ -77,11 +80,11 @@ export class Runner {
     this.results = [...this.inventory.diagnostics, ...this.document.diagnostics, ...this.inventory.errors];
   }
 
-  protected get document() {
+  protected get document(): IDocument {
     return this.inventory.document;
   }
 
-  public addResult(result: IRuleResult) {
+  public addResult(result: IRuleResult): void {
     this.results.push(result);
   }
 
@@ -110,7 +113,38 @@ export class Runner {
       rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
     );
 
+    const optimizedRules: OptimizedRule[] = [];
+    const optimizedUnresolvedRules: OptimizedRule[] = [];
+    const unoptimizedRules: Rule[] = [];
+
+    const traverseCb = (rule: OptimizedRule, node: IGivenNode) => {
+      lintNode(runnerContext, node, rule, exceptRuleByLocations[rule.name]);
+    };
+
     for (const rule of relevantRules) {
+      if (!(rule instanceof OptimizedRule)) {
+        unoptimizedRules.push(rule);
+        continue;
+      }
+
+      if (rule.resolved) {
+        optimizedRules.push(rule);
+      } else {
+        optimizedUnresolvedRules.push(rule);
+      }
+
+      rule.hookup(traverseCb);
+    }
+
+    if (optimizedRules.length > 0) {
+      traverse(Object(runnerContext.documentInventory.resolved), flatMap(optimizedRules, pickExpressions));
+    }
+
+    if (optimizedUnresolvedRules.length > 0) {
+      traverse(Object(runnerContext.documentInventory.unresolved), flatMap(optimizedUnresolvedRules, pickExpressions));
+    }
+
+    for (const rule of unoptimizedRules) {
       try {
         runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
       } catch (ex) {
@@ -129,7 +163,11 @@ export class Runner {
     }
   }
 
-  public getResults(computeFingerprint: ComputeFingerprintFunc) {
+  public getResults(computeFingerprint: ComputeFingerprintFunc): IRuleResult[] {
     return prepareResults(this.results, computeFingerprint);
   }
+}
+
+function pickExpressions({ expressions }: OptimizedRule): JSONPathExpression[] {
+  return expressions;
 }

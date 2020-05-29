@@ -1,6 +1,8 @@
 import * as jsonSpecv4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import { FetchMockSandbox } from 'fetch-mock';
 
+import { isNimmaEnvVariableSet } from './src/utils/isNimmaEnvVariableSet';
+
 const oasRuleset = JSON.parse(JSON.stringify(require('./rulesets/oas/index.json')));
 const oasFunctions = JSON.parse(JSON.stringify(require('./__karma__/__fixtures__/oas-functions.json')));
 const oas2Schema = JSON.parse(JSON.stringify(require('./rulesets/oas/schemas/schema.oas2.json')));
@@ -67,3 +69,5 @@ beforeEach(() => {
 afterEach(() => {
   window.fetch = fetch;
 });
+
+console.info(`Nimma rule optimizer activated: ${isNimmaEnvVariableSet()}`);
