@@ -9,7 +9,7 @@ import { IFunction, IFunctionPaths, IFunctionValues, IRule, JSONSchema } from '.
 const ajv = new AJV({ allErrors: true, jsonPointers: true });
 const validate = ajv.addSchema(ruleSchema).compile(rulesetSchema);
 
-const serializeAJVErrors = (errors: AJV.ErrorObject[]) =>
+const serializeAJVErrors = (errors: AJV.ErrorObject[]): string =>
   errors.map(({ message, dataPath }) => `${dataPath} ${message}`).join('\n');
 
 export class ValidationError extends AJV.ValidationError {

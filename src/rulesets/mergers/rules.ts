@@ -1,6 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { cloneDeep } from 'lodash';
-import { HumanReadableDiagnosticSeverity, IRule } from '../../types';
+import { HumanReadableDiagnosticSeverity, IRule, IThen } from '../../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
 import { isValidRule } from '../validation';
@@ -37,7 +36,7 @@ export function mergeRules(
 
 const ROOT_DESCRIPTOR = Symbol('root-descriptor');
 
-function markRule(rule: IRule) {
+function markRule(rule: IRule): void {
   if (!(ROOT_DESCRIPTOR in rule)) {
     Object.defineProperty(rule, ROOT_DESCRIPTOR, {
       configurable: false,
@@ -48,7 +47,7 @@ function markRule(rule: IRule) {
   }
 }
 
-function updateRootRule(root: IRule, newRule: IRule | null) {
+function updateRootRule(root: IRule, newRule: IRule | null): void {
   markRule(root);
   Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
 }
@@ -57,11 +56,23 @@ function getRootRule(rule: IRule): IRule | null {
   return rule[ROOT_DESCRIPTOR] !== undefined ? rule[ROOT_DESCRIPTOR] : null;
 }
 
-function copyRule(rule: IRule) {
-  return cloneDeep(rule);
+function copyRuleThen(then: IThen): IThen {
+  return {
+    ...then,
+    ...('functionOptions' in then ? { ...then.functionOptions } : null),
+  };
 }
 
-function processRule(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity) {
+function copyRule(rule: IRule): IRule {
+  return {
+    ...rule,
+    ...('then' in rule
+      ? { then: Array.isArray(rule.then) ? rule.then.map(copyRuleThen) : copyRuleThen(rule.then) }
+      : null),
+  };
+}
+
+function processRule(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity): void {
   const existingRule = rules[name];
 
   switch (typeof rule) {
@@ -116,7 +127,7 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
   }
 }
 
-function normalizeRule(rule: IRule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined) {
+function normalizeRule(rule: IRule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined): void {
   if (rule.recommended === void 0) {
     rule.recommended = true;
   }

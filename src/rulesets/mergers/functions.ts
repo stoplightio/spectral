@@ -8,7 +8,7 @@ export function mergeFunctions(
   target: RulesetFunctionCollection,
   source: RulesetFunctionCollection,
   rules: RuleCollection,
-) {
+): void {
   const map: Dictionary<string, string> = {};
 
   for (const [name, def] of Object.entries(source)) {
