@@ -1,4 +1,4 @@
-import { IFunction, IFunctionResult } from '../../../types';
+import type { IFunction, IFunctionResult } from '../../../types';
 
 export const oasOpParams: IFunction = (targetVal, _options, _paths, vals) => {
   const results: IFunctionResult[] = [];

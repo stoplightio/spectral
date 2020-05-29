@@ -1,4 +1,4 @@
-import { IFunction, IFunctionResult } from '../../../types';
+import type { IFunction, IFunctionResult } from '../../../types';
 
 export const oasOp2xxResponse: IFunction = targetVal => {
   if (!targetVal) {

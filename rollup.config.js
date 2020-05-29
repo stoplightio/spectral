@@ -38,12 +38,7 @@ module.exports = functions.map(fn => ({
       include: ['dist/**/*.{ts,tsx}'],
     }),
     resolve(),
-    commonjs({
-      namedExports: {
-        'node_modules/lodash/lodash.js': ['isObject', 'trimStart', 'cloneDeep', 'get', 'set'],
-        'node_modules/@stoplight/types/dist/index.js': ['DiagnosticSeverity'],
-      },
-    }),
+    commonjs(),
     json(),
     terser(),
   ],

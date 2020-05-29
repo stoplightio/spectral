@@ -1,4 +1,4 @@
-import { JsonPath } from '@stoplight/types';
+import type { JsonPath } from '@stoplight/types';
 
 const _get = require('lodash/get');
 

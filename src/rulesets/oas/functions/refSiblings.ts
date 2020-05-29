@@ -1,5 +1,5 @@
-import { JsonPath } from '@stoplight/types/dist';
-import { IFunction, IFunctionResult } from '../../../types';
+import type { JsonPath } from '@stoplight/types';
+import type { IFunction, IFunctionResult } from '../../../types';
 
 function isObject(maybeObj: unknown): maybeObj is object {
   return typeof maybeObj === 'object' && maybeObj !== null;
