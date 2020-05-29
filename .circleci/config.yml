@@ -31,10 +31,10 @@ commands:
           command: yarn build
       - run:
           name: Run browser tests
-          command: yarn test.karma
+          command: yarn test.karma && USE_NIMMA=true yarn test.karma
       - run:
           name: Run node tests
-          command: yarn test --coverage --maxWorkers=2
+          command: yarn test --coverage --maxWorkers=2 && USE_NIMMA=true yarn test --maxWorkers=2
       - run:
           name: Create the Spectral Binary
           command: yarn build.binary

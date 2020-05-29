@@ -5,5 +5,6 @@ module.exports = {
   testMatch: ['<rootDir>/src/**/__tests__/*.(ts)'],
   testPathIgnorePatterns: ['/node_modules/', '\.karma\.test\.ts$'],
   coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/'],
-  setupFilesAfterEnv: ['./setupJest.ts', './setupTests.ts']
+  setupFilesAfterEnv: ['./setupJest.ts', './setupTests.ts'],
+  globalSetup: './setupJest.global.ts'
 };

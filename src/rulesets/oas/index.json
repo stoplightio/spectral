@@ -136,45 +136,25 @@
       "description": "Markdown descriptions should not contain `eval(`.",
       "recommended": true,
       "type": "style",
-      "given": "$..*",
-      "then": [
-        {
-          "field": "description",
-          "function": "pattern",
-          "functionOptions": {
-            "notMatch": "eval\\("
-          }
-        },
-        {
-          "field": "title",
-          "function": "pattern",
-          "functionOptions": {
-            "notMatch": "eval\\("
-          }
+      "given": "$..[?(@property === 'description' || @property === 'title')]",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "eval\\("
         }
-      ]
+      }
     },
     "no-script-tags-in-markdown": {
       "description": "Markdown descriptions should not contain `<script>` tags.",
       "recommended": true,
       "type": "style",
-      "given": "$..*",
-      "then": [
-        {
-          "field": "description",
-          "function": "pattern",
-          "functionOptions": {
-            "notMatch": "<script"
-          }
-        },
-        {
-          "field": "title",
-          "function": "pattern",
-          "functionOptions": {
-            "notMatch": "<script"
-          }
+      "given": "$..[?(@property === 'description' || @property === 'title')]",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "<script"
         }
-      ]
+      }
     },
     "openapi-tags-alphabetical": {
       "description": "OpenAPI object should have alphabetical `tags`.",
@@ -327,7 +307,7 @@
       "severity": 0,
       "recommended": true,
       "resolved": false,
-      "given": "$",
+      "given": "$..[?(@property === '$ref')]",
       "then": {
         "function": "refSiblings"
       }
@@ -405,7 +385,7 @@
       "description": "Parameter objects should have a `description`.",
       "recommended": false,
       "formats": ["oas2"],
-      "given": "$..[?(@parentProperty === 'parameters' && @.in)]",
+      "given": "$..parameters[?(@.in)]",
       "type": "style",
       "then": {
         "field": "description",
@@ -467,9 +447,8 @@
       "recommended": true,
       "formats": ["oas2"],
       "type": "validation",
-      "given": "$..[?(@.anyOf)]",
+      "given": "$..anyOf",
       "then": {
-        "field": "anyOf",
         "function": "undefined"
       }
     },
@@ -479,9 +458,8 @@
       "recommended": true,
       "formats": ["oas2"],
       "type": "validation",
-      "given": "$..[?(@.oneOf)]",
+      "given": "$..oneOf",
       "then": {
-        "field": "oneOf",
         "function": "undefined"
       }
     },
@@ -543,13 +521,8 @@
       "formats": ["oas3"],
       "type": "style",
       "given": [
-        "$.components.examples.*",
-        "$.paths..content.*.examples.*",
-        "$.components..content.*.examples.*",
-        "$.paths..parameters.*.examples.*",
-        "$.components..parameters.*.examples.*",
-        "$.paths..headers.*.examples.*",
-        "$.components..headers.*.examples.*"
+        "$.paths..examples[*]",
+        "$.components..examples[*]"
       ],
       "then": {
         "function": "xor",
