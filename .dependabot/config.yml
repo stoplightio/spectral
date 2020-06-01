@@ -22,7 +22,7 @@ update_configs:
 
   - package_manager: "javascript"
     directory: "/"
-    update_schedule: "weekly" # we do not need to check for devDependencies updates on a daily basis
+    update_schedule: "monthly" # we do not need to check for devDependencies updates on a daily basis
     version_requirement_updates: increase_versions
 
     commit_message:
