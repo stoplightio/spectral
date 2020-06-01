@@ -1,7 +1,7 @@
-import { ValidateFunction } from 'ajv';
+import type { ValidateFunction } from 'ajv';
 
-import { ISchemaFunction } from '../../../functions/schema';
-import { IFunction, IFunctionContext } from '../../../types';
+import type { ISchemaFunction } from '../../../functions/schema';
+import type { IFunction, IFunctionContext } from '../../../types';
 import * as asyncApi2Schema from '../schemas/schema.asyncapi2.json';
 
 const fakeSchemaObjectId = 'asyncapi2#schemaObject';

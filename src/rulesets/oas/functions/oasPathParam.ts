@@ -1,5 +1,5 @@
-import { Segment } from '@stoplight/types';
-import { IFunction, IFunctionResult } from '../../../types';
+import type { Segment } from '@stoplight/types';
+import type { IFunction, IFunctionResult } from '../../../types';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 

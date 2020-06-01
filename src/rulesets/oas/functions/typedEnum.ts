@@ -1,4 +1,4 @@
-import { IFunction, IFunctionContext } from '../../../types';
+import type { IFunction, IFunctionContext } from '../../../types';
 
 export const typedEnum: IFunction = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
   if (targetVal === null || typeof targetVal !== 'object') {
