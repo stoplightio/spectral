@@ -40,7 +40,7 @@
     "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
     "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
     "generate-assets": "node -r ts-node/register ./scripts/generate-assets.ts",
-    "inline-version": "./scripts/inline-version.js",
+    "inline-version": "node ./scripts/inline-version.js",
     "prelint": "tsc --noEmit",
     "lint.fix": "yarn lint --fix",
     "lint": "eslint --cache --cache-location .cache/ src/**/*.{ts,js} test-harness/**/*.{ts,js}",
