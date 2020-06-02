@@ -590,7 +590,7 @@
     lodash "^4.17.15"
     safe-stable-stringify "^1.1"
 
-"@stoplight/lifecycle@^2.2.1":
+"@stoplight/lifecycle@2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@stoplight/lifecycle/-/lifecycle-2.2.1.tgz#bfa837d1dd3bd97eab96d8c8cf1bc3ea5ddcd263"
   integrity sha512-XOyfoJyWp5tXRFWq43mvnOoYTvkupwqGjDQnQ2o1qRNnfTrE70bjNK5ptD9A6m3zajAXgbl0puFa7P2CMg7+ew==
