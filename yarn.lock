@@ -4628,10 +4628,10 @@ karma-env-preprocessor@^0.1.1:
   resolved "https://registry.yarnpkg.com/karma-env-preprocessor/-/karma-env-preprocessor-0.1.1.tgz#bbe8c87d59c00edb76070bd3c31b4b39d5dc7e15"
   integrity sha1-u+jIfVnADtt2BwvTwxtLOdXcfhU=
 
-karma-jasmine@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-3.1.1.tgz#f592b253e7619a8d84559d7daf473a647498ade8"
-  integrity sha512-pxBmv5K7IkBRLsFSTOpgiK/HzicQT3mfFF+oHAC7nxMfYKhaYFgxOa5qjnHW4sL5rUnmdkSajoudOnnOdPyW4Q==
+karma-jasmine@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-3.3.1.tgz#c01b1a2ec973e1531c1f6535e1d7d66b8e4275c2"
+  integrity sha512-Nxh7eX9mOQMyK0VSsMxdod+bcqrR/ikrmEiWj5M6fwuQ7oI+YEF1FckaDsWfs6TIpULm9f0fTKMjF7XcrvWyqQ==
   dependencies:
     jasmine-core "^3.5.0"
 
