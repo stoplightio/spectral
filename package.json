@@ -105,7 +105,7 @@
     "@types/tmp": "^0.2.0",
     "@types/xml2js": "^0.4.5",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
-    "@typescript-eslint/parser": "^2.26.0",
+    "@typescript-eslint/parser": "^2.34.0",
     "copyfiles": "^2.2.0",
     "dependency-graph": "^0.8.0",
     "eslint": "^6.8.0",
