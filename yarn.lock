@@ -4445,9 +4445,9 @@ jest-watcher@^25.5.0:
     string-length "^3.1.0"
 
 jest-when@~2.7:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-2.7.1.tgz#09ab7114d014bdb4e35183deac63cdf2bcec8698"
-  integrity sha512-4J2kNNEiu8rWmiZTn9HJB8U1HyDfvywpZ+FzgwnUv7yftvDFLo95U7sEiOeVK3j20af8lj6/7nrFf9lyCmOjKA==
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-2.7.2.tgz#b7b4225e8882bd84a1cfd09216b2c63d22f892bd"
+  integrity sha512-GuVzimG0wW18A5JlYwhHrvuwmWRAQpsnilRVdJktvrZX5V0++al1f/iwITE7+Cud8Rbw/U2eka4tyy7kvxIWnw==
   dependencies:
     bunyan "^1.8.12"
     expect "^24.8.0"
