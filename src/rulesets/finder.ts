@@ -7,7 +7,7 @@ import { NPM_PKG_ROOT, SPECTRAL_PKG_NAME, SPECTRAL_PKG_VERSION } from '../consts
 const SPECTRAL_SRC_ROOT = path.join(__dirname, '../../dist');
 
 function resolveSpectralVersion(pkg: string): string {
-  return SPECTRAL_PKG_VERSION === ''
+  return SPECTRAL_PKG_VERSION.length === 0
     ? pkg
     : pkg.replace(SPECTRAL_PKG_NAME, `${SPECTRAL_PKG_NAME}@${SPECTRAL_PKG_VERSION}`);
 }
