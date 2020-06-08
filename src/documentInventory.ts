@@ -4,7 +4,7 @@ import { ICache, IGraphNodeData, IUriParser } from '@stoplight/json-ref-resolver
 import { extname, resolve } from '@stoplight/path';
 import { Dictionary, IParserResult, JsonPath } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
-import { get } from 'lodash';
+import { get, isObjectLike } from 'lodash';
 import { Document, IDocument } from './document';
 
 import { formatParserDiagnostics, formatResolverErrors } from './errorMessages';
@@ -22,18 +22,18 @@ export type DocumentInventoryItem = {
 export class DocumentInventory {
   private static readonly _cachedRemoteDocuments = new WeakMap<ICache | IResolver, Dictionary<Document>>();
 
-  public graph!: DepGraph<IGraphNodeData>;
+  public graph: DepGraph<IGraphNodeData> | null;
   public resolved: unknown;
-  public errors!: IRuleResult[];
+  public errors: IRuleResult[] | null;
   public diagnostics: IRuleResult[] = [];
 
   public readonly referencedDocuments: Dictionary<Document>;
 
-  public get source() {
+  public get source(): string | null {
     return this.document.source;
   }
 
-  public get unresolved() {
+  public get unresolved(): unknown {
     return this.document.data;
   }
 
@@ -42,9 +42,12 @@ export class DocumentInventory {
   }
 
   constructor(public readonly document: IDocument<unknown>, protected resolver: IResolver) {
+    this.graph = null;
+    this.errors = null;
+
     const cacheKey = resolver instanceof Resolver ? resolver.uriCache : resolver;
     const cachedDocuments = DocumentInventory._cachedRemoteDocuments.get(cacheKey);
-    if (cachedDocuments) {
+    if (cachedDocuments !== void 0) {
       this.referencedDocuments = cachedDocuments;
     } else {
       this.referencedDocuments = {};
@@ -52,9 +55,16 @@ export class DocumentInventory {
     }
   }
 
-  public async resolve() {
+  public async resolve(): Promise<void> {
+    if (!isObjectLike(this.document.data)) {
+      this.graph = null;
+      this.resolved = null;
+      this.errors = null;
+      return;
+    }
+
     const resolveResult = await this.resolver.resolve(this.document.data, {
-      ...(this.document.source !== null && { baseUri: this.document.source }),
+      ...(this.document.source !== null ? { baseUri: this.document.source } : null),
       parseResolveResult: this.parseResolveResult,
     });
 
@@ -92,7 +102,7 @@ export class DocumentInventory {
       let { source } = this;
 
       while (true) {
-        if (source === null) return null;
+        if (source === null || this.graph === null) return null;
 
         $ref = getEndRef(this.graph.getNodeData(source).refMap, $ref);
 
