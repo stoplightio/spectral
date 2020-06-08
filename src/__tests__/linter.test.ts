@@ -1257,11 +1257,57 @@ responses:: !!foo
   test.each(['1', 'null', '', 'false'])('given %s input, should report nothing', async input => {
     const s = new Spectral({ resolver: httpAndFileResolver });
 
-    const file = '/tmp/file.yaml';
-    const doc = new Document(input, Parsers.Yaml, file);
+    const source = '/tmp/file.yaml';
+    const doc = new Document(input, Parsers.Yaml, source);
 
-    const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: file } });
+    const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: source } });
 
     expect(results).toEqual([]);
+  });
+
+  test('should be capable of linting arrays', async () => {
+    const s = new Spectral({ resolver: httpAndFileResolver });
+
+    s.setRules({
+      'falsy-foo': {
+        given: '$..foo',
+        then: {
+          function: 'falsy',
+        },
+      },
+      'truthy-bar': {
+        given: '$..bar',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const source = '/tmp/file.yaml';
+    const doc = new Document(
+      JSON.stringify([
+        {
+          foo: true,
+        },
+        {
+          bar: true,
+        },
+      ]),
+      Parsers.Yaml,
+      source,
+    );
+
+    const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: source } });
+
+    expect(results).toEqual([
+      {
+        code: 'falsy-foo',
+        message: '`foo` property is not falsy',
+        path: ['0', 'foo'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+        source,
+      },
+    ]);
   });
 });
