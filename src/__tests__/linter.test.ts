@@ -6,6 +6,8 @@ import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { mergeRules, readRuleset } from '../rulesets';
 import { RuleCollection, Spectral } from '../spectral';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
+import { Parsers, Document } from '..';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
@@ -1250,5 +1252,16 @@ responses:: !!foo
         }),
       ]);
     });
+  });
+
+  test.each(['1', 'null', '', 'false'])('given %s input, should report nothing', async input => {
+    const s = new Spectral({ resolver: httpAndFileResolver });
+
+    const file = '/tmp/file.yaml';
+    const doc = new Document(input, Parsers.Yaml, file);
+
+    const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: file } });
+
+    expect(results).toEqual([]);
   });
 });
