@@ -1,19 +1,18 @@
 import * as path from '@stoplight/path';
 import * as fs from 'fs';
 import { RESOLVE_ALIASES, STATIC_ASSETS } from '../assets';
-
-const NPM_PKG_ROOT = 'https://unpkg.com/';
-const SPECTRAL_PKG_NAME = '@stoplight/spectral';
+import { NPM_PKG_ROOT, SPECTRAL_PKG_NAME, SPECTRAL_PKG_VERSION } from '../consts';
 
 // let's point at dist directory that has all relevant files (including custom functions) transpiled
 const SPECTRAL_SRC_ROOT = path.join(__dirname, '../../dist');
-// DON'T RENAME THIS FUNCTION, you can move it within this file, but it must be kept as top-level declaration
-// parameter can be renamed, but don't this if you don't need to
-function resolveSpectralVersion(pkg: string) {
-  return pkg;
+
+function resolveSpectralVersion(pkg: string): string {
+  return SPECTRAL_PKG_VERSION === ''
+    ? pkg
+    : pkg.replace(SPECTRAL_PKG_NAME, `${SPECTRAL_PKG_NAME}@${SPECTRAL_PKG_VERSION}`);
 }
 
-function resolveFromNPM(pkg: string) {
+function resolveFromNPM(pkg: string): string {
   try {
     return require.resolve(pkg);
   } catch {
@@ -21,11 +20,11 @@ function resolveFromNPM(pkg: string) {
   }
 }
 
-export function isNPMSource(src: string) {
+export function isNPMSource(src: string): boolean {
   return src.startsWith(NPM_PKG_ROOT) && !src.includes(`${NPM_PKG_ROOT}${SPECTRAL_PKG_NAME}`); // we ignore spectral on purpose, since they undergo a slightly different process
 }
 
-async function resolveFromFS(from: string, to: string) {
+async function resolveFromFS(from: string, to: string): Promise<string> {
   let targetPath: string;
 
   // if a built-in ruleset starting with @stoplight/spectral is given,
@@ -53,7 +52,7 @@ async function resolveFromFS(from: string, to: string) {
   throw new Error('File does not exist');
 }
 
-export async function findFile(from: string, to: string) {
+export async function findFile(from: string, to: string): Promise<string> {
   const mapped = RESOLVE_ALIASES[to];
 
   if (mapped !== void 0) {
