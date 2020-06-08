@@ -1,7 +1,6 @@
-import * as Parsers from './parsers';
-
+export * from './consts';
 export * from './spectral';
 export * from './formats';
 export { Rule } from './rule';
-export { Parsers };
+export * as Parsers from './parsers';
 export { Document, ParsedDocument } from './document';
