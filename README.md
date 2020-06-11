@@ -69,7 +69,7 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 
 ## License
 
-Spectral is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
+Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE). Use it however you want.
 
 This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral) - the office has enough coffee already!
 
