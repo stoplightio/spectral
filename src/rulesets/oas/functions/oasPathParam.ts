@@ -103,6 +103,7 @@ export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
 
   // keep track of normalized paths for verifying paths are unique
   const uniquePaths: object = {};
+  const validOperationKeys = ['get', 'head', 'post', 'put', 'patch', 'delete', 'options', 'trace'];
 
   for (const path in object.paths) {
     if (!object.paths[path]) continue;
@@ -157,10 +158,11 @@ export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
       }
     }
 
+    // find parameters set within the operation's 'parameters' object
     for (const op in object.paths[path]) {
       if (!object.paths[path][op]) continue;
 
-      if (op === 'parameters') {
+      if (op === 'parameters' || !validOperationKeys.includes(op)) {
         continue;
       }
 
