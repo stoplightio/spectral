@@ -8,7 +8,7 @@ A flexible JSON/YAML linter, with out of the box support for OpenAPI v2/v3 and A
 
 ![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
-## Spectral Features
+## Features
 
 - Create custom rules to lint JSON or YAML objects
 - Ready-to-use rules to validate and lint:
@@ -18,6 +18,10 @@ A flexible JSON/YAML linter, with out of the box support for OpenAPI v2/v3 and A
 - Built-in set of functions to help [create custom rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Create custom functions for advanced use cases
 - Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
+
+## License
+
+Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE).
 
 ## Installation
 
@@ -30,6 +34,8 @@ yarn global add @stoplight/spectral
 ```
 
 Find more [installation methods](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md) in our documentation.
+
+This package is [Treeware](https://treeware.earth) so if you would like to thank us for creating it, we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral).
 
 ## Documentation
 
@@ -53,13 +59,7 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 ### What is the difference between Spectral and Speccy
 
-[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI).
-
-Speccy has been abandoned, but Spectral is steaming ahead, adding loads of functionality like custom functions, exceptions, and AsyncAPI support.
-
-## Contributing
-
-If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI). It's mostly been abandoned now, and is JavaScript not TypeScript.
 
 ### Integrations
 
@@ -67,11 +67,9 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 - [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
 
-## License
+## Contributing
 
-Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE). Use it however you want.
-
-This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral) - the office has enough coffee already!
+If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Thanks
 
@@ -83,8 +81,8 @@ This package is [Treeware](https://treeware.earth). If you use it in production,
 
 ## Support
 
-If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
-
 If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We've created an open source category for these questions. It's also a great place to share your implementations.
+
+If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
 
 If you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
