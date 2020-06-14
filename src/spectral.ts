@@ -9,7 +9,8 @@ import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, nor
 import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
-import request from './request';
+import request, { DEFAULT_REQUEST_OPTIONS } from './request';
+import { httpAndFileResolver } from './resolvers/http-and-file';
 import { OptimizedRule, Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
@@ -52,7 +53,17 @@ export class Spectral {
 
   constructor(protected readonly opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
-    this._resolver = opts?.resolver ?? new Resolver();
+    if (opts?.proxyUri) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const ProxyAgent = require('proxy-agent');
+      DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(opts.proxyUri);
+      require('./resolvers/http-and-file');
+    }
+    if (opts?.resolver) {
+      this._resolver = opts.resolver;
+    } else {
+      this._resolver = typeof window === 'undefined' ? httpAndFileResolver : new Resolver();
+    }
     this.formats = {};
     this.runtime = new RunnerRuntime();
   }
