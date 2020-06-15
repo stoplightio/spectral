@@ -21,3 +21,5 @@ export const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['json-schema-draft7', isJSONSchemaDraft7, 'JSON Schema Draft 7'],
   ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09'],
 ];
+
+export const KNOWN_RULESETS = ['spectral:oas', 'spectral:asyncapi'];
