@@ -12,6 +12,7 @@ import * as path from '@stoplight/path';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import * as $RefParser from '@apidevtools/json-schema-ref-parser';
+import { KNOWN_RULESETS } from "../src/formats";
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
@@ -27,7 +28,7 @@ if (!fs.existsSync(baseDir)) {
 const generatedAssets = {};
 
 (async () => {
-  for (const kind of ['oas', 'asyncapi']) {
+  for (const kind of KNOWN_RULESETS.map(ruleset => ruleset.replace('spectral:', ''))) {
     const assets = await processDirectory(path.join(__dirname, `../rulesets/${kind}`));
     Object.assign(generatedAssets, assets);
     await writeFileAsync(path.join(baseDir, `assets.${kind}.json`), JSON.stringify(assets, null, 2));
