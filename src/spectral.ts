@@ -57,7 +57,6 @@ export class Spectral {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const ProxyAgent = require('proxy-agent');
       DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(opts.proxyUri);
-      require('./resolvers/http-and-file');
     }
     if (opts?.resolver) {
       this._resolver = opts.resolver;
