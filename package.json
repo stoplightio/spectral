@@ -60,7 +60,7 @@
     "test": "jest --silent"
   },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "https://github.com/stoplightio/better-ajv-errors.git#bundled",
+    "@stoplight/better-ajv-errors": "0.0.0",
     "@stoplight/json": "3.6.0",
     "@stoplight/json-ref-readers": "1.1.1",
     "@stoplight/json-ref-resolver": "3.0.9",

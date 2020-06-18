@@ -539,9 +539,10 @@
   dependencies:
     type-detect "4.0.8"
 
-"@stoplight/better-ajv-errors@https://github.com/stoplightio/better-ajv-errors.git#bundled":
+"@stoplight/better-ajv-errors@0.0.0":
   version "0.0.0"
-  resolved "https://github.com/stoplightio/better-ajv-errors.git#b92f539f131a70f9c3581039806ae23b52e552df"
+  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.0.0.tgz#18bf69c2380a00b72e4bd5fb7247c5adf615795a"
+  integrity sha512-jA1i4J5HmCXMmZdZigdeEHpisFCGVg5QfK++ouxP58pxshATJ5G40U9uGec2vYnuR2MQnzWHAXYf0f8jvJhBwg==
   dependencies:
     jsonpointer "^4.0.1"
     leven "^3.1.0"
