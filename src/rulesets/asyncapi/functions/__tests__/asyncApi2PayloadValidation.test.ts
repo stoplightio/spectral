@@ -22,7 +22,7 @@ describe('asyncApi2PayloadValidation', () => {
 
     expect(results).toEqual([
       {
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be boolean',
+        message: '`deprecated` property type should be boolean',
         path: ['$', 'components', 'messages', 'aMessage', 'deprecated'],
       },
     ]);

@@ -60,6 +60,7 @@
     "test": "jest --silent"
   },
   "dependencies": {
+    "@stoplight/better-ajv-errors": "https://github.com/stoplightio/better-ajv-errors.git#bundled",
     "@stoplight/json": "3.6.0",
     "@stoplight/json-ref-readers": "1.1.1",
     "@stoplight/json-ref-resolver": "3.0.9",
@@ -70,7 +71,6 @@
     "abort-controller": "3.0.0",
     "ajv": "6.12.2",
     "ajv-oai": "1.2.0",
-    "better-ajv-errors": "0.6.7",
     "blueimp-md5": "2.13.0",
     "chalk": "4.0.0",
     "eol": "0.9.1",
@@ -83,7 +83,7 @@
     "proxy-agent": "3.1.1",
     "strip-ansi": "6.0",
     "text-table": "0.2",
-    "tslib": "1.11.1",
+    "tslib": "1.13.0",
     "yargs": "15.3.1"
   },
   "devDependencies": {

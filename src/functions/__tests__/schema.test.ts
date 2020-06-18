@@ -25,7 +25,7 @@ describe('schema', () => {
 
       expect(runSchema('', testSchema)).toEqual([
         {
-          message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be number',
+          message: 'Value type should be number',
           path: [],
         },
       ]);
@@ -38,7 +38,7 @@ describe('schema', () => {
 
       expect(runSchema(0, testSchema)).toEqual([
         {
-          message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+          message: `Value type should be string`,
           path: [],
         },
       ]);
@@ -51,7 +51,7 @@ describe('schema', () => {
 
       expect(runSchema(false, testSchema)).toEqual([
         {
-          message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+          message: `Value type should be string`,
           path: [],
         },
       ]);
@@ -64,7 +64,7 @@ describe('schema', () => {
 
       expect(runSchema(null, testSchema)).toEqual([
         {
-          message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+          message: `Value type should be string`,
           path: [],
         },
       ]);
@@ -105,7 +105,7 @@ describe('schema', () => {
       const input = { foo: 'bar' };
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be array',
+          message: 'Value type should be array',
           path: [],
         }),
       ]);
@@ -115,8 +115,7 @@ describe('schema', () => {
       const input = ['1', '2'];
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message:
-            '{{property|gravis|append-property|optional-typeof|capitalize}}maxItems should NOT have more than 1 items',
+          message: 'Object should not have more than 1 items',
           path: [],
         }),
       ]);
@@ -152,7 +151,7 @@ describe('schema', () => {
         ),
       ).toEqual([
         {
-          message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+          message: '`bar` property type should be string',
           path: ['foo', 'bar'],
         },
       ]);
@@ -186,7 +185,7 @@ describe('schema', () => {
       const input = 'not an email';
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: '{{property|gravis|append-property|optional-typeof|capitalize}}format should match format `email`',
+          message: 'String should match format `email`',
           path: [],
         }),
       ]);
@@ -224,7 +223,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+        message: `Value type should be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -244,7 +243,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+        message: `Value type should be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -279,7 +278,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: `{{property|gravis|append-property|optional-typeof|capitalize}}type should be string`,
+            message: 'Value type should be string',
             path: [],
           },
         ]);
@@ -296,7 +295,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be integer',
+            message: 'Value type should be integer',
             path: [],
           },
         ]);

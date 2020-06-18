@@ -1,15 +1,12 @@
-import { decodePointerFragment } from '@stoplight/json';
 import { Optional } from '@stoplight/types';
 import * as AJV from 'ajv';
 import { ValidateFunction } from 'ajv';
 import * as jsonSpecV4 from 'ajv/lib/refs/json-schema-draft-04.json';
 import * as jsonSpecV6 from 'ajv/lib/refs/json-schema-draft-06.json';
 import * as jsonSpecV7 from 'ajv/lib/refs/json-schema-draft-07.json';
-import { IOutputError } from 'better-ajv-errors';
-import { capitalize, escapeRegExp } from 'lodash';
+import * as betterAjvErrors from '@stoplight/better-ajv-errors';
 import { IFunction, IFunctionResult, JSONSchema } from '../types';
 const oasFormatValidator = require('ajv-oai/lib/format-validator');
-const betterAjvErrors = require('better-ajv-errors/lib/modern');
 
 export interface ISchemaFunction extends IFunction<ISchemaOptions> {
   Ajv: typeof AJV;
@@ -32,12 +29,8 @@ export interface ISchemaOptions {
   prepareResults?(errors: AJV.ErrorObject[]): void;
 }
 
-interface IAJVOutputError extends IOutputError {
-  path?: string;
-}
-
 const logger = {
-  warn(...args: any[]) {
+  warn(...args: unknown[]): void {
     const firstArg = args[0];
     if (typeof firstArg === 'string') {
       if (firstArg.startsWith('unknown format')) return;
@@ -51,7 +44,7 @@ const logger = {
 const ajvInstances = {};
 
 function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV.Ajv {
-  const type: string = oasVersion && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema';
+  const type: string = oasVersion !== void 0 && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema';
   if (typeof ajvInstances[type] !== 'undefined') {
     return ajvInstances[type];
   }
@@ -92,7 +85,7 @@ function getSchemaId(schemaObj: JSONSchema): void | string {
 }
 
 const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
-  public get({ schema: schemaObj, oasVersion, allErrors }: ISchemaOptions) {
+  public get({ schema: schemaObj, oasVersion, allErrors }: ISchemaOptions): ValidateFunction {
     const ajv = getAjv(oasVersion, allErrors);
     const schemaId = getSchemaId(schemaObj);
     let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
@@ -110,39 +103,6 @@ const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
     return validator;
   }
 })();
-
-const replaceProperty = (
-  substring: string,
-  potentialProperty: Optional<number | string>,
-  propertyName: Optional<string>,
-) => {
-  if (typeof potentialProperty === 'string' && propertyName !== void 0) {
-    return `Property \`${propertyName}\``;
-  }
-
-  return '{{property|gravis|append-property|optional-typeof|capitalize}}';
-};
-
-const cleanAJVErrorMessage = (message: string, path: Optional<string>, suggestion: Optional<string>, type: string) => {
-  let cleanMessage = message.trim();
-
-  if (path) {
-    cleanMessage = message.replace(
-      new RegExp(`^${escapeRegExp(decodePointerFragment(path))}:?\\s*(?:(Property\\s+)([^\\s]+))?`),
-      replaceProperty,
-    );
-  } else if (cleanMessage.startsWith(':')) {
-    cleanMessage = cleanMessage.replace(/:\s*/, replaceProperty);
-  } else if (cleanMessage.startsWith('Property ')) {
-    cleanMessage = cleanMessage.replace(/(Property\s+)([^\s]+)/, replaceProperty);
-  } else {
-    cleanMessage = `${capitalize(type)} ${cleanMessage}`;
-  }
-
-  return `${cleanMessage.replace(/['"]/g, '`')}${
-    typeof suggestion === 'string' && suggestion.length > 0 ? `. ${suggestion}` : ''
-  }`;
-};
 
 export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
   const path = paths.target ?? paths.given;
@@ -164,26 +124,18 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
   try {
     // we used the compiled validation now, hence this lookup here (see the logic above for more info)
     const validator = opts.ajv ?? validators.get(opts);
-    if (!validator(targetVal) && validator.errors) {
+    if (validator(targetVal) === false && Array.isArray(validator.errors)) {
       opts.prepareResults?.(validator.errors);
 
-      try {
-        results.push(
-          ...(betterAjvErrors(schemaObj, targetVal, validator.errors, { format: 'js' }) as IAJVOutputError[]).map(
-            ({ suggestion, error, path: errorPath }) => ({
-              message: cleanAJVErrorMessage(error, errorPath, suggestion, typeof targetVal),
-              path: [...path, ...(errorPath ? errorPath.replace(/^\//, '').split('/') : [])],
-            }),
-          ),
-        );
-      } catch {
-        results.push(
-          ...validator.errors.map(({ message, dataPath }) => ({
-            message: message ? cleanAJVErrorMessage(message, dataPath, void 0, typeof targetVal) : '',
-            path: [...path, ...dataPath.split('/').slice(1).map(decodePointerFragment)],
-          })),
-        );
-      }
+      results.push(
+        ...betterAjvErrors(schemaObj, validator.errors, {
+          propertyPath: path,
+          targetValue: targetVal,
+        }).map(({ suggestion, error, path: errorPath }) => ({
+          message: suggestion !== void 0 ? `${error}. ${suggestion}` : error,
+          path: [...path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
+        })),
+      );
     }
   } catch (ex) {
     if (!(ex instanceof AJV.MissingRefError)) {
@@ -204,7 +156,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
 
 schema.Ajv = AJV;
 // eslint-disable-next-line @typescript-eslint/unbound-method
-schema.createAJVInstance = (opts: AJV.Options) => {
+schema.createAJVInstance = (opts: AJV.Options): AJV.Ajv => {
   const ajv = new AJV(opts);
 
   ajv.addFormat('int32', { type: 'number', validate: oasFormatValidator.int32 });

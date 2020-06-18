@@ -58,6 +58,6 @@ OpenAPI 3.x detected
  32:28  error  oas3-schema  `user_id` property type should be object.
  36:28  error  oas3-schema  `properties` property type should be object.
  38:23  error  oas3-schema  `description` property type should be string.
- 41:17  error  oas3-schema  `responses` property minProperties should NOT have fewer than 1 properties.
+ 41:17  error  oas3-schema  `responses` property should not have fewer than 1 properties.
 
 ✖ 7 problems (7 errors, 0 warnings, 0 infos, 0 hints)
