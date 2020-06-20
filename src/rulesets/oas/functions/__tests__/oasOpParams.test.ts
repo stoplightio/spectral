@@ -75,18 +75,9 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 25,
-            line: 15,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'Operations must have unique `name` + `in` parameters',
+        path: ['paths', '/foo', 'get', 'parameters'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -115,18 +106,9 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 44,
-            line: 12,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'Operations must have unique `name` + `in` parameters',
+        path: ['paths', '/foo', 'get', 'parameters'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -168,18 +150,9 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 25,
-            line: 11,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'Operation has multiple instances of the `in:body` parameter',
+        path: ['paths', '/foo', 'get', 'parameters'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -201,18 +174,9 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 25,
-            line: 11,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'Operation cannot have both `in:body` and `in:formData` parameters',
+        path: ['paths', '/foo', 'get', 'parameters'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
