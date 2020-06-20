@@ -9,8 +9,8 @@ import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, nor
 import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
-import request, { DEFAULT_REQUEST_OPTIONS } from './request';
-import { httpAndFileResolver } from './resolvers/http-and-file';
+import request from './request';
+import { createHttpAndFileResolver } from './resolvers/http-and-file';
 import { OptimizedRule, Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
@@ -53,16 +53,14 @@ export class Spectral {
 
   constructor(protected readonly opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
-    if (opts?.proxyUri) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const ProxyAgent = require('proxy-agent');
-      DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(opts.proxyUri);
-    }
+
     if (opts?.resolver) {
       this._resolver = opts.resolver;
     } else {
-      this._resolver = typeof window === 'undefined' ? httpAndFileResolver : new Resolver();
+      this._resolver =
+        typeof window === 'undefined' ? createHttpAndFileResolver({ proxyUri: opts?.proxyUri }) : new Resolver();
     }
+
     this.formats = {};
     this.runtime = new RunnerRuntime();
   }
@@ -171,7 +169,9 @@ export class Spectral {
   }
 
   public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions) {
-    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], options));
+    this.setRuleset(
+      await readRuleset(Array.isArray(uris) ? uris : [uris], { proxyUri: this.opts?.proxyUri, ...options }),
+    );
   }
 
   public setRuleset(ruleset: IRuleset) {

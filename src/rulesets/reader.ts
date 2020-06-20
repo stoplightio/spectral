@@ -4,7 +4,7 @@ import { extname, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile, isNPMSource } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
@@ -13,6 +13,7 @@ import { assertValidRuleset } from './validation';
 
 export interface IRulesetReadOptions {
   timeout?: number;
+  proxyUri?: string;
 }
 
 function parseContent(content: string, source: string): unknown {
@@ -61,11 +62,12 @@ const createRulesetProcessor = (
     }
 
     processedRulesets.add(rulesetUri);
-    const { result } = await httpAndFileResolver.resolve(
+    const { result } = await createHttpAndFileResolver({ proxyUri: readOpts?.proxyUri }).resolve(
       parseContent(
         await readParsable(rulesetUri, {
           timeout: readOpts?.timeout,
           encoding: 'utf8',
+          proxyUri: readOpts?.proxyUri,
         }),
         rulesetUri,
       ),
@@ -145,6 +147,7 @@ const createRulesetProcessor = (
               code: await readFile(source, {
                 timeout: readOpts?.timeout,
                 encoding: 'utf8',
+                proxyUri: readOpts?.proxyUri,
               }),
               schema: fnSchema,
               source,

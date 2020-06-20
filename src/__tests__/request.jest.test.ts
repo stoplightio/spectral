@@ -1,7 +1,7 @@
 import * as http from 'http';
 import * as url from 'url';
 import { DEFAULT_REQUEST_OPTIONS } from '../request';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 const ProxyAgent = require('proxy-agent');
 
@@ -40,14 +40,13 @@ describe('request', () => {
     server.close();
   });
 
-  afterEach(() => {
-    delete DEFAULT_REQUEST_OPTIONS.agent;
-    require('../resolvers/http-and-file');
-  });
-
   describe('when agent is set', () => {
     beforeEach(() => {
       DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(`http://localhost:${PORT}`);
+    });
+
+    afterEach(() => {
+      delete DEFAULT_REQUEST_OPTIONS.agent;
     });
 
     describe('loading a ruleset', () => {
@@ -69,7 +68,7 @@ describe('request', () => {
           },
         };
 
-        const s = new Spectral({ resolver: httpAndFileResolver });
+        const s = new Spectral({ resolver: createHttpAndFileResolver() });
 
         return expect(s.runWithResolved(doc)).resolves.toHaveProperty('resolved', {
           info: {

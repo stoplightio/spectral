@@ -7,7 +7,7 @@ import { isAsyncApiv2, isOpenApiv2, isOpenApiv3 } from '../../formats';
 import { readParsable } from '../../fs/reader';
 import { Spectral } from '../../index';
 import * as Parsers from '../../parsers';
-import { httpAndFileResolver } from '../../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '../../resolvers/http-and-file';
 import { FormatLookup } from '../../types';
 
 interface ITestCases {
@@ -64,7 +64,7 @@ describe('Online vs Offline context', () => {
       const content = await readParsable(fixturePath, { encoding: 'utf8' });
       const document = new Document(content, Parsers.Json, fixturePath);
 
-      const resolvingSpectral = new Spectral({ resolver: httpAndFileResolver });
+      const resolvingSpectral = new Spectral({ resolver: createHttpAndFileResolver() });
       resolvingSpectral.registerFormat(formatName, formatLookup);
       await resolvingSpectral.loadRuleset(ruleset);
 

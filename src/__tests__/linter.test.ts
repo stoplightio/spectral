@@ -6,7 +6,7 @@ import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { mergeRules, readRuleset } from '../rulesets';
 import { RuleCollection, Spectral } from '../spectral';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '../resolvers/http-and-file';
 import { Parsers, Document } from '..';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
@@ -1258,7 +1258,7 @@ responses:: !!foo
   });
 
   test.each(['1', 'null', '', 'false'])('given %s input, should report nothing', async input => {
-    const s = new Spectral({ resolver: httpAndFileResolver });
+    const s = new Spectral({ resolver: createHttpAndFileResolver() });
 
     const source = '/tmp/file.yaml';
     const doc = new Document(input, Parsers.Yaml, source);
@@ -1269,7 +1269,7 @@ responses:: !!foo
   });
 
   test('should be capable of linting arrays', async () => {
-    const s = new Spectral({ resolver: httpAndFileResolver });
+    const s = new Spectral({ resolver: createHttpAndFileResolver() });
 
     s.setRules({
       'falsy-foo': {

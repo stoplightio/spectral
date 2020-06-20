@@ -8,7 +8,7 @@ import { Document } from '../document';
 import { isOpenApiv2 } from '../formats';
 import { pattern } from '../functions/pattern';
 import * as Parsers from '../parsers';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
 const bareRuleset = require('./__fixtures__/bare-oas-ruleset.json');
@@ -98,7 +98,7 @@ describe('Spectral', () => {
 
   test('should report issues for correct files with correct ranges and paths', async () => {
     const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json'));
-    const spectral = new Spectral({ resolver: httpAndFileResolver });
+    const spectral = new Spectral({ resolver: createHttpAndFileResolver() });
     await spectral.loadRuleset('spectral:oas');
     spectral.registerFormat('oas2', isOpenApiv2);
     const document = new Document(fs.readFileSync(documentUri, 'utf8'), Parsers.Json, documentUri);
@@ -187,7 +187,7 @@ describe('Spectral', () => {
   });
 
   test('properly decorates results with metadata pertaining to the document being linted', async () => {
-    const s = new Spectral({ resolver: httpAndFileResolver });
+    const s = new Spectral({ resolver: createHttpAndFileResolver() });
     s.setFunctions({ pattern });
     s.setRules({
       'unsecure-remote-reference': {
@@ -271,7 +271,7 @@ describe('Spectral', () => {
   });
 
   test('should recognize the source of remote $refs, and de-dupe results by fingerprint', async () => {
-    const s = new Spectral({ resolver: httpAndFileResolver });
+    const s = new Spectral({ resolver: createHttpAndFileResolver() });
     const documentUri = path.join(__dirname, './__fixtures__/gh-658/URIError.yaml');
 
     s.setRules({
