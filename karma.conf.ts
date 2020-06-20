@@ -1,6 +1,8 @@
 // Karma configuration
 // Generated on Tue Jul 02 2019 17:18:30 GMT+0200 (Central European Summer Time)
 
+import type { TransformCallback, TransformContext } from "karma-typescript";
+
 module.exports = (config: any) => {
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -38,8 +40,23 @@ module.exports = (config: any) => {
           },
         },
         acornOptions: {
-          ecmaVersion: 9,
+          ecmaVersion: 11,
         },
+        transforms: [
+          function(context: TransformContext, callback: TransformCallback) {
+            // you may ask why on earth do we need this...,
+            // so this is to make sure `cjs` extensions are treated as actual scripts and not text files
+            // https://github.com/monounity/karma-typescript/blob/master/packages/karma-typescript/src/bundler/bundle-item.ts#L18 does not have cjs extension listed, so our file is not treated as script, and eventually require-ing it leads to a typeerror, since we get a string instead
+            // luckily it's an OR with rhs being `this.transformedScript` expression, so all we need to do is to set it to true (which we do below)
+            const err: any = void 0; // needed because typings are incorrect and expect Error only
+            if (context.module.includes('@stoplight/ordered-object-literal')) {
+              // needed to set a flag transformedScript on BundledItem described above, https://github.com/monounity/karma-typescript/blob/master/packages/karma-typescript/src/bundler/transformer.ts#L94
+              return callback(err, { dirty: true, transformedScript: true });
+            }
+
+            return callback(err, false);
+          }
+        ]
       },
     },
 
