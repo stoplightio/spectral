@@ -50,7 +50,7 @@ export const oasOpParams: IFunction = params => {
 
   if (hasDuplicateParams) {
     results.push({
-      message: 'Operations must have unique `name` + `in` parameters',
+      message: 'Operation must have unique `name` + `in` parameters',
     });
   }
 

@@ -75,7 +75,7 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operations must have unique `name` + `in` parameters',
+        message: 'Operation must have unique `name` + `in` parameters',
         path: ['paths', '/foo', 'get', 'parameters'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
@@ -106,7 +106,7 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operations must have unique `name` + `in` parameters',
+        message: 'Operation must have unique `name` + `in` parameters',
         path: ['paths', '/foo', 'get', 'parameters'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
