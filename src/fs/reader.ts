@@ -4,11 +4,12 @@ import * as fs from 'fs';
 import { RequestInit } from 'node-fetch';
 import { STATIC_ASSETS } from '../assets';
 import request from '../request';
+import { Agent } from 'http';
 
 export interface IReadOptions {
   encoding: string;
   timeout?: number;
-  proxyUri?: string;
+  agent?: Agent;
 }
 
 export async function readFile(name: string | number, opts: IReadOptions): Promise<string> {
@@ -39,10 +40,7 @@ export async function readFile(name: string | number, opts: IReadOptions): Promi
     let timeout: NodeJS.Timeout | number | null = null;
     try {
       const requestOpts: RequestInit = {};
-      if (opts.proxyUri) {
-        const ProxyAgent = require('proxy-agent');
-        requestOpts.agent = new ProxyAgent(opts.proxyUri);
-      }
+      requestOpts.agent = opts.agent;
       if (opts.timeout) {
         const controller = new AbortController();
         timeout = setTimeout(() => {
@@ -50,6 +48,7 @@ export async function readFile(name: string | number, opts: IReadOptions): Promi
         }, opts.timeout);
         requestOpts.signal = controller.signal;
       }
+
       response = await request(name, requestOpts);
 
       if (!response.ok) throw new Error(response.statusText);

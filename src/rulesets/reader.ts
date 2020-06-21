@@ -10,10 +10,11 @@ import { findFile, isNPMSource } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset } from './validation';
+import { Agent } from 'http';
 
 export interface IRulesetReadOptions {
   timeout?: number;
-  proxyUri?: string;
+  agent?: Agent;
 }
 
 function parseContent(content: string, source: string): unknown {
@@ -62,12 +63,12 @@ const createRulesetProcessor = (
     }
 
     processedRulesets.add(rulesetUri);
-    const { result } = await createHttpAndFileResolver({ proxyUri: readOpts?.proxyUri }).resolve(
+    const { result } = await createHttpAndFileResolver({ agent: readOpts?.agent }).resolve(
       parseContent(
         await readParsable(rulesetUri, {
           timeout: readOpts?.timeout,
           encoding: 'utf8',
-          proxyUri: readOpts?.proxyUri,
+          agent: readOpts?.agent,
         }),
         rulesetUri,
       ),
@@ -147,7 +148,7 @@ const createRulesetProcessor = (
               code: await readFile(source, {
                 timeout: readOpts?.timeout,
                 encoding: 'utf8',
-                proxyUri: readOpts?.proxyUri,
+                agent: readOpts?.agent,
               }),
               schema: fnSchema,
               source,

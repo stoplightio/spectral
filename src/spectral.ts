@@ -3,6 +3,7 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
+import { Agent } from 'http';
 
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
@@ -41,6 +42,7 @@ export * from './types';
 
 export class Spectral {
   private readonly _resolver: IResolver;
+  private readonly agent: Agent | undefined;
 
   public functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
   public rules: RunRuleCollection = {};
@@ -54,11 +56,15 @@ export class Spectral {
   constructor(protected readonly opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
 
+    if (opts?.proxyUri) {
+      const ProxyAgent = require('proxy-agent');
+      this.agent = new ProxyAgent(opts.proxyUri);
+    }
     if (opts?.resolver) {
       this._resolver = opts.resolver;
     } else {
       this._resolver =
-        typeof window === 'undefined' ? createHttpAndFileResolver({ proxyUri: opts?.proxyUri }) : new Resolver();
+        typeof window === 'undefined' ? createHttpAndFileResolver({ agent: this.agent }) : new Resolver();
     }
 
     this.formats = {};
@@ -169,9 +175,7 @@ export class Spectral {
   }
 
   public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions) {
-    this.setRuleset(
-      await readRuleset(Array.isArray(uris) ? uris : [uris], { proxyUri: this.opts?.proxyUri, ...options }),
-    );
+    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], { agent: this.agent, ...options }));
   }
 
   public setRuleset(ruleset: IRuleset) {

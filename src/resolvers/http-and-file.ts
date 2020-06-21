@@ -1,22 +1,15 @@
 import { createResolveHttp, resolveFile } from '@stoplight/json-ref-readers';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { RequestInit } from 'node-fetch';
 import { DEFAULT_REQUEST_OPTIONS } from '../request';
+import { Agent } from 'http';
 
 export interface IHttpAndFileResolverOptions {
-  proxyUri?: string;
+  agent?: Agent;
 }
 
 // resolves files, http and https $refs, and internal $refs
 export function createHttpAndFileResolver(opts?: IHttpAndFileResolverOptions): Resolver {
-  const requestOptions: RequestInit = {};
-
-  if (opts?.proxyUri) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const ProxyAgent = require('proxy-agent');
-    requestOptions.agent = new ProxyAgent(opts.proxyUri);
-  }
-  const resolveHttp = createResolveHttp({ ...DEFAULT_REQUEST_OPTIONS, ...requestOptions });
+  const resolveHttp = createResolveHttp({ ...DEFAULT_REQUEST_OPTIONS, ...opts });
 
   return new Resolver({
     resolvers: {
