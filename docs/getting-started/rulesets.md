@@ -128,4 +128,10 @@ You can also make your own: read more about [Custom Rulesets](../guides/4-custom
 
 ## Documentation URL
 
-Phil add something please
+Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
+
+Whatever you link you provide, the rule name will be appended as an anchor.
+
+TODO example
+
+If no documentationUrl is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed. 
