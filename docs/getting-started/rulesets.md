@@ -132,6 +132,6 @@ Optionally provide a documentation URL to your ruleset in order to help end-user
 
 Whatever you link you provide, the rule name will be appended as an anchor.
 
-TODO example
+Given the following `documentationUrl` [`https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md`](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md), an example URL for `info-contact` rule would look as follows [`https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#info-contact`](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#info-contact).
 
-If no documentationUrl is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed. 
+If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
