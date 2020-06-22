@@ -31,7 +31,7 @@ describe('Ruleset Validation', () => {
     expect(assertValidRuleset.bind(null, validRuleset)).not.toThrow();
   });
 
-  it.each([false, 2, null])('given invalid %s documentationUrl type, throws', documentationUrl => {
+  it.each([false, 2, null, 'foo', '12.foo.com'])('given invalid %s documentationUrl, throws', documentationUrl => {
     expect(assertValidRuleset.bind(null, { documentationUrl, rules: {} })).toThrow(ValidationError);
   });
 
