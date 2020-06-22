@@ -4,7 +4,8 @@
     "type": "object",
     "properties": {
         "documentationUrl": {
-            "type": "string"
+            "type": "string",
+            "format": "url"
         },
         "rules": {
             "type": "object",
