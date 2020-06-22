@@ -4,31 +4,44 @@ const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 
 describe('Ruleset Validation', () => {
-  it('given primitive type should throw', () => {
+  it('given primitive type, throws', () => {
     expect(assertValidRuleset.bind(null, null)).toThrow('Provided ruleset is not an object');
     expect(assertValidRuleset.bind(null, 2)).toThrow('Provided ruleset is not an object');
     expect(assertValidRuleset.bind(null, 'true')).toThrow('Provided ruleset is not an object');
   });
 
-  it('given object with no rules and no extends properties should throw', () => {
+  it('given object with no rules and no extends properties, throws', () => {
     expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules or extends property');
     expect(assertValidRuleset.bind(null, { rule: {} })).toThrow('Ruleset must have rules or extends property');
   });
 
-  it('given object with extends property only should emit no errors', () => {
+  it('given object with extends property only, emits no errors', () => {
     expect(assertValidRuleset.bind(null, { extends: [] })).not.toThrow();
   });
 
-  it('given object with rules property only should emit no errors', () => {
+  it('given object with rules property only, emits no errors', () => {
     expect(assertValidRuleset.bind(null, { rules: {} })).not.toThrow();
   });
 
-  it('given invalid ruleset should throw', () => {
+  it('given invalid ruleset, throws', () => {
     expect(assertValidRuleset.bind(null, invalidRuleset)).toThrow(ValidationError);
   });
 
-  it('given valid ruleset should emit no errors', () => {
+  it('given valid ruleset should, emits no errors', () => {
     expect(assertValidRuleset.bind(null, validRuleset)).not.toThrow();
+  });
+
+  it.each([false, 2, null])('given invalid %s documentationUrl type, throws', documentationUrl => {
+    expect(assertValidRuleset.bind(null, { documentationUrl, rules: {} })).toThrow(ValidationError);
+  });
+
+  it('recognizes valid documentationUrl', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+        extends: ['spectral:oas'],
+      }),
+    ).not.toThrow();
   });
 
   it.each(['error', 'warn', 'info', 'hint', 'off'])('recognizes human-readable %s severity', severity => {
