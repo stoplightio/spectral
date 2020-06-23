@@ -4,17 +4,15 @@ import { extname, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
-import { createHttpAndFileResolver } from '../resolvers/http-and-file';
+import { createHttpAndFileResolver, IHttpAndFileResolverOptions } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile, isNPMSource } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset } from './validation';
-import { Agent } from 'http';
 
-export interface IRulesetReadOptions {
+export interface IRulesetReadOptions extends IHttpAndFileResolverOptions {
   timeout?: number;
-  agent?: Agent;
 }
 
 function parseContent(content: string, source: string): unknown {
