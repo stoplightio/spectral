@@ -111,7 +111,7 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "fetch-mock": "^7.7.3",
+    "fetch-mock": "^9.10.2",
     "glob-fs": "^0.1.7",
     "husky": "^4.2.5",
     "jest": "~25.5",
