@@ -94,7 +94,7 @@
     "@rollup/plugin-node-resolve": "^8.0.1",
     "@types/chalk": "^2.2.0",
     "@types/fetch-mock": "^7.3.1",
-    "@types/jest": "^25.2.3",
+    "@types/jest": "^26.0.0",
     "@types/jest-when": "^2.7.1",
     "@types/lodash": "^4.14.155",
     "@types/nanoid": "^2.1.0",
