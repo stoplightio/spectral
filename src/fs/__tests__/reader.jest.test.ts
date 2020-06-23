@@ -30,7 +30,7 @@ end
     });
 
     it('throws when fd cannot be accessed', () => {
-      return expect(readFile(2, { encoding: 'utf8' })).rejects.toThrow();
+      return expect(readFile(2147483647, { encoding: 'utf8' })).rejects.toThrow();
     });
   });
 });

@@ -64,7 +64,7 @@ describe('schema-path', () => {
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
         path: ['example'],
-        message: 'Object should have required property `url`',
+        message: '`example` property should have required property `url`',
       },
     ]);
   });
@@ -79,7 +79,7 @@ describe('schema-path', () => {
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
         path: ['example'],
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        message: '`example` property type should be string',
       },
     ]);
   });
@@ -109,11 +109,11 @@ describe('schema-path', () => {
     };
     expect(runSchemaPath(target, '$.examples.*', path)).toEqual([
       {
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        message: '`id` property type should be string',
         path: ['examples', 'application/json', 'id'],
       },
       {
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        message: '`id` property type should be string',
         path: ['examples', 'application/yaml', 'id'],
       },
     ]);
@@ -138,11 +138,11 @@ describe('schema-path', () => {
     };
     expect(runSchemaPath(target, '$.schema.examples.*', path)).toEqual([
       {
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        message: '`0` property type should be string',
         path: ['schema', 'examples', '0'],
       },
       {
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}type should be string',
+        message: '`2` property type should be string',
         path: ['schema', 'examples', '2'],
       },
     ]);
@@ -159,7 +159,7 @@ describe('schema-path', () => {
 
     expect(runSchemaPath(target, fieldToCheck, path)).toEqual([
       {
-        message: '{{property|gravis|append-property|optional-typeof|capitalize}}format should match format `url`',
+        message: '`example` property should match format `url`',
         path: ['example'],
       },
     ]);

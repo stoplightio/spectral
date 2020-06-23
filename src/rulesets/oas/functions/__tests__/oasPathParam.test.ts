@@ -121,6 +121,18 @@ describe('oasPathParam', () => {
     expect(results).toHaveLength(0);
   });
 
+  test('No errors if operation is a not a standard HTTP operation.', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          'x-not-a-standard-operation': {},
+        },
+      },
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
   test('Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one', async () => {
     const results = await s.run({
       paths: {

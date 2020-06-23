@@ -70,7 +70,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Object should have required property `value`',
+        message: '`default` property should have required property `value`',
         path: ['components', 'messages', 'aMessage', 'payload', 'default'],
         severity: rule.severity,
       }),
@@ -87,7 +87,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Object should have required property `value`',
+        message: '`default` property should have required property `value`',
         path: ['components', 'messageTraits', 'aTrait', 'payload', 'default'],
         severity: rule.severity,
       }),
@@ -106,7 +106,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: ruleName,
-          message: 'Object should have required property `value`',
+          message: '`default` property should have required property `value`',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'payload', 'default'],
           severity: rule.severity,
         }),
