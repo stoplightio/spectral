@@ -5,7 +5,7 @@ function computeFingerprint(param: Dictionary<unknown>): string {
   return `${param.in}-${param.name}`;
 }
 
-export const oasOpParams: IFunction = params => {
+export const oasOpParams: IFunction = (params, _opts, { given }) => {
   /**
    * This function verifies:
    *
@@ -20,50 +20,58 @@ export const oasOpParams: IFunction = params => {
 
   const results: IFunctionResult[] = [];
 
-  const count = {
-    body: 0,
-    formData: 0,
+  const count: Dictionary<number[]> = {
+    body: [],
+    formData: [],
   };
   const list: string[] = [];
-  let hasDuplicateParams = false;
+  const duplicates: number[] = [];
+
+  let index = -1;
 
   for (const param of params) {
+    index++;
+
     if (param === null || typeof param !== 'object') continue;
 
     // skip params that are refs
     if ('$ref' in param) continue;
 
     // Operations must have unique `name` + `in` parameters.
-    if (!hasDuplicateParams) {
-      const fingerprint = computeFingerprint(param);
-      if (list.includes(fingerprint)) {
-        hasDuplicateParams = true;
-      } else {
-        list.push(fingerprint);
-      }
+    const fingerprint = computeFingerprint(param);
+    if (list.includes(fingerprint)) {
+      duplicates.push(index);
+    } else {
+      list.push(fingerprint);
     }
 
     if (param.in in count) {
-      count[param.in]++;
+      count[param.in].push(index);
     }
   }
 
-  if (hasDuplicateParams) {
+  if (duplicates.length > 0) {
+    for (const i of duplicates) {
+      results.push({
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: [...given, i],
+      });
+    }
+  }
+
+  if (count.body.length > 0 && count.formData.length > 0) {
     results.push({
-      message: 'Operation must have unique `name` + `in` parameters',
+      message: 'Operation cannot have both `in:body` and `in:formData` parameters.',
     });
   }
 
-  if (count.body > 0 && count.formData > 0) {
-    results.push({
-      message: 'Operation cannot have both `in:body` and `in:formData` parameters',
-    });
-  }
-
-  if (count.body > 1) {
-    results.push({
-      message: 'Operation has multiple instances of the `in:body` parameter',
-    });
+  if (count.body.length > 1) {
+    for (let i = 1; i < count.body.length; i++) {
+      results.push({
+        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        path: [...given, count.body[i]],
+      });
+    }
   }
 
   return results;
