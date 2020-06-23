@@ -1,35 +1,30 @@
-version: 1
-update_configs:
-  - package_manager: "javascript"
+version: 2
+updates:
+  #  uncomment when https://github.com/dependabot/dependabot-core/issues/1865 is resolved
+  #  - package-ecosystem: "npm"
+  #    directory: "/"
+  #    schedule:
+  #      interval: "daily"
+  #    versioning-strategy: increase
+  #
+  #    commit-message:
+  #      prefix: "fix"
+  #      include: "scope"
+  #
+  #    allow:
+  #      - dependency-name: "@stoplight/*" # match all Stoplight deps, regardless of type
+  #        dependency-type: "all"
+  #      - dependency-type: "production"
+
+  - package-ecosystem: "npm"
     directory: "/"
-    update_schedule: "live"
-    version_requirement_updates: increase_versions
+    schedule:
+      interval: "monthly" # we do not need to check for devDependencies updates on a daily basis
+    versioning-strategy: "increase"
 
-    commit_message:
-      prefix: "fix"
-      include_scope: true
-
-    allowed_updates:
-      - match:
-          dependency_name: "@stoplight/*" # match all Stoplight deps, regardless of type
-          update_type: "all"
-      - match:
-          dependency_type: "production"
-          update_type: "all"
-      - match:
-          dependency_type: "development"
-          update_type: "security"
-
-  - package_manager: "javascript"
-    directory: "/"
-    update_schedule: "monthly" # we do not need to check for devDependencies updates on a daily basis
-    version_requirement_updates: increase_versions
-
-    commit_message:
+    commit-message:
       prefix: "chore"
-      include_scope: true
+      include: "scope"
 
-    allowed_updates:
-      - match:
-          dependency_type: "development"
-          update_type: "all"
+    allow:
+      - dependency-type: "development"
