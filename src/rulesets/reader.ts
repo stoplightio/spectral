@@ -40,6 +40,10 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
     Object.assign(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
     Object.assign(base.exceptions, resolvedRuleset.exceptions);
+
+    if (resolvedRuleset.documentationUrl !== void 0 && !('documentationUrl' in base)) {
+      base.documentationUrl = resolvedRuleset.documentationUrl;
+    }
   }
 
   return base;
@@ -86,6 +90,7 @@ const createRulesetProcessor = (
     const functions = {};
     const exceptions = {};
     const newRuleset: IRuleset = {
+      ...('documentationUrl' in ruleset ? { documentationUrl: ruleset.documentationUrl } : null),
       rules,
       functions,
       exceptions,
