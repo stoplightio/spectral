@@ -3,6 +3,7 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
+import type { Agent } from 'http';
 
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
@@ -10,6 +11,7 @@ import { DocumentInventory } from './documentInventory';
 import { CoreFunctions, functions as coreFunctions } from './functions';
 import * as Parsers from './parsers';
 import request from './request';
+import { createHttpAndFileResolver } from './resolvers/http-and-file';
 import { OptimizedRule, Rule } from './rule';
 import { readRuleset } from './rulesets';
 import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
@@ -40,6 +42,7 @@ export * from './types';
 
 export class Spectral {
   private readonly _resolver: IResolver;
+  private readonly agent: Agent | undefined;
 
   public functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
   public rules: RunRuleCollection = {};
@@ -52,7 +55,19 @@ export class Spectral {
 
   constructor(protected readonly opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
-    this._resolver = opts?.resolver ?? new Resolver();
+
+    if (opts?.proxyUri) {
+      // using eval so bundlers do not include proxy-agent when Spectral is used in the browser
+      const ProxyAgent = eval('require')('proxy-agent');
+      this.agent = new ProxyAgent(opts.proxyUri);
+    }
+    if (opts?.resolver) {
+      this._resolver = opts.resolver;
+    } else {
+      this._resolver =
+        typeof window === 'undefined' ? createHttpAndFileResolver({ agent: this.agent }) : new Resolver();
+    }
+
     this.formats = {};
     this.runtime = new RunnerRuntime();
   }
@@ -161,7 +176,7 @@ export class Spectral {
   }
 
   public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions) {
-    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], options));
+    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], { agent: this.agent, ...options }));
   }
 
   public setRuleset(ruleset: IRuleset) {

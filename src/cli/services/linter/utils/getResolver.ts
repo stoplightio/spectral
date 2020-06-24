@@ -1,6 +1,6 @@
 import { isAbsolute, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
-import { httpAndFileResolver } from '../../../../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '../../../../resolvers/http-and-file';
 
 export const getResolver = (resolver: Optional<string>) => {
   if (resolver) {
@@ -11,7 +11,7 @@ export const getResolver = (resolver: Optional<string>) => {
     }
   }
 
-  return httpAndFileResolver;
+  return createHttpAndFileResolver();
 };
 
 function formatMessage(message: string): Optional<string> {
