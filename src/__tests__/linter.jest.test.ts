@@ -7,7 +7,7 @@ import * as timers from 'timers';
 
 import { isOpenApiv3 } from '../formats';
 import { functions } from '../functions';
-import { createHttpAndFileResolver } from '../resolvers/http-and-file';
+import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { readRuleset } from '../rulesets';
 import { setFunctionContext } from '../rulesets/evaluators';
 import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
@@ -460,7 +460,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
   });
 
   it('should report resolving errors for correct files', async () => {
-    spectral = new Spectral({ resolver: createHttpAndFileResolver() });
+    spectral = new Spectral({ resolver: httpAndFileResolver });
 
     const documentUri = path.join(__dirname, './__fixtures__/schemas/doc.json');
     const result = await spectral.run(
@@ -495,7 +495,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
   describe('evaluate "value" in validation messages', () => {
     test('should print correct values for referenced files', async () => {
-      spectral = new Spectral({ resolver: createHttpAndFileResolver() });
+      spectral = new Spectral({ resolver: httpAndFileResolver });
 
       spectral.setRules({
         'empty-is-falsy': {
@@ -703,7 +703,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       };
 
       it('should ignore specified rules violations in a referenced document', async () => {
-        spectral = new Spectral({ resolver: createHttpAndFileResolver() });
+        spectral = new Spectral({ resolver: httpAndFileResolver });
         spectral.registerFormat('oas3', isOpenApiv3);
 
         const rules = {
@@ -746,7 +746,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       });
 
       it('should ignore specified rules violations in "resolved=false" mode', async () => {
-        spectral = new Spectral({ resolver: createHttpAndFileResolver() });
+        spectral = new Spectral({ resolver: httpAndFileResolver });
         spectral.registerFormat('oas3', isOpenApiv3);
 
         const rules = {

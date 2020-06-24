@@ -7,11 +7,11 @@ import { readParsable } from '../../../fs/reader';
 import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
 import { RuleType, Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
-import { createHttpAndFileResolver } from '../../../resolvers/http-and-file';
+import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 import { rules } from '../index.json';
 
 describe('unusedDefinition - Http and fs remote references', () => {
-  const s = new Spectral({ resolver: createHttpAndFileResolver() });
+  const s = new Spectral({ resolver: httpAndFileResolver });
   s.registerFormat('oas2', () => true);
   s.setFunctions({ unreferencedReusableObject });
   s.setRules({
