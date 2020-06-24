@@ -3,7 +3,7 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
-import { Agent } from 'http';
+import type { Agent } from 'http';
 
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
@@ -57,7 +57,8 @@ export class Spectral {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
 
     if (opts?.proxyUri) {
-      const ProxyAgent = require('proxy-agent');
+      // using eval so bundlers do not include proxy-agent when Spectral is used in the browser
+      const ProxyAgent = eval('require')('proxy-agent');
       this.agent = new ProxyAgent(opts.proxyUri);
     }
     if (opts?.resolver) {
