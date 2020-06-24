@@ -46,9 +46,10 @@
     },
     "operation-parameters": {
       "description": "Operation parameters are unique and non-repeating.",
+      "message": "{{error}}",
       "recommended": true,
       "type": "validation",
-      "given": "$",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )].parameters",
       "then": {
         "function": "oasOpParams"
       }

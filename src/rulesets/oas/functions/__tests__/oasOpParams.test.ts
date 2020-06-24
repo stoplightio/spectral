@@ -75,18 +75,16 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 25,
-            line: 15,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: ['paths', '/foo', 'get', 'parameters', '1'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        code: 'operation-parameters',
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: ['paths', '/foo', 'get', 'parameters', '2'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -115,18 +113,16 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 44,
-            line: 12,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: ['paths', '/foo', 'get', 'parameters', '1'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        code: 'operation-parameters',
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: ['paths', '/foo', 'get', 'parameters', '2'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -148,7 +144,22 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results.length).toEqual(1);
+    expect(results).toEqual([
+      {
+        code: 'operation-parameters',
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: ['paths', '/foo', 'get', 'parameters', '1'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        code: 'operation-parameters',
+        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        path: ['paths', '/foo', 'get', 'parameters', '3'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 
   test('Error if multiple in:body', async () => {
@@ -161,25 +172,39 @@ describe('oasOpParams', () => {
               { in: 'body', name: 'bar' },
             ],
           },
-          put: {},
+          put: {
+            parameters: [
+              { in: 'body', name: 'foo' },
+              { in: 'query', name: 'foo' },
+              { in: 'header', name: 'bar' },
+              { in: 'body', name: 'bar' },
+              { in: 'header', name: 'baz' },
+              { in: 'body', name: 'baz' },
+            ],
+          },
         },
       },
     });
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 25,
-            line: 11,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        path: ['paths', '/foo', 'get', 'parameters', '1'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        code: 'operation-parameters',
+        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        path: ['paths', '/foo', 'put', 'parameters', '3'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        code: 'operation-parameters',
+        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        path: ['paths', '/foo', 'put', 'parameters', '5'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -201,18 +226,9 @@ describe('oasOpParams', () => {
     expect(results).toEqual([
       {
         code: 'operation-parameters',
-        message: 'Operation parameters are unique and non-repeating.',
-        path: ['paths', '/foo', 'get'],
-        range: {
-          end: {
-            character: 25,
-            line: 11,
-          },
-          start: {
-            character: 12,
-            line: 3,
-          },
-        },
+        message: 'Operation cannot have both `in:body` and `in:formData` parameters.',
+        path: ['paths', '/foo', 'get', 'parameters'],
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
