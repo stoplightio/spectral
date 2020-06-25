@@ -265,6 +265,13 @@ describe('casing', () => {
       );
     });
 
+    test.each(Object.values(CasingType))('properly detects leading char for %s casing', casing => {
+      expect(runCasing('/', casing, true, { allowLeading: true, char: '/' })).toBeUndefined();
+      expect(runCasing('//', casing, true, { allowLeading: true, char: '/' })).toEqual([
+        { message: `must be ${casing} case` },
+      ]);
+    });
+
     test('allows advanced scenarios', () => {
       expect(runCasing('X-MyAmazing-Header', CasingType.pascal, true, { char: '-' })).toBeUndefined();
       expect(
