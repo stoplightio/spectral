@@ -713,8 +713,11 @@ responses:: !!foo
     );
   });
 
-  test('should report invalid $refs', async () => {
-    const result = await spectral.run(invalidSchema);
+  test('should report when a resolver is not defined for a given $ref type', async () => {
+    const s = new Spectral({ resolver: new Resolver() });
+    s.registerFormat('oas3', isOpenApiv3);
+
+    const result = await s.run(invalidSchema);
 
     expect(result).toEqual([
       expect.objectContaining({

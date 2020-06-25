@@ -23,6 +23,7 @@ export interface IConstructorOpts {
   resolver?: IResolver;
   computeFingerprint?: ComputeFingerprintFunc;
   useNimma?: boolean;
+  proxyUri?: string;
 }
 
 export interface IRunOpts {
