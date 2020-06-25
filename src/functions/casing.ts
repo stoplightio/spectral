@@ -40,7 +40,8 @@ export const casing: IFunction<ICasingOptions> = (targetVal, opts) => {
     targetVal.length === 1 &&
     opts.separator !== void 0 &&
     opts.separator.allowLeading === true &&
-    targetVal.endsWith(opts.separator.char)
+    // eslint-disable-next-line @typescript-eslint/prefer-string-starts-ends-with
+    targetVal[0] === opts.separator.char
   ) {
     return;
   }
