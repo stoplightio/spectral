@@ -192,6 +192,19 @@ spectral
   });
 ```
 
+### Using a proxy
+
+Spectral supports http(s) proxies when fetching remote schemas and rulesets.
+
+```js
+const { Spectral } = require('@stoplight/spectral');
+
+const spectral = new Spectral({ proxyUri: 'http://my-proxy:3000' });
+spectral.loadRuleset('https://example.org/my-rules')
+
+// lint as usual - $refs and rules will be requested using the proxy
+```
+
 ### Using custom resolver
 
 Spectral lets you provide any custom $ref resolver. By default, http(s) and file protocols are resolved, relatively to

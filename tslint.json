@@ -1,9 +1,0 @@
-{
-  "extends": ["tslint-config-stoplight"],
-  "linterOptions": {
-    "exclude": ["**/*.json"]
-  },
-  "rules": {
-    "prettier": "error"
-  }
-}

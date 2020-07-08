@@ -36,6 +36,15 @@ export const casing: IFunction<ICasingOptions> = (targetVal, opts) => {
     return;
   }
 
+  if (
+    targetVal.length === 1 &&
+    opts.separator !== void 0 &&
+    opts.separator.allowLeading === true &&
+    targetVal === opts.separator.char
+  ) {
+    return;
+  }
+
   const casingValidator = buildFrom(CASES[opts.type], opts);
 
   if (casingValidator.test(targetVal)) {
