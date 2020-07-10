@@ -3,6 +3,10 @@
     "$id": "http://stoplight.io/schemas/ruleset.schema.json",
     "type": "object",
     "properties": {
+        "documentationUrl": {
+            "type": "string",
+            "format": "url"
+        },
         "rules": {
             "type": "object",
             "additionalProperties": {

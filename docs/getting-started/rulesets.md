@@ -125,3 +125,20 @@ Spectral comes with two rulesets included:
  - `spectral:asyncapi` - AsyncAPI v2 rules
 
 You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
+
+## Documentation URL
+
+Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
+
+Whatever you link you provide, the rule name will be appended as an anchor.
+
+Given the following `documentationUrl` [`https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md`](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md), an example URL for `info-contact` rule would look as follows [`https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#info-contact`](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#info-contact).
+
+```yaml
+documentationUrl: https://www.example.com/docs/api-ruleset.md
+
+rules:
+  # ...
+```
+
+If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
