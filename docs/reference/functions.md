@@ -136,13 +136,26 @@ Available types are:
 
 ```yaml
 camel-case-name:
-  description: Name should camelCased.
+  description: Name should be camelCased.
   type: style
   given: "$.name"
   then:
     function: casing
     functionOptions:
       type: camel
+
+paths-kebab-case:
+  description: Should paths be kebab-case.
+  message: '{{property}} is not kebab-case (lower case and separated with hyphens)'
+  severity: warn
+  given: $.paths[*]~
+  then:
+    function: casing
+    functionOptions:
+      type: kebab
+      separator:
+        char: /
+        allowLeading: true
 ```
 
 ## schema
