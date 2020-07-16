@@ -1,4 +1,4 @@
-import { schemaPath } from '../schema-path';
+import { schemaPath } from '../schemaPath';
 
 function runSchemaPath(target: any, field: string, schemaPathStr: string) {
   return schemaPath(target, { field, schemaPath: schemaPathStr }, { given: [], target: [] }, {

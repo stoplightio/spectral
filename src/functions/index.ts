@@ -5,7 +5,7 @@ import { falsy } from './falsy';
 import { length } from './length';
 import { pattern } from './pattern';
 import { schema } from './schema';
-import { schemaPath } from './schema-path';
+import { schemaPath } from './schemaPath';
 import { truthy } from './truthy';
 import { undefined } from './undefined';
 import { unreferencedReusableObject } from './unreferencedReusableObject';
