@@ -1,6 +1,6 @@
 # Spectral CLI
 
-Once installed, Spectral can be run via the command-line:
+[Once installed](../getting-started/2-installation.md), Spectral can be run via the command-line:
 
 ```bash
 spectral lint petstore.yaml
@@ -20,7 +20,7 @@ spectral lint ./reference/**/*.oas*.{json,yml,yaml}
 
 Other options include:
 
-``` text
+```text
   --version                    Show version number                                          [boolean]
   --help                       Show help                                                    [boolean]
   --encoding, -e               text encoding to use                        [string] [default: "utf8"]
@@ -41,9 +41,12 @@ Other options include:
 
 The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset.
 
-You can also provide your own ruleset file. By default, the Spectral CLI will look for a ruleset file called `.spectral.yml` or `.spectral.json` in the current working directory. You can tell spectral to use a different file by using the `--ruleset` CLI option.
+## Using a Ruleset File
 
-Here you can build a [custom ruleset](../getting-started/rulesets.md), or extend and modify our core rulesets:
+If you don't specify a ruleset file with the `--ruleset` parameter, the Spectral CLI will look for a ruleset file called `.spectral.yml`, `.spectral.yaml`, or `.spectral.json` in the current working directory. If no ruleset is specified and no default ruleset file is found, the built-in rulesets will be used.
+
+Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or extend and modify our core rulesets:
+
 - [OpenAPI ruleset](../reference/openapi-rules.md)
 - [AsyncAPI ruleset](../reference/asyncapi-rules.md)
 
@@ -61,7 +64,7 @@ To have requests made from Spectral be proxied through a server, you'd need to s
 
 `PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
 
-## Custom $ref resolving
+## Custom $ref Resolving
 
 If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
 
@@ -79,5 +82,4 @@ module.exports = new Resolver({
 });
 ```
 
-
-You can learn more about $ref resolving in the [JS section](./3-javascript.md#using-custom-resolver).
+You can learn more about `$ref` resolving in the [JS section](./3-javascript.md#using-custom-resolver).

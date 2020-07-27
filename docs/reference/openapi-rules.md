@@ -2,7 +2,7 @@
 
 Spectral has a built-in "oas" ruleset, with OAS being shorthand for the [OpenAPI Specification](https://openapis.org/specification).
 
-In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/rulesets.md#formats)).
+In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats)).
 
 ## OpenAPI v2 & v3
 
@@ -297,7 +297,7 @@ Use just one tag for an operation, which is helpful for some documentation syste
 <!-- theme: warning -->
 > ### Removed in v5.0
 >
-> This rule was removed in Spectral v5.0, so if you are relying on it you can find the [old definition here](https://github.com/stoplightio/spectral/blob/v4.2.0/src/rulesets/oas/index.json#L312) and paste it into your [custom ruleset](../getting-started/rulesets.md).
+> This rule was removed in Spectral v5.0, so if you are relying on it you can find the [old definition here](https://github.com/stoplightio/spectral/blob/v4.2.0/src/rulesets/oas/index.json#L312) and paste it into your [custom ruleset](../getting-started/3-rulesets.md).
 
 Operation `summary` should start with upper case and end with a dot.
 

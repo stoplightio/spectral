@@ -29,7 +29,7 @@ For example if the API has a bunch of URLs with underscores, then becoming consi
 
 Folks will forget to run Spectral, and that means they can commit broken or (low quality) documents. Adding a git commit hook can be a simple solution to this using something like [Husky](https://github.com/typicode/husky).
 
-```
+```jsonc
 // package.json
 {
   "husky": {
@@ -48,7 +48,7 @@ See our [CLI documentation](./2-cli.md) to see what other arguments and options 
 
 Running Spectral on CI servers is just a case of doing what you'd do in the CI.
 
-``` yaml
+```yaml
 version: 2
 jobs:
   build:
