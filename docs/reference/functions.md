@@ -1,6 +1,6 @@
 # Core Functions
 
-Rules use "functions" and those can be custom defined. To save everyone the effort of writing functions for common tasks, Spectral comes with a few bundled out of the box.
+Rules use "functions" and those can be custom defined. To save everyone the effort of writing functions for common tasks, Spectral comes with a few bundled out of the box. If you find these don't do what you need, you can [also write custom functions](../guides/5-custom-functions.md).
 
 ## alphabetical
 

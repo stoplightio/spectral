@@ -15,7 +15,7 @@ A flexible JSON/YAML linter, with out of the box support for OpenAPI v2/v3 and A
   - OpenAPI v2 _and_ v3 documents
   - AsyncAPI v2 documents
 - Use JSON path to apply rules to specific parts of your objects
-- Built-in set of functions to help [create custom rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/rulesets.md#adding-a-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Built-in set of functions to help [create custom rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/3-rulesets.md#adding-a-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Create custom functions for advanced use cases
 - Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
@@ -33,13 +33,13 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-Find more [installation methods](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/installation.md) in our documentation.
+Find more [installation methods](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/2-installation.md) in our documentation.
 
 This package is [Treeware](https://treeware.earth) so if you would like to thank us for creating it, we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral).
 
 ## Documentation
 
-Take a look at our [getting started documentation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/concepts.md), then peek through some of our guides:
+Take a look at our [getting started documentation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
 
 - [Different Workflows](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
 - [Using the command-line interface](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.

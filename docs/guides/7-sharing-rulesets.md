@@ -1,6 +1,6 @@
-## Sharing & Distributing Rulesets
+# Sharing & Distributing Rulesets
 
-A [ruleset](../getting-started/rulesets.md) becomes infinitely more useful when other developers are using it. By itself, it's just a way of enforcing some rules on a single project, but when distributed a ruleset can become a "style guide" for enforcing consistency across a whole bunch of projects!
+A [ruleset](../getting-started/3-rulesets.md) becomes infinitely more useful when other developers are using it. By itself, it's just a way of enforcing some rules on a single project, but when distributed a ruleset can become a "style guide" for enforcing consistency across a whole bunch of projects!
 
 To help you out distribute your rulesets among the others, Spectral provides a few ways to load rulesets from a variety of resources:
 
@@ -19,7 +19,7 @@ extends:
 
 There are various pros and cons to each approach, so see what is right for you.
 
-### HTTP Server
+## HTTP Server
 
 At its most basic level, a Spectral ruleset is just a JSON or YAML file. It can be hosted anywhere you like: on your web hosting, Amazon S3, or anywhere text files are accessible, and then pulled into your own local ruleset in the filesystem:
 
@@ -44,7 +44,7 @@ As with any ruleset, you can pass these directly to the [Spectral CLI](./2-cli.m
 spectral lint -r https://example.com/some-ruleset.yml
 ```
 
-### NPM
+## NPM
 
 As Spectral is a [NPM](https://www.npmjs.com/) package, we support loading rulesets from other NPM packages.
 
@@ -123,11 +123,11 @@ extends:
   - "example-spectral-ruleset@0.2.0"
 ```
 
-### Filesystem
+## Filesystem
 
 If you want to share Spectral rulesets between multiple repositories, you may need to use something like [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to clone down another repository into your repository.
 
-```
+```bash
 git submodule add https://github.com/some-org/style-guide
 ```
 

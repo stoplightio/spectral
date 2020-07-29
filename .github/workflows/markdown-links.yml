@@ -10,7 +10,7 @@ jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
     - uses: gaurav-nelson/github-action-markdown-link-check@master
       with:
         folder-path: 'docs'

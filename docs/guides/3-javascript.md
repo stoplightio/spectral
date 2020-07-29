@@ -4,7 +4,7 @@ The Spectral CLI is a thin wrapper around a JavaScript (TypeScript) API, which c
 
 Assuming it has been installed as a Node module via NPM/Yarn, it can be used to lint YAML and JSON documents from a string, or from an object.
 
-## Linting a YAML string
+## Linting a YAML String
 
 ```js
 const { Spectral, Document, Parsers } = require('@stoplight/spectral');
@@ -23,7 +23,7 @@ spectral
 ```
 
 Please note that by default Spectral supports YAML 1.2 with merge keys extension.
-As recommended by the [spec](https://yaml.org/spec/1.2/spec.html#id2804923), tags are resolved according to the "Core Schema".
+As recommended by the [spec](https://yaml.org/spec/1.2/spec.html#id2804923), tags are resolved according to the "Core Schema."
 
 This will run Spectral with no formats, rules or functions, so it's not going to do anything besides $ref resolving.
 Find out how to add formats, rules and functions below.
@@ -89,7 +89,7 @@ spectral.registerFormat('json-schema-draft7', isJSONSchemaDraft7);
 spectral.registerFormat('json-schema-2019-09', isJSONSchemaDraft2019_09);
 ```
 
-Learn more about predefined formats in the (ruleset documentation)[../getting-started/rulesets.md#formats].
+Learn more about predefined formats in the [ruleset documentation](../getting-started/3-rulesets.md#formats).
 
 ## Loading Rules
 
@@ -153,7 +153,7 @@ spectral.run(myOpenApiDocument)
 
 ## Advanced
 
-### Creating a custom format
+### Creating a Custom Format
 
 Spectral supports two core formats: `oas2` and `oas3`. Using `registerFormat` you can add support for auto-detecting other formats. You might want to do this for a ruleset which is run against multiple major versions of description format like RAML v0.8 and v1.0.
 
@@ -192,9 +192,9 @@ spectral
   });
 ```
 
-### Using a proxy
+### Using a Proxy
 
-Spectral supports http(s) proxies when fetching remote schemas and rulesets.
+Spectral supports HTTP(S) proxies when fetching remote schemas and rulesets.
 
 ```js
 const { Spectral } = require('@stoplight/spectral');
@@ -205,7 +205,7 @@ spectral.loadRuleset('https://example.org/my-rules')
 // lint as usual - $refs and rules will be requested using the proxy
 ```
 
-### Using custom resolver
+### Using a Custom Resolver
 
 Spectral lets you provide any custom $ref resolver. By default, http(s) and file protocols are resolved, relatively to
 the document Spectral lints against. If you'd like support any additional protocol or adjust the resolution, you are
@@ -249,7 +249,7 @@ The custom resolver we've just created will resolve all remote file refs relativ
 
 More on that can be found in the [json-ref-resolver repo](https://github.com/stoplightio/json-ref-resolver).
 
-### Using custom de-duplication strategy
+### Using a Custom De-duplication Strategy
 
 By default, Spectral will de-duplicate results based on the result code and document location. You can customize this
 behavior with the `computeFingerprint` option. For example, here is the default fingerprint implementation:

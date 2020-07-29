@@ -65,6 +65,5 @@ An example with more path segments: the location for a `get` method from a
 `/todos/{todo_id}/labels` path in an openapi document `/root/here.yaml`
 would be expressed as `/root/here.yaml#/paths/~1todos~1{todo_id}~1labels/get`.
 
-
 <!-- theme: info -->
 > Running Spectral CLI with the `--format json` parameter is pretty useful to find out the path segments of each result.

@@ -19,7 +19,10 @@ rules:
 
 Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
-By default, Spectral processes each rule on "resolved document" (a file where all `$ref`s have been resolved. If you would like to have an original input supplied to your rule, you can place `resolved` property as follows:
+<!-- theme: info -->
+> Spectral processes each rule on "resolved document" (a file where all `$ref` entries have been resolved). If your rule needs to access `$ref` values, you must set `resolved: false` on your rule.
+
+Here's an eample of a rule that can access `$ref` values:
 
 ```yaml
 rules:
@@ -33,9 +36,9 @@ rules:
       function: truthy
 ```
 
-You might find `resolved` useful if your rule requires access to `$ref` values specifically, for example if you want to enforce conventions on the folder structure used for [splitting up documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/).
+You might find `resolved: false` useful if your rule requires access to `$ref` values specifically, for example if you want to enforce conventions on the folder structure used for [splitting up documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/).
 
-In most cases, you will want to operate on resolved document.
+**In most cases, you will want to operate on a resolved document.**
 
 ### Given
 
@@ -52,7 +55,9 @@ The default value is `warn`.
 
 ### Then
 
-The Then part of the rules explains what to do with the `given` JSONPath, and involves two required keywords:
+The `then` part of the rule explains which function to apply to the `given` JSONPath. The function you apply [may be one of the core functions](../reference/functions.md) or it may be [a custom function](./5-custom-functions.md).
+
+`then` has two required keywords:
 
 ```yaml
 then:
@@ -71,7 +76,7 @@ then:
     match: '^[0-9]+$'
 ```
 
-The above pattern based rule would error on `456avbas` as it is not numeric.
+The above [`pattern` based rule](../reference/functions.md#pattern) would error on `456avbas` as it is not numeric.
 
 ```yaml
 responses:
@@ -100,7 +105,7 @@ This provides a new description, and changes recommended to true, but anything c
 
 If you're just looking change the severity of the rule, there is a handy shortcut.
 
-### Changing rule severity
+## Changing Rule Severity
 
 Maybe you want to use the rules from the `spectral:oas` ruleset, but instead of `operation-2xx-response` triggering an error you'd like it to trigger a warning instead.
 
@@ -112,9 +117,9 @@ rules:
 
 Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
-## Disabling rules
+## Disabling Rules
 
-This example shows the opposite of the "Enabling Specific rules" example. Sometimes you might want to enable all rules by default, and disable a few.
+This example shows the opposite of the "Enabling Specific Rules" example. Sometimes you might want to enable all rules by default, and disable a few.
 
 ```yaml
 extends: [[spectral:oas, all]]
@@ -157,6 +162,33 @@ message: "{{value}} is greater than 0"
 message: "{{path}} cannot point at remote reference"
 ```
 
+## Documentation URL
+
+Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
+
+Whatever you link you provide, the rule name will be appended as an anchor.
+
+```yaml
+extends: spectral:oas
+documentationUrl: https://www.example.com/docs/api-ruleset.md
+rules:
+  tag-description:
+    description: Please provide a description for each tag.
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+
+```
+
+In this example, violations of the `tag-description` rule would indicate `https://www.example.com/docs/api-ruleset.md#tag-description` as the location for finding out more about the rule.
+
+If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
+
+## Core Functions
+
+Several functions [are provided by default](../reference/functions.md) for your rules.
+
 ## Custom Functions
 
-Learn more about [custom functions](../guides/5-custom-functions.md).
+If none of the [core functions](../reference/functions.md) do what you want, you can [write your own custom functions](./5-custom-functions.md).
