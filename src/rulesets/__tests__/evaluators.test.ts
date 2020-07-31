@@ -96,5 +96,18 @@ describe('Code evaluators', () => {
       const fn2 = setFunctionContext(context, jest.fn().mockReturnThis());
       expect(fn()).not.toBe(fn2());
     });
+
+    it('copies enumerable properties', () => {
+      const context = { a: true };
+      const prop = Object.freeze({});
+      const fn = function () {
+        return;
+      };
+
+      fn.foo = prop;
+
+      const boundFn = setFunctionContext(context, fn);
+      expect(boundFn.foo).toBe(prop);
+    });
   });
 });

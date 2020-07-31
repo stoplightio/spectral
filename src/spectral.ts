@@ -44,10 +44,10 @@ export class Spectral {
   private readonly _resolver: IResolver;
   private readonly agent: Agent | undefined;
 
-  public functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
-  public rules: RunRuleCollection = {};
-  public exceptions: RulesetExceptionCollection = {};
-  public formats: RegisteredFormats;
+  public readonly functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
+  public readonly rules: RunRuleCollection = {};
+  public readonly exceptions: RulesetExceptionCollection = {};
+  public readonly formats: RegisteredFormats;
 
   protected readonly runtime: RunnerRuntime;
 
@@ -70,6 +70,8 @@ export class Spectral {
 
     this.formats = {};
     this.runtime = new RunnerRuntime();
+
+    this.setFunctions(coreFunctions);
   }
 
   public static registerStaticAssets(assets: Dictionary<string, string>) {
@@ -141,7 +143,16 @@ export class Spectral {
   public setFunctions(functions: FunctionCollection): void {
     empty(this.functions);
 
-    Object.assign(this.functions, { ...coreFunctions, ...functions });
+    const mergedFunctions = { ...coreFunctions, ...functions };
+
+    for (const key of Object.keys(mergedFunctions)) {
+      const context: IFunctionContext = {
+        functions: this.functions,
+        cache: new Map(),
+      };
+
+      this.functions[key] = setFunctionContext(context, mergedFunctions[key]);
+    }
   }
 
   public setRules(rules: RuleCollection): void {
@@ -198,29 +209,20 @@ export class Spectral {
             return fns;
           }
 
-          const context: IFunctionContext = {
-            functions: this.functions,
-            cache: new Map(),
-          };
+          fns[key] = compileExportedFunction({
+            code,
+            name,
+            source,
+            schema,
+            inject: {
+              fetch: request,
+              spectral: this.runtime.spawn(),
+            },
+          });
 
-          fns[key] = setFunctionContext(
-            context,
-            compileExportedFunction({
-              code,
-              name,
-              source,
-              schema,
-              inject: {
-                fetch: request,
-                spectral: this.runtime.spawn(),
-              },
-            }),
-          );
           return fns;
         },
-        {
-          ...coreFunctions,
-        },
+        {},
       ),
     );
 
