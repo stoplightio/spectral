@@ -117,7 +117,7 @@
     "jest": "~25.5",
     "jest-mock": "^26.1.0",
     "jest-when": "~2.7",
-    "karma": "^5.1.0",
+    "karma": "^5.1.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.3.1",
