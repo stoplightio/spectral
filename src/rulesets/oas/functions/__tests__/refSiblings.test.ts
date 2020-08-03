@@ -68,6 +68,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['securityDefinitions', 'apikey'],
+        resolvedPath: ['securityDefinitions', 'apikey'],
         range: {
           end: {
             character: 16,
@@ -84,6 +85,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path'],
+        resolvedPath: ['paths', '/path'],
         range: {
           end: {
             character: 5,
@@ -100,6 +102,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'post'],
+        resolvedPath: ['paths', '/path', 'post'],
         range: {
           end: {
             character: 16,
@@ -116,6 +119,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get'],
+        resolvedPath: ['paths', '/path', 'get'],
         range: {
           end: {
             character: 7,
@@ -132,6 +136,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get', 'security'],
+        resolvedPath: ['paths', '/path', 'get', 'security'],
         range: {
           end: {
             character: 9,
@@ -178,9 +183,9 @@ describe('refSiblings', () => {
     expect(results).toEqual([
       {
         code: 'no-$ref-siblings',
-
         message: '$ref cannot be placed next to any other properties',
         path: ['components', 'securityDefinitions', 'apikey'],
+        resolvedPath: ['components', 'securityDefinitions', 'apikey'],
         range: {
           end: {
             character: 18,
@@ -197,6 +202,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path'],
+        resolvedPath: ['paths', '/path'],
         range: {
           end: {
             character: 5,
@@ -213,6 +219,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'post'],
+        resolvedPath: ['paths', '/path', 'post'],
         range: {
           end: {
             character: 16,
@@ -229,6 +236,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get'],
+        resolvedPath: ['paths', '/path', 'get'],
         range: {
           end: {
             character: 7,
@@ -245,6 +253,7 @@ describe('refSiblings', () => {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
         path: ['paths', '/path', 'get', 'security'],
+        resolvedPath: ['paths', '/path', 'get', 'security'],
         range: {
           end: {
             character: 9,

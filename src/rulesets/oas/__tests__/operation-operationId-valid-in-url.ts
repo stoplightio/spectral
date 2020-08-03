@@ -41,6 +41,7 @@ describe('operation-operationId-valid-in-url', () => {
         code: 'operation-operationId-valid-in-url',
         message: 'operationId may only use characters that are valid when used in a URL.',
         path: ['paths', '/todos', 'get', 'operationId'],
+        resolvedPath: ['paths', '/todos', 'get', 'operationId'],
         range: {
           end: {
             character: 31,

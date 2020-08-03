@@ -31,6 +31,7 @@ describe('info-contact', () => {
         code: 'info-contact',
         message: 'Info object should contain `contact` object.',
         path: ['info'],
+        resolvedPath: ['info', 'contact'],
         range: {
           end: {
             character: 20,

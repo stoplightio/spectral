@@ -89,6 +89,7 @@ describe('linter', () => {
         code: 'rule2',
         message: '`foo` property is not truthy',
         path: ['foo'],
+        resolvedPath: ['foo'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
@@ -513,6 +514,7 @@ describe('linter', () => {
       {
         message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar]',
         path: [],
+        resolvedPath: [],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
         code: 'unrecognized-format',
@@ -532,6 +534,7 @@ describe('linter', () => {
         code: 'unrecognized-format',
         message: 'The provided document does not match any of the registered formats [oas2, oas3]',
         path: [],
+        resolvedPath: [],
         range: {
           end: {
             character: 4,
@@ -592,6 +595,7 @@ responses:: !!foo
           code: 'parser',
           message: 'Unknown tag <tag:yaml.org,2002:foo>',
           path: [],
+          resolvedPath: [],
           range: {
             end: {
               character: 17,
@@ -608,6 +612,7 @@ responses:: !!foo
           code: 'parser',
           message: 'Bad indentation of a mapping entry',
           path: [],
+          resolvedPath: [],
           range: {
             end: {
               character: 1,
@@ -762,6 +767,7 @@ responses:: !!foo
           code: 'parser',
           message: 'Duplicate key: foo',
           path: ['foo'],
+          resolvedPath: ['foo'],
           range: {
             end: {
               character: 17,
@@ -787,6 +793,7 @@ responses:: !!foo
           code: 'parser',
           message: 'Duplicate key: foo',
           path: ['foo'],
+          resolvedPath: ['foo'],
           range: {
             end: {
               character: 3,
@@ -818,6 +825,7 @@ responses:: !!foo
         code: 'parser',
         message: 'Mapping key must be a string scalar rather than number',
         path: ['responses', '200'],
+        resolvedPath: ['responses', '200'],
         range: {
           end: {
             character: 5,
@@ -1124,6 +1132,7 @@ responses:: !!foo
           code: 'no-$ref-siblings',
           message: '$ref cannot be placed next to any other properties',
           path: ['responses'],
+          resolvedPath: ['responses'],
           range: {
             end: {
               character: 19,
@@ -1140,6 +1149,7 @@ responses:: !!foo
           code: 'no-$ref-siblings',
           message: '$ref cannot be placed next to any other properties',
           path: ['responses', '300', 'description'],
+          resolvedPath: ['responses', '300', 'description'],
           range: {
             end: {
               character: 24,
@@ -1156,6 +1166,7 @@ responses:: !!foo
           code: 'no-$ref-siblings',
           message: '$ref cannot be placed next to any other properties',
           path: ['responses', '300', 'abc'],
+          resolvedPath: ['responses', '300', 'abc'],
           range: {
             end: {
               character: 16,
@@ -1307,6 +1318,7 @@ responses:: !!foo
         code: 'falsy-foo',
         message: '`foo` property is not falsy',
         path: ['0', 'foo'],
+        resolvedPath: ['0', 'foo'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
         source,

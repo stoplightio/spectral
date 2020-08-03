@@ -35,6 +35,7 @@ describe('info-license', () => {
         code: 'info-license',
         message: 'OpenAPI object `info` should contain a `license` object.',
         path: ['info'],
+        resolvedPath: ['info', 'license'],
         range: {
           end: {
             character: 28,

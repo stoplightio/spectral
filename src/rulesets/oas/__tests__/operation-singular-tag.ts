@@ -41,6 +41,7 @@ describe('operation-singular-tag', () => {
         code: 'operation-singular-tag',
         message: 'Operation may only have one tag.',
         path: ['paths', '/todos', 'get', 'tags'],
+        resolvedPath: ['paths', '/todos', 'get', 'tags'],
         range: {
           end: {
             character: 19,

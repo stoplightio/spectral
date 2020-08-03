@@ -39,6 +39,7 @@ describe('oas2-oneOf', () => {
         code: 'oas2-oneOf',
         message: 'oneOf is not available in OpenAPI v2, it was added in OpenAPI v3',
         path: ['paths', '/test', 'get', 'responses', '200', 'schema', 'oneOf'],
+        resolvedPath: ['paths', '/test', 'get', 'responses', '200', 'schema', 'oneOf'],
         range: {
           end: {
             character: 32,

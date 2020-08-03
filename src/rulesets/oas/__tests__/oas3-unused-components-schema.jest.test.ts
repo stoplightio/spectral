@@ -92,6 +92,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
           code: 'oas3-unused-components-schema',
           message: 'Potentially unused components schema has been detected.',
           path: ['components', 'schemas', 'Unhooked'],
+          resolvedPath: ['components', 'schemas', 'Unhooked'],
           range: {
             end: {
               character: 11,
@@ -129,6 +130,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
           code: 'oas3-unused-components-schema',
           message: 'Potentially unused components schema has been detected.',
           path: ['components', 'schemas', 'Unhooked'],
+          resolvedPath: ['components', 'schemas', 'Unhooked'],
           range: {
             end: {
               character: 7,

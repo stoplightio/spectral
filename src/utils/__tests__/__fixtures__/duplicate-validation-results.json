@@ -13,23 +13,7 @@
       "schema",
       "example"
     ],
-    "severity": 0,
-    "source": "/home/Spectral/test-harness/scenarios/documents/invalid-schema-example/lib.yaml",
-    "range": {
-      "start": {
-        "line": 20,
-        "character": 15
-      },
-      "end": {
-        "line": 20,
-        "character": 19
-      }
-    }
-  },
-  {
-    "code": "valid-schema-example-in-content",
-    "message": "\"schema.example\" property type should be integer",
-    "path": [
+    "resolvedPath": [
       "paths",
       "/resource",
       "get",
@@ -57,6 +41,55 @@
     "code": "valid-schema-example-in-content",
     "message": "\"schema.example\" property type should be integer",
     "path": [
+      "paths",
+      "/resource",
+      "get",
+      "responses",
+      "200",
+      "content",
+      "application/json",
+      "schema",
+      "example"
+    ],
+    "resolvedPath": [
+      "paths",
+      "/resource",
+      "get",
+      "responses",
+      "200",
+      "content",
+      "application/json",
+      "schema",
+      "example"
+    ],
+    "severity": 0,
+    "source": "/home/Spectral/test-harness/scenarios/documents/invalid-schema-example/lib.yaml",
+    "range": {
+      "start": {
+        "line": 20,
+        "character": 15
+      },
+      "end": {
+        "line": 20,
+        "character": 19
+      }
+    }
+  },
+  {
+    "code": "valid-schema-example-in-content",
+    "message": "\"schema.example\" property type should be integer",
+    "path": [
+      "paths",
+      "/resource",
+      "get",
+      "responses",
+      "200",
+      "content",
+      "application/json",
+      "schema",
+      "example"
+    ],
+    "resolvedPath": [
       "paths",
       "/resource",
       "get",
@@ -84,6 +117,12 @@
     "code": "valid-example-in-schemas",
     "message": "\"Test.example\" property type should be integer",
     "path": [
+      "components",
+      "schemas",
+      "Test",
+      "example"
+    ],
+    "resolvedPath": [
       "components",
       "schemas",
       "Test",

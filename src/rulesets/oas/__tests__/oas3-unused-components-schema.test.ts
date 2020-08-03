@@ -48,11 +48,13 @@ describe('unusedComponentsSchema - Local references', () => {
       expect.objectContaining({
         code: 'invalid-ref',
         path: ['x-hook', '$ref'],
+        resolvedPath: ['x-hook', '$ref'],
       }),
       {
         code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'NotHooked'],
+        resolvedPath: ['components', 'schemas', 'NotHooked'],
         range: {
           end: {
             character: 28,
@@ -131,6 +133,7 @@ describe('unusedComponentsSchema - Local references', () => {
         code: 'oas3-unused-components-schema',
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'BouhouhouIamUnused'],
+        resolvedPath: ['components', 'schemas', 'BouhouhouIamUnused'],
         range: {
           end: {
             character: 11,

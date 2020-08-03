@@ -27,6 +27,7 @@ describe('lint', () => {
       code: 'parser',
       message: 'Duplicate key: foo',
       path: ['foo'],
+      resolvedPath: ['foo'],
       range: {
         end: {
           character: 17,

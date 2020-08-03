@@ -199,6 +199,7 @@ describe('spectral', () => {
             code: 'truthy-baz',
             message: 'Baz must be truthy',
             path: ['foo', 'bar', 'baz'],
+            resolvedPath: ['foo', 'bar', 'baz'],
             range: {
               end: {
                 character: 12,
@@ -266,6 +267,7 @@ describe('spectral', () => {
             code: 'pagination-responses-have-x-next-token',
             message: 'All collection endpoints have the X-Next-Token parameter in responses',
             path: ['responses', 'GetAgreementsOk', 'headers'],
+            resolvedPath: ['paths', '/agreements', 'get', 'responses', '200', 'headers', 'X-Next-Token'],
             range: expect.any(Object),
             severity: DiagnosticSeverity.Error,
             source,

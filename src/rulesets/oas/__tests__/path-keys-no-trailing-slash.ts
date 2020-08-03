@@ -29,6 +29,7 @@ describe('path-keys-no-trailing-slash', () => {
         code: 'path-keys-no-trailing-slash',
         message: 'paths should not end with a slash.',
         path: ['paths', '/path/'],
+        resolvedPath: ['paths', '/path/'],
         range: {
           end: {
             character: 16,

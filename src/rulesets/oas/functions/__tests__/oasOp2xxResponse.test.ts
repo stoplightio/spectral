@@ -62,6 +62,7 @@ describe('oasOp2xxResponse', () => {
         code: 'operation-2xx-response',
         message: 'Operation must have at least one `2xx` response.',
         path: ['paths', '/path1', 'get', 'responses'],
+        resolvedPath: ['paths', '/path1', 'get', 'responses'],
         range: {
           end: {
             character: 30,
@@ -92,6 +93,7 @@ describe('oasOp2xxResponse', () => {
         code: 'operation-2xx-response',
         message: 'Operation must have at least one `2xx` response.',
         path: ['paths', '/path1', 'get', 'responses'],
+        resolvedPath: ['paths', '/path1', 'get', 'responses'],
         range: {
           end: {
             character: 23,

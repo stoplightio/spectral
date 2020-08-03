@@ -37,6 +37,7 @@ describe('contact-properties', () => {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',
         path: ['info', 'contact'],
+        resolvedPath: ['info', 'contact', 'name'],
         range: {
           end: {
             character: 17,

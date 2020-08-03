@@ -31,6 +31,7 @@ describe('info-description', () => {
         code: 'info-description',
         message: 'OpenAPI object info `description` must be present and non-empty string.',
         path: ['info'],
+        resolvedPath: ['info', 'description'],
         range: {
           end: {
             character: 28,

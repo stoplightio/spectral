@@ -7,6 +7,7 @@ const results: IRuleResult[] = sortResults([
     code: 'operation-description',
     message: 'paths./pets.get.description is not truthy',
     path: ['paths', '/pets', 'get', 'description'],
+    resolvedPath: ['paths', '/pets', 'get', 'description'],
     severity: 1,
     source: '/home/Stoplight/spectral/yaml/src/__tests__/fixtures/petstore.oas2.yaml',
     range: {
@@ -24,6 +25,7 @@ const results: IRuleResult[] = sortResults([
     code: 'operation-tags',
     message: 'paths./pets.get.tags is not truthy',
     path: ['paths', '/pets', 'get', 'tags'],
+    resolvedPath: ['paths', '/pets', 'get', 'tags'],
     severity: 1,
     source: '/home/Stoplight/spectral/yaml/src/__tests__/fixtures/petstore.oas2.yaml',
     range: {

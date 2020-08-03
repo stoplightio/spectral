@@ -31,6 +31,7 @@ describe('oas2-api-schemes', () => {
         code: 'oas2-api-schemes',
         message: 'OpenAPI host `schemes` must be present and non-empty array.',
         path: [],
+        resolvedPath: ['schemes'],
         range: {
           end: {
             character: 13,
@@ -57,6 +58,7 @@ describe('oas2-api-schemes', () => {
         code: 'oas2-api-schemes',
         message: 'OpenAPI host `schemes` must be present and non-empty array.',
         path: ['schemes'],
+        resolvedPath: ['schemes'],
         range: {
           end: {
             character: 15,

@@ -43,6 +43,7 @@ describe('oasPathParam', () => {
         code: 'path-params',
         message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
         path: ['paths', '/foo/{bar}', 'get'],
+        resolvedPath: ['paths', '/foo/{bar}', 'get'],
         range: {
           end: {
             character: 15,
@@ -182,6 +183,7 @@ describe('oasPathParam', () => {
         code: 'path-params',
         message: `The path \`/foo/{bar}/{bar}\` uses the parameter \`{bar}\` multiple times. Path parameters must be unique.`,
         path: ['paths', '/foo/{bar}/{bar}'],
+        resolvedPath: ['paths', '/foo/{bar}/{bar}'],
         range: {
           end: {
             character: 15,
@@ -223,6 +225,7 @@ describe('oasPathParam', () => {
         code: 'path-params',
         message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
         path: ['paths', '/foo/{bar}', 'parameters', '0'],
+        resolvedPath: ['paths', '/foo/{bar}', 'parameters', '0'],
         range: {
           end: {
             character: 42,
@@ -306,6 +309,7 @@ describe('oasPathParam', () => {
         code: 'path-params',
         message: `The paths \`/foo/{boo}\` and \`/foo/{bar}\` are equivalent.`,
         path: ['paths', '/foo/{bar}'],
+        resolvedPath: ['paths', '/foo/{bar}'],
         range: {
           end: {
             character: 5,

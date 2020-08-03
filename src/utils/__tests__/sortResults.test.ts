@@ -6,6 +6,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 01',
     path: ['a', 'b', 'c', 'd'],
+    resolvedPath: ['a', 'b', 'c', 'd'],
     source: 'source 01',
     range: {
       start: { line: 1, character: 1 },
@@ -17,6 +18,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 01',
     path: ['a', 'b', 'c', 'd'],
+    resolvedPath: ['a', 'b', 'c', 'd'],
     source: 'source 02',
     range: {
       start: { line: 1, character: 1 },
@@ -28,6 +30,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 01',
     path: ['a', 'b', 'c', 'd'],
+    resolvedPath: ['a', 'b', 'c', 'd'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 1 },
@@ -39,6 +42,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 01',
     path: ['a', 'b', 'c', 'd'],
+    resolvedPath: ['a', 'b', 'c', 'd'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 2 },
@@ -50,6 +54,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 02',
     path: ['a', 'b', 'c', 'd'],
+    resolvedPath: ['a', 'b', 'c', 'd'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 2 },
@@ -61,6 +66,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 02',
     path: ['a', 'b', 'c', 'e'],
+    resolvedPath: ['a', 'b', 'c', 'e'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 2 },
@@ -72,6 +78,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 02',
     path: ['a', 'b', 'c', 'f'],
+    resolvedPath: ['a', 'b', 'c', 'f'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 2 },
@@ -83,6 +90,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 03',
     path: ['a', 'b', 'c', 'f'],
+    resolvedPath: ['a', 'b', 'c', 'f'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 2 },
@@ -94,6 +102,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 03',
     path: ['a', 'b', 'c', 'f'],
+    resolvedPath: ['a', 'b', 'c', 'f'],
     source: 'source 02',
     range: {
       start: { line: 2, character: 3 },
@@ -105,6 +114,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 03',
     path: ['a', 'b', 'c', 'f'],
+    resolvedPath: ['a', 'b', 'c', 'f'],
     source: 'source 02',
     range: {
       start: { line: 3, character: 3 },
@@ -116,6 +126,7 @@ const results: IRuleResult[] = [
   {
     code: 'code 03',
     path: ['a', 'b', 'c', 'f'],
+    resolvedPath: ['a', 'b', 'c', 'f'],
     source: 'source 03',
     range: {
       start: { line: 3, character: 3 },
@@ -155,6 +166,7 @@ describe('compareResults', () => {
     const input = {
       code: 'code 01',
       path: ['a', 'b', 'c', 'd'],
+      resolvedPath: ['a', 'b', 'c', 'd'],
       range: {
         start: { line: 1, character: 1 },
         end: { line: 99, character: 99 },
@@ -178,6 +190,7 @@ describe('compareResults', () => {
     const input = {
       source: 'somewhere',
       path: ['a', 'b', 'c', 'd'],
+      resolvedPath: ['a', 'b', 'c', 'd'],
       range: {
         start: { line: 1, character: 1 },
         end: { line: 99, character: 99 },

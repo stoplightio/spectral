@@ -37,6 +37,7 @@ describe('no-eval-in-markdown', () => {
         code: 'no-eval-in-markdown',
         message: 'Markdown descriptions should not contain `eval(`.',
         path: ['info', 'title'],
+        resolvedPath: ['info', 'title'],
         range: {
           end: {
             character: 40,
@@ -66,6 +67,7 @@ describe('no-eval-in-markdown', () => {
         code: 'no-eval-in-markdown',
         message: 'Markdown descriptions should not contain `eval(`.',
         path: ['info', 'description'],
+        resolvedPath: ['info', 'description'],
         range: {
           end: {
             character: 52,

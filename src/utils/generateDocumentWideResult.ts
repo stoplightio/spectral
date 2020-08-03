@@ -16,5 +16,6 @@ export const generateDocumentWideResult = (
     severity,
     ...(document.source !== null && { source: document.source }),
     path: [],
+    resolvedPath: [],
   };
 };

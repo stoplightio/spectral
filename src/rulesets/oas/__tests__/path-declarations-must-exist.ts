@@ -29,6 +29,7 @@ describe('path-declarations-must-exist', () => {
         code: 'path-declarations-must-exist',
         message: 'Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.',
         path: ['paths', '/path/{}'],
+        resolvedPath: ['paths', '/path/{}'],
         range: {
           end: {
             character: 18,

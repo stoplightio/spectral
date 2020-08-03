@@ -132,6 +132,7 @@ function processTargetResults(
       // todo: rule.isInterpolable
       message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
       path,
+      resolvedPath: escapedJsonPath,
       severity: getDiagnosticSeverity(rule.severity),
       ...(source !== null && { source }),
       range,

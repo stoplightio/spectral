@@ -31,6 +31,7 @@ describe('oas3-api-servers', () => {
         code: 'oas3-api-servers',
         message: 'OpenAPI `servers` must be present and non-empty array.',
         path: [],
+        resolvedPath: ['servers'],
         range: {
           end: {
             character: 13,
@@ -57,6 +58,7 @@ describe('oas3-api-servers', () => {
         code: 'oas3-api-servers',
         message: 'OpenAPI `servers` must be present and non-empty array.',
         path: ['servers'],
+        resolvedPath: ['servers'],
         range: {
           end: {
             character: 15,

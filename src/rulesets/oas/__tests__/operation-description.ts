@@ -39,6 +39,7 @@ describe('operation-description', () => {
         code: 'operation-description',
         message: 'Operation `description` must be present and non-empty string.',
         path: ['paths', '/todos', 'get'],
+        resolvedPath: ['paths', '/todos', 'get', 'description'],
         range: {
           end: {
             character: 15,

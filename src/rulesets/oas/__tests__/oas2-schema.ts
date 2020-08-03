@@ -46,6 +46,7 @@ describe('oas2-schema', () => {
         code: 'oas2-schema',
         message: `\`get\` property should have required property \`responses\`.`,
         path: ['paths', '/test', 'get'],
+        resolvedPath: ['paths', '/test', 'get'],
         range: {
           end: {
             character: 15,

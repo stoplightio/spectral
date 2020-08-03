@@ -29,6 +29,7 @@ describe('path-not-include-query', () => {
         code: 'path-not-include-query',
         message: 'given keys should not include a query string.',
         path: ['paths', '/path?query=true'],
+        resolvedPath: ['paths', '/path?query=true'],
         range: {
           end: {
             character: 26,

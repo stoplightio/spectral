@@ -51,6 +51,7 @@ describe('oas2-unused-definition - local references', () => {
         code: 'oas2-unused-definition',
         message: 'Potentially unused definition has been detected.',
         path: ['definitions', 'NotHooked'],
+        resolvedPath: ['definitions', 'NotHooked'],
         range: {
           end: {
             character: 26,
@@ -125,6 +126,7 @@ describe('oas2-unused-definition - local references', () => {
         code: 'oas2-unused-definition',
         message: 'Potentially unused definition has been detected.',
         path: ['definitions', 'BouhouhouIamUnused'],
+        resolvedPath: ['definitions', 'BouhouhouIamUnused'],
         range: {
           end: {
             character: 9,

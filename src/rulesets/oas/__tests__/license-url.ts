@@ -35,6 +35,7 @@ describe('license-url', () => {
         code: 'license-url',
         message: 'License object should include `url`.',
         path: ['info', 'license'],
+        resolvedPath: ['info', 'license', 'url'],
         range: {
           end: {
             character: 19,

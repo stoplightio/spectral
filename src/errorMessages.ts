@@ -37,7 +37,10 @@ export function formatParserDiagnostics(diagnostics: ReadonlyArray<IDiagnostic>,
     code: 'parser',
     message: getDiagnosticErrorMessage(diagnostic),
     path: diagnostic.path ?? [],
-    ...(source !== null && { source }),
+    get resolvedPath(): JsonPath {
+      return this.path;
+    },
+    ...(source !== null ? { source } : null),
   }));
 }
 
@@ -50,10 +53,11 @@ export const formatResolverErrors = (document: IDocument, diagnostics: IResolveE
     return {
       code: 'invalid-ref',
       path,
+      resolvedPath: path,
       message: prettyPrintResolverErrorMessage(error.message),
       severity: DiagnosticSeverity.Error,
       range,
-      ...(source !== null && { source }),
+      ...(source !== null ? { source } : null),
     };
   });
 };

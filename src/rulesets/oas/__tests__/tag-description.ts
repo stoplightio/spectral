@@ -31,6 +31,7 @@ describe('tag-description', () => {
         code: 'tag-description',
         message: 'Tag object should have a `description`.',
         path: ['tags', '0'],
+        resolvedPath: ['tags', '0', 'description'],
         range: {
           end: {
             character: 19,

@@ -40,6 +40,7 @@ describe('oas3-server-trailing-slash', () => {
         code: 'oas3-server-trailing-slash',
         message: 'Server URL should not have a trailing slash.',
         path: ['servers', '0', 'url'],
+        resolvedPath: ['servers', '0', 'url'],
         range: {
           end: {
             character: 36,

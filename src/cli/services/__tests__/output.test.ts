@@ -14,6 +14,7 @@ describe('Output service', () => {
         {
           code: 'info-contact',
           path: ['info'],
+          resolvedPath: ['info'],
           message: 'Info object should contain `contact` object.',
           severity: DiagnosticSeverity.Information,
           range: {

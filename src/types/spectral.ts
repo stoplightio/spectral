@@ -34,7 +34,8 @@ export interface IRunOpts {
 }
 
 export interface IRuleResult extends IDiagnostic {
-  path: JsonPath;
+  readonly path: JsonPath;
+  readonly resolvedPath: JsonPath;
 }
 
 export interface ISpectralFullResult {

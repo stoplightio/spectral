@@ -88,6 +88,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
           code: 'oas2-unused-definition',
           message: 'Potentially unused definition has been detected.',
           path: ['definitions', 'Unhooked'],
+          resolvedPath: ['definitions', 'Unhooked'],
           range: {
             end: {
               character: 9,
@@ -125,6 +126,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
           code: 'oas2-unused-definition',
           message: 'Potentially unused definition has been detected.',
           path: ['definitions', 'Unhooked'],
+          resolvedPath: ['definitions', 'Unhooked'],
           range: {
             end: {
               character: 5,

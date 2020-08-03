@@ -65,6 +65,7 @@ describe('oasTagDefined', () => {
         code: 'operation-tag-defined',
         message: 'Operation tags should be defined in global tags.',
         path: ['paths', '/path1', 'get', 'tags', '0'],
+        resolvedPath: ['paths', '/path1', 'get', 'tags', '0'],
         range: {
           end: {
             character: 16,
@@ -104,6 +105,7 @@ describe('oasTagDefined', () => {
         code: 'operation-tag-defined',
         message: 'Operation tags should be defined in global tags.',
         path: ['paths', '/path1', 'get', 'tags', '1'],
+        resolvedPath: ['paths', '/path1', 'get', 'tags', '1'],
         range: {
           end: {
             character: 16,
@@ -120,6 +122,7 @@ describe('oasTagDefined', () => {
         code: 'operation-tag-defined',
         message: 'Operation tags should be defined in global tags.',
         path: ['paths', '/path1', 'get', 'tags', '3'],
+        resolvedPath: ['paths', '/path1', 'get', 'tags', '3'],
         range: {
           end: {
             character: 16,

@@ -87,6 +87,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'first'],
+        resolvedPath: ['components', 'examples', 'first'],
         range: {
           end: {
             character: 17,
@@ -117,6 +118,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'third'],
+        resolvedPath: ['components', 'examples', 'third'],
         range: {
           end: {
             character: 17,
@@ -143,6 +145,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'first'],
+        resolvedPath: ['components', 'examples', 'first'],
         range: {
           end: {
             character: 24,
@@ -173,6 +176,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'second'],
+        resolvedPath: ['components', 'examples', 'second'],
         range: {
           end: {
             character: 25,
@@ -207,6 +211,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'headers', 'headerName', 'examples', 'second'],
+        resolvedPath: ['components', 'headers', 'headerName', 'examples', 'second'],
         range: {
           end: {
             character: 29,
@@ -241,6 +246,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'parameters', 'parameterName', 'examples', 'second'],
+        resolvedPath: ['components', 'parameters', 'parameterName', 'examples', 'second'],
         range: {
           end: {
             character: 29,
@@ -286,6 +292,17 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['paths', '/path', 'get', 'responses', '200', 'content', 'application/json', 'examples', 'second'],
+        resolvedPath: [
+          'paths',
+          '/path',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'examples',
+          'second',
+        ],
         range: {
           end: {
             character: 37,

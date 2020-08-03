@@ -52,6 +52,7 @@ describe('oasOpFormDataConsumeCheck', () => {
         message:
           'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
         path: ['paths', '/path1', 'get'],
+        resolvedPath: ['paths', '/path1', 'get'],
         range: {
           end: {
             character: 26,

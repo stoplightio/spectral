@@ -31,6 +31,7 @@ describe('openapi-tags-alphabetical', () => {
         code: 'openapi-tags-alphabetical',
         message: 'OpenAPI object should have alphabetical `tags`.',
         path: ['tags'],
+        resolvedPath: ['tags'],
         range: {
           end: {
             character: 21,

@@ -35,6 +35,7 @@ describe('no-script-tags-in-markdown', () => {
         code: 'no-script-tags-in-markdown',
         message: 'Markdown descriptions should not contain `<script>` tags.',
         path: ['info', 'description'],
+        resolvedPath: ['info', 'description'],
         range: {
           end: {
             character: 54,

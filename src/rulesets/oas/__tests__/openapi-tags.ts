@@ -30,6 +30,7 @@ describe('openapi-tags', () => {
         code: 'openapi-tags',
         message: 'OpenAPI object should have non-empty `tags` array.',
         path: [],
+        resolvedPath: ['tags'],
         range: {
           end: {
             character: 13,
@@ -56,6 +57,7 @@ describe('openapi-tags', () => {
         code: 'openapi-tags',
         message: 'OpenAPI object should have non-empty `tags` array.',
         path: ['tags'],
+        resolvedPath: ['tags'],
         range: {
           start: {
             character: 9,

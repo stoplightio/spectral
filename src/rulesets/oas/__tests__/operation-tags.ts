@@ -39,6 +39,7 @@ describe('operation-tags', () => {
         code: 'operation-tags',
         message: 'Operation should have non-empty `tags` array.',
         path: ['paths', '/todos', 'get'],
+        resolvedPath: ['paths', '/todos', 'get', 'tags'],
         range: {
           end: {
             character: 15,

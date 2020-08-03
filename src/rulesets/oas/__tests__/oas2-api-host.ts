@@ -32,6 +32,7 @@ describe('oas2-api-host', () => {
         code: 'oas2-api-host',
         message: 'OpenAPI `host` must be present and non-empty string.',
         path: [],
+        resolvedPath: ['host'],
         range: {
           end: {
             character: 13,
