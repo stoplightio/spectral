@@ -1,7 +1,10 @@
 import { pattern } from '../pattern';
 
 function runPattern(targetVal: any, options?: any) {
-  return pattern(
+  return pattern.call(
+    {
+      cache: new Map(),
+    },
     targetVal,
     options,
     {
@@ -15,37 +18,17 @@ function runPattern(targetVal: any, options?: any) {
 }
 
 describe('pattern', () => {
-  describe('given a true regex', () => {
-    test('should return empty array when given value matches the given match regex', () => {
-      expect(runPattern('abc', { match: /[abc]+/ })).toEqual([]);
-    });
-
-    test('should return a message when given value does not match the given notMatch regex', () => {
-      expect(runPattern('def', { match: /[abc]+/ })).toEqual([{ message: "must match the pattern '/[abc]+/'" }]);
-    });
-
-    test('should return empty array when given value does not match the given notMatch regex', () => {
-      expect(runPattern('dEf', { notMatch: /[abc]+/i })).toEqual([]);
-    });
-
-    test('should return a message when given value does match the given notMatch regex', () => {
-      expect(runPattern('aBc', { notMatch: /[abc]+/i })).toEqual([
-        { message: "must not match the pattern '/[abc]+/i'" },
-      ]);
-    });
-  });
-
   describe('given a string regex', () => {
     test('should return empty array when given value matches the given match string regex without slashes', () => {
-      expect(runPattern('abc', { match: '[abc]+' })).toEqual([]);
+      expect(runPattern('abc', { match: '[abc]+' })).toBeUndefined();
     });
 
     test('should return empty array when given value matches the given match string regex with slashes', () => {
-      expect(runPattern('abc', { match: '/[abc]+/' })).toEqual([]);
+      expect(runPattern('abc', { match: '/[abc]+/' })).toBeUndefined();
     });
 
     test('should return empty array when given value matches the given match string regex with slashes and modifier', () => {
-      expect(runPattern('aBc', { match: '/[abc]+/im' })).toEqual([]);
+      expect(runPattern('aBc', { match: '/[abc]+/im' })).toBeUndefined();
     });
 
     test('should throw an exception when given string regex contains invalid flags', () => {
@@ -55,13 +38,13 @@ describe('pattern', () => {
     });
 
     test('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', () => {
-      expect(runPattern('def', { notMatch: '/[abc]+/i' })).toEqual([]);
+      expect(runPattern('def', { notMatch: '/[abc]+/i' })).toBeUndefined();
     });
   });
 
   describe('given match and notMatch regexes', () => {
     test('should return empty array when given value match the given match and does not match the given notMatch regexes', () => {
-      expect(runPattern('def', { match: /[def]+/, notMatch: /[abc]+/ })).toEqual([]);
+      expect(runPattern('def', { match: /[def]+/, notMatch: /[abc]+/ })).toBeUndefined();
     });
   });
 });

@@ -165,8 +165,12 @@ export const compileExportedFunction = ({ code, name, source, schema, inject }: 
 };
 
 export function setFunctionContext(context: unknown, fn: Function) {
-  return Function.prototype.bind.call(
+  const boundFn = Function.prototype.bind.call(
     fn,
     Object.freeze(Object.defineProperties({}, Object.getOwnPropertyDescriptors(context))),
   );
+
+  Object.assign(boundFn, fn);
+
+  return boundFn;
 }
