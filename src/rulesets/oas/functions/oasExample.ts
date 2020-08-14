@@ -18,16 +18,19 @@ const ORDER_CHECK = {
       {
         field: 'examples',
         multiple: true,
+        keyed: false,
       },
     ],
     3: [
       {
         field: 'example',
         multiple: false,
+        keyed: false,
       },
       {
         field: 'examples',
         multiple: true,
+        keyed: true,
       },
     ],
   },
@@ -36,16 +39,19 @@ const ORDER_CHECK = {
       {
         field: 'example',
         multiple: false,
+        keyed: false,
       },
       {
         field: 'x-example',
         multiple: false,
+        keyed: false,
       },
     ],
     3: [
       {
         field: 'example',
         multiple: false,
+        keyed: false,
       },
     ],
   },
@@ -69,7 +75,7 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
 
   const order = ORDER_CHECK[opts.type][opts.oasVersion];
 
-  for (const { field, multiple } of order) {
+  for (const { field, keyed, multiple } of order) {
     if (!(field in targetVal)) {
       continue;
     }
@@ -85,18 +91,24 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
 
       for (const exampleKey of Object.keys(value)) {
         const exampleValue = value[exampleKey];
-        if (!isObject(exampleValue)) {
+        if (keyed && !isObject(exampleValue)) {
           // should be covered by oas3-examples-value-or-externalValue
           continue;
         }
 
+        const targetPath = [...paths.given, field, exampleKey];
+
+        if (keyed) {
+          targetPath.push('value');
+        }
+
         const result = this.functions.schema.call(
           this,
-          exampleValue.value,
+          keyed ? exampleValue.value : exampleValue,
           schemaOpts,
           {
             given: paths.given,
-            target: [...paths.given, field, exampleKey, 'value'],
+            target: targetPath,
           },
           otherValues,
         );
