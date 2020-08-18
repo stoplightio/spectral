@@ -36,7 +36,7 @@ describe('Rulesets reader', () => {
     });
 
     expect(functions).toMatchObject({
-      oasOp2xxResponse: expect.any(Object),
+      oasOpSuccessResponse: expect.any(Object),
       oasOpFormDataConsumeCheck: expect.any(Object),
       oasOpIdUnique: expect.any(Object),
       oasOpParams: expect.any(Object),

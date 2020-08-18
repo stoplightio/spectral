@@ -3,7 +3,7 @@
   "formats": ["oas2", "oas3"],
   "functions": [
     "oasDocumentSchema",
-    "oasOp2xxResponse",
+    "oasOpSuccessResponse",
     "oasOpFormDataConsumeCheck",
     "oasOpIdUnique",
     "oasOpParams",
@@ -14,14 +14,14 @@
     "refSiblings"
   ],
   "rules": {
-    "operation-2xx-response": {
-      "description": "Operation must have at least one `2xx` response.",
+    "operation-success-response": {
+      "description": "Operation must have at least one `2xx` or `3xx` response.",
       "recommended": true,
       "type": "style",
       "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "responses",
-        "function": "oasOp2xxResponse"
+        "function": "oasOpSuccessResponse"
       }
     },
     "oas2-operation-formData-consume-check": {

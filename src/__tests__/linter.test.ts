@@ -193,13 +193,13 @@ describe('linter', () => {
     spectral.setRules({
       ...mergeRules(oasRules, {
         'oas3-valid-schema-example': 'off',
-        'operation-2xx-response': -1,
+        'operation-success-response': -1,
         'openapi-tags': 'off',
         'operation-tag-defined': 'off',
       }),
       ...omit(spectral.rules, [
         'oas3-valid-schema-example',
-        'operation-2xx-response',
+        'operation-success-response',
         'openapi-tags',
         'operation-tag-defined',
       ]),

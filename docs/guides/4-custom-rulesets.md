@@ -107,12 +107,12 @@ If you're just looking change the severity of the rule, there is a handy shortcu
 
 ## Changing Rule Severity
 
-Maybe you want to use the rules from the `spectral:oas` ruleset, but instead of `operation-2xx-response` triggering an error you'd like it to trigger a warning instead.
+Maybe you want to use the rules from the `spectral:oas` ruleset, but instead of `operation-success-response` triggering an error you'd like it to trigger a warning instead.
 
 ```yaml
 extends: spectral:oas
 rules:
-  operation-2xx-response: warn
+  operation-success-response: warn
 ```
 
 Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
