@@ -560,13 +560,6 @@ describe('Linter service', () => {
           source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
         }),
         expect.objectContaining({
-          code: 'openapi-tags',
-          message: 'OpenAPI object should have non-empty `tags` array.',
-          path: [],
-          range: expect.any(Object),
-          source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
-        }),
-        expect.objectContaining({
           code: 'oas2-schema',
           message: 'Property `foo` is not expected to be here.',
           path: ['paths'],
@@ -638,13 +631,6 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'oas2-api-schemes',
           message: 'OpenAPI host `schemes` must be present and non-empty array.',
-          path: [],
-          range: expect.any(Object),
-          source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
-        }),
-        expect.objectContaining({
-          code: 'openapi-tags',
-          message: 'OpenAPI object should have non-empty `tags` array.',
           path: [],
           range: expect.any(Object),
           source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
@@ -763,10 +749,6 @@ describe('Linter service', () => {
           }),
           expect.objectContaining({
             code: 'oas3-api-servers',
-            source: 'foo://openapi-3.0-no-contact.yaml',
-          }),
-          expect.objectContaining({
-            code: 'openapi-tags',
             source: 'foo://openapi-3.0-no-contact.yaml',
           }),
         ]),

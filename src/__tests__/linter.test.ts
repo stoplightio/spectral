@@ -660,9 +660,6 @@ responses:: !!foo
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'openapi-tags',
-      }),
-      expect.objectContaining({
         code: 'operation-tag-defined',
       }),
       expect.objectContaining({

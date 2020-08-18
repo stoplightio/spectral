@@ -173,7 +173,7 @@
     },
     "openapi-tags": {
       "description": "OpenAPI object should have non-empty `tags` array.",
-      "recommended": true,
+      "recommended": false,
       "type": "style",
       "given": "$",
       "then": {
