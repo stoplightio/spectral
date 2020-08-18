@@ -255,10 +255,6 @@ Defining tags allows you to add more information like a `description`. For more 
 
 **Recommended:** Yes
 
-### operation-default-response
-
-**Recommended:** No
-
 ### operation-description
 
 **Recommended:** Yes

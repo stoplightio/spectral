@@ -187,16 +187,6 @@
         }
       }
     },
-    "operation-default-response": {
-      "description": "Operations must have a default response.",
-      "recommended": false,
-      "type": "style",
-      "given": "$.paths.*.*.responses",
-      "then": {
-        "field": "default",
-        "function": "truthy"
-      }
-    },
     "operation-description": {
       "description": "Operation `description` must be present and non-empty string.",
       "recommended": true,
