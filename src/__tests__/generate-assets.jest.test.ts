@@ -1,4 +1,10 @@
 import { existsSync, readFileSync } from 'fs';
+import { Spectral } from '../spectral';
+import { setFunctionContext } from '../rulesets/evaluators';
+import { functions } from '../functions';
+import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
+import { KNOWN_FORMATS } from '../formats';
+import { DiagnosticSeverity } from '@stoplight/types/dist';
 
 describe('generate-assets', () => {
   let assets: Record<string, string>;
@@ -37,9 +43,83 @@ describe('generate-assets', () => {
     );
   });
 
-  it('Does not contain test files', () => {
+  it('does not contain test files', () => {
     Object.keys(assets).forEach(key => {
       expect(key).not.toMatch('__tests__');
     });
+  });
+
+  it('dereferences OAS schemas in the way they can be resolved by Ajv', async () => {
+    const key = `@stoplight/spectral/rulesets/oas/index.json`;
+    const ruleset = JSON.parse(assets[key]);
+    const spectral = new Spectral();
+
+    for (const [name, fn] of KNOWN_FORMATS) {
+      spectral.registerFormat(name, fn);
+    }
+
+    spectral.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
+    spectral.setRules({
+      'oas2-schema': {
+        ...ruleset.rules['oas2-schema'],
+      },
+      'oas3-schema': {
+        ...ruleset.rules['oas3-schema'],
+      },
+    });
+
+    expect(
+      await spectral.run({
+        openapi: '3.0.0',
+        info: {},
+        paths: {
+          '/': {
+            '500': true,
+          },
+        },
+      }),
+    ).toStrictEqual([
+      {
+        code: 'oas3-schema',
+        message: '`info` property should have required property `title`.',
+        path: ['info'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        code: 'oas3-schema',
+        message: 'Property `500` is not expected to be here.',
+        path: ['paths', '/'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Error,
+      },
+    ]);
+
+    expect(
+      await spectral.run({
+        swagger: '2.0',
+        info: {},
+        paths: {
+          '/': {
+            '500': true,
+          },
+        },
+      }),
+    ).toStrictEqual([
+      {
+        code: 'oas2-schema',
+        message: '`info` property should have required property `title`.',
+        path: ['info'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        code: 'oas2-schema',
+        message: 'Property `500` is not expected to be here.',
+        path: ['paths', '/'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Error,
+      },
+    ]);
   });
 });

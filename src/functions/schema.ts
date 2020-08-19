@@ -88,7 +88,13 @@ const validators = new (class extends WeakMap<JSONSchema, ValidateFunction> {
   public get({ schema: schemaObj, oasVersion, allErrors }: ISchemaOptions): ValidateFunction {
     const ajv = getAjv(oasVersion, allErrors);
     const schemaId = getSchemaId(schemaObj);
-    let validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
+    let validator;
+    try {
+      validator = schemaId !== void 0 ? ajv.getSchema(schemaId) : void 0;
+    } catch {
+      validator = void 0;
+    }
+
     if (validator !== void 0) {
       return validator;
     }
