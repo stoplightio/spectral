@@ -11,10 +11,10 @@ async function match(pattern: fg.Pattern | fg.Pattern[]): Promise<string[]> {
 }
 
 export async function listFiles(
-  pattens: Array<number | string>,
+  patterns: Array<number | string>,
   ignoreUnmatchedGlobs: boolean,
 ): Promise<[Array<number | string>, Array<number | string>]> {
-  const { files, fileDescriptors, urls } = pattens.reduce<{
+  const { files, fileDescriptors, urls } = patterns.reduce<{
     files: string[];
     urls: string[];
     fileDescriptors: number[];
