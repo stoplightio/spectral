@@ -10,19 +10,13 @@ async function match(pattern: fg.Pattern | fg.Pattern[]): Promise<string[]> {
   return (await fg(pattern, GLOB_OPTIONS)).map(normalize);
 }
 
-export async function listFiles(
-  patterns: Array<number | string>,
-  ignoreUnmatchedGlobs: boolean,
-): Promise<[Array<number | string>, Array<number | string>]> {
-  const { files, fileDescriptors, urls } = patterns.reduce<{
+export async function listFiles(patterns: string[], ignoreUnmatchedGlobs: boolean): Promise<[string[], string[]]> {
+  const { files, urls } = patterns.reduce<{
     files: string[];
     urls: string[];
-    fileDescriptors: number[];
   }>(
     (group, pattern) => {
-      if (typeof pattern === 'number') {
-        group.fileDescriptors.push(pattern);
-      } else if (!/^https?:\/\//.test(pattern)) {
+      if (!/^https?:\/\//.test(pattern)) {
         group.files.push(pattern.replace(/\\/g, '/'));
       } else {
         group.urls.push(pattern);
@@ -33,7 +27,6 @@ export async function listFiles(
     {
       files: [],
       urls: [],
-      fileDescriptors: [],
     },
   );
 
@@ -56,5 +49,5 @@ export async function listFiles(
     );
   }
 
-  return [[...urls, ...fileDescriptors, ...filesFound], fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
+  return [[...urls, ...filesFound], fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
 }
