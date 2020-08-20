@@ -13,6 +13,5 @@ OpenAPI 3.x detected
 
 {document}
  1:1  warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
- 1:1  warning  openapi-tags      OpenAPI object should have non-empty `tags` array.
 
-✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)
+✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
