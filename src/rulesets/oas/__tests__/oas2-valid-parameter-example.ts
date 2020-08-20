@@ -35,21 +35,6 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('will ignore when not in body', async () => {
-    const results = await s.run({
-      parameters: [
-        {
-          in: 'query',
-          schema: {
-            type: 'number',
-            example: 'doggie',
-          },
-        },
-      ],
-    });
-    expect(results).toHaveLength(0);
-  });
-
   test.each(['example', 'x-example'])('will fail when %s example is invalid', async field => {
     const results = await s.run({
       parameters: [

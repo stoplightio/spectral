@@ -407,7 +407,7 @@
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
-      "given": "$..parameters..[?(@.in == 'body')]..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
+      "given": "$..parameters..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
       "then": {
         "function": "oasExample",
         "functionOptions": {
@@ -448,6 +448,23 @@
           "schemaField": "schema",
           "oasVersion": 2,
           "type": "media"
+        }
+      }
+    },
+    "oas2-valid-response-schema-example": {
+      "description": "Examples must be valid against their defined schema.",
+      "message": "{{error}}",
+      "recommended": true,
+      "formats": ["oas2"],
+      "severity": 0,
+      "type": "validation",
+      "given": "$..responses..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
+      "then": {
+        "function": "oasExample",
+        "functionOptions": {
+          "schemaField": "$",
+          "oasVersion": 2,
+          "type": "schema"
         }
       }
     },
