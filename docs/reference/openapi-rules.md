@@ -188,6 +188,22 @@ info:
     url: https://www.tldrlegal.com/l/mit
 ```
 
+### no-$ref-siblings
+
+An object exposing a `$ref` property cannot be further extended with additional properties.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+TheBadModel:
+  $ref: "#/components/TheBadModelProperties"
+  examples: # <= This property will be ignored
+    an_example:
+      name: something
+```
+
 ### no-eval-in-markdown
 
 This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack.
