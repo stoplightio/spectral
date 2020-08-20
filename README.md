@@ -39,19 +39,19 @@ This package is [Treeware](https://treeware.earth) so if you would like to thank
 
 ## Documentation
 
-Take a look at our [getting started documentation](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
+Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/concepts.md), then peek through some of our guides:
 
-- [Different Workflows](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
-- [Using the command-line interface](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
-- [Using the JavaScript API](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
-- [Custom Rulesets](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw em out and make your own.
-- [Custom Functions](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
+- [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
+- [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
+- [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
+- [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw em out and make your own.
+- [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
 
 ## FAQs
 
 ### How is this different to AJV
 
-[Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
+[Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
 
 ### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
 

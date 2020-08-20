@@ -1,16 +1,16 @@
 import { Spectral } from '../../../spectral';
-import oasOp2xxResponse from '../functions/oasOp2xxResponse';
+import oasOpSuccessResponse from '../functions/oasOpSuccessResponse';
 import { rules } from '../index.json';
 
-describe('operation-2xx-response', () => {
+describe('operation-success-response', () => {
   let spectral: Spectral;
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.setFunctions({ oasOp2xxResponse });
+    spectral.setFunctions({ oasOpSuccessResponse });
     spectral.setRules({
       // @ts-ignore
-      'operation-2xx-response': rules['operation-2xx-response'],
+      'operation-success-response': rules['operation-success-response'],
     });
   });
 
@@ -31,7 +31,24 @@ describe('operation-2xx-response', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('is happy when a (non 200) 2xx response is set', async () => {
+  test('is happy when a 301 response is set', async () => {
+    const results = await spectral.run({
+      swagger: '2.0',
+      paths: {
+        '/path': {
+          get: {
+            responses: {
+              '301': {},
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('is happy when a (non 200) success response is set', async () => {
     const results = await spectral.run({
       swagger: '2.0',
       paths: {
@@ -49,7 +66,7 @@ describe('operation-2xx-response', () => {
   });
 
   ['put', 'post', 'delete', 'options', 'head', 'patch', 'trace'].forEach(method => {
-    test(`warns if HTTP verb ${method} is missing a 2xx response`, async () => {
+    test(`warns if HTTP verb ${method} is missing a success response`, async () => {
       const obj = {
         swagger: '2.0',
         paths: {
@@ -64,15 +81,15 @@ describe('operation-2xx-response', () => {
       const results = await spectral.run(obj);
       expect(results).toEqual([
         expect.objectContaining({
-          code: 'operation-2xx-response',
-          message: 'Operation must have at least one `2xx` response.',
+          code: 'operation-success-response',
+          message: 'Operation must have at least one `2xx` or `3xx` response.',
           path: ['paths', '/path', method, 'responses'],
         }),
       ]);
     });
   });
 
-  test('warns about missing 2xx response', async () => {
+  test('warns about missing success response', async () => {
     const results = await spectral.run({
       swagger: '2.0',
       paths: {
@@ -88,8 +105,8 @@ describe('operation-2xx-response', () => {
 
     expect(results).toEqual([
       expect.objectContaining({
-        code: 'operation-2xx-response',
-        message: 'Operation must have at least one `2xx` response.',
+        code: 'operation-success-response',
+        message: 'Operation must have at least one `2xx` or `3xx` response.',
         path: ['paths', '/path', 'get', 'responses'],
       }),
     ]);

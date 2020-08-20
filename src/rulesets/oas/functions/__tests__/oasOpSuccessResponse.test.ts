@@ -1,18 +1,18 @@
 import { DiagnosticSeverity } from '@stoplight/types/dist';
 import { RuleType, Spectral } from '../../../../spectral';
 import { rules } from '../../index.json';
-import oasOp2xxResponse from '../oasOp2xxResponse';
+import oasOpSuccessResponse from '../oasOpSuccessResponse';
 
-describe('oasOp2xxResponse', () => {
+describe('oasOpSuccessResponse', () => {
   let s: Spectral;
 
   beforeEach(() => {
     s = new Spectral();
-    s.setFunctions({ oasOp2xxResponse });
+    s.setFunctions({ oasOpSuccessResponse });
     s.setRules({
-      'operation-2xx-response': Object.assign(rules['operation-2xx-response'], {
+      'operation-success-response': Object.assign(rules['operation-success-response'], {
         recommended: true,
-        type: RuleType[rules['operation-2xx-response'].type],
+        type: RuleType[rules['operation-success-response'].type],
       }),
     });
   });
@@ -38,7 +38,7 @@ describe('oasOp2xxResponse', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors if missing 2xx', async () => {
+  test('return errors if missing Success', async () => {
     const results = await s.run({
       paths: {
         '/path1': {
@@ -59,8 +59,8 @@ describe('oasOp2xxResponse', () => {
 
     expect(results).toEqual([
       {
-        code: 'operation-2xx-response',
-        message: 'Operation must have at least one `2xx` response.',
+        code: 'operation-success-response',
+        message: 'Operation must have at least one `2xx` or `3xx` response.',
         path: ['paths', '/path1', 'get', 'responses'],
         range: {
           end: {
@@ -89,8 +89,8 @@ describe('oasOp2xxResponse', () => {
     });
     expect(results).toEqual([
       {
-        code: 'operation-2xx-response',
-        message: 'Operation must have at least one `2xx` response.',
+        code: 'operation-success-response',
+        message: 'Operation must have at least one `2xx` or `3xx` response.',
         path: ['paths', '/path1', 'get', 'responses'],
         range: {
           end: {

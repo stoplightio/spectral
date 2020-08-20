@@ -229,57 +229,57 @@ describe('Linter service', () => {
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/pet', 'post', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/pet', 'put', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/pet/{petId}', 'post', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/pet/{petId}', 'delete', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/store/order/{orderId}', 'delete', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/user', 'post', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/user/createWithArray', 'post', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/user/createWithList', 'post', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/user/logout', 'get', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/user/{username}', 'put', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
+            code: 'operation-success-response',
             path: ['paths', '/user/{username}', 'delete', 'responses'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.oas2.json'),
           }),
@@ -560,13 +560,6 @@ describe('Linter service', () => {
           source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
         }),
         expect.objectContaining({
-          code: 'openapi-tags',
-          message: 'OpenAPI object should have non-empty `tags` array.',
-          path: [],
-          range: expect.any(Object),
-          source: expect.stringContaining('__tests__/__fixtures__/draft-ref.oas2.json'),
-        }),
-        expect.objectContaining({
           code: 'oas2-schema',
           message: 'Property `foo` is not expected to be here.',
           path: ['paths'],
@@ -638,13 +631,6 @@ describe('Linter service', () => {
         expect.objectContaining({
           code: 'oas2-api-schemes',
           message: 'OpenAPI host `schemes` must be present and non-empty array.',
-          path: [],
-          range: expect.any(Object),
-          source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
-        }),
-        expect.objectContaining({
-          code: 'openapi-tags',
-          message: 'OpenAPI object should have non-empty `tags` array.',
           path: [],
           range: expect.any(Object),
           source: expect.stringContaining('__tests__/__fixtures__/draft-nested-ref.oas2.json'),
@@ -763,10 +749,6 @@ describe('Linter service', () => {
           }),
           expect.objectContaining({
             code: 'oas3-api-servers',
-            source: 'foo://openapi-3.0-no-contact.yaml',
-          }),
-          expect.objectContaining({
-            code: 'openapi-tags',
             source: 'foo://openapi-3.0-no-contact.yaml',
           }),
         ]),
