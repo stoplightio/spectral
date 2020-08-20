@@ -1,0 +1,366 @@
+====test====
+All kinds of examples are validated - OAS3
+====document====
+# https://github.com/philsturgeon/examples-examples/blob/master/oas3.yaml
+openapi: 3.0.0
+info:
+  title: Examples Examples
+  version: "1.0"
+  description: Examples of loads of examples, some right, some wrong.
+  contact:
+    name: Phil Sturgeon
+    email: phil@stoplight.io
+    url: https://stoplight.io
+  license:
+    name: MIT
+tags:
+
+  - name: media-examples
+    description: >
+      The sort of examples which show up in the [Media Type
+      Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#mediaTypeObject),
+      which are `example` or `examples`. There is more than just an `s` difference between these keywords, they're different shapes too.
+      `example` is singular example which just contains the actual example value.
+      ```yaml
+        post:
+          summary: Adds a new user
+          requestBody:
+            content:
+              application/json:    # Media type
+                schema:            # Request body contents
+                  $ref: '#/components/schemas/User'
+                example:
+                  id: 10
+                  name: Jessica Smith
+          responses:
+            '200':
+              description: OK
+      ```
+      `examples` is an array of objects, which have an arbitrary string which acts as a nickname for that example,
+      and that property is another object which contains several optional properties including a
+      `value` property, which then contains the actual example.
+      ```yaml
+        post:
+          summary: Adds a new user
+          requestBody:
+            content:
+              application/json:     # Media type
+                schema:             # Request body contents
+                  $ref: '#/components/schemas/User'
+                examples:
+                  Jessica:   # Example 1
+                    value:   # <-- this is different
+                      id: 10
+                      name: Jessica Smith
+                  Ron:       # Example 2
+                    value:   # <-- this is different
+                      id: 11
+                      name: Ron Stewart
+          responses:
+            '200':
+              description: OK
+      ```
+      Confused? Good. Me too.
+  - name: parameter-examples
+    description: >
+      Parameters (things in the Parameter Object) can have examples or an
+      example, or a THIRD THING which is an example INSIDE a schema. BLOODY
+      HELL.
+  - name: schema-examples
+    description:
+      The sort of examples which show up for properties inside a Schema Object.
+      This is a singular example keyword, and takes a literal value.
+
+servers:
+  - url: http://example.org
+paths:
+  /schema-example:
+    get:
+      operationId: schema-examples
+      description: when schema examples are inline (no $ref involved)
+      tags:
+        - schema-examples
+      responses:
+        "200":
+          description: Success, because the example matches the schema
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  completed:
+                    type: boolean
+                  completed_at:
+                    type: string
+                    format: date-time
+                required:
+                  - id
+                  - name
+                  - completed
+                # notice how im in the schemq object, not next to it
+                example:
+                  id: 1
+                  name: get food
+                  completed: false
+                  completed_at: 1955-04-23T13:22:52.685Z
+        "500":
+          description: Fail, because the example is nonsense
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  completed:
+                    type: boolean
+                  completed_at:
+                    type: string
+                    format: date-time
+                required:
+                  - id
+                  - name
+                  - completed
+                # notice how im in the schema object, not next to it
+                example:
+                  id: 1
+                  completed: Not a boolean
+                  completed_at: Not a date
+        "501":
+          description: Fail, because the property example is nonsense
+          content:
+            application/json:
+              schema:
+                properties:
+                  some-bool:
+                    type: boolean
+                    example: not a bool
+                  some-date:
+                    type: string
+                    format: date-time
+                    example: not a date
+                  some-url:
+                    type: string
+                    format: url
+                    example: not a URL
+
+  /param-examples:
+    get:
+      operationId: parameter-example
+      description: when parameter examples are inline (no $ref involved)
+      tags:
+        - parameter-examples
+      parameters:
+        - name: single-example-good
+          description: Valid to its schema
+          in: query
+          schema:
+            type: string
+            enum: [foo, bar]
+          example: foo
+
+        - name: single-example-bad
+          description: Not valid to its schema
+          in: query
+          schema:
+            type: string
+            enum: [foo, bar]
+          example: not "foo" or "bar" so this is bad
+
+        - name: single-schema-example-good
+          description: Valid to its schema
+          in: query
+          schema:
+            type: string
+            enum: [foo, bar]
+            example: foo
+
+        - name: single-schema-example-bad
+          description: Not valid to its schema
+          in: query
+          schema:
+            type: string
+            enum: [foo, bar]
+            example: not "foo" or "bar" so this is bad
+
+        - name: multiple-examples
+          description: Valid to its schema
+          in: query
+          schema:
+            type: string
+            enum: [foo, bar]
+          examples:
+            the-good:
+              value: foo
+            the-bad:
+              value: 123
+            the-ugly:
+              value: [an, array]
+
+        # Seeing as OAS3 supports a single parameter example, multiple parameter
+        # examples, and schema examples, there is no need for x-example or x-examples at all.
+
+      responses:
+        '200':
+          description: 'ok'
+
+  /response-examples:
+    get:
+      operationId: response-examples-inline
+      description: when examples are inline (no $ref involved)
+      tags:
+        - media-examples
+      responses:
+        "200":
+          description: Success, because the example matches the schema
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  completed:
+                    type: boolean
+                  completed_at:
+                    type: string
+                    format: date-time
+                required:
+                  - id
+                  - name
+                  - completed
+              examples:
+                response:
+                  value:
+                    id: 1
+                    name: get food
+                    completed: false
+                    completed_at: 1955-04-23T13:22:52.685Z
+        "500":
+          description: Fail, because the example is nonsense
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  completed:
+                    type: boolean
+                  completed_at:
+                    type: string
+                    format: date-time
+                required:
+                  - id
+                  - name
+                  - completed
+              examples:
+                response:
+                  value:
+                    completed: Not a boolean
+                    completed_at: Not a date
+
+  /response-examples-via-$ref:
+    get:
+      operationId: response-examples-via-$ref
+      description: When the example is compared against a schema that ia a $ref to
+        another file
+      tags:
+        - media-examples
+      responses:
+        "200":
+          description: Success, because the example matches the definition in a $ref
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/todo-full"
+              examples:
+                response:
+                  value:
+                    id: 1
+                    name: get food
+                    completed: false
+                    completed_at: 1955-04-23T13:22:52.685Z
+                    created_at: 1994-11-05T03:26:51.471Z
+                    updated_at: 1989-07-29T11:30:06.701Z
+components:
+  schemas:
+    todo-full:
+      title: Todo Full
+      allOf:
+        - "$ref": "#/components/schemas/todo-partial"
+        - type: object
+          properties:
+            id:
+              type: integer
+              minimum: 0
+              maximum: 1000000
+            completed_at:
+              type: string
+              format: date-time
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+            user:
+              "$ref": "#/components/schemas/user"
+          required:
+            - id
+            - user
+      x-tags:
+        - Todos
+    todo-partial:
+      title: Todo Partial
+      type: object
+      properties:
+        name:
+          type: string
+        completed:
+          type: boolean
+      required:
+        - name
+        - completed
+      x-tags:
+        - Todos
+    user:
+      title: User
+      type: object
+      properties:
+        name:
+          type: string
+          description: The user's full name.
+        age:
+          type: number
+          minimum: 0
+          maximum: 150
+      required:
+        - name
+        - age
+      x-tags:
+        - Todos
+====command====
+{bin} lint {document}
+====stdout====
+OpenAPI 3.x detected
+
+{document}
+ 126:25  error  oas3-valid-content-schema-example    `example` property should have required property `name`
+ 138:30  error  oas3-valid-content-schema-example    `example` property type should be boolean
+ 142:30  error  oas3-valid-content-schema-example    `example` property should match format `date-time`
+ 146:30  error  oas3-valid-content-schema-example    `example` property should match format `url`
+ 169:20  error  oas3-valid-oas-parameter-example     `example` property should be equal to one of the allowed values: foo, bar
+ 185:22  error  oas3-valid-parameter-schema-example  `example` property should be equal to one of the allowed values: foo, bar
+ 197:22  error  oas3-valid-oas-parameter-example     `value` property type should be string
+ 199:21  error  oas3-valid-oas-parameter-example     `value` property type should be string
+ 262:25  error  oas3-valid-oas-content-example       `value` property should have required property `id`
+ 282:25  error  oas3-valid-oas-content-example       `value` property should have required property `user`
+
+✖ 10 problems (10 errors, 0 warnings, 0 infos, 0 hints)
