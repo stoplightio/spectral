@@ -17,7 +17,7 @@ Our Code of Conduct exists because of that dedication, and we do not tolerate ha
 Yarn is a package manager for your code, similar to npm. While you can use npm to use Spectral in your own project, we use yarn for development of Spectral.
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your computer.
-2. Install yarn: Refer to the [installation documentation](https://classic.yarnpkg.com/en/docs/install/) according to your developement operating system
+2. Install yarn: Refer to the [installation documentation](https://classic.yarnpkg.com/en/docs/install/) according to your development operating system
 3. In your terminal, navigate to the directory you cloned Spectral into (check that you are on the `develop` branch).
 4. Install the dependencies: `yarn`
 5. Build Spectral: `yarn build`

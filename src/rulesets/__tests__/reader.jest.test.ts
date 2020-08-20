@@ -294,7 +294,7 @@ describe('Rulesets reader', () => {
   });
 
   it('should override properties of extended rulesets', () => {
-    return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty('rules.operation-2xx-response', {
+    return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty('rules.operation-success-response', {
       description: 'should be overridden',
       given: '$.info',
       formats: expect.arrayContaining([expect.any(String)]),
@@ -875,7 +875,7 @@ describe('Rulesets reader', () => {
     });
 
     expect(functions).toMatchObject({
-      oasOp2xxResponse: expect.any(Object),
+      oasOpSuccessResponse: expect.any(Object),
       oasOpFormDataConsumeCheck: expect.any(Object),
       oasOpIdUnique: expect.any(Object),
       oasOpParams: expect.any(Object),
