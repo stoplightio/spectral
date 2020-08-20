@@ -8,9 +8,9 @@ In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of
 
 These rules apply to both OpenAPI v2 and v3.
 
-### operation-2xx-response
+### operation-success-response
 
-Operation must have at least one `2xx` response. Any API operation (endpoint) can fail but presumably it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
+Operation must have at least one `2xx` or `3xx` response. Any API operation (endpoint) can fail, but presumably it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
 
 **Recommended:** Yes
 
@@ -188,6 +188,22 @@ info:
     url: https://www.tldrlegal.com/l/mit
 ```
 
+### no-$ref-siblings
+
+An object exposing a `$ref` property cannot be further extended with additional properties.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+TheBadModel:
+  $ref: "#/components/TheBadModelProperties"
+  examples: # <= This property will be ignored
+    an_example:
+      name: something
+```
+
 ### no-eval-in-markdown
 
 This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack.
@@ -253,10 +269,6 @@ Why? Well, you _can_ reference tags arbitrarily in operations, and definition is
 
 Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
 
-**Recommended:** Yes
-
-### operation-default-response
-
 **Recommended:** No
 
 ### operation-description
@@ -289,17 +301,6 @@ paths:
 ### operation-singular-tag
 
 Use just one tag for an operation, which is helpful for some documentation systems which use tags to avoid duplicate content.
-
-**Recommended:** No
-
-### operation-summary-formatted
-
-<!-- theme: warning -->
-> ### Removed in v5.0
->
-> This rule was removed in Spectral v5.0, so if you are relying on it you can find the [old definition here](https://github.com/stoplightio/spectral/blob/v4.2.0/src/rulesets/oas/index.json#L312) and paste it into your [custom ruleset](../getting-started/3-rulesets.md).
-
-Operation `summary` should start with upper case and end with a dot.
 
 **Recommended:** No
 

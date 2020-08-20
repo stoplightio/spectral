@@ -5,12 +5,12 @@ import { mergeRules } from '../rules';
 
 describe('Ruleset rules merging', () => {
   const baseRule: IRule = {
-    message: 'Operation must have at least one `2xx` response.',
+    message: 'Operation must have at least one `2xx` or `3xx` response.',
     given:
       "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
     then: {
       field: 'responses',
-      function: 'oasOp2xxResponse',
+      function: 'oasOpSuccessResponse',
       functionOptions: {
         foo: 'bar',
       },
@@ -77,12 +77,12 @@ describe('Ruleset rules merging', () => {
 
     mergeRules(rules, {
       test: {
-        message: 'Operation must have at least one `2xx` response.',
+        message: 'Operation must have at least one `2xx` or `3xx` response.',
         given:
           "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
         then: {
           field: 'responses',
-          function: 'oasOp2xxResponse',
+          function: 'oasOpSuccessResponse',
         },
         severity: 'error',
       },
@@ -98,12 +98,12 @@ describe('Ruleset rules merging', () => {
 
     mergeRules(rules, {
       test: {
-        message: 'Operation must have at least one `2xx` response.',
+        message: 'Operation must have at least one `2xx` or `3xx` response.',
         given:
           "$..paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
         then: {
           field: 'responses',
-          function: 'oasOp2xxResponse',
+          function: 'oasOpSuccessResponse',
         },
         severity: 'error',
       },

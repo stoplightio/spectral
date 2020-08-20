@@ -111,7 +111,6 @@ OpenAPI 3.x detected
 
 {document}
   1:1       warning  oas3-api-servers        OpenAPI `servers` must be present and non-empty array.
-  1:1       warning  openapi-tags            OpenAPI object should have non-empty `tags` array.
   3:10        error  info-contact            Info object should contain `contact` object.
   3:10      warning  info-description        OpenAPI object info `description` must be present and non-empty string.
   5:14         hint  info-matches-stoplight  Info must contain Stoplight
@@ -122,4 +121,4 @@ OpenAPI 3.x detected
  59:14  information  operation-description   Operation `description` must be present and non-empty string.
  62:18      warning  operation-tag-defined   Operation tags should be defined in global tags.
 
-✖ 11 problems (3 errors, 5 warnings, 2 infos, 1 hint)
+✖ 10 problems (3 errors, 4 warnings, 2 infos, 1 hint)

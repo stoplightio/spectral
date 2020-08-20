@@ -12,7 +12,10 @@ import * as path from '@stoplight/path';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import * as $RefParser from '@apidevtools/json-schema-ref-parser';
-import { KNOWN_RULESETS } from "../src/formats";
+import { KNOWN_RULESETS } from '../src/formats';
+import { Dictionary } from '@stoplight/types';
+import { isLocalRef, pointerToPath } from '@stoplight/json';
+import { get } from 'lodash';
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
@@ -27,7 +30,7 @@ if (!fs.existsSync(baseDir)) {
 
 const generatedAssets = {};
 
-(async () => {
+(async (): Promise<void> => {
   for (const kind of KNOWN_RULESETS.map(ruleset => ruleset.replace('spectral:', ''))) {
     const assets = await processDirectory(path.join(__dirname, `../rulesets/${kind}`));
     Object.assign(generatedAssets, assets);
@@ -48,7 +51,7 @@ async function _processDirectory(assets: Record<string, string>, dir: string): P
       } else {
         let content = await readFileAsync(target, 'utf8');
         if (path.extname(name) === '.json') {
-          content = JSON.stringify(await $RefParser.bundle(target, JSON.parse(content), {}))
+          content = JSON.stringify(await resolveExternal$Refs(JSON.parse(content), target));
         }
 
         assets[path.join('@stoplight/spectral', path.relative(path.join(__dirname, '..'), target))] = content;
@@ -61,4 +64,30 @@ async function processDirectory(dir: string): Promise<Record<string, string>> {
   const assets = {};
   await _processDirectory(assets, dir);
   return assets;
+}
+
+async function resolveExternal$Refs(document: Dictionary<unknown>, source: string): Promise<unknown> {
+  for (const [key, value] of Object.entries(document)) {
+    if (key === '$ref') {
+      if (typeof value === 'string' && !isLocalRef(value)) {
+        const [filepath, pointer = '#'] = value.split('#');
+
+        const actualFilepath = path.join(path.dirname(source), filepath);
+        const referencedDocument = JSON.parse(await readFileAsync(actualFilepath, 'utf8'));
+        const jsonPath = pointerToPath(pointer);
+
+        return await $RefParser.bundle(
+          actualFilepath,
+          jsonPath.length > 0 ? get(referencedDocument, jsonPath) : referencedDocument,
+          {},
+        );
+      }
+    }
+
+    if (value !== null && typeof value === 'object') {
+      document[key] = await resolveExternal$Refs(value as Dictionary<unknown>, source);
+    }
+  }
+
+  return document;
 }

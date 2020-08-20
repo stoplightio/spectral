@@ -620,26 +620,26 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       expect(res).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            code: 'operation-2xx-response',
-            message: 'Operation must have at least one `2xx` response.',
+            code: 'operation-success-response',
+            message: 'Operation must have at least one `2xx` or `3xx` response.',
             path: ['paths', '/a.one', 'get'],
             source: '/test/file.json',
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
-            message: 'Operation must have at least one `2xx` response.',
+            code: 'operation-success-response',
+            message: 'Operation must have at least one `2xx` or `3xx` response.',
             path: ['paths', '/a.three', 'get'],
             source: '/test/file.json',
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
-            message: 'Operation must have at least one `2xx` response.',
+            code: 'operation-success-response',
+            message: 'Operation must have at least one `2xx` or `3xx` response.',
             path: ['paths', '/b.one', 'get'],
             source: '/test/file.json',
           }),
           expect.objectContaining({
-            code: 'operation-2xx-response',
-            message: 'Operation must have at least one `2xx` response.',
+            code: 'operation-success-response',
+            message: 'Operation must have at least one `2xx` or `3xx` response.',
             path: ['paths', '/b.two', 'get'],
             source: '/test/file.json',
           }),
@@ -649,8 +649,8 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       expect(res).toEqual(
         expect.not.arrayContaining([
           expect.objectContaining({
-            code: 'operation-2xx-response',
-            message: 'Operation must have at least one `2xx` response.',
+            code: 'operation-success-response',
+            message: 'Operation must have at least one `2xx` or `3xx` response.',
             path: ['paths', '/a.two', 'get'],
             source: '/test/file.json',
           }),
@@ -660,8 +660,8 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       expect(res).toEqual(
         expect.not.arrayContaining([
           expect.objectContaining({
-            code: 'operation-2xx-response',
-            message: 'Operation must have at least one `2xx` response.',
+            code: 'operation-success-response',
+            message: 'Operation must have at least one `2xx` or `3xx` response.',
             path: ['paths', '/b.three', 'get'],
             source: '/test/file.json',
           }),
