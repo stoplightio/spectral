@@ -294,15 +294,18 @@ describe('Rulesets reader', () => {
   });
 
   it('should override properties of extended rulesets', () => {
-    return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty('rules.operation-success-response', {
-      description: 'should be overridden',
-      given: '$.info',
-      formats: expect.arrayContaining([expect.any(String)]),
-      recommended: true,
-      severity: DiagnosticSeverity.Warning,
-      then: expect.any(Object),
-      type: 'style',
-    });
+    return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty(
+      'rules.operation-success-response',
+      {
+        description: 'should be overridden',
+        given: '$.info',
+        formats: expect.arrayContaining([expect.any(String)]),
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: expect.any(Object),
+        type: 'style',
+      },
+    );
   });
 
   it('should persist disabled properties of extended rulesets', () => {

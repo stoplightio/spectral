@@ -87,7 +87,6 @@ OpenAPI 3.x detected
 
 {document}
   1:1  warning  oas3-api-servers       OpenAPI `servers` must be present and non-empty array.
-  1:1  warning  openapi-tags           OpenAPI object should have non-empty `tags` array.
  10:9  warning  operation-operationId  Operation should have an `operationId`.
  10:9  warning  operation-tags         Operation should have non-empty `tags` array.
  22:9  warning  operation-operationId  Operation should have an `operationId`.
@@ -95,4 +94,4 @@ OpenAPI 3.x detected
  34:9  warning  operation-operationId  Operation should have an `operationId`.
  34:9  warning  operation-tags         Operation should have non-empty `tags` array.
 
-✖ 8 problems (0 errors, 8 warnings, 0 infos, 0 hints)
+✖ 7 problems (0 errors, 7 warnings, 0 infos, 0 hints)

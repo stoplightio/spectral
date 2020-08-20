@@ -26,7 +26,6 @@ OpenAPI 3.x detected
 
 {document}
   1:1   warning  oas3-api-servers              OpenAPI `servers` must be present and non-empty array.
-  1:1   warning  openapi-tags                  OpenAPI object should have non-empty `tags` array.
   2:6   warning  info-contact                  Info object should contain `contact` object.
   2:6   warning  info-description              OpenAPI object info `description` must be present and non-empty string.
   7:9   warning  operation-description         Operation `description` must be present and non-empty string.
@@ -38,4 +37,4 @@ OpenAPI 3.x detected
  13:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.
   15:9  warning  parser                        Mapping key must be a string scalar rather than number
 
-✖ 12 problems (2 errors, 10 warnings, 0 infos, 0 hints)
+✖ 11 problems (2 errors, 9 warnings, 0 infos, 0 hints)
