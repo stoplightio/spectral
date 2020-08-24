@@ -1,6 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
+import oasExample from '../functions/oasExample';
+import { setFunctionContext } from '../../evaluators';
+import { functions } from '../../../functions';
 
 describe('oas2-valid-definition-example', () => {
   let s: Spectral;
@@ -8,6 +11,7 @@ describe('oas2-valid-definition-example', () => {
   beforeEach(() => {
     s = new Spectral();
     s.registerFormat('oas2', () => true);
+    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
     s.setRules({
       'oas2-valid-definition-example': Object.assign(ruleset.rules['oas2-valid-definition-example'], {
         recommended: true,
@@ -16,13 +20,13 @@ describe('oas2-valid-definition-example', () => {
     });
   });
 
-  test('will pass when simple example is valid', async () => {
+  test.each(['example', 'x-example'])('will pass when simple %s is valid', async field => {
     const results = await s.run({
       definitions: [
         {
           xoxo: {
             type: 'string',
-            example: 'doggie',
+            [field]: 'doggie',
           },
         },
       ],
@@ -30,13 +34,13 @@ describe('oas2-valid-definition-example', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('will fail when simple example is invalid', async () => {
+  test.each(['example', 'x-example'])('will fail when simple %s is invalid', async field => {
     const results = await s.run({
       definitions: [
         {
           xoxo: {
             type: 'string',
-            example: 123,
+            [field]: 123,
           },
         },
       ],
@@ -44,7 +48,7 @@ describe('oas2-valid-definition-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-definition-example',
-        message: `\`example\` property type should be string`,
+        message: `\`${field}\` property type should be string`,
         severity: DiagnosticSeverity.Error,
       }),
     ]);

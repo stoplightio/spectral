@@ -65,8 +65,9 @@ describe('operation-success-response', () => {
     expect(results).toHaveLength(0);
   });
 
-  ['put', 'post', 'delete', 'options', 'head', 'patch', 'trace'].forEach(method => {
-    test(`warns if HTTP verb ${method} is missing a success response`, async () => {
+  test.each(['put', 'post', 'delete', 'options', 'head', 'patch', 'trace'])(
+    'warns if HTTP verb %s is missing a success response',
+    async method => {
       const obj = {
         swagger: '2.0',
         paths: {
@@ -86,8 +87,8 @@ describe('operation-success-response', () => {
           path: ['paths', '/path', method, 'responses'],
         }),
       ]);
-    });
-  });
+    },
+  );
 
   test('warns about missing success response', async () => {
     const results = await spectral.run({
