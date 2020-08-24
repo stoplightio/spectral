@@ -1,6 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../spectral';
 import { rules } from '../../index.json';
+import { setFunctionContext } from '../../../evaluators';
+import { functions } from '../../../../functions';
+import oasExample from '../../functions/oasExample';
 
 export default (ruleName: string, path: string) => {
   let s: Spectral;
@@ -8,6 +11,7 @@ export default (ruleName: string, path: string) => {
   beforeEach(() => {
     s = new Spectral();
     s.registerFormat('oas3', () => true);
+    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
     s.setRules({
       [ruleName]: Object.assign(rules[ruleName], {
         recommended: true,
@@ -244,5 +248,31 @@ export default (ruleName: string, path: string) => {
     });
 
     expect(results).toHaveLength(0);
+  });
+
+  test('will fail when simple example is invalid (examples)', async () => {
+    const results = await s.run({
+      openapi: '3.0.0',
+      [path]: {
+        xoxo: {
+          schema: {
+            type: 'string',
+          },
+          examples: {
+            test1: {
+              value: 123,
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        severity: DiagnosticSeverity.Error,
+        code: ruleName,
+        message: '`value` property type should be string',
+      }),
+    ]);
   });
 };

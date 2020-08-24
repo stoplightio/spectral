@@ -2,7 +2,7 @@ import * as AJV from 'ajv';
 import { ISchemaOptions } from '../../../functions/schema';
 import { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
 
-function shouldIgnoreError(error: AJV.ErrorObject) {
+function shouldIgnoreError(error: AJV.ErrorObject): boolean {
   return (
     // oneOf is a fairly error as we have 2 options to choose from for most of the time.
     error.keyword === 'oneOf' ||
@@ -44,7 +44,7 @@ export function prepareResults(errors: AJV.ErrorObject[]) {
   }
 }
 
-function applyManualReplacements(errors: IFunctionResult[]) {
+function applyManualReplacements(errors: IFunctionResult[]): void {
   for (const error of errors) {
     if (error.path === void 0) continue;
 
