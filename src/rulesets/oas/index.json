@@ -706,24 +706,10 @@
       "formats": ["oas3"],
       "recommended": true,
       "type": "validation",
-      "given": "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "$",
-          "oasVersion": 3,
-          "type": "schema"
-        }
-      }
-    },
-    "oas3-valid-content-schema-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "severity": 0,
-      "formats": ["oas3"],
-      "recommended": true,
-      "type": "validation",
-      "given": "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
+      "given": [
+        "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]"
+      ],
       "then": {
         "function": "oasExample",
         "functionOptions": {

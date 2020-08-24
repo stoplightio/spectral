@@ -352,10 +352,10 @@ components:
 OpenAPI 3.x detected
 
 {document}
- 126:25  error  oas3-valid-content-schema-example    `example` property should have required property `name`
- 138:30  error  oas3-valid-content-schema-example    `example` property type should be boolean
- 142:30  error  oas3-valid-content-schema-example    `example` property should match format `date-time`
- 146:30  error  oas3-valid-content-schema-example    `example` property should match format `url`
+ 126:25  error  oas3-valid-schema-example            `example` property should have required property `name`
+ 138:30  error  oas3-valid-schema-example            `example` property type should be boolean
+ 142:30  error  oas3-valid-schema-example            `example` property should match format `date-time`
+ 146:30  error  oas3-valid-schema-example            `example` property should match format `url`
  169:20  error  oas3-valid-oas-parameter-example     `example` property should be equal to one of the allowed values: foo, bar
  185:22  error  oas3-valid-parameter-schema-example  `example` property should be equal to one of the allowed values: foo, bar
  197:22  error  oas3-valid-oas-parameter-example     `value` property type should be string
