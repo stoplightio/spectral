@@ -7,6 +7,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.5.0] - 2019-08-25
+
+### Features
+- Support proxies via JS API [#1081](https://github.com/stoplightio/spectral/issues/1081)
+- Ruleset accepts `documentationUrl` property to specify the source of the documentation [#1242](https://github.com/stoplightio/spectral/pull/1242)
+- Introduce an experimental JSON Path engine to speed up the linting process [#1136](https://github.com/stoplightio/spectral/pull/1136). Currently hidden behind USE_NIMMA env variable.
+
+### Fixed
+- Improve examples validation [#1284](https://github.com/stoplightio/spectral/pull/1284)
+- Path Params being applied to more than http operations [#1187](https://github.com/stoplightio/spectral/issues/1187)
+- Occasional out of memory errors caused by better-ajv-errors [#1223](https://github.com/stoplightio/spectral/issues/1223), [#455](https://github.com/stoplightio/spectral/issues/455)
+- Unexpected result while linting an empty document [#1209](https://github.com/stoplightio/spectral/issues/1209)
+- Casing function supports leading char [#1256](https://github.com/stoplightio/spectral/pull/1256)
+- `operation-paramaters` rule outputs better messages [#1235](https://github.com/stoplightio/spectral/issues/1235)
+- Document sources are not normalized correctly under Windows [#1185](https://github.com/stoplightio/spectral/pull/1185)
+- Various performance improvements [#1184](https://github.com/stoplightio/spectral/pull/1184), [#1188](https://github.com/stoplightio/spectral/pull/1188), [#1189](https://github.com/stoplightio/spectral/pull/1189), [#1300](https://github.com/stoplightio/spectral/pull/1300)
+
 ## [5.4.0] - 2019-05-27
 
 ### Added
