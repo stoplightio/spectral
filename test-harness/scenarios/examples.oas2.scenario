@@ -263,13 +263,13 @@ definitions:
 OpenAPI 2.0 (Swagger) detected
 
 {document}
-  83:26    error  oas2-valid-response-schema-example  `completed` property type should be boolean
-  91:26    error  oas2-valid-response-schema-example  `example` property type should be boolean
-  95:26    error  oas2-valid-response-schema-example  `example` property should match format `date-time`
-  99:26    error  oas2-valid-response-schema-example  `example` property should match format `url`
- 106:11  warning  operation-tag-defined               Operation tags should be defined in global tags.
- 120:22    error  oas2-valid-parameter-example        `x-example` property should be equal to one of the allowed values: foo, bar
- 177:30    error  oas2-valid-response-example         `application/json` property should have required property `name`
- 194:30    error  oas2-valid-response-example         `application/json` property should have required property `user`
+  83:26    error  oas2-valid-schema-example  `completed` property type should be boolean
+  91:26    error  oas2-valid-schema-example  `example` property type should be boolean
+  95:26    error  oas2-valid-schema-example  `example` property should match format `date-time`
+  99:26    error  oas2-valid-schema-example  `example` property should match format `url`
+ 106:11  warning  operation-tag-defined      Operation tags should be defined in global tags.
+ 120:22    error  oas2-valid-schema-example  `x-example` property should be equal to one of the allowed values: foo, bar
+ 177:30    error  oas2-valid-media-example   `application/json` property should have required property `name`
+ 194:30    error  oas2-valid-media-example   `application/json` property should have required property `user`
 
 ✖ 8 problems (7 errors, 1 warning, 0 infos, 0 hints)
