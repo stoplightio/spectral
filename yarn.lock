@@ -635,12 +635,11 @@
     lodash "^4.17.15"
     safe-stable-stringify "^1.1"
 
-"@stoplight/lifecycle@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/lifecycle/-/lifecycle-2.3.0.tgz#072036efe0984e52502449172373b7f427c85954"
-  integrity sha512-nVeciLEYlj97W4OEwGp7UVGzdTkux8mSacbAARPJboEvVrqW/QHfAc830rcZ/UBvpWuni5WbMAPFpQ9t9Jb/AA==
+"@stoplight/lifecycle@2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/lifecycle/-/lifecycle-2.3.1.tgz#9cb0b2e260e3d4a52a14f7a92403807ee2c2b53f"
+  integrity sha512-On7qGYPDG1sgx2AOuJp8Hmm6WdK8+1PpCs7DEYoJ1GWtruPij9Q/pW0AV9CuR8KbCrOnvYcBsplaanB+Q3g/7Q==
   dependencies:
-    strict-event-emitter-types "^2.0.0"
     wolfy87-eventemitter "~5.2.8"
 
 "@stoplight/ordered-object-literal@^1.0.1":
@@ -6746,11 +6745,6 @@ streamroller@^2.2.4:
     date-format "^2.1.0"
     debug "^4.1.1"
     fs-extra "^8.1.0"
-
-strict-event-emitter-types@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/strict-event-emitter-types/-/strict-event-emitter-types-2.0.0.tgz#05e15549cb4da1694478a53543e4e2f4abcf277f"
-  integrity sha512-Nk/brWYpD85WlOgzw5h173aci0Teyv8YdIAEtV+N88nDB0dLlazZyJMIsN6eo1/AR61l+p6CJTG1JIyFaoNEEA==
 
 string-argv@0.3.1:
   version "0.3.1"

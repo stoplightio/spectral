@@ -1,4 +1,4 @@
-import { createEventEmitter, IDisposable } from '@stoplight/lifecycle';
+import { EventEmitter, IDisposable } from '@stoplight/lifecycle';
 
 type Revokable = () => void;
 
@@ -8,7 +8,7 @@ export type SpectralEvents = {
   afterTeardown(): void;
 };
 
-export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
+export class RunnerRuntime extends EventEmitter<SpectralEvents> {
   protected readonly revokables: Revokable[];
 
   constructor() {
