@@ -34,6 +34,7 @@ export class RunnerRuntime extends EventEmitter<SpectralEvents> {
   public spawn(): Pick<RunnerRuntime, 'on'> {
     return this.persist(
       Object.freeze({
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         on: this.hijackDisposable(this.on),
       }),
     );
