@@ -1,7 +1,6 @@
 # Exceptions
 
-From time to time, you want to ignore some specific results without turning off
-the rule entirely. This may happen, for instance, when working with legacy APIs which are nowhere near the standards of your modern APIs, but you cannot fix everything all at once.
+From time to time, you want to ignore some specific results without [turning off the rule entirely](./4-custom-rulesets.md#disabling-rules). For instance, you may want to do this when working on a project that has several legacy APIs which are nowhere near the standards of your modern APIs, and you cannot fix all the errors for a specific file all at once.
 
 The ruleset can be extended for that purpose through the optional `except` property. `except` describes a map of locations (expressed as paths and [JSON Pointers](https://tools.ietf.org/html/rfc6901)) and rules that should be ignored.
 
@@ -12,7 +11,7 @@ extends: spectral:oas
 
 except:
   "subfolder/one.yaml#":
-    - oas3-api-servers
+    - no-$ref-siblings
   "/tmp/docs/one.yaml#/info":
     - info-contact
     - info-description
@@ -20,7 +19,7 @@ except:
 
 Doing this in a ruleset which is being distributed to multiple APIs is possible, but might not be what you want to do. Maybe the files your writing exceptions for do not exist in other projects, or maybe they do not need this exception being added.
 
-Instead, lets create two rulesets.
+Instead, let's create two rulesets.
 
 One we'll call the main ruleset which is the one we're distributing via a URL, NPM, or some other means. This ruleset will describe the ideal set of rules:
 
