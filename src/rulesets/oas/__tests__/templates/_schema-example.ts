@@ -1,6 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../../spectral';
 import { rules } from '../../index.json';
+import { setFunctionContext } from '../../../evaluators';
+import { functions } from '../../../../functions';
+import oasExample from '../../functions/oasExample';
 
 export default (ruleName: string, path: string) => {
   let s: Spectral;
@@ -8,6 +11,7 @@ export default (ruleName: string, path: string) => {
   beforeEach(() => {
     s = new Spectral();
     s.registerFormat('oas3', () => true);
+    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
     s.setRules({
       [ruleName]: Object.assign(rules[ruleName], {
         recommended: true,

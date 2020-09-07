@@ -1,6 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType, Spectral } from '../../../spectral';
 import * as ruleset from '../index.json';
+import { setFunctionContext } from '../../evaluators';
+import { functions } from '../../../functions';
+import oasExample from '../functions/oasExample';
 
 describe('oas2-valid-parameter-example', () => {
   let s: Spectral;
@@ -8,6 +11,7 @@ describe('oas2-valid-parameter-example', () => {
   beforeEach(() => {
     s = new Spectral();
     s.registerFormat('oas2', () => true);
+    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
     s.setRules({
       'oas2-valid-parameter-example': Object.assign(ruleset.rules['oas2-valid-parameter-example'], {
         recommended: true,
@@ -16,14 +20,14 @@ describe('oas2-valid-parameter-example', () => {
     });
   });
 
-  test('will pass when simple example is valid', async () => {
+  test.each(['example', 'x-example'])('will pass when %s example is valid', async field => {
     const results = await s.run({
       parameters: [
         {
           in: 'body',
           schema: {
             type: 'string',
-            example: 'doggie',
+            [field]: 'doggie',
           },
         },
       ],
@@ -31,29 +35,14 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('will ignore when not in body', async () => {
-    const results = await s.run({
-      parameters: [
-        {
-          in: 'query',
-          schema: {
-            type: 'number',
-            example: 'doggie',
-          },
-        },
-      ],
-    });
-    expect(results).toHaveLength(0);
-  });
-
-  test('will fail when simple example is invalid', async () => {
+  test.each(['example', 'x-example'])('will fail when %s example is invalid', async field => {
     const results = await s.run({
       parameters: [
         {
           in: 'body',
           schema: {
             type: 'string',
-            example: 123,
+            [field]: 123,
           },
         },
       ],
@@ -61,7 +50,7 @@ describe('oas2-valid-parameter-example', () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: 'oas2-valid-parameter-example',
-        message: '`example` property type should be string',
+        message: `\`${field}\` property type should be string`,
         severity: DiagnosticSeverity.Error,
       }),
     ]);

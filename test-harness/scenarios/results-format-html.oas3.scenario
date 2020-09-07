@@ -106,7 +106,7 @@ OpenAPI 3.x detected
 <div id="overview" class="bg-warning">
     <h1>Spectral Report</h1>
     <div>
-        <span>4 problems (0 errors, 4 warnings, 0 infos, 0 hints)</span> - Generated on {date}
+        <span>3 problems (0 errors, 3 warnings, 0 infos, 0 hints)</span> - Generated on {date}
     </div>
 </div>
 <table>
@@ -114,19 +114,13 @@ OpenAPI 3.x detected
     <tr class="bg-warning" data-group="f-0">
     <th colspan="4">
         [+] {document}
-        <span>4 problems (0 errors, 4 warnings, 0 infos, 0 hints)</span>
+        <span>3 problems (0 errors, 3 warnings, 0 infos, 0 hints)</span>
     </th>
 </tr>
 <tr style="display:none" class="f-0">
     <td>1:1</td>
     <td class="severity clr-warning">warning</td>
     <td>OpenAPI `servers` must be present and non-empty array.</td>
-</tr>
-
-<tr style="display:none" class="f-0">
-    <td>1:1</td>
-    <td class="severity clr-warning">warning</td>
-    <td>OpenAPI object should have non-empty `tags` array.</td>
 </tr>
 
 <tr style="display:none" class="f-0">

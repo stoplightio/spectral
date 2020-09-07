@@ -1,0 +1,275 @@
+====test====
+All kinds of examples are validated - OAS2
+====document====
+# https://github.com/philsturgeon/examples-examples/blob/master/oas2.yaml
+swagger: '2.0'
+info:
+  title: Examples Examples
+  version: '1.0'
+  description: |-
+    Examples of loads of examples, some right, some wrong.
+  contact:
+    name: Phil Sturgeon
+    email: phil@stoplight.io
+    url: https://stoplight.io
+  license:
+    name: MIT
+host: example.org
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+  - name: media-examples
+    description: >
+      The sort of examples which show up in the [Responses
+      Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#responseObject),
+      which are `examples` with a mime type as a key.
+  - name: schema-examples
+    description: >
+      The sort of examples which show up for properties inside a [Schema
+      Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#schemaObject).
+paths:
+  "/schema-example":
+    get:
+      operationId: schema-examples-inline
+      description: when schema examples are inline (no $ref involved)
+      tags:
+        - schema-examples
+      responses:
+        '200':
+          description: 'Success, because the example matches the schema'
+          schema:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              completed:
+                type: boolean
+              completed_at:
+                type: string
+                format: date-time
+            required:
+              - id
+              - name
+              - completed
+            # notice how im in the schemq object, not next to it
+            example:
+              id: 1
+              name: get food
+              completed: false
+              completed_at: '1955-04-23T13:22:52.685Z'
+        '500':
+          description: 'Fail, because the example is nonsense'
+          schema:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              completed:
+                type: boolean
+              completed_at:
+                type: string
+                format: date-time
+            required:
+              - id
+              - name
+              - completed
+            # notice how im in the schema object, not next to it
+            example:
+              id: 1
+              name: fail
+              completed: Not a boolean
+              completed_at: 'Not a date'
+        '501':
+          description: 'Fail, because the property example is nonsense'
+          schema:
+            properties:
+              some-bool:
+                type: boolean
+                example: not a bool
+              some-date:
+                type: string
+                format: date-time
+                example: not a date
+              some-url:
+                type: string
+                format: url
+                example: not a URL
+
+  /param-examples:
+    get:
+      operationId: parameter-example
+      description: when parameter examples are inline (no $ref involved)
+      tags:
+        - parameter-examples
+      parameters:
+        - name: single-example-good
+          description: Valid to its schema
+          in: query
+          type: string
+          enum: [foo, bar]
+          x-example: foo
+
+        - name: single-example-bad
+          description: Not valid to its schema
+          in: query
+          type: string
+          enum: [foo, bar]
+          x-example: not "foo" or "bar" so this is bad
+
+        # OAS2 does not have the schema keyword here, so no need to support that.
+        # OAS2 does not have multiple examples support for keywords, so no need to support that.
+
+      responses:
+        '200':
+          description: 'ok'
+
+  "/response-examples":
+    get:
+      operationId: response-examples-inline
+      description: when examples are inline (no $ref involved)
+      tags:
+        - media-examples
+      responses:
+        '200':
+          description: 'Success, because the example matches the schema'
+          schema:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              completed:
+                type: boolean
+              completed_at:
+                type: string
+                format: date-time
+            required:
+              - id
+              - name
+              - completed
+          examples:
+            application/json:
+              id: 1
+              name: get food
+              completed: false
+              completed_at: '1955-04-23T13:22:52.685Z'
+        '500':
+          description: 'Fail, because the example is nonsense'
+          schema:
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              completed:
+                type: boolean
+              completed_at:
+                type: string
+                format: date-time
+            required:
+              - id
+              - name
+              - completed
+          examples:
+            application/json:
+              id: 1
+              completed: Not a boolean
+              completed_at: 'Not a date'
+
+  "/response-examples-via-$ref":
+    get:
+      operationId: response-examples-via-$ref
+      description: When the example is compared against a schema that ia a $ref to another file
+      tags:
+        - media-examples
+      responses:
+        '200':
+          description: 'Success, because the example matches the definition in a $ref'
+          schema:
+            "$ref": "#/definitions/todo-full"
+          examples:
+            application/json:
+              id: 1
+              name: get food
+              completed: false
+              completed_at: '1955-04-23T13:22:52.685Z'
+              created_at: '1994-11-05T03:26:51.471Z'
+              updated_at: '1989-07-29T11:30:06.701Z'
+definitions:
+  todo-full:
+    title: Todo Full
+    allOf:
+      - "$ref": "#/definitions/todo-partial"
+      - type: object
+        properties:
+          id:
+            type: integer
+            minimum: 0
+            maximum: 1000000
+          completed_at:
+            type: string
+            format: date-time
+          created_at:
+            type: string
+            format: date-time
+          updated_at:
+            type: string
+            format: date-time
+          user:
+            "$ref": "#/definitions/user"
+        required:
+          - id
+          - user
+    x-tags:
+      - Todos
+  todo-partial:
+    title: Todo Partial
+    type: object
+    properties:
+      name:
+        type: string
+      completed:
+        type: boolean
+    required:
+      - name
+      - completed
+    x-tags:
+      - Todos
+  user:
+    title: User
+    type: object
+    properties:
+      name:
+        type: string
+        description: The user's full name.
+      age:
+        type: number
+        minimum: 0
+        maximum: 150
+    required:
+      - name
+      - age
+    x-tags:
+      - Todos
+====command====
+{bin} lint {document}
+====stdout====
+OpenAPI 2.0 (Swagger) detected
+
+{document}
+  83:26    error  oas2-valid-response-schema-example  `completed` property type should be boolean
+  91:26    error  oas2-valid-response-schema-example  `example` property type should be boolean
+  95:26    error  oas2-valid-response-schema-example  `example` property should match format `date-time`
+  99:26    error  oas2-valid-response-schema-example  `example` property should match format `url`
+ 106:11  warning  operation-tag-defined               Operation tags should be defined in global tags.
+ 120:22    error  oas2-valid-parameter-example        `x-example` property should be equal to one of the allowed values: foo, bar
+ 177:30    error  oas2-valid-response-example         `application/json` property should have required property `name`
+ 194:30    error  oas2-valid-response-example         `application/json` property should have required property `user`
+
+✖ 8 problems (7 errors, 1 warning, 0 infos, 0 hints)
