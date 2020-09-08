@@ -138,4 +138,4 @@ extends:
   - ./style-guide/spectral.json
 ```
 
-If you need custom functions this will work, as `functionDir` can point to a directory inside `style-guide/` and all the JavaScript files can live in there too.
+If you need custom functions this will work, as `functionsDir` can point to a directory inside `style-guide/` and all the JavaScript files can live in there too.
