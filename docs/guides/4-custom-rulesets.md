@@ -86,7 +86,7 @@ responses:
     foo: bar
 ```
 
-## Extending Rules
+## Extending Ruleset
 
 When extending another ruleset, you can actually extend and modify rules it has declared by adding a rule to your own ruleset with the same name.
 
