@@ -88,7 +88,7 @@ responses:
 
 ## Extending Ruleset
 
-When extending another ruleset, you can actually extend and modify rules it has declared by adding a rule to your own ruleset with the same name.
+When extending another ruleset, you can actually replace a rule it has declared by adding a new rule to your own ruleset with the same name.
 
 ```yaml
 extends: spectral:oas
