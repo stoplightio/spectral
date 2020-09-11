@@ -890,6 +890,41 @@ describe('Rulesets reader', () => {
     readFileSpy.mockRestore();
   });
 
+  it('should support YAML merge keys', async () => {
+    const ruleset = await readRuleset(path.join(__dirname, './__fixtures__/ruleset-with-merge-keys.yaml'));
+
+    expect(ruleset.rules).toStrictEqual({
+      'no-x-headers-request': {
+        description: "All 'HTTP' headers SHOULD NOT include 'X-' headers (https://tools.ietf.org/html/rfc6648).",
+        given: ["$..parameters[?(@.in == 'header')].name"],
+        message: "HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}",
+        recommended: true,
+        severity: 1,
+        then: {
+          function: 'pattern',
+          functionOptions: {
+            notMatch: '/^[xX]-/',
+          },
+        },
+        type: 'style',
+      },
+      'no-x-headers-response': {
+        description: "All 'HTTP' headers SHOULD NOT include 'X-' headers (https://tools.ietf.org/html/rfc6648).",
+        given: ['$.[responses][*].headers.*~'],
+        message: "HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}",
+        recommended: true,
+        severity: 1,
+        then: {
+          function: 'pattern',
+          functionOptions: {
+            notMatch: '/^[xX]-/',
+          },
+        },
+        type: 'style',
+      },
+    });
+  });
+
   describe('Exceptions loading', () => {
     it('should handle loading a standalone ruleset', async () => {
       const ruleset = await readRuleset(standaloneExceptRuleset);
