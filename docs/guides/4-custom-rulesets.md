@@ -86,9 +86,9 @@ responses:
     foo: bar
 ```
 
-## Extending Rules
+## Redefining Rules
 
-When extending another ruleset, you can actually extend and modify rules it has declared by adding a rule to your own ruleset with the same name.
+When extending another ruleset, you can actually replace a rule it has declared by adding a new rule to your own ruleset with the same name.
 
 ```yaml
 extends: spectral:oas
@@ -129,20 +129,22 @@ rules:
 
 The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
-### Enabling Rules
+<!-- theme: info -->
+> If you'd like to disable rules for a specific file or part of a file, you can use [Exceptions](6-exceptions.md).
+
+## Enabling Rules
 
 Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
 
 ```yaml
 extends: [[spectral:oas, off]]
 rules:
-  # This rule is defined in the spectral:oas ruleset. We're passing `true` to turn it on and inherit the severity defined in the spectral:oas ruleset.
   operation-operationId-unique: true
 ```
 
 The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
 
-### Enriching Messages
+## Enriching Messages
 
 To help you create meaningful error messages, Spectral comes with a couple of placeholders that are evaluated at runtime.
 
