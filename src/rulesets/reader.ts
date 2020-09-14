@@ -2,7 +2,6 @@ import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
 import { extname, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
-import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
 import { createHttpAndFileResolver, IHttpAndFileResolverOptions } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
@@ -10,6 +9,7 @@ import { findFile, isNPMSource } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset } from './validation';
+import { parseYaml } from '../parsers';
 
 export interface IRulesetReadOptions extends IHttpAndFileResolverOptions {
   timeout?: number;
@@ -20,7 +20,7 @@ function parseContent(content: string, source: string): unknown {
     return JSON.parse(content);
   }
 
-  return parse(content);
+  return parseYaml(content).data;
 }
 
 export async function readRuleset(uris: string | string[], opts?: IRulesetReadOptions): Promise<IRuleset> {
