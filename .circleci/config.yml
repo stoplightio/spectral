@@ -69,7 +69,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: << parameters.node-version >>
+          node-version: << parameters.node-version >>.0
           install-yarn: true
           install-npm: false
       - install-and-build
@@ -135,9 +135,9 @@ workflows:
               os:
                 - linux
               node-version:
-                - "10.18.0"
-                - "12.9.1"
-                - "14.9.0"
+                - "10.18"
+                - "12.9"
+                - "14.9"
       - test-browser
 
   release:
