@@ -257,7 +257,7 @@ describe('oas3-valid-schema-example', () => {
       expect(results).toHaveLength(0);
     });
 
-    test('will pass for valid parents examples which contain invalid child examples', async () => {
+    test('will fail for valid parents examples which contain invalid child examples', async () => {
       const results = await s.run({
         swagger: '2.0',
         info: {
