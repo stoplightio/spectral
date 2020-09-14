@@ -1,0 +1,20 @@
+rules:
+  no-x-headers-request: &no-x-headers
+    description: "All 'HTTP' headers SHOULD NOT include 'X-' headers (https://tools.ietf.org/html/rfc6648)."
+    severity: warn
+    given:
+      - "$..parameters[?(@.in == 'header')].name"
+    message: |-
+      HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}
+    recommended: true
+    type: style
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/^[xX]-/"
+  no-x-headers-response:
+    <<: *no-x-headers
+    given:
+      - $.[responses][*].headers.*~
+    message: |-
+      HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}
