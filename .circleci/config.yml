@@ -2,6 +2,12 @@ version: 2.1
 
 orbs:
   stoplight: stoplight/cli@0.0.2
+  node: circleci/node@3.0.0
+
+executors:
+  linux:
+    docker:
+      - image: cimg/base:2020.01
 
 commands:
   cached-dependencies:
@@ -19,22 +25,29 @@ commands:
           paths:
             - ~/.cache/yarn
 
-  install-and-test:
+  install-and-build:
     description: >-
-      Install everything required to run the test suite, then run it.
+      Build everything required to run the test suite
     steps:
-      - checkout
       - cached-dependencies
-      - run: yarn
       - run:
           name: Build the code
           command: yarn build
+
+  test-node:
+    steps:
       - run:
-          name: Run browser tests
-          command: yarn test.karma && USE_NIMMA=true yarn test.karma
+          name: Lint the code
+          command: yarn lint
       - run:
           name: Run node tests
-          command: yarn test --coverage --maxWorkers=2 && USE_NIMMA=true yarn test --maxWorkers=2
+          command: yarn test --coverage --maxWorkers=2
+      - run:
+          name: Run node tests (nimma)
+          command: npx cross-env USE_NIMMA=true yarn test --maxWorkers=2
+
+  test-harness:
+    steps:
       - run:
           name: Create the Spectral Binary
           command: yarn build.binary
@@ -44,32 +57,41 @@ commands:
       - run:
           name: Run harness tests
           command: yarn test.harness
-      - run:
-          name: Lint the code
-          command: yarn lint
 
 jobs:
-  test-node-latest:
+  test:
+    parameters:
+      os:
+        type: executor
+      node-version:
+        type: string
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node-version >>
+          install-yarn: true
+          install-npm: false
+      - install-and-build
+      - test-node
+      - test-harness
+
+  test-browser:
     docker:
       - image: circleci/node:latest-browsers
     steps:
-      - install-and-test
-
-  test-node-12:
-    docker:
-      - image: circleci/node:12-browsers
-    steps:
-      - install-and-test
-
-  test-node-10:
-    docker:
-      - image: circleci/node:10-browsers
-    steps:
-      - install-and-test
+      - checkout
+      - install-and-build
+      - run:
+          name: Run browser tests
+          command: yarn test.karma
+      - run:
+          name: Run browser tests (nimma)
+          command: USE_NIMMA=true yarn test.karma
 
   release:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - cached-dependencies
@@ -107,9 +129,17 @@ jobs:
 workflows:
   commit:
     jobs:
-      - test-node-latest
-      - test-node-12
-      - test-node-10
+      - test:
+          matrix:
+            parameters:
+              os:
+                - linux
+              node-version:
+                - "10.18.0"
+                - "12.9.1"
+                - "14.9.0"
+      - test-browser
+
   release:
     jobs:
       - release:
