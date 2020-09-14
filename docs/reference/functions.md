@@ -236,6 +236,11 @@ important-fields:
       function: truthy
 ```
 
+## defined
+
+The value must be defined, meaning it must be anything but `undefined`.
+It's the opposite of what undefined function does.
+
 ## undefined
 
 The value must be `undefined`. When combined with `field: foo` on an object the `foo` property must be undefined.
