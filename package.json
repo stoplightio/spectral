@@ -30,7 +30,7 @@
     "rulesets/*"
   ],
   "engines": {
-    "node": ">=10.0"
+    "node": ">=10.18"
   },
   "scripts": {
     "build.binary": "pkg . --output ./binaries/spectral",
