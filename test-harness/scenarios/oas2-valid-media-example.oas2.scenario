@@ -31,14 +31,14 @@ paths:
 ====asset:ruleset====
 extends: [[spectral:oas, off]]
 rules:
-  oas2-valid-response-example: error
+  oas2-valid-media-example: error
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 OpenAPI 2.0 (Swagger) detected
 
 {document}
- 11:31  error  oas2-valid-response-example  `application/json` property type should be boolean
- 26:32  error  oas2-valid-response-example  `application/yaml` property should have required property `user`
+ 11:31  error  oas2-valid-media-example  `application/json` property type should be boolean
+ 26:32  error  oas2-valid-media-example  `application/yaml` property should have required property `user`
 
 ✖ 2 problems (2 errors, 0 warnings, 0 infos, 0 hints)
