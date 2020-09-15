@@ -30,7 +30,7 @@
     "rulesets/*"
   ],
   "engines": {
-    "node": ">=10.0"
+    "node": ">=10.18"
   },
   "scripts": {
     "build.binary": "pkg . --output ./binaries/spectral",
@@ -96,7 +96,7 @@
     "@types/fetch-mock": "^7.3.1",
     "@types/jest": "^26.0.4",
     "@types/jest-when": "^2.7.1",
-    "@types/lodash": "^4.14.157",
+    "@types/lodash": "^4.14.161",
     "@types/nanoid": "^2.1.0",
     "@types/nock": "^11.1.0",
     "@types/node": "~13.1",
@@ -115,7 +115,7 @@
     "glob-fs": "^0.1.7",
     "husky": "^4.2.5",
     "jest": "~25.5",
-    "jest-mock": "^26.2.0",
+    "jest-mock": "^26.3.0",
     "jest-when": "~2.7",
     "karma": "^5.1.1",
     "karma-chrome-launcher": "^3.1.0",
@@ -129,7 +129,7 @@
     "prettier": "^2.0.5",
     "recast": "^0.19.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.18.1",
+    "rollup": "^2.26.11",
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^25.5.1",
