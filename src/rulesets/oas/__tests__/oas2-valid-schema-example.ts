@@ -20,10 +20,10 @@ describe('oas2-valid-schema-example', () => {
     });
   });
 
-  describe('parameters', () => {
+  describe.each(['parameters', 'definitions'])('%s', parentField => {
     test.each(['example', 'x-example'])('will pass when %s example is valid', async field => {
       const results = await s.run({
-        parameters: [
+        [parentField]: [
           {
             in: 'body',
             schema: {
@@ -36,12 +36,11 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toHaveLength(0);
     });
 
-    test.each(['example', 'x-example'])('will fail when %s example is invalid', async field => {
+    test.each(['example', 'x-example'])('will fail when simple %s is invalid', async field => {
       const results = await s.run({
-        parameters: [
+        [parentField]: [
           {
-            in: 'body',
-            schema: {
+            xoxo: {
               type: 'string',
               [field]: 123,
             },
@@ -59,7 +58,7 @@ describe('oas2-valid-schema-example', () => {
 
     test('will pass when complex example is used ', async () => {
       const results = await s.run({
-        parameters: [
+        [parentField]: [
           {
             in: 'body',
             schema: {
@@ -91,7 +90,7 @@ describe('oas2-valid-schema-example', () => {
 
     test('will error with totally invalid input', async () => {
       const results = await s.run({
-        parameters: [
+        [parentField]: [
           {
             in: 'body',
             schema: {
@@ -127,114 +126,9 @@ describe('oas2-valid-schema-example', () => {
       ]);
     });
 
-    test('will fail for valid parents examples which contain invalid child examples', async () => {
-      const results = await s.run({
-        swagger: '2.0',
-        info: {
-          version: '1.0.0',
-          title: 'Swagger Petstore',
-        },
-        paths: {
-          '/pet': {
-            post: {
-              parameters: [
-                {
-                  in: 'body',
-                  name: 'body',
-                  required: true,
-                  schema: {
-                    type: 'object',
-                    example: {
-                      a: {
-                        b: {
-                          c: 'foo',
-                        },
-                      },
-                    },
-                    properties: {
-                      a: {
-                        type: 'object',
-                        example: {
-                          b: {
-                            c: 'foo',
-                          },
-                        },
-                        properties: {
-                          b: {
-                            type: 'object',
-                            properties: {
-                              c: {
-                                type: 'string',
-                                example: 12345,
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              ],
-              responses: {
-                '200': {
-                  description: 'OK',
-                },
-              },
-            },
-          },
-        },
-      });
-
-      expect(results).toEqual([
-        expect.objectContaining({
-          code: 'oas2-valid-schema-example',
-          message: '`example` property type should be string',
-          path: [
-            'paths',
-            '/pet',
-            'post',
-            'parameters',
-            '0',
-            'schema',
-            'properties',
-            'a',
-            'properties',
-            'b',
-            'properties',
-            'c',
-            'example',
-          ],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Error,
-        }),
-      ]);
-    });
-
-    test('will not fail if an actual property is called example', async () => {
-      const results = await s.run({
-        parameters: [
-          {
-            in: 'body',
-            type: 'object',
-            properties: {
-              example: {
-                description: 'an actual field called example...',
-                type: 'string',
-              },
-            },
-            example: {
-              example: 'what is gonna happen',
-            },
-          },
-        ],
-      });
-
-      expect(results).toHaveLength(0);
-    });
-
     test('will not fail if an actual property is called example and there is also type/format property', async () => {
       const results = await s.run({
-        parameters: [
+        [parentField]: [
           {
             type: 'object',
             properties: {
@@ -257,104 +151,6 @@ describe('oas2-valid-schema-example', () => {
   });
 
   describe('definitions', () => {
-    test.each(['example', 'x-example'])('will pass when simple %s is valid', async field => {
-      const results = await s.run({
-        definitions: [
-          {
-            xoxo: {
-              type: 'string',
-              [field]: 'doggie',
-            },
-          },
-        ],
-      });
-      expect(results).toHaveLength(0);
-    });
-
-    test.each(['example', 'x-example'])('will fail when simple %s is invalid', async field => {
-      const results = await s.run({
-        definitions: [
-          {
-            xoxo: {
-              type: 'string',
-              [field]: 123,
-            },
-          },
-        ],
-      });
-      expect(results).toEqual([
-        expect.objectContaining({
-          code: 'oas2-valid-schema-example',
-          message: `\`${field}\` property type should be string`,
-          severity: DiagnosticSeverity.Error,
-        }),
-      ]);
-    });
-
-    test('will pass when complex example is used ', async () => {
-      const results = await s.run({
-        definitions: {
-          xoxo: {
-            type: 'object',
-            properties: {
-              url: {
-                type: 'string',
-              },
-              width: {
-                type: 'integer',
-              },
-              height: {
-                type: 'integer',
-              },
-            },
-            required: ['url'],
-            example: {
-              url: 'images/38.png',
-              width: 100,
-              height: 100,
-            },
-          },
-        },
-      });
-
-      expect(results).toHaveLength(0);
-    });
-
-    test('will error with totally invalid input', async () => {
-      const results = await s.run({
-        definitions: {
-          xoxo: {
-            type: 'object',
-            properties: {
-              url: {
-                type: 'string',
-              },
-              width: {
-                type: 'integer',
-              },
-              height: {
-                type: 'integer',
-              },
-            },
-            required: ['url'],
-            example: {
-              url2: 'images/38.png',
-              width: 'coffee',
-              height: false,
-            },
-          },
-        },
-      });
-
-      expect(results).toEqual([
-        expect.objectContaining({
-          code: 'oas2-valid-schema-example',
-          message: '`example` property should have required property `url`',
-          severity: DiagnosticSeverity.Error,
-        }),
-      ]);
-    });
-
     test('works fine with allOf $ref', async () => {
       const results = await s.run({
         definitions: {
@@ -495,29 +291,6 @@ describe('oas2-valid-schema-example', () => {
             },
             example: {
               example: 'what is gonna happen',
-            },
-          },
-        },
-      });
-
-      expect(results).toHaveLength(0);
-    });
-
-    test('will not fail if an actual property is called example and there is also type/format property', async () => {
-      const results = await s.run({
-        definitions: {
-          xoxo: {
-            type: 'object',
-            properties: {
-              example: {
-                type: 'string',
-                example: 'abc',
-              },
-              type: {
-                type: 'number',
-                example: 123,
-              },
-              format: 'plain text',
             },
           },
         },
