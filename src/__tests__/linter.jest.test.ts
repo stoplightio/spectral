@@ -502,7 +502,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value|to-string}} should be falsy',
+          message: 'Value #{{printValue()}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',

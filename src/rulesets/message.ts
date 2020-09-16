@@ -1,5 +1,5 @@
 import { Segment } from '@stoplight/types';
-import { capitalize, isObject } from 'lodash';
+import { isObject } from 'lodash';
 import { Replacer } from '../utils/replacer';
 
 export interface IMessageVars {
@@ -14,17 +14,15 @@ export type MessageInterpolator = (str: string, values: IMessageVars) => string;
 
 const MessageReplacer = new Replacer<IMessageVars>(2);
 
-MessageReplacer.addTransformer('double-quotes', (id, value) => (value ? `"${value}"` : ''));
-MessageReplacer.addTransformer('single-quotes', (id, value) => (value ? `'${value}'` : ''));
-MessageReplacer.addTransformer('gravis', (id, value) => (value ? `\`${value}\`` : ''));
-MessageReplacer.addTransformer('capitalize', (id, value) => capitalize(String(value)));
+MessageReplacer.addFunction('printProperty', ({ property }) => {
+  if (property !== void 0) {
+    return `\`${property}\` property `;
+  }
 
-MessageReplacer.addTransformer('append-property', (id, value) => (value ? `${value} property ` : ''));
-MessageReplacer.addTransformer('optional-typeof', (id, value, values) =>
-  value ? String(value) : `${typeof values.value} `,
-);
+  return '';
+});
 
-MessageReplacer.addTransformer('to-string', (id, value) => {
+MessageReplacer.addFunction('printValue', ({ value }) => {
   if (isObject(value)) {
     return Array.isArray(value) ? 'Array[]' : 'Object{}';
   }

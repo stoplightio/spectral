@@ -1,40 +1,40 @@
 import { Dictionary } from '@stoplight/types';
 import { eval, parse } from 'expression-eval';
 
-export type Transformer<V = unknown, VV = object> = (identifier: string, value: V, values: VV) => string;
+export type Transformer<V = object> = (values: V) => string;
 
 export class Replacer<V extends object> {
   protected readonly regex: RegExp;
-  protected readonly transformers: Dictionary<Transformer<V[keyof V], V>>;
+  protected readonly functions: Dictionary<Transformer<V>>;
 
   constructor(count: number) {
     this.regex = new RegExp(`#?${'{'.repeat(count)}([^}\n]+)${'}'.repeat(count)}`, 'g');
 
-    this.transformers = {};
+    this.functions = {};
   }
 
-  public addTransformer(name: string, filter: Transformer<V[keyof V], V>): void {
-    this.transformers[name] = filter;
+  public addFunction(name: string, filter: Transformer<V>): void {
+    this.functions[name] = filter;
   }
 
   public print(input: string, values: V): string {
-    return input.replace(this.regex, (substr, expr, index) => {
+    return input.replace(this.regex, (substr, identifier, index) => {
       const shouldEvaluate = input[index] === '#';
 
       if (shouldEvaluate) {
-        return String(eval(parse(expr), values));
+        return String(
+          eval(parse(identifier), {
+            ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
+              fns[name] = fn.bind(null, values);
+              return fns;
+            }, {}),
+            ...values,
+          }),
+        );
       }
-
-      const [identifier, ...transformers] = expr.split('|');
 
       if (!(identifier in values)) {
         return '';
-      }
-
-      for (const transformer of transformers) {
-        if (transformer in this.transformers) {
-          values[identifier] = this.transformers[transformer](identifier, values[identifier], values);
-        }
       }
 
       return String(values[identifier]);

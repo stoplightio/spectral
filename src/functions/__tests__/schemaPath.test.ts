@@ -177,7 +177,7 @@ describe('schema-path', () => {
       };
       expect(runSchemaPath(target, invalidFieldToCheck, path)).toEqual([
         {
-          message: '{{property|gravis|append-property}}does not exist',
+          message: '#{{printProperty()}}does not exist',
           path: ['nonsense'],
         },
       ]);

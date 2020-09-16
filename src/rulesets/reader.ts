@@ -1,6 +1,6 @@
 import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
-import { extname, join } from '@stoplight/path';
+import { extname, join, toFSPath } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { readFile, readParsable } from '../fs/reader';
 import { createHttpAndFileResolver, IHttpAndFileResolverOptions } from '../resolvers/http-and-file';
@@ -79,7 +79,7 @@ const createRulesetProcessor = (
         dereferenceInline: false,
         uriCache,
         async parseResolveResult(opts) {
-          opts.result = parseContent(opts.result, opts.targetAuthority.pathname());
+          opts.result = parseContent(opts.result, toFSPath(opts.targetAuthority.pathname()));
           return opts;
         },
       },

@@ -53,11 +53,23 @@ describe('Replacer', () => {
     ).toEqual('missing :(');
   });
 
-  it('supports transformers', () => {
+  it('evaluates expressions', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
-    replacer.addTransformer('dot', (id, value) => (Array.isArray(value) ? value.join('.') : String(value)));
 
-    const template = '{{path|dot}}';
+    const template = "#{{path[1] + '-' + path[2].toUpperCase()}}";
+
+    expect(
+      replacer.print(template, {
+        path: ['foo', 'bar', '/a'],
+      }),
+    ).toEqual('bar-/A');
+  });
+
+  it('supports custom functions', () => {
+    const replacer = new Replacer<Dictionary<unknown>>(2);
+    replacer.addFunction('printPath', ({ path }) => (Array.isArray(path) ? path.join('.') : String(path)));
+
+    const template = '#{{printPath()}}';
 
     expect(
       replacer.print(template, {
