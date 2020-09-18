@@ -22,15 +22,19 @@ export class Replacer<V extends object> {
       const shouldEvaluate = input[index] === '#';
 
       if (shouldEvaluate) {
-        return String(
-          eval(parse(identifier), {
-            ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
-              fns[name] = fn.bind(values);
-              return fns;
-            }, {}),
-            ...values,
-          }),
-        );
+        try {
+          return String(
+            eval(parse(identifier), {
+              ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
+                fns[name] = fn.bind(values);
+                return fns;
+              }, {}),
+              ...values,
+            }),
+          );
+        } catch {
+          return '';
+        }
       }
 
       if (!(identifier in values)) {

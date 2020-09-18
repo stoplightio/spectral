@@ -80,4 +80,15 @@ describe('Replacer', () => {
       }),
     ).toEqual('foo.bar./a');
   });
+
+  it('handles exceptions thrown during evaluation', () => {
+    const replacer = new Replacer<Dictionary<unknown>>(2);
+    const template = 'value is: #{{value.name}}';
+
+    expect(
+      replacer.print(template, {
+        value: null,
+      }),
+    ).toEqual('value is: ');
+  });
 });
