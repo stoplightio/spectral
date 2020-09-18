@@ -4,7 +4,7 @@ export const defined: IFunction = (targetVal): void | IFunctionResult[] => {
   if (typeof targetVal === 'undefined') {
     return [
       {
-        message: '#{{printProperty()}}should be defined',
+        message: '#{{print("property")}}should be defined',
       },
     ];
   }

@@ -23,7 +23,7 @@ describe('truthy', () => {
   test('should return an error message if target value is falsy', () => {
     expect(runTruthy(false)).toEqual([
       {
-        message: '#{{printProperty()}}is not truthy',
+        message: '#{{print("property")}}is not truthy',
       },
     ]);
   });
@@ -31,7 +31,7 @@ describe('truthy', () => {
   test('should return an error message if target value is null', () => {
     expect(runTruthy(null)).toEqual([
       {
-        message: '#{{printProperty()}}is not truthy',
+        message: '#{{print("property")}}is not truthy',
       },
     ]);
   });

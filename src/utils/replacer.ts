@@ -1,7 +1,7 @@
 import { Dictionary } from '@stoplight/types';
 import { eval, parse } from 'expression-eval';
 
-export type Transformer<V = object> = (values: V) => string;
+export type Transformer<V = object> = (this: V, ...args: unknown[]) => string;
 
 export class Replacer<V extends object> {
   protected readonly regex: RegExp;
@@ -25,7 +25,7 @@ export class Replacer<V extends object> {
         return String(
           eval(parse(identifier), {
             ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
-              fns[name] = fn.bind(null, values);
+              fns[name] = fn.bind(values);
               return fns;
             }, {}),
             ...values,

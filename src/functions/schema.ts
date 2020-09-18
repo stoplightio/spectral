@@ -117,7 +117,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
     return [
       {
         path,
-        message: `#{{printProperty()}}does not exist`,
+        message: `#{{print("property")}}does not exist`,
       },
     ];
   }

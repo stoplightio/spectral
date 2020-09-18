@@ -67,7 +67,10 @@ describe('Replacer', () => {
 
   it('supports custom functions', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
-    replacer.addFunction('printPath', ({ path }) => (Array.isArray(path) ? path.join('.') : String(path)));
+    replacer.addFunction('printPath', function () {
+      const { path } = this;
+      return Array.isArray(path) ? path.join('.') : String(path);
+    });
 
     const template = '#{{printPath()}}';
 

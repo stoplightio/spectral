@@ -5,7 +5,7 @@ export const undefined: IFunction = (targetVal): void | IFunctionResult[] => {
   if (typeof targetVal !== 'undefined') {
     return [
       {
-        message: '#{{printProperty()}}should be undefined',
+        message: '#{{print("property")}}should be undefined',
       },
     ];
   }

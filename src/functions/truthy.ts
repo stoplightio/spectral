@@ -4,7 +4,7 @@ export const truthy: IFunction = (targetVal): void | IFunctionResult[] => {
   if (!targetVal) {
     return [
       {
-        message: '#{{printProperty()}}is not truthy',
+        message: '#{{print("property")}}is not truthy',
       },
     ];
   }
