@@ -31,6 +31,7 @@ export interface IRunOpts {
   resolve?: {
     documentUri?: string;
   };
+  source?: string;
 }
 
 export interface IRuleResult extends IDiagnostic {
@@ -53,7 +54,7 @@ export interface IResolver {
   resolve(source: unknown, opts?: IResolveOpts): Promise<ResolveResult>;
 }
 
-export type FormatLookup = (document: unknown) => boolean;
+export type FormatLookup = (document: unknown, source?: string) => boolean;
 export type RegisteredFormats = Dictionary<FormatLookup, string>;
 
 export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;

@@ -573,6 +573,45 @@ describe('linter', () => {
     expect(result).toEqual([]);
   });
 
+  test('should accept format lookup by source', async () => {
+    spectral.registerFormat('foo-bar', (_, source) => source === '/foo/bar');
+
+    spectral.setRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        formats: [],
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run(
+      {
+        x: false,
+        y: '',
+      },
+      {
+        source: '/foo/bar',
+      },
+    );
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+      }),
+    ]);
+  });
+
   test('should include parser diagnostics', async () => {
     const responses = `
 responses:: !!foo
