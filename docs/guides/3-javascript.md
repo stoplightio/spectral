@@ -195,7 +195,7 @@ spectral
 Alternatively you may lookup for certain format by optional `source`, which could be passed in `run` options.
 
 ```js
-const { Spectral } = require('@stoplight/spectral');
+const { Document, Spectral } = require('@stoplight/spectral');
 
 const spectral = new Spectral();
 
@@ -216,15 +216,7 @@ spectral.setRuleset({
 });
 
 spectral
-  .run(
-    {
-      'foo-bar': true,
-      x: false
-    },
-    {
-      source: '/foo/bar',
-    }
-  )
+  .run(new Document(`foo-bar: true\nx: false`, Parsers.Yaml, '/foo/bar'))
   .then(result => {
     expect(result).toEqual([
       expect.objectContaining({

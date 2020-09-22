@@ -595,15 +595,7 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run(
-      {
-        x: false,
-        y: '',
-      },
-      {
-        source: '/foo/bar',
-      },
-    );
+    const result = await spectral.run(new Document(`x: false\ny: ''`, Parsers.Yaml, '/foo/bar'));
 
     expect(result).toEqual([
       expect.objectContaining({

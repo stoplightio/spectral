@@ -111,7 +111,9 @@ export class Spectral {
 
     if (document.formats === void 0) {
       const registeredFormats = Object.keys(this.formats);
-      const foundFormats = registeredFormats.filter(format => this.formats[format](inventory.resolved, opts.source));
+      const foundFormats = registeredFormats.filter(format =>
+        this.formats[format](inventory.resolved, document.source ?? void 0),
+      );
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         document.formats = null;
         if (registeredFormats.length > 0) {

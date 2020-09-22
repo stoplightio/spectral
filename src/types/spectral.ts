@@ -31,7 +31,6 @@ export interface IRunOpts {
   resolve?: {
     documentUri?: string;
   };
-  source?: string;
 }
 
 export interface IRuleResult extends IDiagnostic {
