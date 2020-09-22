@@ -192,6 +192,48 @@ spectral
   });
 ```
 
+Alternatively you may lookup for certain format by optional `source`, which could be passed in `run` options.
+
+```js
+const { Spectral } = require('@stoplight/spectral');
+
+const spectral = new Spectral();
+
+spectral.registerFormat('foo-bar', (_, source) => source === '/foo/bar');
+
+spectral.setRuleset({
+  functions: {},
+  rules: {
+    rule1: {
+      given: '$.x',
+      formats: ['foo-bar'],
+      severity: 'error',
+      then: {
+        function: 'truthy',
+      },
+    },
+  },
+});
+
+spectral
+  .run(
+    {
+      'foo-bar': true,
+      x: false
+    },
+    {
+      source: '/foo/bar',
+    }
+  )
+  .then(result => {
+    expect(result).toEqual([
+      expect.objectContaining({
+       code: 'rule1',
+     }),
+   ]);
+  });
+```
+
 ### Using a Proxy
 
 Spectral supports HTTP(S) proxies when fetching remote schemas and rulesets.
