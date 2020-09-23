@@ -1,7 +1,7 @@
 import { getLocationForJsonPath, JsonParserResult, parseWithPointers, trapAccess } from '@stoplight/json';
 import { IParser } from './types';
 
-export const parseJson = (input: string) =>
+export const parseJson = (input: string): JsonParserResult<unknown> =>
   parseWithPointers(input, {
     ignoreDuplicateKeys: false,
     preserveKeyOrder: true,
