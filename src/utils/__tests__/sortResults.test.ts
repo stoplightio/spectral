@@ -164,9 +164,9 @@ describe('compareResults', () => {
     };
 
     [
-      { one: undefined, another: undefined, expected: 0 },
-      { one: 'a', another: undefined, expected: 1 },
-      { one: undefined, another: 'a', expected: -1 },
+      { one: void 0, another: void 0, expected: 0 },
+      { one: 'a', another: void 0, expected: 1 },
+      { one: void 0, another: 'a', expected: -1 },
       { one: 'a', another: 'a', expected: 0 },
       { one: 'a', another: 'b', expected: -1 },
     ].forEach(tc => {
@@ -187,14 +187,14 @@ describe('compareResults', () => {
     };
 
     [
-      { one: undefined, another: undefined, expected: 0 },
-      { one: 'a', another: undefined, expected: 1 },
-      { one: undefined, another: 'a', expected: -1 },
+      { one: void 0, another: void 0, expected: 0 },
+      { one: 'a', another: void 0, expected: 1 },
+      { one: void 0, another: 'a', expected: -1 },
       { one: 'a', another: 'a', expected: 0 },
       { one: 'a', another: 'b', expected: -1 },
       { one: '2', another: '10', expected: -1 },
-      { one: 1, another: undefined, expected: 1 },
-      { one: undefined, another: 1, expected: -1 },
+      { one: 1, another: void 0, expected: 1 },
+      { one: void 0, another: 1, expected: -1 },
       { one: 1, another: 1, expected: 0 },
       { one: 1, another: 2, expected: -1 },
       { one: 1, another: '1', expected: 0 },
