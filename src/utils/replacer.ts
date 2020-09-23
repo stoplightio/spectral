@@ -32,7 +32,8 @@ export class Replacer<V extends object> {
               ...values,
             }),
           );
-        } catch {
+        } catch (ex) {
+          console.warn(ex);
           return '';
         }
       }

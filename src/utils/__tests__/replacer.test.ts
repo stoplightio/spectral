@@ -2,6 +2,10 @@ import { Dictionary } from '@stoplight/types';
 import { Replacer } from '../replacer';
 
 describe('Replacer', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('interpolates correctly', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
     const template = 'oops... "{{property}}" is missing;error: {{error}}';
@@ -81,7 +85,11 @@ describe('Replacer', () => {
     ).toEqual('foo.bar./a');
   });
 
-  it('handles exceptions thrown during evaluation', () => {
+  it('handles and prints out exceptions thrown during evaluation', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      // no-op
+    });
+
     const replacer = new Replacer<Dictionary<unknown>>(2);
     const template = 'value is: #{{value.name}}';
 
@@ -90,5 +98,6 @@ describe('Replacer', () => {
         value: null,
       }),
     ).toEqual('value is: ');
+    expect(warnSpy).toBeCalledWith(new TypeError("Cannot read property 'name' of null"));
   });
 });
