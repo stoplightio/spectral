@@ -64,14 +64,17 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
     const path = paths.target ?? paths.given;
     return [
       {
-        ...(!keyedBy && {
-          path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]],
-        }),
-        message: keyedBy
-          ? 'properties are not in alphabetical order'
-          : `at least 2 properties are not in alphabetical order: "${
-              targetArray[unsortedItems[0]]
-            }" should be placed after "${targetArray[unsortedItems[1]]}"`,
+        ...(keyedBy === void 0
+          ? {
+              path: [...path, Array.isArray(targetVal) ? unsortedItems[0] : targetArray[unsortedItems[0]]],
+            }
+          : null),
+        message:
+          keyedBy !== void 0
+            ? 'properties are not in alphabetical order'
+            : `at least 2 properties are not in alphabetical order: "${
+                targetArray[unsortedItems[0]]
+              }" should be placed after "${targetArray[unsortedItems[1]]}"`,
       },
     ];
   }
