@@ -53,6 +53,7 @@ export interface IResolver {
   resolve(source: unknown, opts?: IResolveOpts): Promise<ResolveResult>;
 }
 
+// todo(@p0lip): make it string | null when working on 6.0
 export type FormatLookup = (document: unknown, source?: string) => boolean;
 export type RegisteredFormats = Dictionary<FormatLookup, string>;
 
