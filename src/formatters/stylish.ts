@@ -37,12 +37,12 @@ import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, g
 // -----------------------------------------------------------------------------
 
 function formatRange(range?: IRange): string {
-  if (!range) return '';
+  if (range === void 0) return '';
 
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
 }
 
-function getMessageType(severity: DiagnosticSeverity) {
+function getMessageType(severity: DiagnosticSeverity): string {
   const color = getColorForSeverity(severity);
   const name = getSeverityName(severity);
 

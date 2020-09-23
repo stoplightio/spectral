@@ -13,7 +13,7 @@ const printSummary = ({
   warnings: number;
   infos: number;
   hints: number;
-}) => {
+}): string | null => {
   const total = errors + warnings + infos + hints;
   if (total === 0) {
     return null;
@@ -38,7 +38,7 @@ const printSummary = ({
   ].join('');
 };
 
-export const getSummaryForSource = (results: IRuleResult[]) => {
+export const getSummaryForSource = (results: IRuleResult[]): string | null => {
   const {
     [DiagnosticSeverity.Error]: { length: errors },
     [DiagnosticSeverity.Warning]: { length: warnings },

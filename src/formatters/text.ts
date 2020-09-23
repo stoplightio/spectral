@@ -3,7 +3,7 @@ import { IRuleResult } from '../types';
 import { Formatter } from './types';
 import { getSeverityName, groupBySource } from './utils';
 
-function renderResults(results: IRuleResult[]) {
+function renderResults(results: IRuleResult[]): string {
   return results
     .map(result => {
       const line = result.range.start.line + 1;
@@ -14,7 +14,7 @@ function renderResults(results: IRuleResult[]) {
     .join('\n');
 }
 
-function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>) {
+function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>): string {
   return Object.keys(groupedResults)
     .map(source => renderResults(groupedResults[source]))
     .join('\n');

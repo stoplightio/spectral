@@ -3,7 +3,7 @@ import { IRuleResult } from '../types';
 import { Formatter } from './types';
 import { getSeverityName, groupBySource } from './utils';
 
-function escapeString(str: Optional<string | number>) {
+function escapeString(str: Optional<string | number>): string {
   if (str === void 0) {
     return '';
   }
@@ -19,14 +19,14 @@ function escapeString(str: Optional<string | number>) {
     .replace(/\]/g, '|]');
 }
 
-function inspectionType(result: IRuleResult) {
+function inspectionType(result: IRuleResult): string {
   const code = escapeString(result.code);
   const severity = getSeverityName(result.severity);
   const message = escapeString(result.message);
   return `##teamcity[inspectionType category='openapi' id='${code}' name='${code}' description='${severity} -- ${message}']`;
 }
 
-function inspection(result: IRuleResult) {
+function inspection(result: IRuleResult): string {
   const code = escapeString(result.code);
   const severity = getSeverityName(result.severity);
   const message = escapeString(result.message);
@@ -34,11 +34,11 @@ function inspection(result: IRuleResult) {
   return `##teamcity[inspection typeId='${code}' file='${result.source}' line='${line}' message='${severity} -- ${message}']`;
 }
 
-function renderResults(results: IRuleResult[]) {
+function renderResults(results: IRuleResult[]): string {
   return results.map(result => `${inspectionType(result)}\n${inspection(result)}`).join('\n');
 }
 
-function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>) {
+function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>): string {
   return Object.keys(groupedResults)
     .map(source => renderResults(groupedResults[source]))
     .join('\n');
