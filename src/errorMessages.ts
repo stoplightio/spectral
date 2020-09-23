@@ -4,10 +4,10 @@ import { uniqBy } from 'lodash';
 import { Document, IDocument } from './document';
 import { IRuleResult } from './types';
 
-const toUpperCase = (word: string) => word.toUpperCase();
-const splitWord = (word: string, end: string, start: string) => `${end} ${start.toLowerCase()}`;
+const toUpperCase = (word: string): string => word.toUpperCase();
+const splitWord = (word: string, end: string, start: string): string => `${end} ${start.toLowerCase()}`;
 
-export function getDiagnosticErrorMessage(diagnostic: IDiagnostic) {
+export function getDiagnosticErrorMessage(diagnostic: IDiagnostic): string {
   const key = getPropertyKey(diagnostic.path);
   let prettifiedMessage = diagnostic.message.replace(/^[a-z]/, toUpperCase);
 
@@ -23,7 +23,7 @@ export function getDiagnosticErrorMessage(diagnostic: IDiagnostic) {
   return prettifiedMessage;
 }
 
-export const prettyPrintResolverErrorMessage = (message: string) => message.replace(/^Error\s*:\s*/, '');
+export const prettyPrintResolverErrorMessage = (message: string): string => message.replace(/^Error\s*:\s*/, '');
 
 const getPropertyKey = (path: JsonPath | undefined): Segment | void => {
   if (path !== undefined && path.length > 0) {
@@ -53,7 +53,7 @@ export const formatResolverErrors = (document: IDocument, diagnostics: IResolveE
       message: prettyPrintResolverErrorMessage(error.message),
       severity: DiagnosticSeverity.Error,
       range,
-      ...(source !== null && { source }),
+      ...(source !== null ? { source } : null),
     };
   });
 };

@@ -9,7 +9,7 @@ import { FailSeverity, ILintConfig, OutputFormat } from '../../types/config';
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
 
-const toArray = (args: unknown) => (Array.isArray(args) ? args : [args]);
+const toArray = (args: unknown): unknown[] => (Array.isArray(args) ? args : [args]);
 
 const formatOptions = Object.values(OutputFormat);
 
@@ -156,9 +156,9 @@ const lintCommand: CommandModule = {
         return results;
       })
       .then(results => {
-        if (results.length) {
+        if (results.length > 0) {
           process.exitCode = severeEnoughToFail(results, failSeverity) ? 1 : 0;
-        } else if (!config.quiet) {
+        } else if (config.quiet !== true) {
           console.log(`No results with a severity of '${failSeverity}' or higher found!`);
         }
         const formattedOutput = formatOutput(results, format);
@@ -168,7 +168,7 @@ const lintCommand: CommandModule = {
   },
 };
 
-const fail = ({ message }: Error) => {
+const fail = ({ message }: Error): void => {
   console.error(message);
   process.exitCode = 2;
 };

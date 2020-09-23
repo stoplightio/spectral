@@ -50,7 +50,7 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
   const unsortedItems = getUnsortedItems<unknown>(
     targetArray,
     keyedBy !== void 0
-      ? (a, b) => {
+      ? (a, b): number => {
           if (!isObject(a) || !isObject(b)) return 0;
 
           return compare(a[keyedBy], b[keyedBy]);
