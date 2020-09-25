@@ -7,10 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.6.0] - 2019-09-28
+
+### Added
+- YAML merge keys can be used in rulesets [#1325](https://github.com/stoplightio/spectral/issues/1325)
+- New built-in function `defined` [#1338](https://github.com/stoplightio/spectral/pull/1338)
+- Enhance error message formatting [#1339](https://github.com/stoplightio/spectral/issues/1339)
+- JS API: Document format lookup functions takes filepath [#1348](https://github.com/stoplightio/spectral/pull/1348)
+
 ## [5.5.0] - 2019-08-25
 
-### Features
-- Support proxies via JS API [#1081](https://github.com/stoplightio/spectral/issues/1081)
+### Added
+- JS API: Support proxies [#1081](https://github.com/stoplightio/spectral/issues/1081)
 - Ruleset accepts `documentationUrl` property to specify the source of the documentation [#1242](https://github.com/stoplightio/spectral/pull/1242)
 - Introduce an experimental JSON Path engine to speed up the linting process [#1136](https://github.com/stoplightio/spectral/pull/1136). Currently hidden behind USE_NIMMA env variable.
 
