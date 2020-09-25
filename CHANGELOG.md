@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.6.0] - 2019-09-25
+
+### Features
+- YAML merge keys can be used in rulesets [#1325](https://github.com/stoplightio/spectral/issues/1325)
+- New built-in function `defined` [#1338](https://github.com/stoplightio/spectral/pull/1338)
+- Enhance error message formatting [#1339](https://github.com/stoplightio/spectral/issues/1339)
+- Document format lookup functions takes filepath [#1348](https://github.com/stoplightio/spectral/pull/1348)
+
 ## [5.5.0] - 2019-08-25
 
 ### Features
