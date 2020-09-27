@@ -1015,7 +1015,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'A parameter in the header should be written in kebab-case',
-          message: '{{value|to-string}} is not kebab-cased: {{error}}',
+          message: '#{{print("value")}} is not kebab-cased: {{error}}',
           given: "$..parameters[?(@.in === 'header')]",
           then: {
             field: 'name',
@@ -1066,7 +1066,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value|to-string}} should be falsy',
+          message: 'Value #{{print("value")}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',
