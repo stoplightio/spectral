@@ -1,4 +1,4 @@
-![Spectral logo](img/spectral-banner.png)
+![Spectral logo](./docs/img/spectral-banner.png)
 
 [![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral)
 [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral)
