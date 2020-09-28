@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.6.0] - 2019-09-25
 
-### Features
+### Added
 - YAML merge keys can be used in rulesets [#1325](https://github.com/stoplightio/spectral/issues/1325)
 - New built-in function `defined` [#1338](https://github.com/stoplightio/spectral/pull/1338)
 - Enhance error message formatting [#1339](https://github.com/stoplightio/spectral/issues/1339)
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.5.0] - 2019-08-25
 
-### Features
+### Added
 - Support proxies via JS API [#1081](https://github.com/stoplightio/spectral/issues/1081)
 - Ruleset accepts `documentationUrl` property to specify the source of the documentation [#1242](https://github.com/stoplightio/spectral/pull/1242)
 - Introduce an experimental JSON Path engine to speed up the linting process [#1136](https://github.com/stoplightio/spectral/pull/1136). Currently hidden behind USE_NIMMA env variable.
