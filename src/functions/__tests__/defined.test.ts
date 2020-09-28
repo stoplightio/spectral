@@ -23,7 +23,7 @@ describe('defined', () => {
   test('should return an error message if target value is undefined', () => {
     expect(runDefined(void 0)).toEqual([
       {
-        message: '{{property|gravis|append-property}}should be defined',
+        message: '#{{print("property")}}should be defined',
       },
     ]);
   });

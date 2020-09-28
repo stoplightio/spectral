@@ -14,6 +14,21 @@ describe('message util', () => {
     ).toEqual('oops... "description" is missing;error: expected property to be truthy');
   });
 
+  test('evaluates code', () => {
+    const template = 'Property "#{{value.param}}" is missing. Path: #{{path.toUpperCase()}}';
+    expect(
+      message(template, {
+        property: 'description',
+        error: 'expected property to be truthy',
+        path: 'test',
+        description: null,
+        value: {
+          param: 'test',
+        },
+      }),
+    ).toEqual('Property "test" is missing. Path: TEST');
+  });
+
   test.each([0, false, null, undefined])('interpolates %s value correctly', value => {
     const template = 'Value must not equal {{value}}';
     expect(

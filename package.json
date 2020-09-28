@@ -74,6 +74,7 @@
     "blueimp-md5": "2.13.0",
     "chalk": "4.0.0",
     "eol": "0.9.1",
+    "expression-eval": "3.1.2",
     "fast-glob": "3.1.0",
     "jsonpath-plus": "4.0.0",
     "lodash": "4.17.19",

@@ -117,7 +117,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
     return [
       {
         path,
-        message: `{{property|gravis|append-property}}does not exist`,
+        message: `#{{print("property")}}does not exist`,
       },
     ];
   }
