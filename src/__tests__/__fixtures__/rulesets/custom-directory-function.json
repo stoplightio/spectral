@@ -1,6 +1,6 @@
 {
-  "extends": ["./custom-functions-oas-ruleset.json"],
-  "functionsDir": "./customOasFunctions",
+  "extends": ["./custom-functions.json"],
+  "functionsDir": "./customFunctions",
   "functions": [
     "hasIn"
   ],
