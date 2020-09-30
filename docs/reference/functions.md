@@ -146,7 +146,7 @@ camel-case-name:
 
 paths-kebab-case:
   description: Should paths be kebab-case.
-  message: '{{property}} is not kebab-case (lower case and separated with hyphens)'
+  message: "{{property}} is not kebab-case (lower case and separated with hyphens)"
   severity: warn
   given: $.paths[*]~
   then:
