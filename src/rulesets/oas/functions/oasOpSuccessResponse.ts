@@ -1,18 +1,22 @@
-import type { IFunction, IFunctionResult } from '../../../types';
+import type { IFunction } from '../../../types';
+import { isObject } from './utils/isObject';
 
 export const oasOpSuccessResponse: IFunction = targetVal => {
-  if (!targetVal) {
+  if (!isObject(targetVal)) {
     return;
   }
 
-  const results: IFunctionResult[] = [];
-  const responses = Object.keys(targetVal);
-  if (responses.filter(response => Number(response) >= 200 && Number(response) < 400).length === 0) {
-    results.push({
-      message: 'operations must define at least one 2xx or 3xx response',
-    });
+  for (const response of Object.keys(targetVal)) {
+    if (Number(response) >= 200 && Number(response) < 400) {
+      return;
+    }
   }
-  return results;
+
+  return [
+    {
+      message: 'operations must define at least one 2xx or 3xx response',
+    },
+  ];
 };
 
 export default oasOpSuccessResponse;
