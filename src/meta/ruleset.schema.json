@@ -77,6 +77,18 @@
           "type": "string"
         }
       }
+    },
+    "parserOptions": {
+      "type": "object",
+      "properties": {
+        "duplicateKeys": {
+          "$ref": "shared.json#/Severity"
+        },
+        "incompatibleValues": {
+          "$ref": "shared.json#/Severity"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "anyOf": [

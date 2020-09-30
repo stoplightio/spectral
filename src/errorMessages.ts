@@ -37,7 +37,7 @@ export function formatParserDiagnostics(diagnostics: ReadonlyArray<IDiagnostic>,
     code: 'parser',
     message: getDiagnosticErrorMessage(diagnostic),
     path: diagnostic.path ?? [],
-    ...(source !== null && { source }),
+    ...(source !== null ? { source } : null),
   }));
 }
 
