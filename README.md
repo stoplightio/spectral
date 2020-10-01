@@ -15,7 +15,7 @@ A flexible JSON/YAML linter, with out of the box support for OpenAPI v2/v3 and A
   - OpenAPI v2 _and_ v3 documents
   - AsyncAPI v2 documents
 - Use JSON path to apply rules to specific parts of your objects
-- Built-in set of functions to help [create custom rules](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/3-rulesets.md#adding-a-rule). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - Create custom functions for advanced use cases
 - Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
@@ -33,7 +33,7 @@ npm install -g @stoplight/spectral
 yarn global add @stoplight/spectral
 ```
 
-Find more [installation methods](https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/getting-started/2-installation.md) in our documentation.
+Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
 
 This package is [Treeware](https://treeware.earth) so if you would like to thank us for creating it, we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral).
 
