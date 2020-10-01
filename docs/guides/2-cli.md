@@ -35,6 +35,7 @@ Other options include:
                                                                            [boolean] [default: false]
   --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
   --show-unmatched-globs       show unmatched glob patterns                [boolean] [default: false]
+  --fail-on-unmatched-globs    fail on unmatched glob patterns             [boolean] [default: false]
   --verbose, -v                increase verbosity                                           [boolean]
   --quiet, -q                  no logging - output only                                     [boolean]
 ```
