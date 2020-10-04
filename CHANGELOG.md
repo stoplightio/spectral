@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.6.0] - 2019-09-28
+## [5.6.0] - 2020-09-28
 
 ### Added
 - YAML merge keys can be used in rulesets [#1325](https://github.com/stoplightio/spectral/issues/1325)
@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhance error message formatting [#1339](https://github.com/stoplightio/spectral/issues/1339)
 - JS API: Document format lookup functions takes filepath [#1348](https://github.com/stoplightio/spectral/pull/1348)
 
-## [5.5.0] - 2019-08-25
+## [5.5.0] - 2020-08-25
 
 ### Added
 - JS API: Support proxies [#1081](https://github.com/stoplightio/spectral/issues/1081)
@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document sources are not normalized correctly under Windows [#1185](https://github.com/stoplightio/spectral/pull/1185)
 - Various performance improvements [#1184](https://github.com/stoplightio/spectral/pull/1184), [#1188](https://github.com/stoplightio/spectral/pull/1188), [#1189](https://github.com/stoplightio/spectral/pull/1189), [#1300](https://github.com/stoplightio/spectral/pull/1300)
 
-## [5.4.0] - 2019-05-27
+## [5.4.0] - 2020-05-27
 
 ### Added
 - New AsyncAPI 2 ruleset and format [#965](https://github.com/stoplightio/spectral/issues/965)
@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Load custom functions from NPM correctly [#1093](https://github.com/stoplightio/spectral/pull/1093)
 - Teach `path-params` to report an actual endpoint path [#1130](https://github.com/stoplightio/spectral/issues/1130)
 
-## [5.3.0] - 2019-04-02
+## [5.3.0] - 2020-04-02
 
 ### Added
 - Built-in functions can now be accessed from custom functions [#925](https://github.com/stoplightio/spectral/pull/925)
@@ -68,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Requiring packages located under node_modules is possible [#1029](https://github.com/stoplightio/spectral/pull/1029)
 - Set proper document source if legacy parsed result is given [#1040](https://github.com/stoplightio/spectral/pull/1040)
 
-## [5.2.0] - 2019-03-18
+## [5.2.0] - 2020-03-18
 
 ### Added
 - Rule exceptions are supported [#747](https://github.com/stoplightio/spectral/issues/747)
@@ -80,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Alphabetical rule works correctly for $refs [#979](https://github.com/stoplightio/spectral/issues/979)
 
-## [5.1.0] - 2019-02-26
+## [5.1.0] - 2020-02-26
 
 ### Added
 - Implement a new `typed-enum` rule to detect enum value that do not respect specified type [#913](https://github.com/stoplightio/spectral/pull/913)
