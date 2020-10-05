@@ -186,7 +186,7 @@ In this example, violations of the `tag-description` rule would indicate `https:
 
 If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
 
-If you wish to override a documentation url for a particular rule, you can do so by specifying `documentationUrl` as follows
+If you wish to override a documentation URL for a particular rule, you can do so by specifying `documentationUrl`.
 
 ```yaml
 extends: spectral:oas
