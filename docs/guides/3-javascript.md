@@ -22,9 +22,6 @@ spectral
   .then(console.log);
 ```
 
-Please note that by default Spectral supports YAML 1.2 with merge keys extension.
-As recommended by the [spec](https://yaml.org/spec/1.2/spec.html#id2804923), tags are resolved according to the "Core Schema."
-
 This will run Spectral with no formats, rules or functions, so it's not going to do anything besides $ref resolving.
 Find out how to add formats, rules and functions below.
 
