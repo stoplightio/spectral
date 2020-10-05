@@ -20,6 +20,7 @@ rules:
 Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
 <!-- theme: info -->
+
 > Spectral processes each rule on "resolved document" (a file where all `$ref` entries have been resolved). If your rule needs to access `$ref` values, you must set `resolved: false` on your rule.
 
 Here's an eample of a rule that can access `$ref` values:
@@ -68,12 +69,12 @@ then:
 The `field` keyword is optional, and is for applying the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSON Path. The value can also be `@key` to apply the rule to a keys of an object.
 
 ```yaml
-given: '$.responses'
+given: "$.responses"
 then:
-  field: '@key'
+  field: "@key"
   function: pattern
   functionOptions:
-    match: '^[0-9]+$'
+    match: "^[0-9]+$"
 ```
 
 The above [`pattern` based rule](../reference/functions.md#pattern) would error on `456avbas` as it is not numeric.
@@ -130,6 +131,7 @@ rules:
 The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
 
 <!-- theme: info -->
+
 > If you'd like to disable rules for a specific file or part of a file, you can use [Exceptions](6-exceptions.md).
 
 ## Enabling Rules
@@ -180,7 +182,6 @@ rules:
     then:
       field: description
       function: truthy
-
 ```
 
 In this example, violations of the `tag-description` rule would indicate `https://www.example.com/docs/api-ruleset.md#tag-description` as the location for finding out more about the rule.

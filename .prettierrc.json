@@ -4,5 +4,15 @@
   "trailingComma": "all",
   "printWidth": 120,
   "proseWrap": "always",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": ["*.md"],
+      "options": {
+        "singleQuote": false,
+        "printWidth": 200,
+        "proseWrap": "preserve"
+      }
+    }
+  ]
 }
