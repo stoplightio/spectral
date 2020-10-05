@@ -62,7 +62,7 @@
     "test": "jest --silent"
   },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "0.0.0",
+    "@stoplight/better-ajv-errors": "0.0.3",
     "@stoplight/json": "3.9.0",
     "@stoplight/json-ref-readers": "1.2.1",
     "@stoplight/json-ref-resolver": "3.1.0",
