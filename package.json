@@ -44,7 +44,7 @@
     "prelint": "tsc --noEmit",
     "lint.fix": "yarn lint --fix",
     "lint": "eslint --cache --cache-location .cache/ --ext=.js,.ts src test-harness",
-    "copy.html-templates": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
+    "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
     "postbuild.functions": "copyfiles -u 1 \"dist/rulesets/{oas,asyncapi}/functions/*.js\" ./",
     "postbuild": "yarn build.functions && yarn generate-assets",
     "prebuild": "yarn build.clean && copyfiles -u 1 \"src/rulesets/{oas,asyncapi}/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/{oas,asyncapi}/**/*.json\" ./ && yarn copy.html-templates",

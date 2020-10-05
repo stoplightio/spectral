@@ -1,11 +1,12 @@
-import { sortResults } from '../../utils';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { sortResults } from '../../../utils';
 import { teamcity } from '../teamcity';
 
 const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('Teamcity formatter', () => {
   test('should format messages', () => {
-    const result = teamcity(mixedErrors);
+    const result = teamcity(mixedErrors, { failSeverity: DiagnosticSeverity.Error });
     expect(result)
       .toContain(`##teamcity[inspectionType category='openapi' id='info-contact' name='info-contact' description='hint -- Info object should contain \`contact\` object.']
 ##teamcity[inspection typeId='info-contact' file='/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json' line='3' message='hint -- Info object should contain \`contact\` object.']
