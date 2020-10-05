@@ -62,7 +62,7 @@ const lintCommand: CommandModule = {
         format: {
           alias: 'f',
           description: 'formatter to use for outputting results',
-          options: formatOptions,
+          choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
         },
