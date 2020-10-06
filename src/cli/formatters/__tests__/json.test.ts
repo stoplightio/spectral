@@ -1,5 +1,6 @@
-import { IRuleResult } from '../../types';
-import { sortResults } from '../../utils';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { IRuleResult } from '../../../types';
+import { sortResults } from '../../../utils';
 import { json } from '../json';
 
 const results: IRuleResult[] = sortResults([
@@ -41,7 +42,7 @@ const results: IRuleResult[] = sortResults([
 
 describe('JSON formatter', () => {
   test('should include ranges', () => {
-    expect(JSON.parse(json(results))).toEqual([
+    expect(JSON.parse(json(results, { failSeverity: DiagnosticSeverity.Error }))).toEqual([
       expect.objectContaining({
         range: {
           start: {
@@ -70,7 +71,7 @@ describe('JSON formatter', () => {
   });
 
   test('should include message', () => {
-    expect(JSON.parse(json(results))).toEqual([
+    expect(JSON.parse(json(results, { failSeverity: DiagnosticSeverity.Error }))).toEqual([
       expect.objectContaining({
         message: 'paths./pets.get.description is not truthy',
       }),
