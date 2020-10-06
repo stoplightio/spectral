@@ -1,6 +1,6 @@
 import * as yargs from 'yargs';
 
-import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '../../../types';
 import { lint } from '../../services/linter';
 import { formatOutput, writeOutput } from '../../services/output';
@@ -150,7 +150,7 @@ describe('lint', () => {
     // needed by Node 8 (different ticking?) - can be simplified once we drop support for version 8
     await new Promise(resolve => {
       setImmediate(() => {
-        expect(formatOutput).toBeCalledWith(results, format);
+        expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
         resolve();
       });
     });
