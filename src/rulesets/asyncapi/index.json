@@ -1,11 +1,7 @@
 {
   "documentationUrl": "https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/asyncapi-rules.md",
-  "formats": [
-    "asyncapi2"
-  ],
-  "functions" : [
-    "asyncApi2PayloadValidation"
-  ],
+  "formats": ["asyncapi2"],
+  "functions": ["asyncApi2PayloadValidation"],
   "rules": {
     "asyncapi-channel-no-empty-parameter": {
       "description": "Channel path should not have empty parameter substitution pattern.",
@@ -61,14 +57,10 @@
             "type": "object",
             "properties": {
               "type": {
-                "enum": [
-                  "object"
-                ]
+                "enum": ["object"]
               }
             },
-            "required": [
-              "type"
-            ]
+            "required": ["type"]
           }
         },
         "allErrors": true
@@ -138,9 +130,7 @@
       "description": "Operation `description` must be present and non-empty string.",
       "recommended": true,
       "type": "style",
-      "given": [
-        "$.channels.*.[publish,subscribe]"
-      ],
+      "given": ["$.channels.*.[publish,subscribe]"],
       "then": {
         "field": "description",
         "function": "truthy"
@@ -151,9 +141,7 @@
       "severity": "error",
       "recommended": true,
       "type": "validation",
-      "given": [
-        "$.channels.*.[publish,subscribe]"
-      ],
+      "given": ["$.channels.*.[publish,subscribe]"],
       "then": {
         "field": "operationId",
         "function": "truthy"
@@ -163,10 +151,7 @@
       "description": "Parameter objects should have a `description`.",
       "recommended": false,
       "type": "style",
-      "given": [
-        "$.components.parameters.*",
-        "$.channels.*.parameters.*"
-      ],
+      "given": ["$.components.parameters.*", "$.channels.*.parameters.*"],
       "then": {
         "field": "description",
         "function": "truthy"
@@ -217,11 +202,7 @@
       "severity": "info",
       "recommended": true,
       "type": "validation",
-      "given": [
-        "$.components.messageTraits.*",
-        "$.components.messages.*",
-        "$.channels.*.[publish,subscribe].message"
-      ],
+      "given": ["$.components.messageTraits.*", "$.components.messages.*", "$.channels.*.[publish,subscribe].message"],
       "then": {
         "field": "schemaFormat",
         "function": "undefined"

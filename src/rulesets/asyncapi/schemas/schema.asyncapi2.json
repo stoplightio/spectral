@@ -3,11 +3,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "asyncapi2",
   "type": "object",
-  "required": [
-    "asyncapi",
-    "info",
-    "channels"
-  ],
+  "required": ["asyncapi", "info", "channels"],
   "additionalProperties": false,
   "patternProperties": {
     "^x-[\\w\\d\\.\\-\\_]+$": {
@@ -17,9 +13,7 @@
   "properties": {
     "asyncapi": {
       "type": "string",
-      "enum": [
-        "2.0.0"
-      ],
+      "enum": ["2.0.0"],
       "description": "The AsyncAPI specification version of this document."
     },
     "id": {
@@ -59,9 +53,7 @@
   "definitions": {
     "Reference": {
       "type": "object",
-      "required": [
-        "$ref"
-      ],
+      "required": ["$ref"],
       "properties": {
         "$ref": {
           "$ref": "#/definitions/ReferenceObject"
@@ -75,10 +67,7 @@
     "info": {
       "type": "object",
       "description": "General information about the API.",
-      "required": [
-        "version",
-        "title"
-      ],
+      "required": ["version", "title"],
       "additionalProperties": false,
       "patternProperties": {
         "^x-[\\w\\d\\.\\-\\_]+$": {
@@ -139,9 +128,7 @@
     },
     "license": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "additionalProperties": false,
       "properties": {
         "name": {
@@ -163,10 +150,7 @@
     "server": {
       "type": "object",
       "description": "An object representing a Server.",
-      "required": [
-        "url",
-        "protocol"
-      ],
+      "required": ["url", "protocol"],
       "additionalProperties": false,
       "patternProperties": {
         "^x-[\\w\\d\\.\\-\\_]+$": {
@@ -380,15 +364,7 @@
               ]
             },
             "simpleTypes": {
-              "enum": [
-                "array",
-                "boolean",
-                "integer",
-                "null",
-                "number",
-                "object",
-                "string"
-              ]
+              "enum": ["array", "boolean", "integer", "null", "number", "object", "string"]
             },
             "stringArray": {
               "type": "array",
@@ -399,10 +375,7 @@
               "default": []
             }
           },
-          "type": [
-            "object",
-            "boolean"
-          ],
+          "type": ["object", "boolean"],
           "properties": {
             "$id": {
               "type": "string",
@@ -694,9 +667,7 @@
       "type": "object",
       "additionalProperties": false,
       "description": "information about external documentation",
-      "required": [
-        "url"
-      ],
+      "required": ["url"],
       "properties": {
         "description": {
           "type": "string"
@@ -852,9 +823,7 @@
           "oneOf": [
             {
               "type": "object",
-              "required": [
-                "oneOf"
-              ],
+              "required": ["oneOf"],
               "additionalProperties": false,
               "properties": {
                 "oneOf": {
@@ -992,9 +961,7 @@
     },
     "correlationId": {
       "type": "object",
-      "required": [
-        "location"
-      ],
+      "required": ["location"],
       "additionalProperties": false,
       "patternProperties": {
         "^x-[\\w\\d\\.\\-\\_]+$": {
@@ -1021,9 +988,7 @@
     "tag": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "properties": {
         "name": {
           "type": "string"
@@ -1180,15 +1145,11 @@
     },
     "userPassword": {
       "type": "object",
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "userPassword"
-          ]
+          "enum": ["userPassword"]
         },
         "description": {
           "type": "string"
@@ -1203,23 +1164,15 @@
     },
     "apiKey": {
       "type": "object",
-      "required": [
-        "type",
-        "in"
-      ],
+      "required": ["type", "in"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "apiKey"
-          ]
+          "enum": ["apiKey"]
         },
         "in": {
           "type": "string",
-          "enum": [
-            "user",
-            "password"
-          ]
+          "enum": ["user", "password"]
         },
         "description": {
           "type": "string"
@@ -1234,15 +1187,11 @@
     },
     "X509": {
       "type": "object",
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "X509"
-          ]
+          "enum": ["X509"]
         },
         "description": {
           "type": "string"
@@ -1257,15 +1206,11 @@
     },
     "symmetricEncryption": {
       "type": "object",
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "symmetricEncryption"
-          ]
+          "enum": ["symmetricEncryption"]
         },
         "description": {
           "type": "string"
@@ -1280,15 +1225,11 @@
     },
     "asymmetricEncryption": {
       "type": "object",
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "asymmetricEncryption"
-          ]
+          "enum": ["asymmetricEncryption"]
         },
         "description": {
           "type": "string"
@@ -1320,17 +1261,12 @@
         "properties": {
           "scheme": {
             "type": "string",
-            "enum": [
-              "bearer"
-            ]
+            "enum": ["bearer"]
           }
         }
       },
       "type": "object",
-      "required": [
-        "scheme",
-        "type"
-      ],
+      "required": ["scheme", "type"],
       "properties": {
         "scheme": {
           "type": "string"
@@ -1340,9 +1276,7 @@
         },
         "type": {
           "type": "string",
-          "enum": [
-            "http"
-          ]
+          "enum": ["http"]
         }
       },
       "patternProperties": {
@@ -1354,25 +1288,18 @@
     },
     "BearerHTTPSecurityScheme": {
       "type": "object",
-      "required": [
-        "type",
-        "scheme"
-      ],
+      "required": ["type", "scheme"],
       "properties": {
         "scheme": {
           "type": "string",
-          "enum": [
-            "bearer"
-          ]
+          "enum": ["bearer"]
         },
         "bearerFormat": {
           "type": "string"
         },
         "type": {
           "type": "string",
-          "enum": [
-            "http"
-          ]
+          "enum": ["http"]
         },
         "description": {
           "type": "string"
@@ -1387,28 +1314,18 @@
     },
     "APIKeyHTTPSecurityScheme": {
       "type": "object",
-      "required": [
-        "type",
-        "name",
-        "in"
-      ],
+      "required": ["type", "name", "in"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "httpApiKey"
-          ]
+          "enum": ["httpApiKey"]
         },
         "name": {
           "type": "string"
         },
         "in": {
           "type": "string",
-          "enum": [
-            "header",
-            "query",
-            "cookie"
-          ]
+          "enum": ["header", "query", "cookie"]
         },
         "description": {
           "type": "string"
@@ -1423,16 +1340,11 @@
     },
     "oauth2Flows": {
       "type": "object",
-      "required": [
-        "type",
-        "flows"
-      ],
+      "required": ["type", "flows"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "oauth2"
-          ]
+          "enum": ["oauth2"]
         },
         "description": {
           "type": "string"
@@ -1446,16 +1358,11 @@
                   "$ref": "#/definitions/oauth2Flow"
                 },
                 {
-                  "required": [
-                    "authorizationUrl",
-                    "scopes"
-                  ]
+                  "required": ["authorizationUrl", "scopes"]
                 },
                 {
                   "not": {
-                    "required": [
-                      "tokenUrl"
-                    ]
+                    "required": ["tokenUrl"]
                   }
                 }
               ]
@@ -1466,16 +1373,11 @@
                   "$ref": "#/definitions/oauth2Flow"
                 },
                 {
-                  "required": [
-                    "tokenUrl",
-                    "scopes"
-                  ]
+                  "required": ["tokenUrl", "scopes"]
                 },
                 {
                   "not": {
-                    "required": [
-                      "authorizationUrl"
-                    ]
+                    "required": ["authorizationUrl"]
                   }
                 }
               ]
@@ -1486,16 +1388,11 @@
                   "$ref": "#/definitions/oauth2Flow"
                 },
                 {
-                  "required": [
-                    "tokenUrl",
-                    "scopes"
-                  ]
+                  "required": ["tokenUrl", "scopes"]
                 },
                 {
                   "not": {
-                    "required": [
-                      "authorizationUrl"
-                    ]
+                    "required": ["authorizationUrl"]
                   }
                 }
               ]
@@ -1506,11 +1403,7 @@
                   "$ref": "#/definitions/oauth2Flow"
                 },
                 {
-                  "required": [
-                    "authorizationUrl",
-                    "tokenUrl",
-                    "scopes"
-                  ]
+                  "required": ["authorizationUrl", "tokenUrl", "scopes"]
                 }
               ]
             }
@@ -1559,16 +1452,11 @@
     },
     "openIdConnect": {
       "type": "object",
-      "required": [
-        "type",
-        "openIdConnectUrl"
-      ],
+      "required": ["type", "openIdConnectUrl"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "openIdConnect"
-          ]
+          "enum": ["openIdConnect"]
         },
         "description": {
           "type": "string"

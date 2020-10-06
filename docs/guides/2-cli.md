@@ -65,21 +65,21 @@ To have requests made from Spectral be proxied through a server, you'd need to s
 
 `PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
 
-## Custom $ref Resolving
+## Custom \$ref Resolving
 
-If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
+If you want to customize \$ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
 
 ### Example
 
 Assuming the filename is called `my-resolver.js` and the content looks as follows, the path should look more or less like `--resolver=./my-resolver.js`.
 
 ```js
-const { Resolver } = require('@stoplight/json-ref-resolver');
+const { Resolver } = require("@stoplight/json-ref-resolver");
 
 module.exports = new Resolver({
   resolvers: {
     // pass any resolver for protocol you need
-  }
+  },
 });
 ```
 

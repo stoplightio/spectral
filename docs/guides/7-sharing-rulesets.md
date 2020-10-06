@@ -27,7 +27,7 @@ At its most basic level, a Spectral ruleset is just a JSON or YAML file. It can 
 
 ```yaml
 extends:
-- https://example.com/company-ruleset.yaml
+  - https://example.com/company-ruleset.yaml
 ```
 
 You can even shove them up on GitHub:
@@ -35,7 +35,7 @@ You can even shove them up on GitHub:
 ```yaml
 # why not give this one a try! 🥳
 extends:
-- https://raw.githubusercontent.com/openapi-contrib/style-guides/master/apisyouwonthate.yml
+  - https://raw.githubusercontent.com/openapi-contrib/style-guides/master/apisyouwonthate.yml
 ```
 
 As with any ruleset, you can pass these directly to the [Spectral CLI](./2-cli.md):
@@ -88,13 +88,13 @@ This is a very basic example showing how the directory structure as well as pack
 **functions/min.js**
 
 ```js
-'use strict';
+"use strict";
 
 module.exports = function (targetVal, { min }) {
-  if (typeof targetVal !== 'number') {
+  if (typeof targetVal !== "number") {
     return [
       {
-        message: 'Value is not a number.',
+        message: "Value is not a number.",
       },
     ];
   }
@@ -106,7 +106,7 @@ module.exports = function (targetVal, { min }) {
       },
     ];
   }
-}
+};
 ```
 
 Developers wanting to pull in your ruleset can just reference the module name in `extends`:

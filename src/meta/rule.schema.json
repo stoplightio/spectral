@@ -14,11 +14,11 @@
 
         {
           "if": {
-           "properties": {
-             "function": {
-               "const": "alphabetical"
-             }
-           }
+            "properties": {
+              "function": {
+                "const": "alphabetical"
+              }
+            }
           },
           "then": {
             "properties": {
@@ -180,20 +180,14 @@
                     "type": "object"
                   },
                   "oasVersion": {
-                    "enum": [
-                      2,
-                      3,
-                      3.1
-                    ],
+                    "enum": [2, 3, 3.1],
                     "type": "number"
                   },
                   "allErrors": {
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "schema"
-                ],
+                "required": ["schema"],
                 "type": "object"
               }
             }
@@ -221,20 +215,14 @@
                     "type": "string"
                   },
                   "oasVersion": {
-                    "enum": [
-                      2,
-                      3,
-                      3.1
-                    ],
+                    "enum": [2, 3, 3.1],
                     "type": "number"
                   },
                   "allErrors": {
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "schemaPath"
-                ],
+                "required": ["schemaPath"],
                 "type": "object"
               }
             }
@@ -261,9 +249,7 @@
                     "pattern": "^#"
                   }
                 },
-                "required": [
-                  "reusableObjectsLocation"
-                ],
+                "required": ["reusableObjectsLocation"],
                 "type": "object"
               }
             }
@@ -304,11 +290,7 @@
             "properties": {
               "function": {
                 "type": "string",
-                "enum": [
-                  "truthy",
-                  "falsy",
-                  "undefined"
-                ]
+                "enum": ["truthy", "falsy", "undefined"]
               }
             }
           },
@@ -342,24 +324,12 @@
       "type": "object"
     },
     "DiagnosticSeverity": {
-      "enum": [
-        -1,
-        0,
-        1,
-        2,
-        3
-      ],
+      "enum": [-1, 0, 1, 2, 3],
       "type": "number"
     },
     "HumanReadableSeverity": {
       "type": "string",
-      "enum": [
-        "error",
-        "warn",
-        "info",
-        "hint",
-        "off"
-      ]
+      "enum": ["error", "warn", "info", "hint", "off"]
     },
     "Severity": {
       "oneOf": [
@@ -430,17 +400,11 @@
           ]
         },
         "type": {
-          "enum": [
-            "style",
-            "validation"
-          ],
+          "enum": ["style", "validation"],
           "type": "string"
         }
       },
-      "required": [
-        "given",
-        "then"
-      ],
+      "required": ["given", "then"],
       "type": "object"
     },
     {
