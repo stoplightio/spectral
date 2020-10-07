@@ -41,9 +41,9 @@ Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md)
 
 ```yaml
 extends:
-- ./config/spectral.json
-- https://example.org/api/style.yaml
-- some-npm-module
+  - ./config/spectral.json
+  - https://example.org/api/style.yaml
+  - some-npm-module
 ```
 
 The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).

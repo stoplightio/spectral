@@ -1,6 +1,7 @@
 import { Parser } from 'xml2js';
-import { sortResults } from '../../utils';
+import { sortResults } from '../../../utils';
 import { junit } from '../junit';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const oas3SchemaErrors = sortResults(require('./__fixtures__/oas3-schema-errors.json'));
 const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
@@ -14,7 +15,7 @@ describe('JUnit formatter', () => {
   });
 
   test('should produce valid report', async () => {
-    const result = await parse(junit(oas3SchemaErrors));
+    const result = await parse(junit(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error }));
     expect(result).toEqual({
       testsuites: {
         testsuite: [
@@ -83,8 +84,8 @@ describe('JUnit formatter', () => {
     });
   });
 
-  test('should filter out non-error validation results', async () => {
-    const result = await parse(junit(mixedErrors));
+  test('given failSeverity set to error, should filter out non-error validation results', async () => {
+    const result = await parse(junit(mixedErrors, { failSeverity: DiagnosticSeverity.Error }));
     expect(result).toEqual({
       testsuites: {
         testsuite: [
@@ -98,6 +99,59 @@ describe('JUnit formatter', () => {
               time: '0',
             },
             testcase: [
+              {
+                $: {
+                  classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',
+                  name: 'org.spectral.info-matches-stoplight',
+                  time: '0',
+                },
+                failure: [
+                  {
+                    $: {
+                      message: 'Info must contain Stoplight',
+                    },
+                    _: 'line 5, col 14, Info must contain Stoplight (info-matches-stoplight) at path #/info/title',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+  });
+
+  test('given failSeverity set to other value than error, should filter treat all validation results matching the severity as errors', async () => {
+    const result = await parse(junit(mixedErrors, { failSeverity: DiagnosticSeverity.Warning }));
+    expect(result).toEqual({
+      testsuites: {
+        testsuite: [
+          {
+            $: {
+              errors: '0',
+              failures: '2',
+              name: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json',
+              package: 'org.spectral',
+              tests: '2',
+              time: '0',
+            },
+            testcase: [
+              {
+                $: {
+                  classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',
+                  name: 'org.spectral.info-description',
+                  time: '0',
+                },
+                failure: [
+                  {
+                    $: {
+                      message: 'OpenAPI object info `description` must be present and non-empty string.',
+                    },
+                    _:
+                      'line 3, col 10, OpenAPI object info `description` must be present and non-empty string. (info-description) at path #/info',
+                  },
+                ],
+              },
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',

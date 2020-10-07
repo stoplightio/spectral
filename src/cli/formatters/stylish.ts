@@ -28,7 +28,7 @@ import * as chalk from 'chalk';
 import stripAnsi = require('strip-ansi');
 import * as table from 'text-table';
 
-import { IRuleResult } from '../types';
+import { IRuleResult } from '../../types';
 import { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
 
@@ -42,7 +42,7 @@ function formatRange(range?: IRange): string {
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
 }
 
-function getMessageType(severity: DiagnosticSeverity) {
+function getMessageType(severity: DiagnosticSeverity): string {
   const color = getColorForSeverity(severity);
   const name = getSeverityName(severity);
 

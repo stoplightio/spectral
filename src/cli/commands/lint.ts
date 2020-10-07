@@ -62,7 +62,7 @@ const lintCommand: CommandModule = {
         format: {
           alias: 'f',
           description: 'formatter to use for outputting results',
-          options: formatOptions,
+          choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
         },
@@ -168,7 +168,7 @@ const lintCommand: CommandModule = {
         } else if (!config.quiet) {
           console.log(`No results with a severity of '${failSeverity}' or higher found!`);
         }
-        const formattedOutput = formatOutput(results, format);
+        const formattedOutput = formatOutput(results, format, { failSeverity: getDiagnosticSeverity(failSeverity) });
         return writeOutput(formattedOutput, output);
       })
       .catch(fail);

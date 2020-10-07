@@ -394,9 +394,7 @@
       "then": {
         "function": "oasOpSecurityDefined",
         "functionOptions": {
-          "schemesPath": [
-            "securityDefinitions"
-          ]
+          "schemesPath": ["securityDefinitions"]
         }
       }
     },
@@ -412,7 +410,7 @@
         "$..parameters..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
         "$..responses..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]"
       ],
-        "then": {
+      "then": {
         "function": "oasExample",
         "functionOptions": {
           "schemaField": "$",
@@ -517,17 +515,11 @@
       "recommended": true,
       "formats": ["oas3"],
       "type": "style",
-      "given": [
-        "$.paths..examples[*]",
-        "$.components..examples[*]"
-      ],
+      "given": ["$.paths..examples[*]", "$.components..examples[*]"],
       "then": {
         "function": "xor",
         "functionOptions": {
-          "properties": [
-            "externalValue",
-            "value"
-          ]
+          "properties": ["externalValue", "value"]
         }
       }
     },
@@ -540,10 +532,7 @@
       "then": {
         "function": "oasOpSecurityDefined",
         "functionOptions": {
-          "schemesPath": [
-            "components",
-            "securitySchemes"
-          ]
+          "schemesPath": ["components", "securitySchemes"]
         }
       }
     },
