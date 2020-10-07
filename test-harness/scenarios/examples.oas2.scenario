@@ -268,7 +268,7 @@ OpenAPI 2.0 (Swagger) detected
   95:26    error  oas2-valid-schema-example  `example` property should match format `date-time`
   99:26    error  oas2-valid-schema-example  `example` property should match format `url`
  106:11  warning  operation-tag-defined      Operation tags should be defined in global tags.
- 120:22    error  oas2-valid-schema-example  `x-example` property should be equal to one of the allowed values: foo, bar
+ 120:22    error  oas2-valid-schema-example  `x-example` property should be equal to one of the allowed values: `foo`, `bar`
  177:30    error  oas2-valid-media-example   `application/json` property should have required property `name`
  194:30    error  oas2-valid-media-example   `application/json` property should have required property `user`
 
