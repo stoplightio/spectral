@@ -63,7 +63,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect.objectContaining({
         code: ruleName,
         message:
-          'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: object. Did you mean object?).',
+          'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: `object`. Did you mean `object`?).',
         path: ['components', 'messages', 'aMessage', 'headers', 'type'],
         severity: rule.severity,
       }),
@@ -98,7 +98,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect.objectContaining({
         code: ruleName,
         message:
-          'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: object. Did you mean object?).',
+          'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: `object`. Did you mean `object`?).',
         path: ['components', 'messageTraits', 'aTrait', 'headers', 'type'],
         severity: rule.severity,
       }),
@@ -155,7 +155,7 @@ describe(`Rule '${ruleName}'`, () => {
         expect.objectContaining({
           code: ruleName,
           message:
-            'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: object. Did you mean object?).',
+            'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: `object`. Did you mean `object`?).',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'headers', 'type'],
           severity: rule.severity,
         }),
