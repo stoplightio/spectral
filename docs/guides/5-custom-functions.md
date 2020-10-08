@@ -1,6 +1,6 @@
 # Custom Functions
 
-If the built-in functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use your own custom functions.
+If the core functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use your own custom functions.
 
 Create a directory to contain your new functions. By default `functions/` is assumed.
 
@@ -132,9 +132,12 @@ If a particular rule has a `field` property in `then`, that path will be exposed
 
 `otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSON Path expression.
 
-`otherValues.resolved` serves for internal purposes, therefore we discourage using it in custom functions.
+`otherValues.documentInventory` provides an access to resolved and unresolved documents as well as some other advanced properties.
+You shouldn't need it for most of the time. For the list of available options, please refer to the [source code](../../src/documentInventory.ts).
 
-Custom functions take exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
+`otherValues.rule` an actual rule your function was called for.
+
+Custom functions take exactly the same arguments as core functions do, so you are more than welcome to take a look at the existing implementation.
 
 The process of creating a function involves 2 steps:
 
@@ -208,6 +211,26 @@ module.exports = (targetVal, _opts, paths) => {
 It's worth keeping in mind, Spectral will attempt to deduplicate messages when they bear the same `code` and target the same `path`.
 
 As such, when your custom function is susceptible to return more than one result, you have to specify a different `path` for each result.
+
+## Referencing core functions
+
+Your custom function may also build on top of existing functions Spectral offers.
+To reference a given core function, access `this.functions`.
+Make sure to provide all arguments that was originally passed to your function, otherwise a core function may misbehave.
+
+### Example
+
+```js
+module.exports = function (targetVal, ...args) {
+  if (targetVal.info["skip-info"] === true) {
+    // if info has a property with key called "skip-info" and its value is true, let's do nothing
+    return;
+  }
+
+  // otherwise call the truthy function
+  return this.functions.truthy(targetVal.info, ...args);
+};
+```
 
 ## Async Functions
 
