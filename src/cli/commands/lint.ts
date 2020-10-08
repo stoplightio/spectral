@@ -109,6 +109,12 @@ const lintCommand: CommandModule = {
           description: 'show unmatched glob patterns',
           type: 'boolean',
           default: false,
+          deprecated: 'use --fail-on-unmatched-globs',
+        },
+        'fail-on-unmatched-globs': {
+          description: 'fail on unmatched glob patterns',
+          type: 'boolean',
+          default: false,
         },
         verbose: {
           alias: 'v',
@@ -133,6 +139,7 @@ const lintCommand: CommandModule = {
       encoding,
       ignoreUnknownFormat,
       showUnmatchedGlobs,
+      failOnUnmatchedGlobs,
       ...config
     } = (args as unknown) as ILintConfig & {
       documents: Array<number | string>;
@@ -145,6 +152,7 @@ const lintCommand: CommandModule = {
       output,
       encoding,
       ignoreUnknownFormat,
+      failOnUnmatchedGlobs,
       showUnmatchedGlobs,
       ruleset,
       ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['skipRule', 'verbose', 'quiet', 'resolver']),
@@ -156,7 +164,7 @@ const lintCommand: CommandModule = {
         return results;
       })
       .then(results => {
-        if (results.length) {
+        if (results.length > 0) {
           process.exitCode = severeEnoughToFail(results, failSeverity) ? 1 : 0;
         } else if (!config.quiet) {
           console.log(`No results with a severity of '${failSeverity}' or higher found!`);

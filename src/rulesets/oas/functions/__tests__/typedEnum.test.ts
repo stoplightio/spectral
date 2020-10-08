@@ -1,13 +1,18 @@
 import { functions } from '../../../../functions';
 import { typedEnum } from '../typedEnum';
+import { DocumentInventory } from '../../../../documentInventory';
+import { Document } from '../../../../document';
+import * as Parsers from '../../../../parsers';
 
 function runTypedEnum(targetVal: any) {
+  const doc = new Document(JSON.stringify(targetVal), Parsers.Json);
+
   return typedEnum.call(
     { functions },
     targetVal,
     null,
     { given: ['$'] },
-    { given: null, original: null, documentInventory: {} as any, rule: {} as any },
+    { given: null, original: null, documentInventory: new DocumentInventory(doc, {} as any), rule: {} as any },
   );
 }
 
