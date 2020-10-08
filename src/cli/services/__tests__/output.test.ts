@@ -1,10 +1,10 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
-import * as formatters from '../../../formatters';
+import * as formatters from '../../formatters';
 import { OutputFormat } from '../../../types/config';
 import { formatOutput, writeOutput } from '../output';
 
-jest.mock('../../../formatters');
+jest.mock('../../formatters');
 jest.mock('fs');
 
 describe('Output service', () => {
@@ -32,7 +32,7 @@ describe('Output service', () => {
 
       const output = `value for ${format}`;
       (formatters[format] as jest.Mock).mockReturnValueOnce(output);
-      expect(formatOutput(results, format as OutputFormat)).toEqual(output);
+      expect(formatOutput(results, format as OutputFormat, { failSeverity: DiagnosticSeverity.Error })).toEqual(output);
     });
   });
 

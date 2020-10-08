@@ -43,10 +43,10 @@
     "inline-version": "node ./scripts/inline-version.js",
     "prelint": "tsc --noEmit",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
-    "lint.eslint":" eslint --cache --cache-location .cache/ --ext=.js,.ts src test-harness",
+    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.ts src test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --check {src,test-harness}/**/*.{json,yaml} docs/**/*.md README.md",
     "lint": "yarn lint.prettier && yarn lint.eslint",
-    "copy.html-templates": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
+    "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
     "postbuild.functions": "copyfiles -u 1 \"dist/rulesets/{oas,asyncapi}/functions/*.js\" ./",
     "postbuild": "yarn build.functions && yarn generate-assets",
     "prebuild": "yarn build.clean && copyfiles -u 1 \"src/rulesets/{oas,asyncapi}/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/{oas,asyncapi}/**/*.json\" ./ && yarn copy.html-templates",
@@ -62,7 +62,7 @@
     "test": "jest --silent"
   },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "0.0.0",
+    "@stoplight/better-ajv-errors": "0.0.3",
     "@stoplight/json": "3.9.0",
     "@stoplight/json-ref-readers": "1.2.1",
     "@stoplight/json-ref-resolver": "3.1.0",
