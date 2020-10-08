@@ -109,6 +109,7 @@ const lintCommand: CommandModule = {
           description: 'show unmatched glob patterns',
           type: 'boolean',
           default: false,
+          deprecated: 'use --fail-on-unmatched-globs',
         },
         'fail-on-unmatched-globs': {
           description: 'fail on unmatched glob patterns',
