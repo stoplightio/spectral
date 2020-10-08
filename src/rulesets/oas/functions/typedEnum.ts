@@ -17,7 +17,20 @@ export const typedEnum: IFunction = function (this: IFunctionContext, targetVal,
     return;
   }
 
-  const innerSchema = { type: initialSchema.type, enum: initialSchema.enum };
+  const isOAS3 = otherValues.documentInventory.document.formats?.includes('oas3') === true;
+
+  let innerSchema;
+  if (isOAS3 && targetVal.nullable === true) {
+    const type = Array.isArray(initialSchema.type) ? [...initialSchema.type] : [initialSchema.type];
+    if (!type.includes('null')) {
+      type.push('null');
+    }
+
+    innerSchema = { type, enum: initialSchema.enum };
+  } else {
+    innerSchema = { type: initialSchema.type, enum: initialSchema.enum };
+  }
+
   const schemaObject = { schema: innerSchema };
 
   const incorrectValues: Array<{ index: number; val: unknown }> = [];
