@@ -24,13 +24,12 @@
  */
 
 import { extname } from '@stoplight/path';
-import { DiagnosticSeverity } from '@stoplight/types';
 import { escapeRegExp } from 'lodash';
-import { printPath, PrintStyle } from '../utils';
+import { printPath, PrintStyle } from '../../utils';
 import { Formatter } from './types';
 import { groupBySource, xmlEscape } from './utils';
 
-export const junit: Formatter = results => {
+export const junit: Formatter = (results, { failSeverity }) => {
   let output = '';
 
   output += '<?xml version="1.0" encoding="utf-8"?>\n';
@@ -42,9 +41,7 @@ export const junit: Formatter = results => {
     const classname = source.replace(new RegExp(`${escapeRegExp(extname(source))}$`), '');
 
     if (validationResults.length > 0) {
-      const filteredValidationResults = validationResults.filter(
-        result => result.severity === DiagnosticSeverity.Error,
-      );
+      const filteredValidationResults = validationResults.filter(result => result.severity <= failSeverity);
 
       output += `<testsuite package="org.spectral" time="0" tests="${filteredValidationResults.length}" errors="0" failures="${filteredValidationResults.length}" name="${source}">\n`;
 

@@ -24,13 +24,14 @@ Other options include:
   --version                    Show version number                                          [boolean]
   --help                       Show help                                                    [boolean]
   --encoding, -e               text encoding to use                        [string] [default: "utf8"]
-  --format, -f                 formatter to use for outputting results  [string] [default: "stylish"]
+  --format, -f                 formatter to use for outputting results
+      [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity"] [default: "stylish"]
   --output, -o                 output to a file instead of stdout                            [string]
   --resolver                   path to custom json-ref-resolver instance                     [string]
   --ruleset, -r                path/URL to a ruleset file                                    [string]
   --skip-rule, -s              ignore certain rules if they are causing trouble              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
-                                [string] [choices: "error", "warn", "info", "hint"] [default: "warn"]
+                               [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
                                                                            [boolean] [default: false]
   --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
@@ -64,21 +65,21 @@ To have requests made from Spectral be proxied through a server, you'd need to s
 
 `PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
 
-## Custom $ref Resolving
+## Custom \$ref Resolving
 
-If you want to customize $ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
+If you want to customize \$ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
 
 ### Example
 
 Assuming the filename is called `my-resolver.js` and the content looks as follows, the path should look more or less like `--resolver=./my-resolver.js`.
 
 ```js
-const { Resolver } = require('@stoplight/json-ref-resolver');
+const { Resolver } = require("@stoplight/json-ref-resolver");
 
 module.exports = new Resolver({
   resolvers: {
     // pass any resolver for protocol you need
-  }
+  },
 });
 ```
 
