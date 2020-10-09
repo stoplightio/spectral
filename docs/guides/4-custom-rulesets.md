@@ -188,6 +188,21 @@ In this example, violations of the `tag-description` rule would indicate `https:
 
 If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
 
+If you wish to override a documentation URL for a particular rule, you can do so by specifying `documentationUrl`.
+
+```yaml
+extends: spectral:oas
+documentationUrl: https://www.example.com/docs/api-ruleset.md
+rules:
+  tag-description:
+    description: Please provide a description for each tag.
+    documentationUrl: https://www.example.com/docs/tag-description.md
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+```
+
 ## Core Functions
 
 Several functions [are provided by default](../reference/functions.md) for your rules.
