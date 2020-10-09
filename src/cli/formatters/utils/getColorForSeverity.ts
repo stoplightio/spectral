@@ -7,6 +7,6 @@ const SEVERITY_COLORS = {
   [DiagnosticSeverity.Hint]: 'white',
 };
 
-export function getColorForSeverity(severity: DiagnosticSeverity) {
+export function getColorForSeverity(severity: DiagnosticSeverity): string {
   return SEVERITY_COLORS[severity];
 }

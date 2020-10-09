@@ -81,6 +81,6 @@ export const compareResults = (left: IRuleResult, right: IRuleResult): -1 | 0 | 
   return normalize(diffPath);
 };
 
-export const sortResults = (results: IRuleResult[]) => {
+export const sortResults = (results: IRuleResult[]): IRuleResult[] => {
   return [...results].sort(compareResults);
 };

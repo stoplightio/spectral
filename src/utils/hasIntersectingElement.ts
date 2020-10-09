@@ -1,1 +1,2 @@
-export const hasIntersectingElement = (left: unknown[], right: unknown[]) => left.some(item => right.includes(item));
+export const hasIntersectingElement = (left: unknown[], right: unknown[]): boolean =>
+  left.some(item => right.includes(item));

@@ -4,7 +4,7 @@ import { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { startsWithProtocol } from './startsWithProtocol';
 
-export const isAbsoluteRef = (ref: string) => isAbsolute(ref) || startsWithProtocol(ref);
+export const isAbsoluteRef = (ref: string): boolean => isAbsolute(ref) || startsWithProtocol(ref);
 
 export const traverseObjUntilRef = (obj: unknown, path: JsonPath): string | null => {
   let piece: unknown = obj;
@@ -42,10 +42,10 @@ export const getEndRef = (refMap: Dictionary<string>, $ref: string): string => {
 
 export const safePointerToPath = (pointer: string): JsonPath => {
   const rawPointer = extractPointerFromRef(pointer);
-  return rawPointer ? pointerToPath(rawPointer) : [];
+  return rawPointer !== null ? pointerToPath(rawPointer) : [];
 };
 
-export const getClosestJsonPath = (data: unknown, path: JsonPath) => {
+export const getClosestJsonPath = (data: unknown, path: JsonPath): JsonPath => {
   const closestPath: JsonPath = [];
 
   if (!isObject(data)) return closestPath;

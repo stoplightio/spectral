@@ -1,6 +1,6 @@
 import { Dictionary } from '@stoplight/types';
 
-function resolveSpectralRuleset(ruleset: string) {
+function resolveSpectralRuleset(ruleset: string): string {
   return `@stoplight/spectral/rulesets/${ruleset}/index.json`;
 }
 

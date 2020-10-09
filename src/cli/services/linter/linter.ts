@@ -18,7 +18,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   for (const [format, lookup, prettyName] of KNOWN_FORMATS) {
     spectral.registerFormat(format, document => {
       if (lookup(document)) {
-        if (!flags.quiet) {
+        if (flags.quiet !== true) {
           console.log(`${prettyName} detected`);
         }
 
@@ -29,7 +29,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     });
   }
 
-  if (flags.verbose) {
+  if (flags.verbose === true) {
     if (ruleset) {
       const rules = Object.values(spectral.rules);
       console.info(`Found ${rules.length} rules (${rules.filter(rule => rule.enabled).length} enabled)`);
@@ -38,7 +38,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     }
   }
 
-  if (flags.skipRule) {
+  if (flags.skipRule !== void 0) {
     spectral.setRules(skipRules(ruleset.rules, flags));
   }
 

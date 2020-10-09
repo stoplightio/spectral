@@ -1,7 +1,7 @@
-import fetch, { RequestInit } from 'node-fetch';
+import fetch, { RequestInit, Response } from 'node-fetch';
 
 export const DEFAULT_REQUEST_OPTIONS: RequestInit = {};
 
-export default async (uri: string, opts: RequestInit = {}) => {
+export default async (uri: string, opts: RequestInit = {}): Promise<Response> => {
   return fetch(uri, { ...opts, ...DEFAULT_REQUEST_OPTIONS });
 };

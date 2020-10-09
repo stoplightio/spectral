@@ -1,4 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import { isObject } from 'lodash';
 import { HumanReadableDiagnosticSeverity, IRule, IThen } from '../../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
@@ -59,7 +60,7 @@ function getRootRule(rule: IRule): IRule | null {
 function copyRuleThen(then: IThen): IThen {
   return {
     ...then,
-    ...('functionOptions' in then ? { ...then.functionOptions } : null),
+    ...('functionOptions' in then && isObject(then.functionOptions) ? { ...then.functionOptions } : null),
   };
 }
 

@@ -23,9 +23,9 @@ export class RunnerRuntime extends EventEmitter<SpectralEvents> {
     return proxy;
   }
 
-  public revoke() {
+  public revoke(): void {
     let revokable;
-    // tslint:disable-next-line:no-conditional-assignment
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     while ((revokable = this.revokables.shift())) {
       revokable();
     }

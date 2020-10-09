@@ -117,7 +117,7 @@ export class Runner {
     const optimizedUnresolvedRules: OptimizedRule[] = [];
     const unoptimizedRules: Rule[] = [];
 
-    const traverseCb = (rule: OptimizedRule, node: IGivenNode) => {
+    const traverseCb = (rule: OptimizedRule, node: IGivenNode): void => {
       lintNode(runnerContext, node, rule, exceptRuleByLocations[rule.name]);
     };
 
