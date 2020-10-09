@@ -101,7 +101,7 @@ describe('Rulesets reader', () => {
     );
   });
 
-  it('given ruleset  with no custom rules extending other rulesets', async () => {
+  it('given ruleset with no custom rules extending other rulesets', async () => {
     const { rules } = await readRuleset(extendsOnlyRuleset);
 
     expect(rules).toEqual({
@@ -145,6 +145,7 @@ describe('Rulesets reader', () => {
           oasRules[name] = {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
+            documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
             ...(rule.severity === void 0 && { severity: DiagnosticSeverity.Warning }),
             ...(rule.recommended === void 0 && { recommended: true }),
             then: expect.any(Object),
@@ -172,6 +173,7 @@ describe('Rulesets reader', () => {
             rules[name] = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
+              documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
               ...(rule.severity === undefined && { severity: DiagnosticSeverity.Warning }),
               ...(rule.recommended === false && { severity: -1 }),
               ...(rule.recommended === void 0 && { recommended: true }),
@@ -213,6 +215,7 @@ describe('Rulesets reader', () => {
             const formattedRule: IRule = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
+              documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
               ...(rule.severity === void 0 && { severity: DiagnosticSeverity.Warning }),
               ...(rule.recommended === false && { severity: -1 }),
               ...(rule.recommended === void 0 && { recommended: true }),
@@ -298,6 +301,7 @@ describe('Rulesets reader', () => {
       'rules.operation-success-response',
       {
         description: 'should be overridden',
+        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
         given: '$.info',
         formats: expect.arrayContaining([expect.any(String)]),
         recommended: true,
@@ -317,6 +321,7 @@ describe('Rulesets reader', () => {
         formats: expect.arrayContaining([expect.any(String)]),
         severity: -1,
         description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
         then: expect.any(Object),
         type: 'validation',
       },
@@ -921,6 +926,31 @@ describe('Rulesets reader', () => {
           },
         },
         type: 'style',
+      },
+    });
+  });
+
+  it('should respect documentationUrl', async () => {
+    const ruleset = await readRuleset(path.join(__dirname, './__fixtures__/documentation-url-ruleset.json'));
+
+    expect(ruleset.rules).toStrictEqual({
+      'foo-rule': {
+        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+        given: '',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: '',
+        },
+      },
+      'bar-rule': {
+        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/bar-rule.md',
+        given: '',
+        recommended: true,
+        severity: DiagnosticSeverity.Warning,
+        then: {
+          function: '',
+        },
       },
     });
   });

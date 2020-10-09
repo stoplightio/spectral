@@ -6,6 +6,8 @@ export interface IRule<T = string, O = any> {
 
   formats?: string[];
 
+  documentationUrl?: string;
+
   // A meaningful feedback about the error
   message?: string;
 
