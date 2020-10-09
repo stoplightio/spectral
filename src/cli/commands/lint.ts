@@ -62,7 +62,7 @@ const lintCommand: CommandModule = {
         format: {
           alias: 'f',
           description: 'formatter to use for outputting results',
-          options: formatOptions,
+          choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
         },
@@ -109,6 +109,12 @@ const lintCommand: CommandModule = {
           description: 'show unmatched glob patterns',
           type: 'boolean',
           default: false,
+          deprecated: 'use --fail-on-unmatched-globs',
+        },
+        'fail-on-unmatched-globs': {
+          description: 'fail on unmatched glob patterns',
+          type: 'boolean',
+          default: false,
         },
         verbose: {
           alias: 'v',
@@ -133,6 +139,7 @@ const lintCommand: CommandModule = {
       encoding,
       ignoreUnknownFormat,
       showUnmatchedGlobs,
+      failOnUnmatchedGlobs,
       ...config
     } = (args as unknown) as ILintConfig & {
       documents: Array<number | string>;
@@ -145,6 +152,7 @@ const lintCommand: CommandModule = {
       output,
       encoding,
       ignoreUnknownFormat,
+      failOnUnmatchedGlobs,
       showUnmatchedGlobs,
       ruleset,
       ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['skipRule', 'verbose', 'quiet', 'resolver']),
@@ -161,7 +169,7 @@ const lintCommand: CommandModule = {
         } else if (config.quiet !== true) {
           console.log(`No results with a severity of '${failSeverity}' or higher found!`);
         }
-        const formattedOutput = formatOutput(results, format);
+        const formattedOutput = formatOutput(results, format, { failSeverity: getDiagnosticSeverity(failSeverity) });
         return writeOutput(formattedOutput, output);
       })
       .catch(fail);

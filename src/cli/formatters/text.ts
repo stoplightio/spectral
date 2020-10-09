@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import { IRuleResult } from '../types';
+import { IRuleResult } from '../../types';
 import { Formatter } from './types';
 import { getSeverityName, groupBySource } from './utils';
 

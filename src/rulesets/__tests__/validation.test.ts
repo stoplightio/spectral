@@ -33,6 +33,20 @@ describe('Ruleset Validation', () => {
 
   it.each([false, 2, null, 'foo', '12.foo.com'])('given invalid %s documentationUrl, throws', documentationUrl => {
     expect(assertValidRuleset.bind(null, { documentationUrl, rules: {} })).toThrow(ValidationError);
+
+    expect(
+      assertValidRuleset.bind(null, {
+        rules: {
+          rule: {
+            documentationUrl,
+            given: '',
+            then: {
+              function: '',
+            },
+          },
+        },
+      }),
+    ).toThrow(ValidationError);
   });
 
   it('recognizes valid documentationUrl', () => {
@@ -40,6 +54,20 @@ describe('Ruleset Validation', () => {
       assertValidRuleset.bind(null, {
         documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
         extends: ['spectral:oas'],
+      }),
+    ).not.toThrow();
+
+    expect(
+      assertValidRuleset.bind(null, {
+        rules: {
+          rule: {
+            documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+            given: '',
+            then: {
+              function: '',
+            },
+          },
+        },
       }),
     ).not.toThrow();
   });

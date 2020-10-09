@@ -27,7 +27,7 @@ import { Dictionary } from '@stoplight/types';
 import * as eol from 'eol';
 import * as fs from 'fs';
 import { template } from 'lodash';
-import { IRuleResult } from '../../types';
+import { IRuleResult } from '../../../types';
 import { Formatter } from '../types';
 import { getHighestSeverity, getSeverityName, getSummary, getSummaryForSource, groupBySource } from '../utils';
 

@@ -42,11 +42,20 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     spectral.setRules(skipRules(ruleset.rules, flags));
   }
 
-  const [targetUris, unmatchedPatterns] = await listFiles(documents, !flags.showUnmatchedGlobs);
+  const [targetUris, unmatchedPatterns] = await listFiles(
+    documents,
+    !(flags.showUnmatchedGlobs || flags.failOnUnmatchedGlobs),
+  );
   const results: IRuleResult[] = [];
 
-  for (const unmatchedPattern of unmatchedPatterns) {
-    console.log(`Glob pattern \`${unmatchedPattern}\` did not match any files`);
+  if (unmatchedPatterns.length > 0) {
+    if (flags.failOnUnmatchedGlobs) {
+      throw new Error(`Unmatched glob patterns: \`${unmatchedPatterns.join(',')}\``);
+    }
+
+    for (const unmatchedPattern of unmatchedPatterns) {
+      console.log(`Glob pattern \`${unmatchedPattern}\` did not match any files`);
+    }
   }
 
   for (const targetUri of targetUris) {

@@ -91,7 +91,7 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
 
       for (const exampleKey of Object.keys(value)) {
         const exampleValue = value[exampleKey];
-        if (keyed && !isObject(exampleValue)) {
+        if (opts.oasVersion === 3 && keyed && (!isObject(exampleValue) || 'externalValue' in exampleValue)) {
           // should be covered by oas3-examples-value-or-externalValue
           continue;
         }

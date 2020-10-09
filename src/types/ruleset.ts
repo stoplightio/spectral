@@ -22,7 +22,6 @@ export type RulesetFunctionCollection = Dictionary<IRulesetFunctionDefinition, s
 export type RulesetExceptionCollection = Dictionary<string[], string>;
 
 export interface IRuleset {
-  documentationUrl?: string;
   rules: RuleCollection;
   functions: RulesetFunctionCollection;
   exceptions: RulesetExceptionCollection;

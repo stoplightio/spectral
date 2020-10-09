@@ -28,7 +28,7 @@ import * as chalk from 'chalk';
 import stripAnsi = require('strip-ansi');
 import * as table from 'text-table';
 
-import { IRuleResult } from '../types';
+import { IRuleResult } from '../../types';
 import { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
 
