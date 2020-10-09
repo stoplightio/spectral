@@ -7,6 +7,6 @@ const SEVERITY_NAMES: Dictionary<string, DiagnosticSeverity> = {
   [DiagnosticSeverity.Hint]: 'hint',
 };
 
-export function getSeverityName(severity: DiagnosticSeverity) {
+export function getSeverityName(severity: DiagnosticSeverity): string {
   return SEVERITY_NAMES[severity];
 }

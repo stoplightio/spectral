@@ -11,7 +11,7 @@ const writeFileAsync = promisify(fs.writeFile);
 
 const spectralBin = path.join(__dirname, '../binaries/spectral');
 const cwd = path.join(__dirname, './scenarios');
-const files = process.env.TESTS ? String(process.env.TESTS).split(',') : fg.sync('**/*.scenario', { cwd });
+const files = process.env.TESTS !== void 0 ? String(process.env.TESTS).split(',') : fg.sync('**/*.scenario', { cwd });
 
 describe('cli acceptance tests', () => {
   describe.each(files)('%s file', file => {
@@ -35,7 +35,7 @@ describe('cli acceptance tests', () => {
         scenario.assets.map(async ([asset]) => {
           const ext = path.extname(asset);
           const tmpFileHandle = await tmpFile({
-            ...(ext && { postfix: ext }),
+            ...(ext !== void 0 ? { postfix: ext } : null),
           });
 
           tmpFileHandles.set(asset, tmpFileHandle);
@@ -76,7 +76,7 @@ describe('cli acceptance tests', () => {
 
       if (expectedStderr !== void 0) {
         expect(stderr).toEqual(normalizeLineEndings(expectedStderr));
-      } else if (stderr) {
+      } else if (stderr !== '') {
         throw new Error(stderr);
       }
 
