@@ -348,6 +348,10 @@
         "description": {
           "type": "string"
         },
+        "documentationUrl": {
+          "type": "string",
+          "format": "url"
+        },
         "recommended": {
           "type": "boolean"
         },
