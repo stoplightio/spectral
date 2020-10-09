@@ -182,5 +182,22 @@ describe('typed-enum', () => {
 
       expect(results).toEqual([]);
     });
+
+    test('supports x-nullable', async () => {
+      const doc = {
+        swagger: '2.0.0',
+        definitions: {
+          Test: {
+            type: 'string',
+            'x-nullable': true,
+            enum: ['OK', 'FAILED', null],
+          },
+        },
+      };
+
+      const results = await s.run(doc);
+
+      expect(results).toEqual([]);
+    });
   });
 });

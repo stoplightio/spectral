@@ -1,0 +1,25 @@
+diff --git a/node_modules/ajv/lib/ajv.d.ts b/ajv.d.ts
+index cc2881b3..a5ef48ce 100644
+--- a/node_modules/ajv/lib/ajv.d.ts
++++ b/node_modules/ajv/lib/ajv.d.ts
+@@ -201,6 +201,7 @@ declare namespace ajv {
+     cache?: object;
+     logger?: CustomLogger | false;
+     nullable?: boolean;
++    xNullable?: boolean;
+     serialize?: ((schema: object | boolean) => any) | false;
+   }
+
+diff --git a/node_modules/ajv/lib/dotjs/validate.js b/node_modules/ajv/lib/dotjs/validate.j
+index f295824b..672f7859 100644
+--- a/node_modules/ajv/lib/dotjs/validate.js
++++ b/node_modules/ajv/lib/dotjs/validate.js
+@@ -115,7 +115,7 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
+   var $errorKeyword;
+   var $typeSchema = it.schema.type,
+     $typeIsArray = Array.isArray($typeSchema);
+-  if ($typeSchema && it.opts.nullable && it.schema.nullable === true) {
++  if ($typeSchema && (it.opts.nullable && it.schema.nullable === true) || (it.opts.xNullable && it.schema['x-nullable'] === true)) {
+     if ($typeIsArray) {
+       if ($typeSchema.indexOf('null') == -1) $typeSchema = $typeSchema.concat('null');
+     } else if ($typeSchema != 'null') {
