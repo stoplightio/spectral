@@ -173,6 +173,26 @@ describe('oas3-valid-media-example', () => {
       ]);
     });
 
+    test('ignores externalValue', async () => {
+      const results = await s.run({
+        openapi: '3.0.0',
+        [path]: {
+          xoxo: {
+            schema: {
+              type: 'string',
+            },
+            examples: {
+              test1: {
+                externalValue: 'http://example.com/foobar.json',
+              },
+            },
+          },
+        },
+      });
+
+      expect(results).toEqual([]);
+    });
+
     test('does not report example mismatches for unknown AJV formats', async () => {
       const results = await s.run({
         openapi: '3.0.0',
