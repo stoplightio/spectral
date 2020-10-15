@@ -56,6 +56,7 @@ function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV
     jsonPointers: true,
     unknownFormats: 'ignore',
     nullable: oasVersion === 3, // Support nullable for OAS3
+    xNullable: oasVersion === 2, // Support x-nullable for OAS2
     logger,
   };
 
@@ -117,7 +118,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
     return [
       {
         path,
-        message: `{{property|gravis|append-property}}does not exist`,
+        message: `#{{print("property")}}does not exist`,
       },
     ];
   }

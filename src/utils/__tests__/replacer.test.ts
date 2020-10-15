@@ -2,6 +2,10 @@ import { Dictionary } from '@stoplight/types';
 import { Replacer } from '../replacer';
 
 describe('Replacer', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('interpolates correctly', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
     const template = 'oops... "{{property}}" is missing;error: {{error}}';
@@ -53,16 +57,47 @@ describe('Replacer', () => {
     ).toEqual('missing :(');
   });
 
-  it('supports transformers', () => {
+  it('evaluates expressions', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
-    replacer.addTransformer('dot', (id, value) => (Array.isArray(value) ? value.join('.') : String(value)));
 
-    const template = '{{path|dot}}';
+    const template = "#{{path[1] + '-' + path[2].toUpperCase()}}";
+
+    expect(
+      replacer.print(template, {
+        path: ['foo', 'bar', '/a'],
+      }),
+    ).toEqual('bar-/A');
+  });
+
+  it('supports custom functions', () => {
+    const replacer = new Replacer<Dictionary<unknown>>(2);
+    replacer.addFunction('printPath', function () {
+      const { path } = this;
+      return Array.isArray(path) ? path.join('.') : String(path);
+    });
+
+    const template = '#{{printPath()}}';
 
     expect(
       replacer.print(template, {
         path: ['foo', 'bar', '/a'],
       }),
     ).toEqual('foo.bar./a');
+  });
+
+  it('handles and prints out exceptions thrown during evaluation', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      // no-op
+    });
+
+    const replacer = new Replacer<Dictionary<unknown>>(2);
+    const template = 'value is: #{{value.name}}';
+
+    expect(
+      replacer.print(template, {
+        value: null,
+      }),
+    ).toEqual('value is: ');
+    expect(warnSpy).toBeCalledWith(new TypeError("Cannot read property 'name' of null"));
   });
 });

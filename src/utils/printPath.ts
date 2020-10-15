@@ -7,12 +7,12 @@ export enum PrintStyle {
   EscapedPointer = 'escapedPointer',
 }
 
-const isNumeric = (input: Segment) => typeof input === 'number' || !Number.isNaN(Number(input));
-const hasWhitespace = (input: string) => /\s/.test(input);
-const safeDecodePointerFragment = (segment: Segment) =>
+const isNumeric = (input: Segment): boolean => typeof input === 'number' || !Number.isNaN(Number(input));
+const hasWhitespace = (input: string): boolean => /\s/.test(input);
+const safeDecodePointerFragment = (segment: Segment): Segment =>
   typeof segment === 'number' ? segment : decodePointerFragment(segment);
 
-const printDotBracketsSegment = (segment: Segment) => {
+const printDotBracketsSegment = (segment: Segment): string | null => {
   if (typeof segment === 'number') {
     return `[${segment}]`;
   }
@@ -32,13 +32,13 @@ const printDotBracketsSegment = (segment: Segment) => {
   return null;
 };
 
-const pathToDotString = (path: JsonPath) =>
+const pathToDotString = (path: JsonPath): string =>
   path.reduce<string>(
     (output, segment, index) => `${output}${printDotBracketsSegment(segment) ?? `${index === 0 ? '' : '.'}${segment}`}`,
     '',
   );
 
-export const printPath = (path: JsonPath, style: PrintStyle) => {
+export const printPath = (path: JsonPath, style: PrintStyle): string => {
   switch (style) {
     case PrintStyle.Dot:
       return decodePointerFragment(pathToDotString(path));

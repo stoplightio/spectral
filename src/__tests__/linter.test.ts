@@ -573,6 +573,37 @@ describe('linter', () => {
     expect(result).toEqual([]);
   });
 
+  test('should accept format lookup by source', async () => {
+    spectral.registerFormat('foo-bar', (_, source) => source === '/foo/bar');
+
+    spectral.setRules({
+      rule1: {
+        given: '$.x',
+        formats: ['foo-bar'],
+        severity: 'error',
+        then: {
+          function: 'truthy',
+        },
+      },
+      rule2: {
+        given: '$.y',
+        formats: [],
+        severity: 'warn',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
+
+    const result = await spectral.run(new Document(`x: false\ny: ''`, Parsers.Yaml, '/foo/bar'));
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+      }),
+    ]);
+  });
+
   test('should include parser diagnostics', async () => {
     const responses = `
 responses:: !!foo
@@ -981,7 +1012,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'A parameter in the header should be written in kebab-case',
-          message: '{{value|to-string}} is not kebab-cased: {{error}}',
+          message: '#{{print("value")}} is not kebab-cased: {{error}}',
           given: "$..parameters[?(@.in === 'header')]",
           then: {
             field: 'name',
@@ -1032,7 +1063,7 @@ responses:: !!foo
           severity: DiagnosticSeverity.Error,
           recommended: true,
           description: 'Should be falsy',
-          message: 'Value {{value|to-string}} should be falsy',
+          message: 'Value #{{print("value")}} should be falsy',
           given: '$..empty',
           then: {
             function: 'falsy',

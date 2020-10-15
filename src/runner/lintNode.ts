@@ -113,7 +113,7 @@ function processTargetResults(
 
     const vars: IMessageVars = {
       property:
-        associatedItem?.missingPropertyPath && associatedItem.missingPropertyPath.length > path.length
+        associatedItem?.missingPropertyPath !== void 0 && associatedItem.missingPropertyPath.length > path.length
           ? printPath(associatedItem.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)
           : path.length > 0
           ? path[path.length - 1]
@@ -133,7 +133,7 @@ function processTargetResults(
       message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
       path,
       severity: getDiagnosticSeverity(rule.severity),
-      ...(source !== null && { source }),
+      ...(source !== null ? { source } : null),
       range,
     });
   }

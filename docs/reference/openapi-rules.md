@@ -143,7 +143,7 @@ Examples can contain Markdown so you can really go to town with them, implementi
 ```yaml
 openapi: 3.0.0
 info:
-  version: '1.0.0'
+  version: "1.0.0"
   title: Descriptive API
   description: >+
     Some description about the general point of this API, and why it exists when another similar but different API also exists.
@@ -188,7 +188,7 @@ info:
     url: https://www.tldrlegal.com/l/mit
 ```
 
-### no-$ref-siblings
+### no-\$ref-siblings
 
 An object exposing a `$ref` property cannot be further extended with additional properties.
 
@@ -242,16 +242,16 @@ OpenAPI object should have alphabetical `tags`. This will be sorted by the `name
 
 ```yaml
 tags:
-  - name: 'Badger'
-  - name: 'Aardvark'
+  - name: "Badger"
+  - name: "Aardvark"
 ```
 
 **Good Example**
 
 ```yaml
 tags:
-  - name: 'Aardvark'
-  - name: 'Badger'
+  - name: "Aardvark"
+  - name: "Badger"
 ```
 
 ### openapi-tags
@@ -264,7 +264,7 @@ Why? Well, you _can_ reference tags arbitrarily in operations, and definition is
 /invoices/{id}/items:
   get:
     tags:
-    - Invoice Items
+      - Invoice Items
 ```
 
 Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
@@ -340,9 +340,9 @@ Tags alone are not very descriptive. Give folks a bit more information to work w
 
 ```yaml
 tags:
-  - name: 'Aardvark'
+  - name: "Aardvark"
     description: Funny nosed pig-head racoon.
-  - name: 'Badger'
+  - name: "Badger"
     description: Angry short-legged omnivores.
 ```
 
@@ -391,7 +391,7 @@ TheBadModel:
       enum:
         - 1
         - 2
-        - 'a string!'
+        - "a string!"
         - 8
 ```
 
@@ -488,7 +488,7 @@ OpenAPI `servers` must be present and non-empty array.
 
 Share links to any and all servers that people might care about. If this is going to be given to internal people then usually that is localhost (so they know the right port number), staging, and production.
 
-``` yaml
+```yaml
 servers:
   - url: https://example.com/api
     description: Production server
@@ -515,12 +515,12 @@ paths:
       operationId: "replace-pet"
       requestBody:
         content:
-          'application/json':
+          "application/json":
             examples:
               foo:
                 summary: A foo example
-                value: {"foo": "bar"}
-                externalValue: 'http://example.org/foo.json'
+                value: { "foo": "bar" }
+                externalValue: "http://example.org/foo.json"
                 # marp! no, can only have one or the other
 ```
 
@@ -538,7 +538,7 @@ Server URL should not point at example.com.
 
 **Bad Example**
 
-``` yaml
+```yaml
 servers:
   - url: https://example.com/api
     description: Production server
@@ -560,7 +560,7 @@ Some tooling forgets to strip trailing slashes off when it's joining the `server
 
 **Good Example**
 
-``` yaml
+```yaml
 servers:
   - url: https://example.com
   - url: https://example.com/api
@@ -568,7 +568,7 @@ servers:
 
 **Bad Example**
 
-``` yaml
+```yaml
 servers:
   - url: https://example.com/
   - url: https://example.com/api/

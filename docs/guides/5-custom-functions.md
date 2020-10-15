@@ -1,14 +1,14 @@
 # Custom Functions
 
-If the built-in functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use your own custom functions.
+If the core functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use your own custom functions.
 
 Create a directory to contain your new functions. By default `functions/` is assumed.
 
 **functions/abc.js**
 
 ```js
-module.exports = (targetVal) => {
-  if (targetVal !== 'hello') {
+module.exports = targetVal => {
+  if (targetVal !== "hello") {
     return [
       {
         message: 'Value must equal "hello".',
@@ -48,12 +48,7 @@ If the message was goodbye, we'd have a problem.
 A custom function might be any JavaScript function compliant with [IFunction](https://github.com/stoplightio/spectral/blob/90a0864863fa232bf367a26dace61fd9f93198db/src/types/function.ts#L3#L8) type.
 
 ```ts
-export type IFunction<O = any> = (
-  targetValue: any,
-  options: O,
-  paths: IFunctionPaths,
-  otherValues: IFunctionValues,
-) => void | IFunctionResult[];
+export type IFunction<O = any> = (targetValue: any, options: O, paths: IFunctionPaths, otherValues: IFunctionValues) => void | IFunctionResult[];
 ```
 
 ### Validating options
@@ -123,7 +118,7 @@ operation-id-kebab-case:
   given: "$"
   then:
     function: pattern
-    functionOptions:  # this object be passed down as options to the custom function
+    functionOptions: # this object be passed down as options to the custom function
       match: ^[a-z][a-z0-9\-]*$
 ```
 
@@ -137,9 +132,12 @@ If a particular rule has a `field` property in `then`, that path will be exposed
 
 `otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSON Path expression.
 
-`otherValues.resolved` serves for internal purposes, therefore we discourage using it in custom functions.
+`otherValues.documentInventory` provides an access to resolved and unresolved documents as well as some other advanced properties.
+You shouldn't need it for most of the time. For the list of available options, please refer to the [source code](../../src/documentInventory.ts).
 
-Custom functions take exactly the same arguments as built-in functions do, so you are more than welcome to take a look at the existing implementation.
+`otherValues.rule` an actual rule your function was called for.
+
+Custom functions take exactly the same arguments as core functions do, so you are more than welcome to take a look at the existing implementation.
 
 The process of creating a function involves 2 steps:
 
@@ -173,48 +171,66 @@ rules:
 **functions/uniqueTagNames.js**
 
 ```js
-const NAME_PROPERTY = 'name';
+const NAME_PROPERTY = "name";
 
 module.exports = (targetVal, _opts, paths) => {
-    if (!Array.isArray(targetVal)) {
-        return;
+  if (!Array.isArray(targetVal)) {
+    return;
+  }
+
+  const seen = [];
+  const results = [];
+
+  const rootPath = paths.target !== void 0 ? paths.target : paths.given;
+
+  for (let i = 0; i < targetVal.length; i++) {
+    if (targetVal[i] === null || typeof targetVal[i] !== "object") {
+      continue;
     }
 
-    const seen = [];
-    const results = [];
+    const tagName = targetVal[i][NAME_PROPERTY];
 
-    const rootPath = paths.target !== void 0 ? paths.target : paths.given;
-
-    for (let i = 0; i < targetVal.length; i++) {
-        if (targetVal[i] === null || typeof targetVal[i] !== 'object') {
-           continue;
-        }
-
-        const tagName = targetVal[i][NAME_PROPERTY];
-
-        if (tagName === void 0) {
-            continue;
-        }
-
-        if (seen.includes(tagName)) {
-            results.push(
-                {
-                    message: `Duplicate tag name '${tagName}'`,
-                    path: [...rootPath, i, NAME_PROPERTY]
-                },
-            );
-        } else {
-            seen.push(tagName);
-        }
+    if (tagName === void 0) {
+      continue;
     }
 
-    return results;
+    if (seen.includes(tagName)) {
+      results.push({
+        message: `Duplicate tag name '${tagName}'`,
+        path: [...rootPath, i, NAME_PROPERTY],
+      });
+    } else {
+      seen.push(tagName);
+    }
+  }
+
+  return results;
 };
 ```
 
 It's worth keeping in mind, Spectral will attempt to deduplicate messages when they bear the same `code` and target the same `path`.
 
 As such, when your custom function is susceptible to return more than one result, you have to specify a different `path` for each result.
+
+## Referencing core functions
+
+Your custom function may also build on top of existing functions Spectral offers.
+To reference a given core function, access `this.functions`.
+Make sure to provide all arguments that was originally passed to your function, otherwise a core function may misbehave.
+
+### Example
+
+```js
+module.exports = function (targetVal, ...args) {
+  if (targetVal.info["skip-info"] === true) {
+    // if info has a property with key called "skip-info" and its value is true, let's do nothing
+    return;
+  }
+
+  // otherwise call the truthy function
+  return this.functions.truthy(targetVal.info, ...args);
+};
+```
 
 ## Async Functions
 
@@ -228,11 +244,11 @@ As of Spectral 5.4.0, custom functions can also be asynchronous.
 **functions/dictionary.js**
 
 ```js
-const CACHE_KEY = 'dictionary';
+const CACHE_KEY = "dictionary";
 
 module.exports = async function (targetVal) {
   if (!this.cache.has(CACHE_KEY)) {
-    const res = await fetch('https://dictionary.com/evil');
+    const res = await fetch("https://dictionary.com/evil");
     if (res.ok) {
       this.cache.set(CACHE_KEY, await res.json());
     } else {
@@ -266,14 +282,14 @@ Performs anything slow inside a function (like `fs` calls), you may want to leve
 
 ```js
 module.exports = function () {
-  if (!this.cache.has('cached-item')) {
-    this.cache.set('cached-item', anyValue);
+  if (!this.cache.has("cached-item")) {
+    this.cache.set("cached-item", anyValue);
   }
 
-  const cached = this.cache.get('cached-item');
+  const cached = this.cache.get("cached-item");
 
   // the rest of function
-}
+};
 ```
 
 Each custom function is provided with its **own** cache instance that has a function-life lifespan, which means the cache is persisted for the whole life of a particular function.
@@ -283,7 +299,7 @@ The cache will be retained between subsequent function calls and is never invali
 In other words:
 
 - Using the JavaScript API, so long as your ruleset remains unchanged, all subsequent `spectral.run()` calls will invoke custom functions with the same cache instance.
-As soon as you set a ruleset using `setRuleset()` or `loadRuleset()` method, each custom function will receive a new cache instance.
+  As soon as you set a ruleset using `setRuleset()` or `loadRuleset()` method, each custom function will receive a new cache instance.
 
 - Using the CLI, the cache will be invalidated when the process terminates.
 
@@ -320,6 +336,7 @@ Potential risks include:
 While the risk is relatively low, you should be careful about including **external rulesets** you are not in charge of, in particular those that leverage custom functions.
 You are strongly encouraged to review the custom functions a given ruleset provides.
 What you should hunt for is:
+
 - obfuscated code,
 - calls to an untrusted external library,
 - places where remote code is executed.
@@ -333,7 +350,7 @@ Core functions can be overridden with custom rulesets, so if you'd like to make 
 ## Performance tips
 
 - try to avoid allocating objects as much as possible if your custom function might is very generic, and therefore is expected to be used by plenty of rules.
-If your document is huge enough, and JSON path expression is loose (meaning it matches a lot of properties), your function might be called hundreds of thousands of times.
+  If your document is huge enough, and JSON path expression is loose (meaning it matches a lot of properties), your function might be called hundreds of thousands of times.
 
 ```
 // bad
@@ -374,7 +391,7 @@ Another caveat is that ES Modules and other modules systems are not supported. A
 To give you an example of a good code:
 
 ```js
-module.exports = (obj) => {
+module.exports = obj => {
   for (const [key, value] of Object.entries(obj)) {
     // this is a perfectly fine code
   }
@@ -384,7 +401,7 @@ module.exports = (obj) => {
 You do not need to provide any shim for `Object.entries` or use [regenerator](https://facebook.github.io/regenerator/) for the `for of` loop. As stated, you cannot use ES Modules, so the following code is considered as invalid and won't work correctly.
 
 ```js
-export default (obj) => {
+export default obj => {
   for (const [key, value] of Object.entries(obj)) {
     // this is a perfectly fine code
   }
@@ -393,10 +410,10 @@ export default (obj) => {
 
 Require calls will work only in Node.js, and will cause errors for anyone trying to use the ruleset in the browser. If your ruleset is definitely going to only be used in the context of NodeJS then using them is ok, but if you are distributing your rulesets to the public we recommend avoiding the use of `require()` to increase portability.
 
- ```js
-const foo = require('./foo');
+```js
+const foo = require("./foo");
 
-module.exports = (obj) => {
+module.exports = obj => {
   for (const [key, value] of Object.entries(obj)) {
     // this is a perfectly fine code
   }

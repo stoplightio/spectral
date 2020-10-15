@@ -1,6 +1,6 @@
 import * as yargs from 'yargs';
 
-import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '../../../types';
 import { lint } from '../../services/linter';
 import { formatOutput, writeOutput } from '../../services/output';
@@ -78,6 +78,7 @@ describe('lint', () => {
         format: 'stylish',
         ignoreUnknownFormat: false,
         showUnmatchedGlobs: false,
+        failOnUnmatchedGlobs: false,
       });
     });
   });
@@ -95,6 +96,7 @@ describe('lint', () => {
       format: 'stylish',
       ignoreUnknownFormat: false,
       showUnmatchedGlobs: false,
+      failOnUnmatchedGlobs: false,
     });
   });
 
@@ -106,6 +108,7 @@ describe('lint', () => {
       format: 'stylish',
       ignoreUnknownFormat: false,
       showUnmatchedGlobs: false,
+      failOnUnmatchedGlobs: false,
     });
   });
 
@@ -117,6 +120,7 @@ describe('lint', () => {
       format: 'json',
       ignoreUnknownFormat: false,
       showUnmatchedGlobs: false,
+      failOnUnmatchedGlobs: false,
     });
   });
 
@@ -150,7 +154,7 @@ describe('lint', () => {
     // needed by Node 8 (different ticking?) - can be simplified once we drop support for version 8
     await new Promise(resolve => {
       setImmediate(() => {
-        expect(formatOutput).toBeCalledWith(results, format);
+        expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
         resolve();
       });
     });
@@ -175,6 +179,7 @@ describe('lint', () => {
       format: 'stylish',
       ignoreUnknownFormat: false,
       showUnmatchedGlobs: false,
+      failOnUnmatchedGlobs: false,
     });
   });
 
@@ -185,6 +190,7 @@ describe('lint', () => {
       format: 'stylish',
       ignoreUnknownFormat: true,
       showUnmatchedGlobs: false,
+      failOnUnmatchedGlobs: false,
     });
   });
 
@@ -195,6 +201,18 @@ describe('lint', () => {
       format: 'stylish',
       ignoreUnknownFormat: false,
       showUnmatchedGlobs: true,
+      failOnUnmatchedGlobs: false,
+    });
+  });
+
+  it('passes fail-on-unmatched-globs to lint', async () => {
+    await run('lint --fail-on-unmatched-globs ./__fixtures__/empty-oas2-document.json');
+    expect(lint).toHaveBeenCalledWith([expect.any(String)], {
+      encoding: 'utf8',
+      format: 'stylish',
+      ignoreUnknownFormat: false,
+      showUnmatchedGlobs: false,
+      failOnUnmatchedGlobs: true,
     });
   });
 

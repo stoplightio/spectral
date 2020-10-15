@@ -35,3 +35,20 @@ If the file you want to lint is on your computer, you'll need to mount the direc
 ```bash
 docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint "/tmp/file.yaml"
 ```
+
+To use the docker image on GitLab you need to set `entrypoint` to `""` like this
+
+```yml
+stages:
+  - validate
+
+validate_open-api:
+  stage: validate
+  image:
+    name: stoplight/spectral
+    entrypoint: [""]
+  script:
+    - spectral lint file.yaml
+```
+
+For more details about `entrypoint: [""]` see this issue on GitLab [here](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2692#note_50147081)

@@ -14,7 +14,7 @@ export const generateDocumentWideResult = (
     message,
     code,
     severity,
-    ...(document.source !== null && { source: document.source }),
+    ...(document.source !== null ? { source: document.source } : null),
     path: [],
   };
 };

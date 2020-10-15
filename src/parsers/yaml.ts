@@ -1,7 +1,7 @@
 import { getLocationForJsonPath, parseWithPointers, trapAccess, YamlParserResult } from '@stoplight/yaml';
 import { IParser } from './types';
 
-export const parseYaml = (input: string) =>
+export const parseYaml = (input: string): YamlParserResult<unknown> =>
   parseWithPointers(input, {
     ignoreDuplicateKeys: false,
     mergeKeys: true,

@@ -48,7 +48,7 @@ export const getLintTargets = (targetValue: unknown, field: Optional<string>): I
     });
   }
 
-  if (!targets.length) {
+  if (targets.length === 0) {
     // must call then at least once, with no document
     targets.push({
       path: [],

@@ -2,14 +2,14 @@ import { Cache } from '@stoplight/json-ref-resolver';
 import { ICache } from '@stoplight/json-ref-resolver/types';
 import { extname, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
-import { parse } from '@stoplight/yaml';
 import { readFile, readParsable } from '../fs/reader';
 import { createHttpAndFileResolver, IHttpAndFileResolverOptions } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile, isNPMSource } from './finder';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
-import { assertValidRuleset } from './validation';
+import { assertValidRuleset, isValidRule } from './validation';
+import { parseYaml } from '../parsers';
 
 export interface IRulesetReadOptions extends IHttpAndFileResolverOptions {
   timeout?: number;
@@ -20,7 +20,7 @@ function parseContent(content: string, source: string): unknown {
     return JSON.parse(content);
   }
 
-  return parse(content);
+  return parseYaml(content).data;
 }
 
 export async function readRuleset(uris: string | string[], opts?: IRulesetReadOptions): Promise<IRuleset> {
@@ -40,10 +40,6 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
     Object.assign(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
     Object.assign(base.exceptions, resolvedRuleset.exceptions);
-
-    if (resolvedRuleset.documentationUrl !== void 0 && !('documentationUrl' in base)) {
-      base.documentationUrl = resolvedRuleset.documentationUrl;
-    }
   }
 
   return base;
@@ -90,7 +86,6 @@ const createRulesetProcessor = (
     const functions = {};
     const exceptions = {};
     const newRuleset: IRuleset = {
-      ...('documentationUrl' in ruleset ? { documentationUrl: ruleset.documentationUrl } : null),
       rules,
       functions,
       exceptions,
@@ -104,10 +99,10 @@ const createRulesetProcessor = (
         let extendedRuleset: IRuleset | null;
         let parentSeverity: FileRulesetSeverity;
         if (Array.isArray(extended)) {
-          parentSeverity = severity === undefined ? extended[1] : severity;
+          parentSeverity = severity === void 0 ? extended[1] : severity;
           extendedRuleset = await processRuleset(rulesetUri, extended[0], parentSeverity);
         } else {
-          parentSeverity = severity === undefined ? 'recommended' : severity;
+          parentSeverity = severity === void 0 ? 'recommended' : severity;
           extendedRuleset = await processRuleset(rulesetUri, extended, parentSeverity);
         }
 
@@ -120,7 +115,15 @@ const createRulesetProcessor = (
     }
 
     if (ruleset.rules !== void 0) {
-      mergeRules(rules, ruleset.rules, severity === undefined ? 'recommended' : severity);
+      mergeRules(rules, ruleset.rules, severity === void 0 ? 'recommended' : severity);
+
+      if (ruleset.documentationUrl !== void 0) {
+        for (const rule of Object.values(ruleset.rules)) {
+          if (isValidRule(rule) && rule.documentationUrl === void 0) {
+            rule.documentationUrl = ruleset.documentationUrl;
+          }
+        }
+      }
     }
 
     if (ruleset.except !== void 0) {

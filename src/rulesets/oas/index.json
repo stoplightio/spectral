@@ -394,20 +394,22 @@
       "then": {
         "function": "oasOpSecurityDefined",
         "functionOptions": {
-          "schemesPath": [
-            "securityDefinitions"
-          ]
+          "schemesPath": ["securityDefinitions"]
         }
       }
     },
-    "oas2-valid-parameter-example": {
+    "oas2-valid-schema-example": {
       "description": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
       "recommended": true,
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
-      "given": "$..parameters..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
+      "given": [
+        "$..definitions..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..responses..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]"
+      ],
       "then": {
         "function": "oasExample",
         "functionOptions": {
@@ -417,24 +419,7 @@
         }
       }
     },
-    "oas2-valid-definition-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "formats": ["oas2"],
-      "severity": 0,
-      "type": "validation",
-      "given": "$..definitions..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "$",
-          "oasVersion": 2,
-          "type": "schema"
-        }
-      }
-    },
-    "oas2-valid-response-example": {
+    "oas2-valid-media-example": {
       "description": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
       "recommended": true,
@@ -448,23 +433,6 @@
           "schemaField": "schema",
           "oasVersion": 2,
           "type": "media"
-        }
-      }
-    },
-    "oas2-valid-response-schema-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "formats": ["oas2"],
-      "severity": 0,
-      "type": "validation",
-      "given": "$..responses..[?(@property !== 'properties' && (@.example || @['x-example']) && (@.type || @.format || @.$ref || @.properties || @.items))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "$",
-          "oasVersion": 2,
-          "type": "schema"
         }
       }
     },
@@ -547,17 +515,11 @@
       "recommended": true,
       "formats": ["oas3"],
       "type": "style",
-      "given": [
-        "$.paths..examples[*]",
-        "$.components..examples[*]"
-      ],
+      "given": ["$.paths..examples[*]", "$.components..examples[*]"],
       "then": {
         "function": "xor",
         "functionOptions": {
-          "properties": [
-            "externalValue",
-            "value"
-          ]
+          "properties": ["externalValue", "value"]
         }
       }
     },
@@ -570,10 +532,7 @@
       "then": {
         "function": "oasOpSecurityDefined",
         "functionOptions": {
-          "schemesPath": [
-            "components",
-            "securitySchemes"
-          ]
+          "schemesPath": ["components", "securitySchemes"]
         }
       }
     },
@@ -614,88 +573,24 @@
         }
       }
     },
-    "oas3-valid-oas-parameter-example": {
+    "oas3-valid-media-example": {
       "description": "Examples must be valid against their defined schema.",
       "message": "{{error}}",
       "recommended": true,
       "severity": 0,
       "formats": ["oas3"],
       "type": "validation",
-      "given": "$..parameters..[?(@.schema && (@.example || @.examples))]",
+      "given": [
+        "$..content..[?(@.schema && (@.example || @.examples))]",
+        "$..headers..[?(@.schema && (@.example || @.examples))]",
+        "$..parameters..[?(@.schema && (@.example || @.examples))]"
+      ],
       "then": {
         "function": "oasExample",
         "functionOptions": {
           "schemaField": "schema",
           "oasVersion": 3,
           "type": "media"
-        }
-      }
-    },
-    "oas3-valid-oas-header-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "severity": 0,
-      "formats": ["oas3"],
-      "type": "validation",
-      "given": "$..headers..[?(@.schema && (@.example || @.examples))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "schema",
-          "oasVersion": 3,
-          "type": "media"
-        }
-      }
-    },
-    "oas3-valid-oas-content-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "severity": 0,
-      "formats": ["oas3"],
-      "type": "validation",
-      "given": "$..content..[?(@.schema && (@.example || @.examples))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "schema",
-          "oasVersion": 3,
-          "type": "media"
-        }
-      }
-    },
-    "oas3-valid-parameter-schema-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "severity": 0,
-      "formats": ["oas3"],
-      "type": "validation",
-      "given": "$..parameters..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "$",
-          "oasVersion": 3,
-          "type": "schema"
-        }
-      }
-    },
-    "oas3-valid-header-schema-example": {
-      "description": "Examples must be valid against their defined schema.",
-      "message": "{{error}}",
-      "recommended": true,
-      "severity": 0,
-      "formats": ["oas3"],
-      "type": "validation",
-      "given": "$..headers..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
-      "then": {
-        "function": "oasExample",
-        "functionOptions": {
-          "schemaField": "$",
-          "oasVersion": 3,
-          "type": "schema"
         }
       }
     },
@@ -708,7 +603,9 @@
       "type": "validation",
       "given": [
         "$.components.schemas..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]"
+        "$..content..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..headers..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && @.example && (@.type || @.format || @.$ref || @.properties || @.items))]"
       ],
       "then": {
         "function": "oasExample",

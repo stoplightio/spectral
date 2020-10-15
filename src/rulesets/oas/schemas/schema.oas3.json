@@ -3,11 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "description": "Validation schema for OpenAPI Specification 3.0.X.",
   "type": "object",
-  "required": [
-    "openapi",
-    "info",
-    "paths"
-  ],
+  "required": ["openapi", "info", "paths"],
   "properties": {
     "openapi": {
       "type": "string",
@@ -46,16 +42,13 @@
     }
   },
   "patternProperties": {
-    "^x-": {
-    }
+    "^x-": {}
   },
   "additionalProperties": false,
   "definitions": {
     "Reference": {
       "type": "object",
-      "required": [
-        "$ref"
-      ],
+      "required": ["$ref"],
       "patternProperties": {
         "^\\$ref$": {
           "type": "string",
@@ -65,10 +58,7 @@
     },
     "Info": {
       "type": "object",
-      "required": [
-        "title",
-        "version"
-      ],
+      "required": ["title", "version"],
       "properties": {
         "title": {
           "type": "string"
@@ -91,8 +81,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -112,16 +101,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "License": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "properties": {
         "name": {
           "type": "string"
@@ -132,16 +118,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "Server": {
       "type": "object",
-      "required": [
-        "url"
-      ],
+      "required": ["url"],
       "properties": {
         "url": {
           "type": "string"
@@ -157,16 +140,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "ServerVariable": {
       "type": "object",
-      "required": [
-        "default"
-      ],
+      "required": ["default"],
       "properties": {
         "enum": {
           "type": "array",
@@ -182,8 +162,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -327,8 +306,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -402,21 +380,13 @@
         },
         "enum": {
           "type": "array",
-          "items": {
-          },
+          "items": {},
           "minItems": 1,
           "uniqueItems": false
         },
         "type": {
           "type": "string",
-          "enum": [
-            "array",
-            "boolean",
-            "integer",
-            "number",
-            "object",
-            "string"
-          ]
+          "enum": ["array", "boolean", "integer", "number", "object", "string"]
         },
         "not": {
           "oneOf": [
@@ -510,8 +480,7 @@
         "format": {
           "type": "string"
         },
-        "default": {
-        },
+        "default": {},
         "nullable": {
           "type": "boolean",
           "default": false
@@ -527,8 +496,7 @@
           "type": "boolean",
           "default": false
         },
-        "example": {
-        },
+        "example": {},
         "externalDocs": {
           "$ref": "#/definitions/ExternalDocumentation"
         },
@@ -541,16 +509,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "Discriminator": {
       "type": "object",
-      "required": [
-        "propertyName"
-      ],
+      "required": ["propertyName"],
       "properties": {
         "propertyName": {
           "type": "string"
@@ -586,16 +551,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "Response": {
       "type": "object",
-      "required": [
-        "description"
-      ],
+      "required": ["description"],
       "properties": {
         "description": {
           "type": "string"
@@ -634,8 +596,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -652,8 +613,7 @@
             }
           ]
         },
-        "example": {
-        },
+        "example": {},
         "examples": {
           "type": "object",
           "additionalProperties": {
@@ -675,8 +635,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false,
       "allOf": [
@@ -694,16 +653,14 @@
         "description": {
           "type": "string"
         },
-        "value": {
-        },
+        "value": {},
         "externalValue": {
           "type": "string",
           "format": "uri-reference"
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -727,9 +684,7 @@
         },
         "style": {
           "type": "string",
-          "enum": [
-            "simple"
-          ],
+          "enum": ["simple"],
           "default": "simple"
         },
         "explode": {
@@ -757,8 +712,7 @@
           "minProperties": 1,
           "maxProperties": 1
         },
-        "example": {
-        },
+        "example": {},
         "examples": {
           "type": "object",
           "additionalProperties": {
@@ -774,8 +728,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false,
       "allOf": [
@@ -793,8 +746,7 @@
         "^\\/": {
           "$ref": "#/definitions/PathItem"
         },
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -835,16 +787,13 @@
         "^(get|put|post|delete|options|head|patch|trace)$": {
           "$ref": "#/definitions/Operation"
         },
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "Operation": {
       "type": "object",
-      "required": [
-        "responses"
-      ],
+      "required": ["responses"],
       "properties": {
         "tags": {
           "type": "array",
@@ -922,8 +871,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -952,8 +900,7 @@
             }
           ]
         },
-        "^x-": {
-        }
+        "^x-": {}
       },
       "minProperties": 1,
       "additionalProperties": false
@@ -969,9 +916,7 @@
     },
     "Tag": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "properties": {
         "name": {
           "type": "string"
@@ -984,16 +929,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "ExternalDocumentation": {
       "type": "object",
-      "required": [
-        "url"
-      ],
+      "required": ["url"],
       "properties": {
         "description": {
           "type": "string"
@@ -1004,73 +946,52 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "ExampleXORExamples": {
       "description": "Example and examples are mutually exclusive",
       "not": {
-        "required": [
-          "example",
-          "examples"
-        ]
+        "required": ["example", "examples"]
       }
     },
     "SchemaXORContent": {
       "description": "Schema and content are mutually exclusive, at least one is required",
       "not": {
-        "required": [
-          "schema",
-          "content"
-        ]
+        "required": ["schema", "content"]
       },
       "oneOf": [
         {
-          "required": [
-            "schema"
-          ]
+          "required": ["schema"]
         },
         {
-          "required": [
-            "content"
-          ],
+          "required": ["content"],
           "description": "Some properties are not allowed if content is present",
           "allOf": [
             {
               "not": {
-                "required": [
-                  "style"
-                ]
+                "required": ["style"]
               }
             },
             {
               "not": {
-                "required": [
-                  "explode"
-                ]
+                "required": ["explode"]
               }
             },
             {
               "not": {
-                "required": [
-                  "allowReserved"
-                ]
+                "required": ["allowReserved"]
               }
             },
             {
               "not": {
-                "required": [
-                  "example"
-                ]
+                "required": ["example"]
               }
             },
             {
               "not": {
-                "required": [
-                  "examples"
-                ]
+                "required": ["examples"]
               }
             }
           ]
@@ -1129,8 +1050,7 @@
           "minProperties": 1,
           "maxProperties": 1
         },
-        "example": {
-        },
+        "example": {},
         "examples": {
           "type": "object",
           "additionalProperties": {
@@ -1146,14 +1066,10 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false,
-      "required": [
-        "name",
-        "in"
-      ],
+      "required": ["name", "in"],
       "allOf": [
         {
           "$ref": "#/definitions/ExampleXORExamples"
@@ -1171,27 +1087,17 @@
       "oneOf": [
         {
           "description": "Parameter in path",
-          "required": [
-            "required"
-          ],
+          "required": ["required"],
           "properties": {
             "in": {
-              "enum": [
-                "path"
-              ]
+              "enum": ["path"]
             },
             "style": {
-              "enum": [
-                "matrix",
-                "label",
-                "simple"
-              ],
+              "enum": ["matrix", "label", "simple"],
               "default": "simple"
             },
             "required": {
-              "enum": [
-                true
-              ]
+              "enum": [true]
             }
           }
         },
@@ -1199,17 +1105,10 @@
           "description": "Parameter in query",
           "properties": {
             "in": {
-              "enum": [
-                "query"
-              ]
+              "enum": ["query"]
             },
             "style": {
-              "enum": [
-                "form",
-                "spaceDelimited",
-                "pipeDelimited",
-                "deepObject"
-              ],
+              "enum": ["form", "spaceDelimited", "pipeDelimited", "deepObject"],
               "default": "form"
             }
           }
@@ -1218,14 +1117,10 @@
           "description": "Parameter in header",
           "properties": {
             "in": {
-              "enum": [
-                "header"
-              ]
+              "enum": ["header"]
             },
             "style": {
-              "enum": [
-                "simple"
-              ],
+              "enum": ["simple"],
               "default": "simple"
             }
           }
@@ -1234,14 +1129,10 @@
           "description": "Parameter in cookie",
           "properties": {
             "in": {
-              "enum": [
-                "cookie"
-              ]
+              "enum": ["cookie"]
             },
             "style": {
-              "enum": [
-                "form"
-              ],
+              "enum": ["form"],
               "default": "form"
             }
           }
@@ -1250,9 +1141,7 @@
     },
     "RequestBody": {
       "type": "object",
-      "required": [
-        "content"
-      ],
+      "required": ["content"],
       "properties": {
         "description": {
           "type": "string"
@@ -1269,8 +1158,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -1292,45 +1180,31 @@
     },
     "APIKeySecurityScheme": {
       "type": "object",
-      "required": [
-        "type",
-        "name",
-        "in"
-      ],
+      "required": ["type", "name", "in"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "apiKey"
-          ]
+          "enum": ["apiKey"]
         },
         "name": {
           "type": "string"
         },
         "in": {
           "type": "string",
-          "enum": [
-            "header",
-            "query",
-            "cookie"
-          ]
+          "enum": ["header", "query", "cookie"]
         },
         "description": {
           "type": "string"
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "HTTPSecurityScheme": {
       "type": "object",
-      "required": [
-        "scheme",
-        "type"
-      ],
+      "required": ["scheme", "type"],
       "properties": {
         "scheme": {
           "type": "string"
@@ -1343,14 +1217,11 @@
         },
         "type": {
           "type": "string",
-          "enum": [
-            "http"
-          ]
+          "enum": ["http"]
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false,
       "oneOf": [
@@ -1358,25 +1229,19 @@
           "description": "Bearer",
           "properties": {
             "scheme": {
-              "enum": [
-                "bearer"
-              ]
+              "enum": ["bearer"]
             }
           }
         },
         {
           "description": "Non Bearer",
           "not": {
-            "required": [
-              "bearerFormat"
-            ]
+            "required": ["bearerFormat"]
           },
           "properties": {
             "scheme": {
               "not": {
-                "enum": [
-                  "bearer"
-                ]
+                "enum": ["bearer"]
               }
             }
           }
@@ -1385,16 +1250,11 @@
     },
     "OAuth2SecurityScheme": {
       "type": "object",
-      "required": [
-        "type",
-        "flows"
-      ],
+      "required": ["type", "flows"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "oauth2"
-          ]
+          "enum": ["oauth2"]
         },
         "flows": {
           "$ref": "#/definitions/OAuthFlows"
@@ -1404,23 +1264,17 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "OpenIdConnectSecurityScheme": {
       "type": "object",
-      "required": [
-        "type",
-        "openIdConnectUrl"
-      ],
+      "required": ["type", "openIdConnectUrl"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "openIdConnect"
-          ]
+          "enum": ["openIdConnect"]
         },
         "openIdConnectUrl": {
           "type": "string",
@@ -1431,8 +1285,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -1453,17 +1306,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "ImplicitOAuthFlow": {
       "type": "object",
-      "required": [
-        "authorizationUrl",
-        "scopes"
-      ],
+      "required": ["authorizationUrl", "scopes"],
       "properties": {
         "authorizationUrl": {
           "type": "string",
@@ -1481,16 +1330,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "PasswordOAuthFlow": {
       "type": "object",
-      "required": [
-        "tokenUrl"
-      ],
+      "required": ["tokenUrl"],
       "properties": {
         "tokenUrl": {
           "type": "string",
@@ -1508,16 +1354,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "ClientCredentialsFlow": {
       "type": "object",
-      "required": [
-        "tokenUrl"
-      ],
+      "required": ["tokenUrl"],
       "properties": {
         "tokenUrl": {
           "type": "string",
@@ -1535,17 +1378,13 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
     "AuthorizationCodeOAuthFlow": {
       "type": "object",
-      "required": [
-        "authorizationUrl",
-        "tokenUrl"
-      ],
+      "required": ["authorizationUrl", "tokenUrl"],
       "properties": {
         "authorizationUrl": {
           "type": "string",
@@ -1567,8 +1406,7 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false
     },
@@ -1584,11 +1422,9 @@
         },
         "parameters": {
           "type": "object",
-          "additionalProperties": {
-          }
+          "additionalProperties": {}
         },
-        "requestBody": {
-        },
+        "requestBody": {},
         "description": {
           "type": "string"
         },
@@ -1597,16 +1433,12 @@
         }
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       },
       "additionalProperties": false,
       "not": {
         "description": "Operation Id and Operation Ref are mutually exclusive",
-        "required": [
-          "operationId",
-          "operationRef"
-        ]
+        "required": ["operationId", "operationRef"]
       }
     },
     "Callback": {
@@ -1615,8 +1447,7 @@
         "$ref": "#/definitions/PathItem"
       },
       "patternProperties": {
-        "^x-": {
-        }
+        "^x-": {}
       }
     },
     "Encoding": {
@@ -1633,12 +1464,7 @@
         },
         "style": {
           "type": "string",
-          "enum": [
-            "form",
-            "spaceDelimited",
-            "pipeDelimited",
-            "deepObject"
-          ]
+          "enum": ["form", "spaceDelimited", "pipeDelimited", "deepObject"]
         },
         "explode": {
           "type": "boolean"

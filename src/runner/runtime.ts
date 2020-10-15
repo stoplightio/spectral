@@ -1,4 +1,4 @@
-import { createEventEmitter, IDisposable } from '@stoplight/lifecycle';
+import { EventEmitter, IDisposable } from '@stoplight/lifecycle';
 
 type Revokable = () => void;
 
@@ -8,7 +8,7 @@ export type SpectralEvents = {
   afterTeardown(): void;
 };
 
-export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
+export class RunnerRuntime extends EventEmitter<SpectralEvents> {
   protected readonly revokables: Revokable[];
 
   constructor() {
@@ -23,9 +23,9 @@ export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
     return proxy;
   }
 
-  public revoke() {
+  public revoke(): void {
     let revokable;
-    // tslint:disable-next-line:no-conditional-assignment
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     while ((revokable = this.revokables.shift())) {
       revokable();
     }
@@ -34,6 +34,7 @@ export class RunnerRuntime extends createEventEmitter<SpectralEvents>() {
   public spawn(): Pick<RunnerRuntime, 'on'> {
     return this.persist(
       Object.freeze({
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         on: this.hijackDisposable(this.on),
       }),
     );

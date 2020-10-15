@@ -26,7 +26,7 @@ export const pivotExceptions = (
     rules.forEach(rulename => {
       const rule = runRules[rulename];
 
-      if (rule !== undefined) {
+      if (rule !== void 0) {
         if (!(rulename in dic)) {
           dic[rulename] = [];
         }

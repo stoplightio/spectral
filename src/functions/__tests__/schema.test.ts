@@ -269,7 +269,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: `String should be equal to one of the allowed values: foo, bar. Did you mean bar?`,
+            message: 'String should be equal to one of the allowed values: `foo`, `bar`. Did you mean `bar`?',
             path: [],
           },
         ]);
@@ -310,6 +310,31 @@ describe('schema', () => {
         ]);
       });
     });
+
+    describe('and an enum contains a null', () => {
+      const testSchema: JSONSchema6 = {
+        $schema: `http://json-schema.org/draft-06/schema#`,
+        enum: [1, null],
+      };
+
+      it('reports pretty enum errors for a string', () => {
+        expect(runSchema('baz', testSchema)).toEqual([
+          {
+            message: `String should be equal to one of the allowed values: 1, null`,
+            path: [],
+          },
+        ]);
+      });
+
+      it('reports pretty enum errors for a number', () => {
+        expect(runSchema(2, testSchema)).toEqual([
+          {
+            message: `Number should be equal to one of the allowed values: 1, null`,
+            path: [],
+          },
+        ]);
+      });
+    });
   });
 
   test('reports slightly less pretty enum errors for primitive values that are not similar to any values in enum', () => {
@@ -321,7 +346,7 @@ describe('schema', () => {
 
     expect(runSchema('three', testSchema)).toEqual([
       {
-        message: `String should be equal to one of the allowed values: foo, bar`,
+        message: 'String should be equal to one of the allowed values: `foo`, `bar`',
         path: [],
       },
     ]);
@@ -350,5 +375,37 @@ describe('schema', () => {
     test('given resolved context, ignores', () => {
       expect(runSchema({}, { $ref: '#/bar' }, void 0, { rule: { resolved: true } })).toEqual([]);
     });
+  });
+
+  test('given OAS2, supports x-nullable', () => {
+    const testSchema: JSONSchema4 = {
+      type: 'string',
+      'x-nullable': true,
+    };
+
+    expect(runSchema('cxz', testSchema, 2)).toEqual([]);
+    expect(runSchema(null, testSchema, 2)).toEqual([]);
+    expect(runSchema(2, testSchema, 2)).toEqual([
+      {
+        message: 'Value type should be string,null',
+        path: [],
+      },
+    ]);
+  });
+
+  test('given OAS3, supports nullable', () => {
+    const testSchema: JSONSchema4 = {
+      type: 'string',
+      nullable: true,
+    };
+
+    expect(runSchema('cxz', testSchema, 3)).toEqual([]);
+    expect(runSchema(null, testSchema, 3)).toEqual([]);
+    expect(runSchema(2, testSchema, 3)).toEqual([
+      {
+        message: 'Value type should be string,null',
+        path: [],
+      },
+    ]);
   });
 });
