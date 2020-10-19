@@ -118,7 +118,6 @@ Text must match a certain case, like `camelCase` or `snake_case`.
 For instance, the following naming style could be enforced:
 
 - Headers _(eg. `X-YourMighty-Header`)_: type: `pascal`, separator.char: `-`
-- Camel cased paths _(eg. `/path/toThe/amazingResource`)_: type: `camel`, separator.char: `/`, separator.allowLeading: `true`
 
 Available types are:
 
@@ -143,19 +142,6 @@ camel-case-name:
     function: casing
     functionOptions:
       type: camel
-
-paths-kebab-case:
-  description: Should paths be kebab-case.
-  message: "{{property}} is not kebab-case (lower case and separated with hyphens)"
-  severity: warn
-  given: $.paths[*]~
-  then:
-    function: casing
-    functionOptions:
-      type: kebab
-      separator:
-        char: /
-        allowLeading: true
 ```
 
 ## schema
