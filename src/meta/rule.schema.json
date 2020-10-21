@@ -323,23 +323,8 @@
       ],
       "type": "object"
     },
-    "DiagnosticSeverity": {
-      "enum": [-1, 0, 1, 2, 3],
-      "type": "number"
-    },
-    "HumanReadableSeverity": {
-      "type": "string",
-      "enum": ["error", "warn", "info", "hint", "off"]
-    },
     "Severity": {
-      "oneOf": [
-        {
-          "$ref": "#/definitions/DiagnosticSeverity"
-        },
-        {
-          "$ref": "#/definitions/HumanReadableSeverity"
-        }
-      ]
+      "$ref": "shared.json#/Severity"
     }
   },
   "oneOf": [
@@ -412,7 +397,7 @@
       "type": "object"
     },
     {
-      "$ref": "#/definitions/HumanReadableSeverity"
+      "$ref": "shared.json#/HumanReadableSeverity"
     },
     {
       "type": "boolean"

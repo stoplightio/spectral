@@ -360,6 +360,15 @@ describe('Rulesets reader', () => {
     expect(rules['oas3-valid-rule'].formats).toEqual(['oas3']);
   });
 
+  it('should include parserOptions', async () => {
+    const { parserOptions } = await readRuleset(path.join(__dirname, '__fixtures__/parser-options-ruleset.json'));
+
+    expect(parserOptions).toStrictEqual({
+      duplicateKeys: 'warn',
+      incompatibleValues: 'off',
+    });
+  });
+
   it('given spectral:oas ruleset, should not pick up unrecommended rules', () => {
     return expect(readRuleset('spectral:oas')).resolves.toEqual(
       expect.objectContaining({

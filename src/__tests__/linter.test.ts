@@ -8,6 +8,7 @@ import { mergeRules, readRuleset } from '../rulesets';
 import { RuleCollection, Spectral } from '../spectral';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Parsers, Document } from '..';
+import { IParser } from '../parsers/types';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
@@ -859,9 +860,143 @@ responses:: !!foo
             line: 1,
           },
         },
-        severity: DiagnosticSeverity.Warning,
+        severity: DiagnosticSeverity.Error,
       },
     ]);
+  });
+
+  describe('parser options', () => {
+    test('should allow changing the severity of invalid YAML mapping keys diagnostics', async () => {
+      spectral.setRuleset({
+        rules: {},
+        functions: {},
+        exceptions: {},
+        parserOptions: {
+          incompatibleValues: 'info',
+        },
+      });
+      const results = await spectral.run(
+        `responses:
+  200:
+    description: ''
+  '400':
+    description: ''`,
+        { ignoreUnknownFormat: true },
+      );
+
+      expect(results).toEqual([
+        {
+          code: 'parser',
+          message: 'Mapping key must be a string scalar rather than number',
+          path: ['responses', '200'],
+          range: {
+            end: {
+              character: 5,
+              line: 1,
+            },
+            start: {
+              character: 2,
+              line: 1,
+            },
+          },
+          severity: DiagnosticSeverity.Information,
+        },
+      ]);
+    });
+
+    test('should allow disabling invalid YAML mapping keys diagnostics', async () => {
+      spectral.setRuleset({
+        rules: {},
+        functions: {},
+        exceptions: {},
+        parserOptions: {
+          incompatibleValues: 'off',
+        },
+      });
+      const results = await spectral.run(
+        `responses:
+  200:
+    description: ''
+  500:
+  '400':
+    description: ''`,
+        { ignoreUnknownFormat: true },
+      );
+
+      expect(results).toEqual([]);
+    });
+
+    test.each<keyof typeof Parsers>(['Json', 'Yaml'])(
+      'should allow changing the severity of duplicate key diagnostics reported by %s parser',
+      async parser => {
+        spectral.setRuleset({
+          rules: {},
+          functions: {},
+          exceptions: {},
+          parserOptions: {
+            duplicateKeys: 'info',
+          },
+        });
+
+        const results = await spectral.run(
+          new Document(
+            `{
+  "200": {},
+  "200": {}
+}`,
+            Parsers[parser] as IParser,
+          ),
+          { ignoreUnknownFormat: true },
+        );
+
+        expect(results).toEqual([
+          {
+            code: 'parser',
+            message: 'Duplicate key: 200',
+            path: ['200'],
+            range: {
+              end: {
+                character: 7,
+                line: 2,
+              },
+              start: {
+                character: 2,
+                line: 2,
+              },
+            },
+            severity: DiagnosticSeverity.Information,
+          },
+        ]);
+      },
+    );
+
+    test.each<keyof typeof Parsers>(['Json', 'Yaml'])(
+      'should allow disabling duplicate key diagnostics reported by %s parser',
+      async parser => {
+        spectral.setRuleset({
+          rules: {},
+          functions: {},
+          exceptions: {},
+          parserOptions: {
+            duplicateKeys: 'off',
+          },
+        });
+
+        const results = await spectral.run(
+          new Document(
+            `{
+  "200": {},
+  "200": {},
+  "200": {}
+}`,
+            Parsers[parser] as IParser,
+          ),
+          { ignoreUnknownFormat: true },
+        );
+
+        expect(results).toEqual([]);
+      },
+    );
   });
 
   describe('functional tests for the given property', () => {

@@ -1,0 +1,19 @@
+{
+  "$id": "http://stoplight.io/schemas/shared.json",
+  "DiagnosticSeverity": {
+    "enum": [-1, 0, 1, 2, 3]
+  },
+  "HumanReadableSeverity": {
+    "enum": ["error", "warn", "info", "hint", "off"]
+  },
+  "Severity": {
+    "oneOf": [
+      {
+        "$ref": "#/DiagnosticSeverity"
+      },
+      {
+        "$ref": "#/HumanReadableSeverity"
+      }
+    ]
+  }
+}

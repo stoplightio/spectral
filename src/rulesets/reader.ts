@@ -40,6 +40,10 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
     Object.assign(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
     Object.assign(base.exceptions, resolvedRuleset.exceptions);
+
+    if (resolvedRuleset.parserOptions !== void 0 && !('parserOptions' in base)) {
+      base.parserOptions = resolvedRuleset.parserOptions;
+    }
   }
 
   return base;
@@ -89,6 +93,7 @@ const createRulesetProcessor = (
       rules,
       functions,
       exceptions,
+      ...('parserOptions' in ruleset ? { parserOptions: ruleset.parserOptions } : null),
     };
 
     const extendedRulesets = ruleset.extends;

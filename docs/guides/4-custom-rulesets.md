@@ -166,6 +166,19 @@ message: "{{value}} is greater than 0"
 message: "{{path}} cannot point at remote reference"
 ```
 
+## Parsing Options
+
+If you do not care about duplicate keys or invalid values (such as non-string mapping keys in YAML), you can tune their severity using `parserOptions` setting.
+
+```yaml
+extends: spectral:oas
+parserOptions:
+  duplicateKeys: warn # error is the default value
+  incompatibleValues: off # error is the default value
+```
+
+`parserOptions` is not inherited by extended rulesets.
+
 ## Documentation URL
 
 Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
