@@ -28,7 +28,7 @@ export function normalizeSource(source: Optional<string>): string | null {
 export class Document<D = unknown, R extends IParserResult = IParserResult<D>> implements IDocument<D> {
   protected readonly parserResult: R;
   public readonly source: string | null;
-  public readonly diagnostics: ReadonlyArray<IRuleResult>;
+  public readonly diagnostics: IRuleResult[];
   public formats?: string[] | null;
 
   constructor(protected readonly input: string, protected readonly parser: IParser<R>, source?: string) {
@@ -66,7 +66,7 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> i
 
 export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult> implements IDocument<D> {
   public readonly source: string | null;
-  public readonly diagnostics: ReadonlyArray<IRuleResult>;
+  public readonly diagnostics: IRuleResult[];
   public formats?: string[] | null;
 
   constructor(protected readonly parserResult: R) {

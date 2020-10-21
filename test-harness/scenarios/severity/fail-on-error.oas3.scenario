@@ -31,10 +31,10 @@ OpenAPI 3.x detected
   7:9   warning  operation-description         Operation `description` must be present and non-empty string.
   7:9   warning  operation-tags                Operation should have non-empty `tags` array.
   8:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.
-  10:9  warning  parser                        Mapping key must be a string scalar rather than number
+  10:9    error  parser                        Mapping key must be a string scalar rather than number
  12:10  warning  operation-description         Operation `description` must be present and non-empty string.
  12:10  warning  operation-tags                Operation should have non-empty `tags` array.
  13:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.
-  15:9  warning  parser                        Mapping key must be a string scalar rather than number
+  15:9    error  parser                        Mapping key must be a string scalar rather than number
 
-✖ 11 problems (2 errors, 9 warnings, 0 infos, 0 hints)
+✖ 11 problems (4 errors, 7 warnings, 0 infos, 0 hints)
