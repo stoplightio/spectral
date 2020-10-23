@@ -69,6 +69,7 @@ export const stylish: Formatter = results => {
       getMessageType(result.severity),
       result.code ?? '',
       result.message,
+      result.path,
     ]);
 
     output += `${table(pathTableData, {
