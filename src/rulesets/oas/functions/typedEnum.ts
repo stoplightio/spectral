@@ -18,15 +18,10 @@ export const typedEnum: IFunction = function (this: IFunctionContext, targetVal,
   }
 
   const isOAS3 = otherValues.documentInventory.document.formats?.includes('oas3') === true;
-  const isOAS2 = otherValues.documentInventory.document.formats?.includes('oas2') === true;
 
   let innerSchema;
-  if ((isOAS3 && targetVal.nullable === true) || (isOAS2 && targetVal['x-nullable'] === true)) {
-    const type = Array.isArray(initialSchema.type)
-      ? [...initialSchema.type]
-      : initialSchema.type !== void 0
-      ? [initialSchema.type]
-      : [];
+  if (isOAS3 && targetVal.nullable === true) {
+    const type = Array.isArray(initialSchema.type) ? [...initialSchema.type] : [initialSchema.type];
     if (!type.includes('null')) {
       type.push('null');
     }
