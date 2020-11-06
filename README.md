@@ -79,8 +79,6 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 
 ## Support
 
-If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We've created an open source category for these questions. It's also a great place to share your implementations.
+If you need help using Spectral or have a support question, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions). It's also a great place to share your rulesets, or tools that leverage Spectral.
 
 If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
-
-If you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
