@@ -37,7 +37,7 @@ This package is [Treeware](https://treeware.earth) so if you would like to thank
 
 ## Documentation
 
-Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/concepts.md), then peek through some of our guides:
+Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
 
 - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
 - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
