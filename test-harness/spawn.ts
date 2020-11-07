@@ -28,7 +28,6 @@ function stringifyStream(stream: Transform) {
   stream.on('readable', () => {
     let chunk: string | null;
 
-    // tslint:disable-next-line:no-conditional-assignment
     while ((chunk = stream.read()) !== null) {
       result += chunk;
     }

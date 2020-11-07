@@ -645,7 +645,7 @@
       "description": "Validate structure of OpenAPI v3 specification.",
       "message": "{{error}}.",
       "severity": 0,
-      "formats": ["oas3"],
+      "formats": ["oas30"],
       "recommended": true,
       "type": "validation",
       "given": "$",
@@ -653,6 +653,7 @@
         "function": "oasDocumentSchema",
         "functionOptions": {
           "allErrors": true,
+          "oasVersion": "3.0",
           "schema": {
             "$ref": "./schemas/schema.oas3.json"
           }
@@ -668,6 +669,25 @@
       "given": "$",
       "then": {
         "function": "oasUnusedComponent"
+      }
+    },
+    "oas3.1-schema": {
+      "description": "Validate structure of OpenAPI v3.1 specification.",
+      "message": "{{error}}.",
+      "severity": 0,
+      "formats": ["oas3.1"],
+      "recommended": true,
+      "type": "validation",
+      "given": "$",
+      "then": {
+        "function": "oasDocumentSchema",
+        "functionOptions": {
+          "allErrors": true,
+          "oasVersion": "3.1",
+          "schema": {
+            "$ref": "./schemas/schema.oas3.1.json"
+          }
+        }
       }
     }
   }

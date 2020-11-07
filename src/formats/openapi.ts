@@ -9,5 +9,8 @@ export const isOpenApiv2 = (document: unknown): boolean =>
 export const isOpenApiv3 = (document: unknown): boolean =>
   isObject(document) && 'openapi' in document && parseFloat(String((document as MaybeOAS3).openapi)) === 3;
 
+export const isOpenApiv3_0 = (document: unknown): boolean =>
+  isObject(document) && 'openapi' in document && parseFloat(String((document as MaybeOAS3).openapi)) === 3.0;
+
 export const isOpenApiv3_1 = (document: unknown): boolean =>
   isObject(document) && 'openapi' in document && parseFloat(String((document as MaybeOAS3).openapi)) === 3.1;

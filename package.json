@@ -73,7 +73,7 @@
     "@stoplight/types": "11.9.0",
     "@stoplight/yaml": "4.2.1",
     "abort-controller": "3.0.0",
-    "ajv": "6.12.5",
+    "ajv": "^7.0.0",
     "ajv-oai": "1.2.0",
     "blueimp-md5": "2.18.0",
     "chalk": "4.1.0",
