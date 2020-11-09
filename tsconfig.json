@@ -1,9 +1,9 @@
 {
-  "include": ["src"],
+  "include": ["src", "./*.ts"],
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2017",
-    "module": "commonjs",
+    "module": "CommonJS",
     "lib": ["es2020", "dom"],
     "strict": true,
     "pretty": true,
@@ -23,7 +23,6 @@
     "sourceMap": true,
     "declaration": true,
     "removeComments": true,
-    "jsx": "react",
     "skipLibCheck": true,
     "noEmitHelpers": true,
     "importHelpers": true

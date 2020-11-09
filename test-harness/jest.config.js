@@ -3,7 +3,7 @@ module.exports = {
     {
       displayName: 'HARNESS',
       preset: 'ts-jest',
-      testMatch: ['<rootDir>/test-harness/index.ts']
-    }
-  ]
+      testMatch: ['<rootDir>/index.ts'],
+    },
+  ],
 };
