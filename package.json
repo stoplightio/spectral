@@ -40,7 +40,7 @@
     "build": "tsc -p ./tsconfig.build.json",
     "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
     "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
-    "generate-assets": "ts-node --compiler-options='{\"module\": \"CommonJS\"}' ./scripts/generate-assets.ts",
+    "generate-assets": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} ./scripts/generate-assets.ts",
     "inline-version": "node ./scripts/inline-version.js",
     "prelint": "tsc --noEmit",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
