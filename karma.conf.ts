@@ -22,7 +22,7 @@ module.exports = (config: any) => {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'src/**/*.ts': ['karma-typescript', 'env'],
-      './karma-jest.ts': ['karma-typescript'],
+      './__karma__/**/*.ts': ['karma-typescript'],
       './setupKarma.ts': ['karma-typescript'],
       './setupTests.ts': ['karma-typescript'],
     },
@@ -30,7 +30,8 @@ module.exports = (config: any) => {
     envPreprocessor: ['USE_NIMMA'],
 
     karmaTypescriptConfig: {
-      ...require('./tsconfig.karma.json'),
+      ...require('./tsconfig.json'),
+      include: ['**/*.ts'],
       bundlerOptions: {
         resolve: {
           alias: {
