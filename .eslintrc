@@ -1,10 +1,5 @@
 {
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "project": "./tsconfig.eslint.json"
-  },
   "env": {
     "es6": true,
     "shared-node-browser": true
@@ -13,7 +8,6 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended"
   ],
   "rules": {
@@ -27,13 +21,8 @@
     "no-undefined": "off",
 
     "@typescript-eslint/camelcase": "off",
-    "@typescript-eslint/strict-boolean-expressions": "warn",
-    "@typescript-eslint/prefer-regexp-exec": "error",
     "@typescript-eslint/prefer-optional-chain": "error",
-    "@typescript-eslint/prefer-nullish-coalescing": "error",
     "@typescript-eslint/prefer-for-of": "error",
-    "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
-    "@typescript-eslint/no-throw-literal": "error",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -50,6 +39,25 @@
     "@typescript-eslint/explicit-function-return-type": "warn"
   },
   "overrides": [
+    {
+      "files": [
+        "src/**/*.ts"
+      ],
+      "extends": [
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+        "@typescript-eslint/prefer-regexp-exec": "error",
+        "@typescript-eslint/prefer-nullish-coalescing": "error",
+        "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
+        "@typescript-eslint/strict-boolean-expressions": "warn",
+        "@typescript-eslint/no-throw-literal": "error",
+        "@typescript-eslint/require-await": "off"
+      }
+    },
     {
       "files": [
         "src/rulesets/*/functions/**/*.ts"
@@ -69,7 +77,7 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/require-await": "off",
         "@typescript-eslint/unbound-method": "off",
         "@typescript-eslint/no-var-requires": "off"
       }
@@ -109,6 +117,15 @@
       ],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+
+    {
+      "files": [
+        "scripts/**/*.js"
+      ],
+      "env": {
+        "node": true
       }
     }
   ]

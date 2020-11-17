@@ -93,18 +93,14 @@ Running the harness tests (these must pass or the PR merge will be blocked):
 yarn test.harness
 ```
 
-## Creating an issue
+## Bugs & Feature Requests
 
 We want to keep issues in this repo focused on bug reports and feature requests.
-
-For support questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
 
 Before you open an issue, please search to see if anyone else has already opened an issue that might be similar to yours.
 
 ## Support
 
-For support or "how-to" type questions, please use the [Stoplight Community forum](https://community.stoplight.io/c/open-source). If you are unsure if you are experiencing a bug, the [forum](https://community.stoplight.io/c/open-source) is a great place to start.
+For help, discussions, or "how-to" type questions, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions). If you are unsure if you are experiencing a bug then this is also a great place to start, as a discussion can be turned into an issue easily.
 
 If you have found a security issue, please email [security@stoplight.io](mailto:security@stoplight.io) directly.
-
-We try to respond to all pull requests and issues within 7 days.

@@ -37,7 +37,7 @@ This package is [Treeware](https://treeware.earth) so if you would like to thank
 
 ## Documentation
 
-Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/concepts.md), then peek through some of our guides:
+Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
 
 - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
 - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
@@ -79,8 +79,6 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 
 ## Support
 
-If you need help using Spectral or have a support question, please use the [Stoplight Community forum](https://community.stoplight.io). We've created an open source category for these questions. It's also a great place to share your implementations.
+If you need help using Spectral or have a support question, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions). It's also a great place to share your rulesets, or tools that leverage Spectral.
 
 If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
-
-If you want to discuss something in private, you can reach out to Stoplight support at [support@stoplight.io](mailto:support@stoplight.io).
