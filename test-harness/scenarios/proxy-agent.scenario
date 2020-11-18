@@ -9,6 +9,6 @@ PROXY=http://localhost:3001
 {bin} lint {document} --ignore-unknown-format
 ====stdout====
 {document}
- 2:9  error  invalid-ref  FetchError: request to http://localhost:3002/foo.json failed, reason: connect ECONNREFUSED 127.0.0.1:3001
+ 2:9  error  invalid-ref  FetchError: request to http://localhost:3002/foo.json failed, reason: connect ECONNREFUSED 127.0.0.1:3001  foo.$ref
 
 ✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)

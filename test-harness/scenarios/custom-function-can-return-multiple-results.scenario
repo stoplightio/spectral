@@ -76,9 +76,9 @@ OpenAPI 3.x detected
 
 {document}
   1:1   warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
-  2:6   warning  info-contact      Info object should contain `contact` object.
-  2:6   warning  info-description  OpenAPI object info `description` must be present and non-empty string.
- 11:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'
- 13:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'
+  2:6   warning  info-contact      Info object should contain `contact` object.                             info
+  2:6   warning  info-description  OpenAPI object info `description` must be present and non-empty string.  info
+ 11:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'              tags[2].name
+ 13:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'              tags[3].name
 
 ✖ 5 problems (0 errors, 5 warnings, 0 infos, 0 hints)

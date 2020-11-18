@@ -28,6 +28,6 @@ rules:
 OpenAPI 3.x detected
 
 {document}
- 10:15  warning  response-order  Responses should be in alphabetical order
+ 10:15  warning  response-order  Responses should be in alphabetical order  paths./foo.get.responses[400]
 
 ✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
