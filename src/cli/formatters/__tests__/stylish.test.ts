@@ -25,15 +25,15 @@ describe('Stylish formatter', () => {
   )}  info-description        OpenAPI object info \`description\` must be present and non-empty string.  info
   5:14        ${chalk.red(
     'error',
-  )}  info-matches-stoplight  Info must contain Stoplight                                              info,title
+  )}  info-matches-stoplight  Info must contain Stoplight                                              info.title
  17:13  ${chalk.blue(
    'information',
- )}  operation-description   Operation \`description\` must be present and non-empty string.            paths,/pets,get
+ )}  operation-description   Operation \`description\` must be present and non-empty string.            paths./pets.get
  64:14  ${chalk.blue(
    'information',
- )}  operation-description   Operation \`description\` must be present and non-empty string.            paths,/pets,post
+ )}  operation-description   Operation \`description\` must be present and non-empty string.            paths./pets.post
  86:13  ${chalk.blue(
    'information',
- )}  operation-description   Operation \`description\` must be present and non-empty string.            paths,/pets/{petId},get`);
+ )}  operation-description   Operation \`description\` must be present and non-empty string.            paths./pets/{petId}.get`);
   });
 });
