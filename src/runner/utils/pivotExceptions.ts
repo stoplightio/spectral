@@ -6,7 +6,7 @@ import { RulesetExceptionCollection } from '../../types/ruleset';
 
 export interface IExceptionLocation {
   source: string;
-  path: JsonPath;
+  path: JsonPath | null;
 }
 
 export const pivotExceptions = (
@@ -19,7 +19,7 @@ export const pivotExceptions = (
     const pointer = extractPointerFromRef(location);
     const source = extractSourceFromRef(location);
 
-    if (pointer === null || source === null) {
+    if (source === null) {
       throw new InvalidUriError(`Malformed exception key (${location}).`);
     }
 
@@ -31,7 +31,7 @@ export const pivotExceptions = (
           dic[rulename] = [];
         }
 
-        dic[rulename].push({ source, path: pointerToPath(pointer) });
+        dic[rulename].push({ source, path: pointer === null ? null : pointerToPath(pointer) });
       }
     });
   });

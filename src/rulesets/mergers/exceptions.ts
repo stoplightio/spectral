@@ -27,19 +27,17 @@ const normalize = ($ref: string, rulesetUri?: string): string => {
 
   const pointer = extractPointerFromRef($ref);
 
-  if (typeof pointer !== 'string') {
-    throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri, 'Missing pointer fragment'));
-  }
-
-  try {
-    pointerToPath(pointer);
-  } catch {
-    throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri));
+  if (pointer !== null) {
+    try {
+      pointerToPath(pointer);
+    } catch {
+      throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri));
+    }
   }
 
   const path = rulesetUri === undefined || isAbsolute(source) ? source : join(rulesetUri, '..', source);
 
-  return pathNormalize(path) + pointer;
+  return pathNormalize(path) + (pointer ?? '');
 };
 
 const buildErrorMessagePrefix = ($ref: string, rulesetUri?: string): string => {

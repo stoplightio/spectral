@@ -737,6 +737,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const rules = {
           'no-yaml-remote-reference': testRuleset.rules['no-yaml-remote-reference'],
+          'no-remote-reference': testRuleset.rules['no-remote-reference'],
           schema: testRuleset.rules.schema,
         };
 
@@ -749,11 +750,17 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
             code: 'schema',
           }),
           expect.objectContaining({
+            code: 'no-remote-reference',
+          }),
+          expect.objectContaining({
             code: 'no-yaml-remote-reference',
           }),
         ]);
 
-        const exceptions = extractExceptionFrom(testRuleset, 'no-yaml-remote-reference', 1);
+        const exceptions = {
+          ...extractExceptionFrom(testRuleset, 'no-yaml-remote-reference', 1),
+          ...extractExceptionFrom(testRuleset, 'no-remote-reference', 2),
+        };
 
         spectral.setRuleset({ rules, exceptions, functions: {} });
 

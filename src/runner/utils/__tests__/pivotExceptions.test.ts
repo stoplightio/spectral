@@ -55,7 +55,7 @@ describe('pivotExceptions', () => {
     expect(pivotExceptions(exceptions, runRules)).toEqual(expected);
   });
 
-  const malformedLocations = [[''], ['a'], ['#'], ['#a'], ['#/']];
+  const malformedLocations = [[''], ['#'], ['#a'], ['#/']];
 
   it.each(malformedLocations)('throws upon detected malformed location (%s)', malformed => {
     const bad = buildRulesetExceptionCollectionFrom(malformed);
