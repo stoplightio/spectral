@@ -145,7 +145,7 @@ describe('Rulesets reader', () => {
           oasRules[name] = {
             ...rule,
             formats: expect.arrayContaining([expect.any(String)]),
-            documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+            documentationUrl: `https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#${name}`,
             ...(rule.severity === void 0 && { severity: DiagnosticSeverity.Warning }),
             ...(rule.recommended === void 0 && { recommended: true }),
             then: expect.any(Object),
@@ -173,7 +173,7 @@ describe('Rulesets reader', () => {
             rules[name] = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+              documentationUrl: `https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#${name}`,
               ...(rule.severity === undefined && { severity: DiagnosticSeverity.Warning }),
               ...(rule.recommended === false && { severity: -1 }),
               ...(rule.recommended === void 0 && { recommended: true }),
@@ -215,7 +215,7 @@ describe('Rulesets reader', () => {
             const formattedRule: IRule = {
               ...rule,
               formats: expect.arrayContaining([expect.any(String)]),
-              documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+              documentationUrl: `https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#${name}`,
               ...(rule.severity === void 0 && { severity: DiagnosticSeverity.Warning }),
               ...(rule.recommended === false && { severity: -1 }),
               ...(rule.recommended === void 0 && { recommended: true }),
@@ -299,7 +299,7 @@ describe('Rulesets reader', () => {
   it('should override properties of extended rulesets', () => {
     return expect(readRuleset(extendsOasWithOverrideRuleset)).resolves.toHaveProperty('rules.operation-2xx-response', {
       description: 'should be overridden',
-      documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+      documentationUrl: `https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#operation-2xx-response`,
       given: '$.info',
       formats: expect.arrayContaining([expect.any(String)]),
       recommended: true,
@@ -318,7 +318,8 @@ describe('Rulesets reader', () => {
         formats: expect.arrayContaining([expect.any(String)]),
         severity: -1,
         description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
-        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+        documentationUrl:
+          'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas2-operation-security-defined',
         then: expect.any(Object),
         type: 'validation',
       },
@@ -941,7 +942,8 @@ describe('Rulesets reader', () => {
 
     expect(ruleset.rules).toStrictEqual({
       'foo-rule': {
-        documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
+        documentationUrl:
+          'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#foo-rule',
         given: '',
         recommended: true,
         severity: DiagnosticSeverity.Warning,
