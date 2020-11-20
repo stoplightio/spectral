@@ -35,7 +35,7 @@ The default value is `warn`.
 ### Resolved
 
 By default, Spectral processes each rule on a "resolved" document (a file where
-all `$ref` JSON schema references have been replaced with the objects they point
+all `$ref` JSON Schema references have been replaced with the objects they point
 to). While this is typically the desired behavior, there are some use cases
 where you may need to run a rule on the "raw" un-resolved document. For example,
 if you want to enforce conventions on the folder structure used for [splitting
