@@ -52,12 +52,12 @@ rules:
 OpenAPI 3.x detected
 
 {document}
-  5:11  error  oas3-schema  Property `foo` is not expected to be here.
- 12:11  error  oas3-schema  Property `type` is not expected to be here.
- 23:18  error  oas3-schema  `type` property type should be string.
- 32:28  error  oas3-schema  `user_id` property type should be object.
- 36:28  error  oas3-schema  `properties` property type should be object.
- 38:23  error  oas3-schema  `description` property type should be string.
- 41:17  error  oas3-schema  `responses` property should not have fewer than 1 properties.
+  5:11  error  oas3-schema  Property `foo` is not expected to be here.                     info.contact
+ 12:11  error  oas3-schema  Property `type` is not expected to be here.                    paths./user.get.parameters[0]
+ 23:18  error  oas3-schema  `type` property type should be string.                         paths./user.get.parameters[1].schema.type
+ 32:28  error  oas3-schema  `user_id` property type should be object.                      paths./user.get.responses[200].content.application/json.schema.properties.user_id
+ 36:28  error  oas3-schema  `properties` property type should be object.                   paths./user.get.responses[200].content.application/yaml.schema.properties
+ 38:23  error  oas3-schema  `description` property type should be string.                  paths./user.get.responses[400].description
+ 41:17  error  oas3-schema  `responses` property should not have fewer than 1 properties.  paths./address.get.responses
 
 ✖ 7 problems (7 errors, 0 warnings, 0 infos, 0 hints)

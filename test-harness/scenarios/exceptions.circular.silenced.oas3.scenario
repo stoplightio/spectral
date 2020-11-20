@@ -6,7 +6,7 @@ info:
   title: Circular circurlarity
   description: This is a description
   version: draft
-  contact: 
+  contact:
     email: me@me.com
 paths:
   /self_referencing_graphs:
@@ -88,11 +88,11 @@ OpenAPI 3.x detected
 {document}
   1:1  warning  oas3-api-servers       OpenAPI `servers` must be present and non-empty array.
   1:1  warning  openapi-tags           OpenAPI object should have non-empty `tags` array.
- 10:9  warning  operation-operationId  Operation should have an `operationId`.
- 10:9  warning  operation-tags         Operation should have non-empty `tags` array.
- 22:9  warning  operation-operationId  Operation should have an `operationId`.
- 22:9  warning  operation-tags         Operation should have non-empty `tags` array.
- 34:9  warning  operation-operationId  Operation should have an `operationId`.
- 34:9  warning  operation-tags         Operation should have non-empty `tags` array.
+ 10:9  warning  operation-operationId  Operation should have an `operationId`.                 paths./self_referencing_graphs.get
+ 10:9  warning  operation-tags         Operation should have non-empty `tags` array.           paths./self_referencing_graphs.get
+ 22:9  warning  operation-operationId  Operation should have an `operationId`.                 paths./cyclic_graphs.get
+ 22:9  warning  operation-tags         Operation should have non-empty `tags` array.           paths./cyclic_graphs.get
+ 34:9  warning  operation-operationId  Operation should have an `operationId`.                 paths./looping_graphs.get
+ 34:9  warning  operation-tags         Operation should have non-empty `tags` array.           paths./looping_graphs.get
 
 ✖ 8 problems (0 errors, 8 warnings, 0 infos, 0 hints)

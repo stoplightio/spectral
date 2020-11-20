@@ -89,7 +89,7 @@ Loose JSON Schema can be validated
 JSON Schema (loose) detected
 
 {document}
- 3:11    error  no-root-all-of        No root allOf combiner
- 6:22  warning  no-empty-description  Description must not be empty
+ 3:11    error  no-root-all-of        No root allOf combiner         allOf
+ 6:22  warning  no-empty-description  Description must not be empty  allOf[0].description
 
 ✖ 2 problems (1 error, 1 warning, 0 infos, 0 hints)
