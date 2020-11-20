@@ -1,5 +1,5 @@
 {
-  "documentationUrl": "https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md",
+  "documentationUrl": "https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md",
   "formats": ["oas2", "oas3"],
   "functions": [
     "oasDocumentSchema",

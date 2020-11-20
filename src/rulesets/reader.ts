@@ -123,9 +123,9 @@ const createRulesetProcessor = (
       mergeRules(rules, ruleset.rules, severity === void 0 ? 'recommended' : severity);
 
       if (ruleset.documentationUrl !== void 0) {
-        for (const rule of Object.values(ruleset.rules)) {
+        for (const [name, rule] of Object.entries(ruleset.rules)) {
           if (isValidRule(rule) && rule.documentationUrl === void 0) {
-            rule.documentationUrl = ruleset.documentationUrl;
+            rule.documentationUrl = `${ruleset.documentationUrl}#${name}`;
           }
         }
       }
