@@ -28,9 +28,9 @@ components:
 OpenAPI 3.x detected
 
 {document}
- 12:15  error  typed-enum  Enum value `Tap, tap, tap...` does not respect the specified type `integer`.
- 13:15  error  typed-enum  Enum value `Is thing thing on?` does not respect the specified type `integer`.
- 15:15  error  typed-enum  Enum value `You certainly wonder` does not respect the specified type `integer`.
- 16:15  error  typed-enum  Enum value `Why I gathered you all today...` does not respect the specified type `integer`.
+ 12:15  error  typed-enum  Enum value `Tap, tap, tap...` does not respect the specified type `integer`.                 components.schemas.a_model.properties.id.enum[1]
+ 13:15  error  typed-enum  Enum value `Is thing thing on?` does not respect the specified type `integer`.               components.schemas.a_model.properties.id.enum[2]
+ 15:15  error  typed-enum  Enum value `You certainly wonder` does not respect the specified type `integer`.             components.schemas.a_model.properties.id.enum[4]
+ 16:15  error  typed-enum  Enum value `Why I gathered you all today...` does not respect the specified type `integer`.  components.schemas.a_model.properties.id.enum[5]
 
 ✖ 4 problems (4 errors, 0 warnings, 0 infos, 0 hints)

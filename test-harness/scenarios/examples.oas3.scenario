@@ -352,15 +352,15 @@ components:
 OpenAPI 3.x detected
 
 {document}
- 126:25  error  oas3-valid-schema-example  `example` property should have required property `name`
- 138:30  error  oas3-valid-schema-example  `example` property type should be boolean
- 142:30  error  oas3-valid-schema-example  `example` property should match format `date-time`
- 146:30  error  oas3-valid-schema-example  `example` property should match format `url`
- 169:20  error  oas3-valid-media-example   `example` property should be equal to one of the allowed values: `foo`, `bar`
- 185:22  error  oas3-valid-schema-example  `example` property should be equal to one of the allowed values: `foo`, `bar`
- 197:22  error  oas3-valid-media-example   `value` property type should be string
- 199:21  error  oas3-valid-media-example   `value` property type should be string
- 262:25  error  oas3-valid-media-example   `value` property should have required property `id`
- 282:25  error  oas3-valid-media-example   `value` property should have required property `user`
+ 126:25  error  oas3-valid-schema-example  `example` property should have required property `name`                        paths./schema-example.get.responses[500].content.application/json.schema.example
+ 138:30  error  oas3-valid-schema-example  `example` property type should be boolean                                      paths./schema-example.get.responses[501].content.application/json.schema.properties.some-bool.example
+ 142:30  error  oas3-valid-schema-example  `example` property should match format `date-time`                             paths./schema-example.get.responses[501].content.application/json.schema.properties.some-date.example
+ 146:30  error  oas3-valid-schema-example  `example` property should match format `url`                                   paths./schema-example.get.responses[501].content.application/json.schema.properties.some-url.example
+ 169:20  error  oas3-valid-media-example   `example` property should be equal to one of the allowed values: `foo`, `bar`  paths./param-examples.get.parameters[1].example
+ 185:22  error  oas3-valid-schema-example  `example` property should be equal to one of the allowed values: `foo`, `bar`  paths./param-examples.get.parameters[3].schema.example
+ 197:22  error  oas3-valid-media-example   `value` property type should be string                                         paths./param-examples.get.parameters[4].examples.the-bad.value
+ 199:21  error  oas3-valid-media-example   `value` property type should be string                                         paths./param-examples.get.parameters[4].examples.the-ugly.value
+ 262:25  error  oas3-valid-media-example   `value` property should have required property `id`                            paths./response-examples.get.responses[500].content.application/json.examples.response.value
+ 282:25  error  oas3-valid-media-example   `value` property should have required property `user`                          paths./response-examples-via-$ref.get.responses[200].content.application/json.examples.response.value
 
 ✖ 10 problems (10 errors, 0 warnings, 0 infos, 0 hints)
