@@ -1,5 +1,4 @@
 {
-  "extends": ["spectral:oas"],
   "functions": [
     "truthy",
     "validateBar",

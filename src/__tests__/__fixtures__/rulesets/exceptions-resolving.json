@@ -1,11 +1,8 @@
 {
-  "extends": [["spectral:oas", "off"]],
   "rules": {
     "no-yaml-remote-reference": {
-      "formats": ["oas2", "oas3"],
       "message": "$ref must not point at yaml files",
       "given": "$..$ref",
-      "recommended": true,
       "resolved": false,
       "then": {
         "function": "pattern",
@@ -15,20 +12,24 @@
       }
     },
     "strings-maxLength": {
-      "formats": ["oas2", "oas3"],
       "message": "String typed properties MUST be further described using 'maxLength'. Error: {{error}}",
       "given": "$..*[?(@.type === 'string')]",
-      "recommended": true,
       "then": {
         "field": "maxLength",
         "function": "truthy"
       }
     },
-    "oas3-schema": "error"
+    "schema": {
+      "message": "I always throw!",
+      "given": "$",
+      "then": {
+        "function": "falsy"
+      }
+    }
   },
   "except": {
-    "./exceptions.remote.oas3.yaml#/components/schemas/TheRemoteType": ["strings-maxLength"],
-    "../foo.json#/components/schemas/TheLocalType/$ref": [ "no-yaml-remote-reference"],
+    "../exceptions.remote.oas3.yaml#/components/schemas/TheRemoteType": ["strings-maxLength"],
+    "../../foo.json#/components/schemas/TheLocalType/$ref": [ "no-yaml-remote-reference"],
     "another.yaml#": ["dummy-rule", "info-contact"]
   }
 }
