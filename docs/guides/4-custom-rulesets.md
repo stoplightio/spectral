@@ -19,28 +19,6 @@ rules:
 
 Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
-<!-- theme: info -->
-
-> Spectral processes each rule on "resolved document" (a file where all `$ref` entries have been resolved). If your rule needs to access `$ref` values, you must set `resolved: false` on your rule.
-
-Here's an eample of a rule that can access `$ref` values:
-
-```yaml
-rules:
-  my-rule-name:
-    description: Tags must have a description.
-    given: $.tags[*]
-    severity: error
-    resolved: false
-    then:
-      field: description
-      function: truthy
-```
-
-You might find `resolved: false` useful if your rule requires access to `$ref` values specifically, for example if you want to enforce conventions on the folder structure used for [splitting up documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/).
-
-**In most cases, you will want to operate on a resolved document.**
-
 ### Given
 
 The `given` property is one of only two on required properties on each rule definition (the other being `then`).
@@ -53,6 +31,45 @@ It can be any valid JSONPath expression or an array of JSONPath expressions.
 The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`.
 
 The default value is `warn`.
+
+### Resolved
+
+By default, Spectral processes each rule on a "resolved" document (a file where
+all `$ref` JSON schema references have been replaced with the objects they point
+to). While this is typically the desired behavior, there are some use cases
+where you may need to run a rule on the "raw" un-resolved document. For example,
+if you want to enforce conventions on the folder structure used for [splitting
+up documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/).
+
+If your rule needs to access the raw `$ref` reference values, you can set
+`resolved: false` to allow the rule to receive the raw un-resolved version of
+the document. Otherwise `resolved: true` is the default.
+
+Here's an eample of a rule that can access `$ref` values:
+
+```yaml
+rules:
+  my-rule-name:
+    description: Parameters must be references
+    given: $.paths.[*][get,post,put,delete,options]
+    severity: error
+    resolved: false
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              $ref:
+                type: string
+            required:
+              - $ref
+```
+
+**In most cases, you will want to operate on a resolved document.**
 
 ### Then
 
