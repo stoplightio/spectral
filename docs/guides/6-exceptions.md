@@ -53,6 +53,17 @@ In the future when the API is improved to pass those rules, they can be removed.
 extends: https://acme.org/ruleset.yaml
 ```
 
+If you wish to turn a given rule for a whole file, you should skip pointer.
+
+```yaml
+# .spectral.yaml
+extends: https://acme.org/ruleset.yaml
+
+except:
+  "subfolder/one.yaml":
+    - my-rule
+```
+
 ## Special Characters
 
 [RFC 6901](https://tools.ietf.org/html/rfc6901#section-3) says that special characters

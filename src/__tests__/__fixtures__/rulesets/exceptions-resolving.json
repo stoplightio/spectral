@@ -11,6 +11,18 @@
         }
       }
     },
+    "no-remote-reference": {
+      "message": "$ref must not point at remote files",
+      "given": "$..$ref",
+      "recommended": true,
+      "resolved": false,
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "\\.[a-z]*(#.*)$"
+        }
+      }
+    },
     "strings-maxLength": {
       "message": "String typed properties MUST be further described using 'maxLength'. Error: {{error}}",
       "given": "$..*[?(@.type === 'string')]",
@@ -29,7 +41,8 @@
   },
   "except": {
     "../exceptions.remote.oas3.yaml#/components/schemas/TheRemoteType": ["strings-maxLength"],
-    "../../foo.json#/components/schemas/TheLocalType/$ref": [ "no-yaml-remote-reference"],
+    "../../foo.json#/components/schemas/TheLocalType/$ref": ["no-yaml-remote-reference"],
+    "../../foo.json": ["no-remote-reference"],
     "another.yaml#": ["dummy-rule", "info-contact"]
   }
 }
