@@ -1,0 +1,73 @@
+{
+  "rules": {
+    "info-matches-stoplight": {
+      "message": "Info must contain Stoplight",
+      "given": "$",
+      "then": {
+        "field": "info.title",
+        "function": "pattern",
+        "functionOptions": {
+          "match": "Stoplight"
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object should contain `contact` object.",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy"
+      }
+    },
+    "info-description": {
+      "description": "OpenAPI object info `description` must be present and non-empty string.",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    },
+    "oas3-api-servers": {
+      "description": "OpenAPI `servers` must be present and non-empty array.",
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "items": {
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "operation-success-response": {
+      "description": "Operation must have at least one `2xx` or `3xx` response.",
+      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "type": "object",
+            "required": ["200"],
+            "properties": {
+              "200": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "except": {
+    "/test/file.json#/info": ["info-contact", "info-description"],
+    "/test/file.json#": ["oas3-api-servers"],
+    "/test/file.json#/paths/~1a.two/get": ["operation-success-response"],
+    "/test/file.json#/paths/~1b.three/get": ["operation-success-response"],
+    "another.yaml#": ["dummy-rule", "info-contact"]
+  }
+}
