@@ -9,6 +9,10 @@ export const oasOpIdUnique: IFunction = targetVal => {
   const seenIds: unknown[] = [];
 
   for (const { path, operation } of getAllOperations(paths)) {
+    if (!('operationId' in paths[path][operation])) {
+      continue;
+    }
+
     const { operationId } = paths[path][operation];
 
     if (seenIds.includes(operationId)) {
@@ -16,9 +20,9 @@ export const oasOpIdUnique: IFunction = targetVal => {
         message: 'operationId must be unique.',
         path: ['paths', path, operation, 'operationId'],
       });
+    } else {
+      seenIds.push(operationId);
     }
-
-    seenIds.push(operationId);
   }
 
   return results;
