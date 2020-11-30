@@ -1,8 +1,20 @@
 import type { JsonPath } from '@stoplight/types';
 
-const _get = require('lodash/get');
+import type { IFunction, IFunctionResult } from '../../../types';
+import { getAllOperations } from './utils/getAllOperations';
+import { isObject } from './utils/isObject';
 
-import { IFunction, IFunctionResult } from '../../../types';
+function _get(value: unknown, path: JsonPath): unknown {
+  for (const segment of path) {
+    if (!isObject(value)) {
+      break;
+    }
+
+    value = value[segment];
+  }
+
+  return value;
+}
 
 export const oasOpSecurityDefined: IFunction<{
   schemesPath: JsonPath;
@@ -11,30 +23,32 @@ export const oasOpSecurityDefined: IFunction<{
 
   const { schemesPath } = options;
 
-  const { paths = {} } = targetVal;
-  const schemes = _get(targetVal, schemesPath) || {};
-  const allDefs = Object.keys(schemes);
+  const { paths } = targetVal;
+  const schemes = _get(targetVal, schemesPath);
 
-  for (const path in paths) {
-    if (Object.keys(paths[path]).length > 0)
-      for (const operation in paths[path]) {
-        if (operation !== 'parameters') {
-          const { security = [] } = paths[path][operation];
+  const allDefs = isObject(schemes) ? Object.keys(schemes) : [];
 
-          for (const index in security) {
-            if (security[index]) {
-              const securityKeys = Object.keys(security[index]);
+  for (const { path, operation } of getAllOperations(paths)) {
+    const { security } = paths[path][operation];
 
-              if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
-                results.push({
-                  message: 'operation referencing undefined security scheme',
-                  path: ['paths', path, operation, 'security', index],
-                });
-              }
-            }
-          }
-        }
+    if (!Array.isArray(security)) {
+      continue;
+    }
+
+    for (const [index, value] of security.entries()) {
+      if (!isObject(value)) {
+        continue;
       }
+
+      const securityKeys = Object.keys(value);
+
+      if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
+        results.push({
+          message: 'Operation referencing undefined security scheme.',
+          path: ['paths', path, operation, 'security', index],
+        });
+      }
+    }
   }
 
   return results;

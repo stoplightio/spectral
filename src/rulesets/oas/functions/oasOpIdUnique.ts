@@ -1,37 +1,29 @@
 import type { IFunction, IFunctionResult } from '../../../types';
+import { getAllOperations } from './utils/getAllOperations';
 
-export const oasOpIdUnique: IFunction = (targetVal, _options, functionPaths) => {
+export const oasOpIdUnique: IFunction = targetVal => {
   const results: IFunctionResult[] = [];
 
-  const { paths = {} } = targetVal;
+  const { paths } = targetVal;
 
-  const ids: any[] = [];
+  const seenIds: unknown[] = [];
 
-  for (const path in paths) {
-    if (Object.keys(paths[path]).length > 0) {
-      for (const operation in paths[path]) {
-        if (operation !== 'parameters') {
-          const { operationId } = paths[path][operation];
+  for (const { path, operation } of getAllOperations(paths)) {
+    if (!('operationId' in paths[path][operation])) {
+      continue;
+    }
 
-          if (operationId) {
-            ids.push({
-              path: ['paths', path, operation, 'operationId'],
-              operationId,
-            });
-          }
-        }
-      }
+    const { operationId } = paths[path][operation];
+
+    if (seenIds.includes(operationId)) {
+      results.push({
+        message: 'operationId must be unique.',
+        path: ['paths', path, operation, 'operationId'],
+      });
+    } else {
+      seenIds.push(operationId);
     }
   }
-
-  ids.forEach(operationId => {
-    if (ids.filter(id => id.operationId === operationId.operationId).length > 1) {
-      results.push({
-        message: 'operationId must be unique',
-        path: operationId.path || functionPaths.given,
-      });
-    }
-  });
 
   return results;
 };
