@@ -30,11 +30,10 @@ OpenAPI 3.x detected
   2:6   warning  info-description              OpenAPI object info `description` must be present and non-empty string.  info
   7:9   warning  operation-description         Operation `description` must be present and non-empty string.            paths./test.get
   7:9   warning  operation-tags                Operation should have non-empty `tags` array.                            paths./test.get
-  8:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.                        paths./test.get.operationId
   10:9    error  parser                        Mapping key must be a string scalar rather than number                   paths./test.get.responses[200]
  12:10  warning  operation-description         Operation `description` must be present and non-empty string.            paths./test.post
  12:10  warning  operation-tags                Operation should have non-empty `tags` array.                            paths./test.post
  13:20    error  operation-operationId-unique  Every operation must have a unique `operationId`.                        paths./test.post.operationId
   15:9    error  parser                        Mapping key must be a string scalar rather than number                   paths./test.post.responses[200]
 
-✖ 11 problems (4 errors, 7 warnings, 0 infos, 0 hints)
+✖ 10 problems (3 errors, 7 warnings, 0 infos, 0 hints)
