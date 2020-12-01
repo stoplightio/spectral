@@ -138,7 +138,7 @@
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^25.5.1",
-    "ts-node": "^8.10.2",
+    "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.7",
     "xml2js": "^0.4.23"
