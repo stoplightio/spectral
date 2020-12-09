@@ -48,6 +48,12 @@ describe('Rulesets reader', () => {
     nock.enableNetConnect();
   });
 
+  it('given empty ruleset, should throw a user friendly error', async () => {
+    await expect(readRuleset(path.join(__dirname, './__fixtures__/empty.json'))).rejects.toThrow(
+      'Ruleset must not empty',
+    );
+  });
+
   it('given flat, valid ruleset file should return rules', async () => {
     expect(await readRuleset(validFlatRuleset)).toEqual(
       expect.objectContaining({
