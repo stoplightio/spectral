@@ -56,6 +56,29 @@ describe('oas2-valid-schema-example', () => {
       ]);
     });
 
+    describe.each(['', null, 0, false])('given falsy %s value', value => {
+      test.each(['example', 'x-example'])('will validate empty %s value', async field => {
+        const results = await s.run({
+          [parentField]: [
+            {
+              xoxo: {
+                enum: ['a', 'b'],
+                [field]: value,
+              },
+            },
+          ],
+        });
+
+        expect(results).toEqual([
+          expect.objectContaining({
+            code: 'oas2-valid-schema-example',
+            message: `\`${field}\` property should be equal to one of the allowed values: \`a\`, \`b\``,
+            severity: DiagnosticSeverity.Error,
+          }),
+        ]);
+      });
+    });
+
     test('will pass when complex example is used ', async () => {
       const results = await s.run({
         [parentField]: [
