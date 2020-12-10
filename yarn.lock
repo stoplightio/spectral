@@ -273,6 +273,14 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@brightcove/kacl@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@brightcove/kacl/-/kacl-0.1.11.tgz#c924a59a98f7d08ba294098f43d22606c341a9ca"
+  integrity sha512-1KdQpJKb6GhU5V6uAlmCIUvgVNcxyU8Wswzt2Gbe4O4sjnxCGWxNhDtbmkdvqyM0Qr+b5cvlw/Ophc9zzVl76w==
+  dependencies:
+    chalk "^2.4.1"
+    keep-a-changelog "^0.10.0"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"
@@ -1678,7 +1686,7 @@ chalk@*, chalk@4.0.0, chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.4.2:
+chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.4.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -3235,6 +3243,13 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+gitconfiglocal@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/gitconfiglocal/-/gitconfiglocal-2.1.0.tgz#07c28685c55cc5338b27b5acbcfe34aeb92e43d1"
+  integrity sha512-qoerOEliJn3z+Zyn1HW2F6eoYJqKwS6MgC9cztTLUB/xLWX8gD/6T60pKn4+t/d6tP7JlybI7Z3z+I572CR/Vg==
+  dependencies:
+    ini "^1.3.2"
+
 glob-base@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/glob-base/-/glob-base-0.3.0.tgz#dbb164f6221b1c0b1ccf82aea328b497df0ea3c4"
@@ -3656,6 +3671,11 @@ inherits@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
+
+ini@^1.3.2:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.7.tgz#a09363e1911972ea16d7a8851005d84cf09a9a84"
+  integrity sha512-iKpRpXP+CrP2jyrxvg1kMUpXDyRUFDWurxbnVT1vQPx+Wz9uCYsMIqYuSBLV+PAaZG/d7kRLKRFc9oDMsH+mFQ==
 
 ini@^1.3.4:
   version "1.3.5"
@@ -4748,6 +4768,15 @@ karma@^5.2.3:
     tmp "0.2.1"
     ua-parser-js "0.7.22"
     yargs "^15.3.1"
+
+keep-a-changelog@^0.10.0:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/keep-a-changelog/-/keep-a-changelog-0.10.2.tgz#b3b68dd9cdd8edb1139b5ff5023d3cd258b100fe"
+  integrity sha512-lV2Jf+VS9K2xaSwzvuMWTDxJCIFFM3PCfgzVaEU9tD68M3E0YeabGai7pG/UzFlJ4r//EO9w4u65kXF1QjLnwg==
+  dependencies:
+    gitconfiglocal "^2.1.0"
+    semver "^7.3.2"
+    yargs-parser "^18.1.3"
 
 kind-of@^1.1.0:
   version "1.1.0"
@@ -7606,7 +7635,7 @@ yaml@^1.10.0, yaml@^1.7.2:
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.0.tgz#3b593add944876077d4d683fee01081bd9fff31e"
   integrity sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==
 
-yargs-parser@18.x, yargs-parser@^18.1.1:
+yargs-parser@18.x, yargs-parser@^18.1.1, yargs-parser@^18.1.3:
   version "18.1.3"
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-18.1.3.tgz#be68c4975c6b2abf469236b0c870362fab09a7b0"
   integrity sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==
