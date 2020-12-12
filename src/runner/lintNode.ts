@@ -8,13 +8,13 @@ import { getDiagnosticSeverity } from '../rulesets/severity';
 import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
-import { getLintTargets, IExceptionLocation, isAKnownException } from './utils';
+import { getLintTargets, ExceptionLocation, isAKnownException } from './utils';
 
 export const lintNode = (
   context: IRunnerInternalContext,
   node: IGivenNode,
   rule: Rule,
-  exceptionLocations: Optional<IExceptionLocation[]>,
+  exceptionLocations: Optional<ExceptionLocation[]>,
 ): void => {
   const fnContext: IFunctionValues = {
     original: node.value,
@@ -91,7 +91,7 @@ function processTargetResults(
   context: IRunnerInternalContext,
   results: IFunctionResult[],
   rule: Rule,
-  exceptionLocations: Optional<IExceptionLocation[]>,
+  exceptionLocations: Optional<ExceptionLocation[]>,
   targetPath: JsonPath,
 ): void {
   for (const result of results) {
