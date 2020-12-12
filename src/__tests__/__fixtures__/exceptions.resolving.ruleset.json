@@ -37,6 +37,15 @@
       "then": {
         "function": "falsy"
       }
+    },
+    "no-json-schema-integer-type": {
+      "given": "$.components.schemas..type",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "notMatch": "^integer$"
+        }
+      }
     }
   },
   "except": {
@@ -44,6 +53,7 @@
     "../foo.json#/components/schemas/TheLocalType/$ref": ["no-yaml-remote-reference"],
     "../foo.json#/components/schemas/integerRemote/$ref": ["no-yaml-remote-reference"],
     "../foo.json": ["no-remote-reference"],
-    "another.yaml#": ["dummy-rule", "info-contact"]
+    "another.yaml#": ["dummy-rule", "info-contact"],
+    "#/components/schemas/integerOne/type": ["no-json-schema-integer-type"]
   }
 }

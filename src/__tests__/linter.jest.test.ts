@@ -676,6 +676,9 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
             integerOne: {
               type: 'integer',
             },
+            integerRemote: {
+              $ref: './__fixtures__/exceptions.remote.oas3.yaml#/components/schemas/integerOne',
+            },
             integerTwo: {
               type: 'integer',
             },
@@ -744,6 +747,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         const rules = {
           'no-yaml-remote-reference': testRuleset.rules['no-yaml-remote-reference'],
           'no-remote-reference': testRuleset.rules['no-remote-reference'],
+          'no-json-schema-integer-type': testRuleset.rules['no-json-schema-integer-type'],
           schema: testRuleset.rules.schema,
         };
 
@@ -753,6 +757,9 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         expect(first).toEqual([
           expect.objectContaining({
+            code: 'no-json-schema-integer-type',
+          }),
+          expect.objectContaining({
             code: 'schema',
           }),
           expect.objectContaining({
@@ -761,20 +768,31 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           expect.objectContaining({
             code: 'no-yaml-remote-reference',
           }),
+          expect.objectContaining({
+            code: 'no-json-schema-integer-type',
+          }),
+          expect.objectContaining({
+            code: 'no-remote-reference',
+          }),
+          expect.objectContaining({
+            code: 'no-yaml-remote-reference',
+          }),
+          expect.objectContaining({
+            code: 'no-json-schema-integer-type',
+          }),
         ]);
 
-        const exceptions = {
-          ...extractExceptionFrom(testRuleset, 'no-yaml-remote-reference', 1),
-          ...extractExceptionFrom(testRuleset, 'no-remote-reference', 3),
-        };
-
-        spectral.setRuleset({ rules, exceptions, functions: {} });
+        spectral.setRuleset({ rules, exceptions: testRuleset.exceptions, functions: {} });
 
         const second = await spectral.run(document, opts);
 
         expect(second).toEqual([
           expect.objectContaining({
             code: 'schema',
+          }),
+          expect.objectContaining({
+            code: 'no-json-schema-integer-type',
+            path: ['components', 'schemas', 'integerTwo', 'type'],
           }),
         ]);
       });

@@ -13,17 +13,20 @@ describe('Ruleset exceptions merging', () => {
         'file.yaml#/a': [],
         'file.yaml#/b': ['1', '2'],
         'file.yaml': ['1', '2'],
+        '#/c': ['3', '4'],
       };
 
       const source: RulesetExceptionCollection = {
         'file.yaml': ['6'],
         'file.yaml#/c': ['3'],
         'file.yaml#/d': ['4', '5'],
+        '#/c': ['7'],
       };
 
       mergeExceptions(target, source, dummyRulesetUri);
 
       expect(target).toEqual({
+        '#/c': ['3', '4', '7'],
         'file.yaml': ['1', '2', '6'],
         'file.yaml#/a': [],
         'file.yaml#/b': ['1', '2'],
@@ -72,7 +75,7 @@ describe('Ruleset exceptions merging', () => {
 
     describe('Validation', () => {
       describe('Invalid locations', () => {
-        const invalidLocations = ['##where', '#where', '#', '#/where', '../123.yaml#where'];
+        const invalidLocations = ['##where', '#where', '../123.yaml#where'];
 
         it.each(invalidLocations)(
           'throws when locations are not valid uris (including fragment): "%s"',
@@ -123,6 +126,7 @@ describe('Ruleset exceptions merging', () => {
 
     describe('Normalization', () => {
       const relativeLocations: Array<[string, string, string]> = [
+        ['./ruleset.yaml', '#/toto', '#/toto'],
         ['./ruleset.yaml', 'one.yaml#', 'one.yaml#'],
         ['./ruleset.yaml', 'one.yaml#/', 'one.yaml#/'],
         ['./ruleset.yaml', 'one.yaml', 'one.yaml'],
