@@ -1,28 +1,33 @@
-![Spectral logo](./docs/img/spectral-banner.png)
+<div align="center" width="1000">
+  <a href="https://stoplight.io/api-mocking?utm_source=github&utm_medium=prism&utm_campaign=readme">
+    <img src="./docs/img/readme-header.svg" width="1000" alt="JSON/YAML linter with custom rulesets.">
+	<br>
+  <br>
+  <a href="https://circleci.com/gh/stoplightio/spectral">
+    <img src="https://img.shields.io/circleci/build/github/stoplightio/spectral/master" alt="Build Status">
+  </a>
+  <a href="https://www.npmjs.com/package/@stoplight/spectral">
+    <img src="https://img.shields.io/npm/dw/@stoplight/spectral?color=blue" alt="NPM Downloads">
+  </a>
+  <a href="https://plant.treeware.earth/stoplightio/spectral">
+    <img src="https://img.shields.io/treeware/trees/stoplightio/spectral" alt="Buy us a Tree">
+  </a>
+	<br>
+  <br>
+</div>
 
-[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral) [![Treeware (Trees)](https://img.shields.io/treeware/trees/stoplightio/spectral)](https://plant.treeware.earth/stoplightio/spectral)
-
-A flexible JSON/YAML linter, with out of the box support for OpenAPI v2/v3 and AsyncAPI v2.
+- **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
+- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents 
+- **JSON Path Support**: Use JSON path to apply rules to specific parts of your objects
+- **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- **Custom Functions**: Create custom functions for advanced use cases
+- **JSON Validation**: Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
 ![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
-## Features
+## 🧰 Installation and Usage
 
-- Create custom rules to lint JSON or YAML objects
-- Ready-to-use rules to validate and lint:
-  - OpenAPI v2 _and_ v3 documents
-  - AsyncAPI v2 documents
-- Use JSON path to apply rules to specific parts of your objects
-- Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
-- Create custom functions for advanced use cases
-- Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
-
-## License
-
-Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE).
-
-## Installation
-
+**Install**
 ```bash
 npm install -g @stoplight/spectral
 
@@ -33,19 +38,29 @@ yarn global add @stoplight/spectral
 
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
 
-This package is [Treeware](https://treeware.earth) so if you would like to thank us for creating it, we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral).
+**Lint**
+```bash
+spectral lint petstore.yaml
+```
 
-## Documentation
+## 📖 Documentation & Community
 
+- [Documentation](https://meta.stoplight.io/docs/spectral/docs/)
+  - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
+  - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
+  - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
+  - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
+  - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw em out and make your own.
+  - [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
 Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
 
-- [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
-- [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
-- [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
-- [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw em out and make your own.
-- [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
+## ℹ️ Support
 
-## FAQs
+If you need help using Spectral or have a support question, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions). It's also a great place to share your rulesets, or tools that leverage Spectral.
+
+If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
+
+## ❓ FAQs
 
 ### How is this different to AJV
 
@@ -59,17 +74,21 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 [Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI). It's mostly been abandoned now, and is JavaScript not TypeScript.
 
-### Integrations
+## ⚙️ Integrations
 
 - [Stoplight Studio](https://stoplight.io/studio) uses Spectral to validate and lint OpenAPI documents.
 - [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
 
-## Contributing
+## 🏁 Help Others Utilize Spectral 
+
+If you're using Spectral for an interesting use case, create a pull request or [contact us]() for a case study. Spread the goodness 🎉
+
+## 👏 Contributing
 
 If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Thanks
+## 🎉 Thanks
 
 - [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI and his work on Speccy
 - [Jamund Ferguson](https://github.com/xjamundx) for JUnit formatter
@@ -77,8 +96,11 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 - Julian Laval for HTML formatter
 - [@nulltoken](https://github.com/nulltoken) for a whole bunch of amazing features
 
-## Support
 
-If you need help using Spectral or have a support question, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions). It's also a great place to share your rulesets, or tools that leverage Spectral.
+## 📜 License
 
-If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
+Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE).
+
+## 🌲 Sponsor Spectral by Planting a Tree
+
+This package is [Treeware](https://treeware.earth) so if you would like to thank us for creating it, we ask that you [**buy the world a tree**](https://plant.treeware.earth/stoplightio/spectral).
