@@ -1,5 +1,5 @@
 <div align="center" width="1000">
-  <a href="https://stoplight.io/api-mocking?utm_source=github&utm_medium=prism&utm_campaign=readme">
+  <a href="https://stoplight.io/api-mocking?utm_source=github&utm_medium=spectral&utm_campaign=readme">
     <img src="./docs/img/readme-header.svg" width="1000" alt="JSON/YAML linter with custom rulesets.">
 	<br>
   <br>
@@ -50,7 +50,7 @@ spectral lint petstore.yaml
   - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
   - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
   - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
-  - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw em out and make your own.
+  - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw 'em out and make your own.
   - [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
 Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
 
@@ -62,13 +62,13 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 ## ❓ FAQs
 
-### How is this different to AJV
+### How is this different to Ajv
 
 [Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
 
 ### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
 
-No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_campaign=spectral).
+No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_medium=spectral&utm_campaign=readme).
 
 ### What is the difference between Spectral and Speccy
 
@@ -76,13 +76,13 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 ## ⚙️ Integrations
 
-- [Stoplight Studio](https://stoplight.io/studio) uses Spectral to validate and lint OpenAPI documents.
+- [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) uses Spectral to validate and lint OpenAPI documents.
 - [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
 
 ## 🏁 Help Others Utilize Spectral 
 
-If you're using Spectral for an interesting use case, create a pull request or [contact us]() for a case study. Spread the goodness 🎉
+If you're using Spectral for an interesting use case, create a pull request or [contact us](mailto:growth@stoplight.io) for a case study. Spread the goodness 🎉
 
 ## 👏 Contributing
 
