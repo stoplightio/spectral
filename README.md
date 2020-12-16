@@ -45,7 +45,7 @@ spectral lint petstore.yaml
 
 ## 📖 Documentation & Community
 
-- [Documentation](https://meta.stoplight.io/docs/spectral/docs/)
+- [Documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md)
   - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
   - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
   - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
