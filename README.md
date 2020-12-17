@@ -14,10 +14,7 @@
 
 - [Installation and Usage](#-installation-and-Usage)
 - [Documentation and Community](#-documentation-and-community)
-- [Support](#-support)
 - [FAQs](#-faqs)
-- [Integrations](#-integrations)
-- [Share your Use Case](#-help-others-utilize-spectral)
 - [Contributing](#-contributing) 
 
 ## 🧰 Installation and Usage
