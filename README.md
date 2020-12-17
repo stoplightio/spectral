@@ -74,7 +74,7 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 ## 🏁 Help Others Utilize Spectral 
 
-If you're using Spectral for an interesting use case, create a pull request or [contact us](mailto:growth@stoplight.io) for a case study. Spread the goodness 🎉
+If you're using Spectral for an interesting use case, [contact us](mailto:growth@stoplight.io) for a case study. We'll add it to a list here. Spread the goodness 🎉
 
 ## 👏 Contributing
 
