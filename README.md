@@ -1,20 +1,5 @@
-<div align="center" width="1000">
-  <a href="https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme">
-    <img src="./docs/img/readme-header.svg" width="1000" alt="JSON/YAML linter with custom rulesets.">
-	<br>
-  <br>
-  <a href="https://circleci.com/gh/stoplightio/spectral">
-    <img src="https://img.shields.io/circleci/build/github/stoplightio/spectral/master" alt="Build Status">
-  </a>
-  <a href="https://www.npmjs.com/package/@stoplight/spectral">
-    <img src="https://img.shields.io/npm/dw/@stoplight/spectral?color=blue" alt="NPM Downloads">
-  </a>
-  <a href="https://plant.treeware.earth/stoplightio/spectral">
-    <img src="https://img.shields.io/treeware/trees/stoplightio/spectral" alt="Buy us a Tree">
-  </a>
-	<br>
-  <br>
-</div>
+[![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
+[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral) [![Treeware (Trees)](https://img.shields.io/treeware/trees/stoplightio/spectral)](https://plant.treeware.earth/stoplightio/spectral)
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents 
@@ -24,6 +9,8 @@
 - **JSON Validation**: Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
 ![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
+
+# Overview
 
 ## 🧰 Installation and Usage
 
