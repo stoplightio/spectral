@@ -2,7 +2,7 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral) [![Treeware (Trees)](https://img.shields.io/treeware/trees/stoplightio/spectral)](https://plant.treeware.earth/stoplightio/spectral)
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
-- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents 
+- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents
 - **JSON Path Support**: Use JSON path to apply rules to specific parts of your objects
 - **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - **Custom Functions**: Create custom functions for advanced use cases
@@ -15,11 +15,12 @@
 - [Installation and Usage](#-installation-and-Usage)
 - [Documentation and Community](#-documentation-and-community)
 - [FAQs](#-faqs)
-- [Contributing](#-contributing) 
+- [Contributing](#-contributing)
 
 ## 🧰 Installation and Usage
 
 **Install**
+
 ```bash
 npm install -g @stoplight/spectral
 
@@ -31,6 +32,7 @@ yarn global add @stoplight/spectral
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
 
 **Lint**
+
 ```bash
 spectral lint petstore.yaml
 ```
@@ -44,7 +46,7 @@ spectral lint petstore.yaml
   - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
   - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw 'em out and make your own.
   - [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
-Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
+    Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
 
 ## ℹ️ Support
 
@@ -72,7 +74,7 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 - [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
 
-## 🏁 Help Others Utilize Spectral 
+## 🏁 Help Others Utilize Spectral
 
 If you're using Spectral for an interesting use case, [contact us](mailto:growth@stoplight.io) for a case study. We'll add it to a list here. Spread the goodness 🎉
 
@@ -87,7 +89,6 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 - [Sindre Sorhus](https://github.com/sindresorhus) for Stylish formatter
 - Julian Laval for HTML formatter
 - [@nulltoken](https://github.com/nulltoken) for a whole bunch of amazing features
-
 
 ## 📜 License
 
