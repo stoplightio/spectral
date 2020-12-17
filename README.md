@@ -12,6 +12,14 @@
 
 # Overview
 
+- [Installation and Usage](#-installation-and-Usage)
+- [Documentation and Community](#-documentation-and-community)
+- [Support](#-support)
+- [FAQs](#-faqs)
+- [Integrations](#-integrations)
+- [Share your Use Case](#-help-others-utilize-spectral)
+- [Contributing](#-contributing) 
+
 ## 🧰 Installation and Usage
 
 **Install**
@@ -30,7 +38,7 @@ Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/ge
 spectral lint petstore.yaml
 ```
 
-## 📖 Documentation & Community
+## 📖 Documentation and Community
 
 - [Documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md)
   - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
