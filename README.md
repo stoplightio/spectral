@@ -1,5 +1,5 @@
 <div align="center" width="1000">
-  <a href="https://stoplight.io/api-mocking?utm_source=github&utm_medium=spectral&utm_campaign=readme">
+  <a href="https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme">
     <img src="./docs/img/readme-header.svg" width="1000" alt="JSON/YAML linter with custom rulesets.">
 	<br>
   <br>
