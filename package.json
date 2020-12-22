@@ -43,10 +43,11 @@
     "generate-assets": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} ./scripts/generate-assets.ts",
     "inline-version": "node ./scripts/inline-version.js",
     "prelint": "tsc --noEmit",
+    "lint.changelog": "kacl lint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.ts src test-harness scripts",
     "lint.prettier": "prettier --ignore-path .eslintignore --check {src,test-harness}/**/*.{json,yaml} docs/**/*.md README.md",
-    "lint": "yarn lint.prettier && yarn lint.eslint",
+    "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
     "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
     "postbuild.functions": "copyfiles -u 1 \"dist/rulesets/{oas,asyncapi}/functions/*.js\" ./",
     "postbuild": "yarn build.functions && yarn generate-assets",
@@ -92,6 +93,7 @@
   },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.1",
+    "@brightcove/kacl": "^0.1.11",
     "@commitlint/config-conventional": "^9.1.1",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-json": "^4.1.0",
@@ -138,7 +140,7 @@
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^25.5.1",
-    "ts-node": "^8.10.2",
+    "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.7",
     "xml2js": "^0.4.23"
@@ -146,6 +148,19 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix --cache --cache-location .cache"
+    ],
+    "CHANGELOG.md": [
+      "kacl lint",
+      "prettier --write"
+    ],
+    "docs/**/*.md": [
+      "prettier --ignore-path .eslintignore --write"
+    ],
+    "README.md": [
+      "prettier --write"
+    ],
+    "{src,test-harness}/**/*.{json,yaml}": [
+      "prettier --ignore-path .eslintignore --write"
     ]
   },
   "husky": {

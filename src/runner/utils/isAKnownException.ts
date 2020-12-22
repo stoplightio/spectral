@@ -1,14 +1,14 @@
 import { JsonPath, Optional } from '@stoplight/types';
 import { arePathsEqual } from './arePathsEqual';
-import { IExceptionLocation } from './pivotExceptions';
+import { ExceptionLocation } from './pivotExceptions';
 
 export const isAKnownException = (
   path: JsonPath,
   source: Optional<string | null>,
-  locations: IExceptionLocation[],
+  locations: ExceptionLocation[],
 ): boolean => {
   for (const location of locations) {
-    if (source !== location.source) {
+    if (location.source !== null && source !== location.source) {
       continue;
     }
 

@@ -53,7 +53,7 @@ In the future when the API is improved to pass those rules, they can be removed.
 extends: https://acme.org/ruleset.yaml
 ```
 
-If you wish to turn a given rule for a whole file, you should skip pointer.
+If you wish to turn off a given rule for a whole file, you should skip the pointer.
 
 ```yaml
 # .spectral.yaml
@@ -62,6 +62,16 @@ extends: https://acme.org/ruleset.yaml
 except:
   "subfolder/one.yaml":
     - my-rule
+```
+
+Disabling a particular JSON path globally is supported as well.
+
+```yaml
+extends: https://acme.org/ruleset.yaml
+
+except:
+  "#/info":
+    - info-contact
 ```
 
 ## Special Characters

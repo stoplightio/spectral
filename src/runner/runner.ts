@@ -12,7 +12,7 @@ import { generateDocumentWideResult } from '../utils/generateDocumentWideResult'
 import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
-import { IExceptionLocation, pivotExceptions } from './utils';
+import { ExceptionLocation, pivotExceptions } from './utils';
 
 const isStdInSource = (inventory: DocumentInventory): boolean => {
   return inventory.document.source === STDIN;
@@ -30,7 +30,7 @@ const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory)
 const runRule = (
   context: IRunnerInternalContext,
   rule: Rule,
-  exceptRuleByLocations: Optional<IExceptionLocation[]>,
+  exceptRuleByLocations: Optional<ExceptionLocation[]>,
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
 
