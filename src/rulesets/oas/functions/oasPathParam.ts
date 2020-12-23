@@ -1,5 +1,6 @@
-import type { Segment } from '@stoplight/types';
+import type { JsonPath, Segment } from '@stoplight/types';
 import type { IFunction, IFunctionResult } from '../../../types';
+import { isObject } from './utils/isObject';
 
 const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
 
@@ -23,7 +24,7 @@ const isUnknownNamedPathParam = (
   p: IParam,
   path: Segment[],
   results: IFunctionResult[],
-  seens: Array<Record<string, unknown>>,
+  seen: Record<string, unknown>,
 ): p is INamedPathParam => {
   if (!isNamedPathParam(p)) {
     return false;
@@ -33,11 +34,9 @@ const isUnknownNamedPathParam = (
     results.push(generateResult(requiredMessage(p.name), path));
   }
 
-  for (const seen of seens) {
-    if (p.name in seen) {
-      results.push(generateResult(uniqueDefinitionMessage(p.name), path));
-      return false;
-    }
+  if (p.name in seen) {
+    results.push(generateResult(uniqueDefinitionMessage(p.name), path));
+    return false;
   }
 
   return true;
@@ -45,8 +44,8 @@ const isUnknownNamedPathParam = (
 
 const ensureAllDefinedPathParamsAreUsedInPath = (
   path: string,
-  params: Record<string, Segment[]>,
-  expected: Record<string, unknown>,
+  params: Record<string, JsonPath>,
+  expected: string[],
   results: IFunctionResult[],
 ) => {
   for (const p in params) {
@@ -54,7 +53,7 @@ const ensureAllDefinedPathParamsAreUsedInPath = (
       continue;
     }
 
-    if (!(p in expected)) {
+    if (!expected.includes(p)) {
       const resPath = params[p];
       results.push(generateResult(`Parameter \`${p}\` is not used in the path \`${path}\`.`, resPath));
     }
@@ -64,15 +63,11 @@ const ensureAllDefinedPathParamsAreUsedInPath = (
 const ensureAllExpectedParamsinPathAreDefined = (
   path: string,
   params: Record<string, Segment[]>,
-  expected: Record<string, unknown>,
+  expected: string[],
   operationPath: Segment[],
   results: IFunctionResult[],
 ) => {
-  for (const p in expected) {
-    if (!expected[p]) {
-      continue;
-    }
-
+  for (const p of expected) {
     if (!(p in params)) {
       results.push(
         generateResult(
@@ -84,11 +79,7 @@ const ensureAllExpectedParamsinPathAreDefined = (
   }
 };
 
-export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
-  const results: IFunctionResult[] = [];
-
-  const { original: object } = vals;
-
+export const oasPathParam: IFunction = targetVal => {
   /**
    * This rule verifies:
    *
@@ -97,101 +88,98 @@ export const oasPathParam: IFunction = (targetVal, _options, paths, vals) => {
    * 2. every path.parameters + operation.parameters property must be used in the path string
    */
 
-  if (!object.paths) {
-    return [];
+  if (!isObject(targetVal.paths)) {
+    return;
   }
+
+  const results: IFunctionResult[] = [];
 
   // keep track of normalized paths for verifying paths are unique
   const uniquePaths: object = {};
   const validOperationKeys = ['get', 'head', 'post', 'put', 'patch', 'delete', 'options', 'trace'];
 
-  for (const path in object.paths) {
-    if (!object.paths[path]) continue;
+  for (const path of Object.keys(targetVal.paths)) {
+    if (!isObject(targetVal.paths[path])) continue;
 
     // verify normalized paths are functionally unique (ie `/path/{one}` vs `/path/{two}` are
     // different but equivalent within the context of OAS)
     const normalized = path.replace(pathRegex, '%'); // '%' is used here since its invalid in paths
-    if (uniquePaths[normalized]) {
+    if (normalized in uniquePaths) {
       results.push(
-        generateResult(`The paths \`${uniquePaths[normalized]}\` and \`${path}\` are equivalent.`, [
-          ...paths.given,
-          'paths',
-          path,
-        ]),
+        generateResult(`The paths \`${uniquePaths[normalized]}\` and \`${path}\` are equivalent.`, ['paths', path]),
       );
     } else {
       uniquePaths[normalized] = path;
     }
 
     // find all templated path parameters
-    const pathElements = {};
-    while (true) {
-      const match = pathRegex.exec(path);
+    const pathElements: string[] = [];
+    let match;
 
-      if (match && match.length > 0) {
-        const p = match[0].replace(/[{}]/g, '');
-        if (pathElements[p]) {
-          results.push(
-            generateResult(
-              `The path \`${path}\` uses the parameter \`{${p}}\` multiple times. Path parameters must be unique.`,
-              [...paths.given, 'paths', path],
-            ),
-          );
-        } else {
-          pathElements[p] = {};
-        }
-        continue;
+    while ((match = pathRegex.exec(path))) {
+      const p = match[0].replace(/[{}]/g, '');
+      if (pathElements.includes(p)) {
+        results.push(
+          generateResult(
+            `The path \`${path}\` uses the parameter \`{${p}}\` multiple times. Path parameters must be unique.`,
+            ['paths', path],
+          ),
+        );
+      } else {
+        pathElements.push(p);
       }
-      break;
     }
 
     // find parameters set within the top-level 'parameters' object
     const topParams = {};
-    for (const i in object.paths[path].parameters) {
-      if (!object.paths[path].parameters[i]) continue;
+    if (Array.isArray(targetVal.paths[path].parameters)) {
+      for (const [i, value] of targetVal.paths[path].parameters.entries()) {
+        if (!isObject(value)) continue;
 
-      const p: IParam = object.paths[path].parameters[i];
-      const fullParameterPath = [...paths.given, 'paths', path, 'parameters', i];
+        const fullParameterPath = ['paths', path, 'parameters', i];
 
-      if (isUnknownNamedPathParam(p, fullParameterPath, results, [topParams])) {
-        topParams[p.name] = fullParameterPath;
+        if (isUnknownNamedPathParam(value, fullParameterPath, results, topParams)) {
+          topParams[value.name] = fullParameterPath;
+        }
       }
     }
 
-    // find parameters set within the operation's 'parameters' object
-    for (const op in object.paths[path]) {
-      if (!object.paths[path][op]) continue;
+    if (isObject(targetVal.paths[path])) {
+      // find parameters set within the operation's 'parameters' object
+      for (const op of Object.keys(targetVal.paths[path])) {
+        if (!isObject(targetVal.paths[path][op])) continue;
 
-      if (op === 'parameters' || !validOperationKeys.includes(op)) {
-        continue;
-      }
-
-      const operationParams = {};
-      const parameters = object.paths[path][op].parameters;
-
-      const operationPath = [...paths.given, 'paths', path, op];
-
-      for (const i in parameters) {
-        if (!Object.hasOwnProperty.call(parameters, i)) continue;
-
-        const p: IParam = parameters[i];
-        const fullParameterPath = [...operationPath, 'parameters', i];
-
-        if (isUnknownNamedPathParam(p, fullParameterPath, results, [topParams, operationParams])) {
-          operationParams[p.name] = fullParameterPath;
+        if (op === 'parameters' || !validOperationKeys.includes(op)) {
+          continue;
         }
-      }
 
-      const definedParams = { ...topParams, ...operationParams };
-      ensureAllDefinedPathParamsAreUsedInPath(path, definedParams, pathElements, results);
-      ensureAllExpectedParamsinPathAreDefined(path, definedParams, pathElements, operationPath, results);
+        const operationParams = {};
+        const parameters = targetVal.paths[path][op].parameters;
+        const operationPath = ['paths', path, op];
+
+        if (Array.isArray(parameters)) {
+          for (const [i, p] of parameters.entries()) {
+            if (!isObject(p)) continue;
+
+            const fullParameterPath = [...operationPath, 'parameters', i];
+
+            if (isUnknownNamedPathParam(p, fullParameterPath, results, operationParams)) {
+              operationParams[p.name] = fullParameterPath;
+            }
+          }
+        }
+
+        const definedParams = { ...topParams, ...operationParams };
+        ensureAllDefinedPathParamsAreUsedInPath(path, definedParams, pathElements, results);
+        ensureAllExpectedParamsinPathAreDefined(path, definedParams, pathElements, operationPath, results);
+      }
     }
   }
 
   return results;
 };
 
-function generateResult(message: string, path: Array<string | number>): IFunctionResult {
+function generateResult(message: string, path: JsonPath): IFunctionResult {
   return {
     message,
     path,

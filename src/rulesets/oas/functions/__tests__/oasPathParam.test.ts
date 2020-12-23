@@ -416,6 +416,11 @@ describe('oasPathParam', () => {
                 required: true,
               },
               {
+                name: 'bar',
+                in: 'path',
+                required: true,
+              },
+              {
                 name: 'qux',
                 in: 'path',
                 required: true,
@@ -450,7 +455,7 @@ describe('oasPathParam', () => {
       expect.objectContaining({
         code: 'path-params',
         message: 'Path parameter `bar` is defined multiple times. Path parameters must be unique.',
-        path: ['paths', '/foo/{boo}/{bar}/{qux}', 'get', 'parameters', '0'],
+        path: ['paths', '/foo/{boo}/{bar}/{qux}', 'get', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
@@ -486,5 +491,34 @@ describe('oasPathParam', () => {
     });
 
     expect(results).toEqual([]);
+  });
+
+  test('No error if path parameter definition has override at the operation level', async () => {
+    const results = await s.run({
+      paths: {
+        '/foo/{bar}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+              description: 'Shared common parameter.',
+            },
+          ],
+          get: {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+                description: 'Operation level parameter.',
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(results).toHaveLength(0);
   });
 });
