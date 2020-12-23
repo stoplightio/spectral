@@ -15,3 +15,5 @@ components:
     TheRemoteType:
       description: A strongly typed string
       type: string
+    integerOne:
+      type: integer
