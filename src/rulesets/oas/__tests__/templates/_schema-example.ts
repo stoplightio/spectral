@@ -5,6 +5,8 @@ import { setFunctionContext } from '../../../evaluators';
 import { functions } from '../../../../functions';
 import oasExample from '../../functions/oasExample';
 
+const Decimal = require('decimal.js');
+
 export default (ruleName: string, path: string) => {
   let s: Spectral;
 
@@ -285,8 +287,8 @@ export default (ruleName: string, path: string) => {
     ['byte', 'MTI3'],
     ['int32', 2 ** 30],
     ['int64', 2 ** 40],
-    ['float', 2 ** 64],
-    ['double', 2 ** 1028],
+    ['float', new Decimal(2).pow(128)],
+    ['double', new Decimal(2).pow(1024)],
   ])('does not report valid usage of %s format', async (format, example) => {
     const results = await s.run({
       openapi: '3.0.2',
