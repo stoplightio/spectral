@@ -5,6 +5,8 @@ import { setFunctionContext } from '../../evaluators';
 import { functions } from '../../../functions';
 import oasExample from '../functions/oasExample';
 
+const Decimal = require('decimal.js');
+
 describe('oas3-valid-schema-example', () => {
   let s: Spectral;
 
@@ -124,6 +126,30 @@ describe('oas3-valid-schema-example', () => {
           severity: DiagnosticSeverity.Error,
         }),
       ]);
+    });
+
+    describe.each(['', null, 0, false])('given falsy %s value', value => {
+      test('will validate empty value', async () => {
+        const results = await s.run({
+          openapi: '3.0.2',
+          [field]: {
+            schemas: {
+              xoxo: {
+                enum: ['a', 'b'],
+                example: value,
+              },
+            },
+          },
+        });
+
+        expect(results).toEqual([
+          expect.objectContaining({
+            code: 'oas3-valid-schema-example',
+            message: '`example` property should be equal to one of the allowed values: `a`, `b`',
+            severity: DiagnosticSeverity.Error,
+          }),
+        ]);
+      });
     });
 
     test('will pass when complex example is used ', async () => {
@@ -302,8 +328,8 @@ describe('oas3-valid-schema-example', () => {
       ['byte', 'MTI3'],
       ['int32', 2 ** 30],
       ['int64', 2 ** 40],
-      ['float', 2 ** 64],
-      ['double', 2 ** 1028],
+      ['float', new Decimal(2).pow(128)],
+      ['double', new Decimal(2).pow(1024)],
     ])('does not report valid usage of %s format', async (format, example) => {
       const results = await s.run({
         openapi: '3.0.2',
