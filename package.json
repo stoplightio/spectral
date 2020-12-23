@@ -134,7 +134,7 @@
     "patch-package": "^6.2.2",
     "pkg": "^4.4.8",
     "prettier": "^2.0.5",
-    "recast": "^0.19.1",
+    "recast": "^0.20.4",
     "rimraf": "^3.0.2",
     "rollup": "^2.34.0",
     "rollup-plugin-terser": "^6.1.0",
