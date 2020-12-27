@@ -25,6 +25,19 @@ describe('oas3-server-trailing-slash', () => {
     expect(results.length).toEqual(0);
   });
 
+  test('validate a correct object with default value', async () => {
+    const results = await s.run({
+      openapi: '3.0.0',
+      paths: {},
+      servers: [
+        {
+          url: '/',
+        },
+      ],
+    });
+    expect(results.length).toEqual(0);
+  });
+
   test('return errors if server url ends with a slash', async () => {
     const results = await s.run({
       openapi: '3.0.0',
