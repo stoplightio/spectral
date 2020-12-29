@@ -515,7 +515,14 @@
       "recommended": true,
       "formats": ["oas3"],
       "type": "style",
-      "given": ["$.paths..examples[*]", "$.components..examples[*]"],
+      "given": [
+        "$.components.examples[*]",
+        "$.paths[*][*]..content[*].examples[*]",
+        "$.paths[*][*]..parameters[*].examples[*]",
+        "$.components.parameters[*].examples[*]",
+        "$.paths[*][*]..headers[*].examples[*]",
+        "$.components.headers[*].examples[*]"
+      ],
       "then": {
         "function": "xor",
         "functionOptions": {
