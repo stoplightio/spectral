@@ -67,6 +67,26 @@ describe('oas3-examples-value-or-externalValue', () => {
     expect(results.length).toEqual(0);
   });
 
+  test('will not validate properties in schemas that are literally named example or examples', async () => {
+    const results = await s.run({
+      components: {
+        schemas: {
+          pet: {
+            properties: {
+              examples: {
+                type: 'array',
+              },
+              example: {
+                type: 'integer',
+              },
+            },
+          },
+        },
+      },
+    });
+    expect(results.length).toEqual(0);
+  });
+
   test('multiple examples - validate all value or externalValue', async () => {
     const results = await s.run({
       components: {
