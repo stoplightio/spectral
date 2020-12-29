@@ -518,7 +518,6 @@
       "given": [
         "$.components.examples[*]",
         "$.paths[*][*]..content[*].examples[*]",
-        "$.components.content[*].examples[*]",
         "$.paths[*][*]..parameters[*].examples[*]",
         "$.components.parameters[*].examples[*]",
         "$.paths[*][*]..headers[*].examples[*]",
