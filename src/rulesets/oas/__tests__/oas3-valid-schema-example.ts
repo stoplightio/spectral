@@ -38,6 +38,20 @@ describe('oas3-valid-schema-example', () => {
       expect(results).toHaveLength(0);
     });
 
+    test('will pass when default value is valid', async () => {
+      const results = await s.run({
+        [field]: {
+          schemas: {
+            xoxo: {
+              type: 'string',
+              example: 'doggie',
+            },
+          },
+        },
+      });
+      expect(results).toHaveLength(0);
+    });
+
     test('will fail when simple example is invalid', async () => {
       const results = await s.run({
         openapi: '3.0.2',
@@ -55,6 +69,26 @@ describe('oas3-valid-schema-example', () => {
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-schema-example',
           message: '`example` property type should be string',
+        }),
+      ]);
+    });
+
+    test('will fail when default value is invalid', async () => {
+      const results = await s.run({
+        [field]: {
+          schemas: {
+            xoxo: {
+              type: 'string',
+              default: 2,
+            },
+          },
+        },
+      });
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'oas3-valid-schema-example',
+          message: '`default` property type should be string',
+          severity: DiagnosticSeverity.Error,
         }),
       ]);
     });

@@ -36,6 +36,59 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toHaveLength(0);
     });
 
+    test('will pass when both examples are valid', async () => {
+      const results = await s.run({
+        [parentField]: [
+          {
+            in: 'body',
+            schema: {
+              type: 'string',
+              example: 'doggie',
+              'x-example': 'doggie',
+            },
+          },
+        ],
+      });
+      expect(results).toHaveLength(0);
+    });
+
+    test('will pass when default value is valid', async () => {
+      const results = await s.run({
+        [parentField]: [
+          {
+            in: 'body',
+            schema: {
+              type: 'string',
+              default: '2',
+            },
+          },
+        ],
+      });
+      expect(results).toHaveLength(0);
+    });
+
+    test('will fail when one of examples is invalid', async () => {
+      const results = await s.run({
+        [parentField]: [
+          {
+            in: 'body',
+            schema: {
+              type: 'string',
+              example: 'doggie',
+              'x-example': 2,
+            },
+          },
+        ],
+      });
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'oas2-valid-schema-example',
+          message: '`x-example` property type should be string',
+          severity: DiagnosticSeverity.Error,
+        }),
+      ]);
+    });
+
     test.each(['example', 'x-example'])('will fail when simple %s is invalid', async field => {
       const results = await s.run({
         [parentField]: [
@@ -51,6 +104,27 @@ describe('oas2-valid-schema-example', () => {
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
           message: `\`${field}\` property type should be string`,
+          severity: DiagnosticSeverity.Error,
+        }),
+      ]);
+    });
+
+    test('will fail when default value is invalid', async () => {
+      const results = await s.run({
+        [parentField]: [
+          {
+            in: 'body',
+            schema: {
+              type: 'string',
+              default: 2,
+            },
+          },
+        ],
+      });
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'oas2-valid-schema-example',
+          message: '`default` property type should be string',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
