@@ -67,7 +67,7 @@ describe('oas3-examples-value-or-externalValue', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('will not validate example property placed in schema under components schema', async () => {
+  test('will not validate properties in schemas that are literally named example or examples', async () => {
     const results = await s.run({
       components: {
         schemas: {
