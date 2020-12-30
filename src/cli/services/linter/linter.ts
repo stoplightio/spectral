@@ -31,8 +31,12 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   }
 
   if (flags.verbose === true) {
-    const rules = Object.values(spectral.rules);
-    console.info(`Found ${rules.length} rules (${rules.filter(rule => rule.enabled).length} enabled)`);
+    if (ruleset) {
+      const rules = Object.values(spectral.rules);
+      console.info(`Found ${rules.length} rules (${rules.filter(rule => rule.enabled).length} enabled)`);
+    } else {
+      console.info('No rules loaded, attempting to detect document type');
+    }
   }
 
   if (flags.skipRule !== void 0) {
