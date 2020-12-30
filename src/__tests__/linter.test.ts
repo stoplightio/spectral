@@ -45,8 +45,6 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
   });
 
   test('should not throw if passed in value is not an object', () => {
@@ -188,7 +186,11 @@ describe('linter', () => {
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
   });
 
+  // todo: depends on spectral:oas
   test('should not report anything for disabled rules', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+
     await spectral.loadRuleset('spectral:oas');
     const { rules: oasRules } = await readRuleset('spectral:oas');
     spectral.setRules({
@@ -234,19 +236,40 @@ describe('linter', () => {
   });
 
   test('should output unescaped json paths', async () => {
-    await spectral.loadRuleset('spectral:oas');
+    spectral.setRuleset({
+      rules: {
+        'valid-header': {
+          given: '$..header',
+          message: 'Header should be valid',
+          then: {
+            field: 'a~',
+            function: 'falsy',
+          },
+        },
+      },
+      functions: {},
+      exceptions: {},
+    });
 
-    const result = await spectral.run(invalidSchema);
-
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'oas3-schema',
-          message: 'Property `type` is not expected to be here.',
-          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-        }),
-      ]),
+    const result = await spectral.run(
+      {
+        a: {
+          '/b': {
+            header: {
+              'a~': 1,
+            },
+          },
+        },
+      },
+      { ignoreUnknownFormat: true },
     );
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'valid-header',
+        path: ['a', '/b', 'header', 'a~'],
+      }),
+    ]);
   });
 
   test('should support human readable severity levels', async () => {
@@ -360,6 +383,9 @@ describe('linter', () => {
   });
 
   test('should not run any rule with defined formats if there are no formats registered', async () => {
+    spectral.registerFormat('oas2', () => false);
+    spectral.registerFormat('oas3', () => false);
+
     spectral.setRules({
       rule1: {
         given: '$.x',
@@ -476,6 +502,8 @@ describe('linter', () => {
   });
 
   test('should not run any rule with defined formats if some formats are registered but document format could not be associated', async () => {
+    spectral.registerFormat('oas2', () => false);
+    spectral.registerFormat('oas3', () => false);
     spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
 
     spectral.setRules({
@@ -526,6 +554,8 @@ describe('linter', () => {
 
   // TODO: Find a way to cover formats more extensively
   test('given a string input, should warn about unmatched formats', async () => {
+    spectral.registerFormat('oas2', () => false);
+    spectral.registerFormat('oas3', () => false);
     const result = await spectral.run('test');
 
     expect(result).toEqual([
@@ -656,6 +686,7 @@ responses:: !!foo
     );
   });
 
+  // todo: depends on spectral:oas
   test('should report a valid line number for json paths containing escaped slashes', async () => {
     spectral.registerFormat('oas2', isOpenApiv2);
     spectral.registerFormat('oas3', isOpenApiv3);

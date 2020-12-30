@@ -11,11 +11,7 @@ export class InvalidUriError extends Error {
 const normalize = ($ref: string, rulesetUri?: string): string => {
   const source = extractSourceFromRef($ref);
 
-  if (typeof source !== 'string') {
-    throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri, 'Missing source'));
-  }
-
-  if (rulesetUri === void 0 && !isAbsolute(source)) {
+  if (rulesetUri === void 0 && source !== null && !isAbsolute(source)) {
     throw new InvalidUriError(
       buildInvalidUriErrorMessage(
         $ref,
@@ -27,19 +23,27 @@ const normalize = ($ref: string, rulesetUri?: string): string => {
 
   const pointer = extractPointerFromRef($ref);
 
-  if (typeof pointer !== 'string') {
-    throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri, 'Missing pointer fragment'));
+  if (source === null && pointer === null) {
+    throw new InvalidUriError(
+      `Malformed exception key (${location}). You must provide either a valid pointer or a valid source, or a source with a pointer.`,
+    );
   }
 
-  try {
-    pointerToPath(pointer);
-  } catch {
-    throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri));
+  if (pointer !== null) {
+    try {
+      pointerToPath(pointer);
+    } catch {
+      throw new InvalidUriError(buildInvalidUriErrorMessage($ref, rulesetUri));
+    }
+  }
+
+  if (source === null) {
+    return pointer as string;
   }
 
   const path = rulesetUri === undefined || isAbsolute(source) ? source : join(rulesetUri, '..', source);
 
-  return pathNormalize(path) + pointer;
+  return pathNormalize(path) + (pointer ?? '');
 };
 
 const buildErrorMessagePrefix = ($ref: string, rulesetUri?: string): string => {
@@ -55,7 +59,7 @@ const buildErrorMessagePrefix = ($ref: string, rulesetUri?: string): string => {
 const buildInvalidUriErrorMessage = ($ref: string, rulesetUri?: string, precision?: string): string => {
   return (
     buildErrorMessagePrefix($ref, rulesetUri) +
-    `Key \`${$ref}\` is not a valid uri${precision ? ` (${precision})` : ''}.`
+    `Key \`${$ref}\` is not a valid uri${precision !== void 0 ? ` (${precision})` : ''}.`
   );
 };
 
@@ -66,7 +70,7 @@ export function mergeExceptions(
 ): void {
   for (const [location, sourceRules] of Object.entries(source)) {
     const normalizedLocation = normalize(location, baseUri);
-    const targetRules = target[normalizedLocation] !== undefined ? target[normalizedLocation] : [];
+    const targetRules = normalizedLocation in target ? target[normalizedLocation] : [];
 
     const set = new Set(targetRules);
 
@@ -74,12 +78,13 @@ export function mergeExceptions(
       throw new Error(buildErrorMessagePrefix(location, baseUri) + 'An empty array of rules has been provided.');
     }
 
-    sourceRules.forEach(r => {
-      if (r.length === 0) {
+    for (const rule of sourceRules) {
+      if (rule.length === 0) {
         throw new Error(buildErrorMessagePrefix(location, baseUri) + 'A rule with an empty name has been provided.');
       }
-      set.add(r);
-    });
+
+      set.add(rule);
+    }
 
     target[normalizedLocation] = [...set].sort((a, b) => a.localeCompare(b));
   }

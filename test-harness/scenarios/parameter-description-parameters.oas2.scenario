@@ -40,8 +40,8 @@ parameters:
 OpenAPI 2.0 (Swagger) detected
 
 {document}
-  5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.
- 14:11  warning  oas2-parameter-description  Parameter objects should have a `description`.
- 25:13  warning  oas2-parameter-description  Parameter objects should have a `description`.
+  5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]
+ 14:11  warning  oas2-parameter-description  Parameter objects should have a `description`.  paths./pets.get.parameters[0]
+ 25:13  warning  oas2-parameter-description  Parameter objects should have a `description`.  parameters.skipParam
 
 ✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)

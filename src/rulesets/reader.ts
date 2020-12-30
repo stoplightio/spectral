@@ -65,15 +65,18 @@ const createRulesetProcessor = (
     }
 
     processedRulesets.add(rulesetUri);
+    const content = await readParsable(rulesetUri, {
+      timeout: readOpts?.timeout,
+      encoding: 'utf8',
+      agent: readOpts?.agent,
+    });
+
+    if (content.trim().length === 0) {
+      throw new Error('Ruleset must not empty');
+    }
+
     const { result } = await createHttpAndFileResolver({ agent: readOpts?.agent }).resolve(
-      parseContent(
-        await readParsable(rulesetUri, {
-          timeout: readOpts?.timeout,
-          encoding: 'utf8',
-          agent: readOpts?.agent,
-        }),
-        rulesetUri,
-      ),
+      parseContent(content, rulesetUri),
       {
         baseUri: rulesetUri,
         dereferenceInline: false,
@@ -123,9 +126,9 @@ const createRulesetProcessor = (
       mergeRules(rules, ruleset.rules, severity === void 0 ? 'recommended' : severity);
 
       if (ruleset.documentationUrl !== void 0) {
-        for (const rule of Object.values(ruleset.rules)) {
+        for (const [name, rule] of Object.entries(ruleset.rules)) {
           if (isValidRule(rule) && rule.documentationUrl === void 0) {
-            rule.documentationUrl = ruleset.documentationUrl;
+            rule.documentationUrl = `${ruleset.documentationUrl}#${name}`;
           }
         }
       }

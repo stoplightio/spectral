@@ -1,10 +1,6 @@
-import type { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
-import type { Dictionary } from '@stoplight/types';
+import type { IFunction, IFunctionContext, IFunctionResult, JSONSchema } from '../../../types';
 import type { ISchemaOptions } from '../../../functions/schema';
-
-function isObject(value: unknown): value is Dictionary<any> {
-  return value !== null && typeof value === 'object';
-}
+import { isObject } from './utils/isObject';
 
 interface IOasExampleOptions {
   oasVersion: 2 | 3;
@@ -69,7 +65,7 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
   }
 
   const schemaOpts: ISchemaOptions = {
-    schema: opts.schemaField === '$' ? targetVal : targetVal[opts.schemaField],
+    schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as JSONSchema),
     oasVersion: opts.oasVersion,
   };
 
@@ -104,7 +100,7 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
 
         const result = this.functions.schema.call(
           this,
-          keyed ? exampleValue.value : exampleValue,
+          keyed && isObject(exampleValue) ? exampleValue.value : exampleValue,
           schemaOpts,
           {
             given: paths.given,

@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Tue Jul 02 2019 17:18:30 GMT+0200 (Central European Summer Time)
 
-import type { TransformCallback, TransformContext } from "karma-typescript";
+import type { TransformCallback, TransformContext } from 'karma-typescript';
 
 module.exports = (config: any) => {
   config.set({
@@ -13,7 +13,7 @@ module.exports = (config: any) => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./karma-jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
+    files: ['./__karma__/jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
     exclude: ['src/cli/**', 'src/formatters/**', 'src/**/*.jest.test.ts'],
@@ -22,17 +22,16 @@ module.exports = (config: any) => {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'src/**/*.ts': ['karma-typescript', 'env'],
-      './karma-jest.ts': ['karma-typescript'],
+      './__karma__/**/*.ts': ['karma-typescript'],
       './setupKarma.ts': ['karma-typescript'],
       './setupTests.ts': ['karma-typescript'],
     },
 
-    envPreprocessor: [
-      'USE_NIMMA',
-    ],
+    envPreprocessor: ['USE_NIMMA'],
 
     karmaTypescriptConfig: {
-      ...require('./tsconfig.karma.json'),
+      ...require('./tsconfig.json'),
+      include: ['**/*.ts'],
       bundlerOptions: {
         resolve: {
           alias: {
@@ -43,7 +42,7 @@ module.exports = (config: any) => {
           ecmaVersion: 11,
         },
         transforms: [
-          function(context: TransformContext, callback: TransformCallback) {
+          function (context: TransformContext, callback: TransformCallback) {
             // you may ask why on earth do we need this...,
             // so this is to make sure `cjs` extensions are treated as actual scripts and not text files
             // https://github.com/monounity/karma-typescript/blob/master/packages/karma-typescript/src/bundler/bundle-item.ts#L18 does not have cjs extension listed, so our file is not treated as script, and eventually require-ing it leads to a typeerror, since we get a string instead
@@ -55,8 +54,8 @@ module.exports = (config: any) => {
             }
 
             return callback(err, false);
-          }
-        ]
+          },
+        ],
       },
     },
 

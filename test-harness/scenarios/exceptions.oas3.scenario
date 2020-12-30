@@ -20,6 +20,6 @@ except:
 OpenAPI 3.x detected
 
 {document}
- 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.
+ 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.  info
 
 ✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)

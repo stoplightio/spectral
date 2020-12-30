@@ -31,6 +31,7 @@ import * as table from 'text-table';
 import { IRuleResult } from '../../types';
 import { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
+import { printPath, PrintStyle } from '../../utils';
 
 // -----------------------------------------------------------------------------
 // Helpers
@@ -69,6 +70,7 @@ export const stylish: Formatter = results => {
       getMessageType(result.severity),
       result.code ?? '',
       result.message,
+      printPath(result.path, PrintStyle.Dot),
     ]);
 
     output += `${table(pathTableData, {

@@ -2,30 +2,37 @@
 // an operation is also present in the global tags array.
 
 import type { IFunction, IFunctionResult } from '../../../types';
+import { getAllOperations } from './utils/getAllOperations';
+import { isObject } from './utils/isObject';
 
 export const oasTagDefined: IFunction = targetVal => {
   const results: IFunctionResult[] = [];
 
-  const globalTags = (targetVal.tags || []).map(({ name }: { name: string }) => name);
+  const globalTags: string[] = [];
 
-  const { paths = {} } = targetVal;
+  if (Array.isArray(targetVal.tags)) {
+    for (const tag of targetVal.tags) {
+      if (isObject(tag) && typeof tag.name === 'string') {
+        globalTags.push(tag.name);
+      }
+    }
+  }
 
-  const validOperationKeys = ['get', 'head', 'post', 'put', 'patch', 'delete', 'options', 'trace'];
+  const { paths } = targetVal;
 
-  for (const path in paths) {
-    if (Object.keys(paths[path]).length > 0) {
-      for (const operation in paths[path]) {
-        if (validOperationKeys.includes(operation)) {
-          const { tags = [] } = paths[path][operation];
-          tags.forEach((tag: string, index: number) => {
-            if (globalTags.indexOf(tag) === -1) {
-              results.push({
-                message: 'Operation tags should be defined in global tags.',
-                path: ['paths', path, operation, 'tags', index],
-              });
-            }
-          });
-        }
+  for (const { path, operation } of getAllOperations(paths)) {
+    const { tags } = paths[path][operation];
+
+    if (!Array.isArray(tags)) {
+      continue;
+    }
+
+    for (const [i, tag] of tags.entries()) {
+      if (!globalTags.includes(tag)) {
+        results.push({
+          message: 'Operation tags should be defined in global tags.',
+          path: ['paths', path, operation, 'tags', i],
+        });
       }
     }
   }

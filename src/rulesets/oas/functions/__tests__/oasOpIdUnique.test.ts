@@ -56,22 +56,6 @@ describe('oasOpIdUnique', () => {
       {
         code: 'operation-operationId-unique',
         message: 'Every operation must have a unique `operationId`.',
-        path: ['paths', '/path1', 'get', 'operationId'],
-        range: {
-          end: {
-            character: 28,
-            line: 4,
-          },
-          start: {
-            character: 23,
-            line: 4,
-          },
-        },
-        severity: DiagnosticSeverity.Error,
-      },
-      {
-        code: 'operation-operationId-unique',
-        message: 'Every operation must have a unique `operationId`.',
         path: ['paths', '/path2', 'get', 'operationId'],
         range: {
           end: {
@@ -103,22 +87,6 @@ describe('oasOpIdUnique', () => {
     });
 
     expect(results).toEqual([
-      {
-        code: 'operation-operationId-unique',
-        message: 'Every operation must have a unique `operationId`.',
-        path: ['paths', '/path1', 'get', 'operationId'],
-        range: {
-          end: {
-            character: 28,
-            line: 4,
-          },
-          start: {
-            character: 23,
-            line: 4,
-          },
-        },
-        severity: DiagnosticSeverity.Error,
-      },
       {
         code: 'operation-operationId-unique',
         message: 'Every operation must have a unique `operationId`.',

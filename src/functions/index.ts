@@ -1,5 +1,6 @@
 import { alphabetical } from './alphabetical';
 import { casing } from './casing';
+import { defined } from './defined';
 import { enumeration } from './enumeration';
 import { falsy } from './falsy';
 import { length } from './length';
@@ -14,6 +15,7 @@ import { xor } from './xor';
 export const functions = {
   alphabetical,
   casing,
+  defined,
   enumeration,
   length,
   pattern,

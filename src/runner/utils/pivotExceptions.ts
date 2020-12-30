@@ -4,26 +4,35 @@ import { InvalidUriError } from '../../rulesets/mergers/exceptions';
 import { RunRuleCollection } from '../../types';
 import { RulesetExceptionCollection } from '../../types/ruleset';
 
-export interface IExceptionLocation {
-  source: string;
-  path: JsonPath;
-}
+export type ExceptionLocation =
+  | {
+      source: string;
+      path: JsonPath;
+    }
+  | {
+      source: string;
+      path: null;
+    }
+  | {
+      source: null;
+      path: JsonPath;
+    };
 
 export const pivotExceptions = (
   exceptions: RulesetExceptionCollection,
   runRules: RunRuleCollection,
-): Dictionary<IExceptionLocation[], string> => {
-  const dic: Dictionary<IExceptionLocation[], string> = {};
+): Dictionary<ExceptionLocation[], string> => {
+  const dic: Dictionary<ExceptionLocation[], string> = {};
 
-  Object.entries(exceptions).forEach(([location, rules]) => {
+  for (const [location, rules] of Object.entries(exceptions)) {
     const pointer = extractPointerFromRef(location);
     const source = extractSourceFromRef(location);
 
-    if (pointer === null || source === null) {
+    if (pointer === null && source === null) {
       throw new InvalidUriError(`Malformed exception key (${location}).`);
     }
 
-    rules.forEach(rulename => {
+    for (const rulename of rules) {
       const rule = runRules[rulename];
 
       if (rule !== void 0) {
@@ -31,10 +40,13 @@ export const pivotExceptions = (
           dic[rulename] = [];
         }
 
-        dic[rulename].push({ source, path: pointerToPath(pointer) });
+        dic[rulename].push({
+          source,
+          path: pointer === null ? null : pointerToPath(pointer),
+        } as ExceptionLocation);
       }
-    });
-  });
+    }
+  }
 
   return dic;
 };

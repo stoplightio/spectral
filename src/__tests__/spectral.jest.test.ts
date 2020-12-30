@@ -11,7 +11,7 @@ import * as Parsers from '../parsers';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
-const bareRuleset = require('./__fixtures__/bare-oas-ruleset.json');
+const bareRuleset = require('./__fixtures__/rulesets/bare.json');
 
 describe('Spectral', () => {
   afterEach(() => {
@@ -21,7 +21,7 @@ describe('Spectral', () => {
   describe('loadRuleset', () => {
     test('should support loading rulesets from filesystem', async () => {
       const s = new Spectral();
-      await s.loadRuleset(path.join(__dirname, '__fixtures__/bare-oas-ruleset.json'));
+      await s.loadRuleset(path.join(__dirname, '__fixtures__/rulesets/bare.json'));
 
       expect(s.rules).toEqual({
         'info-matches-stoplight': expect.objectContaining({
@@ -39,7 +39,7 @@ describe('Spectral', () => {
         [expect.stringMatching('^/test/file.json#$'), ['oas3-api-servers']],
         [expect.stringMatching('^/test/file.json#/paths/~1a.two/get$'), ['operation-success-response']],
         [expect.stringMatching('^/test/file.json#/paths/~1b.three/get$'), ['operation-success-response']],
-        [expect.stringMatching('/__tests__/__fixtures__/another.yaml#$'), ['dummy-rule', 'info-contact']],
+        [expect.stringMatching('/__tests__/__fixtures__/rulesets/another.yaml#$'), ['dummy-rule', 'info-contact']],
       ]);
     });
 
@@ -79,7 +79,7 @@ describe('Spectral', () => {
 
   test('should support combining built-in ruleset with a custom one', async () => {
     const s = new Spectral();
-    await s.loadRuleset(['spectral:oas', path.join(__dirname, './__fixtures__/bare-oas-ruleset.json')]);
+    await s.loadRuleset(['spectral:oas', path.join(__dirname, './__fixtures__/rulesets/bare.json')]);
 
     expect(Object.values(s.rules)).toEqual(
       expect.arrayContaining([
@@ -96,6 +96,7 @@ describe('Spectral', () => {
     );
   });
 
+  // todo: depends on spectral:oas
   test('should report issues for correct files with correct ranges and paths', async () => {
     const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json'));
     const spectral = new Spectral({ resolver: httpAndFileResolver });
