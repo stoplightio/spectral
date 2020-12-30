@@ -1,11 +1,12 @@
 import { Document, STDIN } from '../../../document';
 import { KNOWN_FORMATS } from '../../../formats';
-import { readParsable } from '../../../fs/reader';
+import { readParsable, IFileReadOptions } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { ILintConfig } from '../../../types/config';
-import { getRuleset, listFiles, skipRules } from './utils';
+import { getRuleset, listFiles, skipRules, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';
+import { YamlParserResult } from '@stoplight/yaml';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
   const spectral = new Spectral({
@@ -42,8 +43,9 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     spectral.setRules(skipRules(ruleset.rules, flags));
   }
 
+  const [globs, fileDescriptors] = segregateEntriesPerKind(documents);
   const [targetUris, unmatchedPatterns] = await listFiles(
-    documents,
+    globs,
     !(flags.showUnmatchedGlobs || flags.failOnUnmatchedGlobs),
   );
   const results: IRuleResult[] = [];
@@ -58,16 +60,12 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     }
   }
 
-  for (const targetUri of targetUris) {
-    if (flags.verbose) {
+  for (const targetUri of [...targetUris, ...fileDescriptors]) {
+    if (flags.verbose === true) {
       console.info(`Linting ${targetUri}`);
     }
 
-    const document = new Document(
-      await readParsable(targetUri, { encoding: flags.encoding }),
-      Parsers.Yaml,
-      typeof targetUri === 'number' ? STDIN : targetUri,
-    );
+    const document = await createDocument(targetUri, { encoding: flags.encoding });
 
     results.push(
       ...(await spectral.run(document, {
@@ -81,3 +79,14 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
 
   return results;
 }
+
+const createDocument = async (
+  identifier: string | number,
+  opts: IFileReadOptions,
+): Promise<Document<unknown, YamlParserResult<unknown>>> => {
+  if (typeof identifier === 'string') {
+    return new Document(await readParsable(identifier, opts), Parsers.Yaml, identifier);
+  }
+
+  return new Document(await readFileDescriptor(identifier, opts), Parsers.Yaml, STDIN);
+};

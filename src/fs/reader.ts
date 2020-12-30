@@ -6,34 +6,17 @@ import { STATIC_ASSETS } from '../assets';
 import request from '../request';
 import { Agent } from 'http';
 
-export interface IReadOptions {
+export interface IFileReadOptions {
   encoding: string;
+}
+
+export interface IReadOptions extends IFileReadOptions {
   timeout?: number;
   agent?: Agent;
 }
 
-export async function readFile(name: string | number, opts: IReadOptions): Promise<string> {
-  if (typeof name === 'number') {
-    let result = '';
-
-    const stream = fs.createReadStream('', { fd: name });
-    stream.setEncoding(opts.encoding);
-
-    stream.on('readable', () => {
-      let chunk: string | null;
-
-      while ((chunk = stream.read()) !== null) {
-        result += chunk;
-      }
-    });
-
-    return new Promise<string>((resolve, reject) => {
-      stream.on('error', reject);
-      stream.on('end', () => {
-        resolve(result);
-      });
-    });
-  } else if (name in STATIC_ASSETS) {
+export async function readFile(name: string, opts: IReadOptions): Promise<string> {
+  if (name in STATIC_ASSETS) {
     return STATIC_ASSETS[name];
   } else if (isURL(name)) {
     let response;
@@ -41,7 +24,7 @@ export async function readFile(name: string | number, opts: IReadOptions): Promi
     try {
       const requestOpts: RequestInit = {};
       requestOpts.agent = opts.agent;
-      if (opts.timeout) {
+      if (opts.timeout !== void 0) {
         const controller = new AbortController();
         timeout = setTimeout(() => {
           controller.abort();
@@ -81,7 +64,7 @@ export async function readFile(name: string | number, opts: IReadOptions): Promi
   }
 }
 
-export async function readParsable(name: string | number, opts: IReadOptions): Promise<string> {
+export async function readParsable(name: string, opts: IReadOptions): Promise<string> {
   try {
     return await readFile(name, opts);
   } catch (ex) {
