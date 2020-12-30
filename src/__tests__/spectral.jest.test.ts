@@ -110,15 +110,15 @@ describe('Spectral', () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: 'oas2-schema',
-          path: ['paths', '/todos/{todoId}', 'get', 'responses', '200'],
+          path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'description'],
           range: {
             end: {
-              character: 11,
-              line: 31,
+              character: 29,
+              line: 17,
             },
             start: {
-              character: 17,
-              line: 16,
+              character: 27,
+              line: 17,
             },
           },
           source: documentUri,

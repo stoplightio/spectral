@@ -157,6 +157,13 @@ describe('oasDocumentSchema', () => {
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
         },
+        {
+          code: 'oas3-schema',
+          message: 'Property `foo` is not expected to be here.',
+          path: ['components', 'securitySchemes', 'basic', 'foo'],
+          severity: DiagnosticSeverity.Error,
+          range: expect.any(Object),
+        },
       ]);
     });
 
