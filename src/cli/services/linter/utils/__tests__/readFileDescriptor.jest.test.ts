@@ -1,6 +1,6 @@
 import { join } from '@stoplight/path';
 import * as fs from 'fs';
-import { readFileDescriptor } from '../readFromFileDescriptor';
+import { readFileDescriptor } from '../readFileDescriptor';
 
 describe('readFileDescriptor', () => {
   describe('when a file descriptor is supplied', () => {

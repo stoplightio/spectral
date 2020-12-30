@@ -4,10 +4,8 @@ import { readParsable, IFileReadOptions } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { ILintConfig } from '../../../types/config';
-import { getRuleset, listFiles, skipRules } from './utils';
+import { getRuleset, listFiles, skipRules, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';
-import { segregateEntriesPerKind } from './utils/segregateEntriesPerKind';
-import { readFileDescriptor } from './utils/readFromFileDescriptor';
 import { YamlParserResult } from '@stoplight/yaml';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {

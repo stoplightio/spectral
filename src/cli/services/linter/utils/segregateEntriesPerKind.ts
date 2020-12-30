@@ -1,14 +1,14 @@
-export const segregateEntriesPerKind = (entries: Array<string | number>): [string[], number[]] => {
-  return entries.reduce(
+export function segregateEntriesPerKind(entries: Array<string | number>): [string[], number[]] {
+  return entries.reduce<[string[], number[]]>(
     (group, entry) => {
       if (typeof entry === 'string') {
         group[0].push(entry);
-        return group;
+      } else {
+        group[1].push(entry);
       }
 
-      group[1].push(entry);
       return group;
     },
-    [[], []] as [string[], number[]],
+    [[], []],
   );
-};
+}
