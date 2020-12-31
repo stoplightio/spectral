@@ -314,6 +314,8 @@ Operation should have non-empty `tags` array.
 
 Operation tags should be defined in global tags.
 
+Note: [Desktop Studio does not recognize global tags](https://github.com/stoplightio/studio/issues/347)
+
 **Recommended:** Yes
 
 ### path-declarations-must-exist
