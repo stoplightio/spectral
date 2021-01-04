@@ -7,6 +7,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.8.0] - 2021-01-04
+
+### Added
+
+- CLI: add JSON path to stylish formatter [#1382](https://github.com/stoplightio/spectral/pull/1382)
+- Support optional pointers and sources in `except` [#1405](https://github.com/stoplightio/spectral/pull/1405), [#1423](https://github.com/stoplightio/spectral/pull/1423)
+
+### Fixed
+
+- OpenAPI `path-params` rule flags parameter override definitions as duplicate [#1416](https://github.com/stoplightio/spectral/issues/1416)
+- Falsy OpenAPI `example` fields are validated correctly [#1418](https://github.com/stoplightio/spectral/pull/1418)
+- OpenAPI examples in examples is asked to be OpenAPI compliant [#1406](https://github.com/stoplightio/spectral/issues/1406)
+- Allow single trailing slash for OpenAPI 3 server url [#1427](https://github.com/stoplightio/spectral/pull/1427)
+- Missing non-existing enums in the OpenAPI default [#1429](https://github.com/stoplightio/spectral/pull/1429)
+- Friendly error is thrown for empty ruleset [#1407](https://github.com/stoplightio/spectral/issues/1407)
+- Various general improvements for OpenAPI rules using custom functions [#1362](https://github.com/stoplightio/spectral/pull/1362)
+
 ## [5.7.2] - 2020-12-10
 
 ### Fixed
