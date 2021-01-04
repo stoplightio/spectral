@@ -42,6 +42,19 @@ module.exports = (config: any) => {
           ecmaVersion: 11,
         },
         transforms: [
+          require('karma-typescript-es6-transform')({
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  targets: {
+                    node: 'current',
+                  },
+                },
+              ],
+            ],
+          }),
+
           function (context: TransformContext, callback: TransformCallback) {
             // you may ask why on earth do we need this...,
             // so this is to make sure `cjs` extensions are treated as actual scripts and not text files
