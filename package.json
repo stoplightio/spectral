@@ -136,7 +136,7 @@
     "prettier": "^2.0.5",
     "recast": "^0.20.4",
     "rimraf": "^3.0.2",
-    "rollup": "^2.34.0",
+    "rollup": "^2.35.1",
     "rollup-plugin-terser": "^6.1.0",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-jest": "^25.5.1",
