@@ -26,9 +26,9 @@ describe('listFiles CLI util', () => {
     const list = [path.join(__dirname, 'foo/a.json'), path.join(__dirname, 'foo/b.json')];
 
     when((fg as unknown) as jest.Mock)
-      .calledWith('./foo/*.json')
+      .calledWith('./foo/*.json', expect.any(Object))
       .mockResolvedValueOnce([...list])
-      .calledWith('bar/**/baz*.yaml')
+      .calledWith('bar/**/baz*.yaml', expect.any(Object))
       .mockResolvedValueOnce([]);
 
     expect(await listFiles(['./foo/*.json', 'bar/**/baz*.yaml'], false)).toEqual([list, ['bar/**/baz*.yaml']]);

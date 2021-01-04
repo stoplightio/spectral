@@ -121,7 +121,7 @@
     "husky": "^4.3.6",
     "jest": "~25.5",
     "jest-mock": "^26.6.2",
-    "jest-when": "~2.7",
+    "jest-when": "~3.0",
     "karma": "^5.2.3",
     "karma-chrome-launcher": "^3.1.0",
     "karma-env-preprocessor": "^0.1.1",
