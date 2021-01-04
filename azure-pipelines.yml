@@ -25,7 +25,7 @@ jobs:
       - script: yarn
         displayName: Install deps
 
-      - script: yarn lint
+      - script: yarn lint.eslint
         displayName: Lint the code
 
       - script: yarn build
