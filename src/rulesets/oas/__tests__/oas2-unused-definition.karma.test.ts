@@ -21,7 +21,7 @@ describe('unusedDefinition - Http remote references', () => {
   });
 
   beforeEach(() => {
-    fetchMock = require('fetch-mock').sandbox();
+    fetchMock = require('fetch-mock').default.sandbox();
     window.fetch = fetchMock;
   });
 

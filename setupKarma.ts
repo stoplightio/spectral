@@ -15,7 +15,7 @@ const { fetch } = window;
 let fetchMock: FetchMockSandbox;
 
 beforeEach(() => {
-  fetchMock = require('fetch-mock').sandbox();
+  fetchMock = require('fetch-mock').default.sandbox();
   fetchMock.catch((url, _opts) => {
     console.warn(`Url '${url}' hasn't been found. Have you forgotten to mock it in 'setupKarma.ts'?`);
     return 404;
