@@ -35,7 +35,7 @@ const { Spectral } = require("@stoplight/spectral");
 
 const myOpenApiDocument = {
   responses: {
-    "200": {
+    200: {
       description: "",
       schema: {
         $ref: "#/definitions/error-response",
