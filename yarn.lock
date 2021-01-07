@@ -1162,10 +1162,10 @@
   dependencies:
     type-detect "4.0.8"
 
-"@stoplight/better-ajv-errors@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.0.3.tgz#8d47a511aca89e0027cf748785910fbb25d7c54f"
-  integrity sha512-q3PoPiYZdzfJjQ+q6ifuLVFx3dBKRxW1OBGxnLAoDlamYb+GJUNiaSLB32L6OB4fi6h/TsY21lZB7y7aYFM7tQ==
+"@stoplight/better-ajv-errors@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.0.4.tgz#2147e0e4e9918519e885e74b15aa458a89eb2337"
+  integrity sha512-HFXOerq/6/6YisiTJwCOScwfNaXyGmX7ROAEUoKOrckK9+hJ/QLFm5EofQYEgX4aXkvHokLEbWBs4NMwZ6hQUw==
   dependencies:
     jsonpointer "^4.0.1"
     leven "^3.1.0"
