@@ -47,11 +47,11 @@ function stubRequire(): NodeJS.Require {
 
 function proxyRequire(source: string): NodeJS.Require {
   const actualRequire = require;
-  function req(p: string) {
+  function req(p: string): unknown {
     if (p.startsWith('.')) {
       p = join(source, '..', stripRoot(p));
     } else {
-      p = require.resolve(p, { paths: [join(source, '..')] });
+      p = eval('require.resolve')(p, { paths: [join(source, '..')] });
     }
 
     return actualRequire.call(null, p);
