@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { HTMLElement, parse } from 'node-html-parser';
+import { parse } from 'node-html-parser';
 import { sortResults } from '../../../utils';
 import { html } from '../html';
 
@@ -7,7 +7,7 @@ const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('HTML formatter', () => {
   test('should display proper severity levels', () => {
-    const result = parse(html(mixedErrors, { failSeverity: DiagnosticSeverity.Error })) as HTMLElement;
+    const result = parse(html(mixedErrors, { failSeverity: DiagnosticSeverity.Error }));
     const table = result.querySelector('table tbody');
     expect(table.innerHTML.trim()).toEqual(`<tr class="bg-error" data-group="f-0">
     <th colspan="4">
