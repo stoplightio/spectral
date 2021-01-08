@@ -99,7 +99,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "@types/chalk": "^2.2.0",
-    "@types/jest": "^26.0.4",
+    "@types/jest": "^26.0.20",
     "@types/jest-when": "^2.7.1",
     "@types/lodash": "^4.14.167",
     "@types/nanoid": "^2.1.0",
