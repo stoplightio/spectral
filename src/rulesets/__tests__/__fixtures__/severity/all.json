@@ -1,0 +1,6 @@
+{
+  "extends": [["./shared.json", "all"]],
+  "rules": {
+    "description-matches-stoplight": "off"
+  }
+}

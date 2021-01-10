@@ -1,8 +1,6 @@
 {
-  "extends": [["spectral:oas", "all"]],
   "rules": {
-    "valid-rule": {
-      "message": "should be OK",
+    "valid-rule-2": {
       "given": "$.info",
       "then": {
         "function": "truthy"

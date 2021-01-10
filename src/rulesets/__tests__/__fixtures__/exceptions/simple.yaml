@@ -1,4 +1,4 @@
-extends: [[spectral:oas, off]]
+rules: {}
 except:
   "one.yaml#": ["my-rule-1"]
   "../two.yaml#": ["my-rule-2"]

@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { Spectral } from '../../../spectral';
+import { Spectral } from '../../../../spectral';
 
 export default (s: Spectral, oasVersion: number) => {
   test('should work for shared level parameters', async () => {

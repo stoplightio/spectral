@@ -38,7 +38,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
 
       const remoteFsRefeferencePath = path.join(
         __dirname,
-        '../../__tests__/__fixtures__/unusedDefinition.definition.json#/definitions/ExternalFs',
+        './__fixtures__/unusedShared/unusedDefinition.definition.json#/definitions/ExternalFs',
       );
 
       const doc = `{
@@ -106,7 +106,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
     });
 
     test('when analyzing a directly self-referencing document from the filesystem', async () => {
-      const fixturePath = path.join(__dirname, '../../__tests__/__fixtures__/unusedDefinition.remoteLocal.json');
+      const fixturePath = path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.remoteLocal.json');
 
       const doc = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(doc, Parsers.Json, fixturePath));
@@ -115,7 +115,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
     });
 
     test('when analyzing an indirectly self-referencing document from the filesystem', async () => {
-      const fixturePath = path.join(__dirname, '../../__tests__/__fixtures__/unusedDefinition.indirect.1.json');
+      const fixturePath = path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.indirect.1.json');
 
       const doc = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(doc, Parsers.Json, fixturePath));
@@ -136,7 +136,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
             },
           },
           severity: DiagnosticSeverity.Warning,
-          source: expect.stringMatching('/__tests__/__fixtures__/unusedDefinition.indirect.1.json$'),
+          source: expect.stringMatching('/__fixtures__/unusedShared/unusedDefinition.indirect.1.json$'),
         },
       ]);
     });

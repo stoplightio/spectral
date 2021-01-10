@@ -1,7 +1,8 @@
 {
-  "extends": ["spectral:oas"],
+  "extends": ["./oas2.json", "./oas3.json"],
+  "formats": ["oas2", "oas3"],
   "rules": {
-    "valid-rule": {
+    "generic-valid-rule": {
       "message": "should be OK",
       "given": "$.info",
       "then": {

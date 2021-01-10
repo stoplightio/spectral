@@ -40,7 +40,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
 
       const remoteFsRefeferencePath = path.join(
         __dirname,
-        '../../__tests__/__fixtures__/unusedComponentsSchema.definition.json#/components/schemas/ExternalFs',
+        './__fixtures__/unusedShared/unusedComponentsSchema.definition.json#/components/schemas/ExternalFs',
       );
 
       const doc = `{
@@ -110,7 +110,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
     });
 
     test('when analyzing a directly self-referencing document from the filesystem', async () => {
-      const fixturePath = path.join(__dirname, '../../__tests__/__fixtures__/unusedComponentsSchema.remoteLocal.json');
+      const fixturePath = path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.remoteLocal.json');
 
       const spec = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(spec, Parsers.Json, fixturePath));
@@ -119,7 +119,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
     });
 
     test('when analyzing an indirectly self-referencing document from the filesystem', async () => {
-      const fixturePath = path.join(__dirname, '../../__tests__/__fixtures__/unusedComponentsSchema.indirect.1.json');
+      const fixturePath = path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json');
 
       const spec = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(spec, Parsers.Json, fixturePath));
@@ -140,7 +140,7 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
             },
           },
           severity: DiagnosticSeverity.Warning,
-          source: expect.stringMatching('/__tests__/__fixtures__/unusedComponentsSchema.indirect.1.json$'),
+          source: expect.stringMatching('/__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json$'),
         },
       ]);
     });
