@@ -1,16 +1,7 @@
 {
   "rules": {
     "valid-rule": {
-      "message": "should be OK",
       "given": "$.info",
-      "then": {
-        "function": "truthy"
-      }
-    },
-    "valid-rule-recommended": {
-      "message": "should be OK",
-      "given": "$.info",
-      "recommended": true,
       "then": {
         "function": "truthy"
       }

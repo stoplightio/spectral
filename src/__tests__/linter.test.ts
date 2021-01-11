@@ -1,17 +1,14 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
-import { omit } from 'lodash';
 import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
-import { mergeRules, readRuleset } from '../rulesets';
-import { RuleCollection, Spectral } from '../spectral';
+import { Spectral } from '../spectral';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Parsers, Document } from '..';
 import { IParser } from '../parsers/types';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
-const studioFixture = JSON.stringify(require('./__fixtures__/studio-default-fixture-oas3.json'), null, 2);
 const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
 const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
 
@@ -184,55 +181,6 @@ describe('linter', () => {
     );
 
     expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Hint);
-  });
-
-  // todo: depends on spectral:oas
-  test('should not report anything for disabled rules', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
-
-    await spectral.loadRuleset('spectral:oas');
-    const { rules: oasRules } = await readRuleset('spectral:oas');
-    spectral.setRules({
-      ...mergeRules(oasRules, {
-        'oas3-valid-schema-example': 'off',
-        'operation-success-response': -1,
-        'openapi-tags': 'off',
-        'operation-tag-defined': 'off',
-      }),
-      ...omit(spectral.rules, [
-        'oas3-valid-schema-example',
-        'operation-success-response',
-        'openapi-tags',
-        'operation-tag-defined',
-      ]),
-    } as RuleCollection);
-
-    const result = await spectral.run(invalidSchema);
-
-    expect(result).toEqual([
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'Property `type` is not expected to be here.',
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-components-schema',
-        message: 'Potentially unused components schema has been detected.',
-        path: ['components', 'schemas', 'Pets'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-components-schema',
-        message: 'Potentially unused components schema has been detected.',
-        path: ['components', 'schemas', 'foo'],
-      }),
-    ]);
   });
 
   test('should output unescaped json paths', async () => {
@@ -686,32 +634,51 @@ responses:: !!foo
     );
   });
 
-  // todo: depends on spectral:oas
   test('should report a valid line number for json paths containing escaped slashes', async () => {
     spectral.registerFormat('oas2', isOpenApiv2);
     spectral.registerFormat('oas3', isOpenApiv3);
-    await spectral.loadRuleset('spectral:oas');
+    spectral.setRules({
+      'truthy-get': {
+        given: '$..get',
+        then: {
+          function: 'truthy',
+        },
+      },
+    });
 
-    const result = await spectral.run(studioFixture);
-
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'oas3-schema',
-          path: ['paths', '/users', 'get', 'responses'],
-          range: {
-            end: {
-              character: 23,
-              line: 16,
-            },
-            start: {
-              character: 20,
-              line: 16,
+    const result = await spectral.run(
+      JSON.stringify(
+        {
+          paths: {
+            '/test': {
+              get: null,
             },
           },
-        }),
-      ]),
+        },
+        null,
+        2,
+      ),
+      {
+        ignoreUnknownFormat: true,
+      },
     );
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'truthy-get',
+        path: ['paths', '/test', 'get'],
+        range: {
+          end: {
+            character: 17,
+            line: 3,
+          },
+          start: {
+            character: 13,
+            line: 3,
+          },
+        },
+      }),
+    ]);
   });
 
   test('should remove all redundant ajv errors', async () => {
@@ -775,9 +742,8 @@ responses:: !!foo
 
   test('should report when a resolver is not defined for a given $ref type', async () => {
     const s = new Spectral({ resolver: new Resolver() });
-    s.registerFormat('oas3', isOpenApiv3);
 
-    const result = await s.run(invalidSchema);
+    const result = await s.run(invalidSchema, { ignoreUnknownFormat: true });
 
     expect(result).toEqual([
       expect.objectContaining({
@@ -1267,103 +1233,36 @@ responses:: !!foo
   });
 
   test('should evaluate {{path}} in validation messages', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
-    await spectral.loadRuleset('spectral:oas');
     spectral.setRules({
-      'oas3-schema': {
-        ...spectral.rules['oas3-schema'],
-        description: spectral.rules['oas3-schema'].description ?? '',
-        message: 'Schema error at {{path}}',
+      'truthy-get': {
+        given: '$..get',
+        message: 'Invalid value at {{path}}',
+        then: {
+          function: 'truthy',
+        },
       },
     });
 
-    return expect(spectral.run(invalidSchema)).resolves.toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'oas3-schema',
-          message: 'Schema error at #/paths/~1pets/get/responses/200/headers/header-1',
-          path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-        }),
-      ]),
-    );
-  });
-
-  test('should report ref siblings', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
-    await spectral.loadRuleset('spectral:oas');
-
-    const results = await spectral.run({
-      $ref: '#/',
-      responses: {
-        200: {
-          description: 'a',
-        },
-        201: {
-          description: 'b',
-        },
-        300: {
-          description: 'c',
-          abc: 'd',
-          $ref: '#/d',
+    const result = await spectral.run(
+      {
+        paths: {
+          '/test': {
+            get: null,
+          },
         },
       },
-      openapi: '3.0.0',
-    });
-
-    expect(results).toEqual(
-      expect.arrayContaining([
-        {
-          code: 'no-$ref-siblings',
-          message: '$ref cannot be placed next to any other properties',
-          path: ['responses'],
-          range: {
-            end: {
-              character: 19,
-              line: 12,
-            },
-            start: {
-              character: 14,
-              line: 2,
-            },
-          },
-          severity: DiagnosticSeverity.Error,
-        },
-        {
-          code: 'no-$ref-siblings',
-          message: '$ref cannot be placed next to any other properties',
-          path: ['responses', '300', 'description'],
-          range: {
-            end: {
-              character: 24,
-              line: 10,
-            },
-            start: {
-              character: 21,
-              line: 10,
-            },
-          },
-          severity: DiagnosticSeverity.Error,
-        },
-        {
-          code: 'no-$ref-siblings',
-          message: '$ref cannot be placed next to any other properties',
-          path: ['responses', '300', 'abc'],
-          range: {
-            end: {
-              character: 16,
-              line: 11,
-            },
-            start: {
-              character: 13,
-              line: 11,
-            },
-          },
-          severity: DiagnosticSeverity.Error,
-        },
-      ]),
+      {
+        ignoreUnknownFormat: true,
+      },
     );
+
+    return expect(result).toEqual([
+      expect.objectContaining({
+        code: 'truthy-get',
+        message: 'Invalid value at #/paths/~1test/get',
+        path: ['paths', '/test', 'get'],
+      }),
+    ]);
   });
 
   describe('runWithResolved', () => {

@@ -27,6 +27,21 @@ describe('Linter', () => {
     nock.cleanAll();
   });
 
+  test('should not report anything for disabled rules', async () => {
+    await spectral.loadRuleset(path.join(__dirname, './__fixtures__/rulesets/disabled.json'));
+
+    const result = await spectral.run({});
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'explicitly-not-recommended',
+      }),
+      expect.objectContaining({
+        code: 'implicitly-recommended',
+      }),
+    ]);
+  });
+
   it('should make use of custom functions', async () => {
     await spectral.loadRuleset(functionRuleset);
     expect(await spectral.run({})).toEqual([
