@@ -31,7 +31,7 @@ It has a specific syntax known as [JSON Path](https://jsonpath.com/), which if y
 
 Your `given` value can be a string containing any valid JSON Path Plus expression, or an array of expressions to apply a rule to multiple parts of a document.
 
-Use the [JSON Path Online Evaluator](http://jsonpath.com/) determine what `given` path you want.
+Use the [JSON Path Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
 
 ### Severity
 
