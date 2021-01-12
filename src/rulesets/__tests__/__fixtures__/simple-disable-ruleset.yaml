@@ -1,3 +1,0 @@
-extends: spectral:oas
-rules:
-  operation-description: false

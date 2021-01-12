@@ -1,0 +1,6 @@
+{
+  "extends": [["./recommended.json", "all"]],
+  "rules": {
+    "explicitly-recommended": "off"
+  }
+}

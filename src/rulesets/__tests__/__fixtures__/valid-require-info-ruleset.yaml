@@ -1,6 +1,0 @@
-rules:
-  require-info:
-    message: should be OK
-    given: "$.info"
-    then:
-      function: truthy

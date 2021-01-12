@@ -1,6 +1,10 @@
 # Custom Rulesets
 
-Want to go beyond tweaking a ruleset, and learn how to make your own?
+Customising the core rulesets will get you so far, but at some point you will want to create your very own rulesets. A ruleset is any set of rules that you want to apply to a JSON/YAML document, which could be OpenAPI, RAML, etc. Instead of just focusing on the quality of the OpenAPI/AsyncAPI documents you're writing like the core rulsets do, your custom rulesets could even implement an API Style Guide, but instead of being a Wiki document, it can be automated.
+
+If you'd like to make sure your APIs are consistent and high quality before they've even built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what Hypermedia Formats should be used.
+
+Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is vaid. Whatever you want to do, to start with you'll need to create some rules.
 
 ## Adding Rules
 
@@ -21,10 +25,13 @@ Spectral has [built-in functions](../reference/functions.md) such as `truthy` or
 
 ### Given
 
-The `given` property is one of only two on required properties on each rule definition (the other being `then`).
+The `given` property is conceptually quite like a selector in CSS, in that it picks the part of the document to apply rules to.
 
-It can be any valid JSONPath expression or an array of JSONPath expressions.
-[JSONPath Online Evaluator](http://jsonpath.com/) is a helpful tool to determine what `given` path you want.
+It has a specific syntax known as [JSON Path](https://jsonpath.com/), which if you are familiar with XPath is quite similar. JSON Path is not yet a standard (it [will be](https://tools.ietf.org/html/draft-normington-jsonpath-00) someday), and has a few competing implementations. Spectral uses [jsonpath-plus](https://www.npmjs.com/package/jsonpath-plus) for the implementation, which supports all the main JSON Path functionality and a little bit more, but this syntax may differ slightly from other JSON Path implementations.
+
+Your `given` value can be a string containing any valid JSON Path Plus expression, or an array of expressions to apply a rule to multiple parts of a document.
+
+Use the [JSON Path Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
 
 ### Severity
 
