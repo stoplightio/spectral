@@ -25,11 +25,11 @@ jobs:
       - script: yarn
         displayName: Install deps
 
-      - script: yarn lint
-        displayName: Lint the code
-
       - script: yarn build
         displayName: Build the code in JavaScript
+
+      - script: yarn lint
+        displayName: Lint the code
 
       - script: yarn test.karma
         displayName: Run the browser tests
