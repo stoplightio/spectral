@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
 
 describe('operation-description', () => {
-  const s = new Spectral();
-  s.setRules({
-    'operation-description': Object.assign(ruleset.rules['operation-description'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['operation-description'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['operation-description']);
   });
 
   test('validate a correct object', async () => {

@@ -1,14 +1,11 @@
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
 
 describe('oas3-server-not-example.com', () => {
-  const s = new Spectral();
-  s.registerFormat('oas3', () => true);
-  s.setRules({
-    'oas3-server-not-example.com': Object.assign(ruleset.rules['oas3-server-not-example.com'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['oas3-server-not-example.com'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['oas3-server-not-example.com']);
   });
 
   test('validate a correct object', async () => {

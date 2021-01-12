@@ -1,19 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
 
 describe('oas3-examples-value-or-externalValue', () => {
-  const s = new Spectral();
-  s.registerFormat('oas3', () => true);
-  s.setRules({
-    'oas3-examples-value-or-externalValue': Object.assign(ruleset.rules['oas3-examples-value-or-externalValue'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['oas3-examples-value-or-externalValue'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['oas3-examples-value-or-externalValue']);
   });
 
   test('validate if just externalValue', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: { examples: { first: { externalValue: 'value' } } },
     });
     expect(results.length).toEqual(0);
@@ -21,6 +19,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('validate if just value', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: { examples: { first: { value: 'value' } } },
     });
     expect(results.length).toEqual(0);
@@ -28,6 +27,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('validate if example on top level', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       examples: { first: { value: 'value', externalValue: 'value' } },
     });
     expect(results.length).toEqual(0);
@@ -35,6 +35,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('validate if examples properties in examples', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         examples: {
           first: {
@@ -69,6 +70,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('will not validate properties in schemas that are literally named example or examples', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         schemas: {
           pet: {
@@ -89,6 +91,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('multiple examples - validate all value or externalValue', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         examples: {
           first: { value: 'value1' },
@@ -101,22 +104,16 @@ describe('oas3-examples-value-or-externalValue', () => {
   });
 
   test('return warnings if missing externalValue and value', async () => {
-    const results = await s.run({ components: { examples: { first: {} } } });
+    const results = await s.run({
+      openapi: '3.0.0',
+      components: { examples: { first: {} } },
+    });
     expect(results).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'first'],
-        range: {
-          end: {
-            character: 17,
-            line: 3,
-          },
-          start: {
-            character: 14,
-            line: 3,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -124,6 +121,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if missing externalValue and value in one', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         examples: {
           first: { value: 'value1' },
@@ -137,16 +135,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'third'],
-        range: {
-          end: {
-            character: 17,
-            line: 9,
-          },
-          start: {
-            character: 14,
-            line: 9,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -154,6 +143,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('return warnings if both externalValue and value', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         examples: { first: { externalValue: 'externalValue', value: 'value' } },
       },
@@ -163,16 +153,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'first'],
-        range: {
-          end: {
-            character: 24,
-            line: 5,
-          },
-          start: {
-            character: 14,
-            line: 3,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -180,6 +161,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if both externalValue and value in one (in components)', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         examples: {
           first: { value: 'value1' },
@@ -193,16 +175,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'examples', 'second'],
-        range: {
-          end: {
-            character: 25,
-            line: 8,
-          },
-          start: {
-            character: 15,
-            line: 6,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -210,6 +183,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if both externalValue and value in one (in headers)', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         headers: {
           headerName: {
@@ -227,16 +201,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'headers', 'headerName', 'examples', 'second'],
-        range: {
-          end: {
-            character: 29,
-            line: 10,
-          },
-          start: {
-            character: 19,
-            line: 8,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -244,6 +209,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if both externalValue and value in one (in parameters)', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       components: {
         parameters: {
           parameterName: {
@@ -261,16 +227,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['components', 'parameters', 'parameterName', 'examples', 'second'],
-        range: {
-          end: {
-            character: 29,
-            line: 10,
-          },
-          start: {
-            character: 19,
-            line: 8,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);
@@ -278,6 +235,7 @@ describe('oas3-examples-value-or-externalValue', () => {
 
   test('multiple examples - return warnings if both externalValue and value in one (in content)', async () => {
     const results = await s.run({
+      openapi: '3.0.0',
       paths: {
         '/path': {
           get: {
@@ -306,16 +264,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
         path: ['paths', '/path', 'get', 'responses', '200', 'content', 'application/json', 'examples', 'second'],
-        range: {
-          end: {
-            character: 37,
-            line: 14,
-          },
-          start: {
-            character: 27,
-            line: 12,
-          },
-        },
+        range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
       },
     ]);

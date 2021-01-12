@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
 
 describe('path-declarations-must-exist', () => {
-  const s = new Spectral();
-  s.setRules({
-    'path-declarations-must-exist': Object.assign(ruleset.rules['path-declarations-must-exist'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['path-declarations-must-exist'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['path-declarations-must-exist']);
   });
 
   test('validate a correct object', async () => {

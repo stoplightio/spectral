@@ -1,25 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
-import { setFunctionContext } from '../../evaluators';
-import { functions } from '../../../functions';
-import oasExample from '../functions/oasExample';
+import { Spectral } from '../../../spectral';
+
+import { loadRules } from './__helpers__/loadRules';
 
 const Decimal = require('decimal.js');
 
 describe('oas3-valid-schema-example', () => {
   let s: Spectral;
 
-  beforeEach(() => {
-    s = new Spectral();
-    s.registerFormat('oas3', () => true);
-    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
-    s.setRules({
-      'oas3-valid-schema-example': Object.assign(ruleset.rules['oas3-valid-schema-example'], {
-        recommended: true,
-        type: RuleType[ruleset.rules['oas3-valid-schema-example'].type],
-      }),
-    });
+  beforeEach(async () => {
+    s = await loadRules(['oas3-valid-schema-example']);
   });
 
   describe.each(['components', 'headers'])('%s', field => {
@@ -40,6 +30,7 @@ describe('oas3-valid-schema-example', () => {
 
     test('will pass when default value is valid', async () => {
       const results = await s.run({
+        openapi: '3.0.2',
         [field]: {
           schemas: {
             xoxo: {
@@ -75,6 +66,7 @@ describe('oas3-valid-schema-example', () => {
 
     test('will fail when default value is invalid', async () => {
       const results = await s.run({
+        openapi: '3.0.2',
         [field]: {
           schemas: {
             xoxo: {

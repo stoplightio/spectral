@@ -1,20 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Document } from '../../../document';
-import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
-import { RuleType, Spectral } from '../../../index';
+import type { Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
+import { loadRules } from './__helpers__/loadRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
-import { rules } from '../index.json';
 
 describe('unusedComponentsSchema - Local references', () => {
-  const s = new Spectral({ resolver: httpAndFileResolver });
-  s.registerFormat('oas3', () => true);
-  s.setFunctions({ unreferencedReusableObject });
-  s.setRules({
-    'oas3-unused-components-schema': Object.assign(rules['oas3-unused-components-schema'], {
-      recommended: true,
-      type: RuleType[rules['oas3-unused-components-schema'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['oas3-unused-components-schema'], { resolver: httpAndFileResolver });
   });
 
   test('does not report anything for empty object', async () => {

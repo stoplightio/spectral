@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
 
 describe('openapi-tags', () => {
-  const s = new Spectral();
-  s.setRules({
-    'openapi-tags': Object.assign(ruleset.rules['openapi-tags'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['openapi-tags'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['openapi-tags']);
   });
 
   test('validate a correct object', async () => {

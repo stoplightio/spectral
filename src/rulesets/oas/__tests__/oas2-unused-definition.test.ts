@@ -1,20 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Document } from '../../../document';
-import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
-import { RuleType, Spectral } from '../../../index';
+import type { Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
+import { loadRules } from './__helpers__/loadRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
-import { rules } from '../index.json';
 
 describe('oas2-unused-definition - local references', () => {
-  const s = new Spectral({ resolver: httpAndFileResolver });
-  s.registerFormat('oas2', () => true);
-  s.setFunctions({ unreferencedReusableObject });
-  s.setRules({
-    'oas2-unused-definition': Object.assign(rules['oas2-unused-definition'], {
-      recommended: true,
-      type: RuleType[rules['oas2-unused-definition'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await loadRules(['oas2-unused-definition'], { resolver: httpAndFileResolver });
   });
 
   test('does not report anything for empty object', async () => {
