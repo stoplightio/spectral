@@ -1,22 +1,21 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
+import type { Spectral } from '../../../spectral';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { loadRules } from './__helpers__/loadRules';
 
 const ruleName = 'asyncapi-tags-alphabetical';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    tags: [{ name: 'a tag' }, { name: 'another tag' }],
-  };
+  beforeEach(async () => {
+    s = await loadRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      tags: [{ name: 'a tag' }, { name: 'another tag' }],
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -25,18 +24,16 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if tags are not sorted', async () => {
-    const clone = cloneDeep(doc);
+    doc.tags = [{ name: 'wrongly ordered' }, ...doc.tags];
 
-    clone.tags = [{ name: 'wrongly ordered' }, ...clone.tags];
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'AsyncAPI object should have alphabetical `tags`.',
         path: ['tags'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });

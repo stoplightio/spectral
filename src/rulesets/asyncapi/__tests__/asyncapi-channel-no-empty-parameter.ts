@@ -1,16 +1,16 @@
 import { cloneDeep } from 'lodash';
 
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
 import { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
+import { DiagnosticSeverity } from '@stoplight/types/dist';
 
 const ruleName = 'asyncapi-channel-no-empty-parameter';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
+  let s: Spectral;
+
   beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
+    s = await loadRules([ruleName]);
   });
 
   const doc: any = {
@@ -38,7 +38,7 @@ describe(`Rule '${ruleName}'`, () => {
         code: ruleName,
         message: 'Channel path should not have empty parameter substitution pattern.',
         path: ['channels', 'users/{}/signedOut'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });

@@ -1,39 +1,38 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
 import { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-unused-components-schema';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    channels: {
-      'users/signedUp': {
-        subscribe: {
-          message: {
-            payload: {
-              $ref: '#/components/schemas/externallyDefinedUser',
+  beforeEach(async () => {
+    s = await loadRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      channels: {
+        'users/signedUp': {
+          subscribe: {
+            message: {
+              payload: {
+                $ref: '#/components/schemas/externallyDefinedUser',
+              },
             },
           },
         },
       },
-    },
-    components: {
-      schemas: {
-        externallyDefinedUser: {
-          type: 'string',
+      components: {
+        schemas: {
+          externallyDefinedUser: {
+            type: 'string',
+          },
         },
       },
-    },
-  };
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -42,11 +41,9 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if components.schemas contains unreferenced objects', async () => {
-    const clone = cloneDeep(doc);
+    delete doc.channels['users/signedUp'];
 
-    delete clone.channels['users/signedUp'];
-
-    clone.channels['users/signedOut'] = {
+    doc.channels['users/signedOut'] = {
       subscribe: {
         message: {
           payload: {
@@ -56,14 +53,14 @@ describe(`Rule '${ruleName}'`, () => {
       },
     };
 
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'Potentially unused components schema has been detected.',
         path: ['components', 'schemas', 'externallyDefinedUser'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });

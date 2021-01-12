@@ -1,26 +1,25 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
+import type { Spectral } from '../../../spectral';
+import { loadRules } from './__helpers__/loadRules';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-info-license';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    info: {
-      license: {
-        name: 'MIT',
+  beforeEach(async () => {
+    s = await loadRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      info: {
+        license: {
+          name: 'MIT',
+        },
       },
-    },
-  };
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -29,18 +28,16 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if license property is missing', async () => {
-    const clone = cloneDeep(doc);
+    delete doc.info.license;
 
-    delete clone.info.license;
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'AsyncAPI object should contain `license` object.',
         path: ['info'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });
