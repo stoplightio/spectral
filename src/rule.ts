@@ -2,7 +2,7 @@ import { Optional } from '@stoplight/types';
 import { JSONPathExpression } from 'nimma';
 
 import { IDocument } from './document';
-import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './rulesets/severity';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './ruleset/severity';
 import { IGivenNode, IRule, IThen, SpectralDiagnosticSeverity } from './types';
 import { hasIntersectingElement } from './utils';
 

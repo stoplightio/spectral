@@ -3,7 +3,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
 import { RuleCollection, Spectral } from '../../spectral';
-import { readRuleset } from '../reader';
+import { readRuleset } from '../readRuleset';
 
 jest.mock('fs');
 jest.mock('nanoid/non-secure');

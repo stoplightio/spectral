@@ -1,6 +1,6 @@
 import { FetchMockSandbox } from 'fetch-mock';
 import { Spectral } from '../../spectral';
-import { readRuleset } from '../reader';
+import { readRuleset } from '../readRuleset';
 
 declare const fetch: FetchMockSandbox;
 

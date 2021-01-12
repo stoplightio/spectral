@@ -1,10 +1,10 @@
 import * as path from '@stoplight/path';
 import * as fs from 'fs';
-import { RESOLVE_ALIASES, STATIC_ASSETS } from '../assets';
-import { NPM_PKG_ROOT, SPECTRAL_PKG_NAME, SPECTRAL_PKG_VERSION } from '../consts';
+import { RESOLVE_ALIASES, STATIC_ASSETS } from '../../assets';
+import { NPM_PKG_ROOT, SPECTRAL_PKG_NAME, SPECTRAL_PKG_VERSION } from '../../consts';
 
 // let's point at dist directory that has all relevant files (including custom functions) transpiled
-const SPECTRAL_SRC_ROOT = path.join(__dirname, '../../dist');
+const SPECTRAL_SRC_ROOT = path.join(__dirname, '../../../dist');
 
 function resolveSpectralVersion(pkg: string): string {
   return SPECTRAL_PKG_VERSION.length === 0
@@ -18,10 +18,6 @@ function resolveFromNPM(pkg: string): string {
   } catch {
     return path.join(NPM_PKG_ROOT, resolveSpectralVersion(pkg));
   }
-}
-
-export function isNPMSource(src: string): boolean {
-  return src.startsWith(NPM_PKG_ROOT) && !src.includes(`${NPM_PKG_ROOT}${SPECTRAL_PKG_NAME}`); // we ignore spectral on purpose, since they undergo a slightly different process
 }
 
 async function resolveFromFS(from: string, to: string): Promise<string> {

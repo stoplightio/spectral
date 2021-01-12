@@ -1,8 +1,8 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
-import { InvalidUriError } from '../../../rulesets/mergers/exceptions';
 import { ExceptionLocation, pivotExceptions } from '../pivotExceptions';
 
 import { Rule } from '../../../rule';
+import { InvalidUriError } from '../../../ruleset/mergers/exceptions';
 
 describe('pivotExceptions', () => {
   let dummyRule: Rule;

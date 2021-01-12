@@ -6,7 +6,7 @@ import * as path from 'path';
 import * as timers from 'timers';
 
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { readRuleset } from '../rulesets';
+import { readRuleset } from '../ruleset';
 import { IFunctionResult, Spectral } from '../spectral';
 import { IRuleset, RulesetExceptionCollection } from '../types/ruleset';
 

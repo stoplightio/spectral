@@ -1,4 +1,4 @@
-import { findFile } from '../finder';
+import { findFile } from '../findFile';
 
 describe('Rulesets finder', () => {
   it('should point to unpkg.com if npm module', () => {

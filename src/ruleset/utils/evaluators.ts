@@ -1,8 +1,8 @@
 import { join, stripRoot } from '@stoplight/path';
 import { Dictionary, Optional } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { IFunction, JSONSchema } from '../types';
-import { decorateIFunctionWithSchemaValidation } from './validation';
+import { decorateIFunctionWithSchemaValidation } from '../validation';
+import { JSONSchema, IFunction } from '../../types';
 
 export type CJSExport = Partial<{
   exports: object | ESCJSCompatibleExport;

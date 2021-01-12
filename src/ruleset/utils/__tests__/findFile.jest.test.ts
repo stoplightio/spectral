@@ -1,10 +1,10 @@
 import * as path from '@stoplight/path';
-import { findFile } from '../finder';
+import { findFile } from '../findFile';
 
 describe('Rulesets finder', () => {
   it('should join relative path', () => {
-    return expect(findFile(__dirname, './finder.jest.test.ts')).resolves.toEqual(
-      path.join(__dirname, './finder.jest.test.ts'),
+    return expect(findFile(__dirname, './findFile.jest.test.ts')).resolves.toEqual(
+      path.join(__dirname, './findFile.jest.test.ts'),
     );
   });
 

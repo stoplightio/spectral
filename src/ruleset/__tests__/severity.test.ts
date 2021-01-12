@@ -1,4 +1,4 @@
-import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { HumanReadableDiagnosticSeverity } from '../../types';
 import { FileRulesetSeverity } from '../../types/ruleset';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
