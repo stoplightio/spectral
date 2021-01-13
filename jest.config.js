@@ -3,8 +3,8 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js'],
   testEnvironment: 'node',
   testMatch: ['<rootDir>/src/**/__tests__/*.(ts)'],
-  testPathIgnorePatterns: ['/node_modules/', '\.karma\.test\.ts$'],
+  testPathIgnorePatterns: ['/node_modules/', '.karma.test.ts$'],
   coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/'],
-  setupFilesAfterEnv: ['./setupJest.ts', './setupTests.ts'],
-  globalSetup: './setupJest.global.ts'
+  setupFilesAfterEnv: ['./setupJest.ts'],
+  globalSetup: './setupJest.global.ts',
 };

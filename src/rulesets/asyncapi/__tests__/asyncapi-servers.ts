@@ -1,27 +1,26 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-servers';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    servers: {
-      production: {
-        url: 'stoplight.io',
-        protocol: 'https',
+  beforeEach(async () => {
+    s = await createWithRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      servers: {
+        production: {
+          url: 'stoplight.io',
+          protocol: 'https',
+        },
       },
-    },
-  };
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -30,36 +29,32 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if servers property is missing', async () => {
-    const clone = cloneDeep(doc);
+    delete doc.servers;
 
-    delete clone.servers;
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'AsyncAPI object should contain a non empty `servers` object.',
         path: [],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });
 
   test('return result if servers property is empty', async () => {
-    const clone = cloneDeep(doc);
+    delete doc.servers.production;
+    expect(doc.servers).toEqual({});
 
-    delete clone.servers.production;
-    expect(clone.servers).toEqual({});
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'AsyncAPI object should contain a non empty `servers` object.',
         path: ['servers'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });

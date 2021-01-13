@@ -1,46 +1,45 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
+import type { Spectral } from '../../../spectral';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { createWithRules } from './__helpers__/createWithRules';
 
 const ruleName = 'asyncapi-schema-default';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    channels: {
-      'users/{userId}/signedUp': {
+  beforeEach(async () => {
+    s = await createWithRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      channels: {
+        'users/{userId}/signedUp': {
+          parameters: {
+            userId: {
+              schema: {
+                default: 17,
+              },
+            },
+          },
+        },
+      },
+      components: {
         parameters: {
-          userId: {
+          orphanParameter: {
             schema: {
               default: 17,
             },
           },
         },
-      },
-    },
-    components: {
-      parameters: {
-        orphanParameter: {
-          schema: {
+        schemas: {
+          aSchema: {
             default: 17,
           },
         },
       },
-      schemas: {
-        aSchema: {
-          default: 17,
-        },
-      },
-    },
-  };
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -49,51 +48,45 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if components.schemas.{schema}.default is not valid against the schema it decorates', async () => {
-    const clone = cloneDeep(doc);
+    doc.components.schemas.aSchema.type = 'string';
 
-    clone.components.schemas.aSchema.type = 'string';
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`default` property type should be string',
         path: ['components', 'schemas', 'aSchema', 'default'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
 
   test('return result if components.parameters.{parameter}.schema.default is not valid against the schema it decorates', async () => {
-    const clone = cloneDeep(doc);
+    doc.components.parameters.orphanParameter.schema.type = 'string';
 
-    clone.components.parameters.orphanParameter.schema.type = 'string';
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`default` property type should be string',
         path: ['components', 'parameters', 'orphanParameter', 'schema', 'default'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
 
   test('return result if channels.{channel}.parameters.{parameter}.schema.default is not valid against the schema it decorates', async () => {
-    const clone = cloneDeep(doc);
-
-    clone.channels['users/{userId}/signedUp'].parameters.userId.schema.type = 'string';
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    doc.channels['users/{userId}/signedUp'].parameters.userId.schema.type = 'string';
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`default` property type should be string',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'userId', 'schema', 'default'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });

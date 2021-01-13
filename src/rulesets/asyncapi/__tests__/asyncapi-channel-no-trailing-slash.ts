@@ -1,24 +1,23 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
+import type { Spectral } from '../../../spectral';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { createWithRules } from './__helpers__/createWithRules';
 
 const ruleName = 'asyncapi-channel-no-trailing-slash';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    channels: {
-      'users/{userId}/signedUp': {},
-    },
-  };
+  beforeEach(async () => {
+    s = await createWithRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      channels: {
+        'users/{userId}/signedUp': {},
+      },
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -27,18 +26,16 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if channels.{channel} ends with a trailing slash', async () => {
-    const clone = cloneDeep(doc);
+    doc.channels['users/{userId}/signedOut/'] = {};
 
-    clone.channels['users/{userId}/signedOut/'] = {};
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'Channel path should not end with a slash.',
         path: ['channels', 'users/{userId}/signedOut/'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });
