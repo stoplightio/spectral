@@ -1,57 +1,57 @@
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
 
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
-
 const ruleName = 'asyncapi-payload';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
+  let s: Spectral;
+  let doc: any;
+
   beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
+    s = await createWithRules([ruleName]);
+
+    const payload = {
+      type: 'object',
+      properties: {
+        value: {
+          type: 'integer',
+        },
+      },
+      required: ['value'],
+    };
+
+    doc = {
+      asyncapi: '2.0.0',
+      channels: {
+        'users/{userId}/signedUp': {
+          publish: {
+            message: {
+              payload: cloneDeep(payload),
+            },
+          },
+          subscribe: {
+            message: {
+              payload: cloneDeep(payload),
+            },
+          },
+        },
+      },
+      components: {
+        messageTraits: {
+          aTrait: {
+            payload: cloneDeep(payload),
+          },
+        },
+        messages: {
+          aMessage: {
+            payload: cloneDeep(payload),
+          },
+        },
+      },
+    };
   });
-
-  const payload = {
-    type: 'object',
-    properties: {
-      value: {
-        type: 'integer',
-      },
-    },
-    required: ['value'],
-  };
-
-  const doc: any = {
-    asyncapi: '2.0.0',
-    channels: {
-      'users/{userId}/signedUp': {
-        publish: {
-          message: {
-            payload: cloneDeep(payload),
-          },
-        },
-        subscribe: {
-          message: {
-            payload: cloneDeep(payload),
-          },
-        },
-      },
-    },
-    components: {
-      messageTraits: {
-        aTrait: {
-          payload: cloneDeep(payload),
-        },
-      },
-      messages: {
-        aMessage: {
-          payload: cloneDeep(payload),
-        },
-      },
-    },
-  };
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -60,35 +60,31 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if components.messages.{message}.payload is not valid against the AsyncApi2 schema object', async () => {
-    const clone = cloneDeep(doc);
+    doc.components.messages.aMessage.payload.deprecated = 17;
 
-    clone.components.messages.aMessage.payload.deprecated = 17;
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`deprecated` property type should be boolean',
         path: ['components', 'messages', 'aMessage', 'payload', 'deprecated'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
 
   test('return result if components.messageTraits.{trait}.payload is not valid against the AsyncApi2 schema object', async () => {
-    const clone = cloneDeep(doc);
+    doc.components.messageTraits.aTrait.payload.deprecated = 17;
 
-    clone.components.messageTraits.aTrait.payload.deprecated = 17;
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`deprecated` property type should be boolean',
         path: ['components', 'messageTraits', 'aTrait', 'payload', 'deprecated'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
@@ -96,18 +92,16 @@ describe(`Rule '${ruleName}'`, () => {
   test.each(['publish', 'subscribe'])(
     'return result if channels.{channel}.%s.message.payload is not valid against the AsyncApi2 schema object',
     async (property: string) => {
-      const clone = cloneDeep(doc);
+      doc.channels['users/{userId}/signedUp'][property].message.payload.deprecated = 17;
 
-      clone.channels['users/{userId}/signedUp'][property].message.payload.deprecated = 17;
-
-      const results = await s.run(clone, { ignoreUnknownFormat: false });
+      const results = await s.run(doc, { ignoreUnknownFormat: false });
 
       expect(results).toEqual([
         expect.objectContaining({
           code: ruleName,
           message: '`deprecated` property type should be boolean',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'payload', 'deprecated'],
-          severity: rule.severity,
+          severity: DiagnosticSeverity.Error,
         }),
       ]);
     },

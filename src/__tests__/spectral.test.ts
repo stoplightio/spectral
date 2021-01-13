@@ -3,7 +3,6 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { DepGraph } from 'dependency-graph';
 import { escapeRegExp, merge } from 'lodash';
 
-import { buildRulesetExceptionCollectionFrom } from '../../setupTests';
 import { Document } from '../document';
 import * as Parsers from '../parsers';
 import { RunRuleCollection, Spectral } from '../spectral';
@@ -282,7 +281,7 @@ describe('spectral', () => {
       it.each([['one.yaml#'], ['one.yaml#/'], ['one.yaml#/toto'], ['down/one.yaml#/toto'], ['../one.yaml#/toto']])(
         'throws on relative locations  (location: "%s")',
         location => {
-          const exceptions = buildRulesetExceptionCollectionFrom(location);
+          const exceptions = { [location]: ['a'] };
 
           expect(() => {
             s.setRuleset({ rules: {}, functions: {}, exceptions });
@@ -296,7 +295,7 @@ describe('spectral', () => {
         ['c:/one.yaml#/toto', 'c:/one.yaml#/toto'],
         ['c:\\one.yaml#/toto', 'c:/one.yaml#/toto'],
       ])('normalizes absolute locations (location: "%s")', (location, expected) => {
-        const exceptions = buildRulesetExceptionCollectionFrom(location);
+        const exceptions = { [location]: ['a'] };
 
         s.setRuleset({ rules: {}, functions: {}, exceptions });
 

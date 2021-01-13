@@ -1,26 +1,25 @@
-import { cloneDeep } from 'lodash';
-
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
 import { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-info-license-url';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
-  beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
-  });
+  let s: Spectral;
+  let doc: any;
 
-  const doc: any = {
-    asyncapi: '2.0.0',
-    info: {
-      license: {
-        url: 'https://github.com/stoplightio/spectral/blob/develop/LICENSE',
+  beforeEach(async () => {
+    s = await createWithRules([ruleName]);
+
+    doc = {
+      asyncapi: '2.0.0',
+      info: {
+        license: {
+          url: 'https://github.com/stoplightio/spectral/blob/develop/LICENSE',
+        },
       },
-    },
-  };
+    };
+  });
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -29,18 +28,16 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if url property is missing', async () => {
-    const clone = cloneDeep(doc);
+    delete doc.info.license.url;
 
-    delete clone.info.license.url;
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: 'License object should include `url`.',
         path: ['info', 'license'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Warning,
       }),
     ]);
   });

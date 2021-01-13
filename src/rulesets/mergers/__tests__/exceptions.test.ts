@@ -2,8 +2,6 @@ import { escapeRegExp } from 'lodash';
 import { RulesetExceptionCollection } from '../../../types/ruleset';
 import { mergeExceptions } from '../exceptions';
 
-import { buildRulesetExceptionCollectionFrom } from '../../../../setupTests';
-
 describe('Ruleset exceptions merging', () => {
   describe('when loaded from a ruleset', () => {
     const dummyRulesetUri = './ruleset.yaml';
@@ -80,7 +78,7 @@ describe('Ruleset exceptions merging', () => {
         it.each(invalidLocations)(
           'throws when locations are not valid uris (including fragment): "%s"',
           async location => {
-            const source = buildRulesetExceptionCollectionFrom(location);
+            const source = { [location]: ['a'] };
 
             expect(() => {
               mergeExceptions({}, source, dummyRulesetUri);
@@ -95,7 +93,7 @@ describe('Ruleset exceptions merging', () => {
 
       describe('throws on empty rules array', () => {
         const location = 'one.yaml#/';
-        const source = buildRulesetExceptionCollectionFrom(location, []);
+        const source = { [location]: [] };
 
         expect(() => {
           mergeExceptions({}, source, dummyRulesetUri);
@@ -110,7 +108,7 @@ describe('Ruleset exceptions merging', () => {
 
       describe('throws on empty rule name', () => {
         const location = 'one.yaml#/';
-        const source = buildRulesetExceptionCollectionFrom(location, ['b', '']);
+        const source = { [location]: ['b', ''] };
 
         expect(() => {
           mergeExceptions({}, source, dummyRulesetUri);
@@ -148,12 +146,12 @@ describe('Ruleset exceptions merging', () => {
       it.each(relativeLocations)(
         'combines relative locations with ruleset uri (ruleset: "%s", location: "%s")',
         (rulesetUri, location, expectedLocation) => {
-          const source = buildRulesetExceptionCollectionFrom(location);
+          const source = { [location]: ['a'] };
           const target = {};
 
           mergeExceptions(target, source, rulesetUri);
 
-          const expected = buildRulesetExceptionCollectionFrom(expectedLocation);
+          const expected = { [expectedLocation]: ['a'] };
           expect(target).toEqual(expected);
         },
       );
@@ -179,12 +177,12 @@ describe('Ruleset exceptions merging', () => {
       it.each(absoluteLocations)(
         'normalize absolute locations (ruleset: "%s", location: "%s")',
         (rulesetUri, location, expectedLocation) => {
-          const source = buildRulesetExceptionCollectionFrom(location);
+          const source = { [location]: ['a'] };
           const target = {};
 
           mergeExceptions(target, source, rulesetUri);
 
-          const expected = buildRulesetExceptionCollectionFrom(expectedLocation);
+          const expected = { [expectedLocation]: ['a'] };
           expect(target).toEqual(expected);
         },
       );
