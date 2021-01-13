@@ -51,6 +51,11 @@ export const lintNode = (
       } catch (ex) {
         // todo: use reporter or sth
         console.warn(ex);
+        targetResults = [
+          {
+            message: `Error executing function ${then.function}: ${ex}`,
+          },
+        ];
       }
 
       if (targetResults === void 0) continue;
