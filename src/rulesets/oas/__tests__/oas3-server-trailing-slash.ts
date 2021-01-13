@@ -1,15 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas3-server-trailing-slash', () => {
-  const s = new Spectral();
-  s.registerFormat('oas3', () => true);
-  s.setRules({
-    'oas3-server-trailing-slash': Object.assign(ruleset.rules['oas3-server-trailing-slash'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['oas3-server-trailing-slash'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['oas3-server-trailing-slash']);
   });
 
   test('validate a correct object', async () => {

@@ -1,26 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FetchMockSandbox } from 'fetch-mock';
 import { Document } from '../../../document';
-import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
-import { RuleType, Spectral } from '../../../index';
+import type { Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
+import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
-import { rules } from '../index.json';
 
 describe('unusedComponentsSchema - Http remote references', () => {
   let fetchMock: FetchMockSandbox;
+  let s: Spectral;
 
-  const s = new Spectral({ resolver: httpAndFileResolver });
-  s.registerFormat('oas3', () => true);
-  s.setFunctions({ unreferencedReusableObject });
-  s.setRules({
-    'oas3-unused-components-schema': Object.assign(rules['oas3-unused-components-schema'], {
-      recommended: true,
-      type: RuleType[rules['oas3-unused-components-schema'].type],
-    }),
-  });
-
-  beforeEach(() => {
+  beforeEach(async () => {
+    s = await createWithRules(['oas3-unused-components-schema'], { resolver: httpAndFileResolver });
     fetchMock = require('fetch-mock').default.sandbox();
     window.fetch = fetchMock;
   });

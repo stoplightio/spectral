@@ -1,14 +1,11 @@
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas2-oneOf', () => {
-  const s = new Spectral();
-  s.registerFormat('oas2', () => true);
-  s.setRules({
-    'oas2-oneOf': Object.assign(ruleset.rules['oas2-oneOf'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['oas2-oneOf'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['oas2-oneOf']);
   });
 
   test('annotates with correct paths', async () => {

@@ -1,15 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas2-api-schemes', () => {
-  const s = new Spectral();
-  s.registerFormat('oas2', () => true);
-  s.setRules({
-    'oas2-api-schemes': Object.assign(ruleset.rules['oas2-api-schemes'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['oas2-api-schemes'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['oas2-api-schemes']);
   });
 
   test('validate a correct object', async () => {

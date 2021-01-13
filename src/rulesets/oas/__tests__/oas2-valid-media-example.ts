@@ -1,28 +1,18 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
-import { setFunctionContext } from '../../evaluators';
-import { functions } from '../../../functions';
-import oasExample from '../functions/oasExample';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas2-valid-media-example', () => {
   let s: Spectral;
 
-  beforeEach(() => {
-    s = new Spectral();
-    s.registerFormat('oas2', () => true);
-    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
-    s.setRules({
-      'oas2-valid-media-example': Object.assign(ruleset.rules['oas2-valid-media-example'], {
-        recommended: true,
-        type: RuleType[ruleset.rules['oas2-valid-media-example'].type],
-      }),
-    });
+  beforeEach(async () => {
+    s = await createWithRules(['oas2-valid-media-example']);
   });
 
   describe('responses', () => {
     test('will pass when examples are valid', async () => {
       const results = await s.run({
+        swagger: '2.0',
         responses: {
           200: {
             schema: {
@@ -40,6 +30,7 @@ describe('oas2-valid-media-example', () => {
 
     test('will fail when example is invalid', async () => {
       const results = await s.run({
+        swagger: '2.0',
         responses: {
           200: {
             schema: {

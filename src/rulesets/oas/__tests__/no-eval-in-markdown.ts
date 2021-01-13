@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('no-eval-in-markdown', () => {
-  const s = new Spectral();
-  s.setRules({
-    'no-eval-in-markdown': Object.assign(ruleset.rules['no-eval-in-markdown'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['no-eval-in-markdown'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['no-eval-in-markdown']);
   });
 
   test('validate a correct object', async () => {

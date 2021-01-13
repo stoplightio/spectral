@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('operation-singular-tag', () => {
-  const s = new Spectral();
-  s.setRules({
-    'operation-singular-tag': Object.assign(ruleset.rules['operation-singular-tag'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['operation-singular-tag'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['operation-singular-tag']);
   });
 
   test('validate a correct object', async () => {

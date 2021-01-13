@@ -1,58 +1,59 @@
 import { cloneDeep } from 'lodash';
 
-import { buildTestSpectralWithAsyncApiRule } from '../../../../setupTests';
-import { Rule } from '../../../rule';
-import { Spectral } from '../../../spectral';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-payload-default';
-let s: Spectral;
-let rule: Rule;
 
 describe(`Rule '${ruleName}'`, () => {
+  let s: Spectral;
+  let doc: any;
+
   beforeEach(async () => {
-    [s, rule] = await buildTestSpectralWithAsyncApiRule(ruleName);
+    s = await createWithRules([ruleName]);
+
+    const payload = {
+      type: 'object',
+      properties: {
+        value: {
+          type: 'integer',
+        },
+      },
+      required: ['value'],
+      default: { value: 17 },
+    };
+
+    doc = {
+      asyncapi: '2.0.0',
+      channels: {
+        'users/{userId}/signedUp': {
+          publish: {
+            message: {
+              payload: cloneDeep(payload),
+            },
+          },
+          subscribe: {
+            message: {
+              payload: cloneDeep(payload),
+            },
+          },
+        },
+      },
+      components: {
+        messageTraits: {
+          aTrait: {
+            payload: cloneDeep(payload),
+          },
+        },
+        messages: {
+          aMessage: {
+            payload: cloneDeep(payload),
+          },
+        },
+      },
+    };
   });
-
-  const payload = {
-    type: 'object',
-    properties: {
-      value: {
-        type: 'integer',
-      },
-    },
-    required: ['value'],
-    default: { value: 17 },
-  };
-
-  const doc: any = {
-    asyncapi: '2.0.0',
-    channels: {
-      'users/{userId}/signedUp': {
-        publish: {
-          message: {
-            payload: cloneDeep(payload),
-          },
-        },
-        subscribe: {
-          message: {
-            payload: cloneDeep(payload),
-          },
-        },
-      },
-    },
-    components: {
-      messageTraits: {
-        aTrait: {
-          payload: cloneDeep(payload),
-        },
-      },
-      messages: {
-        aMessage: {
-          payload: cloneDeep(payload),
-        },
-      },
-    },
-  };
 
   test('validates a correct object', async () => {
     const results = await s.run(doc, { ignoreUnknownFormat: false });
@@ -61,35 +62,31 @@ describe(`Rule '${ruleName}'`, () => {
   });
 
   test('return result if components.messages.{message}.payload.default is not valid against the schema it decorates', async () => {
-    const clone = cloneDeep(doc);
+    doc.components.messages.aMessage.payload.default = { seventeen: 17 };
 
-    clone.components.messages.aMessage.payload.default = { seventeen: 17 };
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`default` property should have required property `value`',
         path: ['components', 'messages', 'aMessage', 'payload', 'default'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
 
   test('return result if components.messageTraits.{trait}.payload.default is not valid against the schema it decorates', async () => {
-    const clone = cloneDeep(doc);
+    doc.components.messageTraits.aTrait.payload.default = { seventeen: 17 };
 
-    clone.components.messageTraits.aTrait.payload.default = { seventeen: 17 };
-
-    const results = await s.run(clone, { ignoreUnknownFormat: false });
+    const results = await s.run(doc, { ignoreUnknownFormat: false });
 
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
         message: '`default` property should have required property `value`',
         path: ['components', 'messageTraits', 'aTrait', 'payload', 'default'],
-        severity: rule.severity,
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
@@ -97,18 +94,16 @@ describe(`Rule '${ruleName}'`, () => {
   test.each(['publish', 'subscribe'])(
     'return result if channels.{channel}.%s.message.payload.default is not valid against the schema it decorates',
     async (property: string) => {
-      const clone = cloneDeep(doc);
+      doc.channels['users/{userId}/signedUp'][property].message.payload.default = { seventeen: 17 };
 
-      clone.channels['users/{userId}/signedUp'][property].message.payload.default = { seventeen: 17 };
-
-      const results = await s.run(clone, { ignoreUnknownFormat: false });
+      const results = await s.run(doc, { ignoreUnknownFormat: false });
 
       expect(results).toEqual([
         expect.objectContaining({
           code: ruleName,
           message: '`default` property should have required property `value`',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'payload', 'default'],
-          severity: rule.severity,
+          severity: DiagnosticSeverity.Error,
         }),
       ]);
     },

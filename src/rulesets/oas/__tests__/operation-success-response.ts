@@ -1,21 +1,15 @@
-import { Spectral } from '../../../spectral';
-import oasOpSuccessResponse from '../functions/oasOpSuccessResponse';
-import { rules } from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('operation-success-response', () => {
-  let spectral: Spectral;
+  let s: Spectral;
 
-  beforeEach(() => {
-    spectral = new Spectral();
-    spectral.setFunctions({ oasOpSuccessResponse });
-    spectral.setRules({
-      // @ts-ignore
-      'operation-success-response': rules['operation-success-response'],
-    });
+  beforeEach(async () => {
+    s = await createWithRules(['operation-success-response']);
   });
 
   test('is happy when a 200 response is set', async () => {
-    const results = await spectral.run({
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -32,7 +26,7 @@ describe('operation-success-response', () => {
   });
 
   test('is happy when a 301 response is set', async () => {
-    const results = await spectral.run({
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -49,7 +43,7 @@ describe('operation-success-response', () => {
   });
 
   test('is happy when a (non 200) success response is set', async () => {
-    const results = await spectral.run({
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -79,7 +73,7 @@ describe('operation-success-response', () => {
           '418': {},
         },
       };
-      const results = await spectral.run(obj);
+      const results = await s.run(obj);
       expect(results).toEqual([
         expect.objectContaining({
           code: 'operation-success-response',
@@ -91,7 +85,7 @@ describe('operation-success-response', () => {
   );
 
   test('warns about missing success response', async () => {
-    const results = await spectral.run({
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/path': {
@@ -114,7 +108,7 @@ describe('operation-success-response', () => {
   });
 
   test('ignores anything at the PathItem level which is not a HTTP method', async () => {
-    const results = await spectral.run({
+    const results = await s.run({
       swagger: '2.0',
       paths: {
         '/path': {

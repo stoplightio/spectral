@@ -1,23 +1,12 @@
-import { isOpenApiv2, isOpenApiv3 } from '../../../formats';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
-import refSiblings from '../functions/refSiblings';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('no-$ref-siblings', () => {
   let s: Spectral;
 
-  beforeEach(() => {
-    s = new Spectral();
-    s.registerFormat('oas2', isOpenApiv2);
-    s.registerFormat('oas3', isOpenApiv3);
-    s.setFunctions({ refSiblings });
-    s.setRules({
-      'no-$ref-siblings': Object.assign({}, ruleset.rules['no-$ref-siblings'], {
-        recommended: true,
-        type: RuleType[ruleset.rules['no-$ref-siblings'].type],
-      }),
-    });
+  beforeEach(async () => {
+    s = await createWithRules(['no-$ref-siblings']);
   });
 
   test('reports ref siblings', async () => {

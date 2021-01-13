@@ -1,32 +1,20 @@
-import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import { setFunctionContext } from '../../evaluators';
-import { functions } from '../../../functions';
-import oasExample from '../functions/oasExample';
-import * as ruleset from '../index.json';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe.each(['oas2', 'oas3'])('%s', spec => {
   let s: Spectral;
+  let docHeader: Dictionary<unknown>;
 
-  beforeEach(() => {
-    s = new Spectral();
-    s.registerFormat(spec, () => true);
-    s.setFunctions({ oasExample: setFunctionContext({ functions }, oasExample) });
-    s.setRules({
-      'oas2-valid-schema-example': Object.assign(ruleset.rules['oas2-valid-schema-example'], {
-        recommended: true,
-        type: RuleType[ruleset.rules['oas2-valid-schema-example'].type],
-      }),
-      'oas3-valid-schema-example': Object.assign(ruleset.rules['oas3-valid-schema-example'], {
-        recommended: true,
-        type: RuleType[ruleset.rules['oas3-valid-schema-example'].type],
-      }),
-    });
+  beforeEach(async () => {
+    s = await createWithRules(['oas2-valid-schema-example', 'oas3-valid-schema-example']);
+    docHeader = spec === 'oas2' ? { swagger: '2.0' } : { openapi: '3.0.0' };
   });
 
   describe('parameters', () => {
     test('will pass when simple example is valid', async () => {
       const results = await s.run({
+        ...docHeader,
         parameters: [
           {
             schema: {
@@ -41,6 +29,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will fail for valid parents examples which contain invalid child examples', async () => {
       const results = await s.run({
+        ...docHeader,
         info: {
           version: '1.0.0',
         },
@@ -122,6 +111,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will not fail if an actual property is called example', async () => {
       const results = await s.run({
+        ...docHeader,
         parameters: [
           {
             in: 'body',
@@ -144,6 +134,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will not fail if an actual property is called example and there is also type/format property', async () => {
       const results = await s.run({
+        ...docHeader,
         parameters: [
           {
             type: 'object',
@@ -167,6 +158,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will fail when simple example is invalid', async () => {
       const results = await s.run({
+        ...docHeader,
         parameters: [
           {
             schema: {
@@ -187,6 +179,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will pass when complex example is used ', async () => {
       const results = await s.run({
+        ...docHeader,
         parameters: [
           {
             schema: {
@@ -218,6 +211,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will fail when complex example is used', async () => {
       const data = {
+        ...docHeader,
         parameters: [
           {
             Heh: {
@@ -266,6 +260,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
     test('will error with totally invalid input', async () => {
       const results = await s.run({
+        ...docHeader,
         parameters: [
           {
             schema: {

@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('license-url', () => {
-  const s = new Spectral();
-  s.setRules({
-    'license-url': Object.assign(ruleset.rules['license-url'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['license-url'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['license-url']);
   });
 
   test('validate a correct object', async () => {
