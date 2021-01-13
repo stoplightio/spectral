@@ -4,7 +4,10 @@ import { IConstructorOpts, Spectral } from '../../../../spectral';
 import { isOpenApiv2, isOpenApiv3 } from '../../../../formats';
 import * as ruleset from '../../index.json';
 
-export async function loadRules(rules: (keyof typeof ruleset['rules'])[], opts?: IConstructorOpts): Promise<Spectral> {
+export async function createWithRules(
+  rules: (keyof typeof ruleset['rules'])[],
+  opts?: IConstructorOpts,
+): Promise<Spectral> {
   try {
     Object.assign(STATIC_ASSETS, await import('../../../../../rulesets/assets/assets.oas.json'), {
       'my-ruleset': JSON.stringify({

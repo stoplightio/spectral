@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas3-api-servers', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas3-api-servers']);
+    s = await createWithRules(['oas3-api-servers']);
   });
 
   test('validate a correct object', async () => {

@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas2-host-trailing-slash', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas2-host-trailing-slash']);
+    s = await createWithRules(['oas2-host-trailing-slash']);
   });
 
   test('validate a correct object', async () => {

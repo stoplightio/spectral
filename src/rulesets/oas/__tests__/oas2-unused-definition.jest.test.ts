@@ -6,14 +6,14 @@ import { Document } from '../../../document';
 import { readParsable } from '../../../fs/reader';
 import type { Spectral } from '../../../spectral';
 import * as Parsers from '../../../parsers';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
 describe('unusedDefinition - Http and fs remote references', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas2-unused-definition'], { resolver: httpAndFileResolver });
+    s = await createWithRules(['oas2-unused-definition'], { resolver: httpAndFileResolver });
   });
 
   describe('reports unreferenced definitions', () => {

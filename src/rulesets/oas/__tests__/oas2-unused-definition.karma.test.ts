@@ -3,7 +3,7 @@ import { FetchMockSandbox } from 'fetch-mock';
 import { Document } from '../../../document';
 import type { Spectral } from '../../../spectral';
 import * as Parsers from '../../../parsers';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
 describe('unusedDefinition - Http remote references', () => {
@@ -12,7 +12,7 @@ describe('unusedDefinition - Http remote references', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas2-unused-definition'], { resolver: httpAndFileResolver });
+    s = await createWithRules(['oas2-unused-definition'], { resolver: httpAndFileResolver });
     fetchMock = require('fetch-mock').default.sandbox();
     window.fetch = fetchMock;
   });

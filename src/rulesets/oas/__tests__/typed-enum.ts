@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../index';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('typed-enum', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['typed-enum']);
+    s = await createWithRules(['typed-enum']);
   });
   describe('oas2', () => {
     test('does not report anything for empty object', async () => {

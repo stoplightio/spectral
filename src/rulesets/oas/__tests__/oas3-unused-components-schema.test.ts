@@ -2,14 +2,14 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { Document } from '../../../document';
 import type { Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
 describe('unusedComponentsSchema - Local references', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas3-unused-components-schema'], { resolver: httpAndFileResolver });
+    s = await createWithRules(['oas3-unused-components-schema'], { resolver: httpAndFileResolver });
   });
 
   test('does not report anything for empty object', async () => {

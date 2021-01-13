@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('contact-properties', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['contact-properties']);
+    s = await createWithRules(['contact-properties']);
   });
 
   test('validate a correct object', async () => {

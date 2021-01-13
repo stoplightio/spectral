@@ -1,11 +1,11 @@
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('operation-success-response', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['operation-success-response']);
+    s = await createWithRules(['operation-success-response']);
   });
 
   test('is happy when a 200 response is set', async () => {

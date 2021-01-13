@@ -1,13 +1,13 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe.each(['oas2', 'oas3'])('%s', spec => {
   let s: Spectral;
   let docHeader: Dictionary<unknown>;
 
   beforeEach(async () => {
-    s = await loadRules(['oas2-valid-schema-example', 'oas3-valid-schema-example']);
+    s = await createWithRules(['oas2-valid-schema-example', 'oas3-valid-schema-example']);
     docHeader = spec === 'oas2' ? { swagger: '2.0' } : { openapi: '3.0.0' };
   });
 

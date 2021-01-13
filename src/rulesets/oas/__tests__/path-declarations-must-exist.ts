@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('path-declarations-must-exist', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['path-declarations-must-exist']);
+    s = await createWithRules(['path-declarations-must-exist']);
   });
 
   test('validate a correct object', async () => {

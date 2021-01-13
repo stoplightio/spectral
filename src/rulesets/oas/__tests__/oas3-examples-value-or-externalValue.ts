@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas3-examples-value-or-externalValue', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas3-examples-value-or-externalValue']);
+    s = await createWithRules(['oas3-examples-value-or-externalValue']);
   });
 
   test('validate if just externalValue', async () => {

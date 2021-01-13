@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('openapi-tags-alphabetical', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['openapi-tags-alphabetical']);
+    s = await createWithRules(['openapi-tags-alphabetical']);
   });
 
   test('validate a correct object', async () => {

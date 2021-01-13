@@ -1,11 +1,11 @@
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas2-anyOf', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas2-anyOf']);
+    s = await createWithRules(['oas2-anyOf']);
   });
 
   test('annotates with correct paths', async () => {

@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 const Decimal = require('decimal.js');
 
@@ -8,7 +8,7 @@ describe('oas3-valid-media-example', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas3-valid-media-example']);
+    s = await createWithRules(['oas3-valid-media-example']);
   });
 
   describe.each(['headers', 'content'])('%s', path => {

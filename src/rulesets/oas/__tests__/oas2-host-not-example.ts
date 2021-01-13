@@ -1,11 +1,11 @@
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('oas2-host-not-example', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['oas2-host-not-example']);
+    s = await createWithRules(['oas2-host-not-example']);
   });
 
   test('validate a correct object', async () => {

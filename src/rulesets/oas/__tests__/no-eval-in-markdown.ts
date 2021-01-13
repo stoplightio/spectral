@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('no-eval-in-markdown', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules(['no-eval-in-markdown']);
+    s = await createWithRules(['no-eval-in-markdown']);
   });
 
   test('validate a correct object', async () => {
