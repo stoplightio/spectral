@@ -115,7 +115,7 @@
     "dependency-graph": "^0.9.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-prettier": "^3.3.1",
     "fetch-mock": "^9.11.0",
     "glob-fs": "^0.1.7",
     "husky": "^4.3.6",
