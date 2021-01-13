@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('path-keys-no-trailing-slash', () => {
-  const s = new Spectral();
-  s.setRules({
-    'path-keys-no-trailing-slash': Object.assign(ruleset.rules['path-keys-no-trailing-slash'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['path-keys-no-trailing-slash'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['path-keys-no-trailing-slash']);
   });
 
   test('validate a correct object', async () => {

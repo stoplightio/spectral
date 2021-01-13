@@ -4,21 +4,16 @@ import * as nock from 'nock';
 
 import { Document } from '../../../document';
 import { readParsable } from '../../../fs/reader';
-import { unreferencedReusableObject } from '../../../functions/unreferencedReusableObject';
-import { RuleType, Spectral } from '../../../index';
+import type { Spectral } from '../../../spectral';
 import * as Parsers from '../../../parsers';
+import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
-import { rules } from '../index.json';
 
 describe('unusedDefinition - Http and fs remote references', () => {
-  const s = new Spectral({ resolver: httpAndFileResolver });
-  s.registerFormat('oas2', () => true);
-  s.setFunctions({ unreferencedReusableObject });
-  s.setRules({
-    'oas2-unused-definition': Object.assign(rules['oas2-unused-definition'], {
-      recommended: true,
-      type: RuleType[rules['oas2-unused-definition'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['oas2-unused-definition'], { resolver: httpAndFileResolver });
   });
 
   describe('reports unreferenced definitions', () => {

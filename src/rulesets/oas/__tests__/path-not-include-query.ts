@@ -1,14 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { RuleType, Spectral } from '../../../spectral';
-import * as ruleset from '../index.json';
+import type { Spectral } from '../../../spectral';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('path-not-include-query', () => {
-  const s = new Spectral();
-  s.setRules({
-    'path-not-include-query': Object.assign(ruleset.rules['path-not-include-query'], {
-      recommended: true,
-      type: RuleType[ruleset.rules['path-not-include-query'].type],
-    }),
+  let s: Spectral;
+
+  beforeEach(async () => {
+    s = await createWithRules(['path-not-include-query']);
   });
 
   test('validate a correct object', async () => {

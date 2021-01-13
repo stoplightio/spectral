@@ -1,27 +1,13 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { functions } from '../../../functions';
-import { KNOWN_FORMATS, RuleType, Spectral } from '../../../index';
-import { setFunctionContext } from '../../evaluators';
-import { typedEnum } from '../functions/typedEnum';
-import { rules } from '../index.json';
+import type { Spectral } from '../../../index';
+import { createWithRules } from './__helpers__/createWithRules';
 
 describe('typed-enum', () => {
-  const s = new Spectral();
+  let s: Spectral;
 
-  beforeEach(() => {
-    s.setFunctions({ typedEnum: setFunctionContext({ functions }, typedEnum) });
-    s.setRules({
-      'typed-enum': Object.assign(rules['typed-enum'], {
-        recommended: true,
-        type: RuleType[rules['typed-enum'].type],
-      }),
-    });
-
-    for (const [name, fn] of KNOWN_FORMATS) {
-      s.registerFormat(name, fn);
-    }
+  beforeEach(async () => {
+    s = await createWithRules(['typed-enum']);
   });
-
   describe('oas2', () => {
     test('does not report anything for empty object', async () => {
       const results = await s.run({
