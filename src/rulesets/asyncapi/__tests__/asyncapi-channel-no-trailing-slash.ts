@@ -1,6 +1,6 @@
 import type { Spectral } from '../../../spectral';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 const ruleName = 'asyncapi-channel-no-trailing-slash';
 
@@ -9,7 +9,7 @@ describe(`Rule '${ruleName}'`, () => {
   let doc: any;
 
   beforeEach(async () => {
-    s = await loadRules([ruleName]);
+    s = await createWithRules([ruleName]);
 
     doc = {
       asyncapi: '2.0.0',

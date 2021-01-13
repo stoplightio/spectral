@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 
 import type { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-payload-default';
@@ -11,7 +11,7 @@ describe(`Rule '${ruleName}'`, () => {
   let doc: any;
 
   beforeEach(async () => {
-    s = await loadRules([ruleName]);
+    s = await createWithRules([ruleName]);
 
     const payload = {
       type: 'object',

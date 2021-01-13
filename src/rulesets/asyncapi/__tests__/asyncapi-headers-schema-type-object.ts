@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 
 import type { Spectral } from '../../../spectral';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 
 const ruleName = 'asyncapi-headers-schema-type-object';
 
@@ -11,7 +11,7 @@ describe(`Rule '${ruleName}'`, () => {
   let doc: any;
 
   beforeEach(async () => {
-    s = await loadRules([ruleName]);
+    s = await createWithRules([ruleName]);
 
     const headersBearer = {
       headers: {

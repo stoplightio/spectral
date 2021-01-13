@@ -4,7 +4,7 @@ import { Spectral } from '../../../../spectral';
 import { isAsyncApiv2 } from '../../../../formats';
 import * as ruleset from '../../index.json';
 
-export async function loadRules(rules: (keyof typeof ruleset['rules'])[]): Promise<Spectral> {
+export async function createWithRules(rules: (keyof typeof ruleset['rules'])[]): Promise<Spectral> {
   try {
     Object.assign(STATIC_ASSETS, await import('../../../../../rulesets/assets/assets.asyncapi.json'), {
       'my-ruleset': JSON.stringify({

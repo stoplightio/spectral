@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 
 import { Spectral } from '../../../spectral';
-import { loadRules } from './__helpers__/loadRules';
+import { createWithRules } from './__helpers__/createWithRules';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-channel-no-empty-parameter';
@@ -10,7 +10,7 @@ describe(`Rule '${ruleName}'`, () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await loadRules([ruleName]);
+    s = await createWithRules([ruleName]);
   });
 
   const doc: any = {
