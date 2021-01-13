@@ -1,6 +1,6 @@
 import { Spectral } from '../../../spectral';
 import { loadRules } from './__helpers__/loadRules';
-import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const ruleName = 'asyncapi-operation-description';
 
