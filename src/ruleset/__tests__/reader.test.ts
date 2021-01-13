@@ -1,4 +1,4 @@
-import { readRuleset } from '../reader';
+import { readRuleset } from '../readRuleset';
 
 describe('Rulesets reader', () => {
   it('should resolve oas2-schema', async () => {

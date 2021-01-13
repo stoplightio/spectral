@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 import { Spectral } from '../spectral';
-import { setFunctionContext } from '../rulesets/evaluators';
+import { setFunctionContext } from '../ruleset';
 import { functions } from '../functions';
 import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
 import { KNOWN_FORMATS } from '../formats';

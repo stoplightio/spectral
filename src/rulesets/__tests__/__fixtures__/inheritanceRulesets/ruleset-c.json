@@ -1,3 +1,0 @@
-{
-  "extends": [["./ruleset-b.json", "off"]]
-}

@@ -1,7 +1,7 @@
 import { join, resolve } from '@stoplight/path';
 import * as nock from 'nock';
 import * as yargs from 'yargs';
-import { ValidationError } from '../../../rulesets/validation';
+import { ValidationError } from '../../../ruleset/validation';
 import { ILintConfig } from '../../../types/config';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';

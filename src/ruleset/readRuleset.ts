@@ -5,7 +5,7 @@ import { Optional } from '@stoplight/types';
 import { readFile, readParsable } from '../fs/reader';
 import { createHttpAndFileResolver, IHttpAndFileResolverOptions } from '../resolvers/http-and-file';
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
-import { findFile, isNPMSource } from './finder';
+import { findFile, isNPMSource } from './utils';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset, isValidRule } from './validation';

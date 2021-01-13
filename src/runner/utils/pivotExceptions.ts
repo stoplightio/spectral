@@ -1,8 +1,8 @@
 import { extractPointerFromRef, extractSourceFromRef, pointerToPath } from '@stoplight/json';
 import { Dictionary, JsonPath } from '@stoplight/types';
-import { InvalidUriError } from '../../rulesets/mergers/exceptions';
 import { RunRuleCollection } from '../../types';
 import { RulesetExceptionCollection } from '../../types/ruleset';
+import { InvalidUriError } from '../../ruleset/mergers/exceptions';
 
 export type ExceptionLocation =
   | {

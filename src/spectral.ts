@@ -13,10 +13,14 @@ import * as Parsers from './parsers';
 import request from './request';
 import { createHttpAndFileResolver } from './resolvers/http-and-file';
 import { OptimizedRule, Rule } from './rule';
-import { readRuleset } from './rulesets';
-import { compileExportedFunction, setFunctionContext } from './rulesets/evaluators';
-import { mergeExceptions } from './rulesets/mergers/exceptions';
-import { IRulesetReadOptions } from './rulesets/reader';
+import {
+  compileExportedFunction,
+  IRulesetReadOptions,
+  setFunctionContext,
+  readRuleset,
+  getDiagnosticSeverity,
+} from './ruleset';
+import { mergeExceptions } from './ruleset/mergers/exceptions';
 import { Runner, RunnerRuntime } from './runner';
 import {
   FormatLookup,
@@ -35,7 +39,6 @@ import {
 import { IParserOptions, IRuleset, RulesetExceptionCollection } from './types/ruleset';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
-import { getDiagnosticSeverity } from './rulesets/severity';
 import { DEFAULT_PARSER_OPTIONS } from './consts';
 
 memoize.Cache = WeakMap;
