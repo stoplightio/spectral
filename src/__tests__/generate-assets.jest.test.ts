@@ -89,7 +89,7 @@ describe('generate-assets', () => {
       {
         code: 'oas3-schema',
         message: 'Property `500` is not expected to be here.',
-        path: ['paths', '/'],
+        path: ['paths', '/', '500'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Error,
       },
@@ -116,7 +116,7 @@ describe('generate-assets', () => {
       {
         code: 'oas2-schema',
         message: 'Property `500` is not expected to be here.',
-        path: ['paths', '/'],
+        path: ['paths', '/', '500'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Error,
       },

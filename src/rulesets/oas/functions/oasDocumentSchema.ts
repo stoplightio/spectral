@@ -31,6 +31,13 @@ const ERROR_MAP = [
 // As you can see, what we deal here wit is actually not really oneOf anymore - it's always the first member of oneOf we match against.
 // That being said, we always strip both oneOf and $ref, since we are always interested in the first error.
 export function prepareResults(errors: AJV.ErrorObject[]) {
+  // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
+  for (const error of errors) {
+    if (error.keyword === 'additionalProperties') {
+      error.dataPath = `${error.dataPath}/${error.params['additionalProperty']}`;
+    }
+  }
+
   for (let i = 0; i < errors.length; i++) {
     const error = errors[i];
 
