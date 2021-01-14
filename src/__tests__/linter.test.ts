@@ -11,6 +11,7 @@ import { IParser } from '../parsers/types';
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
 const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
+const invalidStatusCodes = JSON.stringify(require('./__fixtures__/invalid-status-codes.oas3.json'));
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -694,8 +695,18 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: 'Property `type` is not expected to be here.',
+        message: '`header-1` property should have required property `schema`.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'Property `type` is not expected to be here.',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'Property `op` is not expected to be here.',
+        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
       }),
       expect.objectContaining({
         code: 'invalid-ref',
@@ -717,6 +728,32 @@ responses:: !!foo
         code: 'oas3-valid-schema-example',
         message: '`example` property type should be number',
         path: ['components', 'schemas', 'foo', 'example'],
+      }),
+    ]);
+  });
+
+  test('should preserve sibling additionalProperties errors', async () => {
+    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.registerFormat('oas3', isOpenApiv3);
+    await spectral.loadRuleset('spectral:oas');
+
+    const result = await spectral.run(invalidStatusCodes);
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'Property `42` is not expected to be here.',
+        path: ['paths', '/pets', 'post', 'responses', '42'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'Property `9999` is not expected to be here.',
+        path: ['paths', '/pets', 'post', 'responses', '9999'],
+      }),
+      expect.objectContaining({
+        code: 'oas3-schema',
+        message: 'Property `5xx` is not expected to be here.',
+        path: ['paths', '/pets', 'post', 'responses', '5xx'],
       }),
     ]);
   });

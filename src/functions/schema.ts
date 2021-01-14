@@ -44,7 +44,8 @@ const logger = {
 const ajvInstances = {};
 
 function getAjv(oasVersion: Optional<number>, allErrors: Optional<boolean>): AJV.Ajv {
-  const type: string = oasVersion !== void 0 && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema';
+  const qual = allErrors === true ? '-all' : '';
+  const type: string = (oasVersion !== void 0 && oasVersion >= 2 ? 'oas' + oasVersion : 'jsonschema') + qual;
   if (typeof ajvInstances[type] !== 'undefined') {
     return ajvInstances[type];
   }
