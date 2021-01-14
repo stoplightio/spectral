@@ -22,7 +22,7 @@ export class Rule {
 
   constructor(name: string, rule: IProcessedRule) {
     this.name = name;
-    this.enabled = rule.enabled !== false;
+    this.enabled = rule.enabled ?? true;
     this.description = rule.description ?? null;
     this.message = rule.message ?? null;
     this.severity = rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity);
