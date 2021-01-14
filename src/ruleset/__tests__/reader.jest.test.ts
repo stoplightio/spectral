@@ -37,6 +37,7 @@ describe('Rulesets reader', () => {
           'valid-rule': {
             given: '$.info',
             severity: DiagnosticSeverity.Warning,
+            enabled: true,
             recommended: true,
             then: expect.any(Object),
           },
@@ -53,6 +54,7 @@ describe('Rulesets reader', () => {
         rules: {
           'valid-rule': {
             given: '$.info',
+            enabled: true,
             recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: {
@@ -61,6 +63,7 @@ describe('Rulesets reader', () => {
           },
           'valid-rule-2': {
             given: '$.info',
+            enabled: true,
             recommended: true,
             severity: DiagnosticSeverity.Warning,
             then: {
@@ -74,7 +77,7 @@ describe('Rulesets reader', () => {
 
   describe('severity', () => {
     function getEnabledRules(rules: RuleCollection) {
-      return Object.keys(rules).filter(name => rules[name].severity !== -1);
+      return Object.keys(rules).filter(name => rules[name].enabled);
     }
 
     it('given ruleset with extends set to recommended, should enable recommended rules', async () => {
@@ -113,6 +116,18 @@ describe('Rulesets reader', () => {
 
     it('given ruleset with extends set to off, should disable all rules but explicitly enabled', async () => {
       const { rules } = await readRuleset(getFixturePath('severity/off.json'));
+      expect(Object.keys(rules)).toEqual([
+        'description-matches-stoplight',
+        'title-matches-stoplight',
+        'contact-name-matches-stoplight',
+        'overridable-rule',
+      ]);
+
+      expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
+    });
+
+    it('given nested extends with severity set to off', async () => {
+      const { rules } = await readRuleset(getFixturePath('severity/off-proxy.json'));
       expect(Object.keys(rules)).toEqual([
         'description-matches-stoplight',
         'title-matches-stoplight',
@@ -175,6 +190,7 @@ describe('Rulesets reader', () => {
           'valid-foo-value': {
             given: '$',
             severity: DiagnosticSeverity.Warning,
+            enabled: true,
             recommended: true,
             then: {
               field: 'foo',
@@ -234,6 +250,7 @@ describe('Rulesets reader', () => {
           'valid-foo-value': {
             given: '$',
             severity: DiagnosticSeverity.Warning,
+            enabled: true,
             recommended: true,
             then: {
               field: 'foo',
@@ -378,6 +395,7 @@ describe('Rulesets reader', () => {
         'bar-rule': {
           given: '$.bar',
           message: 'Bar is truthy',
+          enabled: true,
           recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
@@ -387,6 +405,7 @@ describe('Rulesets reader', () => {
         'foo-rule': {
           given: '$.foo',
           message: 'Foo is falsy',
+          enabled: true,
           recommended: true,
           severity: DiagnosticSeverity.Warning,
           then: {
@@ -406,6 +425,7 @@ describe('Rulesets reader', () => {
           given: '$',
           message: 'Foo',
           severity: DiagnosticSeverity.Warning,
+          enabled: true,
           recommended: true,
           then: {
             function: 'falsy',
@@ -480,6 +500,7 @@ describe('Rulesets reader', () => {
         description: "All 'HTTP' headers SHOULD NOT include 'X-' headers (https://tools.ietf.org/html/rfc6648).",
         given: ["$..parameters[?(@.in == 'header')].name"],
         message: "HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}",
+        enabled: true,
         recommended: true,
         severity: 1,
         then: {
@@ -494,6 +515,7 @@ describe('Rulesets reader', () => {
         description: "All 'HTTP' headers SHOULD NOT include 'X-' headers (https://tools.ietf.org/html/rfc6648).",
         given: ['$.[responses][*].headers.*~'],
         message: "HTTP header '{{value}}' SHOULD NOT include 'X-' prefix in {{path}}",
+        enabled: true,
         recommended: true,
         severity: 1,
         then: {
@@ -515,6 +537,7 @@ describe('Rulesets reader', () => {
         documentationUrl:
           'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#foo-rule',
         given: '',
+        enabled: true,
         recommended: true,
         severity: DiagnosticSeverity.Warning,
         then: {
@@ -524,6 +547,7 @@ describe('Rulesets reader', () => {
       'bar-rule': {
         documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/bar-rule.md',
         given: '',
+        enabled: true,
         recommended: true,
         severity: DiagnosticSeverity.Warning,
         then: {

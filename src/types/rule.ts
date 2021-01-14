@@ -31,6 +31,10 @@ export interface IRule<T = string, O = unknown> {
   then: IThen<T, O> | Array<IThen<T, O>>;
 }
 
+export interface IProcessedRule extends IRule {
+  enabled?: boolean;
+}
+
 export interface IThen<T = string, O = unknown> {
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
