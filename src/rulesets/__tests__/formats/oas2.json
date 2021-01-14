@@ -1,6 +1,8 @@
 {
+  "formats": ["oas2"],
   "rules": {
-    "valid-rule": {
+    "oas2-valid-rule": {
+      "message": "should be OK",
       "given": "$.info",
       "then": {
         "function": "truthy"

@@ -57,7 +57,7 @@ const createRulesetProcessor = (
   return async function processRuleset(
     baseUri: string,
     uri: string,
-    severity?: FileRulesetSeverity,
+    severity: FileRulesetSeverity = 'recommended',
   ): Promise<IRuleset | null> {
     const rulesetUri = await findFile(join(baseUri, '..'), uri);
     if (processedRulesets.has(rulesetUri)) {
@@ -105,12 +105,11 @@ const createRulesetProcessor = (
     if (extendedRulesets !== void 0) {
       for (const extended of Array.isArray(extendedRulesets) ? extendedRulesets : [extendedRulesets]) {
         let extendedRuleset: IRuleset | null;
-        let parentSeverity: FileRulesetSeverity;
+        let parentSeverity: FileRulesetSeverity = severity;
         if (Array.isArray(extended)) {
-          parentSeverity = severity === void 0 ? extended[1] : severity;
-          extendedRuleset = await processRuleset(rulesetUri, extended[0], parentSeverity);
+          parentSeverity = extended[1];
+          extendedRuleset = await processRuleset(rulesetUri, extended[0], extended[1]);
         } else {
-          parentSeverity = severity === void 0 ? 'recommended' : severity;
           extendedRuleset = await processRuleset(rulesetUri, extended, parentSeverity);
         }
 
@@ -123,12 +122,12 @@ const createRulesetProcessor = (
     }
 
     if (ruleset.rules !== void 0) {
-      mergeRules(rules, ruleset.rules, severity === void 0 ? 'recommended' : severity);
+      mergeRules(rules, ruleset.rules, severity);
 
       if (ruleset.documentationUrl !== void 0) {
         for (const [name, rule] of Object.entries(ruleset.rules)) {
           if (isValidRule(rule) && rule.documentationUrl === void 0) {
-            rule.documentationUrl = `${ruleset.documentationUrl}#${name}`;
+            newRuleset.rules[name].documentationUrl = `${ruleset.documentationUrl}#${name}`;
           }
         }
       }

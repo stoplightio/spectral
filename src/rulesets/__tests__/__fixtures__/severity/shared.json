@@ -3,7 +3,6 @@
     "description-matches-stoplight": {
       "message": "Description must contain Stoplight",
       "given": "$.info",
-      "type": "style",
       "recommended": true,
       "severity": "error",
       "then": {
@@ -17,7 +16,6 @@
     "title-matches-stoplight": {
       "message": "Title must contain Stoplight",
       "given": "$.info",
-      "type": "style",
       "then": {
         "field": "title",
         "function": "pattern",
@@ -29,7 +27,6 @@
     "contact-name-matches-stoplight": {
       "message": "Contact name must contain Stoplight",
       "given": "$.info.contact",
-      "type": "style",
       "recommended": false,
       "then": {
         "field": "name",
@@ -37,6 +34,12 @@
         "functionOptions": {
           "match": "Stoplight"
         }
+      }
+    },
+    "overridable-rule": {
+      "given": "$",
+      "then": {
+        "function": "truthy"
       }
     }
   }

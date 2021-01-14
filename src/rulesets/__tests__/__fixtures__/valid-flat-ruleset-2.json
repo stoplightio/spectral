@@ -1,6 +1,6 @@
 {
   "rules": {
-    "valid-rule": {
+    "valid-rule-2": {
       "given": "$.info",
       "then": {
         "function": "truthy"

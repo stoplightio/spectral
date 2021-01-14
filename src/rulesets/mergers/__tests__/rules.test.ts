@@ -51,7 +51,7 @@ describe('Ruleset rules merging', () => {
       test: false,
     });
 
-    expect(rules).toHaveProperty('test.severity', -1);
+    expect(rules).toHaveProperty('test.enabled', false);
   });
 
   it('supports nested severity', () => {
@@ -144,7 +144,7 @@ describe('Ruleset rules merging', () => {
       test: ['off'],
     });
 
-    expect(rules).toHaveProperty('test.severity', -1);
+    expect(rules).toHaveProperty('test.enabled', false);
   });
 
   it('does not set functionOptions if rule does not implement it', () => {
@@ -185,8 +185,8 @@ describe('Ruleset rules merging', () => {
       'off',
     );
 
-    expect(rules).toHaveProperty('test.severity', -1);
-    expect(rules).toHaveProperty('test2.severity', -1);
+    expect(rules).toHaveProperty('test.enabled', false);
+    expect(rules).toHaveProperty('test2.enabled', false);
   });
 
   it('picks up recommended rules', () => {
@@ -212,9 +212,9 @@ describe('Ruleset rules merging', () => {
     expect(rules.test2.recommended).toBe(false);
     expect(rules.test3.recommended).toBe(true);
 
-    expect(rules).toHaveProperty('test.severity', DiagnosticSeverity.Warning);
-    expect(rules).toHaveProperty('test2.severity', -1);
-    expect(rules).toHaveProperty('test3.severity', DiagnosticSeverity.Warning);
+    expect(rules).toHaveProperty('test.enabled', true);
+    expect(rules).toHaveProperty('test2.enabled', false);
+    expect(rules).toHaveProperty('test3.enabled', true);
   });
 
   it('rules with no severity and no recommended set are treated as warnings', () => {
@@ -249,7 +249,7 @@ describe('Ruleset rules merging', () => {
       'recommended',
     );
 
-    expect(rules).toHaveProperty('rule.severity', -1);
+    expect(rules).toHaveProperty('rule.enabled', false);
   });
 
   it('sets warning as default severity level if a rule has no severity specified', () => {
@@ -388,45 +388,54 @@ describe('Ruleset rules merging', () => {
     });
 
     it('respects ruleset severity', () => {
-      expect(mergeRules({}, rules, 'all')).toEqual({
+      expect(mergeRules({}, JSON.parse(JSON.stringify(rules)), 'all')).toEqual({
         rule: expect.objectContaining({
           recommended: true,
           severity: DiagnosticSeverity.Warning,
+          enabled: true,
         }),
         'rule-with-no-recommended': expect.objectContaining({
           severity: DiagnosticSeverity.Warning,
+          enabled: true,
         }),
         'optional-rule': expect.objectContaining({
           recommended: false,
           severity: DiagnosticSeverity.Warning,
+          enabled: true,
         }),
       });
 
-      expect(mergeRules({}, rules, 'recommended')).toEqual({
+      expect(mergeRules({}, JSON.parse(JSON.stringify(rules)), 'recommended')).toEqual({
         rule: expect.objectContaining({
           recommended: true,
           severity: DiagnosticSeverity.Warning,
+          enabled: true,
         }),
         'rule-with-no-recommended': expect.objectContaining({
           severity: DiagnosticSeverity.Warning,
+          enabled: true,
         }),
         'optional-rule': expect.objectContaining({
           recommended: false,
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
+          enabled: false,
         }),
       });
 
-      expect(mergeRules({}, rules, 'off')).toEqual({
+      expect(mergeRules({}, JSON.parse(JSON.stringify(rules)), 'off')).toEqual({
         rule: expect.objectContaining({
           recommended: true,
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
+          enabled: false,
         }),
         'rule-with-no-recommended': expect.objectContaining({
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
+          enabled: false,
         }),
         'optional-rule': expect.objectContaining({
           recommended: false,
-          severity: -1,
+          severity: DiagnosticSeverity.Warning,
+          enabled: false,
         }),
       });
     });

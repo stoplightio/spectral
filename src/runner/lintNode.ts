@@ -129,7 +129,6 @@ function processTargetResults(
 
     context.results.push({
       code: rule.name,
-      // todo: rule.isInterpolable
       message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
       path,
       severity: getDiagnosticSeverity(rule.severity),

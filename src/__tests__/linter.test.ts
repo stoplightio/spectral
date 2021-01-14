@@ -775,6 +775,7 @@ responses:: !!foo
         message: spectral.rules['operation-tag-defined'].message ?? '',
         description: spectral.rules['operation-tag-defined'].description ?? '',
         severity: 'off',
+        enabled: false,
       },
     });
 

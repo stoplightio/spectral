@@ -22,6 +22,7 @@ const removeAllRulesBut = (spectral: Spectral, ruleName: string) => {
   const patchedRule = Object.assign(rule1, {
     recommended: true,
     severity: rawRule.severity,
+    enabled: true,
   }) as IRule;
 
   const rules: RuleCollection = {};

@@ -1,9 +1,9 @@
-import { DiagnosticSeverity } from '@stoplight/types';
-import { isObject } from 'lodash';
-import { HumanReadableDiagnosticSeverity, IRule, IThen } from '../../types';
 import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
-import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity, getSeverityLevel } from '../severity';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from '../severity';
 import { isValidRule } from '../validation';
+import { DiagnosticSeverity } from '@stoplight/types/dist';
+import { Dictionary } from '@stoplight/types';
+import { IRule, IProcessedRule } from '../../types';
 
 /*
 - if rule is object, simple deep merge (or we could replace to be a bit stricter?)
@@ -13,20 +13,26 @@ import { isValidRule } from '../validation';
 - if rule is array, index 0 should be false/true/string/number - same severity logic as above. optional second
 */
 export function mergeRules(
-  target: FileRuleCollection,
+  target: Dictionary<IProcessedRule>,
   source: FileRuleCollection,
   rulesetSeverity?: FileRulesetSeverity,
-): FileRuleCollection {
+): Dictionary<IProcessedRule> {
   for (const [name, rule] of Object.entries(source)) {
-    if (rulesetSeverity !== undefined) {
-      const severity = getSeverityLevel(source, name, rulesetSeverity);
-      if (isValidRule(rule)) {
-        markRule(rule);
-        rule.severity = severity;
-        processRule(target, name, rule);
-      } else {
-        processRule(target, name, typeof rule === 'boolean' ? rule : severity);
+    if (rulesetSeverity !== void 0) {
+      if (isValidRule(rule) && !('enabled' in rule)) {
+        let enabled;
+        if (rulesetSeverity === 'all') {
+          enabled = true;
+        } else if (rulesetSeverity === 'off') {
+          enabled = false;
+        } else {
+          enabled = rule.recommended !== false;
+        }
+
+        (rule as IProcessedRule).enabled = enabled;
       }
+
+      processRule(target, name, rule);
     } else {
       processRule(target, name, rule);
     }
@@ -35,69 +41,26 @@ export function mergeRules(
   return target;
 }
 
-const ROOT_DESCRIPTOR = Symbol('root-descriptor');
-
-function markRule(rule: IRule): void {
-  if (!(ROOT_DESCRIPTOR in rule)) {
-    Object.defineProperty(rule, ROOT_DESCRIPTOR, {
-      configurable: false,
-      enumerable: false,
-      writable: false,
-      value: copyRule(rule),
-    });
-  }
-}
-
-function updateRootRule(root: IRule, newRule: IRule | null): void {
-  markRule(root);
-  Object.assign(root[ROOT_DESCRIPTOR], copyRule(newRule === null ? root : Object.assign(root, newRule)));
-}
-
-function getRootRule(rule: IRule): IRule | null {
-  return rule[ROOT_DESCRIPTOR] !== undefined ? rule[ROOT_DESCRIPTOR] : null;
-}
-
-function copyRuleThen(then: IThen): IThen {
-  return {
-    ...then,
-    ...('functionOptions' in then && isObject(then.functionOptions) ? { ...then.functionOptions } : null),
-  };
-}
-
-function copyRule(rule: IRule): IRule {
-  return {
-    ...rule,
-    ...('then' in rule
-      ? { then: Array.isArray(rule.then) ? rule.then.map(copyRuleThen) : copyRuleThen(rule.then) }
-      : null),
-  };
-}
-
-function processRule(rules: FileRuleCollection, name: string, rule: FileRule | FileRulesetSeverity): void {
+function processRule(rules: Dictionary<IProcessedRule>, name: string, rule: FileRule): void {
   const existingRule = rules[name];
 
   switch (typeof rule) {
     case 'boolean':
       if (isValidRule(existingRule)) {
-        const rootRule = getRootRule(existingRule);
-        if (!rule) {
-          existingRule.severity = -1;
-        } else if (rootRule === null) {
-          existingRule.severity = getSeverityLevel(rules, name, rule);
-          updateRootRule(existingRule, existingRule);
-        } else if ('severity' in rootRule) {
-          existingRule.severity = rootRule.severity;
-          updateRootRule(existingRule, existingRule);
-        } else {
-          existingRule.severity = DiagnosticSeverity.Warning;
-        }
+        existingRule.enabled = rule;
       }
+
       break;
     case 'string':
     case 'number':
       // what if rule does not exist (yet)? throw, store the invalid state somehow?
       if (isValidRule(existingRule)) {
-        existingRule.severity = getSeverityLevel(rules, name, rule);
+        if (rule === 'off') {
+          existingRule.enabled = false;
+        } else {
+          existingRule.severity = getDiagnosticSeverity(rule);
+          existingRule.enabled = true;
+        }
       }
 
       break;
@@ -105,21 +68,15 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
       if (Array.isArray(rule)) {
         processRule(rules, name, rule[0]);
 
-        if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== undefined) {
+        if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== void 0) {
           if ('functionOptions' in existingRule.then) {
             existingRule.then.functionOptions = rule[1];
           }
-
-          updateRootRule(existingRule, null);
         }
       } else if (isValidRule(existingRule)) {
-        normalizeRule(rule, existingRule.severity);
-        updateRootRule(existingRule, rule);
+        Object.assign(existingRule, normalizeRule(rule));
       } else {
-        normalizeRule(rule, getSeverityLevel(rules, name, rule));
-        // new rule
-        markRule(rule);
-        rules[name] = rule;
+        rules[name] = normalizeRule(rule);
       }
 
       break;
@@ -128,14 +85,9 @@ function processRule(rules: FileRuleCollection, name: string, rule: FileRule | F
   }
 }
 
-function normalizeRule(rule: IRule, severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity | undefined): void {
-  if (rule.recommended === void 0) {
-    rule.recommended = true;
-  }
-
-  if (rule.severity === void 0) {
-    rule.severity = severity === void 0 ? (rule.recommended !== false ? DEFAULT_SEVERITY_LEVEL : -1) : severity;
-  } else {
-    rule.severity = getDiagnosticSeverity(rule.severity);
-  }
+function normalizeRule(rule: IRule): IProcessedRule & { recommended: boolean; severity: DiagnosticSeverity } {
+  return Object.assign(Object.defineProperties({}, Object.getOwnPropertyDescriptors(rule)), {
+    recommended: rule.recommended !== false,
+    severity: rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
+  });
 }
