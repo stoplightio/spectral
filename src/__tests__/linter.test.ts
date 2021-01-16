@@ -715,13 +715,13 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
-        code: 'oas3-unused-components-schema',
-        message: 'Potentially unused components schema has been detected.',
+        code: 'oas3-unused-component',
+        message: 'Potentially unused component has been detected.',
         path: ['components', 'schemas', 'Pets'],
       }),
       expect.objectContaining({
-        code: 'oas3-unused-components-schema',
-        message: 'Potentially unused components schema has been detected.',
+        code: 'oas3-unused-component',
+        message: 'Potentially unused component has been detected.',
         path: ['components', 'schemas', 'foo'],
       }),
       expect.objectContaining({
