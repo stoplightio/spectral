@@ -1,4 +1,5 @@
 import type { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
+import { isObject } from 'lodash';
 
 export const oasUnusedComponent: IFunction<{}> = function (
   this: IFunctionContext,
@@ -9,7 +10,7 @@ export const oasUnusedComponent: IFunction<{}> = function (
 ) {
   const results: IFunctionResult[] = [];
 
-  if (targetVal.components === void 0) {
+  if (!isObject(targetVal.components)) {
     return results;
   }
 
@@ -24,7 +25,7 @@ export const oasUnusedComponent: IFunction<{}> = function (
     'callbacks',
   ];
 
-  componentTypes.forEach(type => {
+  for (const type of componentTypes) {
     const resultsForType = this.functions.unreferencedReusableObject.call(
       this,
       targetVal.components[type],
@@ -35,7 +36,7 @@ export const oasUnusedComponent: IFunction<{}> = function (
     if (resultsForType !== void 0 && Array.isArray(resultsForType)) {
       results.push(...resultsForType);
     }
-  });
+  }
 
   return results;
 };
