@@ -96,6 +96,23 @@
         }
       ]
     },
+    "duplicated-entry-in-enum": {
+      "description": "Enum values should not have duplicate entry.",
+      "type": "validation",
+      "severity": "warn",
+      "recommended": true,
+      "message": "A duplicated entry in the enum was found. Error: {{error}}",
+      "given": "$..enum",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "type": "array",
+            "uniqueItems": true
+          }
+        }
+      }
+    },
     "info-contact": {
       "description": "Info object should contain `contact` object.",
       "recommended": true,
