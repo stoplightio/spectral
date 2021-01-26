@@ -642,20 +642,6 @@
         }
       }
     },
-    "oas3-unused-components-schema": {
-      "description": "Potentially unused components schema has been detected.",
-      "recommended": false,
-      "formats": ["oas3"],
-      "type": "style",
-      "resolved": false,
-      "given": "$.components.schemas",
-      "then": {
-        "function": "unreferencedReusableObject",
-        "functionOptions": {
-          "reusableObjectsLocation": "#/components/schemas"
-        }
-      }
-    },
     "oas3-unused-component": {
       "description": "Potentially unused component has been detected.",
       "recommended": true,
