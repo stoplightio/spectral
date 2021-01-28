@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Used Components",
+    "description": "Negative test of unused components",
+    "contact": {
+      "email": "anywho@widgetco.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://petstore.swagger.io/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "pets"
+    }
+  ],
+  "paths": {
+    "/pet": {
+      "post": {
+        "description": "Add a new pet to the store",
+        "summary": "Add pet",
+        "operationId": "add_pet",
+        "tags": [
+          "pets"
+        ],
+        "parameters": [
+          {
+            "name": "param1",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SomeSchema"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/SomeParameter"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/SomeBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "headers": {
+              "Some-Header": {
+                "$ref": "#/components/headers/SomeHeader"
+              }
+            },
+            "content": {
+              "application/json": {
+                "examples": {
+                  "AnExample": {
+                    "$ref": "#/components/examples/SomeExample"
+                  }
+                }
+              }
+            },
+            "links": {
+              "TheLink": {
+                "$ref": "#/components/links/SomeLink"
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/SomeResponse"
+          }
+        },
+        "callbacks": {
+          "TheCallback": {
+            "$ref": "#/components/callbacks/SomeCallback"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SomeSchema": {
+        "description": "Used schema",
+        "type": "string"
+      }
+    },
+    "parameters": {
+      "SomeParameter": {
+        "description": "Used parameter",
+        "name": "foo",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "SomeBody": {
+        "description": "Used request body",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "callbacks": {
+      "SomeCallback": {
+        "{$request.query.queryUrl}": {
+          "post": {
+            "requestBody": {
+              "description": "Callback payload",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Success"
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "SomeExample": {
+        "description": "Used example",
+        "value": "foo"
+      }
+    },
+    "headers": {
+      "SomeHeader": {
+        "description": "Used header",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "links": {
+      "SomeLink": {
+        "description": "Used link",
+        "operationId": "add_pet",
+        "parameters": {
+          "pet_id": "$response.body#/id"
+        }
+      }
+    },
+    "responses": {
+      "SomeResponse": {
+        "description": "Used response"
+      }
+    }
+  }
+}

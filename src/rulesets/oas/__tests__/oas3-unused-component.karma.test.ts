@@ -1,17 +1,17 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FetchMockSandbox } from 'fetch-mock';
 import { Document } from '../../../document';
-import type { Spectral } from '../../../index';
+import { Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
 import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
-describe('unusedComponentsSchema - Http remote references', () => {
+describe('unusedComponent - Http remote references', () => {
   let fetchMock: FetchMockSandbox;
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await createWithRules(['oas3-unused-components-schema'], { resolver: httpAndFileResolver });
+    s = await createWithRules(['oas3-unused-component'], { resolver: httpAndFileResolver });
     fetchMock = require('fetch-mock').default.sandbox();
     window.fetch = fetchMock;
   });
@@ -20,7 +20,7 @@ describe('unusedComponentsSchema - Http remote references', () => {
     window.fetch = fetch;
   });
 
-  test('reports unreferenced components schemas', async () => {
+  test('reports unreferenced components', async () => {
     fetchMock.mock('https://oas3.library.com/defs.json', {
       status: 200,
       body: {
@@ -77,8 +77,8 @@ describe('unusedComponentsSchema - Http remote references', () => {
 
     expect(results).toEqual([
       {
-        code: 'oas3-unused-components-schema',
-        message: 'Potentially unused components schema has been detected.',
+        code: 'oas3-unused-component',
+        message: 'Potentially unused component has been detected.',
         path: ['components', 'schemas', 'Unhooked'],
         range: {
           end: {

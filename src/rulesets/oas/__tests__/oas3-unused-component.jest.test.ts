@@ -4,19 +4,19 @@ import * as nock from 'nock';
 
 import { Document } from '../../../document';
 import { readParsable } from '../../../fs/reader';
-import type { Spectral } from '../../../index';
+import { Spectral } from '../../../index';
 import * as Parsers from '../../../parsers';
 import { createWithRules } from './__helpers__/createWithRules';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
-describe('unusedComponentsSchema - Http and fs remote references', () => {
+describe('unusedComponent - Http and fs remote references', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await createWithRules(['oas3-unused-components-schema'], { resolver: httpAndFileResolver });
+    s = await createWithRules(['oas3-unused-component'], { resolver: httpAndFileResolver });
   });
 
-  describe('reports unreferenced components schemas', () => {
+  describe('reports unreferenced components', () => {
     test('when analyzing an in-memory document', async () => {
       nock('https://oas3.library.com')
         .get('/defs.json')
@@ -84,8 +84,8 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
 
       expect(results).toEqual([
         {
-          code: 'oas3-unused-components-schema',
-          message: 'Potentially unused components schema has been detected.',
+          code: 'oas3-unused-component',
+          message: 'Potentially unused component has been detected.',
           path: ['components', 'schemas', 'Unhooked'],
           range: {
             end: {
@@ -121,8 +121,8 @@ describe('unusedComponentsSchema - Http and fs remote references', () => {
 
       expect(results).toEqual([
         {
-          code: 'oas3-unused-components-schema',
-          message: 'Potentially unused components schema has been detected.',
+          code: 'oas3-unused-component',
+          message: 'Potentially unused component has been detected.',
           path: ['components', 'schemas', 'Unhooked'],
           range: {
             end: {

@@ -391,7 +391,7 @@ describe('Linter service', () => {
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),
           expect.objectContaining({
-            code: 'oas3-unused-components-schema',
+            code: 'oas3-unused-component',
             path: ['components', 'schemas', 'Pets'],
             source: join(process.cwd(), 'src/__tests__/__fixtures__/petstore.invalid-schema.oas3.json'),
           }),

@@ -11,6 +11,7 @@
     "oasOpSecurityDefined",
     "oasPathParam",
     "oasTagDefined",
+    "oasUnusedComponent",
     "typedEnum",
     "refSiblings"
   ],
@@ -641,18 +642,15 @@
         }
       }
     },
-    "oas3-unused-components-schema": {
-      "description": "Potentially unused components schema has been detected.",
+    "oas3-unused-component": {
+      "description": "Potentially unused component has been detected.",
       "recommended": true,
       "formats": ["oas3"],
       "type": "style",
       "resolved": false,
-      "given": "$.components.schemas",
+      "given": "$",
       "then": {
-        "function": "unreferencedReusableObject",
-        "functionOptions": {
-          "reusableObjectsLocation": "#/components/schemas"
-        }
+        "function": "oasUnusedComponent"
       }
     }
   }
