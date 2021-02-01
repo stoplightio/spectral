@@ -7065,10 +7065,10 @@ rollup-plugin-typescript2@^0.29.0:
     resolve "1.17.0"
     tslib "2.0.1"
 
-rollup@^2.36.1:
-  version "2.36.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.36.1.tgz#2174f0c25c7b400d57b05628d0e732c7ae8d2178"
-  integrity sha512-eAfqho8dyzuVvrGqpR0ITgEdq0zG2QJeWYh+HeuTbpcaXk8vNFc48B7bJa1xYosTCKx0CuW+447oQOW8HgBIZQ==
+rollup@^2.38.2:
+  version "2.38.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.38.2.tgz#ac5feef9e3b5f1c4386a0578f3add52b8b66759f"
+  integrity sha512-3Sg65zfgqsnI2LUFsOmhJDvTWXwio+taySq/dsyvel8+GW+AxeW9V6YZG8BpVGQk/TS4uvGLARRH5T3ygDyyNQ==
   optionalDependencies:
     fsevents "~2.1.2"
 
