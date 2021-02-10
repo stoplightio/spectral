@@ -38,7 +38,7 @@ commands:
     steps:
       - run:
           name: Lint the code
-          command: yarn lint
+          command: yarn lint.eslint
       - run:
           name: Run node tests
           command: yarn test --coverage --maxWorkers=2
