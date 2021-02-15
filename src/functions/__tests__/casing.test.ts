@@ -46,7 +46,7 @@ describe('casing', () => {
 
     describe('camel', () => {
       const invalid = ['foo_test', 'Foo', '1fooBarBaz', '123', 'foo-bar'];
-      const valid = ['foo', 'fooBar', 'fooBarBaz'];
+      const valid = ['foo', 'fooBar', 'fooBarBaz', 'coordinateX'];
       const validWithDigits = ['foo1', 'foo24Bar', 'fooBar0Baz323'];
 
       test.each(invalid)('should recognize invalid target %s', target => {
@@ -70,7 +70,7 @@ describe('casing', () => {
 
     describe('pascal', () => {
       const invalid = ['foo_test', '123', '1fooBarBaz', 'fooBarBaz1', 'fooBar', 'foo1', 'foo-bar'];
-      const valid = ['Foo', 'FooBar', 'FooBarBaz'];
+      const valid = ['Foo', 'FooBar', 'FooBarBaz', 'CoordinateZ'];
       const validWithDigits = ['Foo1', 'FooBarBaz1'];
 
       test.each(invalid)('should recognize invalid target %s', target => {
