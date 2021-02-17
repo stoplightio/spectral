@@ -16,7 +16,6 @@ const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction): Validat
 
   const ajv = schemaFn.createAJVInstance({
     meta: false,
-    jsonPointers: true,
     allErrors: true,
   });
 

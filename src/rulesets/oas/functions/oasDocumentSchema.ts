@@ -1,13 +1,13 @@
-import * as AJV from 'ajv';
+import { ErrorObject } from 'ajv';
 import { ISchemaOptions } from '../../../functions/schema';
 import { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
 
-function shouldIgnoreError(error: AJV.ErrorObject): boolean {
+function shouldIgnoreError(error: ErrorObject): boolean {
   return (
     // oneOf is a fairly error as we have 2 options to choose from for most of the time.
     error.keyword === 'oneOf' ||
     // the required $ref is entirely useless, since oas-schema rules operate on resolved content, so there won't be any $refs in the document
-    (error.keyword === 'required' && (error.params as AJV.RequiredParams).missingProperty === '$ref')
+    (error.keyword === 'required' && error.params.missingProperty === '$ref')
   );
 }
 
@@ -30,7 +30,7 @@ const ERROR_MAP = [
 // The $ref part is never going to be interesting for us, because both oas-schema rules operate on resolved content, so we won't have any $refs left.
 // As you can see, what we deal here wit is actually not really oneOf anymore - it's always the first member of oneOf we match against.
 // That being said, we always strip both oneOf and $ref, since we are always interested in the first error.
-export function prepareResults(errors: AJV.ErrorObject[]) {
+export function prepareResults(errors: ErrorObject[]) {
   // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
   for (const error of errors) {
     if (error.keyword === 'additionalProperties') {
