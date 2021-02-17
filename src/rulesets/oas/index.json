@@ -489,7 +489,7 @@
         "functionOptions": {
           "allErrors": true,
           "schema": {
-            "$ref": "./schemas/schema.oas2.json"
+            "$ref": "./schemas/oas2/schema.json"
           }
         }
       }
@@ -655,7 +655,7 @@
           "allErrors": true,
           "oasVersion": "3.0",
           "schema": {
-            "$ref": "./schemas/schema.oas3.json"
+            "$ref": "./schemas/oas3-0/schema.json"
           }
         }
       }
@@ -685,7 +685,7 @@
           "allErrors": true,
           "oasVersion": "3.1",
           "schema": {
-            "$ref": "./schemas/schema.oas3.1.json"
+            "$ref": "./schemas/oas3-1/schema.json"
           }
         }
       }
