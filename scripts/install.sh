@@ -14,6 +14,14 @@ if [ "$UNAME" = "Darwin" ] ; then
   FILENAME="spectral-macos"
 elif [ "$UNAME" = "Linux" ] ; then
   FILENAME="spectral-linux"
+  if [ -f /etc/os-release ]; then
+    # extract the value for KEY named "NAME"
+    DISTRO=$(sed -n -e 's/^NAME="\?\([^"]*\)"\?$/\1/p' /etc/os-release)
+    if [ "$DISTRO" = "Alpine Linux" ]; then
+      echo "Installing on Alpine Linux."
+      FILENAME="spectral"
+    fi
+  fi
 fi
 
 URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
