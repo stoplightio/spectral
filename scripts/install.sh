@@ -19,7 +19,7 @@ elif [ "$UNAME" = "Linux" ] ; then
     DISTRO=$(sed -n -e 's/^NAME="\?\([^"]*\)"\?$/\1/p' /etc/os-release)
     if [ "$DISTRO" = "Alpine Linux" ]; then
       echo "Installing on Alpine Linux."
-      FILENAME="spectral"
+      FILENAME="spectral-alpine"
     fi
   fi
 fi
