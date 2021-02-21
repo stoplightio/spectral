@@ -82,7 +82,7 @@ const createRulesetProcessor = (
         dereferenceInline: false,
         uriCache,
         async parseResolveResult(opts) {
-          opts.result = parseContent(opts.result, opts.targetAuthority.pathname());
+          opts.result = parseContent(opts.result, opts.targetAuthority.href());
           return opts;
         },
       },
