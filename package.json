@@ -97,7 +97,7 @@
     "@commitlint/config-conventional": "^9.1.1",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^11.1.1",
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "@types/jest": "^26.0.4",
     "@types/jest-when": "^2.7.2",
     "@types/lodash": "^4.14.167",
