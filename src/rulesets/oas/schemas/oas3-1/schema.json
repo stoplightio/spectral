@@ -1,1334 +1,1477 @@
 {
-  "$id": "https://spec.openapis.org/oas/3.0/schema/2019-04-02",
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Validation schema for OpenAPI Specification 3.0.X.",
+  "$id": "https://spec.openapis.org/oas/3.1/schema/2021-02-18",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "required": [
     "openapi",
-    "info",
-    "paths"
+    "info"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "components"
+      ]
+    },
+    {
+      "required": [
+        "paths"
+      ]
+    },
+    {
+      "required": [
+        "webhooks"
+      ]
+    }
+  ],
+  "allOf": [
+    {
+      "$ref": "#/$defs/Mixins/$defs/Extensible"
+    }
   ],
   "properties": {
     "openapi": {
       "type": "string",
-      "pattern": "^3\\.0\\.\\d(-.+)?$"
+      "pattern": "^3\\.1\\.\\d(-.+)?$"
+    },
+    "jsonSchemaDialect": {
+      "type": "string",
+      "format": "uri"
     },
     "info": {
-      "$ref": "#/definitions/Info"
+      "$ref": "#Info"
     },
     "externalDocs": {
-      "$ref": "#/definitions/ExternalDocumentation"
+      "$ref": "#ExternalDocumentation"
     },
     "servers": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/Server"
+        "$ref": "#Server"
       }
     },
     "security": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/SecurityRequirement"
+        "$ref": "#SecurityRequirement"
       }
     },
     "tags": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/Tag"
-      },
-      "uniqueItems": true
+        "$ref": "#Tag"
+      }
     },
     "paths": {
-      "$ref": "#/definitions/Paths"
+      "$ref": "#Paths"
+    },
+    "webhooks": {
+      "$comment": "TODO: Implement meta-schema for webhooks"
     },
     "components": {
-      "$ref": "#/definitions/Components"
+      "$ref": "#Components"
     }
   },
-  "patternProperties": {
-    "^x-": true
-  },
-  "additionalProperties": false,
-  "definitions": {
-    "Reference": {
-      "type": "object",
-      "required": [
-        "$ref"
-      ],
-      "patternProperties": {
-        "^\\$ref$": {
-          "type": "string",
-          "format": "uri-reference"
-        }
-      }
-    },
-    "Info": {
-      "type": "object",
-      "required": [
-        "title",
-        "version"
-      ],
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "termsOfService": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "contact": {
-          "$ref": "#/definitions/Contact"
-        },
-        "license": {
-          "$ref": "#/definitions/License"
-        },
-        "version": {
-          "type": "string"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Contact": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "email": {
-          "type": "string",
-          "format": "email"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "License": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string",
-          "format": "uri-reference"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Server": {
-      "type": "object",
-      "required": [
-        "url"
-      ],
-      "properties": {
-        "url": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "variables": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/ServerVariable"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "ServerVariable": {
-      "type": "object",
-      "required": [
-        "default"
-      ],
-      "properties": {
-        "enum": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "default": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Components": {
-      "type": "object",
-      "properties": {
-        "schemas": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Schema"
-                },
-                {
-                  "$ref": "#/definitions/Reference"
-                }
-              ]
+  "unevaluatedProperties": false,
+  "$defs": {
+    "Mixins": {
+      "$defs": {
+        "Describable": {
+          "properties": {
+            "description": {
+              "type": "string"
             }
           }
         },
-        "responses": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/Response"
-                }
-              ]
+        "Requireable": {
+          "properties": {
+            "required": {
+              "type": "boolean",
+              "default": false
             }
           }
         },
-        "parameters": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/Parameter"
-                }
-              ]
+        "Deprecatable": {
+          "properties": {
+            "deprecated": {
+              "type": "boolean",
+              "default": false
             }
           }
         },
-        "examples": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/Example"
-                }
-              ]
-            }
-          }
-        },
-        "requestBodies": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/RequestBody"
-                }
-              ]
-            }
-          }
-        },
-        "headers": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/Header"
-                }
-              ]
-            }
-          }
-        },
-        "securitySchemes": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/SecurityScheme"
-                }
-              ]
-            }
-          }
-        },
-        "links": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/Link"
-                }
-              ]
-            }
-          }
-        },
-        "callbacks": {
-          "type": "object",
-          "patternProperties": {
-            "^[a-zA-Z0-9\\.\\-_]+$": {
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/Reference"
-                },
-                {
-                  "$ref": "#/definitions/Callback"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Schema": {
-      "$ref": "meta/schema-object.json"
-    },
-    "Response": {
-      "type": "object",
-      "required": [
-        "description"
-      ],
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "headers": {
-          "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Header"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          }
-        },
-        "content": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/MediaType"
-          }
-        },
-        "links": {
-          "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Link"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "MediaType": {
-      "type": "object",
-      "properties": {
-        "schema": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/Schema"
-            },
-            {
-              "$ref": "#/definitions/Reference"
-            }
-          ]
-        },
-        "example": true,
-        "examples": {
-          "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Example"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          }
-        },
-        "encoding": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/Encoding"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/definitions/ExampleXORExamples"
-        }
-      ]
-    },
-    "Example": {
-      "type": "object",
-      "properties": {
-        "summary": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "value": true,
-        "externalValue": {
-          "type": "string",
-          "format": "uri-reference"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Header": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "required": {
-          "type": "boolean",
-          "default": false
-        },
-        "deprecated": {
-          "type": "boolean",
-          "default": false
-        },
-        "allowEmptyValue": {
-          "type": "boolean",
-          "default": false
-        },
-        "style": {
-          "type": "string",
-          "const": "simple",
-          "default": "simple"
-        },
-        "explode": {
-          "type": "boolean"
-        },
-        "allowReserved": {
-          "type": "boolean",
-          "default": false
-        },
-        "schema": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/Schema"
-            },
-            {
-              "$ref": "#/definitions/Reference"
-            }
-          ]
-        },
-        "content": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/MediaType"
-          },
-          "minProperties": 1,
-          "maxProperties": 1
-        },
-        "example": true,
-        "examples": {
-          "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Example"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false,
-      "allOf": [
-        {
-          "$ref": "#/definitions/ExampleXORExamples"
-        },
-        {
-          "$ref": "#/definitions/SchemaXORContent"
-        }
-      ]
-    },
-    "Paths": {
-      "type": "object",
-      "patternProperties": {
-        "^\\/": {
-          "$ref": "#/definitions/PathItem"
-        },
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "PathItem": {
-      "type": "object",
-      "properties": {
-        "$ref": {
-          "type": "string"
-        },
-        "summary": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "servers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Server"
-          }
-        },
-        "parameters": {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Parameter"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          },
-          "uniqueItems": true
-        }
-      },
-      "patternProperties": {
-        "^(get|put|post|delete|options|head|patch|trace)$": {
-          "$ref": "#/definitions/Operation"
-        },
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Operation": {
-      "type": "object",
-      "required": [
-        "responses"
-      ],
-      "properties": {
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "summary": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "externalDocs": {
-          "$ref": "#/definitions/ExternalDocumentation"
-        },
-        "operationId": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Parameter"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          },
-          "uniqueItems": true
-        },
-        "requestBody": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/RequestBody"
-            },
-            {
-              "$ref": "#/definitions/Reference"
-            }
-          ]
-        },
-        "responses": {
-          "$ref": "#/definitions/Responses"
-        },
-        "callbacks": {
-          "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Callback"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
-          }
-        },
-        "deprecated": {
-          "type": "boolean",
-          "default": false
-        },
-        "security": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/SecurityRequirement"
-          }
-        },
-        "servers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Server"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Responses": {
-      "type": "object",
-      "properties": {
-        "default": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/Response"
-            },
-            {
-              "$ref": "#/definitions/Reference"
-            }
-          ]
-        }
-      },
-      "patternProperties": {
-        "^[1-5](?:\\d{2}|XX)$": {
-          "oneOf": [
-            {
-              "$ref": "#/definitions/Response"
-            },
-            {
-              "$ref": "#/definitions/Reference"
-            }
-          ]
-        },
-        "^x-": true
-      },
-      "minProperties": 1,
-      "additionalProperties": false
-    },
-    "SecurityRequirement": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
-    },
-    "Tag": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "externalDocs": {
-          "$ref": "#/definitions/ExternalDocumentation"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "ExternalDocumentation": {
-      "type": "object",
-      "required": [
-        "url"
-      ],
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string",
-          "format": "uri-reference"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "ExampleXORExamples": {
-      "description": "Example and examples are mutually exclusive",
-      "not": {
-        "required": [
-          "example",
-          "examples"
-        ]
-      }
-    },
-    "SchemaXORContent": {
-      "description": "Schema and content are mutually exclusive, at least one is required",
-      "not": {
-        "required": [
-          "schema",
-          "content"
-        ]
-      },
-      "oneOf": [
-        {
-          "required": [
-            "schema"
-          ]
-        },
-        {
-          "required": [
-            "content"
-          ],
-          "description": "Some properties are not allowed if content is present",
+        "DescReqDep": {
           "allOf": [
             {
-              "not": {
-                "required": [
-                  "style"
-                ]
-              }
+              "$ref": "#/$defs/Mixins/$defs/Describable"
             },
             {
-              "not": {
-                "required": [
-                  "explode"
-                ]
-              }
+              "$ref": "#/$defs/Mixins/$defs/Requireable"
             },
             {
-              "not": {
-                "required": [
-                  "allowReserved"
-                ]
-              }
-            },
-            {
-              "not": {
-                "required": [
-                  "example"
-                ]
-              }
-            },
-            {
-              "not": {
-                "required": [
-                  "examples"
-                ]
-              }
+              "$ref": "#/$defs/Mixins/$defs/Deprecatable"
             }
           ]
-        }
-      ]
-    },
-    "Parameter": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
         },
-        "in": {
-          "type": "string"
+        "Extensible": {
+          "patternProperties": {
+            "^x-": true
+          }
         },
-        "description": {
-          "type": "string"
+        "WithSingleExample": {
+          "properties": {
+            "example": true,
+            "examples": false
+          }
         },
-        "required": {
-          "type": "boolean",
-          "default": false
+        "WithExampleObjects": {
+          "properties": {
+            "example": false,
+            "examples": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#Example"
+              }
+            }
+          }
         },
-        "deprecated": {
-          "type": "boolean",
-          "default": false
-        },
-        "allowEmptyValue": {
-          "type": "boolean",
-          "default": false
-        },
-        "style": {
-          "type": "string"
-        },
-        "explode": {
-          "type": "boolean"
-        },
-        "allowReserved": {
-          "type": "boolean",
-          "default": false
-        },
-        "schema": {
+        "WithExamples": {
           "oneOf": [
             {
-              "$ref": "#/definitions/Schema"
+              "$ref": "#/$defs/Mixins/$defs/WithSingleExample"
             },
             {
-              "$ref": "#/definitions/Reference"
+              "$ref": "#/$defs/Mixins/$defs/WithExampleObjects"
             }
           ]
         },
-        "content": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/MediaType"
-          },
-          "minProperties": 1,
-          "maxProperties": 1
-        },
-        "example": true,
-        "examples": {
-          "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Example"
-              },
-              {
-                "$ref": "#/definitions/Reference"
-              }
-            ]
+        "WithSchema": {
+          "properties": {
+            "schema": {
+              "$ref": "#Schema"
+            },
+            "content": false
           }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false,
-      "required": [
-        "name",
-        "in"
-      ],
-      "allOf": [
-        {
-          "$ref": "#/definitions/ExampleXORExamples"
         },
-        {
-          "$ref": "#/definitions/SchemaXORContent"
+        "WithSchemaAndExamples": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithSchema"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithExamples"
+            }
+          ]
         },
-        {
-          "$ref": "#/definitions/ParameterLocation"
-        }
-      ]
-    },
-    "ParameterLocation": {
-      "description": "Parameter location",
-      "oneOf": [
-        {
-          "description": "Parameter in path",
+        "WithContent": {
+          "properties": {
+            "schema": false,
+            "content": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#MediaType"
+              },
+              "minProperties": 1,
+              "maxProperties": 1
+            }
+          }
+        },
+        "WithNameAndLocation": {
           "required": [
-            "required"
+            "name",
+            "in"
           ],
           "properties": {
-            "in": {
-              "const": "path"
+            "name": {
+              "type": "string"
             },
+            "in": {
+              "type": "string",
+              "enum": [
+                "path",
+                "query",
+                "header",
+                "cookie"
+              ]
+            }
+          }
+        },
+        "WithExplodeAndReserved": {
+          "properties": {
+            "explode": {
+              "type": "boolean"
+            },
+            "allowReserved": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "WithEmpty": {
+          "properties": {
+            "allowEmptyValue": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "WithExplodeReservedAndEmpty": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithExplodeAndReserved"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithEmpty"
+            }
+          ]
+        },
+        "StyledSimple": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithExplodeReservedAndEmpty"
+            }
+          ],
+          "properties": {
             "style": {
+              "type": "string",
+              "const": "simple",
+              "default": "simple"
+            }
+          }
+        },
+        "StyledMatrix": {
+          "properties": {
+            "style": {
+              "type": "string",
               "enum": [
                 "matrix",
                 "label",
                 "simple"
               ],
               "default": "simple"
-            },
-            "required": {
-              "const": true
             }
           }
         },
-        {
-          "description": "Parameter in query",
+        "StyledFormOnly": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithExplodeReservedAndEmpty"
+            }
+          ],
           "properties": {
-            "in": {
-              "const": "query"
-            },
             "style": {
+              "type": "string",
+              "const": "form",
+              "default": "form"
+            }
+          }
+        },
+        "StyledFormComplexNoDefaultOrEmpty": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithExplodeAndReserved"
+            }
+          ],
+          "properties": {
+            "style": {
+              "type": "string",
               "enum": [
                 "form",
                 "spaceDelimited",
                 "pipeDelimited",
                 "deepObject"
-              ],
-              "default": "form"
+              ]
             }
           }
         },
-        {
-          "description": "Parameter in header",
-          "properties": {
-            "in": {
-              "const": "header"
+        "StyledFormComplex": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/StyledFormComplexNoDefaultOrEmpty"
             },
-            "style": {
-              "const": "simple",
-              "default": "simple"
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithExplodeReservedAndEmpty"
             }
-          }
-        },
-        {
-          "description": "Parameter in cookie",
+          ],
           "properties": {
-            "in": {
-              "const": "cookie"
-            },
             "style": {
-              "const": "form",
               "default": "form"
             }
           }
         }
-      ]
+      }
     },
-    "RequestBody": {
-      "type": "object",
-      "required": [
-        "content"
-      ],
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "content": {
+    "Objects": {
+      "$defs": {
+        "Reference": {
+          "$anchor": "Reference",
           "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/MediaType"
+          "required": [
+            "$ref"
+          ],
+          "properties": {
+            "$ref": {
+              "type": "string",
+              "format": "uri-reference"
+            }
           }
         },
-        "required": {
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "SecurityScheme": {
-      "oneOf": [
-        {
-          "$ref": "#/definitions/APIKeySecurityScheme"
+        "Info": {
+          "$anchor": "Info",
+          "type": "object",
+          "required": [
+            "title",
+            "version"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Describable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "termsOfService": {
+              "type": "string",
+              "format": "uri-reference"
+            },
+            "contact": {
+              "$ref": "#Contact"
+            },
+            "license": {
+              "$ref": "#License"
+            }
+          },
+          "$defs": {
+            "Contact": {
+              "$anchor": "Contact",
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri-reference"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                }
+              },
+              "unevaluatedProperties": false
+            },
+            "License": {
+              "$anchor": "License",
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri-reference"
+                },
+                "identifier": {
+                  "type": "string"
+                }
+              },
+              "unevaluatedProperties": false
+            }
+          }
         },
-        {
-          "$ref": "#/definitions/HTTPSecurityScheme"
+        "Server": {
+          "$anchor": "Server",
+          "type": "object",
+          "required": [
+            "url"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Describable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "variables": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "required": [
+                  "default"
+                ],
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/Mixins/$defs/Describable"
+                  },
+                  {
+                    "$ref": "#/$defs/Mixins/$defs/Extensible"
+                  }
+                ],
+                "properties": {
+                  "enum": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1
+                  },
+                  "default": {
+                    "type": "string"
+                  }
+                },
+                "unevaluatedProperties": false
+              }
+            }
+          },
+          "unevaluatedProperties": false
         },
-        {
-          "$ref": "#/definitions/OAuth2SecurityScheme"
-        },
-        {
-          "$ref": "#/definitions/OpenIdConnectSecurityScheme"
-        }
-      ]
-    },
-    "APIKeySecurityScheme": {
-      "type": "object",
-      "required": [
-        "type",
-        "name",
-        "in"
-      ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "const": "apiKey"
-        },
-        "name": {
-          "type": "string"
-        },
-        "in": {
-          "type": "string",
-          "enum": [
-            "header",
-            "query",
-            "cookie"
+        "Response": {
+          "$anchor": "Response",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "required": [
+                "description"
+              ],
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Describable"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "properties": {
+                "headers": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#Header"
+                  }
+                },
+                "content": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#MediaType"
+                  }
+                },
+                "links": {
+                  "type": "object",
+                  "additionalProperteis": {
+                    "$ref": "#Link"
+                  }
+                }
+              },
+              "unevaluatedProperties": false
+            }
           ]
         },
-        "description": {
-          "type": "string"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "HTTPSecurityScheme": {
-      "type": "object",
-      "required": [
-        "scheme",
-        "type"
-      ],
-      "properties": {
-        "scheme": {
-          "type": "string"
-        },
-        "bearerFormat": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string",
-          "const": "http"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false,
-      "oneOf": [
-        {
-          "description": "Bearer",
+        "MediaType": {
+          "$anchor": "MediaType",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/WithSchemaAndExamples"
+            }
+          ],
           "properties": {
-            "scheme": {
-              "const": "bearer"
+            "encoding": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/StyledFormComplexNoDefaultOrEmpty"
+                }
+              ],
+              "properties": {
+                "contentType": {
+                  "type": "string"
+                },
+                "headers": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#Header"
+                  }
+                }
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        "Example": {
+          "$anchor": "Example",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Describable"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "properties": {
+                "summary": {
+                  "type": "string"
+                },
+                "value": true,
+                "externalValue": {
+                  "type": "string",
+                  "format": "uri-reference"
+                }
+              },
+              "unevaluatedProperties": false
+            }
+          ]
+        },
+        "Header": {
+          "$anchor": "Header",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "required": [
+                "schema"
+              ],
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/DescReqDep"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/WithSchemaAndExamples"
+                    },
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/StyledSimple"
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/WithContent"
+                    },
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/WithEmpty"
+                    }
+                  ]
+                }
+              ],
+              "unevaluatedProperties": false
+            }
+          ]
+        },
+        "Paths": {
+          "$anchor": "Paths",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "patternProperties": {
+            "^/": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "$ref": "#Reference"
+                },
+                {
+                  "$ref": "#PathItem"
+                }
+              ]
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        "PathItem": {
+          "$anchor": "PathItem",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Describable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "summary": {
+              "type": "string"
+            },
+            "servers": {
+              "type": "array",
+              "items": {
+                "$ref": "#Server"
+              }
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "$ref": "#Parameter"
+                  },
+                  {
+                    "$ref": "#Reference"
+                  }
+                ]
+              },
+              "uniqueItems": true
             }
           }
         },
-        {
-          "description": "Non Bearer",
-          "not": {
-            "required": [
-              "bearerFormat"
-            ]
-          },
+        "Operation": {
+          "$anchor": "Operation",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Describable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Deprecatable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
           "properties": {
-            "scheme": {
-              "not": {
-                "const": "bearer"
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "summary": {
+              "type": "string"
+            },
+            "externalDocs": {
+              "$ref": "#ExternalDocumentation"
+            },
+            "operationId": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "array",
+              "items": {
+                "$ref": "#Parameter"
+              }
+            },
+            "requestBody": {
+              "$ref": "#RequestBody"
+            },
+            "responses": {
+              "$ref": "#Responses"
+            },
+            "callback": {
+              "$ref": "#Callback"
+            },
+            "security": {
+              "type": "array",
+              "items": {
+                "$ref": "#SecurityRequirement"
+              }
+            },
+            "servers": {
+              "type": "array",
+              "items": {
+                "$ref": "#Server"
+              }
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        "Responses": {
+          "$anchor": "Responses",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "default": {
+              "$ref": "#Response"
+            }
+          },
+          "patternProperties": {
+            "[1-5](?:\\d{2}|XX)": {
+              "$ref": "#Response"
+            }
+          },
+          "minProperties": 1,
+          "unevaluatedProperties": false
+        },
+        "SecurityRequirement": {
+          "$anchor": "SecurityRequirement",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "Tag": {
+          "$anchor": "Tag",
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Describable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "externalDocs": {
+              "$ref": "#ExternalDocumentation"
+            }
+          },
+          "unevaluatedProperties": false
+        },
+        "ExternalDocumentation": {
+          "$anchor": "ExternalDocumentation",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "type": "object",
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri-reference"
+            }
+          }
+        },
+        "Parameter": {
+          "$anchor": "Parameter",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/WithNameAndLocation"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                },
+                {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#PathParam"
+                        },
+                        {
+                          "$ref": "#/$defs/Mixins/$defs/Describable"
+                        },
+                        {
+                          "$ref": "#/$defs/Mixins/$defs/Deprecatable"
+                        },
+                        {
+                          "required": [
+                            "required"
+                          ],
+                          "properties": {
+                            "required": {
+                              "const": true,
+                              "default": true
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "allOf": [
+                        {
+                          "anyOf": [
+                            {
+                              "$ref": "#QueryParam"
+                            },
+                            {
+                              "$ref": "#HeaderParam"
+                            },
+                            {
+                              "$ref": "#CookieParam"
+                            }
+                          ]
+                        },
+                        {
+                          "$ref": "#/$defs/Mixins/$defs/DescReqDep"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "oneOf": [
+                {
+                  "allOf": [
+                    {
+                      "required": [
+                        "schema"
+                      ]
+                    },
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/WithSchemaAndExamples"
+                    },
+                    {
+                      "oneOf": [
+                        {
+                          "allOf": [
+                            {
+                              "$ref": "#PathParam"
+                            },
+                            {
+                              "$ref": "#/$defs/Mixins/$defs/StyledMatrix"
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "$ref": "#QueryParam"
+                            },
+                            {
+                              "$ref": "#/$defs/Mixins/$defs/StyledFormComplex"
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "$ref": "#HeaderParam"
+                            },
+                            {
+                              "$ref": "#/$defs/Mixins/$defs/StyledSimple"
+                            }
+                          ]
+                        },
+                        {
+                          "allOf": [
+                            {
+                              "$ref": "#CookieParam"
+                            },
+                            {
+                              "$ref": "#/$defs/Mixins/$defs/StyledFormOnly"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "allOf": [
+                    {
+                      "required": [
+                        "content"
+                      ]
+                    },
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/WithContent"
+                    },
+                    {
+                      "$ref": "#/$defs/Mixins/$defs/WithEmpty"
+                    }
+                  ]
+                }
+              ],
+              "unevaluatedProperties": false
+            }
+          ],
+          "$defs": {
+            "PathParam": {
+              "$anchor": "PathParam",
+              "properties": {
+                "in": {
+                  "const": "path"
+                }
+              }
+            },
+            "QueryParam": {
+              "$anchor": "QueryParam",
+              "properties": {
+                "in": {
+                  "const": "query"
+                }
+              }
+            },
+            "HeaderParam": {
+              "$anchor": "HeaderParam",
+              "properties": {
+                "in": {
+                  "const": "header"
+                }
+              }
+            },
+            "CookieParam": {
+              "$anchor": "CookieParam",
+              "properties": {
+                "in": {
+                  "const": "cookie"
+                }
               }
             }
           }
-        }
-      ]
-    },
-    "OAuth2SecurityScheme": {
-      "type": "object",
-      "required": [
-        "type",
-        "flows"
-      ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "const": "oauth2"
         },
-        "flows": {
-          "$ref": "#/definitions/OAuthFlows"
+        "RequestBody": {
+          "$anchor": "RequestBody",
+          "required": [
+            "content"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Describable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Requireable"
+            },
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "content": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#MediaType"
+              }
+            }
+          },
+          "unevaluatedProperties": false
         },
-        "description": {
-          "type": "string"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "OpenIdConnectSecurityScheme": {
-      "type": "object",
-      "required": [
-        "type",
-        "openIdConnectUrl"
-      ],
-      "properties": {
-        "type": {
-          "type": "string",
-          "const": "openIdConnect"
-        },
-        "openIdConnectUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "OAuthFlows": {
-      "type": "object",
-      "properties": {
-        "implicit": {
-          "$ref": "#/definitions/ImplicitOAuthFlow"
-        },
-        "password": {
-          "$ref": "#/definitions/PasswordOAuthFlow"
-        },
-        "clientCredentials": {
-          "$ref": "#/definitions/ClientCredentialsFlow"
-        },
-        "authorizationCode": {
-          "$ref": "#/definitions/AuthorizationCodeOAuthFlow"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "ImplicitOAuthFlow": {
-      "type": "object",
-      "required": [
-        "authorizationUrl",
-        "scopes"
-      ],
-      "properties": {
-        "authorizationUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "refreshUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "scopes": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "PasswordOAuthFlow": {
-      "type": "object",
-      "required": [
-        "tokenUrl"
-      ],
-      "properties": {
-        "tokenUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "refreshUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "scopes": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "ClientCredentialsFlow": {
-      "type": "object",
-      "required": [
-        "tokenUrl"
-      ],
-      "properties": {
-        "tokenUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "refreshUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "scopes": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "AuthorizationCodeOAuthFlow": {
-      "type": "object",
-      "required": [
-        "authorizationUrl",
-        "tokenUrl"
-      ],
-      "properties": {
-        "authorizationUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "tokenUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "refreshUrl": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "scopes": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false
-    },
-    "Link": {
-      "type": "object",
-      "properties": {
-        "operationId": {
-          "type": "string"
-        },
-        "operationRef": {
-          "type": "string",
-          "format": "uri-reference"
-        },
-        "parameters": {
-          "type": "object",
-          "additionalProperties": true
-        },
-        "requestBody": true,
-        "description": {
-          "type": "string"
-        },
-        "server": {
-          "$ref": "#/definitions/Server"
-        }
-      },
-      "patternProperties": {
-        "^x-": true
-      },
-      "additionalProperties": false,
-      "not": {
-        "description": "Operation Id and Operation Ref are mutually exclusive",
-        "required": [
-          "operationId",
-          "operationRef"
-        ]
-      }
-    },
-    "Callback": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "#/definitions/PathItem"
-      },
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "Encoding": {
-      "type": "object",
-      "properties": {
-        "contentType": {
-          "type": "string"
-        },
-        "headers": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/Header"
+        "SecurityScheme": {
+          "$anchor": "SecurityScheme",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Describable"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "properties": {
+                "type": {
+                  "string": null,
+                  "enum": [
+                    "apiKey",
+                    "http",
+                    "bearer",
+                    "mutualTLS",
+                    "oauth2",
+                    "openIdConnect"
+                  ],
+                  "oneOf": [
+                    {
+                      "$ref": "#APIKey"
+                    },
+                    {
+                      "$ref": "#HTTP"
+                    },
+                    {
+                      "$ref": "#MutualTLS"
+                    },
+                    {
+                      "$ref": "#OAuth2"
+                    },
+                    {
+                      "$ref": "#OpenIdConnect"
+                    }
+                  ]
+                }
+              },
+              "unevaluatedProperties": false
+            }
+          ],
+          "$defs": {
+            "APIKey": {
+              "$anchor": "APIKey",
+              "properties": {
+                "type": {
+                  "const": "apiKey"
+                }
+              },
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/WithNameAndLocation"
+                }
+              ],
+              "not": {
+                "$ref": "#PathParam"
+              }
+            },
+            "HTTP": {
+              "$anchor": "HTTP",
+              "required": [
+                "scheme"
+              ],
+              "properties": {
+                "scheme": {
+                  "type": "string"
+                }
+              },
+              "oneOf": [
+                {
+                  "properties": {
+                    "type": {
+                      "const": "http"
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "type": {
+                      "const": "bearer"
+                    },
+                    "bearerFormat": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            },
+            "MutalTLS": {
+              "$anchor": "MutualTLS",
+              "properties": {
+                "type": {
+                  "const": "mutualTLS"
+                }
+              }
+            },
+            "OAuth2": {
+              "$anchor": "OAuth2",
+              "required": [
+                "flows"
+              ],
+              "properties": {
+                "type": {
+                  "const": "oauth2"
+                },
+                "flows": {
+                  "$ref": "#OAuthFlows"
+                }
+              }
+            },
+            "OpenIdConnect": {
+              "$anchor": "OpenIdConnect",
+              "required": [
+                "openIdConnectUrl"
+              ],
+              "properties": {
+                "type": {
+                  "const": "openIdConnect"
+                },
+                "openIdConnectUrl": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
           }
         },
-        "style": {
-          "type": "string",
-          "enum": [
-            "form",
-            "spaceDelimited",
-            "pipeDelimited",
-            "deepObject"
+        "OAuthFlows": {
+          "$anchor": "OAuthFlows",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            }
+          ],
+          "properties": {
+            "implicit": {
+              "allOf": [
+                {
+                  "required": [
+                    "scopes"
+                  ]
+                },
+                {
+                  "$ref": "#CommonFlow"
+                },
+                {
+                  "$ref": "#AuthorizationFlow"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "unevaluatedProperties": false
+            },
+            "password": {
+              "allOf": [
+                {
+                  "$ref": "#CommonFlow"
+                },
+                {
+                  "$ref": "#TokenFlow"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "unevaluatedProperties": false
+            },
+            "clientCredentials": {
+              "allOf": [
+                {
+                  "$ref": "#CommonFlow"
+                },
+                {
+                  "$ref": "#TokenFlow"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "unevaluatedProperties": false
+            },
+            "authorizationCode": {
+              "allOf": [
+                {
+                  "$ref": "#CommonFlow"
+                },
+                {
+                  "$ref": "#TokenFlow"
+                },
+                {
+                  "$ref": "#AuthorizationFlow"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "unevaluatedProperties": false
+            }
+          },
+          "unevaluatedProperties": false,
+          "$defs": {
+            "Common": {
+              "$anchor": "CommonFlow",
+              "properties": {
+                "refreshUrl": {
+                  "type": "string",
+                  "format": "uri-reference"
+                },
+                "scopes": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "Token": {
+              "$anchor": "TokenFlow",
+              "required": [
+                "tokenUrl"
+              ],
+              "properties": {
+                "tokenUrl": {
+                  "type": "string",
+                  "format": "uri-reference"
+                }
+              }
+            },
+            "Authorization": {
+              "$anchor": "AuthorizationFlow",
+              "required": [
+                "authorizationUrl"
+              ],
+              "properties": {
+                "authorizationUrl": {
+                  "type": "string",
+                  "format": "uri-reference"
+                }
+              }
+            }
+          }
+        },
+        "Link": {
+          "$anchor": "Link",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Describable"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "oneOf": [
+                {
+                  "properties": {
+                    "operationRef": {
+                      "type": "string",
+                      "format": "uri-reference"
+                    },
+                    "operationId": false
+                  }
+                },
+                {
+                  "properties": {
+                    "operationRef": false,
+                    "operationId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ],
+              "properties": {
+                "parameters": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "requestBody": true,
+                "server": {
+                  "$ref": "#Server"
+                }
+              },
+              "unevaluatedProperties": false
+            }
           ]
         },
-        "explode": {
-          "type": "boolean"
+        "Callback": {
+          "$anchor": "Callback",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "unevaluatedProperties": false
+            }
+          ]
         },
-        "allowReserved": {
-          "type": "boolean",
-          "default": false
+        "Schema": {
+          "$anchor": "Schema",
+          "oneOf": [
+            {
+              "$ref": "#Reference"
+            },
+            {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "https://json-schema.org/draft/2020-12/schema"
+                },
+                {
+                  "$ref": "#SchemaExtensions"
+                },
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                }
+              ],
+              "unevaluatedProperties": false
+            }
+          ],
+          "$defs": {
+            "Extensions": {
+              "$anchor": "SchemaExtensions",
+              "properties": {
+                "discriminator": {
+                  "$ref": "#Discriminator"
+                },
+                "externalDocs": {
+                  "$ref": "#ExternalDocumentation"
+                },
+                "xml": {
+                  "$ref": "#XML"
+                }
+              }
+            },
+            "Discriminator": {
+              "$anchor": "Discriminator",
+              "type": "object",
+              "required": [
+                "propertyName"
+              ],
+              "properties": {
+                "propertyName": {
+                  "type": "string"
+                },
+                "mapping": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "XML": {
+              "$anchor": "XML",
+              "allOf": [
+                {
+                  "$ref": "#/$defs/Mixins/$defs/Extensible"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "type": "string",
+                      "format": "url"
+                    },
+                    "prefix": {
+                      "type": "string"
+                    },
+                    "attribute": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "wrapped": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                }
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "Components": {
+          "$anchor": "Components",
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Mixins/$defs/Extensible"
+            },
+            {
+              "additionalProperties": {
+                "$comment": "All sub-objects have the same property name constraints",
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^[a-zA-Z0-9\\.\\-_]+$"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "schemas": {
+              "additionalProperties": {
+                "$ref": "#Schema"
+              }
+            },
+            "responses": {
+              "additionalProperties": {
+                "$ref": "#Responses"
+              }
+            },
+            "parameters": {
+              "additionalProperties": {
+                "$ref": "#Parameter"
+              }
+            },
+            "pathItems": {
+              "additionalProperties": {
+                "$ref": "#PathItem"
+              }
+            },
+            "examples": {
+              "additionalProperties": {
+                "$ref": "#Example"
+              }
+            },
+            "requestBodies": {
+              "additionalProperties": {
+                "$ref": "#RequestBody"
+              }
+            },
+            "headers": {
+              "additionalProperties": {
+                "$ref": "#Header"
+              }
+            },
+            "links": {
+              "additionalProperties": {
+                "$ref": "#Link"
+              }
+            },
+            "callbacks": {
+              "additionalProperties": {
+                "$ref": "#Callback"
+              }
+            }
+          },
+          "unevaluatedProperties": false
         }
-      },
-      "additionalProperties": false
+      }
     }
   }
 }
