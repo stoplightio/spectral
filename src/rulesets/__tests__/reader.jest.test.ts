@@ -557,6 +557,27 @@ describe('Rulesets reader', () => {
     });
   });
 
+  it('should not resolve json-schema.org $refs', async () => {
+    expect(await readRuleset(getFixturePath('json-schema-org-ruleset.json'))).toEqual(
+      expect.objectContaining({
+        rules: {
+          'json-schema': {
+            enabled: true,
+            given: '$',
+            recommended: true,
+            severity: DiagnosticSeverity.Warning,
+            then: {
+              function: 'valid',
+              functionOptions: {
+                $ref: 'http://json-schema.org/draft-04/schema#',
+              },
+            },
+          },
+        },
+      }),
+    );
+  });
+
   describe('Exceptions loading', () => {
     it('should handle loading a standalone ruleset', async () => {
       const ruleset = await readRuleset(path.join(__dirname, './__fixtures__/exceptions/standalone.yaml'));
