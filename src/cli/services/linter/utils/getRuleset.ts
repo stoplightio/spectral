@@ -1,11 +1,11 @@
 import { isAbsolute, resolve } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
-import { readRuleset } from '../../../../ruleset';
+import { IRulesetReadOptions, readRuleset } from '../../../../ruleset';
 import { getDefaultRulesetFile } from '../../../../ruleset/utils';
 import { IRuleset } from '../../../../types/ruleset';
 import { KNOWN_RULESETS } from '../../../../formats';
 
-async function loadRulesets(cwd: string, rulesetFiles: string[]): Promise<IRuleset> {
+async function loadRulesets(cwd: string, rulesetFiles: string[], opts: IRulesetReadOptions): Promise<IRuleset> {
   if (rulesetFiles.length === 0) {
     return {
       functions: {},
@@ -14,13 +14,16 @@ async function loadRulesets(cwd: string, rulesetFiles: string[]): Promise<IRules
     };
   }
 
-  return readRuleset(rulesetFiles.map(file => (isAbsolute(file) ? file : resolve(cwd, file))));
+  return readRuleset(
+    rulesetFiles.map(file => (isAbsolute(file) ? file : resolve(cwd, file))),
+    opts,
+  );
 }
 
-export async function getRuleset(rulesetFile: Optional<string[]>): Promise<IRuleset> {
+export async function getRuleset(rulesetFile: Optional<string[]>, opts: IRulesetReadOptions): Promise<IRuleset> {
   const rulesetFiles = rulesetFile ?? (await getDefaultRulesetFile(process.cwd()));
 
   return await (rulesetFiles !== null
-    ? loadRulesets(process.cwd(), Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles])
-    : readRuleset(KNOWN_RULESETS));
+    ? loadRulesets(process.cwd(), Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles], opts)
+    : readRuleset(KNOWN_RULESETS, opts));
 }

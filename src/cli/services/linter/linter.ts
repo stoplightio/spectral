@@ -7,13 +7,19 @@ import { ILintConfig } from '../../../types/config';
 import { getRuleset, listFiles, skipRules, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';
 import { YamlParserResult } from '@stoplight/yaml';
+import { DEFAULT_REQUEST_OPTIONS } from '../../../request';
+import type { Agent } from 'https';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
   const spectral = new Spectral({
     resolver: getResolver(flags.resolver),
+    proxyUri: process.env.PROXY,
   });
 
-  const ruleset = await getRuleset(flags.ruleset);
+  const ruleset = await getRuleset(flags.ruleset, {
+    agent: DEFAULT_REQUEST_OPTIONS.agent as Agent,
+  });
+
   spectral.setRuleset(ruleset);
 
   for (const [format, lookup, prettyName] of KNOWN_FORMATS) {
