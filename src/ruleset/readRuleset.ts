@@ -90,7 +90,7 @@ const createRulesetProcessor = (
           return opts.ref;
         },
         async parseResolveResult(opts) {
-          opts.result = parseContent(opts.result, opts.targetAuthority.pathname());
+          opts.result = parseContent(opts.result, opts.targetAuthority.href());
           return opts;
         },
       },
