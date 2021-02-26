@@ -81,6 +81,14 @@ const createRulesetProcessor = (
         baseUri: rulesetUri,
         dereferenceInline: false,
         uriCache,
+        transformRef(opts) {
+          const host = opts.ref?.host();
+          if (host === 'json-schema.org') {
+            return;
+          }
+
+          return opts.ref;
+        },
         async parseResolveResult(opts) {
           opts.result = parseContent(opts.result, opts.targetAuthority.href());
           return opts;

@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "json-schema": {
+      "given": "$",
+      "then": {
+        "function": "valid",
+        "functionOptions": {
+          "$ref": "http://json-schema.org/draft-04/schema#"
+        }
+      }
+    }
+  }
+}
