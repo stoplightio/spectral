@@ -475,13 +475,19 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       expect.arrayContaining([
         expect.objectContaining({
           code: 'invalid-ref',
-          message: `ENOENT: no such file or directory, open '${path.join(documentUri, '../broken-age.yaml')}'`,
+          message: `ENOENT: no such file or directory, open '${path.join(
+            normalize(documentUri),
+            '../broken-age.yaml',
+          )}'`,
           path: ['age', '$ref'],
           source: normalize(path.join(documentUri, '../user.json')),
         }),
         expect.objectContaining({
           code: 'invalid-ref',
-          message: `ENOENT: no such file or directory, open '${path.join(documentUri, '../broken-length.json')}'`,
+          message: `ENOENT: no such file or directory, open '${path.join(
+            normalize(documentUri),
+            '../broken-length.json',
+          )}'`,
           path: ['maxLength', '$ref'],
           source: normalize(path.join(documentUri, '../name.json')),
         }),
