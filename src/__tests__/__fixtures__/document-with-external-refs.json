@@ -1,0 +1,8 @@
+{
+  "todo": {
+    "$ref": "./models/todo-full.v1.json"
+  },
+  "empty": {
+    "$ref": ""
+  }
+}
