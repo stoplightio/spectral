@@ -5,7 +5,6 @@ import * as nock from 'nock';
 import * as path from 'path';
 
 import { Document } from '../document';
-import { isOpenApiv2 } from '../formats';
 import { pattern } from '../functions/pattern';
 import * as Parsers from '../parsers';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
@@ -96,95 +95,58 @@ describe('Spectral', () => {
     );
   });
 
-  // todo: depends on spectral:oas
   test('should report issues for correct files with correct ranges and paths', async () => {
-    const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.oas2.json'));
+    const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.json'));
     const spectral = new Spectral({ resolver: httpAndFileResolver });
-    await spectral.loadRuleset('spectral:oas');
-    spectral.registerFormat('oas2', isOpenApiv2);
+    spectral.setRules({
+      'requires-type': {
+        given: ['$..allOf', '$.empty'],
+        then: {
+          field: 'type',
+          function: 'truthy',
+        },
+      },
+    });
     const document = new Document(fs.readFileSync(documentUri, 'utf8'), Parsers.Json, documentUri);
 
     const results = await spectral.run(document);
 
-    expect(results).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'oas2-schema',
-          path: ['paths', '/todos/{todoId}', 'get', 'responses', '200', 'description'],
-          range: {
-            end: {
-              character: 29,
-              line: 17,
-            },
-            start: {
-              character: 27,
-              line: 17,
-            },
+    expect(results).toEqual([
+      {
+        code: 'requires-type',
+        message: '`empty.type` property is not truthy',
+        path: ['empty'],
+        range: {
+          end: {
+            character: 3,
+            line: 6,
           },
-          source: documentUri,
-        }),
-        expect.objectContaining({
-          code: 'oas2-schema',
-          path: [],
-          range: {
-            end: {
-              character: 1,
-              line: 37,
-            },
-            start: {
-              character: 0,
-              line: 0,
-            },
+          start: {
+            character: 11,
+            line: 4,
           },
-          source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
-        }),
-        expect.objectContaining({
-          code: 'path-params',
-          path: ['paths', '/todos/{todoId}', 'get'],
-          range: {
-            end: {
-              character: 7,
-              line: 33,
-            },
-            start: {
-              character: 13,
-              line: 11,
-            },
+        },
+        severity: DiagnosticSeverity.Warning,
+        source: documentUri,
+      },
+      {
+        code: 'requires-type',
+        message: '`allOf.type` property is not truthy',
+        path: ['allOf'],
+        range: {
+          end: {
+            character: 3,
+            line: 33,
           },
-          source: documentUri,
-        }),
-        expect.objectContaining({
-          code: 'info-contact',
-          path: ['info'],
-          range: {
-            end: {
-              character: 3,
-              line: 6,
-            },
-            start: {
-              character: 10,
-              line: 2,
-            },
+          start: {
+            character: 11,
+            line: 3,
           },
-          source: documentUri,
-        }),
-        expect.objectContaining({
-          code: 'operation-description',
-          path: ['paths', '/todos/{todoId}', 'get'],
-          range: {
-            end: {
-              character: 7,
-              line: 33,
-            },
-            start: {
-              character: 13,
-              line: 11,
-            },
-          },
-          source: documentUri,
-        }),
-      ]),
-    );
+        },
+        severity: DiagnosticSeverity.Warning,
+        source: expect.stringContaining('__fixtures__/models/todo-full.v1.json'),
+      },
+    ]);
   });
 
   test('properly decorates results with metadata pertaining to the document being linted', async () => {

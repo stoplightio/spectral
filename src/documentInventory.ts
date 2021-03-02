@@ -109,12 +109,21 @@ export class DocumentInventory {
         if ($ref === null) return null;
 
         const scopedPath = [...safePointerToPath($ref), ...newPath];
-        let resolvedDoc;
+        let resolvedDoc = this.document;
 
         if (isLocalRef($ref)) {
           resolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
         } else {
-          const extractedSource = extractSourceFromRef($ref)!;
+          const extractedSource = extractSourceFromRef($ref);
+
+          if (extractedSource === null) {
+            return {
+              document: resolvedDoc,
+              path: getClosestJsonPath(resolvedDoc.data, path),
+              missingPropertyPath: path,
+            };
+          }
+
           source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
 
           resolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
