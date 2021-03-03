@@ -128,7 +128,7 @@
     "karma-typescript-es6-transform": "^5.2.0",
     "lint-staged": "^10.5.4",
     "nock": "~12.0.2",
-    "node-html-parser": "^2.0.1",
+    "node-html-parser": "^3.0.3",
     "patch-package": "^6.4.4",
     "pkg": "^4.4.9",
     "prettier": "^2.2.1",
