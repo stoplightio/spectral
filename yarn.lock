@@ -1186,10 +1186,10 @@
     node-fetch "^2.6.0"
     tslib "^1.14.1"
 
-"@stoplight/json-ref-resolver@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-3.1.1.tgz#c450b71ff8c8ed25eeb547244c0c4e7646fc9991"
-  integrity sha512-FUOu3nPwbX2COczcCwvUz1EpqRNYlw7Ng8keOWGiwKmlXVz4OKdRw4hi2HUg9QNSX1CyFVJ3A3pPtpkizfKqlg==
+"@stoplight/json-ref-resolver@3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-ref-resolver/-/json-ref-resolver-3.1.2.tgz#ae218cf6062d6be490c135603478415e700b52ba"
+  integrity sha512-SwSvhQ1jNDDLrmKSc17cEx2zZxjzF1tB4nmzaD5fn/r0oI77CNL0Rts4tAVodXVFKrWnaNWZuZmlla6x8y7eFA==
   dependencies:
     "@stoplight/json" "^3.10.2"
     "@stoplight/path" "^1.3.2"
