@@ -94,7 +94,8 @@
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.6",
     "@brightcove/kacl": "^0.1.11",
-    "@commitlint/config-conventional": "^9.1.1",
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
@@ -160,11 +161,6 @@
     "{src,test-harness}/**/*.{json,yaml}": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "pkg": {
     "scripts": [
