@@ -151,24 +151,14 @@ describe('lint', () => {
 
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
     await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
-    // needed by Node 8 (different ticking?) - can be simplified once we drop support for version 8
-    await new Promise(resolve => {
-      setImmediate(() => {
-        expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
-        resolve();
-      });
-    });
+    await new Promise(resolve => void process.nextTick(resolve));
+    expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
   });
 
   it('writes formatted output to a file', async () => {
     await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
-    // needed by Node 8 (different ticking?) - can be simplified once we drop support for version 8
-    await new Promise(resolve => {
-      setImmediate(() => {
-        expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
-        resolve();
-      });
-    });
+    await new Promise(resolve => void process.nextTick(resolve));
+    expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
   });
 
   it('passes skip-rule to lint', async () => {
@@ -225,18 +215,9 @@ describe('lint', () => {
   it('prints error message upon exception', async () => {
     const error = new Error('Failure');
     (lint as jest.Mock).mockReset();
-    (lint as jest.Mock).mockReturnValueOnce({
-      // could be mockRejectedValueOnce, but Node 8 does not like it (different ticking?), so here is the workaround
-      then() {
-        return this;
-      },
-      catch(fn: Function) {
-        fn(error);
-        return this;
-      },
-    });
-
+    (lint as jest.Mock).mockRejectedValueOnce(error);
     await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
+    await new Promise(resolve => void process.nextTick(resolve));
     expect(errorSpy).toBeCalledWith('Failure');
   });
 });
