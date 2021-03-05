@@ -130,6 +130,23 @@ describe('Spectral', () => {
         source: documentUri,
       },
       {
+        code: 'invalid-ref',
+        message: 'EISDIR: illegal operation on a directory, read',
+        path: ['empty', '$ref'],
+        range: {
+          end: {
+            character: 14,
+            line: 5,
+          },
+          start: {
+            character: 12,
+            line: 5,
+          },
+        },
+        severity: DiagnosticSeverity.Error,
+        source: documentUri,
+      },
+      {
         code: 'requires-type',
         message: '`allOf.type` property is not truthy',
         path: ['allOf'],
