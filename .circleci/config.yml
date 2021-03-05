@@ -135,7 +135,6 @@ workflows:
               os:
                 - linux
               node-version:
-                - "10.18"
                 - "12.9"
                 - "14.9"
       - test-browser

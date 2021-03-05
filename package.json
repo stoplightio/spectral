@@ -30,7 +30,7 @@
     "rulesets/*"
   ],
   "engines": {
-    "node": ">=10.18"
+    "node": ">=12"
   },
   "scripts": {
     "postinstall": "patch-package",
