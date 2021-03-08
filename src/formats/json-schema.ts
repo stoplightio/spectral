@@ -3,7 +3,6 @@ import { JSONSchema } from '../types';
 
 const KNOWN_JSON_SCHEMA_TYPES = ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
 const KNOWN_JSON_SCHEMA_COMBINERS = ['allOf', 'oneOf', 'anyOf'];
-const $SCHEMA_DRAFT4_REGEX = /^https?:\/\/json-schema.org\/draft-04\/(?:hyper-)?schema#?$/;
 const $SCHEMA_DRAFT6_REGEX = /^https?:\/\/json-schema.org\/draft-06\/(?:hyper-)?schema#?$/;
 const $SCHEMA_DRAFT7_REGEX = /^https?:\/\/json-schema.org\/draft-07\/(?:hyper-)?schema#?$/;
 const $SCHEMA_DRAFT_2019_09_REGEX = /^https?:\/\/json-schema.org\/draft\/2019-09\/(?:hyper-)?schema#?$/;
@@ -25,9 +24,6 @@ export const isJSONSchemaLoose = (document: unknown): boolean =>
     hasValidJSONSchemaType(document) ||
     hasValidJSONSchemaCombiner(document) ||
     'not' in document);
-
-export const isJSONSchemaDraft4 = (document: unknown): boolean =>
-  isJSONSchema(document) && $SCHEMA_DRAFT4_REGEX.test(document.$schema);
 
 export const isJSONSchemaDraft6 = (document: unknown): boolean =>
   isJSONSchema(document) && $SCHEMA_DRAFT6_REGEX.test(document.$schema);

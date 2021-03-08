@@ -1,7 +1,6 @@
 import {
   isJSONSchema,
   isJSONSchemaDraft2019_09,
-  isJSONSchemaDraft4,
   isJSONSchemaDraft6,
   isJSONSchemaDraft7,
   isJSONSchemaLoose,
@@ -13,8 +12,6 @@ describe('JSON Schema format', () => {
       'http://json-schema.org/schema#',
       'https://json-schema.org/schema#',
       'http://json-schema.org/hyper-schema#',
-      'http://json-schema.org/draft-04/schema#',
-      'http://json-schema.org/draft-04/hyper-schema#',
       'http://json-schema.org/draft-06/schema#',
       'http://json-schema.org/draft-06/hyper-schema#',
     ])('recognizes %s schema correctly', $schema => {
@@ -39,8 +36,6 @@ describe('JSON Schema format', () => {
         'http://json-schema.org/schema#',
         'https://json-schema.org/schema#',
         'http://json-schema.org/hyper-schema#',
-        'http://json-schema.org/draft-04/schema#',
-        'http://json-schema.org/draft-04/hyper-schema#',
         'http://json-schema.org/draft-06/schema#',
         'http://json-schema.org/draft-06/hyper-schema#',
       ])('recognizes %s schema correctly', $schema => {
@@ -89,41 +84,6 @@ describe('JSON Schema format', () => {
     });
   });
 
-  describe('JSON Schema Draft 4', () => {
-    it.each([
-      'http://json-schema.org/draft-04/schema#',
-      'https://json-schema.org/draft-04/schema#',
-      'http://json-schema.org/draft-04/schema',
-      'https://json-schema.org/draft-04/schema',
-      'http://json-schema.org/draft-04/hyper-schema#',
-      'https://json-schema.org/draft-04/hyper-schema#',
-      'http://json-schema.org/draft-04/hyper-schema',
-      'https://json-schema.org/draft-04/hyper-schema',
-    ])('recognizes %s schema correctly', $schema => {
-      expect(isJSONSchemaDraft4({ $schema })).toBe(true);
-    });
-
-    it.each([
-      'http://json-schema.org/schema#',
-      'https://json-schema.org/schema#',
-      'http://json-schema.org/hyper-schema#',
-      'http://json-schema.org/draft-06/schema#',
-      'http://json-schema.org/draft-06/hyper-schema#',
-    ])('does not recognize %s schema', $schema => {
-      expect(isJSONSchemaDraft4({ $schema })).toBe(false);
-    });
-
-    it('does not recognize invalid document', () => {
-      expect(isJSONSchemaDraft4({ $schema: '2.0' })).toBe(false);
-      expect(isJSONSchemaDraft4({ $schema: 'json-schema' })).toBe(false);
-      expect(isJSONSchemaDraft4({ $schema: 2 })).toBe(false);
-      expect(isJSONSchemaDraft4({ swagger: null })).toBe(false);
-      expect(isJSONSchemaDraft4({ allOf: [] })).toBe(false);
-      expect(isJSONSchemaDraft4({ type: 'string' })).toBe(false);
-      expect(isJSONSchemaDraft4({})).toBe(false);
-      expect(isJSONSchemaDraft4(null)).toBe(false);
-    });
-  });
   describe('JSON Schema Draft 6', () => {
     it.each([
       'http://json-schema.org/draft-06/schema#',

@@ -7,6 +7,6 @@ info: {}
 {bin} lint {document}
 ====stdout====
 {document}
- 1:1  warning  unrecognized-format  The provided document does not match any of the registered formats [oas2, oas3, asyncapi2, json-schema, json-schema-loose, json-schema-draft4, json-schema-draft6, json-schema-draft7, json-schema-2019-09]
+ 1:1  warning  unrecognized-format  The provided document does not match any of the registered formats [oas2, oas3, oas3.0, oas3.1, asyncapi2, json-schema, json-schema-loose, json-schema-draft6, json-schema-draft7, json-schema-2019-09]
 
 ✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)

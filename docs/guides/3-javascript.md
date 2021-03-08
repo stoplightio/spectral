@@ -58,22 +58,21 @@ Assuming your rulesets use the built-in Spectral formats, this can be accomplish
 - OpenAPI
 
 ```js
-const { Spectral, isOpenApiv2, isOpenApiv3 } = require("@stoplight/spectral");
+const { Spectral, isOpenApiv3_0, isOpenApiv3_1 } = require("@stoplight/spectral");
 
 const spectral = new Spectral();
-spectral.registerFormat("oas2", isOpenApiv2);
-spectral.registerFormat("oas3", isOpenApiv3);
+spectral.registerFormat("oas3.0", isOpenApiv3_0);
+spectral.registerFormat("oas3.1", isOpenApiv3_1);
 ```
 
 - JSON Schema
 
 ```js
-const { Spectral, isJSONSchema, isJSONSchemaDraft4, isJSONSchemaDraft6, isJSONSchemaDraft7, isJSONSchemaDraft2019_09, isJSONSchemaLoose } = require("@stoplight/spectral");
+const { Spectral, isJSONSchema, isJSONSchemaDraft6, isJSONSchemaDraft7, isJSONSchemaDraft2019_09, isJSONSchemaLoose } = require("@stoplight/spectral");
 
 const spectral = new Spectral();
 spectral.registerFormat("json-schema", isJSONSchema);
 spectral.registerFormat("json-schema-loose", isJSONSchemaLoose);
-spectral.registerFormat("json-schema-draft4", isJSONSchemaDraft4);
 spectral.registerFormat("json-schema-draft6", isJSONSchemaDraft6);
 spectral.registerFormat("json-schema-draft7", isJSONSchemaDraft7);
 spectral.registerFormat("json-schema-2019-09", isJSONSchemaDraft2019_09);
