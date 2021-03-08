@@ -7,6 +7,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.0] - 2021-03-08
+
+### Added
+
+- Add `duplicated-entry-in-enum` rule to detect duplicated entry in enum [#1478](https://github.com/stoplightio/spectral/issues/1478)
+- Improve `additionalProperties` JSON Schema validation [#1433](https://github.com/stoplightio/spectral/pull/1433)
+
+### Changed
+
+- $refs in rulesets linking to json-schema.org are kept unresolved [#1519](https://github.com/stoplightio/spectral/pull/1519)
+
+### Fixed
+
+- Empty $refs should not be ignored [#1540](https://github.com/stoplightio/spectral/pull/1540)
+- Proper source detection of an error caused by an empty $ref [#1515](https://github.com/stoplightio/spectral/issues/1515)
+- Improve file $ref resolving on Windows [#1514](https://github.com/stoplightio/spectral/pull/1514)
+- Proxy settings not applied to all outgoing requests [#1324](https://github.com/stoplightio/spectral/issues/1324)
+- Pascal/Camel `casing` do not support single uppercase letters at the end [#1500](https://github.com/stoplightio/spectral/issues/1500)
+- Nested extends broken in rulesets Error disabling an extended ruleset in an extended ruleset [#1352](https://github.com/stoplightio/spectral/issues/1352), [#1380](https://github.com/stoplightio/spectral/issues/1380)
+- Missing validation of child parameter child properties [#1400](https://github.com/stoplightio/spectral/issues/1400)
+
 ## [5.8.1] - 2021-02-11
 
 ### Fixed
@@ -26,7 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Falsy OpenAPI `example` fields are validated correctly [#1418](https://github.com/stoplightio/spectral/pull/1418)
 - OpenAPI examples in examples is asked to be OpenAPI compliant [#1406](https://github.com/stoplightio/spectral/issues/1406)
 - Allow single trailing slash for OpenAPI 3 server url [#1427](https://github.com/stoplightio/spectral/pull/1427)
-- Missing non-existing enums in the OpenAPI default [#1429](https://github.com/stoplightio/spectral/pull/1429)
 - Friendly error is thrown for empty ruleset [#1407](https://github.com/stoplightio/spectral/issues/1407)
 - Various general improvements for OpenAPI rules using custom functions [#1362](https://github.com/stoplightio/spectral/pull/1362)
 
