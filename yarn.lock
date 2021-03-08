@@ -5540,10 +5540,10 @@ karma-jasmine@^3.3.1:
   dependencies:
     jasmine-core "^3.5.0"
 
-karma-typescript-es6-transform@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/karma-typescript-es6-transform/-/karma-typescript-es6-transform-5.2.0.tgz#af728441ca4b1e746d9d3fa999aab4da2ce05587"
-  integrity sha512-t7oP1Yt2Y6wk+9+P1Tq9zmrooPFqrbYF9xOR8FI3gde8VewT/WIRFnI+qT7wEi2gFT+AP7osckWgPWt72Mj+tg==
+karma-typescript-es6-transform@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/karma-typescript-es6-transform/-/karma-typescript-es6-transform-5.4.0.tgz#05a0313f3cb6dac943b92c76b8a4a66df33d71a9"
+  integrity sha512-IV9o1eVmc5+OT4FGISeE6z74TjBhhphz06Gk3/DOQC+yk61M81bgkwyAvcU9rnAPLbv1XojTdJTxX8ulPKmjYg==
   dependencies:
     "@babel/core" "^7.11.1"
     "@babel/preset-env" "^7.11.0"
