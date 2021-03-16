@@ -61,7 +61,8 @@
     "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.0.4",
@@ -89,7 +90,7 @@
     "strip-ansi": "6.0",
     "text-table": "0.2",
     "tslib": "2.1.0",
-    "yargs": "15.4.1"
+    "yargs": "16.2.0"
   },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.7",
@@ -108,6 +109,7 @@
     "@types/text-table": "^0.2.1",
     "@types/tmp": "^0.2.0",
     "@types/xml2js": "^0.4.8",
+    "@types/yargs": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "copyfiles": "^2.4.1",
