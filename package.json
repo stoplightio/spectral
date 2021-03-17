@@ -83,7 +83,7 @@
     "nanoid": "2.1.11",
     "nimma": "0.0.0",
     "node-fetch": "2.6.1",
-    "proxy-agent": "3.1.1",
+    "proxy-agent": "4.0.1",
     "strip-ansi": "6.0",
     "text-table": "0.2",
     "tslib": "1.13.0",
