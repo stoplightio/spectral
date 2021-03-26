@@ -4,7 +4,7 @@ import { readParsable, IFileReadOptions } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
 import { IRuleResult, Spectral } from '../../../spectral';
 import { ILintConfig } from '../../../types/config';
-import { getRuleset, listFiles, skipRules, segregateEntriesPerKind, readFileDescriptor } from './utils';
+import { getRuleset, listFiles, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';
 import { YamlParserResult } from '@stoplight/yaml';
 import { DEFAULT_REQUEST_OPTIONS } from '../../../request';
@@ -45,15 +45,8 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     }
   }
 
-  if (flags.skipRule !== void 0) {
-    spectral.setRules(skipRules(ruleset.rules, flags));
-  }
-
   const [globs, fileDescriptors] = segregateEntriesPerKind(documents);
-  const [targetUris, unmatchedPatterns] = await listFiles(
-    globs,
-    !(flags.showUnmatchedGlobs || flags.failOnUnmatchedGlobs),
-  );
+  const [targetUris, unmatchedPatterns] = await listFiles(globs, !flags.failOnUnmatchedGlobs);
   const results: IRuleResult[] = [];
 
   if (unmatchedPatterns.length > 0) {

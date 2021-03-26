@@ -77,7 +77,6 @@ describe('lint', () => {
         encoding: 'utf8',
         format: 'stylish',
         ignoreUnknownFormat: false,
-        showUnmatchedGlobs: false,
         failOnUnmatchedGlobs: false,
       });
     });
@@ -95,7 +94,6 @@ describe('lint', () => {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      showUnmatchedGlobs: false,
       failOnUnmatchedGlobs: false,
     });
   });
@@ -107,7 +105,6 @@ describe('lint', () => {
       encoding: 'utf16',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      showUnmatchedGlobs: false,
       failOnUnmatchedGlobs: false,
     });
   });
@@ -119,7 +116,6 @@ describe('lint', () => {
       encoding: 'utf16',
       format: 'json',
       ignoreUnknownFormat: false,
-      showUnmatchedGlobs: false,
       failOnUnmatchedGlobs: false,
     });
   });
@@ -161,36 +157,12 @@ describe('lint', () => {
     expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
   });
 
-  it('passes skip-rule to lint', async () => {
-    await run('lint --skip-rule foo --skip-rule bar ./__fixtures__/empty-oas2-document.json');
-    expect(lint).toHaveBeenCalledWith([expect.any(String)], {
-      skipRule: ['foo', 'bar'],
-      encoding: 'utf8',
-      format: 'stylish',
-      ignoreUnknownFormat: false,
-      showUnmatchedGlobs: false,
-      failOnUnmatchedGlobs: false,
-    });
-  });
-
   it('passes ignore-unknown-format to lint', async () => {
     await run('lint --ignore-unknown-format ./__fixtures__/empty-oas2-document.json');
     expect(lint).toHaveBeenCalledWith([expect.any(String)], {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: true,
-      showUnmatchedGlobs: false,
-      failOnUnmatchedGlobs: false,
-    });
-  });
-
-  it('passes show-unmatched-globs to lint', async () => {
-    await run('lint --show-unmatched-globs ./__fixtures__/empty-oas2-document.json');
-    expect(lint).toHaveBeenCalledWith([expect.any(String)], {
-      encoding: 'utf8',
-      format: 'stylish',
-      ignoreUnknownFormat: false,
-      showUnmatchedGlobs: true,
       failOnUnmatchedGlobs: false,
     });
   });
@@ -201,7 +173,6 @@ describe('lint', () => {
       encoding: 'utf8',
       format: 'stylish',
       ignoreUnknownFormat: false,
-      showUnmatchedGlobs: false,
       failOnUnmatchedGlobs: true,
     });
   });

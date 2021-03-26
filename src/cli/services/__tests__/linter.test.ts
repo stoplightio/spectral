@@ -129,24 +129,6 @@ describe('Linter service', () => {
           ]),
         );
       });
-
-      describe('and --skip-rule=info-contact is set', () => {
-        it('output other warnings but not info-contact', async () => {
-          const output = await run(`lint --skip-rule=info-contact ${document}`);
-
-          expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'oas3-api-servers' })]));
-          expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'info-contact' })]));
-        });
-      });
-
-      describe('and --skip-rule=info-contact --skip-rule=oas3-api-servers is set', () => {
-        it('outputs neither info-contact or oas3-api-servers', async () => {
-          const output = await run(`lint --skip-rule=info-contact --skip-rule=oas3-api-servers ${document}`);
-
-          expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'info-contact' })]));
-          expect(output).toEqual(expect.not.arrayContaining([expect.objectContaining({ code: 'oas3-api-servers' })]));
-        });
-      });
     });
   });
 
