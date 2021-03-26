@@ -29,14 +29,11 @@ Other options include:
   --output, -o                 output to a file instead of stdout                            [string]
   --resolver                   path to custom json-ref-resolver instance                     [string]
   --ruleset, -r                path/URL to a ruleset file                                    [string]
-  --skip-rule, -s              ignore certain rules if they are causing trouble              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
                                [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
                                                                            [boolean] [default: false]
   --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
-  --show-unmatched-globs       show unmatched glob patterns
-                               [deprecated: use --fail-on-unmatched-globs] [boolean] [default: false]
   --fail-on-unmatched-globs    fail on unmatched glob patterns             [boolean] [default: false]
   --verbose, -v                increase verbosity                                           [boolean]
   --quiet, -q                  no logging - output only                                     [boolean]
