@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.1] - 2021-04-08
+
+### Fixed
+
+- `duplicated-entry-in-enum` rule complains about `enum` property in objects [#1571](https://github.com/stoplightio/spectral/issues/1571)
+- Dependencies upgrade, including `proxy-agent` [#1552](https://github.com/stoplightio/spectral/issues/1552)
+
 ## [5.9.0] - 2021-03-08
 
 ### Added
