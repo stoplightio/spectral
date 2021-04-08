@@ -106,8 +106,17 @@
         "function": "schema",
         "functionOptions": {
           "schema": {
-            "type": "array",
-            "uniqueItems": true
+            "oneOf": [
+              {
+                "type": "array",
+                "uniqueItems": true
+              },
+              {
+                "not": {
+                  "type": "array"
+                }
+              }
+            ]
           }
         }
       }

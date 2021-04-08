@@ -36,6 +36,31 @@ describe('duplicated-entry-in-enum', () => {
       expect(results).toEqual([]);
     });
 
+    test('does not report anything when enum is an object property', async () => {
+      const doc = {
+        openapi: '3.0.2',
+        components: {
+          schemas: {
+            schema: {
+              type: 'object',
+              properties: {
+                enum: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      const results = await s.run(doc);
+
+      expect(results).toEqual([]);
+    });
+
     test('identifies enum with duplicated entries', async () => {
       const doc = {
         swagger: '2.0',
