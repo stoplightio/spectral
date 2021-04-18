@@ -14,7 +14,7 @@ Options:
       --version                  Show version number  [boolean]
       --help                     Show help  [boolean]
   -e, --encoding                 text encoding to use  [string] [default: "utf8"]
-  -f, --format                   formatter to use for outputting results  [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity"] [default: "stylish"]
+  -f, --format                   formatter to use for outputting results  [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty"] [default: "stylish"]
   -o, --output                   output to a file instead of stdout  [string]
       --resolver                 path to custom json-ref-resolver instance  [string]
   -r, --ruleset                  path/URL to a ruleset file  [string]

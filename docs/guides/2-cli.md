@@ -21,22 +21,22 @@ spectral lint ./reference/**/*.oas*.{json,yml,yaml}
 Other options include:
 
 ```text
-  --version                    Show version number                                          [boolean]
-  --help                       Show help                                                    [boolean]
-  --encoding, -e               text encoding to use                        [string] [default: "utf8"]
+  --version                    Show version number                                                    [boolean]
+  --help                       Show help                                                              [boolean]
+  --encoding, -e               text encoding to use                                  [string] [default: "utf8"]
   --format, -f                 formatter to use for outputting results
-      [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity"] [default: "stylish"]
-  --output, -o                 output to a file instead of stdout                            [string]
-  --resolver                   path to custom json-ref-resolver instance                     [string]
-  --ruleset, -r                path/URL to a ruleset file                                    [string]
+      [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty"] [default: "stylish"]
+  --output, -o                 output to a file instead of stdout                                      [string]
+  --resolver                   path to custom json-ref-resolver instance                               [string]
+  --ruleset, -r                path/URL to a ruleset file                                              [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
-                               [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
+                                         [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
-                                                                           [boolean] [default: false]
-  --ignore-unknown-format      do not warn about unmatched formats         [boolean] [default: false]
-  --fail-on-unmatched-globs    fail on unmatched glob patterns             [boolean] [default: false]
-  --verbose, -v                increase verbosity                                           [boolean]
-  --quiet, -q                  no logging - output only                                     [boolean]
+                                                                                     [boolean] [default: false]
+  --ignore-unknown-format      do not warn about unmatched formats                   [boolean] [default: false]
+  --fail-on-unmatched-globs    fail on unmatched glob patterns                       [boolean] [default: false]
+  --verbose, -v                increase verbosity                                                     [boolean]
+  --quiet, -q                  no logging - output only                                               [boolean]
 ```
 
 The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset.
