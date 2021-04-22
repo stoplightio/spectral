@@ -61,6 +61,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `json-schema-draft6` (`$schema` says this is JSON Schema Draft 06)
 - `json-schema-draft7` (`$schema` says this is JSON Schema Draft 07)
 - `json-schema-2019-09` (`$schema` says this is JSON Schema 2019-09)
+- `json-schema-2020-12` (`$schema` says this is JSON Schema 2020-12)
 
 Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
 
