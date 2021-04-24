@@ -23,10 +23,9 @@
  * @author Ava Thorn
  */
 
-import { IRange } from '@stoplight/types';
+import { IDiagnostic, IRange } from '@stoplight/types';
 import * as chalk from 'chalk';
 
-// import { IRuleResult } from '../../types';
 import { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSummary, getSeverityName, groupBySource } from './utils';
 import { printPath, PrintStyle } from '../../utils';
@@ -54,7 +53,7 @@ export const pretty: Formatter = results => {
   const summaryColor = getColorForSeverity(getHighestSeverity(results));
   const summaryText = getSummary(groupedResults);
 
-  const uniqueIssues: Array<string | number | undefined> = [];
+  const uniqueIssues: IDiagnostic['code'][] = [];
   Object.keys(groupedResults).forEach(i => {
     const pathResults = groupedResults[i];
     ui.div({ text: 'File:   ' + i, padding: PAD_TOP1_LEFT0 });

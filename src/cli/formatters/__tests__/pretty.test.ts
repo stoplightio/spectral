@@ -9,8 +9,11 @@ const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 function setColumnWidth(width: number, func: CallableFunction): void {
   const og = process.stdout.columns;
   process.stdout.columns = width;
-  func(width);
-  process.stdout.columns = og;
+  try {
+    func(width);
+  } finally {
+    process.stdout.columns = og;
+  }
 }
 function forceWrapped(s: string, wrapType: number): string {
   // Occurs when line is wrapped at non-whitespace character
