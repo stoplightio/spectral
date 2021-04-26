@@ -19,7 +19,7 @@ const logger = {
 };
 
 function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
-  const ajv = new Ajv({ allErrors, messages: true, strict: false, allowUnionTypes: true, logger });
+  const ajv = new Ajv({ allErrors, meta: true, messages: true, strict: false, allowUnionTypes: true, logger });
   addFormats(ajv);
   if (Ajv === AjvBase) {
     ajv.addSchema(draft4);

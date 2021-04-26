@@ -7,6 +7,7 @@ import { assignAjvInstance } from './ajv';
 import Ajv, { Options } from 'ajv';
 import addFormats from 'ajv-formats';
 import { Dictionary } from '@stoplight/types';
+import { draft7 } from 'json-schema-migrate';
 
 export interface ISchemaFunction extends IFunction<ISchemaOptions> {
   createAJVInstance(opts: Options): Ajv;
@@ -37,14 +38,21 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
   const results: IFunctionResult[] = [];
 
   // we already access a resolved object in src/functions/schema-path.ts
-  const { schema: schemaObj, allErrors = false } = opts;
+  const { allErrors = false } = opts;
+  let { schema: schemaObj } = opts;
 
   let validator = opts.ajv;
 
   try {
     if (validator === void 0) {
-      // we used the compiled validation now, hence this lookup here (see the logic above for more info)
-      const ajv = assignAjvInstance(opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7', allErrors);
+      const dialect = opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7';
+      if (dialect === 'draft4' || dialect === 'draft6') {
+        schemaObj = JSON.parse(JSON.stringify(schemaObj));
+        (schemaObj as Dictionary<unknown>).$schema = 'http://json-schema.org/draft-07/schema#';
+        draft7(schemaObj);
+      }
+
+      const ajv = assignAjvInstance(dialect, allErrors);
 
       let seenSchemas = compiled.get(ajv);
       if (seenSchemas === void 0) {

@@ -12,6 +12,36 @@ function runSchema(target: any, schemaObj: object, context?: DeepPartial<IFuncti
 }
 
 describe('schema', () => {
+  it('validates draft 4', () => {
+    const testSchema = {
+      $schema: 'http://json-schema.org/draft-04/schema#',
+      type: 'number',
+      maximum: 2,
+      exclusiveMaximum: true,
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        message: 'Number must be < 2',
+        path: [],
+      },
+    ]);
+  });
+
+  it('validates draft 6', () => {
+    const testSchema = {
+      $schema: 'http://json-schema.org/draft-06/schema#',
+      type: 'string',
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        message: 'Value type must be string',
+        path: [],
+      },
+    ]);
+  });
+
   describe('validates falsy values such as', () => {
     test('empty string', () => {
       const testSchema: JSONSchema = {
