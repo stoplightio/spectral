@@ -3,11 +3,12 @@ import { isAsyncApiv2 } from './asyncapi';
 import {
   isJSONSchema,
   isJSONSchemaDraft2019_09,
+  isJSONSchemaDraft2020_12,
   isJSONSchemaDraft4,
   isJSONSchemaDraft6,
   isJSONSchemaDraft7,
   isJSONSchemaLoose,
-} from './json-schema';
+} from './jsonSchema';
 import { isOpenApiv2, isOpenApiv3 } from './openapi';
 
 export const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
@@ -20,6 +21,7 @@ export const KNOWN_FORMATS: Array<[string, FormatLookup, string]> = [
   ['json-schema-draft6', isJSONSchemaDraft6, 'JSON Schema Draft 6'],
   ['json-schema-draft7', isJSONSchemaDraft7, 'JSON Schema Draft 7'],
   ['json-schema-2019-09', isJSONSchemaDraft2019_09, 'JSON Schema Draft 2019-09'],
+  ['json-schema-2020-12', isJSONSchemaDraft2020_12, 'JSON Schema Draft 2020-12'],
 ];
 
 export const KNOWN_RULESETS = ['spectral:oas', 'spectral:asyncapi'];
