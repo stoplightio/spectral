@@ -15,12 +15,10 @@ const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction): Validat
   }
 
   const ajv = schemaFn.createAJVInstance({
-    meta: false,
-    jsonPointers: true,
     allErrors: true,
+    strict: false,
   });
 
-  ajv.addMetaSchema(schemaFn.specs.v7);
   ajv.addSchema(asyncApi2Schema, asyncApi2Schema.$id);
 
   validator = ajv.compile(asyncApi2SchemaObject);
@@ -37,7 +35,7 @@ export const asyncApi2PayloadValidation: IFunction<null> = function (
 ) {
   const ajvValidationFn = buildAsyncApi2SchemaObjectValidator(this.functions.schema);
 
-  const results = this.functions.schema(
+  return this.functions.schema(
     targetVal,
     {
       schema: asyncApi2SchemaObject,
@@ -47,12 +45,6 @@ export const asyncApi2PayloadValidation: IFunction<null> = function (
     paths,
     otherValues,
   );
-
-  if (!Array.isArray(results)) {
-    return [];
-  }
-
-  return results;
 };
 
 export default asyncApi2PayloadValidation;

@@ -29,6 +29,8 @@
           },
           {
             "type": "array",
+            "minItems": 2,
+            "additionalItems": false,
             "items": [
               {
                 "type": "string"
@@ -37,8 +39,7 @@
                 "type": "string",
                 "enum": ["off", "recommended", "all"]
               }
-            ],
-            "additionalItems": false
+            ]
           }
         ]
       }
@@ -64,6 +65,7 @@
                 "$schema": "http://json-schema.org/draft-07/schema#"
               }
             ],
+            "minItems": 2,
             "additionalItems": false
           }
         ]
@@ -82,10 +84,10 @@
       "type": "object",
       "properties": {
         "duplicateKeys": {
-          "$ref": "shared.json#/Severity"
+          "$ref": "shared.json#/$defs/Severity"
         },
         "incompatibleValues": {
-          "$ref": "shared.json#/Severity"
+          "$ref": "shared.json#/$defs/Severity"
         }
       },
       "additionalProperties": false

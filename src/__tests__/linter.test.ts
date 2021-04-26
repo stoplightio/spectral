@@ -7,6 +7,7 @@ import { Spectral } from '../spectral';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Parsers, Document } from '..';
 import { IParser } from '../parsers/types';
+import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/createWithRules';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
@@ -683,19 +684,19 @@ responses:: !!foo
   });
 
   test('should remove all redundant ajv errors', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
-    await spectral.loadRuleset('spectral:oas');
+    const spectral = await createWithRules(['oas3-schema', 'oas3-valid-schema-example', 'oas3-valid-media-example']);
 
     const result = await spectral.run(invalidSchema);
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'operation-tag-defined',
+        code: 'oas3-schema',
+        message: '`email` property must match format `email`.',
+        path: ['info', 'contact', 'email'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: '`header-1` property should have required property `schema`.',
+        message: '`header-1` property must have required property `schema`.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
@@ -715,27 +716,15 @@ responses:: !!foo
         code: 'invalid-ref',
       }),
       expect.objectContaining({
-        code: 'oas3-unused-component',
-        message: 'Potentially unused component has been detected.',
-        path: ['components', 'schemas', 'Pets'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
-        message: 'Potentially unused component has been detected.',
-        path: ['components', 'schemas', 'foo'],
-      }),
-      expect.objectContaining({
         code: 'oas3-valid-schema-example',
-        message: '`example` property type should be number',
+        message: '`example` property type must be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
   });
 
   test('should preserve sibling additionalProperties errors', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
-    await spectral.loadRuleset('spectral:oas');
+    const spectral = await createWithRules(['oas3-schema']);
 
     const result = await spectral.run(invalidStatusCodes);
 

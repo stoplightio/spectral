@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 
 const ruleName = 'asyncapi-payload';
 
-describe(`Rule '${ruleName}'`, () => {
+describe(`Rule 'asyncapi-payload'`, () => {
   let s: Spectral;
   let doc: any;
 
@@ -67,7 +67,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`deprecated` property type should be boolean',
+        message: '`deprecated` property type must be boolean',
         path: ['components', 'messages', 'aMessage', 'payload', 'deprecated'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -82,7 +82,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`deprecated` property type should be boolean',
+        message: '`deprecated` property type must be boolean',
         path: ['components', 'messageTraits', 'aTrait', 'payload', 'deprecated'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -99,7 +99,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: ruleName,
-          message: '`deprecated` property type should be boolean',
+          message: '`deprecated` property type must be boolean',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'payload', 'deprecated'],
           severity: DiagnosticSeverity.Error,
         }),

@@ -38,7 +38,6 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
       relevantItem.value,
       {
         schema: schemaObject,
-        oasVersion: opts.oasVersion,
         allErrors: opts.allErrors,
       },
       {

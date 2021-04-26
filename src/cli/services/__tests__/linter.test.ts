@@ -563,7 +563,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '`info` property should have required property `title`.',
+          message: '`info` property must have required property `version`.',
           path: ['definitions', 'info'],
           range: {
             end: {
@@ -611,7 +611,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '`description` property type should be string.',
+          message: '`description` property type must be string.',
           path: ['definitions', 'info', 'description'],
           range: {
             end: {
@@ -639,7 +639,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '`info` property should have required property `title`.',
+          message: '`info` property must have required property `version`.',
           path: [],
           range: {
             end: {
@@ -671,7 +671,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '`description` property type should be string.', // this is covered by 'info-description' as well
+          message: '`description` property type must be string.', // this is covered by 'info-description' as well
           path: ['description'],
           range: {
             end: {
@@ -687,7 +687,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'oas2-schema',
-          message: '`get` property should have required property `responses`.',
+          message: '`get` property must have required property `responses`.',
           path: ['paths', '/test', 'get'],
           range: {
             end: {

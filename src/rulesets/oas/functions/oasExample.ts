@@ -2,6 +2,7 @@ import type { IFunction, IFunctionContext, IFunctionResult, JSONSchema } from '.
 import type { ISchemaOptions } from '../../../functions/schema';
 import { isObject } from './utils/isObject';
 import type { Dictionary, JsonPath, Optional } from '@stoplight/types';
+import oasSchema from './oasSchema';
 
 interface IOasExampleOptions {
   oasVersion: 2 | 3;
@@ -122,7 +123,6 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
 
   const schemaOpts: ISchemaOptions = {
     schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as JSONSchema),
-    oasVersion: opts.oasVersion,
   };
 
   let results: Optional<IFunctionResult[]> = void 0;
@@ -133,7 +133,7 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
       : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given, opts.oasVersion);
 
   for (const validationItem of validationItems) {
-    const result = this.functions.schema.call(
+    const result = oasSchema.call(
       this,
       validationItem.value,
       schemaOpts,

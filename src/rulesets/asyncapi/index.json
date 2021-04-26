@@ -40,8 +40,8 @@
       }
     },
     "asyncapi-headers-schema-type-object": {
-      "description": "Headers schema type should be `object`.",
-      "message": "Headers schema type should be `object` ({{error}}).",
+      "description": "Headers schema type must be `object`.",
+      "message": "Headers schema type must be `object` ({{error}}).",
       "severity": "error",
       "recommended": true,
       "type": "validation",
@@ -273,10 +273,10 @@
       "then": {
         "function": "schema",
         "functionOptions": {
+          "allErrors": true,
           "schema": {
             "$ref": "./schemas/schema.asyncapi2.json"
-          },
-          "allErrors": true
+          }
         }
       }
     },

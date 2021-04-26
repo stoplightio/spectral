@@ -35,7 +35,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Object should have required property `channels`',
+        message: 'Object must have required property `channels`',
         path: [],
         severity: DiagnosticSeverity.Error,
       }),

@@ -46,7 +46,7 @@ describe('oas2-valid-media-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-media-example',
-          message: '`application/yaml` property type should be string',
+          message: '`application/yaml` property type must be string',
           severity: DiagnosticSeverity.Error,
           path: ['responses', '200', 'examples', 'application/yaml'],
         }),

@@ -452,7 +452,7 @@ describe('Rulesets reader', () => {
   });
 
   it('given invalid ruleset should output errors', () => {
-    return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/should have required property/);
+    return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/must have required property/);
   });
 
   it('is able to load the whole ruleset from static file', async () => {

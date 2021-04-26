@@ -1,5 +1,6 @@
-import * as AJV from 'ajv';
+import AJV, { ErrorObject } from 'ajv';
 import { isObject } from 'lodash';
+import addFormats from 'ajv-formats';
 
 import { FileRule, IRulesetFile } from '../types/ruleset';
 import * as ruleSchema from '../meta/rule.schema.json';
@@ -7,16 +8,17 @@ import * as rulesetSchema from '../meta/ruleset.schema.json';
 import * as shared from '../meta/shared.json';
 import { IFunction, IFunctionPaths, IFunctionValues, IRule, JSONSchema } from '../types';
 
-const ajv = new AJV({ allErrors: true, jsonPointers: true });
+const ajv = new AJV({ allErrors: true, allowUnionTypes: true, strict: true, strictRequired: false });
+addFormats(ajv);
 const validate = ajv.addSchema(ruleSchema).addSchema(shared).compile(rulesetSchema);
 
-const serializeAJVErrors = (errors: AJV.ErrorObject[]): string =>
-  errors.map(({ message, dataPath }) => `${dataPath} ${message}`).join('\n');
+const serializeAJVErrors = (errors: ErrorObject[]): string =>
+  errors.map(({ message, instancePath }) => `${instancePath} ${message}`).join('\n');
 
 export class ValidationError extends AJV.ValidationError {
   public message: string;
 
-  constructor(public errors: AJV.ErrorObject[]) {
+  constructor(public errors: ErrorObject[]) {
     super(errors);
     this.message = serializeAJVErrors(errors);
   }

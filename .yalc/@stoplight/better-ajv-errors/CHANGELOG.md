@@ -1,0 +1,1 @@
+# @stoplight/better-ajv-errors

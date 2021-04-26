@@ -1,47 +1,15 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { isOpenApiv2, isOpenApiv3, RuleType, Spectral } from '../../../..';
-import { functions } from '../../../../functions';
-import { rules } from '../../index.json';
-import oasDocumentSchema, { prepareResults } from '../oasDocumentSchema';
+import { Spectral } from '../../../..';
+import { prepareResults } from '../oasDocumentSchema';
 
 import { ErrorObject } from 'ajv';
-import * as oas2Schema from '../../schemas/schema.oas2.json';
-import * as oas3Schema from '../../schemas/schema.oas3.json';
-import { setFunctionContext } from '../../../../ruleset';
+import { createWithRules } from '../../__tests__/__helpers__/createWithRules';
 
 describe('oasDocumentSchema', () => {
   let s: Spectral;
 
-  beforeEach(() => {
-    s = new Spectral();
-
-    s.registerFormat('oas2', isOpenApiv2);
-    s.registerFormat('oas3', isOpenApiv3);
-    s.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
-    s.setRules({
-      'oas2-schema': {
-        ...rules['oas2-schema'],
-        type: RuleType[rules['oas2-schema'].type],
-        then: {
-          ...rules['oas2-schema'].then,
-          functionOptions: {
-            ...rules['oas2-schema'].then.functionOptions,
-            schema: oas2Schema,
-          },
-        },
-      },
-      'oas3-schema': {
-        ...rules['oas3-schema'],
-        type: RuleType[rules['oas3-schema'].type],
-        then: {
-          ...rules['oas3-schema'].then,
-          functionOptions: {
-            ...rules['oas3-schema'].then.functionOptions,
-            schema: oas3Schema,
-          },
-        },
-      },
-    });
+  beforeEach(async () => {
+    s = await createWithRules(['oas2-schema', 'oas3-schema']);
   });
 
   describe('given OpenAPI 2 document', () => {
@@ -114,7 +82,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
-          message: '`type` property type should be string.',
+          message: '`type` property type must be string.',
           path: ['paths', '/user', 'get', 'parameters', '0', 'schema', 'type'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -189,7 +157,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
-          message: '`200` property should have required property `description`.',
+          message: '`200` property must have required property `description`.',
           path: ['paths', '/user', 'get', 'responses', '200'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -203,24 +171,24 @@ describe('oasDocumentSchema', () => {
       const errors: ErrorObject[] = [
         {
           keyword: 'type',
-          dataPath: '/paths/test/post/parameters/0/schema/type',
+          instancePath: '/paths/test/post/parameters/0/schema/type',
           schemaPath: '#/properties/type/type',
           params: { type: 'string' },
-          message: 'should be string',
+          message: 'must be string',
         },
         {
           keyword: 'required',
-          dataPath: '/paths/test/post/parameters/0/schema',
+          instancePath: '/paths/test/post/parameters/0/schema',
           schemaPath: '#/definitions/Reference/required',
           params: { missingProperty: '$ref' },
-          message: "should have required property '$ref'",
+          message: "must have required property '$ref'",
         },
         {
           keyword: 'oneOf',
-          dataPath: '/paths/test/post/parameters/0/schema',
+          instancePath: '/paths/test/post/parameters/0/schema',
           schemaPath: '#/properties/schema/oneOf',
           params: { passingSchemas: null },
-          message: 'should match exactly one schema in oneOf',
+          message: 'must match exactly one schema in oneOf',
         },
       ];
 
@@ -229,10 +197,10 @@ describe('oasDocumentSchema', () => {
       expect(errors).toStrictEqual([
         {
           keyword: 'type',
-          dataPath: '/paths/test/post/parameters/0/schema/type',
+          instancePath: '/paths/test/post/parameters/0/schema/type',
           schemaPath: '#/properties/type/type',
           params: { type: 'string' },
-          message: 'should be string',
+          message: 'must be string',
         },
       ]);
     });
@@ -241,24 +209,24 @@ describe('oasDocumentSchema', () => {
       const errors: ErrorObject[] = [
         {
           keyword: 'type',
-          dataPath: '/paths/test/post/parameters/0/schema/type',
+          instancePath: '/paths/test/post/parameters/0/schema/type',
           schemaPath: '#/properties/type/type',
           params: { type: 'string' },
-          message: 'should be string',
+          message: 'must be string',
         },
         {
           keyword: 'type',
-          dataPath: '/paths/test/post/parameters/1/schema/type',
+          instancePath: '/paths/test/post/parameters/1/schema/type',
           schemaPath: '#/properties/type/type',
           params: { type: 'string' },
-          message: 'should be string',
+          message: 'must be string',
         },
         {
           keyword: 'oneOf',
-          dataPath: '/paths/test/post/parameters/0/schema',
+          instancePath: '/paths/test/post/parameters/0/schema',
           schemaPath: '#/properties/schema/oneOf',
           params: { passingSchemas: null },
-          message: 'should match exactly one schema in oneOf',
+          message: 'must match exactly one schema in oneOf',
         },
       ];
 
@@ -267,24 +235,24 @@ describe('oasDocumentSchema', () => {
       expect(errors).toStrictEqual([
         {
           keyword: 'type',
-          dataPath: '/paths/test/post/parameters/0/schema/type',
+          instancePath: '/paths/test/post/parameters/0/schema/type',
           schemaPath: '#/properties/type/type',
           params: { type: 'string' },
-          message: 'should be string',
+          message: 'must be string',
         },
         {
-          dataPath: '/paths/test/post/parameters/1/schema/type',
+          instancePath: '/paths/test/post/parameters/1/schema/type',
           keyword: 'type',
-          message: 'should be string',
+          message: 'must be string',
           params: {
             type: 'string',
           },
           schemaPath: '#/properties/type/type',
         },
         {
-          dataPath: '/paths/test/post/parameters/0/schema',
+          instancePath: '/paths/test/post/parameters/0/schema',
           keyword: 'oneOf',
-          message: 'should match exactly one schema in oneOf',
+          message: 'must match exactly one schema in oneOf',
           params: {
             passingSchemas: null,
           },
@@ -297,24 +265,24 @@ describe('oasDocumentSchema', () => {
       const errors: ErrorObject[] = [
         {
           keyword: 'type',
-          dataPath: '/paths/test/post/parameters/0/schema/type',
+          instancePath: '/paths/test/post/parameters/0/schema/type',
           schemaPath: '#/properties/type/type',
           params: { type: 'string' },
-          message: 'should be string',
+          message: 'must be string',
         },
         {
           keyword: 'required',
-          dataPath: '/paths/foo/post/parameters/0/schema',
+          instancePath: '/paths/foo/post/parameters/0/schema',
           schemaPath: '#/definitions/Reference/required',
           params: { missingProperty: '$ref' },
-          message: "should have required property '$ref'",
+          message: "must have required property '$ref'",
         },
         {
           keyword: 'oneOf',
-          dataPath: '/paths/baz/post/parameters/0/schema',
+          instancePath: '/paths/baz/post/parameters/0/schema',
           schemaPath: '#/properties/schema/oneOf',
           params: { passingSchemas: null },
-          message: 'should match exactly one schema in oneOf',
+          message: 'must match exactly one schema in oneOf',
         },
       ];
 
@@ -322,27 +290,27 @@ describe('oasDocumentSchema', () => {
 
       expect(errors).toStrictEqual([
         {
-          dataPath: '/paths/test/post/parameters/0/schema/type',
+          instancePath: '/paths/test/post/parameters/0/schema/type',
           keyword: 'type',
-          message: 'should be string',
+          message: 'must be string',
           params: {
             type: 'string',
           },
           schemaPath: '#/properties/type/type',
         },
         {
-          dataPath: '/paths/foo/post/parameters/0/schema',
+          instancePath: '/paths/foo/post/parameters/0/schema',
           keyword: 'required',
-          message: "should have required property '$ref'",
+          message: "must have required property '$ref'",
           params: {
             missingProperty: '$ref',
           },
           schemaPath: '#/definitions/Reference/required',
         },
         {
-          dataPath: '/paths/baz/post/parameters/0/schema',
+          instancePath: '/paths/baz/post/parameters/0/schema',
           keyword: 'oneOf',
-          message: 'should match exactly one schema in oneOf',
+          message: 'must match exactly one schema in oneOf',
           params: {
             passingSchemas: null,
           },
