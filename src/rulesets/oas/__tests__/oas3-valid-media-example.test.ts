@@ -183,21 +183,6 @@ describe('oas3-valid-media-example', () => {
           message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
-        expect.objectContaining({
-          code: 'oas3-valid-media-example',
-          message: '`width` property type must be integer',
-          severity: DiagnosticSeverity.Error,
-        }),
-        expect.objectContaining({
-          code: 'oas3-valid-media-example',
-          message: '`height` property type must be integer',
-          severity: DiagnosticSeverity.Error,
-        }),
-        expect.objectContaining({
-          code: 'oas3-valid-media-example',
-          message: '`email` property type must be string',
-          severity: DiagnosticSeverity.Error,
-        }),
       ]);
     });
 
@@ -479,16 +464,6 @@ describe('oas3-valid-media-example', () => {
         expect.objectContaining({
           code: 'oas3-valid-media-example',
           message: '`example` property must have required property `url`',
-          severity: DiagnosticSeverity.Error,
-        }),
-        expect.objectContaining({
-          code: 'oas3-valid-media-example',
-          message: '`width` property type must be integer',
-          severity: DiagnosticSeverity.Error,
-        }),
-        expect.objectContaining({
-          code: 'oas3-valid-media-example',
-          message: '`height` property type must be integer',
           severity: DiagnosticSeverity.Error,
         }),
       ]);

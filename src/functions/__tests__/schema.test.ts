@@ -221,7 +221,7 @@ describe('schema', () => {
         ]);
       });
 
-      xit('reports pretty enum errors for a number', () => {
+      it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
             message: 'Value type must be string',
@@ -238,7 +238,7 @@ describe('schema', () => {
         enum: [1, 3, 5, 10, 12],
       };
 
-      xit('reports pretty enum errors for a string', () => {
+      it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
             message: 'Value type must be integer',

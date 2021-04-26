@@ -1,4 +1,4 @@
-import Ajv from 'ajv';
+import { default as AjvBase } from 'ajv';
 import type AjvCore from 'ajv/dist/core';
 import Ajv2019 from 'ajv/dist/2019';
 import Ajv2020 from 'ajv/dist/2020';
@@ -18,23 +18,32 @@ const logger = {
   error: console.error,
 };
 
-export function createAjvInstance(Ajv: typeof AjvCore): AjvCore {
-  const ajv = new Ajv({ allErrors: true, messages: true, strict: false, allowUnionTypes: true, logger });
+function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
+  const ajv = new Ajv({ allErrors, messages: true, strict: false, allowUnionTypes: true, logger });
   addFormats(ajv);
+  if (Ajv === AjvBase) {
+    ajv.addSchema(draft4);
+  }
+
   return ajv;
 }
 
+function createAjvInstances(Ajv: typeof AjvCore): { default: AjvCore; allErrors: AjvCore } {
+  return {
+    default: createAjvInstance(Ajv, false),
+    allErrors: createAjvInstance(Ajv, true),
+  };
+}
+
 const ajvInstances = {
-  default: createAjvInstance(Ajv),
-  draft2019_09: createAjvInstance(Ajv2019),
-  draft2020_12: createAjvInstance(Ajv2020),
+  default: createAjvInstances(AjvBase),
+  draft2019_09: createAjvInstances(Ajv2019),
+  draft2020_12: createAjvInstances(Ajv2020),
 };
 
-ajvInstances.default.addSchema(draft4);
-
-export function assignAjvInstance(dialect: string): AjvCore {
+export function assignAjvInstance(dialect: string, allErrors: boolean): AjvCore {
   const draft: keyof typeof ajvInstances =
     dialect === 'draft2020-12' ? 'draft2020_12' : dialect === 'draft2019-10' ? 'draft2019_09' : 'default';
 
-  return ajvInstances[draft];
+  return ajvInstances[draft][allErrors ? 'allErrors' : 'default'];
 }

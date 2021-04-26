@@ -293,16 +293,6 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
           message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
-        expect.objectContaining({
-          code: `${spec}-valid-schema-example`,
-          message: '`width` property type must be integer',
-          severity: DiagnosticSeverity.Error,
-        }),
-        expect.objectContaining({
-          code: `${spec}-valid-schema-example`,
-          message: '`height` property type must be integer',
-          severity: DiagnosticSeverity.Error,
-        }),
       ]);
     });
   });

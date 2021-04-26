@@ -37,14 +37,14 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
   const results: IFunctionResult[] = [];
 
   // we already access a resolved object in src/functions/schema-path.ts
-  const { schema: schemaObj } = opts;
+  const { schema: schemaObj, allErrors = false } = opts;
 
   let validator = opts.ajv;
 
   try {
     if (validator === void 0) {
       // we used the compiled validation now, hence this lookup here (see the logic above for more info)
-      const ajv = assignAjvInstance(opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7');
+      const ajv = assignAjvInstance(opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7', allErrors);
 
       let seenSchemas = compiled.get(ajv);
       if (seenSchemas === void 0) {
