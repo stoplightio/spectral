@@ -180,7 +180,7 @@
                     "type": "object"
                   },
                   "dialect": {
-                    "enum": ["auto", "draft7", "draft2019-09", "draft2020-12"]
+                    "enum": ["auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"]
                   },
                   "allErrors": {
                     "type": "boolean"

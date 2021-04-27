@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   stoplight: stoplight/cli@0.0.2
-  node: circleci/node@4.2.1
+  node: circleci/node@3.0.0
 
 executors:
   linux:
