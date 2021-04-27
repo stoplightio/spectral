@@ -9,6 +9,7 @@ export enum OutputFormat {
   HTML = 'html',
   TEXT = 'text',
   TEAMCITY = 'teamcity',
+  PRETTY = 'pretty',
 }
 
 export interface ILintConfig {

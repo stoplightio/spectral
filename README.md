@@ -87,6 +87,7 @@ If you are interested in contributing to Spectral, check out [CONTRIBUTING.md](C
 - [Mike Ralphson](https://github.com/MikeRalphson) for kicking off the Spectral CLI and his work on Speccy
 - [Jamund Ferguson](https://github.com/xjamundx) for JUnit formatter
 - [Sindre Sorhus](https://github.com/sindresorhus) for Stylish formatter
+- [Ava Thorn](https://github.com/amthorn) for the Pretty formatter
 - Julian Laval for HTML formatter
 - [@nulltoken](https://github.com/nulltoken) for a whole bunch of amazing features
 

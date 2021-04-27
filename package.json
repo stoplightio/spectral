@@ -84,7 +84,7 @@
     "json-schema-migrate": "^2.0.0",
     "json-schema-traverse": "^1.0.0",
     "jsonpath-plus": "5.0.3",
-    "lodash": "4.17.20",
+    "lodash": "4.17.21",
     "nanoid": "2.1.11",
     "nimma": "0.0.0",
     "node-fetch": "2.6.1",
