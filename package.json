@@ -82,7 +82,7 @@
     "expression-eval": "4.0.0",
     "fast-glob": "3.2.5",
     "jsonpath-plus": "5.0.3",
-    "lodash": "4.17.20",
+    "lodash": "4.17.21",
     "nanoid": "2.1.11",
     "nimma": "0.0.0",
     "node-fetch": "2.6.1",
