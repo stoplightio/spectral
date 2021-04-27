@@ -263,6 +263,15 @@ describe('oas2-valid-schema-example', () => {
                 self: {
                   href: '/',
                 },
+                products: {
+                  href: '/products',
+                },
+                product: {
+                  href: '/products/{product_id}',
+                },
+                users: {
+                  href: '/users',
+                },
               },
             },
           },

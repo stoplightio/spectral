@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 
 const ruleName = 'asyncapi-payload';
 
-describe(`Rule 'asyncapi-payload'`, () => {
+describe(`Rule '${ruleName}'`, () => {
   let s: Spectral;
   let doc: any;
 
