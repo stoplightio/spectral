@@ -5,6 +5,7 @@ import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
 
 import * as draft4 from './draft4.json';
+import { oasFormats } from './formats';
 
 const logger = {
   warn(...args: unknown[]): void {
@@ -23,6 +24,10 @@ function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
   addFormats(ajv);
   if (Ajv === AjvBase) {
     ajv.addSchema(draft4);
+  }
+
+  for (const [name, oasFormat] of Object.entries(oasFormats)) {
+    ajv.addFormat(name, oasFormat);
   }
 
   return ajv;

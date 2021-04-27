@@ -6,7 +6,7 @@ import MissingRefError from 'ajv/dist/compile/ref_error';
 import { assignAjvInstance } from './ajv';
 import Ajv, { Options } from 'ajv';
 import addFormats from 'ajv-formats';
-import { Dictionary } from '@stoplight/types';
+import { Dictionary, Optional } from '@stoplight/types';
 import { draft7 } from 'json-schema-migrate';
 
 export interface ISchemaFunction extends IFunction<ISchemaOptions> {
@@ -17,11 +17,9 @@ export interface ISchemaOptions {
   schema: object;
   allErrors?: boolean;
   ajv?: ValidateFunction;
-  dialect?: 'auto' | 'draft7' | 'draft2019-09' | 'draft2020-12';
+  dialect?: 'auto' | 'draft4' | 'draft6' | 'draft7' | 'draft2019-09' | 'draft2020-12';
   prepareResults?(errors: ErrorObject[]): void;
 }
-
-const compiled = new WeakMap<Ajv, Set<string>>();
 
 export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
   const path = paths.target ?? paths.given;
@@ -54,21 +52,15 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
 
       const ajv = assignAjvInstance(dialect, allErrors);
 
-      let seenSchemas = compiled.get(ajv);
-      if (seenSchemas === void 0) {
-        seenSchemas = new Set();
-        compiled.set(ajv, seenSchemas);
-      }
-
       const $id = (schemaObj as Dictionary<unknown>).$id;
 
       if (typeof $id !== 'string') {
         validator = ajv.compile(schemaObj);
-      } else if (!seenSchemas.has($id)) {
-        validator = ajv.compile(schemaObj);
-        seenSchemas.add($id);
       } else {
-        validator = ajv.getSchema($id) as ValidateFunction;
+        validator = ajv.getSchema($id) as Optional<ValidateFunction>;
+        if (validator === void 0) {
+          validator = ajv.compile(schemaObj);
+        }
       }
     }
 

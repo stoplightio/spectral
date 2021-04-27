@@ -232,6 +232,39 @@ describe('schema', () => {
       const input = 123;
       expect(runSchema(input, testSchema)).toEqual([]);
     });
+
+    it.each([
+      ['byte', '3'],
+      ['int32', 2 ** 40],
+      ['int64', Infinity],
+    ])('reports invalid usage of %s format', (format, input) => {
+      const results = runSchema(input, {
+        type: ['string', 'number'],
+        format,
+      });
+
+      expect(results).toEqual([
+        {
+          path: [],
+          message: expect.stringMatching(new RegExp(`^(Number|String) must match format \`${format}\`$`)),
+        },
+      ]);
+    });
+
+    it.each([
+      ['byte', 'MIT3'],
+      ['int32', 2 ** 30],
+      ['int64', 2 ** 40],
+      ['float', 2 ** 69],
+      ['double', 2 ** 1024],
+    ])('does not report valid usage of %s format', async (format, input) => {
+      const results = runSchema(input, {
+        type: ['string', 'number'],
+        format,
+      });
+
+      expect(results).toHaveLength(0);
+    });
   });
 
   describe('given a primitive value', () => {
