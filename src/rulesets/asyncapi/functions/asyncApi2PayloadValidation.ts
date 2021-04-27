@@ -4,7 +4,7 @@ import type { ISchemaFunction } from '../../../functions/schema';
 import type { IFunction, IFunctionContext } from '../../../types';
 import * as asyncApi2Schema from '../schemas/schema.asyncapi2.json';
 
-const fakeSchemaObjectId = 'asyncapi2#schemaObject';
+const fakeSchemaObjectId = 'asyncapi2#/definitions/schema';
 const asyncApi2SchemaObject = { $ref: fakeSchemaObjectId };
 
 let validator: ValidateFunction;

@@ -338,7 +338,6 @@
       "description": "JSON objects describing re-usable channel parameters."
     },
     "schema": {
-      "$id": "#schemaObject",
       "allOf": [
         {
           "definitions": {
