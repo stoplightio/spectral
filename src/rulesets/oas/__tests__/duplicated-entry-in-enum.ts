@@ -74,7 +74,7 @@ describe('duplicated-entry-in-enum', () => {
       expect(results).toEqual([
         {
           code: 'duplicated-entry-in-enum',
-          message: `A duplicated entry in the enum was found. Error: \`enum\` property should not have duplicate items (items ## 1 and 5 are identical)`,
+          message: `A duplicated entry in the enum was found. Error: \`enum\` property must not have duplicate items (items ## 1 and 5 are identical)`,
           path: ['definitions', 'Test', 'enum'],
           range: expect.any(Object),
           severity: DiagnosticSeverity.Warning,
@@ -128,7 +128,7 @@ describe('duplicated-entry-in-enum', () => {
       expect(results).toEqual([
         {
           code: 'duplicated-entry-in-enum',
-          message: `A duplicated entry in the enum was found. Error: \`enum\` property should not have duplicate items (items ## 1 and 5 are identical)`,
+          message: `A duplicated entry in the enum was found. Error: \`enum\` property must not have duplicate items (items ## 1 and 5 are identical)`,
           path: ['components', 'schemas', 'Test', 'enum'],
           range: expect.any(Object),
           severity: DiagnosticSeverity.Warning,

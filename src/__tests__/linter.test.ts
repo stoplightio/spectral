@@ -695,7 +695,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: '`header-1` property should have required property `schema`.',
+        message: '`header-1` property must have required property `schema`.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
@@ -726,7 +726,7 @@ responses:: !!foo
       }),
       expect.objectContaining({
         code: 'oas3-valid-schema-example',
-        message: '`example` property type should be number',
+        message: '`example` property type must be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);

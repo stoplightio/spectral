@@ -62,7 +62,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect.objectContaining({
         code: ruleName,
         message:
-          'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: `object`. Did you mean `object`?).',
+          'Headers schema type must be `object` (`type` property must be equal to one of the allowed values: `object`. Did you mean `object`?).',
         path: ['components', 'messages', 'aMessage', 'headers', 'type'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -77,7 +77,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Headers schema type should be `object` (`headers` property should have required property `type`).',
+        message: 'Headers schema type must be `object` (`headers` property must have required property `type`).',
         path: ['components', 'messages', 'aMessage', 'headers'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -95,7 +95,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect.objectContaining({
         code: ruleName,
         message:
-          'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: `object`. Did you mean `object`?).',
+          'Headers schema type must be `object` (`type` property must be equal to one of the allowed values: `object`. Did you mean `object`?).',
         path: ['components', 'messageTraits', 'aTrait', 'headers', 'type'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -110,7 +110,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: 'Headers schema type should be `object` (`headers` property should have required property `type`).',
+        message: 'Headers schema type must be `object` (`headers` property must have required property `type`).',
         path: ['components', 'messageTraits', 'aTrait', 'headers'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -127,7 +127,7 @@ describe(`Rule '${ruleName}'`, () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: ruleName,
-          message: 'Headers schema type should be `object` (`headers` property should have required property `type`).',
+          message: 'Headers schema type must be `object` (`headers` property must have required property `type`).',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'headers'],
           severity: DiagnosticSeverity.Error,
         }),
@@ -146,7 +146,7 @@ describe(`Rule '${ruleName}'`, () => {
         expect.objectContaining({
           code: ruleName,
           message:
-            'Headers schema type should be `object` (`type` property should be equal to one of the allowed values: `object`. Did you mean `object`?).',
+            'Headers schema type must be `object` (`type` property must be equal to one of the allowed values: `object`. Did you mean `object`?).',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'headers', 'type'],
           severity: DiagnosticSeverity.Error,
         }),

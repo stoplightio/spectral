@@ -55,7 +55,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`default` property type should be string',
+        message: '`default` property type must be string',
         path: ['components', 'schemas', 'aSchema', 'default'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -70,7 +70,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`default` property type should be string',
+        message: '`default` property type must be string',
         path: ['components', 'parameters', 'orphanParameter', 'schema', 'default'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -84,7 +84,7 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`default` property type should be string',
+        message: '`default` property type must be string',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'userId', 'schema', 'default'],
         severity: DiagnosticSeverity.Error,
       }),

@@ -81,7 +81,7 @@ describe('generate-assets', () => {
     ).toStrictEqual([
       {
         code: 'oas3-schema',
-        message: '`info` property should have required property `title`.',
+        message: '`info` property must have required property `title`.',
         path: ['info'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Error,
@@ -108,7 +108,7 @@ describe('generate-assets', () => {
     ).toStrictEqual([
       {
         code: 'oas2-schema',
-        message: '`info` property should have required property `title`.',
+        message: '`info` property must have required property `title`.',
         path: ['info'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Error,

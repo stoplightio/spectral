@@ -87,7 +87,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
       expect(results).toEqual([
         expect.objectContaining({
           code: `${spec}-valid-schema-example`,
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
           path: [
             'paths',
             '/pet',
@@ -172,7 +172,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: `${spec}-valid-schema-example`,
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
         }),
       ]);
     });
@@ -252,7 +252,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
       expect(results).toEqual([
         expect.objectContaining({
           code: `${spec}-valid-schema-example`,
-          message: '`example` property type should be number',
+          message: '`example` property type must be number',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -290,7 +290,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
       expect(results).toEqual([
         expect.objectContaining({
           code: `${spec}-valid-schema-example`,
-          message: '`example` property should have required property `url`',
+          message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
