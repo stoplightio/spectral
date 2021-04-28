@@ -1,6 +1,13 @@
 import { ErrorObject } from 'ajv';
 import { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
-import { ISchemaOptions } from '../../../functions/schema/schema';
+
+import * as oas2_0 from '../schemas/2.0.json';
+import * as oas3_0 from '../schemas/3.0.json';
+
+const OAS_SCHEMAS = {
+  '2.0': oas2_0,
+  '3.0': oas3_0,
+};
 
 function shouldIgnoreError(error: ErrorObject): boolean {
   return (
@@ -66,13 +73,19 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
-export const oasDocumentSchema: IFunction<ISchemaOptions> = function (
-  this: IFunctionContext,
-  targetVal,
-  opts,
-  ...args
-) {
-  const errors = this.functions.schema.call(this, targetVal, { ...opts, prepareResults }, ...args);
+export const oasDocumentSchema: IFunction = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
+  const formats = otherValues.documentInventory.formats;
+  if (!Array.isArray(formats)) return;
+
+  const schema = formats.includes('oas2') ? OAS_SCHEMAS['2.0'] : OAS_SCHEMAS['3.0'];
+
+  const errors = this.functions.schema.call(
+    this,
+    targetVal,
+    { allErrors: true, schema, prepareResults },
+    paths,
+    otherValues,
+  );
 
   if (Array.isArray(errors)) {
     applyManualReplacements(errors);
