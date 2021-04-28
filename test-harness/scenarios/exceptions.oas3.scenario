@@ -18,6 +18,7 @@ except:
 {bin} lint {document} -r {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 {document}
  2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.  info

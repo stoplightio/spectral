@@ -36,4 +36,5 @@ components:
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 No results with a severity of 'error' or higher found!

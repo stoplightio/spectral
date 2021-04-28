@@ -26,6 +26,7 @@ components:
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 {document}
  12:15  error  typed-enum  Enum value `Tap, tap, tap...` does not respect the specified type `integer`.                 components.schemas.a_model.properties.id.enum[1]

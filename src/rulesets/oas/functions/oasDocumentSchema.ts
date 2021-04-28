@@ -3,10 +3,12 @@ import { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
 
 import * as oas2_0 from '../schemas/2.0.json';
 import * as oas3_0 from '../schemas/3.0.json';
+import * as oas3_1 from '../schemas/3.1.json';
 
 const OAS_SCHEMAS = {
   '2.0': oas2_0,
   '3.0': oas3_0,
+  '3.1': oas3_1,
 };
 
 function shouldIgnoreError(error: ErrorObject): boolean {

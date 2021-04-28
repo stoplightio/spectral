@@ -12,6 +12,7 @@ tags:
 {bin} lint {document} --format=json
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 [
 	{
 		"code": "oas3-api-servers",

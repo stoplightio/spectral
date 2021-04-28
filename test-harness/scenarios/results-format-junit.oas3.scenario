@@ -11,6 +11,7 @@ paths: {}
 {bin} lint {document} --format=junit
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
 <testsuite package="org.spectral" time="0" tests="1" errors="0" failures="1" name="{document}">

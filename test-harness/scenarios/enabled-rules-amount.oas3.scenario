@@ -27,6 +27,7 @@ components:
 Found 49 rules (1 enabled)
 Linting {document}
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 {document}
   5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]

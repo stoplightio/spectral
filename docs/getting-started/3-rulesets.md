@@ -54,7 +54,9 @@ Formats are an optional way to specify which API description formats a rule, or 
 
 - `asyncapi2` (AsyncAPI v2.0)
 - `oas2` (OpenAPI v2.0)
-- `oas3` (OpenAPI v3.0)
+- `oas3` (OpenAPI v3.x)
+- `oas3.0` (OpenAPI v3.0.x)
+- `oas3.1` (OpenAPI v3.1.x)
 - `json-schema` (`$schema` says this is some JSON Schema draft)
 - `json-schema-loose` (looks like JSON Schema, but no `$schema` found)
 - `json-schema-draft4` (`$schema` says this is JSON Schema Draft 04)

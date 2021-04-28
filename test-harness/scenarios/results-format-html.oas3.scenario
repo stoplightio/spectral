@@ -10,6 +10,7 @@ paths: {}
 {bin} lint {document} --format=html
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 <!DOCTYPE html>
 <html>
 <head>
