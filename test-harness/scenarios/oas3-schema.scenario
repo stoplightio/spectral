@@ -57,14 +57,14 @@ rules:
 OpenAPI 3.x detected
 
 {document}
-  6:10  error  oas3-schema  Property `foo` is not expected to be here.                     info.contact.foo
- 12:17  error  oas3-schema  Property `type` is not expected to be here.                    paths./user.get.parameters[0].type
- 23:18  error  oas3-schema  `type` property type should be string.                         paths./user.get.parameters[1].schema.type
- 24:11  error  oas3-schema  `2` property should have required property `schema`.           paths./user.get.parameters[2]
- 26:17  error  oas3-schema  Property `type` is not expected to be here.                    paths./user.get.parameters[2].type
- 37:28  error  oas3-schema  `user_id` property type should be object.                      paths./user.get.responses[200].content.application/json.schema.properties.user_id
- 41:28  error  oas3-schema  `properties` property type should be object.                   paths./user.get.responses[200].content.application/yaml.schema.properties
- 43:23  error  oas3-schema  `description` property type should be string.                  paths./user.get.responses[400].description
- 46:17  error  oas3-schema  `responses` property should not have fewer than 1 properties.  paths./address.get.responses
+  6:10  error  oas3-schema  Property `foo` is not expected to be here.                   info.contact.foo
+ 12:17  error  oas3-schema  Property `type` is not expected to be here.                  paths./user.get.parameters[0].type
+ 23:18  error  oas3-schema  `type` property type must be string.                         paths./user.get.parameters[1].schema.type
+ 24:11  error  oas3-schema  `2` property must have required property `schema`.           paths./user.get.parameters[2]
+ 26:17  error  oas3-schema  Property `type` is not expected to be here.                  paths./user.get.parameters[2].type
+ 37:28  error  oas3-schema  `user_id` property type must be object.                      paths./user.get.responses[200].content.application/json.schema.properties.user_id
+ 41:28  error  oas3-schema  `properties` property type must be object.                   paths./user.get.responses[200].content.application/yaml.schema.properties
+ 43:23  error  oas3-schema  `description` property type must be string.                  paths./user.get.responses[400].description
+ 46:17  error  oas3-schema  `responses` property must not have fewer than 1 properties.  paths./address.get.responses
 
 ✖ 9 problems (9 errors, 0 warnings, 0 infos, 0 hints)

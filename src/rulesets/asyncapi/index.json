@@ -41,7 +41,7 @@
     },
     "asyncapi-headers-schema-type-object": {
       "description": "Headers schema type should be `object`.",
-      "message": "Headers schema type should be `object` ({{error}}).",
+      "message": "Headers schema type must be `object` ({{error}}).",
       "severity": "error",
       "recommended": true,
       "type": "validation",

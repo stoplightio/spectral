@@ -76,7 +76,7 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
-          message: '`x-example` property type should be string',
+          message: '`x-example` property type must be string',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -97,7 +97,7 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
-          message: `\`${field}\` property type should be string`,
+          message: `\`${field}\` property type must be string`,
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -119,7 +119,7 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
-          message: '`default` property type should be string',
+          message: '`default` property type must be string',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -142,7 +142,7 @@ describe('oas2-valid-schema-example', () => {
         expect(results).toEqual([
           expect.objectContaining({
             code: 'oas2-valid-schema-example',
-            message: `\`${field}\` property should be equal to one of the allowed values: \`a\`, \`b\``,
+            message: `\`${field}\` property must be equal to one of the allowed values: \`a\`, \`b\``,
             severity: DiagnosticSeverity.Error,
           }),
         ]);
@@ -215,7 +215,7 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
-          message: '`example` property should have required property `url`',
+          message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -319,7 +319,7 @@ describe('oas2-valid-schema-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas2-valid-schema-example',
-          message: '`self` property type should be array',
+          message: '`self` property type must be array',
           path: ['definitions', 'halRoot', 'example', '_links', 'self'],
         }),
       ]);
@@ -368,7 +368,7 @@ describe('oas2-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
           path: ['definitions', '0', 'xoxo', 'properties', 'a', 'properties', 'b', 'properties', 'c', 'example'],
           range: expect.any(Object),
           severity: DiagnosticSeverity.Error,

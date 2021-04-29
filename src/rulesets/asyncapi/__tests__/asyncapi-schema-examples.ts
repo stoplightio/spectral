@@ -55,13 +55,13 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`0` property type should be string',
+        message: '`0` property type must be string',
         path: ['components', 'schemas', 'aSchema', 'examples', '0'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
         code: ruleName,
-        message: '`2` property type should be string',
+        message: '`2` property type must be string',
         path: ['components', 'schemas', 'aSchema', 'examples', '2'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -76,13 +76,13 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`0` property type should be string',
+        message: '`0` property type must be string',
         path: ['components', 'parameters', 'orphanParameter', 'schema', 'examples', '0'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
         code: ruleName,
-        message: '`2` property type should be string',
+        message: '`2` property type must be string',
         path: ['components', 'parameters', 'orphanParameter', 'schema', 'examples', '2'],
         severity: DiagnosticSeverity.Error,
       }),
@@ -96,13 +96,13 @@ describe(`Rule '${ruleName}'`, () => {
     expect(results).toEqual([
       expect.objectContaining({
         code: ruleName,
-        message: '`0` property type should be string',
+        message: '`0` property type must be string',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'userId', 'schema', 'examples', '0'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
         code: ruleName,
-        message: '`2` property type should be string',
+        message: '`2` property type must be string',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'userId', 'schema', 'examples', '2'],
         severity: DiagnosticSeverity.Error,
       }),

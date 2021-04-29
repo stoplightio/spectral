@@ -140,7 +140,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
           propertyPath: path,
           targetValue: targetVal,
         }).map(({ suggestion, error, path: errorPath }) => ({
-          message: suggestion !== void 0 ? `${error}. ${suggestion}` : error,
+          message: (suggestion !== void 0 ? `${error}. ${suggestion}` : error).replace(/\sshould\s/g, ' must '),
           path: [...path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
         })),
       );

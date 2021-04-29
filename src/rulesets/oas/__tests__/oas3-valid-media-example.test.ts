@@ -43,7 +43,7 @@ describe('oas3-valid-media-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
         }),
       ]);
     });
@@ -65,7 +65,7 @@ describe('oas3-valid-media-example', () => {
         expect(results).toEqual([
           expect.objectContaining({
             code: 'oas3-valid-media-example',
-            message: '`example` property should be equal to one of the allowed values: `a`, `b`',
+            message: '`example` property must be equal to one of the allowed values: `a`, `b`',
             severity: DiagnosticSeverity.Error,
           }),
         ]);
@@ -182,7 +182,7 @@ describe('oas3-valid-media-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-media-example',
-          message: '`example` property should have required property `url`',
+          message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -253,7 +253,7 @@ describe('oas3-valid-media-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
-          message: `\`example\` property should match format \`${format}\``,
+          message: `\`example\` property must match format \`${format}\``,
         }),
       ]);
     });
@@ -307,7 +307,7 @@ describe('oas3-valid-media-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
-          message: '`value` property type should be string',
+          message: '`value` property type must be string',
         }),
       ]);
     });
@@ -345,7 +345,7 @@ describe('oas3-valid-media-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
         }),
       ]);
     });
@@ -425,7 +425,7 @@ describe('oas3-valid-media-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-media-example',
-          message: '`example` property should have required property `abc`',
+          message: '`example` property must have required property `abc`',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -463,7 +463,7 @@ describe('oas3-valid-media-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-media-example',
-          message: '`example` property should have required property `url`',
+          message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
       ]);

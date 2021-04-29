@@ -25,7 +25,7 @@ describe('schema', () => {
 
       expect(runSchema('', testSchema)).toEqual([
         {
-          message: 'Value type should be number',
+          message: 'Value type must be number',
           path: [],
         },
       ]);
@@ -38,7 +38,7 @@ describe('schema', () => {
 
       expect(runSchema(0, testSchema)).toEqual([
         {
-          message: `Value type should be string`,
+          message: `Value type must be string`,
           path: [],
         },
       ]);
@@ -51,7 +51,7 @@ describe('schema', () => {
 
       expect(runSchema(false, testSchema)).toEqual([
         {
-          message: `Value type should be string`,
+          message: `Value type must be string`,
           path: [],
         },
       ]);
@@ -64,7 +64,7 @@ describe('schema', () => {
 
       expect(runSchema(null, testSchema)).toEqual([
         {
-          message: `Value type should be string`,
+          message: `Value type must be string`,
           path: [],
         },
       ]);
@@ -105,7 +105,7 @@ describe('schema', () => {
       const input = { foo: 'bar' };
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'Value type should be array',
+          message: 'Value type must be array',
           path: [],
         }),
       ]);
@@ -115,7 +115,7 @@ describe('schema', () => {
       const input = ['1', '2'];
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'Object should not have more than 1 items',
+          message: 'Object must not have more than 1 items',
           path: [],
         }),
       ]);
@@ -151,7 +151,7 @@ describe('schema', () => {
         ),
       ).toEqual([
         {
-          message: '`bar` property type should be string',
+          message: '`bar` property type must be string',
           path: ['foo', 'bar'],
         },
       ]);
@@ -185,7 +185,7 @@ describe('schema', () => {
       const input = 'not an email';
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
-          message: 'String should match format `email`',
+          message: 'String must match format `email`',
           path: [],
         }),
       ]);
@@ -223,7 +223,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: `Value type should be string`,
+        message: `Value type must be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -243,7 +243,7 @@ describe('schema', () => {
     expect(runSchema(2, testSchema)).toEqual([
       {
         path: [],
-        message: `Value type should be string`,
+        message: `Value type must be string`,
       },
     ]);
     expect(runSchema('a', testSchema2)).toEqual([]);
@@ -269,7 +269,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: 'String should be equal to one of the allowed values: `foo`, `bar`. Did you mean `bar`?',
+            message: 'String must be equal to one of the allowed values: `foo`, `bar`. Did you mean `bar`?',
             path: [],
           },
         ]);
@@ -278,7 +278,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: 'Value type should be string',
+            message: 'Value type must be string',
             path: [],
           },
         ]);
@@ -295,7 +295,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: 'Value type should be integer',
+            message: 'Value type must be integer',
             path: [],
           },
         ]);
@@ -304,7 +304,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: `Number should be equal to one of the allowed values: 1, 3, 5, 10, 12`,
+            message: `Number must be equal to one of the allowed values: 1, 3, 5, 10, 12`,
             path: [],
           },
         ]);
@@ -320,7 +320,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a string', () => {
         expect(runSchema('baz', testSchema)).toEqual([
           {
-            message: `String should be equal to one of the allowed values: 1, null`,
+            message: `String must be equal to one of the allowed values: 1, null`,
             path: [],
           },
         ]);
@@ -329,7 +329,7 @@ describe('schema', () => {
       it('reports pretty enum errors for a number', () => {
         expect(runSchema(2, testSchema)).toEqual([
           {
-            message: `Number should be equal to one of the allowed values: 1, null`,
+            message: `Number must be equal to one of the allowed values: 1, null`,
             path: [],
           },
         ]);
@@ -346,7 +346,7 @@ describe('schema', () => {
 
     expect(runSchema('three', testSchema)).toEqual([
       {
-        message: 'String should be equal to one of the allowed values: `foo`, `bar`',
+        message: 'String must be equal to one of the allowed values: `foo`, `bar`',
         path: [],
       },
     ]);
@@ -387,7 +387,7 @@ describe('schema', () => {
     expect(runSchema(null, testSchema, 2)).toEqual([]);
     expect(runSchema(2, testSchema, 2)).toEqual([
       {
-        message: 'Value type should be string,null',
+        message: 'Value type must be string,null',
         path: [],
       },
     ]);
@@ -403,7 +403,7 @@ describe('schema', () => {
     expect(runSchema(null, testSchema, 3)).toEqual([]);
     expect(runSchema(2, testSchema, 3)).toEqual([
       {
-        message: 'Value type should be string,null',
+        message: 'Value type must be string,null',
         path: [],
       },
     ]);

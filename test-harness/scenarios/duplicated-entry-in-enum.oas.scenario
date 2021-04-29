@@ -28,6 +28,6 @@ components:
 OpenAPI 3.x detected
 
 {document}
- 10:16  error  duplicated-entry-in-enum  A duplicated entry in the enum was found. Error: `enum` property should not have duplicate items (items ## 1 and 5 are identical)  components.schemas.a_model.properties.id.enum
+ 10:16  error  duplicated-entry-in-enum  A duplicated entry in the enum was found. Error: `enum` property must not have duplicate items (items ## 1 and 5 are identical)  components.schemas.a_model.properties.id.enum
 
 ✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)

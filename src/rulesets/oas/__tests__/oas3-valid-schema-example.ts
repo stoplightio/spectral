@@ -59,7 +59,7 @@ describe('oas3-valid-schema-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-schema-example',
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
         }),
       ]);
     });
@@ -79,7 +79,7 @@ describe('oas3-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
-          message: '`default` property type should be string',
+          message: '`default` property type must be string',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -134,7 +134,7 @@ describe('oas3-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
-          message: '`example` property type should be string',
+          message: '`example` property type must be string',
           path: [
             field,
             'schemas',
@@ -171,7 +171,7 @@ describe('oas3-valid-schema-example', () => {
         expect(results).toEqual([
           expect.objectContaining({
             code: 'oas3-valid-schema-example',
-            message: '`example` property should be equal to one of the allowed values: `a`, `b`',
+            message: '`example` property must be equal to one of the allowed values: `a`, `b`',
             severity: DiagnosticSeverity.Error,
           }),
         ]);
@@ -249,7 +249,7 @@ describe('oas3-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
-          message: '`example` property type should be number',
+          message: '`example` property type must be number',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -287,7 +287,7 @@ describe('oas3-valid-schema-example', () => {
       expect(results).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
-          message: '`example` property should have required property `url`',
+          message: '`example` property must have required property `url`',
           severity: DiagnosticSeverity.Error,
         }),
       ]);
@@ -345,7 +345,7 @@ describe('oas3-valid-schema-example', () => {
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-schema-example',
-          message: `\`example\` property should match format \`${format}\``,
+          message: `\`example\` property must match format \`${format}\``,
         }),
       ]);
     });
