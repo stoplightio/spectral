@@ -1,6 +1,6 @@
 import { IResolveOpts, IResolveResult } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, Dictionary, IDiagnostic, JsonPath } from '@stoplight/types';
-import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import { JSONSchema7 } from 'json-schema';
 import { IFunction, IProcessedRule, IRule } from '.';
 import { Rule } from '../rule';
 import { ComputeFingerprintFunc } from '../utils';
@@ -57,4 +57,4 @@ export interface IResolver {
 export type FormatLookup = (document: unknown, source?: string) => boolean;
 export type RegisteredFormats = Dictionary<FormatLookup, string>;
 
-export type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
+export type JSONSchema = JSONSchema7;

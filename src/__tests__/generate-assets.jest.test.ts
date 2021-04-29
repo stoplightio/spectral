@@ -1,10 +1,4 @@
 import { existsSync, readFileSync } from 'fs';
-import { Spectral } from '../spectral';
-import { setFunctionContext } from '../ruleset';
-import { functions } from '../functions';
-import oasDocumentSchema from '../rulesets/oas/functions/oasDocumentSchema';
-import { KNOWN_FORMATS } from '../formats';
-import { DiagnosticSeverity } from '@stoplight/types/dist';
 
 describe('generate-assets', () => {
   let assets: Record<string, string>;
@@ -22,11 +16,7 @@ describe('generate-assets', () => {
   });
 
   describe('produces properly serialized built-in rulesets', () => {
-    const testCases = [
-      ['oas', 'oas2-schema', 'title', 'A JSON Schema for Swagger 2.0 API.'],
-      ['oas', 'oas3-schema', 'description', 'Validation schema for OpenAPI Specification 3.0.X.'],
-      ['asyncapi', 'asyncapi-schema', 'title', 'AsyncAPI 2.0.0 schema.'],
-    ];
+    const testCases = [['asyncapi', 'asyncapi-schema', 'title', 'AsyncAPI 2.0.0 schema.']];
 
     it.each(testCases)(
       "Ruleset '%s' contains a rule '%s' with an inlined schema bearing a '%s' property",
@@ -47,79 +37,5 @@ describe('generate-assets', () => {
     Object.keys(assets).forEach(key => {
       expect(key).not.toMatch('__tests__');
     });
-  });
-
-  it('dereferences OAS schemas in the way they can be resolved by Ajv', async () => {
-    const key = `@stoplight/spectral/rulesets/oas/index.json`;
-    const ruleset = JSON.parse(assets[key]);
-    const spectral = new Spectral();
-
-    for (const [name, fn] of KNOWN_FORMATS) {
-      spectral.registerFormat(name, fn);
-    }
-
-    spectral.setFunctions({ oasDocumentSchema: setFunctionContext({ functions }, oasDocumentSchema) });
-    spectral.setRules({
-      'oas2-schema': {
-        ...ruleset.rules['oas2-schema'],
-      },
-      'oas3-schema': {
-        ...ruleset.rules['oas3-schema'],
-      },
-    });
-
-    expect(
-      await spectral.run({
-        openapi: '3.0.0',
-        info: {},
-        paths: {
-          '/': {
-            '500': true,
-          },
-        },
-      }),
-    ).toStrictEqual([
-      {
-        code: 'oas3-schema',
-        message: '`info` property must have required property `title`.',
-        path: ['info'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Error,
-      },
-      {
-        code: 'oas3-schema',
-        message: 'Property `500` is not expected to be here.',
-        path: ['paths', '/', '500'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Error,
-      },
-    ]);
-
-    expect(
-      await spectral.run({
-        swagger: '2.0',
-        info: {},
-        paths: {
-          '/': {
-            '500': true,
-          },
-        },
-      }),
-    ).toStrictEqual([
-      {
-        code: 'oas2-schema',
-        message: '`info` property must have required property `title`.',
-        path: ['info'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Error,
-      },
-      {
-        code: 'oas2-schema',
-        message: 'Property `500` is not expected to be here.',
-        path: ['paths', '/', '500'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Error,
-      },
-    ]);
   });
 });

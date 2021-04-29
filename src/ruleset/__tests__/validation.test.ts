@@ -832,9 +832,9 @@ describe('Ruleset Validation', () => {
     describe('schema function', () => {
       it.each([
         { schema: { type: 'object' } },
-        { schema: { type: 'string' }, oasVersion: 2 },
+        { schema: { type: 'string' }, dialect: 'auto' },
         { schema: { type: 'string' }, allErrors: true },
-        { schema: { type: 'string' }, oasVersion: 3.1, allErrors: false },
+        { schema: { type: 'string' }, dialect: 'draft2019-09', allErrors: false },
       ])('given valid then %s', functionOptions => {
         expect(
           assertValidRuleset.bind(null, {

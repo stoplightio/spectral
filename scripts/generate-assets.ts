@@ -14,8 +14,7 @@ import { promisify } from 'util';
 import * as $RefParser from '@apidevtools/json-schema-ref-parser';
 import { KNOWN_RULESETS } from '../src/formats';
 import { Dictionary } from '@stoplight/types';
-import { isLocalRef, pointerToPath } from '@stoplight/json';
-import { get } from 'lodash';
+import { bundleTarget, isLocalRef, pathToPointer, pointerToPath } from '@stoplight/json';
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
@@ -72,15 +71,20 @@ async function resolveExternal$Refs(document: Dictionary<unknown>, source: strin
       if (typeof value === 'string' && !isLocalRef(value)) {
         const [filepath, pointer = '#'] = value.split('#');
 
-        const actualFilepath = path.join(path.dirname(source), filepath);
-        const referencedDocument = JSON.parse(await readFileAsync(actualFilepath, 'utf8'));
-        const jsonPath = pointerToPath(pointer);
+        if (!filepath.startsWith('.')) continue;
 
-        return await $RefParser.bundle(
-          actualFilepath,
-          jsonPath.length > 0 ? get(referencedDocument, jsonPath) : referencedDocument,
-          {},
-        );
+        const actualFilepath = path.join(path.dirname(source), filepath);
+        let referencedDocument = JSON.parse(await readFileAsync(actualFilepath, 'utf8'));
+        const jsonPath = pointerToPath(pointer.replace(/^([^#])/, '#$1'));
+
+        if (jsonPath.length > 0) {
+          referencedDocument = bundleTarget({
+            document: referencedDocument,
+            path: pathToPointer(jsonPath),
+          });
+        }
+
+        return await $RefParser.bundle(actualFilepath, referencedDocument, {});
       }
     }
 

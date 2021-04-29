@@ -1,7 +1,7 @@
 {
   "$id": "http://stoplight.io/schemas/rule.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "definitions": {
+  "$defs": {
     "Then": {
       "allOf": [
         {
@@ -179,9 +179,8 @@
                   "schema": {
                     "type": "object"
                   },
-                  "oasVersion": {
-                    "enum": [2, 3, 3.1],
-                    "type": "number"
+                  "dialect": {
+                    "enum": ["auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"]
                   },
                   "allErrors": {
                     "type": "boolean"
@@ -324,7 +323,7 @@
       "type": "object"
     },
     "Severity": {
-      "$ref": "shared.json#/Severity"
+      "$ref": "shared.json#/$defs/Severity"
     }
   },
   "oneOf": [
@@ -357,7 +356,7 @@
           "type": "boolean"
         },
         "severity": {
-          "$ref": "#/definitions/Severity"
+          "$ref": "#/$defs/Severity"
         },
         "message": {
           "type": "string"
@@ -371,18 +370,17 @@
         "formats": {
           "type": "array",
           "items": {
-            "type": "string",
-            "minItems": 1
+            "type": "string"
           }
         },
         "then": {
           "anyOf": [
             {
-              "$ref": "#/definitions/Then"
+              "$ref": "#/$defs/Then"
             },
             {
               "items": {
-                "$ref": "#/definitions/Then"
+                "$ref": "#/$defs/Then"
               },
               "type": "array"
             }
@@ -397,21 +395,34 @@
       "type": "object"
     },
     {
-      "$ref": "shared.json#/HumanReadableSeverity"
+      "$ref": "shared.json#/$defs/HumanReadableSeverity"
     },
     {
       "type": "boolean"
     },
     {
       "type": "array",
-      "additionalItems": false,
-      "minItems": 1,
-      "items": [
+      "oneOf": [
         {
-          "$ref": "#/definitions/Severity"
+          "additionalItems": false,
+          "minItems": 1,
+          "items": [
+            {
+              "$ref": "#/$defs/Severity"
+            }
+          ]
         },
         {
-          "type": "object"
+          "additionalItems": false,
+          "minItems": 2,
+          "items": [
+            {
+              "$ref": "#/$defs/Severity"
+            },
+            {
+              "type": "object"
+            }
+          ]
         }
       ]
     }

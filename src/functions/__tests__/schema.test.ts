@@ -1,15 +1,10 @@
-import { DeepPartial, Optional } from '@stoplight/types';
-import { JSONSchema4, JSONSchema6 } from 'json-schema';
+import { DeepPartial } from '@stoplight/types';
+import type { JSONSchema6 as JSONSchema } from 'json-schema';
 import { IFunctionValues } from '../../types';
 import { schema } from '../schema';
 
-function runSchema(
-  target: any,
-  schemaObj: object,
-  oasVersion?: Optional<2 | 3 | 3.1>,
-  context?: DeepPartial<IFunctionValues>,
-) {
-  return schema(target, { schema: schemaObj, oasVersion }, { given: [] }, {
+function runSchema(target: any, schemaObj: object, context?: DeepPartial<IFunctionValues>) {
+  return schema(target, { schema: schemaObj }, { given: [] }, {
     given: null,
     original: null,
     ...context,
@@ -17,9 +12,39 @@ function runSchema(
 }
 
 describe('schema', () => {
+  it('validates draft 4', () => {
+    const testSchema = {
+      $schema: 'http://json-schema.org/draft-04/schema#',
+      type: 'number',
+      maximum: 2,
+      exclusiveMaximum: true,
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        message: 'Number must be < 2',
+        path: [],
+      },
+    ]);
+  });
+
+  it('validates draft 6', () => {
+    const testSchema = {
+      $schema: 'http://json-schema.org/draft-06/schema#',
+      type: 'string',
+    };
+
+    expect(runSchema(2, testSchema)).toEqual([
+      {
+        message: 'Value type must be string',
+        path: [],
+      },
+    ]);
+  });
+
   describe('validates falsy values such as', () => {
     test('empty string', () => {
-      const testSchema: JSONSchema6 = {
+      const testSchema: JSONSchema = {
         type: 'number',
       };
 
@@ -32,7 +57,7 @@ describe('schema', () => {
     });
 
     test('zero', () => {
-      const testSchema: JSONSchema6 = {
+      const testSchema: JSONSchema = {
         type: 'string',
       };
 
@@ -45,7 +70,7 @@ describe('schema', () => {
     });
 
     test('false', () => {
-      const testSchema: JSONSchema6 = {
+      const testSchema: JSONSchema = {
         type: 'string',
       };
 
@@ -58,7 +83,7 @@ describe('schema', () => {
     });
 
     test('null', () => {
-      const testSchema: JSONSchema6 = {
+      const testSchema: JSONSchema = {
         type: 'string',
       };
 
@@ -207,61 +232,45 @@ describe('schema', () => {
       const input = 123;
       expect(runSchema(input, testSchema)).toEqual([]);
     });
-  });
 
-  test('handles duplicate JSONSchema Draft 4 ids', () => {
-    const testSchema: JSONSchema4 = {
-      id: 'test',
-      type: 'string',
-    };
+    it.each([
+      ['byte', '3'],
+      ['int32', 2 ** 40],
+      ['int64', Infinity],
+    ])('reports invalid usage of %s format', (format, input) => {
+      const results = runSchema(input, {
+        type: ['string', 'number'],
+        format,
+      });
 
-    const testSchema2: JSONSchema4 = {
-      id: 'test',
-      type: 'number',
-    };
+      expect(results).toEqual([
+        {
+          path: [],
+          message: expect.stringMatching(new RegExp(`^(Number|String) must match format \`${format}\`$`)),
+        },
+      ]);
+    });
 
-    expect(runSchema(2, testSchema)).toEqual([
-      {
-        path: [],
-        message: `Value type must be string`,
-      },
-    ]);
-    expect(runSchema('a', testSchema2)).toEqual([]);
-  });
+    it.each([
+      ['byte', 'MIT3'],
+      ['int32', 2 ** 30],
+      ['int64', 2 ** 40],
+      ['float', 2 ** 69],
+      ['double', 2 ** 1024],
+    ])('does not report valid usage of %s format', async (format, input) => {
+      const results = runSchema(input, {
+        type: ['string', 'number'],
+        format,
+      });
 
-  test('handles duplicate JSONSchema Draft 6 and 7 $ids', () => {
-    const testSchema: JSONSchema6 = {
-      $id: 'test',
-      type: 'string',
-    };
-
-    const testSchema2: JSONSchema6 = {
-      $id: 'test',
-      type: 'number',
-    };
-
-    expect(runSchema(2, testSchema)).toEqual([
-      {
-        path: [],
-        message: `Value type must be string`,
-      },
-    ]);
-    expect(runSchema('a', testSchema2)).toEqual([]);
-  });
-
-  test.each([4, 6, 7])('accepts draft %d', draft => {
-    const testSchema: JSONSchema6 = {
-      $schema: `http://json-schema.org/draft-0${draft}/schema#`,
-      type: 'string',
-    };
-
-    expect(runSchema.bind(null, 'd', testSchema)).not.toThrow();
+      expect(results).toHaveLength(0);
+    });
   });
 
   describe('given a primitive value', () => {
     describe('and an enum consisting of string values', () => {
-      const testSchema: JSONSchema6 = {
-        $schema: `http://json-schema.org/draft-06/schema#`,
+      const testSchema: JSONSchema = {
+        $schema: `http://json-schema.org/draft-07/schema#`,
         type: 'string',
         enum: ['foo', 'bar'],
       };
@@ -286,8 +295,8 @@ describe('schema', () => {
     });
 
     describe('and an enum consisting of integer values', () => {
-      const testSchema: JSONSchema6 = {
-        $schema: `http://json-schema.org/draft-06/schema#`,
+      const testSchema: JSONSchema = {
+        $schema: `http://json-schema.org/draft-07/schema#`,
         type: 'integer',
         enum: [1, 3, 5, 10, 12],
       };
@@ -312,8 +321,8 @@ describe('schema', () => {
     });
 
     describe('and an enum contains a null', () => {
-      const testSchema: JSONSchema6 = {
-        $schema: `http://json-schema.org/draft-06/schema#`,
+      const testSchema: JSONSchema = {
+        $schema: `http://json-schema.org/draft-07/schema#`,
         enum: [1, null],
       };
 
@@ -338,8 +347,8 @@ describe('schema', () => {
   });
 
   test('reports slightly less pretty enum errors for primitive values that are not similar to any values in enum', () => {
-    const testSchema: JSONSchema6 = {
-      $schema: `http://json-schema.org/draft-06/schema#`,
+    const testSchema: JSONSchema = {
+      $schema: `http://json-schema.org/draft-07/schema#`,
       type: 'string',
       enum: ['foo', 'bar'],
     };
@@ -364,7 +373,7 @@ describe('schema', () => {
 
   describe('when schema has a $ref left', () => {
     test('given unresolved context, reports an error', () => {
-      expect(runSchema({}, { $ref: '#/foo' }, void 0, { rule: { resolved: false } })).toEqual([
+      expect(runSchema({}, { $ref: '#/foo' }, { rule: { resolved: false } })).toEqual([
         {
           message: "can't resolve reference #/foo from id #",
           path: [],
@@ -373,39 +382,7 @@ describe('schema', () => {
     });
 
     test('given resolved context, ignores', () => {
-      expect(runSchema({}, { $ref: '#/bar' }, void 0, { rule: { resolved: true } })).toEqual([]);
+      expect(runSchema({}, { $ref: '#/bar' }, { rule: { resolved: true } })).toEqual([]);
     });
-  });
-
-  test('given OAS2, supports x-nullable', () => {
-    const testSchema: JSONSchema4 = {
-      type: 'string',
-      'x-nullable': true,
-    };
-
-    expect(runSchema('cxz', testSchema, 2)).toEqual([]);
-    expect(runSchema(null, testSchema, 2)).toEqual([]);
-    expect(runSchema(2, testSchema, 2)).toEqual([
-      {
-        message: 'Value type must be string,null',
-        path: [],
-      },
-    ]);
-  });
-
-  test('given OAS3, supports nullable', () => {
-    const testSchema: JSONSchema4 = {
-      type: 'string',
-      nullable: true,
-    };
-
-    expect(runSchema('cxz', testSchema, 3)).toEqual([]);
-    expect(runSchema(null, testSchema, 3)).toEqual([]);
-    expect(runSchema(2, testSchema, 3)).toEqual([
-      {
-        message: 'Value type must be string,null',
-        path: [],
-      },
-    ]);
   });
 });

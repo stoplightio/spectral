@@ -1,7 +1,7 @@
 {
   "title": "A JSON Schema for Swagger 2.0 API.",
-  "id": "http://swagger.io/v2/schema.json#",
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://swagger.io/v2/schema.json#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "required": ["swagger", "info", "paths"],
   "additionalProperties": false,
@@ -1424,7 +1424,8 @@
       "$ref": "http://json-schema.org/draft-04/schema#/properties/default"
     },
     "multipleOf": {
-      "$ref": "http://json-schema.org/draft-04/schema#/properties/multipleOf"
+      "type": "number",
+      "exclusiveMinimum": 0
     },
     "maximum": {
       "$ref": "http://json-schema.org/draft-04/schema#/properties/maximum"

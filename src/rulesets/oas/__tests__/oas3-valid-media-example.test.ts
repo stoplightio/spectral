@@ -2,8 +2,6 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import type { Spectral } from '../../../spectral';
 import { createWithRules } from './__helpers__/createWithRules';
 
-const Decimal = require('decimal.js');
-
 describe('oas3-valid-media-example', () => {
   let s: Spectral;
 
@@ -223,67 +221,6 @@ describe('oas3-valid-media-example', () => {
       });
 
       expect(results).toEqual([]);
-    });
-
-    test.each([
-      ['byte', '1'],
-      ['int32', 2 ** 31],
-      ['int64', 2 ** 63],
-      ['float', 2 ** 128],
-    ])('reports invalid usage of %s format', async (format, example) => {
-      const results = await s.run({
-        openapi: '3.0.0',
-        [path]: {
-          xoxo: {
-            schema: {
-              type: ['string', 'number'],
-              format,
-              properties: {
-                ip_address: {
-                  type: 'string',
-                },
-              },
-            },
-            example,
-          },
-        },
-      });
-
-      expect(results).toEqual([
-        expect.objectContaining({
-          severity: DiagnosticSeverity.Error,
-          code: 'oas3-valid-media-example',
-          message: `\`example\` property must match format \`${format}\``,
-        }),
-      ]);
-    });
-
-    test.each([
-      ['byte', 'MTI3'],
-      ['int32', 2 ** 30],
-      ['int64', 2 ** 40],
-      ['float', new Decimal(2).pow(128)],
-      ['double', new Decimal(2).pow(1024)],
-    ])('does not report valid usage of %s format', async (format, example) => {
-      const results = await s.run({
-        openapi: '3.0.0',
-        [path]: {
-          xoxo: {
-            schema: {
-              type: ['string', 'number'],
-              format,
-              properties: {
-                ip_address: {
-                  type: 'string',
-                },
-              },
-            },
-            example,
-          },
-        },
-      });
-
-      expect(results).toHaveLength(0);
     });
 
     test('will fail when simple example is invalid (examples)', async () => {
