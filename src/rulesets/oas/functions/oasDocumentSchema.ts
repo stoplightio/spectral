@@ -79,7 +79,11 @@ export const oasDocumentSchema: IFunction = function (this: IFunctionContext, ta
   const formats = otherValues.documentInventory.formats;
   if (!Array.isArray(formats)) return;
 
-  const schema = formats.includes('oas2') ? OAS_SCHEMAS['2.0'] : OAS_SCHEMAS['3.0'];
+  const schema = formats.includes('oas2')
+    ? OAS_SCHEMAS['2.0']
+    : formats.includes('oas3.1')
+    ? OAS_SCHEMAS['3.1']
+    : OAS_SCHEMAS['3.0'];
 
   const errors = this.functions.schema.call(
     this,
