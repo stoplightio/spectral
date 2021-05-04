@@ -18,6 +18,7 @@ except:
 cat {document} | {bin} lint -r {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 <STDIN>
  1:1  warning  except-but-stdin  The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.

@@ -1,7 +1,7 @@
 import { STATIC_ASSETS } from '../../../../assets';
 import { empty } from '../../../../utils';
 import { IConstructorOpts, Spectral } from '../../../../spectral';
-import { isOpenApiv2, isOpenApiv3 } from '../../../../formats';
+import { isOpenApiv2, isOpenApiv3, isOpenApiv3_1, isOpenApiv3_0 } from '../../../../formats';
 import * as ruleset from '../../index.json';
 
 export async function createWithRules(
@@ -22,6 +22,8 @@ export async function createWithRules(
     const s = new Spectral(opts);
     s.registerFormat('oas2', isOpenApiv2);
     s.registerFormat('oas3', isOpenApiv3);
+    s.registerFormat('oas3.0', isOpenApiv3_0);
+    s.registerFormat('oas3.1', isOpenApiv3_1);
 
     await s.loadRuleset('my-ruleset');
 

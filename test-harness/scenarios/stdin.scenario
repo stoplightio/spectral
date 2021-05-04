@@ -10,6 +10,7 @@ paths: {}
 cat {document} | {bin} lint
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 <STDIN>
  1:1  warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.

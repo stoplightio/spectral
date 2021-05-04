@@ -55,6 +55,7 @@ rules:
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 {document}
   6:10  error  oas3-schema  Property `foo` is not expected to be here.              info.contact.foo

@@ -26,6 +26,7 @@ rules:
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 {document}
  10:15  warning  response-order  Responses should be in alphabetical order  paths./foo.get.responses[400]

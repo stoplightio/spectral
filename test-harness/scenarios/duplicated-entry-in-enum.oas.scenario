@@ -26,6 +26,7 @@ components:
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 OpenAPI 3.x detected
+OpenAPI 3.0.x detected
 
 {document}
  10:16  error  duplicated-entry-in-enum  A duplicated entry in the enum was found. Error: `enum` property must not have duplicate items (items ## 1 and 5 are identical)  components.schemas.a_model.properties.id.enum

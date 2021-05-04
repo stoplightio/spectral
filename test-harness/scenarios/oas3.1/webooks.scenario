@@ -1,0 +1,26 @@
+====test====
+OAS 3.1 - Validate webhooks
+====document====
+# https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.1/webhook-example.yaml
+openapi: 3.1.0
+info:
+  title: Webhook Example
+  version: 1.0.0
+webhooks:
+  invalidNewPet:
+    foo:
+====asset:ruleset====
+extends: [[spectral:oas, off]]
+rules:
+  oas3-schema: error
+====command====
+{bin} lint {document} --ruleset {asset:ruleset}
+====stdout====
+OpenAPI 3.x detected
+OpenAPI 3.1.x detected
+
+{document}
+ 7:17  error  oas3-schema  `invalidNewPet` property must not have unevaluated properties.  webhooks.invalidNewPet
+
+✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)
+

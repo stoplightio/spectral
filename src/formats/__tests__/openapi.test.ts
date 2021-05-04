@@ -17,8 +17,8 @@ describe('OpenAPI format', () => {
     });
   });
 
-  describe('OpenAPI 3.0', () => {
-    it.each(['3.0.0', '3', '3.0'])('recognizes %s version correctly', version => {
+  describe('OpenAPI 3.x', () => {
+    it.each(['3.0.0', '3', '3.0', '3.1.0', '3.0.3', '3.2'])('recognizes %s version correctly', version => {
       expect(isOpenApiv3({ openapi: version })).toBe(true);
     });
 
@@ -33,20 +33,23 @@ describe('OpenAPI format', () => {
     });
   });
 
+  describe('OpenAPI 3.0', () => {
+    it.each(['3.0.0', '3.0', '3.0.3'])('recognizes %s version correctly', version => {
+      expect(isOpenApiv3({ openapi: version })).toBe(true);
+    });
+
+    it.each(['3', '3.1', '3.1.0', '3.1.3'])('does not recognize %s version', version => {
+      expect(isOpenApiv3({ openapi: version })).toBe(true);
+    });
+  });
+
   describe('OpenAPI 3.1', () => {
-    it.each(['3.1.0', '3.1'])('recognizes %s version correctly', version => {
+    it.each(['3.1.0', '3.1', '3.1.1'])('recognizes %s version correctly', version => {
       expect(isOpenApiv3_1({ openapi: version })).toBe(true);
     });
 
-    it('does not recognize invalid document', () => {
-      expect(isOpenApiv3_1({ openapi: '4.0' })).toBe(false);
-      expect(isOpenApiv3_1({ openapi: 3.0 })).toBe(false);
-      expect(isOpenApiv3_1({ openapi: '2.0' })).toBe(false);
-      expect(isOpenApiv3_1({ openapi: null })).toBe(false);
-      expect(isOpenApiv3_1({ swagger: null })).toBe(false);
-      expect(isOpenApiv3_1({ swagger: '3.0' })).toBe(false);
-      expect(isOpenApiv3_1({})).toBe(false);
-      expect(isOpenApiv3_1(null)).toBe(false);
+    it.each(['3', '3.0', '3.0.3', '3.0.0'])('does not recognize %s version', version => {
+      expect(isOpenApiv3({ openapi: version })).toBe(true);
     });
   });
 });
