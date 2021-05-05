@@ -16,6 +16,7 @@ describe('Runner Runtime', () => {
       const instance = runtime.spawn();
       const { on } = instance;
 
+      // @ts-expect-error
       expect(() => void delete instance.on).toThrow();
       expect(() => void (instance.on = jest.fn())).toThrow();
       // @ts-expect-error

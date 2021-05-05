@@ -131,8 +131,8 @@ describe('sortResults', () => {
     expect(indices).toHaveLength(arr.length);
 
     const shuffled = results
-      .map((v, i) => ({ ...v, pos: indices[i] }))
-      .sort((a, b) => a.pos - b.pos)
+      .map<IRuleResult & { pos?: number }>((v, i) => ({ ...v, pos: indices[i] }))
+      .sort((a, b) => a.pos! - b.pos!)
       .map(v => {
         delete v.pos;
         return v;
