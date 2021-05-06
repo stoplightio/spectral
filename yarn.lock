@@ -1340,10 +1340,10 @@
     tslib "^2.1.0"
     urijs "^1.19.5"
 
-"@stoplight/json@3.13.1":
-  version "3.13.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.13.1.tgz#9bf190d45ca4113d46f6696e8ed4cbce58284ae3"
-  integrity sha512-gaw+7YhXKvyjwABVaIumuQSXVn9ybv/XFvkuE+C3XYYzxLojUBFmYHJ0kvmi7etr3ZvrbzEcNHXzIcHLgvI3Dw==
+"@stoplight/json@3.13.2":
+  version "3.13.2"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.13.2.tgz#fd39f24b6a4b2ff5921f48a9cbfceb3894f28cc4"
+  integrity sha512-mnl+Q76lX+PobG3fAuvugOQDgBY/cE/a6AK/1se2Lfn+7l/NuUaxnFwDwwiFtD+fOqeePiHfg184HtySFoXOXg==
   dependencies:
     "@stoplight/ordered-object-literal" "^1.0.1"
     "@stoplight/types" "^12.2.0"

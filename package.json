@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.1.0",
-    "@stoplight/json": "3.13.1",
+    "@stoplight/json": "3.13.2",
     "@stoplight/json-ref-readers": "1.2.2",
     "@stoplight/json-ref-resolver": "3.1.2",
     "@stoplight/lifecycle": "2.3.2",
