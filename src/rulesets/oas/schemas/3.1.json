@@ -1,5 +1,5 @@
 {
-  "$id": "https://spec.openapis.org/oas/3.1/schema/2021-03-02",
+  "$id": "https://spec.openapis.org/oas/3.1/schema/2021-04-15",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
@@ -15,7 +15,10 @@
       "default": "https://spec.openapis.org/oas/3.1/dialect/base"
     },
     "servers": {
-      "$ref": "#/$defs/server"
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/server"
+      }
     },
     "paths": {
       "$ref": "#/$defs/paths"
@@ -177,7 +180,7 @@
         "schemas": {
           "type": "object",
           "additionalProperties": {
-            "$dynamicRef": "#meta"
+            "$ref": "#/$defs/schema"
           }
         },
         "responses": {
@@ -279,7 +282,7 @@
         }
       },
       "patternProperties": {
-        "^(get|post|delete|options|head|patch|trace)$": {
+        "^(get|put|post|delete|options|head|patch|trace)$": {
           "$ref": "#/$defs/operation"
         }
       },
@@ -395,7 +398,7 @@
           "type": "boolean"
         },
         "schema": {
-          "$dynamicRef": "#meta"
+          "$ref": "#/$defs/schema"
         },
         "content": {
           "$ref": "#/$defs/content"
@@ -604,7 +607,7 @@
       "type": "object",
       "properties": {
         "schema": {
-          "$dynamicRef": "#meta"
+          "$ref": "#/$defs/schema"
         },
         "encoding": {
           "type": "object",
@@ -857,7 +860,7 @@
               "type": "boolean"
             },
             "schema": {
-              "$dynamicRef": "#meta"
+              "$ref": "#/$defs/schema"
             }
           },
           "$ref": "#/$defs/examples"

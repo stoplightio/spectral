@@ -323,6 +323,7 @@
       }
     },
     "no-$ref-siblings": {
+      "formats": ["oas2.0", "oas3.0"],
       "description": "Property cannot be placed among $ref",
       "message": "{{error}}",
       "type": "validation",

@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Document } from '../../../../document';
-import { RuleType, Spectral } from '../../../../index';
+import { isOpenApiv2, isOpenApiv3_0, RuleType, Spectral } from '../../../../index';
 import * as Parsers from '../../../../parsers';
 import { rules as oasRules } from '../../../oas/index.json';
 import refSiblings from '../refSiblings';
@@ -8,6 +8,8 @@ import refSiblings from '../refSiblings';
 describe('refSiblings', () => {
   const s = new Spectral();
   s.setFunctions({ refSiblings });
+  s.registerFormat('oas2.0', isOpenApiv2);
+  s.registerFormat('oas3.0', isOpenApiv3_0);
   s.setRules({
     'no-$ref-siblings': Object.assign(oasRules['no-$ref-siblings'], {
       recommended: true,
