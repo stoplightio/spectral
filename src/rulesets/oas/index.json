@@ -13,6 +13,7 @@
     "oasPathParam",
     "oasTagDefined",
     "oasUnusedComponent",
+    "runtimeExpression",
     "typedEnum",
     "refSiblings"
   ],
@@ -161,6 +162,17 @@
       "then": {
         "field": "info.license.url",
         "function": "truthy"
+      }
+    },
+    "links-parameters-expression": {
+      "description": "The links.parameters object's values should be valid runtime expressions.",
+      "recommended": true,
+      "type": "validation",
+      "formats": ["oas3"],
+      "message": "{{error}}",
+      "given": "$.paths.*.*.responses.*.links.*.parameters.*",
+      "then": {
+        "function": "runTimeExpression"
       }
     },
     "no-eval-in-markdown": {
