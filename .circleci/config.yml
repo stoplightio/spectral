@@ -144,19 +144,17 @@ workflows:
       - release:
           filters:
             branches:
-              only:
-                - master
-                - develop
+              ignore: /.*/
             tags:
               only: /^v.*/
+              ignore: /^v67.*/
       - upload_artifacts:
           filters:
             branches:
-              only:
-                - master
-                - develop
+              ignore: /.*/
             tags:
               only: /^v.*/
+              ignore: /^v67.*/
           requires:
             - release
       - stoplight/analyze:
