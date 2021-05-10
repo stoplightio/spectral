@@ -1195,6 +1195,14 @@
             "$ref": "#/definitions/oauth2AccessCodeSecurity"
           }
         ]
+      },
+      "errorMessage": {
+        "properties": {
+          "basic": "Invalid basic authentication security definition",
+          "apiKey": "Invalid apiKey authentication security definition",
+          "oauth2": "Invalid oauth2 authentication security definition"
+        },
+        "_": "Invalid security securityDefinitions"
       }
     },
     "basicAuthenticationSecurity": {

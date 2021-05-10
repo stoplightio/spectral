@@ -4,6 +4,7 @@ import { IFunction, IFunctionResult } from '../../types/function';
 import { detectDialect } from '../../formats';
 import MissingRefError from 'ajv/dist/compile/ref_error';
 import { assignAjvInstance } from './ajv';
+import ajvErrors from 'ajv-errors';
 import Ajv, { Options } from 'ajv';
 import addFormats from 'ajv-formats';
 import { Dictionary, Optional } from '@stoplight/types';
@@ -98,5 +99,8 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
 schema.createAJVInstance = (opts: Options): Ajv => {
   const ajv = new Ajv(opts);
   addFormats(ajv);
+  if (opts.allErrors) {
+    ajvErrors(ajv);
+  }
   return ajv;
 };

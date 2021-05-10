@@ -39,7 +39,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas2-schema',
-          message: 'Invalid security definition.',
+          message: 'Invalid basic authentication security definition.',
           path: ['securityDefinitions', 'basic'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),

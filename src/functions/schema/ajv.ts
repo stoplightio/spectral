@@ -3,6 +3,7 @@ import type AjvCore from 'ajv/dist/core';
 import Ajv2019 from 'ajv/dist/2019';
 import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
+import ajvErrors from 'ajv-errors';
 
 import * as draft4 from './draft4.json';
 
@@ -21,6 +22,10 @@ const logger = {
 function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
   const ajv = new Ajv({ allErrors, meta: true, messages: true, strict: false, allowUnionTypes: true, logger });
   addFormats(ajv);
+  if (allErrors) {
+    ajvErrors(ajv);
+  }
+
   if (Ajv === AjvBase) {
     ajv.addSchema(draft4);
   }
