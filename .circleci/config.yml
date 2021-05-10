@@ -147,14 +147,12 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-              ignore: /^v67.*/
       - upload_artifacts:
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^v.*/
-              ignore: /^v67.*/
           requires:
             - release
       - stoplight/analyze:
