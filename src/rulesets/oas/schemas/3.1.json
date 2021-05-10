@@ -51,7 +51,8 @@
   "required": ["openapi", "info"],
   "anyOf": [
     {
-      "required": ["paths"]
+      "required": ["paths"],
+      "errorMessage": "The document must have either `paths`, `webhooks` or `components`"
     },
     {
       "required": ["components"]

@@ -1,5 +1,5 @@
-import { ErrorObject } from 'ajv';
-import { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
+import type { ErrorObject } from 'ajv';
+import type { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
 
 import * as oas2_0 from '../schemas/2.0.json';
 import * as oas3_0 from '../schemas/3.0.json';
@@ -27,10 +27,6 @@ const ERROR_MAP = [
     path: /^components\/securitySchemes\/[^/]+$/,
     message: 'Invalid security scheme',
   },
-  {
-    path: /^securityDefinitions\/[^/]+$/,
-    message: 'Invalid security definition',
-  },
 ];
 
 // The function removes irrelevant (aka misleading, confusing, useless, whatever you call it) errors.
@@ -39,7 +35,7 @@ const ERROR_MAP = [
 // The $ref part is never going to be interesting for us, because both oas-schema rules operate on resolved content, so we won't have any $refs left.
 // As you can see, what we deal here wit is actually not really oneOf anymore - it's always the first member of oneOf we match against.
 // That being said, we always strip both oneOf and $ref, since we are always interested in the first error.
-export function prepareResults(errors: ErrorObject[]) {
+export function prepareResults(errors: ErrorObject[]): void {
   // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
   for (const error of errors) {
     if (error.keyword === 'additionalProperties') {

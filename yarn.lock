@@ -1307,10 +1307,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stoplight/better-ajv-errors@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.1.0.tgz#3718799d217d3b1d967431e0b9879491fb5c6fd9"
-  integrity sha512-EiX3Hx7Q8pwxxEtl9RZigI2jfAcNo6xA7V/AwDDJ7hgxhOknvoLH1omtycCheCLdz0MxxU+uvYo1wPrYE7UL+w==
+"@stoplight/better-ajv-errors@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.1.1.tgz#fa7c01aceed122af7c0ab984c6a9cdbef202edb7"
+  integrity sha512-uTfccuOd2Fl7N3I2pEBpWNcHGx1lD3J5BDbqE3YAonXUGa1uUNZdonz3Ow/EqvnZncda++ChAZX61Z7Frd9kYQ==
   dependencies:
     jsonpointer "^4.0.1"
     leven "^3.1.0"
@@ -1340,10 +1340,10 @@
     tslib "^2.1.0"
     urijs "^1.19.5"
 
-"@stoplight/json@3.13.2":
-  version "3.13.2"
-  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.13.2.tgz#fd39f24b6a4b2ff5921f48a9cbfceb3894f28cc4"
-  integrity sha512-mnl+Q76lX+PobG3fAuvugOQDgBY/cE/a6AK/1se2Lfn+7l/NuUaxnFwDwwiFtD+fOqeePiHfg184HtySFoXOXg==
+"@stoplight/json@3.13.5":
+  version "3.13.5"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.13.5.tgz#60ba72ae24bfb0fc1b8b7cb7fbf44199825a3dcf"
+  integrity sha512-Xk8ZVhCeYWaxNFiVM5wsAKsbuRXAqBjKle43v8n10YXE4jjDA6hCKVBRxCo8QNEsakwahJthvq8MM4e0DNIqAA==
   dependencies:
     "@stoplight/ordered-object-literal" "^1.0.1"
     "@stoplight/types" "^12.2.0"
@@ -1379,10 +1379,10 @@
   resolved "https://registry.yarnpkg.com/@stoplight/path/-/path-1.3.2.tgz#96e591496b72fde0f0cdae01a61d64f065bd9ede"
   integrity sha512-lyIc6JUlUA8Ve5ELywPC8I2Sdnh1zc1zmbYgVarhXIp9YeAB0ReeqmGEOWNtlHkbP2DAA1AL65Wfn2ncjK/jtQ==
 
-"@stoplight/types@12.2.0", "@stoplight/types@^12.0.0", "@stoplight/types@^12.2.0":
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-12.2.0.tgz#258c9f1bbc6682aa5ca1a4161d5e75979ffe4a3f"
-  integrity sha512-k1VPgSIpP+wLzGJ14lxhwtSyzYG5az+qby7fzYpc2fGWYFe5apmDm26vf/6N4mMQi2UQ7KxgGfNRSjdu6Msslg==
+"@stoplight/types@12.3.0":
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-12.3.0.tgz#ac71d295319f26abb279e3d89d1c1774857d20b4"
+  integrity sha512-hgzUR1z5BlYvIzUeFK5pjs5JXSvEutA9Pww31+dVicBlunsG1iXopDx/cvfBY7rHOrgtZDuvyeK4seqkwAZ6Cg==
   dependencies:
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
@@ -1391,6 +1391,14 @@
   version "11.10.0"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.10.0.tgz#60bbee770526f4de9cd1c613c7ab84c4e4674126"
   integrity sha512-ffHD9i4UHS8Gsg7Ar8pKjI9B4kq7MRekE7tCROFGcFDzQhfRx9T92AduoLAtP/010XNYq23yDKpLBRPIEk8+xg==
+  dependencies:
+    "@types/json-schema" "^7.0.4"
+    utility-types "^3.10.0"
+
+"@stoplight/types@^12.0.0", "@stoplight/types@^12.2.0":
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-12.2.0.tgz#258c9f1bbc6682aa5ca1a4161d5e75979ffe4a3f"
+  integrity sha512-k1VPgSIpP+wLzGJ14lxhwtSyzYG5az+qby7fzYpc2fGWYFe5apmDm26vf/6N4mMQi2UQ7KxgGfNRSjdu6Msslg==
   dependencies:
     "@types/json-schema" "^7.0.4"
     utility-types "^3.10.0"
@@ -1775,6 +1783,11 @@ aggregate-error@^3.0.0:
   dependencies:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
+
+ajv-errors@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-3.0.0.tgz#e54f299f3a3d30fe144161e5f0d8d51196c527bc"
+  integrity sha512-V3wD15YHfHz6y0KdhYFjyy9vWtEVALT9UrxfN3zqlI6dMioHnJrqOYfyPKol3oqrnCM9uwkcdCwkJ0WUcbLMTQ==
 
 ajv-formats@2.1.0:
   version "2.1.0"
