@@ -184,6 +184,12 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
+      - build-windows-binary:
+         filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
       - upload_artifacts:
           filters:
             branches:
@@ -192,3 +198,4 @@ workflows:
               only: /^v.*/
           requires:
             - release
+            - build-windows-binary
