@@ -116,7 +116,6 @@ jobs:
       - checkout
       - install-and-build
       - test-node
-      - test-harness
 
   build-windows-binary:
     executor:
