@@ -1,0 +1,17 @@
+====test====
+Requires valid commands
+====command====
+{bin} unknown && echo "FAIL"
+====status====
+1
+====stderr====
+spectral <command>
+
+Commands:
+  spectral lint [documents..]  lint JSON/YAML documents from files or URLs
+
+Options:
+  --version  Show version number  [boolean]
+  --help     Show help  [boolean]
+
+Unknown command: unknown

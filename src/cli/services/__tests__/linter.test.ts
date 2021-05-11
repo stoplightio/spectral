@@ -2,7 +2,6 @@ import { join, resolve } from '@stoplight/path';
 import * as nock from 'nock';
 import * as yargs from 'yargs';
 import { ValidationError } from '../../../ruleset/validation';
-import { ILintConfig } from '../../../types/config';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';
 import * as http from 'http';
@@ -26,9 +25,18 @@ const invalidOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-no-cont
 const fooResolver = resolve(__dirname, '__fixtures__/foo-resolver.js');
 const fooDocument = resolve(__dirname, '__fixtures__/foo-document.yaml');
 
-function run(command: string) {
+async function run(command: string) {
   const parser = yargs.command(lintCommand);
-  const { documents, ...opts } = (parser.parse(command) as unknown) as ILintConfig & { documents: string[] };
+  const { documents, ...opts } = await new Promise<any>((resolve, reject) => {
+    parser.parse(command, {}, (err, argv) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(argv);
+      }
+    });
+  });
+
   return lint(documents, opts);
 }
 

@@ -18,7 +18,9 @@ export default yargs
   })
   .version()
   .help(true)
-  .strict()
+  .strictCommands()
+  .strictOptions()
+  .showHelpOnFail(true)
   .wrap(yargs.terminalWidth())
   .command(lintCommand)
   .demandCommand(1, '').argv;

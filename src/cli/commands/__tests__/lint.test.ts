@@ -82,11 +82,6 @@ describe('lint', () => {
     });
   });
 
-  it('shows help when invalid arguments are passed', async () => {
-    const output = await run('lint --foo');
-    expect(output).toContain('documents  Location of JSON/YAML documents. Can be either a file, a glob or');
-  });
-
   it('calls lint with document and default options', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     await run(`lint ${doc}`);
