@@ -141,7 +141,43 @@ jobs:
           command: npm --no-git-tag-version --no-commit-hooks -f version from-git
       - run:
           name: docker build
-          command: docker build .
+          command: docker build . --tag stoplight/spectral:${CIRCLE_SHA1};
+      - run:
+          name: docker push
+          command: |
+            echo "CIRCLE_SHA1=${CIRCLE_SHA1}";
+            # Login to DockerHub
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+            echo "CIRCLE_TAG=${CIRCLE_TAG}";
+            DOCKER_BRANCH="${CIRCLE_BRANCH//\//-}";
+            echo "DOCKER_BRANCH=${DOCKER_BRANCH}";
+            if [[ -n "$DOCKER_BRANCH" ]]; then
+              docker tag stoplight/spectral:${CIRCLE_SHA1} stoplight/spectral:${DOCKER_BRANCH};
+            fi
+            echo "Setting a fake value for CIRCLE_TAG";
+            CIRCLE_TAG="0.0.0";
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              FULL_VERSION="${CIRCLE_TAG/v/}";
+              MINOR_VERSION="${FULL_VERSION/%.+([0-9])/}";
+              MAJOR_VERSION="${MINOR_VERSION/%.+([0-9])/}";
+              echo "FULL_VERSION=$FULL_VERSION";
+              echo "MINOR_VERSION=$MINOR_VERSION";
+              echo "MAJOR_VERSION=$MAJOR_VERSION";
+              docker tag stoplight/spectral:${CIRCLE_SHA1} stoplight/spectral:${FULL_VERSION};
+              docker tag stoplight/spectral:${CIRCLE_SHA1} stoplight/spectral:${MINOR_VERSION};
+              docker tag stoplight/spectral:${CIRCLE_SHA1} stoplight/spectral:${MAJOR_VERSION};
+            fi
+            echo "Created tags:";
+            docker images stoplight/spectral --format="{{ .Tag }}";
+            docker push stoplight/spectral:${CIRCLE_SHA1};
+            if [[ -n "$DOCKER_BRANCH" ]]; then
+              docker push stoplight/spectral:${DOCKER_BRANCH};
+            fi
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push stoplight/spectral:${FULL_VERSION} \
+                          stoplight/spectral:${MINOR_VERSION} \
+                          stoplight/spectral:${MAJOR_VERSION};
+            fi
 
   release:
     docker:
@@ -190,7 +226,10 @@ workflows:
       - test-windows
       - test-browser
       - lint
-      - build-docker
+      - build-docker:
+         filters:
+            branches:
+              only: /chore\/can-we-build-docker-in-circle/
 
   release:
     jobs:
@@ -201,6 +240,12 @@ workflows:
             tags:
               only: /^v.*/
       - build-windows-binary:
+         filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+      - build-docker:
          filters:
             branches:
               ignore: /.*/
