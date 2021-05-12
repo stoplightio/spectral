@@ -234,7 +234,9 @@ workflows:
       - build-docker:
          filters:
             branches:
-              only: /chore\/can-we-build-docker-in-circle/
+              only:
+                - develop
+                - chore/can-we-build-docker-in-circle
 
   release:
     jobs:
