@@ -1,9 +1,11 @@
 # Workflows
 
-When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, but probably wherever they are being made.
+When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, or whatever files you are trying to lint.
 
-- Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
-- Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) or [VS Code](https://github.com/stoplightio/vscode-spectral) automatically as you work, without switching to the CLI.
+1. Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
+2. Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) or [VS Code](https://github.com/stoplightio/vscode-spectral) as you work to avoid switching to CLI.
+3. Run Spectral as a [Git hook](#Git-hooks) for quick feedback in case people forget to run it in the CLI.
+4. Use [Continuous Integration](#Continuous-Integration) to reject pull requests that don't match your rulesets/style-guide.
 
 ## Linting Design-First Workflows
 
@@ -46,19 +48,8 @@ See our [CLI documentation](./2-cli.md) to see what other arguments and options 
 
 ## Continuous Integration
 
-Running Spectral on CI servers is just a case of doing what you'd do in the CI.
+Spectral can be used in any CI environment that runs run NodeJS or our Docker image: Jenkins, CircleCI, GitHub Actions, etc.
 
-```yaml
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - checkout
-      - run:
-          name: "API Description Linter"
-          command: npx @stoplight/spectral lint somefile.yaml -- --ruleset=config/custom-ruleset.yaml
-```
+By enabling the JUnit output format when you lint, most CI servers will show visual results helping people realise what mistakes were made and where.
 
-We plan to add JUnit/xUnit test results in a future version, so tools like CircleCI can show test results in a more visual way. For now, the commands exit code will alert CI that there was a problem, and the console output will say why.
+Read our [Continuous Integration guide](8-continuous-integration.md) for more information on setting things up in your CI of choice.
