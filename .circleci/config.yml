@@ -128,6 +128,18 @@ jobs:
           paths:
             - binaries
 
+  build-docker:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: set version in package.json
+          command: npm --no-git-tag-version --no-commit-hooks -f version from-git
+      - run:
+          name: docker build
+          command: docker build .
+
   release:
     docker:
       - image: circleci/node:14
@@ -175,6 +187,7 @@ workflows:
       - test-windows
       - test-browser
       - lint
+      - build-docker
 
   release:
     jobs:
