@@ -90,7 +90,7 @@
     "strip-ansi": "6.0",
     "text-table": "0.2",
     "tslib": "2.2.0",
-    "yargs": "16.2.0"
+    "yargs": "17.0.1"
   },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^9.0.7",
@@ -109,7 +109,7 @@
     "@types/text-table": "^0.2.1",
     "@types/tmp": "^0.2.0",
     "@types/xml2js": "^0.4.8",
-    "@types/yargs": "^16.0.0",
+    "@types/yargs": "^16.0.1",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "copyfiles": "^2.4.1",
@@ -131,7 +131,7 @@
     "karma-typescript-es6-transform": "^5.2.0",
     "lint-staged": "^10.5.4",
     "nock": "~12.0.2",
-    "node-html-parser": "^2.0.1",
+    "node-html-parser": "^3.3.0",
     "pkg": "^5.1.0",
     "prettier": "^2.2.1",
     "recast": "^0.20.4",
