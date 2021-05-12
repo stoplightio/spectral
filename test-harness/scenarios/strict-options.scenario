@@ -1,10 +1,14 @@
 ====test====
-Errors when no document is provided
+Requires valid options
+====document====
+{}
+====asset:ruleset====
+rules: {}
 ====command====
-./scripts/faketty.bash {bin} lint
+{bin} lint {document} -r {asset:ruleset} -rip && echo "FAIL"
 ====status====
 1
-====stdout====
+====stderr====
 spectral lint [documents..]
 
 lint JSON/YAML documents from files or URLs
@@ -27,4 +31,4 @@ Options:
   -v, --verbose                  increase verbosity  [boolean]
   -q, --quiet                    no logging - output only  [boolean]
 
-No documents provided.
+Unknown arguments: i, p
