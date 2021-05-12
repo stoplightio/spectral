@@ -67,6 +67,33 @@ describe('spectral', () => {
         }, {}),
       );
     });
+
+    test.each([
+      ['spectral:oas', oasRulesetRules],
+      ['spectral:asyncapi', asyncApiRulesetRules],
+    ])('should support loading "%s" built-in ruleset with additional paths', async (rulesetName, rules) => {
+      const s = new Spectral();
+      await s.loadRuleset(rulesetName, undefined, ['/path/one', '/path/two']);
+
+      expect(s.rules).toEqual(
+        expect.objectContaining(
+          Object.entries(rules).reduce<RunRuleCollection>((oasRules, [name, rule]) => {
+            oasRules[name] = expect.objectContaining({
+              name,
+              given: expect.anything(),
+              formats: expect.arrayContaining([expect.any(String)]),
+              enabled: expect.any(Boolean),
+              severity: expect.any(Number),
+              then: expect.any(Array),
+              message: rule.message ?? null,
+              description: rule.description ?? null,
+            });
+
+            return oasRules;
+          }, {}),
+        ),
+      );
+    });
   });
 
   describe('setRules & mergeRules', () => {

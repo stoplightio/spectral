@@ -214,11 +214,11 @@ export class Spectral {
     Object.assign(this.exceptions, target);
   }
 
-  public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions): Promise<void> {
-    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], { agent: this.agent, ...options }));
+  public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions, paths?: string[]): Promise<void> {
+    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], { agent: this.agent, ...options }), paths);
   }
 
-  public setRuleset(ruleset: IRuleset): void {
+  public setRuleset(ruleset: IRuleset, paths: string[] | null = null): void {
     this.runtime.revoke();
 
     this.setRules(ruleset.rules);
@@ -241,6 +241,7 @@ export class Spectral {
             code,
             name,
             source,
+            paths,
             schema,
             inject: {
               fetch: request,

@@ -145,6 +145,31 @@ describe('lint', () => {
     );
   });
 
+  it('calls lint with document and paths', async () => {
+    const doc = './__fixtures__/empty-oas2-document.json';
+    const path = '/absolute/path/example';
+    await run(`lint -p ${path} ${doc}`);
+    expect(lint).toBeCalledWith(
+      [doc],
+      expect.objectContaining({
+        paths: [path],
+      }),
+    );
+  });
+
+  it('calls lint with document and multiple paths', async () => {
+    const doc = './__fixtures__/empty-oas2-document.json';
+    const path1 = '/first/path';
+    const path2 = '/second/path';
+    await run(`lint --p ${path1} -p ${path2} ${doc}`);
+    expect(lint).toBeCalledWith(
+      [doc],
+      expect.objectContaining({
+        paths: [path1, path2],
+      }),
+    );
+  });
+
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
     await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
     await new Promise(resolve => void process.nextTick(resolve));

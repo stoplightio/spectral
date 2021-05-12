@@ -20,7 +20,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     agent: DEFAULT_REQUEST_OPTIONS.agent as Agent,
   });
 
-  spectral.setRuleset(ruleset);
+  spectral.setRuleset(ruleset, flags.paths);
 
   for (const [format, lookup, prettyName] of KNOWN_FORMATS) {
     spectral.registerFormat(format, document => {

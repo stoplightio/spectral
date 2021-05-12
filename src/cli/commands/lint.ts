@@ -81,6 +81,12 @@ const lintCommand: CommandModule = {
           type: 'string',
           coerce: toArray,
         },
+        paths: {
+          alias: 'p',
+          description: 'additional paths for resolving',
+          type: 'string',
+          coerce: toArray,
+        },
         'fail-severity': {
           alias: 'F',
           description: 'results of this level or above will trigger a failure exit code',
@@ -122,6 +128,7 @@ const lintCommand: CommandModule = {
       failSeverity,
       displayOnlyFailures,
       ruleset,
+      paths,
       format,
       output,
       encoding,
@@ -141,6 +148,7 @@ const lintCommand: CommandModule = {
       ignoreUnknownFormat,
       failOnUnmatchedGlobs,
       ruleset,
+      paths,
       ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['verbose', 'quiet', 'resolver']),
     })
       .then(results => {

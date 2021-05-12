@@ -29,6 +29,7 @@ Other options include:
   --output, -o                 output to a file instead of stdout                                      [string]
   --resolver                   path to custom json-ref-resolver instance                               [string]
   --ruleset, -r                path/URL to a ruleset file                                              [string]
+  --paths, -p                  path from which custom functions `require` statements may be resolved   [string]
   --fail-severity, -F          results of this level or above will trigger a failure exit code
                                          [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   --display-only-failures, -D  only output results equal to or greater than --fail-severity
