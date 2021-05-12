@@ -133,6 +133,9 @@ jobs:
       - image: circleci/node:14
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.2
+          docker_layer_caching: true
       - run:
           name: set version in package.json
           command: npm --no-git-tag-version --no-commit-hooks -f version from-git
