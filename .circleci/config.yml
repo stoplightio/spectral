@@ -145,6 +145,7 @@ jobs:
       - run:
           name: docker push
           command: |
+            shopt -s extglob
             echo "CIRCLE_SHA1=${CIRCLE_SHA1}";
             # Login to DockerHub
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
