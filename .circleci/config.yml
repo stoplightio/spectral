@@ -1,13 +1,13 @@
 version: 2.1
 
 orbs:
-  stoplight: stoplight/cli@0.0.2
+  windows: circleci/windows@2.4.0
   node: circleci/node@3.0.0
 
 executors:
   linux:
     docker:
-      - image: cimg/base:2020.01
+      - image: cimg/base:2021.01
 
 commands:
   cached-dependencies:
@@ -34,11 +34,14 @@ commands:
           name: Build the code
           command: yarn build
 
-  test-node:
+  lint:
     steps:
       - run:
           name: Lint the code
           command: yarn lint
+
+  test-node:
+    steps:
       - run:
           name: Run node tests
           command: yarn test --coverage --maxWorkers=2
@@ -58,7 +61,24 @@ commands:
           name: Run harness tests
           command: yarn test.harness
 
+  prepare-release:
+    steps:
+      - checkout
+      - cached-dependencies
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run: npm version from-git
+      - run: yarn inline-version
+      - run: yarn build
+
 jobs:
+  lint:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - cached-dependencies
+      - lint
+
   test:
     parameters:
       os:
@@ -89,16 +109,30 @@ jobs:
           name: Run browser tests (nimma)
           command: USE_NIMMA=true yarn test.karma
 
-  release:
-    docker:
-      - image: circleci/node:12
+  test-windows:
+    executor:
+      name: windows/default
     steps:
       - checkout
-      - cached-dependencies
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: npm version from-git
-      - run: yarn inline-version
-      - run: yarn build
+      - install-and-build
+      - test-node
+
+  build-windows-binary:
+    executor:
+      name: windows/default
+    steps:
+      - prepare-release
+      - run: npx pkg . --targets windows --out-path ./binaries
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - binaries
+
+  release:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - prepare-release
       - run: |
           if [[ "$CIRCLE_TAG" == *beta* ]] ; then
             npm publish --tag beta
@@ -135,14 +169,23 @@ workflows:
               os:
                 - linux
               node-version:
-                - "12.9"
-                - "14.9"
+                - "12.21"
+                - "14.16"
+                - "16.0"
+      - test-windows
       - test-browser
+      - lint
 
   release:
     jobs:
       - release:
           filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+      - build-windows-binary:
+         filters:
             branches:
               ignore: /.*/
             tags:
@@ -155,9 +198,4 @@ workflows:
               only: /^v.*/
           requires:
             - release
-      - stoplight/analyze:
-          filters:
-            branches:
-              only: master
-          requires:
-            - release
+            - build-windows-binary
