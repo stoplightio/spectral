@@ -153,14 +153,11 @@ jobs:
             echo "GIT_SHA=${GIT_SHA}";
             # Login to DockerHub
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-            echo "CIRCLE_TAG=${CIRCLE_TAG}";
             DOCKER_BRANCH="${CIRCLE_BRANCH//\//-}";
             echo "DOCKER_BRANCH=${DOCKER_BRANCH}";
             if [[ -n "$DOCKER_BRANCH" ]]; then
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${DOCKER_BRANCH};
             fi
-            echo "Setting a fake value for CIRCLE_TAG";
-            CIRCLE_TAG="0.0.0";
             if [[ -n "$CIRCLE_TAG" ]]; then
               FULL_VERSION="${CIRCLE_TAG/v/}";
               MINOR_VERSION="${FULL_VERSION/%.+([0-9])/}";
@@ -172,7 +169,7 @@ jobs:
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
             fi
-            echo "Created tags:";
+            echo "Docker tags:";
             docker images stoplight/spectral --format="{{ .Tag }}";
             docker push stoplight/spectral:${GIT_SHA};
             if [[ -n "$DOCKER_BRANCH" ]]; then
