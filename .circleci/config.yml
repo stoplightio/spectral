@@ -128,6 +128,62 @@ jobs:
           paths:
             - binaries
 
+  release-docker:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.2
+          docker_layer_caching: true
+      - run:
+          name: set version in package.json
+          command: npm --no-git-tag-version --no-commit-hooks -f version from-git
+      - run:
+          name: docker build
+          command: |
+            GIT_SHA=${CIRCLE_SHA1:0:7}
+            echo "GIT_SHA=${GIT_SHA}";
+            docker build . --tag stoplight/spectral:${GIT_SHA};
+      - run:
+          name: docker push
+          command: |
+            shopt -s extglob
+            GIT_SHA=${CIRCLE_SHA1:0:7}
+            echo "GIT_SHA=${GIT_SHA}";
+            # Login to DockerHub
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+            DOCKER_BRANCH="${CIRCLE_BRANCH//\//-}";
+            if [[ "$DOCKER_BRANCH" == "master" ]]; then
+              DOCKER_BRANCH="latest";
+            fi
+            echo "DOCKER_BRANCH=${DOCKER_BRANCH}";
+            if [[ -n "$DOCKER_BRANCH" ]]; then
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${DOCKER_BRANCH};
+            fi
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              FULL_VERSION="${CIRCLE_TAG/v/}";
+              MINOR_VERSION="${FULL_VERSION/%.+([0-9])/}";
+              MAJOR_VERSION="${MINOR_VERSION/%.+([0-9])/}";
+              echo "FULL_VERSION=$FULL_VERSION";
+              echo "MINOR_VERSION=$MINOR_VERSION";
+              echo "MAJOR_VERSION=$MAJOR_VERSION";
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION};
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
+            fi
+            echo "Docker tags:";
+            docker images stoplight/spectral --format="{{ .Tag }}";
+            docker push stoplight/spectral:${GIT_SHA};
+            if [[ -n "$DOCKER_BRANCH" ]]; then
+              docker push stoplight/spectral:${DOCKER_BRANCH};
+            fi
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push stoplight/spectral:${FULL_VERSION} \
+                          stoplight/spectral:${MINOR_VERSION} \
+                          stoplight/spectral:${MAJOR_VERSION};
+            fi
+
   release:
     docker:
       - image: circleci/node:14
@@ -185,6 +241,12 @@ workflows:
             tags:
               only: /^v.*/
       - build-windows-binary:
+         filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+      - release-docker:
          filters:
             branches:
               ignore: /.*/
