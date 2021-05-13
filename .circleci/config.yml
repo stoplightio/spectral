@@ -128,7 +128,7 @@ jobs:
           paths:
             - binaries
 
-  build-docker:
+  release-docker:
     docker:
       - image: circleci/node:14
     steps:
@@ -231,12 +231,6 @@ workflows:
       - test-windows
       - test-browser
       - lint
-      - build-docker:
-         filters:
-            branches:
-              only:
-                - develop
-                - chore/can-we-build-docker-in-circle
 
   release:
     jobs:
@@ -252,7 +246,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - build-docker:
+      - release-docker:
          filters:
             branches:
               ignore: /.*/
