@@ -22,9 +22,10 @@ export function formatOutput(results: IRuleResult[], format: OutputFormat, forma
   return formatters[format](results, formatOptions);
 }
 
-export async function writeOutput(outputStr: string, outputFile?: string) {
+export async function writeOutput(outputStr: string, outputFile?: string): Promise<void> {
   if (outputFile) {
-    return writeFileAsync(outputFile, outputStr);
+    return void (await writeFileAsync(outputFile, outputStr));
   }
+
   console.log(outputStr);
 }

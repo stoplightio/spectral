@@ -3,6 +3,7 @@ import { isAbsolute } from '@stoplight/path';
 import { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { startsWithProtocol } from './startsWithProtocol';
+import { isPlainObject } from '../guards/isPlainObject';
 
 export const isAbsoluteRef = (ref: string): boolean => isAbsolute(ref) || startsWithProtocol(ref);
 
@@ -25,7 +26,7 @@ export const traverseObjUntilRef = (obj: unknown, path: JsonPath): string | null
     path.shift();
   }
 
-  if (isObject(piece) && hasRef(piece) && Object.keys(piece).length === 1) {
+  if (isPlainObject(piece) && hasRef(piece) && Object.keys(piece).length === 1) {
     return piece.$ref;
   }
 
@@ -50,12 +51,11 @@ export const getClosestJsonPath = (data: unknown, path: JsonPath): JsonPath => {
 
   if (!isObject(data)) return closestPath;
 
-  let piece = data;
+  let piece: unknown = data;
 
   for (const segment of path) {
-    if (!(segment in piece)) break;
+    if (!isObject(piece) || !(segment in piece)) break;
     closestPath.push(segment);
-    if (!isObject(piece[segment])) break;
     piece = piece[segment];
   }
 

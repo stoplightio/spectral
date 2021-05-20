@@ -35,6 +35,7 @@ export interface IRunOpts {
 
 export interface IRuleResult extends IDiagnostic {
   path: JsonPath;
+  code: string | number;
 }
 
 export interface ISpectralFullResult {
@@ -44,7 +45,7 @@ export interface ISpectralFullResult {
 
 export interface IGivenNode {
   path: JsonPath;
-  value: any;
+  value: unknown;
 }
 
 export type ResolveResult = Omit<IResolveResult, 'runner'>;

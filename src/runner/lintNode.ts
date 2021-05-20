@@ -7,7 +7,8 @@ import { getDiagnosticSeverity } from '../ruleset/severity';
 import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
-import { getLintTargets, ExceptionLocation, isAKnownException, IMessageVars, message } from './utils';
+import { getLintTargets, ExceptionLocation, isAKnownException, MessageVars, message } from './utils';
+import { printError } from '../utils/printError';
 
 export const lintNode = (
   context: IRunnerInternalContext,
@@ -70,7 +71,7 @@ export const lintNode = (
             )
             .catch(ex => {
               // todo: use reporter or sth
-              console.warn(ex.message);
+              console.warn(printError(ex));
             }),
         );
       } else {
@@ -108,9 +109,9 @@ function processTargetResults(
 
     const document = associatedItem?.document ?? context.documentInventory.document;
     const range = document.getRangeForJsonPath(path, true) ?? Document.DEFAULT_RANGE;
-    const value = path.length === 0 ? document.data : get(document.data, path);
+    const value: unknown = path.length === 0 ? document.data : get(document.data, path);
 
-    const vars: IMessageVars = {
+    const vars: MessageVars = {
       property:
         associatedItem?.missingPropertyPath !== void 0 && associatedItem.missingPropertyPath.length > path.length
           ? printPath(associatedItem.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)

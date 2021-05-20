@@ -17,7 +17,7 @@ export class RunnerRuntime extends EventEmitter<SpectralEvents> {
     this.revokables = [];
   }
 
-  public persist<O extends object>(obj: O): O {
+  public persist<O extends Record<string, unknown>>(obj: O): O {
     const { proxy, revoke } = Proxy.revocable<O>(obj, {});
     this.revokables.push(revoke);
     return proxy;

@@ -2,7 +2,7 @@ import { IParsedResult, isParsedResult } from '../document';
 
 describe('isParsedResult util', () => {
   test('correctly identifies objects that fulfill the IParsedResult interface', () => {
-    // @ts-ignore
+    // @ts-expect-error: it's a test that's supposed to fail
     expect(isParsedResult()).toBe(false);
 
     expect(isParsedResult('')).toBe(false);

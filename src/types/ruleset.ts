@@ -6,7 +6,7 @@ import { JSONSchema, RuleCollection } from './spectral';
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 export type FileRulesetSeverity = 'off' | 'recommended' | 'all';
 
-export type FileRule = IRule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, object];
+export type FileRule = IRule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, Record<string, unknown>];
 
 export type FileRuleCollection = Dictionary<FileRule, string>;
 

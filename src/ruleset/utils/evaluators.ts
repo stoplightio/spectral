@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment */
 import { join, stripRoot } from '@stoplight/path';
 import { Dictionary, Optional } from '@stoplight/types';
 import { isObject } from 'lodash';
@@ -5,7 +6,7 @@ import { decorateIFunctionWithSchemaValidation } from '../validation';
 import { JSONSchema, IFunction } from '../../types';
 
 export type CJSExport = Partial<{
-  exports: object | ESCJSCompatibleExport;
+  exports: Record<string, unknown> | ESCJSCompatibleExport;
   require: NodeJS.Require;
 }>;
 export type ESCJSCompatibleExport = Partial<{ default: unknown }>;
@@ -51,6 +52,7 @@ function proxyRequire(source: string): NodeJS.Require {
     if (p.startsWith('.')) {
       p = join(source, '..', stripRoot(p));
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       p = eval('require.resolve')(p, { paths: [join(source, '..')] });
     }
 
@@ -114,6 +116,7 @@ export const evaluateExport = (body: string, source: string | null, inject: Dict
   const root: ContextExport = {};
   const define = createDefine(mod);
 
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval
   Function('module', 'exports', 'define', 'require', ...Object.keys(inject), String(body)).call(
     root,
     mod,
@@ -164,7 +167,7 @@ export const compileExportedFunction = ({ code, name, source, schema, inject }: 
   return fn;
 };
 
-export function setFunctionContext(context: unknown, fn: Function) {
+export function setFunctionContext<F extends Function>(context: unknown, fn: F): F {
   const boundFn = Function.prototype.bind.call(
     fn,
     Object.freeze(Object.defineProperties({}, Object.getOwnPropertyDescriptors(context))),

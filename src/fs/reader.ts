@@ -4,7 +4,9 @@ import * as fs from 'fs';
 import { RequestInit } from 'node-fetch';
 import { STATIC_ASSETS } from '../assets';
 import request from '../request';
-import { Agent } from 'http';
+import type { Agent } from 'http';
+import { isError } from 'lodash';
+import { printError } from '../utils/printError';
 
 export interface IFileReadOptions {
   encoding: string;
@@ -37,7 +39,7 @@ export async function readFile(name: string, opts: IReadOptions): Promise<string
       if (!response.ok) throw new Error(response.statusText);
       return await response.text();
     } catch (ex) {
-      if (ex.name === 'AbortError') {
+      if (isError(ex) && ex.name === 'AbortError') {
         throw new Error('Timeout');
       } else {
         throw ex;
@@ -59,7 +61,7 @@ export async function readFile(name: string, opts: IReadOptions): Promise<string
         });
       });
     } catch (ex) {
-      throw new Error(`Could not read ${name}: ${ex.message}`);
+      throw new Error(`Could not read ${name}: ${printError(ex)}`);
     }
   }
 }
@@ -68,6 +70,6 @@ export async function readParsable(name: string, opts: IReadOptions): Promise<st
   try {
     return await readFile(name, opts);
   } catch (ex) {
-    throw new Error(`Could not parse ${name}: ${ex.message}`);
+    throw new Error(`Could not parse ${name}: ${printError(ex)}`);
   }
 }

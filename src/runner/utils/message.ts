@@ -2,17 +2,17 @@ import { Segment } from '@stoplight/types';
 import { Replacer } from '../../utils/replacer';
 import { printValue } from '../../utils/printValue';
 
-export interface IMessageVars {
+export type MessageVars = {
   property: Segment;
   error: string;
   description: string | null;
   value: unknown;
   path: string;
-}
+};
 
-export type MessageInterpolator = (str: string, values: IMessageVars) => string;
+export type MessageInterpolator = (str: string, values: MessageVars) => string;
 
-const MessageReplacer = new Replacer<IMessageVars>(2);
+const MessageReplacer = new Replacer<MessageVars>(2);
 
 MessageReplacer.addFunction('print', function (type) {
   if (typeof type !== 'string') return '';

@@ -9,7 +9,7 @@ export interface IFunctionContext {
 }
 
 export type IFunction<O extends object | null = null> = (
-  targetValue: any,
+  targetValue: unknown,
   options: O extends null ? null : O,
   paths: IFunctionPaths,
   otherValues: IFunctionValues,
@@ -21,8 +21,8 @@ export interface IFunctionPaths {
 }
 
 export interface IFunctionValues {
-  original: any;
-  given: any;
+  original: unknown;
+  given: unknown;
   documentInventory: DocumentInventory;
   rule: Rule;
 }

@@ -1,5 +1,5 @@
 import { Cache } from '@stoplight/json-ref-resolver';
-import { ICache } from '@stoplight/json-ref-resolver/types';
+import { ICache, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
 import { readFile, readParsable } from '../fs/reader';
@@ -10,6 +10,7 @@ import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset, isValidRule } from './validation';
 import { parseYaml } from '../parsers';
+import { printError } from '../utils/printError';
 
 export interface IRulesetReadOptions extends IHttpAndFileResolverOptions {
   timeout?: number;
@@ -75,7 +76,7 @@ const createRulesetProcessor = (
       throw new Error('Ruleset must not empty');
     }
 
-    const { result } = await createHttpAndFileResolver({ agent: readOpts?.agent }).resolve(
+    const resolved = await createHttpAndFileResolver({ agent: readOpts?.agent }).resolve(
       parseContent(content, rulesetUri),
       {
         baseUri: rulesetUri,
@@ -89,12 +90,14 @@ const createRulesetProcessor = (
 
           return opts.ref;
         },
-        async parseResolveResult(opts) {
+        parseResolveResult(opts): Promise<IUriParser> {
           opts.result = parseContent(opts.result, opts.targetAuthority.href());
-          return opts;
+          return Promise.resolve(opts);
         },
       },
     );
+
+    const result: unknown = resolved.result;
 
     const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
     const rules = {};
@@ -175,7 +178,7 @@ const createRulesetProcessor = (
               source,
             };
           } catch (ex) {
-            console.warn(`Function '${fnName}' could not be loaded: ${ex.message}`);
+            console.warn(`Function '${fnName}' could not be loaded: ${printError(ex)}`);
           }
         }),
       );

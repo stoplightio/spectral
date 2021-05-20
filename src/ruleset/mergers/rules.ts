@@ -86,8 +86,11 @@ function processRule(rules: Dictionary<IProcessedRule>, name: string, rule: File
 }
 
 function normalizeRule(rule: IRule): IProcessedRule & { recommended: boolean; severity: DiagnosticSeverity } {
-  return Object.assign(Object.defineProperties({}, Object.getOwnPropertyDescriptors(rule)), {
-    recommended: rule.recommended !== false,
-    severity: rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
-  });
+  return Object.assign<IRule, { recommended: boolean; severity: DiagnosticSeverity }>(
+    Object.defineProperties({}, Object.getOwnPropertyDescriptors(rule)),
+    {
+      recommended: rule.recommended !== false,
+      severity: rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
+    },
+  );
 }

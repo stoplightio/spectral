@@ -113,7 +113,7 @@ export function tmpFile(opts?: tmp.TmpNameOptions): Promise<tmp.FileResult> {
 
 const BRACES = /{([^}]+)}/g;
 
-export const applyReplacements = (str: string, values: Dictionary<string>) => {
+export const applyReplacements = (str: string, values: Dictionary<string>): string => {
   const replacer = (match: string, identifier: string): string => {
     if (!(identifier in values)) {
       return match;

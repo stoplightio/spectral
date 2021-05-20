@@ -131,8 +131,8 @@ describe('sortResults', () => {
     expect(indices).toHaveLength(arr.length);
 
     const shuffled = results
-      .map((v, i) => ({ ...v, pos: indices[i] }))
-      .sort((a, b) => a.pos - b.pos)
+      .map<IRuleResult & { pos?: number }>((v, i) => ({ ...v, pos: indices[i] }))
+      .sort((a, b) => a.pos! - b.pos!)
       .map(v => {
         delete v.pos;
         return v;
@@ -187,14 +187,9 @@ describe('compareResults', () => {
     };
 
     [
-      { one: void 0, another: void 0, expected: 0 },
-      { one: 'a', another: void 0, expected: 1 },
-      { one: void 0, another: 'a', expected: -1 },
       { one: 'a', another: 'a', expected: 0 },
       { one: 'a', another: 'b', expected: -1 },
       { one: '2', another: '10', expected: -1 },
-      { one: 1, another: void 0, expected: 1 },
-      { one: void 0, another: 1, expected: -1 },
       { one: 1, another: 1, expected: 0 },
       { one: 1, another: 2, expected: -1 },
       { one: 1, another: '1', expected: 0 },
