@@ -17,7 +17,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: cimg/node:15.1
+      - image: cimg/node:14.17.0
     steps:
       # Checkout the code as the first step.
       - checkout
