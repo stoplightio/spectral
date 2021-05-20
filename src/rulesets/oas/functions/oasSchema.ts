@@ -2,6 +2,7 @@ import { ISchemaOptions } from '../../../functions/schema';
 import { IFunction, IFunctionContext } from '../../../types';
 import * as traverse from 'json-schema-traverse';
 import { SchemaObject } from 'json-schema-traverse';
+import { isObject } from './utils/isObject';
 
 const oasSchema: IFunction<ISchemaOptions> = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
   const formats = otherValues.documentInventory.document.formats;
@@ -71,9 +72,14 @@ function get(obj: SchemaObject, jsonPtr: string): SchemaObject | null {
 
   let curObj: SchemaObject = obj;
   for (const segment of path) {
-    const value = curObj[segment];
-    curObj[segment] = Array.isArray(value) ? value.slice() : { ...value };
-    curObj = curObj[segment];
+    const value: unknown = curObj[segment];
+    if (!isObject(value)) {
+      throw ReferenceError(`${segment} not found`);
+    }
+
+    const newValue = Array.isArray(value) ? value.slice() : { ...value };
+    curObj[segment] = newValue;
+    curObj = newValue;
   }
 
   return curObj;
@@ -86,7 +92,7 @@ const createNullableConverter = (keyword: 'x-nullable' | 'nullable') => {
       schema.type = [schema.type, 'null'];
 
       if (Array.isArray(schema.enum)) {
-        schema.enum = [...schema.enum, null];
+        schema.enum = [...(schema.enum as unknown[]), null];
       }
     }
 

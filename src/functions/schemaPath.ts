@@ -14,6 +14,7 @@ import { Optional } from '@stoplight/types';
 import { getLintTargets } from '../runner/utils/getLintTargets';
 import { IFunction, IFunctionResult } from '../types';
 import { schema } from './schema';
+import { isPlainObject } from '../guards/isPlainObject';
 
 export interface ISchemaPathOptions {
   schemaPath: string;
@@ -25,10 +26,13 @@ export interface ISchemaPathOptions {
 }
 
 export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths, otherValues) => {
+  if (!isPlainObject(targetVal)) return;
+
   // The subsection of the targetVal which contains the good bit
   const relevantItems = getLintTargets(targetVal, opts.field);
 
   // The subsection of the targetValue which contains the schema for us to validate the good bit against
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
   const schemaObject = JSONPath({ path: opts.schemaPath, json: targetVal })[0];
 
   const results: IFunctionResult[] = [];
@@ -37,6 +41,7 @@ export const schemaPath: IFunction<ISchemaPathOptions> = (targetVal, opts, paths
     const result = schema(
       relevantItem.value,
       {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         schema: schemaObject,
         allErrors: opts.allErrors,
       },

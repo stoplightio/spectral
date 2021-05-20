@@ -85,7 +85,7 @@ describe('linter', () => {
     return expect(results).toEqual([
       {
         code: 'rule2',
-        message: '`foo` property is not truthy',
+        message: '`foo` property must be truthy',
         path: ['foo'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
@@ -1202,13 +1202,13 @@ responses:: !!foo
       ).resolves.toEqual([
         expect.objectContaining({
           code: 'header-parameter-names-kebab-case',
-          message: '"fooA" is not kebab-cased: must match the pattern \'^[a-z0-9]+((-[a-z0-9]+)+)?$\'',
+          message: '"fooA" is not kebab-cased: "fooA" must match the pattern "^[a-z0-9]+((-[a-z0-9]+)+)?$"',
           path: ['parameters', '0', 'name'],
         }),
 
         expect.objectContaining({
           code: 'header-parameter-names-kebab-case',
-          message: '"d 1" is not kebab-cased: must match the pattern \'^[a-z0-9]+((-[a-z0-9]+)+)?$\'',
+          message: '"d 1" is not kebab-cased: "d 1" must match the pattern "^[a-z0-9]+((-[a-z0-9]+)+)?$"',
           path: ['foo', 'parameters', '0', 'name'],
         }),
       ]);
@@ -1424,7 +1424,7 @@ responses:: !!foo
     expect(results).toEqual([
       {
         code: 'falsy-foo',
-        message: '`foo` property is not falsy',
+        message: '`foo` property must be falsy',
         path: ['0', 'foo'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,

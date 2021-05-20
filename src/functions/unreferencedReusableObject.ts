@@ -23,7 +23,7 @@ export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: st
 
   return orphans.map(orphanPath => {
     return {
-      message: 'Potential orphaned reusable object has been detected.',
+      message: 'Potential orphaned reusable object has been detected',
       path: safePointerToPath(orphanPath),
     };
   });

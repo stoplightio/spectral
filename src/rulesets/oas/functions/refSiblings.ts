@@ -1,9 +1,6 @@
 import type { JsonPath } from '@stoplight/types';
 import type { IFunction, IFunctionResult } from '../../../types';
-
-function isObject(maybeObj: unknown): maybeObj is object {
-  return typeof maybeObj === 'object' && maybeObj !== null;
-}
+import { isObject } from './utils/isObject';
 
 function getParentValue(document: unknown, path: JsonPath): unknown {
   if (path.length === 0) {

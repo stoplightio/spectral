@@ -27,7 +27,7 @@ describe('falsy', () => {
   test('returns error message if target value is not falsy', () => {
     expect(runFalsy(true)).toEqual([
       {
-        message: '#{{print("property")}}is not falsy',
+        message: '#{{print("property")}}must be falsy',
       },
     ]);
   });

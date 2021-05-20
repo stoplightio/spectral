@@ -39,7 +39,7 @@ export function prepareResults(errors: ErrorObject[]): void {
   // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
   for (const error of errors) {
     if (error.keyword === 'additionalProperties') {
-      error.instancePath = `${error.instancePath}/${error.params['additionalProperty']}`;
+      error.instancePath = `${error.instancePath}/${String(error.params['additionalProperty'])}`;
     }
   }
 

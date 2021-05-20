@@ -6,6 +6,7 @@ import { getAllOperations } from './utils/getAllOperations';
 import { isObject } from './utils/isObject';
 
 export const oasTagDefined: IFunction = targetVal => {
+  if (!isObject(targetVal)) return;
   const results: IFunctionResult[] = [];
 
   const globalTags: string[] = [];
@@ -20,8 +21,10 @@ export const oasTagDefined: IFunction = targetVal => {
 
   const { paths } = targetVal;
 
-  for (const { path, operation } of getAllOperations(paths)) {
-    const { tags } = paths[path][operation];
+  for (const { path, operation, value } of getAllOperations(paths)) {
+    if (!isObject(value)) continue;
+
+    const { tags } = value;
 
     if (!Array.isArray(tags)) {
       continue;

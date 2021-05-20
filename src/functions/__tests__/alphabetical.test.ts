@@ -36,7 +36,7 @@ describe('alphabetical', () => {
       }),
     ).toEqual([
       {
-        message: 'at least 2 properties are not in alphabetical order: "c" should be placed after "b"',
+        message: '"c" must be placed after "b"',
         path: ['$', 'c'],
       },
     ]);
@@ -51,7 +51,7 @@ describe('alphabetical', () => {
 
     expect(runAlphabetical(doc)).toEqual([
       {
-        message: 'at least 2 properties are not in alphabetical order: "400" should be placed after "200"',
+        message: '"400" must be placed after "200"',
         path: ['$', '400'],
       },
     ]);
@@ -61,7 +61,7 @@ describe('alphabetical', () => {
     test('given an unsorted array of strings should return error', () => {
       expect(runAlphabetical(['b', 'a'])).toEqual([
         {
-          message: 'at least 2 properties are not in alphabetical order: "b" should be placed after "a"',
+          message: '"b" must be placed after "a"',
           path: ['$', 0],
         },
       ]);
@@ -74,7 +74,7 @@ describe('alphabetical', () => {
     test('given an unsorted array of numbers should return error', () => {
       expect(runAlphabetical([10, 1])).toEqual([
         {
-          message: 'at least 2 properties are not in alphabetical order: "10" should be placed after "1"',
+          message: '10 must be placed after 1',
           path: ['$', 0],
         },
       ]);
@@ -89,7 +89,7 @@ describe('alphabetical', () => {
     test('given an array of objects with unsorted prop values return an error', () => {
       expect(runAlphabetical([{ a: '10' }, { a: '1' }], 'a')).toEqual([
         {
-          message: 'properties are not in alphabetical order',
+          message: 'properties must follow the alphabetical order',
         },
       ]);
     });
@@ -98,8 +98,8 @@ describe('alphabetical', () => {
       expect(runAlphabetical([{ a: '1' }, { a: '2' }, { a: '2' }], 'a')).toBeUndefined();
     });
 
-    test('given an array primitives should not return error', () => {
-      expect(runAlphabetical([100, 1], 'a')).toBeUndefined();
+    test('given an array of primitives should return error', () => {
+      expect(runAlphabetical([100, 1], 'a')).toEqual([{ message: '#{{print("property")}}must be an object' }]);
     });
   });
 
@@ -124,7 +124,7 @@ describe('alphabetical', () => {
       ),
     ).toEqual([
       {
-        message: 'at least 2 properties are not in alphabetical order: "404" should be placed after "200"',
+        message: '"404" must be placed after "200"',
         path: ['$', '404'],
       },
     ]);

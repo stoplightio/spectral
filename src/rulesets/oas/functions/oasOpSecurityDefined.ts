@@ -19,17 +19,20 @@ function _get(value: unknown, path: JsonPath): unknown {
 export const oasOpSecurityDefined: IFunction<{
   schemesPath: JsonPath;
 }> = (targetVal, options) => {
-  const results: IFunctionResult[] = [];
+  if (!isObject(targetVal) || !isObject(targetVal.paths)) return;
 
   const { schemesPath } = options;
-
   const { paths } = targetVal;
-  const schemes = _get(targetVal, schemesPath);
 
+  const results: IFunctionResult[] = [];
+
+  const schemes = _get(targetVal, schemesPath);
   const allDefs = isObject(schemes) ? Object.keys(schemes) : [];
 
-  for (const { path, operation } of getAllOperations(paths)) {
-    const { security } = paths[path][operation];
+  for (const { path, operation, value } of getAllOperations(paths)) {
+    if (!isObject(value)) continue;
+
+    const { security } = value;
 
     if (!Array.isArray(security)) {
       continue;

@@ -177,7 +177,7 @@ describe('schema-path', () => {
       };
       expect(runSchemaPath(target, invalidFieldToCheck, path)).toEqual([
         {
-          message: '#{{print("property")}}does not exist',
+          message: '#{{print("property")}}must exist',
           path: ['nonsense'],
         },
       ]);

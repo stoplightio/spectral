@@ -1,7 +1,10 @@
 import type { IFunction, IFunctionResult } from '../../../types';
 import { getAllOperations } from './utils/getAllOperations';
+import { isObject } from './utils/isObject';
 
 export const oasOpIdUnique: IFunction = targetVal => {
+  if (!isObject(targetVal) || !isObject(targetVal.paths)) return;
+
   const results: IFunctionResult[] = [];
 
   const { paths } = targetVal;
@@ -9,11 +12,17 @@ export const oasOpIdUnique: IFunction = targetVal => {
   const seenIds: unknown[] = [];
 
   for (const { path, operation } of getAllOperations(paths)) {
-    if (!('operationId' in paths[path][operation])) {
+    const pathValue = paths[path];
+
+    if (!isObject(pathValue)) continue;
+
+    const operationValue = pathValue[operation];
+
+    if (!isObject(operationValue) || !('operationId' in operationValue)) {
       continue;
     }
 
-    const { operationId } = paths[path][operation];
+    const { operationId } = operationValue;
 
     if (seenIds.includes(operationId)) {
       results.push({
