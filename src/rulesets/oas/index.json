@@ -340,7 +340,7 @@
       "message": "{{error}}",
       "recommended": true,
       "type": "validation",
-      "given": "$..[?(@.enum && @.type)]",
+      "given": "$..[?(@ && @.enum && @.type)]",
       "then": {
         "function": "typedEnum"
       }
