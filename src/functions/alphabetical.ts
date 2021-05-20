@@ -59,20 +59,20 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
         ];
       }
 
-      const value = item[keyedBy];
-
-      if (typeof value !== 'string' && typeof value !== 'number') {
-        return [
-          {
-            message: '#{{print("property")}}must be one of the allowed types: number, string',
-          },
-        ];
-      }
-
-      _targetArray.push(value);
+      _targetArray.push(item[keyedBy]);
     }
 
     targetArray = _targetArray;
+  }
+
+  for (const item of targetArray) {
+    if (typeof item !== 'string' && typeof item !== 'number') {
+      return [
+        {
+          message: '#{{print("property")}}must be one of the allowed types: number, string',
+        },
+      ];
+    }
   }
 
   const unsortedItems = getUnsortedItems(targetArray, compare);

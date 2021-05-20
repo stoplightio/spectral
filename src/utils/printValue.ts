@@ -3,7 +3,7 @@ import { isObject } from 'lodash';
 
 export function printValue(value: unknown): string {
   if (value === void 0) {
-    return JSON.stringify('undefined');
+    return 'undefined';
   }
 
   if (isObject(value)) {

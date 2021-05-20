@@ -80,8 +80,20 @@ describe('alphabetical', () => {
       ]);
     });
 
-    test('given an array of objects should NOT return an error', () => {
-      expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toBeUndefined();
+    test('given an array of objects should return an error', () => {
+      expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toEqual([
+        {
+          message: '#{{print("property")}}must be one of the allowed types: number, string',
+        },
+      ]);
+    });
+
+    test('given an array containing invalid values should return an error', () => {
+      expect(runAlphabetical([false, 'a', null])).toEqual([
+        {
+          message: '#{{print("property")}}must be one of the allowed types: number, string',
+        },
+      ]);
     });
   });
 
