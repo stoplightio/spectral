@@ -1,6 +1,5 @@
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
-import { parse } from '@stoplight/yaml';
 import { IParsedResult } from '../document';
 import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { Spectral } from '../spectral';
@@ -482,20 +481,16 @@ describe('linter', () => {
       },
     });
 
-    const result = await spectral.run({
-      'bar-foo': true,
-      x: false,
-      y: '',
-    });
+    const result = await spectral.run(
+      {
+        'bar-foo': true,
+        x: false,
+        y: '',
+      },
+      { ignoreUnknownFormat: true },
+    );
 
     expect(result).toEqual([
-      {
-        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar]',
-        path: [],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Warning,
-        code: 'unrecognized-format',
-      },
       expect.objectContaining({
         code: 'rule3',
       }),
@@ -523,7 +518,7 @@ describe('linter', () => {
             line: 0,
           },
         },
-        severity: DiagnosticSeverity.Warning,
+        severity: DiagnosticSeverity.Error,
       },
     ]);
   });
@@ -1289,27 +1284,6 @@ responses:: !!foo
         path: ['paths', '/test', 'get'],
       }),
     ]);
-  });
-
-  describe('runWithResolved', () => {
-    test('should include both resolved and validation results', async () => {
-      spectral.setRules({
-        'no-info': {
-          // some dumb rule to have some error
-          message: 'should be OK',
-          given: '$.info',
-          then: {
-            function: 'falsy',
-          },
-        },
-      });
-
-      const { result } = await new Resolver().resolve(parse(petstoreMergeKeys));
-      const { resolved, results } = await spectral.runWithResolved(petstoreMergeKeys);
-
-      expect(resolved).toEqual(result);
-      expect(results).toEqual([expect.objectContaining({ code: 'no-info' })]);
-    });
   });
 
   describe('legacy parsed document', () => {

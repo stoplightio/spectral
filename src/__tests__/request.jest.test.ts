@@ -61,16 +61,20 @@ describe('request', () => {
     });
 
     describe('loading a $ref', () => {
-      it('proxies the request', () => {
-        const doc = {
-          info: {
-            $ref: 'http://localhost:8089/ok.json#/info',
+      it('proxies the request', async () => {
+        const doc = JSON.stringify(
+          {
+            info: {
+              $ref: 'http://localhost:8089/ok.json#/info',
+            },
           },
-        };
+          null,
+          2,
+        );
 
         const s = new Spectral({ resolver: createHttpAndFileResolver() });
 
-        return expect(s.runWithResolved(doc)).resolves.toHaveProperty('resolved', {
+        return expect(s.run(doc)).resolves.toHaveProperty('context.resolved', {
           info: {
             title: '',
             description: 'Foo',
@@ -93,16 +97,20 @@ describe('request', () => {
     });
 
     describe('loading a $ref', () => {
-      it('proxies the request', () => {
-        const doc = {
-          info: {
-            $ref: 'http://localhost:8089/ok.json#/info',
+      it('proxies the request', async () => {
+        const doc = JSON.stringify(
+          {
+            info: {
+              $ref: 'http://localhost:8089/ok.json#/info',
+            },
           },
-        };
+          null,
+          2,
+        );
 
         const s = new Spectral({ proxyUri: `http://localhost:${PORT}` });
 
-        return expect(s.runWithResolved(doc)).resolves.toHaveProperty('resolved', {
+        return expect(s.run(doc)).resolves.toHaveProperty('context.resolved', {
           info: {
             title: '',
             description: 'Foo',

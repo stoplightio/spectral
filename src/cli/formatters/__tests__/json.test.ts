@@ -1,9 +1,8 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '../../../types';
-import { sortResults } from '../../../utils';
 import { json } from '../json';
 
-const results: IRuleResult[] = sortResults([
+const results: IRuleResult[] = [
   {
     code: 'operation-description',
     message: 'paths./pets.get.description is not truthy',
@@ -38,7 +37,7 @@ const results: IRuleResult[] = sortResults([
       },
     },
   },
-]);
+];
 
 describe('JSON formatter', () => {
   test('should include ranges', () => {

@@ -74,7 +74,6 @@
     "ajv": "8.5.0",
     "ajv-errors": "3.0.0",
     "ajv-formats": "2.1.0",
-    "blueimp-md5": "2.18.0",
     "chalk": "4.1.0",
     "eol": "0.9.1",
     "expression-eval": "4.0.0",

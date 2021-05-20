@@ -3,7 +3,6 @@ import { DiagnosticSeverity, Dictionary, IDiagnostic, JsonPath } from '@stopligh
 import { JSONSchema7 } from 'json-schema';
 import { IFunction, IProcessedRule, IRule } from '.';
 import { Rule } from '../rule';
-import { ComputeFingerprintFunc } from '../utils';
 
 export type FunctionCollection = Dictionary<IFunction<any>, string>;
 export type RuleCollection = Dictionary<IProcessedRule, string>;
@@ -21,7 +20,6 @@ export type RuleDeclarationCollection = Dictionary<boolean, string>;
 
 export interface IConstructorOpts {
   resolver?: IResolver;
-  computeFingerprint?: ComputeFingerprintFunc;
   useNimma?: boolean;
   proxyUri?: string;
 }
@@ -36,11 +34,6 @@ export interface IRunOpts {
 export interface IRuleResult extends IDiagnostic {
   path: JsonPath;
   code: string | number;
-}
-
-export interface ISpectralFullResult {
-  resolved: unknown;
-  results: IRuleResult[];
 }
 
 export interface IGivenNode {

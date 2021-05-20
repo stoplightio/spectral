@@ -1,8 +1,8 @@
 import { stringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
+import { Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
-import { memoize, merge } from 'lodash';
+import { merge } from 'lodash';
 import type { Agent } from 'http';
 import type * as ProxyAgent from 'proxy-agent';
 
@@ -32,18 +32,14 @@ import {
   IResolver,
   IRuleResult,
   IRunOpts,
-  ISpectralFullResult,
   PartialRuleCollection,
   RegisteredFormats,
   RuleCollection,
   RunRuleCollection,
 } from './types';
 import { IParserOptions, IRuleset, RulesetExceptionCollection } from './types/ruleset';
-import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
-import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
+import { empty, isNimmaEnvVariableSet } from './utils';
 import { DEFAULT_PARSER_OPTIONS } from './consts';
-
-memoize.Cache = WeakMap;
 
 export * from './types';
 
@@ -59,11 +55,7 @@ export class Spectral {
 
   protected readonly runtime: RunnerRuntime;
 
-  private readonly _computeFingerprint: ComputeFingerprintFunc;
-
   constructor(protected readonly opts?: IConstructorOpts) {
-    this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
-
     if (opts?.proxyUri !== void 0) {
       // using eval so bundlers do not include proxy-agent when Spectral is used in the browser
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -122,10 +114,11 @@ export class Spectral {
     return document;
   }
 
-  public async runWithResolved(
+  public async run(
     target: IParsedResult | IDocument | Record<string, unknown> | string,
     opts: IRunOpts = {},
-  ): Promise<ISpectralFullResult> {
+  ): Promise<IRuleResult[]> {
+    // todo: return Results once a few tests are rewritten
     const document = this.parseDocument(target, opts.resolve?.documentUri);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
@@ -145,7 +138,12 @@ export class Spectral {
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         document.formats = null;
         if (registeredFormats.length > 0) {
-          runner.addResult(this._generateUnrecognizedFormatError(document));
+          const formats = Object.keys(this.formats).join(', ');
+          runner.results.addRuntimeError(
+            document,
+            'unrecognized-format',
+            `The provided document does not match any of the registered formats [${formats}]`,
+          );
         }
       } else {
         document.formats = foundFormats;
@@ -158,19 +156,10 @@ export class Spectral {
       exceptions: this.exceptions,
     });
 
-    const results = runner.getResults(this._computeFingerprint);
-
-    return {
-      resolved: inventory.resolved,
-      results,
-    };
-  }
-
-  public async run(
-    target: IParsedResult | IDocument | Record<string, unknown> | string,
-    opts: IRunOpts = {},
-  ): Promise<IRuleResult[]> {
-    return (await this.runWithResolved(target, opts)).results;
+    const results = runner.results.slice();
+    // @ts-expect-error: ;[
+    results.context = runner.results.context;
+    return results;
   }
 
   public setFunctions(functions: FunctionCollection): void {
@@ -268,14 +257,5 @@ export class Spectral {
 
   public registerFormat(format: string, fn: FormatLookup): void {
     this.formats[format] = fn;
-  }
-
-  private _generateUnrecognizedFormatError(document: IDocument): IRuleResult {
-    return generateDocumentWideResult(
-      document,
-      `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(', ')}]`,
-      DiagnosticSeverity.Warning,
-      'unrecognized-format',
-    );
   }
 }

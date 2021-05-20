@@ -1,4 +1,4 @@
-import { DiagnosticSeverity, Optional } from '@stoplight/types';
+import { Optional } from '@stoplight/types';
 import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
 import { flatMap, isObject } from 'lodash';
 import { JSONPathExpression, traverse } from 'nimma';
@@ -6,26 +6,12 @@ import { JSONPathExpression, traverse } from 'nimma';
 import { IDocument, STDIN } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { OptimizedRule, Rule } from '../rule';
-import { IGivenNode, IRuleResult } from '../types';
-import { ComputeFingerprintFunc, prepareResults } from '../utils';
-import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
+import { IGivenNode } from '../types';
 import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
 import { ExceptionLocation, pivotExceptions } from './utils';
-
-const isStdInSource = (inventory: DocumentInventory): boolean => {
-  return inventory.document.source === STDIN;
-};
-
-const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory): IRuleResult => {
-  return generateDocumentWideResult(
-    documentInventory.document,
-    'The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.',
-    DiagnosticSeverity.Warning,
-    'except-but-stdin',
-  );
-};
+import { Results } from './results';
 
 const runRule = (
   context: IRunnerInternalContext,
@@ -74,18 +60,15 @@ const runRule = (
 };
 
 export class Runner {
-  public readonly results: IRuleResult[];
+  public readonly results: Results;
 
   constructor(protected readonly runtime: RunnerRuntime, protected readonly inventory: DocumentInventory) {
-    this.results = [...this.inventory.diagnostics, ...this.document.diagnostics, ...(this.inventory.errors ?? [])];
+    this.results = new Results(inventory);
+    this.results.push(...this.inventory.diagnostics, ...this.document.diagnostics, ...(this.inventory.errors ?? []));
   }
 
   protected get document(): IDocument {
     return this.inventory.document;
-  }
-
-  public addResult(result: IRuleResult): void {
-    this.results.push(result);
   }
 
   public async run(context: IRunnerPublicContext): Promise<void> {
@@ -102,11 +85,13 @@ export class Runner {
       promises: [],
     };
 
-    const isStdIn = isStdInSource(documentInventory);
+    const isStdIn = this.document.source === STDIN;
     const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
 
     if (isStdIn && Object.keys(exceptions).length > 0) {
-      runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
+      throw new Error(
+        'The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.',
+      );
     }
 
     const relevantRules = Object.values(rules).filter(
@@ -161,10 +146,8 @@ export class Runner {
     } finally {
       this.runtime.emit('afterTeardown');
     }
-  }
 
-  public getResults(computeFingerprint: ComputeFingerprintFunc): IRuleResult[] {
-    return prepareResults(this.results, computeFingerprint);
+    this.results.sort();
   }
 }
 

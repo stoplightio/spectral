@@ -38,6 +38,26 @@
     "source": "/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json"
   },
   {
+    "code": "info-matches-stoplight",
+    "path": [
+      "info",
+      "title"
+    ],
+    "message": "Info must contain Stoplight",
+    "severity": 0,
+    "range": {
+      "start": {
+        "line": 4,
+        "character": 13
+      },
+      "end": {
+        "line": 4,
+        "character": 31
+      }
+    },
+    "source": "/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json"
+  },
+  {
     "code": "operation-description",
     "path": [
       "paths",
@@ -96,26 +116,6 @@
       "end": {
         "line": 116,
         "character": 54
-      }
-    },
-    "source": "/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json"
-  },
-  {
-    "code": "info-matches-stoplight",
-    "path": [
-      "info",
-      "title"
-    ],
-    "message": "Info must contain Stoplight",
-    "severity": 0,
-    "range": {
-      "start": {
-        "line": 4,
-        "character": 13
-      },
-      "end": {
-        "line": 4,
-        "character": 31
       }
     },
     "source": "/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json"
