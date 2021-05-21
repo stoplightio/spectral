@@ -1,7 +1,7 @@
 {
   "documentationUrl": "https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md",
   "formats": ["asyncapi2"],
-  "functions": ["asyncApi2PayloadValidation"],
+  "functions": ["asyncApi2PayloadValidation", "asyncApi2SchemaValidation"],
   "rules": {
     "asyncapi-channel-no-empty-parameter": {
       "description": "Channel path should not have empty parameter substitution pattern.",
@@ -169,11 +169,9 @@
         "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.default^"
       ],
       "then": {
-        "function": "schemaPath",
+        "function": "asyncApi2SchemaValidation",
         "functionOptions": {
-          "field": "default",
-          "schemaPath": "$",
-          "allErrors": true
+          "type": "default"
         }
       }
     },
@@ -189,11 +187,9 @@
         "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.examples^"
       ],
       "then": {
-        "function": "schemaPath",
+        "function": "asyncApi2SchemaValidation",
         "functionOptions": {
-          "field": "$.examples.*",
-          "schemaPath": "$",
-          "allErrors": true
+          "type": "examples"
         }
       }
     },
@@ -235,11 +231,9 @@
         "$.channels.*.parameters.*.schema.default^"
       ],
       "then": {
-        "function": "schemaPath",
+        "function": "asyncApi2SchemaValidation",
         "functionOptions": {
-          "field": "default",
-          "schemaPath": "$",
-          "allErrors": true
+          "type": "default"
         }
       }
     },
@@ -255,11 +249,9 @@
         "$.channels.*.parameters.*.schema.examples^"
       ],
       "then": {
-        "function": "schemaPath",
+        "function": "asyncApi2SchemaValidation",
         "functionOptions": {
-          "field": "$.examples.*",
-          "schemaPath": "$",
-          "allErrors": true
+          "type": "examples"
         }
       }
     },

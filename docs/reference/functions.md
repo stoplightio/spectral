@@ -174,35 +174,6 @@ oas3-api-servers:
         minItems: 1
 ```
 
-## schemaPath
-
-The schema-path rule is very meta. It is an extension of the schema rule, but it looks for a schema which exists inside the description document. This may never be useful for anything other than the use-case of checking OpenAPI examples are valid:
-
-<!-- title: functionOptions -->
-
-| name       | description                                                            | type      | required? |
-| ---------- | ---------------------------------------------------------------------- | --------- | --------- |
-| field      | the field to check                                                     | `string`  | yes       |
-| schemaPath | a json path pointing to the json schema to use                         | `string`  | yes       |
-| allErrors  | returns all errors when `true`; otherwise only returns the first error | `boolean` | no        |
-
-<!-- title: example -->
-
-```yaml
-valid-oas-example-in-parameters:
-  description: Examples must be valid against their defined schema.
-  message: "{{error}}"
-  recommended: true
-  severity: 0
-  type: validation
-  given: "$..parameters..[?(@.example && @.schema)]"
-  then:
-    function: schemaPath
-    functionOptions:
-      field: example
-      schemaPath: "$.schema"
-```
-
 ## truthy
 
 The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (targetVal)`.
