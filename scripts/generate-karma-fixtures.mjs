@@ -1,6 +1,9 @@
 #!/usr/bin/env node
-const path = require('path');
-const fs = require('fs');
+import * as path from 'path';
+import * as fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const baseDir = path.join(__dirname, '../__karma__/__fixtures__/');
 

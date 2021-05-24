@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-const recast = require('recast');
-const path = require('path');
-const fs = require('fs');
-const pkg = require('../package.json');
+import recast from 'recast';
+import * as path from 'path';
+import * as fs from 'fs';
+
+const pkg = JSON.parse(fs.readFileSync('../package.json', 'utf8'));
 
 const target = path.join(__dirname, '..', 'src', 'consts.ts');
 
