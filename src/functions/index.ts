@@ -6,7 +6,6 @@ import { falsy } from './falsy';
 import { length } from './length';
 import { pattern } from './pattern';
 import { schema } from './schema';
-import { schemaPath } from './schemaPath';
 import { truthy } from './truthy';
 import { undefined } from './undefined';
 import { unreferencedReusableObject } from './unreferencedReusableObject';
@@ -21,7 +20,6 @@ export const functions = {
   pattern,
   falsy,
   schema,
-  schemaPath,
   truthy,
   undefined,
   xor,
