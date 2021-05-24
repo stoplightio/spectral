@@ -81,7 +81,7 @@
     "fast-glob": "3.2.5",
     "json-schema-migrate": "2.0.0",
     "json-schema-traverse": "1.0.0",
-    "jsonpath-plus": "5.0.3",
+    "jsonpath-plus": "5.0.7",
     "lodash": "4.17.21",
     "nanoid": "2.1.11",
     "nimma": "0.0.0",

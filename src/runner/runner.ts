@@ -59,8 +59,6 @@ const runRule = (
           lintNode(
             context,
             {
-              // @ts-expect-error
-              // this is needed due to broken typings in jsonpath-plus (JSONPathClass.toPathArray is correct from typings point of view, but JSONPathClass is not exported, so it fails at runtime)
               path: JSONPath.toPathArray(result.path),
               value: result.value,
             },
