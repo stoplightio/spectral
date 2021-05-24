@@ -1,5 +1,4 @@
 import type { IFunctionContext, IFunction, IFunctionResult } from '../../../spectral';
-import { isObject } from './utils/isObject';
 import type { JsonPath } from '@stoplight/types';
 
 function getRelevantItems(
@@ -10,11 +9,11 @@ function getRelevantItems(
     return [{ path: ['default'], value: target.default }];
   }
 
-  if (!isObject(target.examples)) {
-    throw new Error('');
+  if (!Array.isArray(target.examples)) {
+    return [];
   }
 
-  return Object.entries(target.examples).map(([key, value]) => ({
+  return Array.from(target.examples.entries()).map(([key, value]) => ({
     path: ['examples', key],
     value,
   }));
@@ -27,7 +26,7 @@ const asyncApi2SchemaValidation: IFunction<{ type: 'default' | 'examples' }> = f
   paths,
   otherValues,
 ) {
-  if (!isObject(targetVal)) return;
+  if (targetVal === null || typeof targetVal !== 'object') return;
 
   const schemaObject = targetVal;
   const relevantItems = getRelevantItems(targetVal, opts.type);

@@ -23,11 +23,11 @@ describe('asyncApi2SchemaValidation', () => {
     expect(results).toEqual([
       {
         message: '`0` property type must be string',
-        path: ['examples', '0'],
+        path: ['examples', 0],
       },
       {
         message: '`2` property type must be string',
-        path: ['examples', '2'],
+        path: ['examples', 2],
       },
     ]);
   });
