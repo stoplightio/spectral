@@ -13,7 +13,7 @@ export const xor: IFunction<IXorRuleOptions> = (targetVal, opts) => {
   if (!isPlainObject(targetVal)) {
     return [
       {
-        message: 'unsupported value',
+        message: '#{{print("property")}}must be an object',
       },
     ];
   }
