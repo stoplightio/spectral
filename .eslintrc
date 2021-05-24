@@ -6,24 +6,13 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "func-names": "off",
-    "no-constant-condition": "warn",
-    "no-param-reassign": "off",
-    "no-restricted-syntax": "off",
-    "no-continue": "off",
-    "no-label-var": "off",
-    "no-void": "off",
-    "no-undefined": "off",
-
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/prefer-for-of": "error",
-    "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
@@ -34,8 +23,6 @@
       }
     ],
     "@typescript-eslint/no-var-requires": "warn",
-    "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/require-await": "off",
     "@typescript-eslint/explicit-function-return-type": "warn"
   },
   "overrides": [
@@ -44,6 +31,7 @@
         "src/**/*.ts"
       ],
       "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
       ],
       "parserOptions": {
@@ -55,23 +43,17 @@
         "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
         "@typescript-eslint/strict-boolean-expressions": "warn",
         "@typescript-eslint/no-throw-literal": "error",
-        "@typescript-eslint/require-await": "off"
-      }
-    },
-    {
-      "files": [
-        "src/rulesets/*/functions/**/*.ts"
-      ],
-      "rules": {
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/ban-types": "warn"
       }
     },
 
     {
       "files": [
-        "**/__tests__/*.{ts,js}"
+        "src/**/__tests__/*.ts",
+        "test-harness/**/*.{ts,js}"
       ],
       "rules": {
+        "@typescript-eslint/strict-boolean-expressions": "off",
         "@typescript-eslint/ban-ts-ignore": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-explicit-any": "off",
@@ -79,13 +61,17 @@
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/unbound-method": "off",
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
       }
     },
 
     {
       "files": [
-        "**/__tests__/**/*.jest.test.{ts,js}"
+        "src/**/__tests__/**/*.jest.test.{ts,js}"
       ],
       "env": {
         "jest": true
@@ -94,7 +80,7 @@
 
     {
       "files": [
-        "**/__tests__/**/*.karma.test.{ts,js}"
+        "src/**/__tests__/**/*.karma.test.{ts,js}"
       ],
       "env": {
         "browser": true,
@@ -104,25 +90,8 @@
 
     {
       "files": [
+        "scripts/**/*.{mjs,ts}",
         "test-harness/**/*.{ts,js}"
-      ],
-      "env": {
-        "node": true
-      }
-    },
-
-    {
-      "files": [
-        "test-harness/**/*.js"
-      ],
-      "rules": {
-        "@typescript-eslint/no-var-requires": "off"
-      }
-    },
-
-    {
-      "files": [
-        "scripts/**/*.js"
       ],
       "env": {
         "node": true

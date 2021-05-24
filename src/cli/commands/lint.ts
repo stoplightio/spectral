@@ -21,8 +21,8 @@ const lintCommand: CommandModule = {
         description:
           'Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.',
         coerce(values) {
-          if (values.length > 0) {
-            return values;
+          if (Array.isArray(values) && values.length > 0) {
+            return values as unknown[];
           }
 
           // https://stackoverflow.com/questions/39801643/detect-if-node-receives-stdin
@@ -75,7 +75,7 @@ const lintCommand: CommandModule = {
           type: 'string',
           coerce(value): Optional<string[]> {
             if (value === void 0) return;
-            return Array.isArray(value) ? value.map(String) : [value];
+            return (Array.isArray(value) ? value : [value]).map<string>(String);
           },
         },
         'fail-severity': {

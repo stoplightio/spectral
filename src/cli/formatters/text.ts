@@ -5,6 +5,9 @@ import { getSeverityName, groupBySource } from './utils';
 
 function renderResults(results: IRuleResult[]): string {
   return results
+    .filter<IRuleResult & { source: string }>(
+      (result): result is IRuleResult & { source: string } => typeof result.source === 'string',
+    )
     .map(result => {
       const line = result.range.start.line + 1;
       const character = result.range.start.character + 1;

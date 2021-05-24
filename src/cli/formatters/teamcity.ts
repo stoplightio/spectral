@@ -19,14 +19,14 @@ function escapeString(str: Optional<string | number>): string {
     .replace(/\]/g, '|]');
 }
 
-function inspectionType(result: IRuleResult): string {
+function inspectionType(result: IRuleResult & { source: string }): string {
   const code = escapeString(result.code);
   const severity = getSeverityName(result.severity);
   const message = escapeString(result.message);
   return `##teamcity[inspectionType category='openapi' id='${code}' name='${code}' description='${severity} -- ${message}']`;
 }
 
-function inspection(result: IRuleResult): string {
+function inspection(result: IRuleResult & { source: string }): string {
   const code = escapeString(result.code);
   const severity = getSeverityName(result.severity);
   const message = escapeString(result.message);
@@ -35,7 +35,12 @@ function inspection(result: IRuleResult): string {
 }
 
 function renderResults(results: IRuleResult[]): string {
-  return results.map(result => `${inspectionType(result)}\n${inspection(result)}`).join('\n');
+  return results
+    .filter<IRuleResult & { source: string }>(
+      (result): result is IRuleResult & { source: string } => typeof result.source === 'string',
+    )
+    .map(result => `${inspectionType(result)}\n${inspection(result)}`)
+    .join('\n');
 }
 
 function renderGroupedResults(groupedResults: Dictionary<IRuleResult[]>): string {

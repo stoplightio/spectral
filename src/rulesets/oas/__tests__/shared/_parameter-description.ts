@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Spectral } from '../../../../spectral';
 
-export default (s: Spectral, oasVersion: number) => {
+export default (s: Spectral, oasVersion: number): void => {
   test('should work for shared level parameters', async () => {
     const results = await s.run({
       swagger: '2.0',

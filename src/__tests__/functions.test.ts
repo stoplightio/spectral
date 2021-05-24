@@ -2,7 +2,7 @@ import { IRule } from '..';
 import { Spectral } from '../spectral';
 import { IRuleResult } from '../types';
 
-const applyRuleToObject = async (r: IRule, o: object): Promise<IRuleResult[]> => {
+const applyRuleToObject = async (r: IRule, o: Record<string, unknown>): Promise<IRuleResult[]> => {
   const s = new Spectral();
   s.setRules({
     testRule: r,
@@ -13,7 +13,7 @@ const applyRuleToObject = async (r: IRule, o: object): Promise<IRuleResult[]> =>
 describe('functions', () => {
   describe('pattern', () => {
     test('returns results if pattern is not matched (on string)', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',
@@ -36,7 +36,7 @@ describe('functions', () => {
     });
 
     test('returns resolved if pattern is not matched (on object keys)', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',
@@ -65,7 +65,7 @@ describe('functions', () => {
     });
 
     test('dont return resolved if pattern is matched (on string)', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',
@@ -87,7 +87,7 @@ describe('functions', () => {
     });
 
     test('dont return resolved if pattern is matched (on object keys)', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',
@@ -137,7 +137,7 @@ describe('functions', () => {
     ];
 
     test('return resolved if string, number, array, or object is greater than max', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',
@@ -161,7 +161,7 @@ describe('functions', () => {
     });
 
     test('return resolved if string, number, array, or object is less than min', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',
@@ -185,7 +185,7 @@ describe('functions', () => {
     });
 
     test('dont return a resolved if string, number, array, or object is between min and max', async () => {
-      expect(
+      await expect(
         applyRuleToObject(
           {
             message: '',

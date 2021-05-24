@@ -7,15 +7,16 @@ import { assignAjvInstance } from './ajv';
 import ajvErrors from 'ajv-errors';
 import Ajv, { Options } from 'ajv';
 import addFormats from 'ajv-formats';
-import { Dictionary, Optional } from '@stoplight/types';
+import { Optional } from '@stoplight/types';
 import { draft7 } from 'json-schema-migrate';
+import type { JSONSchema } from '../../types';
 
 export interface ISchemaFunction extends IFunction<ISchemaOptions> {
   createAJVInstance(opts: Options): Ajv;
 }
 
 export interface ISchemaOptions {
-  schema: object;
+  schema: Record<string, unknown> | JSONSchema;
   allErrors?: boolean;
   ajv?: ValidateFunction;
   dialect?: 'auto' | 'draft4' | 'draft6' | 'draft7' | 'draft2019-09' | 'draft2020-12';
@@ -47,13 +48,13 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
       const dialect = opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7';
       if (dialect === 'draft4' || dialect === 'draft6') {
         schemaObj = JSON.parse(JSON.stringify(schemaObj)) as Record<string, unknown>;
-        (schemaObj as Record<string, unknown>).$schema = 'http://json-schema.org/draft-07/schema#';
+        schemaObj.$schema = 'http://json-schema.org/draft-07/schema#';
         draft7(schemaObj);
       }
 
       const ajv = assignAjvInstance(dialect, allErrors);
 
-      const $id = (schemaObj as Dictionary<unknown>).$id;
+      const $id = (schemaObj as Record<string, unknown>).$id;
 
       if (typeof $id !== 'string') {
         validator = ajv.compile(schemaObj);
@@ -95,11 +96,10 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
   return results;
 };
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 schema.createAJVInstance = (opts: Options): Ajv => {
   const ajv = new Ajv(opts);
   addFormats(ajv);
-  if (opts.allErrors) {
+  if (opts.allErrors === true) {
     ajvErrors(ajv);
   }
   return ajv;

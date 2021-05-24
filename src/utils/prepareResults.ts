@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const md5 = require('blueimp-md5');
 
 import { uniqBy } from 'lodash';

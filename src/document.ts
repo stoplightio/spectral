@@ -1,10 +1,10 @@
 import { normalize } from '@stoplight/path';
 import { DeepReadonly, GetLocationForJsonPath, IParserResult, IRange, JsonPath, Optional } from '@stoplight/types';
-import { isObjectLike } from 'lodash';
 import { formatParserDiagnostics } from './errorMessages';
 import { IParser } from './parsers/types';
 import { IRuleResult } from './types';
 import { startsWithProtocol } from './utils';
+import { isPlainObject } from './guards/isPlainObject';
 
 export const STDIN = '<STDIN>';
 
@@ -13,7 +13,7 @@ export interface IDocument<D = unknown> {
   readonly diagnostics: ReadonlyArray<IRuleResult>;
   formats?: string[] | null;
   getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange>;
-  trapAccess<T extends object = object>(obj: T): T;
+  trapAccess<T extends Record<string, unknown> = Record<string, unknown>>(obj: T): T;
   data: D;
 }
 
@@ -25,7 +25,7 @@ export function normalizeSource(source: Optional<string>): string | null {
   return source.length > 0 && !startsWithProtocol(source) ? normalize(source) : source;
 }
 
-export class Document<D = unknown, R extends IParserResult = IParserResult<D>> implements IDocument<D> {
+export class Document<D = unknown, R extends IParserResult<D> = IParserResult<D>> implements IDocument<D> {
   protected readonly parserResult: R;
   public readonly source: string | null;
   public readonly diagnostics: IRuleResult[];
@@ -42,7 +42,7 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> i
     return this.parser.getLocationForJsonPath(this.parserResult, path, closest)?.range;
   }
 
-  public trapAccess<T extends object = object>(obj: T): T {
+  public trapAccess<T extends Record<string, unknown> = Record<string, unknown>>(obj: T): T {
     return this.parser.trapAccess<T>(obj);
   }
 
@@ -59,12 +59,12 @@ export class Document<D = unknown, R extends IParserResult = IParserResult<D>> i
     };
   }
 
-  public get data() {
+  public get data(): D {
     return this.parserResult.data;
   }
 }
 
-export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult> implements IDocument<D> {
+export class ParsedDocument<D = unknown, R extends IParsedResult<D> = IParsedResult<D>> implements IDocument<D> {
   public readonly source: string | null;
   public readonly diagnostics: IRuleResult[];
   public formats?: string[] | null;
@@ -75,7 +75,7 @@ export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult
     this.diagnostics = formatParserDiagnostics(this.parserResult.parsed.diagnostics, this.source);
   }
 
-  public trapAccess<T extends object = object>(obj: T): T {
+  public trapAccess<T extends Record<string, unknown> = Record<string, unknown>>(obj: T): T {
     return obj;
   }
 
@@ -83,17 +83,17 @@ export class ParsedDocument<D = unknown, R extends IParsedResult = IParsedResult
     return this.parserResult.getLocationForJsonPath(this.parserResult.parsed, path, closest)?.range;
   }
 
-  public get data() {
+  public get data(): D {
     return this.parserResult.parsed.data;
   }
 }
 
-export interface IParsedResult<R extends IParserResult = IParserResult<unknown, any, any, any>> {
-  parsed: IParserResult;
+export interface IParsedResult<D = unknown, R extends IParserResult<D> = IParserResult<D, any, any, any>> {
+  parsed: R;
   getLocationForJsonPath: GetLocationForJsonPath<R>;
   source?: string;
   formats?: string[];
 }
 
-export const isParsedResult = (obj: any): obj is IParsedResult =>
-  isObjectLike(obj?.parsed) && typeof obj.getLocationForJsonPath === 'function';
+export const isParsedResult = (obj: unknown): obj is IParsedResult =>
+  isPlainObject(obj) && isPlainObject(obj.parsed) && typeof obj.getLocationForJsonPath === 'function';

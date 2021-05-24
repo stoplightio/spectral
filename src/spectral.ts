@@ -4,6 +4,7 @@ import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 import type { Agent } from 'http';
+import type * as ProxyAgent from 'proxy-agent';
 
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
@@ -26,6 +27,7 @@ import {
   FormatLookup,
   FunctionCollection,
   IConstructorOpts,
+  IFunction,
   IFunctionContext,
   IResolver,
   IRuleResult,
@@ -64,8 +66,8 @@ export class Spectral {
 
     if (opts?.proxyUri !== void 0) {
       // using eval so bundlers do not include proxy-agent when Spectral is used in the browser
-      const ProxyAgent = eval('require')('proxy-agent');
-      this.agent = new ProxyAgent(opts.proxyUri);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      this.agent = new (eval('require')('proxy-agent') as typeof ProxyAgent)(opts.proxyUri);
     }
     if (opts?.resolver !== void 0) {
       this._resolver = opts.resolver;
@@ -86,7 +88,7 @@ export class Spectral {
   }
 
   protected parseDocument(
-    target: IParsedResult | IDocument | object | string,
+    target: IParsedResult | IDocument | Record<string, unknown> | string,
     documentUri: Optional<string>,
   ): IDocument {
     const document =
@@ -121,7 +123,7 @@ export class Spectral {
   }
 
   public async runWithResolved(
-    target: IParsedResult | IDocument | object | string,
+    target: IParsedResult | IDocument | Record<string, unknown> | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
     const document = this.parseDocument(target, opts.resolve?.documentUri);
@@ -164,7 +166,10 @@ export class Spectral {
     };
   }
 
-  public async run(target: IParsedResult | Document | object | string, opts: IRunOpts = {}): Promise<IRuleResult[]> {
+  public async run(
+    target: IParsedResult | IDocument | Record<string, unknown> | string,
+    opts: IRunOpts = {},
+  ): Promise<IRuleResult[]> {
     return (await this.runWithResolved(target, opts)).results;
   }
 
@@ -179,7 +184,7 @@ export class Spectral {
         cache: new Map(),
       };
 
-      this.functions[key] = setFunctionContext(context, mergedFunctions[key]);
+      this.functions[key] = setFunctionContext<IFunction>(context, mergedFunctions[key]);
     }
   }
 

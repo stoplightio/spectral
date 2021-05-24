@@ -13,7 +13,7 @@ addFormats(ajv);
 const validate = ajv.addSchema(ruleSchema).addSchema(shared).compile(rulesetSchema);
 
 const serializeAJVErrors = (errors: ErrorObject[]): string =>
-  errors.map(({ message, instancePath }) => `${instancePath} ${message}`).join('\n');
+  errors.map(({ message, instancePath }) => `${instancePath} ${message ?? ''}`).join('\n');
 
 export class ValidationError extends AJV.ValidationError {
   public message: string;

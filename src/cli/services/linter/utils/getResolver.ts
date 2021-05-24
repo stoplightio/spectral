@@ -6,6 +6,7 @@ import type { Resolver } from '@stoplight/json-ref-resolver';
 export const getResolver = (resolver: Optional<string>): Resolver => {
   if (resolver !== void 0) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return require(isAbsolute(resolver) ? resolver : join(process.cwd(), resolver));
     } catch ({ message }) {
       throw new Error(formatMessage(message) ?? message);

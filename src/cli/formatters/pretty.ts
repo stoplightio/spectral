@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 /**
  * Copyright JS Foundation and other contributors, https://js.foundation
  *
@@ -81,7 +82,7 @@ export const pretty: Formatter = results => {
 
   output += ui.toString();
   output += chalk[summaryColor].bold(`${uniqueIssues.length} Unique Issue(s)\n`);
-  output += chalk[summaryColor].bold(`\u2716 ${summaryText}\n`);
+  output += chalk[summaryColor].bold(`\u2716${summaryText !== null ? ` ${summaryText}` : ''}\n`);
 
   return output;
 };

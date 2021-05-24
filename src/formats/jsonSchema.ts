@@ -1,5 +1,6 @@
-import { isObject } from 'lodash';
 import { JSONSchema } from '../types';
+import { isPlainObject } from '../guards/isPlainObject';
+import { isObject } from 'lodash';
 
 const KNOWN_JSON_SCHEMA_TYPES = ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
 const KNOWN_JSON_SCHEMA_COMPOUND_KEYWORDS = ['allOf', 'oneOf', 'anyOf', 'not', 'if'];
@@ -15,12 +16,12 @@ const hasValidJSONSchemaType = (document: Partial<{ type?: unknown }>): boolean 
   return Array.isArray(document.type) && document.type.every(type => KNOWN_JSON_SCHEMA_TYPES.includes(type));
 };
 
-const hasValidJSONSchemaCompoundKeyword = (document: object): boolean =>
+const hasValidJSONSchemaCompoundKeyword = (document: Record<string, unknown>): boolean =>
   KNOWN_JSON_SCHEMA_COMPOUND_KEYWORDS.some(combiner => combiner in document && isObject(document[combiner]));
 
 function hasSchemaVersion(document: unknown): document is JSONSchema & { $schema: string } {
   return (
-    isObject(document) &&
+    isPlainObject(document) &&
     '$schema' in document &&
     typeof (document as Partial<{ $schema: unknown }>).$schema === 'string'
   );
@@ -30,7 +31,7 @@ export const isJSONSchema = (document: unknown): document is JSONSchema & { $sch
   hasSchemaVersion(document) && document.$schema.includes('//json-schema.org/');
 
 export const isJSONSchemaLoose = (document: unknown): boolean =>
-  isObject(document) &&
+  isPlainObject(document) &&
   (isJSONSchema(document) || hasValidJSONSchemaType(document) || hasValidJSONSchemaCompoundKeyword(document));
 
 export const isJSONSchemaDraft4 = createJSONSchemaDraftMatcher('draft4');

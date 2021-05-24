@@ -25,7 +25,9 @@ export const getLintTargets = (targetValue: unknown, field: Optional<string>): I
         resultType: 'all',
         callback(result) {
           targets.push({
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             path: JSONPath.toPathArray(result.path).slice(1),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             value: result.value,
           });
         },

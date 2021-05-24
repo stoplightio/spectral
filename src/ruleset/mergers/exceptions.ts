@@ -25,7 +25,7 @@ const normalize = ($ref: string, rulesetUri?: string): string => {
 
   if (source === null && pointer === null) {
     throw new InvalidUriError(
-      `Malformed exception key (${location}). You must provide either a valid pointer or a valid source, or a source with a pointer.`,
+      `Malformed exception key (${$ref}). You must provide either a valid pointer or a valid source, or a source with a pointer.`,
     );
   }
 

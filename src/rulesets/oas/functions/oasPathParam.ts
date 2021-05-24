@@ -30,7 +30,7 @@ const isUnknownNamedPathParam = (
     return false;
   }
 
-  if (!p.required) {
+  if (p.required !== true) {
     results.push(generateResult(requiredMessage(p.name), path));
   }
 
@@ -47,8 +47,8 @@ const ensureAllDefinedPathParamsAreUsedInPath = (
   params: Record<string, JsonPath>,
   expected: string[],
   results: IFunctionResult[],
-) => {
-  for (const p in params) {
+): void => {
+  for (const p of Object.keys(params)) {
     if (!params[p]) {
       continue;
     }
@@ -60,13 +60,13 @@ const ensureAllDefinedPathParamsAreUsedInPath = (
   }
 };
 
-const ensureAllExpectedParamsinPathAreDefined = (
+const ensureAllExpectedParamsInPathAreDefined = (
   path: string,
   params: Record<string, Segment[]>,
   expected: string[],
   operationPath: Segment[],
   results: IFunctionResult[],
-) => {
+): void => {
   for (const p of expected) {
     if (!(p in params)) {
       results.push(
@@ -176,7 +176,7 @@ export const oasPathParam: IFunction = targetVal => {
 
         const definedParams = { ...topParams, ...operationParams };
         ensureAllDefinedPathParamsAreUsedInPath(path, definedParams, pathElements, results);
-        ensureAllExpectedParamsinPathAreDefined(path, definedParams, pathElements, operationPath, results);
+        ensureAllExpectedParamsInPathAreDefined(path, definedParams, pathElements, operationPath, results);
       }
     }
   }
@@ -192,9 +192,9 @@ function generateResult(message: string, path: JsonPath): IFunctionResult {
 }
 
 const requiredMessage = (name: string) =>
-  `Path parameter \`${name}\` must have a \`required\` property that is set to \`true\`.`;
+  `Path parameter \`${name}\` must have a \`required\` property that is set to \`true\`.` as const;
 
 const uniqueDefinitionMessage = (name: string) =>
-  `Path parameter \`${name}\` is defined multiple times. Path parameters must be unique.`;
+  `Path parameter \`${name}\` is defined multiple times. Path parameters must be unique.` as const;
 
 export default oasPathParam;

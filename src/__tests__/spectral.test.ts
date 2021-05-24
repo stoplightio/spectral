@@ -99,7 +99,6 @@ describe('spectral', () => {
       const s = new Spectral();
 
       s.setRules({
-        // @ts-ignore
         rule1: {
           message: '',
           given: '$',

@@ -1,10 +1,12 @@
 import type { IFunctionContext, IFunction, IFunctionResult } from '../../../spectral';
 import type { JsonPath } from '@stoplight/types';
 
-function getRelevantItems(
-  target: Record<string, unknown>,
-  type: 'default' | 'examples',
-): { path: JsonPath; value: unknown }[] {
+type SchemaFragment = {
+  default?: unknown;
+  examples?: unknown[];
+};
+
+function getRelevantItems(target: SchemaFragment, type: 'default' | 'examples'): { path: JsonPath; value: unknown }[] {
   if (type === 'default') {
     return [{ path: ['default'], value: target.default }];
   }
@@ -13,10 +15,19 @@ function getRelevantItems(
     return [];
   }
 
-  return Array.from(target.examples.entries()).map(([key, value]) => ({
+  return Array.from<[number, unknown]>(target.examples.entries()).map(([key, value]) => ({
     path: ['examples', key],
     value,
   }));
+}
+
+function isSchemaFragment(maybeSchemaFragment: unknown): maybeSchemaFragment is SchemaFragment {
+  if (typeof maybeSchemaFragment !== 'object' || maybeSchemaFragment === null || Array.isArray(maybeSchemaFragment)) {
+    return false;
+  }
+
+  const schemaFragment = maybeSchemaFragment as Record<string, unknown>;
+  return 'default' in schemaFragment || ('examples' in schemaFragment && Array.isArray(schemaFragment.examples));
 }
 
 const asyncApi2SchemaValidation: IFunction<{ type: 'default' | 'examples' }> = function (
@@ -26,7 +37,13 @@ const asyncApi2SchemaValidation: IFunction<{ type: 'default' | 'examples' }> = f
   paths,
   otherValues,
 ) {
-  if (targetVal === null || typeof targetVal !== 'object') return;
+  if (!isSchemaFragment(targetVal)) {
+    return [
+      {
+        message: `#{{print("property")}must be an object containing "default" or an "examples" array`,
+      },
+    ];
+  }
 
   const schemaObject = targetVal;
   const relevantItems = getRelevantItems(targetVal, opts.type);
@@ -38,7 +55,6 @@ const asyncApi2SchemaValidation: IFunction<{ type: 'default' | 'examples' }> = f
       this,
       relevantItem.value,
       {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         schema: schemaObject,
         allErrors: true,
       },

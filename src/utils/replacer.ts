@@ -1,9 +1,9 @@
 import { Dictionary } from '@stoplight/types';
 import { eval, parse } from 'expression-eval';
 
-export type Transformer<V = object> = (this: V, ...args: unknown[]) => string;
+export type Transformer<V = Record<string, unknown>> = (this: V, ...args: unknown[]) => string;
 
-export class Replacer<V extends object> {
+export class Replacer<V extends Record<string, unknown>> {
   protected readonly regex: RegExp;
   protected readonly functions: Dictionary<Transformer<V>>;
 
@@ -19,11 +19,13 @@ export class Replacer<V extends object> {
 
   public print(input: string, values: V): string {
     return input.replace(this.regex, (substr, identifier, index) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const shouldEvaluate = input[index] === '#';
 
       if (shouldEvaluate) {
         try {
           return String(
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             eval(parse(identifier), {
               ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
                 fns[name] = fn.bind(values);
@@ -42,6 +44,7 @@ export class Replacer<V extends object> {
         return '';
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return String(values[identifier]);
     });
   }

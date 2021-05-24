@@ -37,11 +37,11 @@ export class DocumentInventory {
     return this.document.data;
   }
 
-  public get formats() {
-    return this.document.formats;
+  public get formats(): string[] | null {
+    return this.document.formats ?? null;
   }
 
-  constructor(public readonly document: IDocument<unknown>, protected resolver: IResolver) {
+  constructor(public readonly document: IDocument, protected resolver: IResolver) {
     this.graph = null;
     this.errors = null;
 
@@ -101,6 +101,7 @@ export class DocumentInventory {
 
       let { source } = this;
 
+      // eslint-disable-next-line no-constant-condition
       while (true) {
         if (source === null || this.graph === null) return null;
 
@@ -127,7 +128,7 @@ export class DocumentInventory {
           source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
 
           resolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
-          const obj =
+          const obj: unknown =
             scopedPath.length === 0 || hasRef(resolvedDoc.data) ? resolvedDoc.data : get(resolvedDoc.data, scopedPath);
 
           if (hasRef(obj)) {
@@ -148,7 +149,7 @@ export class DocumentInventory {
     }
   }
 
-  protected parseResolveResult = async (resolveOpts: IUriParser) => {
+  protected parseResolveResult = (resolveOpts: IUriParser): Promise<IUriParser> => {
     const source = resolveOpts.targetAuthority.href().replace(/\/$/, '');
     const ext = extname(source);
 
@@ -161,8 +162,9 @@ export class DocumentInventory {
       this.diagnostics.push(...formatParserDiagnostics(document.diagnostics, document.source));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.referencedDocuments[source] = document;
 
-    return resolveOpts;
+    return Promise.resolve(resolveOpts);
   };
 }

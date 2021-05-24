@@ -33,13 +33,13 @@ export const length: IFunction<ILengthRuleOptions> = (targetVal, opts) => {
 
   if (typeof min !== 'undefined' && value < min) {
     results.push({
-      message: `#{{print("property")} must not be longer than ${printValue(min)}`,
+      message: `#{{print("property")}must not be longer than ${printValue(min)}`,
     });
   }
 
   if (typeof max !== 'undefined' && value > max) {
     results.push({
-      message: `#{{print("property")} must be shorter than ${printValue(max)}`,
+      message: `#{{print("property")}must be shorter than ${printValue(max)}`,
     });
   }
 

@@ -1,6 +1,7 @@
 import { isObject } from 'lodash';
 import { IFunction } from '../types';
 import { printValue } from '../utils/printValue';
+import { isPlainObject } from '../guards/isPlainObject';
 
 export interface IAlphaRuleOptions {
   /** if sorting array of objects, which key to use for comparison */
@@ -29,17 +30,33 @@ const getUnsortedItems = <T>(arr: T[], compareFn: (a: T, B: T) => number): null 
   return null;
 };
 
+function isStringOrNumber(maybeStringOrNumber: unknown): maybeStringOrNumber is string | number {
+  return typeof maybeStringOrNumber === 'string' || typeof maybeStringOrNumber === 'number';
+}
+
+function isValidArray(arr: unknown[]): arr is (number | string)[] {
+  return arr.every(isStringOrNumber);
+}
+
 export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opts, paths, { documentInventory }) => {
   if (!isObject(targetVal)) return;
 
-  let targetArray: (string | number)[];
+  let targetArray: unknown[];
 
   if (Array.isArray(targetVal)) {
     targetArray = targetVal;
+  } else if (isPlainObject(targetVal)) {
+    targetArray = Object.keys(
+      documentInventory
+        .findAssociatedItemForPath(paths.given, true)
+        ?.document.trapAccess<typeof targetVal>(targetVal) ?? targetVal,
+    );
   } else {
-    targetVal =
-      documentInventory.findAssociatedItemForPath(paths.given, true)?.document.trapAccess(targetVal) ?? targetVal;
-    targetArray = Object.keys(targetVal);
+    return [
+      {
+        message: '#{{print("property")}}must be an object or an array',
+      },
+    ];
   }
 
   if (targetArray.length < 2) {
@@ -65,14 +82,12 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
     targetArray = _targetArray;
   }
 
-  for (const item of targetArray) {
-    if (typeof item !== 'string' && typeof item !== 'number') {
-      return [
-        {
-          message: '#{{print("property")}}must be one of the allowed types: number, string',
-        },
-      ];
-    }
+  if (!isValidArray(targetArray)) {
+    return [
+      {
+        message: '#{{print("property")}}must be one of the allowed types: number, string',
+      },
+    ];
   }
 
   const unsortedItems = getUnsortedItems(targetArray, compare);
