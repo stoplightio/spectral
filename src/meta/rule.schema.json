@@ -197,41 +197,6 @@
           "if": {
             "properties": {
               "function": {
-                "const": "schema-path"
-              }
-            }
-          },
-          "then": {
-            "required": ["functionOptions"],
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "schemaPath": {
-                    "type": "string"
-                  },
-                  "field": {
-                    "type": "string"
-                  },
-                  "oasVersion": {
-                    "enum": [2, 3, 3.1],
-                    "type": "number"
-                  },
-                  "allErrors": {
-                    "type": "boolean"
-                  }
-                },
-                "required": ["schemaPath"],
-                "type": "object"
-              }
-            }
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
                 "const": "unreferencedReusableObject"
               }
             }

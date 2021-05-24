@@ -299,63 +299,57 @@ describe('Ruleset Validation', () => {
   });
 
   describe('then validation', () => {
-    describe.each([
-      'casing',
-      'enumeration',
-      'length',
-      'pattern',
-      'schema',
-      'schema-path',
-      'unreferencedReusableObject',
-      'xor',
-    ])('%s function', name => {
-      it('complains about empty options', () => {
-        expect(
-          assertValidRuleset.bind(null, {
-            rules: {
-              rule: {
-                given: '$',
-                then: {
-                  function: name,
-                  functionOptions: {},
+    describe.each(['casing', 'enumeration', 'length', 'pattern', 'schema', 'unreferencedReusableObject', 'xor'])(
+      '%s function',
+      name => {
+        it('complains about empty options', () => {
+          expect(
+            assertValidRuleset.bind(null, {
+              rules: {
+                rule: {
+                  given: '$',
+                  then: {
+                    function: name,
+                    functionOptions: {},
+                  },
                 },
               },
-            },
-          }),
-        ).toThrow(ValidationError);
-      });
+            }),
+          ).toThrow(ValidationError);
+        });
 
-      it('complains about missing options', () => {
-        expect(
-          assertValidRuleset.bind(null, {
-            rules: {
-              rule: {
-                given: '$',
-                then: {
-                  function: name,
+        it('complains about missing options', () => {
+          expect(
+            assertValidRuleset.bind(null, {
+              rules: {
+                rule: {
+                  given: '$',
+                  then: {
+                    function: name,
+                  },
                 },
               },
-            },
-          }),
-        ).toThrow(ValidationError);
-      });
+            }),
+          ).toThrow(ValidationError);
+        });
 
-      it('complains about nullified options', () => {
-        expect(
-          assertValidRuleset.bind(null, {
-            rules: {
-              rule: {
-                given: '$',
-                then: {
-                  function: name,
-                  functionOptions: null,
+        it('complains about nullified options', () => {
+          expect(
+            assertValidRuleset.bind(null, {
+              rules: {
+                rule: {
+                  given: '$',
+                  then: {
+                    function: name,
+                    functionOptions: null,
+                  },
                 },
               },
-            },
-          }),
-        ).toThrow(ValidationError);
-      });
-    });
+            }),
+          ).toThrow(ValidationError);
+        });
+      },
+    );
 
     describe.each(['truthy', 'falsy', 'undefined'])('%s function', name => {
       it('given valid then, does not complain', () => {
