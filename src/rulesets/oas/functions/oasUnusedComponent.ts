@@ -1,19 +1,12 @@
 import type { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
-import { isObject } from 'lodash';
+import { isObject } from './utils/isObject';
 
-export const oasUnusedComponent: IFunction<{}> = function (
-  this: IFunctionContext,
-  targetVal,
-  opts,
-  _paths,
-  otherValues,
-) {
-  const results: IFunctionResult[] = [];
-
-  if (!isObject(targetVal.components)) {
-    return results;
+export const oasUnusedComponent: IFunction = function (this: IFunctionContext, targetVal, opts, _paths, otherValues) {
+  if (!isObject(targetVal) || !isObject(targetVal.components)) {
+    return;
   }
 
+  const results: IFunctionResult[] = [];
   const componentTypes = [
     'schemas',
     'responses',

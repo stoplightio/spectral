@@ -2,14 +2,17 @@ import { isObject } from './isObject';
 
 const validOperationKeys = ['get', 'head', 'post', 'put', 'patch', 'delete', 'options', 'trace'];
 
-export function* getAllOperations(paths: unknown): IterableIterator<{ path: string; operation: string }> {
+type Item = { path: string; operation: string; value: unknown };
+
+export function* getAllOperations(paths: unknown): IterableIterator<Item> {
   if (!isObject(paths)) {
     return;
   }
 
-  const item = {
+  const item: Item = {
     path: '',
     operation: '',
+    value: null,
   };
 
   for (const path of Object.keys(paths)) {
@@ -26,6 +29,7 @@ export function* getAllOperations(paths: unknown): IterableIterator<{ path: stri
       }
 
       item.operation = operation;
+      item.value = operations[operation];
 
       yield item;
     }

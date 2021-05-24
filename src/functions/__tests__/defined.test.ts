@@ -23,7 +23,7 @@ describe('defined', () => {
   test('should return an error message if target value is undefined', () => {
     expect(runDefined(void 0)).toEqual([
       {
-        message: '#{{print("property")}}should be defined',
+        message: '#{{print("property")}}must be defined',
       },
     ]);
   });

@@ -3,7 +3,7 @@ import { IFunctionValues } from '../../../../types';
 import oasSchema from '../../functions/oasSchema';
 import { functions } from '../../../../functions';
 
-function runSchema(target: unknown, schemaObj: object, context?: DeepPartial<IFunctionValues>) {
+function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?: DeepPartial<IFunctionValues>) {
   return oasSchema.call({ functions, cache: new Map() }, target, { schema: schemaObj }, { given: [] }, {
     given: null,
     original: null,

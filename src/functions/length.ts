@@ -1,4 +1,6 @@
 import { IFunction, IFunctionResult } from '../types';
+import { isPlainObject } from '../guards/isPlainObject';
+import { printValue } from '../utils/printValue';
 
 export interface ILengthRuleOptions {
   min?: number;
@@ -10,31 +12,34 @@ export const length: IFunction<ILengthRuleOptions> = (targetVal, opts) => {
 
   const { min, max } = opts;
 
-  let value;
-  const valueType = typeof targetVal;
-  if (valueType === 'object') {
+  let value: number;
+  if (isPlainObject(targetVal)) {
     value = Object.keys(targetVal).length;
   } else if (Array.isArray(targetVal)) {
-    value = targetVal.length + 1;
-  } else if (valueType === 'number') {
-    value = targetVal;
-  } else if (valueType === 'string') {
     value = targetVal.length;
+  } else if (typeof targetVal === 'number') {
+    value = targetVal;
+  } else if (typeof targetVal === 'string') {
+    value = targetVal.length;
+  } else {
+    return [
+      {
+        message: '#{{print("property")}}must be one of the supported types: array, object, string, number',
+      },
+    ];
   }
-
-  if (typeof value === 'undefined') return;
 
   const results: IFunctionResult[] = [];
 
   if (typeof min !== 'undefined' && value < min) {
     results.push({
-      message: `min length is ${min}`,
+      message: `#{{print("property")} must not be longer than ${printValue(min)}`,
     });
   }
 
   if (typeof max !== 'undefined' && value > max) {
     results.push({
-      message: `max length is ${max}`,
+      message: `#{{print("property")} must be shorter than ${printValue(max)}`,
     });
   }
 

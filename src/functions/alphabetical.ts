@@ -1,5 +1,6 @@
 import { isObject } from 'lodash';
 import { IFunction } from '../types';
+import { printValue } from '../utils/printValue';
 
 export interface IAlphaRuleOptions {
   /** if sorting array of objects, which key to use for comparison */
@@ -31,7 +32,7 @@ const getUnsortedItems = <T>(arr: T[], compareFn: (a: T, B: T) => number): null 
 export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opts, paths, { documentInventory }) => {
   if (!isObject(targetVal)) return;
 
-  let targetArray: any[] | string[];
+  let targetArray: (string | number)[];
 
   if (Array.isArray(targetVal)) {
     targetArray = targetVal;
@@ -47,18 +48,34 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
 
   const keyedBy = opts?.keyedBy;
 
-  const unsortedItems = getUnsortedItems<unknown>(
-    targetArray,
-    keyedBy !== void 0
-      ? (a, b): number => {
-          if (!isObject(a) || !isObject(b)) return 0;
+  if (keyedBy !== void 0) {
+    const _targetArray: (string | number)[] = [];
+    for (const item of targetArray) {
+      if (!isObject(item)) {
+        return [
+          {
+            message: '#{{print("property")}}must be an object',
+          },
+        ];
+      }
 
-          return compare(a[keyedBy], b[keyedBy]);
-        }
-      : // If we aren't expecting an object keyed by a specific property, then treat the
-        // object as a simple array.
-        compare,
-  );
+      _targetArray.push(item[keyedBy]);
+    }
+
+    targetArray = _targetArray;
+  }
+
+  for (const item of targetArray) {
+    if (typeof item !== 'string' && typeof item !== 'number') {
+      return [
+        {
+          message: '#{{print("property")}}must be one of the allowed types: number, string',
+        },
+      ];
+    }
+  }
+
+  const unsortedItems = getUnsortedItems(targetArray, compare);
 
   if (unsortedItems != null) {
     const path = paths.target ?? paths.given;
@@ -71,10 +88,10 @@ export const alphabetical: IFunction<IAlphaRuleOptions | null> = (targetVal, opt
           : null),
         message:
           keyedBy !== void 0
-            ? 'properties are not in alphabetical order'
-            : `at least 2 properties are not in alphabetical order: "${
-                targetArray[unsortedItems[0]]
-              }" should be placed after "${targetArray[unsortedItems[1]]}"`,
+            ? 'properties must follow the alphabetical order'
+            : `${printValue(targetArray[unsortedItems[0]])} must be placed after ${printValue(
+                targetArray[unsortedItems[1]],
+              )}`,
       },
     ];
   }

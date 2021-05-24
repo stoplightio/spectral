@@ -1,8 +1,9 @@
 import type { IFunction, IFunctionResult } from '../../../types';
 import type { Dictionary } from '@stoplight/types';
+import { isObject } from './utils/isObject';
 
-function computeFingerprint(param: Dictionary<unknown>): string {
-  return `${param.in}-${param.name}`;
+function computeFingerprint(param: Record<string, unknown>): string {
+  return `${String(param.in)}-${String(param.name)}`;
 }
 
 export const oasOpParams: IFunction = (params, _opts, { given }) => {
@@ -32,7 +33,7 @@ export const oasOpParams: IFunction = (params, _opts, { given }) => {
   for (const param of params) {
     index++;
 
-    if (param === null || typeof param !== 'object') continue;
+    if (!isObject(param)) continue;
 
     // skip params that are refs
     if ('$ref' in param) continue;
@@ -45,7 +46,7 @@ export const oasOpParams: IFunction = (params, _opts, { given }) => {
       list.push(fingerprint);
     }
 
-    if (param.in in count) {
+    if (typeof param.in === 'string' && param.in in count) {
       count[param.in].push(index);
     }
   }

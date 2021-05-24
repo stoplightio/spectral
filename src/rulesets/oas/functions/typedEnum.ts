@@ -1,9 +1,11 @@
 import type { IFunction, IFunctionContext } from '../../../types';
+import { isObject } from './utils/isObject';
 
 export const typedEnum: IFunction = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
-  if (targetVal === null || typeof targetVal !== 'object') {
+  if (!isObject(targetVal)) {
     return;
   }
+
   if (targetVal.enum === null || targetVal.enum === void 0 || targetVal.type === null || targetVal.type === void 0) {
     return;
   }
@@ -23,7 +25,7 @@ export const typedEnum: IFunction = function (this: IFunctionContext, targetVal,
   let innerSchema;
   if ((isOAS3 && targetVal.nullable === true) || (isOAS2 && targetVal['x-nullable'] === true)) {
     const type = Array.isArray(initialSchema.type)
-      ? [...initialSchema.type]
+      ? [...(initialSchema.type as unknown[])]
       : initialSchema.type !== void 0
       ? [initialSchema.type]
       : [];
@@ -40,7 +42,7 @@ export const typedEnum: IFunction = function (this: IFunctionContext, targetVal,
 
   const incorrectValues: Array<{ index: number; val: unknown }> = [];
 
-  enumValues.forEach((val, index) => {
+  (enumValues as unknown[]).forEach((val, index) => {
     const res = this.functions.schema(val, schemaObject, paths, otherValues);
 
     if (Array.isArray(res) && res.length !== 0) {
@@ -58,7 +60,7 @@ export const typedEnum: IFunction = function (this: IFunctionContext, targetVal,
 
   return incorrectValues.map(bad => {
     return {
-      message: `Enum value \`${bad.val}\` does not respect the specified type \`${type}\`.`,
+      message: `Enum value \`${String(bad.val)}\` does not respect the specified type \`${String(type)}\`.`,
       path: [...rootPath, 'enum', bad.index],
     };
   });

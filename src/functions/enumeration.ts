@@ -1,19 +1,26 @@
 import { IFunction, IFunctionResult } from '../types';
+import { printValue } from '../utils/printValue';
+import { isJsonPrimitive } from '../guards/isJsonPrimitive';
 
 export interface IEnumRuleOptions {
-  values: Array<string | number>;
+  values: (string | number | null | boolean)[];
 }
 
 export const enumeration: IFunction<IEnumRuleOptions> = (targetVal, opts) => {
-  if (targetVal === void 0) return;
+  if (!isJsonPrimitive(targetVal)) {
+    return [
+      {
+        message: '#{{print("property")}}must be primitive',
+      },
+    ];
+  }
 
   const { values } = opts;
-
   const results: IFunctionResult[] = [];
 
   if (!values.includes(targetVal)) {
     results.push({
-      message: `${targetVal} does not equal to one of ${values}`,
+      message: `#{{print("value")}} must be equal to one of the allowed values: ${values.map(printValue).join(', ')}`,
     });
   }
 

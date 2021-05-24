@@ -1,4 +1,6 @@
 import { IFunction, IFunctionResult } from '../types';
+import { isPlainObject } from '../guards/isPlainObject';
+import { printValue } from '../utils/printValue';
 
 export interface IXorRuleOptions {
   /** test to verify if one (but not all) of the provided keys are present in object */
@@ -8,14 +10,24 @@ export interface IXorRuleOptions {
 export const xor: IFunction<IXorRuleOptions> = (targetVal, opts) => {
   const { properties } = opts;
 
-  if (targetVal === null || typeof targetVal !== 'object' || properties.length !== 2) return;
+  if (!isPlainObject(targetVal)) {
+    return [
+      {
+        message: '#{{print("property")}}must be an object',
+      },
+    ];
+  }
+
+  if (properties.length !== 2) return;
 
   const results: IFunctionResult[] = [];
 
   const intersection = Object.keys(targetVal).filter(value => -1 !== properties.indexOf(value));
   if (intersection.length !== 1) {
     results.push({
-      message: `${properties[0]} and ${properties[1]} cannot be both defined or both undefined`,
+      message: `${printValue(properties[0])} and ${printValue(
+        properties[1],
+      )} must not be both defined or both undefined`,
     });
   }
 

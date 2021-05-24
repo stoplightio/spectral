@@ -29,7 +29,7 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
     return [
       {
         path,
-        message: `#{{print("property")}}does not exist`,
+        message: `#{{print("property")}}must exist`,
       },
     ];
   }
@@ -46,8 +46,8 @@ export const schema: ISchemaFunction = (targetVal, opts, paths, { rule }) => {
     if (validator === void 0) {
       const dialect = opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7';
       if (dialect === 'draft4' || dialect === 'draft6') {
-        schemaObj = JSON.parse(JSON.stringify(schemaObj));
-        (schemaObj as Dictionary<unknown>).$schema = 'http://json-schema.org/draft-07/schema#';
+        schemaObj = JSON.parse(JSON.stringify(schemaObj)) as Record<string, unknown>;
+        (schemaObj as Record<string, unknown>).$schema = 'http://json-schema.org/draft-07/schema#';
         draft7(schemaObj);
       }
 

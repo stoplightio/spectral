@@ -1,6 +1,6 @@
 import { Segment } from '@stoplight/types';
-import { isObject } from 'lodash';
 import { Replacer } from '../../utils/replacer';
+import { printValue } from '../../utils/printValue';
 
 export interface IMessageVars {
   property: Segment;
@@ -25,11 +25,7 @@ MessageReplacer.addFunction('print', function (type) {
 
       return '';
     case 'value':
-      if (isObject(value)) {
-        return Array.isArray(value) ? 'Array[]' : 'Object{}';
-      }
-
-      return JSON.stringify(value);
+      return printValue(value);
     default:
       if (type in this && this[type] !== null) {
         return String(this[type]);

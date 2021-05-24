@@ -94,7 +94,7 @@
                   "values": {
                     "type": "array",
                     "items": {
-                      "type": ["string", "number"]
+                      "type": ["string", "number", "null", "boolean"]
                     }
                   }
                 },

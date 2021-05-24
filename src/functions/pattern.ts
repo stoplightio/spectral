@@ -1,5 +1,6 @@
 import type { IFunction, IFunctionContext, IFunctionResult } from '../types';
 import type { Optional } from '@stoplight/types';
+import { printValue } from '../utils/printValue';
 
 export interface IRulePatternOptions {
   /** regex that target must match */
@@ -49,7 +50,7 @@ export const pattern: IFunction<IRulePatternOptions> = function (this: IFunction
     if (!pattern.test(targetVal)) {
       results = [
         {
-          message: `must match the pattern '${match}'`,
+          message: `#{{print("value")}} must match the pattern ${printValue(match)}`,
         },
       ];
     }
@@ -60,7 +61,7 @@ export const pattern: IFunction<IRulePatternOptions> = function (this: IFunction
 
     if (pattern.test(targetVal)) {
       const result = {
-        message: `must not match the pattern '${notMatch}'`,
+        message: `#{{print("value")}} must not match the pattern ${printValue(notMatch)}`,
       };
 
       if (results === void 0) {
