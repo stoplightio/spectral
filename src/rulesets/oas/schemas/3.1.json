@@ -1169,7 +1169,9 @@
     },
     "specification-extensions": {
       "patternProperties": {
-        "^x-": true
+        "^x-": {
+          "type": ["number", "string", "null", "boolean", "array", "object"]
+        }
       }
     },
     "examples": {
