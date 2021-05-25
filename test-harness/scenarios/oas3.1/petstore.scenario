@@ -20,6 +20,7 @@ paths:
         schema:
           type: integer
     get:
+      x-internal: true
       summary: Get User Info by User ID
       responses:
         '200':
