@@ -6,11 +6,12 @@ info:
   version: 1.0.0
   title: Stoplight
 paths: {}
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document} --format=html
+{bin} lint {document} --format=html --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
 <!DOCTYPE html>
 <html>
 <head>

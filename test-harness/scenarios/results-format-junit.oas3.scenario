@@ -7,11 +7,12 @@ info:
   title: Stoplight
   foo:
 paths: {}
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document} --format=junit
+{bin} lint {document} --format=junit --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
 <testsuite package="org.spectral" time="0" tests="1" errors="0" failures="1" name="{document}">

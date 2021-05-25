@@ -4,7 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "@stoplight/spectral-core": ["src/index.ts"],
-      "@stoplight/spectral-functions": ["src/functions/index.ts"]
+      "@stoplight/spectral-functions": ["src/functions/index.ts"],
+      "@stoplight/spectral-formats": ["src/formats/index.ts"],
+      "@stoplight/spectral-utils": ["src/utils/index.ts"]
     },
     "moduleResolution": "node",
     "target": "es2017",

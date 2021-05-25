@@ -1,14 +1,15 @@
-import { isObject } from 'lodash';
+import type { Format } from '@stoplight/spectral-core';
+import { isPlainObject } from '@stoplight/json';
 
 type MaybeAsyncApi2 = Partial<{ asyncapi: unknown }>;
 
 const bearsAStringPropertyNamed = (document: unknown, propertyName: string): boolean => {
-  return isObject(document) && propertyName in document && typeof document[propertyName] === 'string';
+  return isPlainObject(document) && propertyName in document && typeof document[propertyName] === 'string';
 };
 
 const version2Regex = /^2\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/;
 
-export const isAsyncApiv2 = (document: unknown): boolean => {
+export const asyncApi2: Format = document => {
   if (!bearsAStringPropertyNamed(document, 'asyncapi')) {
     return false;
   }
@@ -17,3 +18,5 @@ export const isAsyncApiv2 = (document: unknown): boolean => {
 
   return version2Regex.test(version);
 };
+
+asyncApi2.displayName = 'AsyncAPI 2.x';

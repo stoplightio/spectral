@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import { oas2, oas3 } from '@stoplight/spectral-formats';
 import { DeepPartial } from '@stoplight/types';
 import { IFunctionValues } from '../../../../types';
 import oasSchema from '../../functions/oasSchema';
@@ -14,7 +15,7 @@ describe('oasSchema', () => {
   test('given OAS2, supports x-nullable', () => {
     const documentInventory = {
       document: {
-        formats: ['oas2'],
+        formats: new Set([oas2]),
       },
     };
 
@@ -61,7 +62,7 @@ describe('oasSchema', () => {
   test('given OAS3, supports nullable', () => {
     const documentInventory = {
       document: {
-        formats: ['oas3'],
+        formats: new Set([oas3]),
       },
     };
 

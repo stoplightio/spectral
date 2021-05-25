@@ -1,10 +1,14 @@
 ====test====
 Identify enum values that does not respect the specified type
 ====asset:ruleset====
-extends: [[spectral:oas, off]]
+const { oas } = require('@stoplight/spectral-rulesets');
 
-rules:
-  typed-enum: error
+module.exports = {
+  'extends': [[oas, 'off']],
+  rules: {
+    'typed-enum': 'error'
+  }
+}
 ====document====
 openapi: 3.0.2
 components:
@@ -25,9 +29,6 @@ components:
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
  12:15  error  typed-enum  Enum value `Tap, tap, tap...` does not respect the specified type `integer`.                 components.schemas.a_model.properties.id.enum[1]
  13:15  error  typed-enum  Enum value `Is thing thing on?` does not respect the specified type `integer`.               components.schemas.a_model.properties.id.enum[2]

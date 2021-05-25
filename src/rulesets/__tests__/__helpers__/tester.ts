@@ -1,13 +1,12 @@
+import { RulesetDefinition } from '../../../ruleset/types';
+
 jest.mock?.('fs');
 
 import { serveAssets } from '@stoplight/spectral-test-utils';
 
 import { IRuleResult, Spectral } from '../../../spectral';
-import type * as oasRuleset from '../../oas/index.json';
-import type * as aasRuleset from '../../asyncapi/index.json';
-import { STATIC_ASSETS } from '../../../assets';
-import { empty } from '../../../utils';
-import { isAsyncApiv2, isOpenApiv2, isOpenApiv3, isOpenApiv3_0, isOpenApiv3_1 } from '../../../formats';
+import oasRuleset from '../../oas/index';
+import aasRuleset from '../../asyncapi/index';
 import { Document } from '../../../document';
 import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
@@ -32,7 +31,7 @@ export default (ruleName: RuleName, tests: Scenario): void => {
           serveAssets(testCase.mocks);
         }
 
-        const s = await createWithRules([ruleName]);
+        const s = createWithRules([ruleName]);
         const doc = testCase.document instanceof Document ? testCase.document : JSON.stringify(testCase.document);
         const errors = await s.run(doc);
         expect(errors.filter(({ code }) => code === ruleName)).toEqual(
@@ -43,36 +42,19 @@ export default (ruleName: RuleName, tests: Scenario): void => {
   });
 };
 
-export async function createWithRules(rules: (keyof Ruleset['rules'])[]): Promise<Spectral> {
-  try {
-    Object.assign(STATIC_ASSETS, await import('../../../../rulesets/assets/assets.json'), {
-      'my-ruleset': JSON.stringify({
-        extends: [
-          ['spectral:oas', 'off'],
-          ['spectral:asyncapi', 'off'],
-        ],
-        rules: rules.reduce((obj, name) => {
-          obj[name] = true;
-          return obj;
-        }, {}),
-      }),
-    });
+export function createWithRules(rules: (keyof Ruleset['rules'])[]): Spectral {
+  const s = new Spectral({ resolver: httpAndFileResolver });
 
-    const s = new Spectral({ resolver: httpAndFileResolver });
-    s.registerFormat('asyncapi2', isAsyncApiv2);
-    s.registerFormat('oas2', isOpenApiv2);
-    s.registerFormat('oas3', isOpenApiv3);
-    s.registerFormat('oas3.0', isOpenApiv3_0);
-    s.registerFormat('oas3.1', isOpenApiv3_1);
+  s.setRuleset({
+    extends: [
+      [aasRuleset as RulesetDefinition, 'off'],
+      [oasRuleset as RulesetDefinition, 'off'],
+    ],
+    rules: rules.reduce((obj, name) => {
+      obj[name] = true;
+      return obj;
+    }, {}),
+  });
 
-    await s.loadRuleset('my-ruleset');
-
-    for (const rule of rules) {
-      expect(s.rules[rule].severity).not.toEqual(-1);
-    }
-
-    return s;
-  } finally {
-    empty(STATIC_ASSETS);
-  }
+  return s;
 }

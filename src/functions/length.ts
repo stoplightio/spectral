@@ -1,8 +1,8 @@
-import { IFunctionResult } from '../types';
-import { isPlainObject } from '../guards/isPlainObject';
-import { printValue } from '../utils/printValue';
-import { Optional } from '@stoplight/types';
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
+import type { IFunctionResult } from '../types';
+import { printValue } from '@stoplight/spectral-utils';
+import type { Optional } from '@stoplight/types';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import { isPlainObject } from '@stoplight/json';
 
 export type Options =
   | {

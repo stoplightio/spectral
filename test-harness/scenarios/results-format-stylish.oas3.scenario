@@ -6,12 +6,12 @@ info:
   version: 1.0.0
   title: Stoplight
 paths: {}
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document}
+{bin} lint {document} --format=stylish --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
  1:1  warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
  2:6  warning  info-contact      Info object should contain `contact` object.                             info

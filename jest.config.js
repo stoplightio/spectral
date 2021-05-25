@@ -6,10 +6,10 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', '.karma.test.ts$'],
   coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/'],
   setupFilesAfterEnv: ['./setupJest.ts'],
-  globalSetup: './setupJest.global.ts',
   moduleNameMapper: {
     '^@stoplight/spectral-core': '<rootDir>/src/index.ts',
     '^@stoplight/spectral-functions': '<rootDir>/src/functions/index.ts',
+    '^@stoplight/spectral-formats': '<rootDir>/src/formats/index.ts',
     '^@stoplight/spectral-test-utils': '<rootDir>/test-utils/node/index.ts',
   },
   globals: {

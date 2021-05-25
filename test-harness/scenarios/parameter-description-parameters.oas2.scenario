@@ -35,10 +35,8 @@ parameters:
     type: string
     description: status
 ====command====
-{bin} lint {document} --ruleset ./rulesets/parameter-description.oas2.yaml
+{bin} lint {document} --ruleset ./rulesets/parameter-description.oas2.js
 ====stdout====
-OpenAPI 2.0 (Swagger) detected
-
 {document}
   5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]
  14:11  warning  oas2-parameter-description  Parameter objects should have a `description`.  paths./pets.get.parameters[0]

@@ -113,4 +113,22 @@ testRule('operation-success-response', [
     },
     errors: [],
   },
+
+  {
+    name: 'path has no responses',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/test': {
+          get: {
+            operationId: '123',
+          },
+          post: {
+            operationId: '123',
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);

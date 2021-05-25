@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment */
 import { schema } from '@stoplight/spectral-functions';
+import { oas2, oas3 } from '@stoplight/spectral-formats';
 import type { IFunction } from '../../../types';
 import { isObject } from './utils/isObject';
 
@@ -21,8 +22,8 @@ export const typedEnum: IFunction = function (targetVal, opts, paths, otherValue
     return;
   }
 
-  const isOAS3 = otherValues.documentInventory.document.formats?.includes('oas3') === true;
-  const isOAS2 = otherValues.documentInventory.document.formats?.includes('oas2') === true;
+  const isOAS3 = otherValues.documentInventory.document.formats?.has(oas3) === true;
+  const isOAS2 = otherValues.documentInventory.document.formats?.has(oas2) === true;
 
   let innerSchema;
   if ((isOAS3 && targetVal.nullable === true) || (isOAS2 && targetVal['x-nullable'] === true)) {

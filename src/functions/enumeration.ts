@@ -1,5 +1,5 @@
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
-import { printValue } from '../utils/printValue';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import { printValue } from '@stoplight/spectral-utils';
 
 type Primitive = string | number | null | boolean;
 

@@ -1,15 +1,16 @@
 import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
-import { flatMap, isObject } from 'lodash';
+import { isObject } from 'lodash';
 import { JSONPathExpression, traverse } from 'nimma';
 
 import { IDocument } from '../document';
 import { DocumentInventory } from '../documentInventory';
-import { OptimizedRule, Rule } from '../rule';
 import { IGivenNode, IRuleResult } from '../types';
 import { ComputeFingerprintFunc, prepareResults } from '../utils';
 import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
-import { IRunnerInternalContext, IRunnerPublicContext } from './types';
+import { IRunnerInternalContext } from './types';
+import { Rule } from '../ruleset/rule/rule';
+import { Ruleset } from '../ruleset/ruleset';
 
 const runRule = (context: IRunnerInternalContext, rule: Rule): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
@@ -62,15 +63,14 @@ export class Runner {
     this.results.push(result);
   }
 
-  public async run(context: IRunnerPublicContext): Promise<void> {
+  public async run(ruleset: Ruleset): Promise<void> {
     this.runtime.emit('setup');
 
     const { inventory: documentInventory } = this;
-
-    const { rules } = context;
+    const { rules } = ruleset;
 
     const runnerContext: IRunnerInternalContext = {
-      ...context,
+      ruleset,
       documentInventory,
       results: this.results,
       promises: [],
@@ -80,16 +80,16 @@ export class Runner {
       rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
     );
 
-    const optimizedRules: OptimizedRule[] = [];
-    const optimizedUnresolvedRules: OptimizedRule[] = [];
+    const optimizedRules: Rule[] = [];
+    const optimizedUnresolvedRules: Rule[] = [];
     const unoptimizedRules: Rule[] = [];
 
-    const traverseCb = (rule: OptimizedRule, node: IGivenNode): void => {
+    const traverseCb = (rule: Rule, node: IGivenNode): void => {
       lintNode(runnerContext, node, rule);
     };
 
     for (const rule of relevantRules) {
-      if (!(rule instanceof OptimizedRule)) {
+      if (!rule.isOptimized) {
         unoptimizedRules.push(rule);
         continue;
       }
@@ -104,11 +104,11 @@ export class Runner {
     }
 
     if (optimizedRules.length > 0) {
-      traverse(Object(runnerContext.documentInventory.resolved), flatMap(optimizedRules, pickExpressions));
+      traverse(Object(runnerContext.documentInventory.resolved), optimizedRules.flatMap(pickExpressions));
     }
 
     if (optimizedUnresolvedRules.length > 0) {
-      traverse(Object(runnerContext.documentInventory.unresolved), flatMap(optimizedUnresolvedRules, pickExpressions));
+      traverse(Object(runnerContext.documentInventory.unresolved), optimizedUnresolvedRules.flatMap(pickExpressions));
     }
 
     for (const rule of unoptimizedRules) {
@@ -131,6 +131,6 @@ export class Runner {
   }
 }
 
-function pickExpressions({ expressions }: OptimizedRule): JSONPathExpression[] {
-  return expressions;
+function pickExpressions({ expressions }: Rule): JSONPathExpression[] {
+  return expressions!;
 }

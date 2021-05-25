@@ -346,12 +346,12 @@ components:
         - age
       x-tags:
         - Todos
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document}
+{bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
  126:25  error  oas3-valid-schema-example  `example` property must have required property `name`                        paths./schema-example.get.responses[500].content.application/json.schema.example
  138:30  error  oas3-valid-schema-example  `example` property type must be boolean                                      paths./schema-example.get.responses[501].content.application/json.schema.properties.some-bool.example

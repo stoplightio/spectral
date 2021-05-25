@@ -1,5 +1,5 @@
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
-import { safePointerToPath } from '../utils';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import { safePointerToPath } from '@stoplight/spectral-utils';
 
 export type Options = {
   reusableObjectsLocation: string;

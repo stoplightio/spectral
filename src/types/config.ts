@@ -1,4 +1,4 @@
-import { HumanReadableDiagnosticSeverity } from './rule';
+import { HumanReadableDiagnosticSeverity } from '@stoplight/spectral-core';
 
 export type FailSeverity = HumanReadableDiagnosticSeverity;
 
@@ -17,7 +17,7 @@ export interface ILintConfig {
   format: OutputFormat;
   output?: string;
   resolver?: string;
-  ruleset?: string[];
+  ruleset?: string;
   ignoreUnknownFormat: boolean;
   failOnUnmatchedGlobs: boolean;
   verbose?: boolean;

@@ -1,4 +1,4 @@
-import { Dictionary, Optional } from '@stoplight/types';
+import { Dictionary } from '@stoplight/types';
 import { pick } from 'lodash';
 import { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
@@ -73,10 +73,6 @@ const lintCommand: CommandModule = {
           alias: 'r',
           description: 'path/URL to a ruleset file',
           type: 'string',
-          coerce(value): Optional<string[]> {
-            if (value === void 0) return;
-            return (Array.isArray(value) ? value : [value]).map<string>(String);
-          },
         },
         'fail-severity': {
           alias: 'F',

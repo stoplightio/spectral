@@ -33,32 +33,27 @@
     "node": ">=12"
   },
   "scripts": {
+    "prebuild.binary": "yarn copy.html-templates && ./scripts/strap.sh",
     "build.binary": "pkg . --output ./binaries/spectral",
-    "build.clean": "rimraf ./coverage && rimraf ./dist && rimraf ./rulesets && rimraf ./__karma__/__fixtures__",
-    "build.functions": "rollup -c",
+    "postbuild.binary": "rm -r node_modules/@stoplight/spectral-*",
+    "build.clean": "rimraf ./coverage && rimraf ./dist",
+    "prebuild": "yarn build.clean",
     "build": "tsc -p ./tsconfig.build.json",
     "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
     "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
-    "generate-assets": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} ./scripts/generate-assets.ts",
     "inline-version": "node ./scripts/inline-version.mjs",
-    "lint.changelog": "kacl lint",
-    "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
-    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.ts src test-harness scripts",
-    "lint.prettier": "prettier --ignore-path .eslintignore --check {src,test-harness}/**/*.{json,yaml} docs/**/*.md README.md",
-    "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
     "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
-    "postbuild.functions": "copyfiles -u 1 \"dist/rulesets/{oas,asyncapi}/functions/*.js\" ./",
-    "postbuild": "yarn build.functions && yarn generate-assets",
-    "prebuild": "yarn build.clean && copyfiles -u 1 \"src/rulesets/{oas,asyncapi}/**/*.json\" dist && copyfiles -u 1 \"src/rulesets/{oas,asyncapi}/**/*.json\" ./ && yarn copy.html-templates",
-    "prebuild.binary": "yarn build",
-    "pretest.karma": "node ./scripts/generate-karma-fixtures.mjs && yarn pretest",
-    "pretest": "yarn generate-assets",
+    "lint.changelog": "kacl lint",
+    "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
+    "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
+    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts src test-harness scripts",
+    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check src/meta/*.json docs/**/*.md README.md",
+    "test": "yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
+    "pretest.harness": "./scripts/strap.sh",
     "test.harness": "jest -c ./test-harness/jest.config.js",
-    "test.karma": "karma start || exit 0",
-    "test.prod": "yarn build && yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
-    "test.update": "yarn test --updateSnapshot",
-    "test.watch": "yarn test --watch",
-    "test": "jest --silent",
+    "posttest.harness": "rm -r node_modules/@stoplight/spectral-*",
+    "test.jest": "jest --silent",
+    "test.karma": "karma start",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -83,7 +78,6 @@
     "json-schema-traverse": "1.0.0",
     "jsonpath-plus": "5.0.7",
     "lodash": "4.17.21",
-    "nanoid": "2.1.11",
     "nimma": "0.0.0",
     "node-fetch": "2.6.1",
     "proxy-agent": "4.0.1",
@@ -93,13 +87,9 @@
     "yargs": "17.0.1"
   },
   "devDependencies": {
-    "@apidevtools/json-schema-ref-parser": "^9.0.7",
     "@brightcove/kacl": "^0.1.11",
     "@commitlint/cli": "^12.0.1",
     "@commitlint/config-conventional": "^12.0.1",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.1",
     "@types/jest": "^26.0.23",
     "@types/jest-when": "^2.7.2",
     "@types/karma": "^6.3.0",
@@ -109,6 +99,7 @@
     "@types/node-fetch": "^2.5.8",
     "@types/text-table": "^0.2.1",
     "@types/tmp": "^0.2.0",
+    "@types/treeify": "^1.0.0",
     "@types/xml2js": "^0.4.8",
     "@types/yargs": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
@@ -124,6 +115,7 @@
     "jest": "^26.6.3",
     "jest-mock": "^26.6.2",
     "jest-when": "^3.2.1",
+    "json-schema": "^0.3.0",
     "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-env-preprocessor": "^0.1.1",
@@ -138,12 +130,11 @@
     "prettier": "^2.2.1",
     "recast": "^0.20.4",
     "rimraf": "^3.0.2",
-    "rollup": "^2.40.0",
-    "rollup-plugin-typescript2": "^0.30.0",
+    "treeify": "^1.1.0",
     "ts-jest": "^26.5.6",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.2.4",
+    "typescript": "^4.3.1-rc",
     "xml2js": "^0.4.23"
   },
   "lint-staged": {
@@ -160,7 +151,7 @@
     "README.md": [
       "prettier --write"
     ],
-    "{src,test-harness}/**/*.{json,yaml}": [
+    "src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
   },

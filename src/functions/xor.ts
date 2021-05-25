@@ -1,6 +1,6 @@
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
-import { IFunctionResult } from '../types';
-import { printValue } from '../utils/printValue';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import type { IFunctionResult } from '../types';
+import { printValue } from '@stoplight/spectral-utils';
 
 export type Options = {
   /** test to verify if one (but not all) of the provided keys are present in object */

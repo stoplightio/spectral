@@ -103,3 +103,11 @@ testRule('oas3-schema', [
     ],
   },
 ]);
+
+`openapi: 3.1.0
+info:
+  title: Example jsonSchemaDialect error
+  version: 1.0.0
+jsonSchemaDialect:
+paths: {}
+`;

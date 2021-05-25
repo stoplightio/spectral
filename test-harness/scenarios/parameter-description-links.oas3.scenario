@@ -22,8 +22,6 @@ components:
       parameters:
         userUuid: abc
 ====command====
-{bin} lint --ruleset ./rulesets/parameter-description.oas3.yaml {document}
+{bin} lint --ruleset ./rulesets/parameter-description.oas3.js {document}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
 No results with a severity of 'error' or higher found!

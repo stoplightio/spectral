@@ -1,7 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://stoplight.io/schemas/ruleset.schema.json",
+  "$id": "https://github.com/stoplightio/spectral/blob/develop/src/meta/ruleset.schema.json",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "documentationUrl": {
       "type": "string",
@@ -18,29 +19,38 @@
       "$ref": "shared.json#/$defs/Formats"
     },
     "extends": {
-      "type": ["array", "string"],
-      "items": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "array",
-            "minItems": 2,
-            "additionalItems": false,
-            "items": [
+      "oneOf": [
+        {
+          "$ref": "#",
+          "errorMessage": "must be a valid ruleset"
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
               {
-                "type": "string"
+                "$ref": "#/properties/extends/oneOf/0"
               },
               {
-                "type": "string",
-                "enum": ["off", "recommended", "all"],
-                "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
+                "type": "array",
+                "minItems": 2,
+                "additionalItems": false,
+                "items": [
+                  {
+                    "$ref": "#"
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["off", "recommended", "all"],
+                    "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
+                  }
+                ]
               }
             ]
           }
-        ]
-      }
+        }
+      ],
+      "errorMessage": "must be a valid ruleset"
     },
     "parserOptions": {
       "type": "object",

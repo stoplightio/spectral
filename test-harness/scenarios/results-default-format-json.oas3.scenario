@@ -8,11 +8,12 @@ info:
 paths: {}
 tags:
   - name: test
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document} --format=json
+{bin} lint {document} --format=json --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
 [
 	{
 		"code": "oas3-api-servers",

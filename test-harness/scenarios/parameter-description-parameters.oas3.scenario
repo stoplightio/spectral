@@ -22,11 +22,8 @@ components:
       schema:
         type: integer
 ====command====
-{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.yaml
+{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.js
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
   5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]
   9:11  warning  oas3-parameter-description  Parameter objects should have a `description`.  paths./pets.get.parameters[0]

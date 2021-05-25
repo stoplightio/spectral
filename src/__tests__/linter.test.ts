@@ -6,11 +6,11 @@ import { Spectral } from '../spectral';
 import { Parsers, Document } from '..';
 import { IParser } from '../parsers/types';
 import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/tester';
+import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
+import { Format } from '../ruleset/format';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 
-const fnName = 'fake';
-const fnName2 = 'fake2';
 const target = {
   responses: {
     200: {
@@ -24,15 +24,6 @@ const target = {
     },
   },
 };
-const rules = {
-  example: {
-    message: '',
-    given: '$.responses',
-    then: {
-      function: fnName,
-    },
-  },
-};
 
 describe('linter', () => {
   let spectral: Spectral;
@@ -42,27 +33,35 @@ describe('linter', () => {
   });
 
   test('should not throw if passed in value is not an object', () => {
-    const fakeLintingFunction = jest.fn();
-    spectral.setFunctions({
-      [fnName]: fakeLintingFunction,
+    spectral.setRuleset({
+      rules: {
+        example: {
+          message: '',
+          given: '$.responses',
+          then: {
+            function: jest.fn(),
+          },
+        },
+      },
     });
-    spectral.setRules(rules);
 
-    return expect(spectral.run('123')).resolves.toBeTruthy();
+    return expect(spectral.run('123')).resolves.toEqual([]);
   });
 
   test('given failing JSON Path expression, should refuse to lint', async () => {
-    spectral.setRules({
-      rule1: {
-        given: '$.bar[?(@.in==foo)]',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.bar[?(@.in==foo)]',
+          then: {
+            function: truthy,
+          },
         },
-      },
-      rule2: {
-        given: '$.foo',
-        then: {
-          function: 'truthy',
+        rule2: {
+          given: '$.foo',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -80,26 +79,26 @@ describe('linter', () => {
   test('should return all properties matching 4xx response code', async () => {
     const message = '4xx responses require a description';
 
-    spectral.setFunctions({
-      func1: (val: unknown) => {
-        if (!val) {
-          return [
-            {
-              message,
-            },
-          ];
-        }
+    function func1(val: unknown) {
+      if (!val) {
+        return [
+          {
+            message,
+          },
+        ];
+      }
 
-        return;
-      },
-    });
+      return;
+    }
 
-    spectral.setRules({
-      rule1: {
-        given: '$.responses[?(@property >= 400 && @property < 500)]',
-        then: {
-          field: 'description',
-          function: 'func1',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.responses[?(@property >= 400 && @property < 500)]',
+          then: {
+            field: 'description',
+            function: func1,
+          },
         },
       },
     });
@@ -139,22 +138,18 @@ describe('linter', () => {
   });
 
   test('should support rule overriding severity', async () => {
-    spectral.setFunctions({
-      func1: () => {
-        return [
-          {
-            message: 'foo',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.x',
+          severity: DiagnosticSeverity.Hint,
+          then: {
+            function: () => [
+              {
+                message: 'foo',
+              },
+            ],
           },
-        ];
-      },
-    });
-
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        severity: DiagnosticSeverity.Hint,
-        then: {
-          function: 'func1',
         },
       },
     });
@@ -177,11 +172,10 @@ describe('linter', () => {
           message: 'Header should be valid',
           then: {
             field: 'a~',
-            function: 'falsy',
+            function: falsy,
           },
         },
       },
-      functions: {},
     });
 
     const result = await spectral.run(
@@ -206,19 +200,21 @@ describe('linter', () => {
   });
 
   test('should support human readable severity levels', async () => {
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        severity: 'error',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.x',
+          severity: 'error',
+          then: {
+            function: truthy,
+          },
         },
-      },
-      rule2: {
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
+        rule2: {
+          given: '$.y',
+          severity: 'warn',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -244,23 +240,26 @@ describe('linter', () => {
   });
 
   test('should respect the format of data and run rules associated with it', async () => {
-    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+    const fooBarFormat: Format = obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj;
 
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      formats: [fooBarFormat],
+      rules: {
+        rule1: {
+          given: '$.x',
+          formats: [fooBarFormat],
+          severity: 'error',
+          then: {
+            function: truthy,
+          },
         },
-      },
-      rule2: {
-        given: '$.y',
-        formats: [],
-        severity: 'warn',
-        then: {
-          function: 'truthy',
+        rule2: {
+          given: '$.y',
+          formats: [],
+          severity: 'warn',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -279,22 +278,24 @@ describe('linter', () => {
   });
 
   test('should match all formats if rule has no formats defined', async () => {
-    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+    const fooBarFormat: Format = obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj;
 
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.x',
+          formats: [fooBarFormat],
+          severity: 'error',
+          then: {
+            function: truthy,
+          },
         },
-      },
-      rule2: {
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
+        rule2: {
+          given: '$.y',
+          severity: 'warn',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -313,107 +314,29 @@ describe('linter', () => {
         code: 'rule2',
       }),
     ]);
-  });
-
-  test('should not run any rule with defined formats if there are no formats registered', async () => {
-    spectral.registerFormat('oas2', () => false);
-    spectral.registerFormat('oas3', () => false);
-
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
-        },
-      },
-      rule2: {
-        formats: ['baz'],
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
-        },
-      },
-      rule3: {
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
-        },
-      },
-    });
-
-    const result = await spectral.run({
-      'foo-bar': true,
-      x: false,
-      y: '',
-    });
-
-    expect(result).toEqual([
-      expect.objectContaining({
-        code: 'unrecognized-format',
-        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
-      }),
-      expect.objectContaining({
-        code: 'rule3',
-      }),
-    ]);
-  });
-
-  test('should let a format lookup to be overridden', async () => {
-    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
-    spectral.registerFormat('foo-bar', () => false);
-    spectral.registerFormat('baz', () => true);
-
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
-        },
-      },
-      rule2: {
-        formats: ['foo-bar'],
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
-        },
-      },
-    });
-
-    const result = await spectral.run({
-      'foo-bar': true,
-      x: false,
-      y: '',
-    });
-
-    expect(result).toEqual([]);
   });
 
   test('should execute rules matching all found formats', async () => {
-    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
-    spectral.registerFormat('baz', () => true);
+    const fooBarFormat: Format = obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj;
+    const bazFormat: Format = () => true;
 
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.x',
+          formats: [fooBarFormat],
+          severity: 'error',
+          then: {
+            function: truthy,
+          },
         },
-      },
-      rule2: {
-        formats: ['baz'],
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
+        rule2: {
+          formats: [bazFormat],
+          given: '$.y',
+          severity: 'warn',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -430,65 +353,25 @@ describe('linter', () => {
       }),
       expect.objectContaining({
         code: 'rule2',
-      }),
-    ]);
-  });
-
-  test('should not run any rule with defined formats if some formats are registered but document format could not be associated', async () => {
-    spectral.registerFormat('oas2', () => false);
-    spectral.registerFormat('oas3', () => false);
-    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
-
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
-        },
-      },
-      rule2: {
-        formats: ['baz'],
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
-        },
-      },
-      rule3: {
-        given: '$.y',
-        severity: 'warn',
-        then: {
-          function: 'truthy',
-        },
-      },
-    });
-
-    const result = await spectral.run({
-      'bar-foo': true,
-      x: false,
-      y: '',
-    });
-
-    expect(result).toEqual([
-      {
-        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar]',
-        path: [],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Warning,
-        code: 'unrecognized-format',
-      },
-      expect.objectContaining({
-        code: 'rule3',
       }),
     ]);
   });
 
   // TODO: Find a way to cover formats more extensively
   test('given a string input, should warn about unmatched formats', async () => {
-    spectral.registerFormat('oas2', () => false);
-    spectral.registerFormat('oas3', () => false);
+    const oas2: Format = () => false;
+    const oas3: Format = () => false;
+    spectral.setRuleset({
+      formats: [oas2, oas3],
+      rules: {
+        test: {
+          given: '$',
+          then: {
+            function: truthy,
+          },
+        },
+      },
+    });
     const result = await spectral.run('test');
 
     expect(result).toEqual([
@@ -512,15 +395,18 @@ describe('linter', () => {
   });
 
   test('given ignoreUnknownFormat, should not warn about unmatched formats', async () => {
-    spectral.registerFormat('foo-bar', obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj);
+    const format: Format = obj => typeof obj === 'object' && obj !== null && 'foo-bar' in obj;
 
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      formats: [format],
+      rules: {
+        rule1: {
+          given: '$.x',
+          formats: [format],
+          severity: 'error',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -538,23 +424,25 @@ describe('linter', () => {
   });
 
   test('should accept format lookup by source', async () => {
-    spectral.registerFormat('foo-bar', (_, source) => source === '/foo/bar');
+    const fooBar: Format = (_, source) => source === '/foo/bar';
 
-    spectral.setRules({
-      rule1: {
-        given: '$.x',
-        formats: ['foo-bar'],
-        severity: 'error',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.x',
+          formats: [fooBar],
+          severity: 'error',
+          then: {
+            function: truthy,
+          },
         },
-      },
-      rule2: {
-        given: '$.y',
-        formats: [],
-        severity: 'warn',
-        then: {
-          function: 'truthy',
+        rule2: {
+          given: '$.y',
+          formats: [],
+          severity: 'warn',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -620,11 +508,13 @@ responses:: !!foo
   });
 
   test('should report a valid line number for json paths containing escaped slashes', async () => {
-    spectral.setRules({
-      'truthy-get': {
-        given: '$..get',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        'truthy-get': {
+          given: '$..get',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -665,7 +555,7 @@ responses:: !!foo
   });
 
   test('should remove all redundant ajv errors', async () => {
-    const spectral = await createWithRules(['oas3-schema', 'oas3-valid-schema-example', 'oas3-valid-media-example']);
+    const spectral = createWithRules(['oas3-schema', 'oas3-valid-schema-example', 'oas3-valid-media-example']);
 
     const result = await spectral.run(invalidSchema);
 
@@ -765,7 +655,7 @@ responses:: !!foo
   });
 
   describe('reports duplicated properties for', () => {
-    it('JSON format', async () => {
+    test('JSON format', async () => {
       const result = await spectral.run('{"foo":true,"foo":false}', {
         ignoreUnknownFormat: true,
       });
@@ -850,7 +740,6 @@ responses:: !!foo
     test('should allow changing the severity of invalid YAML mapping keys diagnostics', async () => {
       spectral.setRuleset({
         rules: {},
-        functions: {},
         parserOptions: {
           incompatibleValues: 'info',
         },
@@ -887,7 +776,6 @@ responses:: !!foo
     test('should allow disabling invalid YAML mapping keys diagnostics', async () => {
       spectral.setRuleset({
         rules: {},
-        functions: {},
         parserOptions: {
           incompatibleValues: 'off',
         },
@@ -910,7 +798,6 @@ responses:: !!foo
       async parser => {
         spectral.setRuleset({
           rules: {},
-          functions: {},
           parserOptions: {
             duplicateKeys: 'info',
           },
@@ -953,7 +840,6 @@ responses:: !!foo
       async parser => {
         spectral.setRuleset({
           rules: {},
-          functions: {},
           parserOptions: {
             duplicateKeys: 'off',
           },
@@ -977,21 +863,31 @@ responses:: !!foo
   });
 
   describe('functional tests for the given property', () => {
-    let fakeLintingFunction: any;
+    let fakeLintingFunction: jest.Mock;
+    const rules = {
+      example: {
+        message: '',
+        given: '$.responses',
+        then: {
+          get function() {
+            return fakeLintingFunction;
+          },
+        },
+      },
+    };
 
     beforeEach(() => {
       fakeLintingFunction = jest.fn();
-      spectral.setFunctions({
-        [fnName]: fakeLintingFunction,
+      spectral.setRuleset({
+        rules,
       });
-      spectral.setRules(rules);
     });
 
     describe('when given path is set', () => {
       test('should pass given path through to lint function', async () => {
         let path: JsonPath | null = null;
         let given: unknown;
-        (fakeLintingFunction as jest.Mock).mockImplementation((_targetVal, _opts, paths, values) => {
+        fakeLintingFunction.mockImplementation((_targetVal, _opts, paths, values) => {
           path = [...paths.given];
           given = values.given;
         });
@@ -1004,12 +900,14 @@ responses:: !!foo
       });
 
       test('given array of paths, should pass each given path through to lint function', async () => {
-        spectral.setRules({
-          example: {
-            message: '',
-            given: ['$.responses', '$..200'],
-            then: {
-              function: fnName,
+        spectral.setRuleset({
+          rules: {
+            example: {
+              message: '',
+              given: ['$.responses', '$..200'],
+              then: {
+                function: fakeLintingFunction,
+              },
             },
           },
         });
@@ -1026,12 +924,14 @@ responses:: !!foo
 
     describe('when given path is not set', () => {
       test('should pass through root object', async () => {
-        spectral.setRules({
-          example: {
-            message: '',
-            given: '$',
-            then: {
-              function: fnName,
+        spectral.setRuleset({
+          rules: {
+            example: {
+              message: '',
+              given: '$',
+              then: {
+                function: fakeLintingFunction,
+              },
             },
           },
         });
@@ -1045,35 +945,33 @@ responses:: !!foo
   });
 
   describe('functional tests for the then statement', () => {
-    let fakeLintingFunction: any;
-    let fakeLintingFunction2: any;
+    let fakeLintingFunction: jest.Mock;
+    let fakeLintingFunction2: jest.Mock;
 
     beforeEach(() => {
       fakeLintingFunction = jest.fn();
       fakeLintingFunction2 = jest.fn();
-      spectral.setFunctions({
-        [fnName]: fakeLintingFunction,
-        [fnName2]: fakeLintingFunction2,
-      });
-      spectral.setRules({
-        example: {
-          message: '',
-          given: '$.responses',
-          then: [
-            {
-              function: fnName,
-              functionOptions: {
-                func1Prop: '1',
+      spectral.setRuleset({
+        rules: {
+          example: {
+            message: '',
+            given: '$.responses',
+            then: [
+              {
+                function: fakeLintingFunction,
+                functionOptions: {
+                  func1Prop: '1',
+                },
               },
-            },
-            {
-              field: '200',
-              function: fnName2,
-              functionOptions: {
-                func2Prop: '2',
+              {
+                field: '200',
+                function: fakeLintingFunction2,
+                functionOptions: {
+                  func2Prop: '2',
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       });
     });
@@ -1098,13 +996,15 @@ responses:: !!foo
 
     describe('given many then field matches', () => {
       test('should call each one with the appropriate args', async () => {
-        spectral.setRules({
-          example: {
-            message: '',
-            given: '$.responses',
-            then: {
-              field: '$..description',
-              function: fnName,
+        spectral.setRuleset({
+          rules: {
+            example: {
+              message: '',
+              given: '$.responses',
+              then: {
+                field: '$..description',
+                function: fakeLintingFunction,
+              },
             },
           },
         });
@@ -1122,18 +1022,20 @@ responses:: !!foo
   describe('evaluate {{value}} in validation messages', () => {
     test('should print primitive values', () => {
       spectral = new Spectral();
-      spectral.setRules({
-        'header-parameter-names-kebab-case': {
-          severity: DiagnosticSeverity.Error,
-          recommended: true,
-          description: 'A parameter in the header should be written in kebab-case',
-          message: '#{{print("value")}} is not kebab-cased: {{error}}',
-          given: "$..parameters[?(@.in === 'header')]",
-          then: {
-            field: 'name',
-            function: 'pattern',
-            functionOptions: {
-              match: '^[a-z0-9]+((-[a-z0-9]+)+)?$',
+      spectral.setRuleset({
+        rules: {
+          'header-parameter-names-kebab-case': {
+            severity: DiagnosticSeverity.Error,
+            recommended: true,
+            description: 'A parameter in the header should be written in kebab-case',
+            message: '#{{print("value")}} is not kebab-cased: {{error}}',
+            given: "$..parameters[?(@.in === 'header')]",
+            then: {
+              field: 'name',
+              function: pattern,
+              functionOptions: {
+                match: '^[a-z0-9]+((-[a-z0-9]+)+)?$',
+              },
             },
           },
         },
@@ -1173,15 +1075,17 @@ responses:: !!foo
 
     test('should not attempt to print complex values', () => {
       spectral = new Spectral();
-      spectral.setRules({
-        'empty-is-falsy': {
-          severity: DiagnosticSeverity.Error,
-          recommended: true,
-          description: 'Should be falsy',
-          message: 'Value #{{print("value")}} should be falsy',
-          given: '$..empty',
-          then: {
-            function: 'falsy',
+      spectral.setRuleset({
+        rules: {
+          'empty-is-falsy': {
+            severity: DiagnosticSeverity.Error,
+            recommended: true,
+            description: 'Should be falsy',
+            message: 'Value #{{print("value")}} should be falsy',
+            given: '$..empty',
+            then: {
+              function: falsy,
+            },
           },
         },
       });
@@ -1234,15 +1138,17 @@ responses:: !!foo
 
       spectral = new Spectral({ resolver });
 
-      spectral.setRules({
-        'empty-is-falsy': {
-          severity: DiagnosticSeverity.Error,
-          recommended: true,
-          description: 'Should be falsy',
-          message: 'Value #{{print("value")}} should be falsy',
-          given: '$..empty',
-          then: {
-            function: 'falsy',
+      spectral.setRuleset({
+        rules: {
+          'empty-is-falsy': {
+            severity: DiagnosticSeverity.Error,
+            recommended: true,
+            description: 'Should be falsy',
+            message: 'Value #{{print("value")}} should be falsy',
+            given: '$..empty',
+            then: {
+              function: falsy,
+            },
           },
         },
       });
@@ -1290,12 +1196,14 @@ responses:: !!foo
   });
 
   test('should evaluate {{path}} in validation messages', async () => {
-    spectral.setRules({
-      'truthy-get': {
-        given: '$..get',
-        message: 'Invalid value at {{path}}',
-        then: {
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        'truthy-get': {
+          given: '$..get',
+          message: 'Invalid value at {{path}}',
+          then: {
+            function: truthy,
+          },
         },
       },
     });
@@ -1328,13 +1236,15 @@ responses:: !!foo
         info: null,
       });
 
-      spectral.setRules({
-        'no-info': {
-          // some dumb rule to have some error
-          message: 'should be OK',
-          given: '$.info',
-          then: {
-            function: 'truthy',
+      spectral.setRuleset({
+        rules: {
+          'no-info': {
+            // some dumb rule to have some error
+            message: 'should be OK',
+            given: '$.info',
+            then: {
+              function: truthy,
+            },
           },
         },
       });
@@ -1349,12 +1259,14 @@ responses:: !!foo
 
   describe('legacy parsed document', () => {
     beforeEach(() => {
-      spectral.setRules({
-        'falsy-document': {
-          // some dumb rule to have some error
-          given: '$',
-          then: {
-            function: 'falsy',
+      spectral.setRuleset({
+        rules: {
+          'falsy-document': {
+            // some dumb rule to have some error
+            given: '$',
+            then: {
+              function: falsy,
+            },
           },
         },
       });
@@ -1425,17 +1337,19 @@ responses:: !!foo
   test('should be capable of linting arrays', async () => {
     const s = new Spectral();
 
-    s.setRules({
-      'falsy-foo': {
-        given: '$..foo',
-        then: {
-          function: 'falsy',
+    s.setRuleset({
+      rules: {
+        'falsy-foo': {
+          given: '$..foo',
+          then: {
+            function: falsy,
+          },
         },
-      },
-      'truthy-bar': {
-        given: '$..bar',
-        then: {
-          function: 'truthy',
+        'truthy-bar': {
+          given: '$..bar',
+          then: {
+            function: truthy,
+          },
         },
       },
     });

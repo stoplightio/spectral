@@ -1,4 +1,4 @@
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
 export default createRulesetFunction(
   {

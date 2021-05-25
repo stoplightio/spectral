@@ -1,5 +1,5 @@
-import { isPlainObject } from '../guards/isPlainObject';
 import { isObject } from 'lodash';
+import { isPlainObject } from '@stoplight/json';
 
 export function printValue(value: unknown): string {
   if (value === void 0) {

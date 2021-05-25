@@ -8,8 +8,11 @@ info:
 paths: {}
 tags:
   - name: test
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint --quiet {document} --format=json
+{bin} lint --ruleset {asset:ruleset} --quiet {document} --format=json
 ====stdout====
 [
 	{

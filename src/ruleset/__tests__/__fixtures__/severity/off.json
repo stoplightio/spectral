@@ -1,6 +1,0 @@
-{
-  "extends": [["./shared.json", "off"]],
-  "rules": {
-    "overridable-rule": true
-  }
-}

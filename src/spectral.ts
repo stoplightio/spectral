@@ -1,38 +1,23 @@
 import { stringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
+import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
-import { memoize, merge } from 'lodash';
+import { memoize } from 'lodash';
 import type { Agent } from 'http';
 import type * as ProxyAgent from 'proxy-agent';
 
-import { STATIC_ASSETS } from './assets';
-import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
+import { Document, IDocument, IParsedResult, isParsedResult, normalizeSource, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import coreFunctions, { CoreFunctions } from './functions';
 import * as Parsers from './parsers';
-import request from './request';
 import { createHttpAndFileResolver } from './resolvers/http-and-file';
-import { OptimizedRule, Rule } from './rule';
-import { compileExportedFunction, IRulesetReadOptions, readRuleset, getDiagnosticSeverity } from './ruleset';
 import { Runner, RunnerRuntime } from './runner';
-import {
-  FormatLookup,
-  FunctionCollection,
-  IConstructorOpts,
-  IResolver,
-  IRuleResult,
-  IRunOpts,
-  ISpectralFullResult,
-  PartialRuleCollection,
-  RegisteredFormats,
-  RuleCollection,
-  RunRuleCollection,
-} from './types';
-import { IParserOptions, IRuleset } from './types/ruleset';
-import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
+import { IConstructorOpts, IResolver, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
+import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
+import { Ruleset } from './ruleset/ruleset';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
-import { DEFAULT_PARSER_OPTIONS } from './consts';
+import { RulesetDefinition } from './ruleset/types';
+import { Format } from './ruleset/format';
+import { getDiagnosticSeverity } from './ruleset';
 
 memoize.Cache = WeakMap;
 
@@ -42,10 +27,7 @@ export class Spectral {
   private readonly _resolver: IResolver;
   private readonly agent: Agent | undefined;
 
-  public readonly functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
-  public readonly rules: RunRuleCollection = {};
-  public readonly formats: RegisteredFormats;
-  public readonly parserOptions: Required<IParserOptions> = { ...DEFAULT_PARSER_OPTIONS };
+  public ruleset: Ruleset = new Ruleset({ rules: {} });
 
   protected readonly runtime: RunnerRuntime;
 
@@ -66,15 +48,7 @@ export class Spectral {
         typeof window === 'undefined' ? createHttpAndFileResolver({ agent: this.agent }) : new Resolver();
     }
 
-    this.formats = {};
     this.runtime = new RunnerRuntime();
-
-    this.setFunctions(coreFunctions);
-  }
-
-  public static registerStaticAssets(assets: Dictionary<string, string>): void {
-    empty(STATIC_ASSETS);
-    Object.assign(STATIC_ASSETS, assets);
   }
 
   protected parseDocument(
@@ -97,15 +71,21 @@ export class Spectral {
       i++;
       if (diagnostic.code !== 'parser') continue;
 
+      let severity;
+
       if (diagnostic.message.startsWith('Mapping key must be a string scalar rather than')) {
-        diagnostic.severity = getDiagnosticSeverity(this.parserOptions.incompatibleValues);
+        severity = getDiagnosticSeverity(this.ruleset.parserOptions.incompatibleValues);
       } else if (diagnostic.message.startsWith('Duplicate key')) {
-        diagnostic.severity = getDiagnosticSeverity(this.parserOptions.duplicateKeys);
+        severity = getDiagnosticSeverity(this.ruleset.parserOptions.duplicateKeys);
+      } else {
+        continue;
       }
 
-      if (diagnostic.severity === -1) {
+      if (severity === -1) {
         document.diagnostics.splice(i, 1);
         i--;
+      } else {
+        diagnostic.severity = severity;
       }
     }
 
@@ -116,6 +96,11 @@ export class Spectral {
     target: IParsedResult | IDocument | Record<string, unknown> | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
+    const { ruleset } = this;
+    if (!ruleset) {
+      throw new Error('no ruleset loaded');
+    }
+
     const document = this.parseDocument(target, opts.resolve?.documentUri);
 
     if (document.source === null && opts.resolve?.documentUri !== void 0) {
@@ -128,25 +113,18 @@ export class Spectral {
     const runner = new Runner(this.runtime, inventory);
 
     if (document.formats === void 0) {
-      const registeredFormats = Object.keys(this.formats);
-      const foundFormats = registeredFormats.filter(format =>
-        this.formats[format](inventory.resolved, document.source ?? void 0),
-      );
+      const foundFormats = [...ruleset.formats].filter(format => format(inventory.resolved, document.source));
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         document.formats = null;
-        if (registeredFormats.length > 0) {
-          runner.addResult(this._generateUnrecognizedFormatError(document));
+        if (ruleset.formats.size > 0) {
+          runner.addResult(this._generateUnrecognizedFormatError(document, Array.from(ruleset.formats)));
         }
       } else {
-        document.formats = foundFormats;
+        document.formats = new Set(foundFormats);
       }
     }
 
-    await runner.run({
-      rules: this.rules,
-      functions: this.functions,
-    });
-
+    await runner.run(ruleset);
     const results = runner.getResults(this._computeFingerprint);
 
     return {
@@ -158,91 +136,21 @@ export class Spectral {
   public async run(
     target: IParsedResult | IDocument | Record<string, unknown> | string,
     opts: IRunOpts = {},
-  ): Promise<IRuleResult[]> {
+  ): Promise<ISpectralDiagnostic[]> {
     return (await this.runWithResolved(target, opts)).results;
   }
 
-  public setFunctions(functions: FunctionCollection): void {
-    empty(this.functions);
-
-    const mergedFunctions: FunctionCollection = { ...coreFunctions, ...functions };
-
-    for (const key of Object.keys(mergedFunctions)) {
-      this.functions[key] = mergedFunctions[key];
-    }
-  }
-
-  public setRules(rules: RuleCollection): void {
-    empty(this.rules);
-
-    for (const [name, rule] of Object.entries(rules)) {
-      if (this.opts?.useNimma === true || isNimmaEnvVariableSet()) {
-        try {
-          this.rules[name] = new OptimizedRule(name, rule);
-        } catch {
-          this.rules[name] = new Rule(name, rule);
-        }
-      } else {
-        this.rules[name] = new Rule(name, rule);
-      }
-    }
-  }
-
-  public mergeRules(rules: PartialRuleCollection): void {
-    for (const [name, rule] of Object.entries(rules)) {
-      this.rules[name] = merge(this.rules[name], rule);
-    }
-  }
-
-  public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions): Promise<void> {
-    this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], { agent: this.agent, ...options }));
-  }
-
-  public setRuleset(ruleset: IRuleset): void {
+  public setRuleset(ruleset: RulesetDefinition | Ruleset): void {
     this.runtime.revoke();
-
-    this.setRules(ruleset.rules);
-
-    this.setFunctions(
-      Object.entries(ruleset.functions).reduce<FunctionCollection>((fns, [key, { code, ref, name, source }]) => {
-        if (code === void 0) {
-          if (ref !== void 0) {
-            ({ code } = ruleset.functions[ref]);
-          }
-        }
-
-        if (code === void 0) {
-          // shall we log or sth?
-          return fns;
-        }
-
-        fns[key] = compileExportedFunction({
-          code,
-          name,
-          source,
-          inject: {
-            fetch: request,
-            spectral: this.runtime.spawn(),
-          },
-        });
-
-        return fns;
-      }, {}),
-    );
-
-    if (ruleset.parserOptions !== void 0) {
-      Object.assign<Required<IParserOptions>, IParserOptions>(this.parserOptions, ruleset.parserOptions);
-    }
+    this.ruleset = ruleset instanceof Ruleset ? ruleset : new Ruleset(ruleset);
   }
 
-  public registerFormat(format: string, fn: FormatLookup): void {
-    this.formats[format] = fn;
-  }
-
-  private _generateUnrecognizedFormatError(document: IDocument): IRuleResult {
+  private _generateUnrecognizedFormatError(document: IDocument, formats: Format[]): ISpectralDiagnostic {
     return generateDocumentWideResult(
       document,
-      `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(', ')}]`,
+      `The provided document does not match any of the registered formats [${formats
+        .map(fn => fn.displayName ?? fn.name)
+        .join(', ')}]`,
       DiagnosticSeverity.Warning,
       'unrecognized-format',
     );

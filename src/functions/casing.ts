@@ -1,5 +1,5 @@
 import { escapeRegExp } from 'lodash';
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
 export enum CasingType {
   flat = 'flat',

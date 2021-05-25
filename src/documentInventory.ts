@@ -12,6 +12,7 @@ import * as Parsers from './parsers';
 import { IParser } from './parsers/types';
 import { IResolver, IRuleResult } from './types';
 import { getClosestJsonPath, getEndRef, isAbsoluteRef, safePointerToPath, traverseObjUntilRef } from './utils';
+import { Format } from './ruleset/format';
 
 export type DocumentInventoryItem = {
   document: IDocument;
@@ -37,7 +38,7 @@ export class DocumentInventory {
     return this.document.data;
   }
 
-  public get formats(): string[] | null {
+  public get formats(): Set<Format> | null {
     return this.document.formats ?? null;
   }
 

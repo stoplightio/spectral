@@ -1,13 +1,13 @@
 import { ValidateFunction, ErrorObject } from 'ajv';
 import * as betterAjvErrors from '@stoplight/better-ajv-errors';
-import { IFunctionResult } from '../../types/function';
-import { detectDialect } from '../../formats';
+import type { IFunctionResult } from '../../types/function';
+import { detectDialect } from '@stoplight/spectral-formats';
 import { assignAjvInstance } from './ajv';
 import { Optional } from '@stoplight/types';
 import { draft7 } from 'json-schema-migrate';
 import type { JSONSchema } from '../../types';
 import MissingRefError from 'ajv/dist/compile/ref_error';
-import { createRulesetFunction } from '../../ruleset/rulesetFunction';
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;

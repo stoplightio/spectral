@@ -15,20 +15,36 @@ schemas:
 ====command====
 {bin} lint {document} -r {asset:ruleset} --ignore-unknown-format
 ====asset:ruleset====
-rules:
-  valid-user-properties:
-    severity: error
-    given: [$.schemas.user.properties.name, $.schemas.user.properties.occupation]
-    then:
-      field: type
-      function: pattern
-      functionOptions:
-        match: /^string$/
-  require-user-and-address:
-    severity: error
-    given: [$.schemas.user, $.schemas.address]
-    then:
-      function: truthy
+const { truthy, pattern } = require("@stoplight/spectral-functions");
+
+module.exports = {
+   "rules": {
+      "valid-user-properties": {
+         "severity": "error",
+         "given": [
+            "$.schemas.user.properties.name",
+            "$.schemas.user.properties.occupation"
+         ],
+         "then": {
+            "field": "type",
+            "function": pattern,
+            "functionOptions": {
+               "match": "/^string$/"
+            }
+         }
+      },
+      "require-user-and-address": {
+         "severity": "error",
+         "given": [
+            "$.schemas.user",
+            "$.schemas.address"
+         ],
+         "then": {
+            "function": truthy
+         }
+      }
+   }
+}
 ====status====
 1
 ====stdout====

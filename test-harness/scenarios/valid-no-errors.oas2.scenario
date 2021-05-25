@@ -14,8 +14,10 @@ schemes:
 paths: {}
 tags:
   - name: my-tag
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document}
+{bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 2.0 (Swagger) detected
 No results with a severity of 'error' or higher found!

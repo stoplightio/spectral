@@ -82,9 +82,12 @@ The name of severity levels are display correctly by stylish formatter
     }
   }
 }
-====asset:oas-mixed-severity.json====
-{
-  "extends": ["spectral:oas"],
+====asset:oas-mixed-severity.js====
+const { oas } = require('@stoplight/spectral-rulesets');
+const { pattern } = require('@stoplight/spectral-functions');
+
+module.exports = {
+  "extends": [oas],
   "rules": {
     "info-contact": "error",
     "operation-description": "info",
@@ -96,7 +99,7 @@ The name of severity levels are display correctly by stylish formatter
       "recommended": true,
       "then": {
         "field": "title",
-        "function": "pattern",
+        "function": pattern,
         "functionOptions": {
           "match": "Stoplight"
         }
@@ -105,11 +108,8 @@ The name of severity levels are display correctly by stylish formatter
   }
 }
 ====command====
-{bin} lint --ruleset {asset:oas-mixed-severity.json} {document}
+{bin} lint --ruleset {asset:oas-mixed-severity.js} {document}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
   1:1       warning  oas3-api-servers        OpenAPI `servers` must be present and non-empty array.
   3:10        error  info-contact            Info object should contain `contact` object.                             info

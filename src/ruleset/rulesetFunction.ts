@@ -10,18 +10,7 @@ import { printPath, PrintStyle } from '../utils';
 import { EnumError } from 'ajv/dist/vocabularies/validation/enum';
 import { printValue } from '../utils/printValue';
 
-// todo: to be removed by the js-ish ruleset PR
-const logger = {
-  warn(): void {
-    // no-op
-  },
-  // eslint-disable-next-line no-console
-  log: console.log,
-  // eslint-disable-next-line no-console
-  error: console.error,
-};
-
-const ajv = new Ajv({ allErrors: true, allowUnionTypes: true, strict: true, logger });
+const ajv = new Ajv({ allErrors: true, allowUnionTypes: true, strict: true });
 ajvErrors(ajv);
 addFormats(ajv);
 
