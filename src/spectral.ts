@@ -1,6 +1,6 @@
 import { stringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
+import { Dictionary, Optional } from '@stoplight/types';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize, merge } from 'lodash';
 import type { Agent } from 'http';
@@ -40,7 +40,6 @@ import {
 } from './types';
 import { IParserOptions, IRuleset, RulesetExceptionCollection } from './types/ruleset';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
-import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 import { DEFAULT_PARSER_OPTIONS } from './consts';
 
 memoize.Cache = WeakMap;
@@ -145,7 +144,11 @@ export class Spectral {
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         document.formats = null;
         if (registeredFormats.length > 0) {
-          runner.addResult(this._generateUnrecognizedFormatError(document));
+          throw new Error(
+            `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(
+              ', ',
+            )}]`,
+          );
         }
       } else {
         document.formats = foundFormats;
@@ -268,14 +271,5 @@ export class Spectral {
 
   public registerFormat(format: string, fn: FormatLookup): void {
     this.formats[format] = fn;
-  }
-
-  private _generateUnrecognizedFormatError(document: IDocument): IRuleResult {
-    return generateDocumentWideResult(
-      document,
-      `The provided document does not match any of the registered formats [${Object.keys(this.formats).join(', ')}]`,
-      DiagnosticSeverity.Warning,
-      'unrecognized-format',
-    );
   }
 }

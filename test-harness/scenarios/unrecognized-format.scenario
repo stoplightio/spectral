@@ -5,8 +5,7 @@ openapi: 4.0.0
 info: {}
 ====command====
 {bin} lint {document}
-====stdout====
-{document}
- 1:1  warning  unrecognized-format  The provided document does not match any of the registered formats [oas2, oas3, oas3.0, oas3.1, asyncapi2, json-schema, json-schema-loose, json-schema-draft4, json-schema-draft6, json-schema-draft7, json-schema-2019-09, json-schema-2020-12]
-
-✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
+====status====
+2
+====stderr====
+ The provided document does not match any of the registered formats [oas2, oas3, oas3.0, oas3.1, asyncapi2, json-schema, json-schema-loose, json-schema-draft4, json-schema-draft6, json-schema-draft7, json-schema-2019-09, json-schema-2020-12]

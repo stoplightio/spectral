@@ -21,7 +21,7 @@
       "description": "Operation must have at least one `2xx` or `3xx` response.",
       "recommended": true,
       "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "responses",
         "function": "oasOpSuccessResponse"
@@ -32,7 +32,7 @@
       "recommended": true,
       "formats": ["oas2"],
       "type": "validation",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "function": "oasOpFormDataConsumeCheck"
       }
@@ -52,7 +52,7 @@
       "message": "{{error}}",
       "recommended": true,
       "type": "validation",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )].parameters",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )].parameters",
       "then": {
         "function": "oasOpParams"
       }
@@ -221,7 +221,7 @@
       "description": "Operation `description` must be present and non-empty string.",
       "recommended": true,
       "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "description",
         "function": "truthy"
@@ -231,7 +231,7 @@
       "description": "Operation should have an `operationId`.",
       "recommended": true,
       "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "operationId",
         "function": "truthy"
@@ -241,7 +241,7 @@
       "description": "operationId may only use characters that are valid when used in a URL.",
       "recommended": true,
       "type": "validation",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "operationId",
         "function": "pattern",
@@ -254,7 +254,7 @@
       "description": "Operation may only have one tag.",
       "recommended": false,
       "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "tags",
         "function": "length",
@@ -267,7 +267,7 @@
       "description": "Operation should have non-empty `tags` array.",
       "recommended": true,
       "type": "style",
-      "given": "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
+      "given": "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       "then": {
         "field": "tags",
         "function": "truthy"
@@ -437,9 +437,9 @@
       "severity": 0,
       "type": "validation",
       "given": [
-        "$..definitions..[?(@property !== 'properties' && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..parameters..[?(@property !== 'properties' && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..responses..[?(@property !== 'properties' && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]"
+        "$..definitions..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..responses..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]"
       ],
       "then": {
         "function": "oasExample",
@@ -457,7 +457,7 @@
       "formats": ["oas2"],
       "severity": 0,
       "type": "validation",
-      "given": "$..responses..[?(@.schema && @.examples)]",
+      "given": "$..responses..[?(@ && @.schema && @.examples)]",
       "then": {
         "function": "oasExample",
         "functionOptions": {
@@ -614,9 +614,9 @@
       "formats": ["oas3"],
       "type": "validation",
       "given": [
-        "$..content..[?(@.schema && (@.example !== void 0 || @.examples))]",
-        "$..headers..[?(@.schema && (@.example !== void 0 || @.examples))]",
-        "$..parameters..[?(@.schema && (@.example !== void 0 || @.examples))]"
+        "$..content..[?(@ && @.schema && (@.example !== void 0 || @.examples))]",
+        "$..headers..[?(@ && @.schema && (@.example !== void 0 || @.examples))]",
+        "$..parameters..[?(@ && @.schema && (@.example !== void 0 || @.examples))]"
       ],
       "then": {
         "function": "oasExample",
@@ -635,10 +635,10 @@
       "recommended": true,
       "type": "validation",
       "given": [
-        "$.components.schemas..[?(@property !== 'properties' && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..content..[?(@property !== 'properties' && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..headers..[?(@property !== 'properties' && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..parameters..[?(@property !== 'properties' && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]"
+        "$.components.schemas..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..content..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..headers..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]"
       ],
       "then": {
         "function": "oasExample",

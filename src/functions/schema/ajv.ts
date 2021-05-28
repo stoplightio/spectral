@@ -12,10 +12,13 @@ const logger = {
     const firstArg = args[0];
     if (typeof firstArg === 'string') {
       if (firstArg.startsWith('unknown format')) return;
+      // eslint-disable-next-line no-console
       console.warn(...args);
     }
   },
+  // eslint-disable-next-line no-console
   log: console.log,
+  // eslint-disable-next-line no-console
   error: console.error,
 };
 

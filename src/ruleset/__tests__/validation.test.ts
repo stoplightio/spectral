@@ -1110,12 +1110,8 @@ describe('Function Validation', () => {
     const schema: JSONSchema7 = { type: 'string' };
     const fn = jest.fn();
     const wrapped = decorateIFunctionWithSchemaValidation(fn, schema);
-    try {
-      wrapped({}, 2, { given: [] }, { original: [], given: [] } as any);
-    } catch {
-      // will throw
-    }
 
+    expect(wrapped.bind(null, {}, 2, { given: [] }, { original: [], given: [] } as any)).toThrow();
     expect(fn).not.toHaveBeenCalled();
     expect(() => wrapped({}, {}, { given: [] }, { original: [], given: [] } as any)).toThrow(ValidationError);
   });

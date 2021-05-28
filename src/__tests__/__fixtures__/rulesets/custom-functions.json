@@ -38,18 +38,6 @@
         }
       }
     },
-    "has-info-property-invalid": {
-      "message": "{{error}}",
-      "given": "$",
-      "type": "style",
-      "then": {
-        "function": "hasIn",
-        "functionOptions": {
-          "property": "info",
-          "foo": true
-        }
-      }
-    },
     "has-bar-get-operation": {
       "message": "{{error}}",
       "given": "$.paths",

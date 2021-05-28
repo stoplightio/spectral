@@ -145,11 +145,7 @@ export class Runner {
     }
 
     for (const rule of unoptimizedRules) {
-      try {
-        runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
-      } catch (ex) {
-        console.error(ex);
-      }
+      runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
     }
 
     this.runtime.emit('beforeTeardown');

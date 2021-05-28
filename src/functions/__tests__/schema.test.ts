@@ -97,13 +97,15 @@ describe('schema', () => {
   });
 
   describe('when schema defines unknown format', () => {
+    let warnSpy: jest.SpyInstance;
+
     const testSchema = {
       type: 'string',
       format: 'ISO-3166-1 alpha-2',
     };
 
     beforeEach(() => {
-      jest.spyOn(console, 'warn');
+      warnSpy = jest.spyOn(console, 'warn');
     });
 
     afterEach(() => {
@@ -113,7 +115,7 @@ describe('schema', () => {
     test('does not log a warning in the console', () => {
       const input = 'some string';
       expect(runSchema(input, testSchema)).toEqual([]);
-      expect(console.warn).not.toHaveBeenCalled();
+      expect(warnSpy).not.toHaveBeenCalled();
     });
   });
 
