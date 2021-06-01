@@ -1792,10 +1792,10 @@ acorn-walk@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.2.0.tgz#0de889a601203909b0fbe07b8938dc21d2e967bc"
   integrity sha512-OPdCF6GsMIP+Az+aWfAAOEt2/+iVDKE7oy6lJ098aoe59oAmK76qV6Gw60SbZ8jHuG2wH058GF4pLFbYamYrVA==
 
-acorn-walk@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-8.0.0.tgz#56ae4c0f434a45fff4a125e7ea95fa9c98f67a16"
-  integrity sha512-oZRad/3SMOI/pxbbmqyurIx7jHw1wZDcR9G44L8pUVFEomX/0dH89SrM1KaDXuv1NpzAXz6Op/Xu/Qd5XXzdEA==
+acorn-walk@^8.0.0, acorn-walk@^8.0.2:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-8.1.0.tgz#d3c6a9faf00987a5e2b9bdb506c2aa76cd707f83"
+  integrity sha512-mjmzmv12YIG/G8JQdQuz2MUDShEJ6teYpT5bmWA4q7iwoGen8xtt3twF3OvzIUl+Q06aWIjvnwQUKvQ6TtMRjg==
 
 acorn@^7.1.1:
   version "7.1.1"
@@ -5738,14 +5738,14 @@ karma-jasmine@^3.3.1:
   dependencies:
     jasmine-core "^3.5.0"
 
-karma-typescript-es6-transform@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/karma-typescript-es6-transform/-/karma-typescript-es6-transform-5.2.0.tgz#af728441ca4b1e746d9d3fa999aab4da2ce05587"
-  integrity sha512-t7oP1Yt2Y6wk+9+P1Tq9zmrooPFqrbYF9xOR8FI3gde8VewT/WIRFnI+qT7wEi2gFT+AP7osckWgPWt72Mj+tg==
+karma-typescript-es6-transform@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/karma-typescript-es6-transform/-/karma-typescript-es6-transform-5.5.1.tgz#bb1061279e22b0259496c037e3014719cc6b3344"
+  integrity sha512-5iCFir1hLGdWlFEZk5+hfHKu9sDlSEAt1fJO46v8oqElszlMLVjoGQtSzb9E4uWg9fHo7mlRnjFhwM+WKScQHQ==
   dependencies:
     "@babel/core" "^7.11.1"
     "@babel/preset-env" "^7.11.0"
-    acorn-walk "^8.0.0"
+    acorn-walk "^8.0.2"
     log4js "^6.3.0"
     magic-string "^0.25.7"
 
