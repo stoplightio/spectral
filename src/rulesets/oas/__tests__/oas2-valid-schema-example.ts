@@ -23,7 +23,7 @@ describe('oas2-valid-schema-example', () => {
           },
         ],
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will pass when both examples are valid', async () => {
@@ -40,7 +40,7 @@ describe('oas2-valid-schema-example', () => {
           },
         ],
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will pass when default value is valid', async () => {
@@ -56,7 +56,7 @@ describe('oas2-valid-schema-example', () => {
           },
         ],
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when one of examples is invalid', async () => {
@@ -73,7 +73,7 @@ describe('oas2-valid-schema-example', () => {
           },
         ],
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
           message: '`x-example` property type must be string',
@@ -94,7 +94,7 @@ describe('oas2-valid-schema-example', () => {
           },
         ],
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
           message: `\`${field}\` property type must be string`,
@@ -116,7 +116,7 @@ describe('oas2-valid-schema-example', () => {
           },
         ],
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
           message: '`default` property type must be string',
@@ -139,7 +139,7 @@ describe('oas2-valid-schema-example', () => {
           ],
         });
 
-        expect(results).toEqual([
+        expect([...results]).toEqual([
           expect.objectContaining({
             code: 'oas2-valid-schema-example',
             message: `\`${field}\` property must be equal to one of the allowed values: \`a\`, \`b\``,
@@ -179,7 +179,7 @@ describe('oas2-valid-schema-example', () => {
         ],
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will error with totally invalid input', async () => {
@@ -212,7 +212,7 @@ describe('oas2-valid-schema-example', () => {
         ],
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
           message: '`example` property must have required property `url`',
@@ -242,7 +242,7 @@ describe('oas2-valid-schema-example', () => {
         ],
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
   });
 
@@ -315,7 +315,7 @@ describe('oas2-valid-schema-example', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas2-valid-schema-example',
@@ -365,7 +365,7 @@ describe('oas2-valid-schema-example', () => {
         ],
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-schema-example',
           message: '`example` property type must be string',
@@ -395,7 +395,7 @@ describe('oas2-valid-schema-example', () => {
         },
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
   });
 });

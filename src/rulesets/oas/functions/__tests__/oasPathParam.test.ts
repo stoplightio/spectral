@@ -26,7 +26,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('Error if no path parameter definition', async () => {
@@ -38,7 +38,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-params',
         message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
@@ -74,7 +74,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('No error if $ref path parameter definition is used (at the path level)', async () => {
@@ -98,7 +98,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('No error if path parameter definition is set (at the operation level)', async () => {
@@ -118,7 +118,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('No errors if operation is a not a standard HTTP operation.', async () => {
@@ -130,7 +130,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one', async () => {
@@ -151,7 +151,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'path-params',
         message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
@@ -177,7 +177,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-params',
         message: `The path \`/foo/{bar}/{bar}\` uses the parameter \`{bar}\` multiple times. Path parameters must be unique.`,
@@ -218,7 +218,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-params',
         message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
@@ -260,7 +260,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'path-params',
         message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
@@ -301,7 +301,7 @@ describe('oasPathParam', () => {
       ),
     );
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-params',
         message: `The paths \`/foo/{boo}\` and \`/foo/{bar}\` are equivalent.`,
@@ -359,7 +359,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'path-params',
         message: 'Parameter `boo` is not used in the path `/foo`.',
@@ -445,7 +445,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'path-params',
         message: 'Path parameter `boo` is defined multiple times. Path parameters must be unique.',
@@ -490,7 +490,7 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 
   test('No error if path parameter definition has override at the operation level', async () => {
@@ -519,6 +519,6 @@ describe('oasPathParam', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 });

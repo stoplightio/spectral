@@ -24,7 +24,7 @@ describe('oas2-host-trailing-slash', () => {
       paths: {},
       host: 'stoplight.io/',
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-host-trailing-slash',
         message: 'Server URL should not have a trailing slash.',

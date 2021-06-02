@@ -158,7 +158,7 @@ describe('spectral', () => {
         });
       });
 
-      test('should handle lack of information about $refs gracefully', () => {
+      test('should handle lack of information about $refs gracefully', async () => {
         const customResolver: IResolver = {
           resolve: jest.fn(async () => ({
             result: {
@@ -192,7 +192,7 @@ describe('spectral', () => {
 
         const target = new Document(`{"foo":"bar"}`, Parsers.Json, 'foo');
 
-        return expect(s.run(target)).resolves.toStrictEqual([
+        expect([...(await s.run(target))]).toStrictEqual([
           {
             code: 'truthy-baz',
             message: 'Baz must be truthy',
@@ -213,7 +213,7 @@ describe('spectral', () => {
         ]);
       });
 
-      test('should recognize the source of local $refs', () => {
+      test('should recognize the source of local $refs', async () => {
         const s = new Spectral();
         const source = 'foo.yaml';
 
@@ -259,7 +259,7 @@ describe('spectral', () => {
           },
         });
 
-        return expect(s.run(document)).resolves.toEqual([
+        expect([...(await s.run(document))]).toEqual([
           {
             code: 'pagination-responses-have-x-next-token',
             message: 'All collection endpoints have the X-Next-Token parameter in responses',

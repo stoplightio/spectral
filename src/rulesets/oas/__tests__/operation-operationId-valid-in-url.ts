@@ -34,7 +34,7 @@ describe('operation-operationId-valid-in-url', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-operationId-valid-in-url',
         message: 'operationId may only use characters that are valid when used in a URL.',

@@ -32,7 +32,7 @@ describe('operation-tags', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-tags',
         message: 'Operation should have non-empty `tags` array.',

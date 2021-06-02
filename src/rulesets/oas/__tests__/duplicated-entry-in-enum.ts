@@ -14,7 +14,7 @@ describe('duplicated-entry-in-enum', () => {
         swagger: '2.0',
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('does not report anything when the model valid', async () => {
@@ -30,7 +30,7 @@ describe('duplicated-entry-in-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('does not report anything when enum is an object property', async () => {
@@ -55,7 +55,7 @@ describe('duplicated-entry-in-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('identifies enum with duplicated entries', async () => {
@@ -71,7 +71,7 @@ describe('duplicated-entry-in-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'duplicated-entry-in-enum',
           message: `A duplicated entry in the enum was found. Error: \`enum\` property must not have duplicate items (items ## 1 and 5 are identical)`,
@@ -89,7 +89,7 @@ describe('duplicated-entry-in-enum', () => {
         openapi: '3.0.0',
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('does not report anything when the model is valid', async () => {
@@ -107,7 +107,7 @@ describe('duplicated-entry-in-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('identifies enum with duplicated entries', async () => {
@@ -125,7 +125,7 @@ describe('duplicated-entry-in-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'duplicated-entry-in-enum',
           message: `A duplicated entry in the enum was found. Error: \`enum\` property must not have duplicate items (items ## 1 and 5 are identical)`,

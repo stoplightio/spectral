@@ -156,10 +156,7 @@ export class Spectral {
       exceptions: this.exceptions,
     });
 
-    const results = runner.results.slice();
-    // @ts-expect-error: ;[
-    results.context = runner.results.context;
-    return results;
+    return runner.results;
   }
 
   public setFunctions(functions: FunctionCollection): void {

@@ -52,7 +52,7 @@ describe('oasOpIdUnique', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-operationId-unique',
         message: 'Every operation must have a unique `operationId`.',
@@ -86,7 +86,7 @@ describe('oasOpIdUnique', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-operationId-unique',
         message: 'Every operation must have a unique `operationId`.',

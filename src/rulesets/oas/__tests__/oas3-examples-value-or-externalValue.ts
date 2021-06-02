@@ -108,7 +108,7 @@ describe('oas3-examples-value-or-externalValue', () => {
       openapi: '3.0.0',
       components: { examples: { first: {} } },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
@@ -130,7 +130,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
@@ -148,7 +148,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         examples: { first: { externalValue: 'externalValue', value: 'value' } },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
@@ -170,7 +170,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
@@ -196,7 +196,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
@@ -222,7 +222,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',
@@ -259,7 +259,7 @@ describe('oas3-examples-value-or-externalValue', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-examples-value-or-externalValue',
         message: 'Examples should have either a `value` or `externalValue` field.',

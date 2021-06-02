@@ -22,7 +22,7 @@ describe('path-declarations-must-exist', () => {
       swagger: '2.0',
       paths: { '/path/{}': {} },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-declarations-must-exist',
         message: 'Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.',

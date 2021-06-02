@@ -24,7 +24,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
           },
         ],
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail for valid parents examples which contain invalid child examples', async () => {
@@ -84,7 +84,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: `${spec}-valid-schema-example`,
           message: '`example` property type must be string',
@@ -129,7 +129,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
         ],
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will not fail if an actual property is called example and there is also type/format property', async () => {
@@ -153,7 +153,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
         ],
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when simple example is invalid', async () => {
@@ -168,7 +168,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
           },
         ],
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: `${spec}-valid-schema-example`,
@@ -206,7 +206,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
         ],
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when complex example is used', async () => {
@@ -249,7 +249,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
 
       const results = await s.run(data);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: `${spec}-valid-schema-example`,
           message: '`example` property type must be number',
@@ -287,7 +287,7 @@ describe.each(['oas2', 'oas3'])('%s', spec => {
         ],
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: `${spec}-valid-schema-example`,
           message: '`example` property must have required property `url`',

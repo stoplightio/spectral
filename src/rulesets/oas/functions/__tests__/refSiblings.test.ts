@@ -65,7 +65,7 @@ describe('refSiblings', () => {
 
     const results = await s.run(new Document(doc, Parsers.Json));
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'no-$ref-siblings',
         message: '$ref cannot be placed next to any other properties',
@@ -177,7 +177,7 @@ describe('refSiblings', () => {
 
     const results = await s.run(new Document(doc, Parsers.Json));
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'no-$ref-siblings',
 

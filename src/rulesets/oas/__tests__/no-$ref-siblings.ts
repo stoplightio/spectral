@@ -28,7 +28,7 @@ describe('no-$ref-siblings', () => {
       openapi: '3.0.0',
     });
 
-    expect(results).toEqual(
+    expect([...results]).toEqual(
       expect.arrayContaining([
         {
           code: 'no-$ref-siblings',

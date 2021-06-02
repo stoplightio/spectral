@@ -32,7 +32,7 @@ describe('Linter', () => {
 
     const result = await spectral.run({});
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'explicitly-not-recommended',
       }),
@@ -44,7 +44,7 @@ describe('Linter', () => {
 
   it('should make use of custom functions', async () => {
     await spectral.loadRuleset(functionRuleset);
-    expect(await spectral.run({})).toEqual([
+    expect([...(await spectral.run({}))]).toEqual([
       expect.objectContaining({
         code: 'has-info-property',
         message: 'info property is missing',
@@ -54,23 +54,23 @@ describe('Linter', () => {
 
   it('should prefer custom functions over the built-in ones', async () => {
     await spectral.loadRuleset(functionRuleset);
-    expect(
-      await spectral.run({
+    expect([
+      ...(await spectral.run({
         info: {
           contact: true,
         },
-      }),
-    ).toEqual([]);
+      })),
+    ]).toEqual([]);
 
     // this is an actual for difference between the built-in ruleset and the custon one
 
-    expect(
-      await spectral.run({
+    expect([
+      ...(await spectral.run({
         info: {
           contact: 1,
         },
-      }),
-    ).toEqual([
+      })),
+    ]).toEqual([
       expect.objectContaining({
         code: 'true-info-contact',
       }),
@@ -188,12 +188,12 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
     it('should support require calls', async () => {
       await spectral.loadRuleset(functionRuleset);
-      expect(
-        await spectral.run({
+      expect([
+        ...(await spectral.run({
           info: {},
           paths: {},
-        }),
-      ).toEqual([
+        })),
+      ]).toEqual([
         expect.objectContaining({
           code: 'has-bar-get-operation',
           message: 'Object does not have undefined property',
@@ -284,7 +284,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         jest.advanceTimersByTime(200);
 
-        expect(await result).toEqual([
+        expect([...(await result)]).toEqual([
           {
             code: 'async-foo',
             message: 'Error reported by async fn',
@@ -312,7 +312,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         jest.advanceTimersByTime(1000);
 
-        expect(await result).toEqual([]);
+        expect([...(await result)]).toEqual([]);
       });
 
       it('should be able to make actual requests', async () => {
@@ -370,7 +370,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           },
         });
 
-        expect(results).toEqual([
+        expect([...results]).toEqual([
           {
             code: 'no-evil-words',
             message: '`foo` is a forbidden word.',
@@ -436,7 +436,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           },
         });
 
-        expect(results).toEqual([
+        expect([...results]).toEqual([
           {
             code: 'no-evil-words',
             message: '`foo` is a forbidden word.',
@@ -458,7 +458,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
   it('should respect the scope of defined functions (ruleset-based)', async () => {
     await spectral.loadRuleset(customDirectoryFunctionsRuleset);
-    expect(await spectral.run({})).toEqual([
+    expect([...(await spectral.run({}))]).toEqual([
       expect.objectContaining({
         code: 'has-field-property',
         message: 'Object does not have field property',
@@ -486,7 +486,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       },
     );
 
-    expect(result).toEqual(
+    expect([...result]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           code: 'invalid-ref',
@@ -576,7 +576,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
     it('should ignore specified rules violations in a standalone document', async () => {
       await spectral.loadRuleset(exceptionRuleset);
 
-      const res = await spectral.run(
+      const results = await spectral.run(
         {
           openapi: '3.0.2',
           info: {
@@ -590,21 +590,21 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         },
       );
 
-      expect(res.length).toBeGreaterThan(0);
+      expect(results.length).toBeGreaterThan(0);
 
-      expect(res).not.toContainEqual(
+      expect(results).not.toContainEqual(
         expect.objectContaining({
           code: 'info-contact',
         }),
       );
 
-      expect(res).not.toContainEqual(
+      expect(results).not.toContainEqual(
         expect.objectContaining({
           code: 'info-description',
         }),
       );
 
-      expect(res).not.toContainEqual(
+      expect(results).not.toContainEqual(
         expect.objectContaining({
           code: 'oas3-api-servers',
         }),
@@ -740,7 +740,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const first = await spectral.run(document, opts);
 
-        expect(first).toEqual([
+        expect([...first]).toEqual([
           expect.objectContaining({
             code: 'strings-maxLength',
           }),
@@ -755,7 +755,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const second = await spectral.run(document, opts);
 
-        expect(second).toEqual([
+        expect([...second]).toEqual([
           expect.objectContaining({
             code: 'schema',
           }),
@@ -776,7 +776,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const first = await spectral.run(document, opts);
 
-        expect(first).toEqual([
+        expect([...first]).toEqual([
           expect.objectContaining({
             code: 'no-json-schema-integer-type',
           }),
@@ -807,7 +807,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         const second = await spectral.run(document, opts);
 
-        expect(second).toEqual([
+        expect([...second]).toEqual([
           expect.objectContaining({
             code: 'schema',
           }),
@@ -835,9 +835,9 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       ['explicitly-not-recommended', false],
     ]);
 
-    const res = await spectral.run(target);
+    const results = await spectral.run(target);
 
-    expect(res).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'explicitly-recommended',
       }),

@@ -56,7 +56,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-operation-security-defined',
           message: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
@@ -118,7 +118,7 @@ describe('oasOpSecurityDefined', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-operation-security-defined',
           message:

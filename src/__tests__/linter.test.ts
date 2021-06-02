@@ -81,7 +81,7 @@ describe('linter', () => {
       { ignoreUnknownFormat: true },
     );
 
-    return expect(results).toEqual([
+    return expect([...results]).toEqual([
       {
         code: 'rule2',
         message: '`foo` property must be truthy',
@@ -133,7 +133,7 @@ describe('linter', () => {
       { ignoreUnknownFormat: true },
     );
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule1',
         message,
@@ -213,7 +213,7 @@ describe('linter', () => {
       { ignoreUnknownFormat: true },
     );
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'valid-header',
         path: ['a', '/b', 'header', 'a~'],
@@ -247,7 +247,7 @@ describe('linter', () => {
       { ignoreUnknownFormat: true },
     );
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule1',
         severity: DiagnosticSeverity.Error,
@@ -287,7 +287,7 @@ describe('linter', () => {
       y: '',
     });
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule1',
       }),
@@ -321,7 +321,7 @@ describe('linter', () => {
       y: '',
     });
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule1',
       }),
@@ -367,7 +367,7 @@ describe('linter', () => {
       y: '',
     });
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'unrecognized-format',
         message: 'The provided document does not match any of the registered formats [oas2, oas3]',
@@ -408,7 +408,7 @@ describe('linter', () => {
       y: '',
     });
 
-    expect(result).toEqual([]);
+    expect([...result]).toEqual([]);
   });
 
   test('should execute rules matching all found formats', async () => {
@@ -440,7 +440,7 @@ describe('linter', () => {
       y: '',
     });
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule1',
       }),
@@ -490,7 +490,7 @@ describe('linter', () => {
       { ignoreUnknownFormat: true },
     );
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule3',
       }),
@@ -503,7 +503,7 @@ describe('linter', () => {
     spectral.registerFormat('oas3', () => false);
     const result = await spectral.run('test');
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       {
         code: 'unrecognized-format',
         message: 'The provided document does not match any of the registered formats [oas2, oas3]',
@@ -546,7 +546,7 @@ describe('linter', () => {
       { ignoreUnknownFormat: true },
     );
 
-    expect(result).toEqual([]);
+    expect([...result]).toEqual([]);
   });
 
   test('should accept format lookup by source', async () => {
@@ -573,7 +573,7 @@ describe('linter', () => {
 
     const result = await spectral.run(new Document(`x: false\ny: ''`, Parsers.Yaml, '/foo/bar'));
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'rule1',
       }),
@@ -593,7 +593,7 @@ responses:: !!foo
 
     const result = await spectral.run(responses, { ignoreUnknownFormat: true });
 
-    expect(result).toEqual(
+    expect([...result]).toEqual(
       expect.arrayContaining([
         {
           code: 'parser',
@@ -660,7 +660,7 @@ responses:: !!foo
       },
     );
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'truthy-get',
         path: ['paths', '/test', 'get'],
@@ -683,7 +683,7 @@ responses:: !!foo
 
     const result = await spectral.run(invalidSchema);
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
         message: '`email` property must match format `email`.',
@@ -723,7 +723,7 @@ responses:: !!foo
 
     const result = await spectral.run(invalidStatusCodes);
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
         message: 'Property `42` is not expected to be here.',
@@ -749,7 +749,7 @@ responses:: !!foo
 
     const result = await spectral.run(todosInvalid);
 
-    expect(result).toEqual(
+    expect([...result]).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           code: 'invalid-ref',
@@ -766,7 +766,7 @@ responses:: !!foo
 
     const result = await s.run(invalidSchema, { ignoreUnknownFormat: true });
 
-    expect(result).toEqual([
+    expect([...result]).toEqual([
       expect.objectContaining({
         code: 'invalid-ref',
         message: "No resolver defined for scheme 'file' in ref ./models/pet.yaml",
@@ -795,7 +795,7 @@ responses:: !!foo
 
     const result = await spectral.run(petstoreMergeKeys);
 
-    expect(result).toEqual([]);
+    expect([...result]).toEqual([]);
   });
 
   describe('reports duplicated properties for', () => {
@@ -804,7 +804,7 @@ responses:: !!foo
         ignoreUnknownFormat: true,
       });
 
-      expect(result).toEqual([
+      expect([...result]).toEqual([
         {
           code: 'parser',
           message: 'Duplicate key: foo',
@@ -829,7 +829,7 @@ responses:: !!foo
         ignoreUnknownFormat: true,
       });
 
-      expect(result).toEqual([
+      expect([...result]).toEqual([
         {
           code: 'parser',
           message: 'Duplicate key: foo',
@@ -860,7 +860,7 @@ responses:: !!foo
       { ignoreUnknownFormat: true },
     );
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'parser',
         message: 'Mapping key must be a string scalar rather than number',
@@ -899,7 +899,7 @@ responses:: !!foo
         { ignoreUnknownFormat: true },
       );
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'parser',
           message: 'Mapping key must be a string scalar rather than number',
@@ -938,7 +938,7 @@ responses:: !!foo
         { ignoreUnknownFormat: true },
       );
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test.each<keyof typeof Parsers>(['Json', 'Yaml'])(
@@ -964,7 +964,7 @@ responses:: !!foo
           { ignoreUnknownFormat: true },
         );
 
-        expect(results).toEqual([
+        expect([...results]).toEqual([
           {
             code: 'parser',
             message: 'Duplicate key: 200',
@@ -1009,7 +1009,7 @@ responses:: !!foo
           { ignoreUnknownFormat: true },
         );
 
-        expect(results).toEqual([]);
+        expect([...results]).toEqual([]);
       },
     );
   });
@@ -1158,7 +1158,7 @@ responses:: !!foo
   });
 
   describe('evaluate {{value}} in validation messages', () => {
-    test('should print primitive values', () => {
+    test('should print primitive values', async () => {
       spectral = new Spectral();
       spectral.setRules({
         'header-parameter-names-kebab-case': {
@@ -1177,8 +1177,8 @@ responses:: !!foo
         },
       });
 
-      return expect(
-        spectral.run({
+      return expect([
+        ...(await spectral.run({
           parameters: [
             {
               in: 'header',
@@ -1193,8 +1193,8 @@ responses:: !!foo
               },
             ],
           },
-        }),
-      ).resolves.toEqual([
+        })),
+      ]).toEqual([
         expect.objectContaining({
           code: 'header-parameter-names-kebab-case',
           message: '"fooA" is not kebab-cased: "fooA" must match the pattern "^[a-z0-9]+((-[a-z0-9]+)+)?$"',
@@ -1209,7 +1209,7 @@ responses:: !!foo
       ]);
     });
 
-    test('should not attempt to print complex values', () => {
+    test('should not attempt to print complex values', async () => {
       spectral = new Spectral();
       spectral.setRules({
         'empty-is-falsy': {
@@ -1224,16 +1224,16 @@ responses:: !!foo
         },
       });
 
-      return expect(
-        spectral.run({
-          empty: {
-            a: 'b',
-          },
-          bar: {
-            empty: [13, { empty: 123 }],
-          },
-        }),
-      ).resolves.toEqual([
+      const results = await spectral.run({
+        empty: {
+          a: 'b',
+        },
+        bar: {
+          empty: [13, { empty: 123 }],
+        },
+      });
+
+      return expect([...results]).toEqual([
         expect.objectContaining({
           code: 'empty-is-falsy',
           message: 'Value Object{} should be falsy',
@@ -1277,7 +1277,7 @@ responses:: !!foo
       },
     );
 
-    return expect(result).toEqual([
+    return expect([...result]).toEqual([
       expect.objectContaining({
         code: 'truthy-get',
         message: 'Invalid value at #/paths/~1test/get',
@@ -1315,7 +1315,7 @@ responses:: !!foo
         ignoreUnknownFormat: true,
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'falsy-document',
           source: 'foo',
@@ -1341,7 +1341,7 @@ responses:: !!foo
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'falsy-document',
           source: 'foo',
@@ -1358,7 +1358,7 @@ responses:: !!foo
 
     const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: source } });
 
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 
   test('should be capable of linting arrays', async () => {
@@ -1395,7 +1395,7 @@ responses:: !!foo
 
     const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: source } });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'falsy-foo',
         message: '`foo` property must be falsy',

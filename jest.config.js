@@ -7,4 +7,12 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/'],
   setupFilesAfterEnv: ['./setupJest.ts'],
   globalSetup: './setupJest.global.ts',
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        target: 'ES2020',
+        module: 'esnext',
+      },
+    },
+  },
 };

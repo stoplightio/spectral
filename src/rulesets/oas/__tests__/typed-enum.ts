@@ -14,7 +14,7 @@ describe('typed-enum', () => {
         swagger: '2.0',
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('does not report anything when the model valid', async () => {
@@ -30,7 +30,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('identifies enum values which do not respect the type', async () => {
@@ -46,7 +46,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'typed-enum',
           message: 'Enum value `a string!` does not respect the specified type `integer`.',
@@ -78,7 +78,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'typed-enum',
           message: 'Enum value `null` does not respect the specified type `string`.',
@@ -96,7 +96,7 @@ describe('typed-enum', () => {
         openapi: '3.0.0',
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('does not report anything when the model is valid', async () => {
@@ -114,7 +114,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('identifies enum values which do not respect the type', async () => {
@@ -132,7 +132,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'typed-enum',
           message: 'Enum value `a string!` does not respect the specified type `integer`.',
@@ -166,7 +166,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('supports x-nullable', async () => {
@@ -183,7 +183,7 @@ describe('typed-enum', () => {
 
       const results = await s.run(doc);
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
   });
 });

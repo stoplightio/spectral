@@ -31,7 +31,7 @@ describe('oas2-oneOf', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-oneOf',
         message: 'oneOf is not available in OpenAPI v2, it was added in OpenAPI v3',

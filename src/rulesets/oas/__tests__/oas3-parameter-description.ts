@@ -28,7 +28,7 @@ describe('oas3-parameter-description', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-parameter-description',
           message: 'Parameter objects should have a `description`.',
@@ -59,7 +59,7 @@ describe('oas3-parameter-description', () => {
           },
         });
 
-        expect(results).toEqual([]);
+        expect([...results]).toEqual([]);
       });
     });
 
@@ -88,7 +88,7 @@ describe('oas3-parameter-description', () => {
           },
         });
 
-        expect(results).toEqual([]);
+        expect([...results]).toEqual([]);
       });
     });
   });

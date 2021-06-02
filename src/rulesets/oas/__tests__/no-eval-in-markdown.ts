@@ -30,7 +30,7 @@ describe('no-eval-in-markdown', () => {
         description: 'some description text',
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'no-eval-in-markdown',
         message: 'Markdown descriptions should not contain `eval(`.',
@@ -59,7 +59,7 @@ describe('no-eval-in-markdown', () => {
         description: 'some description contains eval(',
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'no-eval-in-markdown',
         message: 'Markdown descriptions should not contain `eval(`.',

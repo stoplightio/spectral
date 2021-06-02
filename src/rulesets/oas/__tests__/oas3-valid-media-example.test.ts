@@ -22,7 +22,7 @@ describe('oas3-valid-media-example', () => {
           },
         },
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when simple example is invalid', async () => {
@@ -37,7 +37,7 @@ describe('oas3-valid-media-example', () => {
           },
         },
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
@@ -60,7 +60,7 @@ describe('oas3-valid-media-example', () => {
           },
         });
 
-        expect(results).toEqual([
+        expect([...results]).toEqual([
           expect.objectContaining({
             code: 'oas3-valid-media-example',
             message: '`example` property must be equal to one of the allowed values: `a`, `b`',
@@ -99,7 +99,7 @@ describe('oas3-valid-media-example', () => {
         },
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when complex example is used ', async () => {
@@ -140,7 +140,7 @@ describe('oas3-valid-media-example', () => {
 
       const results = await s.run(data);
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will error with totally invalid input', async () => {
@@ -177,7 +177,7 @@ describe('oas3-valid-media-example', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-media-example',
           message: '`example` property must have required property `url`',
@@ -203,7 +203,7 @@ describe('oas3-valid-media-example', () => {
         },
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('does not report example mismatches for unknown AJV formats', async () => {
@@ -220,7 +220,7 @@ describe('oas3-valid-media-example', () => {
         },
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('will fail when simple example is invalid (examples)', async () => {
@@ -240,7 +240,7 @@ describe('oas3-valid-media-example', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
@@ -263,7 +263,7 @@ describe('oas3-valid-media-example', () => {
           },
         ],
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when simple example is invalid', async () => {
@@ -278,7 +278,7 @@ describe('oas3-valid-media-example', () => {
           },
         ],
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-media-example',
@@ -316,7 +316,7 @@ describe('oas3-valid-media-example', () => {
         ],
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when complex example is used', async () => {
@@ -359,7 +359,7 @@ describe('oas3-valid-media-example', () => {
 
       const results = await s.run(data);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-media-example',
           message: '`example` property must have required property `abc`',
@@ -397,7 +397,7 @@ describe('oas3-valid-media-example', () => {
         ],
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-media-example',
           message: '`example` property must have required property `url`',

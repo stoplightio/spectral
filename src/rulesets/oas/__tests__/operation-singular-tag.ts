@@ -34,7 +34,7 @@ describe('operation-singular-tag', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-singular-tag',
         message: 'Operation may only have one tag.',

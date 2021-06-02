@@ -1,0 +1,244 @@
+[
+  {
+    "code": "code 01",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "source": "source 01",
+    "range": {
+      "start": {
+        "line": 1,
+        "character": 1
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 01",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 1,
+        "character": 1
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 01",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "e"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 1
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 01",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "f"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 02",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 02",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "e"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 02",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "f"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 03",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "f"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 2
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 03",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "g"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 2,
+        "character": 3
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 03",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "h"
+    ],
+    "source": "source 02",
+    "range": {
+      "start": {
+        "line": 3,
+        "character": 3
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  },
+  {
+    "code": "code 03",
+    "path": [
+      "a",
+      "b",
+      "c",
+      "f"
+    ],
+    "source": "source 03",
+    "range": {
+      "start": {
+        "line": 3,
+        "character": 3
+      },
+      "end": {
+        "line": 99,
+        "character": 99
+      }
+    },
+    "message": "99",
+    "severity": 0
+  }
+]

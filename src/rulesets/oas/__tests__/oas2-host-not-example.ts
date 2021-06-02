@@ -23,7 +23,7 @@ describe('oas2-host-not-example', () => {
       paths: {},
       host: 'https://example.com',
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'oas2-host-not-example',
         message: 'Host URL should not point at example.com.',

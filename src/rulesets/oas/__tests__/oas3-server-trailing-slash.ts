@@ -45,7 +45,7 @@ describe('oas3-server-trailing-slash', () => {
         },
       ],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-server-trailing-slash',
         message: 'Server URL should not have a trailing slash.',

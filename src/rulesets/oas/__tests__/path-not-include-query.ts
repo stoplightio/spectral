@@ -22,7 +22,7 @@ describe('path-not-include-query', () => {
       swagger: '2.0',
       paths: { '/path?query=true': {} },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-not-include-query',
         message: 'given keys should not include a query string.',

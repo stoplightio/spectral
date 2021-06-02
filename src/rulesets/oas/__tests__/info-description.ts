@@ -24,7 +24,7 @@ describe('info-description', () => {
       paths: {},
       info: { contact: { name: 'stoplight.io' } },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'info-description',
         message: 'OpenAPI object info `description` must be present and non-empty string.',

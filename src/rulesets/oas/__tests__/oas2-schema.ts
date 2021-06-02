@@ -23,7 +23,7 @@ describe('oas2-schema', () => {
         version: '1.0.0',
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-schema',
         message: `\`get\` property must have required property \`responses\`.`,

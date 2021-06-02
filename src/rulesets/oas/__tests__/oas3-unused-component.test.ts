@@ -20,7 +20,7 @@ describe('oasUnusedComponent - Local references', () => {
       openapi: '3.0.0',
     });
 
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 
   test('does not throw when meeting an invalid json pointer', async () => {
@@ -42,7 +42,7 @@ describe('oasUnusedComponent - Local references', () => {
 
     const results = await s.run(doc);
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'invalid-ref',
         path: ['x-hook', '$ref'],
@@ -69,13 +69,13 @@ describe('oasUnusedComponent - Local references', () => {
   test('does not report anything when all the components are referenced', async () => {
     const results = await s.run(new Document(noUnusedComponents, Parsers.Json));
 
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 
   test('reports orphaned components', async () => {
     const results = await s.run(new Document(unusedComponents, Parsers.Json));
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'oas3-unused-component',
         message: 'Potentially unused component has been detected.',

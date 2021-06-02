@@ -22,7 +22,7 @@ describe('operation-success-response', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('is happy when a 301 response is set', async () => {
@@ -39,7 +39,7 @@ describe('operation-success-response', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test('is happy when a (non 200) success response is set', async () => {
@@ -56,7 +56,7 @@ describe('operation-success-response', () => {
       },
     });
 
-    expect(results).toHaveLength(0);
+    expect([...results]).toHaveLength(0);
   });
 
   test.each(['put', 'post', 'delete', 'options', 'head', 'patch', 'trace'])(
@@ -74,7 +74,7 @@ describe('operation-success-response', () => {
         },
       };
       const results = await s.run(obj);
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'operation-success-response',
           message: 'Operation must have at least one `2xx` or `3xx` response.',
@@ -98,7 +98,7 @@ describe('operation-success-response', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'operation-success-response',
         message: 'Operation must have at least one `2xx` or `3xx` response.',
@@ -116,6 +116,6 @@ describe('operation-success-response', () => {
         },
       },
     });
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 });

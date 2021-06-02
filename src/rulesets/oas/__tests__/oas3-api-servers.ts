@@ -23,7 +23,7 @@ describe('oas3-api-servers', () => {
       openapi: '3.0.0',
       paths: {},
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-api-servers',
         message: 'OpenAPI `servers` must be present and non-empty array.',
@@ -49,7 +49,7 @@ describe('oas3-api-servers', () => {
       paths: {},
       servers: [],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-api-servers',
         message: 'OpenAPI `servers` must be present and non-empty array.',

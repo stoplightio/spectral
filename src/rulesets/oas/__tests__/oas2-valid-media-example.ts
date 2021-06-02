@@ -25,7 +25,7 @@ describe('oas2-valid-media-example', () => {
           },
         },
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when example is invalid', async () => {
@@ -43,7 +43,7 @@ describe('oas2-valid-media-example', () => {
           },
         },
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas2-valid-media-example',
           message: '`application/yaml` property type must be string',

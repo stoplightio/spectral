@@ -78,7 +78,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
 
       const results = await s.run(new Document(doc, Parsers.Json));
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'oas2-unused-definition',
           message: 'Potentially unused definition has been detected.',
@@ -106,7 +106,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
       const doc = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(doc, Parsers.Json, fixturePath));
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('when analyzing an indirectly self-referencing document from the filesystem', async () => {
@@ -115,7 +115,7 @@ describe('unusedDefinition - Http and fs remote references', () => {
       const doc = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(doc, Parsers.Json, fixturePath));
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'oas2-unused-definition',
           message: 'Potentially unused definition has been detected.',

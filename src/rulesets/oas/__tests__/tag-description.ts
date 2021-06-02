@@ -24,7 +24,7 @@ describe('tag-description', () => {
       paths: {},
       tags: [{ name: 'tag' }],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'tag-description',
         message: 'Tag object should have a `description`.',

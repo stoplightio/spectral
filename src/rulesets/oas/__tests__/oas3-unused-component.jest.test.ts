@@ -82,7 +82,7 @@ describe('unusedComponent - Http and fs remote references', () => {
 
       const results = await s.run(new Document(doc, Parsers.Json));
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'oas3-unused-component',
           message: 'Potentially unused component has been detected.',
@@ -110,7 +110,7 @@ describe('unusedComponent - Http and fs remote references', () => {
       const spec = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(spec, Parsers.Json, fixturePath));
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
 
     test('when analyzing an indirectly self-referencing document from the filesystem', async () => {
@@ -119,7 +119,7 @@ describe('unusedComponent - Http and fs remote references', () => {
       const spec = await readParsable(fixturePath, { encoding: 'utf8' });
       const results = await s.run(new Document(spec, Parsers.Json, fixturePath));
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         {
           code: 'oas3-unused-component',
           message: 'Potentially unused component has been detected.',

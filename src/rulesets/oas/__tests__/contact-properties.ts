@@ -30,7 +30,7 @@ describe('contact-properties', () => {
       paths: {},
       info: { contact: {} },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'contact-properties',
         message: 'Contact object should have `name`, `url` and `email`.',

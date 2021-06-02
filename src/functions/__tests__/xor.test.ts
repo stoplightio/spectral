@@ -3,7 +3,7 @@ import { IRule, IRuleResult, Spectral } from '../..';
 const applyRuleToObject = async (rule: IRule, doc: Record<string, unknown>): Promise<IRuleResult[]> => {
   const s = new Spectral();
   s.setRules({ rule });
-  return await s.run(doc);
+  return [...(await s.run(doc))];
 };
 
 describe('xor', () => {

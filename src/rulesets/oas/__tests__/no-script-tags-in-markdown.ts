@@ -28,7 +28,7 @@ describe('no-script-tags-in-markdown', () => {
         description: 'some description contains <script',
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'no-script-tags-in-markdown',
         message: 'Markdown descriptions should not contain `<script>` tags.',

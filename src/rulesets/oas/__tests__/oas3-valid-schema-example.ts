@@ -23,7 +23,7 @@ describe('oas3-valid-schema-example', () => {
           },
         },
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will pass when default value is valid', async () => {
@@ -38,7 +38,7 @@ describe('oas3-valid-schema-example', () => {
           },
         },
       });
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when simple example is invalid', async () => {
@@ -53,7 +53,7 @@ describe('oas3-valid-schema-example', () => {
           },
         },
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           severity: DiagnosticSeverity.Error,
           code: 'oas3-valid-schema-example',
@@ -74,7 +74,7 @@ describe('oas3-valid-schema-example', () => {
           },
         },
       });
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
           message: '`default` property type must be string',
@@ -129,7 +129,7 @@ describe('oas3-valid-schema-example', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
           message: '`example` property type must be string',
@@ -166,7 +166,7 @@ describe('oas3-valid-schema-example', () => {
           },
         });
 
-        expect(results).toEqual([
+        expect([...results]).toEqual([
           expect.objectContaining({
             code: 'oas3-valid-schema-example',
             message: '`example` property must be equal to one of the allowed values: `a`, `b`',
@@ -205,7 +205,7 @@ describe('oas3-valid-schema-example', () => {
         },
       });
 
-      expect(results).toHaveLength(0);
+      expect([...results]).toHaveLength(0);
     });
 
     test('will fail when complex example is used', async () => {
@@ -244,7 +244,7 @@ describe('oas3-valid-schema-example', () => {
 
       const results = await s.run(data);
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
           message: '`example` property type must be number',
@@ -282,7 +282,7 @@ describe('oas3-valid-schema-example', () => {
         },
       });
 
-      expect(results).toEqual([
+      expect([...results]).toEqual([
         expect.objectContaining({
           code: 'oas3-valid-schema-example',
           message: '`example` property must have required property `url`',
@@ -310,7 +310,7 @@ describe('oas3-valid-schema-example', () => {
         },
       });
 
-      expect(results).toEqual([]);
+      expect([...results]).toEqual([]);
     });
   });
 });

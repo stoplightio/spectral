@@ -31,7 +31,7 @@ describe('oas3-server-not-example.com', () => {
         },
       ],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'oas3-server-not-example.com',
         message: 'Server URL should not point at example.com.',

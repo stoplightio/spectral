@@ -24,7 +24,7 @@ describe('openapi-tags-alphabetical', () => {
       paths: {},
       tags: [{ name: 'b-tag' }, { name: 'a-tag' }],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'openapi-tags-alphabetical',
         message: 'OpenAPI object should have alphabetical `tags`.',

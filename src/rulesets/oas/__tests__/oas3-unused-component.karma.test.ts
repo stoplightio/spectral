@@ -75,7 +75,7 @@ describe('unusedComponent - Http remote references', () => {
 
     const results = await s.run(new Document(doc, Parsers.Json));
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas3-unused-component',
         message: 'Potentially unused component has been detected.',

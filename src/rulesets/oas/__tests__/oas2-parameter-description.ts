@@ -26,7 +26,7 @@ describe('oas2-parameter-description', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'oas2-parameter-description',
         message: 'Parameter objects should have a `description`.',

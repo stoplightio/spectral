@@ -24,7 +24,7 @@ describe('info-contact', () => {
       paths: {},
       info: { version: '1.0' },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'info-contact',
         message: 'Info object should contain `contact` object.',

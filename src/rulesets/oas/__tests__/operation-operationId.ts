@@ -32,7 +32,7 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-operationId',
         message: 'Operation should have an `operationId`.',
@@ -61,6 +61,6 @@ describe('operation-operationId', () => {
         },
       },
     });
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 });

@@ -22,7 +22,7 @@ describe('path-keys-no-trailing-slash', () => {
       swagger: '2.0',
       paths: { '/path/': {} },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'path-keys-no-trailing-slash',
         message: 'paths should not end with a slash.',

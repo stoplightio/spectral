@@ -72,7 +72,7 @@ describe('unusedDefinition - Http remote references', () => {
 
     const results = await s.run(new Document(doc, Parsers.Json));
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-unused-definition',
         message: 'Potentially unused definition has been detected.',

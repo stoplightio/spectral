@@ -14,8 +14,8 @@ describe('oasDocumentSchema', () => {
 
   describe('given OpenAPI 2 document', () => {
     test('validate security definitions', async () => {
-      expect(
-        await s.run({
+      expect([
+        ...(await s.run({
           swagger: '2.0',
           info: {
             title: 'response example',
@@ -35,8 +35,8 @@ describe('oasDocumentSchema', () => {
           securityDefinitions: {
             basic: null,
           },
-        }),
-      ).toEqual([
+        })),
+      ]).toEqual([
         {
           code: 'oas2-schema',
           message: 'Invalid basic authentication security definition.',
@@ -50,8 +50,8 @@ describe('oasDocumentSchema', () => {
 
   describe('given OpenAPI 3 document', () => {
     test('validate parameters', async () => {
-      expect(
-        await s.run({
+      expect([
+        ...(await s.run({
           openapi: '3.0.1',
           info: {
             title: 'response example',
@@ -78,8 +78,8 @@ describe('oasDocumentSchema', () => {
               },
             },
           },
-        }),
-      ).toEqual([
+        })),
+      ]).toEqual([
         {
           code: 'oas3-schema',
           message: '`type` property type must be string.',
@@ -91,8 +91,8 @@ describe('oasDocumentSchema', () => {
     });
 
     test('validate security schemes', async () => {
-      expect(
-        await s.run({
+      expect([
+        ...(await s.run({
           openapi: '3.0.1',
           info: {
             title: 'response example',
@@ -116,8 +116,8 @@ describe('oasDocumentSchema', () => {
               },
             },
           },
-        }),
-      ).toEqual([
+        })),
+      ]).toEqual([
         {
           code: 'oas3-schema',
           message: 'Invalid security scheme.',
@@ -136,8 +136,8 @@ describe('oasDocumentSchema', () => {
     });
 
     test('validate responses', async () => {
-      expect(
-        await s.run({
+      expect([
+        ...(await s.run({
           openapi: '3.0.1',
           info: {
             title: 'response example',
@@ -153,8 +153,8 @@ describe('oasDocumentSchema', () => {
               },
             },
           },
-        }),
-      ).toEqual([
+        })),
+      ]).toEqual([
         {
           code: 'oas3-schema',
           message: '`200` property must have required property `description`.',

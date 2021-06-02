@@ -111,7 +111,7 @@ describe('Spectral', () => {
 
     const results = await spectral.run(document);
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'requires-type',
         message: '`empty.type` property must be truthy',
@@ -241,7 +241,7 @@ describe('Spectral', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'unsecure-remote-reference',
         path: ['paths', '/path', 'post', 'parameters', '1', '$ref'],
@@ -273,7 +273,7 @@ describe('Spectral', () => {
 
     expect(results.length).toEqual(3);
 
-    return expect(results).toEqual([
+    return expect([...results]).toEqual([
       expect.objectContaining({
         path: ['components', 'schemas', 'Error', 'properties', 'status_code'],
         source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),

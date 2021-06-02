@@ -28,7 +28,7 @@ describe('license-url', () => {
         license: { name: 'MIT' },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'license-url',
         message: 'License object should include `url`.',

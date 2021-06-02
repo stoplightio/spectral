@@ -17,7 +17,7 @@ describe('oas2-unused-definition - local references', () => {
       swagger: '2.0',
     });
 
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 
   test('does not throw when meeting an invalid json pointer', async () => {
@@ -37,7 +37,7 @@ describe('oas2-unused-definition - local references', () => {
 
     const results = await s.run(doc);
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: 'invalid-ref',
         path: ['x-hook', '$ref'],
@@ -95,7 +95,7 @@ describe('oas2-unused-definition - local references', () => {
 
     const results = await s.run(new Document(doc, Parsers.Json));
 
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 
   test('reports orphaned definitions', async () => {
@@ -115,7 +115,7 @@ describe('oas2-unused-definition - local references', () => {
 
     const results = await s.run(new Document(doc, Parsers.Json));
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-unused-definition',
         message: 'Potentially unused definition has been detected.',

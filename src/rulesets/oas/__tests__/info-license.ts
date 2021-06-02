@@ -28,7 +28,7 @@ describe('info-license', () => {
         contact: { name: 'stoplight.io' },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'info-license',
         message: 'OpenAPI object `info` should contain a `license` object.',

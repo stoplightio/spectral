@@ -72,7 +72,7 @@ export default (s: Spectral, oasVersion: number): void => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',
@@ -99,7 +99,7 @@ export default (s: Spectral, oasVersion: number): void => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       expect.objectContaining({
         code: `oas${oasVersion}-parameter-description`,
         message: 'Parameter objects should have a `description`.',

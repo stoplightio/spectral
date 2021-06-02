@@ -32,7 +32,7 @@ describe('operation-description', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-description',
         message: 'Operation `description` must be present and non-empty string.',
@@ -61,6 +61,6 @@ describe('operation-description', () => {
         },
       },
     });
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 });

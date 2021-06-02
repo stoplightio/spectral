@@ -23,7 +23,7 @@ describe('openapi-tags', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'openapi-tags',
         message: 'OpenAPI object should have non-empty `tags` array.',
@@ -49,7 +49,7 @@ describe('openapi-tags', () => {
       paths: {},
       tags: [],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'openapi-tags',
         message: 'OpenAPI object should have non-empty `tags` array.',

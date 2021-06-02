@@ -23,7 +23,7 @@ describe('oas2-api-schemes', () => {
       swagger: '2.0',
       paths: {},
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-api-schemes',
         message: 'OpenAPI host `schemes` must be present and non-empty array.',
@@ -49,7 +49,7 @@ describe('oas2-api-schemes', () => {
       paths: {},
       schemes: [],
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-api-schemes',
         message: 'OpenAPI host `schemes` must be present and non-empty array.',

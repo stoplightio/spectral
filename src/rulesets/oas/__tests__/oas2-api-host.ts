@@ -24,7 +24,7 @@ describe('oas2-api-host', () => {
       paths: {},
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-api-host',
         message: 'OpenAPI `host` must be present and non-empty string.',

@@ -60,7 +60,7 @@ describe('oasTagDefined', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-tag-defined',
         message: 'Operation tags should be defined in global tags.',
@@ -99,7 +99,7 @@ describe('oasTagDefined', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-tag-defined',
         message: 'Operation tags should be defined in global tags.',

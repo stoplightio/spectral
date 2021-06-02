@@ -46,7 +46,7 @@ describe('oasOpFormDataConsumeCheck', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'oas2-operation-formData-consume-check',
         message:

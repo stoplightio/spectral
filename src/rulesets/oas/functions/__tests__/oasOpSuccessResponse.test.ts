@@ -57,7 +57,7 @@ describe('oasOpSuccessResponse', () => {
       },
     });
 
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-success-response',
         message: 'Operation must have at least one `2xx` or `3xx` response.',
@@ -87,7 +87,7 @@ describe('oasOpSuccessResponse', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-success-response',
         message: 'Operation must have at least one `2xx` or `3xx` response.',
@@ -120,6 +120,6 @@ describe('oasOpSuccessResponse', () => {
         },
       },
     });
-    expect(results).toEqual([]);
+    expect([...results]).toEqual([]);
   });
 });

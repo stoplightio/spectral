@@ -72,7 +72,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-parameters',
         message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
@@ -110,7 +110,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-parameters',
         message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
@@ -144,7 +144,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-parameters',
         message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
@@ -185,7 +185,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-parameters',
         message: 'Operation has already at least one instance of the `in:body` parameter.',
@@ -223,7 +223,7 @@ describe('oasOpParams', () => {
         },
       },
     });
-    expect(results).toEqual([
+    expect([...results]).toEqual([
       {
         code: 'operation-parameters',
         message: 'Operation cannot have both `in:body` and `in:formData` parameters.',
