@@ -348,15 +348,21 @@ describe('linter', () => {
       },
     });
 
-    await expect(
-      spectral.run({
-        'foo-bar': true,
-        x: false,
-        y: '',
+    const result = await spectral.run({
+      'foo-bar': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      expect.objectContaining({
+        code: 'unrecognized-format',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
       }),
-    ).rejects.toThrowError(
-      new Error('The provided document does not match any of the registered formats [oas2, oas3]'),
-    );
+      expect.objectContaining({
+        code: 'rule3',
+      }),
+    ]);
   });
 
   test('should let a format lookup to be overridden', async () => {
@@ -462,25 +468,50 @@ describe('linter', () => {
       },
     });
 
-    await expect(
-      spectral.run({
-        'bar-foo': true,
-        x: false,
-        y: '',
+    const result = await spectral.run({
+      'bar-foo': true,
+      x: false,
+      y: '',
+    });
+
+    expect(result).toEqual([
+      {
+        message: 'The provided document does not match any of the registered formats [oas2, oas3, foo-bar]',
+        path: [],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+        code: 'unrecognized-format',
+      },
+      expect.objectContaining({
+        code: 'rule3',
       }),
-    ).rejects.toThrowError(
-      new Error('The provided document does not match any of the registered formats [oas2, oas3, foo-bar]'),
-    );
+    ]);
   });
 
   // TODO: Find a way to cover formats more extensively
   test('given a string input, should warn about unmatched formats', async () => {
     spectral.registerFormat('oas2', () => false);
     spectral.registerFormat('oas3', () => false);
+    const result = await spectral.run('test');
 
-    await expect(spectral.run('test')).rejects.toThrowError(
-      new Error('The provided document does not match any of the registered formats [oas2, oas3]'),
-    );
+    expect(result).toEqual([
+      {
+        code: 'unrecognized-format',
+        message: 'The provided document does not match any of the registered formats [oas2, oas3]',
+        path: [],
+        range: {
+          end: {
+            character: 4,
+            line: 0,
+          },
+          start: {
+            character: 0,
+            line: 0,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
   });
 
   test('given ignoreUnknownFormat, should not warn about unmatched formats', async () => {

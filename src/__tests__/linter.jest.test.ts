@@ -77,9 +77,16 @@ describe('Linter', () => {
     ]);
   });
 
-  xit('should not run function if provided data does not match defined schema', async () => {
+  it('should not run function if provided data does not match defined schema', async () => {
     await spectral.loadRuleset(functionRuleset);
-    await expect(spectral.run('{}')).rejects.toThrowError();
+    expect(await spectral.run({})).toEqual(
+      expect.not.arrayContaining([
+        // has-info-property-invalid is not executed
+        expect.objectContaining({
+          code: 'has-info-property-invalid',
+        }),
+      ]),
+    );
   });
 
   describe('custom functions', () => {
