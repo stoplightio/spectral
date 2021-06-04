@@ -7,7 +7,7 @@ const applyRuleToObject = async (rule: IRule, doc: Record<string, unknown>): Pro
 };
 
 describe('xor', () => {
-  test('returns resolved if no properties are present', async () => {
+  it('returns resolved if no properties are present', async () => {
     return expect(
       applyRuleToObject(
         {
@@ -32,7 +32,7 @@ describe('xor', () => {
     ]);
   });
 
-  test('returns resolved if both properties are present', async () => {
+  it('returns resolved if both properties are present', async () => {
     return expect(
       applyRuleToObject(
         {
@@ -57,7 +57,7 @@ describe('xor', () => {
     ]);
   });
 
-  test('returns resolved if the value is not an object', async () => {
+  it('returns resolved if the value is not an object', async () => {
     return expect(
       applyRuleToObject(
         {
@@ -80,7 +80,7 @@ describe('xor', () => {
     ]);
   });
 
-  test('passes when only one of the properties are present', async () => {
+  it('passes when only one of the properties are present', async () => {
     return expect(
       applyRuleToObject(
         {

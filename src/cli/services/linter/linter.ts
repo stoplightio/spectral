@@ -1,5 +1,4 @@
 import { Document, STDIN } from '../../../document';
-import { KNOWN_FORMATS } from '../../../formats';
 import { readParsable, IFileReadOptions } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
 import { IRuleResult, Spectral } from '../../../spectral';
@@ -21,20 +20,6 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   });
 
   spectral.setRuleset(ruleset);
-
-  for (const [format, lookup, prettyName] of KNOWN_FORMATS) {
-    spectral.registerFormat(format, document => {
-      if (lookup(document)) {
-        if (flags.quiet !== true) {
-          console.log(`${prettyName} detected`);
-        }
-
-        return true;
-      }
-
-      return false;
-    });
-  }
 
   if (flags.verbose === true) {
     if (ruleset) {

@@ -16,15 +16,15 @@ function runFalsy(targetVal: any, targetPath?: any) {
 }
 
 describe('falsy', () => {
-  test('returns undefined if target value is falsy', () => {
+  it('returns undefined if target value is falsy', () => {
     expect(runFalsy(false)).toBeUndefined();
   });
 
-  test('returns undefined if target value is null', () => {
+  it('returns undefined if target value is null', () => {
     expect(runFalsy(null)).toBeUndefined();
   });
 
-  test('returns error message if target value is not falsy', () => {
+  it('returns error message if target value is not falsy', () => {
     expect(runFalsy(true)).toEqual([
       {
         message: '#{{print("property")}}must be falsy',
@@ -32,7 +32,7 @@ describe('falsy', () => {
     ]);
   });
 
-  test('returns undefined if target path is set', () => {
+  it('returns undefined if target path is set', () => {
     expect(runFalsy(null, ['a', 'b'])).toBeUndefined();
   });
 });

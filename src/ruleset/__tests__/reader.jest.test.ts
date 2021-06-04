@@ -2,7 +2,7 @@ import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
-import { RuleCollection, Spectral } from '../../spectral';
+import { RuleCollection } from '../../spectral';
 import { readRuleset } from '../readRuleset';
 
 jest.mock('fs');
@@ -449,43 +449,6 @@ describe('Rulesets reader', () => {
 
   it('given invalid ruleset should output errors', () => {
     return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/must have required property/);
-  });
-
-  it('is able to load the whole ruleset from static file', async () => {
-    nock.disableNetConnect();
-
-    const readFileSpy = jest.spyOn(fs, 'readFile');
-
-    Spectral.registerStaticAssets(require('../../../rulesets/assets/assets.json'));
-
-    const { rules, functions } = await readRuleset('spectral:oas');
-
-    expect(rules).toMatchObject({
-      'openapi-tags': expect.objectContaining({
-        description: 'OpenAPI object should have non-empty `tags` array.',
-        formats: ['oas2', 'oas3'],
-      }),
-      'oas2-schema': expect.objectContaining({
-        description: 'Validate structure of OpenAPI v2 specification.',
-        formats: ['oas2'],
-      }),
-      'oas3-schema': expect.objectContaining({
-        description: 'Validate structure of OpenAPI v3 specification.',
-        formats: ['oas3'],
-      }),
-    });
-
-    expect(functions).toMatchObject({
-      oasOpSuccessResponse: expect.any(Object),
-      oasOpFormDataConsumeCheck: expect.any(Object),
-      oasOpIdUnique: expect.any(Object),
-      oasOpParams: expect.any(Object),
-      oasOpSecurityDefined: expect.any(Object),
-      oasPathParam: expect.any(Object),
-    });
-
-    expect(readFileSpy).not.toBeCalled();
-    readFileSpy.mockRestore();
   });
 
   it('should support YAML merge keys', async () => {

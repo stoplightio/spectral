@@ -14,7 +14,7 @@ describe('JUnit formatter', () => {
     parse = parser.parseStringPromise.bind(parser);
   });
 
-  test('should produce valid report', async () => {
+  it('should produce valid report', async () => {
     const result = await parse(junit(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error }));
     expect(result).toEqual({
       testsuites: {
@@ -84,7 +84,7 @@ describe('JUnit formatter', () => {
     });
   });
 
-  test('given failSeverity set to error, should filter out non-error validation results', async () => {
+  it('given failSeverity set to error, should filter out non-error validation results', async () => {
     const result = await parse(junit(mixedErrors, { failSeverity: DiagnosticSeverity.Error }));
     expect(result).toEqual({
       testsuites: {
@@ -121,7 +121,7 @@ describe('JUnit formatter', () => {
     });
   });
 
-  test('given failSeverity set to other value than error, should filter treat all validation results matching the severity as errors', async () => {
+  it('given failSeverity set to other value than error, should filter treat all validation results matching the severity as errors', async () => {
     const result = await parse(junit(mixedErrors, { failSeverity: DiagnosticSeverity.Warning }));
     expect(result).toEqual({
       testsuites: {

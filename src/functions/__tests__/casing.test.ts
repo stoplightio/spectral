@@ -10,12 +10,12 @@ function runCasing(target: unknown, type: CasingType, disallowDigits?: boolean, 
 }
 
 describe('casing', () => {
-  test('given non-string target should return nothing', () => {
+  it('given non-string target should return nothing', () => {
     expect(runCasing(false, CasingType.camel)).toBeUndefined();
     expect(runCasing(1, CasingType.camel)).toBeUndefined();
   });
 
-  test('given empty string target should return nothing', () => {
+  it('given empty string target should return nothing', () => {
     expect(runCasing('', CasingType.camel)).toBeUndefined();
   });
 
@@ -272,7 +272,7 @@ describe('casing', () => {
       ]);
     });
 
-    test('allows advanced scenarios', () => {
+    it('allows advanced scenarios', () => {
       expect(runCasing('X-MyAmazing-Header', CasingType.pascal, true, { char: '-' })).toBeUndefined();
       expect(
         runCasing('/path/to/myResource', CasingType.camel, true, { char: '/', allowLeading: true }),

@@ -11,7 +11,7 @@ function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?
   } as IFunctionValues);
 }
 describe('oasSchema', () => {
-  test('given OAS2, supports x-nullable', () => {
+  it('given OAS2, supports x-nullable', () => {
     const documentInventory = {
       document: {
         formats: ['oas2'],
@@ -58,7 +58,7 @@ describe('oasSchema', () => {
     });
   });
 
-  test('given OAS3, supports nullable', () => {
+  it('given OAS3, supports nullable', () => {
     const documentInventory = {
       document: {
         formats: ['oas3'],

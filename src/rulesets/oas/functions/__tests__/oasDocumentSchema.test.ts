@@ -1,9 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Spectral } from '../../../..';
 import { prepareResults } from '../oasDocumentSchema';
+import type { ErrorObject } from 'ajv';
 
-import { ErrorObject } from 'ajv';
-import { createWithRules } from '../../__tests__/__helpers__/createWithRules';
+import { createWithRules } from '../../../__tests__/__helpers__/tester';
 
 describe('oasDocumentSchema', () => {
   let s: Spectral;
@@ -13,7 +13,7 @@ describe('oasDocumentSchema', () => {
   });
 
   describe('given OpenAPI 2 document', () => {
-    test('validate security definitions', async () => {
+    it('validate security definitions', async () => {
       expect(
         await s.run({
           swagger: '2.0',
@@ -49,7 +49,7 @@ describe('oasDocumentSchema', () => {
   });
 
   describe('given OpenAPI 3 document', () => {
-    test('validate parameters', async () => {
+    it('validate parameters', async () => {
       expect(
         await s.run({
           openapi: '3.0.1',
@@ -90,7 +90,7 @@ describe('oasDocumentSchema', () => {
       ]);
     });
 
-    test('validate security schemes', async () => {
+    it('validate security schemes', async () => {
       expect(
         await s.run({
           openapi: '3.0.1',
@@ -135,7 +135,7 @@ describe('oasDocumentSchema', () => {
       ]);
     });
 
-    test('validate responses', async () => {
+    it('validate responses', async () => {
       expect(
         await s.run({
           openapi: '3.0.1',
@@ -167,7 +167,7 @@ describe('oasDocumentSchema', () => {
   });
 
   describe('prepareResults', () => {
-    test('given oneOf error one of which is required $ref property missing, picks only one error', () => {
+    it('given oneOf error one of which is required $ref property missing, picks only one error', () => {
       const errors: ErrorObject[] = [
         {
           keyword: 'type',
@@ -205,7 +205,7 @@ describe('oasDocumentSchema', () => {
       ]);
     });
 
-    test('given oneOf error one without any $ref property missing, picks all errors', () => {
+    it('given oneOf error one without any $ref property missing, picks all errors', () => {
       const errors: ErrorObject[] = [
         {
           keyword: 'type',
@@ -261,7 +261,7 @@ describe('oasDocumentSchema', () => {
       ]);
     });
 
-    test('given errors with different data paths, picks all errors', () => {
+    it('given errors with different data paths, picks all errors', () => {
       const errors: ErrorObject[] = [
         {
           keyword: 'type',

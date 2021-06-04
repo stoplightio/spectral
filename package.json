@@ -59,6 +59,7 @@
     "test.update": "yarn test --updateSnapshot",
     "test.watch": "yarn test --watch",
     "test": "jest --silent",
+    "test.rulesets": "jest -c ./src/rulesets/jest.config.js --maxWorkers=2",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -102,6 +103,7 @@
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@types/jest": "^26.0.23",
     "@types/jest-when": "^2.7.2",
+    "@types/karma": "^6.3.0",
     "@types/lodash": "^4.14.167",
     "@types/nanoid": "^2.1.0",
     "@types/node": "~13.1",
@@ -125,11 +127,10 @@
     "jest-when": "^3.2.1",
     "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.3.1",
-    "karma-typescript": "^5.4.0",
-    "karma-typescript-es6-transform": "^5.2.0",
+    "karma-webpack": "^5.0.0",
     "lint-staged": "^10.5.4",
+    "memfs": "^3.2.2",
     "nock": "~12.0.2",
     "node-html-parser": "^3.3.4",
     "pkg": "^5.1.0",
@@ -140,9 +141,11 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "ts-jest": "^26.5.6",
+    "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.4",
+    "webpack": "^5.38.1",
     "xml2js": "^0.4.23"
   },
   "lint-staged": {

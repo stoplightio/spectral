@@ -5,7 +5,7 @@ import { text } from '../text';
 const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('Text formatter', () => {
-  test('should format messages', () => {
+  it('should format messages', () => {
     const result = text(mixedErrors, { failSeverity: DiagnosticSeverity.Error });
     expect(result)
       .toContain(`/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3.json:3:10 hint info-contact "Info object should contain \`contact\` object."

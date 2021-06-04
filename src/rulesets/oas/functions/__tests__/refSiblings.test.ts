@@ -17,7 +17,7 @@ describe('refSiblings', () => {
     }),
   });
 
-  test('does not report anything for valid object', async () => {
+  it('does not report anything for valid object', async () => {
     const results = await s.run({
       swagger: '2.0',
       securityDefinitions: {
@@ -39,7 +39,7 @@ describe('refSiblings', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('reports $ref siblings for oas2 document', async () => {
+  it('reports $ref siblings for oas2 document', async () => {
     const doc = `{
   "swagger": "2.0",
   "securityDefinitions": {
@@ -149,7 +149,7 @@ describe('refSiblings', () => {
     ]);
   });
 
-  test('reports $ref siblings for oas3 document', async () => {
+  it('reports $ref siblings for oas3 document', async () => {
     const doc = `{
   "openapi": "3.0.0",
   "components": {

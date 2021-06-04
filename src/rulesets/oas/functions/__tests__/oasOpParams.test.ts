@@ -17,7 +17,7 @@ describe('oasOpParams', () => {
     });
   });
 
-  test('No error if no params', async () => {
+  it('No error if no params', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -28,7 +28,7 @@ describe('oasOpParams', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('No error if only one param operation level', async () => {
+  it('No error if only one param operation level', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -41,7 +41,7 @@ describe('oasOpParams', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('No error if same param on different operations', async () => {
+  it('No error if same param on different operations', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -57,7 +57,7 @@ describe('oasOpParams', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('Error if non-unique param on same operation', async () => {
+  it('Error if non-unique param on same operation', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -90,7 +90,7 @@ describe('oasOpParams', () => {
     ]);
   });
 
-  test('Error if non-unique $ref param on same operation', async () => {
+  it('Error if non-unique $ref param on same operation', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -128,7 +128,7 @@ describe('oasOpParams', () => {
     ]);
   });
 
-  test('Errors if multiple non-unique param on same operation', async () => {
+  it('Errors if multiple non-unique param on same operation', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -162,7 +162,7 @@ describe('oasOpParams', () => {
     ]);
   });
 
-  test('Error if multiple in:body', async () => {
+  it('Error if multiple in:body', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -210,7 +210,7 @@ describe('oasOpParams', () => {
     ]);
   });
 
-  test('Error if both in:formData and in:body', async () => {
+  it('Error if both in:formData and in:body', async () => {
     const results = await s.run({
       paths: {
         '/foo': {

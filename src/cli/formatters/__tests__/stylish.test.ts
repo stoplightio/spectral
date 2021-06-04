@@ -7,14 +7,14 @@ const oas3SchemaErrors = sortResults(require('./__fixtures__/oas3-schema-errors.
 const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
 
 describe('Stylish formatter', () => {
-  test('should prefer message for oas-schema errors', () => {
+  it('should prefer message for oas-schema errors', () => {
     const result = stylish(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error });
     expect(result).toContain('oas3-schema  should NOT have additional properties: type');
     expect(result).toContain('oas3-schema  should match exactly one schema in oneOf');
     expect(result).toContain("oas3-schema  should have required property '$ref'");
   });
 
-  test('should display proper severity level', () => {
+  it('should display proper severity level', () => {
     const result = stylish(mixedErrors, { failSeverity: DiagnosticSeverity.Error });
     expect(result).toContain(`
   3:10         ${chalk.white(

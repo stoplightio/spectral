@@ -20,7 +20,7 @@ describe('defined', () => {
     expect(runDefined(value)).toBeUndefined();
   });
 
-  test('should return an error message if target value is undefined', () => {
+  it('should return an error message if target value is undefined', () => {
     expect(runDefined(void 0)).toEqual([
       {
         message: '#{{print("property")}}must be defined',

@@ -12,7 +12,7 @@ function runPayloadValidation(targetVal: any, opts: { type: 'examples' | 'defaul
 }
 
 describe('asyncApi2SchemaValidation', () => {
-  test('validates examples', () => {
+  it('validates examples', () => {
     const payload = {
       type: 'string',
       examples: [17, 'one', 13],
@@ -32,7 +32,7 @@ describe('asyncApi2SchemaValidation', () => {
     ]);
   });
 
-  test('validates default', () => {
+  it('validates default', () => {
     const payload = {
       type: 'string',
       default: 18,

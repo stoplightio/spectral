@@ -17,7 +17,7 @@ describe('oasPathParam', () => {
     });
   });
 
-  test('No error if templated path is not used', async () => {
+  it('No error if templated path is not used', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -29,7 +29,7 @@ describe('oasPathParam', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('Error if no path parameter definition', async () => {
+  it('Error if no path parameter definition', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -58,7 +58,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('No error if path parameter definition is used (at the path level)', async () => {
+  it('No error if path parameter definition is used (at the path level)', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -77,7 +77,7 @@ describe('oasPathParam', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('No error if $ref path parameter definition is used (at the path level)', async () => {
+  it('No error if $ref path parameter definition is used (at the path level)', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -101,7 +101,7 @@ describe('oasPathParam', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('No error if path parameter definition is set (at the operation level)', async () => {
+  it('No error if path parameter definition is set (at the operation level)', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -121,7 +121,7 @@ describe('oasPathParam', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('No errors if operation is a not a standard HTTP operation.', async () => {
+  it('No errors if operation is a not a standard HTTP operation.', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -133,7 +133,7 @@ describe('oasPathParam', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one', async () => {
+  it('Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -161,7 +161,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('Error if duplicate path parameters with same name are used', async () => {
+  it('Error if duplicate path parameters with same name are used', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}/{bar}': {
@@ -197,7 +197,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('Error if $ref path parameter definition is not required', async () => {
+  it('Error if $ref path parameter definition is not required', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -238,7 +238,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('Error if $ref operation parameter definition is not required', async () => {
+  it('Error if $ref operation parameter definition is not required', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {
@@ -270,7 +270,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('Error if paths are functionally equivalent', async () => {
+  it('Error if paths are functionally equivalent', async () => {
     const results = await s.run(
       new Document(
         `{
@@ -321,7 +321,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('Error if path parameter definition is set (at the global and/or operation level), but unused', async () => {
+  it('Error if path parameter definition is set (at the global and/or operation level), but unused', async () => {
     const results = await s.run({
       paths: {
         '/foo': {
@@ -387,7 +387,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('Error if path parameter are defined multiple times', async () => {
+  it('Error if path parameter are defined multiple times', async () => {
     const results = await s.run({
       paths: {
         '/foo/{boo}/{bar}/{qux}': {
@@ -467,7 +467,7 @@ describe('oasPathParam', () => {
     ]);
   });
 
-  test('No error if two parameters bear the same name but target different locations', async () => {
+  it('No error if two parameters bear the same name but target different locations', async () => {
     const results = await s.run({
       paths: {
         '/foo/{boo}': {
@@ -493,7 +493,7 @@ describe('oasPathParam', () => {
     expect(results).toEqual([]);
   });
 
-  test('No error if path parameter definition has override at the operation level', async () => {
+  it('No error if path parameter definition has override at the operation level', async () => {
     const results = await s.run({
       paths: {
         '/foo/{bar}': {

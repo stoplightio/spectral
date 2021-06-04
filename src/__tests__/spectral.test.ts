@@ -70,7 +70,7 @@ describe('spectral', () => {
   });
 
   describe('setRules & mergeRules', () => {
-    test('should not mutate the passing in rules object', () => {
+    it('should not mutate the passing in rules object', () => {
       const givenCustomRuleSet = {
         rule1: {
           given: '$',
@@ -95,7 +95,7 @@ describe('spectral', () => {
       expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
     });
 
-    test('should update/append on the current rules', () => {
+    it('should update/append on the current rules', () => {
       const s = new Spectral();
 
       s.setRules({
@@ -134,7 +134,7 @@ describe('spectral', () => {
 
   describe('when a $ref appears', () => {
     describe('and a custom resolver is provided', () => {
-      test('will call the resolver with target', async () => {
+      it('will call the resolver with target', async () => {
         const customResolver: IResolver = {
           resolve: jest.fn(async () => ({
             result: {},
@@ -158,7 +158,7 @@ describe('spectral', () => {
         });
       });
 
-      test('should handle lack of information about $refs gracefully', () => {
+      it('should handle lack of information about $refs gracefully', () => {
         const customResolver: IResolver = {
           resolve: jest.fn(async () => ({
             result: {
@@ -213,7 +213,7 @@ describe('spectral', () => {
         ]);
       });
 
-      test('should recognize the source of local $refs', () => {
+      it('should recognize the source of local $refs', () => {
         const s = new Spectral();
         const source = 'foo.yaml';
 

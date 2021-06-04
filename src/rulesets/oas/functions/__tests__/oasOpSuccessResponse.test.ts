@@ -17,7 +17,7 @@ describe('oasOpSuccessResponse', () => {
     });
   });
 
-  test('validate a correct object', async () => {
+  it('validate a correct object', async () => {
     const results = await s.run({
       paths: {
         '/path1': {
@@ -38,7 +38,7 @@ describe('oasOpSuccessResponse', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors if missing Success', async () => {
+  it('return errors if missing Success', async () => {
     const results = await s.run({
       paths: {
         '/path1': {
@@ -77,7 +77,7 @@ describe('oasOpSuccessResponse', () => {
     ]);
   });
 
-  test('return errors if no responses', async () => {
+  it('return errors if no responses', async () => {
     const results = await s.run({
       paths: {
         '/path1': {
@@ -107,7 +107,7 @@ describe('oasOpSuccessResponse', () => {
     ]);
   });
 
-  test('does not complain when no $.responses property', async () => {
+  it('does not complain when no $.responses property', async () => {
     const results = await s.run({
       paths: {
         '/test': {

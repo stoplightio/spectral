@@ -28,7 +28,7 @@ describe('typedEnum', () => {
     });
   });
 
-  test('is undefined when the enum contains no value', () => {
+  it('is undefined when the enum contains no value', () => {
     const schema = {
       type: 'integer',
       enum: [],
@@ -38,7 +38,7 @@ describe('typedEnum', () => {
   });
 
   describe('basic', () => {
-    test('is undefined when all enum values respect the type', () => {
+    it('is undefined when all enum values respect the type', () => {
       const schema = {
         type: 'integer',
         enum: [123, 456],
@@ -47,7 +47,7 @@ describe('typedEnum', () => {
       expect(runTypedEnum(schema)).toBeUndefined();
     });
 
-    test('is undefined when all enum values respect the type', () => {
+    it('is undefined when all enum values respect the type', () => {
       const schema = {
         type: 'integer',
         enum: [123, 456],
@@ -65,7 +65,7 @@ describe('typedEnum', () => {
       expect(runTypedEnum(schema)).toBeUndefined();
     });
 
-    test('identifies enum values which do not respect the type', () => {
+    it('identifies enum values which do not respect the type', () => {
       const schema = {
         type: 'integer',
         enum: [123, 'a string!', 456, 'and another one!'],

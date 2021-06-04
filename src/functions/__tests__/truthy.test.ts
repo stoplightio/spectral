@@ -16,11 +16,11 @@ function runTruthy(targetVal: any, targetPath?: any) {
 }
 
 describe('truthy', () => {
-  test('should return undefined if target value is truthy', () => {
+  it('should return undefined if target value is truthy', () => {
     expect(runTruthy(true)).toBeUndefined();
   });
 
-  test('should return an error message if target value is falsy', () => {
+  it('should return an error message if target value is falsy', () => {
     expect(runTruthy(false)).toEqual([
       {
         message: '#{{print("property")}}must be truthy',
@@ -28,7 +28,7 @@ describe('truthy', () => {
     ]);
   });
 
-  test('should return an error message if target value is null', () => {
+  it('should return an error message if target value is null', () => {
     expect(runTruthy(null)).toEqual([
       {
         message: '#{{print("property")}}must be truthy',

@@ -43,7 +43,7 @@ describe('schema', () => {
   });
 
   describe('validates falsy values such as', () => {
-    test('empty string', () => {
+    it('empty string', () => {
       const testSchema: JSONSchema = {
         type: 'number',
       };
@@ -56,7 +56,7 @@ describe('schema', () => {
       ]);
     });
 
-    test('zero', () => {
+    it('zero', () => {
       const testSchema: JSONSchema = {
         type: 'string',
       };
@@ -69,7 +69,7 @@ describe('schema', () => {
       ]);
     });
 
-    test('false', () => {
+    it('false', () => {
       const testSchema: JSONSchema = {
         type: 'string',
       };
@@ -82,7 +82,7 @@ describe('schema', () => {
       ]);
     });
 
-    test('null', () => {
+    it('null', () => {
       const testSchema: JSONSchema = {
         type: 'string',
       };
@@ -112,7 +112,7 @@ describe('schema', () => {
       jest.restoreAllMocks();
     });
 
-    test('does not log a warning in the console', () => {
+    it('does not log a warning in the console', () => {
       const input = 'some string';
       expect(runSchema(input, testSchema)).toEqual([]);
       expect(warnSpy).not.toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('schema', () => {
       maxItems: 1,
     };
 
-    test('errors with totally invalid input', () => {
+    it('errors with totally invalid input', () => {
       const input = { foo: 'bar' };
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
@@ -138,7 +138,7 @@ describe('schema', () => {
       ]);
     });
 
-    test('errors with subtly invalid input', () => {
+    it('errors with subtly invalid input', () => {
       const input = ['1', '2'];
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
@@ -165,7 +165,7 @@ describe('schema', () => {
       },
     };
 
-    test('reports correct paths', () => {
+    it('reports correct paths', () => {
       expect(
         runSchema(
           {
@@ -208,7 +208,7 @@ describe('schema', () => {
       format: 'email',
     };
 
-    test('errors for not emails', () => {
+    it('errors for not emails', () => {
       const input = 'not an email';
       expect(runSchema(input, testSchema)).toEqual([
         expect.objectContaining({
@@ -218,7 +218,7 @@ describe('schema', () => {
       ]);
     });
 
-    test('considers emails valid', () => {
+    it('considers emails valid', () => {
       const input = 'email@example.com';
       expect(runSchema(input, testSchema)).toEqual([]);
     });
@@ -230,7 +230,7 @@ describe('schema', () => {
       format: 'int32',
     };
 
-    test('accepts a number of any format', () => {
+    it('accepts a number of any format', () => {
       const input = 123;
       expect(runSchema(input, testSchema)).toEqual([]);
     });
@@ -348,7 +348,7 @@ describe('schema', () => {
     });
   });
 
-  test('reports slightly less pretty enum errors for primitive values that are not similar to any values in enum', () => {
+  it('reports slightly less pretty enum errors for primitive values that are not similar to any values in enum', () => {
     const testSchema: JSONSchema = {
       $schema: `http://json-schema.org/draft-07/schema#`,
       type: 'string',
@@ -363,7 +363,7 @@ describe('schema', () => {
     ]);
   });
 
-  test('pretty-prints path-less property', () => {
+  it('pretty-prints path-less property', () => {
     const input = { foo: true };
     expect(runSchema(input, { additionalProperties: false })).toEqual([
       {
@@ -374,7 +374,7 @@ describe('schema', () => {
   });
 
   describe('when schema has a $ref left', () => {
-    test('given unresolved context, reports an error', () => {
+    it('given unresolved context, reports an error', () => {
       expect(runSchema({}, { $ref: '#/foo' }, { rule: { resolved: false } })).toEqual([
         {
           message: "can't resolve reference #/foo from id #",
@@ -383,7 +383,7 @@ describe('schema', () => {
       ]);
     });
 
-    test('given resolved context, ignores', () => {
+    it('given resolved context, ignores', () => {
       expect(runSchema({}, { $ref: '#/bar' }, { rule: { resolved: true } })).toEqual([]);
     });
   });

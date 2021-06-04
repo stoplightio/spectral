@@ -41,7 +41,7 @@ const results: IRuleResult[] = sortResults([
 ]);
 
 describe('JSON formatter', () => {
-  test('should include ranges', () => {
+  it('should include ranges', () => {
     expect(JSON.parse(json(results, { failSeverity: DiagnosticSeverity.Error }))).toEqual([
       expect.objectContaining({
         range: {
@@ -70,7 +70,7 @@ describe('JSON formatter', () => {
     ]);
   });
 
-  test('should include message', () => {
+  it('should include message', () => {
     expect(JSON.parse(json(results, { failSeverity: DiagnosticSeverity.Error }))).toEqual([
       expect.objectContaining({
         message: 'paths./pets.get.description is not truthy',

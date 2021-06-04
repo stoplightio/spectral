@@ -18,7 +18,7 @@ describe('oasOpIdUnique', () => {
     });
   });
 
-  test('validate a correct object', async () => {
+  it('validate a correct object', async () => {
     const results = await s.run({
       paths: {
         '/path1': {
@@ -36,7 +36,7 @@ describe('oasOpIdUnique', () => {
     expect(results.length).toEqual(0);
   });
 
-  test('return errors on different path operations same id', async () => {
+  it('return errors on different path operations same id', async () => {
     const results = await s.run({
       paths: {
         '/path1': {
@@ -72,7 +72,7 @@ describe('oasOpIdUnique', () => {
     ]);
   });
 
-  test('return errors on same path operations same id', async () => {
+  it('return errors on same path operations same id', async () => {
     const results = await s.run({
       paths: {
         '/path1': {

@@ -2,7 +2,7 @@ import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import * as timers from 'timers';
 
 import { httpAndFileResolver } from '../resolvers/http-and-file';
@@ -27,7 +27,7 @@ describe('Linter', () => {
     nock.cleanAll();
   });
 
-  test('should not report anything for disabled rules', async () => {
+  it('should not report anything for disabled rules', async () => {
     await spectral.loadRuleset(path.join(__dirname, './__fixtures__/rulesets/disabled.json'));
 
     const result = await spectral.run({});
@@ -758,7 +758,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
     });
   });
 
-  test('should only run recommended rules, whether implicitly or explicitly', async () => {
+  it('should only run recommended rules, whether implicitly or explicitly', async () => {
     const target = {
       openapi: '3.0.2',
     };

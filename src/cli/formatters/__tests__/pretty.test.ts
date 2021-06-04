@@ -30,7 +30,7 @@ function forceWrapped(s: string, wrapType: number): string {
 }
 
 describe('Pretty formatter', () => {
-  test('should not wrap when terminal width is wide enough', () => {
+  it('should not wrap when terminal width is wide enough', () => {
     setColumnWidth(185, function (): void {
       const result = pretty(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error });
       expect(result).toContain(
@@ -57,7 +57,7 @@ describe('Pretty formatter', () => {
       expect(result).toContain(chalk.red.bold('1 Unique Issue(s)'));
     });
   });
-  xtest('should wrap when terminal width is very small', () => {
+  xit('should wrap when terminal width is very small', () => {
     setColumnWidth(120, function (): void {
       const result = pretty(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error });
       expect(result).toContain(`
@@ -81,7 +81,7 @@ ${chalk.red(
 ${chalk.red.bold('1 Unique Issue(s)')}\n`);
     });
   });
-  test('should display proper severity level', () => {
+  it('should display proper severity level', () => {
     setColumnWidth(185, function (): void {
       const result = pretty(mixedErrors, { failSeverity: DiagnosticSeverity.Error });
       expect(

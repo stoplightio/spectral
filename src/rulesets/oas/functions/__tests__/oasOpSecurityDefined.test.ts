@@ -19,7 +19,7 @@ describe('oasOpSecurityDefined', () => {
       });
     });
 
-    test('validate a correct object (just in body)', async () => {
+    it('validate a correct object (just in body)', async () => {
       const results = await s.run({
         securityDefinitions: {
           apikey: {},
@@ -39,7 +39,7 @@ describe('oasOpSecurityDefined', () => {
       expect(results.length).toEqual(0);
     });
 
-    test('return errors on invalid object', async () => {
+    it('return errors on invalid object', async () => {
       const results = await s.run({
         swagger: '2.0',
         securityDefinitions: {},
@@ -78,7 +78,7 @@ describe('oasOpSecurityDefined', () => {
       }),
     });
 
-    test('validate a correct object (just in body)', async () => {
+    it('validate a correct object (just in body)', async () => {
       const results = await s.run({
         openapi: '3.0.2',
         components: {
@@ -101,7 +101,7 @@ describe('oasOpSecurityDefined', () => {
       expect(results.length).toEqual(0);
     });
 
-    test('return errors on invalid object', async () => {
+    it('return errors on invalid object', async () => {
       const results = await s.run({
         openapi: '3.0.2',
         components: {},

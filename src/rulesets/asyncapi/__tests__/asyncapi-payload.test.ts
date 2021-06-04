@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { cloneDeep } from 'lodash';
 import produce from 'immer';
-import testRule from './__helpers__/tester';
+import testRule from '../../__tests__/__helpers__/tester';
 
 const payload = {
   type: 'object',

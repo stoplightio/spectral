@@ -12,7 +12,7 @@ function runPayloadValidation(targetVal: any) {
 }
 
 describe('asyncApi2PayloadValidation', () => {
-  test('Properly identify payload that do not fit the AsyncApi2 schema object definition', () => {
+  it('Properly identify payload that do not fit the AsyncApi2 schema object definition', () => {
     const payload = {
       type: 'object',
       deprecated: 14,
