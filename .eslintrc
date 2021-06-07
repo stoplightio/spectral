@@ -10,6 +10,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "no-console": "error",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/prefer-for-of": "error",
@@ -44,6 +45,15 @@
         "@typescript-eslint/strict-boolean-expressions": "warn",
         "@typescript-eslint/no-throw-literal": "error",
         "@typescript-eslint/ban-types": "warn"
+      }
+    },
+
+    {
+      "files": [
+        "src/cli/**/*.ts"
+      ],
+      "rules": {
+        "no-console": "warn"
       }
     },
 

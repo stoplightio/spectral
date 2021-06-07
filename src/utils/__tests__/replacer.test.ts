@@ -85,19 +85,14 @@ describe('Replacer', () => {
     ).toEqual('foo.bar./a');
   });
 
-  it('handles and prints out exceptions thrown during evaluation', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
-      // no-op
-    });
-
+  it('given an exception thrown during evaluation, re-throws it', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
     const template = 'value is: #{{value.name}}';
 
     expect(
-      replacer.print(template, {
+      replacer.print.bind(null, template, {
         value: null,
       }),
-    ).toEqual('value is: ');
-    expect(warnSpy).toBeCalledWith(new TypeError("Cannot read property 'name' of null"));
+    ).toThrow();
   });
 });

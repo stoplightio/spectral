@@ -23,21 +23,16 @@ export class Replacer<V extends Record<string, unknown>> {
       const shouldEvaluate = input[index] === '#';
 
       if (shouldEvaluate) {
-        try {
-          return String(
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            eval(parse(identifier), {
-              ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
-                fns[name] = fn.bind(values);
-                return fns;
-              }, {}),
-              ...values,
-            }),
-          );
-        } catch (ex) {
-          console.warn(ex);
-          return '';
-        }
+        return String(
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          eval(parse(identifier), {
+            ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
+              fns[name] = fn.bind(values);
+              return fns;
+            }, {}),
+            ...values,
+          }),
+        );
       }
 
       if (!(identifier in values)) {

@@ -10,7 +10,6 @@ import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
 import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset, isValidRule } from './validation';
 import { parseYaml } from '../parsers';
-import { printError } from '../utils/printError';
 
 export interface IRulesetReadOptions extends IHttpAndFileResolverOptions {
   timeout?: number;
@@ -166,20 +165,16 @@ const createRulesetProcessor = (
           const fnSchema = Array.isArray(fn) ? fn[1] : null;
           const source = await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`);
 
-          try {
-            resolvedFunctions[fnName] = {
-              name: fnName,
-              code: await readFile(source, {
-                timeout: readOpts?.timeout,
-                encoding: 'utf8',
-                agent: readOpts?.agent,
-              }),
-              schema: fnSchema,
-              source,
-            };
-          } catch (ex) {
-            console.warn(`Function '${fnName}' could not be loaded: ${printError(ex)}`);
-          }
+          resolvedFunctions[fnName] = {
+            name: fnName,
+            code: await readFile(source, {
+              timeout: readOpts?.timeout,
+              encoding: 'utf8',
+              agent: readOpts?.agent,
+            }),
+            schema: fnSchema,
+            source,
+          };
         }),
       );
 

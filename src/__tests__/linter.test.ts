@@ -2,7 +2,6 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { IParsedResult } from '../document';
-import { isOpenApiv2, isOpenApiv3 } from '../formats';
 import { Spectral } from '../spectral';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Parsers, Document } from '..';
@@ -10,9 +9,7 @@ import { IParser } from '../parsers/types';
 import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/createWithRules';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
-const todosInvalid = JSON.stringify(require('./__fixtures__/todos.invalid.oas2.json'));
 const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
-const invalidStatusCodes = JSON.stringify(require('./__fixtures__/invalid-status-codes.oas3.json'));
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -56,7 +53,7 @@ describe('linter', () => {
     return expect(spectral.run('123')).resolves.toBeTruthy();
   });
 
-  test('should run all rules despite of invalid JSON path expressions', async () => {
+  test('given failing JSON Path expression, should refuse to lint', async () => {
     spectral.setRules({
       rule1: {
         given: '$.bar[?(@.in==foo)]',
@@ -72,25 +69,14 @@ describe('linter', () => {
       },
     });
 
-    const results = await spectral.run(
-      {
+    await expect(
+      spectral.run({
         bar: {
           in: {},
         },
         foo: null,
-      },
-      { ignoreUnknownFormat: true },
-    );
-
-    return expect(results).toEqual([
-      {
-        code: 'rule2',
-        message: '`foo` property must be truthy',
-        path: ['foo'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Warning,
-      },
-    ]);
+      }),
+    ).rejects.toThrow();
   });
 
   test('should return all properties matching 4xx response code', async () => {
@@ -637,8 +623,6 @@ responses:: !!foo
   });
 
   test('should report a valid line number for json paths containing escaped slashes', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
     spectral.setRules({
       'truthy-get': {
         given: '$..get',
@@ -723,47 +707,40 @@ responses:: !!foo
     ]);
   });
 
-  test('should preserve sibling additionalProperties errors', async () => {
-    const spectral = await createWithRules(['oas3-schema']);
-
-    const result = await spectral.run(invalidStatusCodes);
+  test('should report invalid schema $refs', async () => {
+    const result = await spectral.run(
+      JSON.stringify(
+        {
+          paths: {
+            '/todos/{todoId}': {
+              put: {
+                parameters: [
+                  {
+                    name: 'missing',
+                    in: 'body',
+                    schema: {
+                      $ref: '#/parameters/missing',
+                      example: 'test',
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+        null,
+        2,
+      ),
+    );
 
     expect(result).toEqual([
       expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'Property `42` is not expected to be here.',
-        path: ['paths', '/pets', 'post', 'responses', '42'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'Property `9999` is not expected to be here.',
-        path: ['paths', '/pets', 'post', 'responses', '9999'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'Property `5xx` is not expected to be here.',
-        path: ['paths', '/pets', 'post', 'responses', '5xx'],
+        code: 'invalid-ref',
+        message: "'#/parameters/missing' does not exist",
+        path: ['paths', '/todos/{todoId}', 'put', 'parameters', '0', 'schema', '$ref'],
+        severity: DiagnosticSeverity.Error,
       }),
     ]);
-  });
-
-  test('should report invalid schema $refs', async () => {
-    spectral.registerFormat('oas2', isOpenApiv2);
-    spectral.registerFormat('oas3', isOpenApiv3);
-    await spectral.loadRuleset('spectral:oas');
-
-    const result = await spectral.run(todosInvalid);
-
-    expect(result).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          code: 'invalid-ref',
-          message: "'#/parameters/missing' does not exist",
-          path: ['paths', '/todos/{todoId}', 'put', 'parameters', '1', 'schema', '$ref'],
-          severity: DiagnosticSeverity.Error,
-        }),
-      ]),
-    );
   });
 
   test('should report when a resolver is not defined for a given $ref type', async () => {

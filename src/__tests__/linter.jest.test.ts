@@ -295,7 +295,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         ]);
       });
 
-      it('should handle rejections', async () => {
+      it('given a rejection, should throw', async () => {
         spectral.setFunctions({
           [fnName]() {
             return new Promise<void>((resolve, reject) => {
@@ -312,7 +312,7 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
 
         jest.advanceTimersByTime(1000);
 
-        expect(await result).toEqual([]);
+        await expect(result).rejects.toThrow();
       });
 
       it('should be able to make actual requests', async () => {
