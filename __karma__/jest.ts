@@ -1,7 +1,7 @@
 import { Expect } from 'expect/build/types';
 import * as JestMock from 'jest-mock';
 
-declare var global: NodeJS.Global & {
+declare let global: NodeJS.Global & {
   jest: typeof JestMock;
   expect: Expect;
   test: jest.It;
@@ -10,6 +10,7 @@ declare var global: NodeJS.Global & {
 global.jest = require('jest-mock');
 global.expect = require('expect');
 global.test = it;
+global.test.concurrent = it;
 
 const message = () => "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
 
