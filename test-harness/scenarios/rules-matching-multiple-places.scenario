@@ -13,7 +13,7 @@ schemas:
         type: boolean
   address:
 ====command====
-{bin} lint {document} -r {asset:ruleset}
+{bin} lint {document} -r {asset:ruleset} --ignore-unknown-format
 ====asset:ruleset====
 rules:
   valid-user-properties:
@@ -33,9 +33,8 @@ rules:
 1
 ====stdout====
 {document}
-  1:1   warning  unrecognized-format       The provided document does not match any of the registered formats [oas2, oas3, oas3.0, oas3.1, asyncapi2, json-schema, json-schema-loose, json-schema-draft4, json-schema-draft6, json-schema-draft7, json-schema-2019-09, json-schema-2020-12]
-  6:15    error  valid-user-properties     "number" must match the pattern "/^string$/"                                                                                                                                                                                                      schemas.user.properties.name.type
- 10:15    error  valid-user-properties     "boolean" must match the pattern "/^string$/"                                                                                                                                                                                                     schemas.user.properties.occupation.type
- 11:11    error  require-user-and-address  `address` property must be truthy                                                                                                                                                                                                                 schemas.address
+  6:15  error  valid-user-properties     "number" must match the pattern "/^string$/"   schemas.user.properties.name.type
+ 10:15  error  valid-user-properties     "boolean" must match the pattern "/^string$/"  schemas.user.properties.occupation.type
+ 11:11  error  require-user-and-address  `address` property must be truthy              schemas.address
 
-✖ 4 problems (3 errors, 1 warning, 0 infos, 0 hints)
+✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)

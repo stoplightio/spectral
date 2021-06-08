@@ -377,14 +377,10 @@ describe('Rulesets reader', () => {
     });
   });
 
-  it('should not fail if function cannot be loaded', () => {
+  it('should fail if function cannot be loaded', () => {
     nock('https://unpkg.com').get('/boo.js').reply(404);
 
-    return expect(readRuleset(rulesetWithMissingFunctions)).resolves.toEqual({
-      rules: {},
-      functions: {},
-      exceptions: {},
-    });
+    return expect(readRuleset(rulesetWithMissingFunctions)).rejects.toThrowError();
   });
 
   it('should handle ruleset with circular extensions', () => {

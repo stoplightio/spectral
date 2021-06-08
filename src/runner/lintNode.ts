@@ -8,7 +8,6 @@ import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets, ExceptionLocation, isAKnownException, MessageVars, message } from './utils';
-import { printError } from '../utils/printError';
 
 export const lintNode = (
   context: IRunnerInternalContext,
@@ -28,8 +27,7 @@ export const lintNode = (
   for (const then of rule.then) {
     const func = context.functions[then.function];
     if (typeof func !== 'function') {
-      console.warn(`Function ${then.function} not found. Called by rule ${rule.name}.`);
-      continue;
+      throw new Error(`Function ${then.function} not found. Called by rule ${rule.name}.`);
     }
 
     const targets = getLintTargets(node.value, then.field);
@@ -37,42 +35,31 @@ export const lintNode = (
     for (const target of targets) {
       const targetPath = target.path.length > 0 ? [...givenPath, ...target.path] : givenPath;
 
-      let targetResults;
-      try {
-        targetResults = func(
-          target.value,
-          then.functionOptions ?? null,
-          {
-            given: givenPath,
-            target: targetPath,
-          },
-          fnContext,
-        );
-      } catch (ex) {
-        // todo: use reporter or sth
-        console.warn(ex);
-      }
+      const targetResults = func(
+        target.value,
+        then.functionOptions ?? null,
+        {
+          given: givenPath,
+          target: targetPath,
+        },
+        fnContext,
+      );
 
       if (targetResults === void 0) continue;
 
       if ('then' in targetResults) {
         context.promises.push(
-          targetResults
-            .then(results =>
-              results === void 0
-                ? void 0
-                : void processTargetResults(
-                    context,
-                    results,
-                    rule,
-                    exceptionLocations,
-                    targetPath, // todo: get rid of it somehow.
-                  ),
-            )
-            .catch(ex => {
-              // todo: use reporter or sth
-              console.warn(printError(ex));
-            }),
+          targetResults.then(results =>
+            results === void 0
+              ? void 0
+              : void processTargetResults(
+                  context,
+                  results,
+                  rule,
+                  exceptionLocations,
+                  targetPath, // todo: get rid of it somehow.
+                ),
+          ),
         );
       } else {
         processTargetResults(
