@@ -17,7 +17,7 @@ afterEach(() => {
   }
 });
 
-export default function (mocks: Record<string, string | Record<string, unknown>>): void {
+export function serveAssets(mocks: Record<string, string | Record<string, unknown>>): void {
   for (const [uri, body] of Object.entries(mocks)) {
     if (!isURL(uri)) {
       fs.mkdirSync(dirname(uri), { recursive: true });

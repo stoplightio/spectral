@@ -20,15 +20,15 @@ function runAlphabetical(target: any, keyedBy?: string) {
 }
 
 describe('alphabetical', () => {
-  it('given falsy target should return nothing', () => {
+  test('given falsy target should return nothing', () => {
     expect(runAlphabetical(false)).toBeUndefined();
   });
 
-  it('given single element target should return nothing', () => {
+  test('given single element target should return nothing', () => {
     expect(runAlphabetical(['a'])).toBeUndefined();
   });
 
-  it('given an object and keys not in order return an error message', () => {
+  test('given an object and keys not in order return an error message', () => {
     expect(
       runAlphabetical({
         c: 2,
@@ -42,7 +42,7 @@ describe('alphabetical', () => {
     ]);
   });
 
-  it('given an object with unsorted properties with numeric keys', () => {
+  test('given an object with unsorted properties with numeric keys', () => {
     const doc = parseYaml(`
 '400':
   description: ''
@@ -58,7 +58,7 @@ describe('alphabetical', () => {
   });
 
   describe('given NO keyedBy', () => {
-    it('given an unsorted array of strings should return error', () => {
+    test('given an unsorted array of strings should return error', () => {
       expect(runAlphabetical(['b', 'a'])).toEqual([
         {
           message: '"b" must be placed after "a"',
@@ -67,11 +67,11 @@ describe('alphabetical', () => {
       ]);
     });
 
-    it('given a sorted array of strings should NOT return error', () => {
+    test('given a sorted array of strings should NOT return error', () => {
       expect(runAlphabetical(['a', 'ab'])).toBeUndefined();
     });
 
-    it('given an unsorted array of numbers should return error', () => {
+    test('given an unsorted array of numbers should return error', () => {
       expect(runAlphabetical([10, 1])).toEqual([
         {
           message: '10 must be placed after 1',
@@ -80,7 +80,7 @@ describe('alphabetical', () => {
       ]);
     });
 
-    it('given an array of objects should return an error', () => {
+    test('given an array of objects should return an error', () => {
       expect(runAlphabetical([{ a: '10' }, { b: '1' }])).toEqual([
         {
           message: '#{{print("property")}}must be one of the allowed types: number, string',
@@ -88,7 +88,7 @@ describe('alphabetical', () => {
       ]);
     });
 
-    it('given an array containing invalid values should return an error', () => {
+    test('given an array containing invalid values should return an error', () => {
       expect(runAlphabetical([false, 'a', null])).toEqual([
         {
           message: '#{{print("property")}}must be one of the allowed types: number, string',
@@ -98,7 +98,7 @@ describe('alphabetical', () => {
   });
 
   describe('given keyedBy', () => {
-    it('given an array of objects with unsorted prop values return an error', () => {
+    test('given an array of objects with unsorted prop values return an error', () => {
       expect(runAlphabetical([{ a: '10' }, { a: '1' }], 'a')).toEqual([
         {
           message: 'properties must follow the alphabetical order',
@@ -106,16 +106,16 @@ describe('alphabetical', () => {
       ]);
     });
 
-    it('given an array of objects with sorted prop values to NOT return an error', () => {
+    test('given an array of objects with sorted prop values to NOT return an error', () => {
       expect(runAlphabetical([{ a: '1' }, { a: '2' }, { a: '2' }], 'a')).toBeUndefined();
     });
 
-    it('given an array of primitives should return error', () => {
+    test('given an array of primitives should return error', () => {
       expect(runAlphabetical([100, 1], 'a')).toEqual([{ message: '#{{print("property")}}must be an object' }]);
     });
   });
 
-  it('is able to trap object again', () => {
+  test('is able to trap object again', () => {
     const document = new Document(`'404':\n'200':`, Parsers.Yaml);
 
     Object.defineProperty(document, 'data', {

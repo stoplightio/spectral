@@ -1,3 +1,7 @@
+jest.mock?.('fs');
+
+import { serveAssets } from '@stoplight/spectral-test-utils';
+
 import { IRuleResult, Spectral } from '../../../spectral';
 import type * as oasRuleset from '../../oas/index.json';
 import type * as aasRuleset from '../../asyncapi/index.json';
@@ -5,8 +9,7 @@ import { STATIC_ASSETS } from '../../../assets';
 import { empty } from '../../../utils';
 import { isAsyncApiv2, isOpenApiv2, isOpenApiv3, isOpenApiv3_0, isOpenApiv3_1 } from '../../../formats';
 import { Document } from '../../../document';
-
-import setupMocks from './setup-mocks/index';
+import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
 type Ruleset = typeof oasRuleset & typeof aasRuleset;
 export type RuleName = keyof Ruleset['rules'];
@@ -26,7 +29,7 @@ export default (ruleName: RuleName, tests: Scenario): void => {
     for (const testCase of tests) {
       (concurrent ? it.concurrent : it)(testCase.name, async () => {
         if (testCase.mocks !== void 0) {
-          setupMocks(testCase.mocks);
+          serveAssets(testCase.mocks);
         }
 
         const s = await createWithRules([ruleName]);
@@ -55,7 +58,7 @@ export async function createWithRules(rules: (keyof Ruleset['rules'])[]): Promis
       }),
     });
 
-    const s = new Spectral();
+    const s = new Spectral({ resolver: httpAndFileResolver });
     s.registerFormat('asyncapi2', isAsyncApiv2);
     s.registerFormat('oas2', isOpenApiv2);
     s.registerFormat('oas3', isOpenApiv3);

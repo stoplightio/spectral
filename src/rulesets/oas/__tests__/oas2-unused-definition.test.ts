@@ -4,10 +4,26 @@ import * as path from '@stoplight/path';
 import { Document } from '../../../document';
 import * as Parsers from '../../../parsers';
 
-const remoteLocalDocument = path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.remoteLocal.json');
-const definitionDocument = path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.definition.json');
-const indirectDocument = path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.indirect.1.json');
-const indirect2Document = path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.indirect.2.json');
+const remoteLocalDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedDefinition.remoteLocal.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.remoteLocal.json'),
+);
+const definitionDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedDefinition.definition.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.definition.json'),
+);
+const indirectDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedDefinition.indirect.1.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.indirect.1.json'),
+);
+const indirect2Document = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedDefinition.indirect.2.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedDefinition.indirect.2.json'),
+);
 
 testRule('oas2-unused-definition', [
   {
@@ -118,7 +134,7 @@ testRule('oas2-unused-definition', [
                 $ref: '#/definitions/HookedAsWell',
               },
               {
-                $ref: definitionDocument,
+                $ref: definitionDocument.source!,
               },
               {
                 $ref: 'https://oas2.library.com/defs.json#/definitions/ExternalHttp',
@@ -156,33 +172,33 @@ testRule('oas2-unused-definition', [
           },
         },
       },
-      [definitionDocument]: require(definitionDocument),
+      [definitionDocument.source!]: definitionDocument.data,
     },
   },
 
   {
     name: 'a directly self-referencing document from the filesystem',
-    document: new Document(JSON.stringify(require(remoteLocalDocument)), Parsers.Json, remoteLocalDocument),
+    document: remoteLocalDocument,
     errors: [],
     mocks: {
-      [remoteLocalDocument]: require(remoteLocalDocument),
+      [remoteLocalDocument.source!]: remoteLocalDocument.data,
     },
   },
 
   {
     name: 'an indirectly self-referencing document from the filesystem',
-    document: new Document(JSON.stringify(require(indirectDocument)), Parsers.Json, indirectDocument),
+    document: indirectDocument,
     errors: [
       {
         message: 'Potentially unused definition has been detected.',
         path: ['definitions', 'Unhooked'],
         severity: DiagnosticSeverity.Warning,
-        source: indirectDocument,
+        source: indirectDocument.source!,
       },
     ],
     mocks: {
-      [indirectDocument]: require(indirectDocument),
-      [indirect2Document]: require(indirect2Document),
+      [indirectDocument.source!]: indirectDocument.data,
+      [indirect2Document.source!]: indirect2Document.data,
     },
   },
 ]);

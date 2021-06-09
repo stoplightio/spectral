@@ -15,7 +15,7 @@ describe('Spectral', () => {
   });
 
   describe('loadRuleset', () => {
-    it('should support loading rulesets over http', async () => {
+    test('should support loading rulesets over http', async () => {
       const ruleset = {
         rules: {
           'info-matches-stoplight': {

@@ -17,17 +17,17 @@ function runEnum(targetVal: any, values: any[]) {
 }
 
 describe('enumeration', () => {
-  it('should return undefined if target value is truthy', () => {
+  test('should return undefined if target value is truthy', () => {
     expect(runEnum('x', ['x', 'y', 'z'])).toEqual([]);
   });
 
-  it('should return an error message if target value is falsy', () => {
+  test('should return an error message if target value is falsy', () => {
     const results = runEnum('x', ['y', 'z']);
     expect(results).toHaveLength(1);
     expect(results[0].message).toEqual(`#{{print("value")}} must be equal to one of the allowed values: "y", "z"`);
   });
 
-  it('given no primitive value, should return an error message', () => {
+  test('given no primitive value, should return an error message', () => {
     expect(runEnum({}, ['test'])).toEqual([
       {
         message: '#{{print("property")}}must be primitive',

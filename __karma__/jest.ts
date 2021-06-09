@@ -7,11 +7,10 @@ declare let global: NodeJS.Global & {
   test: jest.It;
 };
 
-export default it;
-it.concurrent = it;
-
 global.jest = require('jest-mock');
 global.expect = require('expect');
+global.test = it;
+global.test.concurrent = it;
 
 const message = () => "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
 

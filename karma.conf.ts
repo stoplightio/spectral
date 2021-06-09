@@ -1,9 +1,8 @@
 // Karma configuration
 // Generated on Tue Jul 02 2019 17:18:30 GMT+0200 (Central European Summer Time)
 
-import { Config } from 'karma';
-import * as path from 'path';
-import * as os from 'os';
+import type { TransformCallback, TransformContext } from 'karma-typescript';
+import type { Config } from 'karma';
 
 module.exports = (config: Config): void => {
   config.set({
@@ -12,14 +11,10 @@ module.exports = (config: Config): void => {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'webpack'],
+    frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: [
-      { pattern: './__karma__/jest.ts' },
-      { pattern: './setupKarma.ts' },
-      { pattern: 'src/**/*.ts', watched: false },
-    ],
+    files: ['./__karma__/jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
     exclude: ['src/cli/**', 'src/formatters/**', 'src/**/*.jest.test.ts'],
@@ -27,17 +22,65 @@ module.exports = (config: Config): void => {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/{formats,functions,guards,meta,parsers,resolvers,ruleset,rulesets,runner,types,utils}/**/*.{js,ts,json}': [
-        'webpack',
-      ],
-      './__karma__/**/*.ts': ['webpack'],
-      './setupKarma.ts': ['webpack'],
+      'src/**/*.ts': ['karma-typescript', 'env'],
+      './__karma__/**/*.ts': ['karma-typescript'],
+      './setupKarma.ts': ['karma-typescript'],
+      './setupTests.ts': ['karma-typescript'],
+    },
+
+    // @ts-expect-error: non-standard - karma-env-preprocessor
+    envPreprocessor: ['USE_NIMMA'],
+
+    karmaTypescriptConfig: {
+      ...require('./tsconfig.json'),
+      include: ['**/*.ts'],
+      bundlerOptions: {
+        resolve: {
+          alias: {
+            '@stoplight/spectral-test-utils': require.resolve('./test-utils/browser/index.js'),
+            'node-fetch': require.resolve('./__karma__/fetch'),
+            fs: require.resolve('./__karma__/fs'),
+            process: require.resolve('./__karma__/process'),
+          },
+        },
+        acornOptions: {
+          ecmaVersion: 11,
+        },
+        transforms: [
+          require('karma-typescript-es6-transform')({
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  targets: {
+                    node: 'current',
+                  },
+                },
+              ],
+            ],
+          }),
+
+          function (context: TransformContext, callback: TransformCallback) {
+            // you may ask why on earth do we need this...,
+            // so this is to make sure `cjs` extensions are treated as actual scripts and not text files
+            // https://github.com/monounity/karma-typescript/blob/master/packages/karma-typescript/src/bundler/bundle-item.ts#L18 does not have cjs extension listed, so our file is not treated as script, and eventually require-ing it leads to a typeerror, since we get a string instead
+            // luckily it's an OR with rhs being `this.transformedScript` expression, so all we need to do is to set it to true (which we do below)
+            const err: any = void 0; // needed because typings are incorrect and expect Error only
+            if (context.module.includes('@stoplight/ordered-object-literal')) {
+              // needed to set a flag transformedScript on BundledItem described above, https://github.com/monounity/karma-typescript/blob/master/packages/karma-typescript/src/bundler/transformer.ts#L94
+              return callback(err, { dirty: true, transformedScript: true });
+            }
+
+            return callback(err, false);
+          },
+        ],
+      },
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'karma-typescript'],
 
     // web server port
     port: 9876,
@@ -63,62 +106,5 @@ module.exports = (config: Config): void => {
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity,
-
-    // @ts-expect-error: non-standard
-    webpack: {
-      mode: 'development',
-      output: {
-        filename: '[name].js',
-        path: path.join(os.tmpdir(), '_karma_webpack_') + Math.floor(Math.random() * 1000000),
-      },
-      stats: 'minimal',
-      watch: false,
-      module: {
-        rules: [
-          {
-            test: /\.ts$/,
-            use: 'ts-loader',
-            exclude: /node_modules/,
-          },
-        ],
-      },
-      resolve: {
-        extensions: ['.ts', '.js'],
-        alias: {
-          nock: false,
-          jest: require.resolve('jest-mock'),
-        },
-        fallback: {
-          fs: require.resolve('./__karma__/fs.mjs'),
-          path: require.resolve('@stoplight/path'),
-          process: false,
-          nock: false,
-          util: false,
-          stream: false,
-          assert: false,
-          url: false,
-        },
-      },
-      optimization: {
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          minSize: 0,
-          cacheGroups: {
-            commons: {
-              name: 'commons',
-              chunks: 'initial',
-              minChunks: 1,
-            },
-          },
-        },
-      },
-      plugins: [
-        new (require('webpack') as any).ProvidePlugin({
-          test: require.resolve('./__karma__/jest.ts'),
-          expect: require.resolve('expect'),
-        }),
-      ],
-    },
   });
 };

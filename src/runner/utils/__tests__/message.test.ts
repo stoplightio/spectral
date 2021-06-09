@@ -1,7 +1,7 @@
 import { message } from '../message';
 
 describe('message util', () => {
-  it('interpolates correctly', () => {
+  test('interpolates correctly', () => {
     const template = 'oops... "{{property}}" is missing;error: {{error}}';
     expect(
       message(template, {
@@ -14,7 +14,7 @@ describe('message util', () => {
     ).toEqual('oops... "description" is missing;error: expected property to be truthy');
   });
 
-  it('evaluates code', () => {
+  test('evaluates code', () => {
     const template = 'Property "#{{value.param}}" is missing. Path: #{{path.toUpperCase()}}';
     expect(
       message(template, {
@@ -42,7 +42,7 @@ describe('message util', () => {
     ).toEqual(`Value must not equal ${value}`);
   });
 
-  it('handles siblings', () => {
+  test('handles siblings', () => {
     const template = '{{error}}{{error}}{{property}}{{bar}}{{error}}{{error}}';
     expect(
       message(template, {
@@ -55,7 +55,7 @@ describe('message util', () => {
     ).toEqual('foofoobazfoofoo');
   });
 
-  it('strips missing keys', () => {
+  test('strips missing keys', () => {
     const template = '{{foo}}missing {{bar}}:(';
     expect(
       message(template, {

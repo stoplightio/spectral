@@ -2,7 +2,7 @@ import { normalize } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
-import * as path from '@stoplight/path';
+import * as path from 'path';
 
 import { Document } from '../document';
 import { pattern } from '../functions/pattern';
@@ -18,7 +18,7 @@ describe('Spectral', () => {
   });
 
   describe('loadRuleset', () => {
-    it('should support loading rulesets from filesystem', async () => {
+    test('should support loading rulesets from filesystem', async () => {
       const s = new Spectral();
       await s.loadRuleset(path.join(__dirname, '__fixtures__/rulesets/bare.json'));
 
@@ -42,7 +42,7 @@ describe('Spectral', () => {
       ]);
     });
 
-    it('should support loading rulesets over http', async () => {
+    test('should support loading rulesets over http', async () => {
       const ruleset = {
         rules: {
           'info-matches-stoplight': {
@@ -76,7 +76,7 @@ describe('Spectral', () => {
     });
   });
 
-  it('should support combining built-in ruleset with a custom one', async () => {
+  test('should support combining built-in ruleset with a custom one', async () => {
     const s = new Spectral();
     await s.loadRuleset(['spectral:oas', path.join(__dirname, './__fixtures__/rulesets/bare.json')]);
 
@@ -95,7 +95,7 @@ describe('Spectral', () => {
     );
   });
 
-  it('should report issues for correct files with correct ranges and paths', async () => {
+  test('should report issues for correct files with correct ranges and paths', async () => {
     const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.json'));
     const spectral = new Spectral({ resolver: httpAndFileResolver });
     spectral.setRules({
@@ -166,7 +166,7 @@ describe('Spectral', () => {
     ]);
   });
 
-  it('properly decorates results with metadata pertaining to the document being linted', async () => {
+  test('properly decorates results with metadata pertaining to the document being linted', async () => {
     const s = new Spectral({ resolver: httpAndFileResolver });
     s.setFunctions({ pattern });
     s.setRules({
@@ -250,7 +250,7 @@ describe('Spectral', () => {
     ]);
   });
 
-  it('should recognize the source of remote $refs, and de-dupe results by fingerprint', async () => {
+  test('should recognize the source of remote $refs, and de-dupe results by fingerprint', async () => {
     const s = new Spectral({ resolver: httpAndFileResolver });
     const documentUri = path.join(__dirname, './__fixtures__/gh-658/URIError.yaml');
 

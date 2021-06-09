@@ -5,7 +5,10 @@ import { OutputFormat } from '../../../types/config';
 import { formatOutput, writeOutput } from '../output';
 
 jest.mock('../../formatters');
-jest.mock('fs');
+jest.mock('fs', () => ({
+  ...jest.requireActual<typeof import('fs')>('fs'),
+  writeFile: jest.fn(),
+}));
 
 describe('Output service', () => {
   describe('formatOutput', () => {
@@ -40,7 +43,9 @@ describe('Output service', () => {
     let logSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      logSpy = jest.spyOn(console, 'log');
+      logSpy = jest.spyOn(console, 'log').mockImplementation(() => {
+        /* disable logging */
+      });
     });
 
     afterEach(() => {

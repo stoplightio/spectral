@@ -18,7 +18,7 @@ describe('oasTagDefined', () => {
     });
   });
 
-  it('validate a correct object', async () => {
+  test('validate a correct object', async () => {
     const results = await s.run({
       tags: [
         {
@@ -44,7 +44,7 @@ describe('oasTagDefined', () => {
     expect(results.length).toEqual(0);
   });
 
-  it('return errors on undefined tag', async () => {
+  test('return errors on undefined tag', async () => {
     const results = await s.run({
       tags: [
         {
@@ -80,7 +80,7 @@ describe('oasTagDefined', () => {
     ]);
   });
 
-  it('return errors on undefined tags among defined tags', async () => {
+  test('return errors on undefined tags among defined tags', async () => {
     const results = await s.run({
       tags: [
         {
@@ -135,7 +135,7 @@ describe('oasTagDefined', () => {
     ]);
   });
 
-  it('resilient to no global tags or operation tags', async () => {
+  test('resilient to no global tags or operation tags', async () => {
     const results = await s.run({
       paths: {
         '/path1': {

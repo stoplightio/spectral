@@ -12,7 +12,7 @@ const applyRuleToObject = async (r: IRule, o: Record<string, unknown>): Promise<
 
 describe('functions', () => {
   describe('pattern', () => {
-    it('returns results if pattern is not matched (on string)', async () => {
+    test('returns results if pattern is not matched (on string)', async () => {
       await expect(
         applyRuleToObject(
           {
@@ -35,7 +35,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    it('returns resolved if pattern is not matched (on object keys)', async () => {
+    test('returns resolved if pattern is not matched (on object keys)', async () => {
       await expect(
         applyRuleToObject(
           {
@@ -64,7 +64,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(1);
     });
 
-    it('dont return resolved if pattern is matched (on string)', async () => {
+    test('dont return resolved if pattern is matched (on string)', async () => {
       await expect(
         applyRuleToObject(
           {
@@ -86,7 +86,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(0);
     });
 
-    it('dont return resolved if pattern is matched (on object keys)', async () => {
+    test('dont return resolved if pattern is matched (on object keys)', async () => {
       await expect(
         applyRuleToObject(
           {
@@ -136,7 +136,7 @@ describe('functions', () => {
       },
     ];
 
-    it('return resolved if string, number, array, or object is greater than max', async () => {
+    test('return resolved if string, number, array, or object is greater than max', async () => {
       await expect(
         applyRuleToObject(
           {
@@ -160,7 +160,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(4);
     });
 
-    it('return resolved if string, number, array, or object is less than min', async () => {
+    test('return resolved if string, number, array, or object is less than min', async () => {
       await expect(
         applyRuleToObject(
           {
@@ -184,7 +184,7 @@ describe('functions', () => {
       ).resolves.toHaveLength(4);
     });
 
-    it('dont return a resolved if string, number, array, or object is between min and max', async () => {
+    test('dont return a resolved if string, number, array, or object is between min and max', async () => {
       await expect(
         applyRuleToObject(
           {

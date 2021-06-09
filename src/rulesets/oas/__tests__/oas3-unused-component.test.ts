@@ -1,11 +1,28 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as path from '@stoplight/path';
 import { Parsers, Document } from '../../..';
 import testRule from '../../__tests__/__helpers__/tester';
 
-const remoteLocalDocument = require.resolve('./__fixtures__/unusedShared/unusedComponentsSchema.remoteLocal.json');
-const definitionDocument = require.resolve('./__fixtures__/unusedShared/unusedComponentsSchema.definition.json');
-const indirectDocument = require.resolve('./__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json');
-const indirect2Document = require.resolve('./__fixtures__/unusedShared/unusedComponentsSchema.indirect.2.json');
+const remoteLocalDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.remoteLocal.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.remoteLocal.json'),
+);
+const definitionDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.definition.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.definition.json'),
+);
+const indirectDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json'),
+);
+const indirect2Document = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.indirect.2.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.indirect.2.json'),
+);
 
 testRule('oas3-unused-component', [
   {
@@ -156,33 +173,33 @@ testRule('oas3-unused-component', [
           },
         },
       },
-      [definitionDocument]: require(definitionDocument),
+      [definitionDocument.source!]: definitionDocument.data,
     },
   },
 
   {
     name: 'a directly self-referencing document from the filesystem',
-    document: new Document(JSON.stringify(require(remoteLocalDocument)), Parsers.Json, remoteLocalDocument),
+    document: remoteLocalDocument,
     errors: [],
     mocks: {
-      [remoteLocalDocument]: require(remoteLocalDocument),
+      [remoteLocalDocument.source!]: remoteLocalDocument.data,
     },
   },
 
   {
     name: 'an indirectly self-referencing document from the filesystem',
-    document: new Document(JSON.stringify(require(indirectDocument)), Parsers.Json, indirectDocument),
+    document: indirectDocument,
     errors: [
       {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'schemas', 'Unhooked'],
         severity: DiagnosticSeverity.Warning,
-        source: indirectDocument,
+        source: indirectDocument.source!,
       },
     ],
     mocks: {
-      [indirectDocument]: require(indirectDocument),
-      [indirect2Document]: require(indirect2Document),
+      [indirectDocument.source!]: indirectDocument.data,
+      [indirect2Document.source!]: indirect2Document.data,
     },
   },
 ]);

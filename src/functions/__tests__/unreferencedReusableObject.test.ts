@@ -8,11 +8,11 @@ function runUnreferencedReusableObject(data: any, reusableObjectsLocation: strin
 }
 
 describe('unreferencedReusableObject', () => {
-  it('throws when reusableObjectsLocation does not look like a valid local json pointer', () => {
+  test('throws when reusableObjectsLocation does not look like a valid local json pointer', () => {
     expect(() => runUnreferencedReusableObject({}, 'Nope')).toThrow();
   });
 
-  it('given a non object data should return nothing', () => {
+  test('given a non object data should return nothing', () => {
     expect(runUnreferencedReusableObject('Nope', '#')).toBeUndefined();
   });
 });

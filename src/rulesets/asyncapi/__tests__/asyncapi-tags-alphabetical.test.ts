@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import testRule from '../../__tests__/__helpers__/tester';
+import testRule from './__helpers__/tester';
 
 testRule('asyncapi-tags-alphabetical', [
   {

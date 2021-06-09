@@ -32,5 +32,3 @@ afterEach(() => {
   readFileSpy.mockRestore();
   accessSpy.mockRestore();
 });
-
-jest.mock('fs');

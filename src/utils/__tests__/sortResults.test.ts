@@ -141,7 +141,7 @@ describe('sortResults', () => {
     return shuffled;
   };
 
-  it('should properly order results', () => {
+  test('should properly order results', () => {
     const randomlySortedIndices = [5, 4, 1, 10, 8, 6, 3, 9, 2, 0, 7];
 
     const shuffled = shuffleBy(results, randomlySortedIndices);
@@ -151,7 +151,7 @@ describe('sortResults', () => {
 });
 
 describe('compareResults', () => {
-  it('should properly order results source', () => {
+  test('should properly order results source', () => {
     const input = {
       code: 'code 01',
       path: ['a', 'b', 'c', 'd'],
@@ -174,7 +174,7 @@ describe('compareResults', () => {
     });
   });
 
-  it('should properly order results code', () => {
+  test('should properly order results code', () => {
     const input = {
       source: 'somewhere',
       path: ['a', 'b', 'c', 'd'],

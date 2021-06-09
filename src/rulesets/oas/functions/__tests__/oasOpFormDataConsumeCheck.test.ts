@@ -1,16 +1,24 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { Spectral } from '../../../../index';
-import { createWithRules } from '../../../__tests__/__helpers__/tester';
+import { RuleType, Spectral } from '../../../../index';
+import { rules } from '../../index.json';
+import oasOpFormDataConsumeCheck from '../oasOpFormDataConsumeCheck';
 
-// todo: move to oas2-operation-formData-consume-check
 describe('oasOpFormDataConsumeCheck', () => {
   let s: Spectral;
 
-  beforeEach(async () => {
-    s = await createWithRules(['oas2-operation-formData-consume-check']);
+  beforeEach(() => {
+    s = new Spectral();
+    s.registerFormat('oas2', () => true);
+    s.setFunctions({ oasOpFormDataConsumeCheck });
+    s.setRules({
+      'oas2-operation-formData-consume-check': Object.assign(rules['oas2-operation-formData-consume-check'], {
+        recommended: true,
+        type: RuleType[rules['oas2-operation-formData-consume-check'].type],
+      }),
+    });
   });
 
-  it('validate a correct object', async () => {
+  test('validate a correct object', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {
@@ -25,7 +33,7 @@ describe('oasOpFormDataConsumeCheck', () => {
     expect(results.length).toEqual(0);
   });
 
-  it('return errors on different path operations same id', async () => {
+  test('return errors on different path operations same id', async () => {
     const results = await s.run({
       swagger: '2.0',
       paths: {
