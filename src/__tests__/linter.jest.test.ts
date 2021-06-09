@@ -510,68 +510,6 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
     );
   });
 
-  describe('evaluate "value" in validation messages', () => {
-    test('should print correct values for referenced files', async () => {
-      spectral = new Spectral({ resolver: httpAndFileResolver });
-
-      spectral.setRules({
-        'empty-is-falsy': {
-          severity: DiagnosticSeverity.Error,
-          recommended: true,
-          description: 'Should be falsy',
-          message: 'Value #{{print("value")}} should be falsy',
-          given: '$..empty',
-          then: {
-            function: 'falsy',
-          },
-        },
-      });
-
-      return expect(
-        spectral.run(
-          {
-            empty: {
-              $ref: './__fixtures__/petstore.merge.keys.oas3.json#/info/contact/url',
-            },
-            bar: {
-              empty: {
-                $ref: './__fixtures__/petstore.oas3.json#/servers',
-              },
-            },
-            foo: {
-              empty: {
-                $ref: './__fixtures__/petstore.oas3.json#/info',
-              },
-            },
-          },
-          {
-            resolve: {
-              documentUri: path.join(__dirname, 'foo.json'),
-            },
-          },
-        ),
-      ).resolves.toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            code: 'empty-is-falsy',
-            message: 'Value "https://example.com" should be falsy',
-            path: ['info', 'contact', 'url'],
-          }),
-          expect.objectContaining({
-            code: 'empty-is-falsy',
-            message: 'Value Array[] should be falsy',
-            path: ['servers'],
-          }),
-          expect.objectContaining({
-            code: 'empty-is-falsy',
-            message: 'Value Object{} should be falsy',
-            path: ['info'],
-          }),
-        ]),
-      );
-    });
-  });
-
   describe('Exceptions handling', () => {
     it('should ignore specified rules violations in a standalone document', async () => {
       await spectral.loadRuleset(exceptionRuleset);

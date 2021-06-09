@@ -2,7 +2,6 @@
   "$schema": "",
   "definitions": {
     "info": {
-      "foo": "bar",
       "description": 0,
       "contact": {
         "name": "test"

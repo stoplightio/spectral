@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "defined-name": {
+      "given": "$..name",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  }
+}

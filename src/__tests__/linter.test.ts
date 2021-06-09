@@ -3,13 +3,11 @@ import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { IParsedResult } from '../document';
 import { Spectral } from '../spectral';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Parsers, Document } from '..';
 import { IParser } from '../parsers/types';
 import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/createWithRules';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
-const petstoreMergeKeys = JSON.stringify(require('./__fixtures__/petstore.merge.keys.oas3.json'));
 
 const fnName = 'fake';
 const fnName2 = 'fake2';
@@ -745,43 +743,30 @@ responses:: !!foo
 
   test('should report when a resolver is not defined for a given $ref type', async () => {
     const s = new Spectral({ resolver: new Resolver() });
+    const document = JSON.stringify({
+      'file-refs': [{ $ref: './models/pet.yaml' }, { $ref: '../common/models/error.yaml' }],
+    });
 
-    const result = await s.run(invalidSchema, { ignoreUnknownFormat: true });
+    const result = await s.run(document);
 
     expect(result).toEqual([
       expect.objectContaining({
         code: 'invalid-ref',
         message: "No resolver defined for scheme 'file' in ref ./models/pet.yaml",
-        path: ['paths', '/pets', 'get', 'responses', '200', 'content', 'application/json', 'schema', '$ref'],
+        path: ['file-refs', '0', '$ref'],
         severity: DiagnosticSeverity.Error,
       }),
       expect.objectContaining({
         code: 'invalid-ref',
         message: "No resolver defined for scheme 'file' in ref ../common/models/error.yaml",
-        path: ['paths', '/pets', 'get', 'responses', 'default', 'content', 'application/json', 'schema', '$ref'],
+        path: ['file-refs', '1', '$ref'],
         severity: DiagnosticSeverity.Error,
       }),
     ]);
   });
 
-  test('should support YAML merge keys', async () => {
-    await spectral.loadRuleset('spectral:oas');
-    spectral.setRules({
-      'operation-tag-defined': {
-        ...spectral.rules['operation-tag-defined'],
-        message: spectral.rules['operation-tag-defined'].message ?? '',
-        description: spectral.rules['operation-tag-defined'].description ?? '',
-        severity: 'off',
-      },
-    });
-
-    const result = await spectral.run(petstoreMergeKeys);
-
-    expect(result).toEqual([]);
-  });
-
   describe('reports duplicated properties for', () => {
-    test('JSON format', async () => {
+    it('JSON format', async () => {
       const result = await spectral.run('{"foo":true,"foo":false}', {
         ignoreUnknownFormat: true,
       });
@@ -1233,6 +1218,80 @@ responses:: !!foo
         }),
       ]);
     });
+
+    test('should print correct values for referenced files', async () => {
+      const resolver = new Resolver({
+        resolvers: {
+          file: {
+            async resolve() {
+              return JSON.stringify({
+                info: {
+                  contact: {
+                    url: 'stoplight.io',
+                  },
+                },
+                servers: [],
+              });
+            },
+          },
+        },
+      });
+
+      spectral = new Spectral({ resolver });
+
+      spectral.setRules({
+        'empty-is-falsy': {
+          severity: DiagnosticSeverity.Error,
+          recommended: true,
+          description: 'Should be falsy',
+          message: 'Value #{{print("value")}} should be falsy',
+          given: '$..empty',
+          then: {
+            function: 'falsy',
+          },
+        },
+      });
+
+      const results = await spectral.run(
+        new Document(
+          JSON.stringify({
+            foo: {
+              empty: {
+                $ref: './spec.json#/info',
+              },
+            },
+            empty: {
+              $ref: './spec.json#/info/contact/url',
+            },
+            bar: {
+              empty: {
+                $ref: './spec.json#/servers',
+              },
+            },
+          }),
+          Parsers.Json,
+          'test.json',
+        ),
+      );
+
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'empty-is-falsy',
+          message: 'Value Object{} should be falsy',
+          path: ['info'],
+        }),
+        expect.objectContaining({
+          code: 'empty-is-falsy',
+          message: 'Value "stoplight.io" should be falsy',
+          path: ['info', 'contact', 'url'],
+        }),
+        expect.objectContaining({
+          code: 'empty-is-falsy',
+          message: 'Value Array[] should be falsy',
+          path: ['servers'],
+        }),
+      ]);
+    });
   });
 
   test('should evaluate {{path}} in validation messages', async () => {
@@ -1270,19 +1329,23 @@ responses:: !!foo
 
   describe('runWithResolved', () => {
     test('should include both resolved and validation results', async () => {
+      const document = JSON.stringify({
+        info: null,
+      });
+
       spectral.setRules({
         'no-info': {
           // some dumb rule to have some error
           message: 'should be OK',
           given: '$.info',
           then: {
-            function: 'falsy',
+            function: 'truthy',
           },
         },
       });
 
-      const { result } = await new Resolver().resolve(parse(petstoreMergeKeys));
-      const { resolved, results } = await spectral.runWithResolved(petstoreMergeKeys);
+      const { result } = await new Resolver().resolve(parse(document));
+      const { resolved, results } = await spectral.runWithResolved(document);
 
       expect(resolved).toEqual(result);
       expect(results).toEqual([expect.objectContaining({ code: 'no-info' })]);
@@ -1354,18 +1417,18 @@ responses:: !!foo
   });
 
   test.each(['1', 'null', '', 'false'])('given %s input, should report nothing', async input => {
-    const s = new Spectral({ resolver: httpAndFileResolver });
+    const s = new Spectral();
 
     const source = '/tmp/file.yaml';
     const doc = new Document(input, Parsers.Yaml, source);
 
-    const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: source } });
+    const results = await s.run(doc);
 
     expect(results).toEqual([]);
   });
 
   test('should be capable of linting arrays', async () => {
-    const s = new Spectral({ resolver: httpAndFileResolver });
+    const s = new Spectral();
 
     s.setRules({
       'falsy-foo': {
@@ -1396,7 +1459,7 @@ responses:: !!foo
       source,
     );
 
-    const results = await s.run(doc, { ignoreUnknownFormat: true, resolve: { documentUri: source } });
+    const results = await s.run(doc);
 
     expect(results).toEqual([
       {
