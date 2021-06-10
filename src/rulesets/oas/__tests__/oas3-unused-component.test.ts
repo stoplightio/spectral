@@ -1,129 +1,205 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { Document } from '../../../document';
-import type { Spectral } from '../../../index';
-import * as Parsers from '../../../parsers';
-import { createWithRules } from './__helpers__/createWithRules';
-import { httpAndFileResolver } from '../../../resolvers/http-and-file';
+import * as path from '@stoplight/path';
+import { Parsers, Document } from '../../..';
+import testRule from '../../__tests__/__helpers__/tester';
 
-const noUnusedComponents = JSON.stringify(require('../../__tests__/__fixtures__/unusedComponent.negative.json'));
-const unusedComponents = JSON.stringify(require('../../__tests__/__fixtures__/unusedComponent.json'));
+const remoteLocalDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.remoteLocal.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.remoteLocal.json'),
+);
+const definitionDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.definition.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.definition.json'),
+);
+const indirectDocument = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.indirect.1.json'),
+);
+const indirect2Document = new Document<any, any>(
+  JSON.stringify(require('./__fixtures__/unusedShared/unusedComponentsSchema.indirect.2.json')),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/unusedShared/unusedComponentsSchema.indirect.2.json'),
+);
 
-describe('oasUnusedComponent - Local references', () => {
-  let s: Spectral;
-
-  beforeEach(async () => {
-    s = await createWithRules(['oas3-unused-component'], { resolver: httpAndFileResolver });
-  });
-
-  test('does not report anything for empty object', async () => {
-    const results = await s.run({
+testRule('oas3-unused-component', [
+  {
+    name: 'empty object',
+    document: {
       openapi: '3.0.0',
-    });
+    },
 
-    expect(results).toEqual([]);
-  });
+    errors: [],
+  },
 
-  test('does not throw when meeting an invalid json pointer', async () => {
-    const doc = `{
-      "openapi": "3.0.0",
-      "x-hook": {
-        "$ref": "'$#@!!!' What?"
+  {
+    name: 'meeting an invalid json pointer',
+    document: {
+      openapi: '3.0.0',
+      'x-hook': {
+        $ref: "'$#@!!!' What?",
       },
-      "paths": {
-      },
-      "components": {
-        "schemas": {
-          "NotHooked": {
-            "type": "object"
-          }
-        }
-      }
-    }`;
-
-    const results = await s.run(doc);
-
-    expect(results).toEqual([
-      expect.objectContaining({
-        code: 'invalid-ref',
-        path: ['x-hook', '$ref'],
-      }),
-      {
-        code: 'oas3-unused-component',
-        message: 'Potentially unused component has been detected.',
-        path: ['components', 'schemas', 'NotHooked'],
-        range: {
-          end: {
-            character: 28,
-            line: 10,
-          },
-          start: {
-            character: 22,
-            line: 9,
+      paths: {},
+      components: {
+        schemas: {
+          NotHooked: {
+            type: 'object',
           },
         },
+      },
+    },
+    errors: [
+      {
+        message: 'Potentially unused component has been detected.',
+        path: ['components', 'schemas', 'NotHooked'],
         severity: DiagnosticSeverity.Warning,
       },
-    ]);
-  });
+    ],
+  },
 
-  test('does not report anything when all the components are referenced', async () => {
-    const results = await s.run(new Document(noUnusedComponents, Parsers.Json));
+  {
+    name: 'all components are referenced',
+    document: require('../../__tests__/__fixtures__/unusedComponent.negative.json'),
+    errors: [],
+  },
 
-    expect(results).toEqual([]);
-  });
+  {
+    name: 'orphaned components',
+    document: require('../../__tests__/__fixtures__/unusedComponent.json'),
 
-  test('reports orphaned components', async () => {
-    const results = await s.run(new Document(unusedComponents, Parsers.Json));
-
-    expect(results).toEqual([
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+    errors: [
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'schemas', 'SomeSchema'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'parameters', 'SomeParameter'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'requestBodies', 'SomeBody'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'callbacks', 'SomeCallback'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'examples', 'SomeExample'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'headers', 'SomeHeader'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'links', 'SomeLink'],
         severity: DiagnosticSeverity.Warning,
-      }),
-      expect.objectContaining({
-        code: 'oas3-unused-component',
+      },
+      {
         message: 'Potentially unused component has been detected.',
         path: ['components', 'responses', 'SomeResponse'],
         severity: DiagnosticSeverity.Warning,
-      }),
-    ]);
-  });
-});
+      },
+    ],
+  },
+
+  {
+    name: 'unreferenced components when analyzing an in-memory document',
+    document: {
+      openapi: '3.0.0',
+      'x-hook': {
+        $ref: '#/components/schemas/Hooked',
+      },
+      'x-also-hook': {
+        $ref: '#/components/schemas/Hooked',
+      },
+      paths: {
+        '/path': {
+          post: {
+            parameters: [
+              {
+                $ref: '#/components/schemas/HookedAsWell',
+              },
+              {
+                $ref: `${definitionDocument}#/components/schemas/ExternalFs`,
+              },
+              {
+                $ref: 'https://oas3.library.com/defs.json#/components/schemas/ExternalHttp',
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Hooked: {
+            type: 'object',
+          },
+          HookedAsWell: {
+            name: 'value',
+            in: 'query',
+            type: 'number',
+          },
+          Unhooked: {
+            type: 'object',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Potentially unused component has been detected.',
+        path: ['components', 'schemas', 'Unhooked'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+    mocks: {
+      'https://oas3.library.com/defs.json': {
+        components: {
+          schemas: {
+            ExternalHttp: {
+              type: 'number',
+            },
+          },
+        },
+      },
+      [definitionDocument.source!]: definitionDocument.data,
+    },
+  },
+
+  {
+    name: 'a directly self-referencing document from the filesystem',
+    document: remoteLocalDocument,
+    errors: [],
+    mocks: {
+      [remoteLocalDocument.source!]: remoteLocalDocument.data,
+    },
+  },
+
+  {
+    name: 'an indirectly self-referencing document from the filesystem',
+    document: indirectDocument,
+    errors: [
+      {
+        message: 'Potentially unused component has been detected.',
+        path: ['components', 'schemas', 'Unhooked'],
+        severity: DiagnosticSeverity.Warning,
+        source: indirectDocument.source!,
+      },
+    ],
+    mocks: {
+      [indirectDocument.source!]: indirectDocument.data,
+      [indirect2Document.source!]: indirect2Document.data,
+    },
+  },
+]);

@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src", "test-utils"],
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es2017",

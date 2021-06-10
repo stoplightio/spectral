@@ -3,7 +3,7 @@ import { Spectral } from '../../../..';
 import { prepareResults } from '../oasDocumentSchema';
 
 import { ErrorObject } from 'ajv';
-import { createWithRules } from '../../__tests__/__helpers__/createWithRules';
+import { createWithRules } from '../../__tests__/__helpers__/tester';
 
 describe('oasDocumentSchema', () => {
   let s: Spectral;

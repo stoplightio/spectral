@@ -2,8 +2,9 @@
 // Generated on Tue Jul 02 2019 17:18:30 GMT+0200 (Central European Summer Time)
 
 import type { TransformCallback, TransformContext } from 'karma-typescript';
+import type { Config } from 'karma';
 
-module.exports = (config: any) => {
+module.exports = (config: Config): void => {
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -27,6 +28,7 @@ module.exports = (config: any) => {
       './setupTests.ts': ['karma-typescript'],
     },
 
+    // @ts-expect-error: non-standard - karma-env-preprocessor
     envPreprocessor: ['USE_NIMMA'],
 
     karmaTypescriptConfig: {
@@ -35,7 +37,10 @@ module.exports = (config: any) => {
       bundlerOptions: {
         resolve: {
           alias: {
+            '@stoplight/spectral-test-utils': require.resolve('./test-utils/browser/index.js'),
             'node-fetch': require.resolve('./__karma__/fetch'),
+            fs: require.resolve('./__karma__/fs'),
+            process: require.resolve('./__karma__/process'),
           },
         },
         acornOptions: {

@@ -5,7 +5,6 @@ import * as nock from 'nock';
 import { RuleCollection, Spectral } from '../../spectral';
 import { readRuleset } from '../readRuleset';
 
-jest.mock('fs');
 jest.mock('nanoid/non-secure');
 
 const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json');

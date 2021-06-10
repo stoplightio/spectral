@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { fs } from 'memfs';
 
 export const promises = fs.promises;

@@ -5,7 +5,7 @@ import { IParsedResult } from '../document';
 import { Spectral } from '../spectral';
 import { Parsers, Document } from '..';
 import { IParser } from '../parsers/types';
-import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/createWithRules';
+import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/tester';
 
 const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 
