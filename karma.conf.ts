@@ -14,7 +14,7 @@ module.exports = (config: Config): void => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./__karma__/jest.ts', './setupKarma.ts', 'src/**/*.ts'],
+    files: ['./__karma__/jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
     exclude: ['src/cli/**', 'src/formatters/**', 'src/**/*.jest.test.ts'],
