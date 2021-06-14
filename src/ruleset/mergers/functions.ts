@@ -17,7 +17,6 @@ export function mergeFunctions(
     target[newName] = def;
     target[name] = {
       name: def.name,
-      schema: def.schema,
       ref: newName,
       source: def.source,
     };

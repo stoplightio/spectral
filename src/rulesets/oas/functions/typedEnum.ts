@@ -1,7 +1,9 @@
-import type { IFunction, IFunctionContext } from '../../../types';
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment */
+import { schema } from '@stoplight/spectral-functions';
+import type { IFunction } from '../../../types';
 import { isObject } from './utils/isObject';
 
-export const typedEnum: IFunction = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
+export const typedEnum: IFunction = function (targetVal, opts, paths, otherValues) {
   if (!isObject(targetVal)) {
     return;
   }
@@ -43,7 +45,7 @@ export const typedEnum: IFunction = function (this: IFunctionContext, targetVal,
   const incorrectValues: Array<{ index: number; val: unknown }> = [];
 
   (enumValues as unknown[]).forEach((val, index) => {
-    const res = this.functions.schema(val, schemaObject, paths, otherValues);
+    const res = schema(val, schemaObject, paths, otherValues);
 
     if (Array.isArray(res) && res.length !== 0) {
       incorrectValues.push({ index, val });

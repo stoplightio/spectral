@@ -1,50 +1,39 @@
-import type { ValidateFunction } from 'ajv';
-
-import type { ISchemaFunction } from '../../../functions/schema';
-import type { IFunction, IFunctionContext } from '../../../types';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import * as betterAjvErrors from '@stoplight/better-ajv-errors';
 import * as asyncApi2Schema from '../schemas/schema.asyncapi2.json';
 
 const fakeSchemaObjectId = 'asyncapi2#/definitions/schema';
 const asyncApi2SchemaObject = { $ref: fakeSchemaObjectId };
 
-let validator: ValidateFunction;
+const ajv = new Ajv({
+  allErrors: true,
+  strict: false,
+});
 
-const buildAsyncApi2SchemaObjectValidator = (schemaFn: ISchemaFunction): ValidateFunction => {
-  if (validator !== void 0) {
-    return validator;
-  }
+addFormats(ajv);
 
-  const ajv = schemaFn.createAJVInstance({
-    allErrors: true,
-    strict: false,
-  });
+ajv.addSchema(asyncApi2Schema, asyncApi2Schema.$id);
 
-  ajv.addSchema(asyncApi2Schema, asyncApi2Schema.$id);
+const ajvValidationFn = ajv.compile(asyncApi2SchemaObject);
 
-  validator = ajv.compile(asyncApi2SchemaObject);
+export default createRulesetFunction<unknown, null>(
+  {
+    input: null,
+    options: null,
+  },
+  function asyncApi2PayloadValidation(targetVal, _opts, paths) {
+    ajvValidationFn(targetVal);
 
-  return validator;
-};
+    const path = paths.target ?? paths.given;
 
-export const asyncApi2PayloadValidation: IFunction<null> = function (
-  this: IFunctionContext,
-  targetVal,
-  _opts,
-  paths,
-  otherValues,
-) {
-  const ajvValidationFn = buildAsyncApi2SchemaObjectValidator(this.functions.schema);
-
-  return this.functions.schema(
-    targetVal,
-    {
-      schema: asyncApi2SchemaObject,
-      ajv: ajvValidationFn,
-      allErrors: true,
-    },
-    paths,
-    otherValues,
-  );
-};
-
-export default asyncApi2PayloadValidation;
+    return betterAjvErrors(asyncApi2SchemaObject, ajvValidationFn.errors, {
+      propertyPath: path,
+      targetValue: targetVal,
+    }).map(({ suggestion, error, path: errorPath }) => ({
+      message: suggestion !== void 0 ? `${error}. ${suggestion}` : error,
+      path: [...path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
+    }));
+  },
+);

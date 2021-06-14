@@ -1,7 +1,6 @@
 import { join, resolve } from '@stoplight/path';
 import * as nock from 'nock';
 import * as yargs from 'yargs';
-import { ValidationError } from '../../../ruleset/validation';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';
 import * as http from 'http';
@@ -9,6 +8,7 @@ import * as url from 'url';
 import { DEFAULT_REQUEST_OPTIONS } from '../../../request';
 import * as ProxyAgent from 'proxy-agent';
 import { DiagnosticSeverity } from '@stoplight/types';
+import { RulesetValidationError } from '@stoplight/spectral-core';
 
 jest.mock('../output');
 
@@ -198,7 +198,7 @@ describe('Linter service', () => {
 
       it('fails trying to extend an invalid relative ruleset', () => {
         return expect(run(`lint ${validCustomOas3SpecPath} -r ${invalidNestedRulesetPath}`)).rejects.toThrowError(
-          ValidationError,
+          RulesetValidationError,
         );
       });
 
@@ -224,7 +224,7 @@ describe('Linter service', () => {
       it('given one is valid other is not, outputs "invalid ruleset" error', () => {
         return expect(
           run(`lint ${validCustomOas3SpecPath} -r ${invalidRulesetPath} -r ${validRulesetPath}`),
-        ).rejects.toThrowError(ValidationError);
+        ).rejects.toThrowError(RulesetValidationError);
       });
     });
 
@@ -236,7 +236,9 @@ describe('Linter service', () => {
       });
 
       it('outputs "invalid ruleset" error', () => {
-        return expect(run(`lint ${validOas3SpecPath} -r ${invalidRulesetPath}`)).rejects.toThrowError(ValidationError);
+        return expect(run(`lint ${validOas3SpecPath} -r ${invalidRulesetPath}`)).rejects.toThrowError(
+          RulesetValidationError,
+        );
       });
 
       it('outputs no issues', () => {

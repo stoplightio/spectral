@@ -1,12 +1,22 @@
-import { IFunction, IFunctionResult } from '../types';
+import { createRulesetFunction } from '../ruleset/rulesetFunction';
 
-// eslint-disable-next-line no-shadow-restricted-names
-export const undefined: IFunction = (targetVal): void | IFunctionResult[] => {
-  if (typeof targetVal !== 'undefined') {
-    return [
-      {
-        message: '#{{print("property")}}must be undefined',
-      },
-    ];
-  }
-};
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: 'null',
+    },
+  },
+  // eslint-disable-next-line no-shadow-restricted-names
+  function undefined(targetVal) {
+    if (typeof targetVal !== 'undefined') {
+      return [
+        {
+          message: '#{{print("property")}}must be undefined',
+        },
+      ];
+    }
+
+    return;
+  },
+);

@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-return */
 import type { ErrorObject } from 'ajv';
-import type { IFunction, IFunctionContext, IFunctionResult } from '../../../types';
+import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
+import { schema as schemaFn } from '@stoplight/spectral-functions';
 
 import * as oas2_0 from '../schemas/2.0.json';
 import * as oas3_0 from '../schemas/3.0.json';
@@ -71,29 +73,27 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
-export const oasDocumentSchema: IFunction = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
-  const formats = otherValues.documentInventory.formats;
-  if (!Array.isArray(formats)) return;
+export default createRulesetFunction<unknown, null>(
+  {
+    input: null,
+    options: null,
+  },
+  function oasDocumentSchema(targetVal, opts, paths, otherValues) {
+    const formats = otherValues.documentInventory.formats;
+    if (!Array.isArray(formats)) return;
 
-  const schema = formats.includes('oas2')
-    ? OAS_SCHEMAS['2.0']
-    : formats.includes('oas3.1')
-    ? OAS_SCHEMAS['3.1']
-    : OAS_SCHEMAS['3.0'];
+    const schema = formats.includes('oas2')
+      ? OAS_SCHEMAS['2.0']
+      : formats.includes('oas3.1')
+      ? OAS_SCHEMAS['3.1']
+      : OAS_SCHEMAS['3.0'];
 
-  const errors = this.functions.schema.call(
-    this,
-    targetVal,
-    { allErrors: true, schema, prepareResults },
-    paths,
-    otherValues,
-  );
+    const errors = schemaFn(targetVal, { allErrors: true, schema, prepareResults }, paths, otherValues);
 
-  if (Array.isArray(errors)) {
-    applyManualReplacements(errors);
-  }
+    if (Array.isArray(errors)) {
+      applyManualReplacements(errors);
+    }
 
-  return errors;
-};
-
-export default oasDocumentSchema;
+    return errors;
+  },
+);

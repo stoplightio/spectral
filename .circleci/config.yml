@@ -45,9 +45,6 @@ commands:
       - run:
           name: Run node tests
           command: yarn test --coverage --maxWorkers=2
-      - run:
-          name: Run node tests (nimma)
-          command: npx cross-env USE_NIMMA=true yarn test --maxWorkers=2
 
   test-harness:
     steps:

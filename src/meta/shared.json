@@ -2,6 +2,21 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://stoplight.io/schemas/shared.json",
   "$defs": {
+    "Format": {
+      "type": "string",
+      "minLength": 1,
+      "errorMessage": {
+        "type": "format must be a string",
+        "minLength": "format must not be empty"
+      }
+    },
+    "Formats": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Format"
+      },
+      "errorMessage": "formats must be an array of strings"
+    },
     "DiagnosticSeverity": {
       "enum": [-1, 0, 1, 2, 3]
     },
@@ -16,7 +31,8 @@
         {
           "$ref": "#/$defs/HumanReadableSeverity"
         }
-      ]
+      ],
+      "errorMessage": "the value has to be one of: 0, 1, 2, 3 or \"error\", \"warn\", \"info\", \"hint\", \"off\""
     }
   }
 }

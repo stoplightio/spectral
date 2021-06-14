@@ -1,6 +1,5 @@
-import { Dictionary } from '@stoplight/types';
 import { escapeRegExp } from 'lodash';
-import { IFunction } from '../types';
+import { createRulesetFunction } from '../ruleset/rulesetFunction';
 
 export enum CasingType {
   flat = 'flat',
@@ -12,16 +11,16 @@ export enum CasingType {
   macro = 'macro',
 }
 
-export interface ICasingOptions {
+export type Options = {
   type: CasingType;
   disallowDigits?: boolean;
   separator?: {
     char: string;
     allowLeading?: boolean;
   };
-}
+};
 
-const CASES: Dictionary<string, CasingType> = {
+const CASES: Record<CasingType, string> = {
   [CasingType.flat]: '[a-z][a-z{__DIGITS__}]*',
   [CasingType.camel]: '[a-z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*',
   [CasingType.pascal]: '[A-Z][a-z{__DIGITS__}]*(?:[A-Z{__DIGITS__}](?:[a-z{__DIGITS__}]+|$))*',
@@ -31,36 +30,75 @@ const CASES: Dictionary<string, CasingType> = {
   [CasingType.macro]: '[A-Z][A-Z{__DIGITS__}]*(?:_[A-Z{__DIGITS__}]+)*',
 };
 
-export const casing: IFunction<ICasingOptions> = (targetVal, opts) => {
-  if (typeof targetVal !== 'string' || targetVal.length === 0) {
-    return;
-  }
-
-  if (
-    targetVal.length === 1 &&
-    opts.separator !== void 0 &&
-    opts.separator.allowLeading === true &&
-    targetVal === opts.separator.char
-  ) {
-    return;
-  }
-
-  const casingValidator = buildFrom(CASES[opts.type], opts);
-
-  if (casingValidator.test(targetVal)) {
-    return;
-  }
-
-  return [
-    {
-      message: `must be ${opts.type} case`,
+export default createRulesetFunction<string, Options>(
+  {
+    input: {
+      type: 'string',
+      minLength: 1,
     },
-  ];
-};
+    options: {
+      required: ['type'],
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          enum: Object.values(CasingType),
+          errorMessage: `"casing" function and its "type" option accept the following values: ${Object.values(
+            CasingType,
+          ).join(', ')}`,
+        },
+        disallowDigits: {
+          type: 'boolean',
+        },
+        separator: {
+          type: 'object',
+          required: ['char'],
+          additionalProperties: false,
+          properties: {
+            char: {
+              type: 'string',
+              maxLength: 1,
+              errorMessage: `"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"`,
+            },
+            allowLeading: {
+              type: 'boolean',
+            },
+          },
+        },
+      },
+      additionalProperties: false,
+      errorMessage: {
+        type: `"casing" function has invalid options specified. Example valid options: { "type": "camel" }, { "type": "pascal", "disallowDigits": true }`,
+      },
+    },
+  },
+  function casing(targetVal, opts) {
+    if (
+      targetVal.length === 1 &&
+      opts.separator !== void 0 &&
+      opts.separator.allowLeading === true &&
+      targetVal === opts.separator.char
+    ) {
+      return;
+    }
+
+    const casingValidator = buildFrom(CASES[opts.type], opts);
+
+    if (casingValidator.test(targetVal)) {
+      return;
+    }
+
+    return [
+      {
+        message: `must be ${opts.type} case`,
+      },
+    ];
+  },
+);
 
 const DIGITS_PATTERN = '0-9';
 
-const buildFrom = (basePattern: string, overrides: ICasingOptions): RegExp => {
+const buildFrom = (basePattern: string, overrides: Options): RegExp => {
   const injectDigits = overrides.disallowDigits !== true;
 
   const pattern = basePattern.replace(/\{__DIGITS__\}/g, injectDigits ? DIGITS_PATTERN : '');

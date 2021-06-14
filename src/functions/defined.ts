@@ -1,11 +1,19 @@
-import { IFunction, IFunctionResult } from '../types';
+import { createRulesetFunction } from '../ruleset/rulesetFunction';
 
-export const defined: IFunction = (targetVal): void | IFunctionResult[] => {
-  if (typeof targetVal === 'undefined') {
-    return [
-      {
-        message: '#{{print("property")}}must be defined',
-      },
-    ];
-  }
-};
+export default createRulesetFunction<unknown, null>(
+  {
+    input: null,
+    options: null,
+  },
+  function defined(input) {
+    if (typeof input === 'undefined') {
+      return [
+        {
+          message: '#{{print("property")}}must be defined',
+        },
+      ];
+    }
+
+    return;
+  },
+);

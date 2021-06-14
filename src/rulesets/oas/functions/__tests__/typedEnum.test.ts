@@ -1,4 +1,3 @@
-import { functions } from '../../../../functions';
 import { typedEnum } from '../typedEnum';
 import { DocumentInventory } from '../../../../documentInventory';
 import { Document } from '../../../../document';
@@ -7,8 +6,7 @@ import * as Parsers from '../../../../parsers';
 function runTypedEnum(targetVal: any) {
   const doc = new Document(JSON.stringify(targetVal), Parsers.Json);
 
-  return typedEnum.call(
-    { functions },
+  return typedEnum(
     targetVal,
     null,
     { given: ['$'] },

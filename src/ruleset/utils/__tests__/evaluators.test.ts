@@ -1,4 +1,4 @@
-import { evaluateExport, setFunctionContext } from '../evaluators';
+import { evaluateExport } from '../evaluators';
 
 describe('Code evaluators', () => {
   describe('Export evaluator', () => {
@@ -80,34 +80,6 @@ describe('Code evaluators', () => {
           },
         });
       });
-    });
-  });
-
-  describe('setFunctionContext', () => {
-    it('binds context to given function', () => {
-      const context = { a: true };
-      const fn = setFunctionContext(context, jest.fn().mockReturnThis());
-      expect(fn()).toStrictEqual({ a: true });
-    });
-
-    it('deep-copies provided context', () => {
-      const context = { a: true };
-      const fn = setFunctionContext(context, jest.fn().mockReturnThis());
-      const fn2 = setFunctionContext(context, jest.fn().mockReturnThis());
-      expect(fn()).not.toBe(fn2());
-    });
-
-    it('copies enumerable properties', () => {
-      const context = { a: true };
-      const prop = Object.freeze({});
-      const fn = function () {
-        return;
-      };
-
-      fn.foo = prop;
-
-      const boundFn = setFunctionContext(context, fn);
-      expect(boundFn.foo).toBe(prop);
     });
   });
 });

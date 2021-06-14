@@ -1,19 +1,18 @@
 import { Dictionary } from '@stoplight/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { HumanReadableDiagnosticSeverity, IRule } from './rule';
-import { JSONSchema, RuleCollection } from './spectral';
+import { RuleCollection } from './spectral';
 
 export type FileRuleSeverity = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 export type FileRulesetSeverity = 'off' | 'recommended' | 'all';
 
-export type FileRule = IRule | FileRuleSeverity | [FileRuleSeverity] | [FileRuleSeverity, Record<string, unknown>];
+export type FileRule = IRule | FileRuleSeverity;
 
 export type FileRuleCollection = Dictionary<FileRule, string>;
 
 export interface IRulesetFunctionDefinition {
   code?: string;
   ref?: string;
-  schema: JSONSchema | null;
   name: string;
   source: string | null;
 }
@@ -39,7 +38,7 @@ export interface IRulesetFile {
   formats?: string[];
   rules?: FileRuleCollection;
   functionsDir?: string;
-  functions?: Array<string | [string, JSONSchema]>;
+  functions?: string[];
   except?: RulesetExceptionCollection;
   parserOptions?: IParserOptions;
 }

@@ -1,6 +1,11 @@
 {
   "include": ["src", "test-utils"],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@stoplight/spectral-core": ["src/index.ts"],
+      "@stoplight/spectral-functions": ["src/functions/index.ts"]
+    },
     "moduleResolution": "node",
     "target": "es2017",
     "module": "CommonJS",

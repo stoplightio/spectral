@@ -1,11 +1,11 @@
 import { IResolveOpts, IResolveResult } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, Dictionary, IDiagnostic, JsonPath } from '@stoplight/types';
 import { JSONSchema7 } from 'json-schema';
-import { IFunction, IProcessedRule, IRule } from '.';
+import { IProcessedRule, IRule, RulesetFunction, RulesetFunctionWithValidator } from '.';
 import { Rule } from '../rule';
 import { ComputeFingerprintFunc } from '../utils';
 
-export type FunctionCollection = Dictionary<IFunction<any>, string>;
+export type FunctionCollection = Dictionary<RulesetFunction<any, any> | RulesetFunctionWithValidator<any, any>, string>;
 export type RuleCollection = Dictionary<IProcessedRule, string>;
 export type PartialRuleCollection = Dictionary<Partial<IRule>, string>;
 export type RunRuleCollection = Dictionary<Rule, string>;

@@ -1,30 +1,52 @@
-import { isObject } from 'lodash';
-import { IFunction } from '../types';
+import { createRulesetFunction } from '../ruleset/rulesetFunction';
 import { safePointerToPath } from '../utils';
 
-export const unreferencedReusableObject: IFunction<{ reusableObjectsLocation: string }> = (
-  data,
-  opts,
-  _paths,
-  otherValues,
-) => {
-  if (!isObject(data)) return;
-
-  const graph = otherValues.documentInventory.graph;
-  if (graph === null) {
-    return [{ message: 'unreferencedReusableObject requires dependency graph' }];
-  }
-
-  const normalizedSource = otherValues.documentInventory.source ?? '';
-
-  const defined = Object.keys(data).map(name => `${normalizedSource}${opts.reusableObjectsLocation}/${name}`);
-
-  const orphans = defined.filter(defPath => !graph.hasNode(defPath));
-
-  return orphans.map(orphanPath => {
-    return {
-      message: 'Potential orphaned reusable object has been detected',
-      path: safePointerToPath(orphanPath),
-    };
-  });
+export type Options = {
+  reusableObjectsLocation: string;
 };
+
+export default createRulesetFunction<Record<string, unknown>, Options>(
+  {
+    input: {
+      type: 'object',
+    },
+    options: {
+      type: 'object',
+      properties: {
+        reusableObjectsLocation: {
+          type: 'string',
+          format: 'json-pointer-uri-fragment',
+          errorMessage:
+            '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
+        },
+      },
+      additionalProperties: false,
+      required: ['reusableObjectsLocation'],
+      errorMessage: {
+        type:
+          '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+        required:
+          '"unreferencedReusableObject" function is missing "reusableObjectsLocation" option. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+      },
+    },
+  },
+  function unreferencedReusableObject(data, opts, _paths, otherValues) {
+    const graph = otherValues.documentInventory.graph;
+    if (graph === null) {
+      throw new Error('unreferencedReusableObject requires dependency graph');
+    }
+
+    const normalizedSource = otherValues.documentInventory.source ?? '';
+
+    const defined = Object.keys(data).map(name => `${normalizedSource}${opts.reusableObjectsLocation}/${name}`);
+
+    const orphans = defined.filter(defPath => !graph.hasNode(defPath));
+
+    return orphans.map(orphanPath => {
+      return {
+        message: 'Potential orphaned reusable object has been detected',
+        path: safePointerToPath(orphanPath),
+      };
+    });
+  },
+);

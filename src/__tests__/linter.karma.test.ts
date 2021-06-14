@@ -38,7 +38,6 @@ describe('Linter', () => {
         functions: {
           fn: {
             source: null,
-            schema: null,
             name: 'fn',
             code: `module.exports = () => void fetch('https://stoplight.io')`,
           },

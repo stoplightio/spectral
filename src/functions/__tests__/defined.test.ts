@@ -1,30 +1,28 @@
-import { defined } from '../defined';
+import defined from '../defined';
+import testFunction from './__helpers__/tester';
+import { RulesetValidationError } from '../../ruleset/validation';
 
-function runDefined(targetVal: any, targetPath?: any) {
-  return defined(
-    targetVal,
-    null,
-    {
-      given: ['$'],
-      target: targetPath,
-    },
-    {
-      given: null,
-      original: null,
-    } as any,
-  );
-}
+const runDefined = testFunction.bind(null, defined);
 
-describe('defined', () => {
-  test.each([true, 0, null])('should return undefined if target value is defined', value => {
-    expect(runDefined(value)).toBeUndefined();
+describe('Core Functions / Defined', () => {
+  it.each([true, 0, null])('given defined input, should return no error message', async value => {
+    expect(await runDefined(value)).toEqual([]);
   });
 
-  test('should return an error message if target value is undefined', () => {
-    expect(runDefined(void 0)).toEqual([
+  it('given undefined input, should return an error message', async () => {
+    expect(await runDefined({}, null, { then: { field: 'foo' } })).toEqual([
       {
-        message: '#{{print("property")}}must be defined',
+        message: '`foo` property must be defined',
+        path: [],
       },
     ]);
+  });
+
+  describe('validation', () => {
+    it.each([{}, 2])('given invalid %p options, should throw', async opts => {
+      await expect(runDefined([], opts)).rejects.toThrow(
+        new RulesetValidationError('"defined" function does not accept any options'),
+      );
+    });
   });
 });

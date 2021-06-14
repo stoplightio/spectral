@@ -1,32 +1,49 @@
-import { ISchemaOptions } from '../../../functions/schema';
-import { IFunction, IFunctionContext } from '../../../types';
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
 import * as traverse from 'json-schema-traverse';
-import { SchemaObject } from 'json-schema-traverse';
+import type { SchemaObject } from 'json-schema-traverse';
 import { isObject } from './utils/isObject';
+import { schema as schemaFn } from '@stoplight/spectral-functions';
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
-const oasSchema: IFunction<ISchemaOptions> = function (this: IFunctionContext, targetVal, opts, paths, otherValues) {
-  const formats = otherValues.documentInventory.document.formats;
-
-  let { schema } = opts;
-
-  if (Array.isArray(formats)) {
-    try {
-      if (formats.includes('oas2')) {
-        schema = convertXNullable({ ...schema });
-        traverse(schema, visitOAS2);
-      } else if (formats.includes('oas3')) {
-        schema = convertNullable({ ...schema });
-        traverse(schema, visitOAS3);
-      }
-    } catch {
-      // just in case
-    }
-  }
-
-  return this.functions.schema.call(this, targetVal, { ...opts, schema, dialect: 'draft4' }, paths, otherValues);
+export type Options = {
+  schema: Record<string, unknown>;
 };
 
-export default oasSchema;
+export default createRulesetFunction<unknown, Options>(
+  {
+    input: null,
+    options: {
+      type: 'object',
+      properties: {
+        schema: {
+          type: 'object',
+        },
+      },
+      additionalProperties: false,
+    },
+  },
+  function oasSchema(targetVal, opts, paths, otherValues) {
+    const formats = otherValues.documentInventory.document.formats;
+
+    let { schema } = opts;
+
+    if (Array.isArray(formats)) {
+      try {
+        if (formats.includes('oas2')) {
+          schema = convertXNullable({ ...schema });
+          traverse(schema, visitOAS2);
+        } else if (formats.includes('oas3')) {
+          schema = convertNullable({ ...schema });
+          traverse(schema, visitOAS3);
+        }
+      } catch {
+        // just in case
+      }
+    }
+
+    return schemaFn(targetVal, { ...opts, schema, dialect: 'draft4' }, paths, otherValues);
+  },
+);
 
 const visitOAS2: traverse.Callback = (
   schema,

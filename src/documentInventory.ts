@@ -58,7 +58,7 @@ export class DocumentInventory {
   public async resolve(): Promise<void> {
     if (!isObjectLike(this.document.data)) {
       this.graph = null;
-      this.resolved = null;
+      this.resolved = this.document.data;
       this.errors = null;
       return;
     }

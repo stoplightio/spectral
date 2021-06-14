@@ -204,13 +204,11 @@ describe('Rulesets reader', () => {
           min: {
             name: 'min',
             ref: 'random-id-0',
-            schema: null,
             source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
           },
           'random-id-0': {
             code: minFnCode,
             name: 'min',
-            schema: null,
             source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
           },
         },
@@ -264,13 +262,11 @@ describe('Rulesets reader', () => {
           min: {
             name: 'min',
             ref: 'random-id-0',
-            schema: null,
             source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
           },
           'random-id-0': {
             code: minFnCode,
             name: 'min',
-            schema: null,
             source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
           },
         },
@@ -286,13 +282,11 @@ describe('Rulesets reader', () => {
       'foo.cjs': {
         name: 'foo.cjs',
         ref: 'random-id-0',
-        schema: null,
         source: path.join(fooRuleset, '../functions/foo.cjs.js'),
       },
       'random-id-0': {
         name: 'foo.cjs',
         code: fooCJSFunction,
-        schema: null,
         source: path.join(fooRuleset, '../functions/foo.cjs.js'),
       },
     });
@@ -321,13 +315,11 @@ describe('Rulesets reader', () => {
         bar: {
           name: 'bar',
           ref: expect.stringMatching(/^random-id-[01]$/),
-          schema: null,
           source: path.join(base, './customFunctions/bar.js'),
         },
         truthy: {
           name: 'truthy',
           ref: expect.stringMatching(/^random-id-[01]$/),
-          schema: null,
           source: path.join(base, './customFunctions/truthy.js'),
         },
       }),
@@ -344,14 +336,12 @@ describe('Rulesets reader', () => {
     expect(barFunctionDef).toEqual({
       name: 'bar',
       code: barFunction,
-      schema: null,
       source: path.join(base, './customFunctions/bar.js'),
     });
 
     expect(truthyFunctionDef).toEqual({
       name: 'truthy',
       code: truthyFunction,
-      schema: null,
       source: path.join(base, './customFunctions/truthy.js'),
     });
 
@@ -447,7 +437,7 @@ describe('Rulesets reader', () => {
   });
 
   it('given invalid ruleset should output errors', () => {
-    return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/must have required property/);
+    return expect(readRuleset(invalidRuleset)).rejects.toThrowError(/^Error at /);
   });
 
   it('is able to load the whole ruleset from static file', async () => {
