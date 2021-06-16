@@ -38,11 +38,6 @@ const MEDIA_VALIDATION_ITEMS: Dictionary<MediaValidationItem[], 2 | 3> = {
   ],
 };
 
-//const SCHEMA_VALIDATION_ITEMS: Dictionary<string[], 2 | 3> = {
-//  2: ['example', 'x-example', 'default'],
-//  3: ['example', 'default'],
-//};
-
 const SCHEMA_VALIDATION_ITEMS: Dictionary<MediaValidationItem[], 2 | 3> = {
     2: [
       {
@@ -115,23 +110,6 @@ function* getMediaValidationItems(
     }
   }
 }
-
-/*function* getSchemaValidationItems(
-  fields: string[],
-  targetVal: Dictionary<unknown>,
-  givenPath: JsonPath,
-): Iterable<ValidationItem> {
-  for (const field of fields) {
-    if (!(field in targetVal)) {
-      continue;
-    }
-
-    yield {
-      value: targetVal[field],
-      path: [...givenPath, field],
-    };
-  }
-}*/
 
 export const oasExample: IFunction<IOasExampleOptions> = function (
   this: IFunctionContext,
