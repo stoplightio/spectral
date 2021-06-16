@@ -182,7 +182,6 @@ describe('linter', () => {
         },
       },
       functions: {},
-      exceptions: {},
     });
 
     const result = await spectral.run(
@@ -852,7 +851,6 @@ responses:: !!foo
       spectral.setRuleset({
         rules: {},
         functions: {},
-        exceptions: {},
         parserOptions: {
           incompatibleValues: 'info',
         },
@@ -890,7 +888,6 @@ responses:: !!foo
       spectral.setRuleset({
         rules: {},
         functions: {},
-        exceptions: {},
         parserOptions: {
           incompatibleValues: 'off',
         },
@@ -914,7 +911,6 @@ responses:: !!foo
         spectral.setRuleset({
           rules: {},
           functions: {},
-          exceptions: {},
           parserOptions: {
             duplicateKeys: 'info',
           },
@@ -958,7 +954,6 @@ responses:: !!foo
         spectral.setRuleset({
           rules: {},
           functions: {},
-          exceptions: {},
           parserOptions: {
             duplicateKeys: 'off',
           },

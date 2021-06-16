@@ -6,12 +6,9 @@ import * as path from 'path';
 import * as timers from 'timers';
 
 import { httpAndFileResolver } from '../resolvers/http-and-file';
-import { readRuleset } from '../ruleset';
 import { IFunctionResult, Spectral } from '../spectral';
-import { IRuleset, RulesetExceptionCollection } from '../types/ruleset';
 
 const functionRuleset = path.join(__dirname, './__fixtures__/rulesets/custom-functions.json');
-const exceptionRuleset = path.join(__dirname, './__fixtures__/rulesets/exceptions.json');
 const customDirectoryFunctionsRuleset = path.join(__dirname, './__fixtures__/rulesets/custom-directory-function.json');
 const recommendedRulesetPath = path.join(__dirname, './__fixtures__/rulesets/recommended.json');
 
@@ -98,7 +95,6 @@ describe('Linter', () => {
       const scope = nock('https://stoplight.io').get('/').once().reply(200);
 
       spectral.setRuleset({
-        exceptions: {},
         functions: {
           fn: {
             source: null,
@@ -196,7 +192,6 @@ describe('Linter', () => {
 
       it('should be able to make actual requests', async () => {
         spectral.setRuleset({
-          exceptions: {},
           functions: {
             [fnName]: {
               name: fnName,
@@ -269,7 +264,6 @@ module.exports = async function (targetVal) {
 
       it('should be able to defer request and make it in beforeTeardown step', async () => {
         spectral.setRuleset({
-          exceptions: {},
           functions: {
             [fnName]: {
               name: fnName,
@@ -386,254 +380,6 @@ module.exports = async function (targetVal) {
         }),
       ]),
     );
-  });
-
-  describe('Exceptions handling', () => {
-    it('should ignore specified rules violations in a standalone document', async () => {
-      await spectral.loadRuleset(exceptionRuleset);
-
-      const res = await spectral.run(
-        {
-          openapi: '3.0.2',
-          info: {
-            title: '',
-          },
-        },
-        {
-          resolve: {
-            documentUri: '/test/file.json',
-          },
-        },
-      );
-
-      expect(res.length).toBeGreaterThan(0);
-
-      expect(res).not.toContainEqual(
-        expect.objectContaining({
-          code: 'info-contact',
-        }),
-      );
-
-      expect(res).not.toContainEqual(
-        expect.objectContaining({
-          code: 'info-description',
-        }),
-      );
-
-      expect(res).not.toContainEqual(
-        expect.objectContaining({
-          code: 'oas3-api-servers',
-        }),
-      );
-    });
-
-    it('should not swallow results', async () => {
-      // Cf. https://github.com/stoplightio/spectral/issues/1018
-
-      const document = {
-        openapi: '3.0.2',
-        paths: {
-          '/a.one': { get: 17 },
-          '/a.two': { get: 18 },
-          '/a.three': { get: 19 },
-          '/b.one': { get: 17 },
-          '/b.two': { get: 18 },
-          '/b.three': { get: 19 },
-        },
-      };
-
-      await spectral.loadRuleset(exceptionRuleset);
-
-      const res = await spectral.run(document, {
-        resolve: {
-          documentUri: '/test/file.json',
-        },
-      });
-
-      expect(res).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            code: 'operation-success-response',
-            message: 'Operation must have at least one `2xx` or `3xx` response.',
-            path: ['paths', '/a.one', 'get'],
-            source: '/test/file.json',
-          }),
-          expect.objectContaining({
-            code: 'operation-success-response',
-            message: 'Operation must have at least one `2xx` or `3xx` response.',
-            path: ['paths', '/a.three', 'get'],
-            source: '/test/file.json',
-          }),
-          expect.objectContaining({
-            code: 'operation-success-response',
-            message: 'Operation must have at least one `2xx` or `3xx` response.',
-            path: ['paths', '/b.one', 'get'],
-            source: '/test/file.json',
-          }),
-          expect.objectContaining({
-            code: 'operation-success-response',
-            message: 'Operation must have at least one `2xx` or `3xx` response.',
-            path: ['paths', '/b.two', 'get'],
-            source: '/test/file.json',
-          }),
-        ]),
-      );
-
-      expect(res).toEqual(
-        expect.not.arrayContaining([
-          expect.objectContaining({
-            code: 'operation-success-response',
-            message: 'Operation must have at least one `2xx` or `3xx` response.',
-            path: ['paths', '/a.two', 'get'],
-            source: '/test/file.json',
-          }),
-        ]),
-      );
-
-      expect(res).toEqual(
-        expect.not.arrayContaining([
-          expect.objectContaining({
-            code: 'operation-success-response',
-            message: 'Operation must have at least one `2xx` or `3xx` response.',
-            path: ['paths', '/b.three', 'get'],
-            source: '/test/file.json',
-          }),
-        ]),
-      );
-    });
-
-    describe('resolving', () => {
-      const document = {
-        openapi: '3.0.2',
-        components: {
-          schemas: {
-            TheLocalType: {
-              $ref: './__fixtures__/exceptions.remote.oas3.yaml#/components/schemas/TheRemoteType',
-            },
-            integerOne: {
-              type: 'integer',
-            },
-            integerRemote: {
-              $ref: './__fixtures__/exceptions.remote.oas3.yaml#/components/schemas/integerOne',
-            },
-            integerTwo: {
-              type: 'integer',
-            },
-          },
-        },
-      };
-
-      let testRuleset: IRuleset;
-
-      beforeAll(async () => {
-        testRuleset = await readRuleset(path.join(__dirname, './__fixtures__/rulesets/exceptions-resolving.json'));
-      });
-
-      const opts = {
-        resolve: {
-          documentUri: path.join(__dirname, './foo.json'),
-        },
-      };
-
-      const extractExceptionFrom = (ruleset: IRuleset, name: string, position: number): RulesetExceptionCollection => {
-        const exceptions = {};
-        const key = Object.keys(ruleset.exceptions)[position];
-        expect(ruleset.exceptions[key]).toEqual([name]);
-        exceptions[key] = ruleset.exceptions[key];
-
-        return exceptions;
-      };
-
-      it('should ignore specified rules violations in a referenced document', async () => {
-        spectral = new Spectral({ resolver: httpAndFileResolver });
-
-        const rules = {
-          'strings-maxLength': testRuleset.rules['strings-maxLength'],
-          schema: testRuleset.rules.schema,
-        };
-
-        spectral.setRuleset({ rules, exceptions: {}, functions: {} });
-
-        const first = await spectral.run(document, opts);
-
-        expect(first).toEqual([
-          expect.objectContaining({
-            code: 'strings-maxLength',
-          }),
-          expect.objectContaining({
-            code: 'schema',
-          }),
-        ]);
-
-        const exceptions = extractExceptionFrom(testRuleset, 'strings-maxLength', 0);
-
-        spectral.setRuleset({ rules, exceptions, functions: {} });
-
-        const second = await spectral.run(document, opts);
-
-        expect(second).toEqual([
-          expect.objectContaining({
-            code: 'schema',
-          }),
-        ]);
-      });
-
-      it('should ignore specified rules violations in "resolved=false" mode', async () => {
-        spectral = new Spectral({ resolver: httpAndFileResolver });
-
-        const rules = {
-          'no-yaml-remote-reference': testRuleset.rules['no-yaml-remote-reference'],
-          'no-remote-reference': testRuleset.rules['no-remote-reference'],
-          'no-json-schema-integer-type': testRuleset.rules['no-json-schema-integer-type'],
-          schema: testRuleset.rules.schema,
-        };
-
-        spectral.setRuleset({ rules, exceptions: {}, functions: {} });
-
-        const first = await spectral.run(document, opts);
-
-        expect(first).toEqual([
-          expect.objectContaining({
-            code: 'no-json-schema-integer-type',
-          }),
-          expect.objectContaining({
-            code: 'schema',
-          }),
-          expect.objectContaining({
-            code: 'no-remote-reference',
-          }),
-          expect.objectContaining({
-            code: 'no-yaml-remote-reference',
-          }),
-          expect.objectContaining({
-            code: 'no-json-schema-integer-type',
-          }),
-          expect.objectContaining({
-            code: 'no-remote-reference',
-          }),
-          expect.objectContaining({
-            code: 'no-yaml-remote-reference',
-          }),
-          expect.objectContaining({
-            code: 'no-json-schema-integer-type',
-          }),
-        ]);
-
-        spectral.setRuleset({ rules, exceptions: testRuleset.exceptions, functions: {} });
-
-        const second = await spectral.run(document, opts);
-
-        expect(second).toEqual([
-          expect.objectContaining({
-            code: 'schema',
-          }),
-          expect.objectContaining({
-            code: 'no-json-schema-integer-type',
-            path: ['components', 'schemas', 'integerTwo', 'type'],
-          }),
-        ]);
-      });
-    });
   });
 
   test('should only run recommended rules, whether implicitly or explicitly', async () => {

@@ -11,9 +11,6 @@ const invalidRuleset = path.join(__dirname, './__fixtures__/invalid-ruleset.json
 const fooRuleset = path.join(__dirname, './__fixtures__/foo-ruleset.json');
 const rulesetWithMissingFunctions = path.join(__dirname, './__fixtures__/ruleset-with-missing-functions.json');
 const fooExtendsBarRuleset = path.join(__dirname, './__fixtures__/foo-extends-bar-ruleset.json');
-const simpleExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/simple.yaml');
-const inheritingExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/inheriting.yaml');
-const invalidExceptRuleset = path.join(__dirname, './__fixtures__/exceptions/invalid.yaml');
 
 function getFixturePath(name: string): string {
   return path.join(__dirname, '__fixtures__', name);
@@ -212,7 +209,6 @@ describe('Rulesets reader', () => {
             source: 'https://unpkg.com/example-spectral-ruleset/functions/min.js',
           },
         },
-        exceptions: {},
       });
     });
 
@@ -270,7 +266,6 @@ describe('Rulesets reader', () => {
             source: 'https://unpkg.com/example-spectral-ruleset@0.0.3/functions/min.js',
           },
         },
-        exceptions: {},
       });
     });
   });
@@ -374,7 +369,6 @@ describe('Rulesets reader', () => {
 
   it('should handle ruleset with circular extensions', () => {
     return expect(readRuleset(fooExtendsBarRuleset)).resolves.toEqual({
-      exceptions: {},
       functions: {},
       rules: {
         'bar-rule': {
@@ -403,7 +397,6 @@ describe('Rulesets reader', () => {
 
   it('should handle ruleset that extends itself', () => {
     return expect(readRuleset(path.join(__dirname, './__fixtures__/self-extending-ruleset.json'))).resolves.toEqual({
-      exceptions: {},
       functions: {},
       rules: {
         'foo-rule': {
@@ -561,42 +554,5 @@ describe('Rulesets reader', () => {
         },
       }),
     );
-  });
-
-  describe('Exceptions loading', () => {
-    it('should handle loading a standalone ruleset', async () => {
-      const ruleset = await readRuleset(path.join(__dirname, './__fixtures__/exceptions/standalone.yaml'));
-
-      expect(Object.entries(ruleset.exceptions)).toEqual([
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
-        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
-      ]);
-    });
-
-    it('should throw when ruleset contains invalid exceptions', () => {
-      expect(readRuleset(invalidExceptRuleset)).rejects.toThrow('is not a valid uri');
-    });
-
-    it('should handle loading a ruleset deriving from a built-in one', async () => {
-      const ruleset = await readRuleset(simpleExceptRuleset);
-
-      expect(Object.entries(ruleset.exceptions)).toEqual([
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
-        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
-      ]);
-    });
-
-    it('should handle loading a ruleset deriving from another one', async () => {
-      const ruleset = await readRuleset(inheritingExceptRuleset);
-
-      expect(Object.entries(ruleset.exceptions)).toEqual([
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/one.yaml#$'), ['my-rule-1']],
-        [expect.stringMatching('/__tests__/__fixtures__/two.yaml#$'), ['my-rule-2']],
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/sub/three.yaml#$'), ['my-rule-3']],
-        [expect.stringMatching('/__tests__/__fixtures__/exceptions/four.yaml#$'), ['my-rule-4']],
-      ]);
-    });
   });
 });

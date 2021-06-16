@@ -34,7 +34,6 @@ describe('Linter', () => {
       });
 
       spectral.setRuleset({
-        exceptions: {},
         functions: {
           fn: {
             source: null,

@@ -156,8 +156,6 @@ The example above will run all of the rules defined in the `spectral:oas` rulese
 
 <!-- theme: info -->
 
-> If you'd like to disable rules for a specific file or part of a file, you can use [Exceptions](6-exceptions.md).
-
 ## Enabling Rules
 
 Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.

@@ -10,7 +10,6 @@ async function loadRulesets(cwd: string, rulesetFiles: string[], opts: IRulesetR
     return {
       functions: {},
       rules: {},
-      exceptions: {},
     };
   }
 

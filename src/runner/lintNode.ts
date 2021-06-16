@@ -1,4 +1,4 @@
-import { JsonPath, Optional } from '@stoplight/types';
+import { JsonPath } from '@stoplight/types';
 import { get } from 'lodash';
 
 import { Document } from '../document';
@@ -7,14 +7,9 @@ import { getDiagnosticSeverity } from '../ruleset/severity';
 import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
-import { getLintTargets, ExceptionLocation, isAKnownException, MessageVars, message } from './utils';
+import { getLintTargets, MessageVars, message } from './utils';
 
-export const lintNode = (
-  context: IRunnerInternalContext,
-  node: IGivenNode,
-  rule: Rule,
-  exceptionLocations: Optional<ExceptionLocation[]>,
-): void => {
+export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule: Rule): void => {
   const fnContext: IFunctionValues = {
     original: node.value,
     given: node.value,
@@ -56,7 +51,6 @@ export const lintNode = (
                   context,
                   results,
                   rule,
-                  exceptionLocations,
                   targetPath, // todo: get rid of it somehow.
                 ),
           ),
@@ -66,7 +60,6 @@ export const lintNode = (
           context,
           targetResults,
           rule,
-          exceptionLocations,
           targetPath, // todo: get rid of it somehow.
         );
       }
@@ -78,7 +71,6 @@ function processTargetResults(
   context: IRunnerInternalContext,
   results: IFunctionResult[],
   rule: Rule,
-  exceptionLocations: Optional<ExceptionLocation[]>,
   targetPath: JsonPath,
 ): void {
   for (const result of results) {
@@ -89,10 +81,6 @@ function processTargetResults(
     );
     const path = associatedItem?.path ?? getClosestJsonPath(context.documentInventory.resolved, escapedJsonPath);
     const source = associatedItem?.document.source;
-
-    if (exceptionLocations !== void 0 && isAKnownException(path, source, exceptionLocations)) {
-      continue;
-    }
 
     const document = associatedItem?.document ?? context.documentInventory.document;
     const range = document.getRangeForJsonPath(path, true) ?? Document.DEFAULT_RANGE;

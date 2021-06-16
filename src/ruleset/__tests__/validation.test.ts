@@ -225,24 +225,6 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`),
     ).not.toThrow();
   });
 
-  describe('Exceptions validation', () => {
-    const rulesetsWithInvalidExceptStructures = [
-      { extends: ['foo'], except: '' },
-      { extends: ['foo'], except: { one: null } },
-      { extends: ['foo'], except: { one: [1] } },
-    ];
-
-    it.each(rulesetsWithInvalidExceptStructures)('throws when defined %p "except" do not match schema', ruleset => {
-      expect(() => {
-        assertValidRuleset(ruleset);
-      }).toThrow(
-        new RulesetValidationError(
-          'Error at #/except: must be a map where each key is either a path or a path+json-pointer or a json-pointer and the value is an array of rules',
-        ),
-      );
-    });
-  });
-
   describe('then validation', () => {
     describe('custom function', () => {
       it('given valid then, does not complain', () => {
