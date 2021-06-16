@@ -1,37 +1,17 @@
-import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import { JSONPath, JSONPathCallback } from 'jsonpath-plus';
 import { flatMap, isObject } from 'lodash';
 import { JSONPathExpression, traverse } from 'nimma';
 
-import { IDocument, STDIN } from '../document';
+import { IDocument } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { OptimizedRule, Rule } from '../rule';
 import { IGivenNode, IRuleResult } from '../types';
 import { ComputeFingerprintFunc, prepareResults } from '../utils';
-import { generateDocumentWideResult } from '../utils/generateDocumentWideResult';
 import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext, IRunnerPublicContext } from './types';
-import { ExceptionLocation, pivotExceptions } from './utils';
 
-const isStdInSource = (inventory: DocumentInventory): boolean => {
-  return inventory.document.source === STDIN;
-};
-
-const generateDefinedExceptionsButStdIn = (documentInventory: DocumentInventory): IRuleResult => {
-  return generateDocumentWideResult(
-    documentInventory.document,
-    'The ruleset contains `except` entries. However, they cannot be enforced when the input is passed through stdin.',
-    DiagnosticSeverity.Warning,
-    'except-but-stdin',
-  );
-};
-
-const runRule = (
-  context: IRunnerInternalContext,
-  rule: Rule,
-  exceptRuleByLocations: Optional<ExceptionLocation[]>,
-): void => {
+const runRule = (context: IRunnerInternalContext, rule: Rule): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
 
   for (const given of rule.given) {
@@ -44,7 +24,6 @@ const runRule = (
           value: target,
         },
         rule,
-        exceptRuleByLocations,
       );
     } else if (isObject(target)) {
       JSONPath({
@@ -61,7 +40,6 @@ const runRule = (
               value: result.value,
             },
             rule,
-            exceptRuleByLocations,
           );
         }) as JSONPathCallback,
       });
@@ -89,7 +67,7 @@ export class Runner {
 
     const { inventory: documentInventory } = this;
 
-    const { rules, exceptions } = context;
+    const { rules } = context;
 
     const runnerContext: IRunnerInternalContext = {
       ...context,
@@ -97,13 +75,6 @@ export class Runner {
       results: this.results,
       promises: [],
     };
-
-    const isStdIn = isStdInSource(documentInventory);
-    const exceptRuleByLocations = isStdIn ? {} : pivotExceptions(exceptions, rules);
-
-    if (isStdIn && Object.keys(exceptions).length > 0) {
-      runnerContext.results.push(generateDefinedExceptionsButStdIn(documentInventory));
-    }
 
     const relevantRules = Object.values(rules).filter(
       rule => rule.enabled && rule.matchesFormat(documentInventory.formats),
@@ -114,7 +85,7 @@ export class Runner {
     const unoptimizedRules: Rule[] = [];
 
     const traverseCb = (rule: OptimizedRule, node: IGivenNode): void => {
-      lintNode(runnerContext, node, rule, exceptRuleByLocations[rule.name]);
+      lintNode(runnerContext, node, rule);
     };
 
     for (const rule of relevantRules) {
@@ -141,7 +112,7 @@ export class Runner {
     }
 
     for (const rule of unoptimizedRules) {
-      runRule(runnerContext, rule, exceptRuleByLocations[rule.name]);
+      runRule(runnerContext, rule);
     }
 
     this.runtime.emit('beforeTeardown');

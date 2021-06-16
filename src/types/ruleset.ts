@@ -18,7 +18,6 @@ export interface IRulesetFunctionDefinition {
 }
 
 export type RulesetFunctionCollection = Dictionary<IRulesetFunctionDefinition, string>;
-export type RulesetExceptionCollection = Dictionary<string[], string>;
 
 export interface IParserOptions {
   duplicateKeys?: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
@@ -28,7 +27,6 @@ export interface IParserOptions {
 export interface IRuleset {
   rules: RuleCollection;
   functions: RulesetFunctionCollection;
-  exceptions: RulesetExceptionCollection;
   parserOptions?: IParserOptions;
 }
 
@@ -39,6 +37,5 @@ export interface IRulesetFile {
   rules?: FileRuleCollection;
   functionsDir?: string;
   functions?: string[];
-  except?: RulesetExceptionCollection;
   parserOptions?: IParserOptions;
 }

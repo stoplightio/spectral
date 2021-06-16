@@ -42,16 +42,6 @@
         ]
       }
     },
-    "except": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "errorMessage": "must be a map where each key is either a path or a path+json-pointer or a json-pointer and the value is an array of rules"
-    },
     "parserOptions": {
       "type": "object",
       "properties": {

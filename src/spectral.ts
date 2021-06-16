@@ -15,7 +15,6 @@ import request from './request';
 import { createHttpAndFileResolver } from './resolvers/http-and-file';
 import { OptimizedRule, Rule } from './rule';
 import { compileExportedFunction, IRulesetReadOptions, readRuleset, getDiagnosticSeverity } from './ruleset';
-import { mergeExceptions } from './ruleset/mergers/exceptions';
 import { Runner, RunnerRuntime } from './runner';
 import {
   FormatLookup,
@@ -30,7 +29,7 @@ import {
   RuleCollection,
   RunRuleCollection,
 } from './types';
-import { IParserOptions, IRuleset, RulesetExceptionCollection } from './types/ruleset';
+import { IParserOptions, IRuleset } from './types/ruleset';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint, empty, isNimmaEnvVariableSet } from './utils';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 import { DEFAULT_PARSER_OPTIONS } from './consts';
@@ -45,7 +44,6 @@ export class Spectral {
 
   public readonly functions: FunctionCollection & CoreFunctions = { ...coreFunctions };
   public readonly rules: RunRuleCollection = {};
-  public readonly exceptions: RulesetExceptionCollection = {};
   public readonly formats: RegisteredFormats;
   public readonly parserOptions: Required<IParserOptions> = { ...DEFAULT_PARSER_OPTIONS };
 
@@ -147,7 +145,6 @@ export class Spectral {
     await runner.run({
       rules: this.rules,
       functions: this.functions,
-      exceptions: this.exceptions,
     });
 
     const results = runner.getResults(this._computeFingerprint);
@@ -197,15 +194,6 @@ export class Spectral {
     }
   }
 
-  private setExceptions(exceptions: RulesetExceptionCollection): void {
-    const target: RulesetExceptionCollection = {};
-    mergeExceptions(target, exceptions);
-
-    empty(this.exceptions);
-
-    Object.assign(this.exceptions, target);
-  }
-
   public async loadRuleset(uris: string[] | string, options?: IRulesetReadOptions): Promise<void> {
     this.setRuleset(await readRuleset(Array.isArray(uris) ? uris : [uris], { agent: this.agent, ...options }));
   }
@@ -241,8 +229,6 @@ export class Spectral {
         return fns;
       }, {}),
     );
-
-    this.setExceptions(ruleset.exceptions);
 
     if (ruleset.parserOptions !== void 0) {
       Object.assign<Required<IParserOptions>, IParserOptions>(this.parserOptions, ruleset.parserOptions);

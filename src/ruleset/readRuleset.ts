@@ -7,7 +7,6 @@ import { createHttpAndFileResolver, IHttpAndFileResolverOptions } from '../resol
 import { FileRulesetSeverity, IRuleset, RulesetFunctionCollection } from '../types/ruleset';
 import { findFile, isNPMSource } from './utils';
 import { mergeFormats, mergeFunctions, mergeRules } from './mergers';
-import { mergeExceptions } from './mergers/exceptions';
 import { assertValidRuleset, isValidRule } from './validation';
 import { parseYaml } from '../parsers';
 
@@ -27,7 +26,6 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
   const base: IRuleset = {
     rules: {},
     functions: {},
-    exceptions: {},
   };
 
   const processedRulesets = new Set<string>();
@@ -39,7 +37,6 @@ export async function readRuleset(uris: string | string[], opts?: IRulesetReadOp
     if (resolvedRuleset === null) continue;
     Object.assign(base.rules, resolvedRuleset.rules);
     Object.assign(base.functions, resolvedRuleset.functions);
-    Object.assign(base.exceptions, resolvedRuleset.exceptions);
 
     if (resolvedRuleset.parserOptions !== void 0 && !('parserOptions' in base)) {
       base.parserOptions = resolvedRuleset.parserOptions;
@@ -101,11 +98,9 @@ const createRulesetProcessor = (
     const ruleset = assertValidRuleset(JSON.parse(JSON.stringify(result)));
     const rules = {};
     const functions = {};
-    const exceptions = {};
     const newRuleset: IRuleset = {
       rules,
       functions,
-      exceptions,
       ...('parserOptions' in ruleset ? { parserOptions: ruleset.parserOptions } : null),
     };
 
@@ -126,7 +121,6 @@ const createRulesetProcessor = (
         if (extendedRuleset !== null) {
           mergeRules(rules, extendedRuleset.rules, parentSeverity);
           Object.assign(functions, extendedRuleset.functions);
-          mergeExceptions(exceptions, extendedRuleset.exceptions, baseUri);
         }
       }
     }
@@ -141,10 +135,6 @@ const createRulesetProcessor = (
           }
         }
       }
-    }
-
-    if (ruleset.except !== void 0) {
-      mergeExceptions(exceptions, ruleset.except, baseUri);
     }
 
     if (Array.isArray(ruleset.formats)) {
