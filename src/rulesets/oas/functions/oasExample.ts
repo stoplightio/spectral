@@ -38,10 +38,33 @@ const MEDIA_VALIDATION_ITEMS: Dictionary<MediaValidationItem[], 2 | 3> = {
   ],
 };
 
-const SCHEMA_VALIDATION_ITEMS: Dictionary<string[], 2 | 3> = {
-  2: ['example', 'x-example', 'default'],
-  3: ['example', 'default'],
+//const SCHEMA_VALIDATION_ITEMS: Dictionary<string[], 2 | 3> = {
+//  2: ['example', 'x-example', 'default'],
+//  3: ['example', 'default'],
+//};
+
+const SCHEMA_VALIDATION_ITEMS: Dictionary<MediaValidationItem[], 2 | 3> = {
+    2: [
+      {
+        field: 'example',
+        multiple: false,
+        keyed: false,
+      },
+      {
+        field: 'x-example',
+        multiple: true,
+        keyed: false,
+      },
+    ],
+    3: [
+      {
+        field: 'example',
+        multiple: false,
+        keyed: false,
+      },
+    ],
 };
+
 
 type ValidationItem = {
   value: unknown;
@@ -93,7 +116,7 @@ function* getMediaValidationItems(
   }
 }
 
-function* getSchemaValidationItems(
+/*function* getSchemaValidationItems(
   fields: string[],
   targetVal: Dictionary<unknown>,
   givenPath: JsonPath,
@@ -108,7 +131,7 @@ function* getSchemaValidationItems(
       path: [...givenPath, field],
     };
   }
-}
+}*/
 
 export const oasExample: IFunction<IOasExampleOptions> = function (
   this: IFunctionContext,
@@ -129,7 +152,7 @@ export const oasExample: IFunction<IOasExampleOptions> = function (
 
   const validationItems =
     opts.type === 'schema'
-      ? getSchemaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given)
+      ? getMediaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given, opts.oasVersion)
       : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given, opts.oasVersion);
 
   for (const validationItem of validationItems) {
