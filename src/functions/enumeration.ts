@@ -1,28 +1,47 @@
-import { IFunction, IFunctionResult } from '../types';
+import { createRulesetFunction } from '../ruleset/rulesetFunction';
 import { printValue } from '../utils/printValue';
-import { isJsonPrimitive } from '../guards/isJsonPrimitive';
 
-export interface IEnumRuleOptions {
-  values: (string | number | null | boolean)[];
-}
+type Primitive = string | number | null | boolean;
 
-export const enumeration: IFunction<IEnumRuleOptions> = (targetVal, opts) => {
-  if (!isJsonPrimitive(targetVal)) {
-    return [
-      {
-        message: '#{{print("property")}}must be primitive',
-      },
-    ];
-  }
-
-  const { values } = opts;
-  const results: IFunctionResult[] = [];
-
-  if (!values.includes(targetVal)) {
-    results.push({
-      message: `#{{print("value")}} must be equal to one of the allowed values: ${values.map(printValue).join(', ')}`,
-    });
-  }
-
-  return results;
+export type Options = {
+  values: Primitive[];
 };
+
+export default createRulesetFunction<Primitive, Options>(
+  {
+    input: {
+      type: ['string', 'number', 'null', 'boolean'],
+    },
+    options: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        values: {
+          type: 'array',
+          items: {
+            type: ['string', 'number', 'null', 'boolean'],
+          },
+          errorMessage:
+            '"enumeration" and its "values" option support only arrays of primitive values, i.e. ["Berlin", "London", "Paris"]',
+        },
+      },
+      required: ['values'],
+      errorMessage: {
+        type: `"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }`,
+      },
+    },
+  },
+  function enumeration(targetVal, { values }) {
+    if (!values.includes(targetVal)) {
+      return [
+        {
+          message: `#{{print("value")}} must be equal to one of the allowed values: ${values
+            .map(printValue)
+            .join(', ')}`,
+        },
+      ];
+    }
+
+    return;
+  },
+);

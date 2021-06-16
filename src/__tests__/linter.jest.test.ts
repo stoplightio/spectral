@@ -77,115 +77,7 @@ describe('Linter', () => {
     ]);
   });
 
-  it('should not run function if provided data does not match defined schema', async () => {
-    await spectral.loadRuleset(functionRuleset);
-    expect(await spectral.run({})).toEqual(
-      expect.not.arrayContaining([
-        // has-info-property-invalid is not executed
-        expect.objectContaining({
-          code: 'has-info-property-invalid',
-        }),
-      ]),
-    );
-  });
-
   describe('custom functions', () => {
-    it('should have access to function-live lifespan cache', async () => {
-      const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
-
-      spectral.setRuleset({
-        exceptions: {},
-        rules: {
-          foo: {
-            given: '$',
-            then: {
-              function: 'fn',
-            },
-          },
-          bar: {
-            given: '$',
-            then: {
-              function: 'fn',
-            },
-          },
-        },
-        functions: {
-          fn: {
-            source: null,
-            name: 'fn',
-            schema: null,
-            code: `module.exports = function() {
-console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
-}`,
-          },
-        },
-      });
-
-      await spectral.run({});
-
-      // verifies whether the 2 subsequent calls passed the same cache instance as the first argument
-      expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[1][0]);
-
-      await spectral.run({});
-
-      expect(logSpy.mock.calls[2][0]).toBe(logSpy.mock.calls[3][0]);
-      expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[2][0]);
-    });
-
-    it('should have access to cache that is not shared among them', async () => {
-      const logSpy = jest.spyOn(global.console, 'log').mockImplementation(Function);
-
-      spectral.setRuleset({
-        exceptions: {},
-        rules: {
-          foo: {
-            given: '$',
-            then: {
-              function: 'fn',
-            },
-          },
-          bar: {
-            given: '$',
-            then: {
-              function: 'fn-2',
-            },
-          },
-        },
-        functions: {
-          fn: {
-            source: null,
-            name: 'fn',
-            schema: null,
-            code: `module.exports = function() {
-console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
-}`,
-          },
-          'fn-2': {
-            source: null,
-            name: 'fn-2',
-            schema: null,
-            code: `module.exports = function() {
-console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
-}`,
-          },
-        },
-      });
-
-      await spectral.run({});
-
-      // verifies whether the 2 subsequent calls **DID NOT** pass the same cache instance as the first argument
-      expect(logSpy.mock.calls[0][0]).not.toBe(logSpy.mock.calls[1][0]);
-
-      await spectral.run({});
-
-      // verifies whether the 2 subsequent calls **DID NOT** pass the same cache instance as the first argument
-      expect(logSpy.mock.calls[2][0]).not.toBe(logSpy.mock.calls[3][0]);
-
-      // verifies whether the 2 subsequent calls to the same function passe the same cache instance as the first argument
-      expect(logSpy.mock.calls[0][0]).toBe(logSpy.mock.calls[2][0]);
-      expect(logSpy.mock.calls[1][0]).toBe(logSpy.mock.calls[3][0]);
-    });
-
     it('should support require calls', async () => {
       await spectral.loadRuleset(functionRuleset);
       expect(
@@ -202,18 +94,6 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
       ]);
     });
 
-    it('should be able to call any available function', async () => {
-      await spectral.loadRuleset(customDirectoryFunctionsRuleset);
-      expect(await spectral.run({ bar: 2 })).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            code: 'validate-bar',
-            message: '`bar` property should be a string',
-          }),
-        ]),
-      );
-    });
-
     it('should be able to make a request using fetch', async () => {
       const scope = nock('https://stoplight.io').get('/').once().reply(200);
 
@@ -222,7 +102,6 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
         functions: {
           fn: {
             source: null,
-            schema: null,
             name: 'fn',
             code: `module.exports = () => void fetch('https://stoplight.io')`,
           },
@@ -321,19 +200,19 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           functions: {
             [fnName]: {
               name: fnName,
-              schema: null,
               source: null,
-              code: `module.exports = async function (targetVal) {
-  if (!this.cache.has('dictionary')) {
+              code: `const cache = new Map();
+module.exports = async function (targetVal) {
+  if (!cache.has('dictionary')) {
     const res = await fetch('https://dictionary.com/evil');
     if (res.ok) {
-      this.cache.set('dictionary', await res.json());
+      cache.set('dictionary', await res.json());
     } else {
       // you can either re-try or just throw an error
     }
   }
 
-  const dictionary = this.cache.get('dictionary');
+  const dictionary = cache.get('dictionary');
 
   if (dictionary.includes(targetVal)) {
     return [{ message: '\`' + targetVal + '\`' + ' is a forbidden word.' }];
@@ -394,7 +273,6 @@ console.log(this.cache.get('test') || this.cache.set('test', []).get('test'));
           functions: {
             [fnName]: {
               name: fnName,
-              schema: null,
               source: null,
               code: await fs.promises.readFile(
                 path.join(__dirname, './__fixtures__/asyncFunctions/lifecycle.js'),

@@ -1,14 +1,14 @@
-import type { IFunction, IFunctionContext, IFunctionResult, JSONSchema } from '../../../types';
-import type { ISchemaOptions } from '../../../functions/schema';
+/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { isObject } from './utils/isObject';
 import type { Dictionary, JsonPath, Optional } from '@stoplight/types';
-import oasSchema from './oasSchema';
+import oasSchema, { Options as SchemaOptions } from './oasSchema';
+import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 
-interface IOasExampleOptions {
+export type Options = {
   oasVersion: 2 | 3;
   schemaField: string;
   type: 'media' | 'schema';
-}
+};
 
 type MediaValidationItem = {
   field: string;
@@ -95,7 +95,7 @@ function* getMediaValidationItems(
 
 function* getSchemaValidationItems(
   fields: string[],
-  targetVal: Dictionary<unknown>,
+  targetVal: Record<string, unknown>,
   givenPath: JsonPath,
 ): Iterable<ValidationItem> {
   for (const field of fields) {
@@ -110,47 +110,56 @@ function* getSchemaValidationItems(
   }
 }
 
-export const oasExample: IFunction<IOasExampleOptions> = function (
-  this: IFunctionContext,
-  targetVal,
-  opts,
-  paths,
-  otherValues,
-) {
-  if (!isObject(targetVal)) {
-    return;
-  }
-
-  const schemaOpts: ISchemaOptions = {
-    schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as JSONSchema),
-  };
-
-  let results: Optional<IFunctionResult[]> = void 0;
-
-  const validationItems =
-    opts.type === 'schema'
-      ? getSchemaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given)
-      : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given, opts.oasVersion);
-
-  for (const validationItem of validationItems) {
-    const result = oasSchema.call(
-      this,
-      validationItem.value,
-      schemaOpts,
-      {
-        given: paths.given,
-        target: validationItem.path,
+export default createRulesetFunction<Record<string, unknown>, Options>(
+  {
+    input: {
+      type: 'object',
+    },
+    options: {
+      type: 'object',
+      properties: {
+        oasVersion: {
+          enum: [2, 3],
+        },
+        schemaField: {
+          type: 'string',
+        },
+        type: {
+          enum: ['media', 'schema'],
+        },
       },
-      otherValues,
-    );
+      additionalProperties: false,
+    },
+  },
+  function oasExample(targetVal, opts, paths, otherValues) {
+    const schemaOpts: SchemaOptions = {
+      schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as SchemaOptions['schema']),
+    };
 
-    if (Array.isArray(result)) {
-      if (results === void 0) results = [];
-      results.push(...result);
+    let results: Optional<IFunctionResult[]> = void 0;
+
+    const validationItems =
+      opts.type === 'schema'
+        ? getSchemaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given)
+        : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given, opts.oasVersion);
+
+    for (const validationItem of validationItems) {
+      const result = oasSchema(
+        validationItem.value,
+        schemaOpts,
+        {
+          given: paths.given,
+          target: validationItem.path,
+        },
+        otherValues,
+      );
+
+      if (Array.isArray(result)) {
+        if (results === void 0) results = [];
+        results.push(...result);
+      }
     }
-  }
 
-  return results;
-};
-
-export default oasExample;
+    return results;
+  },
+);

@@ -1,38 +1,28 @@
-import { truthy } from '../truthy';
+import truthy from '../truthy';
+import testFunction from './__helpers__/tester';
+import { RulesetValidationError } from '../../ruleset/validation';
 
-function runTruthy(targetVal: any, targetPath?: any) {
-  return truthy(
-    targetVal,
-    null,
-    {
-      given: ['$'],
-      target: targetPath,
-    },
-    {
-      given: null,
-      original: null,
-    } as any,
-  );
-}
+const runTruthy = testFunction.bind(null, truthy);
 
-describe('truthy', () => {
-  test('should return undefined if target value is truthy', () => {
-    expect(runTruthy(true)).toBeUndefined();
+describe('Core Functions / Truthy', () => {
+  it.each([true, 1, [], {}])('given truthy %p input, should return no error message', async input => {
+    expect(await runTruthy(input)).toEqual([]);
   });
 
-  test('should return an error message if target value is falsy', () => {
-    expect(runTruthy(false)).toEqual([
+  it.each([false, null, 0, ''])('given falsy %p input, should return an error message', async input => {
+    expect(await runTruthy(input)).toEqual([
       {
-        message: '#{{print("property")}}must be truthy',
+        message: 'The document must be truthy',
+        path: [],
       },
     ]);
   });
 
-  test('should return an error message if target value is null', () => {
-    expect(runTruthy(null)).toEqual([
-      {
-        message: '#{{print("property")}}must be truthy',
-      },
-    ]);
+  describe('validation', () => {
+    it.each([{}, 2])('given invalid %p options, should throw', async opts => {
+      await expect(runTruthy([], opts)).rejects.toThrow(
+        new RulesetValidationError('"truthy" function does not accept any options'),
+      );
+    });
   });
 });

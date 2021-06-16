@@ -1,101 +1,87 @@
-import { IRule, IRuleResult, Spectral } from '../..';
+import { RulesetValidationError } from '../../ruleset';
+import testFunction from './__helpers__/tester';
+import xor from '../xor';
 
-const applyRuleToObject = async (rule: IRule, doc: Record<string, unknown>): Promise<IRuleResult[]> => {
-  const s = new Spectral();
-  s.setRules({ rule });
-  return await s.run(doc);
-};
+const runXor = testFunction.bind(null, xor);
 
-describe('xor', () => {
-  test('returns resolved if no properties are present', async () => {
-    return expect(
-      applyRuleToObject(
-        {
-          given: '$',
-          then: {
-            function: 'xor',
-            functionOptions: { properties: ['yada-yada', 'whatever'] },
-          },
-        },
+describe('Core Functions / Xor', () => {
+  it('given no properties, should return an error message', async () => {
+    expect(
+      await runXor(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
           termsOfService: 'http://swagger.io/terms/',
         },
+        { properties: ['yada-yada', 'whatever'] },
       ),
-    ).resolves.toEqual([
-      expect.objectContaining({
-        code: 'rule',
+    ).toEqual([
+      {
         message: '"yada-yada" and "whatever" must not be both defined or both undefined',
         path: [],
-      }),
+      },
     ]);
   });
 
-  test('returns resolved if both properties are present', async () => {
-    return expect(
-      applyRuleToObject(
-        {
-          given: '$',
-          then: {
-            function: 'xor',
-            functionOptions: { properties: ['version', 'title'] },
-          },
-        },
+  it('given both properties, should return an error message', async () => {
+    expect(
+      await runXor(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
           termsOfService: 'http://swagger.io/terms/',
         },
+        { properties: ['version', 'title'] },
       ),
-    ).resolves.toEqual([
-      expect.objectContaining({
-        code: 'rule',
+    ).toEqual([
+      {
         message: '"version" and "title" must not be both defined or both undefined',
         path: [],
-      }),
+      },
     ]);
   });
 
-  test('returns resolved if the value is not an object', async () => {
-    return expect(
-      applyRuleToObject(
-        {
-          given: '$.info',
-          then: {
-            function: 'xor',
-            functionOptions: { properties: ['version', 'title'] },
-          },
-        },
-        {
-          info: null,
-        },
-      ),
-    ).resolves.toEqual([
-      expect.objectContaining({
-        code: 'rule',
-        message: '`info` property must be an object',
-        path: ['info'],
-      }),
-    ]);
+  it('given invalid input, should should no error message', async () => {
+    return expect(await runXor(null, { properties: ['version', 'title'] })).toEqual([]);
   });
 
-  test('passes when only one of the properties are present', async () => {
-    return expect(
-      applyRuleToObject(
-        {
-          given: '$',
-          then: {
-            function: 'xor',
-            functionOptions: { properties: ['something', 'title'] },
-          },
-        },
+  it('given only one of the properties, should return no error message', async () => {
+    expect(
+      await runXor(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
           termsOfService: 'http://swagger.io/terms/',
         },
+        { properties: ['something', 'title'] },
       ),
-    ).resolves.toHaveLength(0);
+    ).toEqual([]);
+  });
+
+  describe('validation', () => {
+    it.each([{ properties: ['foo', 'bar'] }])('given valid %p options, should not throw', async opts => {
+      expect(await runXor([], opts)).toEqual([]);
+    });
+
+    it.each<[unknown, string]>([
+      [
+        null,
+        '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+      ],
+      [
+        2,
+        '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+      ],
+      [{ properties: ['foo', 'bar'], foo: true }, '"xor" function does not support "foo" option'],
+      [
+        { properties: ['foo', 'bar', 'baz'] },
+        '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
+      ],
+      [{ properties: ['foo', {}] }, '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]'],
+      [{ properties: ['foo'] }, '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]'],
+      [{ properties: [] }, '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]'],
+    ])('given invalid %p options, should throw', async (opts, error) => {
+      await expect(runXor({}, opts)).rejects.toThrow(new RulesetValidationError(error));
+    });
   });
 });

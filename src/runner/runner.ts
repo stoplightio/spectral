@@ -34,10 +34,6 @@ const runRule = (
 ): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
 
-  if (!isObject(target)) {
-    return;
-  }
-
   for (const given of rule.given) {
     // don't have to spend time running jsonpath if given is $ - can just use the root object
     if (given === '$') {
@@ -50,7 +46,7 @@ const runRule = (
         rule,
         exceptRuleByLocations,
       );
-    } else {
+    } else if (isObject(target)) {
       JSONPath({
         path: given,
         json: target,

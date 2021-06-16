@@ -3,288 +3,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$defs": {
     "Then": {
-      "allOf": [
-        {
-          "properties": {
-            "field": {
-              "type": "string"
-            }
-          }
+      "properties": {
+        "field": {
+          "type": "string"
         },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "alphabetical"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "keyedBy": {
-                    "type": "string"
-                  }
-                },
-                "type": ["object", "null"]
-              }
-            }
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "casing"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": ["flat", "camel", "pascal", "kebab", "cobol", "snake", "macro"]
-                  },
-                  "disallowDigits": {
-                    "type": "boolean"
-                  },
-                  "separator": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "char": {
-                        "type": "string",
-                        "maxLength": 1
-                      },
-                      "allowLeading": {
-                        "type": "boolean"
-                      }
-                    },
-                    "required": ["char"],
-                    "type": "object"
-                  }
-                },
-                "required": ["type"],
-                "type": "object"
-              }
-            },
-            "required": ["functionOptions"]
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "enumeration"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "values": {
-                    "type": "array",
-                    "items": {
-                      "type": ["string", "number", "null", "boolean"]
-                    }
-                  }
-                },
-                "type": "object",
-                "required": ["values"]
-              }
-            },
-            "required": ["functionOptions"]
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "length"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "min": {
-                    "type": "number"
-                  },
-                  "max": {
-                    "type": "number"
-                  }
-                },
-                "minProperties": 1,
-                "type": "object"
-              }
-            },
-            "required": ["functionOptions"]
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "pattern"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "match": {
-                    "type": "string"
-                  },
-                  "notMatch": {
-                    "type": "string"
-                  }
-                },
-                "minProperties": 1,
-                "type": "object"
-              }
-            },
-            "required": ["functionOptions"]
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "schema"
-              }
-            }
-          },
-          "then": {
-            "required": ["functionOptions"],
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "schema": {
-                    "type": "object"
-                  },
-                  "dialect": {
-                    "enum": ["auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"]
-                  },
-                  "allErrors": {
-                    "type": "boolean"
-                  }
-                },
-                "required": ["schema"],
-                "type": "object"
-              }
-            }
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "unreferencedReusableObject"
-              }
-            }
-          },
-          "then": {
-            "required": ["functionOptions"],
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "reusableObjectsLocation": {
-                    "type": "string",
-                    "minLength": 1,
-                    "pattern": "^#"
-                  }
-                },
-                "required": ["reusableObjectsLocation"],
-                "type": "object"
-              }
-            }
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "const": "xor"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "additionalProperties": false,
-                "properties": {
-                  "properties": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "minItems": 2
-                  }
-                },
-                "type": "object",
-                "required": ["properties"]
-              }
-            },
-            "required": ["functionOptions"]
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "type": "string",
-                "enum": ["truthy", "falsy", "undefined"]
-              }
-            }
-          },
-          "then": {
-            "type": "object",
-            "properties": {
-              "functionOptions": {
-                "type": ["null"]
-              }
-            }
-          }
-        },
-
-        {
-          "if": {
-            "properties": {
-              "function": {
-                "type": "string"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "functionOptions": {
-                "type": ["object", "null"]
-              }
-            }
-          }
+        "function": {
+          "type": "string"
         }
-      ],
+      },
+      "required": ["function"],
       "type": "object"
     },
     "Severity": {
@@ -299,7 +26,8 @@
         },
         "documentationUrl": {
           "type": "string",
-          "format": "url"
+          "format": "url",
+          "errorMessage": "must be a valid URL"
         },
         "recommended": {
           "type": "boolean"
@@ -333,10 +61,7 @@
           "type": "array"
         },
         "formats": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "$ref": "shared.json#/$defs/Formats"
         },
         "then": {
           "anyOf": [
@@ -353,43 +78,23 @@
         },
         "type": {
           "enum": ["style", "validation"],
-          "type": "string"
+          "type": "string",
+          "errorMessage": "allowed types are \"style\" and \"validation\""
         }
       },
       "required": ["given", "then"],
-      "type": "object"
+      "type": "object",
+      "additionalProperties": false,
+      "errorMessage": {
+        "required": "the rule must have at least \"given\" and \"then\" properties"
+      }
     },
     {
       "$ref": "shared.json#/$defs/HumanReadableSeverity"
     },
     {
       "type": "boolean"
-    },
-    {
-      "type": "array",
-      "oneOf": [
-        {
-          "additionalItems": false,
-          "minItems": 1,
-          "items": [
-            {
-              "$ref": "#/$defs/Severity"
-            }
-          ]
-        },
-        {
-          "additionalItems": false,
-          "minItems": 2,
-          "items": [
-            {
-              "$ref": "#/$defs/Severity"
-            },
-            {
-              "type": "object"
-            }
-          ]
-        }
-      ]
     }
-  ]
+  ],
+  "errorMessage": "the rule has to have at least \"given\" and \"then\". If you intent to override the severity of extended rule, the value must to be a boolean or any valid severity level"
 }

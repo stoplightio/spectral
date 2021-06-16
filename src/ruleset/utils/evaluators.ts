@@ -2,8 +2,7 @@
 import { join, stripRoot } from '@stoplight/path';
 import { Dictionary, Optional } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { decorateIFunctionWithSchemaValidation } from '../validation';
-import { JSONSchema, IFunction } from '../../types';
+import { IFunction } from '../../types';
 
 export type CJSExport = Partial<{
   exports: Record<string, unknown> | ESCJSCompatibleExport;
@@ -51,6 +50,10 @@ function proxyRequire(source: string): NodeJS.Require {
   function req(p: string): unknown {
     if (p.startsWith('.')) {
       p = join(source, '..', stripRoot(p));
+    } else if (p === '@stoplight/spectral-core') {
+      p = require.resolve('../../index');
+    } else if (p === '@stoplight/spectral-functions') {
+      p = require.resolve('../../functions/index');
     } else {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       p = eval('require.resolve')(p, { paths: [join(source, '..')] });
@@ -149,14 +152,11 @@ export type CompileOptions = {
   code: string;
   name: string;
   source: string | null;
-  schema: JSONSchema | null;
   inject: Dictionary<unknown>;
 };
 
-export const compileExportedFunction = ({ code, name, source, schema, inject }: CompileOptions) => {
-  const exportedFn = evaluateExport(code, source, inject) as IFunction;
-
-  const fn = schema !== null ? decorateIFunctionWithSchemaValidation(exportedFn, schema) : exportedFn;
+export const compileExportedFunction = ({ code, name, source, inject }: CompileOptions) => {
+  const fn = evaluateExport(code, source, inject) as IFunction;
 
   Reflect.defineProperty(fn, 'name', {
     configurable: true,
@@ -166,14 +166,3 @@ export const compileExportedFunction = ({ code, name, source, schema, inject }: 
   Object.freeze(fn);
   return fn;
 };
-
-export function setFunctionContext<F extends Function>(context: unknown, fn: F): F {
-  const boundFn = Function.prototype.bind.call(
-    fn,
-    Object.freeze(Object.defineProperties({}, Object.getOwnPropertyDescriptors(context))),
-  );
-
-  Object.assign(boundFn, fn);
-
-  return boundFn;
-}

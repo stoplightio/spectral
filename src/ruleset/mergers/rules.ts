@@ -65,15 +65,7 @@ function processRule(rules: Dictionary<IProcessedRule>, name: string, rule: File
 
       break;
     case 'object':
-      if (Array.isArray(rule)) {
-        processRule(rules, name, rule[0]);
-
-        if (isValidRule(existingRule) && rule.length === 2 && rule[1] !== void 0) {
-          if ('functionOptions' in existingRule.then) {
-            existingRule.then.functionOptions = rule[1];
-          }
-        }
-      } else if (isValidRule(existingRule)) {
+      if (isValidRule(existingRule)) {
         Object.assign(existingRule, normalizeRule(rule));
       } else {
         rules[name] = normalizeRule(rule);

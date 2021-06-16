@@ -3,18 +3,7 @@
     "truthy",
     "validateBar",
     "deepHasIn",
-    [
-      "hasIn",
-      {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "property": {
-            "type": ["number", "string"]
-          }
-        }
-      }
-    ]
+    "hasIn"
   ],
   "rules": {
     "true-info-contact": {

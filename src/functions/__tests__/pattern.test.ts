@@ -1,50 +1,67 @@
-import { pattern } from '../pattern';
+import testFunction from './__helpers__/tester';
+import pattern from '../pattern';
+import { RulesetValidationError } from '../../ruleset/validation';
 
-function runPattern(targetVal: any, options?: any) {
-  return pattern.call(
-    {
-      cache: new Map(),
-    },
-    targetVal,
-    options,
-    {
-      given: ['$'],
-    },
-    {
-      given: null,
-      original: null,
-    } as any,
-  );
-}
+const runPattern = testFunction.bind(null, pattern);
 
-describe('pattern', () => {
+describe('Core Functions / Pattern', () => {
   describe('given a string regex', () => {
-    test('should return empty array when given value matches the given match string regex without slashes', () => {
-      expect(runPattern('abc', { match: '[abc]+' })).toBeUndefined();
+    it('given value matching the given match string regex without slashes, should return no error message', async () => {
+      expect(await runPattern('abc', { match: '[abc]+' })).toEqual([]);
     });
 
-    test('should return empty array when given value matches the given match string regex with slashes', () => {
-      expect(runPattern('abc', { match: '/[abc]+/' })).toBeUndefined();
+    it('given value matching the given match string regex with slashes, should return no error message', async () => {
+      expect(await runPattern('abc', { match: '/[abc]+/' })).toEqual([]);
     });
 
-    test('should return empty array when given value matches the given match string regex with slashes and modifier', () => {
-      expect(runPattern('aBc', { match: '/[abc]+/im' })).toBeUndefined();
+    it('should return empty array when given value matches the given match string regex with slashes and modifier', async () => {
+      expect(await runPattern('aBc', { match: '/[abc]+/im' })).toEqual([]);
     });
 
-    test('should throw an exception when given string regex contains invalid flags', () => {
-      expect(() => runPattern('aBc', { match: '/[abc]+/invalid' })).toThrow(
+    it('given string regex containing invalid flags, should throw an exception', async () => {
+      await expect(runPattern('aBc', { match: '/[abc]+/invalid' })).rejects.toThrow(
         "Invalid flags supplied to RegExp constructor 'invalid'",
       );
     });
 
-    test('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', () => {
-      expect(runPattern('def', { notMatch: '/[abc]+/i' })).toBeUndefined();
+    it('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', async () => {
+      expect(await runPattern('def', { notMatch: '/[abc]+/i' })).toEqual([]);
     });
   });
 
   describe('given match and notMatch regexes', () => {
-    test('should return empty array when given value match the given match and does not match the given notMatch regexes', () => {
-      expect(runPattern('def', { match: /[def]+/, notMatch: /[abc]+/ })).toBeUndefined();
+    it('should return empty array when given value match the given match and does not match the given notMatch regexes', async () => {
+      expect(await runPattern('def', { match: /[def]+/, notMatch: /[abc]+/ })).toEqual([]);
+    });
+  });
+
+  describe('validation', () => {
+    it.each([{ match: 'foo' }, { notMatch: 'foo' }, { match: 'foo', notMatch: 'bar' }])(
+      'given valid %p options, should not throw',
+      async opts => {
+        expect(await runPattern('def', opts)).toBeInstanceOf(Array);
+      },
+    );
+
+    it.each<[unknown, string]>([
+      [
+        null,
+        '"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }',
+      ],
+      [
+        {},
+        `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
+      ],
+      [{ foo: true }, '"pattern" function does not support "foo" option'],
+      [{ match: 2 }, '"pattern" function and its "match" option must be string or RegExp instance'],
+      [{ notMatch: null }, '"pattern" function and its "notMatch" option must be string or RegExp instance'],
+      [
+        { match: 4, notMatch: 10 },
+        `"pattern" function and its "match" option must be string or RegExp instance
+"pattern" function and its "notMatch" option must be string or RegExp instance`,
+      ],
+    ])('given invalid %p options, should throw', async (opts, error) => {
+      await expect(runPattern('abc', opts)).rejects.toThrow(new RulesetValidationError(error));
     });
   });
 });

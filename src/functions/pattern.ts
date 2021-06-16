@@ -1,20 +1,29 @@
-import type { IFunction, IFunctionContext, IFunctionResult } from '../types';
 import type { Optional } from '@stoplight/types';
+import { createRulesetFunction } from '../ruleset/rulesetFunction';
+import type { IFunctionResult } from '../types';
 import { printValue } from '../utils/printValue';
 
-export interface IRulePatternOptions {
-  /** regex that target must match */
-  match?: string;
-
-  /** regex that target must not match */
-  notMatch?: string;
-}
+export type Options =
+  | {
+      /** regex that target must match */
+      match: string;
+    }
+  | {
+      /** regex that target must not match */
+      notMatch: string;
+    }
+  | {
+      match: string;
+      notMatch: string;
+    };
 
 // regex in a string like {"match": "/[a-b]+/im"} or {"match": "[a-b]+"} in a json ruleset
 // the available flags are "gimsuy" as described here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
 const REGEXP_PATTERN = /^\/(.+)\/([a-z]*)$/;
 
-function getFromCache(cache: Map<string, RegExp>, pattern: string): RegExp {
+const cache = new Map<string, RegExp>();
+
+function getFromCache(pattern: string): RegExp {
   const existingPattern = cache.get(pattern);
   if (existingPattern !== void 0) {
     return existingPattern;
@@ -36,41 +45,86 @@ function createRegex(pattern: string): RegExp {
   }
 }
 
-export const pattern: IFunction<IRulePatternOptions> = function (this: IFunctionContext, targetVal, opts) {
-  if (typeof targetVal !== 'string') return;
-
-  let results: Optional<IFunctionResult[]>;
-
-  const { match, notMatch } = opts;
-  const cache = this.cache as Map<string, RegExp>;
-
-  if (match !== void 0) {
-    const pattern = getFromCache(cache, match);
-
-    if (!pattern.test(targetVal)) {
-      results = [
-        {
-          message: `#{{print("value")}} must match the pattern ${printValue(match)}`,
+export default createRulesetFunction<string, Options>(
+  {
+    input: {
+      type: 'string',
+    },
+    options: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        match: {
+          anyOf: [
+            {
+              type: 'string',
+            },
+            {
+              type: 'object',
+              properties: {
+                exec: {},
+                test: {},
+                flags: {
+                  type: 'string',
+                },
+              },
+              required: ['test', 'flags'],
+            },
+          ],
+          errorMessage: `"pattern" function and its "match" option must be string or RegExp instance`,
         },
-      ];
-    }
-  }
+        notMatch: {
+          anyOf: [
+            {
+              type: 'string',
+            },
+            {
+              type: 'object',
+              properties: {
+                exec: {},
+                test: {},
+                flags: {
+                  type: 'string',
+                },
+              },
+              required: ['test', 'flags'],
+            },
+          ],
+          errorMessage: `"pattern" function and its "notMatch" option must be string or RegExp instance`,
+        },
+      },
+      minProperties: 1,
+      errorMessage: {
+        type: `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
+        minProperties: `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
+      },
+    },
+  },
+  function pattern(targetVal, opts) {
+    let results: Optional<IFunctionResult[]>;
 
-  if (notMatch !== void 0) {
-    const pattern = getFromCache(cache, notMatch);
+    if ('match' in opts) {
+      const pattern = getFromCache(opts.match);
 
-    if (pattern.test(targetVal)) {
-      const result = {
-        message: `#{{print("value")}} must not match the pattern ${printValue(notMatch)}`,
-      };
-
-      if (results === void 0) {
-        results = [result];
-      } else {
-        results.push(result);
+      if (!pattern.test(targetVal)) {
+        results = [
+          {
+            message: `#{{print("value")}} must match the pattern ${printValue(opts.match)}`,
+          },
+        ];
       }
     }
-  }
 
-  return results;
-};
+    if ('notMatch' in opts) {
+      const pattern = getFromCache(opts.notMatch);
+
+      if (pattern.test(targetVal)) {
+        (results ??= []).push({
+          message: `#{{print("value")}} must not match the pattern ${printValue(opts.notMatch)}`,
+        });
+      }
+    }
+
+    return results;
+  },
+);

@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { DeepPartial } from '@stoplight/types';
 import { IFunctionValues } from '../../../../types';
 import oasSchema from '../../functions/oasSchema';
-import { functions } from '../../../../functions';
 
 function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?: DeepPartial<IFunctionValues>) {
-  return oasSchema.call({ functions, cache: new Map() }, target, { schema: schemaObj }, { given: [] }, {
+  return oasSchema(target, { schema: schemaObj }, { given: [] }, {
     given: null,
     original: null,
     ...context,

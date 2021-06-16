@@ -135,44 +135,6 @@ describe('Ruleset rules merging', () => {
     });
   });
 
-  it('supports array-ish syntax', () => {
-    const rules = {
-      test: JSON.parse(JSON.stringify(baseRule)),
-    };
-
-    mergeRules(rules, {
-      test: ['off'],
-    });
-
-    expect(rules).toHaveProperty('test.enabled', false);
-  });
-
-  it('does not set functionOptions if rule does not implement it', () => {
-    const rules = {
-      test: JSON.parse(JSON.stringify(baseRule)),
-    };
-
-    delete rules.test.then.functionOptions;
-
-    mergeRules(rules, {
-      test: ['off', { baz: 'bar' }],
-    });
-
-    expect(rules).not.toHaveProperty('test.then.functionOptions');
-  });
-
-  it('provides support for custom functionOptions via array-ish syntax', () => {
-    const rules = {
-      test: JSON.parse(JSON.stringify(baseRule)),
-    };
-
-    mergeRules(rules, {
-      test: ['off', { baz: 'bar' }],
-    });
-
-    expect(rules).toHaveProperty('test.then.functionOptions', { baz: 'bar' });
-  });
-
   it('provides support to disable all rules present in a given ruleset', () => {
     const rules = {};
 

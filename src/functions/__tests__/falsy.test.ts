@@ -1,38 +1,28 @@
-import { falsy } from '../falsy';
+import falsy from '../falsy';
+import testFunction from './__helpers__/tester';
+import { RulesetValidationError } from '../../ruleset/validation';
 
-function runFalsy(targetVal: any, targetPath?: any) {
-  return falsy(
-    targetVal,
-    null,
-    {
-      given: ['$'],
-      target: targetPath,
-    },
-    {
-      given: null,
-      original: null,
-    } as any,
-  );
-}
+const runFalsy = testFunction.bind(null, falsy);
 
-describe('falsy', () => {
-  test('returns undefined if target value is falsy', () => {
-    expect(runFalsy(false)).toBeUndefined();
+describe('Core Functions / Falsy', () => {
+  it.each([false, null, 0, ''])('given falsy %p input, should return no error message', async input => {
+    expect(await runFalsy(input)).toEqual([]);
   });
 
-  test('returns undefined if target value is null', () => {
-    expect(runFalsy(null)).toBeUndefined();
-  });
-
-  test('returns error message if target value is not falsy', () => {
-    expect(runFalsy(true)).toEqual([
+  it.each([true, 1, [], {}])('given truthy %p input, should return an error message', async input => {
+    expect(await runFalsy(input)).toEqual([
       {
-        message: '#{{print("property")}}must be falsy',
+        message: 'The document must be falsy',
+        path: [],
       },
     ]);
   });
 
-  test('returns undefined if target path is set', () => {
-    expect(runFalsy(null, ['a', 'b'])).toBeUndefined();
+  describe('validation', () => {
+    it.each([{}, 2])('given invalid %p options, should throw', async opts => {
+      await expect(runFalsy([], opts)).rejects.toThrow(
+        new RulesetValidationError('"falsy" function does not accept any options'),
+      );
+    });
   });
 });

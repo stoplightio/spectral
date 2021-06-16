@@ -160,9 +160,7 @@ const createRulesetProcessor = (
       const resolvedFunctions: RulesetFunctionCollection = {};
 
       await Promise.all(
-        rulesetFunctions.map(async fn => {
-          const fnName = Array.isArray(fn) ? fn[0] : fn;
-          const fnSchema = Array.isArray(fn) ? fn[1] : null;
+        rulesetFunctions.map(async fnName => {
           const source = await findFile(rulesetFunctionsBaseDir, `./${fnName}.js`);
 
           resolvedFunctions[fnName] = {
@@ -172,7 +170,6 @@ const createRulesetProcessor = (
               encoding: 'utf8',
               agent: readOpts?.agent,
             }),
-            schema: fnSchema,
             source,
           };
         }),

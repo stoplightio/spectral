@@ -1,9 +1,7 @@
-import { functions } from '../../../../functions';
-import { asyncApi2PayloadValidation } from '../asyncApi2PayloadValidation';
+import asyncApi2PayloadValidation from '../asyncApi2PayloadValidation';
 
 function runPayloadValidation(targetVal: any) {
-  return asyncApi2PayloadValidation.call(
-    { functions },
+  return asyncApi2PayloadValidation(
     targetVal,
     null,
     { given: ['$', 'components', 'messages', 'aMessage'] },

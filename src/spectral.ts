@@ -9,26 +9,18 @@ import type * as ProxyAgent from 'proxy-agent';
 import { STATIC_ASSETS } from './assets';
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument, normalizeSource } from './document';
 import { DocumentInventory } from './documentInventory';
-import { CoreFunctions, functions as coreFunctions } from './functions';
+import coreFunctions, { CoreFunctions } from './functions';
 import * as Parsers from './parsers';
 import request from './request';
 import { createHttpAndFileResolver } from './resolvers/http-and-file';
 import { OptimizedRule, Rule } from './rule';
-import {
-  compileExportedFunction,
-  IRulesetReadOptions,
-  setFunctionContext,
-  readRuleset,
-  getDiagnosticSeverity,
-} from './ruleset';
+import { compileExportedFunction, IRulesetReadOptions, readRuleset, getDiagnosticSeverity } from './ruleset';
 import { mergeExceptions } from './ruleset/mergers/exceptions';
 import { Runner, RunnerRuntime } from './runner';
 import {
   FormatLookup,
   FunctionCollection,
   IConstructorOpts,
-  IFunction,
-  IFunctionContext,
   IResolver,
   IRuleResult,
   IRunOpts,
@@ -176,15 +168,10 @@ export class Spectral {
   public setFunctions(functions: FunctionCollection): void {
     empty(this.functions);
 
-    const mergedFunctions = { ...coreFunctions, ...functions };
+    const mergedFunctions: FunctionCollection = { ...coreFunctions, ...functions };
 
     for (const key of Object.keys(mergedFunctions)) {
-      const context: IFunctionContext = {
-        functions: this.functions,
-        cache: new Map(),
-      };
-
-      this.functions[key] = setFunctionContext<IFunction>(context, mergedFunctions[key]);
+      this.functions[key] = mergedFunctions[key];
     }
   }
 
@@ -229,34 +216,30 @@ export class Spectral {
     this.setRules(ruleset.rules);
 
     this.setFunctions(
-      Object.entries(ruleset.functions).reduce<FunctionCollection>(
-        (fns, [key, { code, ref, name, source, schema }]) => {
-          if (code === void 0) {
-            if (ref !== void 0) {
-              ({ code } = ruleset.functions[ref]);
-            }
+      Object.entries(ruleset.functions).reduce<FunctionCollection>((fns, [key, { code, ref, name, source }]) => {
+        if (code === void 0) {
+          if (ref !== void 0) {
+            ({ code } = ruleset.functions[ref]);
           }
+        }
 
-          if (code === void 0) {
-            // shall we log or sth?
-            return fns;
-          }
-
-          fns[key] = compileExportedFunction({
-            code,
-            name,
-            source,
-            schema,
-            inject: {
-              fetch: request,
-              spectral: this.runtime.spawn(),
-            },
-          });
-
+        if (code === void 0) {
+          // shall we log or sth?
           return fns;
-        },
-        {},
-      ),
+        }
+
+        fns[key] = compileExportedFunction({
+          code,
+          name,
+          source,
+          inject: {
+            fetch: request,
+            spectral: this.runtime.spawn(),
+          },
+        });
+
+        return fns;
+      }, {}),
     );
 
     this.setExceptions(ruleset.exceptions);

@@ -5,7 +5,7 @@ import * as nock from 'nock';
 import * as path from 'path';
 
 import { Document } from '../document';
-import { pattern } from '../functions/pattern';
+import pattern from '../functions/pattern';
 import * as Parsers from '../parsers';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';

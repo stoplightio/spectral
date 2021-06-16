@@ -19,11 +19,11 @@ MessageReplacer.addFunction('print', function (type) {
   const { property, value } = this;
   switch (type) {
     case 'property':
-      if (property !== void 0) {
+      if (property !== void 0 && property !== '') {
         return `\`${property}\` property `;
       }
 
-      return '';
+      return `The document `;
     case 'value':
       return printValue(value);
     default:

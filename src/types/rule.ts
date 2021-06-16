@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RuleType } from './enums';
 
-export interface IRule<T = string, O = unknown> {
+export interface IRule {
   type?: RuleType;
 
   formats?: string[];
@@ -28,23 +28,23 @@ export interface IRule<T = string, O = unknown> {
   // If undefined or true, resolved data will be supplied
   resolved?: boolean;
 
-  then: IThen<T, O> | Array<IThen<T, O>>;
+  then: IThen | IThen[];
 }
 
 export interface IProcessedRule extends IRule {
   enabled?: boolean;
 }
 
-export interface IThen<T = string, O = unknown> {
+export interface IThen {
   // the `path.to.prop` to field, or special `@key` value to target keys for matched `given` object
   // EXAMPLE: if the target object is an oas object and given = `$..responses[*]`, then `@key` would be the response code (200, 400, etc)
   field?: string;
 
   // name of the function to run
-  function: T;
+  function: string;
 
   // Options passed to the function
-  functionOptions?: O;
+  functionOptions?: unknown;
 }
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';

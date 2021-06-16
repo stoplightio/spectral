@@ -5,7 +5,8 @@
   "properties": {
     "documentationUrl": {
       "type": "string",
-      "format": "url"
+      "format": "url",
+      "errorMessage": "must be a valid URL"
     },
     "rules": {
       "type": "object",
@@ -14,11 +15,7 @@
       }
     },
     "formats": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      }
+      "$ref": "shared.json#/$defs/Formats"
     },
     "extends": {
       "type": ["array", "string"],
@@ -37,36 +34,10 @@
               },
               {
                 "type": "string",
-                "enum": ["off", "recommended", "all"]
+                "enum": ["off", "recommended", "all"],
+                "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
               }
             ]
-          }
-        ]
-      }
-    },
-    "functionsDir": {
-      "type": "string"
-    },
-    "functions": {
-      "type": "array",
-      "items": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "array",
-            "items": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "object",
-                "$schema": "http://json-schema.org/draft-07/schema#"
-              }
-            ],
-            "minItems": 2,
-            "additionalItems": false
           }
         ]
       }
@@ -78,7 +49,8 @@
         "items": {
           "type": "string"
         }
-      }
+      },
+      "errorMessage": "must be a map where each key is either a path or a path+json-pointer or a json-pointer and the value is an array of rules"
     },
     "parserOptions": {
       "type": "object",

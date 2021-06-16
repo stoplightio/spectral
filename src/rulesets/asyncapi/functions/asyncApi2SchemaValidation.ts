@@ -1,5 +1,8 @@
-import type { IFunctionContext, IFunction, IFunctionResult } from '../../../spectral';
 import type { JsonPath } from '@stoplight/types';
+import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
+import { schema } from '@stoplight/spectral-functions';
+
+export type Options = { type: 'default' | 'examples' };
 
 type SchemaFragment = {
   default?: unknown;
@@ -21,56 +24,55 @@ function getRelevantItems(target: SchemaFragment, type: 'default' | 'examples'):
   }));
 }
 
-function isSchemaFragment(maybeSchemaFragment: unknown): maybeSchemaFragment is SchemaFragment {
-  if (typeof maybeSchemaFragment !== 'object' || maybeSchemaFragment === null || Array.isArray(maybeSchemaFragment)) {
-    return false;
-  }
-
-  const schemaFragment = maybeSchemaFragment as Record<string, unknown>;
-  return 'default' in schemaFragment || ('examples' in schemaFragment && Array.isArray(schemaFragment.examples));
-}
-
-const asyncApi2SchemaValidation: IFunction<{ type: 'default' | 'examples' }> = function (
-  this: IFunctionContext,
-  targetVal,
-  opts,
-  paths,
-  otherValues,
-) {
-  if (!isSchemaFragment(targetVal)) {
-    return [
-      {
-        message: `#{{print("property")}must be an object containing "default" or an "examples" array`,
+export default createRulesetFunction<SchemaFragment, Options>(
+  {
+    input: {
+      type: 'object',
+      properties: {
+        default: {},
+        examples: {
+          type: 'array',
+        },
       },
-    ];
-  }
-
-  const schemaObject = targetVal;
-  const relevantItems = getRelevantItems(targetVal, opts.type);
-
-  const results: IFunctionResult[] = [];
-
-  for (const relevantItem of relevantItems) {
-    const result = this.functions.schema.call(
-      this,
-      relevantItem.value,
-      {
-        schema: schemaObject,
-        allErrors: true,
+      errorMessage: `#{{print("property")}must be an object containing "default" or an "examples" array`,
+    },
+    errorOnInvalidInput: true,
+    options: {
+      type: 'object',
+      properties: {
+        type: {
+          enum: ['default', 'examples'],
+        },
       },
-      {
-        given: paths.given,
-        target: [...(paths.target ?? paths.given), ...relevantItem.path],
-      },
-      otherValues,
-    );
+      additionalProperties: false,
+      required: ['type'],
+    },
+  },
+  function asyncApi2SchemaValidation(targetVal, opts, paths, otherValues) {
+    const schemaObject = targetVal;
+    const relevantItems = getRelevantItems(targetVal, opts.type);
 
-    if (Array.isArray(result)) {
-      results.push(...result);
+    const results: IFunctionResult[] = [];
+
+    for (const relevantItem of relevantItems) {
+      const result = schema(
+        relevantItem.value,
+        {
+          schema: schemaObject,
+          allErrors: true,
+        },
+        {
+          given: paths.given,
+          target: [...(paths.target ?? paths.given), ...relevantItem.path],
+        },
+        otherValues,
+      );
+
+      if (Array.isArray(result)) {
+        results.push(...result);
+      }
     }
-  }
 
-  return results;
-};
-
-export { asyncApi2SchemaValidation as default };
+    return results;
+  },
+);

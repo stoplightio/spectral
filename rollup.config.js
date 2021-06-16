@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import { terser } from 'rollup-plugin-terser';
 
 const BASE_PATH = process.cwd();
 
@@ -30,6 +29,8 @@ for (const rulesetName of builtIns) {
   }
 }
 
+const deps = Object.keys(require('./package.json').dependencies);
+
 module.exports = functions.map(fn => ({
   input: fn,
   plugins: [
@@ -40,8 +41,8 @@ module.exports = functions.map(fn => ({
     resolve(),
     commonjs(),
     json(),
-    terser(),
   ],
+  external: id => id.startsWith('ajv') || id.startsWith('@stoplight/') || deps.includes(id),
   output: {
     file: fn,
     format: 'cjs',
