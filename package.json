@@ -48,7 +48,7 @@
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts src test-harness scripts",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check src/meta/*.json docs/**/*.md README.md",
-    "test": "yarn lint && yarn test.karma && yarn test --coverage --maxWorkers=2",
+    "test": "yarn lint && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
     "pretest.harness": "./scripts/strap.sh",
     "test.harness": "jest -c ./test-harness/jest.config.js",
     "posttest.harness": "rm -r node_modules/@stoplight/spectral-*",

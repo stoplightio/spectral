@@ -44,7 +44,7 @@ commands:
     steps:
       - run:
           name: Run node tests
-          command: yarn test --coverage --maxWorkers=2
+          command: yarn test.jest --coverage --maxWorkers=2
 
   test-harness:
     steps:
