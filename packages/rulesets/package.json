@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "6.0.0-alpha3",
+  "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -19,9 +19,9 @@
     "node": ">=14"
   },
   "dependencies": {
-    "@stoplight/spectral-core": "6.0.0-alpha3",
-    "@stoplight/spectral-functions": "6.0.0-alpha3",
-    "@stoplight/spectral-formats": "6.0.0-alpha3",
+    "@stoplight/spectral-core": "0.0.0",
+    "@stoplight/spectral-functions": "0.0.0",
+    "@stoplight/spectral-formats": "0.0.0",
     "@stoplight/types": "12.3.0",
     "ajv": "8.5.0"
   },

@@ -1,7 +1,7 @@
 
 {
   "name": "@stoplight/spectral-ref-resolver",
-  "version": "6.0.0-alpha3",
+  "version": "0.0.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",

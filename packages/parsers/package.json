@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-parsers",
-  "version": "6.0.0-alpha3",
+  "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
