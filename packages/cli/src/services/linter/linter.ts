@@ -1,7 +1,6 @@
-import { Document, STDIN } from '../../../document';
+import { Document, STDIN, IRuleResult, Spectral } from '@stoplight/spectral-core';
 import { readParsable, IFileReadOptions } from '../../../fs/reader';
-import * as Parsers from '../../../parsers';
-import { IRuleResult, Spectral } from '../../../spectral';
+import * as Parsers from '@stoplight/spectral-parsers';
 import { ILintConfig } from '../../../types/config';
 import { getRuleset, listFiles, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';

@@ -8,8 +8,7 @@ import { get, isObjectLike } from 'lodash';
 import { Document, IDocument } from './document';
 
 import { formatParserDiagnostics, formatResolverErrors } from './errorMessages';
-import * as Parsers from './parsers';
-import { IParser } from './parsers/types';
+import * as Parsers from '@stoplight/spectral-parsers';
 import { IResolver, IRuleResult } from './types';
 import { getClosestJsonPath, getEndRef, isAbsoluteRef, safePointerToPath, traverseObjUntilRef } from './utils';
 import { Format } from './ruleset/format';

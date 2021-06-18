@@ -1,6 +1,8 @@
 import { stringify } from '@stoplight/json';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
+import * as Parsers from '@stoplight/spectral-parsers';
+import { createHttpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize } from 'lodash';
 import type { Agent } from 'http';
@@ -8,8 +10,6 @@ import type * as ProxyAgent from 'proxy-agent';
 
 import { Document, IDocument, IParsedResult, isParsedResult, normalizeSource, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import * as Parsers from './parsers';
-import { createHttpAndFileResolver } from './resolvers/http-and-file';
 import { Runner, RunnerRuntime } from './runner';
 import { IConstructorOpts, IResolver, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
