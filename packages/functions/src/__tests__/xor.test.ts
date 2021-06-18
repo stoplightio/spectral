@@ -1,4 +1,4 @@
-import { RulesetValidationError } from '../../ruleset';
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import xor from '../xor';
 
