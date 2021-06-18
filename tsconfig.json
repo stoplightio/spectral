@@ -13,7 +13,7 @@
     "moduleResolution": "node",
     "target": "es2017",
     "module": "CommonJS",
-    "lib": ["es2020", "dom"],
+    "lib": ["es2020"],
     "strict": true,
     "pretty": true,
     "experimentalDecorators": true,

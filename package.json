@@ -1,6 +1,5 @@
 {
   "name": "root",
-  "description": "A flexible object linter with out of the box support for OpenAPI v2 and v3.",
   "keywords": [
     "json linter",
     "linter",
@@ -12,7 +11,6 @@
     "API"
   ],
   "private": true,
-  "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -21,35 +19,28 @@
     "url": "https://github.com/stoplightio/spectral"
   },
   "license": "Apache-2.0",
-  "main": "dist/index.js",
   "engines": {
     "node": ">=12"
   },
   "scripts": {
     "prebuild.binary": "yarn copy.html-templates && ./scripts/strap.sh",
-    "build.binary": "pkg . --output ./binaries/spectral",
-    "postbuild.binary": "rm -r node_modules/@stoplight/spectral-*",
-    "build.clean": "rimraf ./coverage && rimraf ./dist",
-    "prebuild": "yarn build.clean",
     "build": "tsc -p ./tsconfig.build.json",
-    "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
-    "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
     "inline-version": "node ./scripts/inline-version.mjs",
-    "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
-    "lint.changelog": "kacl lint",
     "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
+    "lint.changelog": "kacl lint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts src test-harness scripts",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check src/meta/*.json docs/**/*.md README.md",
-    "test": "yarn lint && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
-    "pretest.harness": "./scripts/strap.sh",
+    "test": "yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
     "test.harness": "jest -c ./test-harness/jest.config.js",
-    "posttest.harness": "rm -r node_modules/@stoplight/spectral-*",
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
     "version": "lerna version --no-push",
     "release": "lerna publish from-package"
+  },
+  "workspaces": {
+    "packages": ["packages/*"]
   },
   "devDependencies": {
     "@brightcove/kacl": "^0.1.11",
@@ -69,7 +60,6 @@
     "@types/yargs": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
-    "copyfiles": "^2.4.1",
     "dependency-graph": "^0.11.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
@@ -87,14 +77,13 @@
     "karma-jasmine": "^3.3.1",
     "karma-typescript": "^5.4.0",
     "karma-typescript-es6-transform": "^5.2.0",
+    "lerna": "^4.0.0",
     "lint-staged": "^10.5.4",
     "memfs": "^3.2.2",
     "nock": "~12.0.2",
     "node-html-parser": "^3.3.4",
-    "pkg": "^5.1.0",
     "prettier": "^2.2.1",
     "recast": "^0.20.4",
-    "rimraf": "^3.0.2",
     "treeify": "^1.1.0",
     "ts-jest": "^26.5.6",
     "ts-node": "^10.0.0",
@@ -116,7 +105,7 @@
     "README.md": [
       "prettier --write"
     ],
-    "src/meta/*.json": [
+    "packages/rulesets/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
   },

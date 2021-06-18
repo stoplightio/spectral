@@ -42,9 +42,15 @@
     "tslib": "2.2.0",
     "yargs": "17.0.1"
   },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "pkg": "^5.1.0"
+  },
   "scripts": {
+    "build.binary": "pkg . --output ./binaries/spectral",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
-    "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts"
+    "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts",
+    "copy.html-templates": "copyfiles -u 1 \".//formatters/html/*.html\" \"./dist/\""
   },
   "pkg": {
     "scripts": [

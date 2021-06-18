@@ -1,10 +1,9 @@
 import { Parser } from 'xml2js';
-import { sortResults } from '../../../utils';
 import { junit } from '../junit';
 import { DiagnosticSeverity } from '@stoplight/types';
 
-const oas3SchemaErrors = sortResults(require('./__fixtures__/oas3-schema-errors.json'));
-const mixedErrors = sortResults(require('./__fixtures__/mixed-errors.json'));
+const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');
+const mixedErrors = require('./__fixtures__/mixed-errors.json');
 
 describe('JUnit formatter', () => {
   let parse: Parser['parseStringPromise'];
