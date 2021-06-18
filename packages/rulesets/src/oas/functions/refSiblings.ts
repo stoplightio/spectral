@@ -1,5 +1,5 @@
 import type { JsonPath } from '@stoplight/types';
-import type { IFunction, IFunctionResult } from '../../../types';
+import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
 
 function getParentValue(document: unknown, path: JsonPath): unknown {

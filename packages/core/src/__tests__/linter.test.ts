@@ -1,3 +1,4 @@
+import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
@@ -5,11 +6,9 @@ import { IParsedResult } from '../document';
 import { Spectral } from '../spectral';
 import { Parsers, Document } from '..';
 import { IParser } from '../parsers/types';
-import { createWithRules } from '../rulesets/oas/__tests__/__helpers__/tester';
-import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
 import { Format } from '../ruleset/format';
 
-const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
+// const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
 
 const target = {
   responses: {
@@ -554,45 +553,45 @@ responses:: !!foo
     ]);
   });
 
-  test('should remove all redundant ajv errors', async () => {
-    const spectral = createWithRules(['oas3-schema', 'oas3-valid-schema-example', 'oas3-valid-media-example']);
-
-    const result = await spectral.run(invalidSchema);
-
-    expect(result).toEqual([
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: '`email` property must match format `email`.',
-        path: ['info', 'contact', 'email'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: '`header-1` property must have required property `schema`.',
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'Property `type` is not expected to be here.',
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
-      }),
-      expect.objectContaining({
-        code: 'oas3-schema',
-        message: 'Property `op` is not expected to be here.',
-        path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'invalid-ref',
-      }),
-      expect.objectContaining({
-        code: 'oas3-valid-schema-example',
-        message: '`example` property type must be number',
-        path: ['components', 'schemas', 'foo', 'example'],
-      }),
-    ]);
-  });
+  // test('should remove all redundant ajv errors', async () => {
+  //   const spectral = createWithRules(['oas3-schema', 'oas3-valid-schema-example', 'oas3-valid-media-example']);
+  //
+  //   const result = await spectral.run(invalidSchema);
+  //
+  //   expect(result).toEqual([
+  //     expect.objectContaining({
+  //       code: 'oas3-schema',
+  //       message: '`email` property must match format `email`.',
+  //       path: ['info', 'contact', 'email'],
+  //     }),
+  //     expect.objectContaining({
+  //       code: 'oas3-schema',
+  //       message: '`header-1` property must have required property `schema`.',
+  //       path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
+  //     }),
+  //     expect.objectContaining({
+  //       code: 'oas3-schema',
+  //       message: 'Property `type` is not expected to be here.',
+  //       path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
+  //     }),
+  //     expect.objectContaining({
+  //       code: 'oas3-schema',
+  //       message: 'Property `op` is not expected to be here.',
+  //       path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
+  //     }),
+  //     expect.objectContaining({
+  //       code: 'invalid-ref',
+  //     }),
+  //     expect.objectContaining({
+  //       code: 'invalid-ref',
+  //     }),
+  //     expect.objectContaining({
+  //       code: 'oas3-valid-schema-example',
+  //       message: '`example` property type must be number',
+  //       path: ['components', 'schemas', 'foo', 'example'],
+  //     }),
+  //   ]);
+  // });
 
   test('should report invalid schema $refs', async () => {
     const result = await spectral.run(

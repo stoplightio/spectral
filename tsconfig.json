@@ -3,9 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@stoplight/spectral-core": ["src/index.ts"],
-      "@stoplight/spectral-functions": ["src/functions/index.ts"],
-      "@stoplight/spectral-formats": ["src/formats/index.ts"],
+      "@stoplight/spectral-core": ["packages/core/src/index.ts"],
+      "@stoplight/spectral-functions": ["packages/functions/src/index.ts"],
+      "@stoplight/spectral-formats": ["packages/formats/src/index.ts"],
+      "@stoplight/spectral-parsers": ["packages/parsers/src/index.ts"],
+      "@stoplight/spectral-ref-resolver": ["packages/ref-resolver/src/index.ts"],
       "@stoplight/spectral-utils": ["src/utils/index.ts"]
     },
     "moduleResolution": "node",

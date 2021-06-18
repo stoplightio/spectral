@@ -1,14 +1,10 @@
-import { RulesetDefinition } from '../../../ruleset/types';
-
 jest.mock?.('fs');
 
 import { serveAssets } from '@stoplight/spectral-test-utils';
-
-import { IRuleResult, Spectral } from '../../../spectral';
+import { IRuleResult, Spectral, Document, RulesetDefinition } from '@stoplight/spectral-core';
+import { httpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 import oasRuleset from '../../oas/index';
 import aasRuleset from '../../asyncapi/index';
-import { Document } from '../../../document';
-import { httpAndFileResolver } from '../../../resolvers/http-and-file';
 
 type Ruleset = typeof oasRuleset & typeof aasRuleset;
 export type RuleName = keyof Ruleset['rules'];

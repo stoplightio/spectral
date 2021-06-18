@@ -1,4 +1,4 @@
-import type { IFunction } from '../../../types';
+import type { IFunction } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
 
 export const oasOpSuccessResponse: IFunction = targetVal => {

@@ -1,7 +1,7 @@
 // This function will check an API doc to verify that any tag that appears on
 // an operation is also present in the global tags array.
 
-import type { IFunction, IFunctionResult } from '../../../types';
+import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { getAllOperations } from './utils/getAllOperations';
 import { isObject } from './utils/isObject';
 

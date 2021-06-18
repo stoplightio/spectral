@@ -2,10 +2,10 @@ import { isURL } from '@stoplight/path';
 import AbortController from 'abort-controller';
 import * as fs from 'fs';
 import { RequestInit } from 'node-fetch';
-import request from '../request';
+import request from './fetch';
 import type { Agent } from 'http';
 import { isError } from 'lodash';
-import { printError } from '../utils/printError';
+import { printError } from '@stoplight/spectral-core';
 
 export interface IFileReadOptions {
   encoding: string;
