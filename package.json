@@ -1,6 +1,5 @@
 {
-  "name": "@stoplight/spectral",
-  "version": "0.0.0",
+  "name": "root",
   "description": "A flexible object linter with out of the box support for OpenAPI v2 and v3.",
   "keywords": [
     "json linter",
@@ -48,7 +47,9 @@
     "posttest.harness": "rm -r node_modules/@stoplight/spectral-*",
     "test.jest": "jest --silent",
     "test.karma": "karma start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "version": "lerna version --no-push",
+    "release": "lerna publish"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.1.1",
@@ -71,6 +72,7 @@
     "json-schema-migrate": "2.0.0",
     "json-schema-traverse": "1.0.0",
     "jsonpath-plus": "5.0.7",
+    "lerna": "^4.0.0",
     "lodash": "4.17.21",
     "nimma": "0.0.0",
     "node-fetch": "2.6.1",

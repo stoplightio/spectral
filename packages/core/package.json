@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
-  "version": "0.0.0",
+  "version": "6.0.0-alpha3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
