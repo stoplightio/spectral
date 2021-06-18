@@ -23,13 +23,18 @@ try {
 
 module.exports = () => void 0;
 ====asset:ruleset====
-functions: ["{asset:fn.js|filename|no-ext}"]
-functionsDir: "."
-rules:
-  has-property:
-    given: $
-    then:
-      function: "{asset:fn.js|filename|no-ext}"
+const fn = require("{asset:fn.js}");
+
+module.exports = {
+  rules: {
+    'has-property': {
+      given: '$',
+      then: {
+        function: fn,
+      },
+    },
+  },
+};
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset} --ignoreUnknownFormat
 ====status====

@@ -3,12 +3,18 @@ Prints meaningful error message when custom json-ref-resolver instance cannot be
 ====document====
 $ref: custom://user.yaml
 ====asset:ruleset====
-rules:
-  required-user:
-    given: $
-    then:
-      field: user
-      function: truthy
+const { truthy } = require('@stoplight/spectral-functions');
+
+module.exports = {
+  rules:
+  'required-user': {
+    given: '$',
+    then: {
+      field: 'user',
+      function: truthy,
+    }
+  },
+}
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset} --resolver ./resolvers/missing-resolver.js
 ====status====

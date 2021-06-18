@@ -14,18 +14,16 @@ module.exports = (config: Config): void => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./__karma__/jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
+    files: ['./__karma__/jest.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
-    exclude: ['src/cli/**', 'src/formatters/**', 'src/**/*.jest.test.ts'],
+    exclude: ['src/cli/**', 'src/**/*.jest.test.ts'],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'src/**/*.ts': ['karma-typescript', 'env'],
       './__karma__/**/*.ts': ['karma-typescript'],
-      './setupKarma.ts': ['karma-typescript'],
-      './setupTests.ts': ['karma-typescript'],
     },
 
     // @ts-expect-error: non-standard - karma-env-preprocessor

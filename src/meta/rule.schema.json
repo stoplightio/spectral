@@ -1,18 +1,23 @@
 {
-  "$id": "http://stoplight.io/schemas/rule.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/stoplightio/spectral/blob/develop/src/meta/rule.schema.json",
   "$defs": {
     "Then": {
-      "properties": {
-        "field": {
-          "type": "string"
+      "type": "object",
+      "allOf": [
+        {
+          "properties": {
+            "field": {
+              "type": "string"
+            }
+          }
         },
-        "function": {
-          "type": "string"
+        {
+          "type": "object",
+          "spectral-runtime": "ruleset-function",
+          "required": ["function"]
         }
-      },
-      "required": ["function"],
-      "type": "object"
+      ]
     },
     "Severity": {
       "$ref": "shared.json#/$defs/Severity"
@@ -95,6 +100,5 @@
     {
       "type": "boolean"
     }
-  ],
-  "errorMessage": "the rule has to have at least \"given\" and \"then\". If you intent to override the severity of extended rule, the value must to be a boolean or any valid severity level"
+  ]
 }

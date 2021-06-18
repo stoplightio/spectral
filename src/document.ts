@@ -2,16 +2,17 @@ import { normalize } from '@stoplight/path';
 import { DeepReadonly, GetLocationForJsonPath, IParserResult, IRange, JsonPath, Optional } from '@stoplight/types';
 import { formatParserDiagnostics } from './errorMessages';
 import { IParser } from './parsers/types';
-import { IRuleResult } from './types';
 import { startsWithProtocol } from './utils';
-import { isPlainObject } from './guards/isPlainObject';
+import { IRuleResult } from './types';
+import { Format } from './ruleset/format';
+import { isPlainObject } from '@stoplight/json';
 
 export const STDIN = '<STDIN>';
 
 export interface IDocument<D = unknown> {
   readonly source: string | null;
   readonly diagnostics: ReadonlyArray<IRuleResult>;
-  formats?: string[] | null;
+  formats?: Set<Format> | null;
   getRangeForJsonPath(path: JsonPath, closest?: boolean): Optional<IRange>;
   trapAccess<T extends Record<string, unknown> = Record<string, unknown>>(obj: T): T;
   data: D;
@@ -29,7 +30,7 @@ export class Document<D = unknown, R extends IParserResult<D> = IParserResult<D>
   protected readonly parserResult: R;
   public readonly source: string | null;
   public readonly diagnostics: IRuleResult[];
-  public formats?: string[] | null;
+  public formats?: Set<Format> | null;
 
   constructor(protected readonly input: string, protected readonly parser: IParser<R>, source?: string) {
     this.parserResult = parser.parse(input);
@@ -67,7 +68,7 @@ export class Document<D = unknown, R extends IParserResult<D> = IParserResult<D>
 export class ParsedDocument<D = unknown, R extends IParsedResult<D> = IParsedResult<D>> implements IDocument<D> {
   public readonly source: string | null;
   public readonly diagnostics: IRuleResult[];
-  public formats?: string[] | null;
+  public formats?: Set<Format> | null;
 
   constructor(protected readonly parserResult: R) {
     // we need to normalize the path in case path with forward slashes is given

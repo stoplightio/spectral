@@ -9,7 +9,7 @@ describe('oasDocumentSchema', () => {
   let s: Spectral;
 
   beforeEach(async () => {
-    s = await createWithRules(['oas2-schema', 'oas3-schema']);
+    s = createWithRules(['oas2-schema', 'oas3-schema']);
   });
 
   describe('given OpenAPI 2 document', () => {

@@ -3,18 +3,14 @@ import * as nock from 'nock';
 import * as yargs from 'yargs';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';
-import * as http from 'http';
-import * as url from 'url';
-import { DEFAULT_REQUEST_OPTIONS } from '../../../request';
-import * as ProxyAgent from 'proxy-agent';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RulesetValidationError } from '@stoplight/spectral-core';
 
 jest.mock('../output');
 
 const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
-const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.yaml');
-const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.yaml');
+const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.js');
+const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.js');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
 
 async function run(command: string) {
@@ -52,7 +48,7 @@ describe('Linter service', () => {
   });
 
   it('handles relative path to a document', async () => {
-    const results = await run('lint -r ./gh-474/ruleset.json ./gh-474/document.json');
+    const results = await run('lint -r ./gh-474/ruleset.js ./gh-474/document.json');
 
     expect(results).toEqual([
       {
@@ -188,8 +184,8 @@ describe('Linter service', () => {
   });
 
   describe('--ruleset', () => {
-    const validNestedRulesetPath = join(__dirname, '__fixtures__/ruleset-extends-valid.yaml');
-    const invalidNestedRulesetPath = join(__dirname, '__fixtures__/ruleset-extends-invalid.yaml');
+    const validNestedRulesetPath = join(__dirname, '__fixtures__/ruleset-extends-valid.js');
+    const invalidNestedRulesetPath = join(__dirname, '__fixtures__/ruleset-extends-invalid.js');
 
     describe('extends feature', () => {
       it('extends a valid relative ruleset', () => {
@@ -201,38 +197,11 @@ describe('Linter service', () => {
           RulesetValidationError,
         );
       });
-
-      it('given remote nested ruleset, resolves', () => {
-        nock('http://foo.local')
-          .persist()
-          .get('/ruleset-master.yaml')
-          .replyWithFile(200, validNestedRulesetPath, {
-            'Content-Type': 'application/yaml',
-          })
-          .get('/ruleset-valid.yaml')
-          .replyWithFile(200, validRulesetPath, {
-            'Content-Type': 'application/yaml',
-          });
-
-        return expect(run(`lint ${validCustomOas3SpecPath} -r http://foo.local/ruleset-master.yaml`)).resolves.toEqual(
-          [],
-        );
-      });
-    });
-
-    describe('when multiple ruleset options provided', () => {
-      it('given one is valid other is not, outputs "invalid ruleset" error', () => {
-        return expect(
-          run(`lint ${validCustomOas3SpecPath} -r ${invalidRulesetPath} -r ${validRulesetPath}`),
-        ).rejects.toThrowError(RulesetValidationError);
-      });
     });
 
     describe('when single ruleset option provided', () => {
       it('outputs "does not exist" error', () => {
-        return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow(
-          'ENOENT: no such file or directory',
-        );
+        return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow('Cannot find module');
       });
 
       it('outputs "invalid ruleset" error', () => {
@@ -255,14 +224,6 @@ describe('Linter service', () => {
             }),
           ]),
         );
-      });
-
-      it('given valid remote ruleset file, outputs no issues', () => {
-        nock('http://foo.local').persist().get('/ruleset.yaml').replyWithFile(200, validRulesetPath, {
-          'Content-Type': 'application/yaml',
-        });
-
-        return expect(run(`lint ${validCustomOas3SpecPath} -r http://foo.local/ruleset.yaml`)).resolves.toEqual([]);
       });
     });
   });
@@ -317,7 +278,7 @@ describe('Linter service', () => {
 
   describe('$ref linting', () => {
     it('outputs errors occurring in referenced files', () => {
-      return expect(run(`lint -r references/ruleset.json references/no-nested.json`)).resolves.toEqual([
+      return expect(run(`lint -r references/ruleset.js references/no-nested.json`)).resolves.toEqual([
         expect.objectContaining({
           code: 'valid-schema',
           message: '`info` property must have required property `version`',
@@ -370,7 +331,7 @@ describe('Linter service', () => {
     });
 
     it('outputs errors occurring in nested referenced files', () => {
-      return expect(run(`lint -r references/ruleset.json references/nested.json`)).resolves.toEqual([
+      return expect(run(`lint -r references/ruleset.js references/nested.json`)).resolves.toEqual([
         expect.objectContaining({
           code: 'valid-schema',
           message: '`info` property must have required property `version`',
@@ -453,61 +414,6 @@ describe('Linter service', () => {
           severity: DiagnosticSeverity.Warning,
         },
       ]);
-    });
-  });
-
-  describe('proxy', () => {
-    let server: http.Server;
-    const PORT = 4001;
-
-    beforeAll(() => {
-      // nock cannot mock proxied requests
-      server = http
-        .createServer((req, res) => {
-          const { pathname } = url.parse(String(req.url));
-          if (pathname === '/custom-ruleset') {
-            res.writeHead(403);
-          } else if (pathname === '/ok.json') {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.write(
-              JSON.stringify({
-                info: {
-                  title: '',
-                  description: 'Foo',
-                },
-              }),
-            );
-          } else {
-            res.writeHead(404);
-          }
-
-          res.end();
-        })
-        .listen(PORT, '0.0.0.0');
-    });
-
-    afterAll(() => {
-      server.close();
-    });
-
-    describe('when agent is set', () => {
-      beforeEach(() => {
-        DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(`http://localhost:${PORT}`) as any;
-      });
-
-      afterEach(() => {
-        delete DEFAULT_REQUEST_OPTIONS.agent;
-      });
-
-      describe('loading a ruleset', () => {
-        it('proxies the request', async () => {
-          await expect(
-            run(`lint --ruleset http://localhost:4000/custom-ruleset src/__tests__/__fixtures__/petstore.oas3.json`),
-          ).rejects.toThrowErrorMatchingInlineSnapshot(
-            `"Could not parse http://localhost:4000/custom-ruleset: Forbidden"`,
-          );
-        });
-      });
     });
   });
 });

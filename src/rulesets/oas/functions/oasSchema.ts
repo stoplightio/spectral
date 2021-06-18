@@ -4,6 +4,7 @@ import type { SchemaObject } from 'json-schema-traverse';
 import { isObject } from './utils/isObject';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
 import { createRulesetFunction } from '@stoplight/spectral-core';
+import { oas2, oas3 } from '@stoplight/spectral-formats';
 
 export type Options = {
   schema: Record<string, unknown>;
@@ -27,12 +28,12 @@ export default createRulesetFunction<unknown, Options>(
 
     let { schema } = opts;
 
-    if (Array.isArray(formats)) {
+    if (formats) {
       try {
-        if (formats.includes('oas2')) {
+        if (formats.has(oas2)) {
           schema = convertXNullable({ ...schema });
           traverse(schema, visitOAS2);
-        } else if (formats.includes('oas3')) {
+        } else if (formats.has(oas3)) {
           schema = convertNullable({ ...schema });
           traverse(schema, visitOAS3);
         }

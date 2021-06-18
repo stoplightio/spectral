@@ -1,11 +1,11 @@
-import { isObject } from './isObject';
+import { isPlainObject } from '@stoplight/json';
 
 const validOperationKeys = ['get', 'head', 'post', 'put', 'patch', 'delete', 'options', 'trace'];
 
 type Item = { path: string; operation: string; value: unknown };
 
 export function* getAllOperations(paths: unknown): IterableIterator<Item> {
-  if (!isObject(paths)) {
+  if (!isPlainObject(paths)) {
     return;
   }
 
@@ -17,14 +17,14 @@ export function* getAllOperations(paths: unknown): IterableIterator<Item> {
 
   for (const path of Object.keys(paths)) {
     const operations = paths[path];
-    if (!isObject(operations)) {
+    if (!isPlainObject(operations)) {
       continue;
     }
 
     item.path = path;
 
     for (const operation of Object.keys(operations)) {
-      if (!isObject(operations[operation]) || !validOperationKeys.includes(operation)) {
+      if (!isPlainObject(operations[operation]) || !validOperationKeys.includes(operation)) {
         continue;
       }
 

@@ -1,6 +1,6 @@
 import { JsonPath } from '@stoplight/types';
 import { DocumentInventory } from '../documentInventory';
-import { Rule } from '../rule';
+import type { Rule } from '../ruleset/rule/rule';
 
 export type RulesetFunction<I extends unknown = unknown, O extends unknown = unknown> = (
   input: I,

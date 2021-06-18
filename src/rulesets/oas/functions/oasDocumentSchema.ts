@@ -2,15 +2,16 @@
 import type { ErrorObject } from 'ajv';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
+import { oas2, oas3_1 } from '@stoplight/spectral-formats';
 
-import * as oas2_0 from '../schemas/2.0.json';
-import * as oas3_0 from '../schemas/3.0.json';
-import * as oas3_1 from '../schemas/3.1.json';
+import * as schemaOas2_0 from '../schemas/2.0.json';
+import * as schemaOas3_0 from '../schemas/3.0.json';
+import * as schemaOas3_1 from '../schemas/3.1.json';
 
 const OAS_SCHEMAS = {
-  '2.0': oas2_0,
-  '3.0': oas3_0,
-  '3.1': oas3_1,
+  '2.0': schemaOas2_0,
+  '3.0': schemaOas3_0,
+  '3.1': schemaOas3_1,
 };
 
 function shouldIgnoreError(error: ErrorObject): boolean {
@@ -80,11 +81,11 @@ export default createRulesetFunction<unknown, null>(
   },
   function oasDocumentSchema(targetVal, opts, paths, otherValues) {
     const formats = otherValues.documentInventory.formats;
-    if (!Array.isArray(formats)) return;
+    if (formats === null) return;
 
-    const schema = formats.includes('oas2')
+    const schema = formats.has(oas2)
       ? OAS_SCHEMAS['2.0']
-      : formats.includes('oas3.1')
+      : formats.has(oas3_1)
       ? OAS_SCHEMAS['3.1']
       : OAS_SCHEMAS['3.0'];
 

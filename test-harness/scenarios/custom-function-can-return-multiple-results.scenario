@@ -58,23 +58,24 @@ module.exports = (targetVal, _opts, paths) => {
   return results;
 };
 ====asset:ruleset====
-extends: [spectral:oas]
+const { oas } = require('@stoplight/spectral-rulesets');
+const fn = require('{asset:fn.js}');
 
-functions: ["{asset:fn.js|filename|no-ext}"]
-functionsDir: "."
-
-rules:
-  unique-tag-names:
-    message: "Tags should have distinct names: {{error}}"
-    given: "$.tags"
-    then:
-      function: "{asset:fn.js|filename|no-ext}"
+module.exports = {
+  extends: oas,
+  rules: {
+    'unique-tag-names': {
+      message: "Tags should have distinct names: {{error}}",
+      given: "$.tags",
+      then: {
+        function: fn,
+      },
+    },
+  },
+}
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
   1:1   warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
   2:6   warning  info-contact      Info object should contain `contact` object.                             info

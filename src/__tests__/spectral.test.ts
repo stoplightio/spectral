@@ -1,136 +1,14 @@
 import { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity } from '@stoplight/types';
+import { truthy } from '@stoplight/spectral-functions';
 import { DepGraph } from 'dependency-graph';
-import { merge } from 'lodash';
 
 import { Document } from '../document';
 import * as Parsers from '../parsers';
-import { RunRuleCollection, Spectral } from '../spectral';
-import { IResolver, RuleCollection } from '../types';
-
-const oasRuleset = JSON.parse(JSON.stringify(require('../rulesets/oas/index.json')));
-const asyncApiRuleset = JSON.parse(JSON.stringify(require('../rulesets/asyncapi/index.json')));
-const oasRulesetRules: RuleCollection = oasRuleset.rules;
-const asyncApiRulesetRules: RuleCollection = asyncApiRuleset.rules;
+import { Spectral } from '../spectral';
+import { IResolver } from '../types';
 
 describe('spectral', () => {
-  describe('loadRuleset', () => {
-    test.each([
-      ['spectral:oas', oasRulesetRules],
-      ['spectral:asyncapi', asyncApiRulesetRules],
-    ])('should support loading "%s" built-in ruleset', async (rulesetName, rules) => {
-      const s = new Spectral();
-      await s.loadRuleset(rulesetName);
-
-      expect(s.rules).toEqual(
-        expect.objectContaining(
-          Object.entries(rules).reduce<RunRuleCollection>((oasRules, [name, rule]) => {
-            oasRules[name] = expect.objectContaining({
-              name,
-              given: expect.anything(),
-              formats: expect.arrayContaining([expect.any(String)]),
-              enabled: expect.any(Boolean),
-              severity: expect.any(Number),
-              then: expect.any(Array),
-              message: rule.message ?? null,
-              description: rule.description ?? null,
-            });
-
-            return oasRules;
-          }, {}),
-        ),
-      );
-    });
-
-    test.each([
-      ['spectral:oas', oasRulesetRules],
-      ['spectral:asyncapi', asyncApiRulesetRules],
-    ])('should support loading multiple times the built-in ruleset "%s"', async (rulesetName, expectedRules) => {
-      const s = new Spectral();
-      await s.loadRuleset([rulesetName, rulesetName]);
-
-      expect(s.rules).toEqual(
-        Object.entries(expectedRules).reduce<RunRuleCollection>((oasRules, [name, rule]) => {
-          oasRules[name] = expect.objectContaining({
-            name,
-            given: expect.anything(),
-            formats: expect.arrayContaining([expect.any(String)]),
-            enabled: expect.any(Boolean),
-            severity: expect.any(Number),
-            then: expect.any(Array),
-            message: rule.message ?? null,
-            description: rule.description ?? null,
-          });
-
-          return oasRules;
-        }, {}),
-      );
-    });
-  });
-
-  describe('setRules & mergeRules', () => {
-    test('should not mutate the passing in rules object', () => {
-      const givenCustomRuleSet = {
-        rule1: {
-          given: '$',
-          then: {
-            function: 'truthy',
-          },
-        },
-      };
-
-      // deep copy
-      const expectedCustomRuleSet = merge({}, givenCustomRuleSet);
-
-      const s = new Spectral();
-      s.setRules(givenCustomRuleSet);
-
-      s.mergeRules({
-        rule1: {
-          severity: DiagnosticSeverity.Error,
-        },
-      });
-
-      expect(expectedCustomRuleSet).toEqual(givenCustomRuleSet);
-    });
-
-    test('should update/append on the current rules', () => {
-      const s = new Spectral();
-
-      s.setRules({
-        rule1: {
-          message: '',
-          given: '$',
-          severity: DiagnosticSeverity.Warning,
-          then: {
-            function: 'truthy',
-          },
-        },
-      });
-
-      s.mergeRules({
-        rule2: {
-          message: '',
-          given: '$',
-          then: {
-            function: 'truthy',
-          },
-        },
-      });
-
-      expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
-
-      s.mergeRules({
-        rule1: {
-          severity: DiagnosticSeverity.Error,
-        },
-      });
-
-      expect(Object.keys(s.rules)).toEqual(['rule1', 'rule2']);
-      expect(s.rules.rule1.severity).toBe(DiagnosticSeverity.Error);
-    });
-  });
-
   describe('when a $ref appears', () => {
     describe('and a custom resolver is provided', () => {
       test('will call the resolver with target', async () => {
@@ -177,14 +55,16 @@ describe('spectral', () => {
           resolver: customResolver,
         });
 
-        s.setRules({
-          'truthy-baz': {
-            given: '$.foo.bar.baz',
-            message: 'Baz must be truthy',
-            severity: DiagnosticSeverity.Error,
-            recommended: true,
-            then: {
-              function: 'truthy',
+        s.setRuleset({
+          rules: {
+            'truthy-baz': {
+              given: '$.foo.bar.baz',
+              message: 'Baz must be truthy',
+              severity: DiagnosticSeverity.Error,
+              recommended: true,
+              then: {
+                function: truthy,
+              },
             },
           },
         });
@@ -248,13 +128,15 @@ describe('spectral', () => {
           source,
         );
 
-        s.setRules({
-          'pagination-responses-have-x-next-token': {
-            description: 'All collection endpoints have the X-Next-Token parameter in responses',
-            given: "$.paths..get.responses['200'].headers",
-            severity: 'error',
-            recommended: true,
-            then: { field: 'X-Next-Token', function: 'truthy' },
+        s.setRuleset({
+          rules: {
+            'pagination-responses-have-x-next-token': {
+              description: 'All collection endpoints have the X-Next-Token parameter in responses',
+              given: "$.paths..get.responses['200'].headers",
+              severity: 'error',
+              recommended: true,
+              then: { field: 'X-Next-Token', function: truthy },
+            },
           },
         });
 

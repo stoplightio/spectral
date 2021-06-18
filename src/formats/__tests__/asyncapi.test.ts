@@ -1,9 +1,9 @@
-import { isAsyncApiv2 } from '../asyncapi';
+import { asyncApi2 } from '../asyncapi';
 
 describe('AsyncApi format', () => {
   describe('AsyncApi 2.{minor}.{patch}', () => {
     it.each([['2.0.17'], ['2.9.0'], ['2.9.3']])('recognizes %s version correctly', (version: string) => {
-      expect(isAsyncApiv2({ asyncapi: version })).toBe(true);
+      expect(asyncApi2({ asyncapi: version }, null)).toBe(true);
     });
 
     const testCases = [
@@ -25,7 +25,7 @@ describe('AsyncApi format', () => {
     ];
 
     it.each(testCases)('does not recognize invalid document %o', document => {
-      expect(isAsyncApiv2(document)).toBe(false);
+      expect(asyncApi2(document, null)).toBe(false);
     });
   });
 });

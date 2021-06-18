@@ -1,99 +1,31 @@
 import { normalize } from '@stoplight/path';
+import { truthy, pattern } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
 
 import { Document } from '../document';
-import pattern from '../functions/pattern';
 import * as Parsers from '../parsers';
 import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
-
-const bareRuleset = require('./__fixtures__/rulesets/bare.json');
 
 describe('Spectral', () => {
   afterEach(() => {
     nock.cleanAll();
   });
 
-  describe('loadRuleset', () => {
-    test('should support loading rulesets from filesystem', async () => {
-      const s = new Spectral();
-      await s.loadRuleset(path.join(__dirname, '__fixtures__/rulesets/bare.json'));
-
-      expect(s.rules).toEqual({
-        'info-matches-stoplight': expect.objectContaining({
-          message: bareRuleset.rules['info-matches-stoplight'].message,
-          name: 'info-matches-stoplight',
-          given: [bareRuleset.rules['info-matches-stoplight'].given],
-          severity: DiagnosticSeverity.Warning,
-        }),
-      });
-    });
-
-    test('should support loading rulesets over http', async () => {
-      const ruleset = {
-        rules: {
-          'info-matches-stoplight': {
-            message: 'Info must contain Stoplight',
-            given: '$.info',
-            type: 'style',
-            then: {
-              field: 'title',
-              function: 'pattern',
-              functionOptions: {
-                match: 'Stoplight',
-              },
-            },
-          },
-        },
-      };
-
-      nock('https://localhost:4000').get('/custom-ruleset').reply(200, JSON.stringify(ruleset));
-
-      const s = new Spectral();
-      await s.loadRuleset('https://localhost:4000/custom-ruleset');
-
-      expect(s.rules).toEqual({
-        'info-matches-stoplight': expect.objectContaining({
-          message: bareRuleset.rules['info-matches-stoplight'].message,
-          name: 'info-matches-stoplight',
-          given: [bareRuleset.rules['info-matches-stoplight'].given],
-          severity: DiagnosticSeverity.Warning,
-        }),
-      });
-    });
-  });
-
-  test('should support combining built-in ruleset with a custom one', async () => {
-    const s = new Spectral();
-    await s.loadRuleset(['spectral:oas', path.join(__dirname, './__fixtures__/rulesets/bare.json')]);
-
-    expect(Object.values(s.rules)).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          name: 'oas2-schema',
-        }),
-        expect.objectContaining({
-          name: 'oas3-schema',
-        }),
-        expect.objectContaining({
-          name: 'info-matches-stoplight',
-        }),
-      ]),
-    );
-  });
-
   test('should report issues for correct files with correct ranges and paths', async () => {
     const documentUri = normalize(path.join(__dirname, './__fixtures__/document-with-external-refs.json'));
     const spectral = new Spectral({ resolver: httpAndFileResolver });
-    spectral.setRules({
-      'requires-type': {
-        given: ['$..allOf', '$.empty'],
-        then: {
-          field: 'type',
-          function: 'truthy',
+    spectral.setRuleset({
+      rules: {
+        'requires-type': {
+          given: ['$..allOf', '$.empty'],
+          then: {
+            field: 'type',
+            function: truthy,
+          },
         },
       },
     });
@@ -158,17 +90,18 @@ describe('Spectral', () => {
 
   test('properly decorates results with metadata pertaining to the document being linted', async () => {
     const s = new Spectral({ resolver: httpAndFileResolver });
-    s.setFunctions({ pattern });
-    s.setRules({
-      'unsecure-remote-reference': {
-        message: '$ref must not point at unsecured remotes',
-        given: '$..$ref',
-        recommended: true,
-        resolved: false,
-        then: {
-          function: 'pattern',
-          functionOptions: {
-            notMatch: '^http:',
+    s.setRuleset({
+      rules: {
+        'unsecure-remote-reference': {
+          message: '$ref must not point at unsecured remotes',
+          given: '$..$ref',
+          recommended: true,
+          resolved: false,
+          then: {
+            function: pattern,
+            functionOptions: {
+              notMatch: '^http:',
+            },
           },
         },
       },
@@ -244,15 +177,17 @@ describe('Spectral', () => {
     const s = new Spectral({ resolver: httpAndFileResolver });
     const documentUri = path.join(__dirname, './__fixtures__/gh-658/URIError.yaml');
 
-    s.setRules({
-      'schema-strings-maxLength': {
-        severity: DiagnosticSeverity.Warning,
-        recommended: true,
-        message: "String typed properties MUST be further described using 'maxLength'. Error: {{error}}",
-        given: "$..[?(@.type === 'string')]",
-        then: {
-          field: 'maxLength',
-          function: 'truthy',
+    s.setRuleset({
+      rules: {
+        'schema-strings-maxLength': {
+          severity: DiagnosticSeverity.Warning,
+          recommended: true,
+          message: "String typed properties MUST be further described using 'maxLength'. Error: {{error}}",
+          given: "$..[?(@.type === 'string')]",
+          then: {
+            field: 'maxLength',
+            function: truthy,
+          },
         },
       },
     });

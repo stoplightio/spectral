@@ -2,12 +2,11 @@ import { JsonPath } from '@stoplight/types';
 import { get } from 'lodash';
 
 import { Document } from '../document';
-import { Rule } from '../rule';
-import { getDiagnosticSeverity } from '../ruleset/severity';
 import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets, MessageVars, message } from './utils';
+import { Rule } from '../ruleset/rule/rule';
 
 export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule: Rule): void => {
   const fnContext: IFunctionValues = {
@@ -20,17 +19,12 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
   const givenPath = node.path.length > 0 && node.path[0] === '$' ? node.path.slice(1) : node.path;
 
   for (const then of rule.then) {
-    const func = context.functions[then.function];
-    if (typeof func !== 'function') {
-      throw new Error(`Function ${then.function} not found. Called by rule ${rule.name}.`);
-    }
-
     const targets = getLintTargets(node.value, then.field);
 
     for (const target of targets) {
       const targetPath = target.path.length > 0 ? [...givenPath, ...target.path] : givenPath;
 
-      const targetResults = func(
+      const targetResults = then.function(
         target.value,
         then.functionOptions ?? null,
         {
@@ -75,10 +69,7 @@ function processTargetResults(
 ): void {
   for (const result of results) {
     const escapedJsonPath = (result.path ?? targetPath).map(decodeSegmentFragment);
-    const associatedItem = context.documentInventory.findAssociatedItemForPath(
-      escapedJsonPath,
-      rule.resolved !== false,
-    );
+    const associatedItem = context.documentInventory.findAssociatedItemForPath(escapedJsonPath, rule.resolved);
     const path = associatedItem?.path ?? getClosestJsonPath(context.documentInventory.resolved, escapedJsonPath);
     const source = associatedItem?.document.source;
 
@@ -106,7 +97,7 @@ function processTargetResults(
       code: rule.name,
       message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
       path,
-      severity: getDiagnosticSeverity(rule.severity),
+      severity: rule.severity,
       ...(source !== null ? { source } : null),
       range,
     });

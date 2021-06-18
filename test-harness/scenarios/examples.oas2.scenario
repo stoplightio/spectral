@@ -257,11 +257,12 @@ definitions:
       - age
     x-tags:
       - Todos
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document}
+{bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 2.0 (Swagger) detected
-
 {document}
   83:26    error  oas2-valid-schema-example  `completed` property type must be boolean                                      paths./schema-example.get.responses[500].schema.example.completed
   91:26    error  oas2-valid-schema-example  `example` property type must be boolean                                        paths./schema-example.get.responses[501].schema.properties.some-bool.example

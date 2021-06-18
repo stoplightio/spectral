@@ -1,9 +1,8 @@
-import { extractPointerFromRef, hasRef, pointerToPath } from '@stoplight/json';
+import { isPlainObject, extractPointerFromRef, hasRef, pointerToPath } from '@stoplight/json';
 import { isAbsolute } from '@stoplight/path';
 import { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
 import { startsWithProtocol } from './startsWithProtocol';
-import { isPlainObject } from '../guards/isPlainObject';
 
 export const isAbsoluteRef = (ref: string): boolean => isAbsolute(ref) || startsWithProtocol(ref);
 

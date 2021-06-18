@@ -1,28 +1,35 @@
-import { isAbsolute, resolve } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
-import { IRulesetReadOptions, readRuleset } from '../../../../ruleset';
-import { getDefaultRulesetFile } from '../../../../ruleset/utils';
-import { IRuleset } from '../../../../types/ruleset';
-import { KNOWN_RULESETS } from '../../../../formats';
+import { Ruleset } from '../../../../ruleset/ruleset';
+import * as fs from 'fs';
+import * as path from '@stoplight/path';
+import { isDefaultRulesetFile } from '../../../../ruleset/utils';
+import { isAbsolute } from '@stoplight/path';
+import * as process from 'process';
+import { RulesetDefinition } from '@stoplight/spectral-core';
 
-async function loadRulesets(cwd: string, rulesetFiles: string[], opts: IRulesetReadOptions): Promise<IRuleset> {
-  if (rulesetFiles.length === 0) {
-    return {
-      functions: {},
-      rules: {},
-    };
+async function getDefaultRulesetFile(): Promise<Optional<string>> {
+  const cwd = process.cwd();
+  for (const filename of await fs.promises.readdir(cwd)) {
+    if (isDefaultRulesetFile(filename)) {
+      return path.join(cwd, filename);
+    }
   }
 
-  return readRuleset(
-    rulesetFiles.map(file => (isAbsolute(file) ? file : resolve(cwd, file))),
-    opts,
-  );
+  return;
 }
 
-export async function getRuleset(rulesetFile: Optional<string[]>, opts: IRulesetReadOptions): Promise<IRuleset> {
-  const rulesetFiles = rulesetFile ?? (await getDefaultRulesetFile(process.cwd()));
+export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset> {
+  if (rulesetFile === void 0) {
+    rulesetFile = await getDefaultRulesetFile();
+  } else if (!isAbsolute(rulesetFile)) {
+    rulesetFile = path.join(process.cwd(), rulesetFile);
+  }
 
-  return await (rulesetFiles !== null
-    ? loadRulesets(process.cwd(), Array.isArray(rulesetFiles) ? rulesetFiles : [rulesetFiles], opts)
-    : readRuleset(KNOWN_RULESETS, opts));
+  if (rulesetFile === void 0) {
+    return new Ruleset({ rules: {} });
+  }
+
+  const ruleset = (await import(rulesetFile)) as { default: RulesetDefinition } | RulesetDefinition;
+
+  return new Ruleset('default' in ruleset ? ruleset.default : ruleset, { severity: 'recommended' });
 }

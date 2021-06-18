@@ -7,8 +7,11 @@ info:
   version: 1.0.0
   title: Stoplight
 paths: {}
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document} --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
+{bin} lint {document} --ruleset {asset:ruleset} --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
 ====asset:output.txt====
 ====stdout====
 {document}

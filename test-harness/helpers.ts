@@ -1,5 +1,7 @@
 import { Dictionary, Optional } from '@stoplight/types';
 import * as tmp from 'tmp';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const IS_WINDOWS = process.platform === 'win32';
 
@@ -87,10 +89,13 @@ function getEnv(env: string): NodeJS.ProcessEnv {
   );
 }
 
-export function tmpFile(opts?: tmp.TmpNameOptions): Promise<tmp.FileResult> {
+export async function tmpFile(opts?: tmp.TmpNameOptions): Promise<tmp.FileResult> {
+  await fs.promises.mkdir(path.join(__dirname, 'tmp'), { recursive: true });
+
   return new Promise((resolve, reject) => {
     tmp.file(
       {
+        tmpdir: path.join(__dirname, 'tmp'),
         postfix: '.yml',
         prefix: 'asset-',
         tries: 10,

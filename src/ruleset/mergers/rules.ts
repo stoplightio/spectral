@@ -1,88 +1,54 @@
-import { FileRule, FileRuleCollection, FileRulesetSeverity } from '../../types/ruleset';
-import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from '../severity';
-import { isValidRule } from '../validation';
-import { DiagnosticSeverity } from '@stoplight/types/dist';
-import { Dictionary } from '@stoplight/types';
-import { IRule, IProcessedRule } from '../../types';
+import { Optional } from '@stoplight/types';
+import { assertValidRule } from '../validation';
+import { Rule } from '../rule/rule';
+import type { Ruleset } from '../ruleset';
+import { FileRuleDefinition } from '../types';
+
+function assertExistingRule(maybeRule: Optional<Rule>): asserts maybeRule is Rule {
+  if (maybeRule === void 0) {
+    throw new ReferenceError('Cannot extend non-existing rule');
+  }
+}
 
 /*
 - if rule is object, simple deep merge (or we could replace to be a bit stricter?)
 - if rule is true, use parent rule with it's default severity
 - if rule is false, use parent rule but set it's severity to "off"
 - if rule is string or number, use parent rule and set it's severity to the given string/number value
-- if rule is array, index 0 should be false/true/string/number - same severity logic as above. optional second
 */
-export function mergeRules(
-  target: Dictionary<IProcessedRule>,
-  source: FileRuleCollection,
-  rulesetSeverity?: FileRulesetSeverity,
-): Dictionary<IProcessedRule> {
-  for (const [name, rule] of Object.entries(source)) {
-    if (rulesetSeverity !== void 0) {
-      if (isValidRule(rule) && !('enabled' in rule)) {
-        let enabled;
-        if (rulesetSeverity === 'all') {
-          enabled = true;
-        } else if (rulesetSeverity === 'off') {
-          enabled = false;
-        } else {
-          enabled = rule.recommended !== false;
-        }
-
-        (rule as IProcessedRule).enabled = enabled;
-      }
-
-      processRule(target, name, rule);
-    } else {
-      processRule(target, name, rule);
-    }
-  }
-
-  return target;
-}
-
-function processRule(rules: Dictionary<IProcessedRule>, name: string, rule: FileRule): void {
-  const existingRule = rules[name];
-
+export function mergeRule(
+  existingRule: Optional<Rule>,
+  name: string,
+  rule: FileRuleDefinition,
+  ruleset: Ruleset,
+): Rule {
   switch (typeof rule) {
     case 'boolean':
-      if (isValidRule(existingRule)) {
-        existingRule.enabled = rule;
-      }
-
+      assertExistingRule(existingRule);
+      existingRule.enabled = rule;
       break;
     case 'string':
     case 'number':
-      // what if rule does not exist (yet)? throw, store the invalid state somehow?
-      if (isValidRule(existingRule)) {
-        if (rule === 'off') {
-          existingRule.enabled = false;
-        } else {
-          existingRule.severity = getDiagnosticSeverity(rule);
-          existingRule.enabled = true;
-        }
+      assertExistingRule(existingRule);
+      existingRule.severity = rule;
+      if (rule === 'off') {
+        existingRule.enabled = false;
+      } else if (!existingRule.enabled) {
+        existingRule.enabled = true;
       }
-
       break;
     case 'object':
-      if (isValidRule(existingRule)) {
-        Object.assign(existingRule, normalizeRule(rule));
+      if (existingRule !== void 0) {
+        Object.assign(existingRule, rule, { owner: existingRule.owner });
       } else {
-        rules[name] = normalizeRule(rule);
+        assertValidRule(rule);
+        return new Rule(name, rule, ruleset);
       }
 
       break;
     default:
-      throw new Error('Invalid value for a rule');
+      throw new Error('Invalid value');
   }
-}
 
-function normalizeRule(rule: IRule): IProcessedRule & { recommended: boolean; severity: DiagnosticSeverity } {
-  return Object.assign<IRule, { recommended: boolean; severity: DiagnosticSeverity }>(
-    Object.defineProperties({}, Object.getOwnPropertyDescriptors(rule)),
-    {
-      recommended: rule.recommended !== false,
-      severity: rule.severity === void 0 ? DEFAULT_SEVERITY_LEVEL : getDiagnosticSeverity(rule.severity),
-    },
-  );
+  return existingRule;
 }

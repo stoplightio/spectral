@@ -1,6 +1,6 @@
 import { isObject } from 'lodash';
-import { createRulesetFunction } from '../ruleset/rulesetFunction';
-import { printValue } from '../utils/printValue';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import { printValue } from '@stoplight/spectral-utils';
 
 export type Options = {
   /** if sorting array of objects, which key to use for comparison */

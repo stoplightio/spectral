@@ -1,5 +1,6 @@
-import { JSONSchema } from '../types';
-import { isPlainObject } from '../guards/isPlainObject';
+import type { Format } from '@stoplight/spectral-core';
+import { isPlainObject } from '@stoplight/json';
+import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 import { isObject } from 'lodash';
 
 const KNOWN_JSON_SCHEMA_TYPES = ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
@@ -27,21 +28,40 @@ function hasSchemaVersion(document: unknown): document is JSONSchema & { $schema
   );
 }
 
-export const isJSONSchema = (document: unknown): document is JSONSchema & { $schema: string } =>
+type JSONSchema = JSONSchema4 | JSONSchema6 | JSONSchema7;
+
+const isJsonSchema = (document: unknown): document is Record<string, unknown> & { $schema: string } =>
   hasSchemaVersion(document) && document.$schema.includes('//json-schema.org/');
 
-export const isJSONSchemaLoose = (document: unknown): boolean =>
+export const jsonSchema: Format<Record<string, unknown> & { $schema: string }> = isJsonSchema;
+
+jsonSchema.displayName = 'JSON Schema';
+
+export const jsonSchemaLoose: Format<Record<string, unknown>> = (
+  document: unknown,
+): document is Record<string, unknown> =>
   isPlainObject(document) &&
-  (isJSONSchema(document) || hasValidJSONSchemaType(document) || hasValidJSONSchemaCompoundKeyword(document));
+  (isJsonSchema(document) || hasValidJSONSchemaType(document) || hasValidJSONSchemaCompoundKeyword(document));
 
-export const isJSONSchemaDraft4 = createJSONSchemaDraftMatcher('draft4');
-export const isJSONSchemaDraft6 = createJSONSchemaDraftMatcher('draft6');
-export const isJSONSchemaDraft7 = createJSONSchemaDraftMatcher('draft7');
-export const isJSONSchemaDraft2019_09 = createJSONSchemaDraftMatcher('draft2019-09');
-export const isJSONSchemaDraft2020_12 = createJSONSchemaDraftMatcher('draft2020-12');
+jsonSchemaLoose.displayName = 'JSON Schema (loose)';
 
-function createJSONSchemaDraftMatcher(draft: string) {
-  return (document: unknown): boolean => isJSONSchema(document) && extractDraftVersion(document.$schema) === draft;
+export const jsonSchemaDraft4 = createJsonSchemaFormat<JSONSchema4>('draft4', 'JSON Schema Draft 4');
+export const jsonSchemaDraft6 = createJsonSchemaFormat<JSONSchema6>('draft6', 'JSON Schema Draft 6');
+export const jsonSchemaDraft7 = createJsonSchemaFormat<JSONSchema7>('draft7', 'JSON Schema Draft 7');
+export const jsonSchemaDraft2019_09 = createJsonSchemaFormat<Record<string, unknown>>(
+  'draft2019-09',
+  'JSON Schema Draft 2019-09',
+);
+export const jsonSchemaDraft2020_12 = createJsonSchemaFormat<Record<string, unknown>>(
+  'draft2020-12',
+  'JSON Schema Draft 2020-12',
+);
+
+function createJsonSchemaFormat<D = null>(draft: string, name: string): Format<D> {
+  const format: Format = (document: unknown): document is D =>
+    isJsonSchema(document) && extractDraftVersion(document.$schema) === draft;
+  format.displayName = name;
+  return format as Format<D>;
 }
 
 export function extractDraftVersion($schema: string): string | null {
@@ -50,7 +70,7 @@ export function extractDraftVersion($schema: string): string | null {
 }
 
 export function detectDialect(document: unknown): string | null {
-  if (!isJSONSchema(document)) {
+  if (!isJsonSchema(document)) {
     return null;
   }
 

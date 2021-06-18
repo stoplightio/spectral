@@ -1,9 +1,7 @@
-import functions from '../../../../functions';
 import asyncApi2SchemaValidation from '../asyncApi2SchemaValidation';
 
 function runPayloadValidation(targetVal: any, opts: { type: 'examples' | 'default' }) {
-  return asyncApi2SchemaValidation.call(
-    { functions },
+  return asyncApi2SchemaValidation(
     targetVal,
     opts,
     { given: [] },

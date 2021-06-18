@@ -1,13 +1,10 @@
-import { DocumentInventory } from '../documentInventory';
-import { FunctionCollection, IRuleResult, RunRuleCollection } from '../types';
+import type { DocumentInventory } from '../documentInventory';
+import type { Ruleset } from '../ruleset/ruleset';
+import { ISpectralDiagnostic } from '../types';
 
-export interface IRunnerPublicContext {
-  rules: RunRuleCollection;
-  functions: FunctionCollection;
-}
-
-export interface IRunnerInternalContext extends IRunnerPublicContext {
+export interface IRunnerInternalContext {
+  ruleset: Ruleset;
   documentInventory: DocumentInventory;
-  results: IRuleResult[];
+  results: ISpectralDiagnostic[];
   promises: Array<Promise<void>>;
 }

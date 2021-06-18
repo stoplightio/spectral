@@ -48,15 +48,17 @@ paths:
     get:
       responses: {}
 ====asset:ruleset====
-extends: [[spectral:oas, off]]
-rules:
-  oas3-schema: error
+const { oas } = require('@stoplight/spectral-rulesets');
+
+module.exports = {
+  'extends': [[oas, 'off']],
+  rules: {
+    'oas3-schema': 'error'
+  }
+}
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
   6:10  error  oas3-schema  Property `foo` is not expected to be here.              info.contact.foo
  12:17  error  oas3-schema  Property `type` is not expected to be here.             paths./user.get.parameters[0].type

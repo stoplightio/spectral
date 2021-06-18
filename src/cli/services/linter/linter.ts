@@ -1,5 +1,4 @@
 import { Document, STDIN } from '../../../document';
-import { KNOWN_FORMATS } from '../../../formats';
 import { readParsable, IFileReadOptions } from '../../../fs/reader';
 import * as Parsers from '../../../parsers';
 import { IRuleResult, Spectral } from '../../../spectral';
@@ -7,8 +6,6 @@ import { ILintConfig } from '../../../types/config';
 import { getRuleset, listFiles, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';
 import { YamlParserResult } from '@stoplight/yaml';
-import { DEFAULT_REQUEST_OPTIONS } from '../../../request';
-import type { Agent } from 'https';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
   const spectral = new Spectral({
@@ -16,29 +13,12 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     proxyUri: process.env.PROXY,
   });
 
-  const ruleset = await getRuleset(flags.ruleset, {
-    agent: DEFAULT_REQUEST_OPTIONS.agent as Agent,
-  });
+  const ruleset = await getRuleset(flags.ruleset);
 
   spectral.setRuleset(ruleset);
-
-  for (const [format, lookup, prettyName] of KNOWN_FORMATS) {
-    spectral.registerFormat(format, document => {
-      if (lookup(document)) {
-        if (flags.quiet !== true) {
-          console.log(`${prettyName} detected`);
-        }
-
-        return true;
-      }
-
-      return false;
-    });
-  }
-
   if (flags.verbose === true) {
     if (ruleset) {
-      const rules = Object.values(spectral.rules);
+      const rules = Object.values(ruleset.rules);
       console.info(`Found ${rules.length} rules (${rules.filter(rule => rule.enabled).length} enabled)`);
     } else {
       console.info('No rules loaded, attempting to detect document type');

@@ -38,11 +38,12 @@ paths:
                     type: string
                   tag:
                     type: string
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
 ====command====
-{bin} lint {document} --fail-severity=error -D
+{bin} lint {document} --ruleset {asset:ruleset}  --fail-severity=error -D
 ====status====
 0
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
 No results with a severity of 'error' or higher found!

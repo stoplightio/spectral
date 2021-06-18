@@ -1,6 +1,11 @@
+import { schema } from '@stoplight/spectral-functions';
 import { assertValidRuleset, RulesetValidationError } from '../validation';
+import { Format } from '@stoplight/spectral-core';
 const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
+
+const formatA: Format = () => false;
+const formatB: Format = () => false;
 
 describe('Ruleset Validation', () => {
   it('given primitive type, throws', () => {
@@ -61,7 +66,7 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
     expect(
       assertValidRuleset.bind(null, {
         documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
-        extends: ['spectral:oas'],
+        rules: {},
       }),
     ).not.toThrow();
 
@@ -104,24 +109,18 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
     ).not.toThrow();
   });
 
-  it('recognizes invalid array-ish syntax', () => {
-    expect(
-      assertValidRuleset.bind(null, {
-        rules: {
-          rule: ['off', 2],
-        },
-      }),
-    ).toThrow(
-      new RulesetValidationError(
-        'Error at #/rules/rule: the rule has to have at least "given" and "then". If you intent to override the severity of extended rule, the value must to be a boolean or any valid severity level',
-      ),
-    );
-  });
-
   it('recognizes valid array-ish extends syntax', () => {
+    const rulesetA = {
+      rules: {},
+    };
+
+    const rulesetB = {
+      extends: [],
+    };
+
     expect(
       assertValidRuleset.bind(null, {
-        extends: [['foo', 'off'], 'test'],
+        extends: [[rulesetA, 'off'], rulesetB],
         rules: {},
       }),
     ).not.toThrow();
@@ -130,37 +129,51 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
   it('recognizes string extends syntax', () => {
     expect(
       assertValidRuleset.bind(null, {
-        extends: 'foo',
-        rules: {},
+        rules: {
+          foo: {
+            given: '$',
+            then: {
+              function: schema,
+              functionOptions: {},
+            },
+          },
+        },
       }),
     ).not.toThrow();
   });
 
-  it('recognizes invalid array-ish extends syntax', () => {
+  it.each<[unknown, string]>([
+    [[[{ rules: {} }, 'test']], `Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`],
+    [
+      [[{ rules: {} }, 'test'], 'foo'],
+      `Error at #/extends/1: must be a valid ruleset
+Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
+    ],
+  ])('recognizes invalid array-ish extends syntax %p', (_extends, message) => {
     expect(
       assertValidRuleset.bind(null, {
-        extends: [['foo', 'test']],
-        rules: {},
+        extends: _extends,
       }),
-    ).toThrow(
-      new RulesetValidationError(`Error at #/extends/0: must be string
-Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`),
-    );
+    ).toThrow(new RulesetValidationError(message));
   });
 
   it('recognizes valid ruleset formats syntax', () => {
     expect(
       assertValidRuleset.bind(null, {
-        formats: ['oas3'],
+        formats: [formatB],
         rules: {},
       }),
     ).not.toThrow();
   });
 
   it.each([
-    [[2, 'a'], 'Error at #/formats/0: format must be a string'],
-    [2, 'Error at #/formats: formats must be an array of strings'],
-    [[''], 'Error at #/formats/0: format must not be empty'],
+    [
+      [2, 'a'],
+      `Error at #/formats/0: must be a valid format
+Error at #/formats/1: must be a valid format`,
+    ],
+    [2, 'Error at #/formats: must be an array of formats'],
+    [[''], 'Error at #/formats/0: must be a valid format'],
   ])('recognizes invalid ruleset %p formats syntax', (formats, error) => {
     expect(
       assertValidRuleset.bind(null, {
@@ -173,14 +186,14 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`),
   it('recognizes valid rule formats syntax', () => {
     expect(
       assertValidRuleset.bind(null, {
-        formats: ['d'],
+        formats: [formatB],
         rules: {
           rule: {
             given: '$.info',
             then: {
               function: 'truthy',
             },
-            formats: ['oas2'],
+            formats: [formatA],
           },
         },
       }),
@@ -188,9 +201,12 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`),
   });
 
   it.each([
-    [[2, 'a'], 'Error at #/rules/rule/formats/0: format must be a string'],
-    [2, 'Error at #/rules/rule/formats: formats must be an array of strings'],
-    [[''], 'Error at #/rules/rule/formats/0: format must not be empty'],
+    [
+      [2, 'a'],
+      `Error at #/rules/rule/formats/0: must be a valid format
+Error at #/rules/rule/formats/1: must be a valid format`,
+    ],
+    [2, 'Error at #/rules/rule/formats: must be an array of formats'],
   ])('recognizes invalid rule %p formats syntax', (formats, error) => {
     expect(
       assertValidRuleset.bind(null, {
@@ -205,24 +221,6 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`),
         },
       }),
     ).toThrow(new RulesetValidationError(error));
-  });
-
-  it('recognizes functions directory', () => {
-    expect(
-      assertValidRuleset.bind(null, {
-        functionsDir: 'baz',
-        rules: {},
-      }),
-    ).not.toThrow();
-  });
-
-  it('recognizes valid array of functions with names only', () => {
-    expect(
-      assertValidRuleset.bind(null, {
-        functions: ['foo', 'bar'],
-        rules: {},
-      }),
-    ).not.toThrow();
   });
 
   describe('then validation', () => {

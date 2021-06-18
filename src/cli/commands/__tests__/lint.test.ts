@@ -122,7 +122,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith(
       [doc],
       expect.objectContaining({
-        ruleset: [ruleset],
+        ruleset,
       }),
     );
   });

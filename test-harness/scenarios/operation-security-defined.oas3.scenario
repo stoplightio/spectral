@@ -1,9 +1,14 @@
 ====test====
 Operation security defined, allow optional / no auth security
 ====asset:ruleset====
-extends: [[spectral:oas, off]]
-rules:
-  oas3-operation-security-defined: error
+const { oas } = require('@stoplight/spectral-rulesets');
+
+module.exports = {
+  'extends': [[oas, 'off']],
+  rules: {
+    'oas3-operation-security-defined': 'error',
+  },
+}
 ====document====
 openapi: 3.0.2
 paths:
@@ -35,6 +40,4 @@ components:
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
 No results with a severity of 'error' or higher found!
