@@ -1,18 +1,6 @@
 {
-  "name": "@stoplight/spectral",
+  "name": "@stoplight/spectral-functions",
   "version": "0.0.0",
-  "description": "A flexible object linter with out of the box support for OpenAPI v2 and v3.",
-  "keywords": [
-    "json linter",
-    "linter",
-    "json validator",
-    "validator",
-    "OpenAPI",
-    "Swagger",
-    "schema",
-    "API"
-  ],
-  "private": true,
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -23,35 +11,13 @@
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
   "engines": {
     "node": ">=12"
   },
-  "scripts": {
-    "prebuild.binary": "yarn copy.html-templates && ./scripts/strap.sh",
-    "build.binary": "pkg . --output ./binaries/spectral",
-    "postbuild.binary": "rm -r node_modules/@stoplight/spectral-*",
-    "build.clean": "rimraf ./coverage && rimraf ./dist",
-    "prebuild": "yarn build.clean",
-    "build": "tsc -p ./tsconfig.build.json",
-    "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
-    "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
-    "inline-version": "node ./scripts/inline-version.mjs",
-    "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
-    "lint.changelog": "kacl lint",
-    "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
-    "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
-    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts src test-harness scripts",
-    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check src/meta/*.json docs/**/*.md README.md",
-    "test": "yarn lint && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
-    "pretest.harness": "./scripts/strap.sh",
-    "test.harness": "jest -c ./test-harness/jest.config.js",
-    "posttest.harness": "rm -r node_modules/@stoplight/spectral-*",
-    "test.jest": "jest --silent",
-    "test.karma": "karma start",
-    "prepare": "husky install"
-  },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "0.1.1",
     "@stoplight/json": "3.15.0",
     "@stoplight/json-ref-readers": "1.2.2",
     "@stoplight/json-ref-resolver": "3.1.2",

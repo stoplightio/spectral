@@ -1,6 +1,6 @@
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import casing, { CasingType } from '../casing';
 import testFunction from './__helpers__/tester';
-import { RulesetValidationError } from '../../ruleset';
 
 const runCasing = testFunction.bind(null, casing);
 
