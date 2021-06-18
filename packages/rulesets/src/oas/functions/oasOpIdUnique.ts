@@ -1,4 +1,4 @@
-import type { IFunction, IFunctionResult } from '../../../types';
+import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { getAllOperations } from './utils/getAllOperations';
 import { isObject } from './utils/isObject';
 

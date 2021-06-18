@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment */
 import { schema } from '@stoplight/spectral-functions';
 import { oas2, oas3 } from '@stoplight/spectral-formats';
-import type { IFunction } from '../../../types';
+import type { IFunction } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
 
 export const typedEnum: IFunction = function (targetVal, opts, paths, otherValues) {

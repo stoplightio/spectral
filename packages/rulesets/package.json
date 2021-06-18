@@ -1,0 +1,33 @@
+{
+  "name": "@stoplight/spectral-rulesets",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stoplightio/spectral",
+  "bugs": "https://github.com/stoplightio/spectral/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/spectral.git"
+  },
+  "dependencies": {
+    "@stoplight/json": "3.15.0",
+    "@stoplight/spectral-core": "",
+    "@stoplight/spectral-formats": "",
+    "ajv": "~8.6.0",
+    "lodash": "~4.17.21"
+  },
+  "devDependencies": {
+    "@stoplight/spectral-parsers": ""
+  }
+}
