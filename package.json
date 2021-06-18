@@ -49,7 +49,7 @@
     "test.karma": "karma start",
     "prepare": "husky install",
     "version": "lerna version --no-push",
-    "release": "lerna publish"
+    "release": "lerna publish from-package"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.1.1",
