@@ -1,6 +1,6 @@
 import type { Optional } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
-import { printValue } from '@stoplight/spectral-utils';
+import { printValue } from '@stoplight/spectral-runtime';
 
 export type Options =
   | {

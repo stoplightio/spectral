@@ -1,6 +1,6 @@
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import length from '../length';
-import { RulesetValidationError } from '../../ruleset/validation';
 
 const runLength = testFunction.bind(null, length);
 

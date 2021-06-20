@@ -3,11 +3,10 @@ import { pick } from 'lodash';
 import { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
 
-import { getDiagnosticSeverity } from '../../ruleset';
-import { IRuleResult } from '../../types';
-import { FailSeverity, ILintConfig, OutputFormat } from '../../types/config';
+import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
+import { FailSeverity, ILintConfig, OutputFormat } from '../services/config';
 
 const formatOptions = Object.values(OutputFormat);
 

@@ -5,10 +5,9 @@ node_modules
 /.pnp
 .pnp.js
 
-/binaries
-/rulesets
-/__karma__/__fixtures__/
+packages/cli/binaries
 /test-harness/tmp/
+packages/*/dist
 
 # testing
 /coverage

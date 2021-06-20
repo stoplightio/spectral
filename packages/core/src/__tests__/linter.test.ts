@@ -3,9 +3,8 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import { IParsedResult } from '../document';
-import { Spectral } from '../spectral';
-import { Parsers, Document } from '..';
-import { IParser } from '../parsers/types';
+import { Document, Spectral } from '..';
+import * as Parsers from '@stoplight/spectral-parsers';
 import { Format } from '../ruleset/format';
 
 // const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
@@ -808,7 +807,7 @@ responses:: !!foo
   "200": {},
   "200": {}
 }`,
-            Parsers[parser] as IParser,
+            Parsers[parser] as Parsers.IParser,
           ),
           { ignoreUnknownFormat: true },
         );
@@ -851,7 +850,7 @@ responses:: !!foo
   "200": {},
   "200": {}
 }`,
-            Parsers[parser] as IParser,
+            Parsers[parser] as Parsers.IParser,
           ),
           { ignoreUnknownFormat: true },
         );

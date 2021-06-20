@@ -1,10 +1,10 @@
 import { Dictionary } from '@stoplight/types';
+import { IRuleResult } from '@stoplight/spectral-core';
 import { writeFile } from 'fs';
 import { promisify } from 'util';
 import { html, json, junit, stylish, teamcity, text, pretty } from '../formatters';
 import { Formatter, FormatterOptions } from '../formatters/types';
-import { IRuleResult } from '../../types';
-import { OutputFormat } from '../../types/config';
+import type { OutputFormat } from './config';
 
 const writeFileAsync = promisify(writeFile);
 

@@ -1,5 +1,5 @@
 const rulesetInvalid = require('./ruleset-invalid');
-const { default: pattern } = require('../../../../../dist/functions/pattern');
+const { pattern } = require('@stoplight/spectral-functions');
 
 module.exports = {
   extends: rulesetInvalid,

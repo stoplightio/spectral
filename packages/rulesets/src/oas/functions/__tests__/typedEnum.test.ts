@@ -1,7 +1,7 @@
 import { typedEnum } from '../typedEnum';
-import { DocumentInventory } from '../../../../documentInventory';
-import { Document } from '../../../../document';
-import * as Parsers from '../../../../parsers';
+import { Document } from '@stoplight/spectral-core';
+import { DocumentInventory } from '@stoplight/spectral-core/src/documentInventory';
+import * as Parsers from '@stoplight/spectral-parsers';
 
 function runTypedEnum(targetVal: any) {
   const doc = new Document(JSON.stringify(targetVal), Parsers.Json);

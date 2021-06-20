@@ -4,9 +4,11 @@ import { detectDialect } from '@stoplight/spectral-formats';
 import { assignAjvInstance } from './ajv';
 import { Optional } from '@stoplight/types';
 import { draft7 } from 'json-schema-migrate';
-import type { JSONSchema } from '../../types';
 import MissingRefError from 'ajv/dist/compile/ref_error';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
+
+// todo: fix
+type JSONSchema = any;
 
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;

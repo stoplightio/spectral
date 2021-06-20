@@ -1,6 +1,6 @@
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import unreferencedReusableObject from '../unreferencedReusableObject';
-import { RulesetValidationError } from '../../ruleset/validation';
 
 const runUnreferencedReusableObject = testFunction.bind(null, unreferencedReusableObject);
 

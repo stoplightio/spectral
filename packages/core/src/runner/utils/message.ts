@@ -1,6 +1,6 @@
 import { Segment } from '@stoplight/types';
+import { printValue } from '@stoplight/spectral-runtime';
 import { Replacer } from '../../utils/replacer';
-import { printValue } from '../../utils/printValue';
 
 export type MessageVars = {
   property: Segment;

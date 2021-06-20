@@ -4,10 +4,10 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
 import * as path from 'path';
+import * as Parsers from '@stoplight/spectral-parsers';
+import { httpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 
 import { Document } from '../document';
-import * as Parsers from '../parsers';
-import { httpAndFileResolver } from '../resolvers/http-and-file';
 import { Spectral } from '../spectral';
 
 describe('Spectral', () => {

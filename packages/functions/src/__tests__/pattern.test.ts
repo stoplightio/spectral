@@ -1,6 +1,6 @@
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import pattern from '../pattern';
-import { RulesetValidationError } from '../../ruleset/validation';
 
 const runPattern = testFunction.bind(null, pattern);
 

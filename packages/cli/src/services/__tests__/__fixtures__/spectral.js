@@ -1,4 +1,4 @@
-const { default: pattern } = require('../../../../../dist/functions/pattern');
+const { pattern } = require('@stoplight/spectral-functions');
 
 module.exports = {
   rules: {

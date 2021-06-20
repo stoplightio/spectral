@@ -1,6 +1,6 @@
 import type { JSONSchema6 as JSONSchema } from 'json-schema';
 import schema from '../schema';
-import { RulesetValidationError } from '../../ruleset';
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 
 const runSchema = testFunction.bind(null, schema);

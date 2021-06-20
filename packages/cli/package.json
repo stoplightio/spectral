@@ -39,7 +39,7 @@
     "proxy-agent": "4.0.1",
     "strip-ansi": "6.0",
     "text-table": "0.2",
-    "tslib": "2.2.0",
+    "tslib": "2.3.0",
     "yargs": "17.0.1"
   },
   "devDependencies": {
@@ -47,6 +47,8 @@
     "pkg": "^5.1.0"
   },
   "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "prebuild.binary": "yarn copy.html-templates",
     "build.binary": "pkg . --output ./binaries/spectral",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
     "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts",

@@ -1,4 +1,4 @@
-const { default: truthy } = require('../../../../../dist/functions/truthy');
+const { truthy } = require('@stoplight/spectral-functions');
 
 module.exports = {
   'rules': {

@@ -1,6 +1,6 @@
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import enumeration from '../enumeration';
 import testFunction from './__helpers__/tester';
-import { RulesetValidationError } from '../../ruleset/validation';
 
 const runEnumeration = testFunction.bind(null, enumeration);
 

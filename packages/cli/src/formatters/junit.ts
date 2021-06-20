@@ -25,7 +25,7 @@
 
 import { extname } from '@stoplight/path';
 import { escapeRegExp } from 'lodash';
-import { printPath, PrintStyle } from '../../utils';
+import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import { Formatter } from './types';
 import { groupBySource, xmlEscape } from './utils';
 

@@ -1,8 +1,7 @@
 import { Optional } from '@stoplight/types';
-import { Ruleset } from '../../../../ruleset/ruleset';
+import { Ruleset } from '@stoplight/spectral-core';
 import * as fs from 'fs';
 import * as path from '@stoplight/path';
-import { isDefaultRulesetFile } from '../../../../ruleset/utils';
 import { isAbsolute } from '@stoplight/path';
 import * as process from 'process';
 import { RulesetDefinition } from '@stoplight/spectral-core';
@@ -10,7 +9,7 @@ import { RulesetDefinition } from '@stoplight/spectral-core';
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
   const cwd = process.cwd();
   for (const filename of await fs.promises.readdir(cwd)) {
-    if (isDefaultRulesetFile(filename)) {
+    if (Ruleset.isDefaultRulesetFile(filename)) {
       return path.join(cwd, filename);
     }
   }

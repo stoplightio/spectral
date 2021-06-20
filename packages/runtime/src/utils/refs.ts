@@ -2,7 +2,10 @@ import { isPlainObject, extractPointerFromRef, hasRef, pointerToPath } from '@st
 import { isAbsolute } from '@stoplight/path';
 import { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
-import { startsWithProtocol } from './startsWithProtocol';
+
+const PROTOCOL_REGEX = /^[a-z]+:\/\//i;
+
+export const startsWithProtocol = (input: string): boolean => PROTOCOL_REGEX.test(input);
 
 export const isAbsoluteRef = (ref: string): boolean => isAbsolute(ref) || startsWithProtocol(ref);
 

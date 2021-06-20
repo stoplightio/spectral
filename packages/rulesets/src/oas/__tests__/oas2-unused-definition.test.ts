@@ -1,8 +1,8 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import testRule from '../../__tests__/__helpers__/tester';
 import * as path from '@stoplight/path';
-import { Document } from '../../../document';
-import * as Parsers from '../../../parsers';
+import { Document } from '@stoplight/spectral-core';
+import * as Parsers from '@stoplight/spectral-parsers';
+import testRule from '../../__tests__/__helpers__/tester';
 
 const remoteLocalDocument = new Document<any, any>(
   JSON.stringify(require('./__fixtures__/unusedShared/unusedDefinition.remoteLocal.json')),

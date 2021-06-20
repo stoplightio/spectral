@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { Spectral } from '../../../..';
+import { Spectral } from '@stoplight/spectral-core';
 import { prepareResults } from '../oasDocumentSchema';
 
 import { ErrorObject } from 'ajv';

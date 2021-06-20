@@ -1,13 +1,11 @@
 import { normalize } from '@stoplight/path';
 import { DeepReadonly, GetLocationForJsonPath, IParserResult, IRange, JsonPath, Optional } from '@stoplight/types';
 import { formatParserDiagnostics } from './errorMessages';
-import { IParser } from './parsers/types';
-import { startsWithProtocol } from './utils';
+import { startsWithProtocol } from '@stoplight/spectral-runtime';
+import { isPlainObject } from '@stoplight/json';
+import { IParser } from '@stoplight/spectral-parsers';
 import { IRuleResult } from './types';
 import { Format } from './ruleset/format';
-import { isPlainObject } from '@stoplight/json';
-
-export const STDIN = '<STDIN>';
 
 export interface IDocument<D = unknown> {
   readonly source: string | null;

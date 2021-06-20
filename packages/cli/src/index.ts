@@ -2,7 +2,7 @@
 
 import * as yargs from 'yargs';
 
-import { DEFAULT_REQUEST_OPTIONS } from '../request';
+import { DEFAULT_REQUEST_OPTIONS } from '@stoplight/spectral-runtime';
 import lintCommand from './commands/lint';
 import type * as Agent from 'proxy-agent';
 

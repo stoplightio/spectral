@@ -1,5 +1,12 @@
-import type { IRuleResult, RulesetFunction, RulesetFunctionWithValidator } from '../../../types';
-import { Spectral, Document, RuleDefinition, Ruleset } from '@stoplight/spectral-core';
+import {
+  Spectral,
+  Document,
+  RuleDefinition,
+  Ruleset,
+  IRuleResult,
+  RulesetFunction,
+  RulesetFunctionWithValidator,
+} from '@stoplight/spectral-core';
 
 export default async function <O = unknown>(
   fn: RulesetFunction<any, any> | RulesetFunctionWithValidator<any, any>,

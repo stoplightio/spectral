@@ -1,6 +1,6 @@
 import { createResolveHttp, resolveFile } from '@stoplight/json-ref-readers';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import { DEFAULT_REQUEST_OPTIONS } from '../request';
+import { DEFAULT_REQUEST_OPTIONS } from '@stoplight/spectral-runtime';
 import { Agent } from 'http';
 
 export interface IHttpAndFileResolverOptions {

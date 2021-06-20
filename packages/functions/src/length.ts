@@ -1,6 +1,6 @@
-import { printValue } from '@stoplight/spectral-utils';
 import type { Optional } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
+import { printValue } from '@stoplight/spectral-runtime';
 import { isPlainObject } from '@stoplight/json';
 
 export type Options =

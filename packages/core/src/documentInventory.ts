@@ -10,7 +10,13 @@ import { Document, IDocument } from './document';
 import { formatParserDiagnostics, formatResolverErrors } from './errorMessages';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { IResolver, IRuleResult } from './types';
-import { getClosestJsonPath, getEndRef, isAbsoluteRef, safePointerToPath, traverseObjUntilRef } from './utils';
+import {
+  getClosestJsonPath,
+  getEndRef,
+  isAbsoluteRef,
+  safePointerToPath,
+  traverseObjUntilRef,
+} from '@stoplight/spectral-runtime';
 import { Format } from './ruleset/format';
 
 export type DocumentInventoryItem = {
@@ -154,7 +160,8 @@ export class DocumentInventory {
     const ext = extname(source);
 
     const content = String(resolveOpts.result);
-    const parser: IParser<IParserResult<unknown, any, any, any>> = ext === '.json' ? Parsers.Json : Parsers.Yaml;
+    const parser: Parsers.IParser<IParserResult<unknown, any, any, any>> =
+      ext === '.json' ? Parsers.Json : Parsers.Yaml;
     const document = new Document(content, parser, source);
 
     resolveOpts.result = document.data;

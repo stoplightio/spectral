@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as formatters from '../../formatters';
-import { OutputFormat } from '../../../types/config';
+import { OutputFormat } from '../config';
 import { formatOutput, writeOutput } from '../output';
 
 jest.mock('../../formatters');

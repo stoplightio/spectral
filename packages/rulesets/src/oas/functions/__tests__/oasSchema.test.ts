@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { oas2, oas3 } from '@stoplight/spectral-formats';
 import { DeepPartial } from '@stoplight/types';
-import { IFunctionValues } from '../../../../types';
+import { IFunctionValues } from '@stoplight/spectral-core';
 import oasSchema from '../../functions/oasSchema';
 
 function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?: DeepPartial<IFunctionValues>) {

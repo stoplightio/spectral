@@ -1,4 +1,4 @@
-const { default:schema } = require('../../../../../../dist/functions/schema');
+const { schema } = require('@stoplight/spectral-functions');
 
 module.exports = {
   rules: {

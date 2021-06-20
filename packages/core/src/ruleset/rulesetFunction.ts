@@ -1,14 +1,14 @@
 import Ajv, { ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
 import ajvErrors from 'ajv-errors';
+import type { RequiredError } from 'ajv/dist/vocabularies/validation/required';
+import type { AdditionalPropertiesError } from 'ajv/lib/vocabularies/applicator/additionalProperties';
+import type { EnumError } from 'ajv/dist/vocabularies/validation/enum';
 
-import { IFunctionResult, JSONSchema, RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import { printPath, PrintStyle, printValue } from '@stoplight/spectral-runtime';
+
 import { RulesetValidationError } from './validation';
-import { RequiredError } from 'ajv/dist/vocabularies/validation/required';
-import { AdditionalPropertiesError } from 'ajv/lib/vocabularies/applicator/additionalProperties';
-import { printPath, PrintStyle } from '../utils';
-import { EnumError } from 'ajv/dist/vocabularies/validation/enum';
-import { printValue } from '../utils/printValue';
+import { IFunctionResult, JSONSchema, RulesetFunction, RulesetFunctionWithValidator } from '../types';
 
 const ajv = new Ajv({ allErrors: true, allowUnionTypes: true, strict: true });
 ajvErrors(ajv);

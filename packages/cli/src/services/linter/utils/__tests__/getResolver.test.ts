@@ -1,5 +1,5 @@
 import { join, relative } from '@stoplight/path';
-import { createHttpAndFileResolver } from '../../../../../resolvers/http-and-file';
+import { createHttpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 import { getResolver } from '../getResolver';
 
 const customResolver = require('./__fixtures__/resolver');
@@ -16,7 +16,10 @@ describe('getResolver', () => {
 
   it('throws when module cannot be imported', () => {
     expect(getResolver.bind(null, join(__dirname, 'test.json'))).toThrow(
-      `Cannot find module '${join(__dirname, 'test.json')}' from 'src/cli/services/linter/utils/getResolver.ts'`,
+      `Cannot find module '${join(
+        __dirname,
+        'test.json',
+      )}' from 'packages/cli/src/services/linter/utils/getResolver.ts'`,
     );
   });
 

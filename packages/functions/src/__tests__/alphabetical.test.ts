@@ -1,9 +1,7 @@
-import { Parsers } from '../../';
-import { Document } from '../../document';
-import { parseYaml } from '../../parsers';
+import * as Parsers from '@stoplight/spectral-parsers';
+import { Document, RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import alphabetical from '../alphabetical';
-import { RulesetValidationError } from '../../ruleset/validation';
 
 const runAlphabetical = testFunction.bind(null, alphabetical);
 
@@ -31,7 +29,7 @@ describe('Core Functions / Alphabetical', () => {
   });
 
   it('given an object with unsorted properties with numeric keys, should return an error message', async () => {
-    const doc = parseYaml(`
+    const doc = Parsers.Yaml.parse(`
 '400':
   description: ''
 '200':

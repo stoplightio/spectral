@@ -119,4 +119,10 @@ export class Ruleset {
   public get parserOptions(): ParserOptions {
     return { ...DEFAULT_PARSER_OPTIONS, ...this.definition.parserOptions };
   }
+
+  public static isDefaultRulesetFile(uri: string): boolean {
+    const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
+
+    return DEFAULT_RULESET_FILE.test(uri);
+  }
 }

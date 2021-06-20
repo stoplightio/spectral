@@ -2,11 +2,11 @@ import Ajv, { _, ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';
 import { isPlainObject } from '@stoplight/json';
+import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
 import * as shared from '../meta/shared.json';
-import { printPath, PrintStyle } from '../utils';
 import type { FileRuleDefinition, RuleDefinition, RulesetDefinition } from './types';
 
 const message = _`'spectral-message'`;

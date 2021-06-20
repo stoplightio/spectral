@@ -13,15 +13,16 @@
   "files": [
     "/dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/stoplightio/spectral.git"
   },
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json"
+  },
   "dependencies": {
     "@stoplight/json": "3.15.0",
+    "@stoplight/types": "^12.3.0",
     "@stoplight/spectral-core": "0.0.0",
     "@stoplight/spectral-formats": "0.0.0",
     "ajv": "~8.6.0",

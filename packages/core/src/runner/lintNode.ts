@@ -1,9 +1,9 @@
 import { JsonPath } from '@stoplight/types';
+import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import { get } from 'lodash';
 
 import { Document } from '../document';
 import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
-import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '../utils';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets, MessageVars, message } from './utils';
 import { Rule } from '../ruleset/rule/rule';

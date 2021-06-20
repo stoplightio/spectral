@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import { IRuleResult } from '../../../types';
+import type { IRuleResult } from '@stoplight/spectral-core';
 
 export const groupBySource = (results: IRuleResult[]): Dictionary<IRuleResult[]> => {
   return results.reduce<Dictionary<IRuleResult[]>>((grouped, result) => {

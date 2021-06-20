@@ -1,12 +1,10 @@
 import { stringify } from '@stoplight/json';
-import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, Optional } from '@stoplight/types';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { createHttpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 import { YamlParserResult } from '@stoplight/yaml';
 import { memoize } from 'lodash';
 import type { Agent } from 'http';
-import type * as ProxyAgent from 'proxy-agent';
 
 import { Document, IDocument, IParsedResult, isParsedResult, normalizeSource, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
@@ -36,16 +34,10 @@ export class Spectral {
   constructor(protected readonly opts?: IConstructorOpts) {
     this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
 
-    if (opts?.proxyUri !== void 0) {
-      // using eval so bundlers do not include proxy-agent when Spectral is used in the browser
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      this.agent = new (eval('require')('proxy-agent') as typeof ProxyAgent)(opts.proxyUri);
-    }
     if (opts?.resolver !== void 0) {
       this._resolver = opts.resolver;
     } else {
-      this._resolver =
-        typeof window === 'undefined' ? createHttpAndFileResolver({ agent: this.agent }) : new Resolver();
+      this._resolver = createHttpAndFileResolver({ agent: this.agent });
     }
 
     this.runtime = new RunnerRuntime();

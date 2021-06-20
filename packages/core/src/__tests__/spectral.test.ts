@@ -2,9 +2,9 @@ import { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { truthy } from '@stoplight/spectral-functions';
 import { DepGraph } from 'dependency-graph';
+import * as Parsers from '@stoplight/spectral-parsers';
 
 import { Document } from '../document';
-import * as Parsers from '../parsers';
 import { Spectral } from '../spectral';
 import { IResolver } from '../types';
 

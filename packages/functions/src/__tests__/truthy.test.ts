@@ -1,6 +1,6 @@
+import { RulesetValidationError } from '@stoplight/spectral-core';
 import truthy from '../truthy';
 import testFunction from './__helpers__/tester';
-import { RulesetValidationError } from '../../ruleset/validation';
 
 const runTruthy = testFunction.bind(null, truthy);
 

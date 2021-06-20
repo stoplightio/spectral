@@ -1,5 +1,5 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
-import { IRuleResult } from '../../../types';
+import { IRuleResult } from '@stoplight/spectral-core';
 import { groupBySeverity } from './groupBySeverity';
 import { pluralize } from './pluralize';
 

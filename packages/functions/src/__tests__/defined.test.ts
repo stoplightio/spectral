@@ -1,6 +1,6 @@
 import defined from '../defined';
 import testFunction from './__helpers__/tester';
-import { RulesetValidationError } from '../../ruleset/validation';
+import { RulesetValidationError } from '@stoplight/spectral-core';
 
 const runDefined = testFunction.bind(null, defined);
 
