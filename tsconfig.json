@@ -9,7 +9,6 @@
       "@stoplight/spectral-parsers": ["packages/parsers/src/index.ts"],
       "@stoplight/spectral-ref-resolver": ["packages/ref-resolver/src/index.ts"],
       "@stoplight/spectral-runtime": ["packages/runtime/src/index.ts"],
-      "@stoplight/spectral-ruleset": ["packages/ruleset/src/index.ts"],
       "@stoplight/spectral-rulesets": ["packages/rulesets/src/index.ts"]
     },
     "moduleResolution": "node",

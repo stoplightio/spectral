@@ -39,19 +39,19 @@ commands:
   lint-code:
     steps:
       - run:
-          name: Lint the code
+          name: Lint code
           command: yarn lint.eslint
 
   lint-documentation:
     steps:
       - run:
-          name: Lint the documentation
+          name: Lint documentation
           command: yarn lint.prettier
 
   lint-changelog:
     steps:
       - run:
-          name: Lint the changelog
+          name: Lint changelog
           command: yarn lint.changelog
 
   lint-commit-message:
@@ -131,7 +131,8 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - install-and-build
+      - run: lerna bootstrap
+      - run: yarn build
       - test-node
 
   build-windows-binary:

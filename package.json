@@ -70,7 +70,7 @@
     "jest-mock": "^27.0.3",
     "jest-when": "^3.3.1",
     "json-schema": "^0.3.0",
-    "karma": "^6.3.4",
+    "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.3.1",
