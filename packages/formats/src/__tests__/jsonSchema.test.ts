@@ -7,7 +7,7 @@ import {
   jsonSchemaDraft2020_12,
   jsonSchemaDraft2019_09,
 } from '../jsonSchema';
-import { Format } from '@stoplight/spectral-core';
+import type { Format } from '@stoplight/spectral-core';
 
 describe('JSON Schema format', () => {
   describe('JSON Schema strict', () => {

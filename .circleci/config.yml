@@ -18,7 +18,9 @@ commands:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn install --frozen-lockfile
+          command: |
+            npx lerna bootstrap
+            ! git diff --name-only | grep yarn.lock
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
@@ -50,10 +52,7 @@ commands:
     steps:
       - run:
           name: Create the Spectral Binary
-          command: yarn build.binary
-      - run:
-          name: Create output directory
-          command: mkdir ./test-harness/tmp
+          command: lerna run build.binary --scope=@stoplight/spectral-cli
       - run:
           name: Run harness tests
           command: yarn test.harness
@@ -64,7 +63,6 @@ commands:
       - cached-dependencies
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: npm version from-git
-      - run: yarn inline-version
       - run: yarn build
 
 jobs:
