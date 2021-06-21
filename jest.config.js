@@ -1,3 +1,4 @@
+/*eslint-env node*/
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const path = require('path');
 const { mapValues } = require('lodash');
@@ -58,14 +59,17 @@ module.exports = {
     },
     {
       ...projectDefault,
-      displayName: '@stoplight/spectral-ref-resolver',
+      displayName: {
+        name: '@stoplight/spectral-ref-resolver',
+        color: 'yellow',
+      },
       testMatch: ['<rootDir>/packages/ref-resolver/src/**/__tests__/**/*.{test,spec}.ts'],
     },
     {
       ...projectDefault,
       displayName: {
         name: '@stoplight/spectral-rulesets',
-        color: 'yellow',
+        color: 'cyanBright',
       },
       testMatch: ['<rootDir>/packages/rulesets/src/**/__tests__/**/*.{test,spec}.ts'],
     },
@@ -75,7 +79,8 @@ module.exports = {
         name: '@stoplight/spectral-runtime',
         color: 'blue',
       },
-      testMatch: ['<rootDir>/packages/runtime/src/**/__tests__/*.*.ts'],
+      testMatch: ['<rootDir>/packages/runtime/src/**/__tests__/*.{test,spec}.ts'],
     },
   ],
+  collectCoverageFrom: ['<rootDir>/packages/*/src/**/*.ts', '!<rootDir>/packages/*/src/**/__*__/**/*.ts'],
 };

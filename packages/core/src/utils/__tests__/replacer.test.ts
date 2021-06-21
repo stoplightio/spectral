@@ -2,10 +2,6 @@ import { Dictionary } from '@stoplight/types';
 import { Replacer } from '../replacer';
 
 describe('Replacer', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it('interpolates correctly', () => {
     const replacer = new Replacer<Dictionary<unknown>>(2);
     const template = 'oops... "{{property}}" is missing;error: {{error}}';

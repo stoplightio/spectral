@@ -103,7 +103,7 @@ describe('Core Functions / Schema', () => {
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
+      warnSpy.mockRestore();
     });
 
     it('does not log a warning in the console', async () => {
