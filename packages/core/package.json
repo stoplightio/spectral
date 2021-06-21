@@ -19,7 +19,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "postbuild": "node ./scripts/inline-version.mjs"
+    "postbuild": "node --experimental-modules ./scripts/inline-version.mjs"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.1.1",
