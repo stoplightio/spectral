@@ -22,7 +22,9 @@
     "build": "tsc -p ./tsconfig.json"
   },
   "dependencies": {
+    "@stoplight/better-ajv-errors": "^0.1.1",
     "@stoplight/json": "3.15.0",
+    "@stoplight/spectral-runtime": "^0.0.0",
     "@stoplight/types": "12.3.0",
     "ajv": "8.6.0",
     "ajv-errors": "3.0.0",
@@ -31,5 +33,8 @@
     "json-schema-traverse": "1.0.0",
     "lodash": "4.17.21",
     "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@stoplight/spectral-parsers": "^0.0.0"
   }
 }

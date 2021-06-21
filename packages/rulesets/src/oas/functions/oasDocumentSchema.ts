@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-return */
 import type { ErrorObject } from 'ajv';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';

@@ -5,10 +5,7 @@ import { assignAjvInstance } from './ajv';
 import { Optional } from '@stoplight/types';
 import { draft7 } from 'json-schema-migrate';
 import MissingRefError from 'ajv/dist/compile/ref_error';
-import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
-
-// todo: fix
-type JSONSchema = any;
+import { createRulesetFunction, IFunctionResult, JSONSchema } from '@stoplight/spectral-core';
 
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;
@@ -37,8 +34,7 @@ export default createRulesetFunction<unknown, Options>(
       required: ['schema'],
       type: 'object',
       errorMessage: {
-        type:
-          '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
+        type: '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
       },
     },
   },

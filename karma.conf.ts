@@ -17,7 +17,7 @@ module.exports = (config: Config): void => {
     files: ['./__karma__/jest.ts', 'src/**/*.ts'],
 
     // list of files / patterns to exclude
-    exclude: ['src/cli/**', 'src/**/*.jest.test.ts'],
+    exclude: ['*.jest.test.ts'],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor

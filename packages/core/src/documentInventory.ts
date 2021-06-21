@@ -1,15 +1,13 @@
 import { extractSourceFromRef, hasRef, isLocalRef } from '@stoplight/json';
-import { Resolver } from '@stoplight/json-ref-resolver';
-import { ICache, IGraphNodeData, IUriParser } from '@stoplight/json-ref-resolver/types';
 import { extname, resolve } from '@stoplight/path';
 import { Dictionary, IParserResult, JsonPath } from '@stoplight/types';
-import { DepGraph } from 'dependency-graph';
 import { get, isObjectLike } from 'lodash';
 import { Document, IDocument } from './document';
+import { Resolver, ResolveResult } from '@stoplight/spectral-ref-resolver';
 
 import { formatParserDiagnostics, formatResolverErrors } from './errorMessages';
 import * as Parsers from '@stoplight/spectral-parsers';
-import { IResolver, IRuleResult } from './types';
+import { IRuleResult } from './types';
 import {
   getClosestJsonPath,
   getEndRef,
@@ -26,9 +24,9 @@ export type DocumentInventoryItem = {
 };
 
 export class DocumentInventory {
-  private static readonly _cachedRemoteDocuments = new WeakMap<ICache | IResolver, Dictionary<Document>>();
+  private static readonly _cachedRemoteDocuments = new WeakMap<Resolver['uriCache'], Dictionary<Document>>();
 
-  public graph: DepGraph<IGraphNodeData> | null;
+  public graph: ResolveResult['graph'] | null;
   public resolved: unknown;
   public errors: IRuleResult[] | null;
   public diagnostics: IRuleResult[] = [];
@@ -47,11 +45,11 @@ export class DocumentInventory {
     return this.document.formats ?? null;
   }
 
-  constructor(public readonly document: IDocument, protected resolver: IResolver) {
+  constructor(public readonly document: IDocument, protected resolver: Resolver) {
     this.graph = null;
     this.errors = null;
 
-    const cacheKey = resolver instanceof Resolver ? resolver.uriCache : resolver;
+    const cacheKey = resolver.uriCache;
     const cachedDocuments = DocumentInventory._cachedRemoteDocuments.get(cacheKey);
     if (cachedDocuments !== void 0) {
       this.referencedDocuments = cachedDocuments;
@@ -155,11 +153,12 @@ export class DocumentInventory {
     }
   }
 
-  protected parseResolveResult = (resolveOpts: IUriParser): Promise<IUriParser> => {
+  protected parseResolveResult: Resolver['parseResolveResult'] = resolveOpts => {
     const source = resolveOpts.targetAuthority.href().replace(/\/$/, '');
     const ext = extname(source);
 
     const content = String(resolveOpts.result);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const parser: Parsers.IParser<IParserResult<unknown, any, any, any>> =
       ext === '.json' ? Parsers.Json : Parsers.Yaml;
     const document = new Document(content, parser, source);

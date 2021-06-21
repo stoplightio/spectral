@@ -1,8 +1,8 @@
-import { IResolveError } from '@stoplight/json-ref-resolver/types';
 import { DiagnosticSeverity, IDiagnostic, JsonPath, Segment } from '@stoplight/types';
 import { uniqBy } from 'lodash';
 import { Document, IDocument } from './document';
 import { IRuleResult } from './types';
+import { ResolveError } from '@stoplight/spectral-ref-resolver';
 
 const toUpperCase = (word: string): string => word.toUpperCase();
 const splitWord = (word: string, end: string, start: string): string => `${end} ${start.toLowerCase()}`;
@@ -41,7 +41,7 @@ export function formatParserDiagnostics(diagnostics: ReadonlyArray<IDiagnostic>,
   }));
 }
 
-export const formatResolverErrors = (document: IDocument, diagnostics: IResolveError[]): IRuleResult[] => {
+export const formatResolverErrors = (document: IDocument, diagnostics: ResolveError[]): IRuleResult[] => {
   return uniqBy(diagnostics, 'message').map<IRuleResult>(error => {
     const path = [...error.path, '$ref'];
     const range = document.getRangeForJsonPath(path, true) ?? Document.DEFAULT_RANGE;

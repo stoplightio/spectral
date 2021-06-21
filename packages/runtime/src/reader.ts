@@ -9,7 +9,7 @@ import request from './fetch';
 import { printError } from './utils/printError';
 
 export interface IFileReadOptions {
-  encoding: string;
+  encoding: 'ascii' | 'utf8' | 'utf-8' | 'utf16le' | 'ucs2' | 'ucs-2' | 'base64' | 'latin1' | 'binary' | 'hex';
 }
 
 export interface IReadOptions extends IFileReadOptions {

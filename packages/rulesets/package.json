@@ -21,14 +21,20 @@
     "build": "tsc -p ./tsconfig.json"
   },
   "dependencies": {
+    "@stoplight/better-ajv-errors": "0.1.1",
     "@stoplight/json": "3.15.0",
-    "@stoplight/types": "^12.3.0",
     "@stoplight/spectral-core": "0.0.0",
     "@stoplight/spectral-formats": "0.0.0",
+    "@stoplight/types": "^12.3.0",
+    "@types/json-schema": "^7.0.7",
     "ajv": "~8.6.0",
+    "ajv-formats": "~2.1.0",
+    "json-schema-traverse": "^1.0.0",
     "lodash": "~4.17.21"
   },
   "devDependencies": {
-    "@stoplight/spectral-parsers": "0.0.0"
+    "@stoplight/path": "^1.3.2",
+    "@stoplight/spectral-parsers": "0.0.0",
+    "immer": "^9.0.3"
   }
 }

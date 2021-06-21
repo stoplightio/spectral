@@ -3,7 +3,7 @@ import { truthy, pattern } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as nock from 'nock';
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { httpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 
@@ -158,11 +158,7 @@ describe('Spectral', () => {
 
     const parsedResult = new Document(JSON.stringify(doc), Parsers.Json, targetUri);
 
-    const results = await s.run(parsedResult, {
-      resolve: {
-        documentUri: 'test.json',
-      },
-    });
+    const results = await s.run(parsedResult, {});
 
     expect(results).toEqual([
       expect.objectContaining({
@@ -192,9 +188,7 @@ describe('Spectral', () => {
       },
     });
 
-    const results = await s.run(fs.readFileSync(documentUri, 'utf8'), {
-      resolve: { documentUri },
-    });
+    const results = await s.run(new Document(fs.readFileSync(documentUri, 'utf8'), Parsers.Yaml, documentUri));
 
     expect(results.length).toEqual(3);
 

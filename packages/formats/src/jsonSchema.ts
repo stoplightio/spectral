@@ -1,12 +1,12 @@
 import type { Format } from '@stoplight/spectral-core';
 import { isPlainObject } from '@stoplight/json';
 import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
-import { isObject } from 'lodash';
 
 const KNOWN_JSON_SCHEMA_TYPES = ['array', 'boolean', 'integer', 'null', 'number', 'object', 'string'];
 const KNOWN_JSON_SCHEMA_COMPOUND_KEYWORDS = ['allOf', 'oneOf', 'anyOf', 'not', 'if'];
 
-const SCHEMA_DRAFT_REGEX = /^https?:\/\/json-schema.org\/(?:draft-0([467])|draft\/(20(?:19-09|20-12)))\/(?:hyper-)?schema#?$/;
+const SCHEMA_DRAFT_REGEX =
+  /^https?:\/\/json-schema.org\/(?:draft-0([467])|draft\/(20(?:19-09|20-12)))\/(?:hyper-)?schema#?$/;
 
 const hasValidJSONSchemaType = (document: Partial<{ type?: unknown }>): boolean => {
   if (!('type' in document)) return false;
@@ -18,7 +18,9 @@ const hasValidJSONSchemaType = (document: Partial<{ type?: unknown }>): boolean 
 };
 
 const hasValidJSONSchemaCompoundKeyword = (document: Record<string, unknown>): boolean =>
-  KNOWN_JSON_SCHEMA_COMPOUND_KEYWORDS.some(combiner => combiner in document && isObject(document[combiner]));
+  KNOWN_JSON_SCHEMA_COMPOUND_KEYWORDS.some(
+    combiner => combiner in document && typeof document[combiner] === 'object' && document[combiner] !== null,
+  );
 
 function hasSchemaVersion(document: unknown): document is JSONSchema & { $schema: string } {
   return (

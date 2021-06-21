@@ -32,7 +32,7 @@ ajv.addKeyword({
       case 'spectral-function':
         cxt.pass(_`typeof ${data}.function === "function"`);
         cxt.pass(
-          _`(() => { try { ${data}.function.validator?.('functionOptions' in ${data} ? ${data} : null); } catch (e) { ${data}[${message}] = e.message } })()`,
+          _`(() => { try { ${data}.function.validator && ${data}.function.validator('functionOptions' in ${data} ? ${data} : null); } catch (e) { ${data}[${message}] = e.message } })()`,
         );
         break;
     }

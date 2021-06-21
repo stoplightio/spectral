@@ -39,8 +39,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'should NOT have additional properties: type',
                     },
-                    _:
-                      'line 36, col 22, should NOT have additional properties: type (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
+                    _: 'line 36, col 22, should NOT have additional properties: type (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
                   },
                 ],
               },
@@ -55,8 +54,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'should match exactly one schema in oneOf',
                     },
-                    _:
-                      'line 36, col 22, should match exactly one schema in oneOf (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
+                    _: 'line 36, col 22, should match exactly one schema in oneOf (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
                   },
                 ],
               },
@@ -71,8 +69,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: "should have required property '$ref'",
                     },
-                    _:
-                      'line 36, col 22, should have required property &apos;$ref&apos; (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
+                    _: 'line 36, col 22, should have required property &apos;$ref&apos; (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
                   },
                 ],
               },
@@ -146,8 +143,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'OpenAPI object info `description` must be present and non-empty string.',
                     },
-                    _:
-                      'line 3, col 10, OpenAPI object info `description` must be present and non-empty string. (info-description) at path #/info',
+                    _: 'line 3, col 10, OpenAPI object info `description` must be present and non-empty string. (info-description) at path #/info',
                   },
                 ],
               },

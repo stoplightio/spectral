@@ -120,8 +120,7 @@ testRule('path-params', [
   },
 
   {
-    name:
-      'Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one',
+    name: 'Error if path parameter definition is set (at the operation level) for a method, but forgotten for another one',
     document: {
       openapi: '3.0.3',
       paths: {

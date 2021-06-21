@@ -23,6 +23,6 @@
   "dependencies": {
     "@stoplight/json": "3.15.0",
     "@stoplight/types": "12.3.0",
-    "@stoplight/yaml": "4.2.1"
+    "@stoplight/yaml": "4.2.2"
   }
 }

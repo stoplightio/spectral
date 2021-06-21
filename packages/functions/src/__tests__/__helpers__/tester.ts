@@ -9,6 +9,7 @@ import {
 } from '@stoplight/spectral-core';
 
 export default async function <O = unknown>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: RulesetFunction<any, any> | RulesetFunctionWithValidator<any, any>,
   input: unknown,
   opts: O | null = null,

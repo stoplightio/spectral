@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import { isObject } from './utils/isObject';
 import type { Dictionary, JsonPath, Optional } from '@stoplight/types';
 import oasSchema, { Options as SchemaOptions } from './oasSchema';

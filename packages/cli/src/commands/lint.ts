@@ -51,6 +51,7 @@ const lintCommand: CommandModule = {
           description: 'text encoding to use',
           type: 'string',
           default: 'utf8',
+          choices: ['utf8', 'ascii', 'utf-8', 'utf16le', 'ucs2', 'ucs-2', 'base64', 'latin1'],
         },
         format: {
           alias: 'f',
@@ -120,7 +121,7 @@ const lintCommand: CommandModule = {
       ignoreUnknownFormat,
       failOnUnmatchedGlobs,
       ...config
-    } = (args as unknown) as ILintConfig & {
+    } = args as unknown as ILintConfig & {
       documents: Array<number | string>;
       failSeverity: FailSeverity;
       displayOnlyFailures: boolean;

@@ -87,6 +87,7 @@ export class ParsedDocument<D = unknown, R extends IParsedResult<D> = IParsedRes
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface IParsedResult<D = unknown, R extends IParserResult<D> = IParserResult<D, any, any, any>> {
   parsed: R;
   getLocationForJsonPath: GetLocationForJsonPath<R>;

@@ -17,7 +17,7 @@ describe('listFiles CLI util', () => {
   it('returns file paths', async () => {
     const list = [path.join(__dirname, 'foo/a.json'), path.join(__dirname, 'foo/b.json')];
 
-    ((fg as unknown) as jest.Mock).mockResolvedValueOnce([...list]);
+    (fg as unknown as jest.Mock).mockResolvedValueOnce([...list]);
 
     expect(await listFiles(['./foo/*.json'], true)).toEqual([list, []]);
   });
@@ -25,7 +25,7 @@ describe('listFiles CLI util', () => {
   it('given disabled ignoredUnmatchedGlobs, reports unmatched patterns', async () => {
     const list = [path.join(__dirname, 'foo/a.json'), path.join(__dirname, 'foo/b.json')];
 
-    when((fg as unknown) as jest.Mock)
+    when(fg as unknown as jest.Mock)
       .calledWith('./foo/*.json', expect.any(Object))
       .mockResolvedValueOnce([...list])
       .calledWith('bar/**/baz*.yaml', expect.any(Object))

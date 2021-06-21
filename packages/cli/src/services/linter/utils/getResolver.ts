@@ -3,7 +3,7 @@ import { Optional } from '@stoplight/types';
 import { createHttpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 import type { Resolver } from '@stoplight/json-ref-resolver';
 
-export const getResolver = (resolver: Optional<string>): Resolver => {
+export const getResolver = (resolver: Optional<string>, proxy: Optional<string>): Resolver => {
   if (resolver !== void 0) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -11,6 +11,12 @@ export const getResolver = (resolver: Optional<string>): Resolver => {
     } catch ({ message }) {
       throw new Error(formatMessage(message) ?? message);
     }
+  }
+
+  if (typeof proxy === 'string') {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const ProxyAgent = require('proxy-agent') as typeof import('proxy-agent');
+    return createHttpAndFileResolver({ agent: new ProxyAgent(process.env.PROXY) });
   }
 
   return createHttpAndFileResolver();

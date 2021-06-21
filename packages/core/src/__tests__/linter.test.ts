@@ -1,13 +1,11 @@
 import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
-import { Resolver } from '@stoplight/json-ref-resolver';
 import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
-import { IParsedResult } from '../document';
-import { Document, Spectral } from '..';
 import * as Parsers from '@stoplight/spectral-parsers';
-import { Format } from '../ruleset/format';
+import { Resolver } from '@stoplight/spectral-ref-resolver';
 
-// const invalidSchema = JSON.stringify(require('./__fixtures__/petstore.invalid-schema.oas3.json'));
+import { IParsedResult } from '../document';
+import { Document, Spectral, Format } from '..';
 
 const target = {
   responses: {
@@ -552,46 +550,6 @@ responses:: !!foo
     ]);
   });
 
-  // test('should remove all redundant ajv errors', async () => {
-  //   const spectral = createWithRules(['oas3-schema', 'oas3-valid-schema-example', 'oas3-valid-media-example']);
-  //
-  //   const result = await spectral.run(invalidSchema);
-  //
-  //   expect(result).toEqual([
-  //     expect.objectContaining({
-  //       code: 'oas3-schema',
-  //       message: '`email` property must match format `email`.',
-  //       path: ['info', 'contact', 'email'],
-  //     }),
-  //     expect.objectContaining({
-  //       code: 'oas3-schema',
-  //       message: '`header-1` property must have required property `schema`.',
-  //       path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
-  //     }),
-  //     expect.objectContaining({
-  //       code: 'oas3-schema',
-  //       message: 'Property `type` is not expected to be here.',
-  //       path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
-  //     }),
-  //     expect.objectContaining({
-  //       code: 'oas3-schema',
-  //       message: 'Property `op` is not expected to be here.',
-  //       path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
-  //     }),
-  //     expect.objectContaining({
-  //       code: 'invalid-ref',
-  //     }),
-  //     expect.objectContaining({
-  //       code: 'invalid-ref',
-  //     }),
-  //     expect.objectContaining({
-  //       code: 'oas3-valid-schema-example',
-  //       message: '`example` property type must be number',
-  //       path: ['components', 'schemas', 'foo', 'example'],
-  //     }),
-  //   ]);
-  // });
-
   test('should report invalid schema $refs', async () => {
     const result = await spectral.run(
       JSON.stringify(
@@ -628,7 +586,7 @@ responses:: !!foo
     ]);
   });
 
-  test('should report when a resolver is not defined for a given $ref type', async () => {
+  test('should report when a resolver is no t defined for a given $ref type', async () => {
     const s = new Spectral({ resolver: new Resolver() });
     const document = JSON.stringify({
       'file-refs': [{ $ref: './models/pet.yaml' }, { $ref: '../common/models/error.yaml' }],
@@ -1284,32 +1242,6 @@ responses:: !!foo
 
       const results = await spectral.run(parsedResult, {
         ignoreUnknownFormat: true,
-      });
-
-      expect(results).toEqual([
-        expect.objectContaining({
-          code: 'falsy-document',
-          source: 'foo',
-        }),
-      ]);
-    });
-
-    test('given missing source on parsedResult, should try to set resolveUri as source of the document', async () => {
-      const parsedResult: IParsedResult = {
-        parsed: {
-          data: {},
-          diagnostics: [],
-          ast: {},
-          lineMap: [],
-        },
-        getLocationForJsonPath: jest.fn(),
-      };
-
-      const results = await spectral.run(parsedResult, {
-        ignoreUnknownFormat: true,
-        resolve: {
-          documentUri: 'foo',
-        },
       });
 
       expect(results).toEqual([

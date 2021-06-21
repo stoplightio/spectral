@@ -6,7 +6,7 @@ import { DEFAULT_REQUEST_OPTIONS } from '@stoplight/spectral-runtime';
 import lintCommand from './commands/lint';
 import type * as Agent from 'proxy-agent';
 
-if (process.env.PROXY) {
+if (typeof process.env.PROXY === 'string') {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const ProxyAgent = require('proxy-agent') as typeof Agent;
   DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(process.env.PROXY);

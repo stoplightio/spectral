@@ -1,20 +1,14 @@
-import { IResolveOpts, IResolveResult } from '@stoplight/json-ref-resolver/types';
 import { IDiagnostic, JsonPath } from '@stoplight/types';
 import { JSONSchema7 } from 'json-schema';
-import { ComputeFingerprintFunc } from '../utils';
+import type { Resolver } from '@stoplight/spectral-ref-resolver';
 
 export interface IConstructorOpts {
-  resolver?: IResolver;
-  computeFingerprint?: ComputeFingerprintFunc;
+  resolver?: Resolver;
   useNimma?: boolean;
-  proxyUri?: string;
 }
 
 export interface IRunOpts {
   ignoreUnknownFormat?: boolean;
-  resolve?: {
-    documentUri?: string;
-  };
 }
 
 export interface ISpectralDiagnostic extends IDiagnostic {
@@ -32,12 +26,6 @@ export interface ISpectralFullResult {
 export interface IGivenNode {
   path: JsonPath;
   value: unknown;
-}
-
-export type ResolveResult = Omit<IResolveResult, 'runner'>;
-
-export interface IResolver {
-  resolve(source: unknown, opts?: IResolveOpts): Promise<ResolveResult>;
 }
 
 export type JSONSchema = JSONSchema7;

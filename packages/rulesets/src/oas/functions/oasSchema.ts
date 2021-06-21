@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return */
 import * as traverse from 'json-schema-traverse';
 import type { SchemaObject } from 'json-schema-traverse';
 import { isObject } from './utils/isObject';

@@ -51,6 +51,7 @@ export interface IRuleThen {
   field?: string;
 
   // name of the function to run
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function: RulesetFunction<any, any> | RulesetFunctionWithValidator<any, any>;
 
   // Options passed to the function

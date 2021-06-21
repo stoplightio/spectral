@@ -12,7 +12,7 @@
       "@stoplight/spectral-rulesets": ["packages/rulesets/src/index.ts"]
     },
     "moduleResolution": "node",
-    "target": "ES2020",
+    "target": "ES2019",
     "module": "CommonJS",
     "lib": ["es2020"],
     "strict": true,

@@ -53,7 +53,7 @@ describe('Output service', () => {
     });
 
     it('given outputFile, writes output to a specified path', async () => {
-      ((fs.writeFile as any) as jest.Mock).mockImplementationOnce((path, val, cb) => {
+      (fs.writeFile as any as jest.Mock).mockImplementationOnce((path, val, cb) => {
         cb(null, void 0);
       });
 

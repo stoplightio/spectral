@@ -77,8 +77,7 @@ testRule('asyncapi-schema-examples', [
   },
 
   {
-    name:
-      'channels.{channel}.parameters.{parameter}.schema.examples.{position} is not valid against the schema it decorates',
+    name: 'channels.{channel}.parameters.{parameter}.schema.examples.{position} is not valid against the schema it decorates',
     document: produce(document, (draft: any) => {
       draft.channels['users/{userId}/signedUp'].parameters.userId.schema.type = 'string';
     }),

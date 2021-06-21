@@ -95,9 +95,9 @@ describe('lint', () => {
 
   it('calls lint with document and custom encoding', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    await run(`lint --encoding utf16 ${doc}`);
+    await run(`lint --encoding ascii ${doc}`);
     expect(lint).toBeCalledWith([doc], {
-      encoding: 'utf16',
+      encoding: 'ascii',
       format: 'stylish',
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
@@ -106,9 +106,9 @@ describe('lint', () => {
 
   it('calls lint with document and custom encoding and format', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    await run(`lint -f json --encoding utf16 ${doc}`);
+    await run(`lint -f json --encoding ascii ${doc}`);
     expect(lint).toBeCalledWith([doc], {
-      encoding: 'utf16',
+      encoding: 'ascii',
       format: 'json',
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,

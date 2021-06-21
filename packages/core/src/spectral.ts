@@ -1,15 +1,13 @@
 import { stringify } from '@stoplight/json';
-import { DiagnosticSeverity, Optional } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 import * as Parsers from '@stoplight/spectral-parsers';
-import { createHttpAndFileResolver } from '@stoplight/spectral-ref-resolver';
-import { YamlParserResult } from '@stoplight/yaml';
+import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-resolver';
 import { memoize } from 'lodash';
-import type { Agent } from 'http';
 
-import { Document, IDocument, IParsedResult, isParsedResult, normalizeSource, ParsedDocument } from './document';
+import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
 import { Runner, RunnerRuntime } from './runner';
-import { IConstructorOpts, IResolver, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
+import { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
 import { Ruleset } from './ruleset/ruleset';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
@@ -22,8 +20,7 @@ memoize.Cache = WeakMap;
 export * from './types';
 
 export class Spectral {
-  private readonly _resolver: IResolver;
-  private readonly agent: Agent | undefined;
+  private readonly _resolver: Resolver;
 
   public ruleset: Ruleset = new Ruleset({ rules: {} });
 
@@ -32,30 +29,26 @@ export class Spectral {
   private readonly _computeFingerprint: ComputeFingerprintFunc;
 
   constructor(protected readonly opts?: IConstructorOpts) {
-    this._computeFingerprint = memoize(opts?.computeFingerprint ?? defaultComputeResultFingerprint);
+    this._computeFingerprint = memoize(defaultComputeResultFingerprint);
 
     if (opts?.resolver !== void 0) {
       this._resolver = opts.resolver;
     } else {
-      this._resolver = createHttpAndFileResolver({ agent: this.agent });
+      this._resolver = createHttpAndFileResolver();
     }
 
     this.runtime = new RunnerRuntime();
   }
 
-  protected parseDocument(
-    target: IParsedResult | IDocument | Record<string, unknown> | string,
-    documentUri: Optional<string>,
-  ): IDocument {
+  protected parseDocument(target: IParsedResult | IDocument | Record<string, unknown> | string): IDocument {
     const document =
       target instanceof Document
         ? target
         : isParsedResult(target)
         ? new ParsedDocument(target)
-        : new Document<unknown, YamlParserResult<unknown>>(
+        : new Document<unknown, Parsers.YamlParserResult<unknown>>(
             typeof target === 'string' ? target : stringify(target, void 0, 2),
             Parsers.Yaml,
-            documentUri,
           );
 
     let i = -1;
@@ -89,16 +82,8 @@ export class Spectral {
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
     const { ruleset } = this;
-    if (!ruleset) {
-      throw new Error('no ruleset loaded');
-    }
 
-    const document = this.parseDocument(target, opts.resolve?.documentUri);
-
-    if (document.source === null && opts.resolve?.documentUri !== void 0) {
-      (document as Omit<Document, 'source'> & { source: string }).source = normalizeSource(opts.resolve.documentUri);
-    }
-
+    const document = this.parseDocument(target);
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 

@@ -2,6 +2,7 @@ import { typedEnum } from '../typedEnum';
 import { Document } from '@stoplight/spectral-core';
 import { DocumentInventory } from '@stoplight/spectral-core/src/documentInventory';
 import * as Parsers from '@stoplight/spectral-parsers';
+import { Resolver } from '@stoplight/spectral-ref-resolver';
 
 function runTypedEnum(targetVal: any) {
   const doc = new Document(JSON.stringify(targetVal), Parsers.Json);
@@ -10,7 +11,7 @@ function runTypedEnum(targetVal: any) {
     targetVal,
     null,
     { given: ['$'] },
-    { given: null, original: null, documentInventory: new DocumentInventory(doc, {} as any), rule: {} as any },
+    { given: null, original: null, documentInventory: new DocumentInventory(doc, new Resolver()), rule: {} as any },
   );
 }
 
