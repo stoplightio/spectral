@@ -36,11 +36,30 @@ commands:
           name: Build the code
           command: yarn build
 
-  lint:
+  lint-code:
     steps:
       - run:
           name: Lint the code
-          command: yarn lint
+          command: yarn lint.eslint
+
+  lint-documentation:
+    steps:
+      - run:
+          name: Lint the documentation
+          command: yarn lint.prettier
+
+  lint-changelog:
+    steps:
+      - run:
+          name: Lint the changelog
+          command: yarn lint.changelog
+
+  lint-commit-message:
+    steps:
+      - run:
+          name: Lint commit messages
+          command: |
+            echo "$(git log -1 --pretty=format:"%s")" | npx commitlint
 
   test-node:
     steps:
@@ -72,7 +91,10 @@ jobs:
     steps:
       - checkout
       - cached-dependencies
-      - lint
+      - lint-commit-message
+      - lint-changelog
+      - lint-code
+      - lint-documentation
 
   test:
     parameters:
