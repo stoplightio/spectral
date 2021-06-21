@@ -131,7 +131,7 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - run: lerna bootstrap
+      - run: npx lerna bootstrap
       - run: yarn build
       - test-node
 
