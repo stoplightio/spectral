@@ -19,7 +19,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "postbuild": "node --experimental-modules ./scripts/inline-version.mjs"
+    "postbuild": "node -r esm ./scripts/inline-version.mjs"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.1.1",
@@ -50,6 +50,7 @@
     "@stoplight/yaml": "^4.2.2",
     "@types/json-schema": "^7.0.7",
     "@types/treeify": "^1.0.0",
+    "esm": "^3.2.25",
     "nock": "^13.1.0",
     "recast": "^0.20.4"
   }
