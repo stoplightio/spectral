@@ -17,9 +17,6 @@
     "type": "git",
     "url": "https://github.com/stoplightio/spectral.git"
   },
-  "scripts": {
-    "build": "tsc -p ./tsconfig.json"
-  },
   "dependencies": {
     "@stoplight/json-ref-readers": "1.2.2",
     "@stoplight/json-ref-resolver": "3.1.2",

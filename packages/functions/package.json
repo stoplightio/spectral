@@ -18,9 +18,6 @@
   "engines": {
     "node": ">=12"
   },
-  "scripts": {
-    "build": "tsc -p ./tsconfig.json"
-  },
   "dependencies": {
     "@stoplight/better-ajv-errors": "^0.1.1",
     "@stoplight/json": "3.15.0",

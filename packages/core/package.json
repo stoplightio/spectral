@@ -19,7 +19,6 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "tsc -p ./tsconfig.json",
     "postbuild": "node ./scripts/inline-version.mjs"
   },
   "dependencies": {

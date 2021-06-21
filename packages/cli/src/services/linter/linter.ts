@@ -58,5 +58,5 @@ const createDocument = async (
     return new Document(await readParsable(identifier, opts), Parsers.Yaml, identifier);
   }
 
-  return new Document(await readFileDescriptor(identifier, opts), Parsers.Yaml);
+  return new Document(await readFileDescriptor(identifier, opts), Parsers.Yaml, '<STDIN>');
 };
