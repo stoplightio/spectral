@@ -131,7 +131,7 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - run: npx lerna bootstrap
+      - run: npx lerna bootstrap -- --ignore-engines
       - run: yarn build
       - test-node
 
@@ -140,9 +140,9 @@ jobs:
       name: windows/default
     steps:
       - prepare-release
-      - run: yarn pkg . --targets windows --out-path ./binaries
+      - run: yarn lerna exec "pkg . --targets windows --out-path ./binaries" --scope=@stoplight/spectral-cli
       - persist_to_workspace:
-          root: ./
+          root: ./packages/cli/
           paths:
             - binaries
 
@@ -215,9 +215,9 @@ jobs:
           else
             npm publish
           fi
-      - run: npx pkg . --targets linux,macos,alpine --out-path ./binaries
+      - run: lerna exec "pkg . --targets linux,macos,alpine --out-path ./binaries" --scope=@stoplight/spectral-cli
       - persist_to_workspace:
-          root: ./
+          root: ./packages/cli/
           paths:
             - binaries
 
@@ -232,7 +232,7 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/packages/cli/binaries
 
 workflows:
   commit:
