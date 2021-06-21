@@ -18,11 +18,10 @@
   "engines": {
     "node": ">=12"
   },
-  "scripts": {
-    "build": "tsc -p ./tsconfig.json"
-  },
   "dependencies": {
     "@stoplight/json": "3.15.0",
-    "@stoplight/types": "12.3.0"
+    "@stoplight/spectral-ruleset": "^0.0.0",
+    "@stoplight/types": "12.3.0",
+    "@types/json-schema": "^7.0.7"
   }
 }

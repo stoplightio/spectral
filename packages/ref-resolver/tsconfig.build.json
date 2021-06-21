@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": ".cache/.tsbuildinfo"
+  },
+  "references": [{ "path":  "../runtime/tsconfig.build.json" }]
+}

@@ -24,6 +24,7 @@
   "dependencies": {
     "@stoplight/better-ajv-errors": "^0.1.1",
     "@stoplight/json": "3.15.0",
+    "@stoplight/spectral-core": "^0.0.0",
     "@stoplight/spectral-runtime": "^0.0.0",
     "@stoplight/types": "12.3.0",
     "ajv": "8.6.0",
