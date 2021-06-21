@@ -1,6 +1,6 @@
 import { schema } from '@stoplight/spectral-functions';
+import { Format } from '../format';
 import { assertValidRuleset, RulesetValidationError } from '../validation';
-import { Format } from '@stoplight/spectral-core';
 const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 

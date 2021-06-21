@@ -2,8 +2,9 @@ import { oas2 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 
 import { Ruleset } from '../ruleset';
+import { RulesetDefinition } from '../types';
 import { print } from './__helpers__/print';
-import { RulesetDefinition, RulesetValidationError } from '@stoplight/spectral-core';
+import { RulesetValidationError } from '../validation';
 
 async function loadRuleset(mod: Promise<{ default: RulesetDefinition }>): Promise<Ruleset> {
   return new Ruleset((await mod).default);

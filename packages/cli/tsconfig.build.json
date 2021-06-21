@@ -7,5 +7,10 @@
     "outDir": "dist",
     "tsBuildInfoFile": ".cache/.tsbuildinfo"
   },
-  "references": [{ "path":  "../core/tsconfig.build.json" }]
+  "references": [
+    { "path":  "../core/tsconfig.build.json" },
+    { "path":  "../parsers/tsconfig.build.json" },
+    { "path":  "../ref-resolver/tsconfig.build.json" },
+    { "path":  "../runtime/tsconfig.build.json" },
+  ]
 }

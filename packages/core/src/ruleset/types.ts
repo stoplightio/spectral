@@ -1,6 +1,6 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Format } from './format';
-import { RulesetFunction, RulesetFunctionWithValidator } from '@stoplight/spectral-core';
+import { RulesetFunction, RulesetFunctionWithValidator } from '../types';
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';
 export type FileRuleSeverityDefinition = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;

@@ -146,12 +146,7 @@ info:
   version: "1.0.0"
   title: Descriptive API
   description: >+
-    Some description about the general point of this API, and why it exists when another similar but different API also exists.
-
-    ## Authentication
-
-    This API uses OAuth2 and tokens can be requested from [Dev Portal: Tokens](https://example.org/developers/tokens).
-
+    Some description about the general point of this API, and why it exists when another similar but different API also exists.## AuthenticationThis API uses OAuth2 and tokens can be requested from [Dev Portal: Tokens](https://example.org/developers/tokens).
 ```
 
 ### info-license
@@ -354,7 +349,6 @@ tags:
   - name: Invoice Items
     description: |+
       Giant long explanation about what this business concept is, because other people _might_ not have a clue!
-
 ```
 
 **Recommended:** No

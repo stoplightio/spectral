@@ -20,7 +20,7 @@ commands:
           name: Install Dependencies
           command: |
             npx lerna bootstrap
-            ! git diff --name-only | grep yarn.lock
+            git diff --name-only | grep yarn.lock && exit 1
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
@@ -52,7 +52,7 @@ commands:
     steps:
       - run:
           name: Create the Spectral Binary
-          command: lerna run build.binary --scope=@stoplight/spectral-cli
+          command: npx lerna run build.binary --scope=@stoplight/spectral-cli
       - run:
           name: Run harness tests
           command: yarn test.harness
@@ -117,7 +117,7 @@ jobs:
       name: windows/default
     steps:
       - prepare-release
-      - run: npx pkg . --targets windows --out-path ./binaries
+      - run: yarn pkg . --targets windows --out-path ./binaries
       - persist_to_workspace:
           root: ./
           paths:
