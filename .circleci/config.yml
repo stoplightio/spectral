@@ -20,7 +20,7 @@ commands:
           name: Install Dependencies
           command: |
             npx lerna bootstrap
-            git diff --name-only | grep yarn.lock && exit 1
+            ! git diff --name-only | grep yarn.lock
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
