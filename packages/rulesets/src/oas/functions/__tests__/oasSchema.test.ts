@@ -1,22 +1,19 @@
 import { oas2, oas3 } from '@stoplight/spectral-formats';
 import { DeepPartial } from '@stoplight/types';
-import { IFunctionValues } from '@stoplight/spectral-core';
 import oasSchema from '../../functions/oasSchema';
 import { createWithRules } from '../../__tests__/__helpers__/tester';
+import { RulesetFunctionContext } from '@stoplight/spectral-core/src';
 
-function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?: DeepPartial<IFunctionValues>) {
-  return oasSchema(target, { schema: schemaObj }, { given: [] }, {
-    given: null,
-    original: null,
+function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?: DeepPartial<RulesetFunctionContext>) {
+  return oasSchema(target, { schema: schemaObj }, {
+    path: [],
     ...context,
-  } as IFunctionValues);
+  } as RulesetFunctionContext);
 }
 describe('oasSchema', () => {
   test('given OAS2, supports x-nullable', () => {
-    const documentInventory = {
-      document: {
-        formats: new Set([oas2]),
-      },
+    const document = {
+      formats: new Set([oas2]),
     };
 
     const testSchema = {
@@ -30,17 +27,17 @@ describe('oasSchema', () => {
       },
     };
 
-    expect(runSchema({}, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema(null, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema(2, testSchema, { documentInventory })).toEqual([
+    expect(runSchema({}, testSchema, { document })).toEqual([]);
+    expect(runSchema(null, testSchema, { document })).toEqual([]);
+    expect(runSchema(2, testSchema, { document })).toEqual([
       {
         message: 'Value type must be object,null',
         path: [],
       },
     ]);
-    expect(runSchema({ foo: null }, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema({ foo: 2 }, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema({ foo: 'test' }, testSchema, { documentInventory })).toEqual([
+    expect(runSchema({ foo: null }, testSchema, { document })).toEqual([]);
+    expect(runSchema({ foo: 2 }, testSchema, { document })).toEqual([]);
+    expect(runSchema({ foo: 'test' }, testSchema, { document })).toEqual([
       {
         message: '`foo` property type must be number,null',
         path: ['foo'],
@@ -60,10 +57,8 @@ describe('oasSchema', () => {
   });
 
   test('given OAS3, supports nullable', () => {
-    const documentInventory = {
-      document: {
-        formats: new Set([oas3]),
-      },
+    const document = {
+      formats: new Set([oas3]),
     };
 
     const testSchema = {
@@ -77,17 +72,17 @@ describe('oasSchema', () => {
       },
     };
 
-    expect(runSchema({}, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema(null, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema(2, testSchema, { documentInventory })).toEqual([
+    expect(runSchema({}, testSchema, { document })).toEqual([]);
+    expect(runSchema(null, testSchema, { document })).toEqual([]);
+    expect(runSchema(2, testSchema, { document })).toEqual([
       {
         message: 'Value type must be object,null',
         path: [],
       },
     ]);
-    expect(runSchema({ foo: null }, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema({ foo: 2 }, testSchema, { documentInventory })).toEqual([]);
-    expect(runSchema({ foo: 'test' }, testSchema, { documentInventory })).toEqual([
+    expect(runSchema({ foo: null }, testSchema, { document })).toEqual([]);
+    expect(runSchema({ foo: 2 }, testSchema, { document })).toEqual([]);
+    expect(runSchema({ foo: 'test' }, testSchema, { document })).toEqual([
       {
         message: '`foo` property type must be number,null',
         path: ['foo'],

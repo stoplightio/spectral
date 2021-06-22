@@ -20,8 +20,8 @@ function getParentValue(document: unknown, path: JsonPath): unknown {
   return piece;
 }
 
-const refSiblings: IFunction = (targetVal, opts, paths, { documentInventory }) => {
-  const value = getParentValue(documentInventory.unresolved, paths.given);
+const refSiblings: IFunction = (targetVal, opts, { document, path }) => {
+  const value = getParentValue(document.data, path);
 
   if (!isObject(value)) {
     return;
@@ -33,7 +33,7 @@ const refSiblings: IFunction = (targetVal, opts, paths, { documentInventory }) =
   }
 
   const results: IFunctionResult[] = [];
-  const actualObjPath = paths.given.slice(0, -1);
+  const actualObjPath = path.slice(0, -1);
 
   for (const key of keys) {
     if (key === '$ref') {

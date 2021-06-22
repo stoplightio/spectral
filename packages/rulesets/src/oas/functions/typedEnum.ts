@@ -3,7 +3,7 @@ import { oas2, oas3 } from '@stoplight/spectral-formats';
 import type { IFunction } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
 
-export const typedEnum: IFunction = function (targetVal, opts, paths, otherValues) {
+export const typedEnum: IFunction = function (targetVal, opts, context) {
   if (!isObject(targetVal)) {
     return;
   }
@@ -21,8 +21,9 @@ export const typedEnum: IFunction = function (targetVal, opts, paths, otherValue
     return;
   }
 
-  const isOAS3 = otherValues.documentInventory.document.formats?.has(oas3) === true;
-  const isOAS2 = otherValues.documentInventory.document.formats?.has(oas2) === true;
+  const { document } = context;
+  const isOAS3 = document.formats?.has(oas3) === true;
+  const isOAS2 = document.formats?.has(oas2) === true;
 
   let innerSchema;
   if ((isOAS3 && targetVal.nullable === true) || (isOAS2 && targetVal['x-nullable'] === true)) {
@@ -45,7 +46,7 @@ export const typedEnum: IFunction = function (targetVal, opts, paths, otherValue
   const incorrectValues: Array<{ index: number; val: unknown }> = [];
 
   (enumValues as unknown[]).forEach((val, index) => {
-    const res = schema(val, schemaObject, paths, otherValues);
+    const res = schema(val, schemaObject, context);
 
     if (Array.isArray(res) && res.length !== 0) {
       incorrectValues.push({ index, val });
@@ -58,12 +59,10 @@ export const typedEnum: IFunction = function (targetVal, opts, paths, otherValue
 
   const { type } = initialSchema;
 
-  const rootPath = paths.target ?? paths.given;
-
   return incorrectValues.map(bad => {
     return {
       message: `Enum value \`${String(bad.val)}\` does not respect the specified type \`${String(type)}\`.`,
-      path: [...rootPath, 'enum', bad.index],
+      path: [...context.path, 'enum', bad.index],
     };
   });
 };

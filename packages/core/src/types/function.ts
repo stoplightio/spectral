@@ -1,13 +1,20 @@
 import { JsonPath } from '@stoplight/types';
-import { DocumentInventory } from '../documentInventory';
-import type { Rule } from '../ruleset/rule/rule';
+import type { IDocumentInventory } from '../documentInventory';
+import type { IRule } from '../ruleset/rule/rule';
+import type { IDocument } from '../document';
 
 export type RulesetFunction<I extends unknown = unknown, O extends unknown = unknown> = (
   input: I,
   options: O,
-  paths: IFunctionPaths,
-  otherValues: IFunctionValues,
+  context: RulesetFunctionContext,
 ) => void | IFunctionResult[] | Promise<void | IFunctionResult[]>;
+
+export type RulesetFunctionContext = {
+  path: JsonPath;
+  document: IDocument;
+  documentInventory: IDocumentInventory;
+  rule: IRule;
+};
 
 export type IFunction = RulesetFunction;
 
@@ -17,18 +24,6 @@ export type RulesetFunctionWithValidator<I extends unknown = unknown, O extends 
 > & {
   validator<O = unknown>(options: unknown): asserts options is O;
 };
-
-export interface IFunctionPaths {
-  given: JsonPath;
-  target?: JsonPath;
-}
-
-export interface IFunctionValues {
-  original: unknown;
-  given: unknown;
-  documentInventory: DocumentInventory;
-  rule: Rule;
-}
 
 export interface IFunctionResult {
   message: string;

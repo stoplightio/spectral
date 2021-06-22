@@ -7,12 +7,12 @@ import { Resolver } from '@stoplight/spectral-ref-resolver';
 function runTypedEnum(targetVal: any) {
   const doc = new Document(JSON.stringify(targetVal), Parsers.Json);
 
-  return typedEnum(
-    targetVal,
-    null,
-    { given: ['$'] },
-    { given: null, original: null, documentInventory: new DocumentInventory(doc, new Resolver()), rule: {} as any },
-  );
+  return typedEnum(targetVal, null, {
+    path: [],
+    document: doc,
+    documentInventory: new DocumentInventory(doc, new Resolver()),
+    rule: {} as any,
+  });
 }
 
 describe('typedEnum', () => {
@@ -73,11 +73,11 @@ describe('typedEnum', () => {
       expect(runTypedEnum(schema)).toEqual([
         {
           message: 'Enum value `a string!` does not respect the specified type `integer`.',
-          path: ['$', 'enum', 1],
+          path: ['enum', 1],
         },
         {
           message: 'Enum value `and another one!` does not respect the specified type `integer`.',
-          path: ['$', 'enum', 3],
+          path: ['enum', 3],
         },
       ]);
     });

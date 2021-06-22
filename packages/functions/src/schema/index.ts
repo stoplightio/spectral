@@ -38,9 +38,7 @@ export default createRulesetFunction<unknown, Options>(
       },
     },
   },
-  function schema(targetVal, opts, paths, { rule }) {
-    const path = paths.target ?? paths.given;
-
+  function schema(targetVal, opts, { path, rule }) {
     if (targetVal === void 0) {
       return [
         {

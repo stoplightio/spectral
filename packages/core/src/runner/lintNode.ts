@@ -3,17 +3,17 @@ import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from
 import { get } from 'lodash';
 
 import { Document } from '../document';
-import { IFunctionResult, IFunctionValues, IGivenNode } from '../types';
+import { IFunctionResult, IGivenNode, RulesetFunctionContext } from '../types';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets, MessageVars, message } from './utils';
 import { Rule } from '../ruleset/rule/rule';
 
 export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule: Rule): void => {
-  const fnContext: IFunctionValues = {
-    original: node.value,
-    given: node.value,
+  const fnContext: RulesetFunctionContext = {
+    document: context.documentInventory.document,
     documentInventory: context.documentInventory,
     rule,
+    path: [],
   };
 
   const givenPath = node.path.length > 0 && node.path[0] === '$' ? node.path.slice(1) : node.path;
@@ -22,17 +22,12 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
     const targets = getLintTargets(node.value, then.field);
 
     for (const target of targets) {
-      const targetPath = target.path.length > 0 ? [...givenPath, ...target.path] : givenPath;
+      const path = target.path.length > 0 ? [...givenPath, ...target.path] : givenPath;
 
-      const targetResults = then.function(
-        target.value,
-        then.functionOptions ?? null,
-        {
-          given: givenPath,
-          target: targetPath,
-        },
-        fnContext,
-      );
+      const targetResults = then.function(target.value, then.functionOptions ?? null, {
+        ...fnContext,
+        path,
+      });
 
       if (targetResults === void 0) continue;
 
@@ -45,7 +40,7 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
                   context,
                   results,
                   rule,
-                  targetPath, // todo: get rid of it somehow.
+                  path, // todo: get rid of it somehow.
                 ),
           ),
         );
@@ -54,7 +49,7 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
           context,
           targetResults,
           rule,
-          targetPath, // todo: get rid of it somehow.
+          path, // todo: get rid of it somehow.
         );
       }
     }

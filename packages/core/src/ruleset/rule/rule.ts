@@ -8,7 +8,20 @@ import { Ruleset } from '../ruleset';
 import { Format } from '../format';
 import { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition } from '../types';
 
-export class Rule {
+export interface IRule {
+  description: string | null;
+  message: string | null;
+  severity: DiagnosticSeverity;
+  resolved: boolean;
+  formats: Set<Format> | null;
+  enabled: boolean;
+  recommended: boolean;
+  documentationUrl: string | null;
+  then: IRuleThen[];
+  given: string[];
+}
+
+export class Rule implements IRule {
   public description: string | null;
   public message: string | null;
   #severity!: DiagnosticSeverity;

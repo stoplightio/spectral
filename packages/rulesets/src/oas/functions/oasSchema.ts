@@ -22,8 +22,8 @@ export default createRulesetFunction<unknown, Options>(
       additionalProperties: false,
     },
   },
-  function oasSchema(targetVal, opts, paths, otherValues) {
-    const formats = otherValues.documentInventory.document.formats;
+  function oasSchema(targetVal, opts, context) {
+    const formats = context.document.formats;
 
     let { schema } = opts;
 
@@ -41,7 +41,7 @@ export default createRulesetFunction<unknown, Options>(
       }
     }
 
-    return schemaFn(targetVal, { ...opts, schema, dialect: 'draft4' }, paths, otherValues);
+    return schemaFn(targetVal, { ...opts, schema, dialect: 'draft4' }, context);
   },
 );
 

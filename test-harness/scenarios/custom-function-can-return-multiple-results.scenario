@@ -22,15 +22,13 @@ paths: {}
 
 const NAME_PROPERTY = 'name';
 
-module.exports = (targetVal, _opts, paths) => {
+module.exports = (targetVal, _opts, { path: rootPath }) => {
   if (!Array.isArray(targetVal)) {
     return;
   }
 
   const seen = [];
   const results = [];
-
-  const rootPath = paths.target !== void 0 ? paths.target : paths.given;
 
   for (let i = 0; i < targetVal.length; i++) {
     if (targetVal[i] === null || typeof targetVal[i] !== 'object') {
