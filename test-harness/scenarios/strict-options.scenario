@@ -22,6 +22,7 @@ Options:
   -e, --encoding                 text encoding to use  [string] [choices: "utf8", "ascii", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1"] [default: "utf8"]
   -f, --format                   formatter to use for outputting results  [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty"] [default: "stylish"]
   -o, --output                   output to a file instead of stdout  [string]
+      --stdin-filepath           path to a file to pretend that stdin comes from  [string]
       --resolver                 path to custom json-ref-resolver instance  [string]
   -r, --ruleset                  path/URL to a ruleset file  [string]
   -F, --fail-severity            results of this level or above will trigger a failure exit code  [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
