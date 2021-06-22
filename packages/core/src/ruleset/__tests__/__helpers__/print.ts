@@ -28,8 +28,8 @@ function formatRules(ruleset: Ruleset): Record<string, Partial<Record<keyof Rule
     formattedRules[rule.name] = {
       name: rule.name,
       enabled: String(rule.enabled),
-      inherited: String(rule.owner !== ruleset),
-      ...(rule.formats ? { formats: printFormats([...rule.formats]) } : null),
+      inherited: String(rule.owner !== ruleset && (ruleset.source === null || rule.owner.source !== ruleset.source)),
+      ...(rule.formats && rule.formats.size > 0 ? { formats: printFormats([...rule.formats]) } : null),
       severity: String(rule.severity),
       ...(rule.documentationUrl !== null ? { documentationUrl: rule.documentationUrl } : null),
     };

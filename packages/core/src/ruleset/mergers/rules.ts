@@ -4,9 +4,9 @@ import { Rule } from '../rule/rule';
 import type { Ruleset } from '../ruleset';
 import { FileRuleDefinition } from '../types';
 
-function assertExistingRule(maybeRule: Optional<Rule>): asserts maybeRule is Rule {
+function assertExistingRule(maybeRule: Optional<Rule>, name: string): asserts maybeRule is Rule {
   if (maybeRule === void 0) {
-    throw new ReferenceError('Cannot extend non-existing rule');
+    throw new ReferenceError(`Cannot extend non-existing rule: "${name}"`);
   }
 }
 
@@ -24,12 +24,12 @@ export function mergeRule(
 ): Rule {
   switch (typeof rule) {
     case 'boolean':
-      assertExistingRule(existingRule);
+      assertExistingRule(existingRule, name);
       existingRule.enabled = rule;
       break;
     case 'string':
     case 'number':
-      assertExistingRule(existingRule);
+      assertExistingRule(existingRule, name);
       existingRule.severity = rule;
       if (rule === 'off') {
         existingRule.enabled = false;

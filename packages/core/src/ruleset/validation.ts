@@ -108,8 +108,8 @@ export function assertValidRuleset(ruleset: unknown): asserts ruleset is Ruleset
     throw new Error('Provided ruleset is not an object');
   }
 
-  if (!('rules' in ruleset) && !('extends' in ruleset)) {
-    throw new RulesetValidationError('Ruleset must have rules or extends property');
+  if (!('rules' in ruleset) && !('extends' in ruleset) && !('overrides' in ruleset)) {
+    throw new RulesetValidationError('Ruleset must have rules or extends or overrides defined');
   }
 
   if (!validate(ruleset)) {

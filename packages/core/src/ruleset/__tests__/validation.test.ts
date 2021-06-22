@@ -15,8 +15,10 @@ describe('Ruleset Validation', () => {
   });
 
   it('given object with no rules and no extends properties, throws', () => {
-    expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules or extends property');
-    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow('Ruleset must have rules or extends property');
+    expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules or extends or overrides defined');
+    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow(
+      'Ruleset must have rules or extends or overrides defined',
+    );
   });
 
   it('given object with extends property only, emits no errors', () => {
@@ -221,6 +223,36 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         },
       }),
     ).toThrow(new RulesetValidationError(error));
+  });
+
+  describe('overrides validation', () => {
+    it('given an invalid overrides, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: null,
+        }),
+      ).toThrow(new RulesetValidationError('Error at #/overrides: must be an array'));
+    });
+
+    it('given an empty overrides, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: [],
+        }),
+      ).toThrow(new RulesetValidationError('Error at #/overrides: must not be empty'));
+    });
+
+    it('given an invalid pattern, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: [2],
+        }),
+      ).toThrow(
+        new RulesetValidationError(
+          'Error at #/overrides/0: must be a override, i.e. { "files": ["v2/**/*.json"], "rules": {} }',
+        ),
+      );
+    });
   });
 
   describe('then validation', () => {

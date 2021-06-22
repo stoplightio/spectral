@@ -1,13 +1,15 @@
 import { oas2 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
+import * as path from '@stoplight/path';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
 import { print } from './__helpers__/print';
 import { RulesetValidationError } from '../validation';
 
-async function loadRuleset(mod: Promise<{ default: RulesetDefinition }>): Promise<Ruleset> {
-  return new Ruleset((await mod).default);
+async function loadRuleset(mod: Promise<{ default: RulesetDefinition }>, source?: string): Promise<Ruleset> {
+  return new Ruleset((await mod).default, { source });
 }
 
 describe('Ruleset', () => {
@@ -185,7 +187,7 @@ describe('Ruleset', () => {
             // @ts-expect-error: invalid ruleset
             {},
           ),
-      ).toThrowError(new RulesetValidationError('Ruleset must have rules or extends property'));
+      ).toThrowError(new RulesetValidationError('Ruleset must have rules or extends or overrides defined'));
     });
   });
 
@@ -235,6 +237,449 @@ describe('Ruleset', () => {
     expect(parserOptions).toStrictEqual({
       duplicateKeys: 'warn',
       incompatibleValues: 'off',
+    });
+  });
+
+  describe('overrides', () => {
+    const cwd = path.join(__dirname, './__fixtures__/overrides/');
+
+    it('given no overrides, should return the initial ruleset', async () => {
+      const ruleset = await loadRuleset(import('./__fixtures__/overrides/_base'), path.join(cwd, 'hierarchy'));
+
+      expect(ruleset.fromSource(null)).toBe(ruleset);
+    });
+
+    it('given a ruleset with overrides only, should consider rule as empty for unmatched files', async () => {
+      const ruleset = await loadRuleset(
+        import('./__fixtures__/overrides/only-overrides'),
+        path.join(cwd, 'only-overrides'),
+      );
+
+      expect(ruleset.rules).toEqual({});
+      expect(ruleset.fromSource(path.join(cwd, 'spec.yaml')).rules).toEqual({});
+    });
+
+    it('rules', async () => {
+      const ruleset = await loadRuleset(import('./__fixtures__/overrides/only-rules'), path.join(cwd, 'only-rules'));
+
+      expect(print(ruleset)).toEqual(print(await loadRuleset(import('./__fixtures__/overrides/_base'))));
+
+      expect(print(ruleset)).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: false
+      └─ severity: 1
+`);
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'unmatched/spec.json')))).toEqual(print(ruleset));
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'legacy/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: -1
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'legacy/test/spec.json')))).toEqual(
+        print(ruleset.fromSource(path.join(cwd, 'legacy/spec.json'))),
+      );
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'v2/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 3
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+    });
+
+    it('should respect the hierarchy of overrides', async () => {
+      const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'), path.join(cwd, 'hierarchy'));
+
+      expect(print(ruleset)).toEqual(print(await loadRuleset(import('./__fixtures__/overrides/_base'))));
+
+      expect(print(ruleset)).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: false
+      └─ severity: 1
+`);
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'unmatched/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 2
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: -1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'legacy/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 2
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: -1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: true
+      ├─ inherited: true
+      └─ severity: 1
+`);
+      expect(print(ruleset.fromSource(path.join(cwd, 'legacy/test/spec.json')))).toEqual(
+        print(ruleset.fromSource(path.join(cwd, 'legacy/spec.json'))),
+      );
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'v2/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 2
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: -1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+    });
+
+    it('should support new rule definitions', async () => {
+      const ruleset = await loadRuleset(
+        import('./__fixtures__/overrides/new-definitions'),
+        path.join(cwd, 'new-definitions'),
+      );
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'legacy/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   ├─ contact-name-matches-stoplight
+   │  ├─ name: contact-name-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ value-matches-stoplight
+      ├─ name: value-matches-stoplight
+      ├─ enabled: true
+      ├─ inherited: false
+      └─ severity: 0
+`);
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'legacy/test/spec.json')))).toEqual(
+        print(ruleset.fromSource(path.join(cwd, 'legacy/spec.json'))),
+      );
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'v2/spec.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+    });
+
+    it('should respect parserOptions', async () => {
+      const ruleset = await loadRuleset(
+        import('./__fixtures__/overrides/parser-options'),
+        path.join(cwd, 'parser-options'),
+      );
+
+      expect(ruleset.fromSource(path.join(cwd, 'document.json')).parserOptions).toStrictEqual({
+        duplicateKeys: DiagnosticSeverity.Error,
+        incompatibleValues: DiagnosticSeverity.Error,
+      });
+
+      expect(ruleset.fromSource(path.join(cwd, 'legacy/apis/document.json')).parserOptions).toStrictEqual({
+        duplicateKeys: DiagnosticSeverity.Error,
+        incompatibleValues: DiagnosticSeverity.Hint,
+      });
+
+      expect(ruleset.fromSource(path.join(cwd, 'v2/document.json')).parserOptions).toStrictEqual({
+        incompatibleValues: DiagnosticSeverity.Warning,
+        duplicateKeys: DiagnosticSeverity.Information,
+      });
+    });
+
+    it('should respect formats', async () => {
+      const ruleset = await loadRuleset(import('./__fixtures__/overrides/formats'), path.join(cwd, 'formats'));
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'schemas/common/user.draft7.json'))))
+        .toEqual(`├─ formats: JSON Schema Draft 7
+└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   ├─ contact-name-matches-stoplight
+   │  ├─ name: contact-name-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ valid-number-validation
+      ├─ name: valid-number-validation
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ formats: JSON Schema Draft 7
+      └─ severity: 1
+`);
+
+      expect(print(ruleset.fromSource(path.join(cwd, 'schemas/user.draft4.json'))))
+        .toEqual(`├─ formats: JSON Schema Draft 4
+└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   ├─ contact-name-matches-stoplight
+   │  ├─ name: contact-name-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ valid-number-validation
+      ├─ name: valid-number-validation
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ formats: JSON Schema Draft 4
+      └─ severity: 1
+`);
+    });
+
+    describe('extends', () => {
+      const cwd = path.join(__dirname, './__fixtures__/overrides/extends');
+
+      it('given local extend with severity set to all, should mark all rules as enabled for matching files', async () => {
+        const ruleset = await loadRuleset(import('./__fixtures__/overrides/extends/all'), path.join(cwd, 'all'));
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'document.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: true
+      ├─ inherited: true
+      └─ severity: 1
+`);
+      });
+
+      it('given multiple extends, should merge them respecting the hierarchy', async () => {
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/extends/multiple-extends'),
+          path.join(cwd, 'multiple-extends'),
+        );
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'document.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: true
+      ├─ inherited: true
+      └─ severity: 1
+`);
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'v2/document.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+      });
+
+      it('given presence of extends in both the ruleset and the override, should always prioritize the override', async () => {
+        const ruleset = await loadRuleset(import('./__fixtures__/overrides/extends/both'), path.join(cwd, 'both'));
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'document.json')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: true
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: true
+      ├─ inherited: true
+      └─ severity: 1
+`);
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'v2/document.json')))).toEqual(
+          print(ruleset.fromSource(path.join(cwd, 'document.json'))),
+        );
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'document.yaml')))).toEqual(`└─ rules
+   ├─ description-matches-stoplight
+   │  ├─ name: description-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 0
+   ├─ title-matches-stoplight
+   │  ├─ name: title-matches-stoplight
+   │  ├─ enabled: false
+   │  ├─ inherited: true
+   │  └─ severity: 1
+   └─ contact-name-matches-stoplight
+      ├─ name: contact-name-matches-stoplight
+      ├─ enabled: false
+      ├─ inherited: true
+      └─ severity: 1
+`);
+      });
+    });
+
+    describe('error handling', () => {
+      it('given document with no source, should throw an error', async () => {
+        const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'), path.join(cwd, 'hierarchy'));
+
+        expect(ruleset.fromSource.bind(ruleset, null)).toThrowError(
+          Error(
+            'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
+          ),
+        );
+      });
+
+      it('given ruleset with no source, should throw an error', async () => {
+        const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'));
+
+        expect(ruleset.fromSource.bind(ruleset, path.join(cwd, 'v2/spec.json'))).toThrowError(
+          Error(
+            'Ruleset must have some source assigned. If you use Spectral programmatically make sure to pass the source to Ruleset',
+          ),
+        );
+      });
+
+      it('given no local or extended rule, should throw an error', async () => {
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/new-definitions-error'),
+          path.join(cwd, 'new-definitions-error'),
+        );
+
+        expect(ruleset.fromSource.bind(ruleset, path.join(cwd, 'v2/spec.json'))).toThrowError(
+          ReferenceError('Cannot extend non-existing rule: "new-definition"'),
+        );
+      });
     });
   });
 });
