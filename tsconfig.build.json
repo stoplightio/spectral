@@ -1,9 +1,31 @@
 {
+  "include": [],
   "extends": "./tsconfig.json",
-  "include": ["src"],
-  "exclude": ["**/__*__/**"],
-  "compilerOptions": {
-    "module": "CommonJS",
-    "outDir": "dist"
-  }
+  "composite": true,
+  "references": [
+    {
+      "path": "./packages/cli/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/core/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/formats/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/functions/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/parsers/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/ref-resolver/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/rulesets/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/runtime/tsconfig.build.json"
+    },
+  ]
 }

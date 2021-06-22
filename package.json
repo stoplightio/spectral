@@ -1,7 +1,5 @@
 {
-  "name": "@stoplight/spectral",
-  "version": "0.0.0",
-  "description": "A flexible object linter with out of the box support for OpenAPI v2 and v3.",
+  "name": "root",
   "keywords": [
     "json linter",
     "linter",
@@ -12,7 +10,7 @@
     "schema",
     "API"
   ],
-  "sideEffects": false,
+  "private": true,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -21,100 +19,56 @@
     "url": "https://github.com/stoplightio/spectral"
   },
   "license": "Apache-2.0",
-  "main": "dist/index.js",
-  "bin": {
-    "spectral": "./dist/cli/index.js"
-  },
-  "files": [
-    "dist/*",
-    "rulesets/*"
-  ],
   "engines": {
     "node": ">=12"
   },
   "scripts": {
-    "prebuild.binary": "yarn copy.html-templates && ./scripts/strap.sh",
-    "build.binary": "pkg . --output ./binaries/spectral",
-    "postbuild.binary": "rm -r node_modules/@stoplight/spectral-*",
-    "build.clean": "rimraf ./coverage && rimraf ./dist",
-    "prebuild": "yarn build.clean",
-    "build": "tsc -p ./tsconfig.build.json",
-    "cli": "node -r ts-node/register -r tsconfig-paths/register src/cli/index.ts",
-    "cli:debug": "node -r ts-node/register -r tsconfig-paths/register --inspect-brk src/cli/index.ts",
-    "inline-version": "node ./scripts/inline-version.mjs",
-    "copy.html-templates": "copyfiles -u 1 \"./src/cli/formatters/html/*.html\" \"./dist/\"",
-    "lint.changelog": "kacl lint",
+    "clean": "rimraf packages/*/{dist,.cache}",
+    "build": "tsc --build ./tsconfig.build.json",
+    "postbuild": "lerna run postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
+    "lint.changelog": "kacl lint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
-    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts src test-harness scripts",
-    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check src/meta/*.json docs/**/*.md README.md",
-    "test": "yarn lint && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
-    "pretest.harness": "./scripts/strap.sh",
+    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
+    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json docs/**/*.md README.md",
+    "test": "yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
     "test.harness": "jest -c ./test-harness/jest.config.js",
-    "posttest.harness": "rm -r node_modules/@stoplight/spectral-*",
     "test.jest": "jest --silent",
     "test.karma": "karma start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "version": "lerna version --no-push",
+    "release": "lerna publish from-package"
   },
-  "dependencies": {
-    "@stoplight/better-ajv-errors": "0.1.1",
-    "@stoplight/json": "3.15.0",
-    "@stoplight/json-ref-readers": "1.2.2",
-    "@stoplight/json-ref-resolver": "3.1.2",
-    "@stoplight/lifecycle": "2.3.2",
-    "@stoplight/path": "1.3.2",
-    "@stoplight/types": "12.3.0",
-    "@stoplight/yaml": "4.2.2",
-    "abort-controller": "3.0.0",
-    "ajv": "8.5.0",
-    "ajv-errors": "3.0.0",
-    "ajv-formats": "2.1.0",
-    "blueimp-md5": "2.18.0",
-    "chalk": "4.1.0",
-    "eol": "0.9.1",
-    "expression-eval": "4.0.0",
-    "fast-glob": "3.2.5",
-    "json-schema-migrate": "2.0.0",
-    "json-schema-traverse": "1.0.0",
-    "jsonpath-plus": "5.0.7",
-    "lodash": "4.17.21",
-    "nimma": "0.0.0",
-    "node-fetch": "2.6.1",
-    "proxy-agent": "4.0.1",
-    "strip-ansi": "6.0",
-    "text-table": "0.2",
-    "tslib": "2.2.0",
-    "yargs": "17.0.1"
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
   },
   "devDependencies": {
     "@brightcove/kacl": "^0.1.11",
-    "@commitlint/cli": "^12.0.1",
-    "@commitlint/config-conventional": "^12.0.1",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
     "@types/jest": "^26.0.23",
-    "@types/jest-when": "^2.7.2",
+    "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.0",
     "@types/lodash": "^4.14.167",
     "@types/nanoid": "^2.1.0",
-    "@types/node": "~13.1",
-    "@types/node-fetch": "^2.5.8",
+    "@types/node": "^15.12.4",
+    "@types/node-fetch": "^2.5.10",
     "@types/text-table": "^0.2.1",
     "@types/tmp": "^0.2.0",
-    "@types/treeify": "^1.0.0",
-    "@types/xml2js": "^0.4.8",
-    "@types/yargs": "^17.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
-    "copyfiles": "^2.4.1",
-    "dependency-graph": "^0.11.0",
-    "eslint": "^7.27.0",
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0",
+    "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
+    "fast-glob": "^3.2.5",
     "fetch-mock": "^9.11.0",
-    "glob-fs": "^0.1.7",
     "husky": "^6.0.0",
-    "jest": "^26.6.3",
-    "jest-mock": "^26.6.2",
-    "jest-when": "^3.2.1",
+    "jest": "^27.0.4",
+    "jest-mock": "^27.0.3",
+    "jest-when": "^3.3.1",
     "json-schema": "^0.3.0",
     "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
@@ -122,23 +76,16 @@
     "karma-jasmine": "^3.3.1",
     "karma-typescript": "^5.4.0",
     "karma-typescript-es6-transform": "^5.2.0",
+    "lerna": "^4.0.0",
     "lint-staged": "^10.5.4",
     "memfs": "^3.2.2",
-    "nock": "~12.0.2",
-    "node-html-parser": "^3.3.4",
-    "pkg": "^5.1.0",
-    "prettier": "^2.2.1",
-    "recast": "^0.20.4",
-    "rimraf": "^3.0.2",
-    "treeify": "^1.1.0",
-    "ts-jest": "^26.5.6",
+    "prettier": "^2.3.1",
+    "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
-    "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.3.1-rc",
-    "xml2js": "^0.4.23"
+    "typescript": "^4.3.2"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{ts,js}": [
       "eslint --fix --cache --cache-location .cache"
     ],
     "CHANGELOG.md": [
@@ -151,18 +98,8 @@
     "README.md": [
       "prettier --write"
     ],
-    "src/meta/*.json": [
+    "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  },
-  "pkg": {
-    "scripts": [
-      "./dist/**/*.js"
-    ],
-    "assets": [
-      "./dist/**/*.json",
-      "./dist/cli/**/*.html"
-    ]
-  },
-  "types": "dist/index.d.ts"
+  }
 }

@@ -29,28 +29,31 @@
   "overrides": [
     {
       "files": [
-        "src/**/*.ts"
+        "packages/*/src/**/*.ts"
       ],
+      "parserOptions": {
+        "project": "./tsconfig.eslint.json"
+      },
       "extends": [
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
       ],
-      "parserOptions": {
-        "project": "./tsconfig.json"
-      },
+      "plugins": ["import"],
       "rules": {
         "@typescript-eslint/prefer-regexp-exec": "error",
         "@typescript-eslint/prefer-nullish-coalescing": "error",
         "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
         "@typescript-eslint/strict-boolean-expressions": "warn",
         "@typescript-eslint/no-throw-literal": "error",
-        "@typescript-eslint/ban-types": "warn"
+        "@typescript-eslint/ban-types": "warn",
+
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.{test,spec}.ts", "**/__helpers__/tester.ts"] }]
       }
     },
 
     {
       "files": [
-        "src/cli/**/*.ts"
+        "packages/cli/src/**/*.ts"
       ],
       "rules": {
         "no-console": "warn"
@@ -59,7 +62,7 @@
 
     {
       "files": [
-        "src/**/__tests__/*.ts",
+        "packages/*/src/**/__tests__/*.ts",
         "test-harness/**/*.{ts,js}"
       ],
       "rules": {

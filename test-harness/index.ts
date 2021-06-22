@@ -9,7 +9,7 @@ import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } f
 import { spawnNode } from './spawn';
 const writeFileAsync = promisify(fs.writeFile);
 
-const spectralBin = path.join(__dirname, '../binaries/spectral');
+const spectralBin = path.join(__dirname, '../packages/cli/binaries/spectral');
 const cwd = path.join(__dirname, './scenarios');
 const files = process.env.TESTS !== void 0 ? String(process.env.TESTS).split(',') : fg.sync('**/*.scenario', { cwd });
 

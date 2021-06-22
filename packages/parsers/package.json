@@ -1,0 +1,25 @@
+{
+  "name": "@stoplight/spectral-parsers",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stoplightio/spectral",
+  "bugs": "https://github.com/stoplightio/spectral/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/spectral.git"
+  },
+  "dependencies": {
+    "@stoplight/json": "3.15.0",
+    "@stoplight/types": "12.3.0",
+    "@stoplight/yaml": "4.2.2"
+  }
+}

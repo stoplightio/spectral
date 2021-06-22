@@ -1,2 +1,3 @@
 **/__fixtures__/**
 /test-harness/**/*.yaml
+/packages/*/dist
