@@ -23,15 +23,21 @@ export type DocumentInventoryItem = {
   missingPropertyPath: JsonPath;
 };
 
-export class DocumentInventory {
-  private static readonly _cachedRemoteDocuments = new WeakMap<Resolver['uriCache'], Dictionary<Document>>();
+export interface IDocumentInventory {
+  readonly graph: ResolveResult['graph'] | null;
+  readonly referencedDocuments: Dictionary<IDocument>;
+  findAssociatedItemForPath(path: JsonPath, resolved: boolean): DocumentInventoryItem | null;
+}
+
+export class DocumentInventory implements IDocumentInventory {
+  private static readonly _cachedRemoteDocuments = new WeakMap<Resolver['uriCache'], Dictionary<IDocument>>();
 
   public graph: ResolveResult['graph'] | null;
   public resolved: unknown;
   public errors: IRuleResult[] | null;
   public diagnostics: IRuleResult[] = [];
 
-  public readonly referencedDocuments: Dictionary<Document>;
+  public readonly referencedDocuments: Dictionary<IDocument>;
 
   public get source(): string | null {
     return this.document.source;

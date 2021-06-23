@@ -23,17 +23,15 @@ export default createRulesetFunction<unknown, null>(
     input: null,
     options: null,
   },
-  function asyncApi2PayloadValidation(targetVal, _opts, paths) {
+  function asyncApi2PayloadValidation(targetVal, _opts, context) {
     ajvValidationFn(targetVal);
 
-    const path = paths.target ?? paths.given;
-
     return betterAjvErrors(asyncApi2SchemaObject, ajvValidationFn.errors, {
-      propertyPath: path,
+      propertyPath: context.path,
       targetValue: targetVal,
     }).map(({ suggestion, error, path: errorPath }) => ({
       message: suggestion !== void 0 ? `${error}. ${suggestion}` : error,
-      path: [...path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
+      path: [...context.path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
     }));
   },
 );

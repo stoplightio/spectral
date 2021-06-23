@@ -55,16 +55,15 @@ export default createRulesetFunction<Record<string, unknown> | unknown[], Option
       },
     },
   },
-  function alphabetical(targetVal, opts, paths, { documentInventory }) {
+  function alphabetical(targetVal, opts, { path, documentInventory }) {
     let targetArray: unknown[];
 
     if (Array.isArray(targetVal)) {
       targetArray = targetVal;
     } else {
       targetArray = Object.keys(
-        documentInventory
-          .findAssociatedItemForPath(paths.given, true)
-          ?.document.trapAccess<typeof targetVal>(targetVal) ?? targetVal,
+        documentInventory.findAssociatedItemForPath(path, true)?.document.trapAccess<typeof targetVal>(targetVal) ??
+          targetVal,
       );
     }
 
@@ -102,7 +101,6 @@ export default createRulesetFunction<Record<string, unknown> | unknown[], Option
     const unsortedItems = getUnsortedItems(targetArray, compare);
 
     if (unsortedItems != null) {
-      const path = paths.target ?? paths.given;
       return [
         {
           ...(keyedBy === void 0

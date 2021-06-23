@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call */
 import type { JsonPath } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 
