@@ -17,6 +17,7 @@
 
 - a _valid_ JSON Path expression throws any exception
 - message interpolation fails
+- a JSON Path alias cannot be resolved
 
 **WILL report a diagnostic error or errors** when:
 

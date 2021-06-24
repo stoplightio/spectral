@@ -1,7 +1,13 @@
 import { dirname, relative } from '@stoplight/path';
 import * as minimatch from 'minimatch';
 import { Rule } from './rule/rule';
-import { FileRulesetSeverityDefinition, ParserOptions, RulesetDefinition, RulesetOverridesDefinition } from './types';
+import {
+  FileRulesetSeverityDefinition,
+  ParserOptions,
+  RulesetAliasesDefinition,
+  RulesetDefinition,
+  RulesetOverridesDefinition,
+} from './types';
 import { assertValidRuleset } from './validation';
 import { Format } from './format';
 import { mergeRule } from './mergers/rules';
@@ -21,6 +27,7 @@ export class Ruleset {
   protected extends!: Ruleset[];
   public readonly formats = new Set<Format>();
   public readonly overrides: RulesetOverridesDefinition | null;
+  public readonly aliases: RulesetAliasesDefinition | null;
 
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
@@ -29,6 +36,8 @@ export class Ruleset {
       severity: 'recommended',
       ...context,
     };
+
+    this.aliases = definition.aliases === void 0 ? null : { ...definition.aliases };
 
     const stack = context?.[STACK_SYMBOL] ?? new Map<RulesetDefinition, Ruleset>();
 

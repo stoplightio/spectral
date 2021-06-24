@@ -60,7 +60,7 @@ export type RulesetExtendsDefinition =
   | RulesetDefinition
   | (RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition])[];
 
-export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'parserOptions'> &
+export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'parserOptions' | 'aliases'> &
   (
     | {
         extends: RulesetExtendsDefinition;
@@ -75,6 +75,7 @@ export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'par
   );
 
 export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & RulesetOverrideDefinition>;
+export type RulesetAliasesDefinition = Record<string, string>;
 
 export type RulesetDefinition = Readonly<
   {
@@ -82,6 +83,7 @@ export type RulesetDefinition = Readonly<
     formats?: Format<any>[];
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;
+    aliases?: RulesetAliasesDefinition;
   } & Readonly<
     | {
         overrides: RulesetOverridesDefinition;

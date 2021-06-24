@@ -1,6 +1,7 @@
 import {
   FileRuleDefinition,
   FileRulesetSeverityDefinition,
+  RulesetAliasesDefinition,
   RulesetDefinition,
   RulesetExtendsDefinition,
   RulesetOverrideDefinition,
@@ -34,6 +35,13 @@ export function mergeRulesets(left: MergeableRuleset, right: MergeableRuleset, i
     ];
   }
 
+  if ('aliases' in left && 'aliases' in right) {
+    (ruleset as Omit<RulesetDefinition, 'aliases'> & { aliases: RulesetAliasesDefinition }).aliases = {
+      ...left.aliases,
+      ...right.aliases,
+    };
+  }
+
   if (!('rules' in left) || !('rules' in right)) return ruleset as RulesetDefinition;
 
   if (isOverride) {
@@ -42,18 +50,14 @@ export function mergeRulesets(left: MergeableRuleset, right: MergeableRuleset, i
       ...right.rules,
     };
   } else {
-    const _ruleset = {
-      rules: left.rules,
-    } as RulesetDefinition;
-
     const r = ruleset as Omit<RulesetDefinition, 'extends'> & { extends?: RulesetExtendsDefinition };
 
     if (!('extends' in r)) {
-      r.extends = _ruleset;
+      r.extends = left as RulesetDefinition;
     } else if (Array.isArray(r.extends)) {
-      r.extends = [...r.extends, _ruleset];
+      r.extends = [...r.extends, left as RulesetDefinition];
     } else {
-      r.extends = [r.extends as RulesetDefinition, _ruleset];
+      r.extends = [r.extends as RulesetDefinition, left as RulesetDefinition];
     }
   }
 
