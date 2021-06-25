@@ -22,11 +22,11 @@
 **Install**
 
 ```bash
-npm install -g @stoplight/spectral
+npm install -g @stoplight/spectral-cli
 
 # OR
 
-yarn global add @stoplight/spectral
+yarn global add @stoplight/spectral-cli
 ```
 
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
