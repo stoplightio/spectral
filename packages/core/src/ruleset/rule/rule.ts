@@ -90,12 +90,21 @@ export class Rule implements IRule {
   #resolveAlias(this: Rule, expr: string): string {
     let resolvedExpr = expr;
 
+    const stack = new Set<string>();
+
     while (resolvedExpr.startsWith('#')) {
       const alias = ALIAS.exec(resolvedExpr)?.[1];
 
       if (alias === void 0 || alias === null) {
-        throw new ReferenceError(`"${this.name}" references an invalid alias`);
+        throw new ReferenceError(`"${this.name}" rule references an invalid alias`);
       }
+
+      if (stack.has(alias)) {
+        const _stack = [...stack, alias];
+        throw new ReferenceError(`Alias "${_stack[0]}" is circular. Resolution stack: ${_stack.join(' -> ')}`);
+      }
+
+      stack.add(alias);
 
       if (this.owner.aliases === null || !(alias in this.owner.aliases)) {
         throw new ReferenceError(`Alias "${alias}" does not exist`);

@@ -1011,6 +1011,32 @@ describe('Ruleset', () => {
       ).toThrowError(ReferenceError('Alias "PathItem-" does not exist'));
     });
 
+    it('given circular alias, should throw', () => {
+      expect(
+        print.bind(
+          null,
+          new Ruleset({
+            aliases: {
+              Root: '#Info',
+              Info: '#Root.test',
+              Contact: '#Info',
+              Test: '#Contact.test',
+            },
+            rules: {
+              'valid-path': {
+                given: '#Test',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          }),
+        ),
+      ).toThrowError(
+        ReferenceError('Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info'),
+      );
+    });
+
     it('should refuse to resolve externally defined aliases', () => {
       expect(
         print.bind(
