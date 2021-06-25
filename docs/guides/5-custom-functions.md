@@ -45,10 +45,21 @@ If the message was goodbye, we'd have a problem.
 
 ## Writing Functions
 
-A custom function might be any JavaScript function compliant with [IFunction](https://github.com/stoplightio/spectral/blob/90a0864863fa232bf367a26dace61fd9f93198db/src/types/function.ts#L3#L8) type.
+A custom function might be any JavaScript function compliant with `RulesetFunction` type.
 
 ```ts
-export type IFunction<O = any> = (targetValue: any, options: O, paths: IFunctionPaths, otherValues: IFunctionValues) => void | IFunctionResult[];
+export type RulesetFunction<I extends unknown = unknown, O extends unknown = unknown> = (
+  input: I,
+  options: O,
+  context: RulesetFunctionContext,
+) => void | IFunctionResult[] | Promise<void | IFunctionResult[]>;
+
+export type RulesetFunctionContext = {
+  path: JsonPath;
+  document: IDocument;
+  documentInventory: IDocumentInventory;
+  rule: IRule;
+};
 ```
 
 ### Validating options
@@ -93,7 +104,7 @@ module.exports = (targetVal, opts) => {
 
 ### targetValue
 
-`targetValue` the value the custom function is provided with and is supposed to lint against.
+`input` the value the custom function is provided with and is supposed to lint against.
 
 It's based on `given` [JSON Path][jsonpath] expression defined on the rule and optionally `field` if placed on `then`.
 
@@ -122,20 +133,17 @@ operation-id-kebab-case:
       match: ^[a-z][a-z0-9\-]*$
 ```
 
-### paths
+### context
 
-`paths.given` contains [JSON Path][jsonpath] expression you set in a rule - in `given` field.
+`context.path` contains a resolved property path pointing to the place in the document
 
-If a particular rule has a `field` property in `then`, that path will be exposed as `paths.target`.
+`context.document` provides an access to the document that we attempt to lint.
+You may find it useful if you'd like to see which formats were applied to it, or in case you'd like to get its unresolved version.
 
-### otherValues
+`context.documentInventory` provides an access to resolved and unresolved documents as well, $ref resolution graph, as some other advanced properties.
+You shouldn't need it for most of the time.
 
-`otherValues.original` and `otherValues.given` are equal for the most of time and represent the value matched using JSON Path expression.
-
-`otherValues.documentInventory` provides an access to resolved and unresolved documents as well as some other advanced properties.
-You shouldn't need it for most of the time. For the list of available options, please refer to the [source code](../../src/documentInventory.ts).
-
-`otherValues.rule` an actual rule your function was called for.
+`context.rule` an actual rule your function was called for.
 
 Custom functions take exactly the same arguments as core functions do, so you are more than welcome to take a look at the existing implementation.
 

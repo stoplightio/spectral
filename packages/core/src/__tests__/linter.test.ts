@@ -1,5 +1,5 @@
 import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
-import { DiagnosticSeverity, JsonPath } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { Resolver } from '@stoplight/spectral-ref-resolver';
@@ -816,88 +816,6 @@ responses:: !!foo
         expect(results).toEqual([]);
       },
     );
-  });
-
-  describe('functional tests for the given property', () => {
-    let fakeLintingFunction: jest.Mock;
-    const rules = {
-      example: {
-        message: '',
-        given: '$.responses',
-        then: {
-          get function() {
-            return fakeLintingFunction;
-          },
-        },
-      },
-    };
-
-    beforeEach(() => {
-      fakeLintingFunction = jest.fn();
-      spectral.setRuleset({
-        rules,
-      });
-    });
-
-    describe('when given path is set', () => {
-      test('should pass given path through to lint function', async () => {
-        let path: JsonPath | null = null;
-        let given: unknown;
-        fakeLintingFunction.mockImplementation((_targetVal, _opts, paths, values) => {
-          path = [...paths.given];
-          given = values.given;
-        });
-
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(path).toEqual(['responses']);
-        expect(given).toEqual(target.responses);
-      });
-
-      test('given array of paths, should pass each given path through to lint function', async () => {
-        spectral.setRuleset({
-          rules: {
-            example: {
-              message: '',
-              given: ['$.responses', '$..200'],
-              then: {
-                function: fakeLintingFunction,
-              },
-            },
-          },
-        });
-
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(2);
-        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual(['responses']);
-        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target.responses);
-        expect(fakeLintingFunction.mock.calls[1][2].given).toEqual(['responses', '200']);
-        expect(fakeLintingFunction.mock.calls[1][3].given).toEqual(target.responses['200']);
-      });
-    });
-
-    describe('when given path is not set', () => {
-      test('should pass through root object', async () => {
-        spectral.setRuleset({
-          rules: {
-            example: {
-              message: '',
-              given: '$',
-              then: {
-                function: fakeLintingFunction,
-              },
-            },
-          },
-        });
-        await spectral.run(target);
-
-        expect(fakeLintingFunction).toHaveBeenCalledTimes(1);
-        expect(fakeLintingFunction.mock.calls[0][2].given).toEqual([]);
-        expect(fakeLintingFunction.mock.calls[0][3].given).toEqual(target);
-      });
-    });
   });
 
   describe('functional tests for the then statement', () => {

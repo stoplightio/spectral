@@ -78,9 +78,9 @@ export default createRulesetFunction<unknown, null>(
     input: null,
     options: null,
   },
-  function oasDocumentSchema(targetVal, opts, paths, otherValues) {
-    const formats = otherValues.documentInventory.formats;
-    if (formats === null) return;
+  function oasDocumentSchema(targetVal, opts, context) {
+    const formats = context.document.formats;
+    if (formats === null || formats === void 0) return;
 
     const schema = formats.has(oas2)
       ? OAS_SCHEMAS['2.0']
@@ -88,7 +88,7 @@ export default createRulesetFunction<unknown, null>(
       ? OAS_SCHEMAS['3.1']
       : OAS_SCHEMAS['3.0'];
 
-    const errors = schemaFn(targetVal, { allErrors: true, schema, prepareResults }, paths, otherValues);
+    const errors = schemaFn(targetVal, { allErrors: true, schema, prepareResults }, context);
 
     if (Array.isArray(errors)) {
       applyManualReplacements(errors);

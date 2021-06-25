@@ -130,7 +130,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
       additionalProperties: false,
     },
   },
-  function oasExample(targetVal, opts, paths, otherValues) {
+  function oasExample(targetVal, opts, context) {
     const schemaOpts: SchemaOptions = {
       schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as SchemaOptions['schema']),
     };
@@ -139,19 +139,14 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
 
     const validationItems =
       opts.type === 'schema'
-        ? getSchemaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given)
-        : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, paths.given, opts.oasVersion);
+        ? getSchemaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, context.path)
+        : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, context.path, opts.oasVersion);
 
     for (const validationItem of validationItems) {
-      const result = oasSchema(
-        validationItem.value,
-        schemaOpts,
-        {
-          given: paths.given,
-          target: validationItem.path,
-        },
-        otherValues,
-      );
+      const result = oasSchema(validationItem.value, schemaOpts, {
+        ...context,
+        path: validationItem.path,
+      });
 
       if (Array.isArray(result)) {
         if (results === void 0) results = [];

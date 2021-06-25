@@ -29,13 +29,13 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
       },
     },
   },
-  function unreferencedReusableObject(data, opts, _paths, otherValues) {
-    const graph = otherValues.documentInventory.graph;
+  function unreferencedReusableObject(data, opts, { document, documentInventory }) {
+    const graph = documentInventory.graph;
     if (graph === null) {
       throw new Error('unreferencedReusableObject requires dependency graph');
     }
 
-    const normalizedSource = otherValues.documentInventory.source ?? '';
+    const normalizedSource = document.source ?? '';
 
     const defined = Object.keys(data).map(name => `${normalizedSource}${opts.reusableObjectsLocation}/${name}`);
 

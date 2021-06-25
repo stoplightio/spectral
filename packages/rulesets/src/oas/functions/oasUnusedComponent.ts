@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import { unreferencedReusableObject } from '@stoplight/spectral-functions';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
@@ -16,7 +15,7 @@ export default createRulesetFunction<{ components: Record<string, unknown> }, nu
     },
     options: null,
   },
-  function oasUnusedComponent(targetVal, opts, _paths, otherValues) {
+  function oasUnusedComponent(targetVal, opts, context) {
     const results: IFunctionResult[] = [];
     const componentTypes = [
       'schemas',
@@ -36,8 +35,7 @@ export default createRulesetFunction<{ components: Record<string, unknown> }, nu
       const resultsForType = unreferencedReusableObject(
         value,
         { reusableObjectsLocation: `#/components/${type}` },
-        _paths,
-        otherValues,
+        context,
       );
       if (resultsForType !== void 0 && Array.isArray(resultsForType)) {
         results.push(...resultsForType);

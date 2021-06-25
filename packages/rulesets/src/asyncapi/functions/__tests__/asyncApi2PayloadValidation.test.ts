@@ -1,12 +1,7 @@
 import asyncApi2PayloadValidation from '../asyncApi2PayloadValidation';
 
 function runPayloadValidation(targetVal: any) {
-  return asyncApi2PayloadValidation(
-    targetVal,
-    null,
-    { given: ['$', 'components', 'messages', 'aMessage'] },
-    { given: null, original: null, documentInventory: {} as any, rule: {} as any },
-  );
+  return asyncApi2PayloadValidation(targetVal, null, { path: ['components', 'messages', 'aMessage'] } as any);
 }
 
 describe('asyncApi2PayloadValidation', () => {
@@ -21,7 +16,7 @@ describe('asyncApi2PayloadValidation', () => {
     expect(results).toEqual([
       {
         message: '`deprecated` property type must be boolean',
-        path: ['$', 'components', 'messages', 'aMessage', 'deprecated'],
+        path: ['components', 'messages', 'aMessage', 'deprecated'],
       },
     ]);
   });

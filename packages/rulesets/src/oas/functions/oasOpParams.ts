@@ -6,7 +6,7 @@ function computeFingerprint(param: Record<string, unknown>): string {
   return `${String(param.in)}-${String(param.name)}`;
 }
 
-export const oasOpParams: IFunction = (params, _opts, { given }) => {
+export const oasOpParams: IFunction = (params, _opts, { path }) => {
   /**
    * This function verifies:
    *
@@ -55,7 +55,7 @@ export const oasOpParams: IFunction = (params, _opts, { given }) => {
     for (const i of duplicates) {
       results.push({
         message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
-        path: [...given, i],
+        path: [...path, i],
       });
     }
   }
@@ -70,7 +70,7 @@ export const oasOpParams: IFunction = (params, _opts, { given }) => {
     for (let i = 1; i < count.body.length; i++) {
       results.push({
         message: 'Operation has already at least one instance of the `in:body` parameter.',
-        path: [...given, count.body[i]],
+        path: [...path, count.body[i]],
       });
     }
   }

@@ -48,7 +48,7 @@ export default createRulesetFunction<SchemaFragment, Options>(
       required: ['type'],
     },
   },
-  function asyncApi2SchemaValidation(targetVal, opts, paths, otherValues) {
+  function asyncApi2SchemaValidation(targetVal, opts, context) {
     const schemaObject = targetVal;
     const relevantItems = getRelevantItems(targetVal, opts.type);
 
@@ -62,10 +62,9 @@ export default createRulesetFunction<SchemaFragment, Options>(
           allErrors: true,
         },
         {
-          given: paths.given,
-          target: [...(paths.target ?? paths.given), ...relevantItem.path],
+          ...context,
+          path: [...context.path, ...relevantItem.path],
         },
-        otherValues,
       );
 
       if (Array.isArray(result)) {
