@@ -12,11 +12,11 @@ describe('migrator', () => {
     await fs.promises.mkdir(cwd, { recursive: true });
   });
 
-  afterAll(async () => {
-    await fs.promises.rmdir(cwd);
+  afterAll(() => {
+    fs.rmdirSync(cwd, { recursive: true });
   });
 
-  describe.each([...Object.entries(fixtures)])('%s', (name, entries) => {
+  describe.each<[string, Record<string, string>]>([...Object.entries(fixtures)])('%s', (name, entries) => {
     const dir = path.join(cwd, name);
     const ruleset = path.join(dir, 'ruleset');
 
