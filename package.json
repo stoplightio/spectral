@@ -31,6 +31,7 @@
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json docs/**/*.md README.md",
+    "pretest": "lerna run pretest",
     "test": "yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
     "test.harness": "jest -c ./test-harness/jest.config.js",
     "test.jest": "jest --silent",

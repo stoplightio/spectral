@@ -13,9 +13,9 @@ import { Format } from './format';
 import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS } from '..';
 import { mergeRulesets } from './mergers/rulesets';
+import { isPlainObject } from '@stoplight/json';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
-const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
 
 type RulesetContext = {
   readonly severity?: FileRulesetSeverityDefinition;
@@ -28,10 +28,24 @@ export class Ruleset {
   public readonly formats = new Set<Format>();
   public readonly overrides: RulesetOverridesDefinition | null;
   public readonly aliases: RulesetAliasesDefinition | null;
+  public readonly definition: RulesetDefinition;
 
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
-  constructor(public readonly definition: RulesetDefinition, context?: RulesetContext) {
+  constructor(readonly maybeDefinition: unknown, context?: RulesetContext) {
+    let definition: RulesetDefinition;
+    if (isPlainObject(maybeDefinition) && 'extends' in maybeDefinition) {
+      const { extends: _, ...def } = maybeDefinition;
+      // we don't want to validate extends - this is going to happen later on (line 29)
+      assertValidRuleset({ extends: [], ...def });
+      definition = maybeDefinition as RulesetDefinition;
+    } else {
+      assertValidRuleset(maybeDefinition);
+      definition = maybeDefinition;
+    }
+
+    this.definition = definition;
+
     this.#context = {
       severity: 'recommended',
       ...context,
@@ -42,14 +56,6 @@ export class Ruleset {
     const stack = context?.[STACK_SYMBOL] ?? new Map<RulesetDefinition, Ruleset>();
 
     stack.set(this.definition, this);
-
-    if ('extends' in definition) {
-      const { extends: _, ...def } = definition;
-      // we don't want to validate extends - this is going to happen later on (line 29)
-      assertValidRuleset({ extends: [], ...def });
-    } else {
-      assertValidRuleset(definition);
-    }
 
     this.extends =
       'extends' in definition
@@ -192,9 +198,5 @@ export class Ruleset {
 
   public get parserOptions(): ParserOptions {
     return { ...DEFAULT_PARSER_OPTIONS, ...this.definition.parserOptions };
-  }
-
-  public static isDefaultRulesetFile(uri: string): boolean {
-    return DEFAULT_RULESET_FILE.test(uri);
   }
 }

@@ -1,0 +1,2 @@
+formats: [oas2, oas3.1, oas3.0, json-schema-loose]
+rules: {}

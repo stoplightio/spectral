@@ -16,6 +16,9 @@
       "path": "./packages/functions/tsconfig.build.json"
     },
     {
+      "path": "./packages/ruleset-migrator/tsconfig.build.json"
+    },
+    {
       "path": "./packages/parsers/tsconfig.build.json"
     },
     {

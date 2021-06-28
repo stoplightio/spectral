@@ -137,7 +137,7 @@ components:
         id:
           type: integer
           description: Unique identifier for the given user.
-          examples:
+          ccc:
             - 13
           readOnly: true
         firstName:
@@ -180,9 +180,13 @@ components:
           examples:
             - 36
 ====asset:ruleset====
-extends: [[spectral:oas, off]]
-rules:
-  oas3-schema: error
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = {
+  extends: [[oas, 'off']],
+  rules: {
+    'oas3-schema': 'error'
+  }
+};
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
