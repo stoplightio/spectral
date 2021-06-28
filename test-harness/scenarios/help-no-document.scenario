@@ -1,7 +1,11 @@
 ====test====
 Errors when no document is provided
+====asset:faketty.sh====
+#!/bin/bash
+
+script -qfec "$(printf "%q " "$@")" /dev/null
 ====command====
-./scripts/faketty.bash {bin} lint
+bash {asset:faketty.sh} {bin} lint
 ====status====
 1
 ====stdout====

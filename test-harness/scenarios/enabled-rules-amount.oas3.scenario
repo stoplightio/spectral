@@ -21,8 +21,17 @@ components:
       in: query
       schema:
         type: integer
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+
+module.exports = {
+  extends: [[oas, 'off']],
+  rules: {
+    'oas3-parameter-description': true,
+  },
+};
 ====command====
-{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.js -v
+{bin} lint {document} --ruleset {asset:ruleset} -v
 ====stdout====
 Found 49 rules (1 enabled)
 Linting {document}
