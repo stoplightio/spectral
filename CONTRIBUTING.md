@@ -19,7 +19,7 @@ The Spectral repo is managed as a monorepo that is composed of multiple packages
 - [cli](./packages/cli) - package for spectral command-line interface
 - [rulesets](./packages/rulesets) - container for rules and functions
 - [functions](./packages/functions) - built-in functions which can be used in rulesets
-- [formats](./packages/rulesets)
+- [formats](./packages/formats)
 - [parsers](./packages/parsers)
 - [ref-resolver](./packages/ref-resolver)
 - [runtime](./packages/runtime)
