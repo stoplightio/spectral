@@ -21,15 +21,18 @@ export function print(ruleset: Ruleset | RulesetDefinition): string {
   );
 }
 
-function formatRules(ruleset: Ruleset): Record<string, Partial<Record<keyof Rule | 'inherited', string>>> {
+function formatRules(
+  ruleset: Ruleset,
+): Record<string, Partial<Record<keyof Rule | 'inherited', string | Record<string, string>>>> {
   const { rules } = ruleset;
-  const formattedRules: Record<string, Partial<Record<keyof Rule | 'inherited', string>>> = {};
+  const formattedRules: Record<string, Partial<Record<keyof Rule | 'inherited', string | Record<string, string>>>> = {};
   for (const rule of Object.values(rules)) {
     formattedRules[rule.name] = {
       name: rule.name,
       enabled: String(rule.enabled),
       inherited: String(rule.owner !== ruleset && (ruleset.source === null || rule.owner.source !== ruleset.source)),
       ...(rule.formats && rule.formats.size > 0 ? { formats: printFormats([...rule.formats]) } : null),
+      given: printArray(rule.given),
       severity: String(rule.severity),
       ...(rule.documentationUrl !== null ? { documentationUrl: rule.documentationUrl } : null),
     };
@@ -38,8 +41,10 @@ function formatRules(ruleset: Ruleset): Record<string, Partial<Record<keyof Rule
   return formattedRules;
 }
 
-function printFormats(formats: Format[]): string {
-  return Array.from(formats)
-    .map(fn => fn.displayName ?? fn.name)
-    .join(', ');
+function printFormats(formats: Format[]): Record<string, string> {
+  return printArray(Array.from(formats).map(fn => fn.displayName ?? fn.name));
+}
+
+function printArray(array: string[]): Record<string, string> {
+  return Object.fromEntries(Object.entries(array));
 }

@@ -90,26 +90,37 @@ describe('Ruleset', () => {
   });
 
   it('formats', async () => {
-    expect(print(await loadRuleset(import('./__fixtures__/formats/ruleset'))))
-      .toEqual(`├─ formats: OpenAPI 2.0 (Swagger), OpenAPI 3.x
+    expect(print(await loadRuleset(import('./__fixtures__/formats/ruleset')))).toEqual(`├─ formats
+│  ├─ 0: OpenAPI 2.0 (Swagger)
+│  └─ 1: OpenAPI 3.x
 └─ rules
    ├─ oas2-valid-rule
    │  ├─ name: oas2-valid-rule
    │  ├─ enabled: true
    │  ├─ inherited: true
-   │  ├─ formats: OpenAPI 2.0 (Swagger)
+   │  ├─ formats
+   │  │  └─ 0: OpenAPI 2.0 (Swagger)
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    ├─ oas3-valid-rule
    │  ├─ name: oas3-valid-rule
    │  ├─ enabled: true
    │  ├─ inherited: true
-   │  ├─ formats: OpenAPI 3.x
+   │  ├─ formats
+   │  │  └─ 0: OpenAPI 3.x
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ generic-valid-rule
       ├─ name: generic-valid-rule
       ├─ enabled: true
       ├─ inherited: false
-      ├─ formats: OpenAPI 2.0 (Swagger), OpenAPI 3.x
+      ├─ formats
+      │  ├─ 0: OpenAPI 2.0 (Swagger)
+      │  └─ 1: OpenAPI 3.x
+      ├─ given
+      │  └─ 0: $.info
       └─ severity: 1
 `);
 
@@ -123,6 +134,7 @@ describe('Ruleset', () => {
               function: truthy,
             },
           },
+
           'generic-valid-rule-2': {
             given: '$.info',
             then: {
@@ -131,18 +143,24 @@ describe('Ruleset', () => {
           },
         },
       }),
-    ).toEqual(`├─ formats: OpenAPI 2.0 (Swagger)
+    ).toEqual(`├─ formats
+│  └─ 0: OpenAPI 2.0 (Swagger)
 └─ rules
    ├─ generic-valid-rule
    │  ├─ name: generic-valid-rule
    │  ├─ enabled: true
    │  ├─ inherited: false
-   │  ├─ formats: OpenAPI 2.0 (Swagger)
+   │  ├─ formats
+   │  │  └─ 0: OpenAPI 2.0 (Swagger)
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ generic-valid-rule-2
       ├─ name: generic-valid-rule-2
       ├─ enabled: true
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $.info
       └─ severity: 1
 `);
   });
@@ -154,6 +172,8 @@ describe('Ruleset', () => {
       ├─ name: foo-rule
       ├─ enabled: true
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $
       └─ severity: 1
 `);
     });
@@ -164,16 +184,22 @@ describe('Ruleset', () => {
    │  ├─ name: baz-rule
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $
    │  └─ severity: 1
    ├─ bar-rule
    │  ├─ name: bar-rule
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $
    │  └─ severity: 1
    └─ foo-rule
       ├─ name: foo-rule
       ├─ enabled: true
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $
       └─ severity: 1
 `);
     });
@@ -220,12 +246,16 @@ describe('Ruleset', () => {
    │  ├─ name: foo-rule
    │  ├─ enabled: true
    │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $
    │  ├─ severity: 1
    │  └─ documentationUrl: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md#foo-rule
    └─ bar-rule
       ├─ name: bar-rule
       ├─ enabled: true
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $
       ├─ severity: 1
       └─ documentationUrl: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/bar-rule.md
 `);
@@ -259,7 +289,7 @@ describe('Ruleset', () => {
       expect(ruleset.fromSource(path.join(cwd, 'spec.yaml')).rules).toEqual({});
     });
 
-    it('rules', async () => {
+    it('given a ruleset with rules only, should apply overrides', async () => {
       const ruleset = await loadRuleset(import('./__fixtures__/overrides/only-rules'), path.join(cwd, 'only-rules'));
 
       expect(print(ruleset)).toEqual(print(await loadRuleset(import('./__fixtures__/overrides/_base'))));
@@ -269,16 +299,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
 
@@ -289,16 +325,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: -1
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
 
@@ -311,16 +353,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 3
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
     });
@@ -335,16 +383,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
 
@@ -353,16 +407,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 2
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: -1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
 
@@ -371,16 +431,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 2
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: -1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: true
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
       expect(print(ruleset.fromSource(path.join(cwd, 'legacy/test/spec.json')))).toEqual(
@@ -392,16 +458,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 2
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: -1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
     });
@@ -417,21 +489,29 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    ├─ contact-name-matches-stoplight
    │  ├─ name: contact-name-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info.contact
    │  └─ severity: 1
    └─ value-matches-stoplight
       ├─ name: value-matches-stoplight
       ├─ enabled: true
       ├─ inherited: false
+      ├─ given
+      │  └─ 0: $..value
       └─ severity: 0
 `);
 
@@ -444,16 +524,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
     });
@@ -483,57 +569,122 @@ describe('Ruleset', () => {
     it('should respect formats', async () => {
       const ruleset = await loadRuleset(import('./__fixtures__/overrides/formats'), path.join(cwd, 'formats'));
 
-      expect(print(ruleset.fromSource(path.join(cwd, 'schemas/common/user.draft7.json'))))
-        .toEqual(`├─ formats: JSON Schema Draft 7
+      expect(print(ruleset.fromSource(path.join(cwd, 'schemas/common/user.draft7.json')))).toEqual(`├─ formats
+│  └─ 0: JSON Schema Draft 7
 └─ rules
    ├─ description-matches-stoplight
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    ├─ contact-name-matches-stoplight
    │  ├─ name: contact-name-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info.contact
    │  └─ severity: 1
    └─ valid-number-validation
       ├─ name: valid-number-validation
       ├─ enabled: true
       ├─ inherited: false
-      ├─ formats: JSON Schema Draft 7
+      ├─ formats
+      │  └─ 0: JSON Schema Draft 7
+      ├─ given
+      │  ├─ 0: $..exclusiveMinimum
+      │  └─ 1: $..exclusiveMaximum
       └─ severity: 1
 `);
 
-      expect(print(ruleset.fromSource(path.join(cwd, 'schemas/user.draft4.json'))))
-        .toEqual(`├─ formats: JSON Schema Draft 4
+      expect(print(ruleset.fromSource(path.join(cwd, 'schemas/user.draft4.json')))).toEqual(`├─ formats
+│  └─ 0: JSON Schema Draft 4
 └─ rules
    ├─ description-matches-stoplight
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    ├─ contact-name-matches-stoplight
    │  ├─ name: contact-name-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info.contact
    │  └─ severity: 1
    └─ valid-number-validation
       ├─ name: valid-number-validation
       ├─ enabled: true
       ├─ inherited: false
-      ├─ formats: JSON Schema Draft 4
+      ├─ formats
+      │  └─ 0: JSON Schema Draft 4
+      ├─ given
+      │  ├─ 0: $..exclusiveMinimum
+      │  └─ 1: $..exclusiveMaximum
       └─ severity: 1
 `);
+    });
+
+    describe('aliases', () => {
+      const cwd = path.join(__dirname, './__fixtures__/overrides/aliases');
+
+      it('given locally defined aliases, should merge them same as rules', async () => {
+        const ruleset = await loadRuleset(import('./__fixtures__/overrides/aliases/scope'), path.join(cwd, 'scope'));
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'document.json')))).toEqual(`└─ rules
+   └─ truthy-stoplight-property
+      ├─ name: truthy-stoplight-property
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ given
+      │  └─ 0: $..value
+      └─ severity: 0
+`);
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'legacy/document.json')))).toEqual(`└─ rules
+   ├─ truthy-stoplight-property
+   │  ├─ name: truthy-stoplight-property
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $..value
+   │  └─ severity: 0
+   └─ falsy-value
+      ├─ name: falsy-value
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ given
+      │  └─ 0: $..value
+      └─ severity: 1
+`);
+
+        expect(print(ruleset.fromSource(path.join(cwd, 'document.yaml')))).toEqual(`└─ rules
+   └─ value-matches-stoplight
+      ├─ name: value-matches-stoplight
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ given
+      │  └─ 0: $..stoplight
+      └─ severity: 0
+`);
+      });
     });
 
     describe('extends', () => {
@@ -547,16 +698,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: true
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
       });
@@ -572,16 +729,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: true
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
 
@@ -590,16 +753,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
       });
@@ -612,16 +781,22 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: true
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: true
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
 
@@ -634,52 +809,265 @@ describe('Ruleset', () => {
    │  ├─ name: description-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 0
    ├─ title-matches-stoplight
    │  ├─ name: title-matches-stoplight
    │  ├─ enabled: false
    │  ├─ inherited: true
+   │  ├─ given
+   │  │  └─ 0: $.info
    │  └─ severity: 1
    └─ contact-name-matches-stoplight
       ├─ name: contact-name-matches-stoplight
       ├─ enabled: false
       ├─ inherited: true
+      ├─ given
+      │  └─ 0: $.info.contact
       └─ severity: 1
 `);
       });
+
+      describe('error handling', () => {
+        it('given document with no source, should throw an error', async () => {
+          const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'), path.join(cwd, 'hierarchy'));
+
+          expect(ruleset.fromSource.bind(ruleset, null)).toThrowError(
+            Error(
+              'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
+            ),
+          );
+        });
+
+        it('given ruleset with no source, should throw an error', async () => {
+          const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'));
+
+          expect(ruleset.fromSource.bind(ruleset, path.join(cwd, 'v2/spec.json'))).toThrowError(
+            Error(
+              'Ruleset must have some source assigned. If you use Spectral programmatically make sure to pass the source to Ruleset',
+            ),
+          );
+        });
+
+        it('given no local or extended rule, should throw an error', async () => {
+          const ruleset = await loadRuleset(
+            import('./__fixtures__/overrides/new-definitions-error'),
+            path.join(cwd, 'new-definitions-error'),
+          );
+
+          expect(ruleset.fromSource.bind(ruleset, path.join(cwd, 'v2/spec.json'))).toThrowError(
+            ReferenceError('Cannot extend non-existing rule: "new-definition"'),
+          );
+        });
+      });
+    });
+  });
+
+  describe('aliases', () => {
+    it('should resolve locally defined aliases', () => {
+      expect(
+        print(
+          new Ruleset({
+            aliases: {
+              Info: '$.info',
+              PathItem: '$.paths[*][*]',
+              Description: '$..description',
+              Name: '$..name',
+            },
+
+            rules: {
+              'valid-path': {
+                given: '#PathItem',
+                then: {
+                  function: truthy,
+                },
+              },
+
+              'valid-name-and-description': {
+                given: ['#Name', '#Description'],
+                then: {
+                  function: truthy,
+                },
+              },
+
+              'valid-contact': {
+                given: '#Info.contact',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          }),
+        ),
+      ).toEqual(`└─ rules
+   ├─ valid-path
+   │  ├─ name: valid-path
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $.paths[*][*]
+   │  └─ severity: 1
+   ├─ valid-name-and-description
+   │  ├─ name: valid-name-and-description
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  ├─ given
+   │  │  ├─ 0: $..name
+   │  │  └─ 1: $..description
+   │  └─ severity: 1
+   └─ valid-contact
+      ├─ name: valid-contact
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ given
+      │  └─ 0: $.info.contact
+      └─ severity: 1
+`);
     });
 
-    describe('error handling', () => {
-      it('given document with no source, should throw an error', async () => {
-        const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'), path.join(cwd, 'hierarchy'));
+    it('should resolve nested aliases', () => {
+      expect(
+        print(
+          new Ruleset({
+            aliases: {
+              Info: '$.info',
+              InfoDescription: '#Info.description',
+              InfoContact: '#Info.contact',
+              InfoContactName: '#InfoContact.name',
+            },
 
-        expect(ruleset.fromSource.bind(ruleset, null)).toThrowError(
-          Error(
-            'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
-          ),
-        );
-      });
+            rules: {
+              'valid-info': {
+                given: '#Info',
+                then: {
+                  function: truthy,
+                },
+              },
 
-      it('given ruleset with no source, should throw an error', async () => {
-        const ruleset = await loadRuleset(import('./__fixtures__/overrides/hierarchy'));
+              'valid-name-and-description': {
+                given: ['#InfoContactName', '#InfoDescription'],
+                then: {
+                  function: truthy,
+                },
+              },
 
-        expect(ruleset.fromSource.bind(ruleset, path.join(cwd, 'v2/spec.json'))).toThrowError(
-          Error(
-            'Ruleset must have some source assigned. If you use Spectral programmatically make sure to pass the source to Ruleset',
-          ),
-        );
-      });
+              'valid-contact': {
+                given: '#InfoContact',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          }),
+        ),
+      ).toEqual(`└─ rules
+   ├─ valid-info
+   │  ├─ name: valid-info
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  ├─ given
+   │  │  └─ 0: $.info
+   │  └─ severity: 1
+   ├─ valid-name-and-description
+   │  ├─ name: valid-name-and-description
+   │  ├─ enabled: true
+   │  ├─ inherited: false
+   │  ├─ given
+   │  │  ├─ 0: $.info.contact.name
+   │  │  └─ 1: $.info.description
+   │  └─ severity: 1
+   └─ valid-contact
+      ├─ name: valid-contact
+      ├─ enabled: true
+      ├─ inherited: false
+      ├─ given
+      │  └─ 0: $.info.contact
+      └─ severity: 1
+`);
+    });
 
-      it('given no local or extended rule, should throw an error', async () => {
-        const ruleset = await loadRuleset(
-          import('./__fixtures__/overrides/new-definitions-error'),
-          path.join(cwd, 'new-definitions-error'),
-        );
+    it('given unresolved alias, should throw', () => {
+      expect(
+        print.bind(
+          null,
+          new Ruleset({
+            extends: {
+              aliases: {
+                PathItem: '$.paths[*][*]',
+              },
+              rules: {},
+            },
+            rules: {
+              'valid-path': {
+                given: '#PathItem-',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          }),
+        ),
+      ).toThrowError(ReferenceError('Alias "PathItem-" does not exist'));
+    });
 
-        expect(ruleset.fromSource.bind(ruleset, path.join(cwd, 'v2/spec.json'))).toThrowError(
-          ReferenceError('Cannot extend non-existing rule: "new-definition"'),
-        );
-      });
+    it('given circular alias, should throw', () => {
+      expect(
+        print.bind(
+          null,
+          new Ruleset({
+            aliases: {
+              Root: '#Info',
+              Info: '#Root.test',
+              Contact: '#Info',
+              Test: '#Contact.test',
+            },
+            rules: {
+              'valid-path': {
+                given: '#Test',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          }),
+        ),
+      ).toThrowError(
+        ReferenceError('Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info'),
+      );
+    });
+
+    it('should refuse to resolve externally defined aliases', () => {
+      expect(
+        print.bind(
+          null,
+          new Ruleset({
+            extends: {
+              aliases: {
+                PathItem: '$.paths[*][*]',
+                Description: '$..description',
+                Name: '$..name',
+              },
+              rules: {},
+            },
+            rules: {
+              'valid-path': {
+                given: '#PathItem',
+                then: {
+                  function: truthy,
+                },
+              },
+
+              'valid-name-and-description': {
+                given: ['#Name', '#Description'],
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          }),
+        ),
+      ).toThrowError(ReferenceError('Alias "PathItem" does not exist'));
     });
   });
 });

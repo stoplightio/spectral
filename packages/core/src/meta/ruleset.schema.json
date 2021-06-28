@@ -100,6 +100,9 @@
               },
               "parserOptions": {
                 "$ref": "#/properties/parserOptions"
+              },
+              "aliases": {
+                "$ref": "#/properties/aliases"
               }
             },
             "anyOf": [
@@ -114,8 +117,22 @@
         ]
       },
       "errorMessage": {
-        "minItems": "must not be empty",
-        "type": "must be an array"
+        "minItems": "must not be empty"
+      }
+    },
+    "aliases": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+        "errorMessage": {
+          "pattern": "to avoid confusion the name must match /^[A-Za-z][A-Za-z0-9_-]*$/ regular expression",
+          "minLength": "the name of an alias must not be empty"
+        }
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[$#]",
+        "errorMessage": "the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
       }
     }
   },
