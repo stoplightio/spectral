@@ -23,7 +23,7 @@ rules:
       function: truthy
 ```
 
-Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+Spectral has [built-in functions](../../functions/docs/core-functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
 Rules then target certain chunks of the JSON/YAML with the `given` keyword, which is a [JSONPath](http://jsonpath.com/) (actually, we use [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
 
@@ -46,7 +46,7 @@ extends:
   - some-npm-module
 ```
 
-The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
+The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](./custom-rulesets.md).
 
 ### Formats
 

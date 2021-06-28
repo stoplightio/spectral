@@ -21,7 +21,7 @@ rules:
       function: truthy
 ```
 
-Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+Spectral has [built-in functions](../../functions/docs/core-functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
 ### Given
 
@@ -80,7 +80,7 @@ rules:
 
 ### Then
 
-The `then` part of the rule explains which function to apply to the `given` JSONPath. The function you apply [may be one of the core functions](../reference/functions.md) or it may be [a custom function](./5-custom-functions.md).
+The `then` part of the rule explains which function to apply to the `given` JSONPath. The function you apply [may be one of the core functions](../../functions/docs/core-functions.md) or it may be [a custom function](../../functions/docs/custom-functions.md).
 
 `then` has two required keywords:
 
@@ -101,7 +101,7 @@ then:
     match: "^[0-9]+$"
 ```
 
-The above [`pattern` based rule](../reference/functions.md#pattern) would error on `456avbas` as it is not numeric.
+The above [`pattern` based rule](../../functions/docs/core-functions.md#pattern) would error on `456avbas` as it is not numeric.
 
 ```yaml
 responses:
@@ -260,8 +260,8 @@ rules:
 
 ## Core Functions
 
-Several functions [are provided by default](../reference/functions.md) for your rules.
+Several functions [are provided by default](../../functions/docs/core-functions.md) for your rules.
 
 ## Custom Functions
 
-If none of the [core functions](../reference/functions.md) do what you want, you can [write your own custom functions](./5-custom-functions.md).
+If none of the [core functions](../../functions/docs/core-functions.md) do what you want, you can [write your own custom functions](../../functions/docs/custom-functions.md).
