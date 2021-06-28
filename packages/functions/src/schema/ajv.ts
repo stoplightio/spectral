@@ -37,18 +37,9 @@ function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
 }
 
 function createAjvInstances(Ajv: typeof AjvCore): { default: AjvCore; allErrors: AjvCore } {
-  let _default: AjvCore;
-  let _allErrors: AjvCore;
-
   return {
-    get default(): AjvCore {
-      _default ??= createAjvInstance(Ajv, false);
-      return _default;
-    },
-    get allErrors(): AjvCore {
-      _allErrors ??= createAjvInstance(Ajv, true);
-      return _allErrors;
-    },
+    default: createAjvInstance(Ajv, false),
+    allErrors: createAjvInstance(Ajv, true),
   };
 }
 
