@@ -79,7 +79,7 @@ spectral.registerFormat("json-schema-draft7", isJSONSchemaDraft7);
 spectral.registerFormat("json-schema-2019-09", isJSONSchemaDraft2019_09);
 ```
 
-Learn more about predefined formats in the [ruleset documentation](../getting-started/3-rulesets.md#formats).
+Learn more about predefined formats in the [ruleset documentation](../../packages/formats/README.md).
 
 ## Loading Rules
 

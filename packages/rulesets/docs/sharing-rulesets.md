@@ -1,6 +1,6 @@
 # Sharing & Distributing Rulesets
 
-A [ruleset](../getting-started/3-rulesets.md) becomes infinitely more useful when other developers are using it. By itself, it's just a way of enforcing some rules on a single project, but when distributed a ruleset can become a "style guide" for enforcing consistency across a whole bunch of projects!
+A [ruleset](./rulesets.md) becomes infinitely more useful when other developers are using it. By itself, it's just a way of enforcing some rules on a single project, but when distributed a ruleset can become a "style guide" for enforcing consistency across a whole bunch of projects!
 
 To help you out distribute your rulesets among the others, Spectral provides a few ways to load rulesets from a variety of resources:
 
@@ -38,7 +38,7 @@ extends:
   - https://raw.githubusercontent.com/openapi-contrib/style-guides/master/apisyouwonthate.yml
 ```
 
-As with any ruleset, you can pass these directly to the [Spectral CLI](./2-cli.md):
+As with any ruleset, you can pass these directly to the [Spectral CLI](../../cli/README.md):
 
 ```shell
 spectral lint -r https://example.com/some-ruleset.yml

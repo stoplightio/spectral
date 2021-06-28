@@ -2,7 +2,7 @@
 
 When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, but probably wherever they are being made.
 
-- Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
+- Run [Spectral CLI](../../packages/cli/README.md) against design docs and get feedback very early on.
 - Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) or [VS Code](https://github.com/stoplightio/vscode-spectral) automatically as you work, without switching to the CLI.
 
 ## Linting Design-First Workflows
@@ -42,7 +42,7 @@ Folks will forget to run Spectral, and that means they can commit broken or (low
 }
 ```
 
-See our [CLI documentation](./2-cli.md) to see what other arguments and options can be used.
+See our [CLI documentation](../../packages/cli/README.md) to see what other arguments and options can be used.
 
 ## Continuous Integration
 

@@ -24,6 +24,7 @@
   },
   "scripts": {
     "clean": "rimraf packages/*/{dist,.cache}",
+    "cli": "yarn workspace @stoplight/spectral-cli",
     "build": "tsc --build ./tsconfig.build.json",
     "postbuild": "lerna run postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",

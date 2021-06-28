@@ -3,13 +3,13 @@
 For many, the easiest way to install Spectral is as a node module.
 
 ```bash
-npm install -g @stoplight/spectral
+npm install -g @stoplight/spectral-cli
 ```
 
 If you are a Yarn user:
 
 ```bash
-yarn global add @stoplight/spectral
+yarn global add @stoplight/spectral-cli
 ```
 
 ## Executable Binaries
