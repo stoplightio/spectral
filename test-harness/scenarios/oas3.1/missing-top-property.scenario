@@ -5,16 +5,13 @@ openapi: 3.1.0
 info:
   title: no paths
   version: 1.0.0
-====asset:ruleset====
+====asset:ruleset.yaml====
 extends: [[spectral:oas, off]]
 rules:
   oas3-schema: error
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset {asset:ruleset.yaml}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.1.x detected
-
 {document}
  1:1  error  oas3-schema  The document must have either `paths`, `webhooks` or `components`.
 
