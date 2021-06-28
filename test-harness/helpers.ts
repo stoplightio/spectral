@@ -9,6 +9,7 @@ export interface IScenarioFile {
   test: string;
   assets: string[][];
   command: Optional<string>;
+  cwd: Optional<string>;
   status: Optional<string>;
   stdout: Optional<string>;
   stderr: Optional<string>;
@@ -31,7 +32,8 @@ function getItem(input: string[], key: string, required?: boolean): Optional<str
 }
 
 export function parseScenarioFile(data: string): IScenarioFile {
-  const regex = /====(test|document|command(?:-(?:nix|win))?|status|stdout|stderr|env|asset:[a-z0-9.-]+)====\r?\n/gi;
+  const regex =
+    /====(test|document|command(?:-(?:nix|win))?|cwd|status|stdout|stderr|env|asset:[a-z0-9./-]+)====\r?\n/gi;
 
   const split = data.split(regex);
 
@@ -40,10 +42,15 @@ export function parseScenarioFile(data: string): IScenarioFile {
   let command = getItem(split, 'command');
   const commandWindows = getItem(split, 'command-win');
   const commandUnix = getItem(split, 'command-nix');
+  let cwd = getItem(split, 'cwd');
   const status = getItem(split, 'status');
   const stdout = getItem(split, 'stdout');
   const stderr = getItem(split, 'stderr');
   const env = getItem(split, 'env');
+
+  if (cwd !== void 0) {
+    cwd = path.join(__dirname, cwd);
+  }
 
   if (command === void 0) {
     if (commandWindows !== void 0 && commandUnix !== void 0) {
@@ -71,6 +78,7 @@ export function parseScenarioFile(data: string): IScenarioFile {
     test,
     assets,
     command,
+    cwd,
     status,
     stdout,
     stderr,
@@ -89,30 +97,35 @@ function getEnv(env: string): NodeJS.ProcessEnv {
   );
 }
 
-export async function tmpFile(opts?: tmp.TmpNameOptions): Promise<tmp.FileResult> {
-  await fs.promises.mkdir(path.join(__dirname, 'tmp'), { recursive: true });
+const TMP_DIR = path.join(__dirname, 'tmp');
 
+if (fs.existsSync(TMP_DIR)) {
+  fs.rmSync(TMP_DIR, { recursive: true });
+}
+
+export async function tmpFile(opts?: tmp.TmpNameOptions): Promise<tmp.FileResult> {
   return new Promise((resolve, reject) => {
-    tmp.file(
-      {
-        tmpdir: path.join(__dirname, 'tmp'),
-        postfix: '.yml',
-        prefix: 'asset-',
-        tries: 10,
-        ...opts,
-      },
-      (err, name, fd, removeCallback) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({
-            name,
-            fd,
-            removeCallback,
-          });
-        }
-      },
-    );
+    fs.promises.mkdir(path.join(TMP_DIR, opts?.tmpdir ?? ''), { recursive: true }).then(() => {
+      tmp.file(
+        {
+          postfix: '.yml',
+          tries: 10,
+          ...opts,
+          tmpdir: path.join(__dirname, 'tmp', opts?.tmpdir ?? ''),
+        },
+        (err, name, fd, removeCallback) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({
+              name,
+              fd,
+              removeCallback,
+            });
+          }
+        },
+      );
+    });
   });
 }
 

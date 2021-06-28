@@ -4,15 +4,17 @@ import * as child_process from 'child_process';
 import { Transform } from 'stream';
 import { normalizeLineEndings } from './helpers';
 
-const cwd = join(__dirname, 'scenarios');
-
 export type SpawnReturn = {
   stdout: string;
   stderr: string;
   status: number;
 };
 
-export type SpawnFn = (command: string, env: Optional<typeof process.env>) => Promise<SpawnReturn>;
+export type SpawnFn = (
+  command: string,
+  env: Optional<typeof process.env>,
+  cwd: Optional<string>,
+) => Promise<SpawnReturn>;
 
 const createStream = () =>
   new Transform({
@@ -42,7 +44,7 @@ function stringifyStream(stream: Transform) {
   });
 }
 
-export const spawnNode: SpawnFn = async (script, env) => {
+export const spawnNode: SpawnFn = async (script, env, cwd = join(__dirname, 'scenarios')) => {
   const stderr = createStream();
   const stdout = createStream();
 

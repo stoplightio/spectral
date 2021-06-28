@@ -1,10 +1,9 @@
 import { Optional } from '@stoplight/types';
-import { Ruleset } from '@stoplight/spectral-core';
+import { Ruleset, RulesetDefinition } from '@stoplight/spectral-core';
 import * as fs from 'fs';
 import * as path from '@stoplight/path';
 import { isAbsolute } from '@stoplight/path';
 import * as process from 'process';
-import { RulesetDefinition } from '@stoplight/spectral-core';
 
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
   const cwd = process.cwd();
@@ -30,5 +29,8 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
 
   const ruleset = (await import(rulesetFile)) as { default: RulesetDefinition } | RulesetDefinition;
 
-  return new Ruleset('default' in ruleset ? ruleset.default : ruleset, { severity: 'recommended' });
+  return new Ruleset('default' in ruleset ? ruleset.default : ruleset, {
+    severity: 'recommended',
+    source: rulesetFile,
+  });
 }

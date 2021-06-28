@@ -1,25 +1,35 @@
+import { dirname, relative } from '@stoplight/path';
+import * as minimatch from 'minimatch';
 import { Rule } from './rule/rule';
-import { FileRulesetSeverityDefinition, ParserOptions, RulesetDefinition } from './types';
+import { FileRulesetSeverityDefinition, ParserOptions, RulesetDefinition, RulesetOverridesDefinition } from './types';
 import { assertValidRuleset } from './validation';
 import { Format } from './format';
 import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS } from '..';
+import { mergeRulesets } from './mergers/rulesets';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
+const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
 
 type RulesetContext = {
-  readonly severity: FileRulesetSeverityDefinition;
+  readonly severity?: FileRulesetSeverityDefinition;
+  readonly source?: string;
   readonly [STACK_SYMBOL]?: Map<RulesetDefinition, Ruleset>;
 };
 
 export class Ruleset {
   protected extends!: Ruleset[];
   public readonly formats = new Set<Format>();
+  public readonly overrides: RulesetOverridesDefinition | null;
 
-  constructor(
-    protected readonly definition: RulesetDefinition,
-    protected readonly context: RulesetContext = { severity: 'recommended' },
-  ) {
+  readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
+
+  constructor(public readonly definition: RulesetDefinition, context?: RulesetContext) {
+    this.#context = {
+      severity: 'recommended',
+      ...context,
+    };
+
     const stack = context?.[STACK_SYMBOL] ?? new Map<RulesetDefinition, Ruleset>();
 
     stack.set(this.definition, this);
@@ -58,6 +68,12 @@ export class Ruleset {
           )
         : [];
 
+    if (stack.size === 1 && definition.overrides) {
+      this.overrides = definition.overrides;
+    } else {
+      this.overrides = null;
+    }
+
     stack.delete(this.definition);
 
     if (Array.isArray(this.definition.formats)) {
@@ -73,6 +89,55 @@ export class Ruleset {
     }
 
     this.rules;
+  }
+
+  get source(): string | null {
+    return this.#context.source ?? null;
+  }
+
+  public fromSource(source: string | null): Ruleset {
+    if (this.overrides === null) {
+      return this;
+    }
+
+    if (source === null) {
+      throw new Error(
+        'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
+      );
+    }
+
+    if (this.source === null) {
+      throw new Error(
+        'Ruleset must have some source assigned. If you use Spectral programmatically make sure to pass the source to Ruleset',
+      );
+    }
+
+    const relativeSource = relative(dirname(this.source), source);
+    const minimatchOpts = { matchBase: true };
+    const overrides = this.overrides
+      .filter(({ files }) => files.some(pattern => minimatch(relativeSource, pattern, minimatchOpts)))
+      .map(({ files, ...ruleset }) => ruleset);
+
+    const { overrides: _, ...definition } = this.definition;
+
+    if (overrides.length === 0) {
+      return this;
+    }
+
+    const mergedOverrides =
+      overrides.length > 1
+        ? overrides
+            .slice(1)
+            .reduce<RulesetDefinition>(
+              (left, right) => mergeRulesets(left, right, true),
+              overrides[0] as RulesetDefinition,
+            )
+        : overrides[0];
+
+    return new Ruleset(mergeRulesets(definition, mergedOverrides, false), {
+      severity: 'recommended',
+      source: this.source,
+    });
   }
 
   public get rules(): Record<string, Rule> {
@@ -94,7 +159,7 @@ export class Ruleset {
 
         if (rule.owner === this) {
           rule.enabled =
-            this.context.severity === 'all' || (this.context.severity === 'recommended' && rule.recommended);
+            this.#context.severity === 'all' || (this.#context.severity === 'recommended' && rule.recommended);
         }
 
         if (rule.formats !== null) {
@@ -102,7 +167,7 @@ export class Ruleset {
             this.formats.add(format);
           }
         } else if (rule.owner !== this) {
-          rule.formats = new Set(rule.owner.definition.formats);
+          rule.formats = rule.owner.definition.formats === void 0 ? null : new Set(rule.owner.definition.formats);
         } else if (this.definition.formats !== void 0) {
           rule.formats = new Set(this.definition.formats);
         }
@@ -121,8 +186,6 @@ export class Ruleset {
   }
 
   public static isDefaultRulesetFile(uri: string): boolean {
-    const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
-
     return DEFAULT_RULESET_FILE.test(uri);
   }
 }
