@@ -13,7 +13,7 @@ import requireResolve from './requireResolve';
 export async function migrateRuleset(filepath: string, { fs, format, npmRegistry }: MigrationOptions): Promise<string> {
   const input = isURL(filepath)
     ? await (await fetch(filepath)).text()
-    : requireResolve?.(filepath) ?? (await fs.promises.readFile(filepath, 'utf8'));
+    : await fs.promises.readFile(requireResolve?.(filepath) ?? filepath, 'utf8');
   const { data: ruleset } = (extname(filepath) === '.json' ? parseJsonWithPointers : parseYamlWithPointers)<unknown>(
     input,
   );
