@@ -12,6 +12,18 @@ The Stoplight Community is dedicated to providing a safe, inclusive, welcoming, 
 
 Our Code of Conduct exists because of that dedication, and we do not tolerate harassment in any form. See our reporting guidelines [here](https://github.com/stoplightio/code-of-conduct/blob/master/incident-reporting.md). Our full Code of Conduct can be found at this [link](https://github.com/stoplightio/code-of-conduct/blob/master/long-form-code-of-conduct.md#long-form-code-of-conduct).
 
+## Repository Structure
+The Spectral repo is managed as a monorepo that is composed of multiple packages:
+
+- [core](./packages/core) - contains classes, functions and types used in other packages.
+- [cli](./packages/cli) - package for spectral command-line interface
+- [rulesets](./packages/rulesets) - container for rules and functions
+- [functions](./packages/functions) - built-in functions which can be used in rulesets
+- [formats](./packages/rulesets)
+- [parsers](./packages/parsers)
+- [ref-resolver](./packages/ref-resolver)
+- [runtime](./packages/runtime)
+
 ## Development
 
 Yarn is a package manager for your code, similar to npm. While you can use npm to use Spectral in your own project, we use yarn for development of Spectral.
@@ -21,7 +33,7 @@ Yarn is a package manager for your code, similar to npm. While you can use npm t
 3. In your terminal, navigate to the directory you cloned Spectral into (check that you are on the `develop` branch).
 4. Install the dependencies: `yarn`
 5. Build Spectral: `yarn build`
-6. Run Spectral from your local installation: `yarn cli lint [openapi_spec_file]`
+6. Run Spectral from your local installation: `yarn cli cli lint [openapi_spec_file]`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
 8. Make changes, add tests, and then run the tests: `yarn test.prod` and `yarn test.harness`
 9. Update the documentation if appropriate. For example, if you added a new rule to an OpenAPI ruleset,
