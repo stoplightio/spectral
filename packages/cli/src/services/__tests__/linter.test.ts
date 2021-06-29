@@ -30,18 +30,22 @@ async function run(command: string) {
 
 describe('Linter service', () => {
   let consoleLogSpy: jest.SpyInstance;
+  let consoleErrorSpy: jest.SpyInstance;
   let processCwdSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {
-      // no-op
-    });
+    const noop = () => {
+      /* no-op */
+    };
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(noop);
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
 
     processCwdSpy = jest.spyOn(process, 'cwd').mockReturnValue(join(__dirname, '__fixtures__'));
   });
 
   afterEach(() => {
     consoleLogSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
     processCwdSpy.mockRestore();
 
     nock.cleanAll();
@@ -86,6 +90,11 @@ describe('Linter service', () => {
         source: join(__dirname, './__fixtures__/gh-474/common.json'),
       },
     ]);
+  });
+
+  it('demands some ruleset to be present', () => {
+    processCwdSpy.mockReturnValue(join(__dirname, '__fixtures__/resolver'));
+    return expect(run(`lint stoplight-info-document.json`)).rejects.toThrow('No ruleset has been provided');
   });
 
   describe('when document is local file', () => {

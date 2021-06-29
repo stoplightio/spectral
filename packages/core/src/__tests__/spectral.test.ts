@@ -4,6 +4,7 @@ import * as Parsers from '@stoplight/spectral-parsers';
 import { Resolver } from '@stoplight/spectral-ref-resolver';
 import { Document } from '../document';
 import { Spectral } from '../spectral';
+import { Ruleset } from '../ruleset';
 
 describe('spectral', () => {
   describe('when a $ref appears', () => {
@@ -19,6 +20,7 @@ describe('spectral', () => {
 
         const target = { foo: 'bar' };
 
+        s.setRuleset(new Ruleset({ rules: {} }));
         await s.run(target);
 
         expect(resolve).toBeCalledWith(target, {

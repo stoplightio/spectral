@@ -30,6 +30,10 @@ describe('linter', () => {
     spectral = new Spectral();
   });
 
+  test('should demand some result', () => {
+    return expect(spectral.run(new Document('123', Parsers.Json))).rejects.toThrow('No ruleset has been provided');
+  });
+
   test('should not throw if passed in value is not an object', () => {
     spectral.setRuleset({
       rules: {
@@ -511,6 +515,7 @@ responses:: !!foo
      description: c
 `;
 
+    spectral.setRuleset({ rules: {} });
     const result = await spectral.run(responses, { ignoreUnknownFormat: true });
 
     expect(result).toEqual(
@@ -599,6 +604,7 @@ responses:: !!foo
   });
 
   test('should report invalid schema $refs', async () => {
+    spectral.setRuleset({ rules: {} });
     const result = await spectral.run(
       JSON.stringify(
         {
@@ -636,6 +642,8 @@ responses:: !!foo
 
   test('should report when a resolver is no t defined for a given $ref type', async () => {
     const s = new Spectral({ resolver: new Resolver() });
+    s.setRuleset(new Ruleset({ rules: {} }));
+
     const document = JSON.stringify({
       'file-refs': [{ $ref: './models/pet.yaml' }, { $ref: '../common/models/error.yaml' }],
     });
@@ -660,6 +668,7 @@ responses:: !!foo
 
   describe('reports duplicated properties for', () => {
     test('JSON format', async () => {
+      spectral.setRuleset({ rules: {} });
       const result = await spectral.run('{"foo":true,"foo":false}', {
         ignoreUnknownFormat: true,
       });
@@ -685,6 +694,7 @@ responses:: !!foo
     });
 
     test('YAML format', async () => {
+      spectral.setRuleset({ rules: {} });
       const result = await spectral.run(`foo: bar\nfoo: baz`, {
         ignoreUnknownFormat: true,
       });
@@ -711,6 +721,7 @@ responses:: !!foo
   });
 
   test('should report invalid YAML mapping keys', async () => {
+    spectral.setRuleset({ rules: {} });
     const results = await spectral.run(
       `responses:
   200:
@@ -1221,6 +1232,7 @@ responses:: !!foo
 
   test.each(['1', 'null', '', 'false'])('given %s input, should report nothing', async input => {
     const s = new Spectral();
+    s.setRuleset(new Ruleset({ rules: {} }));
 
     const source = '/tmp/file.yaml';
     const doc = new Document(input, Parsers.Yaml, source);

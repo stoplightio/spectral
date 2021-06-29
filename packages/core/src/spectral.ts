@@ -22,7 +22,7 @@ export * from './types';
 export class Spectral {
   private readonly _resolver: Resolver;
 
-  public ruleset: Ruleset = new Ruleset({ rules: {} });
+  public ruleset?: Ruleset;
 
   protected readonly runtime: RunnerRuntime;
 
@@ -55,6 +55,10 @@ export class Spectral {
     target: IParsedResult | IDocument | Record<string, unknown> | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
+    if (this.ruleset === void 0) {
+      throw new Error('No ruleset has been provided');
+    }
+
     const document = this.parseDocument(target);
     const ruleset = this.ruleset.fromSource(document.source);
 
