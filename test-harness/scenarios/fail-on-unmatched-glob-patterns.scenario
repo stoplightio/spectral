@@ -1,9 +1,7 @@
 ====test====
 Reports unmatched glob patterns
-====asset:ruleset====
-rules: {}
 ====command====
-{bin} lint ./*oops.{yml,yaml,json} --fail-on-unmatched-globs --ruleset {asset:ruleset}
+{bin} lint ./*oops.{yml,yaml,json} --fail-on-unmatched-globs
 ====status====
 2
 ====stderr====

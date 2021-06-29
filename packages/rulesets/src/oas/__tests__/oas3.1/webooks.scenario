@@ -9,13 +9,16 @@ info:
 webhooks:
   invalidNewPet:
     foo:
-====asset:ruleset.yaml====
+====asset:ruleset====
 extends: [[spectral:oas, off]]
 rules:
   oas3-schema: error
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset.yaml}
+{bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
+OpenAPI 3.x detected
+OpenAPI 3.1.x detected
+
 {document}
  7:17  error  oas3-schema  `invalidNewPet` property must not have unevaluated properties.  webhooks.invalidNewPet
 

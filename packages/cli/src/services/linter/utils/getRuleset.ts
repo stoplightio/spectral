@@ -6,15 +6,13 @@ import * as process from 'process';
 import { extname } from '@stoplight/path';
 import { migrateRuleset } from '@stoplight/spectral-ruleset-migrator';
 
-const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
-
 // eslint-disable-next-line @typescript-eslint/require-await
 const AsyncFunction = (async (): Promise<void> => void 0).constructor as FunctionConstructor;
 
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
   const cwd = process.cwd();
   for (const filename of await fs.promises.readdir(cwd)) {
-    if (DEFAULT_RULESET_FILE.test(filename)) {
+    if (Ruleset.isDefaultRulesetFile(filename)) {
       return path.join(cwd, filename);
     }
   }

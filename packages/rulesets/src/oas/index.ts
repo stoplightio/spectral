@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { oas2, oas3, oas3_0, oas3_1 } from '@stoplight/spectral-formats';
+import { oas2, oas3, oas3_0 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -31,7 +31,7 @@ export { ruleset as default };
 
 const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
-  formats: [oas2, oas3, oas3_0, oas3_1],
+  formats: [oas2, oas3],
   rules: {
     'operation-success-response': {
       description: 'Operation must have at least one `2xx` or `3xx` response.',

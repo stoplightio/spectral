@@ -6,11 +6,13 @@ info:
   title: no paths
   version: 1.0.0
 webhooks: {}
-====asset:ruleset.yaml====
+====asset:ruleset====
 extends: [[spectral:oas, off]]
 rules:
   oas3-schema: error
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset.yaml}
+{bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
+OpenAPI 3.x detected
+OpenAPI 3.1.x detected
 No results with a severity of 'error' or higher found!

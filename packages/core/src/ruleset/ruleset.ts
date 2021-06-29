@@ -16,6 +16,7 @@ import { mergeRulesets } from './mergers/rulesets';
 import { isPlainObject } from '@stoplight/json';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
+const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
 
 type RulesetContext = {
   readonly severity?: FileRulesetSeverityDefinition;
@@ -198,5 +199,9 @@ export class Ruleset {
 
   public get parserOptions(): ParserOptions {
     return { ...DEFAULT_PARSER_OPTIONS, ...this.definition.parserOptions };
+  }
+
+  public static isDefaultRulesetFile(uri: string): boolean {
+    return DEFAULT_RULESET_FILE.test(uri);
   }
 }
