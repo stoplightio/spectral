@@ -4,10 +4,8 @@ import { Dictionary } from '@stoplight/types';
 import * as fg from 'fast-glob';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
-import { promisify } from 'util';
 import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
-const writeFileAsync = promisify(fs.writeFile);
 
 const spectralBin = path.join(__dirname, '../packages/cli/binaries/spectral');
 const cwd = path.join(__dirname, './scenarios');
@@ -33,9 +31,10 @@ describe('cli acceptance tests', () => {
     beforeAll(async () => {
       await Promise.all(
         scenario.assets.map(async ([asset]) => {
-          const ext = path.extname(asset);
+          const assetPath = asset.replace(/^asset:/, '');
           const tmpFileHandle = await tmpFile({
-            ...(ext !== void 0 ? { postfix: ext } : null),
+            name: path.basename(assetPath),
+            tmpdir: path.dirname(assetPath),
           });
 
           tmpFileHandles.set(asset, tmpFileHandle);
@@ -51,7 +50,7 @@ describe('cli acceptance tests', () => {
       await Promise.all(
         scenario.assets.map(async ([asset, contents]) => {
           const replaced = applyReplacements(contents, replacements);
-          await writeFileAsync(replacements[asset], replaced, {
+          await fs.promises.writeFile(replacements[asset], replaced, {
             encoding: 'utf8',
           });
         }),
@@ -68,7 +67,7 @@ describe('cli acceptance tests', () => {
 
     test(scenario.test, async () => {
       const command = applyReplacements(scenario.command!, replacements);
-      const { stderr, stdout, status } = await spawnNode(command, scenario.env);
+      const { stderr, stdout, status } = await spawnNode(command, scenario.env, scenario.cwd);
       replacements.date = String(new Date()); // this may introduce random failures, but hopefully they don't occur too often
 
       const expectedStdout = scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout, replacements);

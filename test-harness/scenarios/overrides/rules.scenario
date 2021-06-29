@@ -1,0 +1,97 @@
+====test====
+Respect overrides with rules-only
+====cwd====
+tmp
+====asset:spectral.js====
+const { DiagnosticSeverity } = require('@stoplight/types');
+const { pattern } = require('@stoplight/spectral-functions');
+
+module.exports = {
+  rules: {
+    'description-matches-stoplight': {
+      message: 'Description must contain Stoplight',
+      given: '$.info',
+      recommended: true,
+      severity: DiagnosticSeverity.Error,
+      then: {
+        field: 'description',
+        function: pattern,
+        functionOptions: {
+          match: 'Stoplight',
+        },
+      },
+    },
+    'title-matches-stoplight': {
+      message: 'Title must contain Stoplight',
+      given: '$.info',
+      then: {
+        field: 'title',
+        function: pattern,
+        functionOptions: {
+          match: 'Stoplight',
+        },
+      },
+    },
+    'contact-name-matches-stoplight': {
+      message: 'Contact name must contain Stoplight',
+      given: '$.info.contact',
+      recommended: false,
+      then: {
+        field: 'name',
+        function: pattern,
+        functionOptions: {
+          match: 'Stoplight',
+        },
+      },
+    },
+  },
+  overrides: [
+    {
+      files: ['legacy/**/*.json'],
+      rules: {
+        'description-matches-stoplight': 'error',
+        'title-matches-stoplight': 'warn',
+      },
+    },
+    {
+      files: ['v2/**/*.json'],
+      rules: {
+        'description-matches-stoplight': 'info',
+        'title-matches-stoplight': 'hint',
+      },
+    },
+  ],
+};
+====asset:v2/document.json====
+{
+  "info": {
+    "description": "",
+    "title": "",
+    "contact": {
+      "name": ""
+    }
+  }
+}
+====asset:legacy/document.json====
+{
+  "info": {
+    "description": "",
+    "title": "",
+    "contact": {
+      "name": ""
+    }
+  }
+}
+====command====
+{bin} lint **/*.json --ruleset {asset:spectral.js} --fail-on-unmatched-globs
+====stdout====
+
+{asset:legacy/document.json}
+ 3:20    error  description-matches-stoplight  Description must contain Stoplight  info.description
+ 4:14  warning  title-matches-stoplight        Title must contain Stoplight        info.title
+
+{asset:v2/document.json}
+ 3:20  information  description-matches-stoplight  Description must contain Stoplight  info.description
+ 4:14         hint  title-matches-stoplight        Title must contain Stoplight        info.title
+
+✖ 4 problems (1 error, 1 warning, 1 info, 1 hint)

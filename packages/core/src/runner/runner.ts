@@ -52,7 +52,7 @@ export class Runner {
   public readonly results: IRuleResult[];
 
   constructor(protected readonly runtime: RunnerRuntime, protected readonly inventory: DocumentInventory) {
-    this.results = [...this.inventory.diagnostics, ...this.document.diagnostics, ...(this.inventory.errors ?? [])];
+    this.results = [...this.inventory.diagnostics, ...(this.inventory.errors ?? [])];
   }
 
   protected get document(): IDocument {

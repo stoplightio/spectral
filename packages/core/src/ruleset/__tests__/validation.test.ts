@@ -15,8 +15,10 @@ describe('Ruleset Validation', () => {
   });
 
   it('given object with no rules and no extends properties, throws', () => {
-    expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules or extends property');
-    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow('Ruleset must have rules or extends property');
+    expect(assertValidRuleset.bind(null, {})).toThrow('Ruleset must have rules or extends or overrides defined');
+    expect(assertValidRuleset.bind(null, { rule: {} })).toThrow(
+      'Ruleset must have rules or extends or overrides defined',
+    );
   });
 
   it('given object with extends property only, emits no errors', () => {
@@ -221,6 +223,102 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         },
       }),
     ).toThrow(new RulesetValidationError(error));
+  });
+
+  describe('overrides validation', () => {
+    it('given an invalid overrides, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: null,
+        }),
+      ).toThrow(new RulesetValidationError('Error at #/overrides: must be array'));
+    });
+
+    it('given an empty overrides, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: [],
+        }),
+      ).toThrow(new RulesetValidationError('Error at #/overrides: must not be empty'));
+    });
+
+    it('given an invalid pattern, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: [2],
+        }),
+      ).toThrow(
+        new RulesetValidationError(
+          'Error at #/overrides/0: must be a override, i.e. { "files": ["v2/**/*.json"], "rules": {} }',
+        ),
+      );
+    });
+  });
+
+  describe('aliases validation', () => {
+    it.each(['Info', 'Info-Description', 'Info_Description', 'Response404', 'errorMessage'])(
+      'recognizes %s as a valid key of an alias',
+      alias => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              [alias]: '$',
+            },
+          }),
+        ).not.toThrow();
+      },
+    );
+
+    it.each(['#Info', '#i', '#Info.contact', '#Info[*]'])('recognizes %s as a valid value of an alias', alias => {
+      expect(
+        assertValidRuleset.bind(null, {
+          rules: {},
+          aliases: {
+            alias,
+          },
+        }),
+      ).not.toThrow();
+    });
+
+    it('given an invalid aliases, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          rules: {},
+          aliases: null,
+        }),
+      ).toThrow(new RulesetValidationError('Error at #/aliases: must be object'));
+    });
+
+    it.each(['$', '#', '$bar', '9a', 'test!'])('given %s keyword used as a key of an alias, throws', key => {
+      expect(
+        assertValidRuleset.bind(null, {
+          rules: {},
+          aliases: {
+            [key]: '$.foo',
+          },
+        }),
+      ).toThrow(
+        new RulesetValidationError(
+          'Error at #/aliases: to avoid confusion the name must match /^[A-Za-z][A-Za-z0-9_-]*$/ regular expression',
+        ),
+      );
+    });
+
+    it.each(['', 'foo'])('given %s value used as an alias, throws', value => {
+      expect(
+        assertValidRuleset.bind(null, {
+          rules: {},
+          aliases: {
+            PathItem: value,
+          },
+        }),
+      ).toThrow(
+        new RulesetValidationError(
+          'Error at #/aliases/PathItem: the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+        ),
+      );
+    });
   });
 
   describe('then validation', () => {

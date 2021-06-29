@@ -11,7 +11,7 @@ import { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } 
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
 import { Ruleset } from './ruleset/ruleset';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
-import { RulesetDefinition } from './ruleset/types';
+import { ParserOptions, RulesetDefinition } from './ruleset/types';
 import { Format } from './ruleset/format';
 import { getDiagnosticSeverity } from './ruleset';
 
@@ -41,53 +41,28 @@ export class Spectral {
   }
 
   protected parseDocument(target: IParsedResult | IDocument | Record<string, unknown> | string): IDocument {
-    const document =
-      target instanceof Document
-        ? target
-        : isParsedResult(target)
-        ? new ParsedDocument(target)
-        : new Document<unknown, Parsers.YamlParserResult<unknown>>(
-            typeof target === 'string' ? target : stringify(target, void 0, 2),
-            Parsers.Yaml,
-          );
-
-    let i = -1;
-    for (const diagnostic of document.diagnostics.slice()) {
-      i++;
-      if (diagnostic.code !== 'parser') continue;
-
-      let severity;
-
-      if (diagnostic.message.startsWith('Mapping key must be a string scalar rather than')) {
-        severity = getDiagnosticSeverity(this.ruleset.parserOptions.incompatibleValues);
-      } else if (diagnostic.message.startsWith('Duplicate key')) {
-        severity = getDiagnosticSeverity(this.ruleset.parserOptions.duplicateKeys);
-      } else {
-        continue;
-      }
-
-      if (severity === -1) {
-        document.diagnostics.splice(i, 1);
-        i--;
-      } else {
-        diagnostic.severity = severity;
-      }
-    }
-
-    return document;
+    return target instanceof Document
+      ? target
+      : isParsedResult(target)
+      ? new ParsedDocument(target)
+      : new Document<unknown, Parsers.YamlParserResult<unknown>>(
+          typeof target === 'string' ? target : stringify(target, void 0, 2),
+          Parsers.Yaml,
+        );
   }
 
   public async runWithResolved(
     target: IParsedResult | IDocument | Record<string, unknown> | string,
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
-    const { ruleset } = this;
-
     const document = this.parseDocument(target);
+    const ruleset = this.ruleset.fromSource(document.source);
+
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 
     const runner = new Runner(this.runtime, inventory);
+    runner.results.push(...this._filterParserErrors(document.diagnostics, ruleset.parserOptions));
 
     if (document.formats === void 0) {
       const foundFormats = [...ruleset.formats].filter(format => format(inventory.resolved, document.source));
@@ -131,5 +106,32 @@ export class Spectral {
       DiagnosticSeverity.Warning,
       'unrecognized-format',
     );
+  }
+
+  private _filterParserErrors(
+    diagnostics: ReadonlyArray<ISpectralDiagnostic>,
+    parserOptions: ParserOptions,
+  ): ISpectralDiagnostic[] {
+    return diagnostics.reduce<ISpectralDiagnostic[]>((diagnostics, diagnostic) => {
+      if (diagnostic.code !== 'parser') return diagnostics;
+
+      let severity;
+
+      if (diagnostic.message.startsWith('Mapping key must be a string scalar rather than')) {
+        severity = getDiagnosticSeverity(parserOptions.incompatibleValues);
+      } else if (diagnostic.message.startsWith('Duplicate key')) {
+        severity = getDiagnosticSeverity(parserOptions.duplicateKeys);
+      } else {
+        diagnostics.push(diagnostic);
+        return diagnostics;
+      }
+
+      if (severity !== -1) {
+        diagnostics.push(diagnostic);
+        diagnostic.severity = severity;
+      }
+
+      return diagnostics;
+    }, []);
   }
 }

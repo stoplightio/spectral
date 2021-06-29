@@ -63,6 +63,77 @@
         }
       },
       "additionalProperties": false
+    },
+    "overrides": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "files": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                },
+                "errorMessage": "must be an non-empty array of glob patterns"
+              }
+            },
+            "required": ["files"],
+            "errorMessage": {
+              "type": "must be a override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }"
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "formats": {
+                "$ref": "#/properties/formats"
+              },
+              "extends": {
+                "$ref": "#/properties/extends"
+              },
+              "rules": {
+                "$ref": "#/properties/rules"
+              },
+              "parserOptions": {
+                "$ref": "#/properties/parserOptions"
+              },
+              "aliases": {
+                "$ref": "#/properties/aliases"
+              }
+            },
+            "anyOf": [
+              {
+                "required": ["extends"]
+              },
+              {
+                "required": ["rules"]
+              }
+            ]
+          }
+        ]
+      },
+      "errorMessage": {
+        "minItems": "must not be empty"
+      }
+    },
+    "aliases": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z][A-Za-z0-9_-]*$",
+        "errorMessage": {
+          "pattern": "to avoid confusion the name must match /^[A-Za-z][A-Za-z0-9_-]*$/ regular expression",
+          "minLength": "the name of an alias must not be empty"
+        }
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[$#]",
+        "errorMessage": "the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+      }
     }
   },
   "anyOf": [
@@ -71,6 +142,9 @@
     },
     {
       "required": ["rules"]
+    },
+    {
+      "required": ["overrides"]
     }
   ]
 }

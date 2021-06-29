@@ -8,8 +8,6 @@ export type FileRulesetSeverityDefinition = 'off' | 'recommended' | 'all';
 
 export type FileRuleDefinition = RuleDefinition | FileRuleSeverityDefinition;
 
-export type FileRuleCollection = Record<string, FileRuleDefinition>;
-
 export type ParserOptions = {
   duplicateKeys: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
   incompatibleValues: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
@@ -58,21 +56,47 @@ export interface IRuleThen {
   functionOptions?: unknown;
 }
 
+export type RulesetExtendsDefinition =
+  | RulesetDefinition
+  | (RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition])[];
+
+export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'parserOptions' | 'aliases'> &
+  (
+    | {
+        extends: RulesetExtendsDefinition;
+      }
+    | {
+        rules: Record<string, Readonly<FileRuleDefinition>>;
+      }
+    | {
+        extends: RulesetExtendsDefinition;
+        rules: Record<string, Readonly<FileRuleDefinition>>;
+      }
+  );
+
+export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & RulesetOverrideDefinition>;
+export type RulesetAliasesDefinition = Record<string, string>;
+
 export type RulesetDefinition = Readonly<
   {
     documentationUrl?: string;
     formats?: Format<any>[];
     parserOptions?: Partial<ParserOptions>;
+    overrides?: RulesetOverridesDefinition;
+    aliases?: RulesetAliasesDefinition;
   } & Readonly<
     | {
-        extends: RulesetDefinition | Array<RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition]>;
+        overrides: RulesetOverridesDefinition;
+      }
+    | {
+        extends: RulesetExtendsDefinition;
       }
     | {
         rules: Record<string, Readonly<RuleDefinition>>;
       }
     | {
-        extends: RulesetDefinition | Array<RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition]>;
-        rules: FileRuleCollection;
+        extends: RulesetExtendsDefinition;
+        rules: Record<string, Readonly<FileRuleDefinition>>;
       }
   >
 >;
