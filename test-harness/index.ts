@@ -15,7 +15,7 @@ const files = process.env.TESTS !== void 0 ? String(process.env.TESTS).split(','
 
 describe('cli acceptance tests', () => {
   afterAll(async () => {
-    await fs.promises.rmdir(tmpCwd, { recursive: true });
+    await fs.promises.rm(tmpCwd, { recursive: true });
   });
 
   describe.each(files)('%s file', file => {
@@ -76,7 +76,7 @@ describe('cli acceptance tests', () => {
 
       tmpFileHandles.clear();
 
-      await fs.promises.rmdir(scenarioCwd, { recursive: true });
+      await fs.promises.rm(scenarioCwd, { recursive: true });
     });
 
     test(scenario.test, async () => {
