@@ -28,7 +28,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   }
 
   if (rulesetFile === void 0) {
-    throw new Error('No ruleset has been provided');
+    return new Ruleset({ rules: {} });
   }
 
   let ruleset;
