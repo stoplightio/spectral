@@ -2,14 +2,18 @@
 import recast from 'recast';
 import * as path from 'path';
 import * as fs from 'fs';
+import { fileURLToPath } from 'url';
+import ts from 'recast/parsers/typescript.js';
 
-const pkg = JSON.parse(fs.readFileSync('../package.json', 'utf8'));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
 
 const target = path.join(__dirname, '..', 'src', 'consts.ts');
 
 const source = fs.readFileSync(target, 'utf8');
 const ast = recast.parse(source, {
-  parser: require('recast/parsers/typescript'),
+  parser: ts,
 });
 
 const {
