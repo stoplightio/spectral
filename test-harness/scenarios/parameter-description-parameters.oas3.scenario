@@ -21,8 +21,17 @@ components:
       in: query
       schema:
         type: integer
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+
+module.exports = {
+  extends: [[oas, 'off']],
+  rules: {
+    'oas3-parameter-description': true,
+  },
+};
 ====command====
-{bin} lint {document} --ruleset ./rulesets/parameter-description.oas3.js
+{bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 {document}
   5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]

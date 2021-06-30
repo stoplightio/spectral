@@ -1,7 +1,5 @@
 ====test====
 Respect overrides with extends
-====cwd====
-tmp
 ====asset:base.js====
 const { DiagnosticSeverity } = require('@stoplight/types');
 const { pattern } = require('@stoplight/spectral-functions');
@@ -49,18 +47,20 @@ module.exports = {
 ====asset:spectral.js====
 const base = require('{asset:base.js}')
 
+const scenarioId = '{scenarioId}';
+
 module.exports = {
   extends: base,
   overrides: [
     {
-      files: ['legacy/**/*.json'],
+      files: [`${scenarioId}-legacy/**/*.json`],
       rules: {
         'description-matches-stoplight': 'error',
         'title-matches-stoplight': 'warn',
       },
     },
     {
-      files: ['v2/**/*.json'],
+      files: [`${scenarioId}-v2/**/*.json`],
       rules: {
         'description-matches-stoplight': 'info',
         'title-matches-stoplight': 'hint',
