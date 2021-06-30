@@ -18,10 +18,10 @@
 - a _valid_ JSON Path expression throws any exception
 - message interpolation fails
 - a JSON Path alias cannot be resolved
+- there was an exception while executing a custom function
 
 **WILL report a diagnostic error or errors** when:
 
-- there was an exception while executing a custom function
 - document does not match any _registered_ format (can be suppressed with ignoreUnknownFormat). **WILL NOT report** if no format is registered.
 - $ref resolving encounters issues
 
