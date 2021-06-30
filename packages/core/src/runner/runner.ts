@@ -11,6 +11,7 @@ import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext } from './types';
 import { Rule } from '../ruleset/rule/rule';
 import { Ruleset } from '../ruleset/ruleset';
+import { toPath } from 'lodash';
 
 const runRule = (context: IRunnerInternalContext, rule: Rule): void => {
   const target = rule.resolved ? context.documentInventory.resolved : context.documentInventory.unresolved;
@@ -36,7 +37,7 @@ const runRule = (context: IRunnerInternalContext, rule: Rule): void => {
             context,
             {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
-              path: JSONPath.toPathArray(result.path),
+              path: toPath(result.path.slice(1)),
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               value: result.value,
             },
