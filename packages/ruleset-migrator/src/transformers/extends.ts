@@ -24,7 +24,7 @@ function processExtend(ctx: TransformerCtx, name: string): namedTypes.AwaitExpre
 
 const transformer: Transformer = function (ctx) {
   const hook: Hook = [
-    /^\/extends$/,
+    /^(\/overrides\/\d+)?\/extends$/,
     (input): namedTypes.ArrayExpression | namedTypes.AwaitExpression | namedTypes.Identifier => {
       ctx.hooks.delete(hook);
       const _extends = input as Ruleset['extends'];
