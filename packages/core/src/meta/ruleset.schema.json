@@ -68,53 +68,94 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "allOf": [
-          {
-            "type": "object",
-            "properties": {
-              "files": {
-                "type": "array",
-                "minItems": 1,
-                "items": {
-                  "type": "string"
-                },
-                "errorMessage": "must be an non-empty array of glob patterns"
-              }
-            },
-            "required": ["files"],
-            "errorMessage": {
-              "type": "must be a override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }"
+        "if": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^#]+#"
+              },
+              "errorMessage": "must be an non-empty array of glob patterns"
             }
           },
-          {
-            "type": "object",
-            "properties": {
-              "formats": {
-                "$ref": "#/properties/formats"
+          "required": ["files"]
+        },
+        "then": {
+          "type": "object",
+          "properties": {
+            "files": true,
+            "rules": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "shared.json#/$defs/Severity"
               },
-              "extends": {
-                "$ref": "#/properties/extends"
+              "errorMessage": {
+                "enum": "must be a valid severity level"
+              }
+            }
+          },
+          "required": ["rules"],
+          "additionalProperties": false,
+          "errorMessage": {
+            "required": "must contain rules when JSON Pointers are defined",
+            "additionalProperties": "must not override any other property than rules when JSON Pointers are defined"
+          }
+        },
+        "else": {
+          "allOf": [
+            {
+              "type": "object",
+              "properties": {
+                "files": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "pattern": "[^#]",
+                    "minLength": 1
+                  },
+                  "errorMessage": "must be an non-empty array of glob patterns"
+                }
               },
-              "rules": {
-                "$ref": "#/properties/rules"
-              },
-              "parserOptions": {
-                "$ref": "#/properties/parserOptions"
-              },
-              "aliases": {
-                "$ref": "#/properties/aliases"
+              "required": ["files"],
+              "errorMessage": {
+                "type": "must be a override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }"
               }
             },
-            "anyOf": [
-              {
-                "required": ["extends"]
+            {
+              "type": "object",
+              "properties": {
+                "formats": {
+                  "$ref": "#/properties/formats"
+                },
+                "extends": {
+                  "$ref": "#/properties/extends"
+                },
+                "rules": {
+                  "$ref": "#/properties/rules"
+                },
+                "parserOptions": {
+                  "$ref": "#/properties/parserOptions"
+                },
+                "aliases": {
+                  "$ref": "#/properties/aliases"
+                }
               },
-              {
-                "required": ["rules"]
-              }
-            ]
-          }
-        ]
+              "anyOf": [
+                {
+                  "required": ["extends"]
+                },
+                {
+                  "required": ["rules"]
+                }
+              ]
+            }
+          ]
+        }
       },
       "errorMessage": {
         "minItems": "must not be empty"

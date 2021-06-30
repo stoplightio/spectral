@@ -8,7 +8,7 @@ import {
   RulesetDefinition,
   RulesetOverridesDefinition,
 } from './types';
-import { assertValidRuleset, RulesetValidationError } from './validation';
+import { assertValidRuleset } from './validation';
 import { Format } from './format';
 import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
@@ -147,18 +147,22 @@ export class Ruleset {
 
         if (actualPattern === pattern) {
           filteredFiles.push(pattern);
-        } else if ('extends' in ruleset || 'parserOptions' in ruleset || !('rules' in ruleset)) {
-          throw new RulesetValidationError(''); // move to ruleset schema
-        } else if (pointer === null) {
-          throw new Error('Unknown error');
+        } else if (!('rules' in ruleset) || pointer === null) {
+          throw new Error('Unknown error. The ruleset is presumably invalid.');
         } else {
           for (const [ruleName, rule] of Object.entries(ruleset.rules)) {
+            if (typeof rule === 'object' || typeof rule === 'boolean') {
+              throw new Error('Unknown error. The ruleset is presumably invalid.');
+            }
+
             const { definition: rulePointerOverrides } = (pointerOverrides[ruleName] ??= {
               rulesetSource,
               definition: new Map(),
             });
-            const severity = getDiagnosticSeverity(rule as any); // todo: validate
+
+            const severity = getDiagnosticSeverity(rule);
             let sourceRulePointerOverrides = rulePointerOverrides.get(actualPattern);
+
             if (sourceRulePointerOverrides === void 0) {
               sourceRulePointerOverrides = new Map();
               rulePointerOverrides.set(actualPattern, sourceRulePointerOverrides);
