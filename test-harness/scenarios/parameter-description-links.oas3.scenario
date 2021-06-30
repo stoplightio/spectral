@@ -21,7 +21,16 @@ components:
       operationId: getUserAddressByUUID
       parameters:
         userUuid: abc
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+
+module.exports = {
+  extends: [[oas, 'off']],
+  rules: {
+    'oas3-parameter-description': true,
+  },
+};
 ====command====
-{bin} lint --ruleset ./rulesets/parameter-description.oas3.js {document}
+{bin} lint --ruleset {asset:ruleset} {document}
 ====stdout====
 No results with a severity of 'error' or higher found!
