@@ -195,6 +195,52 @@ describe('linter', () => {
     ]);
   });
 
+  test('should handle semicolons in property keys', async () => {
+    const document = new Document(
+      `paths:
+  content:
+    application/json;charset=utf-8: # semicolon causes the problem
+      schema:
+        type: string # expecting error on this line`,
+      Parsers.Yaml,
+    );
+
+    const spectral = new Spectral();
+
+    spectral.setRuleset({
+      rules: {
+        rule: {
+          given: '$..type',
+          then: {
+            function: pattern,
+            functionOptions: {
+              match: 'array',
+            },
+          },
+        },
+      },
+    });
+
+    expect(await spectral.run(document)).toEqual([
+      {
+        code: 'rule',
+        message: '"string" must match the pattern "array"',
+        path: ['paths', 'content', 'application/json;charset=utf-8', 'schema', 'type'],
+        range: {
+          end: {
+            character: 20,
+            line: 4,
+          },
+          start: {
+            character: 14,
+            line: 4,
+          },
+        },
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
+  });
+
   test('should support human readable severity levels', async () => {
     spectral.setRuleset({
       rules: {
