@@ -1,12 +1,15 @@
-import { Optional } from '@stoplight/types';
+import { JsonPath, Optional } from '@stoplight/types';
 import { JSONPathExpression } from 'nimma';
-
+import { dirname, relative } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import { pathToPointer } from '@stoplight/json';
+
 import { getDiagnosticSeverity, DEFAULT_SEVERITY_LEVEL } from '../utils/severity';
 import { IGivenNode } from '../../types';
 import { Ruleset } from '../ruleset';
 import { Format } from '../format';
 import { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition } from '../types';
+import { minimatch } from '../utils/minimatch';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
@@ -29,7 +32,7 @@ export class Rule implements IRule {
   #severity!: DiagnosticSeverity;
   public resolved: boolean;
   public formats: Set<Format> | null;
-  public enabled: boolean;
+  #enabled: boolean;
   public recommended: boolean;
   public documentationUrl: string | null;
   #then!: IRuleThen[];
@@ -47,7 +50,7 @@ export class Rule implements IRule {
     public readonly owner: Ruleset,
   ) {
     this.recommended = definition.recommended !== false;
-    this.enabled = this.recommended;
+    this.#enabled = this.recommended;
     this.description = definition.description ?? null;
     this.message = definition.message ?? null;
     this.documentationUrl = definition.documentationUrl ?? null;
@@ -56,6 +59,50 @@ export class Rule implements IRule {
     this.formats = 'formats' in definition ? new Set(definition.formats) : null;
     this.then = definition.then;
     this.given = definition.given;
+  }
+
+  public overrides?: { rulesetSource: string; definition: Map<string, Map<string, DiagnosticSeverity | -1>> };
+
+  public get enabled(): boolean {
+    return this.#enabled || this.overrides !== void 0;
+  }
+
+  public set enabled(enabled: boolean) {
+    this.#enabled = enabled;
+  }
+
+  public getSeverityForSource(source: string, path: JsonPath): DiagnosticSeverity | -1 {
+    if (this.overrides === void 0 || this.overrides.definition.size === 0) {
+      return this.severity;
+    }
+
+    const relativeSource = relative(dirname(this.overrides.rulesetSource), source);
+    const relevantOverrides: Map<string, DiagnosticSeverity | -1>[] = [];
+
+    for (const [source, override] of this.overrides.definition.entries()) {
+      if (minimatch(relativeSource, source)) {
+        relevantOverrides.push(override);
+      }
+    }
+
+    if (relevantOverrides.length === 0) {
+      return this.severity;
+    }
+
+    let severity: DiagnosticSeverity = this.severity;
+    let closestPointer = '';
+    const pointer = pathToPointer(path);
+
+    for (const relevantOverride of relevantOverrides) {
+      for (const [overridePath, overrideSeverity] of relevantOverride.entries()) {
+        if (overridePath.length >= closestPointer.length && pointer.startsWith(overridePath)) {
+          closestPointer = overridePath;
+          severity = overrideSeverity;
+        }
+      }
+    }
+
+    return severity;
   }
 
   public get severity(): DiagnosticSeverity {
