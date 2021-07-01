@@ -1,5 +1,6 @@
 import { builders as b, namedTypes } from 'ast-types';
 import * as functions from '@stoplight/spectral-functions';
+import createOrderedLiteral, { setOrder } from '@stoplight/ordered-object-literal';
 
 import { Transformer } from '../types';
 import { assertString } from '../validation';
@@ -33,11 +34,19 @@ const transformer: Transformer = function (ctx) {
 
   const { rules } = ctx.ruleset;
 
-  for (const key of Object.keys(rules)) {
+  // this is to make sure order of rules is preserved after transformation
+  ctx.ruleset.rules = createOrderedLiteral(rules);
+  const order = Object.keys(rules);
+
+  for (const [i, key] of order.entries()) {
     if (!(key in REPLACEMENTS)) continue;
+    if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
     rules[REPLACEMENTS[key]] = rules[key];
+    order[i] = REPLACEMENTS[key];
     delete rules[key];
   }
+
+  setOrder(rules, order);
 
   ctx.hooks.add([
     /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,

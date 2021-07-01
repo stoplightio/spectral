@@ -10,7 +10,7 @@ module.exports = {
   formats: [oas2, oas3],
   functions: [oasDocumentSchema, oasExample, oasOp2xxResponse, oasOpFormDataConsumeCheck, typedEnum, refSiblings],
   rules: {
-    'operation-default-response': {
+    'operation-2xx-response': {
       description: 'Operation must have at least one `2xx` response.',
       recommended: true,
       type: 'style',
