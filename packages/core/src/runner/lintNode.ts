@@ -88,11 +88,15 @@ function processTargetResults(
     const resultMessage = message(result.message, vars);
     vars.error = resultMessage;
 
+    const severity = source !== null && source !== void 0 ? rule.getSeverityForSource(source, path) : rule.severity;
+
+    if (severity === -1) continue;
+
     context.results.push({
       code: rule.name,
       message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
       path,
-      severity: rule.severity,
+      severity,
       ...(source !== null ? { source } : null),
       range,
     });

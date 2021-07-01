@@ -1,0 +1,119 @@
+====test====
+Respect overrides with pointers
+====asset:base.js====
+const { DiagnosticSeverity } = require('@stoplight/types');
+const { schema } = require('@stoplight/spectral-functions');
+
+module.exports = {
+  rules: {
+    'description-matches-stoplight': {
+      message: 'Description must contain Stoplight',
+      given: '$..description',
+      recommended: true,
+      severity: DiagnosticSeverity.Error,
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'string',
+            pattern: '^Stoplight$',
+          },
+        },
+      },
+    },
+    'title-matches-stoplight': {
+      message: 'Title must contain Stoplight',
+      given: '$..title',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: 'string',
+            pattern: '^Stoplight$',
+          },
+        },
+      },
+    },
+  },
+}
+====asset:spectral.js====
+const base = require('{asset:base.js}')
+
+const assetId = '{scenarioId}';
+
+module.exports = {
+  extends: base,
+  overrides: [
+    {
+      files: [`${assetId}-legacy/**/*.json`],
+      rules: {
+        'description-matches-stoplight': 'error',
+        'title-matches-stoplight': 'warn',
+      },
+    },
+    {
+      files: [`${assetId}-v2/**/*.json#/address`],
+      rules: {
+        'title-matches-stoplight': 'error'
+      },
+    },
+    {
+      files: [`${assetId}-v2/**/*.json`],
+      rules: {
+        'description-matches-stoplight': 'info',
+        'title-matches-stoplight': 'hint',
+      },
+    },
+    {
+      files: [`${assetId}-v2/**/*.json#/address/street`, `${assetId}-v2/**/*.json#/address/city`],
+      rules: {
+        'title-matches-stoplight': 'warn'
+      },
+    },
+   {
+      files: [`**/*.json#/info/title`],
+      rules: {
+        'title-matches-stoplight': 'info'
+      },
+    },
+  ],
+};
+====asset:v2/document.json====
+{
+  "info": {
+    "description": "",
+    "title": ""
+  },
+  "address": {
+    "title": "",
+    "street": {
+      "title": "Stoplight"
+    },
+    "city": {
+      "title": ""
+    }
+  }
+}
+====asset:legacy/document.json====
+{
+  "info": {
+    "description": "",
+    "title": ""
+  }
+}
+====command====
+{bin} lint **/*.json --ruleset {asset:spectral.js} --fail-on-unmatched-globs
+====stdout====
+
+{asset:legacy/document.json}
+ 3:20        error  description-matches-stoplight  Description must contain Stoplight  info.description
+ 4:14  information  title-matches-stoplight        Title must contain Stoplight        info.title
+
+{asset:v2/document.json}
+  3:20  information  description-matches-stoplight  Description must contain Stoplight  info.description
+  4:14  information  title-matches-stoplight        Title must contain Stoplight        info.title
+  7:14        error  title-matches-stoplight        Title must contain Stoplight        address.title
+ 12:16      warning  title-matches-stoplight        Title must contain Stoplight        address.city.title
+
+✖ 6 problems (2 errors, 1 warning, 3 infos, 0 hints)
+

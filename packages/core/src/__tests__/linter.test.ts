@@ -5,7 +5,9 @@ import * as Parsers from '@stoplight/spectral-parsers';
 import { Resolver } from '@stoplight/spectral-ref-resolver';
 
 import { IParsedResult } from '../document';
-import { Document, Spectral, Format } from '..';
+import { Document, Spectral, Format, RulesetDefinition, Ruleset } from '..';
+import { normalize } from '@stoplight/path';
+import * as path from '@stoplight/path';
 
 const target = {
   responses: {
@@ -1274,5 +1276,220 @@ responses:: !!foo
         source,
       },
     ]);
+  });
+
+  describe('Pointers in overrides', () => {
+    test('should be supported', async () => {
+      const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
+      const ruleset: RulesetDefinition = {
+        rules: {
+          'valid-type': {
+            given: '$..type',
+            then: {
+              function: falsy,
+            },
+          },
+        },
+        overrides: [
+          {
+            files: ['**/*.json#/foo/type'],
+            rules: {
+              'valid-type': 'info',
+            },
+          },
+          {
+            files: ['**/*.json', '**/*.json#/type'],
+            rules: {
+              'valid-type': 'error',
+            },
+          },
+          {
+            files: ['**/*.json#/bar/type'],
+            rules: {
+              'valid-type': 'off',
+            },
+          },
+          {
+            files: ['**/*.json#/bar/type/foo/type'],
+            rules: {
+              'valid-type': 'hint',
+            },
+          },
+        ],
+      };
+
+      const spectral = new Spectral();
+
+      spectral.setRuleset(new Ruleset(ruleset, { source: path.join(path.dirname(documentUri), 'ruleset.json') }));
+
+      const document = new Document(
+        JSON.stringify({
+          foo: {
+            type: 'number',
+          },
+          bar: {
+            type: {
+              foo: {
+                type: 'number',
+              },
+            },
+          },
+          baz: {
+            type: 'number',
+          },
+        }),
+        Parsers.Json,
+        documentUri,
+      );
+
+      const results = await spectral.run(document);
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'valid-type',
+          path: ['foo', 'type'],
+          severity: DiagnosticSeverity.Information,
+        }),
+        expect.objectContaining({
+          code: 'valid-type',
+          path: ['bar', 'type', 'foo', 'type'],
+          severity: DiagnosticSeverity.Hint,
+        }),
+        expect.objectContaining({
+          code: 'valid-type',
+          path: ['baz', 'type'],
+          severity: DiagnosticSeverity.Error,
+        }),
+      ]);
+    });
+
+    test('should respect the order of definitions', async () => {
+      const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
+      const ruleset: RulesetDefinition = {
+        rules: {
+          'valid-type': {
+            given: '$..type',
+            then: {
+              function: falsy,
+            },
+          },
+        },
+        overrides: [
+          {
+            files: ['**/*.json#/foo/type'],
+            rules: {
+              'valid-type': 'info',
+            },
+          },
+          {
+            files: ['**/*.json'],
+            rules: {
+              'valid-type': 'error',
+            },
+          },
+          {
+            files: ['**/*.json#/bar/type'],
+            rules: {
+              'valid-type': 'off',
+            },
+          },
+          {
+            files: ['**/*.json#/bar/type/foo/type'],
+            rules: {
+              'valid-type': 'hint',
+            },
+          },
+          {
+            files: ['**/*.json#/baz/type/foo/type', '**/*.json#/bar/type/foo/type'],
+            rules: {
+              'valid-type': 'info',
+            },
+          },
+        ],
+      };
+
+      const spectral = new Spectral();
+
+      spectral.setRuleset(new Ruleset(ruleset, { source: path.join(path.dirname(documentUri), 'ruleset.json') }));
+
+      const document = new Document(
+        JSON.stringify({
+          bar: {
+            type: {
+              foo: {
+                type: 'number',
+              },
+            },
+          },
+        }),
+        Parsers.Json,
+        documentUri,
+      );
+
+      const results = await spectral.run(document);
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'valid-type',
+          path: ['bar', 'type', 'foo', 'type'],
+          severity: DiagnosticSeverity.Information,
+        }),
+      ]);
+    });
+
+    test('should prefer the closest path', async () => {
+      const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
+      const ruleset: RulesetDefinition = {
+        rules: {
+          'valid-type': {
+            given: '$..type',
+            then: {
+              function: falsy,
+            },
+          },
+        },
+        overrides: [
+          {
+            files: ['**/*.json', '**/*.yaml'],
+            rules: {
+              'valid-type': 'error',
+            },
+          },
+          {
+            files: ['**/*.json#/bar/type'],
+            rules: {
+              'valid-type': 'hint',
+            },
+          },
+          {
+            files: ['test.json#/bar'],
+            rules: {
+              'valid-type': 'off',
+            },
+          },
+        ],
+      };
+
+      const spectral = new Spectral();
+
+      spectral.setRuleset(new Ruleset(ruleset, { source: path.join(path.dirname(documentUri), 'ruleset.json') }));
+
+      const document = new Document(
+        JSON.stringify({
+          bar: {
+            type: 'number',
+          },
+        }),
+        Parsers.Json,
+        documentUri,
+      );
+
+      const results = await spectral.run(document);
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'valid-type',
+          path: ['bar', 'type'],
+          severity: DiagnosticSeverity.Hint,
+        }),
+      ]);
+    });
   });
 });
