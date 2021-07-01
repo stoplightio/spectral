@@ -13,7 +13,7 @@ import { Format } from './format';
 import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
-import { extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
+import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
@@ -31,10 +31,24 @@ export class Ruleset {
   public readonly overrides: RulesetOverridesDefinition | null;
   public readonly aliases: RulesetAliasesDefinition | null;
   public readonly rules: Record<string, Rule>;
+  public readonly definition: RulesetDefinition;
 
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
-  constructor(public readonly definition: RulesetDefinition, context?: RulesetContext) {
+  constructor(readonly maybeDefinition: unknown, context?: RulesetContext) {
+    let definition: RulesetDefinition;
+    if (isPlainObject(maybeDefinition) && 'extends' in maybeDefinition) {
+      const { extends: _, ...def } = maybeDefinition;
+      // we don't want to validate extends - this is going to happen later on (line 29)
+      assertValidRuleset({ extends: [], ...def });
+      definition = maybeDefinition as RulesetDefinition;
+    } else {
+      assertValidRuleset(maybeDefinition);
+      definition = maybeDefinition;
+    }
+
+    this.definition = definition;
+
     this.#context = {
       severity: 'recommended',
       ...context,
@@ -45,14 +59,6 @@ export class Ruleset {
     const stack = context?.[STACK_SYMBOL] ?? new Map<RulesetDefinition, Ruleset>();
 
     stack.set(this.definition, this);
-
-    if ('extends' in definition) {
-      const { extends: _, ...def } = definition;
-      // we don't want to validate extends - this is going to happen later on (line 29)
-      assertValidRuleset({ extends: [], ...def });
-    } else {
-      assertValidRuleset(definition);
-    }
 
     this.extends =
       'extends' in definition

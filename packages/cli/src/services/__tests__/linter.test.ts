@@ -226,6 +226,20 @@ describe('Linter service', () => {
         );
       });
     });
+
+    describe('given legacy ruleset', () => {
+      it('outputs warnings', async () => {
+        const output = await run(`lint ${validOas3SpecPath} -r ${join(__dirname, '__fixtures__/ruleset.json')}`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+    });
   });
 
   describe('when loading specification files from web', () => {

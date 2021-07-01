@@ -8,10 +8,7 @@
     "tsBuildInfoFile": ".cache/.tsbuildinfo"
   },
   "references": [
-    { "path":  "../core/tsconfig.build.json" },
-    { "path":  "../parsers/tsconfig.build.json" },
-    { "path":  "../ref-resolver/tsconfig.build.json" },
-    { "path":  "../ruleset-migrator/tsconfig.build.json" },
+    { "path":  "../functions/tsconfig.build.json" },
     { "path":  "../runtime/tsconfig.build.json" },
   ]
 }
