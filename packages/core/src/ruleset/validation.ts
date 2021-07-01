@@ -48,6 +48,7 @@ export class RulesetValidationError extends Error {
 }
 
 const RULE_INSTANCE_PATH = /^\/rules\/[^/]+/;
+const GENERIC_INSTANCE_PATH = /^\/(?:extends|overrides(?:\/\d+\/extends)?)/;
 
 class RulesetAjvValidationError extends RulesetValidationError {
   constructor(public ruleset: Record<string, unknown>, public errors: ErrorObject[]) {
@@ -68,12 +69,12 @@ class RulesetAjvValidationError extends RulesetValidationError {
       const error = sortedErrors[i];
       const prevError = i === 0 ? null : sortedErrors[i - 1];
 
-      if (error.instancePath.startsWith('/extends')) {
+      if (GENERIC_INSTANCE_PATH.test(error.instancePath)) {
         let x = 1;
         while (i + x < sortedErrors.length) {
           if (
             sortedErrors[i + x].instancePath.startsWith(error.instancePath) ||
-            !sortedErrors[i + x].instancePath.startsWith('/extends')
+            !GENERIC_INSTANCE_PATH.test(sortedErrors[i + x].instancePath)
           ) {
             continue l;
           }

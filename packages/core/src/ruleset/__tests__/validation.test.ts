@@ -1,6 +1,7 @@
-import { schema } from '@stoplight/spectral-functions';
+import { schema, truthy } from '@stoplight/spectral-functions';
 import { Format } from '../format';
 import { assertValidRuleset, RulesetValidationError } from '../validation';
+import { RulesetDefinition, RulesetOverridesDefinition } from '../types';
 const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
 const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
 
@@ -252,6 +253,72 @@ Error at #/rules/rule/formats/1: must be a valid format`,
           'Error at #/overrides/0: must be a override, i.e. { "files": ["v2/**/*.json"], "rules": {} }',
         ),
       );
+    });
+
+    describe('pointers', () => {
+      const rulesetA = {
+        rules: {},
+      };
+
+      it.each<[Partial<RulesetDefinition>, string]>([
+        [{ extends: [rulesetA] }, 'Error at #/overrides/0: must contain rules when JSON Pointers are defined'],
+        [{ formats: [formatB] }, 'Error at #/overrides/0: must contain rules when JSON Pointers are defined'],
+        [
+          { rules: {}, formats: [formatB] },
+          'Error at #/overrides/0: must not override any other property than rules when JSON Pointers are defined',
+        ],
+        [
+          { rules: {}, extends: [rulesetA] },
+          'Error at #/overrides/0: must not override any other property than rules when JSON Pointers are defined',
+        ],
+        [
+          {
+            rules: {
+              definition: {
+                given: '$',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          },
+          'Error at #/overrides/0/rules/definition: the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+        ],
+      ])('given an override containing a pointer and %p, throws', (ruleset, error) => {
+        expect(
+          assertValidRuleset.bind(null, {
+            overrides: [
+              {
+                files: ['./bar#'],
+                ...ruleset,
+              },
+            ],
+          }),
+        ).toThrow(new RulesetValidationError(error));
+      });
+
+      it.each<RulesetOverridesDefinition>([
+        [
+          {
+            files: ['*.json#'],
+            rules: {
+              'my-rule': 'error',
+            },
+          },
+        ],
+        [
+          {
+            files: ['*.json#/test'],
+            rules: {},
+          },
+        ],
+      ])('recognizes a valid %p override', (...ruleset) => {
+        expect(
+          assertValidRuleset.bind(null, {
+            overrides: ruleset,
+          }),
+        ).not.toThrow();
+      });
     });
   });
 

@@ -1,5 +1,5 @@
 import { dirname, relative } from '@stoplight/path';
-import * as minimatch from 'minimatch';
+import { minimatch } from './utils/minimatch';
 import { Rule } from './rule/rule';
 import {
   FileRulesetSeverityDefinition,
@@ -11,9 +11,10 @@ import {
 import { assertValidRuleset } from './validation';
 import { Format } from './format';
 import { mergeRule } from './mergers/rules';
-import { DEFAULT_PARSER_OPTIONS } from '..';
+import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
-import { isPlainObject } from '@stoplight/json';
+import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
@@ -29,6 +30,7 @@ export class Ruleset {
   public readonly formats = new Set<Format>();
   public readonly overrides: RulesetOverridesDefinition | null;
   public readonly aliases: RulesetAliasesDefinition | null;
+  public readonly rules: Record<string, Rule>;
   public readonly definition: RulesetDefinition;
 
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
@@ -104,7 +106,7 @@ export class Ruleset {
       }
     }
 
-    this.rules;
+    this.rules = this.#getRules();
   }
 
   get source(): string | null {
@@ -116,32 +118,80 @@ export class Ruleset {
       return this;
     }
 
+    const { source: rulesetSource } = this;
+
     if (source === null) {
       throw new Error(
         'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
       );
     }
 
-    if (this.source === null) {
+    if (rulesetSource === null) {
       throw new Error(
         'Ruleset must have some source assigned. If you use Spectral programmatically make sure to pass the source to Ruleset',
       );
     }
 
-    const relativeSource = relative(dirname(this.source), source);
-    const minimatchOpts = { matchBase: true };
-    const overrides = this.overrides
-      .filter(({ files }) => files.some(pattern => minimatch(relativeSource, pattern, minimatchOpts)))
-      .map(({ files, ...ruleset }) => ruleset);
+    const relativeSource = relative(dirname(rulesetSource), source);
+    const pointerOverrides: Record<
+      string, // ruleName
+      {
+        rulesetSource: string;
+        definition: Map<string, Map<string, DiagnosticSeverity | -1>>; // Map<Source, Map<Pointer, Severity>>>
+      }
+    > = {};
+
+    const overrides = this.overrides.flatMap(({ files, ...ruleset }) => {
+      const filteredFiles: string[] = [];
+
+      for (const pattern of files) {
+        const actualPattern = extractSourceFromRef(pattern) ?? pattern;
+
+        if (!minimatch(relativeSource, actualPattern)) continue;
+
+        const pointer = extractPointerFromRef(pattern);
+
+        if (actualPattern === pattern) {
+          filteredFiles.push(pattern);
+        } else if (!('rules' in ruleset) || pointer === null) {
+          throw new Error('Unknown error. The ruleset is presumably invalid.');
+        } else {
+          for (const [ruleName, rule] of Object.entries(ruleset.rules)) {
+            if (typeof rule === 'object' || typeof rule === 'boolean') {
+              throw new Error('Unknown error. The ruleset is presumably invalid.');
+            }
+
+            const { definition: rulePointerOverrides } = (pointerOverrides[ruleName] ??= {
+              rulesetSource,
+              definition: new Map(),
+            });
+
+            const severity = getDiagnosticSeverity(rule);
+            let sourceRulePointerOverrides = rulePointerOverrides.get(actualPattern);
+
+            if (sourceRulePointerOverrides === void 0) {
+              sourceRulePointerOverrides = new Map();
+              rulePointerOverrides.set(actualPattern, sourceRulePointerOverrides);
+            }
+
+            sourceRulePointerOverrides.set(pointer, severity);
+          }
+        }
+      }
+
+      return filteredFiles.length === 0 ? [] : ruleset;
+    });
 
     const { overrides: _, ...definition } = this.definition;
 
-    if (overrides.length === 0) {
+    if (overrides.length === 0 && Object.keys(pointerOverrides).length === 0) {
       return this;
     }
 
     const mergedOverrides =
-      overrides.length > 1
+      overrides.length === 0
+        ? null
+        : overrides.length > 1
         ? overrides
             .slice(1)
             .reduce<RulesetDefinition>(
@@ -150,13 +200,24 @@ export class Ruleset {
             )
         : overrides[0];
 
-    return new Ruleset(mergeRulesets(definition, mergedOverrides, false), {
-      severity: 'recommended',
-      source: this.source,
-    });
+    const ruleset = new Ruleset(
+      mergedOverrides === null ? (definition as RulesetDefinition) : mergeRulesets(definition, mergedOverrides, false),
+      {
+        severity: 'recommended',
+        source: rulesetSource,
+      },
+    );
+
+    for (const [ruleName, rulePointerOverrides] of Object.entries(pointerOverrides)) {
+      if (ruleName in ruleset.rules) {
+        ruleset.rules[ruleName].overrides = rulePointerOverrides;
+      }
+    }
+
+    return ruleset;
   }
 
-  public get rules(): Record<string, Rule> {
+  #getRules(): Record<string, Rule> {
     const rules: Record<string, Rule> = {};
 
     if (this.extends.length > 0) {

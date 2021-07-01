@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   windows: circleci/windows@2.4.0
-  node: circleci/node@3.0.0
 
 executors:
   linux:
@@ -97,19 +96,14 @@ jobs:
       - lint-code
       - lint-documentation
 
-  test:
+  test-node:
     parameters:
-      os:
-        type: executor
       node-version:
         type: string
-    executor: << parameters.os >>
+    docker:
+      - image: circleci/node:<< parameters.node-version >>
     steps:
       - checkout
-      - node/install:
-          node-version: << parameters.node-version >>.0
-          install-yarn: true
-          install-npm: false
       - install-and-build
       - test-node
       - test-harness
@@ -239,15 +233,13 @@ jobs:
 workflows:
   commit:
     jobs:
-      - test:
+      - test-node:
           matrix:
             parameters:
-              os:
-                - linux
               node-version:
                 - "12.21"
-                - "14.16"
-                - "16.0"
+                - lts
+                - current
       - test-windows
       - test-browser
       - lint
