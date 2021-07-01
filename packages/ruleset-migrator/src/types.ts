@@ -13,7 +13,7 @@ export type MigrationOptions = {
   format?: 'esm' | 'commonjs';
 };
 
-export type Hook = [pattern: RegExp, hook: (input: unknown) => ExpressionKind];
+export type Hook = [pattern: RegExp, hook: (input: unknown) => ExpressionKind | null];
 
 export type Transformer = (ctx: TransformerCtx) => void;
 

@@ -1,5 +1,4 @@
 import * as path from '@stoplight/path';
-import { builders as b, namedTypes } from 'ast-types';
 
 import type { Hook, Transformer } from '../types';
 import { assertArray, assertString } from '../validation';
@@ -16,17 +15,16 @@ const transformer: Transformer = function (ctx) {
 
   const hook: Hook = [
     /^\/functions$/,
-    (value): namedTypes.ArrayExpression => {
+    (value): null => {
       assertArray(value);
       ctx.hooks.delete(hook);
-      delete ctx.ruleset.functions;
 
-      return b.arrayExpression(
-        value.map(fn => {
-          assertString(fn);
-          return ctx.tree.addImport(path.basename(fn, true), fn, true);
-        }),
-      );
+      for (const fn of value) {
+        assertString(fn);
+        ctx.tree.addImport(path.basename(fn, true), fn, true);
+      }
+
+      return null;
     },
   ];
 

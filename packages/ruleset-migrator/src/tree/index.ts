@@ -49,7 +49,8 @@ export class Tree {
     return astring.generate(
       b.program([
         ...Array.from(this.#importDeclarations.entries()).flatMap(([source, identifiers]) => {
-          const resolvedSource = this.#npmRegistry !== null ? path.join(this.#npmRegistry, source) : source;
+          const resolvedSource =
+            this.#npmRegistry !== null && !source.startsWith('./') ? path.join(this.#npmRegistry, source) : source;
 
           const nonDefault = identifiers.filter(({ default: _default }) => !_default);
 

@@ -8,7 +8,6 @@ const refSiblings = _interopDefault(require('./functions/refSiblings.js'));
 module.exports = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3],
-  functions: [oasDocumentSchema, oasExample, oasOp2xxResponse, oasOpFormDataConsumeCheck, typedEnum, refSiblings],
   rules: {
     'operation-2xx-response': {
       description: 'Operation must have at least one `2xx` response.',

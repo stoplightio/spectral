@@ -8,8 +8,18 @@ import * as fixtures from './__fixtures__/.cache/index.json';
 const cwd = '/.tmp/spectral';
 
 describe('migrator', () => {
+  let randomSpy: jest.SpyInstance;
+
   beforeAll(async () => {
     await fs.promises.mkdir(cwd, { recursive: true });
+  });
+
+  beforeEach(() => {
+    randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0.5);
+  });
+
+  afterEach(() => {
+    randomSpy.mockRestore();
   });
 
   afterAll(() => {
@@ -58,6 +68,85 @@ describe('migrator', () => {
           fs: fs as any,
         }),
       ).rejects.toThrow('Invalid ruleset provided');
+    });
+  });
+
+  describe('custom npm registry', () => {
+    it('should be supported', async () => {
+      await fs.promises.writeFile(
+        path.join(cwd, 'custom-npm-provider.json'),
+        JSON.stringify({
+          extends: 'spectral:asyncapi',
+          formats: ['oas2'],
+          rules: {
+            rule: {
+              then: {
+                given: '$',
+                function: 'truthy',
+              },
+            },
+          },
+        }),
+      );
+      expect(
+        await migrateRuleset(path.join(cwd, 'custom-npm-provider.json'), {
+          cwd,
+          format: 'esm',
+          fs: fs as any,
+          npmRegistry: 'https://unpkg.com/',
+        }),
+      ).toEqual(`import {asyncapi} from "https://unpkg.com/@stoplight/spectral-rulesets";
+import {oas2} from "https://unpkg.com/@stoplight/spectral-formats";
+import {truthy} from "https://unpkg.com/@stoplight/spectral-functions";
+export default {
+  "extends": asyncapi,
+  "formats": [oas2],
+  "rules": {
+    "rule": {
+      "then": {
+        "given": "$",
+        "function": truthy
+      }
+    }
+  }
+};
+`);
+    });
+
+    it('should not apply to custom functions', async () => {
+      await fs.promises.writeFile(
+        path.join(cwd, 'custom-npm-provider-custom-functions.json'),
+        JSON.stringify({
+          functions: ['customFunction'],
+          rules: {
+            rule: {
+              then: {
+                given: '$',
+                function: 'customFunction',
+              },
+            },
+          },
+        }),
+      );
+      expect(
+        await migrateRuleset(path.join(cwd, 'custom-npm-provider-custom-functions.json'), {
+          cwd,
+          format: 'esm',
+          fs: fs as any,
+          npmRegistry: 'https://unpkg.com/',
+        }),
+      ).toEqual(`import customFunction from "./functions/customFunction.js";
+export default {
+  "rules": {
+    "rule": {
+      "then": {
+        "given": "$",
+        "function": customFunction
+      }
+    }
+  }
+};
+`);
     });
   });
 });

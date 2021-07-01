@@ -3,7 +3,6 @@ const oasExample = _interopDefault(require('./custom-functions/oasExample.js'));
 const oasOp2xxResponse = _interopDefault(require('./custom-functions/oasOp2xxResponse.js'));
 module.exports = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
-  functions: [oasDocumentSchema, oasExample, oasOp2xxResponse],
   rules: {
     'operation-2xx-response': {
       description: 'Operation must have at least one `2xx` response.',

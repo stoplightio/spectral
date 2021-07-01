@@ -37,7 +37,7 @@ export async function migrateRuleset(filepath: string, { fs, format, npmRegistry
   return tree.toString();
 }
 
-function process(input: unknown, hooks: Set<Hook>, path: string): ExpressionKind {
+function process(input: unknown, hooks: Set<Hook>, path: string): ExpressionKind | null {
   for (const [pattern, fn] of hooks) {
     if (pattern.test(path)) {
       return fn(input);
@@ -45,7 +45,7 @@ function process(input: unknown, hooks: Set<Hook>, path: string): ExpressionKind
   }
 
   if (Array.isArray(input)) {
-    return b.arrayExpression(input.map((item, i) => process(item, hooks, `${path}/${String(i)}`)));
+    return b.arrayExpression(input.map((item, i) => process(item, hooks, `${path}/${String(i)}`)).filter(Boolean));
   } else if (typeof input === 'number' || typeof input === 'boolean' || typeof input === 'string') {
     return b.literal(input);
   } else if (typeof input !== 'object') {
@@ -57,8 +57,14 @@ function process(input: unknown, hooks: Set<Hook>, path: string): ExpressionKind
   }
 
   return b.objectExpression(
-    Object.entries(input).map(([key, value]) =>
-      b.property('init', b.identifier(JSON.stringify(key)), process(value, hooks, `${path}/${key}`)),
-    ),
+    Object.entries(input).reduce<namedTypes.Property[]>((properties, [key, value]) => {
+      const propertyValue = process(value, hooks, `${path}/${key}`);
+
+      if (propertyValue !== null) {
+        properties.push(b.property('init', b.identifier(JSON.stringify(key)), propertyValue));
+      }
+
+      return properties;
+    }, []),
   );
 }
