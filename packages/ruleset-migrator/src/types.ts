@@ -6,7 +6,7 @@ export type MigrationOptions = {
   cwd?: string;
   fs: {
     promises: {
-      readFile: typeof import('fs').promises.readFile; // todo: include @types/node in deps?
+      readFile: typeof import('fs').promises.readFile;
     };
   };
   npmRegistry?: string;
