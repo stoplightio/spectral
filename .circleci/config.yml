@@ -273,3 +273,23 @@ workflows:
           requires:
             - release
             - build-windows-binary
+
+  scheduled:
+    triggers:
+      - schedule:
+          cron: "0,15,30,45 * * * *"
+          filters:
+            branches:
+              only:
+                - cron-job-release
+    jobs:
+      - lint
+      - test-node:
+          matrix:
+            parameters:
+              node-version:
+                - "12.21"
+                - lts
+                - current
+      - test-windows
+      - test-browser
