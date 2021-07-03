@@ -1,6 +1,9 @@
 import { fs } from 'memfs';
 import * as path from 'path';
-import * as prettier from 'prettier';
+import * as prettier from 'prettier/standalone';
+import * as parserBabel from 'prettier/parser-babel';
+import { Ruleset } from '@stoplight/spectral-core';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 import { migrateRuleset } from '..';
 import * as fixtures from './__fixtures__/.cache/index.json';
@@ -8,18 +11,8 @@ import * as fixtures from './__fixtures__/.cache/index.json';
 const cwd = '/.tmp/spectral';
 
 describe('migrator', () => {
-  let randomSpy: jest.SpyInstance;
-
   beforeAll(async () => {
     await fs.promises.mkdir(cwd, { recursive: true });
-  });
-
-  beforeEach(() => {
-    randomSpy = jest.spyOn(Math, 'random').mockReturnValue(0.5);
-  });
-
-  afterEach(() => {
-    randomSpy.mockRestore();
   });
 
   afterAll(() => {
@@ -33,6 +26,7 @@ describe('migrator', () => {
     beforeAll(async () => {
       await fs.promises.mkdir(dir, { recursive: true });
       for (const [name, content] of Object.entries(entries)) {
+        await fs.promises.mkdir(path.join(dir, path.dirname(name)), { recursive: true });
         await fs.promises.writeFile(path.join(dir, name), content);
       }
     });
@@ -48,14 +42,68 @@ describe('migrator', () => {
       expect(
         prettier.format(
           await migrateRuleset(ruleset, {
-            cwd,
             format,
             fs: fs as any,
           }),
-          { parser: 'babel' },
+          { parser: 'babel', plugins: [parserBabel] },
         ),
       ).toEqual(await fs.promises.readFile(path.join(dir, `output${ext}`), 'utf8'));
     });
+  });
+
+  it('should support subsequent migrations', async () => {
+    await fs.promises.writeFile(
+      path.join(cwd, 'ruleset-migration-1.json'),
+      JSON.stringify({
+        extends: ['./ruleset-migration-2.json'],
+        rules: {
+          'valid-type': 'error',
+        },
+      }),
+    );
+
+    await fs.promises.writeFile(
+      path.join(cwd, 'ruleset-migration-2.json'),
+      JSON.stringify({
+        extends: 'spectral:oas',
+        rules: {
+          'valid-type': {
+            given: '$',
+            then: {
+              function: 'truthy',
+            },
+          },
+        },
+      }),
+    );
+
+    const _module: { exports?: any } = {};
+
+    await (async () => void 0).constructor(
+      'module, require',
+      await migrateRuleset(path.join(cwd, 'ruleset-migration-1.json'), {
+        format: 'commonjs',
+        fs: fs as any,
+      }),
+    )(_module, (id: string): unknown => {
+      switch (id) {
+        case '@stoplight/spectral-functions':
+          return require('@stoplight/spectral-functions') as unknown;
+        case '@stoplight/spectral-rulesets':
+          return require('@stoplight/spectral-rulesets') as unknown;
+        default:
+          throw new ReferenceError(`${id} not found`);
+      }
+    });
+
+    const ruleset = new Ruleset(_module.exports);
+
+    expect(Object.keys(ruleset.rules)).toEqual([
+      ...Object.keys(require('@stoplight/spectral-rulesets').oas.rules),
+      'valid-type',
+    ]);
+
+    expect(ruleset.rules['valid-type'].severity).toEqual(DiagnosticSeverity.Error);
   });
 
   describe('error handling', () => {
@@ -63,7 +111,6 @@ describe('migrator', () => {
       await fs.promises.writeFile(path.join(cwd, 'unknown-format.json'), `{ "formats": ["json-schema-draft-2"] }`);
       await expect(
         migrateRuleset(path.join(cwd, 'unknown-format.json'), {
-          cwd,
           format: 'esm',
           fs: fs as any,
         }),
@@ -90,7 +137,6 @@ describe('migrator', () => {
       );
       expect(
         await migrateRuleset(path.join(cwd, 'custom-npm-provider.json'), {
-          cwd,
           format: 'esm',
           fs: fs as any,
           npmRegistry: 'https://unpkg.com/',
@@ -130,12 +176,11 @@ export default {
       );
       expect(
         await migrateRuleset(path.join(cwd, 'custom-npm-provider-custom-functions.json'), {
-          cwd,
           format: 'esm',
           fs: fs as any,
           npmRegistry: 'https://unpkg.com/',
         }),
-      ).toEqual(`import customFunction from "./functions/customFunction.js";
+      ).toEqual(`import customFunction from "/.tmp/spectral/functions/customFunction.js";
 export default {
   "rules": {
     "rule": {

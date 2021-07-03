@@ -18,6 +18,18 @@ fs.promises.readdir(cwd).then(async ls => {
       fs.promises.readFile(path.join(dirpath, 'output.cjs'), 'utf8').then(assign(bundle, 'output.cjs')),
       fs.promises.readFile(path.join(dirpath, 'output.mjs'), 'utf8').then(assign(bundle, 'output.mjs')),
       fs.promises.readFile(path.join(dirpath, 'ruleset.yaml'), 'utf8').then(assign(bundle, 'ruleset')),
+      fs.promises
+        .readdir(path.join(dirpath, 'assets'))
+        .then(list =>
+          Promise.all(
+            list.map(item =>
+              fs.promises.readFile(path.join(dirpath, 'assets', item), 'utf8').then(assign(bundle, `assets/${item}`)),
+            ),
+          ),
+        )
+        .catch(() => {
+          // it may not exist
+        }),
     );
   }
 
@@ -25,8 +37,8 @@ fs.promises.readdir(cwd).then(async ls => {
   await fs.promises.writeFile(path.join(cwd, '.cache/index.json'), JSON.stringify(bundled, null, 2));
 });
 
-function assign(bundled: Record<string, string>, kind: string) {
+function assign(bundled: Record<string, string>, name: string) {
   return async (input: string): Promise<void> => {
-    bundled[kind] = kind === 'ruleset' ? (input as string) : prettier.format(input as string, { parser: 'babel' });
+    bundled[name] = /\.[mc]js$/.test(name) ? prettier.format(input as string, { parser: 'babel' }) : (input as string);
   };
 }
