@@ -45,22 +45,22 @@ testRule('no-$ref-siblings', [
     },
     errors: [
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['responses'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['responses', '300', 'description'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['responses', '300', 'abc'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['openapi'],
         severity: DiagnosticSeverity.Error,
       },
@@ -93,28 +93,28 @@ testRule('no-$ref-siblings', [
     },
     errors: [
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['securityDefinitions', 'apikey'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path', 'post'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path', 'get'],
         severity: DiagnosticSeverity.Error,
       },
       {
         code: 'no-$ref-siblings',
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path', 'get', 'security'],
         severity: DiagnosticSeverity.Error,
       },
@@ -149,27 +149,27 @@ testRule('no-$ref-siblings', [
     },
     errors: [
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['components', 'securityDefinitions', 'apikey'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path', 'post'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path', 'get'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '$ref cannot be placed next to any other properties',
+        message: '$ref must not be placed next to any other properties',
         path: ['paths', '/path', 'get', 'security'],
         severity: DiagnosticSeverity.Error,
       },

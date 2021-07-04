@@ -34,8 +34,8 @@ module.exports = {
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 {document}
-  5:9   warning  oas3-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]
-  9:11  warning  oas3-parameter-description  Parameter objects should have a `description`.  paths./pets.get.parameters[0]
- 16:15  warning  oas3-parameter-description  Parameter objects should have a `description`.  components.parameters.skipParam
+  5:9   warning  oas3-parameter-description  Parameter objects must have "description".  paths./pets.parameters[0]
+  9:11  warning  oas3-parameter-description  Parameter objects must have "description".  paths./pets.get.parameters[0]
+ 16:15  warning  oas3-parameter-description  Parameter objects must have "description".  components.parameters.skipParam
 
 ✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)

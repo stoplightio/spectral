@@ -31,7 +31,7 @@ testRule('operation-tags', [
     errors: [
       {
         code: 'operation-tags',
-        message: 'Operation should have non-empty `tags` array.',
+        message: 'Operation must have non-empty "tags" array.',
         path: ['paths', '/todos', 'get'],
         severity: DiagnosticSeverity.Warning,
       },

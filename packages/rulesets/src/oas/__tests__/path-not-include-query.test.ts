@@ -19,7 +19,7 @@ testRule('path-not-include-query', [
     },
     errors: [
       {
-        message: 'given keys should not include a query string.',
+        message: 'Path must not include query string.',
         path: ['paths', '/path?query=true'],
         severity: DiagnosticSeverity.Warning,
       },

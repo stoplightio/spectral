@@ -31,7 +31,7 @@ testRule('operation-singular-tag', [
     },
     errors: [
       {
-        message: 'Operation may only have one tag.',
+        message: 'Operation must not have more than a single tag.',
         path: ['paths', '/todos', 'get', 'tags'],
         severity: DiagnosticSeverity.Warning,
       },

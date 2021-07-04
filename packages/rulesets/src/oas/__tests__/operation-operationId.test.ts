@@ -30,7 +30,7 @@ testRule('operation-operationId', [
     errors: [
       {
         code: 'operation-operationId',
-        message: 'Operation should have an `operationId`.',
+        message: 'Operation must have "operationId".',
         path: ['paths', '/todos', 'get'],
         severity: DiagnosticSeverity.Warning,
       },

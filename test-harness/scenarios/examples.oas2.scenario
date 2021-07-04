@@ -268,7 +268,7 @@ module.exports = oas;
   91:26    error  oas2-valid-schema-example  "example" property type must be boolean                                        paths./schema-example.get.responses[501].schema.properties.some-bool.example
   95:26    error  oas2-valid-schema-example  "example" property must match format "date-time"                               paths./schema-example.get.responses[501].schema.properties.some-date.example
   99:26    error  oas2-valid-schema-example  "example" property must match format "url"                                     paths./schema-example.get.responses[501].schema.properties.some-url.example
- 106:11  warning  operation-tag-defined      Operation tags should be defined in global tags.                               paths./param-examples.get.tags[0]
+ 106:11  warning  operation-tag-defined      Operation tags must be defined in global tags.                                 paths./param-examples.get.tags[0]
  120:22    error  oas2-valid-schema-example  "x-example" property must be equal to one of the allowed values: "foo", "bar"  paths./param-examples.get.parameters[1].x-example
  177:30    error  oas2-valid-media-example   "application/json" property must have required property "name"                 paths./response-examples.get.responses[500].examples.application/json
  194:30    error  oas2-valid-media-example   "application/json" property must have required property "user"                 paths./response-examples-via-$ref.get.responses[200].examples.application/json
