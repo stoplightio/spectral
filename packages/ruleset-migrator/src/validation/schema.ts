@@ -6,6 +6,15 @@ const schema: JSONSchema4 = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   properties: {
+    except: {
+      type: 'object',
+      additionalProperties: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      },
+    },
     extends: {
       oneOf: [
         {
