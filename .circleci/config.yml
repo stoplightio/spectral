@@ -270,12 +270,14 @@ workflows:
   scheduled:
     triggers:
       - schedule:
-          cron: "15 * * * *"
+          cron: "22 * * * *"
           filters:
             branches:
               only:
                 - cron-job-release
     jobs:
+      - release
+    requires:
       - lint
       - test-node:
           matrix:
@@ -286,4 +288,3 @@ workflows:
                 - current
       - test-windows
       - test-browser
-      - release
