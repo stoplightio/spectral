@@ -270,7 +270,7 @@ workflows:
   scheduled:
     triggers:
       - schedule:
-          cron: "* 10 * * 1"
+          cron: "0 10 * * 1"
           filters:
             branches:
               only:
