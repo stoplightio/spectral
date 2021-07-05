@@ -71,7 +71,7 @@ commands:
     steps:
       - run:
           name: Create the Spectral Binary
-          command: npx lerna run build.binary --scope=@stoplight/spectral-cli
+          command: yarn workspace @stoplight/spectral-cli build.binary
       - run:
           name: Run harness tests
           command: yarn test.harness
@@ -127,7 +127,7 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - run: npx lerna bootstrap -- --ignore-engines
+      - run: yarn --ignore-engines
       - run: yarn build
       - test-node
 
@@ -136,7 +136,7 @@ jobs:
       name: windows/default
     steps:
       - prepare-release
-      - run: yarn lerna exec "pkg . --targets windows --out-path ./binaries" --scope=@stoplight/spectral-cli
+      - run: yarn workspace @stoplight/spectral-cli build.windows
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
@@ -211,7 +211,7 @@ jobs:
           else
             npm publish
           fi
-      - run: lerna exec "pkg . --targets linux,macos,alpine --out-path ./binaries" --scope=@stoplight/spectral-cli
+      - run: yarn workspace @stoplight/spectral-cli build.linuxMacAlpine
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
