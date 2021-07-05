@@ -68,8 +68,7 @@ commands:
     steps:
       - run:
           name: Lint commit messages
-          command: |
-            echo "$(git log -1 --pretty=format:"%s")" | npx commitlint
+          command: node ./scripts/lint-commit-messages.mjs
 
   test-node:
     parameters:
