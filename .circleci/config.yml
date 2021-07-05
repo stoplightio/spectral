@@ -62,7 +62,7 @@ commands:
 
   test-node:
     steps:
-      - run: npx lerna run pretest
+      - run: yarn pretest
       - run:
           name: Run node tests
           command: yarn test.jest --coverage --maxWorkers=2
@@ -114,7 +114,7 @@ jobs:
     steps:
       - checkout
       - install-and-build
-      - run: npx lerna run pretest
+      - run: yarn pretest
       - run:
           name: Run browser tests
           command: yarn test.karma
