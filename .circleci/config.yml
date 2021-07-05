@@ -270,7 +270,7 @@ workflows:
   scheduled:
     triggers:
       - schedule:
-          cron: "26 * * * *"
+          cron: "30 * * * *"
           filters:
             branches:
               only:
@@ -288,11 +288,14 @@ workflows:
             - lint
       - test-windows:
           requires:
-            - test-node
+            - lint
       - test-browser:
           requires:
-            - test-windows
+            - lint
       - release:
           requires:
+            - lint
+            - test-node
+            - test-windows
             - test-browser
   
