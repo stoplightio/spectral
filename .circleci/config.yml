@@ -203,14 +203,7 @@ jobs:
       - image: circleci/node:14
     steps:
       - prepare-release
-      - run: |
-          if [[ "$CIRCLE_TAG" == *beta* ]] ; then
-            npm publish --tag beta
-          elif [[ "$CIRCLE_TAG" == *alpha* ]] ; then
-            npm publish --tag alpha
-          else
-            npm publish
-          fi
+      - run: yarn release
       - run: yarn workspace @stoplight/spectral-cli build.linuxMacAlpine
       - persist_to_workspace:
           root: ./packages/cli/
@@ -277,11 +270,11 @@ workflows:
   scheduled:
     triggers:
       - schedule:
-          cron: "* 10 * * 1"
+          cron: "15 * * * *"
           filters:
             branches:
               only:
-                - develop
+                - cron-job-release
     jobs:
       - lint
       - test-node:
@@ -293,3 +286,4 @@ workflows:
                 - current
       - test-windows
       - test-browser
+      - release
