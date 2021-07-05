@@ -38,7 +38,7 @@
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
-    "release": "semantic-release"
+    "release": "yarn workspaces run semantic-release -e semantic-release-monorepo"
   },
   "workspaces": {
     "packages": [
