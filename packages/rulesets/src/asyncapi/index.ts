@@ -12,14 +12,12 @@ import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 import * as asyncApi2Schema from './schemas/schema.asyncapi2.json';
 
-export { ruleset as default };
-
-const ruleset = {
+export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
   formats: [asyncApi2],
   rules: {
     'asyncapi-channel-no-empty-parameter': {
-      description: 'Channel path should not have empty parameter substitution pattern.',
+      description: 'Channel path must not have empty parameter substitution pattern.',
       recommended: true,
       type: 'style',
       given: '$.channels.*~',
@@ -31,7 +29,7 @@ const ruleset = {
       },
     },
     'asyncapi-channel-no-query-nor-fragment': {
-      description: 'Channel path should not include a query (`?`) or a fragment (`#`) delimiter.',
+      description: 'Channel path must not include query ("?") or fragment ("#") delimiter.',
       recommended: true,
       type: 'style',
       given: '$.channels.*~',
@@ -43,7 +41,7 @@ const ruleset = {
       },
     },
     'asyncapi-channel-no-trailing-slash': {
-      description: 'Channel path should not end with a slash.',
+      description: 'Channel path must not end with slash.',
       recommended: true,
       type: 'style',
       given: '$.channels.*~',
@@ -55,8 +53,8 @@ const ruleset = {
       },
     },
     'asyncapi-headers-schema-type-object': {
-      description: 'Headers schema type must be `object`.',
-      message: 'Headers schema type must be `object` ({{error}}).',
+      description: 'Headers schema type must be "object".',
+      message: 'Headers schema type must be "object" ({{error}}).',
       severity: 'error',
       recommended: true,
       type: 'validation',
@@ -82,7 +80,7 @@ const ruleset = {
       },
     },
     'asyncapi-info-contact-properties': {
-      description: 'Contact object should have `name`, `url` and `email`.',
+      description: 'Contact object must have "name", "url" and "email".',
       recommended: true,
       type: 'style',
       given: '$.info.contact',
@@ -102,7 +100,7 @@ const ruleset = {
       ],
     },
     'asyncapi-info-contact': {
-      description: 'Info object should contain `contact` object.',
+      description: 'Info object must have "contact" object.',
       recommended: true,
       type: 'style',
       given: '$',
@@ -112,7 +110,7 @@ const ruleset = {
       },
     },
     'asyncapi-info-description': {
-      description: 'AsyncAPI object info `description` must be present and non-empty string.',
+      description: 'Info "description" must be present and non-empty string.',
       recommended: true,
       type: 'style',
       given: '$',
@@ -122,7 +120,7 @@ const ruleset = {
       },
     },
     'asyncapi-info-license-url': {
-      description: 'License object should include `url`.',
+      description: 'License object must include "url".',
       recommended: false,
       type: 'style',
       given: '$',
@@ -132,7 +130,7 @@ const ruleset = {
       },
     },
     'asyncapi-info-license': {
-      description: 'AsyncAPI object should contain `license` object.',
+      description: 'Info object must have "license" object.',
       recommended: true,
       type: 'style',
       given: '$',
@@ -142,7 +140,7 @@ const ruleset = {
       },
     },
     'asyncapi-operation-description': {
-      description: 'Operation `description` must be present and non-empty string.',
+      description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
       type: 'style',
       given: ['$.channels.*.[publish,subscribe]'],
@@ -152,7 +150,7 @@ const ruleset = {
       },
     },
     'asyncapi-operation-operationId': {
-      description: 'Operation should have an `operationId`.',
+      description: 'Operation must have "operationId".',
       severity: 'error',
       recommended: true,
       type: 'validation',
@@ -163,7 +161,7 @@ const ruleset = {
       },
     },
     'asyncapi-parameter-description': {
-      description: 'Parameter objects should have a `description`.',
+      description: 'Parameter objects must have "description".',
       recommended: false,
       type: 'style',
       given: ['$.components.parameters.*', '$.channels.*.parameters.*'],
@@ -209,7 +207,7 @@ const ruleset = {
       },
     },
     'asyncapi-payload-unsupported-schemaFormat': {
-      description: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+      description: 'Message schema validation is only supported with default unspecified "schemaFormat".',
       severity: 'info',
       recommended: true,
       type: 'validation',
@@ -286,7 +284,7 @@ const ruleset = {
       },
     },
     'asyncapi-server-no-empty-variable': {
-      description: 'Server URL should not have empty variable substitution pattern.',
+      description: 'Server URL must not have empty variable substitution pattern.',
       recommended: true,
       type: 'style',
       given: '$.servers[*].url',
@@ -298,7 +296,7 @@ const ruleset = {
       },
     },
     'asyncapi-server-no-trailing-slash': {
-      description: 'Server URL should not end with a slash.',
+      description: 'Server URL must not end with slash.',
       recommended: true,
       type: 'style',
       given: '$.servers[*].url',
@@ -310,7 +308,7 @@ const ruleset = {
       },
     },
     'asyncapi-server-not-example-com': {
-      description: 'Server URL should not point at example.com.',
+      description: 'Server URL must not point at example.com.',
       recommended: false,
       type: 'style',
       given: '$.servers[*].url',
@@ -322,7 +320,7 @@ const ruleset = {
       },
     },
     'asyncapi-servers': {
-      description: 'AsyncAPI object should contain a non empty `servers` object.',
+      description: 'AsyncAPI object must have non-empty "servers" object.',
       recommended: true,
       type: 'validation',
       given: '$',
@@ -339,7 +337,7 @@ const ruleset = {
       },
     },
     'asyncapi-tag-description': {
-      description: 'Tag object should have a `description`.',
+      description: 'Tag object must have "description".',
       recommended: false,
       type: 'style',
       given: '$.tags[*]',
@@ -349,7 +347,7 @@ const ruleset = {
       },
     },
     'asyncapi-tags-alphabetical': {
-      description: 'AsyncAPI object should have alphabetical `tags`.',
+      description: 'AsyncAPI object must have alphabetical "tags".',
       recommended: false,
       type: 'style',
       given: '$',
@@ -362,7 +360,7 @@ const ruleset = {
       },
     },
     'asyncapi-tags': {
-      description: 'AsyncAPI object should have non-empty `tags` array.',
+      description: 'AsyncAPI object must have non-empty "tags" array.',
       recommended: true,
       type: 'style',
       given: '$',

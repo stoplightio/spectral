@@ -29,7 +29,7 @@ testRule('asyncapi-server-no-trailing-slash', [
     },
     errors: [
       {
-        message: 'Server URL should not end with a slash.',
+        message: 'Server URL must not end with slash.',
         path: ['servers', 'production', 'url'],
         severity: DiagnosticSeverity.Warning,
       },

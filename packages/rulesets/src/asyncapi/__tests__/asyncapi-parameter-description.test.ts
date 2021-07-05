@@ -36,7 +36,7 @@ testRule('asyncapi-parameter-description', [
     }),
     errors: [
       {
-        message: 'Parameter objects should have a `description`.',
+        message: 'Parameter objects must have "description".',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'userId'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -50,7 +50,7 @@ testRule('asyncapi-parameter-description', [
     }),
     errors: [
       {
-        message: 'Parameter objects should have a `description`.',
+        message: 'Parameter objects must have "description".',
         path: ['components', 'parameters', 'orphanParameter'],
         severity: DiagnosticSeverity.Warning,
       },

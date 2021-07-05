@@ -25,7 +25,7 @@ testRule('asyncapi-info-contact', [
     },
     errors: [
       {
-        message: 'Info object should contain `contact` object.',
+        message: 'Info object must have "contact" object.',
         path: ['info'],
         severity: DiagnosticSeverity.Warning,
       },

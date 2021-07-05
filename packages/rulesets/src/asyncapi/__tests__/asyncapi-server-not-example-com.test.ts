@@ -29,7 +29,7 @@ testRule('asyncapi-server-not-example-com', [
     },
     errors: [
       {
-        message: 'Server URL should not point at example.com.',
+        message: 'Server URL must not point at example.com.',
         path: ['servers', 'production', 'url'],
         severity: DiagnosticSeverity.Warning,
       },
