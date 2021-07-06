@@ -65,6 +65,10 @@ const lintCommand: CommandModule = {
           description: 'output to a file instead of stdout',
           type: 'string',
         },
+        'stdin-filepath': {
+          description: 'path to a file to pretend that stdin comes from',
+          type: 'string',
+        },
         resolver: {
           description: 'path to custom json-ref-resolver instance',
           type: 'string',
@@ -115,6 +119,7 @@ const lintCommand: CommandModule = {
       failSeverity,
       displayOnlyFailures,
       ruleset,
+      stdinFilepath,
       format,
       output,
       encoding,
@@ -134,6 +139,7 @@ const lintCommand: CommandModule = {
       ignoreUnknownFormat,
       failOnUnmatchedGlobs,
       ruleset,
+      stdinFilepath,
       ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['verbose', 'quiet', 'resolver']),
     })
       .then(results => {
