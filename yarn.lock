@@ -2320,10 +2320,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stoplight/better-ajv-errors@0.1.1", "@stoplight/better-ajv-errors@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.1.1.tgz#fa7c01aceed122af7c0ab984c6a9cdbef202edb7"
-  integrity sha512-uTfccuOd2Fl7N3I2pEBpWNcHGx1lD3J5BDbqE3YAonXUGa1uUNZdonz3Ow/EqvnZncda++ChAZX61Z7Frd9kYQ==
+"@stoplight/better-ajv-errors@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.2.0.tgz#86aa8072dece24e2aa7e132f889390c18ca1ca6d"
+  integrity sha512-3vBbXBDplfeOGS2rT4PyOwJ1K0A7/NqlVXI6sJ/XchQlrMXFMKtj4qExBLxr4M9ZiiESu48uhbdS3Nx8A0S+ZA==
   dependencies:
     jsonpointer "^4.0.1"
     leven "^3.1.0"

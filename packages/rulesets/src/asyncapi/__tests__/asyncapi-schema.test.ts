@@ -25,7 +25,7 @@ testRule('asyncapi-schema', [
       },
     },
     errors: [
-      { message: 'Object must have required property `channels`', path: [], severity: DiagnosticSeverity.Error },
+      { message: 'Object must have required property "channels"', path: [], severity: DiagnosticSeverity.Error },
     ],
   },
 ]);

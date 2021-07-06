@@ -34,7 +34,7 @@ testRule('oas3-valid-media-example', [
       },
       errors: [
         {
-          message: '`example` property type must be string',
+          message: '"example" property type must be string',
           path: [field, 'xoxo', 'example'],
           severity: DiagnosticSeverity.Error,
         },
@@ -57,7 +57,7 @@ testRule('oas3-valid-media-example', [
 
       errors: [
         {
-          message: '`example` property must be equal to one of the allowed values: `a`, `b`',
+          message: '"example" property must be equal to one of the allowed values: "a", "b"',
           path: [field, 'xoxo', 'example'],
           severity: DiagnosticSeverity.Error,
         },
@@ -171,7 +171,7 @@ testRule('oas3-valid-media-example', [
       },
       errors: [
         {
-          message: '`example` property must have required property `url`',
+          message: '"example" property must have required property "url"',
           path: [field, 'xoxo', 'example'],
           severity: DiagnosticSeverity.Error,
         },
@@ -235,7 +235,7 @@ testRule('oas3-valid-media-example', [
       errors: [
         {
           code: 'oas3-valid-media-example',
-          message: '`value` property type must be string',
+          message: '"value" property type must be string',
           path: [field, 'xoxo', 'examples', 'test1', 'value'],
         },
       ],
@@ -275,7 +275,7 @@ testRule('oas3-valid-media-example', [
       {
         severity: DiagnosticSeverity.Error,
         code: 'oas3-valid-media-example',
-        message: '`example` property type must be string',
+        message: '"example" property type must be string',
       },
     ],
   },
@@ -353,7 +353,7 @@ testRule('oas3-valid-media-example', [
     errors: [
       {
         code: 'oas3-valid-media-example',
-        message: '`example` property must have required property `abc`',
+        message: '"example" property must have required property "abc"',
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -392,7 +392,7 @@ testRule('oas3-valid-media-example', [
     errors: [
       {
         code: 'oas3-valid-media-example',
-        message: '`example` property must have required property `url`',
+        message: '"example" property must have required property "url"',
         severity: DiagnosticSeverity.Error,
       },
     ],

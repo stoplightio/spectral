@@ -36,7 +36,7 @@ describe('Spectral', () => {
     expect(results).toEqual([
       {
         code: 'requires-type',
-        message: '`empty.type` property must be truthy',
+        message: '"empty.type" property must be truthy',
         path: ['empty'],
         range: {
           end: {
@@ -70,7 +70,7 @@ describe('Spectral', () => {
       },
       {
         code: 'requires-type',
-        message: '`allOf.type` property must be truthy',
+        message: '"allOf.type" property must be truthy',
         path: ['allOf'],
         range: {
           end: {

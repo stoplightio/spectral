@@ -15,11 +15,11 @@ describe('asyncApi2SchemaValidation', () => {
 
     expect(results).toEqual([
       {
-        message: '`0` property type must be string',
+        message: '"0" property type must be string',
         path: ['examples', 0],
       },
       {
-        message: '`2` property type must be string',
+        message: '"2" property type must be string',
         path: ['examples', 2],
       },
     ]);
@@ -35,7 +35,7 @@ describe('asyncApi2SchemaValidation', () => {
 
     expect(results).toEqual([
       {
-        message: '`default` property type must be string',
+        message: '"default" property type must be string',
         path: ['default'],
       },
     ]);

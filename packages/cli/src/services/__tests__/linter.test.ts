@@ -57,7 +57,7 @@ describe('Linter service', () => {
     expect(results).toEqual([
       {
         code: 'defined-name',
-        message: '`name` property must be truthy',
+        message: '"name" property must be truthy',
         path: ['0', 'name'],
         range: {
           end: {
@@ -74,7 +74,7 @@ describe('Linter service', () => {
       },
       {
         code: 'defined-name',
-        message: '`name` property must be truthy',
+        message: '"name" property must be truthy',
         path: ['1', 'name'],
         range: {
           end: {
@@ -306,7 +306,7 @@ describe('Linter service', () => {
       return expect(run(`lint -r references/ruleset.js references/no-nested.json`)).resolves.toEqual([
         expect.objectContaining({
           code: 'valid-schema',
-          message: '`info` property must have required property `version`',
+          message: '"info" property must have required property "version"',
           path: ['definitions', 'info'],
           range: {
             end: {
@@ -322,7 +322,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'valid-schema',
-          message: '`description` property type must be string',
+          message: '"description" property type must be string',
           path: ['definitions', 'info', 'description'],
           range: {
             end: {
@@ -338,7 +338,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'valid-schema',
-          message: 'Property `foo` is not expected to be here',
+          message: 'Property "foo" is not expected to be here',
           path: ['paths'],
           range: {
             end: {
@@ -359,7 +359,7 @@ describe('Linter service', () => {
       return expect(run(`lint -r references/ruleset.js references/nested.json`)).resolves.toEqual([
         expect.objectContaining({
           code: 'valid-schema',
-          message: '`info` property must have required property `version`',
+          message: '"info" property must have required property "version"',
           path: [],
           range: {
             end: {
@@ -375,7 +375,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'valid-schema',
-          message: '`description` property type must be string',
+          message: '"description" property type must be string',
           path: ['description'],
           range: {
             end: {
@@ -391,7 +391,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'valid-schema',
-          message: '`get` property must have required property `responses`',
+          message: '"get" property must have required property "responses"',
           path: ['paths', '/test', 'get'],
           range: {
             end: {
@@ -407,7 +407,7 @@ describe('Linter service', () => {
         }),
         expect.objectContaining({
           code: 'valid-schema',
-          message: '`response` property type must be number',
+          message: '"response" property type must be number',
           path: ['paths', '/test', 'get', 'response'],
           range: {
             end: {

@@ -36,7 +36,7 @@ testRule('oas2-valid-schema-example', [
         },
         errors: [
           {
-            message: `\`${field}\` property type must be string`,
+            message: `"${field}" property type must be string`,
             severity: DiagnosticSeverity.Error,
             path: [parentField, '0', 'xoxo', field],
           },
@@ -58,7 +58,7 @@ testRule('oas2-valid-schema-example', [
         },
         errors: [
           {
-            message: `\`${field}\` property must be equal to one of the allowed values: \`a\`, \`b\``,
+            message: `"${field}" property must be equal to one of the allowed values: "a", "b"`,
             path: [parentField, '0', 'xoxo', field],
             severity: DiagnosticSeverity.Error,
           },
@@ -118,7 +118,7 @@ testRule('oas2-valid-schema-example', [
       },
       errors: [
         {
-          message: '`x-example` property type must be string',
+          message: '"x-example" property type must be string',
           path: [parentField, '0', 'schema', 'x-example'],
           severity: DiagnosticSeverity.Error,
         },
@@ -141,7 +141,7 @@ testRule('oas2-valid-schema-example', [
       },
       errors: [
         {
-          message: '`default` property type must be string',
+          message: '"default" property type must be string',
           path: [parentField, '0', 'schema', 'default'],
           severity: DiagnosticSeverity.Error,
         },
@@ -213,7 +213,7 @@ testRule('oas2-valid-schema-example', [
       },
       errors: [
         {
-          message: '`example` property must have required property `url`',
+          message: '"example" property must have required property "url"',
           severity: DiagnosticSeverity.Error,
           path: [parentField, '0', 'schema', 'example'],
         },
@@ -316,7 +316,7 @@ testRule('oas2-valid-schema-example', [
 
     errors: [
       {
-        message: '`self` property type must be array',
+        message: '"self" property type must be array',
         path: ['definitions', 'halRoot', 'example', '_links', 'self'],
         severity: DiagnosticSeverity.Error,
       },
@@ -365,7 +365,7 @@ testRule('oas2-valid-schema-example', [
     },
     errors: [
       {
-        message: '`example` property type must be string',
+        message: '"example" property type must be string',
         path: ['definitions', '0', 'xoxo', 'properties', 'a', 'properties', 'b', 'properties', 'c', 'example'],
         severity: DiagnosticSeverity.Error,
       },

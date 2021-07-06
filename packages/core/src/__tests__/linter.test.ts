@@ -1283,7 +1283,7 @@ responses:: !!foo
     expect(results).toEqual([
       {
         code: 'falsy-foo',
-        message: '`foo` property must be falsy',
+        message: '"foo" property must be falsy',
         path: ['0', 'foo'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,

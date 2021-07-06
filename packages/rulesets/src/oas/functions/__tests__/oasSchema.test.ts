@@ -39,7 +39,7 @@ describe('oasSchema', () => {
     expect(runSchema({ foo: 2 }, testSchema, { document })).toEqual([]);
     expect(runSchema({ foo: 'test' }, testSchema, { document })).toEqual([
       {
-        message: '`foo` property type must be number,null',
+        message: '"foo" property type must be number,null',
         path: ['foo'],
       },
     ]);
@@ -84,7 +84,7 @@ describe('oasSchema', () => {
     expect(runSchema({ foo: 2 }, testSchema, { document })).toEqual([]);
     expect(runSchema({ foo: 'test' }, testSchema, { document })).toEqual([
       {
-        message: '`foo` property type must be number,null',
+        message: '"foo" property type must be number,null',
         path: ['foo'],
       },
     ]);
@@ -110,22 +110,22 @@ describe('oasSchema', () => {
     expect(result).toEqual([
       expect.objectContaining({
         code: 'oas3-schema',
-        message: '`email` property must match format `email`.',
+        message: '"email" property must match format "email".',
         path: ['info', 'contact', 'email'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: '`header-1` property must have required property `schema`.',
+        message: '"header-1" property must have required property "schema".',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: 'Property `type` is not expected to be here.',
+        message: 'Property "type" is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
       }),
       expect.objectContaining({
         code: 'oas3-schema',
-        message: 'Property `op` is not expected to be here.',
+        message: 'Property "op" is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
       }),
       expect.objectContaining({
@@ -136,7 +136,7 @@ describe('oasSchema', () => {
       }),
       expect.objectContaining({
         code: 'oas3-valid-schema-example',
-        message: '`example` property type must be number',
+        message: '"example" property type must be number',
         path: ['components', 'schemas', 'foo', 'example'],
       }),
     ]);
