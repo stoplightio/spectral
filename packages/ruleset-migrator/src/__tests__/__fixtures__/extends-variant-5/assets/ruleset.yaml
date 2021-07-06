@@ -1,0 +1,5 @@
+rules:
+  my-rule:
+    given: $
+    then:
+      function: truthy

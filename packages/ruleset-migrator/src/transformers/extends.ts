@@ -1,6 +1,9 @@
-import { Hook, Transformer, TransformerCtx } from '../types';
 import { builders as b, namedTypes } from 'ast-types';
+import * as path from '@stoplight/path';
+import { Transformer, TransformerCtx } from '../types';
 import { Ruleset } from '../validation/types';
+import { assertArray } from '../validation';
+import { process } from '..';
 
 const REPLACEMENTS = {
   'spectral:oas': 'oas',
@@ -9,41 +12,47 @@ const REPLACEMENTS = {
 
 export { transformer as default };
 
-function processExtend(ctx: TransformerCtx, name: string): namedTypes.AwaitExpression | namedTypes.Identifier {
+async function processExtend(
+  ctx: TransformerCtx,
+  name: string,
+): Promise<namedTypes.ObjectExpression | namedTypes.Identifier> {
   if (name in REPLACEMENTS) {
     return ctx.tree.addImport(REPLACEMENTS[name], '@stoplight/spectral-rulesets');
   }
 
-  const migrator = ctx.tree.addImport('migrateRuleset', '@stoplight/spectral-ruleset-migrator');
-  return b.awaitExpression(
-    b.callExpression(migrator, [
-      b.literal(name), // todo: should try to resolve / provide initial options?
-    ]),
-  );
+  const filepath = ctx.tree.resolveModule(name);
+  const existingCwd = ctx.cwd;
+  try {
+    ctx.cwd = path.dirname(filepath);
+    return await process(await ctx.read(filepath, ctx.opts.fs), ctx.hooks);
+  } finally {
+    ctx.cwd = existingCwd;
+  }
 }
 
 const transformer: Transformer = function (ctx) {
-  const hook: Hook = [
+  ctx.hooks.add([
     /^(\/overrides\/\d+)?\/extends$/,
-    (input): namedTypes.ArrayExpression | namedTypes.AwaitExpression | namedTypes.Identifier => {
-      ctx.hooks.delete(hook);
+    async (input): Promise<namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier> => {
       const _extends = input as Ruleset['extends'];
 
       if (typeof _extends === 'string') {
         return processExtend(ctx, _extends);
       }
 
-      return b.arrayExpression(
-        _extends?.map(ruleset => {
-          if (typeof ruleset === 'string') {
-            return processExtend(ctx, ruleset);
-          }
+      assertArray(_extends);
 
-          return b.arrayExpression([processExtend(ctx, ruleset[0]), b.literal(ruleset[1])]);
-        }) ?? [],
+      return b.arrayExpression(
+        await Promise.all(
+          _extends.map(async ruleset => {
+            if (typeof ruleset === 'string') {
+              return await processExtend(ctx, ruleset);
+            }
+
+            return b.arrayExpression([await processExtend(ctx, ruleset[0]), b.literal(ruleset[1])]);
+          }),
+        ),
       );
     },
-  ];
-
-  ctx.hooks.add(hook);
+  ]);
 };
