@@ -23,7 +23,7 @@ testRule('asyncapi-info-license', [
     },
     errors: [
       {
-        message: 'AsyncAPI object should contain `license` object.',
+        message: 'Info object must have "license" object.',
         path: ['info'],
         severity: DiagnosticSeverity.Warning,
       },

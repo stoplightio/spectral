@@ -28,7 +28,7 @@ testRule('asyncapi-tag-description', [
     },
     errors: [
       {
-        message: 'Tag object should have a `description`.',
+        message: 'Tag object must have "description".',
         path: ['tags', '0'],
         severity: DiagnosticSeverity.Warning,
       },

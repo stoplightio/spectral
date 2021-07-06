@@ -19,7 +19,7 @@ testRule('asyncapi-tags-alphabetical', [
     },
     errors: [
       {
-        message: 'AsyncAPI object should have alphabetical `tags`.',
+        message: 'AsyncAPI object must have alphabetical "tags".',
         path: ['tags'],
         severity: DiagnosticSeverity.Warning,
       },

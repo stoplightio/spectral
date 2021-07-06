@@ -30,7 +30,7 @@ testRule('asyncapi-operation-operationId', [
     }),
     errors: [
       {
-        message: 'Operation should have an `operationId`.',
+        message: 'Operation must have "operationId".',
         path: ['channels', 'one', property],
         severity: DiagnosticSeverity.Error,
       },

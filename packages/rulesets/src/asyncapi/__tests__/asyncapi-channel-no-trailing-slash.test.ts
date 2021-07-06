@@ -24,7 +24,7 @@ testRule('asyncapi-channel-no-trailing-slash', [
     },
     errors: [
       {
-        message: 'Channel path should not end with a slash.',
+        message: 'Channel path must not end with slash.',
         path: ['channels', 'users/{userId}/signedOut/'],
         severity: DiagnosticSeverity.Warning,
       },

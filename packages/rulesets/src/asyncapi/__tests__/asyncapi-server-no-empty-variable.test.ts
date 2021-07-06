@@ -28,7 +28,7 @@ testRule('asyncapi-server-no-empty-variable', [
     },
     errors: [
       {
-        message: 'Server URL should not have empty variable substitution pattern.',
+        message: 'Server URL must not have empty variable substitution pattern.',
         path: ['servers', 'production', 'url'],
         severity: DiagnosticSeverity.Warning,
       },

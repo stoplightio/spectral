@@ -23,7 +23,7 @@ testRule('asyncapi-servers', [
     },
     errors: [
       {
-        message: 'AsyncAPI object should contain a non empty `servers` object.',
+        message: 'AsyncAPI object must have non-empty "servers" object.',
         path: [],
         severity: DiagnosticSeverity.Warning,
       },
@@ -38,7 +38,7 @@ testRule('asyncapi-servers', [
     },
     errors: [
       {
-        message: 'AsyncAPI object should contain a non empty `servers` object.',
+        message: 'AsyncAPI object must have non-empty "servers" object.',
         path: ['servers'],
         severity: DiagnosticSeverity.Warning,
       },

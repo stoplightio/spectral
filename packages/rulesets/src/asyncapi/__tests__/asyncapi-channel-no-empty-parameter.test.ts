@@ -24,7 +24,7 @@ testRule('asyncapi-channel-no-empty-parameter', [
     },
     errors: [
       {
-        message: 'Channel path should not have empty parameter substitution pattern.',
+        message: 'Channel path must not have empty parameter substitution pattern.',
         path: ['channels', 'users/{}/signedOut'],
         severity: DiagnosticSeverity.Warning,
       },
