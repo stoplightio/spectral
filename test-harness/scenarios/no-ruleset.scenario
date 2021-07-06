@@ -1,0 +1,10 @@
+====test====
+Ruleset is required for Spectral run linting
+====document====
+type: string
+====command====
+{bin} lint {document} --ignore-unknown-format
+====status====
+2
+====stderr====
+No ruleset has been found. Please provide a ruleset using the --ruleset CLI argument, or make sure your ruleset file matches .?spectral.(js|ya?ml|json)
