@@ -1,7 +1,8 @@
 ====test====
-Lints stdin input
+Request only errors be shown, but no errors exist
 ====document====
-version: 1.0.0
+servers:
+  - host: localhost
 ====asset:ruleset.json====
 {
   "rules": {
@@ -9,6 +10,7 @@ version: 1.0.0
       "description": "\"servers\" must be present and non-empty array.",
       "recommended": true,
       "given": "$",
+      "severity": "error"
       "then": {
         "field": "servers",
         "function": "schema",
@@ -24,26 +26,21 @@ version: 1.0.0
         }
       }
     },
-    "valid-version": {
-      "message": "Version must be higher than 2",
-      "given": "$.version",
-      "severity": "error",
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
       "then": {
-         "function": "pattern",
-         "functionOptions": {
-           "match": "^([2-9]|1[0-9])"
-         }
+        "field": "info.contact",
+        "function": "truthy",
       }
     }
   }
 }
 ====command====
-cat {document} | {bin} lint -r {asset:ruleset.json}
+{bin} lint {document} --ruleset {asset:ruleset.json} --fail-severity=error -D
 ====status====
-1
+0
 ====stdout====
-<STDIN>
-  1:1  warning  api-servers    "servers" must be present and non-empty array.
- 1:10    error  valid-version  Version must be higher than 2                   version
-
-✖ 2 problems (1 error, 1 warning, 0 infos, 0 hints)
+No results with a severity of 'error' or higher found!

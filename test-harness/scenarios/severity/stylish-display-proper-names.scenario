@@ -1,125 +1,87 @@
 ====test====
 The name of severity levels are display correctly by stylish formatter
 ====document====
+oneOf:
+  - type: string
+  - type: array
+  - type: boolean
+  - type: number
+  - type: "null"
+====asset:ruleset.yaml====
 {
-  "openapi": "3.0.0",
-  "info": {
-    "version": "1.0.0",
-    "title": "Swagger Petstore",
-    "license": {
-      "name": "MIT"
-    }
-  },
-  "paths": {
-    "/pets": {
-      "get": {
-        "summary": "List all pets",
-        "operationId": "listPets",
-        "tags": ["pets"],
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "How many items to return at one time (max 100)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A paged array of pets",
-            "headers": {
-              "x-next": {
-                "description": "A link to the next page of responses",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            },
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pets"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a pet",
-        "operationId": "createPets",
-        "tags": ["pets"],
-        "responses": {
-          "201": {
-            "description": "Null response"
-          },
-          "default": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
+  "rules": {
+    "no-boolean-type": {
+      "message": "must not be boolean type",
+      "given": "$..type",
+      "severity": "hint",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "not": {
+              "enum": ["boolean"]
             }
           }
         }
       }
-    }
-  }
-}
-====asset:oas-mixed-severity.js====
-const { oas } = require('@stoplight/spectral-rulesets');
-const { pattern } = require('@stoplight/spectral-functions');
-
-module.exports = {
-  "extends": [oas],
-  "rules": {
-    "info-contact": "error",
-    "operation-description": "info",
-    "info-matches-stoplight": {
-      "message": "Info must contain Stoplight",
-      "given": "$.info",
-      "severity": "hint",
-      "type": "style",
-      "recommended": true,
+    },
+    "no-null-type": {
+      "message": "must not be null type",
+      "given": "$..type",
+      "severity": "info",
       "then": {
-        "field": "title",
-        "function": pattern,
+        "function": "schema",
         "functionOptions": {
-          "match": "Stoplight"
+          "schema": {
+            "not": {
+              "enum": ["null"]
+            }
+          }
+        }
+      }
+    },
+    "no-complex-type": {
+      "message": "must not be complex type",
+      "given": "$..type",
+      "severity": "error",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "not": {
+              "enum": ["array", "object"]
+            }
+          }
+        }
+      }
+    },
+    "no-primitive-type": {
+      "message": "must not be primitive type",
+      "given": "$..type",
+      "severity": "warn",
+      "then": {
+        "function": "schema",
+        "functionOptions": {
+          "schema": {
+            "not": {
+              "enum": ["string", "number", "boolean", "null"]
+            }
+          }
         }
       }
     }
   }
 }
 ====command====
-{bin} lint --ruleset {asset:oas-mixed-severity.js} {document}
+{bin} lint --ruleset {asset:ruleset.yaml} {document}
 ====stdout====
 {document}
-  1:1       warning  oas3-api-servers        OpenAPI `servers` must be present and non-empty array.
-  3:10        error  info-contact            Info object should contain `contact` object.                             info
-  3:10      warning  info-description        OpenAPI object info `description` must be present and non-empty string.  info
-  5:14         hint  info-matches-stoplight  Info must contain Stoplight                                              info.title
- 12:13  information  operation-description   Operation `description` must be present and non-empty string.            paths./pets.get
- 15:18      warning  operation-tag-defined   Operation tags should be defined in global tags.                         paths./pets.get.tags[0]
- 42:27        error  invalid-ref             '#/components/schemas/Pets' does not exist                               paths./pets.get.responses[200].content.application/json.schema.$ref
- 52:27        error  invalid-ref             '#/components/schemas/Error' does not exist                              paths./pets.get.responses.default.content.application/json.schema.$ref
- 59:14  information  operation-description   Operation `description` must be present and non-empty string.            paths./pets.post
- 62:18      warning  operation-tag-defined   Operation tags should be defined in global tags.                         paths./pets.post.tags[0]
+ 2:11      warning  no-primitive-type  must not be primitive type  oneOf[0].type
+ 3:11        error  no-complex-type    must not be complex type    oneOf[1].type
+ 4:11         hint  no-boolean-type    must not be boolean type    oneOf[2].type
+ 4:11      warning  no-primitive-type  must not be primitive type  oneOf[2].type
+ 5:11      warning  no-primitive-type  must not be primitive type  oneOf[3].type
+ 6:11  information  no-null-type       must not be null type       oneOf[4].type
+ 6:11      warning  no-primitive-type  must not be primitive type  oneOf[4].type
 
-✖ 10 problems (3 errors, 4 warnings, 2 infos, 1 hint)
+✖ 7 problems (1 error, 4 warnings, 1 info, 1 hint)
