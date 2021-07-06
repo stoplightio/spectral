@@ -56,7 +56,7 @@ export class Spectral {
     opts: IRunOpts = {},
   ): Promise<ISpectralFullResult> {
     if (this.ruleset === void 0) {
-      throw new Error('No ruleset has been provided');
+      throw new Error('No ruleset has been defined. Have you called setRuleset()?');
     }
 
     const document = this.parseDocument(target);

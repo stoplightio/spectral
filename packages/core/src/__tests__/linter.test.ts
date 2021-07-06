@@ -31,7 +31,9 @@ describe('linter', () => {
   });
 
   test('should demand some result', () => {
-    return expect(spectral.run(new Document('123', Parsers.Json))).rejects.toThrow('No ruleset has been provided');
+    return expect(spectral.run(new Document('123', Parsers.Json))).rejects.toThrow(
+      'No ruleset has been defined. Have you called setRuleset()?',
+    );
   });
 
   test('should not throw if passed in value is not an object', () => {
