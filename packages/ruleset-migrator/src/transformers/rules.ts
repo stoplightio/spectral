@@ -4,6 +4,7 @@ import createOrderedLiteral, { setOrder } from '@stoplight/ordered-object-litera
 
 import { Transformer } from '../types';
 import { assertString } from '../validation';
+import { Ruleset } from '../validation/types';
 
 export { transformer as default };
 
@@ -30,23 +31,29 @@ const REPLACEMENTS: Record<string, string> = {
 };
 
 const transformer: Transformer = function (ctx) {
-  if (ctx.ruleset.rules === void 0) return;
+  ctx.hooks.add([
+    /^$/,
+    (_ruleset): void => {
+      const ruleset = _ruleset as Ruleset;
+      if (ruleset.rules === void 0) return;
 
-  const { rules } = ctx.ruleset;
+      const { rules } = ruleset;
 
-  // this is to make sure order of rules is preserved after transformation
-  ctx.ruleset.rules = createOrderedLiteral(rules);
-  const order = Object.keys(rules);
+      // this is to make sure order of rules is preserved after transformation
+      ruleset.rules = createOrderedLiteral(rules);
+      const order = Object.keys(rules);
 
-  for (const [i, key] of order.entries()) {
-    if (!(key in REPLACEMENTS)) continue;
-    if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
-    rules[REPLACEMENTS[key]] = rules[key];
-    order[i] = REPLACEMENTS[key];
-    delete rules[key];
-  }
+      for (const [i, key] of order.entries()) {
+        if (!(key in REPLACEMENTS)) continue;
+        if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
+        rules[REPLACEMENTS[key]] = rules[key];
+        order[i] = REPLACEMENTS[key];
+        delete rules[key];
+      }
 
-  setOrder(rules, order);
+      setOrder(rules, order);
+    },
+  ]);
 
   ctx.hooks.add([
     /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,

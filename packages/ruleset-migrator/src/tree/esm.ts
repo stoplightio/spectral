@@ -5,9 +5,12 @@ import type { IModule } from './types';
 export const esm = <IModule>{
   dependencies: new Set(),
 
-  importDeclaration(identifiers: namedTypes.Identifier[], source: string): namedTypes.ImportDeclaration {
+  importDeclaration(
+    identifiers: [namedTypes.Identifier, namedTypes.Identifier][],
+    source: string,
+  ): namedTypes.ImportDeclaration {
     return b.importDeclaration(
-      identifiers.map(identifier => b.importSpecifier(identifier, identifier)),
+      identifiers.map(([imported, local]) => b.importSpecifier(imported, local)),
       b.literal(source),
     );
   },

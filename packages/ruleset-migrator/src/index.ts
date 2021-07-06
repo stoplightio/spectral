@@ -1,51 +1,76 @@
 import { parseWithPointers as parseJsonWithPointers, safeStringify } from '@stoplight/json';
 import { parseWithPointers as parseYamlWithPointers } from '@stoplight/yaml';
-import { extname, isURL } from '@stoplight/path';
+import { dirname, extname, isURL } from '@stoplight/path';
 import { fetch } from '@stoplight/spectral-runtime';
 import { Hook, MigrationOptions, TransformerCtx } from './types';
 import transformers from './transformers';
-import { Tree } from './tree';
+import { Scope, Tree } from './tree';
 import { builders as b, namedTypes } from 'ast-types';
 import { ExpressionKind } from 'ast-types/gen/kinds';
 import { assertRuleset } from './validation';
 import requireResolve from './requireResolve';
+import { Ruleset } from './validation/types';
 
-export async function migrateRuleset(filepath: string, { fs, format, npmRegistry }: MigrationOptions): Promise<string> {
+async function read(filepath: string, fs: MigrationOptions['fs']): Promise<Ruleset> {
   const input = isURL(filepath)
     ? await (await fetch(filepath)).text()
     : await fs.promises.readFile(requireResolve?.(filepath) ?? filepath, 'utf8');
+
   const { data: ruleset } = (extname(filepath) === '.json' ? parseJsonWithPointers : parseYamlWithPointers)<unknown>(
     input,
   );
 
   assertRuleset(ruleset);
+  return ruleset;
+}
 
-  const tree = new Tree({ npmRegistry, format });
+export async function migrateRuleset(filepath: string, opts: MigrationOptions): Promise<string> {
+  const { fs, format, npmRegistry, scope = new Scope() } = opts;
+  const cwd = dirname(filepath);
+  const tree = new Tree({
+    cwd,
+    format,
+    npmRegistry,
+    scope,
+  });
+
+  const ruleset = await read(filepath, fs);
   const hooks = new Set<Hook>();
   const ctx: TransformerCtx = {
+    cwd,
     tree,
-    ruleset,
+    opts: {
+      scope,
+      ...opts,
+    },
     hooks,
+    read,
   };
 
   for (const transformer of transformers) {
     transformer(ctx);
   }
 
-  tree.ruleset = process(ruleset, hooks, '') as namedTypes.ObjectExpression;
+  tree.ruleset = await process(ruleset, hooks);
 
   return tree.toString();
 }
 
-function process(input: unknown, hooks: Set<Hook>, path: string): ExpressionKind {
+async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise<ExpressionKind | null> {
   for (const [pattern, fn] of hooks) {
     if (pattern.test(path)) {
-      return fn(input);
+      const output = await fn(input);
+
+      if (output !== void 0) {
+        return output;
+      }
     }
   }
 
   if (Array.isArray(input)) {
-    return b.arrayExpression(input.map((item, i) => process(item, hooks, `${path}/${String(i)}`)));
+    return b.arrayExpression(
+      (await Promise.all(input.map((item, i) => _process(item, hooks, `${path}/${String(i)}`)))).filter(Boolean),
+    );
   } else if (typeof input === 'number' || typeof input === 'boolean' || typeof input === 'string') {
     return b.literal(input);
   } else if (typeof input !== 'object') {
@@ -57,8 +82,22 @@ function process(input: unknown, hooks: Set<Hook>, path: string): ExpressionKind
   }
 
   return b.objectExpression(
-    Object.entries(input).map(([key, value]) =>
-      b.property('init', b.identifier(JSON.stringify(key)), process(value, hooks, `${path}/${key}`)),
-    ),
+    (
+      await Promise.all(
+        Object.entries(input).map(async ([key, value]) => {
+          const propertyValue = await _process(value, hooks, `${path}/${key}`);
+
+          if (propertyValue !== null) {
+            return b.property('init', b.identifier(JSON.stringify(key)), propertyValue);
+          }
+
+          return null;
+        }),
+      )
+    ).filter(Boolean) as namedTypes.Property[],
   );
+}
+
+export async function process(input: unknown, hooks: Set<Hook>): Promise<namedTypes.ObjectExpression> {
+  return (await _process(input, hooks, '')) as namedTypes.ObjectExpression;
 }

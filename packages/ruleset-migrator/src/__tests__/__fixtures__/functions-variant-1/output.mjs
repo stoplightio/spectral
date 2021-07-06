@@ -1,14 +1,13 @@
 import { oas2, oas3 } from '@stoplight/spectral-formats';
-import oasDocumentSchema from './functions/oasDocumentSchema.js';
-import oasExample from './functions/oasExample.js';
-import oasOp2xxResponse from './functions/oasOp2xxResponse.js';
-import oasOpFormDataConsumeCheck from './functions/oasOpFormDataConsumeCheck.js';
-import typedEnum from './functions/typedEnum.js';
-import refSiblings from './functions/refSiblings.js';
+import oasDocumentSchema from '/.tmp/spectral/functions-variant-1/functions/oasDocumentSchema.js';
+import oasExample from '/.tmp/spectral/functions-variant-1/functions/oasExample.js';
+import oasOp2xxResponse from '/.tmp/spectral/functions-variant-1/functions/oasOp2xxResponse.js';
+import oasOpFormDataConsumeCheck from '/.tmp/spectral/functions-variant-1/functions/oasOpFormDataConsumeCheck.js';
+import typedEnum from '/.tmp/spectral/functions-variant-1/functions/typedEnum.js';
+import refSiblings from '/.tmp/spectral/functions-variant-1/functions/refSiblings.js';
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3],
-  functions: [oasDocumentSchema, oasExample, oasOp2xxResponse, oasOpFormDataConsumeCheck, typedEnum, refSiblings],
   rules: {
     'operation-2xx-response': {
       description: 'Operation must have at least one `2xx` response.',

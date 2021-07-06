@@ -40,7 +40,6 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
     await AsyncFunction(
       'module, require',
       await migrateRuleset(rulesetFile, {
-        cwd: process.cwd(),
         format: 'commonjs',
         fs,
       }),

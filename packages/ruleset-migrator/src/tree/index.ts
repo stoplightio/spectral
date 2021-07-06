@@ -5,36 +5,55 @@ import { MigrationOptions } from '../types';
 import { commonjs } from './commonjs';
 import { esm } from './esm';
 import { IModule } from './types';
+import requireResolve from '../requireResolve';
+
+export class Scope extends Set<string> {}
 
 export class Tree {
-  readonly #importDeclarations = new Map<string, { identifier: namedTypes.Identifier; default: boolean }[]>();
+  readonly #importDeclarations = new Map<
+    string,
+    { imported: namedTypes.Identifier; local: namedTypes.Identifier; default: boolean }[]
+  >();
 
   readonly #npmRegistry;
   readonly #module: IModule;
+  readonly #cwd: string;
 
-  constructor({ format, npmRegistry }: Pick<MigrationOptions, 'format' | 'npmRegistry'>) {
+  public ruleset?: namedTypes.ObjectExpression;
+  public readonly scope: Scope;
+
+  constructor({
+    cwd,
+    format,
+    npmRegistry,
+    scope,
+  }: Pick<MigrationOptions, 'format' | 'npmRegistry'> & { cwd: string; scope: Scope }) {
+    this.scope = scope;
+    this.#cwd = cwd;
     this.#npmRegistry = npmRegistry ?? null;
     this.#module = format === 'commonjs' ? commonjs : esm;
   }
-
-  public ruleset?: namedTypes.ObjectExpression;
 
   addImport(specifier: string, source: string, _default = false): namedTypes.Identifier {
     const existingImportDeclaration = this.#importDeclarations.get(source);
 
     if (existingImportDeclaration === void 0) {
-      const identifier = b.identifier(specifier);
-      this.#importDeclarations.set(source, [{ identifier, default: _default }]);
+      const identifier = this.identifier(specifier);
+      this.#importDeclarations.set(source, [
+        { imported: b.identifier(specifier), local: identifier, default: _default },
+      ]);
+      this.scope.add(specifier);
       return identifier;
     } else {
-      for (const { identifier } of existingImportDeclaration) {
-        if (identifier.name === specifier) {
-          return identifier;
+      for (const declaration of existingImportDeclaration) {
+        if (declaration.imported.name === specifier) {
+          return declaration.local;
         }
       }
 
-      const identifier = b.identifier(specifier);
-      existingImportDeclaration.push({ identifier, default: _default });
+      const identifier = this.identifier(specifier);
+      this.scope.add(specifier);
+      existingImportDeclaration.push({ imported: identifier, local: identifier, default: _default });
       return identifier;
     }
   }
@@ -49,7 +68,8 @@ export class Tree {
     return astring.generate(
       b.program([
         ...Array.from(this.#importDeclarations.entries()).flatMap(([source, identifiers]) => {
-          const resolvedSource = this.#npmRegistry !== null ? path.join(this.#npmRegistry, source) : source;
+          const resolvedSource =
+            this.#npmRegistry !== null && !source.startsWith(this.#cwd) ? path.join(this.#npmRegistry, source) : source;
 
           const nonDefault = identifiers.filter(({ default: _default }) => !_default);
 
@@ -57,19 +77,33 @@ export class Tree {
             ...(nonDefault.length > 0
               ? [
                   this.#module.importDeclaration(
-                    nonDefault.map(({ identifier }) => identifier),
+                    nonDefault.map(({ imported, local }) => [imported, local]),
                     resolvedSource,
                   ),
                 ]
               : <namedTypes.ImportDeclaration[]>[]),
             ...identifiers
               .filter(({ default: _default }) => _default)
-              .flatMap(({ identifier }) => this.#module.importDefaultDeclaration(identifier, resolvedSource)),
+              .flatMap(({ imported }) => this.#module.importDefaultDeclaration(imported, resolvedSource)),
           ];
         }),
         this.#module.exportDefaultDeclaration(this.ruleset),
         ...this.#module.dependencies,
       ]),
     );
+  }
+
+  public identifier(name: string): namedTypes.Identifier {
+    let uniqName = name;
+    let i = 0;
+    while (this.scope.has(uniqName)) {
+      uniqName = `${name}_${i++}`;
+    }
+
+    return b.identifier(uniqName);
+  }
+
+  public resolveModule(identifier: string): string {
+    return path.isURL(identifier) ? identifier : requireResolve?.(identifier) ?? path.join(this.#cwd, identifier);
   }
 }

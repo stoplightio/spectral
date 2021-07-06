@@ -1,34 +1,36 @@
 import * as path from '@stoplight/path';
-import { builders as b, namedTypes } from 'ast-types';
 
-import type { Hook, Transformer } from '../types';
+import type { Transformer } from '../types';
 import { assertArray, assertString } from '../validation';
+import { Ruleset } from '../validation/types';
 
 export { transformer as default };
 
 const transformer: Transformer = function (ctx) {
-  const { functionsDir, functions } = ctx.ruleset;
+  ctx.hooks.add([
+    /^$/,
+    (_ruleset): void => {
+      const ruleset = _ruleset as Ruleset;
+      const { functionsDir, functions } = ruleset;
 
-  if (Array.isArray(functions) && functions.length > 0) {
-    ctx.ruleset.functions = functions.map(fn => `./${path.join(functionsDir ?? 'functions', fn)}.js`);
-    delete ctx.ruleset.functionsDir;
-  }
-
-  const hook: Hook = [
-    /^\/functions$/,
-    (value): namedTypes.ArrayExpression => {
-      assertArray(value);
-      ctx.hooks.delete(hook);
-      delete ctx.ruleset.functions;
-
-      return b.arrayExpression(
-        value.map(fn => {
-          assertString(fn);
-          return ctx.tree.addImport(path.basename(fn, true), fn, true);
-        }),
-      );
+      if (Array.isArray(functions) && functions.length > 0) {
+        ruleset.functions = functions.map(fn => path.join(ctx.cwd, functionsDir ?? 'functions', `${fn}.js`));
+        delete ruleset.functionsDir;
+      }
     },
-  ];
+  ]);
 
-  ctx.hooks.add(hook);
+  ctx.hooks.add([
+    /^\/functions$/,
+    (value): null => {
+      assertArray(value);
+
+      for (const fn of value) {
+        assertString(fn);
+        ctx.tree.addImport(path.basename(fn, true), fn, true);
+      }
+
+      return null;
+    },
+  ]);
 };
