@@ -37,7 +37,7 @@ version: 1.0.0
   }
 }
 ====command====
-cat {document} | {bin} lint --ruleset {asset:ruleset.json}
+cat {document} | {bin} lint --ruleset "{asset:ruleset.json}"
 ====stdout====
 <STDIN>
   1:1  warning  api-servers    "servers" must be present and non-empty array.

@@ -214,7 +214,7 @@ components:
 const { asyncapi } = require('@stoplight/spectral-rulesets');
 module.exports = asyncapi;
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
   1:1   warning  asyncapi-tags                   AsyncAPI object must have non-empty "tags" array.

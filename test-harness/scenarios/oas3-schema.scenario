@@ -57,7 +57,7 @@ module.exports = {
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
   6:10  error  oas3-schema  Property "foo" is not expected to be here.              info.contact.foo

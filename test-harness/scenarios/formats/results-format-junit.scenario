@@ -51,7 +51,7 @@ info:
   }
 }
 ====command====
-{bin} lint {document} --format=junit --ruleset {asset:ruleset.json}
+{bin} lint {document} --format=junit --ruleset "{asset:ruleset.json}"
 ====stdout====
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>

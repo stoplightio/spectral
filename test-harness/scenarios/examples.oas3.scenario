@@ -350,7 +350,7 @@ components:
 const { oas } = require('@stoplight/spectral-rulesets');
 module.exports = oas;
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
  126:25  error  oas3-valid-schema-example  "example" property must have required property "name"                        paths./schema-example.get.responses[500].content.application/json.schema.example
