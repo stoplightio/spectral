@@ -29,10 +29,13 @@ const _interopDefault = b.functionDeclaration(
 export const commonjs = <IModule>{
   dependencies: new Set(),
 
-  importDeclaration(identifiers: namedTypes.Identifier[], source: string): namedTypes.VariableDeclaration {
+  importDeclaration(
+    identifiers: [namedTypes.Identifier, namedTypes.Identifier][],
+    source: string,
+  ): namedTypes.VariableDeclaration {
     return b.variableDeclaration('const', [
       b.variableDeclarator(
-        b.objectPattern(identifiers.map(identifier => b.property('init', identifier, identifier))),
+        b.objectPattern(identifiers.map(([imported, local]) => b.property('init', imported, local))),
         b.callExpression(b.identifier('require'), [b.literal(source)]),
       ),
     ]);

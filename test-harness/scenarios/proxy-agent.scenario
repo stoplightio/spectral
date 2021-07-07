@@ -5,8 +5,12 @@ foo:
   $ref: http://localhost:3002/foo.json#/ref
 ====env====
 PROXY=http://localhost:3001
+====asset:ruleset====
+module.exports = {
+  rules: {}
+}
 ====command====
-{bin} lint {document} --ignore-unknown-format
+{bin} lint {document} --ignore-unknown-format --ruleset {asset:ruleset}
 ====stdout====
 {document}
  2:9  error  invalid-ref  FetchError: request to http://localhost:3002/foo.json failed, reason: connect ECONNREFUSED 127.0.0.1:3001  foo.$ref

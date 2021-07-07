@@ -1,4 +1,15 @@
-const { migrateRuleset: migrateRuleset } = require('@stoplight/spectral-ruleset-migrator');
+const { truthy: truthy } = require('@stoplight/spectral-functions');
 module.exports = {
-  extends: await migrateRuleset('https://stoplight.io/ruleset.json'),
+  extends: [
+    {
+      rules: {
+        'my-rule': {
+          given: '$',
+          then: {
+            function: truthy,
+          },
+        },
+      },
+    },
+  ],
 };

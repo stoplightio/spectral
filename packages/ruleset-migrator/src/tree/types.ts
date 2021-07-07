@@ -3,7 +3,7 @@ import type { DeclarationKind, ExpressionKind, StatementKind } from 'ast-types/g
 
 export interface IModule {
   dependencies: Set<DeclarationKind>;
-  importDeclaration(identifiers: namedTypes.Identifier[], source: string): DeclarationKind;
+  importDeclaration(identifiers: [namedTypes.Identifier, namedTypes.Identifier][], source: string): DeclarationKind;
   importDefaultDeclaration(identifier: namedTypes.Identifier, source: string): DeclarationKind;
   exportDefaultDeclaration(value: ExpressionKind): StatementKind | DeclarationKind;
 }

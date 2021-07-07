@@ -20,7 +20,7 @@ testRule('asyncapi-info-description', [
     },
     errors: [
       {
-        message: 'AsyncAPI object info `description` must be present and non-empty string.',
+        message: 'Info "description" must be present and non-empty string.',
         path: ['info'],
         severity: DiagnosticSeverity.Warning,
       },

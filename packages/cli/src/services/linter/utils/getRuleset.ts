@@ -28,7 +28,9 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   }
 
   if (rulesetFile === void 0) {
-    return new Ruleset({ rules: {} });
+    throw new Error(
+      'No ruleset has been found. Please provide a ruleset using the --ruleset CLI argument, or make sure your ruleset file matches .?spectral.(js|ya?ml|json)',
+    );
   }
 
   let ruleset;
@@ -41,7 +43,6 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
       'module, require',
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       await migrateRuleset(rulesetFile, {
-        cwd: process.cwd(),
         format: 'commonjs',
         fs,
       }),

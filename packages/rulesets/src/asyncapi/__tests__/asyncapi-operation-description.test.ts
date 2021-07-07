@@ -30,7 +30,7 @@ testRule('asyncapi-operation-description', [
     }),
     errors: [
       {
-        message: 'Operation `description` must be present and non-empty string.',
+        message: 'Operation "description" must be present and non-empty string.',
         path: ['channels', 'one', property],
         severity: DiagnosticSeverity.Warning,
       },

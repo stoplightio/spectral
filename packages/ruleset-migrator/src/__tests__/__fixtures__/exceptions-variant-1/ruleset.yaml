@@ -1,0 +1,8 @@
+extends: spectral:oas
+
+except:
+  "subfolder/one.yaml#":
+    - no-$ref-siblings
+  "/tmp/docs/one.yaml#/info":
+    - info-contact
+    - info-description

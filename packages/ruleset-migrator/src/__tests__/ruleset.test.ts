@@ -1,6 +1,9 @@
 import { fs } from 'memfs';
 import * as path from 'path';
-import * as prettier from 'prettier';
+import * as prettier from 'prettier/standalone';
+import * as parserBabel from 'prettier/parser-babel';
+import { Ruleset } from '@stoplight/spectral-core';
+import { DiagnosticSeverity } from '@stoplight/types';
 
 import { migrateRuleset } from '..';
 import * as fixtures from './__fixtures__/.cache/index.json';
@@ -23,6 +26,7 @@ describe('migrator', () => {
     beforeAll(async () => {
       await fs.promises.mkdir(dir, { recursive: true });
       for (const [name, content] of Object.entries(entries)) {
+        await fs.promises.mkdir(path.join(dir, path.dirname(name)), { recursive: true });
         await fs.promises.writeFile(path.join(dir, name), content);
       }
     });
@@ -38,14 +42,68 @@ describe('migrator', () => {
       expect(
         prettier.format(
           await migrateRuleset(ruleset, {
-            cwd,
             format,
             fs: fs as any,
           }),
-          { parser: 'babel' },
+          { parser: 'babel', plugins: [parserBabel] },
         ),
       ).toEqual(await fs.promises.readFile(path.join(dir, `output${ext}`), 'utf8'));
     });
+  });
+
+  it('should support subsequent migrations', async () => {
+    await fs.promises.writeFile(
+      path.join(cwd, 'ruleset-migration-1.json'),
+      JSON.stringify({
+        extends: ['./ruleset-migration-2.json'],
+        rules: {
+          'valid-type': 'error',
+        },
+      }),
+    );
+
+    await fs.promises.writeFile(
+      path.join(cwd, 'ruleset-migration-2.json'),
+      JSON.stringify({
+        extends: 'spectral:oas',
+        rules: {
+          'valid-type': {
+            given: '$',
+            then: {
+              function: 'truthy',
+            },
+          },
+        },
+      }),
+    );
+
+    const _module: { exports?: any } = {};
+
+    await (async () => void 0).constructor(
+      'module, require',
+      await migrateRuleset(path.join(cwd, 'ruleset-migration-1.json'), {
+        format: 'commonjs',
+        fs: fs as any,
+      }),
+    )(_module, (id: string): unknown => {
+      switch (id) {
+        case '@stoplight/spectral-functions':
+          return require('@stoplight/spectral-functions') as unknown;
+        case '@stoplight/spectral-rulesets':
+          return require('@stoplight/spectral-rulesets') as unknown;
+        default:
+          throw new ReferenceError(`${id} not found`);
+      }
+    });
+
+    const ruleset = new Ruleset(_module.exports);
+
+    expect(Object.keys(ruleset.rules)).toEqual([
+      ...Object.keys(require('@stoplight/spectral-rulesets').oas.rules),
+      'valid-type',
+    ]);
+
+    expect(ruleset.rules['valid-type'].severity).toEqual(DiagnosticSeverity.Error);
   });
 
   describe('error handling', () => {
@@ -53,11 +111,87 @@ describe('migrator', () => {
       await fs.promises.writeFile(path.join(cwd, 'unknown-format.json'), `{ "formats": ["json-schema-draft-2"] }`);
       await expect(
         migrateRuleset(path.join(cwd, 'unknown-format.json'), {
-          cwd,
           format: 'esm',
           fs: fs as any,
         }),
       ).rejects.toThrow('Invalid ruleset provided');
+    });
+  });
+
+  describe('custom npm registry', () => {
+    it('should be supported', async () => {
+      await fs.promises.writeFile(
+        path.join(cwd, 'custom-npm-provider.json'),
+        JSON.stringify({
+          extends: 'spectral:asyncapi',
+          formats: ['oas2'],
+          rules: {
+            rule: {
+              then: {
+                given: '$',
+                function: 'truthy',
+              },
+            },
+          },
+        }),
+      );
+      expect(
+        await migrateRuleset(path.join(cwd, 'custom-npm-provider.json'), {
+          format: 'esm',
+          fs: fs as any,
+          npmRegistry: 'https://unpkg.com/',
+        }),
+      ).toEqual(`import {asyncapi} from "https://unpkg.com/@stoplight/spectral-rulesets";
+import {oas2} from "https://unpkg.com/@stoplight/spectral-formats";
+import {truthy} from "https://unpkg.com/@stoplight/spectral-functions";
+export default {
+  "extends": asyncapi,
+  "formats": [oas2],
+  "rules": {
+    "rule": {
+      "then": {
+        "given": "$",
+        "function": truthy
+      }
+    }
+  }
+};
+`);
+    });
+
+    it('should not apply to custom functions', async () => {
+      await fs.promises.writeFile(
+        path.join(cwd, 'custom-npm-provider-custom-functions.json'),
+        JSON.stringify({
+          functions: ['customFunction'],
+          rules: {
+            rule: {
+              then: {
+                given: '$',
+                function: 'customFunction',
+              },
+            },
+          },
+        }),
+      );
+      expect(
+        await migrateRuleset(path.join(cwd, 'custom-npm-provider-custom-functions.json'), {
+          format: 'esm',
+          fs: fs as any,
+          npmRegistry: 'https://unpkg.com/',
+        }),
+      ).toEqual(`import customFunction from "/.tmp/spectral/functions/customFunction.js";
+export default {
+  "rules": {
+    "rule": {
+      "then": {
+        "given": "$",
+        "function": customFunction
+      }
+    }
+  }
+};
+`);
     });
   });
 });

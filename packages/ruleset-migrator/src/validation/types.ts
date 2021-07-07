@@ -1,6 +1,9 @@
 /*eslint-disable*/
 
 export interface Ruleset {
+  except?: {
+    [k: string]: string[];
+  };
   extends?: string | (string | [string, 'all' | 'recommended' | 'off'])[];
   formats?: (
     | 'oas2'

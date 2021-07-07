@@ -1,0 +1,46 @@
+====test====
+Respects stdin filepath
+====asset:ruleset.json====
+{
+  "rules": {
+    "title-matches-stoplight": {
+      "message": "Info must contain Stoplight",
+      "given": "$.title",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "match": "Stoplight"
+        }
+      }
+    },
+    "description-matches-stoplight": {
+      "message": "Info must contain Stoplight",
+      "given": "$.description",
+      "then": {
+        "function": "pattern",
+        "functionOptions": {
+          "match": "Stoplight"
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.yaml"],
+      "rules": {
+        "title-matches-stoplight": "error"
+      }
+    }
+  ]
+}
+====asset:document.yaml====
+description: Test
+title: Oops
+====command====
+cat {asset:document.yaml} | {bin} lint --ruleset {asset:ruleset.json} --stdin-filepath={asset:document.yaml}
+====stdout====
+{asset:document.yaml}
+ 1:14  warning  description-matches-stoplight  Info must contain Stoplight  description
+  2:8    error  title-matches-stoplight        Info must contain Stoplight  title
+
+✖ 2 problems (1 error, 1 warning, 0 infos, 0 hints)

@@ -18,7 +18,7 @@ testRule('asyncapi-tags', [
     },
     errors: [
       {
-        message: 'AsyncAPI object should have non-empty `tags` array.',
+        message: 'AsyncAPI object must have non-empty "tags" array.',
         path: [],
         severity: DiagnosticSeverity.Warning,
       },

@@ -38,7 +38,7 @@ testRule('asyncapi-payload-unsupported-schemaFormat', [
     }),
     errors: [
       {
-        message: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+        message: 'Message schema validation is only supported with default unspecified "schemaFormat".',
         path: ['components', 'messages', 'aMessage', 'schemaFormat'],
         severity: DiagnosticSeverity.Information,
       },
@@ -52,7 +52,7 @@ testRule('asyncapi-payload-unsupported-schemaFormat', [
     }),
     errors: [
       {
-        message: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+        message: 'Message schema validation is only supported with default unspecified "schemaFormat".',
         path: ['components', 'messageTraits', 'aTrait', 'schemaFormat'],
         severity: DiagnosticSeverity.Information,
       },
@@ -66,7 +66,7 @@ testRule('asyncapi-payload-unsupported-schemaFormat', [
     }),
     errors: [
       {
-        message: 'Message schema validation is only supported with default unspecified `schemaFormat`.',
+        message: 'Message schema validation is only supported with default unspecified "schemaFormat".',
         path: ['channels', 'users/{userId}/signedUp', property, 'message', 'schemaFormat'],
         severity: DiagnosticSeverity.Information,
       },
