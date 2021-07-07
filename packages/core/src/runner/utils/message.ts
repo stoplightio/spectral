@@ -20,7 +20,7 @@ MessageReplacer.addFunction('print', function (type) {
   switch (type) {
     case 'property':
       if (property !== void 0 && property !== '') {
-        return `\`${property}\` property `;
+        return `"${property}" property `;
       }
 
       return `The document `;

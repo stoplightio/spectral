@@ -39,7 +39,7 @@ testRule('oas2-valid-media-example', [
     },
     errors: [
       {
-        message: '`application/yaml` property type must be string',
+        message: '"application/yaml" property type must be string',
         path: ['responses', '200', 'examples', 'application/yaml'],
         severity: DiagnosticSeverity.Error,
       },

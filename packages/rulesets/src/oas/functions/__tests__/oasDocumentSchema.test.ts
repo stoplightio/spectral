@@ -82,7 +82,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
-          message: '`type` property type must be string.',
+          message: '"type" property type must be string.',
           path: ['paths', '/user', 'get', 'parameters', '0', 'schema', 'type'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -127,7 +127,7 @@ describe('oasDocumentSchema', () => {
         },
         {
           code: 'oas3-schema',
-          message: 'Property `foo` is not expected to be here.',
+          message: 'Property "foo" is not expected to be here.',
           path: ['components', 'securitySchemes', 'basic', 'foo'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -157,7 +157,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
-          message: '`200` property must have required property `description`.',
+          message: '"200" property must have required property "description".',
           path: ['paths', '/user', 'get', 'responses', '200'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),

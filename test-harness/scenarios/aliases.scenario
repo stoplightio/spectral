@@ -41,9 +41,9 @@ module.exports = {
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 {document}
- 2:17  warning  valid-name-and-description  `description` property must be truthy  [0].info.description
- 3:13  warning  valid-contact               `contact` property must be falsy       [0].info.contact
- 4:12  warning  valid-name-and-description  `name` property must be truthy         [0].info.contact.name
-  5:8  warning  valid-info                  `info` property must be truthy         [1].info
+ 2:17  warning  valid-name-and-description  "description" property must be truthy  [0].info.description
+ 3:13  warning  valid-contact               "contact" property must be falsy       [0].info.contact
+ 4:12  warning  valid-name-and-description  "name" property must be truthy         [0].info.contact.name
+  5:8  warning  valid-info                  "info" property must be truthy         [1].info
 
 ✖ 4 problems (0 errors, 4 warnings, 0 infos, 0 hints)

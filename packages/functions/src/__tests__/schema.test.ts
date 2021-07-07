@@ -172,7 +172,7 @@ describe('Core Functions / Schema', () => {
         ),
       ).toEqual([
         {
-          message: '`bar` property type must be string',
+          message: '"bar" property type must be string',
           path: ['foo', 'bar'],
         },
       ]);
@@ -189,7 +189,7 @@ describe('Core Functions / Schema', () => {
         ),
       ).toEqual([
         {
-          message: 'Property `baz` is not expected to be here',
+          message: 'Property "baz" is not expected to be here',
           path: ['foo'],
         },
       ]);
@@ -206,7 +206,7 @@ describe('Core Functions / Schema', () => {
       const input = 'not an email';
       expect(await runSchema(input, { schema })).toEqual([
         {
-          message: 'String must match format `email`',
+          message: 'String must match format "email"',
           path: [],
         },
       ]);
@@ -243,7 +243,7 @@ describe('Core Functions / Schema', () => {
       expect(results).toEqual([
         {
           path: [],
-          message: expect.stringMatching(new RegExp(`^(Number|String|Value) must match format \`${format}\`$`)),
+          message: expect.stringMatching(new RegExp(`^(Number|String|Value) must match format "${format}"$`)),
         },
       ]);
     });
@@ -275,7 +275,7 @@ describe('Core Functions / Schema', () => {
       it('reports pretty enum errors for a string', async () => {
         expect(await runSchema('baz', { schema })).toEqual([
           {
-            message: 'String must be equal to one of the allowed values: `foo`, `bar`. Did you mean `bar`?',
+            message: 'String must be equal to one of the allowed values: "foo", "bar". Did you mean "bar"?',
             path: [],
           },
         ]);
@@ -352,7 +352,7 @@ describe('Core Functions / Schema', () => {
 
     expect(await runSchema('three', { schema })).toEqual([
       {
-        message: 'String must be equal to one of the allowed values: `foo`, `bar`',
+        message: 'String must be equal to one of the allowed values: "foo", "bar"',
         path: [],
       },
     ]);
@@ -362,7 +362,7 @@ describe('Core Functions / Schema', () => {
     const input = { foo: true };
     expect(await runSchema(input, { schema: { additionalProperties: false } })).toEqual([
       {
-        message: 'Property `foo` is not expected to be here',
+        message: 'Property "foo" is not expected to be here',
         path: [],
       },
     ]);

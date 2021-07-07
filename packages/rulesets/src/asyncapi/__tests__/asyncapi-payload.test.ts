@@ -57,7 +57,7 @@ testRule('asyncapi-payload', [
     }),
     errors: [
       {
-        message: '`deprecated` property type must be boolean',
+        message: '"deprecated" property type must be boolean',
         path: ['components', 'messages', 'aMessage', 'payload', 'deprecated'],
         severity: DiagnosticSeverity.Error,
       },
@@ -71,7 +71,7 @@ testRule('asyncapi-payload', [
     }),
     errors: [
       {
-        message: '`deprecated` property type must be boolean',
+        message: '"deprecated" property type must be boolean',
         path: ['components', 'messageTraits', 'aTrait', 'payload', 'deprecated'],
         severity: DiagnosticSeverity.Error,
       },
@@ -85,7 +85,7 @@ testRule('asyncapi-payload', [
     }),
     errors: [
       {
-        message: '`deprecated` property type must be boolean',
+        message: '"deprecated" property type must be boolean',
         path: ['channels', 'users/{userId}/signedUp', property, 'message', 'payload', 'deprecated'],
         severity: DiagnosticSeverity.Error,
       },

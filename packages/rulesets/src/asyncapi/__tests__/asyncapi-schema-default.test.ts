@@ -45,7 +45,7 @@ testRule('asyncapi-schema-default', [
     }),
     errors: [
       {
-        message: '`default` property type must be string',
+        message: '"default" property type must be string',
         path: ['components', 'schemas', 'aSchema', 'default'],
         severity: DiagnosticSeverity.Error,
       },
@@ -59,7 +59,7 @@ testRule('asyncapi-schema-default', [
     }),
     errors: [
       {
-        message: '`default` property type must be string',
+        message: '"default" property type must be string',
         path: ['components', 'parameters', 'orphanParameter', 'schema', 'default'],
         severity: DiagnosticSeverity.Error,
       },
@@ -73,7 +73,7 @@ testRule('asyncapi-schema-default', [
     }),
     errors: [
       {
-        message: '`default` property type must be string',
+        message: '"default" property type must be string',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'userId', 'schema', 'default'],
         severity: DiagnosticSeverity.Error,
       },

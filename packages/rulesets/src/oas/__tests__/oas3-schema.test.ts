@@ -7,19 +7,19 @@ testRule('oas3-schema', [
     document: require('./__fixtures__/petstore.invalid-schema.oas3.json'),
     errors: [
       {
-        message: '`email` property must match format `email`.',
+        message: '"email" property must match format "email".',
         path: ['info', 'contact', 'email'],
       },
       {
-        message: '`header-1` property must have required property `schema`.',
+        message: '"header-1" property must have required property "schema".',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       },
       {
-        message: 'Property `type` is not expected to be here.',
+        message: 'Property "type" is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
       },
       {
-        message: 'Property `op` is not expected to be here.',
+        message: 'Property "op" is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
       },
     ],
@@ -86,17 +86,17 @@ testRule('oas3-schema', [
     },
     errors: [
       {
-        message: 'Property `42` is not expected to be here.',
+        message: 'Property "42" is not expected to be here.',
         path: ['paths', '/pets', 'post', 'responses', '42'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Property `9999` is not expected to be here.',
+        message: 'Property "9999" is not expected to be here.',
         path: ['paths', '/pets', 'post', 'responses', '9999'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Property `5xx` is not expected to be here.',
+        message: 'Property "5xx" is not expected to be here.',
         path: ['paths', '/pets', 'post', 'responses', '5xx'],
         severity: DiagnosticSeverity.Error,
       },

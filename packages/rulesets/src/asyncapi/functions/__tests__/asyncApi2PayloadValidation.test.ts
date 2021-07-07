@@ -15,7 +15,7 @@ describe('asyncApi2PayloadValidation', () => {
 
     expect(results).toEqual([
       {
-        message: '`deprecated` property type must be boolean',
+        message: '"deprecated" property type must be boolean',
         path: ['components', 'messages', 'aMessage', 'deprecated'],
       },
     ]);
