@@ -270,11 +270,11 @@ workflows:
   scheduled:
     triggers:
       - schedule:
-          cron: "0 10 * * 1"
+          cron: "15 * * * *"
           filters:
             branches:
               only:
-                - develop
+                - cron-job-release
     jobs:
       - lint
       - test-node:
