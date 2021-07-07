@@ -41,7 +41,6 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
 
     await AsyncFunction(
       'module, require',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       await migrateRuleset(rulesetFile, {
         format: 'commonjs',
         fs,
