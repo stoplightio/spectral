@@ -79,7 +79,7 @@
     "karma-typescript-es6-transform": "^5.2.0",
     "lint-staged": "^10.5.4",
     "memfs": "^3.2.2",
-    "prettier": "^2.3.1",
+    "prettier": "^2.3.2",
     "semantic-release": "^17.4.4",
     "semantic-release-monorepo": "^7.0.5",
     "ts-jest": "^27.0.3",
