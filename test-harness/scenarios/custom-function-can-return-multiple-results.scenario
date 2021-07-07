@@ -1,11 +1,6 @@
 ====test====
 Custom function can return multiple results
 ====document====
-openapi: 3.0.2
-info:
-  title: Test Spec
-  version: 0.0.0
-
 tags:
   - name: a-tag
     description: A tag
@@ -56,11 +51,9 @@ module.exports = (targetVal, _opts, { path: rootPath }) => {
   return results;
 };
 ====asset:ruleset====
-const { oas } = require('@stoplight/spectral-rulesets');
 const fn = require('{asset:fn.js}');
 
 module.exports = {
-  extends: oas,
   rules: {
     'unique-tag-names': {
       message: "Tags should have distinct names: {{error}}",
@@ -75,10 +68,7 @@ module.exports = {
 {bin} lint {document} --ruleset {asset:ruleset}
 ====stdout====
 {document}
-  1:1   warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
-  2:6   warning  info-contact      Info object should contain `contact` object.                             info
-  2:6   warning  info-description  OpenAPI object info `description` must be present and non-empty string.  info
- 11:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'              tags[2].name
- 13:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'              tags[3].name
+ 6:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'  tags[2].name
+ 8:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'  tags[3].name
 
-✖ 5 problems (0 errors, 5 warnings, 0 infos, 0 hints)
+✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)

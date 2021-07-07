@@ -1,16 +1,56 @@
 ====test====
-Invalid OAS3 document outputs results when --format=html
+Invalid document outputs results when --format=html
 ====document====
-openapi: 3.0.0
+---
 info:
   version: 1.0.0
   title: Stoplight
-paths: {}
-====asset:ruleset====
-const { oas } = require('@stoplight/spectral-rulesets');
-module.exports = oas;
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    },
+    "info-description": {
+      "description": "Info \"description\" must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    }
+  }
+}
 ====command====
-{bin} lint {document} --format=html --ruleset {asset:ruleset}
+{bin} lint {document} --format=html --ruleset {asset:ruleset.json}
 ====stdout====
 <!DOCTYPE html>
 <html>
@@ -122,19 +162,19 @@ module.exports = oas;
 <tr style="display:none" class="f-0">
     <td>1:1</td>
     <td class="severity clr-warning">warning</td>
-    <td>OpenAPI `servers` must be present and non-empty array.</td>
+    <td>&quot;servers&quot; must be present and non-empty array.</td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>2:6</td>
     <td class="severity clr-warning">warning</td>
-    <td>Info object should contain `contact` object.</td>
+    <td>Info object must have a &quot;contact&quot; object.</td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>2:6</td>
     <td class="severity clr-warning">warning</td>
-    <td>OpenAPI object info `description` must be present and non-empty string.</td>
+    <td>Info &quot;description&quot; must be present and non-empty string.</td>
 </tr>
 
     </tbody>

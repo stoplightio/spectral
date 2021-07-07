@@ -1,37 +1,29 @@
 ====test====
 Will only fail if there is an error, and there is not. Can still see all warnings.
 ====document====
-openapi: 3.0.0
-info:
-  version: 1.0.0
-  title: Unique Operations
-paths:
-  /test:
-    get:
-      operationId: foo
-      responses:
-        '200':
-          description: ok
-    post:
-      operationId: bar
-      responses:
-        '200':
-          description: ok
-====asset:ruleset====
-const { oas } = require('@stoplight/spectral-rulesets');
-module.exports = oas;
+- type: string
+- type: number
+====asset:ruleset.json====
+{
+  "rules": {
+    "valid-type": {
+      "given": "$..type",
+      "then": {
+        "function": "enumeration",
+        "functionOptions": {
+          "values": ["object"]
+        }
+      }
+    }
+  }
+}
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset} --fail-severity=error
+{bin} lint {document} --ruleset {asset:ruleset.json} --fail-severity=error
 ====status====
 0
 ====stdout====
 {document}
-  1:1   warning  oas3-api-servers       OpenAPI `servers` must be present and non-empty array.
-  2:6   warning  info-contact           Info object should contain `contact` object.                             info
-  2:6   warning  info-description       OpenAPI object info `description` must be present and non-empty string.  info
-  7:9   warning  operation-description  Operation `description` must be present and non-empty string.            paths./test.get
-  7:9   warning  operation-tags         Operation should have non-empty `tags` array.                            paths./test.get
- 12:10  warning  operation-description  Operation `description` must be present and non-empty string.            paths./test.post
- 12:10  warning  operation-tags         Operation should have non-empty `tags` array.                            paths./test.post
+ 1:9  warning  valid-type  "string" must be equal to one of the allowed values: "object"  [0].type
+ 2:9  warning  valid-type  "number" must be equal to one of the allowed values: "object"  [1].type
 
-✖ 7 problems (0 errors, 7 warnings, 0 infos, 0 hints)
+✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)

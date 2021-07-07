@@ -1,0 +1,60 @@
+====test====
+Invalid document returns results in default (stylish) format
+====document====
+---
+info:
+  version: 1.0.0
+  title: Stoplight
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    },
+    "info-description": {
+      "description": "Info \"description\" must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --ruleset {asset:ruleset.json}
+====stdout====
+{document}
+ 1:1  warning  api-servers       "servers" must be present and non-empty array.
+ 2:6  warning  info-contact      Info object must have a "contact" object.                 info
+ 2:6  warning  info-description  Info "description" must be present and non-empty string.  info
+
+✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
