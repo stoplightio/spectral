@@ -2,6 +2,7 @@ import * as path from '@stoplight/path';
 import { normalize } from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
 import * as fg from 'fast-glob';
+import { escapeRegExp } from 'lodash';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
 import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
@@ -82,7 +83,19 @@ describe('cli acceptance tests', () => {
     test(scenario.test, async () => {
       const command = applyReplacements(scenario.command!, replacements);
       const { stderr, stdout, status } = await spawnNode(command, scenario.env, scenarioCwd);
-      replacements.date = String(new Date()); // this may introduce random failures, but hopefully they don't occur too often
+
+      // executing Date() before or after spawnNode were constantly leading to occasional mismatches,
+      // as the success of that approach was highly bound to the time spent on the actual spawnNode call
+      // this is a tad smarter, because instead of naively hoping the date will match, we try to extract the date from the actual output
+      // this regular expression matches "00:43:59" in "Thu Jul 08 2021 00:43:59 GMT+0200 (Central European Summer Time)"
+      const date = RegExp(escapeRegExp(String(Date())).replace(/(\d\d:){2}\d\d/, '(\\d\\d:){2}\\d\\d'));
+      Reflect.defineProperty(replacements, 'date', {
+        configurable: true,
+        enumerable: true,
+        get(): string {
+          return stdout.match(date)?.[0] ?? String(Date());
+        },
+      });
 
       const expectedStdout = scenario.stdout === void 0 ? void 0 : applyReplacements(scenario.stdout, replacements);
       const expectedStderr = scenario.stderr === void 0 ? void 0 : applyReplacements(scenario.stderr, replacements);
