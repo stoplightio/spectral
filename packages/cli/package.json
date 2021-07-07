@@ -26,7 +26,7 @@
   "scripts": {
     "build.binary": "pkg . --output ./binaries/spectral",
     "build.windows": "pkg . --targets windows --out-path ./binaries",
-    "build.linuxMacAlpine": "pkg . --targets linux,macos,alpine --out-path ./binaries",
+    "build.nix": "pkg . --targets linux,macos,alpine --out-path ./binaries",
     "postbuild": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
     "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts"

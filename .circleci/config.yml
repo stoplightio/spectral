@@ -17,9 +17,7 @@ commands:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: |
-            yarn
-            ! git diff --name-only | grep yarn.lock
+          command: yarn --frozen-lockfile
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
@@ -204,7 +202,7 @@ jobs:
     steps:
       - prepare-release
       - run: yarn release
-      - run: yarn workspace @stoplight/spectral-cli build.linuxMacAlpine
+      - run: yarn workspace @stoplight/spectral-cli build.nix
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
@@ -267,10 +265,10 @@ workflows:
             - release
             - build-windows-binary
 
-  scheduled:
+  scheduled-release:
     triggers:
       - schedule:
-          cron: "0 10 * * 1"
+          cron: "0 * * * *"
           filters:
             branches:
               only:
