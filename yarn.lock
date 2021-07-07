@@ -1803,10 +1803,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stoplight/better-ajv-errors@0.1.1", "@stoplight/better-ajv-errors@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.1.1.tgz#fa7c01aceed122af7c0ab984c6a9cdbef202edb7"
-  integrity sha512-uTfccuOd2Fl7N3I2pEBpWNcHGx1lD3J5BDbqE3YAonXUGa1uUNZdonz3Ow/EqvnZncda++ChAZX61Z7Frd9kYQ==
+"@stoplight/better-ajv-errors@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/better-ajv-errors/-/better-ajv-errors-0.2.0.tgz#86aa8072dece24e2aa7e132f889390c18ca1ca6d"
+  integrity sha512-3vBbXBDplfeOGS2rT4PyOwJ1K0A7/NqlVXI6sJ/XchQlrMXFMKtj4qExBLxr4M9ZiiESu48uhbdS3Nx8A0S+ZA==
   dependencies:
     jsonpointer "^4.0.1"
     leven "^3.1.0"
@@ -2074,10 +2074,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.170.tgz#0d67711d4bf7f4ca5147e9091b847479b87925d6"
   integrity sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==
 
-"@types/minimatch@*", "@types/minimatch@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.4.tgz#f0ec25dbf2f0e4b18647313ac031134ca5b24b21"
-  integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
+"@types/minimatch@*", "@types/minimatch@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
+  integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
 
 "@types/minimist@^1.2.0":
   version "1.2.1"
