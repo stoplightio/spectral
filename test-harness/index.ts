@@ -93,7 +93,7 @@ describe('cli acceptance tests', () => {
         configurable: true,
         enumerable: true,
         get(): string {
-          return stdout.match(date)?.[0] ?? String(Date());
+          return stdout.match(date)?.[0] ?? Date();
         },
       });
 
