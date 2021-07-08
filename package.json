@@ -46,7 +46,12 @@
     ]
   },
   "release": {
-    "branches": [{"name": "develop", "prerelease": false }],
+    "branches": [
+      {
+        "name": "develop",
+        "prerelease": false
+      }
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
@@ -114,5 +119,6 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  }
+  },
+  "version": "6.0.0-alpha2"
 }
