@@ -44,7 +44,7 @@ module.exports = {
   },
 };
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
   5:9   warning  oas2-parameter-description  Parameter objects should have a `description`.  paths./pets.parameters[0]

@@ -38,7 +38,7 @@ version: 1.0.0
   }
 }
 ====command====
-cat {document} | {bin} lint -r {asset:ruleset.json}
+cat {document} | {bin} lint -r "{asset:ruleset.json}"
 ====status====
 1
 ====stdout====

@@ -16,7 +16,7 @@ module.exports = {
   },
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset} --resolver ./resolvers/missing-resolver.js
+{bin} lint {document} --ruleset "{asset:ruleset}" --resolver ./resolvers/missing-resolver.js
 ====status====
 2
 ====stderr====

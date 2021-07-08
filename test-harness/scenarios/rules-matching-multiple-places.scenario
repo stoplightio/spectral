@@ -13,7 +13,7 @@ schemas:
         type: boolean
   address:
 ====command====
-{bin} lint {document} -r {asset:ruleset} --ignore-unknown-format
+{bin} lint {document} -r "{asset:ruleset}" --ignore-unknown-format
 ====asset:ruleset====
 const { truthy, pattern } = require("@stoplight/spectral-functions");
 
