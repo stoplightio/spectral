@@ -17,10 +17,25 @@ commands:
             - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn --frozen-lockfile
+          command: yarn --frozen-lockfile --cache-folder $HOME/.cache/yarn
       - save_cache:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+  cached-dependencies-windows:
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-windows-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn --ignore-engines --frozen-lockfile --cache-folder $HOME/.cache/yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-windows-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
@@ -125,7 +140,7 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - run: yarn --ignore-engines
+      - cached-dependencies-windows
       - run: yarn build
       - test-node
 
@@ -296,4 +311,3 @@ workflows:
             - test-node
             - test-windows
             - test-browser
-  
