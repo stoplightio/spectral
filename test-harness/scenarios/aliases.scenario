@@ -38,7 +38,7 @@ module.exports = {
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
  2:17  warning  valid-name-and-description  "description" property must be truthy  [0].info.description

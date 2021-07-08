@@ -10,7 +10,7 @@ module.exports = {
   rules: {}
 };
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
  1:1  warning  unrecognized-format  The provided document does not match any of the registered formats [JSON Schema (loose)]

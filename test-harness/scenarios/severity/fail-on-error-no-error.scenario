@@ -18,7 +18,7 @@ Will only fail if there is an error, and there is not. Can still see all warning
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset.json} --fail-severity=error
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity=error
 ====status====
 0
 ====stdout====

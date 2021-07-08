@@ -50,7 +50,7 @@ info:
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset.json}
+{bin} lint {document} --ruleset "{asset:ruleset.json}"
 ====stdout====
 {document}
  1:1  warning  api-servers       "servers" must be present and non-empty array.

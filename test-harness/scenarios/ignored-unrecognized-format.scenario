@@ -9,6 +9,6 @@ module.exports = {
   rules: {},
 };
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset} --ignore-unknown-format
+{bin} lint {document} --ruleset "{asset:ruleset}" --ignore-unknown-format
 ====stdout====
 No results with a severity of 'error' or higher found!
