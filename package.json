@@ -38,11 +38,27 @@
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
-    "release": "yarn workspaces run semantic-release -e semantic-release-monorepo --branches develop"
+    "release": "yarn workspaces run semantic-release -e semantic-release-monorepo"
   },
   "workspaces": {
     "packages": [
       "packages/*"
+    ]
+  },
+  "release": {
+    "branches": [
+      "develop",
+      {
+        "name": "develop",
+        "prerelease": false
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
     ]
   },
   "devDependencies": {
@@ -103,5 +119,8 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
+  },
+  "dependencies": {
+    "@semantic-release/git": "^9.0.0"
   }
 }
