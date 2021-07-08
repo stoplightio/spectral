@@ -50,7 +50,7 @@ info:
   }
 }
 ====command====
-{bin} lint {document} --format=html --ruleset {asset:ruleset.json}
+{bin} lint {document} --format=html --ruleset "{asset:ruleset.json}"
 ====stdout====
 <!DOCTYPE html>
 <html>

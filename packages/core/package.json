@@ -50,7 +50,7 @@
     "@stoplight/spectral-parsers": "^0.0.0",
     "@stoplight/yaml": "^4.2.2",
     "@types/json-schema": "^7.0.7",
-    "@types/minimatch": "^3.0.4",
+    "@types/minimatch": "^3.0.5",
     "@types/treeify": "^1.0.0",
     "esm": "^3.2.25",
     "nock": "^13.1.0",

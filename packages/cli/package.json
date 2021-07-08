@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-cli",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/xml2js": "^0.4.8",
-    "@types/yargs": "^17.0.0",
+    "@types/yargs": "^17.0.2",
     "copyfiles": "^2.4.1",
     "jest-when": "^3.3.1",
     "nock": "^12.0.2",

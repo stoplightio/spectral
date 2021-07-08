@@ -39,7 +39,7 @@ servers:
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset.json} --fail-severity=error -D
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity=error -D
 ====status====
 0
 ====stdout====

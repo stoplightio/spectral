@@ -27,7 +27,7 @@ components:
             - You certainly wonder
             - Why I gathered you all today...
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
  12:15  error  typed-enum  Enum value `Tap, tap, tap...` must be "integer".                 components.schemas.a_model.properties.id.enum[1]

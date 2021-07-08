@@ -1727,10 +1727,24 @@
     lodash "^4.17.4"
     micromatch "^4.0.2"
 
-"@semantic-release/error@^2.2.0":
+"@semantic-release/error@^2.1.0", "@semantic-release/error@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@semantic-release/error/-/error-2.2.0.tgz#ee9d5a09c9969eade1ec864776aeda5c5cddbbf0"
   integrity sha512-9Tj/qn+y2j+sjCI3Jd+qseGtHjOAeg7dU2/lVcqIQ9TV3QDaDXDYXcoOHU+7o2Hwh8L8ymL4gfuO7KxDs3q2zg==
+
+"@semantic-release/git@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@semantic-release/git/-/git-9.0.0.tgz#304c4883c87d095b1faaae93300f1f1e0466e9a5"
+  integrity sha512-AZ4Zha5NAPAciIJH3ipzw/WU9qLAn8ENaoVAhD6srRPxTpTzuV3NhNh14rcAo8Paj9dO+5u4rTKcpetOBluYVw==
+  dependencies:
+    "@semantic-release/error" "^2.1.0"
+    aggregate-error "^3.0.0"
+    debug "^4.0.0"
+    dir-glob "^3.0.0"
+    execa "^4.0.0"
+    lodash "^4.17.4"
+    micromatch "^4.0.0"
+    p-reduce "^2.0.0"
 
 "@semantic-release/github@^7.0.0":
   version "7.2.3"
@@ -2074,10 +2088,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.170.tgz#0d67711d4bf7f4ca5147e9091b847479b87925d6"
   integrity sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q==
 
-"@types/minimatch@*", "@types/minimatch@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.4.tgz#f0ec25dbf2f0e4b18647313ac031134ca5b24b21"
-  integrity sha512-1z8k4wzFnNjVK/tlxvrWuK5WMt6mydWWP7+zvH5eFep4oj+UkrfiJTRtjCeBXNpwaA/FYqqtb4/QS4ianFpIRA==
+"@types/minimatch@*", "@types/minimatch@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
+  integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
 
 "@types/minimist@^1.2.0":
   version "1.2.1"
@@ -2139,10 +2153,10 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/text-table@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@types/text-table/-/text-table-0.2.1.tgz#39c4d4a058a82f677392dfd09976e83d9b4c9264"
-  integrity sha512-dchbFCWfVgUSWEvhOkXGS7zjm+K7jCUvGrQkAHPk2Fmslfofp4HQTH2pqnQ3Pw5GPYv0zWa2AQjKtsfZThuemQ==
+"@types/text-table@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@types/text-table/-/text-table-0.2.2.tgz#774c90cfcfbc8b4b0ebb00fecbe861dc8b1e8e26"
+  integrity sha512-dGoI5Af7To0R2XE8wJuc6vwlavWARsCh3UKJPjWs1YEqGUqfgBI/j/4GX0yf19/DsDPPf0YAXWAp8psNeIehLg==
 
 "@types/tmp@^0.2.0":
   version "0.2.0"
@@ -2192,10 +2206,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@types/yargs@^17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-17.0.0.tgz#32f740934eedf0a5cd19470249f317755c91f1ae"
-  integrity sha512-RS7u2X7vdXjVQs160PWY1pjLBw6GJj04utojn0KU8p2rRZR37FSzzK6XOT+KLzT/DVbDYRyezroc0LHIvM5Z2A==
+"@types/yargs@^17.0.2":
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-17.0.2.tgz#8fb2e0f4cdc7ab2a1a570106e56533f31225b584"
+  integrity sha512-JhZ+pNdKMfB0rXauaDlrIvm+U7V4m03PPOSVoPS66z8gf+G4Z/UW8UlrVIj2MRQOBzuoEvYtjS0bqYwnpZaS9Q==
   dependencies:
     "@types/yargs-parser" "*"
 
@@ -7386,6 +7400,14 @@ micromatch@^3.1.10:
     snapdragon "^0.8.1"
     to-regex "^3.0.2"
 
+micromatch@^4.0.0, micromatch@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.4.tgz#896d519dfe9db25fce94ceb7a500919bf881ebf9"
+  integrity sha512-pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==
+  dependencies:
+    braces "^3.0.1"
+    picomatch "^2.2.3"
+
 micromatch@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.2.tgz#4fcb0999bf9fbc2fcbdd212f6d629b9a56c39259"
@@ -7393,14 +7415,6 @@ micromatch@^4.0.2:
   dependencies:
     braces "^3.0.1"
     picomatch "^2.0.5"
-
-micromatch@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.4.tgz#896d519dfe9db25fce94ceb7a500919bf881ebf9"
-  integrity sha512-pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==
-  dependencies:
-    braces "^3.0.1"
-    picomatch "^2.2.3"
 
 miller-rabin@^4.0.0:
   version "4.0.1"
@@ -8612,12 +8626,7 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.2.0, prettier@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.1.tgz#76903c3f8c4449bc9ac597acefa24dc5ad4cbea6"
-  integrity sha512-p+vNbgpLjif/+D+DwAZAbndtRrR0md0MwfmOVN9N+2RgyACMT+7tfaRnT+WDPkqnuVwleyuBIG2XBxKDme3hPA==
-
-prettier@^2.3.2:
+prettier@^2.2.0, prettier@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
   integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
