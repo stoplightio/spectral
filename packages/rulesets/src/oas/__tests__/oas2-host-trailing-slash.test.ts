@@ -21,7 +21,7 @@ testRule('oas2-host-trailing-slash', [
     },
     errors: [
       {
-        message: 'Server URL should not have a trailing slash.',
+        message: 'Server URL must not have trailing slash.',
         path: ['host'],
         severity: DiagnosticSeverity.Warning,
       },

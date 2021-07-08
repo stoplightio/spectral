@@ -70,7 +70,7 @@ testRule('operation-success-response', [
     },
     errors: [
       {
-        message: 'Operation must have at least one `2xx` or `3xx` response.',
+        message: 'Operation must have at least one "2xx" or "3xx" response.',
         path: ['paths', '/path', verb, 'responses'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -94,7 +94,7 @@ testRule('operation-success-response', [
 
     errors: [
       {
-        message: 'Operation must have at least one `2xx` or `3xx` response.',
+        message: 'Operation must have at least one "2xx" or "3xx" response.',
         path: ['paths', '/path', 'get', 'responses'],
         severity: DiagnosticSeverity.Warning,
       },

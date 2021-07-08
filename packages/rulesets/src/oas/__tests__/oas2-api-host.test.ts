@@ -21,7 +21,7 @@ testRule('oas2-api-host', [
     errors: [
       {
         code: 'oas2-api-host',
-        message: 'OpenAPI `host` must be present and non-empty string.',
+        message: 'OpenAPI "host" must be present and non-empty string.',
         path: [],
         severity: DiagnosticSeverity.Warning,
       },

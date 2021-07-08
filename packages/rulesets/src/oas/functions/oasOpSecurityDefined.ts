@@ -68,7 +68,7 @@ export default createRulesetFunction<{ paths: Record<string, unknown> }, Options
 
         if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
           results.push({
-            message: 'Operation referencing undefined security scheme.',
+            message: 'Operation must not reference an undefined security scheme.',
             path: ['paths', path, operation, 'security', index],
           });
         }

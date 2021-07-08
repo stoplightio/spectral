@@ -31,7 +31,7 @@ testRule('operation-operationId-valid-in-url', [
     },
     errors: [
       {
-        message: 'operationId may only use characters that are valid when used in a URL.',
+        message: 'operationId must not characters that are invalid when used in URL.',
         path: ['paths', '/todos', 'get', 'operationId'],
         severity: DiagnosticSeverity.Warning,
       },

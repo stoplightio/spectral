@@ -33,7 +33,7 @@ export const oasTagDefined: IFunction = targetVal => {
     for (const [i, tag] of tags.entries()) {
       if (!globalTags.includes(tag)) {
         results.push({
-          message: 'Operation tags should be defined in global tags.',
+          message: 'Operation tags must be defined in global tags.',
           path: ['paths', path, operation, 'tags', i],
         });
       }

@@ -25,6 +25,7 @@ testRule('license-url', [
     },
     errors: [
       {
+        message: 'License object must include "url".',
         path: ['info', 'license'],
         severity: DiagnosticSeverity.Warning,
       },

@@ -38,6 +38,7 @@
     "@stoplight/spectral-parsers": "^0.0.0",
     "@stoplight/spectral-ref-resolver": "^0.0.0",
     "@stoplight/spectral-ruleset-migrator": "^0.0.0",
+    "@stoplight/spectral-rulesets": "*",
     "@stoplight/spectral-runtime": "^0.0.0",
     "@stoplight/types": "12.3.0",
     "chalk": "4.1.1",

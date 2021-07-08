@@ -20,7 +20,7 @@ testRule('openapi-tags', [
     },
     errors: [
       {
-        message: 'OpenAPI object should have non-empty `tags` array.',
+        message: 'OpenAPI object must have non-empty "tags" array.',
         path: [],
         severity: DiagnosticSeverity.Warning,
       },
@@ -36,7 +36,7 @@ testRule('openapi-tags', [
     },
     errors: [
       {
-        message: 'OpenAPI object should have non-empty `tags` array.',
+        message: 'OpenAPI object must have non-empty "tags" array.',
         path: ['tags'],
         severity: DiagnosticSeverity.Warning,
       },

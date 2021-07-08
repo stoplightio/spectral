@@ -52,7 +52,7 @@
   "anyOf": [
     {
       "required": ["paths"],
-      "errorMessage": "The document must have either `paths`, `webhooks` or `components`"
+      "errorMessage": "The document must have either \"paths\", \"webhooks\" or \"components\""
     },
     {
       "required": ["components"]

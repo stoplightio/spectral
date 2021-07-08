@@ -34,7 +34,7 @@ testRule('oas2-operation-formData-consume-check', [
     errors: [
       {
         message:
-          'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
+          'Operations with "in: formData" parameter must include "application/x-www-form-urlencoded" or "multipart/form-data" in their "consumes" property.',
         path: ['paths', '/path1', 'get'],
         severity: DiagnosticSeverity.Warning,
       },
