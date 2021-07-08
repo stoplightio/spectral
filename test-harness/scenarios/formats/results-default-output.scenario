@@ -50,7 +50,7 @@ info:
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset.json} --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
 ====asset:output.txt====
 ====stdout====
 {document}

@@ -36,6 +36,6 @@ module.exports = {
   },
 };
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset} --ignoreUnknownFormat
+{bin} lint {document} --ruleset "{asset:ruleset}" --ignoreUnknownFormat
 ====status====
 0

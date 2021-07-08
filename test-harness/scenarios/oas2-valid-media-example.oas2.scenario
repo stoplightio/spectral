@@ -38,7 +38,7 @@ module.exports = {
   }
 }
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 {document}
  11:31  error  oas2-valid-media-example  "application/json" property type must be boolean                paths./pets.get.responses[200].examples.application/json
