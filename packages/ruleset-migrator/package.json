@@ -24,7 +24,7 @@
     "@stoplight/json": "3.15.0",
     "@stoplight/ordered-object-literal": "^1.0.2",
     "@stoplight/path": "1.3.2",
-    "@stoplight/spectral-functions": "^0.0.0",
+    "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/spectral-runtime": "^0.0.0",
     "@stoplight/types": "12.3.0",
     "@stoplight/yaml": "4.2.2",
@@ -34,8 +34,8 @@
     "astring": "^1.7.5"
   },
   "devDependencies": {
-    "@stoplight/spectral-core": "^0.0.0",
-    "@stoplight/spectral-rulesets": "^0.0.0",
+    "@stoplight/spectral-core": "^1.1.0",
+    "@stoplight/spectral-rulesets": "^1.1.0",
     "json-schema-to-typescript": "^10.1.4",
     "memfs": "^3.2.2",
     "prettier": "^2.3.2"

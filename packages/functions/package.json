@@ -21,7 +21,7 @@
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.2.0",
     "@stoplight/json": "3.15.0",
-    "@stoplight/spectral-core": "^0.0.0",
+    "@stoplight/spectral-core": "^1.1.0",
     "@stoplight/spectral-formats": "^0.0.0",
     "@stoplight/spectral-runtime": "^0.0.0",
     "@stoplight/types": "12.3.0",
@@ -30,7 +30,7 @@
     "ajv-formats": "2.1.0",
     "json-schema-migrate": "2.0.0",
     "json-schema-traverse": "1.0.0",
-    "lodash": "4.17.21",
+    "lodash": "~4.17.21",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
