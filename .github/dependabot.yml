@@ -21,6 +21,7 @@ updates:
     schedule:
       interval: "monthly" # we do not need to check for devDependencies updates on a daily basis
     versioning-strategy: "increase"
+    rebase-strategy: "disabled"
 
     commit-message:
       prefix: "chore"
