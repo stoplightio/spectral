@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "0.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
