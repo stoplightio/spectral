@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-functions",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
