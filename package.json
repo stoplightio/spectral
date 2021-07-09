@@ -119,5 +119,6 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  }
+  },
+  "version": "6.0.0-alpha2"
 }
