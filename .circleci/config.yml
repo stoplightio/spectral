@@ -79,7 +79,6 @@ commands:
       - checkout
       - cached-dependencies
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: npm version from-git
       - run: yarn build
 
 jobs:
@@ -296,4 +295,3 @@ workflows:
             - test-node
             - test-windows
             - test-browser
-  
