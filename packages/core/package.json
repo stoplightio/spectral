@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@stoplight/spectral-formats": "^0.0.0",
-    "@stoplight/spectral-functions": "^0.0.0",
+    "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/spectral-parsers": "^0.0.0",
     "@stoplight/yaml": "^4.2.2",
     "@types/json-schema": "^7.0.7",
