@@ -5,9 +5,9 @@ import * as fg from 'fast-glob';
 import { escapeRegExp } from 'lodash';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
+import { nanoid } from 'nanoid/non-secure';
 import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
-import nanoid = require('nanoid/non-secure');
 
 const spectralBin = path.join(__dirname, '../packages/cli/binaries/spectral');
 const cwd = path.join(__dirname, './scenarios');
