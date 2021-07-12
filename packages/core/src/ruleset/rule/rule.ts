@@ -10,6 +10,7 @@ import { Ruleset } from '../ruleset';
 import { Format } from '../format';
 import { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition } from '../types';
 import { minimatch } from '../utils/minimatch';
+import { printValue } from '@stoplight/spectral-runtime';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
@@ -25,6 +26,13 @@ export interface IRule {
   then: IRuleThen[];
   given: string[];
 }
+
+export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {
+  name: string;
+  formats: string[] | null;
+  then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
+  owner: number;
+};
 
 export class Rule implements IRule {
   public description: string | null;
@@ -217,6 +225,27 @@ export class Rule implements IRule {
         });
       };
     }
+  }
+
+  public toJSON(): StringifiedRule {
+    return {
+      name: this.name,
+      recommended: this.recommended,
+      enabled: this.enabled,
+      description: this.description,
+      message: this.message,
+      documentationUrl: this.documentationUrl,
+      severity: this.severity,
+      resolved: this.resolved,
+      formats: this.formats === null ? null : Array.from(this.formats).map(fn => fn.displayName ?? fn.name),
+      then: this.then.map(then => ({
+        ...then.function,
+        function: then.function.name,
+        ...('functionOptions' in then ? { functionOptions: printValue(then.functionOptions) } : null),
+      })),
+      given: this.#given,
+      owner: this.owner.id,
+    };
   }
 }
 

@@ -1,6 +1,6 @@
 import { dirname, relative } from '@stoplight/path';
 import { minimatch } from './utils/minimatch';
-import { Rule } from './rule/rule';
+import { Rule, StringifiedRule } from './rule/rule';
 import {
   FileRulesetSeverityDefinition,
   ParserOptions,
@@ -25,8 +25,23 @@ type RulesetContext = {
   readonly [STACK_SYMBOL]?: Map<RulesetDefinition, Ruleset>;
 };
 
+let SEED = 1;
+
+export type StringifiedRuleset = {
+  id: number;
+  extends: StringifiedRuleset[] | null;
+  source: string | null;
+  aliases: RulesetAliasesDefinition | null;
+  formats: string[] | null;
+  rules: Record<string, StringifiedRule>;
+  overrides: RulesetOverridesDefinition | null;
+  parserOptions: ParserOptions;
+};
+
 export class Ruleset {
-  protected extends!: Ruleset[];
+  public readonly id = SEED++;
+
+  protected readonly extends: Ruleset[] | null;
   public readonly formats = new Set<Format>();
   public readonly overrides: RulesetOverridesDefinition | null;
   public readonly aliases: RulesetAliasesDefinition | null;
@@ -84,7 +99,7 @@ export class Ruleset {
             },
             [],
           )
-        : [];
+        : null;
 
     if (stack.size === 1 && definition.overrides) {
       this.overrides = definition.overrides;
@@ -100,9 +115,11 @@ export class Ruleset {
       }
     }
 
-    for (const { formats } of this.extends) {
-      for (const format of formats) {
-        this.formats.add(format);
+    if (Array.isArray(this.extends)) {
+      for (const { formats } of this.extends) {
+        for (const format of formats) {
+          this.formats.add(format);
+        }
       }
     }
 
@@ -220,7 +237,7 @@ export class Ruleset {
   #getRules(): Record<string, Rule> {
     const rules: Record<string, Rule> = {};
 
-    if (this.extends.length > 0) {
+    if (this.extends !== null && this.extends.length > 0) {
       for (const extendedRuleset of this.extends) {
         if (extendedRuleset === this) continue;
         for (const rule of Object.values(extendedRuleset.rules)) {
@@ -264,5 +281,21 @@ export class Ruleset {
 
   public static isDefaultRulesetFile(uri: string): boolean {
     return DEFAULT_RULESET_FILE.test(uri);
+  }
+
+  public toJSON(): Omit<StringifiedRuleset, 'extends' | 'rules'> & {
+    extends: Ruleset['extends'];
+    rules: Ruleset['rules'];
+  } {
+    return {
+      id: this.id,
+      extends: this.extends,
+      source: this.source,
+      aliases: this.aliases,
+      formats: this.formats.size === 0 ? null : Array.from(this.formats).map(fn => fn.displayName ?? fn.name),
+      rules: this.rules,
+      overrides: this.overrides,
+      parserOptions: this.parserOptions,
+    };
   }
 }
