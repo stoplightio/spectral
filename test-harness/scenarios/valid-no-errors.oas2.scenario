@@ -18,6 +18,6 @@ tags:
 const { oas } = require('@stoplight/spectral-rulesets');
 module.exports = oas;
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
 No results with a severity of 'error' or higher found!

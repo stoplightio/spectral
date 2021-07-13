@@ -19,7 +19,7 @@ testRule('oas2-schema', [
     },
     errors: [
       {
-        message: `\`get\` property must have required property \`responses\`.`,
+        message: `"get" property must have required property "responses".`,
         path: ['paths', '/test', 'get'],
         severity: DiagnosticSeverity.Error,
       },

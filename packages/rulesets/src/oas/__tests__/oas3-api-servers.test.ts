@@ -20,7 +20,7 @@ testRule('oas3-api-servers', [
     },
     errors: [
       {
-        message: 'OpenAPI `servers` must be present and non-empty array.',
+        message: 'OpenAPI "servers" must be present and non-empty array.',
         path: [],
         severity: DiagnosticSeverity.Warning,
       },
@@ -37,7 +37,7 @@ testRule('oas3-api-servers', [
     errors: [
       {
         code: 'oas3-api-servers',
-        message: 'OpenAPI `servers` must be present and non-empty array.',
+        message: 'OpenAPI "servers" must be present and non-empty array.',
         path: ['servers'],
         severity: DiagnosticSeverity.Warning,
       },

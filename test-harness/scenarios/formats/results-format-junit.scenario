@@ -1,0 +1,61 @@
+====test====
+Invalid document outputs results when --format=junit
+====document====
+---
+info:
+  version: 1.0.0
+  title: Stoplight
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "severity": "error",
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    },
+    "info-description": {
+      "description": "Info \"description\" must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --format=junit --ruleset "{asset:ruleset.json}"
+====stdout====
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+<testsuite package="org.spectral" time="0" tests="1" errors="0" failures="1" name="{document}">
+<testcase time="0" name="org.spectral.api-servers" classname="{document}"><failure message="&quot;servers&quot; must be present and non-empty array."><![CDATA[line 1, col 1, &quot;servers&quot; must be present and non-empty array. (api-servers) at path #]]></failure></testcase>
+</testsuite>
+</testsuites>

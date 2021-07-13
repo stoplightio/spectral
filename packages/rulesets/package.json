@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "0.0.0",
+  "version": "1.2.1",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -18,22 +18,23 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "0.1.1",
+    "@stoplight/better-ajv-errors": "0.2.0",
     "@stoplight/json": "3.15.0",
-    "@stoplight/spectral-core": "^0.0.0",
-    "@stoplight/spectral-formats": "^0.0.0",
-    "@stoplight/spectral-functions": "^0.0.0",
+    "@stoplight/spectral-core": "^1.1.0",
+    "@stoplight/spectral-formats": "^1.0.0",
+    "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/types": "^12.3.0",
     "@types/json-schema": "^7.0.7",
     "ajv": "~8.6.0",
     "ajv-formats": "~2.1.0",
     "json-schema-traverse": "^1.0.0",
-    "lodash": "~4.17.21"
+    "lodash": "~4.17.21",
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@stoplight/path": "^1.3.2",
-    "@stoplight/spectral-parsers": "^0.0.0",
-    "@stoplight/spectral-ref-resolver": "^0.0.0",
-    "immer": "^9.0.3"
+    "@stoplight/spectral-parsers": "*",
+    "@stoplight/spectral-ref-resolver": "*",
+    "immer": "^9.0.5"
   }
 }

@@ -1,0 +1,41 @@
+====test====
+Will fail and return 1 as exit code because errors exist
+====document====
+- type: string
+- type: array
+====asset:ruleset.json====
+{
+  "rules": {
+    "valid-type": {
+      "given": "$..type",
+      "severity": "error",
+      "then": {
+        "function": "enumeration",
+        "functionOptions": {
+          "values": ["object"]
+        }
+      }
+    },
+    "no-primitive-type": {
+      "given": "$..type",
+      "severity": "warn",
+      "then": {
+        "function": "enumeration",
+        "functionOptions": {
+          "values": ["string", "number", "boolean", "null"]
+        }
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity=error
+====status====
+1
+====stdout====
+{document}
+ 1:9    error  valid-type         "string" must be equal to one of the allowed values: "object"                              [0].type
+ 2:9  warning  no-primitive-type  "array" must be equal to one of the allowed values: "string", "number", "boolean", "null"  [1].type
+ 2:9    error  valid-type         "array" must be equal to one of the allowed values: "object"                               [1].type
+
+✖ 3 problems (2 errors, 1 warning, 0 infos, 0 hints)

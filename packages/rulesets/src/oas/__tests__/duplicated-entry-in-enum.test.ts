@@ -62,7 +62,7 @@ testRule('duplicated-entry-in-enum', [
 
     errors: [
       {
-        message: `A duplicated entry in the enum was found. Error: \`enum\` property must not have duplicate items (items ## 1 and 5 are identical)`,
+        message: `"enum" property must not have duplicate items (items ## 1 and 5 are identical)`,
         path: ['definitions', 'Test', 'enum'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -108,7 +108,7 @@ testRule('duplicated-entry-in-enum', [
     },
     errors: [
       {
-        message: `A duplicated entry in the enum was found. Error: \`enum\` property must not have duplicate items (items ## 1 and 5 are identical)`,
+        message: `"enum" property must not have duplicate items (items ## 1 and 5 are identical)`,
         path: ['components', 'schemas', 'Test', 'enum'],
         severity: DiagnosticSeverity.Warning,
       },

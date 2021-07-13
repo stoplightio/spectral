@@ -40,7 +40,7 @@ const refSiblings: IFunction = (targetVal, opts, { document, path }) => {
       continue;
     }
     results.push({
-      message: '$ref cannot be placed next to any other properties',
+      message: '$ref must not be placed next to any other properties',
       path: [...actualObjPath, key],
     });
   }

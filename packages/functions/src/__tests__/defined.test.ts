@@ -12,7 +12,7 @@ describe('Core Functions / Defined', () => {
   it('given undefined input, should return an error message', async () => {
     expect(await runDefined({}, null, { then: { field: 'foo' } })).toEqual([
       {
-        message: '`foo` property must be defined',
+        message: '"foo" property must be defined',
         path: [],
       },
     ]);

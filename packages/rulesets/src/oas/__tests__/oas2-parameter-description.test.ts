@@ -78,7 +78,7 @@ testRule('oas2-parameter-description', [
     },
     errors: [
       {
-        message: 'Parameter objects should have a `description`.',
+        message: 'Parameter objects must have "description".',
         path: ['paths', '/todos', 'parameters', '0'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -105,7 +105,7 @@ testRule('oas2-parameter-description', [
     },
     errors: [
       {
-        message: 'Parameter objects should have a `description`.',
+        message: 'Parameter objects must have "description".',
         path: ['paths', '/todos', 'get', 'parameters', '0'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -143,7 +143,7 @@ testRule('oas2-parameter-description', [
     },
     errors: [
       {
-        message: 'Parameter objects should have a `description`.',
+        message: 'Parameter objects must have "description".',
         path: ['parameters', 'limit'],
         severity: DiagnosticSeverity.Warning,
       },

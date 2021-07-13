@@ -27,7 +27,7 @@ testRule('path-params', [
     },
     errors: [
       {
-        message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
+        message: 'Operation must define parameter "{bar}" as expected by path "/foo/{bar}".',
         path: ['paths', '/foo/{bar}', 'get'],
         severity: DiagnosticSeverity.Error,
       },
@@ -141,7 +141,7 @@ testRule('path-params', [
 
     errors: [
       {
-        message: 'The operation does not define the parameter `{bar}` expected by path `/foo/{bar}`.',
+        message: 'Operation must define parameter "{bar}" as expected by path "/foo/{bar}".',
         path: ['paths', '/foo/{bar}', 'put'],
         severity: DiagnosticSeverity.Error,
       },
@@ -167,7 +167,7 @@ testRule('path-params', [
     },
     errors: [
       {
-        message: `The path \`/foo/{bar}/{bar}\` uses the parameter \`{bar}\` multiple times. Path parameters must be unique.`,
+        message: 'Path "/foo/{bar}/{bar}" must not use parameter "{bar}" multiple times.',
         path: ['paths', '/foo/{bar}/{bar}'],
         severity: DiagnosticSeverity.Error,
       },
@@ -198,7 +198,7 @@ testRule('path-params', [
     },
     errors: [
       {
-        message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
+        message: `Path parameter "bar" must have "required" property that is set to "true".`,
         path: ['paths', '/foo/{bar}', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       },
@@ -230,7 +230,7 @@ testRule('path-params', [
     },
     errors: [
       {
-        message: `Path parameter \`bar\` must have a \`required\` property that is set to \`true\`.`,
+        message: `Path parameter "bar" must have "required" property that is set to "true".`,
         path: ['paths', '/foo/{bar}', 'get', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       },
@@ -267,7 +267,7 @@ testRule('path-params', [
 
     errors: [
       {
-        message: `The paths \`/foo/{boo}\` and \`/foo/{bar}\` are equivalent.`,
+        message: `Paths "/foo/{boo}" and "/foo/{bar}" must not be equivalent.`,
         path: ['paths', '/foo/{bar}'],
         severity: DiagnosticSeverity.Error,
       },
@@ -315,22 +315,22 @@ testRule('path-params', [
     },
     errors: [
       {
-        message: 'Parameter `boo` is not used in the path `/foo`.',
+        message: 'Parameter "boo" must be used in path "/foo".',
         path: ['paths', '/foo', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Parameter `bar` is not used in the path `/foo`.',
+        message: 'Parameter "bar" must be used in path "/foo".',
         path: ['paths', '/foo', 'get', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Parameter `baz` is not used in the path `/foo`.',
+        message: 'Parameter "baz" must be used in path "/foo".',
         path: ['paths', '/foo', 'put', 'parameters', '0'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Parameter `qux` is not used in the path `/foo`.',
+        message: 'Parameter "qux" must be used in path "/foo".',
         path: ['paths', '/foo', 'put', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       },
@@ -399,17 +399,17 @@ testRule('path-params', [
 
     errors: [
       {
-        message: 'Path parameter `boo` is defined multiple times. Path parameters must be unique.',
+        message: 'Path parameter "boo" must not be defined multiple times.',
         path: ['paths', '/foo/{boo}/{bar}/{qux}', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Path parameter `bar` is defined multiple times. Path parameters must be unique.',
+        message: 'Path parameter "bar" must not be defined multiple times.',
         path: ['paths', '/foo/{boo}/{bar}/{qux}', 'get', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Path parameter `qux` is defined multiple times. Path parameters must be unique.',
+        message: 'Path parameter "qux" must not be defined multiple times.',
         path: ['paths', '/foo/{boo}/{bar}/{qux}', 'put', 'parameters', '1'],
         severity: DiagnosticSeverity.Error,
       },

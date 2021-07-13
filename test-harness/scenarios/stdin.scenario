@@ -1,20 +1,46 @@
 ====test====
 Lints stdin input
 ====document====
-openapi: 3.0.0
-info:
-  version: 1.0.0
-  title: Stoplight
-paths: {}
-====asset:ruleset====
-const { oas } = require('@stoplight/spectral-rulesets');
-module.exports = oas;
+version: 1.0.0
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "valid-version": {
+      "message": "Version must be higher than 2",
+      "given": "$.version",
+      "then": {
+         "function": "pattern",
+         "functionOptions": {
+           "match": "^([2-9]|1[0-9])"
+         }
+      }
+    }
+  }
+}
 ====command====
-cat {document} | {bin} lint --ruleset {asset:ruleset}
+cat {document} | {bin} lint --ruleset "{asset:ruleset.json}"
 ====stdout====
 <STDIN>
- 1:1  warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
- 2:6  warning  info-contact      Info object should contain `contact` object.                             info
- 2:6  warning  info-description  OpenAPI object info `description` must be present and non-empty string.  info
+  1:1  warning  api-servers    "servers" must be present and non-empty array.
+ 1:10  warning  valid-version  Version must be higher than 2                   version
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
+✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)

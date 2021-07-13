@@ -61,7 +61,7 @@ export const typedEnum: IFunction = function (targetVal, opts, context) {
 
   return incorrectValues.map(bad => {
     return {
-      message: `Enum value \`${String(bad.val)}\` does not respect the specified type \`${String(type)}\`.`,
+      message: `Enum value \`${String(bad.val)}\` must be "${String(type)}".`,
       path: [...context.path, 'enum', bad.index],
     };
   });

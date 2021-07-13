@@ -16,7 +16,7 @@ testRule('oas3-parameter-description', [
     },
     errors: [
       {
-        message: 'Parameter objects should have a `description`.',
+        message: 'Parameter objects must have "description".',
         path: ['components', 'parameters', 'address'],
         severity: DiagnosticSeverity.Warning,
       },

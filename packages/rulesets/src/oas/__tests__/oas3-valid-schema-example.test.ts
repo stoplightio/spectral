@@ -50,7 +50,7 @@ testRule('oas3-valid-schema-example', [
       },
       errors: [
         {
-          message: '`example` property type must be string',
+          message: '"example" property type must be string',
           path: [field, 'schemas', 'xoxo', 'example'],
           severity: DiagnosticSeverity.Error,
         },
@@ -72,7 +72,7 @@ testRule('oas3-valid-schema-example', [
       },
       errors: [
         {
-          message: '`default` property type must be string',
+          message: '"default" property type must be string',
           severity: DiagnosticSeverity.Error,
           path: [field, 'schemas', 'xoxo', 'default'],
         },
@@ -123,7 +123,7 @@ testRule('oas3-valid-schema-example', [
       },
       errors: [
         {
-          message: '`example` property type must be string',
+          message: '"example" property type must be string',
           path: [
             field,
             'schemas',
@@ -157,7 +157,7 @@ testRule('oas3-valid-schema-example', [
       },
       errors: [
         {
-          message: '`example` property must be equal to one of the allowed values: `a`, `b`',
+          message: '"example" property must be equal to one of the allowed values: "a", "b"',
           path: [field, 'schemas', 'xoxo', 'example'],
           severity: DiagnosticSeverity.Error,
         },
@@ -233,7 +233,7 @@ testRule('oas3-valid-schema-example', [
       },
       errors: [
         {
-          message: '`example` property type must be number',
+          message: '"example" property type must be number',
           severity: DiagnosticSeverity.Error,
           path: [field, 'schemas', 'abc', 'properties', 'abc', 'example'],
         },
@@ -273,7 +273,7 @@ testRule('oas3-valid-schema-example', [
       errors: [
         {
           code: 'oas3-valid-schema-example',
-          message: '`example` property must have required property `url`',
+          message: '"example" property must have required property "url"',
           severity: DiagnosticSeverity.Error,
         },
       ],
@@ -380,7 +380,7 @@ testRule('oas3-valid-schema-example', [
     },
     errors: [
       {
-        message: '`example` property type must be string',
+        message: '"example" property type must be string',
         path: [
           'paths',
           '/pet',
@@ -483,7 +483,7 @@ testRule('oas3-valid-schema-example', [
     errors: [
       {
         severity: DiagnosticSeverity.Error,
-        message: '`example` property type must be string',
+        message: '"example" property type must be string',
         path: ['paths', '/pet', 'post', 'parameters', '0', 'schema', 'example'],
       },
     ],
@@ -565,7 +565,7 @@ testRule('oas3-valid-schema-example', [
     },
     errors: [
       {
-        message: '`example` property type must be number',
+        message: '"example" property type must be number',
         severity: DiagnosticSeverity.Error,
         path: ['paths', '/pet', 'post', 'parameters', '0', 'schema', 'properties', 'abc', 'example'],
       },
@@ -609,7 +609,7 @@ testRule('oas3-valid-schema-example', [
     },
     errors: [
       {
-        message: '`example` property must have required property `url`',
+        message: '"example" property must have required property "url"',
         severity: DiagnosticSeverity.Error,
         path: ['paths', '/pet', 'post', 'parameters', '0', 'schema', 'example'],
       },

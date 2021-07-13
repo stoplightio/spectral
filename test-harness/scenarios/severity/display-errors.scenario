@@ -1,0 +1,46 @@
+====test====
+Request only errors be shown, but no errors exist
+====document====
+servers:
+  - host: localhost
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "severity": "error"
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity=error -D
+====status====
+0
+====stdout====
+No results with a severity of 'error' or higher found!

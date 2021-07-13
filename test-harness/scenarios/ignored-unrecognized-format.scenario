@@ -1,12 +1,14 @@
 ====test====
 Does not report unrecognized formats given --ignore-unknown-format
 ====document====
-openapi: 4.0.0
-info: {}
+version: 1.0
 ====asset:ruleset====
-const { oas } = require('@stoplight/spectral-rulesets');
-module.exports = oas;
+const myFormat = input => input.version === '2.0';
+module.exports = {
+  formats: [myFormat],
+  rules: {},
+};
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset} --ignore-unknown-format
+{bin} lint {document} --ruleset "{asset:ruleset}" --ignore-unknown-format
 ====stdout====
 No results with a severity of 'error' or higher found!

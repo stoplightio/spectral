@@ -13,7 +13,7 @@ schemas:
         type: boolean
   address:
 ====command====
-{bin} lint {document} -r {asset:ruleset} --ignore-unknown-format
+{bin} lint {document} -r "{asset:ruleset}" --ignore-unknown-format
 ====asset:ruleset====
 const { truthy, pattern } = require("@stoplight/spectral-functions");
 
@@ -51,6 +51,6 @@ module.exports = {
 {document}
   6:15  error  valid-user-properties     "number" must match the pattern "/^string$/"   schemas.user.properties.name.type
  10:15  error  valid-user-properties     "boolean" must match the pattern "/^string$/"  schemas.user.properties.occupation.type
- 11:11  error  require-user-and-address  `address` property must be truthy              schemas.address
+ 11:11  error  require-user-and-address  "address" property must be truthy              schemas.address
 
 ✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)

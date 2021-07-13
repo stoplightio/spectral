@@ -7,23 +7,24 @@ testRule('oas3-schema', [
     document: require('./__fixtures__/petstore.invalid-schema.oas3.json'),
     errors: [
       {
-        message: '`email` property must match format `email`.',
+        message: '"email" property must match format "email".',
         path: ['info', 'contact', 'email'],
       },
       {
-        message: '`header-1` property must have required property `schema`.',
+        message: '"header-1" property must have required property "schema".',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       },
       {
-        message: 'Property `type` is not expected to be here.',
+        message: 'Property "type" is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'type'],
       },
       {
-        message: 'Property `op` is not expected to be here.',
+        message: 'Property "op" is not expected to be here.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1', 'op'],
       },
     ],
   },
+
   {
     name: 'sibling additionalProperties errors',
     document: {
@@ -86,28 +87,71 @@ testRule('oas3-schema', [
     },
     errors: [
       {
-        message: 'Property `42` is not expected to be here.',
+        message: 'Property "42" is not expected to be here.',
         path: ['paths', '/pets', 'post', 'responses', '42'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Property `9999` is not expected to be here.',
+        message: 'Property "9999" is not expected to be here.',
         path: ['paths', '/pets', 'post', 'responses', '9999'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Property `5xx` is not expected to be here.',
+        message: 'Property "5xx" is not expected to be here.',
         path: ['paths', '/pets', 'post', 'responses', '5xx'],
         severity: DiagnosticSeverity.Error,
       },
     ],
   },
-]);
 
-`openapi: 3.1.0
-info:
-  title: Example jsonSchemaDialect error
-  version: 1.0.0
-jsonSchemaDialect:
-paths: {}
-`;
+  {
+    name: 'oas3.1: jsonSchemaDialect',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example jsonSchemaDialect error',
+        version: '1.0.0',
+      },
+      paths: {},
+      jsonSchemaDialect: null,
+    },
+    errors: [
+      {
+        message: '"jsonSchemaDialect" property type must be string.',
+        path: ['jsonSchemaDialect'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: missing webhooks/components/paths',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Missing webhooks/components/paths',
+        version: '1.0.0',
+      },
+    },
+    errors: [
+      {
+        message: 'The document must have either "paths", "webhooks" or "components".',
+        path: [],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: paths is not required',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example jsonSchemaDialect error',
+        version: '1.0.0',
+      },
+      webhooks: {},
+    },
+    errors: [],
+  },
+]);

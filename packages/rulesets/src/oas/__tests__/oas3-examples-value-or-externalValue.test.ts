@@ -110,7 +110,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['components', 'examples', 'first'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -131,7 +131,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['components', 'examples', 'third'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -148,7 +148,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['components', 'examples', 'first'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -169,7 +169,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['components', 'examples', 'second'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -194,7 +194,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['components', 'headers', 'headerName', 'examples', 'second'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -219,7 +219,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['components', 'parameters', 'parameterName', 'examples', 'second'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -255,7 +255,7 @@ testRule('oas3-examples-value-or-externalValue', [
     },
     errors: [
       {
-        message: 'Examples should have either a `value` or `externalValue` field.',
+        message: 'Examples must have either "value" or "externalValue" field.',
         path: ['paths', '/path', 'get', 'responses', '200', 'content', 'application/json', 'examples', 'second'],
         severity: DiagnosticSeverity.Warning,
       },

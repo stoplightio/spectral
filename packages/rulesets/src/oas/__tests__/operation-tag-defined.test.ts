@@ -50,7 +50,7 @@ testRule('operation-tag-defined', [
 
     errors: [
       {
-        message: 'Operation tags should be defined in global tags.',
+        message: 'Operation tags must be defined in global tags.',
         path: ['paths', '/path1', 'get', 'tags', '0'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -80,12 +80,12 @@ testRule('operation-tag-defined', [
 
     errors: [
       {
-        message: 'Operation tags should be defined in global tags.',
+        message: 'Operation tags must be defined in global tags.',
         path: ['paths', '/path1', 'get', 'tags', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'Operation tags should be defined in global tags.',
+        message: 'Operation tags must be defined in global tags.',
         path: ['paths', '/path1', 'get', 'tags', '3'],
         severity: DiagnosticSeverity.Warning,
       },
