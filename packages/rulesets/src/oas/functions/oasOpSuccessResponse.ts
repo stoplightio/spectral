@@ -14,7 +14,7 @@ export const oasOpSuccessResponse: IFunction = targetVal => {
 
   return [
     {
-      message: 'operations must define at least one 2xx or 3xx response',
+      message: 'Operation must define at least a single 2xx or 3xx response',
     },
   ];
 };

@@ -1,7 +1,6 @@
 import { isAbsolute, join } from '@stoplight/path';
 import { Optional } from '@stoplight/types';
-import { createHttpAndFileResolver } from '@stoplight/spectral-ref-resolver';
-import type { Resolver } from '@stoplight/json-ref-resolver';
+import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-resolver';
 
 export const getResolver = (resolver: Optional<string>, proxy: Optional<string>): Resolver => {
   if (resolver !== void 0) {

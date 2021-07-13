@@ -28,7 +28,7 @@ testRule('oas2-oneOf', [
     },
     errors: [
       {
-        message: 'oneOf is not available in OpenAPI v2, it was added in OpenAPI v3',
+        message: '"oneOf" keyword must not be used in OpenAPI v2 document.',
         path: ['paths', '/test', 'get', 'responses', '200', 'schema', 'oneOf'],
         severity: DiagnosticSeverity.Warning,
       },

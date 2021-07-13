@@ -45,7 +45,7 @@ testRule('oas3-operation-security-defined', [
     },
     errors: [
       {
-        message: 'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+        message: 'Operation "security" values must match a scheme defined in the "components.securitySchemes" object.',
         path: ['paths', '/path', 'get', 'security', '0'],
         severity: DiagnosticSeverity.Warning,
       },

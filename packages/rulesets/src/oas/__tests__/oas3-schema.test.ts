@@ -24,6 +24,7 @@ testRule('oas3-schema', [
       },
     ],
   },
+
   {
     name: 'sibling additionalProperties errors',
     document: {
@@ -102,12 +103,55 @@ testRule('oas3-schema', [
       },
     ],
   },
-]);
 
-`openapi: 3.1.0
-info:
-  title: Example jsonSchemaDialect error
-  version: 1.0.0
-jsonSchemaDialect:
-paths: {}
-`;
+  {
+    name: 'oas3.1: jsonSchemaDialect',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example jsonSchemaDialect error',
+        version: '1.0.0',
+      },
+      paths: {},
+      jsonSchemaDialect: null,
+    },
+    errors: [
+      {
+        message: '"jsonSchemaDialect" property type must be string.',
+        path: ['jsonSchemaDialect'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: missing webhooks/components/paths',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Missing webhooks/components/paths',
+        version: '1.0.0',
+      },
+    },
+    errors: [
+      {
+        message: 'The document must have either "paths", "webhooks" or "components".',
+        path: [],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: paths is not required',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example jsonSchemaDialect error',
+        version: '1.0.0',
+      },
+      webhooks: {},
+    },
+    errors: [],
+  },
+]);

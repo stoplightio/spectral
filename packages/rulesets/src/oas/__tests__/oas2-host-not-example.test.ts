@@ -21,7 +21,7 @@ testRule('oas2-host-not-example', [
     },
     errors: [
       {
-        message: 'Host URL should not point at example.com.',
+        message: 'Host URL must not point at example.com.',
         path: ['host'],
         severity: DiagnosticSeverity.Warning,
       },

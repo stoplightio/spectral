@@ -38,22 +38,37 @@
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
-    "release": "yarn workspaces run semantic-release -e semantic-release-monorepo --branches develop"
+    "release": "HUSKY=0 yarn workspaces run semantic-release -e semantic-release-monorepo"
   },
   "workspaces": {
     "packages": [
       "packages/*"
     ]
   },
+  "release": {
+    "branches": [
+      {
+        "name": "develop",
+        "prerelease": false
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
+  },
   "devDependencies": {
     "@brightcove/kacl": "^0.1.11",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
+    "@semantic-release/git": "^9.0.0",
     "@types/jest": "^26.0.23",
     "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.0",
     "@types/lodash": "^4.14.167",
-    "@types/nanoid": "^2.1.0",
     "@types/node": "^15.12.4",
     "@types/node-fetch": "^2.5.10",
     "@types/text-table": "^0.2.2",
@@ -75,9 +90,10 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.3.1",
-    "karma-typescript": "^5.4.0",
+    "karma-typescript": "^5.5.1",
     "karma-typescript-es6-transform": "^5.2.0",
-    "lint-staged": "^10.5.4",
+    "lint-staged": "^11.0.0",
+    "nanoid": "^3.1.23",
     "memfs": "^3.2.2",
     "prettier": "^2.3.2",
     "semantic-release": "^17.4.4",
@@ -103,5 +119,6 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  }
+  },
+  "version": "6.0.0-alpha2"
 }

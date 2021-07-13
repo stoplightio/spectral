@@ -43,7 +43,7 @@ testRule('oas3-server-trailing-slash', [
     },
     errors: [
       {
-        message: 'Server URL should not have a trailing slash.',
+        message: 'Server URL must not have trailing slash.',
         path: ['servers', '0', 'url'],
         severity: DiagnosticSeverity.Warning,
       },

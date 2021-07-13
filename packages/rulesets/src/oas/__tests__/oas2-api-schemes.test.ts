@@ -20,7 +20,7 @@ testRule('oas2-api-schemes', [
     },
     errors: [
       {
-        message: 'OpenAPI host `schemes` must be present and non-empty array.',
+        message: 'OpenAPI host "schemes" must be present and non-empty array.',
         path: [],
         severity: DiagnosticSeverity.Warning,
       },
@@ -36,7 +36,7 @@ testRule('oas2-api-schemes', [
     },
     errors: [
       {
-        message: 'OpenAPI host `schemes` must be present and non-empty array.',
+        message: 'OpenAPI host "schemes" must be present and non-empty array.',
         path: ['schemes'],
         severity: DiagnosticSeverity.Warning,
       },

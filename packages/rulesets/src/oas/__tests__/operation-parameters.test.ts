@@ -67,12 +67,12 @@ testRule('operation-parameters', [
     },
     errors: [
       {
-        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
         path: ['paths', '/foo', 'get', 'parameters', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
         path: ['paths', '/foo', 'get', 'parameters', '2'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -103,12 +103,12 @@ testRule('operation-parameters', [
     },
     errors: [
       {
-        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
         path: ['paths', '/foo', 'get', 'parameters', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
         path: ['paths', '/foo', 'get', 'parameters', '2'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -135,12 +135,12 @@ testRule('operation-parameters', [
     },
     errors: [
       {
-        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
         path: ['paths', '/foo', 'get', 'parameters', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'A parameter in this operation already exposes the same combination of `name` and `in` values.',
+        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
         path: ['paths', '/foo', 'get', 'parameters', '3'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -174,17 +174,17 @@ testRule('operation-parameters', [
     },
     errors: [
       {
-        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        message: 'Operation must not have more than a single instance of the "in:body" parameter.',
         path: ['paths', '/foo', 'get', 'parameters', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        message: 'Operation must not have more than a single instance of the "in:body" parameter.',
         path: ['paths', '/foo', 'put', 'parameters', '3'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'Operation has already at least one instance of the `in:body` parameter.',
+        message: 'Operation must not have more than a single instance of the "in:body" parameter.',
         path: ['paths', '/foo', 'put', 'parameters', '5'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -208,7 +208,7 @@ testRule('operation-parameters', [
     },
     errors: [
       {
-        message: 'Operation cannot have both `in:body` and `in:formData` parameters.',
+        message: 'Operation must not have both "in:body" and "in:formData" parameters.',
         path: ['paths', '/foo', 'get', 'parameters'],
         severity: DiagnosticSeverity.Warning,
       },

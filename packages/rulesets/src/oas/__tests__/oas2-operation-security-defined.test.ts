@@ -42,7 +42,7 @@ testRule('oas2-operation-security-defined', [
     },
     errors: [
       {
-        message: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+        message: 'Operation "security" values must match a scheme defined in the "securityDefinitions" object.',
         path: ['paths', '/path', 'get', 'security', '0'],
         severity: DiagnosticSeverity.Warning,
       },

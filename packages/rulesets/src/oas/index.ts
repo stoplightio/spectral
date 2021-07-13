@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { oas2, oas3, oas3_0 } from '@stoplight/spectral-formats';
+import { oas2, oas3, oas3_0, oas3_1 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -25,16 +24,15 @@ import {
   oasOpSecurityDefined,
   oasSchema,
 } from './functions';
-// import type { RulesetDefinition } from '../../ruleset/types';
 
 export { ruleset as default };
 
 const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
-  formats: [oas2, oas3],
+  formats: [oas2, oas3, oas3_0, oas3_1],
   rules: {
     'operation-success-response': {
-      description: 'Operation must have at least one `2xx` or `3xx` response.',
+      description: 'Operation must have at least one "2xx" or "3xx" response.',
       recommended: true,
       type: 'style',
       given:
@@ -46,7 +44,7 @@ const ruleset = {
     },
     'oas2-operation-formData-consume-check': {
       description:
-        'Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.',
+        'Operations with "in: formData" parameter must include "application/x-www-form-urlencoded" or "multipart/form-data" in their "consumes" property.',
       recommended: true,
       formats: [oas2],
       type: 'validation',
@@ -57,7 +55,7 @@ const ruleset = {
       },
     },
     'operation-operationId-unique': {
-      description: 'Every operation must have a unique `operationId`.',
+      description: 'Every operation must have unique "operationId".',
       recommended: true,
       type: 'validation',
       severity: 0,
@@ -78,7 +76,7 @@ const ruleset = {
       },
     },
     'operation-tag-defined': {
-      description: 'Operation tags should be defined in global tags.',
+      description: 'Operation tags must be defined in global tags.',
       recommended: true,
       type: 'validation',
       given: '$',
@@ -87,7 +85,7 @@ const ruleset = {
       },
     },
     'path-params': {
-      description: 'Path parameters should be defined and valid.',
+      description: 'Path parameters must be defined and valid.',
       message: '{{error}}',
       type: 'validation',
       severity: 0,
@@ -98,7 +96,7 @@ const ruleset = {
       },
     },
     'contact-properties': {
-      description: 'Contact object should have `name`, `url` and `email`.',
+      description: 'Contact object must have "name", "url" and "email".',
       recommended: false,
       type: 'style',
       given: '$.info.contact',
@@ -118,11 +116,11 @@ const ruleset = {
       ],
     },
     'duplicated-entry-in-enum': {
-      description: 'Enum values should not have duplicate entry.',
+      description: 'Enum values must not have duplicate entry.',
       type: 'validation',
       severity: 'warn',
       recommended: true,
-      message: 'A duplicated entry in the enum was found. Error: {{error}}',
+      message: '{{error}}',
       given: '$..enum',
       then: {
         function: oasSchema,
@@ -144,7 +142,7 @@ const ruleset = {
       },
     },
     'info-contact': {
-      description: 'Info object should contain `contact` object.',
+      description: 'Info object must have "contact" object.',
       recommended: true,
       type: 'style',
       given: '$',
@@ -154,7 +152,7 @@ const ruleset = {
       },
     },
     'info-description': {
-      description: 'OpenAPI object info `description` must be present and non-empty string.',
+      description: 'Info "description" must be present and non-empty string.',
       recommended: true,
       type: 'style',
       given: '$',
@@ -164,7 +162,7 @@ const ruleset = {
       },
     },
     'info-license': {
-      description: 'OpenAPI object `info` should contain a `license` object.',
+      description: 'Info object must have "license" object.',
       recommended: false,
       type: 'style',
       given: '$',
@@ -174,7 +172,7 @@ const ruleset = {
       },
     },
     'license-url': {
-      description: 'License object should include `url`.',
+      description: 'License object must include "url".',
       recommended: false,
       type: 'style',
       given: '$',
@@ -184,7 +182,7 @@ const ruleset = {
       },
     },
     'no-eval-in-markdown': {
-      description: 'Markdown descriptions should not contain `eval(`.',
+      description: 'Markdown descriptions must not have "eval(".',
       recommended: true,
       type: 'style',
       given: "$..[?(@property === 'description' || @property === 'title')]",
@@ -196,7 +194,7 @@ const ruleset = {
       },
     },
     'no-script-tags-in-markdown': {
-      description: 'Markdown descriptions should not contain `<script>` tags.',
+      description: 'Markdown descriptions must not have "<script>" tags.',
       recommended: true,
       type: 'style',
       given: "$..[?(@property === 'description' || @property === 'title')]",
@@ -208,7 +206,7 @@ const ruleset = {
       },
     },
     'openapi-tags-alphabetical': {
-      description: 'OpenAPI object should have alphabetical `tags`.',
+      description: 'OpenAPI object must have alphabetical "tags".',
       recommended: false,
       type: 'style',
       given: '$',
@@ -221,7 +219,7 @@ const ruleset = {
       },
     },
     'openapi-tags': {
-      description: 'OpenAPI object should have non-empty `tags` array.',
+      description: 'OpenAPI object must have non-empty "tags" array.',
       recommended: false,
       type: 'style',
       given: '$',
@@ -238,7 +236,7 @@ const ruleset = {
       },
     },
     'operation-description': {
-      description: 'Operation `description` must be present and non-empty string.',
+      description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
       type: 'style',
       given:
@@ -249,7 +247,7 @@ const ruleset = {
       },
     },
     'operation-operationId': {
-      description: 'Operation should have an `operationId`.',
+      description: 'Operation must have "operationId".',
       recommended: true,
       type: 'style',
       given:
@@ -260,7 +258,7 @@ const ruleset = {
       },
     },
     'operation-operationId-valid-in-url': {
-      description: 'operationId may only use characters that are valid when used in a URL.',
+      message: 'operationId must not characters that are invalid when used in URL.',
       recommended: true,
       type: 'validation',
       given:
@@ -274,7 +272,7 @@ const ruleset = {
       },
     },
     'operation-singular-tag': {
-      description: 'Operation may only have one tag.',
+      description: 'Operation must not have more than a single tag.',
       recommended: false,
       type: 'style',
       given:
@@ -288,7 +286,7 @@ const ruleset = {
       },
     },
     'operation-tags': {
-      description: 'Operation should have non-empty `tags` array.',
+      description: 'Operation must have non-empty "tags" array.',
       recommended: true,
       type: 'style',
       given:
@@ -299,7 +297,7 @@ const ruleset = {
       },
     },
     'path-declarations-must-exist': {
-      description: 'Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.',
+      message: 'Path parameter declarations must not be empty, ex."/given/{}" is invalid.',
       recommended: true,
       type: 'style',
       given: '$.paths',
@@ -312,7 +310,7 @@ const ruleset = {
       },
     },
     'path-keys-no-trailing-slash': {
-      description: 'paths should not end with a slash.',
+      message: 'Path must not end with slash.',
       recommended: true,
       type: 'style',
       given: '$.paths',
@@ -325,7 +323,7 @@ const ruleset = {
       },
     },
     'path-not-include-query': {
-      description: 'given keys should not include a query string.',
+      description: 'Path must not include query string.',
       recommended: true,
       type: 'style',
       given: '$.paths',
@@ -338,7 +336,7 @@ const ruleset = {
       },
     },
     'tag-description': {
-      description: 'Tag object should have a `description`.',
+      description: 'Tag object must have "description".',
       recommended: false,
       type: 'style',
       given: '$.tags[*]',
@@ -349,7 +347,7 @@ const ruleset = {
     },
     'no-$ref-siblings': {
       formats: [oas2, oas3_0],
-      description: 'Property cannot be placed among $ref',
+      description: 'Property must not be placed among $ref',
       message: '{{error}}',
       type: 'validation',
       severity: 0,
@@ -361,7 +359,7 @@ const ruleset = {
       },
     },
     'typed-enum': {
-      description: 'Enum values should respect the specified type.',
+      description: 'Enum values must respect the specified type.',
       message: '{{error}}',
       recommended: true,
       type: 'validation',
@@ -371,7 +369,7 @@ const ruleset = {
       },
     },
     'oas2-api-host': {
-      description: 'OpenAPI `host` must be present and non-empty string.',
+      description: 'OpenAPI "host" must be present and non-empty string.',
       recommended: true,
       formats: [oas2],
       type: 'style',
@@ -382,7 +380,7 @@ const ruleset = {
       },
     },
     'oas2-api-schemes': {
-      description: 'OpenAPI host `schemes` must be present and non-empty array.',
+      description: 'OpenAPI host "schemes" must be present and non-empty array.',
       recommended: true,
       formats: [oas2],
       type: 'style',
@@ -403,7 +401,7 @@ const ruleset = {
       },
     },
     'oas2-host-not-example': {
-      description: 'Host URL should not point at example.com.',
+      description: 'Host URL must not point at example.com.',
       recommended: false,
       formats: [oas2],
       given: '$',
@@ -417,7 +415,7 @@ const ruleset = {
       },
     },
     'oas2-host-trailing-slash': {
-      description: 'Server URL should not have a trailing slash.',
+      description: 'Server URL must not have trailing slash.',
       recommended: true,
       formats: [oas2],
       given: '$',
@@ -431,7 +429,7 @@ const ruleset = {
       },
     },
     'oas2-parameter-description': {
-      description: 'Parameter objects should have a `description`.',
+      description: 'Parameter objects must have "description".',
       recommended: false,
       formats: [oas2],
       given: '$..parameters[?(@.in)]',
@@ -442,7 +440,7 @@ const ruleset = {
       },
     },
     'oas2-operation-security-defined': {
-      description: 'Operation `security` values must match a scheme defined in the `securityDefinitions` object.',
+      description: 'Operation "security" values must match a scheme defined in the "securityDefinitions" object.',
       recommended: true,
       formats: [oas2],
       type: 'validation',
@@ -493,8 +491,8 @@ const ruleset = {
       },
     },
     'oas2-anyOf': {
-      description: 'OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.',
-      message: 'anyOf is not available in OpenAPI v2, it was added in OpenAPI v3',
+      message: '"anyOf" keyword must not be used in OpenAPI v2 document.',
+      description: 'anyOf is not available in OpenAPI v2, it was added in OpenAPI v3',
       recommended: true,
       formats: [oas2],
       type: 'validation',
@@ -504,8 +502,8 @@ const ruleset = {
       },
     },
     'oas2-oneOf': {
-      description: 'OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.',
-      message: 'oneOf is not available in OpenAPI v2, it was added in OpenAPI v3',
+      message: '"oneOf" keyword must not be used in OpenAPI v2 document.',
+      description: 'oneOf is not available in OpenAPI v2, it was added in OpenAPI v3',
       recommended: true,
       formats: [oas2],
       type: 'validation',
@@ -541,7 +539,7 @@ const ruleset = {
       },
     },
     'oas3-api-servers': {
-      description: 'OpenAPI `servers` must be present and non-empty array.',
+      description: 'OpenAPI "servers" must be present and non-empty array.',
       recommended: true,
       formats: [oas3],
       type: 'style',
@@ -562,7 +560,7 @@ const ruleset = {
       },
     },
     'oas3-examples-value-or-externalValue': {
-      description: 'Examples should have either a `value` or `externalValue` field.',
+      description: 'Examples must have either "value" or "externalValue" field.',
       recommended: true,
       formats: [oas3],
       type: 'style',
@@ -583,7 +581,7 @@ const ruleset = {
     },
     'oas3-operation-security-defined': {
       description:
-        'Operation `security` values must match a scheme defined in the `components.securitySchemes` object.',
+        'Operation "security" values must match a scheme defined in the "components.securitySchemes" object.',
       recommended: true,
       formats: [oas3],
       type: 'validation',
@@ -596,7 +594,7 @@ const ruleset = {
       },
     },
     'oas3-parameter-description': {
-      description: 'Parameter objects should have a `description`.',
+      description: 'Parameter objects must have "description".',
       recommended: false,
       formats: [oas3],
       type: 'style',
@@ -607,7 +605,7 @@ const ruleset = {
       },
     },
     'oas3-server-not-example.com': {
-      description: 'Server URL should not point at example.com.',
+      description: 'Server URL must not point at example.com.',
       recommended: false,
       formats: [oas3],
       type: 'style',
@@ -620,7 +618,7 @@ const ruleset = {
       },
     },
     'oas3-server-trailing-slash': {
-      description: 'Server URL should not have a trailing slash.',
+      description: 'Server URL must not have trailing slash.',
       recommended: true,
       formats: [oas3],
       type: 'style',
@@ -688,7 +686,7 @@ const ruleset = {
       },
     },
     'oas3-unused-component': {
-      description: 'Potentially unused component has been detected.',
+      message: 'Potentially unused component has been detected.',
       recommended: true,
       formats: [oas3],
       type: 'style',
