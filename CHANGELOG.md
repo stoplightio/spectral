@@ -7,6 +7,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] - 2021-07-14
+
+### Added
+
+- Ruleset: New alternative ruleset format [#1615](https://github.com/stoplightio/spectral/issues/1615)
+- Ruleset: ESLint-like Overrides [#1021](https://github.com/stoplightio/spectral/issues/1021)
+- Ruleset: Path Aliases [#1680](https://github.com/stoplightio/spectral/issues/1680)
+- Rulesets: OpenAPI (OAS) 3.1 support [#1302](https://github.com/stoplightio/spectral/issues/1302)
+- Functions: `schema` function uses Ajv v8 under the hood and therefore support newer JSON Schema drafts [#1584](https://github.com/stoplightio/spectral/pull/1584)
+- CLI: implement `--stdin-filepath` flag [#1001](https://github.com/stoplightio/spectral/issues/1001)
+- Formats: JSON Schema Draft 2020-12 format [#1556](https://github.com/stoplightio/spectral/issues/1556)
+- CLI: added pretty formatter for colored and wrapped cli output [#1580](https://github.com/stoplightio/spectral/pull/1580)
+- Rulesets: Supports `x-nullable` for OAS2 [#1359](https://github.com/stoplightio/spectral/issues/1359)
+- Rulesets: `oas3-unused-component` rule which detects all orphaned components [#1440](https://github.com/stoplightio/spectral/pull/1440)
+
+### Changed
+
+- Ruleset validation yields more understandable errors [#1637](https://github.com/stoplightio/spectral/issues/1637)
+- CLI: demand some ruleset to be present [#1699](https://github.com/stoplightio/spectral/pull/1699)
+- CLI: require valid commands and options [#1586](https://github.com/stoplightio/spectral/issues/1586)
+- Core: revise `RulesetFunction` aka `IFunction` [#1685](https://github.com/stoplightio/spectral/pull/1685)
+- Core: runtime exceptions are not swallowed [#1618](https://github.com/stoplightio/spectral/issues/1618)
+- Rulesets: Certain oas{2,3}-valid-\*-example rules have been merged [#1313](https://github.com/stoplightio/spectral/pull/1313)
+- Rulesets: more consistent linting messages in AsyncAPI & OpenAPI rulesets [#1619](https://github.com/stoplightio/spectral/issues/1619)
+- Rulesets: `operation-2xx-response` rule has been renamed to `operation-success-response` and is no longer recommended [#1272](https://github.com/stoplightio/spectral/issues/1273)
+- Rulesets: `openapi-tags` rule is no longer recommended [#1132](https://github.com/stoplightio/spectral/issues/1132)
+
+### Fixed
+
+- Core: Incorrect range when semicolons are present in a key [#1697](https://github.com/stoplightio/spectral/issues/1697)
+- Core: Empty $refs should not be ignored [#1515](https://github.com/stoplightio/spectral/issues/1515)
+- Rulesets: validate 'default' in schemas [#1402](https://github.com/stoplightio/spectral/issues/1402)
+
+### Removed
+
+- Support for Node 10.x [#1542](https://github.com/stoplightio/spectral/pull/1542)
+- Functions: `schemaPath` function [#1621](https://github.com/stoplightio/spectral/issues/1621)
+- CLI: `--skip-rule` and `--show-unmatched-globs` flags [#1560](https://github.com/stoplightio/spectral/pull/1560)
+- Core: exceptions [#1675](https://github.com/stoplightio/spectral/pull/1675)
+- Rulesets: `operation-default-response` rule [#1304](https://github.com/stoplightio/spectral/pull/1304)
+
 ## [5.9.1] - 2021-04-08
 
 ### Fixed
