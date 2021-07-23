@@ -1,2 +1,2 @@
-formats: [oas2, oas3.1, oas3.0, json-schema-loose]
+formats: [oas2, oas3.1, oas3.0, json-schema-loose, json-schema-draft-2019-09]
 rules: {}

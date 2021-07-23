@@ -13,10 +13,12 @@ const REPLACEMENTS = [
   'json-schema-draft4',
   'json-schema-draft6',
   'json-schema-draft7',
-  'json-schema-2019-09',
-  'json-schema-2020-12',
+  'json-schema-draft-2019-09',
+  'json-schema-draft-2020-12',
 ].reduce((replacements, id) => {
-  replacements[id] = id.replace(/\./g, '_').replace(/-([a-z])/g, (match, char) => String(char).toUpperCase());
+  replacements[id] = id
+    .replace(/\.|(?<=[0-9])-(?=[0-9])/g, '_')
+    .replace(/-([0-9a-z])/g, (match, char) => String(char).toUpperCase());
   return replacements;
 }, {});
 
