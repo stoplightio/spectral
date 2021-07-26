@@ -1,8 +1,6 @@
-import type { JSONSchema4 } from 'json-schema';
-
 export { schema as default };
 
-const schema: JSONSchema4 = {
+const schema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   properties: {
@@ -60,7 +58,9 @@ const schema: JSONSchema4 = {
           'json-schema-draft6',
           'json-schema-draft7',
           'json-schema-draft-2019-09',
+          'json-schema-2019-09',
           'json-schema-draft-2020-12',
+          'json-schema-2020-12',
         ],
       },
     },

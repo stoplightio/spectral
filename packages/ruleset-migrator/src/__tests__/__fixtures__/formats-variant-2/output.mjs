@@ -1,7 +1,7 @@
 import { oas2, oas3_1, oas3_0, jsonSchemaLoose, asyncapi2, oas3 } from '@stoplight/spectral-formats';
 import { truthy } from '@stoplight/spectral-functions';
 export default {
-  formats: [oas2, oas3_1, oas3_0, jsonSchemaLoose, jsonSchemaLoose],
+  formats: [oas2, oas3_1, oas3_0, jsonSchemaLoose],
   rules: {
     test: {
       given: '$',

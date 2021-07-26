@@ -1,0 +1,10 @@
+formats:
+  - json-schema-2019-09
+  - json-schema-draft-2019-09
+  - json-schema-draft-2020-12
+  - json-schema-2020-12
+rules:
+  test:
+    given: $
+    then:
+      function: truthy
