@@ -20,3 +20,5 @@ export const asyncApi2: Format = document => {
 };
 
 asyncApi2.displayName = 'AsyncAPI 2.x';
+
+export { asyncApi2 as asyncapi2 };
