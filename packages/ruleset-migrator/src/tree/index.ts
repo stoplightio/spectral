@@ -42,7 +42,6 @@ export class Tree {
       this.#importDeclarations.set(source, [
         { imported: b.identifier(specifier), local: identifier, default: _default },
       ]);
-      this.scope.add(specifier);
       return identifier;
     } else {
       for (const declaration of existingImportDeclaration) {
@@ -52,7 +51,6 @@ export class Tree {
       }
 
       const identifier = this.identifier(specifier);
-      this.scope.add(specifier);
       existingImportDeclaration.push({ imported: identifier, local: identifier, default: _default });
       return identifier;
     }
@@ -84,7 +82,7 @@ export class Tree {
               : <namedTypes.ImportDeclaration[]>[]),
             ...identifiers
               .filter(({ default: _default }) => _default)
-              .flatMap(({ imported }) => this.#module.importDefaultDeclaration(imported, resolvedSource)),
+              .flatMap(({ local }) => this.#module.importDefaultDeclaration(local, resolvedSource)),
           ];
         }),
         this.#module.exportDefaultDeclaration(this.ruleset),
@@ -99,6 +97,8 @@ export class Tree {
     while (this.scope.has(uniqName)) {
       uniqName = `${name}_${i++}`;
     }
+
+    this.scope.add(uniqName);
 
     return b.identifier(uniqName);
   }
