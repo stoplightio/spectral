@@ -1,0 +1,4 @@
+extends:
+  - ./assets/ruleset.js
+  - ./assets/ruleset.cjs
+  - ./assets/ruleset.mjs

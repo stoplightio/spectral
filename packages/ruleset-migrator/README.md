@@ -91,3 +91,13 @@ migrateRuleset(path.join(__dirname, "spectral.json"), {
   format: "commonjs", // esm available too, but not recommended for now
 }).then(fs.promises.writeFile.bind(fs.promises, path.join(__dirname, ".spectral.js")));
 ```
+
+### Caveats
+
+#### YAML/JSON extending JS rulesets
+
+It's not disallowed for a YAML/JSON ruleset to extend another ruleset expressed in JS,
+albeit one has to notice that the formats have to be matched.
+In other words if you select "commonjs" as your target format, your extended rulesets have to follow,
+otherwise Node.js or any other tool you use in between may refuse to load the resulting code.
+If that happens to be the limitation for you, try your luck with [esm](https://www.npmjs.com/package/esm), [Babel](https://babeljs.io/) or a bundler such as [rollup.js](https://rollupjs.org/).

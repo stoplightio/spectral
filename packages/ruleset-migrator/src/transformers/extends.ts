@@ -10,6 +10,8 @@ const REPLACEMENTS = {
   'spectral:asyncapi': 'asyncapi',
 };
 
+const KNOWN_JS_EXTS = /^\.[cm]?js$/;
+
 export { transformer as default };
 
 async function processExtend(
@@ -21,6 +23,11 @@ async function processExtend(
   }
 
   const filepath = ctx.tree.resolveModule(name);
+
+  if (KNOWN_JS_EXTS.test(path.extname(filepath))) {
+    return ctx.tree.addImport('extended_ruleset', filepath, true);
+  }
+
   const existingCwd = ctx.cwd;
   try {
     ctx.cwd = path.dirname(filepath);
