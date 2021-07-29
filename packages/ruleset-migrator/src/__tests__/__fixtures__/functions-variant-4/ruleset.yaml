@@ -1,0 +1,10 @@
+formats:
+  - oas3
+  - oas3.1
+functions:
+  - oas3
+rules:
+  rule:
+    given: $
+    then:
+      - function: oas3

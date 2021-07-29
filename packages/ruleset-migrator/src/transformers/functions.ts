@@ -1,5 +1,4 @@
 import * as path from '@stoplight/path';
-
 import type { Transformer } from '../types';
 import { assertArray, assertString } from '../validation';
 import { Ruleset } from '../validation/types';
@@ -27,7 +26,9 @@ const transformer: Transformer = function (ctx) {
 
       for (const fn of value) {
         assertString(fn);
-        ctx.tree.addImport(path.basename(fn, true), fn, true);
+        const fnName = path.basename(fn, true);
+        const identifier = ctx.tree.addImport(fnName, fn, true);
+        ctx.tree.scope.store(`function-${fnName}`, identifier.name);
       }
 
       return null;

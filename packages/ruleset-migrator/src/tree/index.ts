@@ -6,8 +6,9 @@ import { commonjs } from './commonjs';
 import { esm } from './esm';
 import { IModule } from './types';
 import requireResolve from '../requireResolve';
+import { Scope } from './scope';
 
-export class Scope extends Set<string> {}
+export { Scope };
 
 export class Tree {
   readonly #importDeclarations = new Map<
@@ -20,7 +21,7 @@ export class Tree {
   readonly #cwd: string;
 
   public ruleset?: namedTypes.ObjectExpression;
-  public readonly scope: Scope;
+  public scope: Scope;
 
   constructor({
     cwd,
@@ -37,8 +38,10 @@ export class Tree {
   addImport(specifier: string, source: string, _default = false): namedTypes.Identifier {
     const existingImportDeclaration = this.#importDeclarations.get(source);
 
+    const scope = source.startsWith('@stoplight/') ? this.scope.global : this.scope;
+
     if (existingImportDeclaration === void 0) {
-      const identifier = this.identifier(specifier);
+      const identifier = Tree.identifier(specifier, scope);
       this.#importDeclarations.set(source, [
         { imported: b.identifier(specifier), local: identifier, default: _default },
       ]);
@@ -50,7 +53,7 @@ export class Tree {
         }
       }
 
-      const identifier = this.identifier(specifier);
+      const identifier = Tree.identifier(specifier, scope);
       existingImportDeclaration.push({ imported: identifier, local: identifier, default: _default });
       return identifier;
     }
@@ -91,14 +94,15 @@ export class Tree {
     );
   }
 
-  public identifier(name: string): namedTypes.Identifier {
-    let uniqName = name;
+  public static identifier(name: string, scope: Scope): namedTypes.Identifier {
+    const baseName = name.replace(/[^$_0-9A-Za-z]/g, '').replace(/^([0-9])/, '_$1');
+    let uniqName = baseName;
     let i = 0;
-    while (this.scope.has(uniqName)) {
-      uniqName = `${name}_${i++}`;
+    while (scope.has(uniqName)) {
+      uniqName = `${baseName}$${i++}`;
     }
 
-    this.scope.add(uniqName);
+    scope.add(uniqName);
 
     return b.identifier(uniqName);
   }

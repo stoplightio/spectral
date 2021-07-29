@@ -25,13 +25,13 @@ async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch):
 }
 
 export async function migrateRuleset(filepath: string, opts: MigrationOptions): Promise<string> {
-  const { fs, fetch = defaultFetch, format, npmRegistry, scope = new Scope() } = opts;
+  const { fs, fetch = defaultFetch, format, npmRegistry } = opts;
   const cwd = dirname(filepath);
   const tree = new Tree({
     cwd,
     format,
     npmRegistry,
-    scope,
+    scope: new Scope(),
   });
 
   const ruleset = await read(filepath, fs, fetch);
@@ -40,7 +40,6 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
     cwd,
     tree,
     opts: {
-      scope,
       fetch,
       ...opts,
     },
@@ -99,6 +98,6 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
   );
 }
 
-export async function process(input: unknown, hooks: Set<Hook>): Promise<namedTypes.ObjectExpression> {
+export async function process(input: Ruleset, hooks: Set<Hook>): Promise<namedTypes.ObjectExpression> {
   return (await _process(input, hooks, '')) as namedTypes.ObjectExpression;
 }
