@@ -1,8 +1,8 @@
 import { parseWithPointers as parseJsonWithPointers, safeStringify } from '@stoplight/json';
 import { parseWithPointers as parseYamlWithPointers } from '@stoplight/yaml';
+import { fetch as defaultFetch } from '@stoplight/spectral-runtime';
 import { dirname, extname, isURL } from '@stoplight/path';
-import { fetch } from '@stoplight/spectral-runtime';
-import { Hook, MigrationOptions, TransformerCtx } from './types';
+import { Fetch, Hook, MigrationOptions, TransformerCtx } from './types';
 import transformers from './transformers';
 import { Scope, Tree } from './tree';
 import { builders as b, namedTypes } from 'ast-types';
@@ -11,7 +11,7 @@ import { assertRuleset } from './validation';
 import requireResolve from './requireResolve';
 import { Ruleset } from './validation/types';
 
-async function read(filepath: string, fs: MigrationOptions['fs']): Promise<Ruleset> {
+async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset> {
   const input = isURL(filepath)
     ? await (await fetch(filepath)).text()
     : await fs.promises.readFile(requireResolve?.(filepath) ?? filepath, 'utf8');
@@ -25,7 +25,7 @@ async function read(filepath: string, fs: MigrationOptions['fs']): Promise<Rules
 }
 
 export async function migrateRuleset(filepath: string, opts: MigrationOptions): Promise<string> {
-  const { fs, format, npmRegistry, scope = new Scope() } = opts;
+  const { fs, fetch = defaultFetch, format, npmRegistry, scope = new Scope() } = opts;
   const cwd = dirname(filepath);
   const tree = new Tree({
     cwd,
@@ -34,13 +34,14 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
     scope,
   });
 
-  const ruleset = await read(filepath, fs);
+  const ruleset = await read(filepath, fs, fetch);
   const hooks = new Set<Hook>();
   const ctx: TransformerCtx = {
     cwd,
     tree,
     opts: {
       scope,
+      fetch,
       ...opts,
     },
     hooks,

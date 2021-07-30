@@ -36,6 +36,7 @@
   "devDependencies": {
     "@stoplight/spectral-core": "^1.1.0",
     "@stoplight/spectral-rulesets": "^1.1.0",
+    "fetch-mock": "^9.11.0",
     "json-schema-to-typescript": "^10.1.4",
     "memfs": "^3.2.2",
     "prettier": "^2.3.2"
