@@ -4,6 +4,7 @@ import * as prettier from 'prettier/standalone';
 import * as parserBabel from 'prettier/parser-babel';
 import { Ruleset } from '@stoplight/spectral-core';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as fetchMock from 'fetch-mock';
 
 import { migrateRuleset } from '..';
 import * as fixtures from './__fixtures__/.cache/index.json';
@@ -104,6 +105,57 @@ describe('migrator', () => {
     ]);
 
     expect(ruleset.rules['valid-type'].severity).toEqual(DiagnosticSeverity.Error);
+  });
+
+  it('should accept custom fetch implementation', async () => {
+    // something is off with default module interop in Karma :man_shrugging:
+    const fetch = ((fetchMock as { default?: typeof import('fetch-mock') }).default ?? fetchMock).sandbox();
+
+    await fs.promises.writeFile(
+      path.join(cwd, 'ruleset.json'),
+      JSON.stringify({
+        extends: ['https://spectral.stoplight.io/ruleset'],
+        rules: {
+          'valid-type': 'error',
+        },
+      }),
+    );
+
+    fetch.get('https://spectral.stoplight.io/ruleset', {
+      body: {
+        rules: {
+          'valid-type': {
+            given: '$',
+            function: {
+              then: 'truthy',
+            },
+          },
+        },
+      },
+    });
+
+    expect(
+      await migrateRuleset(path.join(cwd, 'ruleset.json'), {
+        format: 'esm',
+        fs: fs as any,
+        fetch,
+      }),
+    ).toEqual(`export default {
+  "extends": [{
+    "rules": {
+      "valid-type": {
+        "given": "$",
+        "function": {
+          "then": "truthy"
+        }
+      }
+    }
+  }],
+  "rules": {
+    "valid-type": "error"
+  }
+};
+`);
   });
 
   describe('error handling', () => {

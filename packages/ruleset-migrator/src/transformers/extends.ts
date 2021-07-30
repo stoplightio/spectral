@@ -31,7 +31,7 @@ async function processExtend(
   const existingCwd = ctx.cwd;
   try {
     ctx.cwd = path.dirname(filepath);
-    return await process(await ctx.read(filepath, ctx.opts.fs), ctx.hooks);
+    return await process(await ctx.read(filepath, ctx.opts.fs, ctx.opts.fetch), ctx.hooks);
   } finally {
     ctx.cwd = existingCwd;
   }
