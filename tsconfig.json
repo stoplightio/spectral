@@ -10,7 +10,10 @@
       "@stoplight/spectral-ref-resolver": ["packages/ref-resolver/src/index.ts"],
       "@stoplight/spectral-runtime": ["packages/runtime/src/index.ts"],
       "@stoplight/spectral-ruleset-migrator": ["packages/ruleset-migrator/src/index.ts"],
-      "@stoplight/spectral-rulesets": ["packages/rulesets/src/index.ts"]
+      "@stoplight/spectral-rulesets": ["packages/rulesets/src/index.ts"],
+
+      "nimma/fallbacks": ["node_modules/nimma/dist/cjs/fallbacks/"],
+      "nimma/legacy": ["node_modules/nimma/dist/legacy/cjs/"]
     },
     "moduleResolution": "node",
     "target": "ES2019",
