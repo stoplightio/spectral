@@ -362,7 +362,7 @@ Overrides can be used to:
   "overrides": [
     {
       "files": ["schemas/**/*.draft7.json"],
-      "formats": ["jsonSchemaDraft7"],
+      "formats": ["json-schema-draft7"],
       "rules": {
         "valid-number-validation": {
           "given": ["$..exclusiveMinimum", "$..exclusiveMaximum"],
