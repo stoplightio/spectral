@@ -284,10 +284,7 @@ Spectral now supports an alternative format to write rulesets in Javascript usin
 ```js
 //you can import popular functions from libraries
 import { isObject } from "https://cdn.jsdelivr.net/npm/lodash-es/+esm";
-import {
-  truthy,
-  schema,
-} from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions/+esm";
+import { truthy, schema } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions/+esm";
 // you can stick to an older version if you want to for some reason. That's fine
 import { alphabetical } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions@1.0.4/+esm";
 import { oasRuleset } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-rulesets/+esm";
@@ -295,13 +292,9 @@ import { oas2 } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-formats/+
 
 import { verifyType } from "./verifyType.mjs";
 
-const $SCHEMA_DRAFT_2020_XX_REGEX =
-  /^https?:\/\/json-schema.org\/draft\/2020-\d\d\/(?:hyper-)?schema#?$/;
+const $SCHEMA_DRAFT_2020_XX_REGEX = /^https?:\/\/json-schema.org\/draft\/2020-\d\d\/(?:hyper-)?schema#?$/;
 
-const JSONSchemaDraft2020_XX = (document) =>
-  isObject(document) &&
-  "$schema" in document &&
-  $SCHEMA_DRAFT_2020_XX_REGEX.test(document.$schema);
+const JSONSchemaDraft2020_XX = document => isObject(document) && "$schema" in document && $SCHEMA_DRAFT_2020_XX_REGEX.test(document.$schema);
 
 export default {
   formats: [oas2, oas3],
