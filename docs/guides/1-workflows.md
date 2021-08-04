@@ -58,7 +58,7 @@ jobs:
       - checkout
       - run:
           name: "API Description Linter"
-          command: npx @stoplight/spectral lint somefile.yaml -- --ruleset=config/custom-ruleset.yaml
+          command: npx @stoplight/spectral-cli lint somefile.yaml -- --ruleset=config/custom-ruleset.yaml
 ```
 
 We plan to add JUnit/xUnit test results in a future version, so tools like CircleCI can show test results in a more visual way. For now, the commands exit code will alert CI that there was a problem, and the console output will say why.
