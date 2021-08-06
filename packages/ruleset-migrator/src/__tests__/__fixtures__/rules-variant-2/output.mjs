@@ -1,4 +1,4 @@
-import { truthy } from "@stoplight/spectral-functions";
+import { undefined as undefined$0 } from "@stoplight/spectral-functions";
 export default {
   rules: {
     'oas3-unused-components': 'error',
@@ -7,7 +7,7 @@ export default {
       given:
         "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       then: {
-        function: truthy,
+        function: undefined$0,
       },
     },
   },

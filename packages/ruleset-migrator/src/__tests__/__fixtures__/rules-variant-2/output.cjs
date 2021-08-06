@@ -1,4 +1,4 @@
-const { truthy: truthy } = require('@stoplight/spectral-functions');
+const { undefined: undefined$0 } = require('@stoplight/spectral-functions');
 module.exports = {
   rules: {
     'oas3-unused-components': 'error',
@@ -7,7 +7,7 @@ module.exports = {
       given:
         "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       then: {
-        function: truthy,
+        function: undefined$0,
       },
     },
   },

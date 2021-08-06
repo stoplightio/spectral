@@ -48,9 +48,15 @@ const REGISTERED_WORDS = [
   'true',
   'false',
 
+  'undefined', // this is a valid identifier name, but since most folks don't use void, let's ensure we don't touch it
+
+  // NodeJS CJS
   'require',
   'module',
+  '__dirname',
+  '__filename',
 
+  // Our own interop
   '_interopDefault',
 ];
 
