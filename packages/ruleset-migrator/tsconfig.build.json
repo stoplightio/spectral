@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.build.json",
-  "include": ["src"],
+  "include": ["src", "types"],
   "compilerOptions": {
     "composite": true,
     "rootDir": "src",
