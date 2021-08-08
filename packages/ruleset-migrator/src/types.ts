@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 
-import type { Tree, Scope } from './tree';
+import type { Tree } from './tree';
 import type { ExpressionKind } from 'ast-types/gen/kinds';
 import { Ruleset } from './validation/types';
 
@@ -15,7 +15,6 @@ export type MigrationOptions = {
   fetch?: Fetch;
   npmRegistry?: string;
   format?: 'esm' | 'commonjs';
-  scope?: Scope;
 };
 
 export type Hook = [
@@ -28,7 +27,6 @@ export type Transformer = (ctx: TransformerCtx) => void;
 export type TransformerCtx = {
   readonly tree: Tree;
   readonly opts: MigrationOptions & {
-    scope: Scope;
     fetch: Fetch;
   };
   readonly hooks: Set<Hook>;

@@ -31,7 +31,8 @@
     "@types/node": "*",
     "ajv": "^8.6.0",
     "ast-types": "0.14.2",
-    "astring": "^1.7.5"
+    "astring": "^1.7.5",
+    "reserved": "0.1.2"
   },
   "devDependencies": {
     "@stoplight/spectral-core": "^1.1.0",
