@@ -2,6 +2,7 @@ import { isObject } from './utils/isObject';
 import type { Dictionary, JsonPath, Optional } from '@stoplight/types';
 import oasSchema, { Options as SchemaOptions } from './oasSchema';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
+import { oas2 } from '@stoplight/spectral-formats';
 
 export type Options = {
   oasVersion: 2 | 3;
@@ -131,6 +132,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     },
   },
   function oasExample(targetVal, opts, context) {
+    const formats = context.document.formats;
     const schemaOpts: SchemaOptions = {
       schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as SchemaOptions['schema']),
     };
@@ -141,6 +143,11 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
       opts.type === 'schema'
         ? getSchemaValidationItems(SCHEMA_VALIDATION_ITEMS[opts.oasVersion], targetVal, context.path)
         : getMediaValidationItems(MEDIA_VALIDATION_ITEMS[opts.oasVersion], targetVal, context.path, opts.oasVersion);
+
+    if (formats?.has(oas2) && 'required' in schemaOpts.schema && typeof schemaOpts.schema.required === 'boolean') {
+      schemaOpts.schema = { ...schemaOpts.schema };
+      delete schemaOpts.schema.required;
+    }
 
     for (const validationItem of validationItems) {
       const result = oasSchema(validationItem.value, schemaOpts, {
