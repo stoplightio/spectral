@@ -5,7 +5,6 @@ import * as fg from 'fast-glob';
 import { escapeRegExp } from 'lodash';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
-import { nanoid } from 'nanoid/non-secure';
 import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
 
@@ -22,7 +21,7 @@ describe('cli acceptance tests', () => {
   describe.each(files)('%s file', file => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
-    const scenarioId = `${nanoid()}_${Date.now()}`;
+    const scenarioId = `${file.match(/[a-z]+/i)![0]}_${Date.now()}`;
     const scenarioCwd = path.join(tmpCwd, scenarioId);
 
     if (scenario.command === void 0) {
