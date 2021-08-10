@@ -1,4 +1,4 @@
-import { oas2, oas3 } from '@stoplight/spectral-formats';
+import { oas2, oas3, oas3_0, oas3_1 } from '@stoplight/spectral-formats';
 import { DeepPartial } from '@stoplight/types';
 import oasSchema from '../../functions/oasSchema';
 import { createWithRules } from '../../__tests__/__helpers__/tester';
@@ -56,9 +56,9 @@ describe('oasSchema', () => {
     });
   });
 
-  test('given OAS3, supports nullable', () => {
+  test('given OAS 3.0, supports nullable', () => {
     const document = {
-      formats: new Set([oas3]),
+      formats: new Set([oas3, oas3_0]),
     };
 
     const testSchema = {
@@ -99,6 +99,26 @@ describe('oasSchema', () => {
         },
       },
     });
+  });
+
+  test('given OAS 3.1, supports numeric exclusiveMinimum & exclusiveMaximum', () => {
+    const document = {
+      formats: new Set([oas3, oas3_1]),
+    };
+
+    const testSchema = {
+      type: 'number',
+      exclusiveMinimum: 1,
+    };
+
+    expect(runSchema(1, testSchema, { document })).toEqual([
+      {
+        message: 'Number must be > 1',
+        path: [],
+      },
+    ]);
+
+    expect(runSchema(1.5, testSchema, { document })).toEqual([]);
   });
 
   test('should remove all redundant ajv errors', async () => {
