@@ -29,7 +29,7 @@ testRule('oas3-server-not-example.com', [
     },
     errors: [
       {
-        message: 'Server URL should not point at example.com.',
+        message: 'Server URL must not point at example.com.',
         path: ['servers', '0', 'url'],
         severity: DiagnosticSeverity.Warning,
       },

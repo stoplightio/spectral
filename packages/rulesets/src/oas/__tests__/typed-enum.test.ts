@@ -37,12 +37,12 @@ testRule('typed-enum', [
     },
     errors: [
       {
-        message: 'Enum value `a string!` does not respect the specified type `integer`.',
+        message: 'Enum value `a string!` must be "integer".',
         path: ['definitions', 'Test', 'enum', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'Enum value `and another one!` does not respect the specified type `integer`.',
+        message: 'Enum value `and another one!` must be "integer".',
         path: ['definitions', 'Test', 'enum', '3'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -64,7 +64,7 @@ testRule('typed-enum', [
     errors: [
       {
         code: 'typed-enum',
-        message: 'Enum value `null` does not respect the specified type `string`.',
+        message: 'Enum value `null` must be "string".',
         path: ['definitions', 'Test', 'enum', '2'],
         range: expect.any(Object),
         severity: DiagnosticSeverity.Warning,
@@ -126,12 +126,12 @@ testRule('typed-enum', [
     },
     errors: [
       {
-        message: 'Enum value `a string!` does not respect the specified type `integer`.',
+        message: 'Enum value `a string!` must be "integer".',
         path: ['components', 'schemas', 'Test', 'enum', '1'],
         severity: DiagnosticSeverity.Warning,
       },
       {
-        message: 'Enum value `and another one!` does not respect the specified type `integer`.',
+        message: 'Enum value `and another one!` must be "integer".',
         path: ['components', 'schemas', 'Test', 'enum', '3'],
         severity: DiagnosticSeverity.Warning,
       },
@@ -147,7 +147,6 @@ testRule('typed-enum', [
           Test: {
             type: 'string',
             nullable: true,
-
             enum: ['OK', 'FAILED', null],
           },
         },

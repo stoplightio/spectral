@@ -21,7 +21,7 @@ testRule('openapi-tags-alphabetical', [
     },
     errors: [
       {
-        message: 'OpenAPI object should have alphabetical `tags`.',
+        message: 'OpenAPI object must have alphabetical "tags".',
         path: ['tags'],
         severity: DiagnosticSeverity.Warning,
       },

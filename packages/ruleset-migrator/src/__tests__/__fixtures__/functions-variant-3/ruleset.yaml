@@ -1,0 +1,15 @@
+functions:
+  - upper-case
+  - no-@
+  - 400-response
+  - import
+  - require
+rules:
+  rule:
+    given: $
+    then:
+      - function: upper-case
+      - function: no-@
+      - function: 400-response
+      - function: import
+      - function: require

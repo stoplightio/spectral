@@ -94,7 +94,6 @@ commands:
       - checkout
       - cached-dependencies
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: npm version from-git
       - run: yarn build
 
 jobs:
@@ -283,7 +282,7 @@ workflows:
   scheduled-release:
     triggers:
       - schedule:
-          cron: "0 * * * *"
+          cron: "0 12 * * *"
           filters:
             branches:
               only:

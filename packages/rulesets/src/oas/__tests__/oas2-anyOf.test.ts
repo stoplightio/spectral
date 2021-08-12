@@ -28,7 +28,7 @@ testRule('oas2-anyOf', [
     },
     errors: [
       {
-        message: 'anyOf is not available in OpenAPI v2, it was added in OpenAPI v3',
+        message: '"anyOf" keyword must not be used in OpenAPI v2 document.',
         path: ['paths', '/test', 'get', 'responses', '200', 'schema', 'anyOf'],
         severity: DiagnosticSeverity.Warning,
       },

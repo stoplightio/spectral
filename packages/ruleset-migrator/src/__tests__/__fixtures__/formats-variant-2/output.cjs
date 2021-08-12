@@ -8,7 +8,7 @@ const {
 } = require('@stoplight/spectral-formats');
 const { truthy: truthy } = require('@stoplight/spectral-functions');
 module.exports = {
-  formats: [oas2, oas3_1, oas3_0, jsonSchemaLoose, jsonSchemaLoose],
+  formats: [oas2, oas3_1, oas3_0, jsonSchemaLoose],
   rules: {
     test: {
       given: '$',

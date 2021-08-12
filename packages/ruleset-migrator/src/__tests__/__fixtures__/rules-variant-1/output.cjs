@@ -11,7 +11,7 @@ module.exports = {
       given:
         "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       then: {
-        function: oasOpFormDataConsumeCheck,
+        function: void 0,
         functionOptions: null,
       },
     },

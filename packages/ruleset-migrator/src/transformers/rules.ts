@@ -57,12 +57,15 @@ const transformer: Transformer = function (ctx) {
 
   ctx.hooks.add([
     /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,
-    (value): namedTypes.Identifier => {
+    (value): namedTypes.Identifier | namedTypes.UnaryExpression => {
       assertString(value);
 
-      return KNOWN_FUNCTIONS.includes(value)
-        ? ctx.tree.addImport(value, '@stoplight/spectral-functions')
-        : b.identifier(value);
+      if (KNOWN_FUNCTIONS.includes(value)) {
+        return ctx.tree.addImport(value, '@stoplight/spectral-functions');
+      }
+
+      const alias = ctx.tree.scope.load(`function-${value}`);
+      return alias !== void 0 ? b.identifier(alias) : b.unaryExpression('void', b.literal(0));
     },
   ]);
 };

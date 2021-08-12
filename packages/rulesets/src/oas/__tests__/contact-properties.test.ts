@@ -27,7 +27,7 @@ testRule('contact-properties', [
     },
     errors: [
       {
-        message: 'Contact object should have `name`, `url` and `email`.',
+        message: 'Contact object must have "name", "url" and "email".',
         path: ['info', 'contact'],
         severity: DiagnosticSeverity.Warning,
       },

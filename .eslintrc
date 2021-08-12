@@ -47,7 +47,7 @@
         "@typescript-eslint/no-throw-literal": "error",
         "@typescript-eslint/ban-types": "warn",
 
-        "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.{test,spec}.ts", "**/__helpers__/tester.ts"] }]
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.{test,spec}.ts", "**/__tests__/__helpers__/*.ts"] }]
       }
     },
 

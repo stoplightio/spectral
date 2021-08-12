@@ -7,7 +7,6 @@ import * as fs from 'fs';
 import * as tmp from 'tmp';
 import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
-import nanoid = require('nanoid/non-secure');
 
 const spectralBin = path.join(__dirname, '../packages/cli/binaries/spectral');
 const cwd = path.join(__dirname, './scenarios');
@@ -22,7 +21,7 @@ describe('cli acceptance tests', () => {
   describe.each(files)('%s file', file => {
     const data = fs.readFileSync(path.join(cwd, file), { encoding: 'utf8' });
     const scenario = parseScenarioFile(data);
-    const scenarioId = `${nanoid()}_${Date.now()}`;
+    const scenarioId = `${file.match(/[a-z]+/i)![0]}_${Date.now()}`;
     const scenarioCwd = path.join(tmpCwd, scenarioId);
 
     if (scenario.command === void 0) {

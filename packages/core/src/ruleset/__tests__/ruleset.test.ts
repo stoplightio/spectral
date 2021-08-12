@@ -19,21 +19,21 @@ describe('Ruleset', () => {
     }
 
     it('given ruleset with extends set to recommended, should enable recommended rules', async () => {
-      const { rules } = await loadRuleset(import('./__fixtures__/severity/recommended'));
-      expect(Object.keys(rules)).toEqual([
+      const ruleset = await loadRuleset(import('./__fixtures__/severity/recommended'));
+      expect(Object.keys(ruleset.rules)).toEqual([
         'description-matches-stoplight',
         'title-matches-stoplight',
         'contact-name-matches-stoplight',
         'overridable-rule',
       ]);
 
-      expect(getEnabledRules(rules)).toEqual([
+      expect(getEnabledRules(ruleset.rules)).toEqual([
         'description-matches-stoplight',
         'title-matches-stoplight',
         'overridable-rule',
       ]);
 
-      expect(rules).toStrictEqual((await loadRuleset(import('./__fixtures__/severity/implicit'))).rules);
+      expect(print(ruleset)).toEqual(print(await loadRuleset(import('./__fixtures__/severity/implicit'))));
     });
 
     it('given ruleset with extends set to all, should enable all rules but explicitly disabled', async () => {
@@ -202,6 +202,41 @@ describe('Ruleset', () => {
       │  └─ 0: $
       └─ severity: 1
 `);
+    });
+
+    it('should be serializable', async () => {
+      expect(JSON.parse(JSON.stringify(await loadRuleset(import('./__fixtures__/circularity/direct'))))).toEqual({
+        id: expect.any(Number),
+        source: null,
+        aliases: null,
+        extends: [],
+        formats: null,
+        overrides: null,
+        parserOptions: {
+          duplicateKeys: DiagnosticSeverity.Error,
+          incompatibleValues: DiagnosticSeverity.Error,
+        },
+        rules: {
+          'foo-rule': {
+            description: null,
+            documentationUrl: null,
+            enabled: true,
+            formats: null,
+            given: ['$'],
+            message: null,
+            name: 'foo-rule',
+            owner: expect.any(Number),
+            recommended: true,
+            resolved: true,
+            severity: 1,
+            then: [
+              {
+                function: 'falsy',
+              },
+            ],
+          },
+        },
+      });
     });
   });
 
@@ -472,6 +507,105 @@ describe('Ruleset', () => {
       │  └─ 0: $.info.contact
       └─ severity: 1
 `);
+    });
+
+    it('should be serializable', async () => {
+      const ruleset = await loadRuleset(import('./__fixtures__/overrides/serializing'), path.join(cwd, 'serializing'));
+
+      expect(JSON.parse(JSON.stringify(ruleset))).toEqual({
+        id: expect.any(Number),
+        source: path.join(cwd, 'serializing'),
+        aliases: null,
+        extends: null,
+        formats: null,
+        overrides: [
+          {
+            files: ['legacy/**/*.json'],
+            rules: {
+              'contact-name-matches-stoplight': true,
+              'description-matches-stoplight': 'off',
+              'title-matches-stoplight': 'warn',
+            },
+          },
+          {
+            files: ['v2/**/*.json'],
+            rules: {
+              'description-matches-stoplight': 'error',
+              'title-matches-stoplight': 'hint',
+            },
+          },
+          {
+            files: ['**/*.json'],
+            rules: {
+              'description-matches-stoplight': 'info',
+              'title-matches-stoplight': 'off',
+            },
+          },
+        ],
+        parserOptions: {
+          duplicateKeys: DiagnosticSeverity.Error,
+          incompatibleValues: DiagnosticSeverity.Error,
+        },
+        rules: {
+          'contact-name-matches-stoplight': {
+            description: null,
+            documentationUrl: null,
+            enabled: false,
+            formats: null,
+            given: ['$.info.contact'],
+            message: 'Contact name must contain Stoplight',
+            name: 'contact-name-matches-stoplight',
+            owner: expect.any(Number),
+            recommended: false,
+            resolved: true,
+            severity: DiagnosticSeverity.Warning,
+            then: [
+              {
+                function: 'pattern',
+                functionOptions: 'Object{}',
+              },
+            ],
+          },
+          'description-matches-stoplight': {
+            description: null,
+            documentationUrl: null,
+            enabled: true,
+            formats: null,
+            given: ['$.info'],
+            message: 'Description must contain Stoplight',
+            name: 'description-matches-stoplight',
+            owner: expect.any(Number),
+            recommended: true,
+            resolved: true,
+            severity: DiagnosticSeverity.Error,
+            then: [
+              {
+                function: 'pattern',
+                functionOptions: 'Object{}',
+              },
+            ],
+          },
+          'title-matches-stoplight': {
+            description: null,
+            documentationUrl: null,
+            enabled: true,
+            formats: null,
+            given: ['$.info'],
+            message: 'Title must contain Stoplight',
+            name: 'title-matches-stoplight',
+            owner: expect.any(Number),
+            recommended: true,
+            resolved: true,
+            severity: DiagnosticSeverity.Warning,
+            then: [
+              {
+                function: 'pattern',
+                functionOptions: 'Object{}',
+              },
+            ],
+          },
+        },
+      });
     });
 
     it('should support new rule definitions', async () => {
@@ -920,6 +1054,120 @@ describe('Ruleset', () => {
       │  └─ 0: $.info.contact
       └─ severity: 1
 `);
+    });
+
+    it('should be serializable', () => {
+      expect(
+        JSON.parse(
+          JSON.stringify(
+            new Ruleset({
+              aliases: {
+                Info: '$.info',
+                PathItem: '$.paths[*][*]',
+                Description: '$..description',
+                Name: '$..name',
+              },
+
+              rules: {
+                'valid-path': {
+                  given: '#PathItem',
+                  then: {
+                    function: truthy,
+                  },
+                },
+
+                'valid-name-and-description': {
+                  given: ['#Name', '#Description'],
+                  then: {
+                    function: truthy,
+                  },
+                },
+
+                'valid-contact': {
+                  given: '#Info.contact',
+                  then: {
+                    function: truthy,
+                  },
+                },
+              },
+            }),
+          ),
+        ),
+      ).toEqual({
+        extends: null,
+        source: null,
+        id: expect.any(Number),
+        formats: null,
+        overrides: null,
+        parserOptions: {
+          duplicateKeys: DiagnosticSeverity.Error,
+          incompatibleValues: DiagnosticSeverity.Error,
+        },
+        aliases: {
+          Info: '$.info',
+          PathItem: '$.paths[*][*]',
+          Description: '$..description',
+          Name: '$..name',
+        },
+        rules: {
+          'valid-path': {
+            description: null,
+            documentationUrl: null,
+            enabled: true,
+            formats: null,
+            given: ['#PathItem'],
+            message: null,
+            name: 'valid-path',
+            owner: expect.any(Number),
+            recommended: true,
+            resolved: true,
+            severity: DiagnosticSeverity.Warning,
+            then: [
+              {
+                function: 'truthy',
+              },
+            ],
+          },
+
+          'valid-name-and-description': {
+            description: null,
+            documentationUrl: null,
+            enabled: true,
+            formats: null,
+            given: ['#Name', '#Description'],
+            message: null,
+            name: 'valid-name-and-description',
+            owner: expect.any(Number),
+            recommended: true,
+            resolved: true,
+            severity: DiagnosticSeverity.Warning,
+            then: [
+              {
+                function: 'truthy',
+              },
+            ],
+          },
+
+          'valid-contact': {
+            description: null,
+            documentationUrl: null,
+            enabled: true,
+            formats: null,
+            given: ['#Info.contact'],
+            message: null,
+            name: 'valid-contact',
+            owner: expect.any(Number),
+            recommended: true,
+            resolved: true,
+            severity: DiagnosticSeverity.Warning,
+            then: [
+              {
+                function: 'truthy',
+              },
+            ],
+          },
+        },
+      });
     });
 
     it('should resolve nested aliases', () => {

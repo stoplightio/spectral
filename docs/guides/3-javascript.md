@@ -4,135 +4,65 @@ The Spectral CLI is a thin wrapper around a JavaScript (TypeScript) API, which c
 
 Assuming it has been installed as a Node module via NPM/Yarn, it can be used to lint YAML and JSON documents from a string, or from an object.
 
+First of all, in order to consume the JS API you need to install the appropriate package(s).
+
+```bash
+npm install -g @stoplight/spectral-core
+```
+
+If you are a Yarn user:
+
+```bash
+yarn global add @stoplight/spectral-core
+```
+
 ## Linting a YAML String
 
 ```js
-const { Spectral, Document, Parsers } = require("@stoplight/spectral");
+const { Spectral, Document } = require("@stoplight/spectral-core");
+const Parsers = require("@stoplight/spectral-parsers"); // make sure to install the package if you intend to use default parsers!
+const { truthy } = require("@stoplight/spectral-functions"); // this has to be installed as well
 
-const myOpenApiDocument = new Document(
-  `responses:
+const myDocument = new Document(
+  `---
+responses:
   '200':
-    description: ''
-    schema:
-      $ref: '#/definitions/error-response'
-`,
+    description: ''`,
   Parsers.Yaml,
+  "/my-file",
 );
 
 const spectral = new Spectral();
-spectral.run(myOpenApiDocument).then(console.log);
+spectral.setRuleset({
+  // a ruleset has to be provided
+  rules: {
+    "no-empty-description": {
+      given: "$..description",
+      message: "Description must not be empty",
+      then: {
+        function: truthy,
+      },
+    },
+  },
+});
+spectral.run(myDocument).then(console.log);
 ```
 
 This will run Spectral with no formats, rules or functions, so it's not going to do anything besides \$ref resolving.
 Find out how to add formats, rules and functions below.
 
-## Linting an Object
-
-Instead of passing a string to `Document`, you can pass in JavaScript object, with or without `$ref`'s.
-
-```js
-const { Spectral } = require("@stoplight/spectral");
-
-const myOpenApiDocument = {
-  responses: {
-    200: {
-      description: "",
-      schema: {
-        $ref: "#/definitions/error-response",
-      },
-    },
-  },
-};
-
-const spectral = new Spectral();
-spectral.run(myOpenApiDocument).then(console.log);
-```
-
-Note - this usage is discouraged, since you won't get accurate ranges.
-
-## Registering Formats
-
-If you are interested in linting OpenAPI documents or JSON Schema models, you may need to register formats.
-Assuming your rulesets use the built-in Spectral formats, this can be accomplished as follows
-
-- OpenAPI
-
-```js
-const { Spectral, isOpenApiv2, isOpenApiv3 } = require("@stoplight/spectral");
-
-const spectral = new Spectral();
-spectral.registerFormat("oas2", isOpenApiv2);
-spectral.registerFormat("oas3", isOpenApiv3);
-```
-
-- JSON Schema
-
-```js
-const { Spectral, isJSONSchema, isJSONSchemaDraft4, isJSONSchemaDraft6, isJSONSchemaDraft7, isJSONSchemaDraft2019_09, isJSONSchemaLoose } = require("@stoplight/spectral");
-
-const spectral = new Spectral();
-spectral.registerFormat("json-schema", isJSONSchema);
-spectral.registerFormat("json-schema-loose", isJSONSchemaLoose);
-spectral.registerFormat("json-schema-draft4", isJSONSchemaDraft4);
-spectral.registerFormat("json-schema-draft6", isJSONSchemaDraft6);
-spectral.registerFormat("json-schema-draft7", isJSONSchemaDraft7);
-spectral.registerFormat("json-schema-2019-09", isJSONSchemaDraft2019_09);
-```
-
-Learn more about predefined formats in the [ruleset documentation](../getting-started/3-rulesets.md#formats).
-
-## Loading Rules
+## Loading Rulesets
 
 Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`.
 
 ```js
-const { Spectral, isOpenApiv2, isOpenApiv3 } = require("@stoplight/spectral");
+const { Spectral } = require("@stoplight/spectral-core");
+const ruleset = require("./my-ruleset"); // if you use a YAML/JSON ruleset, make sure to use @stoplight/spectral-ruleset-migrator first.
 
 const myOpenApiDocument = `
 openapi: 3.0.0
 # here goes the rest of document
 `;
-
-const spectral = new Spectral();
-spectral.registerFormat("oas2", isOpenApiv2);
-spectral.registerFormat("oas3", isOpenApiv3);
-spectral
-  .loadRuleset("spectral:oas")
-  .then(() => spectral.run(myOpenApiDocument))
-  .then(results => {
-    console.log("here are the results", results);
-  });
-```
-
-The OpenAPI rules are opinionated. There might be some rules that you prefer to change, or disable. We encourage you to create your rules to fit your use case, and we welcome additions to the existing rulesets as well!
-
-Custom rulesets can also be loaded using `spectral.loadRuleset()` by specifying the exact path to the ruleset file.
-
-```js
-const { Spectral, isOpenApiv2, isOpenApiv3 } = require('@stoplight/spectral');
-const { join } = require('path');
-
-const myOpenApiDocument = `
-openapi: 3.0.0
-# here goes the rest of document
-`
-
-const spectral = new Spectral();
-spectral.registerFormat('oas2', isOpenApiv2);
-spectral.registerFormat('oas3', isOpenApiv3);
-
-spectral.loadRuleset(join(__dirname './path/to/my-ruleset.yaml'));
-  .then(() => spectral.run(myOpenApiDocument))
-  .then(results => {
-    console.log('here are the results', results);
-  });
-```
-
-Alternatively, if your ruleset is stored in a plain JSON file that doesn't extend any other rulesets, you can also consider using `setRuleset`, as follows
-
-```js
-const { Spectral } = require("@stoplight/spectral");
-const ruleset = require("./my-ruleset.json");
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
@@ -143,86 +73,18 @@ spectral.run(myOpenApiDocument).then(results => {
 
 ## Advanced
 
-### Creating a Custom Format
-
-Spectral supports two core formats: `oas2` and `oas3`. Using `registerFormat` you can add support for auto-detecting other formats. You might want to do this for a ruleset which is run against multiple major versions of description format like RAML v0.8 and v1.0.
-
-```js
-const { Spectral } = require("@stoplight/spectral");
-
-const spectral = new Spectral();
-
-spectral.registerFormat("foo-bar", obj => typeof obj === "object" && obj !== null && "foo-bar" in obj);
-
-spectral.setRuleset({
-  functions: {},
-  rules: {
-    rule1: {
-      given: "$.x",
-      formats: ["foo-bar"],
-      severity: "error",
-      then: {
-        function: "truthy",
-      },
-    },
-  },
-});
-
-spectral
-  .run({
-    "foo-bar": true,
-    x: false,
-  })
-  .then(result => {
-    expect(result).toEqual([
-      expect.objectContaining({
-        code: "rule1",
-      }),
-    ]);
-  });
-```
-
-Alternatively you may lookup for certain format by optional `source`, which could be passed in `run` options.
-
-```js
-const { Document, Spectral } = require("@stoplight/spectral");
-
-const spectral = new Spectral();
-
-spectral.registerFormat("foo-bar", (_, source) => source === "/foo/bar");
-
-spectral.setRuleset({
-  functions: {},
-  rules: {
-    rule1: {
-      given: "$.x",
-      formats: ["foo-bar"],
-      severity: "error",
-      then: {
-        function: "truthy",
-      },
-    },
-  },
-});
-
-spectral.run(new Document(`foo-bar: true\nx: false`, Parsers.Yaml, "/foo/bar")).then(result => {
-  expect(result).toEqual([
-    expect.objectContaining({
-      code: "rule1",
-    }),
-  ]);
-});
-```
-
 ### Using a Proxy
 
-Spectral supports HTTP(S) proxies when fetching remote schemas and rulesets.
+Spectral supports HTTP(S) proxies when fetching remote assets.
 
 ```js
-const { Spectral } = require("@stoplight/spectral");
+const { Spectral } = require("@stoplight/spectral-core");
+const ProxyAgent = require("proxy-agent");
+const { createHttpAndFileResolver } = require("@stoplight/spectral-ref-resolver");
 
-const spectral = new Spectral({ proxyUri: "http://my-proxy:3000" });
-spectral.loadRuleset("https://example.org/my-rules");
+const spectral = new Spectral({
+  resolver: createHttpAndFileResolver({ agent: new ProxyAgent(process.env.PROXY) }),
+});
 
 // lint as usual - $refs and rules will be requested using the proxy
 ```
@@ -239,7 +101,7 @@ the [@stoplight/json-ref-resolver](https://github.com/stoplightio/json-ref-resol
 ```js
 const path = require("path");
 const fs = require("fs");
-const { Spectral } = require("@stoplight/spectral");
+const { Spectral } = require("@stoplight/spectral-cli");
 const { Resolver } = require("@stoplight/json-ref-resolver");
 
 const customFileResolver = new Resolver({

@@ -10,6 +10,8 @@ const REPLACEMENTS = {
   'spectral:asyncapi': 'asyncapi',
 };
 
+const KNOWN_JS_EXTS = /^\.[cm]?js$/;
+
 export { transformer as default };
 
 async function processExtend(
@@ -21,11 +23,19 @@ async function processExtend(
   }
 
   const filepath = ctx.tree.resolveModule(name);
+
+  if (KNOWN_JS_EXTS.test(path.extname(filepath))) {
+    return ctx.tree.addImport(`${path.basename(filepath, true)}_${path.extname(filepath)}`, filepath, true);
+  }
+
   const existingCwd = ctx.cwd;
+  const scope = ctx.tree.scope;
   try {
     ctx.cwd = path.dirname(filepath);
-    return await process(await ctx.read(filepath, ctx.opts.fs), ctx.hooks);
+    ctx.tree.scope = ctx.tree.scope.fork();
+    return await process(await ctx.read(filepath, ctx.opts.fs, ctx.opts.fetch), ctx.hooks);
   } finally {
+    ctx.tree.scope = scope;
     ctx.cwd = existingCwd;
   }
 }
@@ -41,18 +51,17 @@ const transformer: Transformer = function (ctx) {
       }
 
       assertArray(_extends);
+      const extendedRulesets: (namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier)[] = [];
 
-      return b.arrayExpression(
-        await Promise.all(
-          _extends.map(async ruleset => {
-            if (typeof ruleset === 'string') {
-              return await processExtend(ctx, ruleset);
-            }
+      for (const ruleset of _extends) {
+        if (typeof ruleset === 'string') {
+          extendedRulesets.push(await processExtend(ctx, ruleset));
+        } else {
+          extendedRulesets.push(b.arrayExpression([await processExtend(ctx, ruleset[0]), b.literal(ruleset[1])]));
+        }
+      }
 
-            return b.arrayExpression([await processExtend(ctx, ruleset[0]), b.literal(ruleset[1])]);
-          }),
-        ),
-      );
+      return b.arrayExpression(extendedRulesets);
     },
   ]);
 };

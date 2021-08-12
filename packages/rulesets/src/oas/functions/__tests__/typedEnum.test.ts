@@ -72,11 +72,11 @@ describe('typedEnum', () => {
 
       expect(runTypedEnum(schema)).toEqual([
         {
-          message: 'Enum value `a string!` does not respect the specified type `integer`.',
+          message: 'Enum value `a string!` must be "integer".',
           path: ['enum', 1],
         },
         {
-          message: 'Enum value `and another one!` does not respect the specified type `integer`.',
+          message: 'Enum value `and another one!` must be "integer".',
           path: ['enum', 3],
         },
       ]);
