@@ -14,12 +14,15 @@ describe('Core Functions / Schema', () => {
       exclusiveMaximum: true,
     };
 
-    expect(await runSchema(2, { schema })).toEqual([
+    const result = await runSchema(2, { schema });
+    expect(result).toStrictEqual([
       {
         message: 'Number must be < 2',
         path: [],
       },
     ]);
+
+    expect(await runSchema(2, { schema, dialect: 'auto' })).toStrictEqual(result);
   });
 
   it('validates draft 6', async () => {
@@ -28,12 +31,15 @@ describe('Core Functions / Schema', () => {
       type: 'string',
     };
 
-    expect(await runSchema(2, { schema })).toEqual([
+    const result = await runSchema(2, { schema });
+    expect(result).toEqual([
       {
         message: 'Value type must be string',
         path: [],
       },
     ]);
+
+    expect(await runSchema(2, { schema, dialect: 'auto' })).toStrictEqual(result);
   });
 
   describe('validates falsy values such as', () => {
@@ -389,6 +395,13 @@ describe('Core Functions / Schema', () => {
       { schema: { type: 'string' }, dialect: 'auto' },
       { schema: { type: 'string' }, allErrors: true },
       { schema: { type: 'string' }, dialect: 'draft2019-09', allErrors: false },
+      {
+        schema: { type: 'string' },
+        dialect: 'draft2019-09',
+        prepareResults() {
+          /* no-op */
+        },
+      },
     ])('given valid %p options, should not throw', async opts => {
       expect(await runSchema('', opts)).toBeInstanceOf(Array);
     });

@@ -251,33 +251,12 @@ workflows:
 
   release:
     jobs:
-      - release:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-      - build-windows-binary:
-         filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
       - release-docker:
          filters:
             branches:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - upload_artifacts:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-          requires:
-            - release
-            - build-windows-binary
 
   scheduled-release:
     triggers:
@@ -304,9 +283,17 @@ workflows:
       - test-browser:
           requires:
             - lint
+      - build-windows-binary:
+          requires:
+            - lint
+            - test-windows
       - release:
           requires:
             - lint
             - test-node
             - test-windows
             - test-browser
+      - upload_artifacts:
+          requires:
+            - release
+            - build-windows-binary
