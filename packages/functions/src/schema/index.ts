@@ -25,11 +25,13 @@ export default createRulesetFunction<unknown, Options>(
         },
         dialect: {
           enum: ['auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'],
+          default: 'auto',
         },
         allErrors: {
           type: 'boolean',
+          default: false,
         },
-        prepareResults: {},
+        prepareResults: true,
       },
       required: ['schema'],
       type: 'object',
@@ -56,7 +58,9 @@ export default createRulesetFunction<unknown, Options>(
 
     try {
       let validator;
-      const dialect = opts?.dialect ?? detectDialect(schemaObj) ?? 'draft7';
+      const dialect =
+        (opts.dialect === void 0 || opts.dialect === 'auto' ? detectDialect(schemaObj) : opts?.dialect) ?? 'draft7';
+
       if (dialect === 'draft4' || dialect === 'draft6') {
         schemaObj = JSON.parse(JSON.stringify(schemaObj)) as Record<string, unknown>;
         schemaObj.$schema = 'http://json-schema.org/draft-07/schema#';
