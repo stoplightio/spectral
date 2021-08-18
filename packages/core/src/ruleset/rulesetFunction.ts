@@ -4,6 +4,7 @@ import ajvErrors from 'ajv-errors';
 import type { RequiredError } from 'ajv/dist/vocabularies/validation/required';
 import type { AdditionalPropertiesError } from 'ajv/lib/vocabularies/applicator/additionalProperties';
 import type { EnumError } from 'ajv/dist/vocabularies/validation/enum';
+import type { JSONSchema7 } from 'json-schema';
 
 import { printPath, PrintStyle, printValue } from '@stoplight/spectral-runtime';
 
@@ -70,6 +71,8 @@ type Schema = JSONSchema & { errorMessage?: string | { [key in keyof JSONSchema]
 };
 type SchemaDefinition = Schema | boolean;
 
+const DEFAULT_OPTIONS_VALIDATOR = (o: unknown): boolean => o === null;
+
 export function createRulesetFunction<I extends unknown, O extends unknown>(
   {
     input,
@@ -82,10 +85,18 @@ export function createRulesetFunction<I extends unknown, O extends unknown>(
   },
   fn: RulesetFunction<I, O>,
 ): RulesetFunctionWithValidator<I, O> {
-  const validateOptions = options === null ? (o: unknown): boolean => o === null : ajv.compile(options);
+  const validateOptions = options === null ? DEFAULT_OPTIONS_VALIDATOR : ajv.compile(options);
   const validateInput = input !== null ? ajv.compile(input) : input;
 
-  const wrappedFn: RulesetFunctionWithValidator<I, O> = function (
+  type WrappedRulesetFunction = RulesetFunction<I, O> & {
+    validator<O = unknown>(options: unknown): asserts options is O;
+    schemas?: Readonly<{
+      input: Readonly<JSONSchema7> | null;
+      options: Readonly<JSONSchema7> | null;
+    }>;
+  };
+
+  const wrappedFn: WrappedRulesetFunction = function (
     input,
     options,
     ...args
@@ -131,5 +142,13 @@ export function createRulesetFunction<I extends unknown, O extends unknown>(
     }
   };
 
-  return wrappedFn;
+  Reflect.defineProperty(wrappedFn, 'schemas', {
+    enumerable: false,
+    value: {
+      input,
+      options,
+    },
+  });
+
+  return wrappedFn as RulesetFunctionWithValidator<I, O>;
 }
