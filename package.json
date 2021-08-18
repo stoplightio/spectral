@@ -67,7 +67,7 @@
     "@semantic-release/git": "^9.0.0",
     "@types/jest": "^26.0.23",
     "@types/jest-when": "^2.7.3",
-    "@types/karma": "^6.3.0",
+    "@types/karma": "^6.3.1",
     "@types/lodash": "^4.14.167",
     "@types/node": "^15.12.4",
     "@types/node-fetch": "^2.5.12",

@@ -2089,10 +2089,10 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/karma@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@types/karma/-/karma-6.3.0.tgz#535928aeee6e957464acf17d0a9e928b3aa0c27f"
-  integrity sha512-NQ6AzL/0UhFKrK69R9aPV1a88MBau7F47Tr3Qwg8IlKALDVfRk9w+8r3VfOso0vrFT/IkztjfAPar090laUMdg==
+"@types/karma@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@types/karma/-/karma-6.3.1.tgz#a9e05df4a5d898bffd619c4e109fff9e4f3c676a"
+  integrity sha512-t7hSJ8oWrgzrJV0nBqqMrDnQFft/W3WCPOfSi2aOq7rUPARLC8XpZfbsQ+mfYaNk18v1XqkBU12uirp1ISJVAA==
   dependencies:
     "@types/node" "*"
     log4js "^6.2.1"
