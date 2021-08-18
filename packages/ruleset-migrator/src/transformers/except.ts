@@ -17,7 +17,7 @@ const transformer: Transformer = function (ctx) {
       const overrides = (ruleset.overrides ??= []) as unknown[];
       overrides.push(
         ...Object.keys(except).map(pattern => ({
-          files: [pattern],
+          files: [pattern.startsWith('#') ? `**${pattern}` : pattern],
           rules: except[pattern].reduce((rules, rule) => {
             rules[rule] = 'off';
             return rules;
