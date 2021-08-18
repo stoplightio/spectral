@@ -65,6 +65,7 @@ commands:
           command: |
             echo "$(git log -1 --pretty=format:"%s")" | npx commitlint
 
+
   test-node:
     parameters:
       max-workers:
@@ -126,9 +127,6 @@ jobs:
       - run:
           name: Run browser tests
           command: yarn test.karma
-      - run:
-          name: Run browser tests (nimma)
-          command: USE_NIMMA=true yarn test.karma
 
   test-windows:
     executor:
@@ -140,7 +138,7 @@ jobs:
           flags: "--ignore-engines"
       - run: yarn build
       - test-node:
-          max-workers: 4
+          max-workers: 3
 
   build-windows-binary:
     executor:
