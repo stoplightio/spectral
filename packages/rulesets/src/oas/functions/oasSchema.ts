@@ -1,9 +1,10 @@
 import * as traverse from 'json-schema-traverse';
 import type { SchemaObject } from 'json-schema-traverse';
 import { isObject } from './utils/isObject';
-import { schema as schemaFn } from '@stoplight/spectral-functions';
+import { schema as schemaFn, SchemaOptions } from '@stoplight/spectral-functions';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import { oas2, oas3 } from '@stoplight/spectral-formats';
+import { oas2, oas3_0, oas3_1, extractDraftVersion } from '@stoplight/spectral-formats';
+import { isPlainObject } from '@stoplight/json';
 
 export type Options = {
   schema: Record<string, unknown>;
@@ -27,21 +28,31 @@ export default createRulesetFunction<unknown, Options>(
 
     let { schema } = opts;
 
+    let dialect: SchemaOptions['dialect'] = 'draft4';
+
     if (formats) {
       try {
         if (formats.has(oas2)) {
           schema = convertXNullable({ ...schema });
           traverse(schema, visitOAS2);
-        } else if (formats.has(oas3)) {
+        } else if (formats.has(oas3_0)) {
           schema = convertNullable({ ...schema });
           traverse(schema, visitOAS3);
+        } else if (formats.has(oas3_1)) {
+          if (isPlainObject(context.document.data) && typeof context.document.data.jsonSchemaDialect === 'string') {
+            dialect =
+              (extractDraftVersion(context.document.data.jsonSchemaDialect) as SchemaOptions['dialect']) ??
+              'draft2020-12';
+          } else {
+            dialect = 'draft2020-12';
+          }
         }
       } catch {
         // just in case
       }
     }
 
-    return schemaFn(targetVal, { ...opts, schema, dialect: 'draft4' }, context);
+    return schemaFn(targetVal, { ...opts, schema, dialect }, context);
   },
 );
 
