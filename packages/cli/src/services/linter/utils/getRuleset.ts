@@ -37,7 +37,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
 
   if (/(json|ya?ml)$/.test(extname(rulesetFile))) {
     const m: { exports?: RulesetDefinition } = {};
-    const paths = [path.dirname(rulesetFile)];
+    const paths = [path.dirname(rulesetFile), __dirname];
 
     await AsyncFunction(
       'module, require',
