@@ -259,13 +259,13 @@ workflows:
               only: /^v.*/
 
   scheduled-release:
-    triggers:
-      - schedule:
-          cron: "0 12 * * *"
-          filters:
-            branches:
-              only:
-                - develop
+#    triggers:
+#      - schedule:
+#          cron: "0 12 * * *"
+#          filters:
+#            branches:
+#              only:
+#                - develop
     jobs:
       - lint
       - test-node:
