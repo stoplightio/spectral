@@ -144,7 +144,10 @@ jobs:
     executor:
       name: windows/default
     steps:
-      - prepare-release
+      - cached-dependencies:
+          os: windows
+          flags: "--ignore-engines"
+      - run: yarn build
       - run: yarn workspace @stoplight/spectral-cli build.windows
       - persist_to_workspace:
           root: ./packages/cli/
