@@ -42,6 +42,34 @@ describe('Core Functions / Schema', () => {
     expect(await runSchema(2, { schema, dialect: 'auto' })).toStrictEqual(result);
   });
 
+  it('allows redundant escapes', async () => {
+    let schema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      type: 'string',
+      pattern: '[\\-_]', // this one is good and would work with unicodeRegExp: true
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message: 'Value type must be string',
+        path: [],
+      },
+    ]);
+
+    schema = {
+      $schema: 'http://json-schema.org/draft-06/schema#',
+      type: 'string',
+      pattern: '[\\_-]', // the escape here is redundant
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message: 'Value type must be string',
+        path: [],
+      },
+    ]);
+  });
+
   describe('validates falsy values such as', () => {
     it('empty string', async () => {
       const schema: JSONSchema = {
