@@ -54,7 +54,7 @@ export class Tree {
       }
 
       const identifier = Tree.identifier(specifier, scope);
-      existingImportDeclaration.push({ imported: identifier, local: identifier, default: _default });
+      existingImportDeclaration.push({ imported: b.identifier(specifier), local: identifier, default: _default });
       return identifier;
     }
   }
