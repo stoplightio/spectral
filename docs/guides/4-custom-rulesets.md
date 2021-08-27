@@ -279,7 +279,7 @@ Spectral now supports an alternative format to write rulesets in Javascript usin
 - Explicitly load formats or rulesets to get control over versioning.
 - Load common functions from popular JS libraries easily
 
-### Example
+**Example**
 
 ```js
 //you can import popular functions from libraries
@@ -322,7 +322,7 @@ export default {
 
 Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSON path expressions across various rules. Define aliases for commonly used JSON paths on a global level which can then be reused across the ruleset.
 
-Aliases can be defined in an array of KVP on top of the ruleset.
+Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
 
 ```
 aliases:{
@@ -330,18 +330,21 @@ aliases:{
 }
 ```
 
-### Example:
+**Example**
 
 ```json
 {
   "aliases": {
+    "HeaderNames": "$..parameters.[?(@.in === 'header')].name",
     "Info": "$..info",
     "InfoDescription": "#Info.description",
     "InfoContact": "#Info.contact",
-    "InfoContactName": "#InfoContact.name"
+    "Paths": "$.paths[*]~"
   }
 }
 ```
+
+Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSON Path syntax, like dot notation: `"given": "#InfoContact.name"`.
 
 > This will be followed by our core rulesets providing a common set of aliases for OpenAPI and AsyncAPI so that our users don't have to do the work at all. If you have ideas about what kind of aliases could be useful leave your thoughts [here](https://roadmap.stoplight.io).
 
@@ -355,7 +358,7 @@ Overrides can be used to:
 - Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
 - Override particular rules
 
-### Example:
+**Example**
 
 ```json
 {
