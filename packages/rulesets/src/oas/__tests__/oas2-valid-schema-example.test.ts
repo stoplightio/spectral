@@ -393,4 +393,27 @@ testRule('oas2-valid-schema-example', [
     },
     errors: [],
   },
+
+  {
+    name: 'valid required query paramater',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/route': {
+          get: {
+            parameters: [
+              {
+                name: 'id',
+                in: 'query',
+                required: true,
+                type: 'number',
+                'x-example': 10,
+              },
+            ],
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);
