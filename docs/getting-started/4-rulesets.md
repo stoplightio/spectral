@@ -147,7 +147,7 @@ Custom formats can be registered via the [JS API](../guides/3-javascript.md), bu
 
 Spectral comes with two rulesets included:
 
-- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
-- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
+- `spectral:oas` - [OpenAPI v2/v3 rules](./5-openapi.md)
+- `spectral:asyncapi` - [AsyncAPI v2 rules](./6-asyncapi.md)
 
 You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).

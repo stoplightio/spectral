@@ -1,6 +1,6 @@
 # Custom Functions
 
-If the core functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use your own custom functions.
+If the core functions are not enough for your [custom ruleset](../getting-started/4-rulesets.md), Spectral allows you to write and use your own custom functions.
 
 Create a directory to contain your new functions. By default `functions/` is assumed.
 

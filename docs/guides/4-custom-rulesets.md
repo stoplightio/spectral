@@ -6,6 +6,9 @@ If you'd like to make sure your APIs are consistent and high quality before they
 
 Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is vaid. Whatever you want to do, to start with you'll need to create some rules.
 
+Spectral supports JS rulesets which are a bit more powerful than JSON/YAML rulesets.
+There's a guide available at the bottom where you can learn more about them, and explore potential use cases.
+
 ## Adding Rules
 
 Add your own rules under the `rules` property in your `.spectral.yml`, or another ruleset file.
@@ -274,18 +277,21 @@ If none of the [core functions](../reference/functions.md) do what you want, you
 
 Spectral v6.0 added support for an alternative ruleset format, similar to the JSON and YAML formats, but now entirely in Javascript.
 
-This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries like normal, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
+### Benefits
+
+- Explicitly load formats or rulesets to get control over versioning.
+- Load common functions from popular JS libraries easily
 
 **Example**
 
 ```js
 //you can import popular functions from libraries
-import { isObject } from "https://cdn.jsdelivr.net/npm/lodash-es/+esm";
-import { truthy, schema } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions/+esm";
-// you can stick to an older version if you want to for some reason. That's fine
-import { alphabetical } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions@1.0.4/+esm";
-import { oasRuleset } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-rulesets/+esm";
-import { oas2 } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-formats/+esm";
+import { isObject, pick } from "https://cdn.skypack.dev/lodash-es";
+import { truthy, schema } from "https://cdn.skypack.dev/@stoplight/spectral-functions";
+import { oas as oasRuleset } from "https://cdn.skypack.dev/@stoplight/spectral-rulesets";
+// we load this ruleset because it contains a rule that's no longer available in the newest ruleset
+import { oas as oldOasRuleset } from "https://cdn.skypack.dev/@stoplight/spectral-rulesets@1.2.0";
+import { oas2 } from "https://cdn.skypack.dev/@stoplight/spectral-formats";
 
 import { verifyType } from "./verifyType.mjs";
 
@@ -297,6 +303,7 @@ export default {
   formats: [oas2, oas3],
   extends: [oasRuleset],
   rules: {
+    ...pick(oldOasRuleset, "removed-rule-in-post.1.2.0"),
     "valid-rule": {
       given: "$.info",
       then: {
@@ -317,6 +324,26 @@ export default {
 This code example adds two rules: `valid-rule` and `only-new-json-schema`, things should look fairly familiar for anyone who has used the JSON or YAML formats.
 
 For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
+
+On top of that, since it's a plain JS, you are allowed to modify certain fields of extended rulesets such as "message", or disable certain rules in batch.
+
+### Example
+
+```js
+import { oas as oasRuleset } from "https://cdn.skypack.dev/@stoplight/spectral-rulesets";
+
+const EXCLUDED_RULES = /^oas[23]-valid-(media|schema)-example$/;
+// The following piece of code removes rules matching the regex above ^. You can get rid of it or adjust the logic to your preferences.
+const filteredOasRuleset = {
+  ...oasRuleset,
+  rules: Object.fromEntries(Object.entries(oasRuleset.rules).filter(([key]) => !EXCLUDED_RULES.test(key))),
+};
+
+export default {
+  extends: [filteredOasRuleset],
+  rules: {},
+};
+```
 
 For now the JSON, YAML, and JS, are all being maintained, and there are no current plans to drop support for any of them.
 
