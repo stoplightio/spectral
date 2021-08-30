@@ -65,7 +65,6 @@ commands:
           command: |
             echo "$(git log -1 --pretty=format:"%s")" | npx commitlint
 
-
   test-node:
     parameters:
       max-workers:
@@ -140,6 +139,18 @@ jobs:
       - test-node:
           max-workers: 3
 
+  build-nix-binaries:
+    docker:
+      - image: circleci/node:16
+    steps:
+      - checkout
+      - install-and-build
+      - run: yarn workspace @stoplight/spectral-cli build.nix
+      - persist_to_workspace:
+          root: ./packages/cli/
+          paths:
+            - binaries
+
   build-windows-binary:
     executor:
       name: windows/default
@@ -154,7 +165,7 @@ jobs:
           paths:
             - binaries
 
-  release-docker:
+  push-docker:
     docker:
       - image: circleci/node:14
     steps:
@@ -210,19 +221,16 @@ jobs:
                           stoplight/spectral:${MAJOR_VERSION};
             fi
 
+
+
   release:
     docker:
       - image: circleci/node:14
     steps:
       - prepare-release
       - run: yarn release
-      - run: yarn workspace @stoplight/spectral-cli build.nix
-      - persist_to_workspace:
-          root: ./packages/cli/
-          paths:
-            - binaries
 
-  upload_artifacts:
+  upload-artifacts:
     docker:
       - image: circleci/golang:1-stretch
     steps:
@@ -233,7 +241,7 @@ jobs:
           command: go get github.com/tcnksm/ghr
       - run:
           name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/packages/cli/binaries
+          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
 
 workflows:
   commit:
@@ -251,17 +259,40 @@ workflows:
 
   release:
     jobs:
-      - release-docker:
+      - build-nix-binaries:
+         filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+      - build-windows-binary:
+            filters:
+              branches:
+                ignore: /.*/
+              tags:
+                only: /^v.*/
+      - upload-artifacts:
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^v.*/
+          requires:
+            - build-nix-binaries
+            # - build-windows-binary
+      - push-docker:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+          requires:
+            - upload-artifacts
 
-  scheduled-release:
+  scheduled-packages-release:
     triggers:
       - schedule:
-          cron: "0 12 * * *"
+          cron: "0 12 * * 1-5"
           filters:
             branches:
               only:
@@ -283,17 +314,9 @@ workflows:
       - test-browser:
           requires:
             - lint
-      - build-windows-binary:
-          requires:
-            - lint
-            - test-windows
       - release:
           requires:
             - lint
             - test-node
             - test-windows
             - test-browser
-      - upload_artifacts:
-          requires:
-            - release
-            - build-windows-binary
