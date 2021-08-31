@@ -131,4 +131,81 @@ testRule('operation-success-response', [
     },
     errors: [],
   },
+
+  {
+    name: 'oas2 document has 2XX and 3XX responses set',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/path': {
+          get: {
+            responses: {
+              '3XX': {},
+            },
+          },
+          post: {
+            responses: {
+              '2XX': {},
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Operation must have at least one "2xx" or "3xx" response.',
+        path: ['paths', '/path', 'get', 'responses'],
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        message: 'Operation must have at least one "2xx" or "3xx" response.',
+        path: ['paths', '/path', 'post', 'responses'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'oas 3.0.x document has 2XX and 3XX responses set',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/path': {
+          get: {
+            responses: {
+              '3XX': {},
+            },
+          },
+          post: {
+            responses: {
+              '2XX': {},
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'oas 3.1.x document has 2XX and 3XX responses set',
+    document: {
+      openapi: '3.1.0',
+      paths: {
+        '/path': {
+          get: {
+            responses: {
+              '3XX': {},
+            },
+          },
+          post: {
+            responses: {
+              '2XX': {},
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);
