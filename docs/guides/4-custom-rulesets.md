@@ -383,7 +383,7 @@ Overrides can be used to:
 }
 ```
 
-One can also mix globs with actual paths, i.e.
+One can also combine a glob for a filepath with a JSON Path after the anchor, i.e.:
 
 ```json
 {
