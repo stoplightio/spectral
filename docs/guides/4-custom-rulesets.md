@@ -355,7 +355,7 @@ Previously Spectral supported exceptions, which were limited in their ability to
 Overrides can be used to:
 
 - Override rulesets to apply on particular files/folders `files: ['schemas/**/*.draft7.json']`
-- Override rulesets to apply on particular paths `files: ['**#/components/schemas/Item']`
+- Override rulesets to apply on particular JSON Path's `files: ['**#/components/schemas/Item']`
 - Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
 - Override particular rules
 
