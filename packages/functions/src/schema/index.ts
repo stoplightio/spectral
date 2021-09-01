@@ -6,6 +6,7 @@ import { Optional } from '@stoplight/types';
 import { draft7 } from 'json-schema-migrate';
 import MissingRefError from 'ajv/dist/compile/ref_error';
 import { createRulesetFunction, IFunctionResult, JSONSchema } from '@stoplight/spectral-core';
+import { isError } from 'lodash';
 
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;
@@ -94,12 +95,14 @@ export default createRulesetFunction<unknown, Options>(
         );
       }
     } catch (ex) {
-      if (!(ex instanceof MissingRefError)) {
-        throw ex;
-      } else if (!rule.resolved) {
-        // let's ignore any $ref errors if schema fn is provided with already resolved content,
-        // if our resolver fails to resolve them,
-        // ajv is unlikely to do it either, since it won't have access to the whole document, but a small portion of it
+      if (!isError(ex)) {
+        throw new Error('Unexpected error');
+      }
+
+      // let's ignore any $ref errors if schema fn is provided with already resolved content,
+      // if our resolver fails to resolve them,
+      // ajv is unlikely to do it either, since it won't have access to the whole document, but a small portion of it
+      if (!rule.resolved || !(ex instanceof MissingRefError)) {
         results.push({
           message: ex.message,
           path,
