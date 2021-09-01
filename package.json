@@ -38,6 +38,7 @@
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
+    "postinstall": "patch-package",
     "release": "HUSKY=0 yarn workspaces run semantic-release -e semantic-release-monorepo"
   },
   "workspaces": {
@@ -94,6 +95,7 @@
     "karma-typescript-es6-transform": "^5.2.0",
     "lint-staged": "^11.0.0",
     "memfs": "^3.2.2",
+    "patch-package": "^6.4.7",
     "prettier": "^2.3.2",
     "semantic-release": "^17.4.4",
     "semantic-release-monorepo": "^7.0.5",
@@ -118,6 +120,5 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  },
-  "version": "6.0.0-alpha2"
+  }
 }
