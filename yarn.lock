@@ -8258,10 +8258,10 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-pkg-fetch@3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/pkg-fetch/-/pkg-fetch-3.1.1.tgz#8f94115d926e71359ed96c211fe022b7a2452f8d"
-  integrity sha512-3GfpNwbwoTxge2TrVp6Oyz/FZJOoxF1r0+1YikOhnBXa2Di/VOJKtUObFHap76BFnyFo1fwh5vARWFR9TzLKUg==
+pkg-fetch@3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/pkg-fetch/-/pkg-fetch-3.2.2.tgz#33f391eb176c1844e93189a32f2279b36a1ec949"
+  integrity sha512-bLhFNT4cNnONxzbHo1H2mCCKuQkCR4dgQtv0gUZnWtp8TDP0v0UAXKHG7DXhAoTC5IYP3slLsFJtIda9ksny8g==
   dependencies:
     chalk "^4.1.0"
     fs-extra "^9.1.0"
@@ -8278,10 +8278,10 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-pkg@^5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/pkg/-/pkg-5.2.1.tgz#929294d2dedbcd4427cfc00121a80c151a2a1d4c"
-  integrity sha512-kQ5Fla+76rdmFJNrEOgoklxAURl3uvhvX+m4LCQCRrI+q2lOgsx9pS02NhNuDVnyXsthluAuXCh5SKcMyw+cWw==
+pkg@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/pkg/-/pkg-5.3.1.tgz#8f81671613b9e5bb1d83c39b2eed4799e1e679fe"
+  integrity sha512-jT/sptM1ZG++FNk+jnJYNoWLDQXYd7hqpnBhd5j18SNW1jJzNYo55RahuCiD0KN0PX9mb53GWCqKM0ia/mJytA==
   dependencies:
     "@babel/parser" "7.13.13"
     "@babel/types" "7.13.12"
@@ -8292,7 +8292,7 @@ pkg@^5.2.1:
     into-stream "^6.0.0"
     minimist "^1.2.5"
     multistream "^4.1.0"
-    pkg-fetch "3.1.1"
+    pkg-fetch "3.2.2"
     prebuild-install "6.0.1"
     progress "^2.0.3"
     resolve "^1.20.0"
