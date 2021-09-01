@@ -355,6 +355,7 @@ Previously Spectral supported exceptions, which were limited in their ability to
 Overrides can be used to:
 
 - Override rulesets to apply on particular files/folders `files: ['schemas/**/*.draft7.json']`
+- Override rulesets to apply on particular JSON Path's `files: ['**#/components/schemas/Item']`
 - Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
 - Override particular rules
 
@@ -381,3 +382,20 @@ Overrides can be used to:
   ]
 }
 ```
+
+One can also combine a glob for a filepath with a JSON Path after the anchor, i.e.:
+
+```json
+{
+  "overrides": [
+    {
+      "files": ["legacy/**/*.oas.json#/paths"],
+      "rules": {
+        "some-inherited-rule": "off"
+      }
+    }
+  ]
+}
+```
+
+In the event of multiple matches, the order of definition takes place, with the last one having the higher priority.
