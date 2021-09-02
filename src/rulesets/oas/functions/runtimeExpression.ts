@@ -93,7 +93,7 @@ function isValidReferenceToken(referenceToken: string): boolean {
 
 function isValidEscaped(escaped: string): boolean {
   // escaped must be empty/null or match the given pattern
-  return !escaped || !!/^~(0|1)$/.exec(escaped);
+  return /^(~[01])?$/.test(escaped);
 }
 
 function isValidUnescaped(unescaped: string): boolean {
