@@ -172,7 +172,7 @@
       "message": "{{error}}",
       "given": "$.paths.*.*.responses.*.links.*.parameters.*",
       "then": {
-        "function": "runTimeExpression"
+        "function": "runtimeExpression"
       }
     },
     "no-eval-in-markdown": {
