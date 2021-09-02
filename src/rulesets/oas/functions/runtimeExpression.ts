@@ -98,5 +98,5 @@ function isValidEscaped(escaped: string): boolean {
 
 function isValidUnescaped(unescaped: string): boolean {
   // unescaped may be empty/null, expect no `/` and no `~` chars
-  return !unescaped || !/(\/|~)/.exec(unescaped);
+  return !/[/~]/.test(unescaped);
 }
