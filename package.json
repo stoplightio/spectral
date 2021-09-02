@@ -25,14 +25,14 @@
   "scripts": {
     "clean": "rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspace @stoplight/spectral-ruleset-migrator prebuild",
-    "build": "tsc --build ./tsconfig.build.json",
+    "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/*/CHANGELOG.md docs/**/*.md README.md",
     "pretest": "yarn workspace @stoplight/spectral-ruleset-migrator pretest",
-    "test": "yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
+    "test": "yarn pretest && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
     "test.harness": "jest -c ./test-harness/jest.config.js",
     "test.jest": "jest --silent",
     "test.karma": "karma start",
@@ -77,7 +77,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-prettier": "^4.0.0",
-    "fast-glob": "^3.2.5",
+    "fast-glob": "^3.2.7",
     "fetch-mock": "^9.11.0",
     "husky": "^7.0.4",
     "jest": "^27.3.1",
@@ -112,5 +112,6 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  }
+  },
+  "packageManager": "yarn@3.1.0"
 }
