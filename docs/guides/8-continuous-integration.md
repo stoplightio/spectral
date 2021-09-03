@@ -1,8 +1,8 @@
 # Continuous Integration
 
-## GitHub Action
+Spectral CLI can be run anywhere that NPM packages can be installed and run via CLI, which these days is pretty much any CI solution going.
 
-Spectral has a pre-built [Spectral GitHub Action](https://github.com/stoplightio/spectral-action) which should speed up implementing Spectral in your GitHub repository.
+Here are some examples of Spectral in various CI solutions to give you an idea.
 
 ## CircleCI
 
@@ -26,7 +26,7 @@ jobs:
       - run:
           name: Run Spectral Lint
           command:
-            npx @stoplight/spectral lint openapi.yaml
+            npx @stoplight/spectral-cli lint openapi.yaml
               -o lint-results/junit.xml
               -f junit
       - store_test_results:
@@ -43,6 +43,10 @@ Change the `openapi.yaml` to point to whatever documents you want to lint, and u
 ![On the CircleCI build results page there is a tab called Tests, which will show Spectral results so long as the junit format has been enabled](../img/ci-circleci.png)
 
 Learn more about [CircleCI Configuration](https://circleci.com/docs/2.0/config-intro/), or take a look at this [demo repository](https://github.com/philsturgeon/spectral-demo-circleci).
+
+## GitHub Action
+
+Spectral has a pre-built [Spectral GitHub Action](https://github.com/stoplightio/spectral-action) which should speed up implementing Spectral in your GitHub repository.
 
 ## Jenkins
 
