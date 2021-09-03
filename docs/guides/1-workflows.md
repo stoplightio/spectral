@@ -4,6 +4,7 @@ When and where should you use Spectral? It depends a lot how you are creating an
 
 - Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
 - Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) or [VS Code](https://github.com/stoplightio/vscode-spectral) automatically as you work, without switching to the CLI.
+- Run Spectral via Continuous Integration to avoid mistakes being introduced by people not using Spectral on their end.
 
 ## Linting Design-First Workflows
 
@@ -46,19 +47,4 @@ See our [CLI documentation](./2-cli.md) to see what other arguments and options 
 
 ## Continuous Integration
 
-Running Spectral on CI servers is just a case of doing what you'd do in the CI.
-
-```yaml
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - checkout
-      - run:
-          name: "API Description Linter"
-          command: npx @stoplight/spectral-cli lint somefile.yaml -- --ruleset=config/custom-ruleset.yaml
-```
-
-We plan to add JUnit/xUnit test results in a future version, so tools like CircleCI can show test results in a more visual way. For now, the commands exit code will alert CI that there was a problem, and the console output will say why.
+See how to run Spectral from various [Continuous Integration](./8-continuous-integration.md) solutions.
