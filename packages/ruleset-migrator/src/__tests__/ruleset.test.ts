@@ -245,5 +245,19 @@ export default {
 };
 `);
     });
+
+    it('given commonjs output format, should be unsupported', async () => {
+      await expect(
+        migrateRuleset(
+          path.join(cwd, 'custom-npm-provider-custom-functions.json'),
+          // @ts-expect-error: npmRegistry not accepted
+          {
+            format: 'commonjs',
+            fs: fs as any,
+            npmRegistry: 'https://unpkg.com/',
+          },
+        ),
+      ).rejects.toThrowError("'npmRegistry' option must not be used with commonjs output format.");
+    });
   });
 });

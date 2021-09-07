@@ -1679,7 +1679,7 @@
     tslib "^2.1.0"
     urijs "^1.19.5"
 
-"@stoplight/json@3.15.0", "@stoplight/json@^3.10.2", "@stoplight/json@^3.15.0":
+"@stoplight/json@3.15.0":
   version "3.15.0"
   resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.15.0.tgz#e7c2919aaa12dc4dafb43d4da71e29d101106f34"
   integrity sha512-FxdmBaZyt6FZVN8F/GaGzevLxjkW1gLHC5cPeb4slMM8BIXCxKluIkGLzmb4bnkk2+4gPaYj75V28U6s0WNrbQ==
@@ -1690,6 +1690,17 @@
     lodash "^4.17.15"
     safe-stable-stringify "^1.1"
 
+"@stoplight/json@3.17.0", "@stoplight/json@^3.10.2", "@stoplight/json@^3.15.0":
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/@stoplight/json/-/json-3.17.0.tgz#9d864b63b9c6398c7cecae1340225b15953cac74"
+  integrity sha512-WW0z2bb0D4t8FTl+zNTCu46J8lEOsrUhBPgwEYQ3Ri2Y0MiRE4U1/9ZV8Ki+pIJznZgY9i42bbFwOBxyZn5/6w==
+  dependencies:
+    "@stoplight/ordered-object-literal" "^1.0.2"
+    "@stoplight/types" "^12.3.0"
+    jsonc-parser "~2.2.1"
+    lodash "^4.17.21"
+    safe-stable-stringify "^1.1"
+
 "@stoplight/lifecycle@2.3.2":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@stoplight/lifecycle/-/lifecycle-2.3.2.tgz#d61dff9ba20648241432e2daaef547214dc8976e"
@@ -1697,7 +1708,7 @@
   dependencies:
     wolfy87-eventemitter "~5.2.8"
 
-"@stoplight/ordered-object-literal@^1.0.1", "@stoplight/ordered-object-literal@^1.0.2":
+"@stoplight/ordered-object-literal@1.0.2", "@stoplight/ordered-object-literal@^1.0.1", "@stoplight/ordered-object-literal@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@stoplight/ordered-object-literal/-/ordered-object-literal-1.0.2.tgz#2a88a5ebc8b68b54837ac9a9ae7b779cdd862062"
   integrity sha512-0ZMS/9sNU3kVo/6RF3eAv7MK9DY8WLjiVJB/tVyfF2lhr2R4kqh534jZ0PlrFB9CRXrdndzn1DbX6ihKZXft2w==
