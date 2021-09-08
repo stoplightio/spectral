@@ -13,9 +13,16 @@ export type MigrationOptions = {
     };
   };
   fetch?: Fetch;
-  npmRegistry?: string;
-  format?: 'esm' | 'commonjs';
-};
+} & (
+  | {
+      format?: 'esm';
+      npmRegistry?: string;
+    }
+  | {
+      format?: 'commonjs';
+      npmRegistry?: never;
+    }
+);
 
 export type Hook = [
   pattern: RegExp,

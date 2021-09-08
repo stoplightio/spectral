@@ -33,6 +33,9 @@ export class Tree {
     this.#cwd = cwd;
     this.#npmRegistry = npmRegistry ?? null;
     this.#module = format === 'commonjs' ? commonjs : esm;
+    if (format === 'commonjs' && this.#npmRegistry !== null) {
+      throw new Error(`'npmRegistry' option must not be used with commonjs output format.`);
+    }
   }
 
   addImport(specifier: string, source: string, _default = false): namedTypes.Identifier {
