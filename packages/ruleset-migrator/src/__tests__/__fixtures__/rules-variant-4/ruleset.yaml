@@ -1,0 +1,7 @@
+rules:
+  rule: &rule
+    given: $
+    then:
+      function: truthy
+  valid-length:
+    <<: *rule
