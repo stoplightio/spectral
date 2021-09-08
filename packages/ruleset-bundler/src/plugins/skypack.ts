@@ -10,11 +10,8 @@ export const skypack = (): Plugin => ({
     if (DATA_URIS.test(id) || isURL(id)) return;
 
     const path = id.split('/');
-    if (path.length === 0) {
-      return;
-    }
 
-    if (isValidPackageName(path[0])) {
+    if (path.length > 0 && isValidPackageName(path[0])) {
       return `https://cdn.skypack.dev/${id}`;
     }
 
