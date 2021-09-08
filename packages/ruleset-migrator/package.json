@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
