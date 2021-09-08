@@ -212,7 +212,9 @@ describe('Linter service', () => {
 
     describe('when single ruleset option provided', () => {
       it('outputs "does not exist" error', () => {
-        return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow('Cannot find module');
+        return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow(
+          /^Could not resolve entry module \(packages(\/|\/\/)cli(\/|\\\\)src\/services(\/|\\\\)__tests__(\/|\\\\)__fixtures__(\/|\\\\)non-existent-path\)\.$/,
+        );
       });
 
       it('outputs "invalid ruleset" error', () => {
@@ -241,6 +243,25 @@ describe('Linter service', () => {
     describe('given legacy ruleset', () => {
       it('outputs warnings', async () => {
         const output = await run(`lint ${validOas3SpecPath} -r ${join(__dirname, '__fixtures__/ruleset.json')}`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+
+      it('supports https', async () => {
+        nock('http://foo.local')
+          .persist()
+          .get('/ruleset.json')
+          .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
+            'Content-Type': 'application/yaml',
+          });
+
+        const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json`);
         expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
         expect(output).toEqual(
           expect.not.arrayContaining([
