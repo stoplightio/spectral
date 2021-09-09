@@ -1,8 +1,8 @@
 # Custom Rulesets
 
-Customising the core rulesets will get you so far, but at some point you will want to create your very own rulesets. A ruleset is any set of rules that you want to apply to a JSON/YAML document, which could be OpenAPI, RAML, etc. Instead of just focusing on the quality of the OpenAPI/AsyncAPI documents you're writing like the core rulsets do, your custom rulesets could even implement an API Style Guide, but instead of being a Wiki document, it can be automated.
+Customising existing rulesets might be all you need at first, but at some point you will want to make a custom ruleset. For example, the OpenAPI and AsyncAPI rulesets help create better quality descriptions of APIs, but you could create a custom ruleset to tell you how to make better APIs. This approach is how huge companies automate [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs), instead of writing up giant Wiki documents that nobody reads.
 
-If you'd like to make sure your APIs are consistent and high quality before they've even built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what Hypermedia Formats should be used.
+If you'd like to make sure your APIs are consistent and high quality before they've even built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what error formats should be used. Read our article _[Six Things You Should Include in Your API Style Guide](https://blog.stoplight.io/six-things-you-should-include-in-your-api-style-guide?utm_source=github&utm_medium=spectral&utm_campaign=docs)._
 
 Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is vaid. Whatever you want to do, to start with you'll need to create some rules.
 
@@ -44,15 +44,17 @@ The default value is `warn`.
 By default, Spectral processes each rule on a "resolved" document (a file where
 all `$ref` JSON Schema references have been replaced with the objects they point
 to). While this is typically the desired behavior, there are some use cases
-where you may need to run a rule on the "raw" un-resolved document. For example,
-if you want to enforce conventions on the folder structure used for [splitting
-up documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/).
+where you may need to run a rule on the "raw" un-resolved document.
+
+For example, if you want to enforce conventions on the folder structure used for
+[splitting up
+documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/?utm_source=github&utm_medium=spectral&utm_campaign=docs).
 
 If your rule needs to access the raw `$ref` reference values, you can set
 `resolved: false` to allow the rule to receive the raw un-resolved version of
 the document. Otherwise `resolved: true` is the default.
 
-Here's an eample of a rule that can access `$ref` values:
+Here's an example of a rule that can access `$ref` values:
 
 ```yaml
 rules:
@@ -170,7 +172,7 @@ The example above will run the single rule that we enabled, since we passed `off
 
 ## Recommended or All
 
-Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes witha lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
+Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes with a lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
 
 You can try this out with the core OpenAPI ruleset. If you simply extend the ruleset, by default you will only get the recommended rules.
 
