@@ -51,7 +51,7 @@ spectral lint petstore.yaml
 
 ## ℹ️ Support
 
-If you need help using Spectral or have any questions, please visit the [Stoplight Community Discord](https://discord.com/invite/stoplight). It's also a great place to share your rulesets, show off tools that leverage Spectral, or chat about anything else Stoplight related.
+If you need help using Spectral or have any questions, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions), or visit the [Stoplight Community Discord](https://discord.com/invite/stoplight). These communities are a great place to share your rulesets, or show off tools that leverage Spectral.
 
 If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
 
