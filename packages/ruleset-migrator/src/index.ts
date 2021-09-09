@@ -16,9 +16,12 @@ async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch):
     ? await (await fetch(filepath)).text()
     : await fs.promises.readFile(requireResolve?.(filepath) ?? filepath, 'utf8');
 
-  const { data: ruleset } = (extname(filepath) === '.json' ? parseJsonWithPointers : parseYamlWithPointers)<unknown>(
-    input,
-  );
+  const { data: ruleset } =
+    extname(filepath) === '.json'
+      ? parseJsonWithPointers<unknown>(input)
+      : parseYamlWithPointers<unknown>(input, {
+          mergeKeys: true,
+        });
 
   assertRuleset(ruleset);
   return ruleset;
