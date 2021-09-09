@@ -13,7 +13,8 @@
 # Overview
 
 - [Installation and Usage](#-installation-and-Usage)
-- [Documentation and Community](#-documentation-and-community)
+- [Documentation](#-documentation)
+- [Support](#-support)
 - [FAQs](#-faqs)
 - [Contributing](#-contributing)
 
@@ -37,7 +38,7 @@ Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/ge
 spectral lint petstore.yaml
 ```
 
-## 📖 Documentation and Community
+## 📖 Documentation
 
 - [Documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md)
   - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
@@ -50,7 +51,7 @@ spectral lint petstore.yaml
 
 ## ℹ️ Support
 
-If you need help using Spectral or have a support question, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions). It's also a great place to share your rulesets, or tools that leverage Spectral.
+If you need help using Spectral or have any questions, please visit the [Stoplight Community Discord](https://discord.com/invite/stoplight). It's also a great place to share your rulesets, show off tools that leverage Spectral, or chat about anything else Stoplight related.
 
 If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
 
