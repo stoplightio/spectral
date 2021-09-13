@@ -252,7 +252,7 @@ workflows:
               node-version:
                 - "12.21"
                 - lts
-                - current
+                - "16.8" # see https://github.com/nodejs/node/issues/40030, fixed in 16.9.1, but cimg/node:current is still at 16.9.0
       - test-windows
       - test-browser
       - lint
@@ -305,7 +305,7 @@ workflows:
               node-version:
                 - "12.21"
                 - lts
-                - current
+                - "16.8"
           requires:
             - lint
       - test-windows:
