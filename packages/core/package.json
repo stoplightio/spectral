@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -18,9 +18,7 @@
   "engines": {
     "node": ">=12"
   },
-  "scripts": {
-    "postbuild": "node -r esm ./scripts/inline-version.mjs"
-  },
+  "scripts": {},
   "dependencies": {
     "@stoplight/better-ajv-errors": "0.2.0",
     "@stoplight/json": "3.17.0",
@@ -51,9 +49,7 @@
     "@types/json-schema": "^7.0.7",
     "@types/minimatch": "^3.0.5",
     "@types/treeify": "^1.0.0",
-    "esm": "^3.2.25",
     "nock": "^13.1.0",
-    "recast": "^0.20.4",
     "treeify": "^1.1.0"
   }
 }
