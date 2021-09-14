@@ -191,6 +191,7 @@ rules:
 ```
 
 The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
+
 ## Parsing Options
 
 If you do not care about duplicate keys or invalid values (such as non-string mapping keys in YAML), you can tune their severity using `parserOptions` setting.
