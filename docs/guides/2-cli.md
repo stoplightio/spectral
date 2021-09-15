@@ -44,7 +44,8 @@ The Spectral CLI supports loading documents as YAML or JSON, and validation of O
 
 ## Using a Ruleset File
 
-If you don't specify a ruleset file with the `--ruleset` parameter, the Spectral CLI will look for a ruleset file called `.spectral.yml`, `.spectral.yaml`, or `.spectral.json` in the current working directory. If no ruleset is specified and no default ruleset file is found, the built-in rulesets will be used.
+If you don't specify a ruleset file with the `--ruleset` parameter, the Spectral CLI will look for a ruleset file called `.spectral.yml`, `.spectral.yaml`, `.spectral.json` or `.spectral.js` in the current working directory.
+Spectral will refuse to lint the document if no ruleset is specified and no default ruleset file is found.
 
 Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or extend and modify our core rulesets:
 
