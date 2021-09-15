@@ -52,6 +52,40 @@ describe('linter', () => {
     return expect(spectral.run('123')).resolves.toEqual([]);
   });
 
+  test('given @ in the property key, should still lint as normal', () => {
+    spectral.setRuleset({
+      rules: {
+        example: {
+          given: '$.properties[*]~',
+          message: 'Key must contains letters only',
+          then: {
+            function: pattern,
+            functionOptions: {
+              match: '^[a-z]+$',
+            },
+          },
+        },
+      },
+    });
+
+    return expect(
+      spectral.run({
+        properties: {
+          '@foo': true,
+          foo: true,
+        },
+      }),
+    ).resolves.toEqual([
+      {
+        code: 'example',
+        message: 'Key must contains letters only',
+        path: ['properties', '@foo'],
+        range: expect.any(Object),
+        severity: 1,
+      },
+    ]);
+  });
+
   test('given failing JSON Path expression, should refuse to lint', async () => {
     spectral.setRuleset({
       rules: {

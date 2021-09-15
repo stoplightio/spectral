@@ -25,10 +25,9 @@ jobs:
       - run: "[ -d lint-results ] || mkdir lint-results"
       - run:
           name: Run Spectral Lint
-          command:
-            npx @stoplight/spectral-cli lint openapi.yaml
-              -o lint-results/junit.xml
-              -f junit
+          command: npx @stoplight/spectral-cli lint openapi.yaml
+            -o lint-results/junit.xml
+            -f junit
       - store_test_results:
           path: lint-results
 
