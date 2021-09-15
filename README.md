@@ -31,6 +31,18 @@ yarn global add @stoplight/spectral-cli
 
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
 
+**Create a Ruleset**
+
+Spectral, being a generic YAML/JSON linter, needs a ruleset in order to be able to lint files.
+You can learn more about the rulesets [here](./docs/getting-started/3-rulesets.md).
+
+If you intend to lint an OpenAPI or AsyncAPI document, we have a few predefined rulesets you can extend to get Spectral up and running.
+To reference them, you can run the following command:
+
+```bash
+echo '{\n\t"extends": ["spectral:oas", "spectral:asyncapi"]\n}' > .spectral.json
+```
+
 **Lint**
 
 ```bash
