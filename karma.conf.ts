@@ -43,6 +43,7 @@ module.exports = (config: Config): void => {
             'node-fetch': require.resolve('./__karma__/fetch'),
             fs: require.resolve('./__karma__/fs'),
             process: require.resolve('./__karma__/process'),
+            fsevents: require.resolve('./__karma__/fsevents'),
           },
         },
         acornOptions: {

@@ -17,30 +17,44 @@ afterEach(() => {
   }
 });
 
-export function serveAssets(mocks: Record<string, string | Record<string, unknown>>): void {
+type Body = string | Record<string, unknown>;
+
+export function serveAssets(mocks: Record<string, Body>): void {
   for (const [uri, body] of Object.entries(mocks)) {
     if (!isURL(uri)) {
       fs.mkdirSync(dirname(uri), { recursive: true });
-      fs.writeFileSync(uri, JSON.stringify(body));
+      fs.writeFileSync(uri, typeof body === 'string' ? body : JSON.stringify(body));
       continue;
     }
 
-    const { origin, pathname, searchParams } = new URL(uri);
+    mockResponse(uri, 200, body);
+  }
+}
 
-    const query = {};
-    for (const [key, val] of searchParams.entries()) {
-      query[key] = val;
-    }
+function mockResponse(uri: string, code: number, body: Body): void {
+  const { origin, pathname, searchParams } = new URL(uri);
 
-    const scope = nock(origin).persist(true);
+  const query = {};
+  for (const [key, val] of searchParams.entries()) {
+    query[key] = val;
+  }
 
-    if (Object.keys(query).length > 0) {
-      scope
-        .get(RegExp(pathname.replace(/\/$/, '').replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\/?$'))
-        .query(query)
-        .reply(200, body);
-    } else {
-      scope.get(pathname).reply(200, body);
+  const scope = nock(origin).persist(true);
+
+  if (Object.keys(query).length > 0) {
+    scope
+      .get(RegExp(pathname.replace(/\/$/, '').replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\/?$'))
+      .query(query)
+      .reply(code, body);
+  } else {
+    scope.get(pathname).reply(code, body);
+  }
+}
+
+export function mockResponses(mocks: Record<string, Record<number, Body>>): void {
+  for (const [uri, responses] of Object.entries(mocks)) {
+    for (const [code, body] of Object.entries(responses)) {
+      mockResponse(uri, Number(code), body);
     }
   }
 }
