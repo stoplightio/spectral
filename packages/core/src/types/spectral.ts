@@ -4,7 +4,6 @@ import type { Resolver } from '@stoplight/spectral-ref-resolver';
 
 export interface IConstructorOpts {
   resolver?: Resolver;
-  useNimma?: boolean;
 }
 
 export interface IRunOpts {

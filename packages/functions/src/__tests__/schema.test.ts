@@ -42,6 +42,76 @@ describe('Core Functions / Schema', () => {
     expect(await runSchema(2, { schema, dialect: 'auto' })).toStrictEqual(result);
   });
 
+  it('allows redundant escapes', async () => {
+    let schema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      type: 'string',
+      pattern: '[\\-_]', // this one is good and would work with unicodeRegExp: true
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message: 'Value type must be string',
+        path: [],
+      },
+    ]);
+
+    schema = {
+      $schema: 'http://json-schema.org/draft-06/schema#',
+      type: 'string',
+      pattern: '[\\_-]', // the escape here is redundant
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message: 'Value type must be string',
+        path: [],
+      },
+    ]);
+  });
+
+  it('outputs Ajv runtime errors', async () => {
+    let schema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      type: 'string',
+      pattern: '?',
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message: 'Invalid regular expression: /?/: Nothing to repeat',
+        path: [],
+      },
+    ]);
+
+    schema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      // @ts-expect-error: allOf must be an array
+      allOf: null,
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message: 'schema is invalid: data/allOf must be array',
+        path: [],
+      },
+    ]);
+
+    schema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      // @ts-expect-error: type must be an array of strings, or a string
+      type: 2,
+    };
+
+    expect(await runSchema(2, { schema })).toEqual([
+      {
+        message:
+          'schema is invalid: data/type must be equal to one of the allowed values, data/type must be array, data/type must match a schema in anyOf',
+        path: [],
+      },
+    ]);
+  });
+
   describe('validates falsy values such as', () => {
     it('empty string', async () => {
       const schema: JSONSchema = {

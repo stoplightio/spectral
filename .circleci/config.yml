@@ -165,7 +165,7 @@ jobs:
           paths:
             - binaries
 
-  push-docker:
+  release-docker:
     docker:
       - image: circleci/node:14
     steps:
@@ -252,7 +252,7 @@ workflows:
               node-version:
                 - "12.21"
                 - lts
-                - current
+                - "16.8" # see https://github.com/nodejs/node/issues/40030, fixed in 16.9.1, but cimg/node:current is still at 16.9.0
       - test-windows
       - test-browser
       - lint
@@ -279,8 +279,8 @@ workflows:
               only: /^v.*/
           requires:
             - build-nix-binaries
-            # - build-windows-binary
-      - push-docker:
+            - build-windows-binary
+      - release-docker:
           filters:
             branches:
               ignore: /.*/
@@ -305,7 +305,7 @@ workflows:
               node-version:
                 - "12.21"
                 - lts
-                - current
+                - "16.8"
           requires:
             - lint
       - test-windows:

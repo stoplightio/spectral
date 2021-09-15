@@ -23,7 +23,15 @@ const logger = {
 };
 
 function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
-  const ajv = new Ajv({ allErrors, meta: true, messages: true, strict: false, allowUnionTypes: true, logger });
+  const ajv = new Ajv({
+    allErrors,
+    meta: true,
+    messages: true,
+    strict: false,
+    allowUnionTypes: true,
+    logger,
+    unicodeRegExp: false,
+  });
   addFormats(ajv);
   if (allErrors) {
     ajvErrors(ajv);
@@ -37,9 +45,18 @@ function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
 }
 
 function createAjvInstances(Ajv: typeof AjvCore): { default: AjvCore; allErrors: AjvCore } {
+  let _default: AjvCore;
+  let _allErrors: AjvCore;
+
   return {
-    default: createAjvInstance(Ajv, false),
-    allErrors: createAjvInstance(Ajv, true),
+    get default(): AjvCore {
+      _default ??= createAjvInstance(Ajv, false);
+      return _default;
+    },
+    get allErrors(): AjvCore {
+      _allErrors ??= createAjvInstance(Ajv, true);
+      return _allErrors;
+    },
   };
 }
 

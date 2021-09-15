@@ -1,11 +1,9 @@
 import { JsonPath, Optional } from '@stoplight/types';
-import { JSONPathExpression } from 'nimma';
 import { dirname, relative } from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { pathToPointer } from '@stoplight/json';
 
 import { getDiagnosticSeverity, DEFAULT_SEVERITY_LEVEL } from '../utils/severity';
-import { IGivenNode } from '../../types';
 import { Ruleset } from '../ruleset';
 import { Format } from '../format';
 import { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition } from '../types';
@@ -45,12 +43,6 @@ export class Rule implements IRule {
   public documentationUrl: string | null;
   #then!: IRuleThen[];
   #given!: string[];
-
-  public expressions?: JSONPathExpression[] | null;
-
-  public get isOptimized(): boolean {
-    return Array.isArray(this.expressions);
-  }
 
   constructor(
     public readonly name: string,
@@ -193,38 +185,8 @@ export class Rule implements IRule {
     return false;
   }
 
-  public optimize(): boolean {
-    if (this.expressions !== void 0) return this.isOptimized;
-
-    try {
-      this.expressions = this.given.map(given => {
-        const expr = new JSONPathExpression(given, stub, stub);
-        if (expr.matches === null) {
-          throw new Error(`Rule "${this.name}": cannot optimize ${given}`);
-        }
-
-        return expr;
-      });
-    } catch {
-      this.expressions = null;
-    }
-
-    return this.isOptimized;
-  }
-
   public clone(): Rule {
     return new Rule(this.name, this.definition, this.owner);
-  }
-
-  public hookup(cb: (rule: Rule, node: IGivenNode) => void): void {
-    for (const expr of this.expressions!) {
-      expr.onMatch = (value, path): void => {
-        cb(this, {
-          path,
-          value,
-        });
-      };
-    }
   }
 
   public toJSON(): StringifiedRule {
@@ -247,8 +209,4 @@ export class Rule implements IRule {
       owner: this.owner.id,
     };
   }
-}
-
-function stub(): void {
-  // nada
 }

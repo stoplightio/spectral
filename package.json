@@ -26,7 +26,7 @@
     "clean": "rimraf packages/*/{dist,.cache}",
     "prebuild": "yarn workspace @stoplight/spectral-ruleset-migrator prebuild",
     "build": "tsc --build ./tsconfig.build.json",
-    "postbuild": "yarn workspace @stoplight/spectral-cli postbuild && yarn workspace @stoplight/spectral-core postbuild",
+    "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
     "lint.changelog": "kacl lint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
@@ -38,6 +38,7 @@
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
+    "postinstall": "patch-package",
     "release": "HUSKY=0 yarn workspaces run semantic-release -e semantic-release-monorepo"
   },
   "workspaces": {
@@ -68,13 +69,13 @@
     "@types/jest": "^26.0.23",
     "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.1",
-    "@types/lodash": "^4.14.167",
+    "@types/lodash": "^4.14.172",
     "@types/node": "^15.12.4",
     "@types/node-fetch": "^2.5.12",
     "@types/text-table": "^0.2.2",
-    "@types/tmp": "^0.2.0",
-    "@typescript-eslint/eslint-plugin": "^4.27.0",
-    "@typescript-eslint/parser": "^4.27.0",
+    "@types/tmp": "^0.2.1",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
@@ -92,12 +93,13 @@
     "karma-jasmine": "^3.3.1",
     "karma-typescript": "^5.5.1",
     "karma-typescript-es6-transform": "^5.2.0",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^11.1.2",
     "memfs": "^3.2.2",
+    "patch-package": "^6.4.7",
     "prettier": "^2.3.2",
     "semantic-release": "^17.4.4",
     "semantic-release-monorepo": "^7.0.5",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^27.0.5",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.5"
   },
@@ -118,6 +120,5 @@
     "packages/core/src/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
-  },
-  "version": "6.0.0-alpha2"
+  }
 }

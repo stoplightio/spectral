@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -35,6 +35,6 @@
     "@stoplight/path": "^1.3.2",
     "@stoplight/spectral-parsers": "*",
     "@stoplight/spectral-ref-resolver": "*",
-    "immer": "^9.0.5"
+    "immer": "^9.0.6"
   }
 }

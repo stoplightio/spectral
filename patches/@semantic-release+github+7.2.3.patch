@@ -1,0 +1,34 @@
+diff --git a/node_modules/@semantic-release/github/index.js b/node_modules/@semantic-release/github/index.js
+index fa549f0..7cf7f61 100644
+--- a/node_modules/@semantic-release/github/index.js
++++ b/node_modules/@semantic-release/github/index.js
+@@ -3,7 +3,6 @@
+ const {defaultTo, castArray} = require('lodash');
+ const verifyGitHub = require('./lib/verify');
+ const addChannelGitHub = require('./lib/add-channel');
+-const publishGitHub = require('./lib/publish');
+ const successGitHub = require('./lib/success');
+ const failGitHub = require('./lib/fail');
+ 
+@@ -28,15 +27,6 @@ async function verifyConditions(pluginConfig, context) {
+   verified = true;
+ }
+ 
+-async function publish(pluginConfig, context) {
+-  if (!verified) {
+-    await verifyGitHub(pluginConfig, context);
+-    verified = true;
+-  }
+-
+-  return publishGitHub(pluginConfig, context);
+-}
+-
+ async function addChannel(pluginConfig, context) {
+   if (!verified) {
+     await verifyGitHub(pluginConfig, context);
+@@ -64,4 +54,4 @@ async function fail(pluginConfig, context) {
+   await failGitHub(pluginConfig, context);
+ }
+ 
+-module.exports = {verifyConditions, addChannel, publish, success, fail};
++module.exports = {verifyConditions, addChannel, success, fail};
