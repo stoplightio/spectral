@@ -14,24 +14,15 @@ import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
 import { isObject } from 'lodash';
 import * as commonjs from '@rollup/plugin-commonjs';
 
-const DEFAULT_RULESETS = [
-  'spectral.mjs',
-  'spectral.js',
-  'spectral.cjs',
-  'spectral.json',
-  'spectral.yaml',
-  'spectral.yml',
-].flatMap(name => [`.${name}`, name]);
-
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
   const cwd = process.cwd();
-  const files = await fs.promises.readdir(cwd);
-  const found = DEFAULT_RULESETS.find(ruleset => files.includes(ruleset));
-  if (found === void 0) {
-    return;
+  for (const filename of await fs.promises.readdir(cwd)) {
+    if (Ruleset.isDefaultRulesetFile(filename)) {
+      return path.join(cwd, filename);
+    }
   }
 
-  return path.join(process.cwd(), found);
+  return;
 }
 
 function isLegacyRuleset(filepath: string): boolean {
