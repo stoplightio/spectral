@@ -11,7 +11,7 @@ import type { FileRuleDefinition, RuleDefinition, RulesetDefinition } from './ty
 
 const message = _`'spectral-message'`;
 
-const ajv = new Ajv({ allErrors: true, strict: true, strictRequired: false });
+const ajv = new Ajv({ allErrors: true, strict: true, strictRequired: false, keywords: ['$anchor'] });
 addFormats(ajv);
 addErrors(ajv);
 ajv.addKeyword({
@@ -48,7 +48,7 @@ export class RulesetValidationError extends Error {
 }
 
 const RULE_INSTANCE_PATH = /^\/rules\/[^/]+/;
-const GENERIC_INSTANCE_PATH = /^\/(?:extends|overrides(?:\/\d+\/extends)?)/;
+const GENERIC_INSTANCE_PATH = /^\/(?:aliases|extends|overrides(?:\/\d+\/extends)?)/;
 
 class RulesetAjvValidationError extends RulesetValidationError {
   constructor(public ruleset: Record<string, unknown>, public errors: ErrorObject[]) {
