@@ -1,5 +1,5 @@
 import { oas2 } from '@stoplight/spectral-formats';
-import { truthy } from '@stoplight/spectral-functions';
+import { pattern, truthy } from '@stoplight/spectral-functions';
 import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
 
@@ -7,6 +7,10 @@ import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
 import { print } from './__helpers__/print';
 import { RulesetValidationError } from '../validation';
+import { isPlainObject } from '@stoplight/json';
+import { Format } from '../format';
+import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import { FormatsSet } from '../utils/formatsSet';
 
 async function loadRuleset(mod: Promise<{ default: RulesetDefinition }>, source?: string): Promise<Ruleset> {
   return new Ruleset((await mod).default, { source });
@@ -1233,8 +1237,7 @@ describe('Ruleset', () => {
 
     it('given unresolved alias, should throw', () => {
       expect(
-        print.bind(
-          null,
+        () =>
           new Ruleset({
             extends: {
               aliases: {
@@ -1251,14 +1254,12 @@ describe('Ruleset', () => {
               },
             },
           }),
-        ),
       ).toThrowError(ReferenceError('Alias "PathItem-" does not exist'));
     });
 
     it('given circular alias, should throw', () => {
       expect(
-        print.bind(
-          null,
+        () =>
           new Ruleset({
             aliases: {
               Root: '#Info',
@@ -1275,7 +1276,6 @@ describe('Ruleset', () => {
               },
             },
           }),
-        ),
       ).toThrowError(
         ReferenceError('Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info'),
       );
@@ -1283,8 +1283,7 @@ describe('Ruleset', () => {
 
     it('should refuse to resolve externally defined aliases', () => {
       expect(
-        print.bind(
-          null,
+        () =>
           new Ruleset({
             extends: {
               aliases: {
@@ -1310,8 +1309,138 @@ describe('Ruleset', () => {
               },
             },
           }),
-        ),
       ).toThrowError(ReferenceError('Alias "PathItem" does not exist'));
+    });
+
+    describe('scoped aliases', () => {
+      it('should resolve locally defined aliases according to their targets', () => {
+        const draft4: Format<JSONSchema4> = (input): input is JSONSchema4 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-04/schema#';
+        const draft6: Format<JSONSchema6> = (input): input is JSONSchema6 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-06/schema#';
+        const draft7: Format<JSONSchema7> = (input): input is JSONSchema7 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-07/schema#';
+
+        const ruleset = new Ruleset({
+          aliases: {
+            Id: {
+              targets: [
+                {
+                  formats: [draft4],
+                  given: '$..id',
+                },
+                {
+                  formats: [draft6, draft7],
+                  given: '$..$id',
+                },
+              ],
+            },
+          },
+          rules: {
+            'valid-id': {
+              given: '#Id',
+              then: {
+                function: pattern,
+                functionOptions: {
+                  match: '^project_',
+                },
+              },
+            },
+          },
+        });
+
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft4]))).toStrictEqual(['$..id']);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft6]))).toStrictEqual(['$..$id']);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft7]))).toStrictEqual(['$..$id']);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft6, draft7]))).toStrictEqual([
+          '$..$id',
+        ]);
+      });
+
+      it('should be serializable', () => {
+        const draft4: Format<JSONSchema4> = (input): input is JSONSchema4 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-04/schema#';
+        const draft6: Format<JSONSchema6> = (input): input is JSONSchema6 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-06/schema#';
+        const draft7: Format<JSONSchema7> = (input): input is JSONSchema7 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-07/schema#';
+
+        expect(
+          JSON.parse(
+            JSON.stringify(
+              new Ruleset({
+                aliases: {
+                  Id: {
+                    targets: [
+                      {
+                        formats: [draft4],
+                        given: '$..id',
+                      },
+                      {
+                        formats: [draft6, draft7],
+                        given: '$..$id',
+                      },
+                    ],
+                  },
+                },
+
+                rules: {
+                  'valid-id': {
+                    given: '#Id',
+                    then: {
+                      function: truthy,
+                    },
+                  },
+                },
+              }),
+            ),
+          ),
+        ).toEqual({
+          extends: null,
+          source: null,
+          id: expect.any(Number),
+          formats: null,
+          overrides: null,
+          parserOptions: {
+            duplicateKeys: DiagnosticSeverity.Error,
+            incompatibleValues: DiagnosticSeverity.Error,
+          },
+          aliases: {
+            Id: {
+              targets: [
+                {
+                  formats: ['draft4'],
+                  given: '$..id',
+                },
+                {
+                  formats: ['draft6', 'draft7'],
+                  given: '$..$id',
+                },
+              ],
+            },
+          },
+          rules: {
+            'valid-id': {
+              description: null,
+              documentationUrl: null,
+              enabled: true,
+              formats: null,
+              given: ['#Id'],
+              message: null,
+              name: 'valid-id',
+              owner: expect.any(Number),
+              recommended: true,
+              resolved: true,
+              severity: DiagnosticSeverity.Warning,
+              then: [
+                {
+                  function: 'truthy',
+                },
+              ],
+            },
+          },
+        });
+      });
     });
   });
 });

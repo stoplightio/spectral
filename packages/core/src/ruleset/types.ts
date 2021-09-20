@@ -1,6 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Format } from './format';
 import { RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import { FormatsSet } from './utils/formatsSet';
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';
 export type FileRuleSeverityDefinition = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
@@ -75,7 +76,15 @@ export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'par
   );
 
 export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & RulesetOverrideDefinition>;
-export type RulesetAliasesDefinition = Record<string, string>;
+export type RulesetScopedAliasDefinition = {
+  description?: string;
+  targets: {
+    formats: FormatsSet;
+    given: string;
+  }[];
+};
+
+export type RulesetAliasesDefinition = Record<string, string | RulesetScopedAliasDefinition>;
 
 export type RulesetDefinition = Readonly<
   {
