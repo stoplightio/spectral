@@ -12,7 +12,7 @@ import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
 import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
 import { isError, isObject } from 'lodash';
 import commonjs from '@rollup/plugin-commonjs';
-import { ErrorWithCause } from 'pony-cause';
+import { CLIError } from '../../../errors';
 
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
   const cwd = process.cwd();
@@ -41,7 +41,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   }
 
   if (rulesetFile === void 0) {
-    throw new Error(
+    throw new CLIError(
       'No ruleset has been found. Please provide a ruleset using the --ruleset CLI argument, or make sure your ruleset file matches .?spectral.(js|ya?ml|json)',
     );
   }
@@ -74,7 +74,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
       throw e;
     }
 
-    throw new ErrorWithCause(`Could not read ruleset at ${rulesetFile}.`, { cause: e });
+    throw new CLIError(`Could not read ruleset at ${rulesetFile}.`);
   }
 
   return new Ruleset(load(ruleset, rulesetFile), {
@@ -99,7 +99,7 @@ function load(source: string, uri: string): RulesetDefinition {
   Function('module, require', source)(m, _require);
 
   if (!isObject(m.exports)) {
-    throw Error('No valid export found');
+    throw new CLIError('No valid export found');
   }
 
   return m.exports;
