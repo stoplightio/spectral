@@ -38,6 +38,7 @@ export { transformer as default };
 const transformer: Transformer = function (ctx) {
   const t = transform.bind(null, ctx);
 
+  ctx.hooks.add([/^\/aliases\/[^/]+\/targets\/\d+\/formats$/, t]);
   ctx.hooks.add([/^(\/overrides\/\d+)?\/formats$/, t]);
   ctx.hooks.add([/^(\/overrides\/\d+)?\/rules\/[^/]+\/formats$/, t]);
 };
