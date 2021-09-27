@@ -270,6 +270,75 @@ Several functions [are provided by default](../reference/functions.md) for your 
 
 If none of the [core functions](../reference/functions.md) do what you want, you can [write your own custom functions](./5-custom-functions.md).
 
+## Aliases
+
+Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSON path expressions across various rules. Define aliases for commonly used JSON paths on a global level which can then be reused across the ruleset.
+
+Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
+
+```
+aliases:{
+  {Name}: '{JSONPath}'
+}
+```
+
+**Example**
+
+```yaml
+aliases:
+  HeaderNames: "$..parameters.[?(@.in === 'header')].name",
+  Info: "$..info",
+  InfoDescription: "#Info.description",
+  InfoContact: "#Info.contact",
+  Paths: "$.paths[*]~"
+```
+
+Rulesets can then reference aliases in the [given](#given) keyword, either in full: `given: "#Paths"`, or use it as a prefix for further JSON Path syntax, like dot notation: `given: "#InfoContact.name"`.
+
+> This will be followed by our core rulesets providing a common set of aliases for OpenAPI and AsyncAPI so that our users don't have to do the work at all. If you have ideas about what kind of aliases could be useful leave your thoughts [here](https://roadmap.stoplight.io).
+
+## Overrides
+
+Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or changing parts of a rule. Overrides is the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
+
+Overrides can be used to:
+
+- Override rulesets to apply on particular files/folders `files: ['schemas/**/*.draft7.json']`
+- Override rulesets to apply on particular JSON Pointers `files: ['**#/components/schemas/Item']`
+- Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
+- Override particular rules
+
+**Example**
+
+```yaml
+overrides:
+  - files:
+    - "schemas/**/*.draft7.json"
+    formats:
+    - json-schema-draft7
+    rules:
+      valid-number-validation:
+        given:
+          - "$..exclusiveMinimum"
+          - "$..exclusiveMaximum"
+        then:
+          function: schema
+          functionOptions:
+            type: number
+```
+
+One can also combine a glob for a filepath with a JSON Pointer after the anchor, i.e.:
+
+```yaml
+overrides:
+  - files:
+    - "legacy/**/*.oas.json#/paths"
+    rules:
+      some-inherited-rule: off
+```
+
+In the event of multiple matches, the order of definition takes place, with the last one having the higher priority.
+
 ## Alternative JS Ruleset Format
 
 Spectral now supports an alternative format to write rulesets in Javascript using a similar syntax.
@@ -317,85 +386,3 @@ export default {
   },
 };
 ```
-
-## Aliases
-
-Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSON path expressions across various rules. Define aliases for commonly used JSON paths on a global level which can then be reused across the ruleset.
-
-Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
-
-```
-aliases:{
-  {Name}: '{JSONPath}'
-}
-```
-
-**Example**
-
-```json
-{
-  "aliases": {
-    "HeaderNames": "$..parameters.[?(@.in === 'header')].name",
-    "Info": "$..info",
-    "InfoDescription": "#Info.description",
-    "InfoContact": "#Info.contact",
-    "Paths": "$.paths[*]~"
-  }
-}
-```
-
-Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSON Path syntax, like dot notation: `"given": "#InfoContact.name"`.
-
-> This will be followed by our core rulesets providing a common set of aliases for OpenAPI and AsyncAPI so that our users don't have to do the work at all. If you have ideas about what kind of aliases could be useful leave your thoughts [here](https://roadmap.stoplight.io).
-
-## Overrides
-
-Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or changing parts of a rule. Overrides is the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
-
-Overrides can be used to:
-
-- Override rulesets to apply on particular files/folders `files: ['schemas/**/*.draft7.json']`
-- Override rulesets to apply on particular JSON Pointers `files: ['**#/components/schemas/Item']`
-- Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
-- Override particular rules
-
-**Example**
-
-```json
-{
-  "overrides": [
-    {
-      "files": ["schemas/**/*.draft7.json"],
-      "formats": ["json-schema-draft7"],
-      "rules": {
-        "valid-number-validation": {
-          "given": ["$..exclusiveMinimum", "$..exclusiveMaximum"],
-          "then": {
-            "function": "schema",
-            "functionOptions": {
-              "type": "number"
-            }
-          }
-        }
-      }
-    }
-  ]
-}
-```
-
-One can also combine a glob for a filepath with a JSON Pointer after the anchor, i.e.:
-
-```json
-{
-  "overrides": [
-    {
-      "files": ["legacy/**/*.oas.json#/paths"],
-      "rules": {
-        "some-inherited-rule": "off"
-      }
-    }
-  ]
-}
-```
-
-In the event of multiple matches, the order of definition takes place, with the last one having the higher priority.
