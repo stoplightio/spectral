@@ -276,10 +276,9 @@ Targeting certain parts of an OpenAPI spec is powerful but it can become cumbers
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
 
-```
-aliases:{
+```yaml
+aliases:
   {Name}: '{JSONPath}'
-}
 ```
 
 **Example**
