@@ -25,15 +25,11 @@ Note, the binaries do _not_ auto-update, so you will need to run it again to ins
 ## Docker
 
 Spectral is also available as a Docker image, which can be handy for all sorts of things, like if you're contributing code to Spectral, want to integrate it into your CI build.
-
-```bash
-docker run --rm -it stoplight/spectral lint "${url}"
-```
-
 If the file you want to lint is on your computer, you'll need to mount the directory where the file resides as a volume
 
 ```bash
-docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint "/tmp/file.yaml"
+# make sure to update the value of `--ruleset` according to the actual location of your ruleset
+docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.js" "/tmp/file.yaml"
 ```
 
 To use the docker image on GitLab you need to set `entrypoint` to `""` like this
