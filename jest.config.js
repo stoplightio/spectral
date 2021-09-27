@@ -57,6 +57,14 @@ module.exports = {
     {
       ...projectDefault,
       displayName: {
+        name: '@stoplight/spectral-ruleset-bundler',
+        color: 'blueBright',
+      },
+      testMatch: ['<rootDir>/packages/ruleset-bundler/src/**/__tests__/**/*.{test,spec}.ts'],
+    },
+    {
+      ...projectDefault,
+      displayName: {
         name: '@stoplight/spectral-ruleset-migrator',
         color: 'blueBright',
       },

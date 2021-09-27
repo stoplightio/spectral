@@ -212,16 +212,17 @@ jobs:
             echo "Docker tags:";
             docker images stoplight/spectral --format="{{ .Tag }}";
             docker push stoplight/spectral:${GIT_SHA};
+            echo "Pushed stoplight/spectral:${GIT_SHA}";
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push stoplight/spectral:${FULL_VERSION};
+              docker push stoplight/spectral:${MINOR_VERSION};
+              docker push stoplight/spectral:${MAJOR_VERSION};
+              echo "Pushed stoplight/spectral:${FULL_VERSION}";
+            fi
             if [[ -n "$DOCKER_BRANCH" ]]; then
               docker push stoplight/spectral:${DOCKER_BRANCH};
+              echo "Pushed stoplight/spectral:${DOCKER_BRANCH}";
             fi
-            if [[ -n "$CIRCLE_TAG" ]]; then
-              docker push stoplight/spectral:${FULL_VERSION} \
-                          stoplight/spectral:${MINOR_VERSION} \
-                          stoplight/spectral:${MAJOR_VERSION};
-            fi
-
-
 
   release:
     docker:

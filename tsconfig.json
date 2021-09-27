@@ -9,6 +9,9 @@
       "@stoplight/spectral-parsers": ["packages/parsers/src/index.ts"],
       "@stoplight/spectral-ref-resolver": ["packages/ref-resolver/src/index.ts"],
       "@stoplight/spectral-runtime": ["packages/runtime/src/index.ts"],
+      "@stoplight/spectral-ruleset-bundler": ["packages/ruleset-bundler/src/index.ts"],
+      "@stoplight/spectral-ruleset-bundler/presets/*": ["packages/ruleset-bundler/src/presets/*"],
+      "@stoplight/spectral-ruleset-bundler/plugins/*": ["packages/ruleset-bundler/src/plugins/*"],
       "@stoplight/spectral-ruleset-migrator": ["packages/ruleset-migrator/src/index.ts"],
       "@stoplight/spectral-rulesets": ["packages/rulesets/src/index.ts"],
 

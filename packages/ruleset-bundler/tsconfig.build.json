@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "include": ["src", "types"],
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": ".cache/.tsbuildinfo"
+  },
+  "references": [
+    { "path":  "../core/tsconfig.build.json" },
+    { "path":  "../formats/tsconfig.build.json" },
+    { "path":  "../functions/tsconfig.build.json" },
+    { "path":  "../parsers/tsconfig.build.json" },
+    { "path":  "../ref-resolver/tsconfig.build.json" },
+    { "path":  "../rulesets/tsconfig.build.json" },
+    { "path":  "../runtime/tsconfig.build.json" },
+   ]
+}

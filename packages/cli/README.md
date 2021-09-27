@@ -1,5 +1,5 @@
-[![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
-[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
+[![](../../docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
+[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-cli?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-cli) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents
@@ -8,7 +8,7 @@
 - **Custom Functions**: Create custom functions for advanced use cases
 - **JSON Validation**: Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
-![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
+![Spectral linting an OpenAPI document from the CLI with results being output](../../docs/img/demo.svg)
 
 # Overview
 
@@ -31,18 +31,6 @@ yarn global add @stoplight/spectral-cli
 
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
 
-**Create a Ruleset**
-
-Spectral, being a generic YAML/JSON linter, needs a ruleset in order to be able to lint files.
-You can learn more about the rulesets [here](./docs/getting-started/3-rulesets.md).
-
-If you intend to lint an OpenAPI or AsyncAPI document, we have a few predefined rulesets you can extend to get Spectral up and running.
-To reference them, you can run the following command:
-
-```bash
-echo '{\n\t"extends": ["spectral:oas", "spectral:asyncapi"]\n}' > .spectral.json
-```
-
 **Lint**
 
 ```bash
@@ -51,14 +39,12 @@ spectral lint petstore.yaml
 
 ## 📖 Documentation and Community
 
-- [Documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md)
-  - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
-  - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
-  - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
-  - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
-  - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw 'em out and make your own.
-  - [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
-    Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
+- [Documentation](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mg-concepts)
+  - [Getting Started](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mg-concepts) - The basics concepts, what Spectral is about.
+  - [Using the Command-line Interface](https://meta.stoplight.io/docs/spectral/ZG9jOjI1MTg1-spectral-cli) - Learn how the command line interface works.
+  - [Continuous Integration](https://meta.stoplight.io/docs/spectral/ZG9jOjExNTMyOTAx-continuous-integration) - Spectral CLI can be run anywhere that NPM packages can be installed and run via CLI.
+  - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/ZG9jOjI1MTg5-custom-rulesets) - Don't like our rules? Throw 'em out and make your own.
+  - [Custom Functions](https://meta.stoplight.io/docs/spectral/ZG9jOjI1MTkw-custom-functions) - When the core functions are not enough to solve a problem, you can write custom functions to do _anything_.
 
 ## ℹ️ Support
 

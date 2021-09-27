@@ -1,3 +1,6 @@
 declare module '@stoplight/spectral-test-utils' {
-  export function serveAssets(mocks: Record<string, string | Record<string, unknown>>): void;
+  type Body = string | Record<string, unknown>;
+
+  export function serveAssets(mocks: Record<string, Body>): void;
+  export function mockResponses(mocks: Record<string, Record<number, Body>>): void;
 }
