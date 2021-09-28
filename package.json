@@ -28,7 +28,6 @@
     "build": "tsc --build ./tsconfig.build.json",
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
-    "lint.changelog": "kacl lint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json docs/**/*.md README.md",
@@ -62,7 +61,6 @@
     ]
   },
   "devDependencies": {
-    "@brightcove/kacl": "^0.1.11",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@semantic-release/git": "^9.0.0",
