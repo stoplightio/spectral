@@ -172,7 +172,7 @@ Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
 ## Recommended or All
 
-Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes witha lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
+Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes with a lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
 
 You can try this out with the core OpenAPI ruleset. If you simply extend the ruleset, by default you will only get the recommended rules.
 
