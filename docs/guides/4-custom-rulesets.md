@@ -154,7 +154,7 @@ rules:
       function: truthy
 ```
 
-This provides a new description, and changes recommended to true, but anything can be changed.
+This provides a new description, but anything can be changed.
 
 If you're just looking change the severity of the rule, there is a handy shortcut.
 
@@ -169,6 +169,24 @@ rules:
 ```
 
 Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
+
+## Recommended or All
+
+Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes witha lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
+
+You can try this out with the core OpenAPI ruleset. If you simply extend the ruleset, by default you will only get the recommended rules.
+
+```yaml
+extends: [[spectral:oas, recommended]]
+```
+
+Far more rule exist than just the recommended ones, there are various other rules which will help you create high quality OpenAPI descriptions.
+
+```yaml
+extends: [[spectral:oas, all]]
+```
+
+You can do this with your rulesets, and slide new rules in as not recommended for a while so that only the most interested active API designers/developers get them at first, then eventually roll them out to everyone if they are well received.
 
 ### Disabling Rules
 
