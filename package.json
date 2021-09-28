@@ -80,7 +80,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "fast-glob": "^3.2.5",
     "fetch-mock": "^9.11.0",
-    "husky": "^6.0.0",
+    "husky": "^7.0.2",
     "jest": "^27.0.4",
     "jest-mock": "^27.0.3",
     "jest-when": "^3.3.1",
