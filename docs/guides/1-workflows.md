@@ -3,7 +3,7 @@
 When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, or whatever files you are trying to lint.
 
 1. Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
-2. Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) or [VS Code](https://github.com/stoplightio/vscode-spectral) as you work to avoid switching to CLI.
+2. Run Spectral in [Stoplight Studio](https://stoplight.io/studio/?utm_source=github&utm_medium=spectral&utm_campaign=docs) or [VS Code](https://github.com/stoplightio/vscode-spectral?utm_source=github&utm_medium=spectral&utm_campaign=docs) as you work to avoid switching to CLI.
 3. Run Spectral as a [Git hook](#Git-hooks) for quick feedback in case people forget to run it in the CLI.
 4. Use [Continuous Integration](#Continuous-Integration) to reject pull requests that don't match your rulesets/style-guide.
 
