@@ -113,84 +113,9 @@ responses:
     foo: bar
 ```
 
-## Redefining Rules
+### Message
 
-When extending another ruleset, you can actually replace a rule it has declared by adding a new rule to your own ruleset with the same name.
-
-```yaml
-extends: spectral:oas
-rules:
-  tag-description:
-    description: Please provide a description for each tag.
-    given: $.tags[*]
-    then:
-      field: description
-      function: truthy
-```
-
-This provides a new description, and changes recommended to true, but anything can be changed.
-
-If you're just looking change the severity of the rule, there is a handy shortcut.
-
-## Changing Rule Severity
-
-Maybe you want to use the rules from the `spectral:oas` ruleset, but instead of `operation-success-response` triggering an error you'd like it to trigger a warning instead.
-
-```yaml
-extends: spectral:oas
-rules:
-  operation-success-response: warn
-```
-
-Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
-
-## Disabling Rules
-
-This example shows the opposite of the "Enabling Specific Rules" example. Sometimes you might want to enable all rules by default, and disable a few.
-
-```yaml
-extends: [[spectral:oas, all]]
-rules:
-  operation-operationId-unique: off
-```
-
-The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
-
-<!-- theme: info -->
-
-## Enabling Rules
-
-Sometimes you might want to apply specific rules from another ruleset. Use the `extends` property, and pass `off` as the second argument in order to add the rules from another ruleset, but disable them all by default. This allows you to pick and choose which rules you would like to enable.
-
-```yaml
-extends: [[spectral:oas, off]]
-rules:
-  operation-operationId-unique: true
-```
-
-The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
-
-## Recommended or All
-
-Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes with a lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
-
-You can try this out with the core OpenAPI ruleset. If you simply extend the ruleset, by default you will only get the recommended rules.
-
-```yaml
-extends: [[spectral:oas, recommended]]
-```
-
-Far more rule exist than just the recommended ones, there are various other rules which will help you create high quality OpenAPI descriptions.
-
-```yaml
-extends: [[spectral:oas, all]]
-```
-
-You can do this with your rulesets, and slide new rules in as not recommended for a while so that only the most interested active API designers/developers get them at first, then eventually roll them out to everyone if they are well received.
-
-## Enriching Messages
-
-To help you create meaningful error messages, Spectral comes with a couple of placeholders that are evaluated at runtime.
+To help you create meaningful messages for results, Spectral comes with a couple of placeholders that are evaluated at runtime.
 
 - `{{error}}` - the error returned by function
 - `{{description}}` - the description set on the rule
@@ -213,6 +138,79 @@ message: "{{value}} is greater than 0"
 ```yaml
 message: "{{path}} cannot point at remote reference"
 ```
+
+## Modifying Rules
+
+When extending another ruleset, you can replace a rule defined in that ruleset by adding a new rule to your own ruleset with the same name.
+
+```yaml
+extends: spectral:oas
+rules:
+  tag-description:
+    description: Please provide a description for each tag.
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+```
+
+This provides a new description, but anything can be changed.
+
+If you're just looking change the severity of the rule, there is a handy shortcut.
+
+### Changing Rule Severity
+
+Maybe you want to use the rules from the `spectral:oas` ruleset, but instead of `operation-success-response` triggering an error you'd like it to trigger a warning instead.
+
+```yaml
+extends: spectral:oas
+rules:
+  operation-success-response: warn
+```
+
+Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
+
+## Recommended or All
+
+Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes with a lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
+
+You can try this out with the core OpenAPI ruleset. If you simply extend the ruleset, by default you will only get the recommended rules.
+
+```yaml
+extends: [[spectral:oas, recommended]]
+```
+
+Far more rule exist than just the recommended ones, there are various other rules which will help you create high quality OpenAPI descriptions.
+
+```yaml
+extends: [[spectral:oas, all]]
+```
+
+You can do this with your rulesets, and slide new rules in as not recommended for a while so that only the most interested active API designers/developers get them at first, then eventually roll them out to everyone if they are well received.
+
+### Disabling Rules
+
+This example shows the opposite of the "Enabling Specific Rules" example. Sometimes you might want to enable all rules by default, and disable a few.
+
+```yaml
+extends: [[spectral:oas, all]]
+rules:
+  operation-operationId-unique: off
+```
+
+The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
+
+### Enabling Rules
+
+Sometimes you might want to apply a limited number of rules from another ruleset. To do this, use the `extends` property with `off` as the second argument. This will avoid running any rules from the extended ruleset as they will all be disabled. Then you can pick and choose which rules you would like to enable.
+
+```yaml
+extends: [[spectral:oas, off]]
+rules:
+  operation-operationId-unique: true
+```
+
+The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
 
 ## Parsing Options
 
@@ -274,12 +272,9 @@ If none of the [core functions](../reference/functions.md) do what you want, you
 
 ## Alternative JS Ruleset Format
 
-Spectral now supports an alternative format to write rulesets in Javascript using a similar syntax.
+Spectral v6.0 added support for an alternative ruleset format, similar to the JSON and YAML formats, but now entirely in Javascript.
 
-### Benifits
-
-- Explicitly load formats or rulesets to get control over versioning.
-- Load common functions from popular JS libraries easily
+This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries like normal, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
 
 **Example**
 
@@ -300,13 +295,12 @@ const JSONSchemaDraft2020_XX = document => isObject(document) && "$schema" in do
 
 export default {
   formats: [oas2, oas3],
-  // No longer accepts functions & functionOptions
   extends: [oasRuleset],
   rules: {
     "valid-rule": {
       given: "$.info",
       then: {
-        function: truthy, // instead of 'truthy'
+        function: truthy,
       },
     },
     "only-new-json-schema": {
@@ -319,6 +313,12 @@ export default {
   },
 };
 ```
+
+This code example adds two rules: `valid-rule` and `only-new-json-schema`, things should look fairly familiar for anyone who has used the JSON or YAML formats.
+
+For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
+
+For now the JSON, YAML, and JS, are all being maintained, and there are no current plans to drop support for any of them.
 
 ## Aliases
 
