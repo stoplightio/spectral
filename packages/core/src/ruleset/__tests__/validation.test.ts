@@ -357,6 +357,21 @@ Error at #/rules/rule/formats/1: must be a valid format`,
       ).toThrow(new RulesetValidationError('Error at #/aliases: must be object'));
     });
 
+    it.each([null, 5, [], {}])('recognizes %p as an invalid type of aliases', alias => {
+      expect(
+        assertValidRuleset.bind(null, {
+          rules: {},
+          aliases: {
+            alias,
+          },
+        }),
+      ).toThrow(
+        new RulesetValidationError(
+          'Error at #/aliases/alias: the value of an alias must be a valid JSON Path expression, a reference to the existing Alias optionally paired with a JSON Path expression subset, or contain a valid set of targets',
+        ),
+      );
+    });
+
     it.each(['$', '#', '$bar', '9a', 'test!'])('given %s keyword used as a key of an alias, throws', key => {
       expect(
         assertValidRuleset.bind(null, {
@@ -385,6 +400,147 @@ Error at #/rules/rule/formats/1: must be a valid format`,
           'Error at #/aliases/PathItem: the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
         ),
       );
+    });
+
+    describe('given scoped aliases', () => {
+      it.each(['Info', 'Info-Description', 'Info_Description', 'Response404', 'errorMessage'])(
+        'recognizes %s as a valid key of an alias',
+        alias => {
+          expect(
+            assertValidRuleset.bind(null, {
+              rules: {},
+              aliases: {
+                [alias]: {
+                  targets: [
+                    {
+                      formats: [formatA],
+                      given: '$.definitions[*]',
+                    },
+                  ],
+                },
+              },
+            }),
+          ).not.toThrow();
+        },
+      );
+
+      it.each(['#Info', '#i', '#Info.contact', '#Info[*]'])('recognizes %s as a valid value of an alias', alias => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              alias: {
+                targets: [
+                  {
+                    formats: [formatA],
+                    given: alias,
+                  },
+                ],
+              },
+            },
+          }),
+        ).not.toThrow();
+      });
+
+      it.each([null, 1, {}, 'a'])('recognizes %p as invalid targets', targets => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              SchemaObject: {
+                targets,
+              },
+            },
+          }),
+        ).toThrow(new RulesetValidationError('Error at #/aliases/SchemaObject/targets: must be array'));
+      });
+
+      it('demands some target', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              SchemaObject: {
+                targets: [],
+              },
+            },
+          }),
+        ).toThrow(
+          new RulesetValidationError(
+            'Error at #/aliases/SchemaObject/targets: targets must have at least a single alias definition',
+          ),
+        );
+      });
+
+      it.each([{}, { formats: [] }, { given: '$' }])('demands given & formats to be present', targets => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              SchemaObject: {
+                targets: [targets],
+              },
+            },
+          }),
+        ).toThrow(
+          new RulesetValidationError(
+            'Error at #/aliases/SchemaObject/targets/0: a valid target must contain given and non-empty formats',
+          ),
+        );
+      });
+
+      it('recognizes invalid formats', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              SchemaObject: {
+                targets: [
+                  {
+                    formats: [2],
+                    given: '$.definitions[*]',
+                  },
+                  {
+                    formats: [formatA, 'formatB'],
+                    given: '$.components.schemas[*]',
+                  },
+                ],
+              },
+            },
+          }),
+        ).toThrow(
+          new RulesetValidationError(
+            `Error at #/aliases/SchemaObject/targets/0/formats/0: must be a valid format
+Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
+          ),
+        );
+      });
+
+      it('recognizes invalid given', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              SchemaObject: {
+                targets: [
+                  {
+                    formats: [formatA],
+                    given: '#.definitions[*]',
+                  },
+                  {
+                    formats: [formatA, formatB],
+                    given: '!.components.schemas[*]',
+                  },
+                ],
+              },
+            },
+          }),
+        ).toThrow(
+          new RulesetValidationError(
+            `Error at #/aliases/SchemaObject/targets/1/given: the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset`,
+          ),
+        );
+      });
     });
   });
 
