@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/xml2js": "^0.4.9",
-    "@types/yargs": "^17.0.2",
+    "@types/yargs": "^17.0.3",
     "copyfiles": "^2.4.1",
     "jest-when": "^3.4.0",
     "nock": "^12.0.2",
