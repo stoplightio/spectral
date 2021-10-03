@@ -83,7 +83,7 @@
     "husky": "^7.0.2",
     "jest": "^27.0.4",
     "jest-mock": "^27.0.3",
-    "jest-when": "^3.3.1",
+    "jest-when": "^3.4.0",
     "json-schema": "^0.3.0",
     "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
