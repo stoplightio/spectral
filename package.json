@@ -64,7 +64,7 @@
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@semantic-release/git": "^9.0.0",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.2",
     "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.1",
     "@types/lodash": "^4.14.172",
