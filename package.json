@@ -92,7 +92,7 @@
     "karma-typescript": "^5.5.1",
     "karma-typescript-es6-transform": "^5.2.0",
     "lint-staged": "^11.2.0",
-    "memfs": "^3.2.2",
+    "memfs": "^3.3.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
     "semantic-release": "^17.4.4",
