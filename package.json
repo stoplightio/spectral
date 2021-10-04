@@ -27,7 +27,7 @@
     "prebuild": "yarn workspace @stoplight/spectral-ruleset-migrator prebuild",
     "build": "tsc --build ./tsconfig.build.json",
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
-    "lint": "yarn lint.prettier && yarn lint.eslint && yarn lint.changelog",
+    "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json docs/**/*.md README.md",
@@ -72,12 +72,12 @@
     "@types/node-fetch": "^2.5.12",
     "@types/text-table": "^0.2.2",
     "@types/tmp": "^0.2.1",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-prettier": "^4.0.0",
     "fast-glob": "^3.2.5",
     "fetch-mock": "^9.11.0",
     "husky": "^7.0.2",
@@ -106,7 +106,6 @@
       "eslint --fix --cache --cache-location .cache"
     ],
     "CHANGELOG.md": [
-      "kacl lint",
       "prettier --write"
     ],
     "docs/**/*.md": [
