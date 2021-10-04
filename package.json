@@ -61,7 +61,7 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^12.1.4",
+    "@commitlint/cli": "^13.2.0",
     "@commitlint/config-conventional": "^12.1.4",
     "@semantic-release/git": "^9.0.0",
     "@types/jest": "^27.0.2",
@@ -89,7 +89,7 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.3.1",
-    "karma-typescript": "^5.5.1",
+    "karma-typescript": "^5.5.2",
     "karma-typescript-es6-transform": "^5.2.0",
     "lint-staged": "^11.2.0",
     "memfs": "^3.3.0",
