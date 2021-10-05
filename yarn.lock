@@ -6057,10 +6057,10 @@ karma-typescript-es6-transform@^5.2.0:
     log4js "^6.3.0"
     magic-string "^0.25.7"
 
-karma-typescript@^5.5.1:
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/karma-typescript/-/karma-typescript-5.5.1.tgz#3ceb79ecec695c73d2633aff8714524b5440f38f"
-  integrity sha512-iQDh48sHv+1pCO/Fvlz4b6HwcmaTuAzx1H0Q6zkUQMQH+5sjz8GNFB9jVDiDblbZcgdr+luVBk7NGUV5mXj+eg==
+karma-typescript@^5.5.2:
+  version "5.5.2"
+  resolved "https://registry.yarnpkg.com/karma-typescript/-/karma-typescript-5.5.2.tgz#02abf88d507f396d647cd6972bc0bd28d0c69dd0"
+  integrity sha512-2rNhiCMrIF+VR8jMuovOLSRjNkjdoE/kQ4XYZU94lMkHNQtnqCaToAnztMj4fuOPRErL7VIkwvJEO7jBd47Q6A==
   dependencies:
     acorn "^8.1.0"
     acorn-walk "^8.0.2"
