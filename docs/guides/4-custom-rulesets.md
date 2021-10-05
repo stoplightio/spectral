@@ -327,23 +327,20 @@ Targeting certain parts of an OpenAPI spec is powerful but it can become cumbers
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
 
 ```
-aliases:{
+aliases: {
   {Name}: '{JSONPath}'
 }
 ```
 
 **Example**
 
-```json
-{
-  "aliases": {
-    "HeaderNames": "$..parameters.[?(@.in === 'header')].name",
-    "Info": "$..info",
-    "InfoDescription": "#Info.description",
-    "InfoContact": "#Info.contact",
-    "Paths": "$.paths[*]~"
-  }
-}
+```yaml
+aliases:
+  HeaderNames: "$..parameters.[?(@.in === 'header')].name"
+  Info: "$..info"
+  InfoDescription: "#Info.description"
+  InfoContact: "#Info.contact"
+  Paths: "$.paths[*]~"
 ```
 
 Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSON Path syntax, like dot notation: `"given": "#InfoContact.name"`.
@@ -363,41 +360,31 @@ Overrides can be used to:
 
 **Example**
 
-```json
-{
-  "overrides": [
-    {
-      "files": ["schemas/**/*.draft7.json"],
-      "formats": ["json-schema-draft7"],
-      "rules": {
-        "valid-number-validation": {
-          "given": ["$..exclusiveMinimum", "$..exclusiveMaximum"],
-          "then": {
-            "function": "schema",
-            "functionOptions": {
-              "type": "number"
-            }
-          }
-        }
-      }
-    }
-  ]
-}
+```yaml
+overrides:
+  - files:
+      - schemas/**/*.draft7.json
+    formats:
+      - json-schema-draft7
+    rules:
+      valid-number-validation:
+        given:
+          - $..exclusiveMinimum
+          - $..exclusiveMaximum
+        then:
+          function: schema
+          functionOptions:
+            type: number
 ```
 
 One can also combine a glob for a filepath with a JSON Path after the anchor, i.e.:
 
-```json
-{
-  "overrides": [
-    {
-      "files": ["legacy/**/*.oas.json#/paths"],
-      "rules": {
-        "some-inherited-rule": "off"
-      }
-    }
-  ]
-}
+```yaml
+overrides:
+  - files:
+      - "legacy/**/*.oas.json#/paths"
+    rules:
+      some-inherited-rule: "off"
 ```
 
 In the event of multiple matches, the order of definition takes place, with the last one having the higher priority.
