@@ -160,6 +160,7 @@ jobs:
     executor:
       name: windows/default
     steps:
+      - checkout
       - cached-dependencies:
           os: windows
           flags: "--ignore-engines"
