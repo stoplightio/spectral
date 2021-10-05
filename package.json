@@ -90,7 +90,7 @@
     "karma-env-preprocessor": "^0.1.1",
     "karma-jasmine": "^3.3.1",
     "karma-typescript": "^5.5.2",
-    "karma-typescript-es6-transform": "^5.2.0",
+    "karma-typescript-es6-transform": "^5.5.2",
     "lint-staged": "^11.2.0",
     "memfs": "^3.3.0",
     "patch-package": "^6.4.7",
