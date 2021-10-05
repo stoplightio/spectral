@@ -95,7 +95,7 @@
     "memfs": "^3.3.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "semantic-release": "^17.4.4",
+    "semantic-release": "^17.4.7",
     "semantic-release-monorepo": "^7.0.5",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
