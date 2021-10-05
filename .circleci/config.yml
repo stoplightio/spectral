@@ -16,7 +16,7 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "12.21"
+    - "12.22"
     - lts
     - current
 
