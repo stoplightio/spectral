@@ -37,7 +37,6 @@
     "test.jest": "jest --silent",
     "test.karma": "karma start",
     "prepare": "husky install",
-    "postinstall": "patch-package",
     "release": "HUSKY=0 yarn workspaces run semantic-release -e semantic-release-monorepo"
   },
   "workspaces": {
@@ -63,7 +62,6 @@
   "devDependencies": {
     "@commitlint/cli": "^13.2.0",
     "@commitlint/config-conventional": "^12.1.4",
-    "@semantic-release/git": "^9.0.1",
     "@types/jest": "^27.0.2",
     "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.1",
@@ -93,10 +91,7 @@
     "karma-typescript-es6-transform": "^5.5.2",
     "lint-staged": "^11.2.0",
     "memfs": "^3.3.0",
-    "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "semantic-release": "^17.4.7",
-    "semantic-release-monorepo": "^7.0.5",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
