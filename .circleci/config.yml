@@ -95,6 +95,13 @@ commands:
     steps:
       - checkout
       - cached-dependencies
+      - run:
+          name: Install semantic-release
+          command: |
+            yarn add --dev --no-lockfile --ignore-workspace-root-check semantic-release@18.0 semantic-release-monorepo@7.0 @semantic-release/git@10.0 patch-package@6.4
+            yarn patch-package
+            git checkout HEAD -- package.json
+
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: yarn build
 
