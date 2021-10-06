@@ -7,6 +7,7 @@ import { RulesetFunctionContext } from '@stoplight/spectral-core/src';
 function runSchema(target: unknown, schemaObj: Record<string, unknown>, context?: DeepPartial<RulesetFunctionContext>) {
   return oasSchema(target, { schema: schemaObj }, {
     path: [],
+    documentInventory: {},
     ...context,
   } as RulesetFunctionContext);
 }
