@@ -38,7 +38,7 @@ const commits = await octokit.request('GET /repos/{owner}/{repo}/pulls/{id}/comm
 assert.ok(commits.status >= 200 && commits.status < 300);
 
 for (const { commit } of commits.data) {
-  if (commit.parents.length > 1) {
+  if (Array.isArray(commit.parents) && commit.parents.length > 1) {
     // possibly a merge commit, carry on
     continue;
   }
