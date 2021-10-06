@@ -1357,6 +1357,44 @@ describe('Ruleset', () => {
         ]);
       });
 
+      it('given unresolvable alias, should throw', () => {
+        const draft6: Format<JSONSchema6> = (input): input is JSONSchema6 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-06/schema#';
+        const draft7: Format<JSONSchema7> = (input): input is JSONSchema7 =>
+          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-07/schema#';
+
+        const ruleset = new Ruleset({
+          aliases: {
+            Id: {
+              targets: [
+                {
+                  formats: [draft6],
+                  given: '$..$id',
+                },
+              ],
+            },
+          },
+          rules: {
+            'valid-id': {
+              given: '#Id',
+              then: {
+                function: pattern,
+                functionOptions: {
+                  match: '^project_',
+                },
+              },
+            },
+          },
+        });
+
+        expect(() => ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft7]))).toThrow(
+          'Alias "Id" is applicable to certain formats, but the format of the linted document is not matched',
+        );
+        expect(() => ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([]))).toThrow(
+          'Alias "Id" is applicable to certain formats, but the format of the linted document is not matched',
+        );
+      });
+
       it('should be serializable', () => {
         const draft4: Format<JSONSchema4> = (input): input is JSONSchema4 =>
           isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-04/schema#';
