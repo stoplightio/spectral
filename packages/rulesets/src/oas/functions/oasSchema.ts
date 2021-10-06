@@ -1,14 +1,23 @@
+import type { SchemaObject, ErrorObject } from 'ajv';
 import * as traverse from 'json-schema-traverse';
-import type { SchemaObject } from 'json-schema-traverse';
-import { isObject } from './utils/isObject';
 import { schema as schemaFn, SchemaOptions } from '@stoplight/spectral-functions';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import { oas2, oas3_0, oas3_1, extractDraftVersion } from '@stoplight/spectral-formats';
-import { isPlainObject } from '@stoplight/json';
+import { oas2, oas3_1, extractDraftVersion, oas3_0 } from '@stoplight/spectral-formats';
+import { isPlainObject, pointerToPath } from '@stoplight/json';
 
 export type Options = {
   schema: Record<string, unknown>;
 };
+
+function rewriteNullable(schema: SchemaObject, errors: ErrorObject[]): void {
+  for (const error of errors) {
+    if (error.keyword !== 'type') continue;
+    const value = getSchemaProperty(schema, error.schemaPath);
+    if (isPlainObject(value) && value.nullable === true) {
+      error.message += ',null';
+    }
+  }
+}
 
 export default createRulesetFunction<unknown, Options>(
   {
@@ -28,106 +37,58 @@ export default createRulesetFunction<unknown, Options>(
 
     let { schema } = opts;
 
-    let dialect: SchemaOptions['dialect'] = 'draft4';
+    let dialect: SchemaOptions['dialect'];
+    let prepareResults: SchemaOptions['prepareResults'];
 
-    if (formats) {
-      try {
-        if (formats.has(oas2)) {
-          schema = convertXNullable({ ...schema });
-          traverse(schema, visitOAS2);
-        } else if (formats.has(oas3_0)) {
-          schema = convertNullable({ ...schema });
-          traverse(schema, visitOAS3);
-        } else if (formats.has(oas3_1)) {
-          if (isPlainObject(context.document.data) && typeof context.document.data.jsonSchemaDialect === 'string') {
-            dialect =
-              (extractDraftVersion(context.document.data.jsonSchemaDialect) as SchemaOptions['dialect']) ??
-              'draft2020-12';
-          } else {
-            dialect = 'draft2020-12';
-          }
-        }
-      } catch {
-        // just in case
+    if (!formats) {
+      dialect = 'draft4';
+    } else if (formats.has(oas3_1)) {
+      if (isPlainObject(context.document.data) && typeof context.document.data.jsonSchemaDialect === 'string') {
+        dialect =
+          (extractDraftVersion(context.document.data.jsonSchemaDialect) as SchemaOptions['dialect']) ?? 'draft2020-12';
+      } else {
+        dialect = 'draft2020-12';
       }
+    } else if (formats.has(oas3_0)) {
+      prepareResults = rewriteNullable.bind(null, schema);
+    } else if (formats.has(oas2)) {
+      const clonedSchema = JSON.parse(JSON.stringify(schema)) as typeof schema;
+      traverse(clonedSchema, visitOAS2);
+      schema = clonedSchema;
+      prepareResults = rewriteNullable.bind(null, clonedSchema);
     }
 
-    return schemaFn(targetVal, { ...opts, schema, dialect }, context);
+    return schemaFn(
+      targetVal,
+      {
+        ...opts,
+        schema,
+        prepareResults,
+        dialect,
+      },
+      context,
+    );
   },
 );
 
-const visitOAS2: traverse.Callback = (
-  schema,
-  jsonPtr,
-  rootSchema,
-  parentJsonPtr,
-  parentKeyword,
-  parentSchema,
-  keyIndex,
-) => {
-  if (parentSchema !== void 0 && keyIndex !== void 0 && jsonPtr !== void 0) {
-    const actualSchema = get(parentSchema, jsonPtr);
-    if (actualSchema !== null) {
-      actualSchema[keyIndex] = convertXNullable({ ...schema });
-    }
+const visitOAS2: traverse.Callback = schema => {
+  if (schema['x-nullable'] === true) {
+    schema.nullable = true;
+    delete schema['x-nullable'];
   }
 };
 
-const visitOAS3: traverse.Callback = (
-  schema,
-  jsonPtr,
-  rootSchema,
-  parentJsonPtr,
-  parentKeyword,
-  parentSchema,
-  keyIndex,
-) => {
-  if (parentSchema !== void 0 && keyIndex !== void 0 && jsonPtr !== void 0) {
-    const actualSchema = get(parentSchema, jsonPtr);
-    if (actualSchema !== null) {
-      actualSchema[keyIndex] = convertNullable({ ...schema });
-    }
-  }
-};
+function getSchemaProperty(schema: SchemaObject, schemaPath: string): unknown {
+  const path = pointerToPath(schemaPath);
+  let value: unknown = schema;
 
-function get(obj: SchemaObject, jsonPtr: string): SchemaObject | null {
-  const path = jsonPtr.slice(1).split('/');
-  if (path.length === 1) {
-    return obj;
-  }
-
-  path.pop();
-
-  let curObj: SchemaObject = obj;
-  for (const segment of path) {
-    const value: unknown = curObj[segment];
-    if (!isObject(value)) {
-      throw ReferenceError(`${segment} not found`);
+  for (const fragment of path.slice(0, -1)) {
+    if (!isPlainObject(value)) {
+      return;
     }
 
-    const newValue = Array.isArray(value) ? value.slice() : { ...value };
-    curObj[segment] = newValue;
-    curObj = newValue;
+    value = value[fragment];
   }
 
-  return curObj;
+  return value;
 }
-
-const createNullableConverter = (keyword: 'x-nullable' | 'nullable') => {
-  return (schema: SchemaObject): SchemaObject => {
-    if (!(keyword in schema)) return schema;
-    if (schema[keyword] === true) {
-      schema.type = [schema.type, 'null'];
-
-      if (Array.isArray(schema.enum)) {
-        schema.enum = [...(schema.enum as unknown[]), null];
-      }
-    }
-
-    delete schema[keyword];
-    return schema;
-  };
-};
-
-const convertXNullable = createNullableConverter('x-nullable');
-const convertNullable = createNullableConverter('nullable');
