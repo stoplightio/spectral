@@ -1,8 +1,8 @@
+import * as process from 'node:process';
+import * as child_process from 'node:child_process';
+import { promisify } from 'node:util';
+import * as assert from 'ndoe:assert';
 import { Octokit } from '@octokit/core';
-import * as process from 'process';
-import * as child_process from 'child_process';
-import { promisify } from 'util';
-import * as assert from 'assert/strict';
 import chalk from 'chalk';
 
 if (!process.env.CI_PULL_REQUEST) {
@@ -38,8 +38,8 @@ const commits = await octokit.request('GET /repos/{owner}/{repo}/pulls/{id}/comm
 assert.ok(commits.status >= 200 && commits.status < 300);
 
 for (const { commit } of commits.data) {
-  if (commit.committer.email !== 'noreply@github.com') {
-    // merge commits etc.
+  if (commit.parents.length > 1) {
+    // possibly a merge commit, carry on
     continue;
   }
 
