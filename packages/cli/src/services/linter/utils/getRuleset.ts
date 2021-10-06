@@ -10,8 +10,9 @@ import { bundleRuleset } from '@stoplight/spectral-ruleset-bundler';
 import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
 import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
 import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
-import { isObject } from 'lodash';
+import { isError, isObject } from 'lodash';
 import * as commonjs from '@rollup/plugin-commonjs';
+import { ErrorWithCause } from 'pony-cause';
 
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
   const cwd = process.cwd();
@@ -26,6 +27,10 @@ async function getDefaultRulesetFile(): Promise<Optional<string>> {
 
 function isBasicRuleset(filepath: string): boolean {
   return /\.(json|ya?ml)$/.test(path.extname(filepath));
+}
+
+function isErrorWithCode(error: Error | (Error & { code: unknown })): error is Error & { code: string } {
+  return 'code' in error && typeof error.code === 'string';
 }
 
 export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset> {
@@ -43,35 +48,43 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
 
   let ruleset: string;
 
-  if (isBasicRuleset(rulesetFile)) {
-    const migratedRuleset = await migrateRuleset(rulesetFile, {
-      format: 'esm',
-      fs,
-    });
+  try {
+    if (isBasicRuleset(rulesetFile)) {
+      const migratedRuleset = await migrateRuleset(rulesetFile, {
+        format: 'esm',
+        fs,
+      });
 
-    rulesetFile = path.join(path.dirname(rulesetFile), '.spectral.js');
+      rulesetFile = path.join(path.dirname(rulesetFile), '.spectral.js');
 
-    ruleset = await bundleRuleset(rulesetFile, {
-      target: 'node',
-      format: 'commonjs',
-      plugins: [
-        stdin(migratedRuleset, rulesetFile),
-        builtins(),
-        // sigh, 2021 and we still do not use ESM
-        (commonjs as unknown as typeof import('@rollup/plugin-commonjs').default)(),
-        ...node({ fs, fetch }),
-      ],
-    });
-  } else {
-    ruleset = await bundleRuleset(rulesetFile, {
-      target: 'node',
-      format: 'commonjs',
-      plugins: [
-        builtins(),
-        (commonjs as unknown as typeof import('@rollup/plugin-commonjs').default)(),
-        ...node({ fs, fetch }),
-      ],
-    });
+      ruleset = await bundleRuleset(rulesetFile, {
+        target: 'node',
+        format: 'commonjs',
+        plugins: [
+          stdin(migratedRuleset, rulesetFile),
+          builtins(),
+          // sigh, 2021 and we still do not use ESM
+          (commonjs as unknown as typeof import('@rollup/plugin-commonjs').default)(),
+          ...node({ fs, fetch }),
+        ],
+      });
+    } else {
+      ruleset = await bundleRuleset(rulesetFile, {
+        target: 'node',
+        format: 'commonjs',
+        plugins: [
+          builtins(),
+          (commonjs as unknown as typeof import('@rollup/plugin-commonjs').default)(),
+          ...node({ fs, fetch }),
+        ],
+      });
+    }
+  } catch (e) {
+    if (!isError(e) || !isErrorWithCode(e) || e.code !== 'UNRESOLVED_ENTRY') {
+      throw e;
+    }
+
+    throw new ErrorWithCause(`Could not read ruleset at ${rulesetFile}.`, { cause: e });
   }
 
   return new Ruleset(load(ruleset, rulesetFile), {

@@ -7756,6 +7756,11 @@ please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
+pony-cause@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/pony-cause/-/pony-cause-1.0.0.tgz#d0d39fae5bdfc516f9c20487b13d75c955967159"
+  integrity sha512-thQ/1Jj8F+mZZi68DJSGQ86Qqffkervhhr8LZg+tnJA80g/n64hG736/vC/bNckFumutkU9RGQPxFvfoXd8TXQ==
+
 prebuild-install@6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-6.0.1.tgz#5902172f7a40eb67305b96c2a695db32636ee26d"

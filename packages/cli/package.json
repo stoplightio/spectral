@@ -48,6 +48,7 @@
     "eol": "0.9.1",
     "fast-glob": "3.2.7",
     "lodash": "~4.17.21",
+    "pony-cause": "^1.0.0",
     "proxy-agent": "5.0.0",
     "strip-ansi": "6.0",
     "text-table": "0.2",

@@ -213,7 +213,7 @@ describe('Linter service', () => {
     describe('when single ruleset option provided', () => {
       it('outputs "does not exist" error', () => {
         return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow(
-          /^Could not resolve entry module \(packages[/\\]cli[/\\]src[/\\]services[/\\]__tests__[/\\]__fixtures__[/\\]non-existent-path\)\.$/,
+          `Could not read ruleset at ${join(process.cwd(), 'non-existent-path')}.`,
         );
       });
 
