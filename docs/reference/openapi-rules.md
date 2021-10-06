@@ -2,7 +2,7 @@
 
 Spectral has a built-in "oas" ruleset, with OAS being shorthand for the [OpenAPI Specification](https://openapis.org/specification).
 
-In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/4-rulesets.md#formats)).
+In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats)).
 
 ## OpenAPI v2 & v3
 
