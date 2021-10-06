@@ -1,70 +1,102 @@
-import { schema } from '@stoplight/spectral-functions';
-import { oas2, oas3 } from '@stoplight/spectral-formats';
-import type { IFunction } from '@stoplight/spectral-core';
-import { isObject } from './utils/isObject';
+import { oas2, oas3_0 } from '@stoplight/spectral-formats';
+import { printValue } from '@stoplight/spectral-runtime';
+import { createRulesetFunction, Document, IFunctionResult } from '@stoplight/spectral-core';
+import type { JSONSchema4TypeName, JSONSchema6TypeName, JSONSchema7TypeName } from 'json-schema';
 
-export const typedEnum: IFunction = function (targetVal, opts, context) {
-  if (!isObject(targetVal)) {
-    return;
+function getDataType(
+  input: unknown,
+  checkForInteger: boolean,
+): JSONSchema4TypeName | JSONSchema6TypeName | JSONSchema7TypeName {
+  const type = typeof input;
+  switch (type) {
+    case 'string':
+    case 'boolean':
+      return type;
+    case 'number':
+      if (checkForInteger && Number.isInteger(input)) {
+        return 'integer';
+      }
+
+      return 'number';
+    case 'object':
+      if (input === null) {
+        return 'null';
+      }
+
+      return Array.isArray(input) ? 'array' : 'object';
+    default:
+      throw TypeError('Unknown input type');
   }
+}
 
-  if (targetVal.enum === null || targetVal.enum === void 0 || targetVal.type === null || targetVal.type === void 0) {
-    return;
-  }
-  // do not use rest spread operator here, as this causes the whole tslib gets injected despite proper target set...
-  // obviously, having tslib inlined makes the code size quite larger (around 4x after compression - 1.8K vs 7.4K).
-  const { enum: enumValues } = targetVal;
-  const initialSchema = Object.assign({}, targetVal);
-  delete initialSchema.enum;
-
-  if (!Array.isArray(enumValues)) {
-    return;
-  }
-
-  const { document } = context;
-  const isOAS3 = document.formats?.has(oas3) === true;
-  const isOAS2 = document.formats?.has(oas2) === true;
-
-  let innerSchema;
-  if ((isOAS3 && targetVal.nullable === true) || (isOAS2 && targetVal['x-nullable'] === true)) {
-    const type = Array.isArray(initialSchema.type)
-      ? [...(initialSchema.type as unknown[])]
-      : initialSchema.type !== void 0
-      ? [initialSchema.type]
-      : [];
-    if (!type.includes('null')) {
-      type.push('null');
-    }
-
-    innerSchema = { type, enum: initialSchema.enum };
-  } else {
-    innerSchema = { type: initialSchema.type, enum: initialSchema.enum };
-  }
-
-  const schemaObject = { schema: innerSchema };
-
-  const incorrectValues: Array<{ index: number; val: unknown }> = [];
-
-  (enumValues as unknown[]).forEach((val, index) => {
-    const res = schema(val, schemaObject, context);
-
-    if (Array.isArray(res) && res.length !== 0) {
-      incorrectValues.push({ index, val });
-    }
-  });
-
-  if (incorrectValues.length === 0) {
-    return;
-  }
-
-  const { type } = initialSchema;
-
-  return incorrectValues.map(bad => {
-    return {
-      message: `Enum value \`${String(bad.val)}\` must be "${String(type)}".`,
-      path: [...context.path, 'enum', bad.index],
-    };
-  });
+type Input = {
+  enum: unknown[];
+  type: string[] | string;
+  [key: string]: unknown;
 };
+
+function getTypes(input: Input, formats: Document['formats']): string | string[] {
+  const { type } = input;
+
+  if (
+    (input.nullable === true && formats?.has(oas3_0) === true) ||
+    (input['x-nullable'] === true && formats?.has(oas2) === true)
+  ) {
+    return Array.isArray(type) ? [...type, 'null'] : [type, 'null'];
+  }
+
+  return type;
+}
+
+export const typedEnum = createRulesetFunction<Input, null>(
+  {
+    input: {
+      type: 'object',
+      properties: {
+        enum: {
+          type: 'array',
+        },
+        type: {
+          oneOf: [
+            {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+            {
+              type: 'string',
+            },
+          ],
+        },
+      },
+      required: ['enum', 'type'],
+    },
+    options: null,
+  },
+  function (input, opts, context) {
+    const { enum: enumValues } = input;
+    const type = getTypes(input, context.document.formats);
+    const checkForInteger = type === 'integer' || (Array.isArray(type) && type.includes('integer'));
+
+    let results: IFunctionResult[] | undefined;
+
+    enumValues.forEach((value, i) => {
+      const valueType = getDataType(value, checkForInteger);
+
+      if (valueType === type || (Array.isArray(type) && type.includes(valueType))) {
+        return;
+      }
+
+      results ??= [];
+      results.push({
+        message: `Enum value ${printValue(enumValues[i])} must be "${String(type)}".`,
+        path: [...context.path, 'enum', i],
+      });
+    });
+
+    return results;
+  },
+);
 
 export default typedEnum;
