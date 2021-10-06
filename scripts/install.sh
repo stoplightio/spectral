@@ -1,5 +1,8 @@
 #!/bin/sh
 
+
+VERSION=${1:-latest};
+
 install () {
 
 set -eu
@@ -24,7 +27,12 @@ elif [ "$UNAME" = "Linux" ] ; then
   fi
 fi
 
-URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
+if [ "$VERSION" == "latest" ] ; then
+  URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
+else
+  URL="https://github.com/stoplightio/spectral/releases/download/v${VERSION}/${FILENAME}"
+fi
+
 SRC="$(pwd)/${FILENAME}"
 DEST=/usr/local/bin/spectral
 
