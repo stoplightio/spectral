@@ -1,12 +1,24 @@
 version: 2.1
 
 orbs:
-  windows: circleci/windows@2.4.0
+  windows: circleci/windows@2.4.1
 
 executors:
   linux:
     docker:
-      - image: cimg/base:2021.01
+      - image: cimg/base:2021.07
+
+defaults:
+  default-branch: &default-branch develop
+  release-tag-filter: &release-tag-filter
+    branches:
+      ignore: /.*/
+    tags:
+      only: /^v.*/
+  node-versions: &node-versions
+    - "12.21"
+    - lts
+    - current
 
 commands:
   cached-dependencies:
@@ -52,12 +64,6 @@ commands:
           name: Lint documentation
           command: yarn lint.prettier
 
-  lint-changelog:
-    steps:
-      - run:
-          name: Lint changelog
-          command: yarn lint.changelog
-
   lint-commit-message:
     steps:
       - run:
@@ -95,12 +101,11 @@ commands:
 jobs:
   lint:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:lts
     steps:
       - checkout
       - cached-dependencies
       - lint-commit-message
-      - lint-changelog
       - lint-code
       - lint-documentation
 
@@ -118,7 +123,7 @@ jobs:
 
   test-browser:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: circleci/node:current-browsers
     steps:
       - checkout
       - install-and-build
@@ -141,7 +146,7 @@ jobs:
 
   build-nix-binaries:
     docker:
-      - image: circleci/node:16
+      - image: circleci/node:lts
     steps:
       - checkout
       - install-and-build
@@ -155,6 +160,7 @@ jobs:
     executor:
       name: windows/default
     steps:
+      - checkout
       - cached-dependencies:
           os: windows
           flags: "--ignore-engines"
@@ -167,7 +173,7 @@ jobs:
 
   release-docker:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:lts
     steps:
       - checkout
       - setup_remote_docker:
@@ -184,6 +190,8 @@ jobs:
             docker build . --tag stoplight/spectral:${GIT_SHA};
       - run:
           name: docker push
+          environment:
+            DEFAULT_BRANCH: *default-branch
           command: |
             shopt -s extglob
             GIT_SHA=${CIRCLE_SHA1:0:7}
@@ -191,7 +199,7 @@ jobs:
             # Login to DockerHub
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
             DOCKER_BRANCH="${CIRCLE_BRANCH//\//-}";
-            if [[ "$DOCKER_BRANCH" == "master" ]]; then
+            if [[ "$DOCKER_BRANCH" == "$DEFAULT_BRANCH" ]]; then
               DOCKER_BRANCH="latest";
             fi
             echo "DOCKER_BRANCH=${DOCKER_BRANCH}";
@@ -212,20 +220,21 @@ jobs:
             echo "Docker tags:";
             docker images stoplight/spectral --format="{{ .Tag }}";
             docker push stoplight/spectral:${GIT_SHA};
+            echo "Pushed stoplight/spectral:${GIT_SHA}";
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push stoplight/spectral:${FULL_VERSION};
+              docker push stoplight/spectral:${MINOR_VERSION};
+              docker push stoplight/spectral:${MAJOR_VERSION};
+              echo "Pushed stoplight/spectral:${FULL_VERSION}";
+            fi
             if [[ -n "$DOCKER_BRANCH" ]]; then
               docker push stoplight/spectral:${DOCKER_BRANCH};
+              echo "Pushed stoplight/spectral:${DOCKER_BRANCH}";
             fi
-            if [[ -n "$CIRCLE_TAG" ]]; then
-              docker push stoplight/spectral:${FULL_VERSION} \
-                          stoplight/spectral:${MINOR_VERSION} \
-                          stoplight/spectral:${MAJOR_VERSION};
-            fi
-
-
 
   release:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:lts
     steps:
       - prepare-release
       - run: yarn release
@@ -249,10 +258,7 @@ workflows:
       - test-node:
           matrix:
             parameters:
-              node-version:
-                - "12.21"
-                - lts
-                - "16.8" # see https://github.com/nodejs/node/issues/40030, fixed in 16.9.1, but cimg/node:current is still at 16.9.0
+              node-version: *node-versions
       - test-windows
       - test-browser
       - lint
@@ -260,32 +266,16 @@ workflows:
   release:
     jobs:
       - build-nix-binaries:
-         filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+         filters: *release-tag-filter
       - build-windows-binary:
-            filters:
-              branches:
-                ignore: /.*/
-              tags:
-                only: /^v.*/
+          filters: *release-tag-filter
       - upload-artifacts:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+          filters: *release-tag-filter
           requires:
             - build-nix-binaries
             - build-windows-binary
       - release-docker:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+          filters: *release-tag-filter
           requires:
             - upload-artifacts
 
@@ -296,16 +286,13 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                - *default-branch
     jobs:
       - lint
       - test-node:
           matrix:
             parameters:
-              node-version:
-                - "12.21"
-                - lts
-                - "16.8"
+              node-version: *node-versions
           requires:
             - lint
       - test-windows:

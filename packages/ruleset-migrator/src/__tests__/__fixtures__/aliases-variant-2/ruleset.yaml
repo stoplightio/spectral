@@ -1,0 +1,11 @@
+aliases:
+  schema:
+    description: Foo
+    targets:
+      - formats:
+          - oas2
+        given: $.definitions[*]
+      - formats:
+          - oas3.0
+          - oas3.1
+        given: $.components.schemas[*]

@@ -4,6 +4,41 @@ const schema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   properties: {
+    aliases: {
+      type: 'object',
+      additionalProperties: {
+        oneOf: [
+          {
+            type: 'string',
+          },
+          {
+            type: 'object',
+            properties: {
+              description: {
+                type: 'string',
+              },
+              targets: {
+                type: 'array',
+                minItems: 1,
+                items: {
+                  type: 'object',
+                  properties: {
+                    formats: {
+                      $ref: '#/properties/formats',
+                    },
+                    given: {
+                      type: 'string',
+                    },
+                  },
+                  required: ['formats', 'given'],
+                },
+              },
+            },
+            required: ['targets'],
+          },
+        ],
+      },
+    },
     except: {
       type: 'object',
       additionalProperties: {
@@ -44,6 +79,7 @@ const schema = {
     },
     formats: {
       type: 'array',
+      minItems: 1,
       items: {
         type: 'string',
         enum: [

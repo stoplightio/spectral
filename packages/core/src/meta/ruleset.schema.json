@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/stoplightio/spectral/blob/develop/src/meta/ruleset.schema.json",
+  "$id": "@stoplight/spectral-core/meta/ruleset.schema",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -12,11 +12,11 @@
     "rules": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "rule.schema.json#"
+        "$ref": "rule.schema#"
       }
     },
     "formats": {
-      "$ref": "shared.json#/$defs/Formats"
+      "$ref": "shared#formats"
     },
     "extends": {
       "oneOf": [
@@ -56,10 +56,10 @@
       "type": "object",
       "properties": {
         "duplicateKeys": {
-          "$ref": "shared.json#/$defs/Severity"
+          "$ref": "shared#severity"
         },
         "incompatibleValues": {
-          "$ref": "shared.json#/$defs/Severity"
+          "$ref": "shared#severity"
         }
       },
       "additionalProperties": false
@@ -91,7 +91,7 @@
             "rules": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "shared.json#/$defs/Severity"
+                "$ref": "shared#severity"
               },
               "errorMessage": {
                 "enum": "must be a valid severity level"
@@ -130,7 +130,7 @@
               "type": "object",
               "properties": {
                 "formats": {
-                  "$ref": "#/properties/formats"
+                  "$ref": "shared#formats"
                 },
                 "extends": {
                   "$ref": "#/properties/extends"
@@ -171,9 +171,46 @@
         }
       },
       "additionalProperties": {
-        "type": "string",
-        "pattern": "^[$#]",
-        "errorMessage": "the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+        "oneOf": [
+          {
+            "$id": "alias-value",
+            "type": "string",
+            "pattern": "^[$#]",
+            "errorMessage": {
+              "_": "the value of an alias must be a valid JSON Path expression, a reference to the existing Alias optionally paired with a JSON Path expression subset, or contain a valid set of targets",
+              "pattern": "the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "targets": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "formats": {
+                      "$ref": "shared#formats"
+                    },
+                    "given": {
+                      "$ref": "alias-value"
+                    }
+                  },
+                  "required": ["formats", "given"],
+                  "errorMessage": "a valid target must contain given and non-empty formats"
+                },
+                "errorMessage": {
+                  "minItems": "targets must have at least a single alias definition"
+                }
+              }
+            },
+            "required": ["targets"]
+          }
+        ]
       }
     }
   },
