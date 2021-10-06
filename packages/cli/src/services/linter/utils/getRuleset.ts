@@ -24,7 +24,7 @@ async function getDefaultRulesetFile(): Promise<Optional<string>> {
   return;
 }
 
-function isLegacyRuleset(filepath: string): boolean {
+function isBasicRuleset(filepath: string): boolean {
   return /\.(json|ya?ml)$/.test(path.extname(filepath));
 }
 
@@ -43,7 +43,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
 
   let ruleset: string;
 
-  if (isLegacyRuleset(rulesetFile)) {
+  if (isBasicRuleset(rulesetFile)) {
     const migratedRuleset = await migrateRuleset(rulesetFile, {
       format: 'esm',
       fs,
