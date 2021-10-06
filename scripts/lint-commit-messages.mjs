@@ -1,7 +1,7 @@
 import * as process from 'node:process';
 import * as child_process from 'node:child_process';
 import { promisify } from 'node:util';
-import * as assert from 'ndoe:assert';
+import * as assert from 'node:assert';
 import { Octokit } from '@octokit/core';
 import chalk from 'chalk';
 

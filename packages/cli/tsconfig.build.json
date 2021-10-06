@@ -11,6 +11,7 @@
     { "path":  "../core/tsconfig.build.json" },
     { "path":  "../parsers/tsconfig.build.json" },
     { "path":  "../ref-resolver/tsconfig.build.json" },
+    { "path":  "../ruleset-bundler/tsconfig.build.json" },
     { "path":  "../ruleset-migrator/tsconfig.build.json" },
     { "path":  "../runtime/tsconfig.build.json" },
   ]
