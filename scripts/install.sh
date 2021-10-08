@@ -27,7 +27,7 @@ elif [ "$UNAME" = "Linux" ] ; then
   fi
 fi
 
-if [ "$VERSION" == "latest" ] ; then
+if [ "$VERSION" = "latest" ] ; then
   URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
 else
   URL="https://github.com/stoplightio/spectral/releases/download/v${VERSION}/${FILENAME}"
