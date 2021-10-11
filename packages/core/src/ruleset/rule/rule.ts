@@ -1,7 +1,8 @@
-import { JsonPath, Optional } from '@stoplight/types';
+import { isString } from 'lodash';
+import { JsonPath, Optional, DiagnosticSeverity } from '@stoplight/types';
 import { dirname, relative } from '@stoplight/path';
-import { DiagnosticSeverity } from '@stoplight/types';
 import { pathToPointer } from '@stoplight/json';
+import { printValue } from '@stoplight/spectral-runtime';
 
 import { getDiagnosticSeverity, DEFAULT_SEVERITY_LEVEL } from '../utils/severity';
 import { Ruleset } from '../ruleset';
@@ -13,7 +14,6 @@ import type {
   RulesetScopedAliasDefinition,
 } from '../types';
 import { minimatch } from '../utils/minimatch';
-import { printValue } from '@stoplight/spectral-runtime';
 import { FormatsSet } from '../utils/formatsSet';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
@@ -137,14 +137,18 @@ export class Rule implements IRule {
 
   public set given(given: RuleDefinition['given']) {
     const actualGiven = Array.isArray(given) ? given : [given];
-    this.#given = this.owner.hasComplexAliases ? actualGiven : actualGiven.map(expr => this.#resolveAlias(expr, null));
+    this.#given = this.owner.hasComplexAliases
+      ? actualGiven
+      : actualGiven.map(expr => this.#resolveAlias(expr, null)).filter(isString);
   }
 
   public getGivenForFormats(formats: Set<Format<any>> | null): string[] {
-    return this.owner.hasComplexAliases ? this.#given.map(expr => this.#resolveAlias(expr, formats)) : this.#given;
+    return this.owner.hasComplexAliases
+      ? this.#given.map(expr => this.#resolveAlias(expr, formats)).filter(isString)
+      : this.#given;
   }
 
-  #resolveAlias(expr: string, formats: Set<Format> | null): string {
+  #resolveAlias(expr: string, formats: Set<Format> | null): string | null {
     let resolvedExpr = expr;
 
     const stack = new Set<string>();
@@ -172,7 +176,11 @@ export class Rule implements IRule {
       if (typeof aliasValue === 'string') {
         actualAliasValue = aliasValue;
       } else {
-        actualAliasValue = this.#resolveAliasForFormats(alias, aliasValue, formats);
+        actualAliasValue = this.#resolveAliasForFormats(aliasValue, formats);
+      }
+
+      if (actualAliasValue === null) {
+        return null;
       }
 
       if (actualAliasValue.length + 1 === expr.length) {
@@ -185,15 +193,9 @@ export class Rule implements IRule {
     return resolvedExpr;
   }
 
-  #resolveAliasForFormats(
-    name: string,
-    { targets }: RulesetScopedAliasDefinition,
-    formats: Set<Format> | null,
-  ): string {
-    const errorMessage = `Alias "${name}" is applicable to certain formats, but the format of the linted document is not matched`;
-
+  #resolveAliasForFormats({ targets }: RulesetScopedAliasDefinition, formats: Set<Format> | null): string | null {
     if (formats === null || formats.size === 0) {
-      throw new Error(errorMessage);
+      return null;
     }
 
     // we start from the end to be consistent with overrides etc. - we generally tend to pick the "last" value.
@@ -206,7 +208,7 @@ export class Rule implements IRule {
       }
     }
 
-    throw new Error(errorMessage);
+    return null;
   }
 
   public matchesFormat(formats: Set<Format> | null): boolean {

@@ -1357,7 +1357,7 @@ describe('Ruleset', () => {
         ]);
       });
 
-      it('given unresolvable alias, should throw', () => {
+      it('should drop aliases not matching any target', () => {
         const draft6: Format<JSONSchema6> = (input): input is JSONSchema6 =>
           isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-06/schema#';
         const draft7: Format<JSONSchema7> = (input): input is JSONSchema7 =>
@@ -1387,12 +1387,8 @@ describe('Ruleset', () => {
           },
         });
 
-        expect(() => ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft7]))).toThrow(
-          'Alias "Id" is applicable to certain formats, but the format of the linted document is not matched',
-        );
-        expect(() => ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([]))).toThrow(
-          'Alias "Id" is applicable to certain formats, but the format of the linted document is not matched',
-        );
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft7]))).toStrictEqual([]);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([]))).toStrictEqual([]);
       });
 
       it('should be serializable', () => {
