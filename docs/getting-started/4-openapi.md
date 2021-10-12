@@ -2,7 +2,7 @@
 
 Spectral is a generic linter, but a lot of effort has been put in to making sure OpenAPI is well supported.
 
-Run Spectral against a document without specifying a ruleset will trigger an auto-detect, where Spectral will look to see if `swagger: 2.0` or `openapi: 3.0.x` are in the root of the document. If it finds either of those it will load `spectral:oas`, which is documented in our [Reference > OpenAPI Rules](../reference/openapi-rules.md).
+Run Spectral against a document without specifying a ruleset to trigger an auto-detect, where Spectral will look to see if `swagger: 2.0` or `openapi: 3.0.x` are in the root of the document. If it finds either of those it will load `spectral:oas`, which is documented in our [Reference > OpenAPI Rules](../reference/openapi-rules.md).
 
 <!-- theme: info -->
 
