@@ -1,14 +1,20 @@
-import { JsonPath, Optional } from '@stoplight/types';
+import { isString } from 'lodash';
+import { JsonPath, Optional, DiagnosticSeverity } from '@stoplight/types';
 import { dirname, relative } from '@stoplight/path';
-import { DiagnosticSeverity } from '@stoplight/types';
 import { pathToPointer } from '@stoplight/json';
+import { printValue } from '@stoplight/spectral-runtime';
 
 import { getDiagnosticSeverity, DEFAULT_SEVERITY_LEVEL } from '../utils/severity';
 import { Ruleset } from '../ruleset';
 import { Format } from '../format';
-import { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition } from '../types';
+import type {
+  HumanReadableDiagnosticSeverity,
+  IRuleThen,
+  RuleDefinition,
+  RulesetScopedAliasDefinition,
+} from '../types';
 import { minimatch } from '../utils/minimatch';
-import { printValue } from '@stoplight/spectral-runtime';
+import { FormatsSet } from '../utils/formatsSet';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
@@ -27,7 +33,7 @@ export interface IRule {
 
 export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {
   name: string;
-  formats: string[] | null;
+  formats: FormatsSet | null;
   then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
   owner: number;
 };
@@ -37,7 +43,7 @@ export class Rule implements IRule {
   public message: string | null;
   #severity!: DiagnosticSeverity;
   public resolved: boolean;
-  public formats: Set<Format> | null;
+  public formats: FormatsSet | null;
   #enabled: boolean;
   public recommended: boolean;
   public documentationUrl: string | null;
@@ -56,7 +62,7 @@ export class Rule implements IRule {
     this.documentationUrl = definition.documentationUrl ?? null;
     this.severity = definition.severity;
     this.resolved = definition.resolved !== false;
-    this.formats = 'formats' in definition ? new Set(definition.formats) : null;
+    this.formats = 'formats' in definition ? new FormatsSet(definition.formats) : null;
     this.then = definition.then;
     this.given = definition.given;
   }
@@ -126,15 +132,23 @@ export class Rule implements IRule {
   }
 
   public get given(): string[] {
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    return this.#given.map(this.#resolveAlias, this);
+    return this.#given;
   }
 
   public set given(given: RuleDefinition['given']) {
-    this.#given = Array.isArray(given) ? given : [given];
+    const actualGiven = Array.isArray(given) ? given : [given];
+    this.#given = this.owner.hasComplexAliases
+      ? actualGiven
+      : actualGiven.map(expr => this.#resolveAlias(expr, null)).filter(isString);
   }
 
-  #resolveAlias(this: Rule, expr: string): string {
+  public getGivenForFormats(formats: Set<Format<any>> | null): string[] {
+    return this.owner.hasComplexAliases
+      ? this.#given.map(expr => this.#resolveAlias(expr, formats)).filter(isString)
+      : this.#given;
+  }
+
+  #resolveAlias(expr: string, formats: Set<Format> | null): string | null {
     let resolvedExpr = expr;
 
     const stack = new Set<string>();
@@ -157,14 +171,44 @@ export class Rule implements IRule {
         throw new ReferenceError(`Alias "${alias}" does not exist`);
       }
 
-      if (alias.length + 1 === expr.length) {
-        resolvedExpr = this.owner.aliases[alias];
+      const aliasValue = this.owner.aliases[alias];
+      let actualAliasValue;
+      if (typeof aliasValue === 'string') {
+        actualAliasValue = aliasValue;
       } else {
-        resolvedExpr = this.owner.aliases[alias] + resolvedExpr.slice(alias.length + 1);
+        actualAliasValue = this.#resolveAliasForFormats(aliasValue, formats);
+      }
+
+      if (actualAliasValue === null) {
+        return null;
+      }
+
+      if (actualAliasValue.length + 1 === expr.length) {
+        resolvedExpr = actualAliasValue;
+      } else {
+        resolvedExpr = actualAliasValue + resolvedExpr.slice(alias.length + 1);
       }
     }
 
     return resolvedExpr;
+  }
+
+  #resolveAliasForFormats({ targets }: RulesetScopedAliasDefinition, formats: Set<Format> | null): string | null {
+    if (formats === null || formats.size === 0) {
+      return null;
+    }
+
+    // we start from the end to be consistent with overrides etc. - we generally tend to pick the "last" value.
+    for (let i = targets.length - 1; i >= 0; i--) {
+      const target = targets[i];
+      for (const format of target.formats) {
+        if (formats.has(format)) {
+          return target.given;
+        }
+      }
+    }
+
+    return null;
   }
 
   public matchesFormat(formats: Set<Format> | null): boolean {
@@ -199,13 +243,13 @@ export class Rule implements IRule {
       documentationUrl: this.documentationUrl,
       severity: this.severity,
       resolved: this.resolved,
-      formats: this.formats === null ? null : Array.from(this.formats).map(fn => fn.displayName ?? fn.name),
+      formats: this.formats,
       then: this.then.map(then => ({
         ...then.function,
         function: then.function.name,
         ...('functionOptions' in then ? { functionOptions: printValue(then.functionOptions) } : null),
       })),
-      given: this.#given,
+      given: Array.isArray(this.definition.given) ? this.definition.given : [this.definition.given],
       owner: this.owner.id,
     };
   }
