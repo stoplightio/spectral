@@ -2,7 +2,7 @@
 
 Spectral is a generic linter, but you can add an "oas" ruleset, with OAS being shorthand for the [OpenAPI Specification](https://openapis.org/specification).
 
-Add `extends: "spectral:oas"` to your ruleset file to apply rules for OpenAPI v2 and v3., depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats). See the [OpenAPI Rules](../reference/openapi-rules.md). 
+Add `extends: "spectral:oas"` to your ruleset file to apply rules for OpenAPI v2 and v3.x, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats). See the [OpenAPI Rules](../reference/openapi-rules.md). 
 
 <!-- theme: info -->
 
