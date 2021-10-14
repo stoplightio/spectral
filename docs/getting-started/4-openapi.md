@@ -1,8 +1,8 @@
 # OpenAPI Support
 
-Spectral is a generic linter, but a lot of effort has been put in to making sure OpenAPI is well supported.
+Spectral is a generic linter, but you can add an "oas" ruleset, with OAS being shorthand for the [OpenAPI Specification](https://openapis.org/specification).
 
-Run Spectral against a document without specifying a ruleset to trigger an auto-detect, where Spectral will look to see if `swagger: 2.0` or `openapi: 3.0.x` are in the root of the document. If it finds either of those it will load `spectral:oas`, which is documented in our [Reference > OpenAPI Rules](../reference/openapi-rules.md).
+Add `extends: "spectral:oas"` to your ruleset file to apply rules for OpenAPI v2 and v3., depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats). See the [OpenAPI Rules](../reference/openapi-rules.md). 
 
 <!-- theme: info -->
 

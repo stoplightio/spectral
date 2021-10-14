@@ -1,5 +1,5 @@
 # AsyncAPI Support
 
-Spectral is a generic linter, but a lot of effort has been put in to making sure [AsyncAPI v2](https://www.asyncapi.com/docs/specifications/v2.0.0) is well supported.
+Spectral is a generic linter, but you can add an [AsyncAPI v2](https://www.asyncapi.com/docs/specifications/v2.0.0) ruleset.
 
-Run Spectral against a document without specifying a ruleset to trigger an auto-detect, where Spectral will look to see if `asyncapi: 2.0.0` is in the root of the document. If it finds it, it will load `spectral:asyncapi`, which is documented in our [Reference > AsyncAPI Rules](../reference/asyncapi-rules.md).
+Add `extends: "spectral:asyncapi"` to your ruleset file to apply rules for AsyncAPI v2. See the [AsyncAPI Rules](../reference/asyncapi-rules.md). 
