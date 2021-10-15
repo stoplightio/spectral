@@ -1,9 +1,11 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
+import { optionSchemas } from './schema/optionSchemas';
+
 export default createRulesetFunction<unknown, null>(
   {
     input: null,
-    options: null,
+    options: optionSchemas.defined,
   },
   function defined(input) {
     if (typeof input === 'undefined') {

@@ -3,6 +3,8 @@ import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core
 import { printValue } from '@stoplight/spectral-runtime';
 import { isPlainObject } from '@stoplight/json';
 
+import { optionSchemas } from './schema/optionSchemas';
+
 export type Options =
   | {
       min: number;
@@ -20,22 +22,7 @@ export default createRulesetFunction<unknown[] | Record<string, unknown> | strin
     input: {
       type: ['array', 'object', 'string', 'number'],
     },
-    options: {
-      type: 'object',
-      properties: {
-        min: {
-          type: 'number',
-        },
-        max: {
-          type: 'number',
-        },
-      },
-      minProperties: 1,
-      additionalProperties: false,
-      errorMessage: {
-        type: `"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }`,
-      },
-    },
+    options: optionSchemas.length,
   },
   function length(targetVal, opts) {
     let value: number;

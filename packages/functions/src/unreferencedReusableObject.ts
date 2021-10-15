@@ -1,6 +1,8 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { safePointerToPath } from '@stoplight/spectral-runtime';
 
+import { optionSchemas } from './schema/optionSchemas';
+
 export type Options = {
   reusableObjectsLocation: string;
 };
@@ -10,24 +12,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     input: {
       type: 'object',
     },
-    options: {
-      type: 'object',
-      properties: {
-        reusableObjectsLocation: {
-          type: 'string',
-          format: 'json-pointer-uri-fragment',
-          errorMessage:
-            '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
-        },
-      },
-      additionalProperties: false,
-      required: ['reusableObjectsLocation'],
-      errorMessage: {
-        type: '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
-        required:
-          '"unreferencedReusableObject" function is missing "reusableObjectsLocation" option. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
-      },
-    },
+    options: optionSchemas.unreferencedReusableObject,
   },
   function unreferencedReusableObject(data, opts, { document, documentInventory }) {
     const graph = documentInventory.graph;

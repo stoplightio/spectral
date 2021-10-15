@@ -1,11 +1,11 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
+import { optionSchemas } from './schema/optionSchemas';
+
 export default createRulesetFunction(
   {
     input: null,
-    options: {
-      type: 'null',
-    },
+    options: optionSchemas.undefined,
   },
   // eslint-disable-next-line no-shadow-restricted-names
   function undefined(targetVal) {
