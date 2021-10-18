@@ -1,7 +1,7 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { safePointerToPath } from '@stoplight/spectral-runtime';
 
-import { optionSchemas } from './schema/optionSchemas';
+import { optionSchemas } from './optionSchemas';
 
 export type Options = {
   reusableObjectsLocation: string;

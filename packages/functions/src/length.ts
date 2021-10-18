@@ -3,7 +3,7 @@ import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core
 import { printValue } from '@stoplight/spectral-runtime';
 import { isPlainObject } from '@stoplight/json';
 
-import { optionSchemas } from './schema/optionSchemas';
+import { optionSchemas } from './optionSchemas';
 
 export type Options =
   | {

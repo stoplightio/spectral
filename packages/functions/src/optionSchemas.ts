@@ -1,5 +1,5 @@
 import type { CustomFunctionOptionsSchema } from '@stoplight/spectral-core';
-import { CasingType } from '../types';
+import { CasingType } from './types';
 
 export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
   alphabetical: {

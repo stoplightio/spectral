@@ -1,7 +1,7 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { printValue } from '@stoplight/spectral-runtime';
 
-import { optionSchemas } from './schema/optionSchemas';
+import { optionSchemas } from './optionSchemas';
 
 type Primitive = string | number | null | boolean;
 

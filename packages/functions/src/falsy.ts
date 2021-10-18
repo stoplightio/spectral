@@ -1,6 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
-import { optionSchemas } from './schema/optionSchemas';
+import { optionSchemas } from './optionSchemas';
 
 export default createRulesetFunction<unknown, null>(
   {

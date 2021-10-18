@@ -1,7 +1,7 @@
 import { escapeRegExp } from 'lodash';
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
-import { optionSchemas } from './schema/optionSchemas';
+import { optionSchemas } from './optionSchemas';
 import { CasingType, CasingOptions as Options } from './types';
 
 export { CasingType, Options };
