@@ -2,7 +2,7 @@
 
 The power of integrating linting into the design-first workflow, or any workflow which involves API descriptions, is often overlooked. Linting is not just about validating OpenAPI or JSON Schema documents against specifications. It is for enforcing style guides to ensure that your APIs are consistent, valid, and of high quality.
 
-To achieve this, Spectral has three key concepts: 
+To achieve this, Spectral has three key concepts:
 
 - **Rulesets** act as a container for rules and functions.
 - **Rules** filter your object down to a set of target values and specify the function that is used to evaluate those values.

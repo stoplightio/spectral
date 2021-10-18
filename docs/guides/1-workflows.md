@@ -13,7 +13,7 @@ You can:
 
 If you are using Studio, Spectral automatically runs as you work so you never need to switch to the CLI.
 
-Seeing these errors and warnings facilitate consistent APIs, quickly and easily, without requiring "OpenAPI Gatekeepers" to manually enforce the rules. 
+Seeing these errors and warnings facilitate consistent APIs, quickly and easily, without requiring "OpenAPI Gatekeepers" to manually enforce the rules.
 
 ## Linting Code-First Workflows
 
