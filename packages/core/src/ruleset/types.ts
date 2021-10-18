@@ -3,7 +3,6 @@ import { Format } from './format';
 import { RulesetFunction, RulesetFunctionWithValidator } from '../types';
 import { FormatsSet } from './utils/formatsSet';
 
-export type { CustomFunctionOptionsSchema } from './rulesetFunction';
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';
 export type FileRuleSeverityDefinition = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
 export type FileRulesetSeverityDefinition = 'off' | 'recommended' | 'all';
