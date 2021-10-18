@@ -137,8 +137,28 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
     },
   },
   truthy: null,
-  undefined: {
-    type: 'null',
+  undefined: null,
+  schema: {
+    additionalProperties: false,
+    properties: {
+      schema: {
+        type: 'object',
+      },
+      dialect: {
+        enum: ['auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'],
+        default: 'auto',
+      },
+      allErrors: {
+        type: 'boolean',
+        default: false,
+      },
+      prepareResults: true,
+    },
+    required: ['schema'],
+    type: 'object',
+    errorMessage: {
+      type: '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
+    },
   },
   unreferencedReusableObject: {
     type: 'object',
