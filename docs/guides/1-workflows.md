@@ -1,35 +1,37 @@
 # Workflows
 
-When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, or whatever files you are trying to lint.
+When and where you use Spectral depends on how you are creating and managing your API description documents or other files you are trying to lint.
 
-1. Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
+You can:
+
+1. Run [Spectral CLI](2-cli.md) against design docs and get early feedback.
 2. Run Spectral in [Stoplight Studio](https://stoplight.io/studio/?utm_source=github&utm_medium=spectral&utm_campaign=docs) or [VS Code](https://github.com/stoplightio/vscode-spectral?utm_source=github&utm_medium=spectral&utm_campaign=docs) as you work to avoid switching to CLI.
-3. Run Spectral as a [Git hook](#Git-hooks) for quick feedback in case people forget to run it in the CLI.
-4. Use [Continuous Integration](#Continuous-Integration) to reject pull requests that don't match your rulesets/style-guide.
+3. Run Spectral as a [Git hook](#Git-hooks) to enforce linting as part of the commit process.
+4. Use [Continuous Integration](#Continuous-Integration) to reject pull requests that don't match your rulesets and style-guide.
 
 ## Linting Design-First Workflows
 
-If the developer is just in the early stages of planning and designing the API, they could run Spectral against their design docs and get feedback very early on. If they are using Studio, Spectral will be running automatically as they work, without the developer even needing to switch to the CLI.
+If you are using Studio, Spectral automatically runs as you work so you never need to switch to the CLI.
 
-Seeing these errors and warnings will help nudge the developer towards creating consistent APIs, quickly and easily, without needing to have "OpenAPI Gatekeepers" to enforce the rules manually. Those folks are not infallible, they can miss things, but Spectral can be used to free those people up for bigger and better things.
+Seeing these errors and warnings facilitate consistent APIs, quickly and easily, without requiring "OpenAPI Gatekeepers" to manually enforce the rules.
 
 ## Linting Code-First Workflows
 
-Using Spectral gets a little tricky for developers who are following a code-first (a.k.a "design-second") workflow. If the API description documents live in YAML or JSON files then its fine, and the design-first workflow can be used: with new changes being linted.
+Using Spectral gets a little tricky for developers who are following a code-first (a.k.a "design-second") workflow. If the API description documents live in YAML or JSON files, the design-first workflow can be used, with new changes being linted.
 
-If the API description documents live in some other format, maybe as comments or annotations inside code, Spectral has no way to read that. Hopefully that annotations-based tool has some sort of export option on the CLI. Here's an example for those using [go-swagger](https://github.com/go-swagger/go-swagger).
+If the API description documents live in some other format, such as comments or annotations inside code, consider using a tool with an export option on the CLI. Here's an example using [go-swagger](https://github.com/go-swagger/go-swagger).
 
 ```bash
 swagger generate spec -o ./tmp/openapi.json && spectral lint ./tmp/openapi.json
 ```
 
-Sadly by the time you've already written your code, if Spectral points anything out related to your actual API, and not providing feedback on the API description document itself, figuring out what to do next might be troublesome.
+By the time you've written your code, if Spectral points anything out related to your actual API, and not providing feedback on the API description document itself, figuring out what to do next might be troublesome.
 
 For example if the API has a bunch of URLs with underscores, then becoming consistent is either a case of waiting for the next major version and changing things in there, or taking a more evolution-based approach, aliasing `/example_url` to `/example-url`, then look into [deprecating the old URL](https://apisyouwonthate.com/blog/api-evolution-for-rest-http-apis/).
 
 ## Git-hooks
 
-Folks will forget to run Spectral, and that means they can commit broken or (low quality) documents. Adding a git commit hook can be a simple solution to this using something like [Husky](https://github.com/typicode/husky).
+Git commit hooks prevent developers form committing broken or low quality documents. Here's a simple solution using [Husky](https://github.com/typicode/husky).
 
 ```jsonc
 // package.json

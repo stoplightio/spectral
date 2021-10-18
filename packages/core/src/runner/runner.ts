@@ -9,7 +9,7 @@ import { Ruleset } from '../ruleset/ruleset';
 import Nimma, { Callback } from 'nimma/legacy'; // legacy = Node v12, nimma without /legacy supports only 14+
 import { jsonPathPlus } from 'nimma/fallbacks';
 import { isPlainObject } from '@stoplight/json';
-import { isError } from 'lodash';
+import { isAggregateError } from '../guards/isAggregateError';
 
 export class Runner {
   public readonly results: IRuleResult[];
@@ -31,6 +31,7 @@ export class Runner {
 
     const { inventory: documentInventory } = this;
     const { rules } = ruleset;
+    const formats = this.document.formats ?? null;
 
     const runnerContext: IRunnerInternalContext = {
       ruleset,
@@ -41,13 +42,13 @@ export class Runner {
 
     const enabledRules = Object.values(rules).filter(rule => rule.enabled);
     const relevantRules = enabledRules.filter(rule => rule.matchesFormat(documentInventory.formats));
-    const callbacks: { resolved: Record<string, Callback[]>; unresolved: Record<string, Callback[]> } = {
+    const callbacks: Record<'resolved' | 'unresolved', Record<string, Callback[]>> = {
       resolved: {},
       unresolved: {},
     };
 
     for (const rule of relevantRules) {
-      for (const given of rule.given) {
+      for (const given of rule.getGivenForFormats(formats)) {
         const cb: Callback = (scope): void => {
           lintNode(runnerContext, scope, rule);
         };
@@ -56,18 +57,15 @@ export class Runner {
       }
     }
 
-    execute(
-      runnerContext.documentInventory.resolved,
-      callbacks.resolved,
-      relevantRules.flatMap(r => (r.resolved ? r.given : [])),
-    );
+    const resolvedJsonPaths = Object.keys(callbacks.resolved);
+    const unresolvedJsonPaths = Object.keys(callbacks.unresolved);
 
-    if (Object.keys(callbacks.unresolved).length > 0) {
-      execute(
-        runnerContext.documentInventory.unresolved,
-        callbacks.unresolved,
-        relevantRules.flatMap(r => (!r.resolved ? r.given : [])),
-      );
+    if (resolvedJsonPaths.length > 0) {
+      execute(runnerContext.documentInventory.resolved, callbacks.resolved, resolvedJsonPaths);
+    }
+
+    if (unresolvedJsonPaths.length > 0) {
+      execute(runnerContext.documentInventory.unresolved, callbacks.unresolved, unresolvedJsonPaths);
     }
 
     this.runtime.emit('beforeTeardown');
@@ -124,8 +122,4 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
       throw e;
     }
   }
-}
-
-function isAggregateError(maybeAggregateError: unknown): maybeAggregateError is Error & { errors: unknown[] } {
-  return isError(maybeAggregateError) && maybeAggregateError.constructor.name === 'AggregateError';
 }
