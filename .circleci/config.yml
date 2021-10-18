@@ -18,7 +18,7 @@ defaults:
   node-versions: &node-versions
     - "12.21"
     - lts
-    - 16.8
+    - "16.8"
 
 commands:
   cached-dependencies:
