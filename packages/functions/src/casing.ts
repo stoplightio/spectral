@@ -1,24 +1,10 @@
 import { escapeRegExp } from 'lodash';
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
-export enum CasingType {
-  flat = 'flat',
-  camel = 'camel',
-  pascal = 'pascal',
-  kebab = 'kebab',
-  cobol = 'cobol',
-  snake = 'snake',
-  macro = 'macro',
-}
+import { optionSchemas } from './optionSchemas';
+import { CasingType, CasingOptions as Options } from './types';
 
-export type Options = {
-  type: CasingType;
-  disallowDigits?: boolean;
-  separator?: {
-    char: string;
-    allowLeading?: boolean;
-  };
-};
+export { CasingType, Options };
 
 const CASES: Record<CasingType, string> = {
   [CasingType.flat]: '[a-z][a-z{__DIGITS__}]*',
@@ -36,41 +22,7 @@ export default createRulesetFunction<string, Options>(
       type: 'string',
       minLength: 1,
     },
-    options: {
-      required: ['type'],
-      type: 'object',
-      properties: {
-        type: {
-          type: 'string',
-          enum: Object.values(CasingType),
-          errorMessage: `"casing" function and its "type" option accept the following values: ${Object.values(
-            CasingType,
-          ).join(', ')}`,
-        },
-        disallowDigits: {
-          type: 'boolean',
-        },
-        separator: {
-          type: 'object',
-          required: ['char'],
-          additionalProperties: false,
-          properties: {
-            char: {
-              type: 'string',
-              maxLength: 1,
-              errorMessage: `"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"`,
-            },
-            allowLeading: {
-              type: 'boolean',
-            },
-          },
-        },
-      },
-      additionalProperties: false,
-      errorMessage: {
-        type: `"casing" function has invalid options specified. Example valid options: { "type": "camel" }, { "type": "pascal", "disallowDigits": true }`,
-      },
-    },
+    options: optionSchemas.casing,
   },
   function casing(targetVal, opts) {
     if (

@@ -8,6 +8,8 @@ import MissingRefError from 'ajv/dist/compile/ref_error';
 import { createRulesetFunction, IFunctionResult, JSONSchema } from '@stoplight/spectral-core';
 import { isError } from 'lodash';
 
+import { optionSchemas } from '../optionSchemas';
+
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;
   allErrors?: boolean;
@@ -18,28 +20,7 @@ export type Options = {
 export default createRulesetFunction<unknown, Options>(
   {
     input: null,
-    options: {
-      additionalProperties: false,
-      properties: {
-        schema: {
-          type: 'object',
-        },
-        dialect: {
-          enum: ['auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'],
-          default: 'auto',
-        },
-        allErrors: {
-          type: 'boolean',
-          default: false,
-        },
-        prepareResults: true,
-      },
-      required: ['schema'],
-      type: 'object',
-      errorMessage: {
-        type: '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
-      },
-    },
+    options: optionSchemas.schema,
   },
   function schema(targetVal, opts, { path, rule }) {
     if (targetVal === void 0) {

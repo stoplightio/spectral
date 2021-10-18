@@ -1,6 +1,8 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { printValue } from '@stoplight/spectral-runtime';
 
+import { optionSchemas } from './optionSchemas';
+
 type Primitive = string | number | null | boolean;
 
 export type Options = {
@@ -12,24 +14,7 @@ export default createRulesetFunction<Primitive, Options>(
     input: {
       type: ['string', 'number', 'null', 'boolean'],
     },
-    options: {
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        values: {
-          type: 'array',
-          items: {
-            type: ['string', 'number', 'null', 'boolean'],
-          },
-          errorMessage:
-            '"enumeration" and its "values" option support only arrays of primitive values, i.e. ["Berlin", "London", "Paris"]',
-        },
-      },
-      required: ['values'],
-      errorMessage: {
-        type: `"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }`,
-      },
-    },
+    options: optionSchemas.enumeration,
   },
   function enumeration(targetVal, { values }) {
     if (!values.includes(targetVal)) {
