@@ -10,6 +10,16 @@ info:
     name: Bob the Builder
 servers:
   - url: 'http://localhost:3000'
+  - url: 'https://{username}.localhost:3000/{basePath}'
+    variables:
+      username:
+        default: demo
+        description: this value is assigned by the service provider, in this example `gigantic-server.com`
+      port:
+        enum:
+          - '8443'
+          - '443'
+        default: '8443'
 paths:
   '/users/{userId}':
     parameters:
