@@ -36,6 +36,26 @@ testRule('oas3-valid-schema-example', [
     },
 
     {
+      name: `${field} containing a valid default example with booleanish exclusiveMinimum & exclusiveMaximum`,
+      document: {
+        openapi: '3.0.2',
+        [field]: {
+          schemas: {
+            xoxo: {
+              type: 'number',
+              minimum: 1,
+              maximum: 3,
+              exclusiveMinimum: true,
+              exclusiveMaximum: true,
+              example: 2,
+            },
+          },
+        },
+      },
+      errors: [],
+    },
+
+    {
       name: `invalid simple example in ${field}`,
       document: {
         openapi: '3.0.2',
