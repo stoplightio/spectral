@@ -1,5 +1,5 @@
 {
-  "$id": "https://spec.openapis.org/oas/3.1/schema/2021-04-15",
+  "$id": "https://spec.openapis.org/oas/3.1/schema/2021-09-28",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
@@ -11,7 +11,8 @@
       "$ref": "#/$defs/info"
     },
     "jsonSchemaDialect": {
-      "$ref": "#/$defs/uri",
+      "type": "string",
+      "format": "uri",
       "default": "https://spec.openapis.org/oas/3.1/dialect/base"
     },
     "servers": {
@@ -119,7 +120,8 @@
           "type": "string"
         },
         "url": {
-          "$ref": "#/$defs/uri"
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": ["name"],
@@ -138,7 +140,8 @@
       "type": "object",
       "properties": {
         "url": {
-          "$ref": "#/$defs/uri"
+          "type": "string",
+          "format": "uri-template"
         },
         "description": {
           "type": "string"
@@ -167,7 +170,7 @@
         "default": {
           "type": "string"
         },
-        "descriptions": {
+        "description": {
           "type": "string"
         }
       },
@@ -292,6 +295,7 @@
     },
     "path-item-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -367,7 +371,8 @@
           "type": "string"
         },
         "url": {
-          "$ref": "#/$defs/uri"
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": ["url"],
@@ -460,6 +465,9 @@
               },
               "then": {
                 "properties": {
+                  "name": {
+                    "pattern": "[^/#?]+$"
+                  },
                   "style": {
                     "default": "simple",
                     "enum": ["matrix", "label", "simple"]
@@ -484,7 +492,7 @@
                 "properties": {
                   "style": {
                     "default": "simple",
-                    "enum": ["simple"]
+                    "const": "simple"
                   }
                 }
               }
@@ -520,7 +528,7 @@
                 "properties": {
                   "style": {
                     "default": "form",
-                    "enum": ["form"]
+                    "const": "form"
                   }
                 }
               }
@@ -557,6 +565,7 @@
     },
     "parameter-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -586,6 +595,7 @@
     },
     "request-body-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -696,7 +706,7 @@
         }
       },
       "patternProperties": {
-        "^[1-5][0-9X]{2}$": {
+        "^[1-5](?:[0-9]{2}|XX)$": {
           "$ref": "#/$defs/response-or-reference"
         }
       },
@@ -731,6 +741,7 @@
     },
     "response-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -749,6 +760,7 @@
     },
     "callbacks-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -769,7 +781,8 @@
         },
         "value": true,
         "externalValue": {
-          "$ref": "#/$defs/uri"
+          "type": "string",
+          "format": "uri"
         }
       },
       "$ref": "#/$defs/specification-extensions",
@@ -777,6 +790,7 @@
     },
     "example-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -790,7 +804,8 @@
       "type": "object",
       "properties": {
         "operationRef": {
-          "$ref": "#/$defs/uri"
+          "type": "string",
+          "format": "uri-reference"
         },
         "operationId": true,
         "parameters": {
@@ -817,6 +832,7 @@
     },
     "link-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -840,38 +856,34 @@
           "default": false,
           "type": "boolean"
         },
-        "allowEmptyValue": {
-          "default": false,
-          "type": "boolean"
+        "schema": {
+          "$ref": "#/$defs/schema"
+        },
+        "content": {
+          "$ref": "#/$defs/content"
         }
       },
+      "oneOf": [
+        {
+          "required": ["schema"]
+        },
+        {
+          "required": ["content"]
+        }
+      ],
       "dependentSchemas": {
         "schema": {
           "properties": {
             "style": {
               "default": "simple",
-              "enum": ["simple"]
+              "const": "simple"
             },
             "explode": {
               "default": false,
               "type": "boolean"
-            },
-            "allowReserved": {
-              "default": false,
-              "type": "boolean"
-            },
-            "schema": {
-              "$ref": "#/$defs/schema"
             }
           },
           "$ref": "#/$defs/examples"
-        },
-        "content": {
-          "properties": {
-            "content": {
-              "$ref": "#/$defs/content"
-            }
-          }
         }
       },
       "$ref": "#/$defs/specification-extensions",
@@ -879,6 +891,7 @@
     },
     "header-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -909,7 +922,8 @@
       "type": "object",
       "properties": {
         "$ref": {
-          "$ref": "#/$defs/uri"
+          "type": "string",
+          "format": "uri-reference"
         },
         "summary": {
           "type": "string"
@@ -1003,7 +1017,8 @@
                 "const": "http"
               },
               "scheme": {
-                "const": "bearer"
+                "type": "string",
+                "pattern": "^[Bb][Ee][Aa][Rr][Ee][Rr]$"
               }
             },
             "required": ["type", "scheme"]
@@ -1013,8 +1028,7 @@
               "bearerFormat": {
                 "type": "string"
               }
-            },
-            "required": ["scheme"]
+            }
           }
         },
         "type-oauth2": {
@@ -1047,7 +1061,8 @@
           "then": {
             "properties": {
               "openIdConnectUrl": {
-                "$ref": "#/$defs/uri"
+                "type": "string",
+                "format": "uri"
               }
             },
             "required": ["openIdConnectUrl"]
@@ -1057,6 +1072,7 @@
     },
     "security-scheme-or-reference": {
       "if": {
+        "type": "object",
         "required": ["$ref"]
       },
       "then": {
@@ -1169,9 +1185,7 @@
     },
     "specification-extensions": {
       "patternProperties": {
-        "^x-": {
-          "type": ["number", "string", "null", "boolean", "array", "object"]
-        }
+        "^x-": true
       }
     },
     "examples": {
@@ -1184,10 +1198,6 @@
           }
         }
       }
-    },
-    "uri": {
-      "type": "string",
-      "format": "uri"
     },
     "map-of-strings": {
       "type": "object",
