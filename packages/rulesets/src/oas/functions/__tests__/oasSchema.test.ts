@@ -57,48 +57,80 @@ describe('oasSchema', () => {
     });
   });
 
-  test('given OAS 3.0, supports nullable', () => {
-    const document = {
-      formats: new Set([oas3, oas3_0]),
-    };
+  describe('given OAS 3.0', () => {
+    it('supports nullable', () => {
+      const document = {
+        formats: new Set([oas3, oas3_0]),
+      };
 
-    const testSchema = {
-      type: 'object',
-      nullable: true,
-      properties: {
-        foo: {
-          type: 'number',
-          nullable: true,
+      const testSchema = {
+        type: 'object',
+        nullable: true,
+        properties: {
+          foo: {
+            type: 'number',
+            nullable: true,
+          },
         },
-      },
-    };
+      };
 
-    expect(runSchema({}, testSchema, { document })).toEqual([]);
-    expect(runSchema(null, testSchema, { document })).toEqual([]);
-    expect(runSchema(2, testSchema, { document })).toEqual([
-      {
-        message: 'Value type must be object,null',
-        path: [],
-      },
-    ]);
-    expect(runSchema({ foo: null }, testSchema, { document })).toEqual([]);
-    expect(runSchema({ foo: 2 }, testSchema, { document })).toEqual([]);
-    expect(runSchema({ foo: 'test' }, testSchema, { document })).toEqual([
-      {
-        message: '"foo" property type must be number,null',
-        path: ['foo'],
-      },
-    ]);
-
-    expect(testSchema).toStrictEqual({
-      type: 'object',
-      nullable: true,
-      properties: {
-        foo: {
-          type: 'number',
-          nullable: true,
+      expect(runSchema({}, testSchema, { document })).toEqual([]);
+      expect(runSchema(null, testSchema, { document })).toEqual([]);
+      expect(runSchema(2, testSchema, { document })).toEqual([
+        {
+          message: 'Value type must be object,null',
+          path: [],
         },
-      },
+      ]);
+      expect(runSchema({ foo: null }, testSchema, { document })).toEqual([]);
+      expect(runSchema({ foo: 2 }, testSchema, { document })).toEqual([]);
+      expect(runSchema({ foo: 'test' }, testSchema, { document })).toEqual([
+        {
+          message: '"foo" property type must be number,null',
+          path: ['foo'],
+        },
+      ]);
+
+      expect(testSchema).toStrictEqual({
+        type: 'object',
+        nullable: true,
+        properties: {
+          foo: {
+            type: 'number',
+            nullable: true,
+          },
+        },
+      });
+    });
+
+    it('supports booleanish exclusiveMinimum & exclusiveMaximum', () => {
+      const document = {
+        formats: new Set([oas3, oas3_0]),
+      };
+
+      const testSchema = {
+        type: 'number',
+        minimum: 1,
+        maximum: 3,
+        exclusiveMinimum: true,
+        exclusiveMaximum: true,
+      };
+
+      expect(runSchema(1, testSchema, { document })).toEqual([
+        {
+          message: 'Number must be > 1',
+          path: [],
+        },
+      ]);
+
+      expect(runSchema(3, testSchema, { document })).toEqual([
+        {
+          message: 'Number must be < 3',
+          path: [],
+        },
+      ]);
+
+      expect(runSchema(1.5, testSchema, { document })).toEqual([]);
     });
   });
 

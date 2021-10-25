@@ -37,11 +37,11 @@ export default createRulesetFunction<unknown, Options>(
 
     let { schema } = opts;
 
-    let dialect: SchemaOptions['dialect'];
+    let dialect: SchemaOptions['dialect'] = 'draft4';
     let prepareResults: SchemaOptions['prepareResults'];
 
     if (!formats) {
-      dialect = 'draft4';
+      dialect = 'auto';
     } else if (formats.has(oas3_1)) {
       if (isPlainObject(context.document.data) && typeof context.document.data.jsonSchemaDialect === 'string') {
         dialect =
