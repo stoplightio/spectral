@@ -1247,6 +1247,16 @@
   resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
+"@jsep-plugin/regex@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@jsep-plugin/regex/-/regex-1.0.1.tgz#54b75002ca864bc72fd077add5a60c6379d3a7c4"
+  integrity sha512-GroTtexnEfdVOvvALjW/JfV+wgRMadZKEA/lf9gE09zJejHhcBl+cqJxk2px9ub8k3gUrPe1j81Z1V4RDaSy8A==
+
+"@jsep-plugin/ternary@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@jsep-plugin/ternary/-/ternary-1.0.2.tgz#5e60a31df7086b2d8429a94d7e466b36db7775eb"
+  integrity sha512-hoCxJW/uVT1z9LGsZr1t2m7XNmE5k8w2P+5hfegVOuy9bQFrFESRe/XSd+KZ4eAbGnTkyHqOPct2LTa9qFUrMQ==
+
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.3.tgz#3a582bdb53804c6ba6d146579c46e52130cf4a3b"
@@ -3499,13 +3509,6 @@ expect@^27.2.4:
     jest-message-util "^27.2.4"
     jest-regex-util "^27.0.6"
 
-expression-eval@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/expression-eval/-/expression-eval-4.0.0.tgz#d6a07c93e8b33e635710419d4a595d9208b9cc5e"
-  integrity sha512-YHSnLTyIb9IKaho2IdQbvlei/pElxnGm48UgaXJ1Fe5au95Ck0R9ftm6rHJQuKw3FguZZ4eXVllJFFFc7LX0WQ==
-  dependencies:
-    jsep "^0.3.0"
-
 ext@^1.1.2:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/ext/-/ext-1.4.0.tgz#89ae7a07158f79d35517882904324077e4379244"
@@ -4898,10 +4901,10 @@ jsdom@^16.6.0:
     ws "^7.4.5"
     xml-name-validator "^3.0.0"
 
-jsep@^0.3.0:
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/jsep/-/jsep-0.3.5.tgz#3fd79ebd92f6f434e4857d5272aaeef7d948264d"
-  integrity sha512-AoRLBDc6JNnKjNcmonituEABS5bcfqDhQAWWXNTFrqu6nVXBpBAGfcoTGZMFlIrh9FjmE1CQyX9CTNwZrXMMDA==
+jsep@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/jsep/-/jsep-1.1.2.tgz#f921cae19c0462611683f21b401a82b34eb1c5d5"
+  integrity sha512-2kQugUeiln8vUiDyZf/BQnB3bjcqtwptpbTCbhCTNbWPHrKTHzf4HesmM1iIR+e3URjbQGcdjuxPj4x2M+zWyQ==
 
 jsesc@^2.5.1:
   version "2.5.2"
@@ -5027,11 +5030,6 @@ karma-chrome-launcher@^3.1.0:
   integrity sha512-3dPs/n7vgz1rxxtynpzZTvb9y/GIaW8xjAwcIGttLbycqoFtI7yo1NGnQi6oFTherRE+GIhCAHZC4vEqWGhNvg==
   dependencies:
     which "^1.2.1"
-
-karma-env-preprocessor@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/karma-env-preprocessor/-/karma-env-preprocessor-0.1.1.tgz#bbe8c87d59c00edb76070bd3c31b4b39d5dc7e15"
-  integrity sha1-u+jIfVnADtt2BwvTwxtLOdXcfhU=
 
 karma-jasmine@^3.3.1:
   version "3.3.1"
@@ -5572,12 +5570,15 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-nimma@0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/nimma/-/nimma-0.1.3.tgz#30c2093d9dab7b0516f9d0c041e69ad9e58b4fdc"
-  integrity sha512-HSxAD97kPH1uODkAkHejrSaFpKfT9ZqiwSoK7jCu04IcaZMPKSYwQHZF1w2OQa9imD7WKxo36eea88QlLlqL2w==
+nimma@0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/nimma/-/nimma-0.1.6.tgz#2d39018fc08035dc85bb173c7d9f23b364cc65e6"
+  integrity sha512-e5sD2lr975iRQg08pr0p0lx7ISYojJSQFMSn6hI6W6ylmM+TLKLwM3l0lVsBAIUNOmOPCAlQzn70gFcJaWy3mg==
   dependencies:
+    "@jsep-plugin/regex" "^1.0.1"
+    "@jsep-plugin/ternary" "^1.0.2"
     astring "^1.7.5"
+    jsep "^1.1.2"
   optionalDependencies:
     jsonpath-plus "^6.0.1"
     lodash.topath "^4.5.2"
@@ -6649,6 +6650,13 @@ simple-concat@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/simple-concat/-/simple-concat-1.0.1.tgz#f46976082ba35c2263f1c8ab5edfe26c41c9552f"
   integrity sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==
+
+simple-eval@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/simple-eval/-/simple-eval-1.0.0.tgz#7ba8e6049840690b2d4e356ed01f13209e03aad1"
+  integrity sha512-kpKJR+bqTscgC0xuAl2xHN6bB12lHjC2DCUfqjAx19bQyO3R2EVLOurm3H9AUltv/uFVcSCVNc6faegR+8NYLw==
+  dependencies:
+    jsep "^1.1.2"
 
 simple-get@^3.0.3:
   version "3.1.0"
