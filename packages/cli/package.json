@@ -8,7 +8,7 @@
     "spectral": "./dist/index.js"
   },
   "engines": {
-    "node": ">=12.20"
+    "node": "^12.20 || >= 14.13"
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",

@@ -20,7 +20,7 @@
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=12"
+    "node": "^12.20 || >= 14.13"
   },
   "scripts": {
     "clean": "rimraf .cache packages/*/{dist,.cache}",
