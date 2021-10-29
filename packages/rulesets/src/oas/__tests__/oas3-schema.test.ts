@@ -154,4 +154,37 @@ testRule('oas3-schema', [
     },
     errors: [],
   },
+
+  {
+    name: 'oas3.1: uri template as server url',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Server URL may have variables',
+        version: '1.0.0',
+      },
+      webhooks: {},
+      // https://spec.openapis.org/oas/v3.1.0#server-object-example
+      servers: [
+        {
+          url: 'https://{username}.gigantic-server.com:{port}/{basePath}',
+          description: 'The production API server',
+          variables: {
+            username: {
+              default: 'demo',
+              description: 'this value is assigned by the service provider, in this example `gigantic-server.com`',
+            },
+            port: {
+              enum: ['8443', '443'],
+              default: '8443',
+            },
+            basePath: {
+              default: 'v2',
+            },
+          },
+        },
+      ],
+    },
+    errors: [],
+  },
 ]);

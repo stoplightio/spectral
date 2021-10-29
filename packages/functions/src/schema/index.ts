@@ -1,12 +1,12 @@
-import { ValidateFunction, ErrorObject } from 'ajv';
+import type { ErrorObject } from 'ajv';
 import * as betterAjvErrors from '@stoplight/better-ajv-errors';
 import { detectDialect } from '@stoplight/spectral-formats';
-import { assignAjvInstance } from './ajv';
-import { Optional } from '@stoplight/types';
-import { draft7 } from 'json-schema-migrate';
+import { createAjvInstances } from './ajv';
 import MissingRefError from 'ajv/dist/compile/ref_error';
-import { createRulesetFunction, IFunctionResult, JSONSchema } from '@stoplight/spectral-core';
+import { createRulesetFunction, IFunctionResult, JSONSchema, RulesetFunctionContext } from '@stoplight/spectral-core';
 import { isError } from 'lodash';
+
+import { optionSchemas } from '../optionSchemas';
 
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;
@@ -15,33 +15,14 @@ export type Options = {
   prepareResults?(errors: ErrorObject[]): void;
 };
 
+const instances = new WeakMap<RulesetFunctionContext['documentInventory'], ReturnType<typeof createAjvInstances>>();
+
 export default createRulesetFunction<unknown, Options>(
   {
     input: null,
-    options: {
-      additionalProperties: false,
-      properties: {
-        schema: {
-          type: 'object',
-        },
-        dialect: {
-          enum: ['auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'],
-          default: 'auto',
-        },
-        allErrors: {
-          type: 'boolean',
-          default: false,
-        },
-        prepareResults: true,
-      },
-      required: ['schema'],
-      type: 'object',
-      errorMessage: {
-        type: '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
-      },
-    },
+    options: optionSchemas.schema,
   },
-  function schema(targetVal, opts, { path, rule }) {
+  function schema(targetVal, opts, { path, rule, documentInventory }) {
     if (targetVal === void 0) {
       return [
         {
@@ -51,35 +32,21 @@ export default createRulesetFunction<unknown, Options>(
       ];
     }
 
+    const assignAjvInstance =
+      instances.get(documentInventory) ??
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      instances.set(documentInventory, createAjvInstances()).get(documentInventory)!;
+
     const results: IFunctionResult[] = [];
 
     // we already access a resolved object in src/functions/schema-path.ts
-    const { allErrors = false } = opts;
-    let { schema: schemaObj } = opts;
+    const { allErrors = false, schema: schemaObj } = opts;
 
     try {
-      let validator;
       const dialect =
         (opts.dialect === void 0 || opts.dialect === 'auto' ? detectDialect(schemaObj) : opts?.dialect) ?? 'draft7';
 
-      if (dialect === 'draft4' || dialect === 'draft6') {
-        schemaObj = JSON.parse(JSON.stringify(schemaObj)) as Record<string, unknown>;
-        schemaObj.$schema = 'http://json-schema.org/draft-07/schema#';
-        draft7(schemaObj);
-      }
-
-      const ajv = assignAjvInstance(dialect, allErrors);
-
-      const $id = (schemaObj as Record<string, unknown>).$id;
-
-      if (typeof $id !== 'string') {
-        validator = ajv.compile(schemaObj);
-      } else {
-        validator = ajv.getSchema($id) as Optional<ValidateFunction>;
-        if (validator === void 0) {
-          validator = ajv.compile(schemaObj);
-        }
-      }
+      const validator = assignAjvInstance(schemaObj, dialect, allErrors);
 
       if (validator?.(targetVal) === false && Array.isArray(validator.errors)) {
         opts.prepareResults?.(validator.errors);

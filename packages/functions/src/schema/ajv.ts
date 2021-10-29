@@ -1,11 +1,14 @@
-import { default as AjvBase } from 'ajv';
+import { default as AjvBase, ValidateFunction, SchemaObject } from 'ajv';
 import type AjvCore from 'ajv/dist/core';
 import Ajv2019 from 'ajv/dist/2019';
 import Ajv2020 from 'ajv/dist/2020';
+import AjvDraft4 from 'ajv-draft-04';
 import addFormats from 'ajv-formats';
 import ajvErrors from 'ajv-errors';
+import * as draft6MetaSchema from 'ajv/dist/refs/json-schema-draft-06.json';
+import * as draft4MetaSchema from './draft4.json';
 
-import * as draft4 from './draft4.json';
+import { Options } from './index';
 
 const logger = {
   warn(...args: unknown[]): void {
@@ -38,13 +41,14 @@ function createAjvInstance(Ajv: typeof AjvCore, allErrors: boolean): AjvCore {
   }
 
   if (Ajv === AjvBase) {
-    ajv.addSchema(draft4);
+    ajv.addSchema(draft4MetaSchema);
+    ajv.addSchema(draft6MetaSchema);
   }
 
   return ajv;
 }
 
-function createAjvInstances(Ajv: typeof AjvCore): { default: AjvCore; allErrors: AjvCore } {
+function _createAjvInstances(Ajv: typeof AjvCore): { default: AjvCore; allErrors: AjvCore } {
   let _default: AjvCore;
   let _allErrors: AjvCore;
 
@@ -60,15 +64,33 @@ function createAjvInstances(Ajv: typeof AjvCore): { default: AjvCore; allErrors:
   };
 }
 
-const ajvInstances = {
-  default: createAjvInstances(AjvBase),
-  draft2019_09: createAjvInstances(Ajv2019),
-  draft2020_12: createAjvInstances(Ajv2020),
-};
+type AssignAjvInstance = (schema: SchemaObject, dialect: string, allErrors: boolean) => ValidateFunction;
 
-export function assignAjvInstance(dialect: string, allErrors: boolean): AjvCore {
-  const draft: keyof typeof ajvInstances =
-    dialect === 'draft2020-12' ? 'draft2020_12' : dialect === 'draft2019-10' ? 'draft2019_09' : 'default';
+export function createAjvInstances(): AssignAjvInstance {
+  const ajvInstances: Partial<Record<NonNullable<Options['dialect']>, ReturnType<typeof _createAjvInstances>>> = {
+    auto: _createAjvInstances(AjvBase),
+    draft4: _createAjvInstances(AjvDraft4),
+    'draft2019-09': _createAjvInstances(Ajv2019),
+    'draft2020-12': _createAjvInstances(Ajv2020),
+  };
 
-  return ajvInstances[draft][allErrors ? 'allErrors' : 'default'];
+  const compiledSchemas = new WeakMap<AjvCore, WeakMap<SchemaObject, ValidateFunction>>();
+
+  return function (schema, dialect, allErrors): ValidateFunction {
+    const instances = (ajvInstances[dialect] ?? ajvInstances.auto) as ReturnType<typeof _createAjvInstances>;
+    const ajv = instances[allErrors ? 'allErrors' : 'default'];
+
+    const $id = schema.$id;
+
+    if (typeof $id === 'string') {
+      return ajv.getSchema($id) ?? ajv.compile(schema);
+    } else {
+      const actualCompiledSchemas =
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        compiledSchemas.get(ajv) ?? compiledSchemas.set(ajv, new WeakMap<SchemaObject, ValidateFunction>()).get(ajv)!;
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return actualCompiledSchemas.get(schema) ?? actualCompiledSchemas.set(schema, ajv.compile(schema)).get(schema)!;
+    }
+  };
 }

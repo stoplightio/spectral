@@ -2,6 +2,8 @@ import type { Optional } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { printValue } from '@stoplight/spectral-runtime';
 
+import { optionSchemas } from './optionSchemas';
+
 export type Options =
   | {
       /** regex that target must match */
@@ -49,55 +51,7 @@ export default createRulesetFunction<string, Options>(
     input: {
       type: 'string',
     },
-    options: {
-      type: 'object',
-      additionalProperties: false,
-      properties: {
-        match: {
-          anyOf: [
-            {
-              type: 'string',
-            },
-            {
-              type: 'object',
-              properties: {
-                exec: {},
-                test: {},
-                flags: {
-                  type: 'string',
-                },
-              },
-              required: ['test', 'flags'],
-            },
-          ],
-          errorMessage: `"pattern" function and its "match" option must be string or RegExp instance`,
-        },
-        notMatch: {
-          anyOf: [
-            {
-              type: 'string',
-            },
-            {
-              type: 'object',
-              properties: {
-                exec: {},
-                test: {},
-                flags: {
-                  type: 'string',
-                },
-              },
-              required: ['test', 'flags'],
-            },
-          ],
-          errorMessage: `"pattern" function and its "notMatch" option must be string or RegExp instance`,
-        },
-      },
-      minProperties: 1,
-      errorMessage: {
-        type: `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
-        minProperties: `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
-      },
-    },
+    options: optionSchemas.pattern,
   },
   function pattern(targetVal, opts) {
     let results: Optional<IFunctionResult[]>;
