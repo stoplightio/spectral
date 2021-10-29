@@ -1,4 +1,4 @@
-const { oas2: oas2, oas3: oas3 } = require('@stoplight/spectral-formats');
+const { oas2, oas3 } = require('@stoplight/spectral-formats');
 const oasDocumentSchema = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/oasDocumentSchema.js'));
 const oasExample = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/oasExample.js'));
 const oasOp2xxResponse = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/oasOp2xxResponse.js'));

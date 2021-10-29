@@ -1,11 +1,5 @@
-const {
-  truthy: truthy,
-  pattern: pattern,
-  schema: schema,
-  falsy: falsy,
-  enumeration: enumeration,
-} = require('@stoplight/spectral-functions');
-const { oas2: oas2, oas3: oas3 } = require('@stoplight/spectral-formats');
+const { truthy, pattern, schema, falsy, enumeration } = require('@stoplight/spectral-functions');
+const { oas2, oas3 } = require('@stoplight/spectral-formats');
 module.exports = {
   rules: {
     'api-home': {

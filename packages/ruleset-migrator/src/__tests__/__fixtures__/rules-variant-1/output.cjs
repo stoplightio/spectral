@@ -1,4 +1,4 @@
-const { oas2: oas2 } = require('@stoplight/spectral-formats');
+const { oas2 } = require('@stoplight/spectral-formats');
 module.exports = {
   rules: {
     'oas3-schema': 'error',
