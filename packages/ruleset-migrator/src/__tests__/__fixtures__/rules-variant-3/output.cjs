@@ -1,4 +1,4 @@
-const { truthy: truthy, length: length$0 } = require('@stoplight/spectral-functions');
+const { truthy, length: length$0 } = require('@stoplight/spectral-functions');
 module.exports = {
   rules: {
     rule: {
