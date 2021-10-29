@@ -11,3 +11,4 @@ export { default as oasPathParam } from './oasPathParam';
 export { default as oasTagDefined } from './oasTagDefined';
 export { default as oasUnusedComponent } from './oasUnusedComponent';
 export { default as oasOpIdUnique } from './oasOpIdUnique';
+export { default as oasDiscriminator } from './oasDiscriminator';
