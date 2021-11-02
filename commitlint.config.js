@@ -9,5 +9,6 @@ module.exports = {
   rules: {
     'scope-empty': [2, 'never'],
     'scope-enum': [2, 'always', scopes],
+    'body-max-line-length': [1, 'always', 100],
   },
 };
