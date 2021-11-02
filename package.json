@@ -90,7 +90,7 @@
     "karma-jasmine": "^3.3.1",
     "karma-typescript": "^5.5.2",
     "karma-typescript-es6-transform": "^5.5.2",
-    "lint-staged": "^11.2.0",
+    "lint-staged": "^11.2.6",
     "memfs": "^3.3.0",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.5",
