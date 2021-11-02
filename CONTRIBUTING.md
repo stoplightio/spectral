@@ -69,20 +69,15 @@ For instance, `path` can be quite safely replaced with `@stoplight/path`.
 ### Linting
 
 In comparison with other Stoplight projects, Spectral is the strictest and enforces plenty of rules.
-We use a number of various linters, including ESLint, Prettier or [kacl](https://www.npmjs.com/package/@brightcove/kacl).
+We use a number of various linters, including ESLint, Prettier or [commitlint](https://github.com/conventional-changelog/commitlint).
 If you're confused about a given linting error, please refer to the documentation provided by the owner of one of these packages, or plugins we use.
 Commit messages follow [conventional-changelog](https://github.com/conventional-changelog/commitlint).
+This rule applies to the title of your PR as well.
 
 Running all linters:
 
 ```bash
 yarn lint
-```
-
-Linting CHANGELOG.md
-
-```bash
-yarn lint.changelog
 ```
 
 Linting TS/JS Code
@@ -172,12 +167,12 @@ yarn test.harness
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your computer.
 2. Install yarn: Refer to the [installation documentation](https://classic.yarnpkg.com/en/docs/install/) according to your development operating system
-3. In your terminal, navigate to the directory you cloned Spectral into (check that you are on the `develop` branch).
+3. In your terminal, navigate to the directory you cloned Spectral into.
 4. Install the dependencies: `yarn`
-5. Build Spectral: `yarn build && yarn bui`
-6. Run Spectral from your local installation: `yarn cli lint [openapi_spec_file]`
+5. Build Spectral: `yarn build`
+6. Run Spectral from your local installation: `./packages/cli/dist/index.js lint [openapi_spec_file]`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
-8. Make changes, add tests, and then run the tests: `yarn test` and `yarn test.harness`
+8. Make changes, add tests, and then run the tests: `yarn test` and `yarn workspace @stoplight/spectral-cli build.binary && yarn test.harness`
 9. Update the documentation if appropriate. For example, if you added a new rule to an OpenAPI ruleset,
    add a description of the rule in `docs/reference/openapi-rules.md`.
 
