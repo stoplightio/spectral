@@ -23,6 +23,7 @@ import {
   oasDocumentSchema,
   oasOpSecurityDefined,
   oasSchema,
+  oasDiscriminator,
 } from './functions';
 
 export { ruleset as default };
@@ -398,6 +399,18 @@ const ruleset = {
             type: 'array',
           },
         },
+      },
+    },
+    'oas2-discriminator': {
+      description: 'discriminator property must be defined and required',
+      recommended: true,
+      formats: [oas2],
+      severity: 0,
+      message: '{{error}}',
+      given: '$.definitions[?(@.discriminator)]',
+      type: 'validation',
+      then: {
+        function: oasDiscriminator,
       },
     },
     'oas2-host-not-example': {
