@@ -4908,10 +4908,10 @@ jest-watcher@^27.2.4:
     jest-util "^27.2.4"
     string-length "^4.0.1"
 
-jest-when@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-3.4.1.tgz#833de057ac2bd4da8bed33dad783657a28d80ba3"
-  integrity sha512-oFxeKarvTsuE46SPTzX+znKb+vzQKUxhkPF/fOfhMJE19EcW+sk9dKiACgFVE3K82GgALDH1pjCvHU+uE91QYA==
+jest-when@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-3.4.2.tgz#720f19e0ab3a7d55a45a915663ca2b1bd3a9ec1a"
+  integrity sha512-vO1r+1XsyeavhoSapj7q4xD5xuM9i+UdopfhmJJK/aKaDpzDesxZ6hreLSO1JUZhZInqdM7CCn+At7c0SI2EEw==
 
 jest-worker@^27.2.4:
   version "27.2.4"
