@@ -1673,10 +1673,10 @@
   resolved "https://registry.yarnpkg.com/@types/text-table/-/text-table-0.2.2.tgz#774c90cfcfbc8b4b0ebb00fecbe861dc8b1e8e26"
   integrity sha512-dGoI5Af7To0R2XE8wJuc6vwlavWARsCh3UKJPjWs1YEqGUqfgBI/j/4GX0yf19/DsDPPf0YAXWAp8psNeIehLg==
 
-"@types/tmp@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@types/tmp/-/tmp-0.2.1.tgz#83ecf4ec22a8c218c71db25f316619fe5b986011"
-  integrity sha512-7cTXwKP/HLOPVgjg+YhBdQ7bMiobGMuoBmrGmqwIWJv8elC6t1DfVc/mn4fD9UE1IjhwmhaQ5pGVXkmXbH0rhg==
+"@types/tmp@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@types/tmp/-/tmp-0.2.2.tgz#424537a3b91828cb26aaf697f21ae3cd1b69f7e7"
+  integrity sha512-MhSa0yylXtVMsyT8qFpHA1DLHj4DvQGH5ntxrhHSh8PxUVNi35Wk+P5hVgqbO2qZqOotqr9jaoPRL+iRjWYm/A==
 
 "@types/treeify@^1.0.0":
   version "1.0.0"
@@ -4908,10 +4908,10 @@ jest-watcher@^27.2.4:
     jest-util "^27.2.4"
     string-length "^4.0.1"
 
-jest-when@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-3.4.1.tgz#833de057ac2bd4da8bed33dad783657a28d80ba3"
-  integrity sha512-oFxeKarvTsuE46SPTzX+znKb+vzQKUxhkPF/fOfhMJE19EcW+sk9dKiACgFVE3K82GgALDH1pjCvHU+uE91QYA==
+jest-when@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-3.4.2.tgz#720f19e0ab3a7d55a45a915663ca2b1bd3a9ec1a"
+  integrity sha512-vO1r+1XsyeavhoSapj7q4xD5xuM9i+UdopfhmJJK/aKaDpzDesxZ6hreLSO1JUZhZInqdM7CCn+At7c0SI2EEw==
 
 jest-worker@^27.2.4:
   version "27.2.4"
