@@ -81,7 +81,7 @@
     "fetch-mock": "^9.11.0",
     "husky": "^7.0.2",
     "jest": "^27.2.4",
-    "jest-mock": "^27.2.4",
+    "jest-mock": "^27.3.0",
     "jest-when": "^3.4.1",
     "json-schema": "^0.3.0",
     "karma": "^6.1.1",
