@@ -61,7 +61,7 @@
     "copyfiles": "^2.4.1",
     "jest-when": "^3.4.2",
     "nock": "^13.1.3",
-    "node-html-parser": "^4.1.5",
+    "node-html-parser": "^5.1.0",
     "pkg": "^5.4.1",
     "xml2js": "^0.4.23"
   },
