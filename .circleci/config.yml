@@ -17,7 +17,7 @@ defaults:
       only: /^v.*/
   node-versions: &node-versions
     - "12.21"
-    - lts
+    - "14.18"
     - "16.8"
 
 commands:
