@@ -60,7 +60,7 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^13.2.0",
+    "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^12.1.4",
     "@octokit/core": "^3.5.1",
     "@types/jest": "^27.0.2",
