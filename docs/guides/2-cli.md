@@ -1,6 +1,8 @@
 # Spectral CLI
 
-CLI options include:
+The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset.
+
+Options include:
 
 ```text
       --version                  Show version number                                                                       [boolean]
@@ -21,8 +23,6 @@ CLI options include:
   -v, --verbose                  increase verbosity                                                                        [boolean]
   -q, --quiet                    no logging - output only                                                                  [boolean]
 ```
-
-The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset.
 
 ## Error Results
 
