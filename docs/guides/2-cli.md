@@ -1,24 +1,6 @@
 # Spectral CLI
 
-[Once installed](../getting-started/2-installation.md), Spectral can be run via the command-line:
-
-```bash
-spectral lint petstore.yaml
-```
-
-You can lint multiple files at the same time by passing on multiple arguments:
-
-```bash
-spectral lint petstore.yaml https://example.com/petstore/openapi-v2.json https://example.com/todos/openapi-v3.json
-```
-
-Alternatively you can use [glob syntax](https://github.com/mrmlnc/fast-glob#basic-syntax) to match multiple files at once:
-
-```bash
-spectral lint ./reference/**/*.oas*.{json,yml,yaml}
-```
-
-Other options include:
+CLI options include:
 
 ```text
       --version                  Show version number                                                                       [boolean]
@@ -41,16 +23,6 @@ Other options include:
 ```
 
 The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via our built-in ruleset.
-
-## Using a Ruleset File
-
-If you don't specify a ruleset file with the `--ruleset` parameter, the Spectral CLI will look for a ruleset file called `.spectral.yml`, `.spectral.yaml`, `.spectral.json` or `.spectral.js` in the current working directory.
-Spectral will refuse to lint the document if no ruleset is specified and no default ruleset file is found.
-
-Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or extend and modify our core rulesets:
-
-- [OpenAPI ruleset](../reference/openapi-rules.md)
-- [AsyncAPI ruleset](../reference/asyncapi-rules.md)
 
 ## Error Results
 

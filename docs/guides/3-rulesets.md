@@ -1,12 +1,12 @@
 # Rulesets
 
-Rulesets are collections of rules written in JSON or YAML, which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
+Rulesets are collections of rules written in JSON or YAML, which can be used to power linting of other JSON or YAML files. Meta, we know! 😎
 
-These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
+These rules take parameters and call functions on certain parts of another YAML or JSON object being linted.
 
 ## Anatomy of a Ruleset
 
-A ruleset is a JSON or YAML file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
+A ruleset is a JSON or YAML file ([often the file will be called `.spectral.yaml`](../getting-started/3-load-ruleset.md)), and there are two main parts.
 
 ### Rules
 
@@ -51,25 +51,6 @@ Here are some convenient **additions or elaborations**:
   - `@['...']`/`?@['...']` syntax for escaping special characters within
     property names in filters
 - Documents `$..` (**getting all parent components**)
-
-### Extending Rulesets
-
-Rulesets can extend other rulesets using the `extends` property, allowing you to pull in other rulesets.
-
-```yaml
-extends: spectral:oas
-```
-
-Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
-
-```yaml
-extends:
-  - ./config/spectral.json
-  - https://example.org/api/style.yaml
-  - some-npm-module
-```
-
-The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
 
 ### Formats
 
@@ -143,11 +124,3 @@ rules:
 
 Custom formats can be registered via the [JS API](../guides/3-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
 
-## Core Rulesets
-
-Spectral comes with two rulesets included:
-
-- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
-- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
-
-You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).

@@ -1,6 +1,6 @@
 # Installation
 
-For many, the easiest way to install Spectral is as a node module.
+For many, the easiest way to install Spectral is as a Node module.
 
 ```bash
 npm install -g @stoplight/spectral-cli
@@ -24,15 +24,14 @@ Note, the binaries do _not_ auto-update, so you will need to run it again to ins
 
 ## Docker
 
-Spectral is also available as a Docker image, which can be handy for all sorts of things, like if you're contributing code to Spectral, want to integrate it into your CI build.
-If the file you want to lint is on your computer, you'll need to mount the directory where the file resides as a volume
+Spectral is also available as a Docker image, which can be useful if you're contributing code to Spectral and want to integrate it into your CI build. If the file you want to lint is on your computer, you'll need to mount the directory where the file resides as a volume.
 
 ```bash
 # make sure to update the value of `--ruleset` according to the actual location of your ruleset
 docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.js" "/tmp/file.yaml"
 ```
 
-To use the docker image on GitLab you need to set `entrypoint` to `""` like this
+To use the docker image on GitLab you need to set `entrypoint` to `""`:
 
 ```yml
 stages:
