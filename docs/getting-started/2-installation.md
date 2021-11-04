@@ -46,4 +46,4 @@ validate_open-api:
     - spectral lint file.yaml
 ```
 
-For more details about `entrypoint: [""]` see this issue on GitLab [here](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2692#note_50147081)
+For more details about `entrypoint: [""]` see this issue on GitLab [here](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2692#note_50147081).
