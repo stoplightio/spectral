@@ -31,7 +31,6 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   const { fs, fetch = defaultFetch, format, npmRegistry } = opts;
   const cwd = dirname(filepath);
   const tree = new Tree({
-    cwd,
     format,
     npmRegistry,
     scope: new Scope(),
