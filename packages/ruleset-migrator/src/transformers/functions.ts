@@ -13,7 +13,9 @@ const transformer: Transformer = function (ctx) {
       const { functionsDir, functions } = ruleset;
 
       if (Array.isArray(functions) && functions.length > 0) {
-        ruleset.functions = functions.map(fn => path.join(ctx.cwd, functionsDir ?? 'functions', `${fn}.js`));
+        ruleset.functions = functions.map(fn =>
+          ctx.tree.resolveModule(`${fn}.js`, path.join(ctx.cwd, functionsDir ?? 'functions')),
+        );
         delete ruleset.functionsDir;
       }
     },

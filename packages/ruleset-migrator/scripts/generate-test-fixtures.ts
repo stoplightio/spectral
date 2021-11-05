@@ -18,18 +18,9 @@ fs.promises.readdir(cwd).then(async ls => {
       fs.promises.readFile(path.join(dirpath, 'output.cjs'), 'utf8').then(assign(bundle, 'output.cjs')),
       fs.promises.readFile(path.join(dirpath, 'output.mjs'), 'utf8').then(assign(bundle, 'output.mjs')),
       fs.promises.readFile(path.join(dirpath, 'ruleset.yaml'), 'utf8').then(assign(bundle, 'ruleset')),
-      fs.promises
-        .readdir(path.join(dirpath, 'assets'))
-        .then(list =>
-          Promise.all(
-            list.map(item =>
-              fs.promises.readFile(path.join(dirpath, 'assets', item), 'utf8').then(assign(bundle, `assets/${item}`)),
-            ),
-          ),
-        )
-        .catch(() => {
-          // it may not exist
-        }),
+      readdir(bundle, dirpath, 'assets').catch(() => {
+        // it may not exist
+      }),
     );
   }
 
@@ -41,4 +32,20 @@ function assign(bundled: Record<string, string>, name: string) {
   return async (input: string): Promise<void> => {
     bundled[name] = /\.[mc]js$/.test(name) ? prettier.format(input as string, { parser: 'babel' }) : (input as string);
   };
+}
+
+async function readdir(output: Record<string, string>, cwd: string, relativePath: string): Promise<void> {
+  const dirpath = path.join(cwd, relativePath);
+  const list = await fs.promises.readdir(dirpath);
+  await Promise.all(
+    list.map(async item => {
+      const filepath = path.join(cwd, relativePath, item);
+      const stat = await fs.promises.stat(filepath);
+      if (stat.isDirectory()) {
+        await readdir(output, cwd, path.join(relativePath, item));
+      } else {
+        await assign(output, path.join(relativePath, item))(await fs.promises.readFile(filepath, 'utf8'));
+      }
+    }),
+  );
 }

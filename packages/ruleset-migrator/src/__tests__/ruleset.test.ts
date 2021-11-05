@@ -246,6 +246,43 @@ export default {
 `);
     });
 
+    it('should not apply to custom functions living outside of cwd', async () => {
+      await fs.promises.writeFile(
+        path.join(cwd, 'custom-npm-provider-custom-functions.json'),
+        JSON.stringify({
+          functionsDir: '../fns',
+          functions: ['customFunction'],
+          rules: {
+            rule: {
+              then: {
+                given: '$',
+                function: 'customFunction',
+              },
+            },
+          },
+        }),
+      );
+
+      expect(
+        await migrateRuleset(path.join(cwd, 'custom-npm-provider-custom-functions.json'), {
+          format: 'esm',
+          fs: fs as any,
+          npmRegistry: 'https://unpkg.com/',
+        }),
+      ).toEqual(`import customFunction from "/.tmp/fns/customFunction.js";
+export default {
+  "rules": {
+    "rule": {
+      "then": {
+        "given": "$",
+        "function": customFunction
+      }
+    }
+  }
+};
+`);
+    });
+
     it('given commonjs output format, should be unsupported', async () => {
       await expect(
         migrateRuleset(

@@ -1,0 +1,8 @@
+functions:
+  - pascalCase
+rules:
+  my-rule:
+    message: ruleset 3
+    given: $
+    then:
+      function: pascalCase

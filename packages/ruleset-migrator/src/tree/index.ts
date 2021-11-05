@@ -18,19 +18,13 @@ export class Tree {
 
   readonly #npmRegistry;
   readonly #module: IModule;
-  readonly #cwd: string;
+  readonly #localPaths = new Set<string>();
 
   public ruleset?: namedTypes.ObjectExpression;
   public scope: Scope;
 
-  constructor({
-    cwd,
-    format,
-    npmRegistry,
-    scope,
-  }: Pick<MigrationOptions, 'format' | 'npmRegistry'> & { cwd: string; scope: Scope }) {
+  constructor({ format, npmRegistry, scope }: Pick<MigrationOptions, 'format' | 'npmRegistry'> & { scope: Scope }) {
     this.scope = scope;
-    this.#cwd = cwd;
     this.#npmRegistry = npmRegistry ?? null;
     this.#module = format === 'commonjs' ? commonjs : esm;
     if (format === 'commonjs' && this.#npmRegistry !== null) {
@@ -73,7 +67,7 @@ export class Tree {
       b.program([
         ...Array.from(this.#importDeclarations.entries()).flatMap(([source, identifiers]) => {
           const resolvedSource =
-            this.#npmRegistry !== null && !source.startsWith(this.#cwd) ? path.join(this.#npmRegistry, source) : source;
+            this.#npmRegistry !== null && !this.#localPaths.has(source) ? path.join(this.#npmRegistry, source) : source;
 
           const nonDefault = identifiers.filter(({ default: _default }) => !_default);
 
@@ -110,7 +104,12 @@ export class Tree {
     return b.identifier(uniqName);
   }
 
-  public resolveModule(identifier: string): string {
-    return path.isURL(identifier) ? identifier : requireResolve?.(identifier) ?? path.join(this.#cwd, identifier);
+  public resolveModule(identifier: string, cwd: string): string {
+    const resolved = path.isURL(identifier) ? identifier : requireResolve?.(identifier) ?? path.join(cwd, identifier);
+    if (resolved.startsWith(cwd)) {
+      this.#localPaths.add(resolved);
+    }
+
+    return resolved;
   }
 }
