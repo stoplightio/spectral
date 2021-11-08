@@ -17,7 +17,7 @@ You can extend and modify our core rulesets:
 ### [OpenAPI ruleset](../reference/openapi-rules.md)
 
 
-Add rules for OpenAPI v2 and v3.x to your ruleset file, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats). 
+Add rules for OpenAPI v2 and v3.x to your ruleset file, depending on the appropriate OpenAPI version used (detected through [formats](../guides/3-rulesets.md#formats). 
 
 ```yaml
 extends: spectral:oas

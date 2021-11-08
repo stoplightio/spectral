@@ -34,7 +34,7 @@ When and where you use Spectral depends on how you create and manage your API de
 
 You can run Spectral:
 
-- Against files for early feedback. Use the [Spectral CLI](../guides/2-cli.md) or the [Javascript API](../guides/3a-javascript.md) for this approach.
+- Against files for early feedback. Use the [Spectral CLI](../guides/2-cli.md) or the [Javascript API](../guides/2a-javascript.md) for this approach.
 - Automatically as you work. Use [Stoplight Studio](https://stoplight.io/studio/?utm_source=github&utm_medium=spectral&utm_campaign=docs) or [VS Code](https://github.com/stoplightio/vscode-spectral?utm_source=github&utm_medium=spectral&utm_campaign=docs) for this approach.
 - To enforce linting as part of the commit process. Use [Git hooks](../guides/1-workflows.md) for this approach.
 - With [Continuous Integration](../guides/8-continuous-integration.md) to reject pull requests that don't match your rulesets and style guide.
