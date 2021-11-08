@@ -1,14 +1,5 @@
 # Workflows
 
-When and where you use Spectral depends on how you are creating and managing your API description documents or other files you are trying to lint.
-
-You can:
-
-1. Run [Spectral CLI](2-cli.md) against design docs and get early feedback.
-2. Run Spectral in [Stoplight Studio](https://stoplight.io/studio/?utm_source=github&utm_medium=spectral&utm_campaign=docs) or [VS Code](https://github.com/stoplightio/vscode-spectral?utm_source=github&utm_medium=spectral&utm_campaign=docs) as you work to avoid switching to CLI.
-3. Run Spectral as a [Git hook](#Git-hooks) to enforce linting as part of the commit process.
-4. Use [Continuous Integration](#Continuous-Integration) to reject pull requests that don't match your rulesets and style-guide.
-
 ## Linting Design-First Workflows
 
 If you are using Studio, Spectral automatically runs as you work so you never need to switch to the CLI.
