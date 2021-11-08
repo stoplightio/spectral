@@ -1,6 +1,6 @@
 # Custom Functions
 
-If the core functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use your own custom functions.
+If the core functions are not enough for your [custom ruleset](../guides/3-rulesets.md), Spectral allows you to write and use your own custom functions.
 
 Create a directory to contain your new functions. By default `functions/` is assumed.
 
@@ -18,7 +18,7 @@ export default input => {
 };
 ```
 
-The function is exported anonymously but it has the name `abc` from the file. This name is then loaded in your [ruleset](./4-custom-rulesets.md), via `functions: [abc]`.
+The function is exported anonymously but it has the name `abc` from the file. This name is then loaded in your [ruleset](../guides/4-custom-rulesets.md), via `functions: [abc]`.
 
 **my-ruleset.yaml**
 

@@ -122,5 +122,5 @@ rules:
       # ...
 ```
 
-Custom formats can be registered via the [JS API](../guides/3-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
+Custom formats can be registered via the [JS API](../guides/2a-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
 

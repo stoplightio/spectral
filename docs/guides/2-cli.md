@@ -56,4 +56,4 @@ module.exports = new Resolver({
 });
 ```
 
-You can learn more about `$ref` resolving in the [JS section](./3-javascript.md#using-a-custom-resolver).
+You can learn more about `$ref` resolving in the [JS section](./2a-javascript.md#using-a-custom-resolver).
