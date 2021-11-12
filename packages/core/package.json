@@ -20,7 +20,7 @@
   },
   "scripts": {},
   "dependencies": {
-    "@stoplight/better-ajv-errors": "0.2.0",
+    "@stoplight/better-ajv-errors": "1.0.1",
     "@stoplight/json": "3.17.0",
     "@stoplight/lifecycle": "2.3.2",
     "@stoplight/path": "1.3.2",
