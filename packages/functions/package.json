@@ -19,7 +19,7 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "0.2.0",
+    "@stoplight/better-ajv-errors": "1.0.1",
     "@stoplight/json": "3.17.0",
     "@stoplight/spectral-core": "^1.1.0",
     "@stoplight/spectral-formats": "^1.0.0",
