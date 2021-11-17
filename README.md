@@ -41,7 +41,7 @@ If you intend to lint an OpenAPI or AsyncAPI document, we have a few predefined 
 To reference them, you can run the following command:
 
 ```bash
-echo '{\n\t"extends": ["spectral:oas", "spectral:asyncapi"]\n}' > .spectral.json
+printf '{\n  "extends": ["spectral:oas", "spectral:asyncapi"]\n}\n' > .spectral.json
 ```
 
 **Lint**
