@@ -9,6 +9,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
     properties: {
       keyedBy: {
         type: 'string',
+        description: 'key to sort an object by',
       },
     },
     additionalProperties: false,
@@ -26,9 +27,12 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         errorMessage: `"casing" function and its "type" option accept the following values: ${Object.values(
           CasingType,
         ).join(', ')}`,
+        description: 'the casing type to match against',
       },
       disallowDigits: {
         type: 'boolean',
+        default: false,
+        description: 'if not true, digits are allowed',
       },
       separator: {
         type: 'object',
@@ -39,9 +43,11 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
             type: 'string',
             maxLength: 1,
             errorMessage: `"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"`,
+            description: 'additional char to separate groups of words',
           },
           allowLeading: {
             type: 'boolean',
+            description: 'can the group separator char be used at the first char?',
           },
         },
       },
@@ -63,6 +69,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         },
         errorMessage:
           '"enumeration" and its "values" option support only arrays of primitive values, i.e. ["Berlin", "London", "Paris"]',
+        description: 'an array of possible values',
       },
     },
     required: ['values'],
@@ -76,9 +83,11 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
     properties: {
       min: {
         type: 'number',
+        description: 'the minimum length to match',
       },
       max: {
         type: 'number',
+        description: 'the maximum length to match',
       },
     },
     minProperties: 1,
@@ -109,6 +118,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
           },
         ],
         errorMessage: `"pattern" function and its "match" option must be string or RegExp instance`,
+        description: 'if provided, value must match this regex',
       },
       notMatch: {
         anyOf: [
@@ -128,6 +138,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
           },
         ],
         errorMessage: `"pattern" function and its "notMatch" option must be string or RegExp instance`,
+        description: 'if provided, value must _not_ match this regex',
       },
     },
     minProperties: 1,
@@ -143,14 +154,17 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
     properties: {
       schema: {
         type: 'object',
+        description: 'a valid JSON Schema document',
       },
       dialect: {
         enum: ['auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'],
         default: 'auto',
+        description: 'the JSON Schema draft used by function',
       },
       allErrors: {
         type: 'boolean',
         default: false,
+        description: 'returns all errors when true; otherwise only returns the first error',
       },
       prepareResults: true,
     },
@@ -168,6 +182,8 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         format: 'json-pointer-uri-fragment',
         errorMessage:
           '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
+        description:
+          'a local json pointer to the document member holding the reusable objects (eg. #/definitions for an OAS2 document, #/components/schemas for an OAS3 document)',
       },
     },
     additionalProperties: false,
@@ -189,6 +205,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         minItems: 2,
         maxItems: 2,
         errorMessage: `"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]`,
+        description: 'the properties to check',
       },
     },
     additionalProperties: false,
