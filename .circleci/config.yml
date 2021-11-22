@@ -22,24 +22,17 @@ defaults:
 
 commands:
   cached-dependencies:
-    parameters:
-      os:
-        type: string
-        default: linux
-      flags:
-        type: string
-        default: ''
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - yarn-packages-<< parameters.os >>-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn --frozen-lockfile --cache-folder $HOME/.cache/yarn << parameters.flags >>
+          command: yarn install --immutable
       - save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-<< parameters.os >>-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
@@ -97,9 +90,9 @@ commands:
       - run:
           name: Install semantic-release
           command: |
-            yarn add --dev --no-lockfile --ignore-workspace-root-check semantic-release@18.0 semantic-release-monorepo@7.0 @semantic-release/git@10.0 patch-package@6.4
+            yarn add --dev semantic-release@18.0 semantic-release-monorepo@7.0 @semantic-release/git@10.0 patch-package@6.4
             yarn patch-package
-            git checkout HEAD -- package.json
+            git checkout HEAD -- package.json yarn.lock
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run: yarn build
@@ -143,9 +136,7 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - cached-dependencies:
-          os: windows
-          flags: "--ignore-engines"
+      - cached-dependencies
       - run: yarn build
       - test-node:
           max-workers: 3
@@ -167,9 +158,7 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - cached-dependencies:
-          os: windows
-          flags: "--ignore-engines"
+      - cached-dependencies
       - run: yarn build
       - run: yarn workspace @stoplight/spectral-cli build.windows
       - persist_to_workspace:
