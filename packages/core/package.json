@@ -18,7 +18,6 @@
   "engines": {
     "node": ">=12"
   },
-  "scripts": {},
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.1",
     "@stoplight/json": "3.17.0",
@@ -32,13 +31,13 @@
     "ajv-errors": "~3.0.0",
     "ajv-formats": "~2.1.0",
     "blueimp-md5": "2.18.0",
-    "simple-eval": "1.0.0",
     "json-schema": "0.3.0",
     "jsonpath-plus": "6.0.1",
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
     "minimatch": "3.0.4",
     "nimma": "0.1.6",
+    "simple-eval": "1.0.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
