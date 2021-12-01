@@ -1,77 +1,38 @@
-import type { JsonPath } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 
-import { getAllOperations } from './utils/getAllOperations';
 import { isObject } from './utils/isObject';
+import { oas2 } from '@stoplight/spectral-formats';
+import { get as _get } from 'lodash';
 
-function _get(value: unknown, path: JsonPath): unknown {
-  for (const segment of path) {
-    if (!isObject(value)) {
-      break;
-    }
-
-    value = value[segment];
-  }
-
-  return value;
-}
-
-type Options = {
-  schemesPath: JsonPath;
-};
-
-export default createRulesetFunction<{ paths: Record<string, unknown> }, Options>(
+export default createRulesetFunction<unknown[], null>(
   {
     input: {
-      type: 'object',
-      properties: {
-        paths: {
-          type: 'object',
-        },
-      },
+      type: 'array',
     },
-    options: {
-      type: 'object',
-      properties: {
-        schemesPath: {
-          type: 'array',
-          items: {
-            type: ['string', 'number'],
-          },
-        },
-      },
-    },
+    options: null,
   },
-  function oasOpSecurityDefined(targetVal, { schemesPath }) {
-    const { paths } = targetVal;
-
+  function oasOpSecurityDefined(targetVal, _options, ctx) {
     const results: IFunctionResult[] = [];
 
-    const schemes = _get(targetVal, schemesPath);
+    if (!ctx.document.formats) return results;
+
+    const isOAS2 = ctx.document.formats?.has(oas2);
+    const schemes: unknown = _get(ctx.document.data, isOAS2 ? 'securityDefinitions' : 'components.securitySchemes');
+
     const allDefs = isObject(schemes) ? Object.keys(schemes) : [];
 
-    for (const { path, operation, value } of getAllOperations(paths)) {
-      if (!isObject(value)) continue;
-
-      const { security } = value;
-
-      if (!Array.isArray(security)) {
+    for (const [index, value] of targetVal.entries()) {
+      if (!isObject(value)) {
         continue;
       }
 
-      for (const [index, value] of security.entries()) {
-        if (!isObject(value)) {
-          continue;
-        }
+      const securityKeys = Object.keys(value);
 
-        const securityKeys = Object.keys(value);
-
-        if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
-          results.push({
-            message: 'Operation must not reference an undefined security scheme.',
-            path: ['paths', path, operation, 'security', index],
-          });
-        }
+      if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
+        results.push({
+          message: 'Operation must not reference an undefined security scheme.',
+          path: [...ctx.path, index],
+        });
       }
     }
 

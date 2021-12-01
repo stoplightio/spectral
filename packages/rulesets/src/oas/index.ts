@@ -448,17 +448,15 @@ const ruleset = {
         function: truthy,
       },
     },
-    'oas2-operation-security-defined': {
-      description: 'Operation "security" values must match a scheme defined in the "securityDefinitions" object.',
+    'operation-security-defined': {
+      description:
+        'Operation "security" values must match a scheme defined in the "securityDefinitions"/"securitySchemes" object.',
       recommended: true,
-      formats: [oas2],
       type: 'validation',
-      given: '$',
+      given:
+        "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )].security",
       then: {
         function: oasOpSecurityDefined,
-        functionOptions: {
-          schemesPath: ['securityDefinitions'],
-        },
       },
     },
     'oas2-valid-schema-example': {
@@ -585,20 +583,6 @@ const ruleset = {
         function: xor,
         functionOptions: {
           properties: ['externalValue', 'value'],
-        },
-      },
-    },
-    'oas3-operation-security-defined': {
-      description:
-        'Operation "security" values must match a scheme defined in the "components.securitySchemes" object.',
-      recommended: true,
-      formats: [oas3],
-      type: 'validation',
-      given: '$',
-      then: {
-        function: oasOpSecurityDefined,
-        functionOptions: {
-          schemesPath: ['components', 'securitySchemes'],
         },
       },
     },
