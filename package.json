@@ -80,7 +80,7 @@
     "fast-glob": "^3.2.7",
     "fetch-mock": "^9.11.0",
     "husky": "^7.0.4",
-    "jest": "^27.3.1",
+    "jest": "^27.4.3",
     "jest-mock": "^27.3.0",
     "jest-when": "^3.4.2",
     "json-schema": "^0.3.0",
