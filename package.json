@@ -63,7 +63,7 @@
     "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^12.1.4",
     "@octokit/core": "^3.5.1",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
     "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.1",
     "@types/lodash": "^4.14.176",
