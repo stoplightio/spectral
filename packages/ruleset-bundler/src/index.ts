@@ -9,6 +9,8 @@ export type BundleOptions = {
   treeshake?: boolean; // false by default
 };
 
+export { IO } from './types';
+
 export async function bundleRuleset(
   input: string,
   { target = 'browser', plugins, format, treeshake = false }: BundleOptions,
