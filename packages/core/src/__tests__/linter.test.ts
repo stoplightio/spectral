@@ -1539,5 +1539,33 @@ responses:: !!foo
         }),
       ]);
     });
+
+    test('should support functions overriding severity', async () => {
+      spectral.setRuleset({
+        rules: {
+          rule1: {
+            given: '$.x',
+            severity: DiagnosticSeverity.Hint,
+            then: {
+              function: () => [
+                {
+                  message: 'foo',
+                  severity: DiagnosticSeverity.Error,
+                },
+              ],
+            },
+          },
+        },
+      });
+
+      const result = await spectral.run(
+        {
+          x: true,
+        },
+        { ignoreUnknownFormat: true },
+      );
+
+      expect(result[0]).toHaveProperty('severity', DiagnosticSeverity.Error);
+    });
   });
 });

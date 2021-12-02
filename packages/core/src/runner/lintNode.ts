@@ -88,7 +88,9 @@ function processTargetResults(
     const resultMessage = message(result.message, vars);
     vars.error = resultMessage;
 
-    const severity = source !== null && source !== void 0 ? rule.getSeverityForSource(source, path) : rule.severity;
+    const severity =
+      result.severity ??
+      (source !== null && source !== void 0 ? rule.getSeverityForSource(source, path) : rule.severity);
 
     if (severity === -1) continue;
 

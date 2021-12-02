@@ -1,4 +1,4 @@
-import type { JsonPath } from '@stoplight/types';
+import type { JsonPath, DiagnosticSeverity } from '@stoplight/types';
 import type { IDocumentInventory } from '../documentInventory';
 import type { IRule } from '../ruleset/rule/rule';
 import type { IDocument } from '../document';
@@ -33,4 +33,5 @@ export type RulesetFunctionWithValidator<I extends unknown = unknown, O extends 
 export interface IFunctionResult {
   message: string;
   path?: JsonPath;
+  severity?: DiagnosticSeverity;
 }
