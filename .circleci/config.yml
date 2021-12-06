@@ -72,7 +72,7 @@ commands:
       - run: yarn pretest
       - run:
           name: Run node tests
-          command: yarn test.jest --coverage --maxWorkers=<< parameters.max-workers >>
+          command: yarn test.jest --maxWorkers=<< parameters.max-workers >>
 
   test-harness:
     steps:
