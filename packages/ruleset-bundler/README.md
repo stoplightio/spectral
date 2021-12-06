@@ -1,7 +1,5 @@
 # @stoplight/spectral-ruleset-bundler
 
-**WARNING** - for the time being, the following package is meant to be used internally.
-
 ## Options
 
 - **plugins** - any other Rollup.js plugin, i.e. a minifier.
@@ -13,3 +11,24 @@
 - treeshake - whether to enable tree shaking. False by default.
 
 **Bolded** options are required.
+
+## Loading YAML/JSON Ruleset
+
+It is assumed you have [@stoplight/spectral-ruleset-migrator](https://www.npmjs.com/package/@stoplight/spectral-ruleset-migrator) installed.
+
+```js
+// spectral.mjs
+import * as fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import * as path from "node:path";
+import { Spectral } from "@stoplight/spectral-core";
+import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
+import { fetch } from "@stoplight/spectral-runtime";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const s = new Spectral();
+s.setRuleset(await bundleAndLoadRuleset(path.join(__dirname, ".spectral.yaml"), { fs, fetch }));
+
+// lint as usual
+```
