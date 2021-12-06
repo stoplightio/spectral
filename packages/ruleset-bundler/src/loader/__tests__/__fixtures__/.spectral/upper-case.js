@@ -1,4 +1,4 @@
-import upperCase from 'lodash.uppercase';
+import { upperCase } from 'lodash';
 
 export default input => {
   if (upperCase(input) !== input) {

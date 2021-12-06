@@ -2115,7 +2115,6 @@ __metadata:
     "@types/node": "*"
     "@types/validate-npm-package-name": ^3.0.3
     fetch-mock: ^9.11.0
-    lodash.uppercase: ^4.3.0
     memfs: ^3.3.0
     pony-cause: 1.1.1
     prettier: ^2.4.1
@@ -7438,13 +7437,6 @@ __metadata:
   version: 4.4.2
   resolution: "lodash.truncate@npm:4.4.2"
   checksum: b463d8a382cfb5f0e71c504dcb6f807a7bd379ff1ea216669aa42c52fc28c54e404bfbd96791aa09e6df0de2c1d7b8f1b7f4b1a61f324d38fe98bc535aeee4f5
-  languageName: node
-  linkType: hard
-
-"lodash.uppercase@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "lodash.uppercase@npm:4.3.0"
-  checksum: 0a435cccd3acfe732c968deb4897d6237051d69f58f18e55e7faa781b1731176012e3286505780e93a4e0acb93a6799e39908c7ea3367678bdd2aecb963f469d
   languageName: node
   linkType: hard
 
