@@ -6,13 +6,13 @@ import { bundle } from './common/bundle';
 import { node } from '../presets/node';
 import type { Loader } from './types';
 
-export const bundleAndLoadRuleset: Loader = async (rulesetFile, io) => {
+export const bundleAndLoadRuleset: Loader = async (rulesetFile, io, plugins = []) => {
   const ruleset = await bundle(
     rulesetFile,
     {
       target: 'node',
       format: 'commonjs',
-      plugins: node(io),
+      plugins: [...node(io), ...plugins],
     },
     io,
   );

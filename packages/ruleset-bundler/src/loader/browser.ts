@@ -4,13 +4,13 @@ import { bundle } from './common/bundle';
 import { runtime } from '../presets/runtime';
 import type { Loader } from './types';
 
-export const bundleAndLoadRuleset: Loader = async (rulesetFile, io) => {
+export const bundleAndLoadRuleset: Loader = async (rulesetFile, io, plugins = []) => {
   const ruleset = await bundle(
     rulesetFile,
     {
       format: 'iife',
       target: 'runtime',
-      plugins: runtime(io),
+      plugins: [...runtime(io), ...plugins],
     },
     io,
   );
