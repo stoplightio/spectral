@@ -29,12 +29,12 @@
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
-    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
+    "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/*/CHANGELOG.md docs/**/*.md README.md",
     "pretest": "yarn workspace @stoplight/spectral-ruleset-migrator pretest",
-    "test": "yarn pretest && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
+    "test": "yarn pretest && yarn test.karma && yarn test.jest",
     "test.harness": "jest -c ./test-harness/jest.config.js",
-    "test.jest": "jest --silent",
+    "test.jest": "jest --silent --cacheDirectory=.cache/.jest",
     "test.karma": "karma start",
     "prepare": "husky install",
     "release": "HUSKY=0 yarn workspaces foreach run semantic-release -e semantic-release-monorepo"
@@ -98,7 +98,7 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "eslint --fix --cache --cache-location .cache"
+      "eslint --fix --cache --cache-location .cache/.eslintcache"
     ],
     "packages/*/CHANGELOG.md": [
       "prettier --write"
