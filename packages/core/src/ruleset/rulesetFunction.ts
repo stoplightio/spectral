@@ -61,14 +61,32 @@ export class RulesetFunctionValidationError extends RulesetValidationError {
   }
 }
 
-type Schema = JSONSchema & { errorMessage?: string | { [key in keyof JSONSchema]: string } } & {
-  properties?: {
+type SchemaKeyedFragmentKeyword = 'properties' | 'patternProperties' | 'definitions';
+type SchemaFragmentKeyword = 'additionalItems' | 'propertyNames' | 'if' | 'then' | 'else' | 'not';
+type SchemaCompoundKeyword = 'allOf' | 'anyOf' | 'oneOf';
+
+type Schema = (
+  | (Omit<
+      JSONSchema,
+      SchemaKeyedFragmentKeyword | SchemaFragmentKeyword | SchemaCompoundKeyword | 'items' | 'dependencies'
+    > & {
+      'x-internal'?: boolean;
+      errorMessage?: string | { [key in keyof JSONSchema]: string };
+    })
+  | { 'x-internal': boolean }
+) & {
+  [key in SchemaKeyedFragmentKeyword]?: {
     [key: string]: SchemaDefinition;
   };
-  patternProperties?: {
-    [key: string]: SchemaDefinition;
-  };
+} & {
+  [key in SchemaFragmentKeyword]?: SchemaDefinition;
+} & {
+  [key in SchemaCompoundKeyword]?: SchemaDefinition[];
+} & {
+  items?: SchemaDefinition | SchemaDefinition[];
+  dependencies?: SchemaDefinition | string[];
 };
+
 type SchemaDefinition = Schema | boolean;
 
 const DEFAULT_OPTIONS_VALIDATOR = (o: unknown): boolean => o === null;
