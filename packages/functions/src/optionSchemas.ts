@@ -157,6 +157,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         description: 'Any valid JSON Schema document.',
       },
       dialect: {
+        type: 'string',
         enum: ['auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'],
         default: 'auto',
         description: 'The JSON Schema draft used by function.',
