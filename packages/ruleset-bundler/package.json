@@ -29,6 +29,9 @@
     "type": "git",
     "url": "https://github.com/stoplightio/spectral.git"
   },
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo"
+  },
   "dependencies": {
     "@stoplight/path": "1.3.2",
     "@stoplight/spectral-core": ">=1",

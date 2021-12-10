@@ -18,6 +18,9 @@
   "engines": {
     "node": ">=12"
   },
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo"
+  },
   "dependencies": {
     "@stoplight/json": "3.15.0",
     "@stoplight/spectral-core": "^1.1.0",

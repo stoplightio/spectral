@@ -37,7 +37,7 @@
     "test.jest": "jest --silent --cacheDirectory=.cache/.jest",
     "test.karma": "karma start",
     "prepare": "husky install",
-    "release": "HUSKY=0 yarn workspaces foreach run semantic-release -e semantic-release-monorepo"
+    "release": "HUSKY=0 yarn workspaces foreach run release"
   },
   "workspaces": {
     "packages": [
