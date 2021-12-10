@@ -266,7 +266,7 @@ workflows:
           filters: *default-branch-filter
       - test-browser
       - lint
-      - release:
+      - approve-release:
           type: approval
           filters: *default-branch-filter
           requires:
@@ -274,6 +274,10 @@ workflows:
             - test-node
             - test-windows
             - test-browser
+      - release:
+          filters: *default-branch-filter
+          requires:
+            - approve-release
 
   release:
     jobs:
