@@ -11,7 +11,7 @@ import { printPath, PrintStyle, printValue } from '@stoplight/spectral-runtime';
 import { RulesetValidationError } from './validation';
 import { IFunctionResult, JSONSchema, RulesetFunction, RulesetFunctionWithValidator } from '../types';
 
-const ajv = new Ajv({ allErrors: true, allowUnionTypes: true, strict: true });
+const ajv = new Ajv({ allErrors: true, allowUnionTypes: true, strict: true, keywords: ['x-internal'] });
 ajvErrors(ajv);
 addFormats(ajv);
 
