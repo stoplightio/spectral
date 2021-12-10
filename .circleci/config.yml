@@ -10,15 +10,19 @@ executors:
 
 defaults:
   default-branch: &default-branch develop
+  default-branch-filter: &default-branch-filter
+    branches:
+      only:
+        - *default-branch
   release-tag-filter: &release-tag-filter
     branches:
       ignore: /.*/
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "12.21"
+    - "12.22"
     - "14.18"
-    - "16.8"
+    - "16.13"
 
 commands:
   cached-dependencies:
@@ -34,7 +38,7 @@ commands:
           name: Save Yarn Package Cache
           key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.cache/yarn
+            - ~/.yarn
 
   install-and-build:
     description: >-
@@ -67,12 +71,12 @@ commands:
     parameters:
       max-workers:
         type: integer
-        default: 2
+        default: 3
     steps:
       - run: yarn pretest
       - run:
           name: Run node tests
-          command: yarn test.jest --coverage --maxWorkers=<< parameters.max-workers >>
+          command: yarn test.jest --maxWorkers=<< parameters.max-workers >>
 
   test-harness:
     steps:
@@ -114,6 +118,10 @@ jobs:
         type: string
     docker:
       - image: circleci/node:<< parameters.node-version >>
+    # we should be able to restore the default when the following issue is resolved
+    # - https://github.com/kulshekhar/ts-jest/issues/1967
+    # - https://github.com/facebook/jest/issues/10550
+    resource_class: medium+
     steps:
       - checkout
       - install-and-build
@@ -254,9 +262,18 @@ workflows:
           matrix:
             parameters:
               node-version: *node-versions
-      - test-windows
+      - test-windows:
+          filters: *default-branch-filter
       - test-browser
       - lint
+      - release:
+          type: approval
+          filters: *default-branch-filter
+          requires:
+            - lint
+            - test-node
+            - test-windows
+            - test-browser
 
   release:
     jobs:
@@ -278,10 +295,7 @@ workflows:
     triggers:
       - schedule:
           cron: "0 12 * * 1-5"
-          filters:
-            branches:
-              only:
-                - *default-branch
+          filters: *default-branch-filter
     jobs:
       - lint
       - test-node:
