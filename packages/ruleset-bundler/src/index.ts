@@ -1,6 +1,6 @@
 import { rollup, Plugin } from 'rollup';
 import { isURL } from '@stoplight/path';
-import { isValidPackageName } from './utils/isValidPackageName';
+import { isPackageImport } from './utils/isPackageImport';
 
 export type BundleOptions = {
   plugins: Plugin[];
@@ -33,8 +33,7 @@ export async function bundleRuleset(
         : target === 'browser'
         ? id => isURL(id)
         : (id, importer) =>
-            id.startsWith('node:') ||
-            (!isURL(id) && isValidPackageName(id) && (importer === void 0 || !isURL(importer))),
+            id.startsWith('node:') || (!isURL(id) && isPackageImport(id) && (importer === void 0 || !isURL(importer))),
   });
 
   return (await bundle.generate({ format: format ?? (target === 'runtime' ? 'iife' : 'esm'), exports: 'auto' }))
