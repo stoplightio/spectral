@@ -71,7 +71,7 @@ commands:
     parameters:
       max-workers:
         type: integer
-        default: 2
+        default: 3
     steps:
       - run: yarn pretest
       - run:
@@ -118,6 +118,10 @@ jobs:
         type: string
     docker:
       - image: circleci/node:<< parameters.node-version >>
+    # we should be able to restore the default when the following issue is resolved
+    # - https://github.com/kulshekhar/ts-jest/issues/1967
+    # - https://github.com/facebook/jest/issues/10550
+    resource_class: medium+
     steps:
       - checkout
       - install-and-build
