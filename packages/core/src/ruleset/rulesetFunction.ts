@@ -87,7 +87,7 @@ type Schema = (
   dependencies?: SchemaDefinition | string[];
 };
 
-type SchemaDefinition = Schema | boolean;
+export type SchemaDefinition = Schema | boolean;
 
 const DEFAULT_OPTIONS_VALIDATOR = (o: unknown): boolean => o === null;
 
