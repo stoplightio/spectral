@@ -2109,6 +2109,7 @@ __metadata:
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
     "@stoplight/spectral-ref-resolver": ">=1"
+    "@stoplight/spectral-ruleset-migrator": ^1.5.2
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
     "@stoplight/types": 12.3.0
@@ -2120,12 +2121,10 @@ __metadata:
     prettier: ^2.4.1
     rollup: ~2.60.2
     validate-npm-package-name: 3.0.0
-  peerDependencies:
-    "@stoplight/spectral-ruleset-migrator": ^1.5.2
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ruleset-migrator@^1.5.0, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
+"@stoplight/spectral-ruleset-migrator@^1.5.0, @stoplight/spectral-ruleset-migrator@^1.5.2, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator"
   dependencies:

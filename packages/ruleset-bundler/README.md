@@ -14,8 +14,6 @@
 
 ## Loading YAML/JSON Ruleset
 
-It is assumed you have [@stoplight/spectral-ruleset-migrator](https://www.npmjs.com/package/@stoplight/spectral-ruleset-migrator) installed.
-
 ```js
 // spectral.mjs
 import * as fs from "node:fs";
