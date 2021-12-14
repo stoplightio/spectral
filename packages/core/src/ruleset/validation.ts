@@ -11,7 +11,7 @@ import type { FileRuleDefinition, RuleDefinition, RulesetDefinition } from './ty
 
 const message = _`'spectral-message'`;
 
-const ajv = new Ajv({ allErrors: true, strict: true, strictRequired: false, keywords: ['$anchor'] });
+const ajv = new Ajv({ allErrors: true, strict: true, strictRequired: false, keywords: ['$anchor', 'x-internal'] });
 addFormats(ajv);
 addErrors(ajv);
 ajv.addKeyword({

@@ -29,15 +29,15 @@
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
-    "lint.eslint": "eslint --cache --cache-location .cache/ --ext=.js,.mjs,.ts packages test-harness",
+    "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
     "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/*/CHANGELOG.md docs/**/*.md README.md",
     "pretest": "yarn workspace @stoplight/spectral-ruleset-migrator pretest",
-    "test": "yarn pretest && yarn test.karma && yarn test.jest --coverage --maxWorkers=2",
+    "test": "yarn pretest && yarn test.karma && yarn test.jest",
     "test.harness": "jest -c ./test-harness/jest.config.js",
-    "test.jest": "jest --silent",
+    "test.jest": "jest --silent --cacheDirectory=.cache/.jest",
     "test.karma": "karma start",
     "prepare": "husky install",
-    "release": "HUSKY=0 yarn workspaces foreach run semantic-release -e semantic-release-monorepo"
+    "release": "HUSKY=0 yarn workspaces foreach run release"
   },
   "workspaces": {
     "packages": [
@@ -63,7 +63,7 @@
     "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^12.1.4",
     "@octokit/core": "^3.5.1",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
     "@types/jest-when": "^2.7.3",
     "@types/karma": "^6.3.1",
     "@types/lodash": "^4.14.176",
@@ -80,8 +80,8 @@
     "fast-glob": "^3.2.7",
     "fetch-mock": "^9.11.0",
     "husky": "^7.0.4",
-    "jest": "^27.3.1",
-    "jest-mock": "^27.3.0",
+    "jest": "^27.4.3",
+    "jest-mock": "^27.4.2",
     "jest-when": "^3.4.2",
     "json-schema": "^0.3.0",
     "karma": "^6.1.1",
@@ -98,7 +98,7 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
-      "eslint --fix --cache --cache-location .cache"
+      "eslint --fix --cache --cache-location .cache/.eslintcache"
     ],
     "packages/*/CHANGELOG.md": [
       "prettier --write"

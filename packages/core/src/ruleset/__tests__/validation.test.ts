@@ -88,6 +88,21 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
     ).not.toThrow();
   });
 
+  it.each([false, 2, null])('given invalid %s description in a ruleset, throws', description => {
+    expect(assertValidRuleset.bind(null, { description, rules: {} })).toThrow(
+      new RulesetValidationError('Error at #/description: must be string'),
+    );
+  });
+
+  it('recognizes valid description in a ruleset', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        description: 'This is the ruleset description',
+        rules: {},
+      }),
+    ).not.toThrow();
+  });
+
   it.each(['error', 'warn', 'info', 'hint', 'off'])('recognizes human-readable %s severity', severity => {
     expect(
       assertValidRuleset.bind(null, {

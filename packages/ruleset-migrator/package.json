@@ -44,6 +44,7 @@
   },
   "scripts": {
     "pretest": "ts-node ./scripts/generate-test-fixtures.ts && yarn prebuild",
-    "prebuild": "ts-node ./scripts/compile-schemas.ts"
+    "prebuild": "ts-node ./scripts/compile-schemas.ts",
+    "release": "semantic-release -e semantic-release-monorepo"
   }
 }

@@ -17,6 +17,9 @@
     "type": "git",
     "url": "https://github.com/stoplightio/spectral.git"
   },
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo"
+  },
   "dependencies": {
     "@stoplight/json-ref-readers": "1.2.2",
     "@stoplight/json-ref-resolver": "3.1.3",

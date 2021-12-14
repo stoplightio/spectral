@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -16,7 +16,10 @@
     "dist"
   ],
   "engines": {
-    "node": ">=12"
+    "node": "^12.20 || >= 14.13"
+  },
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.1",
