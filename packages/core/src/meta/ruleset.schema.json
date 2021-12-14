@@ -9,6 +9,7 @@
       "format": "url",
       "errorMessage": "must be a valid URL"
     },
+    "description": { "type": "string" },
     "rules": {
       "type": "object",
       "additionalProperties": {
