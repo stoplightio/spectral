@@ -1,12 +1,18 @@
 import * as nock from 'nock';
-import * as fs from 'fs';
+import * as nodeFs from 'fs';
 import { URL } from 'url';
 import { dirname, isURL } from '@stoplight/path';
 import { fs as memFs } from 'memfs';
 
-if (fs.mkdirSync !== memFs.mkdirSync || fs.writeFileSync !== memFs.writeFileSync || fs.rmdirSync !== memFs.rmdirSync) {
-  throw new Error('jest.mock is not correctly hooked up and memfs is not in use. Aborting for security reasons');
-}
+const fs = new Proxy(nodeFs, {
+  get(target, key) {
+    if (target[key] !== memFs[key]) {
+      throw new Error('jest.mock is not correctly hooked up and memfs is not in use. Aborting for security reasons');
+    }
+
+    return Reflect.get(target, key, target);
+  },
+});
 
 afterEach(() => {
   nock.cleanAll();

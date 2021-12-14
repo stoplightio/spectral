@@ -5,7 +5,7 @@
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
   "engines": {
-    "node": ">=12.20"
+    "node": "^12.20 || >= 14.13"
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -17,6 +17,11 @@
   "exports": {
     ".": {
       "default": "./dist/index.js"
+    },
+    "./with-loader": {
+      "default": "./dist/loader/node.js",
+      "node": "./dist/loader/node.js",
+      "browser": "./dist/loader/browser.js"
     },
     "./presets/*": {
       "default": "./dist/presets/*.js"
@@ -39,11 +44,13 @@
     "@stoplight/spectral-functions": ">=1",
     "@stoplight/spectral-parsers": ">=1",
     "@stoplight/spectral-ref-resolver": ">=1",
+    "@stoplight/spectral-ruleset-migrator": "^1.5.2",
     "@stoplight/spectral-rulesets": ">=1",
     "@stoplight/spectral-runtime": "^1.1.0",
     "@stoplight/types": "12.3.0",
     "@types/node": "*",
-    "rollup": "~2.56.3",
+    "pony-cause": "1.1.1",
+    "rollup": "~2.60.2",
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {

@@ -2122,6 +2122,7 @@ __metadata:
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
     "@stoplight/spectral-ref-resolver": ">=1"
+    "@stoplight/spectral-ruleset-migrator": ^1.5.2
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
     "@stoplight/types": 12.3.0
@@ -2129,13 +2130,14 @@ __metadata:
     "@types/validate-npm-package-name": ^3.0.3
     fetch-mock: ^9.11.0
     memfs: ^3.3.0
+    pony-cause: 1.1.1
     prettier: ^2.4.1
-    rollup: ~2.56.3
+    rollup: ~2.60.2
     validate-npm-package-name: 3.0.0
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ruleset-migrator@^1.5.0, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
+"@stoplight/spectral-ruleset-migrator@^1.5.0, @stoplight/spectral-ruleset-migrator@^1.5.2, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator"
   dependencies:
@@ -8637,6 +8639,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pony-cause@npm:1.1.1":
+  version: 1.1.1
+  resolution: "pony-cause@npm:1.1.1"
+  checksum: 5ff8878b808be48db801d52246a99d7e4789e52d20575ba504ede30c818fd85d38a033915e02c15fa9b6dce72448836dc1a47094acf8f1c21c4f04a4603b0cfb
+  languageName: node
+  linkType: hard
+
 "pony-cause@npm:^1.0.0":
   version: 1.0.0
   resolution: "pony-cause@npm:1.0.0"
@@ -9251,9 +9260,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:~2.56.3":
-  version: 2.56.3
-  resolution: "rollup@npm:2.56.3"
+"rollup@npm:~2.60.2":
+  version: 2.60.2
+  resolution: "rollup@npm:2.60.2"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -9261,7 +9270,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: e4c5a6e871f0340f18fc795cbb6b76bfbc5827580c443a7c4f5d9f9b1fec8c3d1553dae5e45bd7fc9dea4de56e01c244b1583f8f08f401d2ba81f5eb3ff83101
+  checksum: bcd41dfe8afb7e0d97ce2237752165bdda689bcce6321d96821d565de3e0c865a49b544923f315985be2bfde086f72b54aae4ae7c87f798b3cb9558a5bec4e65
   languageName: node
   linkType: hard
 
