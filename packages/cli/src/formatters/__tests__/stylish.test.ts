@@ -1,5 +1,5 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { stylish } from '../stylish';
 
 const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');

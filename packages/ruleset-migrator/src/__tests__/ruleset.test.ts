@@ -7,7 +7,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import * as fetchMock from 'fetch-mock';
 
 import { migrateRuleset } from '..';
-import * as fixtures from './__fixtures__/.cache/index.json';
+import fixtures from './__fixtures__/.cache/index.json';
 
 const cwd = '/.tmp/spectral';
 

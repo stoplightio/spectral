@@ -1,4 +1,4 @@
-import * as validate from 'validate-npm-package-name';
+import validate from 'validate-npm-package-name';
 
 const isValidPackageName = (packageName: string): boolean => validate(packageName).validForNewPackages;
 
