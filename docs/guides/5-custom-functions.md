@@ -133,7 +133,7 @@ Each rule can specify options that each function should receive. This can be don
 
 ```yaml
 operation-id-kebab-case:
-  given: "$"
+  given: "$..operationId"
   then:
     function: pattern
     functionOptions: # this object be passed down as options to the custom function
