@@ -20,8 +20,9 @@ export default {
       description: 'Channel path must not have empty parameter substitution pattern.',
       recommended: true,
       type: 'style',
-      given: '$.channels.*~',
+      given: '$.channels',
       then: {
+        field: '@key',
         function: pattern,
         functionOptions: {
           notMatch: '{}',
@@ -32,8 +33,9 @@ export default {
       description: 'Channel path must not include query ("?") or fragment ("#") delimiter.',
       recommended: true,
       type: 'style',
-      given: '$.channels.*~',
+      given: '$.channels',
       then: {
+        field: '@key',
         function: pattern,
         functionOptions: {
           notMatch: '[\\?#]',
@@ -44,8 +46,9 @@ export default {
       description: 'Channel path must not end with slash.',
       recommended: true,
       type: 'style',
-      given: '$.channels.*~',
+      given: '$.channels',
       then: {
+        field: '@key',
         function: pattern,
         functionOptions: {
           notMatch: '.+\\/$',
@@ -143,7 +146,7 @@ export default {
       description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
       type: 'style',
-      given: ['$.channels.*.[publish,subscribe]'],
+      given: '$.channels[*][publish,subscribe]',
       then: {
         field: 'description',
         function: truthy,
@@ -154,7 +157,7 @@ export default {
       severity: 'error',
       recommended: true,
       type: 'validation',
-      given: ['$.channels.*.[publish,subscribe]'],
+      given: '$.channels[*][publish,subscribe]',
       then: {
         field: 'operationId',
         function: truthy,
@@ -179,7 +182,7 @@ export default {
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload.default^',
         '$.components.messages[?(@.schemaFormat === void 0)].payload.default^',
-        "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.default^",
+        "$.channels[*][publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.default^",
       ],
       then: {
         function: asyncApi2SchemaValidation,
@@ -197,7 +200,7 @@ export default {
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload.examples^',
         '$.components.messages[?(@.schemaFormat === void 0)].payload.examples^',
-        "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.examples^",
+        "$.channels[*][publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.examples^",
       ],
       then: {
         function: asyncApi2SchemaValidation,
@@ -211,7 +214,7 @@ export default {
       severity: 'info',
       recommended: true,
       type: 'validation',
-      given: ['$.components.messageTraits.*', '$.components.messages.*', '$.channels.*.[publish,subscribe].message'],
+      given: ['$.components.messageTraits.*', '$.components.messages.*', '$.channels[*][publish,subscribe].message'],
       then: {
         field: 'schemaFormat',
         function: undefined,
@@ -226,7 +229,7 @@ export default {
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload',
         '$.components.messages[?(@.schemaFormat === void 0)].payload',
-        "$.channels.*.[publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload",
+        "$.channels[*][publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload",
       ],
       then: {
         function: asyncApi2PayloadValidation,
