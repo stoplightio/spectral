@@ -75,7 +75,8 @@ describe('lint', () => {
       await run('lint');
       expect(lint).toBeCalledWith([0], {
         encoding: 'utf8',
-        format: 'stylish',
+        format: ['stylish'],
+        output: { stylish: 'stdout' },
         ignoreUnknownFormat: false,
         failOnUnmatchedGlobs: false,
       });
@@ -87,7 +88,8 @@ describe('lint', () => {
     await run(`lint ${doc}`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf8',
-      format: 'stylish',
+      format: ['stylish'],
+      output: { stylish: 'stdout' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -98,7 +100,8 @@ describe('lint', () => {
     await run(`lint --encoding ascii ${doc}`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'ascii',
-      format: 'stylish',
+      format: ['stylish'],
+      output: { stylish: 'stdout' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -109,7 +112,8 @@ describe('lint', () => {
     await run(`lint -f json --encoding ascii ${doc}`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'ascii',
-      format: 'json',
+      format: ['json'],
+      output: { json: 'stdout' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -152,11 +156,34 @@ describe('lint', () => {
     expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
   });
 
+  it('writes formatted output to multiple files when using format and output flags', async () => {
+    (formatOutput as jest.Mock).mockClear();
+    (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
+
+    await run(`lint --format html,json --output json:foo.json,html:foo.html ./__fixtures__/empty-oas2-document.json`);
+    await new Promise(resolve => void process.nextTick(resolve));
+    expect(writeOutput).toBeCalledTimes(2);
+    expect(writeOutput).nthCalledWith(1, '<formatted output>', 'foo.html');
+    expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
+  });
+
+  it('writes formatted output to multiple files and stdout when using format and output flags', async () => {
+    (formatOutput as jest.Mock).mockClear();
+    (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
+
+    await run(`lint --format html,json --output json:foo.json ./__fixtures__/empty-oas2-document.json`);
+    await new Promise(resolve => void process.nextTick(resolve));
+    expect(writeOutput).toBeCalledTimes(2);
+    expect(writeOutput).nthCalledWith(1, '<formatted output>', undefined);
+    expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
+  });
+
   it('passes ignore-unknown-format to lint', async () => {
     await run('lint --ignore-unknown-format ./__fixtures__/empty-oas2-document.json');
     expect(lint).toHaveBeenCalledWith([expect.any(String)], {
       encoding: 'utf8',
-      format: 'stylish',
+      format: ['stylish'],
+      output: { stylish: 'stdout' },
       ignoreUnknownFormat: true,
       failOnUnmatchedGlobs: false,
     });
@@ -166,7 +193,8 @@ describe('lint', () => {
     await run('lint --fail-on-unmatched-globs ./__fixtures__/empty-oas2-document.json');
     expect(lint).toHaveBeenCalledWith([expect.any(String)], {
       encoding: 'utf8',
-      format: 'stylish',
+      format: ['stylish'],
+      output: { stylish: 'stdout' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: true,
     });
