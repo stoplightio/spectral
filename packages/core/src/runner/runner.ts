@@ -9,7 +9,6 @@ import { Ruleset } from '../ruleset/ruleset';
 import Nimma, { Callback } from 'nimma/legacy'; // legacy = Node v12, nimma without /legacy supports only 14+
 import { jsonPathPlus } from 'nimma/fallbacks';
 import { isPlainObject } from '@stoplight/json';
-import { isAggregateError } from '../guards/isAggregateError';
 
 export class Runner {
   public readonly results: IRuleResult[];
@@ -96,30 +95,22 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
     return;
   }
 
-  try {
-    const nimma = new Nimma(jsonPathExpressions, {
-      fallback: jsonPathPlus,
-      unsafe: false,
-      output: 'auto',
-    });
+  const nimma = new Nimma(jsonPathExpressions, {
+    fallback: jsonPathPlus,
+    unsafe: false,
+    output: 'auto',
+  });
 
-    nimma.query(
-      input,
-      Object.entries(callbacks).reduce<Record<string, Callback>>((mapped, [key, cbs]) => {
-        mapped[key] = scope => {
-          for (const cb of cbs) {
-            cb(scope);
-          }
-        };
+  nimma.query(
+    input,
+    Object.entries(callbacks).reduce<Record<string, Callback>>((mapped, [key, cbs]) => {
+      mapped[key] = scope => {
+        for (const cb of cbs) {
+          cb(scope);
+        }
+      };
 
-        return mapped;
-      }, {}),
-    );
-  } catch (e) {
-    if (isAggregateError(e) && e.errors.length === 1) {
-      throw e.errors[0];
-    } else {
-      throw e;
-    }
-  }
+      return mapped;
+    }, {}),
+  );
 }
