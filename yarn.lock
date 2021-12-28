@@ -1935,19 +1935,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:3.15.0":
-  version: 3.15.0
-  resolution: "@stoplight/json@npm:3.15.0"
-  dependencies:
-    "@stoplight/ordered-object-literal": ^1.0.1
-    "@stoplight/types": ^12.2.0
-    jsonc-parser: ~2.2.1
-    lodash: ^4.17.15
-    safe-stable-stringify: ^1.1
-  checksum: f4dbabf366b5de2931375d59e72f3de2e0dce7aa7676c33b0fe6715c58380b85a3ce102e7a08bac19dae98602eb565f401099949c26ad160a205de87a484f2af
-  languageName: node
-  linkType: hard
-
 "@stoplight/json@npm:3.17.0, @stoplight/json@npm:^3.17.0, @stoplight/json@npm:~3.17.1":
   version: 3.17.0
   resolution: "@stoplight/json@npm:3.17.0"
@@ -2023,7 +2010,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.1.0, @stoplight/spectral-core@^1.3.0, @stoplight/spectral-core@^1.5.1, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.1.0, @stoplight/spectral-core@^1.3.0, @stoplight/spectral-core@^1.5.1, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.0, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -2062,10 +2049,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
-    "@stoplight/json": 3.15.0
-    "@stoplight/spectral-core": ^1.1.0
-    "@stoplight/types": 12.3.0
+    "@stoplight/json": ^3.17.0
+    "@stoplight/spectral-core": ^1.8.0
     "@types/json-schema": ^7.0.7
+    tslib: ^2.3.1
   languageName: unknown
   linkType: soft
 
@@ -2201,7 +2188,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/types@npm:12.3.0, @stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.2.0, @stoplight/types@npm:^12.3.0":
+"@stoplight/types@npm:12.3.0, @stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0":
   version: 12.3.0
   resolution: "@stoplight/types@npm:12.3.0"
   dependencies:
