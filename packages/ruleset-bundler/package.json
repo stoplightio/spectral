@@ -47,10 +47,11 @@
     "@stoplight/spectral-ruleset-migrator": "^1.5.2",
     "@stoplight/spectral-rulesets": ">=1",
     "@stoplight/spectral-runtime": "^1.1.0",
-    "@stoplight/types": "12.3.0",
+    "@stoplight/types": "^12.3.0",
     "@types/node": "*",
     "pony-cause": "1.1.1",
     "rollup": "~2.60.2",
+    "tslib": "^2.3.1",
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {

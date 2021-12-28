@@ -2112,7 +2112,7 @@ __metadata:
     "@stoplight/spectral-ruleset-migrator": ^1.5.2
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
-    "@stoplight/types": 12.3.0
+    "@stoplight/types": ^12.3.0
     "@types/node": "*"
     "@types/validate-npm-package-name": ^3.0.3
     fetch-mock: ^9.11.0
@@ -2120,6 +2120,7 @@ __metadata:
     pony-cause: 1.1.1
     prettier: ^2.4.1
     rollup: ~2.60.2
+    tslib: ^2.3.1
     validate-npm-package-name: 3.0.0
   languageName: unknown
   linkType: soft
