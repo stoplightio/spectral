@@ -30,11 +30,26 @@ export default async function <O = unknown>(
     },
   });
 
-  const results = await s.run(input instanceof Document ? input : JSON.stringify(input));
-  return results
-    .filter(result => result.code === 'my-rule')
-    .map(error => ({
-      path: error.path,
-      message: error.message,
-    }));
+  try {
+    const results = await s.run(input instanceof Document ? input : JSON.stringify(input));
+    return results
+      .filter(result => result.code === 'my-rule')
+      .map(error => ({
+        path: error.path,
+        message: error.message,
+      }));
+  } catch (e: unknown) {
+    if (
+      e instanceof Error &&
+      Array.isArray((e as Error & { errors?: unknown }).errors) &&
+      (e as Error & { errors: unknown[] }).errors.length === 1
+    ) {
+      const actualError = (e as Error & { errors: [unknown] }).errors[0];
+      throw actualError instanceof Error && 'cause' in (actualError as Error & { cause?: unknown })
+        ? (actualError as Error & { cause: unknown }).cause
+        : actualError;
+    } else {
+      throw e;
+    }
+  }
 }

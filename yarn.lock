@@ -2028,7 +2028,7 @@ __metadata:
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.1
-    "@stoplight/json": 3.17.0
+    "@stoplight/json": ~3.17.1
     "@stoplight/lifecycle": 2.3.2
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-formats": "*"
@@ -2041,16 +2041,16 @@ __metadata:
     "@types/json-schema": ^7.0.7
     "@types/minimatch": ^3.0.5
     "@types/treeify": ^1.0.0
-    ajv: ~8.6.0
+    ajv: ^8.6.0
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.0
     blueimp-md5: 2.18.0
-    json-schema: 0.3.0
+    json-schema: 0.4.0
     jsonpath-plus: 6.0.1
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.0.4
-    nimma: 0.1.6
+    nimma: 0.1.7
     nock: ^13.1.0
     simple-eval: 1.0.0
     treeify: ^1.1.0
@@ -3068,12 +3068,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.7.5":
-  version: 1.7.5
-  resolution: "astring@npm:1.7.5"
+"astring@npm:^1.7.5, astring@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "astring@npm:1.8.1"
   bin:
     astring: bin/astring
-  checksum: b432c3f35473ccb7ae715c9e7f5f2ea3eb6864809396d5a0cd4a00959bced3d8aaddf3d87a86e5c0f2f00a210fe789c2835e9dc48ac7c6dfe8be483f655a9490
+  checksum: 2a86ff8cc0c8f25694865cb8b22cdff784b8a0b115bd970c3def864618f22fe6ea78c3bef3ecdc359b2e5eb254a16d408ab06fa52a44e887b298cbf980a8083c
   languageName: node
   linkType: hard
 
@@ -7019,10 +7019,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsep@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "jsep@npm:1.1.2"
-  checksum: 189f29e522eec611793fcc81e8dbf919ecc1e9dd7858b9e34e32461280ae35e89a14ada91f8715b38650717b1571ab4480a46f53d60513079882ccc103f5b9c1
+"jsep@npm:^1.1.2, jsep@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "jsep@npm:1.2.0"
+  checksum: 7166871e91f6be3409658b7417955a72bba4341b664e9cf062c9e0150e7f465aedc4d8fbb67e7967e3c224cbb41f155a0c16df489614421578cb96f1ba1c5519
   languageName: node
   linkType: hard
 
@@ -7099,10 +7099,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:0.3.0, json-schema@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "json-schema@npm:0.3.0"
-  checksum: 5287563499c05e156b88fd3998b53fc4bccd29a6233c9b4417d36f8f34bf56d586388745a92a9dccd15822f63c360c045973c12eb4a6a4b4f3fd8fb864d80a14
+"json-schema@npm:0.4.0, json-schema@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "json-schema@npm:0.4.0"
+  checksum: 66389434c3469e698da0df2e7ac5a3281bcff75e797a5c127db7c5b56270e01ae13d9afa3c03344f76e32e81678337a8c912bdbb75101c62e487dc3778461d72
   languageName: node
   linkType: hard
 
@@ -7989,14 +7989,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nimma@npm:0.1.6":
-  version: 0.1.6
-  resolution: "nimma@npm:0.1.6"
+"nimma@npm:0.1.7":
+  version: 0.1.7
+  resolution: "nimma@npm:0.1.7"
   dependencies:
     "@jsep-plugin/regex": ^1.0.1
     "@jsep-plugin/ternary": ^1.0.2
-    astring: ^1.7.5
-    jsep: ^1.1.2
+    astring: ^1.8.1
+    jsep: ^1.2.0
     jsonpath-plus: ^6.0.1
     lodash.topath: ^4.5.2
   dependenciesMeta:
@@ -8004,7 +8004,7 @@ __metadata:
       optional: true
     lodash.topath:
       optional: true
-  checksum: aca1ac2838049f541444f5da3fcc178692344cc1f8c0c87cd40f3e7e3a92e8b0b14ad391e7a6cde7032a42741a9c3fb46b1752214d031650e606375d97e548db
+  checksum: 6dcf4aa3dd35c714142f04cfde76727202e1aea802cde0584ef35eabf45d217a9352c55e65045ff91956bb348b3b07ede4ca13af5a6bc8e7ce2f3b2ca353f9bd
   languageName: node
   linkType: hard
 
@@ -9301,7 +9301,7 @@ __metadata:
     jest: ^27.4.3
     jest-mock: ^27.4.2
     jest-when: ^3.4.2
-    json-schema: ^0.3.0
+    json-schema: ^0.4.0
     karma: ^6.1.1
     karma-chrome-launcher: ^3.1.0
     karma-jasmine: ^3.3.1

@@ -83,7 +83,7 @@
     "jest": "^27.4.3",
     "jest-mock": "^27.4.2",
     "jest-when": "^3.4.2",
-    "json-schema": "^0.3.0",
+    "json-schema": "^0.4.0",
     "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-jasmine": "^3.3.1",
