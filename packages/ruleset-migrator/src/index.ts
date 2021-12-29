@@ -50,18 +50,18 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   };
 
   for (const transformer of transformers) {
-    transformer(ctx);
+    transformer((...hook) => void ctx.hooks.add(hook));
   }
 
-  tree.ruleset = await process(ruleset, hooks);
+  tree.ruleset = await process(ruleset, ctx);
 
   return tree.toString();
 }
 
-async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise<ExpressionKind | null> {
-  for (const [pattern, fn] of hooks) {
+async function _process(input: unknown, ctx: TransformerCtx, path: string): Promise<ExpressionKind | null> {
+  for (const [pattern, fn] of ctx.hooks) {
     if (pattern.test(path)) {
-      const output = await fn(input);
+      const output = await fn(input, ctx);
 
       if (output !== void 0) {
         return output;
@@ -71,7 +71,9 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
 
   if (Array.isArray(input)) {
     return b.arrayExpression(
-      (await Promise.all(input.map((item, i) => _process(item, hooks, `${path}/${String(i)}`)))).filter(Boolean),
+      (await Promise.all(input.map(async (item, i) => await _process(item, ctx, `${path}/${String(i)}`)))).filter(
+        Boolean,
+      ),
     );
   } else if (typeof input === 'number' || typeof input === 'boolean' || typeof input === 'string') {
     return b.literal(input);
@@ -87,7 +89,7 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
     (
       await Promise.all(
         Object.entries(input).map(async ([key, value]) => {
-          const propertyValue = await _process(value, hooks, `${path}/${key}`);
+          const propertyValue = await _process(value, ctx, `${path}/${key}`);
 
           if (propertyValue !== null) {
             return b.property('init', b.identifier(JSON.stringify(key)), propertyValue);
@@ -100,6 +102,6 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
   );
 }
 
-export async function process(input: Ruleset, hooks: Set<Hook>): Promise<namedTypes.ObjectExpression> {
-  return (await _process(input, hooks, '')) as namedTypes.ObjectExpression;
+export async function process(input: Ruleset, ctx: TransformerCtx): Promise<namedTypes.ObjectExpression> {
+  return (await _process(input, ctx, '')) as namedTypes.ObjectExpression;
 }

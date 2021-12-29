@@ -1,4 +1,5 @@
 import { oas2 } from '@stoplight/spectral-formats';
+import { truthy } from '@stoplight/spectral-functions';
 export default {
   rules: {
     'oas3-schema': 'error',
@@ -11,7 +12,7 @@ export default {
       given:
         "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       then: {
-        function: void 0,
+        function: truthy,
         functionOptions: null,
       },
     },

@@ -21,7 +21,7 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "dependencies": {
-    "@stoplight/json": "3.17.0",
+    "@stoplight/json": "~3.17.0",
     "@stoplight/ordered-object-literal": "1.0.2",
     "@stoplight/path": "1.3.2",
     "@stoplight/spectral-functions": "^1.0.0",
