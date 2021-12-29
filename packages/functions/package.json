@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-functions",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -18,14 +18,17 @@
   "engines": {
     "node": ">=12"
   },
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo"
+  },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.1",
-    "@stoplight/json": "3.17.0",
-    "@stoplight/spectral-core": "^1.1.0",
+    "@stoplight/json": "~3.17.1",
+    "@stoplight/spectral-core": "^1.7.0",
     "@stoplight/spectral-formats": "^1.0.0",
-    "@stoplight/spectral-runtime": "*",
+    "@stoplight/spectral-runtime": "^1.1.0",
     "@stoplight/types": "12.3.0",
-    "ajv": "~8.6.3",
+    "ajv": "^8.6.3",
     "ajv-draft-04": "~1.0.0",
     "ajv-errors": "~3.0.0",
     "ajv-formats": "~2.1.0",

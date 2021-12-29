@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -26,13 +26,14 @@
     "@stoplight/path": "1.3.2",
     "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.1.0",
-    "@stoplight/types": "12.3.0",
+    "@stoplight/types": "^12.3.0",
     "@stoplight/yaml": "4.2.2",
     "@types/node": "*",
     "ajv": "^8.6.0",
     "ast-types": "0.14.2",
     "astring": "^1.7.5",
-    "reserved": "0.1.2"
+    "reserved": "0.1.2",
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@stoplight/spectral-core": "^1.1.0",
@@ -44,6 +45,7 @@
   },
   "scripts": {
     "pretest": "ts-node ./scripts/generate-test-fixtures.ts && yarn prebuild",
-    "prebuild": "ts-node ./scripts/compile-schemas.ts"
+    "prebuild": "ts-node ./scripts/compile-schemas.ts",
+    "release": "semantic-release -e semantic-release-monorepo"
   }
 }

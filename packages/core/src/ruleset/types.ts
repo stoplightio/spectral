@@ -89,6 +89,7 @@ export type RulesetAliasesDefinition = Record<string, string | RulesetScopedAlia
 export type RulesetDefinition = Readonly<
   {
     documentationUrl?: string;
+    description?: string;
     formats?: Format<any>[];
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;

@@ -73,11 +73,10 @@ export default {
 
 ## Usage
 
-### Via @stoplight/spectral-cli
+### With spectral-ruleset-bundler
 
-```ts
-npx @stoplight/spectral-cli ruleset migrate
-```
+If you need to transform the YAML/JSON ruleset and load it in a single step, we've got you covered.
+Please refer to [@stoplight/spectral-ruleset-bundler](https://www.npmjs.com/package/@stoplight/spectral-ruleset-bundler).
 
 ### Programmatically
 
