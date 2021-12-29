@@ -1,5 +1,5 @@
-const ruleset_js = _interopDefault(require('/.tmp/spectral/extends-variant-6/assets/ruleset.js'));
 const ruleset_cjs = _interopDefault(require('/.tmp/spectral/extends-variant-6/assets/ruleset.cjs'));
+const ruleset_js = _interopDefault(require('/.tmp/spectral/extends-variant-6/assets/ruleset.js'));
 const ruleset_mjs = _interopDefault(require('/.tmp/spectral/extends-variant-6/assets/ruleset.mjs'));
 module.exports = {
   extends: [ruleset_js, ruleset_cjs, ruleset_mjs],

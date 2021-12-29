@@ -3,8 +3,8 @@ const oasDocumentSchema = _interopDefault(require('/.tmp/spectral/functions-vari
 const oasExample = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/oasExample.js'));
 const oasOp2xxResponse = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/oasOp2xxResponse.js'));
 const oasOpFormDataConsumeCheck = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/oasOpFormDataConsumeCheck.js'));
-const typedEnum = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/typedEnum.js'));
 const refSiblings = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/refSiblings.js'));
+const typedEnum = _interopDefault(require('/.tmp/spectral/functions-variant-1/functions/typedEnum.js'));
 module.exports = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3],
