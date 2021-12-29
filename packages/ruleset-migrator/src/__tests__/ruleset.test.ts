@@ -193,9 +193,9 @@ describe('migrator', () => {
           fs: fs as any,
           npmRegistry: 'https://unpkg.com/',
         }),
-      ).toEqual(`import {asyncapi} from "https://unpkg.com/@stoplight/spectral-rulesets";
-import {oas2} from "https://unpkg.com/@stoplight/spectral-formats";
+      ).toEqual(`import {oas2} from "https://unpkg.com/@stoplight/spectral-formats";
 import {truthy} from "https://unpkg.com/@stoplight/spectral-functions";
+import {asyncapi} from "https://unpkg.com/@stoplight/spectral-rulesets";
 export default {
   "extends": asyncapi,
   "formats": [oas2],

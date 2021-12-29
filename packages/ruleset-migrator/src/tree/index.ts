@@ -10,11 +10,24 @@ import { Scope } from './scope';
 
 export { Scope };
 
+type ImportDefinition = { imported: namedTypes.Identifier; local: namedTypes.Identifier; default: boolean };
+
+function sortImports([sourceA]: [string, ImportDefinition[]], [sourceB]: [string, ImportDefinition[]]): number {
+  if (sourceA.startsWith('@stoplight/')) {
+    return sourceB.startsWith('@stoplight/') ? sourceA.localeCompare(sourceB) : -1;
+  } else if (sourceB.startsWith('@stoplight/')) {
+    return 1;
+  }
+
+  return sourceA.localeCompare(sourceB);
+}
+
+function sortMembers({ imported: importedA }: ImportDefinition, { imported: importedB }: ImportDefinition): number {
+  return importedA.name.localeCompare(importedB.name);
+}
+
 export class Tree {
-  readonly #importDeclarations = new Map<
-    string,
-    { imported: namedTypes.Identifier; local: namedTypes.Identifier; default: boolean }[]
-  >();
+  readonly #importDeclarations = new Map<string, ImportDefinition[]>();
 
   readonly #npmRegistry;
   readonly #module: IModule;
@@ -65,26 +78,30 @@ export class Tree {
 
     return astring.generate(
       b.program([
-        ...Array.from(this.#importDeclarations.entries()).flatMap(([source, identifiers]) => {
-          const resolvedSource =
-            this.#npmRegistry !== null && !this.#localPaths.has(source) ? path.join(this.#npmRegistry, source) : source;
+        ...Array.from(this.#importDeclarations.entries())
+          .sort(sortImports)
+          .flatMap(([source, identifiers]) => {
+            const resolvedSource =
+              this.#npmRegistry !== null && !this.#localPaths.has(source)
+                ? path.join(this.#npmRegistry, source)
+                : source;
 
-          const nonDefault = identifiers.filter(({ default: _default }) => !_default);
+            const nonDefault = identifiers.filter(({ default: _default }) => !_default).sort(sortMembers);
 
-          return [
-            ...(nonDefault.length > 0
-              ? [
-                  this.#module.importDeclaration(
-                    nonDefault.map(({ imported, local }) => [imported, local]),
-                    resolvedSource,
-                  ),
-                ]
-              : <namedTypes.ImportDeclaration[]>[]),
-            ...identifiers
-              .filter(({ default: _default }) => _default)
-              .flatMap(({ local }) => this.#module.importDefaultDeclaration(local, resolvedSource)),
-          ];
-        }),
+            return [
+              ...(nonDefault.length > 0
+                ? [
+                    this.#module.importDeclaration(
+                      nonDefault.map(({ imported, local }) => [imported, local]),
+                      resolvedSource,
+                    ),
+                  ]
+                : <namedTypes.ImportDeclaration[]>[]),
+              ...identifiers
+                .filter(({ default: _default }) => _default)
+                .flatMap(({ local }) => this.#module.importDefaultDeclaration(local, resolvedSource)),
+            ];
+          }),
         this.#module.exportDefaultDeclaration(this.ruleset),
         ...this.#module.dependencies,
       ]),
