@@ -125,6 +125,11 @@ testRule('oas2-parameter-description', [
           ],
         },
       },
+      parameters: {
+        limit: {
+          description: 'This is how it works.',
+        },
+      },
     },
     errors: [],
   },
