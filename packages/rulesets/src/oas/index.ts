@@ -33,7 +33,60 @@ const ruleset = {
   formats: [oas2, oas3, oas3_0, oas3_1],
   aliases: {
     PathItem: ['$.paths[*]'],
+    ResponsesObject: {
+      targets: [
+        { formats: [oas2], given: ['$.responses', '#OperationObject.responses'] },
+        { formats: [oas3], given: ['$.components.responses', '#OperationObject.responses'] },
+      ],
+    },
+    ResponseObject: '#ResponsesObject[*]', // [(@ && !@.$ref)]
+    ParametersDefinitionsObject: {
+      targets: [
+        { formats: [oas2], given: ['$.parameters'] },
+        { formats: [oas3], given: ['$.components.parameters'] },
+      ],
+    },
+    ParametersObject: {
+      targets: [
+        { formats: [oas2], given: ['#PathItem.parameters', '#OperationObject.parameters'] },
+        {
+          formats: [oas3],
+          given: ['#PathItem.parameters', '#OperationObject.parameters'],
+        },
+      ],
+    },
+    ParameterObject: {
+      targets: [
+        { formats: [oas2], given: ['#ParametersDefinitionsObject[*]', '#ParametersObject[*]'] }, // ?(@ && !@.$ref)
+        {
+          formats: [oas3],
+          given: ['#ParametersDefinitionsObject[*]', '#ParametersObject[*]'], // [?(@ && !@.$ref)]
+        },
+      ],
+    },
+    EncodingObject: '#MediaTypeObject.encoding',
+    MediaTypeObject: ['#RequestBodyObject.content', '#ParameterObject.content', '#ResponseObject.content'],
+    HeadersObject: {
+      targets: [
+        { formats: [oas2], given: ['#ResponseObject.headers'] },
+        {
+          formats: [oas3],
+          given: ['$.components.headers', '#EncodingObject.headers', '#ResponseObject.headers'],
+        },
+      ],
+    },
+    HeaderObject: {
+      targets: [
+        { formats: [oas2], given: ['#ResponseObject.headers[*]'] },
+        {
+          formats: [oas3],
+          given: ['#HeadersObject[*]'], // ?(@ && !$.ref)
+        },
+      ],
+    },
+    RequestBodyObject: ['#OperationObject.requestBody', '$.components.requestBodies[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    SchemaObject: ['#MediaTypeObject.schema', '#ParameterObject.schema', '$.components.schemas[*]'],
   },
   rules: {
     'operation-success-response': {
@@ -123,7 +176,7 @@ const ruleset = {
       severity: 'warn',
       recommended: true,
       message: '{{error}}',
-      given: ["$..[?(@property !== 'properties' && @ && @.enum)]"],
+      given: ["#SchemaObject"],
       then: {
         field: 'enum',
         function: oasSchema,
@@ -440,7 +493,7 @@ const ruleset = {
       description: 'Parameter objects must have "description".',
       recommended: false,
       formats: [oas2],
-      given: '$..parameters[?(@ && @.in)]',
+      given: '#ParameterObject',
       type: 'style',
       then: {
         field: 'description',
@@ -468,11 +521,7 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       type: 'validation',
-      given: [
-        "$..definitions..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..parameters..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..responses..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-      ],
+      given: ['#SchemaObject..[?(@ && @.example)]'],
       then: {
         function: oasExample,
         functionOptions: {
@@ -489,7 +538,7 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       type: 'validation',
-      given: '$..responses..[?(@ && @.schema && @.examples)]',
+      given: '#MediaTypeObject',
       then: {
         function: oasExample,
         functionOptions: {
@@ -575,11 +624,9 @@ const ruleset = {
       type: 'style',
       given: [
         '$.components.examples[*]',
-        '$.paths[*][*]..content[*].examples[*]',
-        '$.paths[*][*]..parameters[*].examples[*]',
-        '$.components.parameters[*].examples[*]',
-        '$.paths[*][*]..headers[*].examples[*]',
-        '$.components.headers[*].examples[*]',
+        '#MediaTypeObject.examples[*]',
+        '#ParameterObject.examples[*]',
+        '#HeaderObject.examples[*]',
       ],
       then: {
         function: xor,
@@ -608,11 +655,7 @@ const ruleset = {
       recommended: false,
       formats: [oas3],
       type: 'style',
-      given: [
-        '#PathItem.parameters[?(@ && @.in)]',
-        '#OperationObject.parameters[?(@ && @.in)]',
-        '$.components.parameters[?(@ && @.in)]',
-      ],
+      given: '#ParameterObject',
       then: {
         field: 'description',
         function: truthy,
@@ -651,11 +694,7 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       type: 'validation',
-      given: [
-        '$..content..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
-        '$..headers..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
-        '$..parameters..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
-      ],
+      given: '#MediaTypeObject',
       then: {
         function: oasExample,
         functionOptions: {
@@ -672,12 +711,7 @@ const ruleset = {
       formats: [oas3],
       recommended: true,
       type: 'validation',
-      given: [
-        "$.components.schemas..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..content..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..headers..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..parameters..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-      ],
+      given: ['#SchemaObject', '#SchemaObject..[?(@ && @.example)]'],
       then: {
         function: oasExample,
         functionOptions: {

@@ -93,6 +93,11 @@ function* getMediaValidationItems(
   }
 }
 
+function isSubschema(givenPath: JsonPath) {
+  // todo: add more
+  return givenPath.length > 1 && !['properties', 'items', 'contains'].includes(String(givenPath[givenPath.length - 1]));
+}
+
 function* getSchemaValidationItems(
   fields: string[],
   targetVal: Record<string, unknown>,
@@ -100,6 +105,10 @@ function* getSchemaValidationItems(
 ): Iterable<ValidationItem> {
   for (const field of fields) {
     if (!(field in targetVal)) {
+      continue;
+    }
+
+    if (!isSubschema(givenPath)) {
       continue;
     }
 
