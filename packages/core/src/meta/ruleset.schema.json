@@ -174,13 +174,7 @@
       "additionalProperties": {
         "oneOf": [
           {
-            "$id": "alias-value",
-            "type": "string",
-            "pattern": "^[$#]",
-            "errorMessage": {
-              "_": "the value of an alias must be a valid JSON Path expression, a reference to the existing Alias optionally paired with a JSON Path expression subset, or contain a valid set of targets",
-              "pattern": "the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
-            }
+            "$ref": "simple-alias"
           },
           {
             "type": "object",
@@ -198,7 +192,7 @@
                       "$ref": "shared#formats"
                     },
                     "given": {
-                      "$ref": "alias-value"
+                      "$ref": "simple-alias"
                     }
                   },
                   "required": ["formats", "given"],
@@ -225,5 +219,31 @@
     {
       "required": ["overrides"]
     }
-  ]
+  ],
+  "$defs": {
+    "SimpleAlias": {
+      "$id": "simple-alias",
+      "oneOf": [
+        {
+          "$id": "alias-value",
+          "type": "string",
+          "pattern": "^[$#]",
+          "errorMessage": {
+            "_": "the value of an alias must be a valid JSON Path expression, a reference to the existing Alias optionally paired with a JSON Path expression subset, or contain a valid set of targets",
+            "pattern": "the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "alias-value"
+          },
+          "minItems": 1,
+          "errorMessage": {
+            "minItems": "non empty"
+          }
+        }
+      ]
+    }
+  }
 }

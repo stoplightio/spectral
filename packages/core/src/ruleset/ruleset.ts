@@ -1,6 +1,6 @@
 import { dirname, relative } from '@stoplight/path';
 import { minimatch } from './utils/minimatch';
-import { Rule, StringifiedRule } from './rule/rule';
+import { Rule, StringifiedRule } from './rule';
 import {
   FileRulesetSeverityDefinition,
   ParserOptions,
@@ -15,6 +15,7 @@ import { mergeRulesets } from './mergers/rulesets';
 import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FormatsSet } from './utils/formatsSet';
+import { isSimpleAliasDefinition } from './utils/isSimpleAlias';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
@@ -78,7 +79,7 @@ export class Ruleset {
             Object.entries(definition.aliases).map(alias => {
               const [name, value] = alias;
 
-              if (typeof value === 'string') {
+              if (isSimpleAliasDefinition(value)) {
                 return alias;
               }
 

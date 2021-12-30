@@ -79,7 +79,7 @@ export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & Rul
 export type RulesetScopedAliasDefinition = {
   description?: string;
   targets: {
-    formats: FormatsSet;
+    formats: FormatsSet | Format[];
     given: string;
   }[];
 };
@@ -90,7 +90,7 @@ export type RulesetDefinition = Readonly<
   {
     documentationUrl?: string;
     description?: string;
-    formats?: Format<any>[];
+    formats?: FormatsSet | Format[];
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;
     aliases?: RulesetAliasesDefinition;

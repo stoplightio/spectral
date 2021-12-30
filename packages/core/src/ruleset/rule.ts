@@ -1,20 +1,16 @@
 import { isString } from 'lodash';
-import { JsonPath, Optional, DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, JsonPath, Optional } from '@stoplight/types';
 import { dirname, relative } from '@stoplight/path';
 import { pathToPointer } from '@stoplight/json';
 import { printValue } from '@stoplight/spectral-runtime';
 
-import { getDiagnosticSeverity, DEFAULT_SEVERITY_LEVEL } from '../utils/severity';
-import { Ruleset } from '../ruleset';
-import { Format } from '../format';
-import type {
-  HumanReadableDiagnosticSeverity,
-  IRuleThen,
-  RuleDefinition,
-  RulesetScopedAliasDefinition,
-} from '../types';
-import { minimatch } from '../utils/minimatch';
-import { FormatsSet } from '../utils/formatsSet';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
+import { Ruleset } from './ruleset';
+import { Format } from './format';
+import type { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition, RulesetScopedAliasDefinition } from './types';
+import { minimatch } from './utils/minimatch';
+import { FormatsSet } from './utils/formatsSet';
+import { isSimpleAliasDefinition } from './utils/isSimpleAlias';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
@@ -139,61 +135,74 @@ export class Rule implements IRule {
     const actualGiven = Array.isArray(given) ? given : [given];
     this.#given = this.owner.hasComplexAliases
       ? actualGiven
-      : actualGiven.map(expr => this.#resolveAlias(expr, null)).filter(isString);
+      : actualGiven.flatMap(expr => this.#resolveAlias(expr, null)).filter(isString);
   }
 
-  public getGivenForFormats(formats: Set<Format<any>> | null): string[] {
-    return this.owner.hasComplexAliases
-      ? this.#given.map(expr => this.#resolveAlias(expr, formats)).filter(isString)
-      : this.#given;
+  public getGivenForFormats(formats: Set<Format> | null): string[] {
+    return this.owner.hasComplexAliases ? this.#given.flatMap(expr => this.#resolveAlias(expr, formats)) : this.#given;
   }
 
-  #resolveAlias(expr: string, formats: Set<Format> | null): string | null {
-    let resolvedExpr = expr;
+  #resolveAlias(expr: string, formats: Set<Format> | null): string[] {
+    const expressions: string[] = [expr];
+    const resolvedExpressions = [];
 
     const stack = new Set<string>();
+    resolve: for (const expression of expressions) {
+      let resolvedExpr = expression;
 
-    while (resolvedExpr.startsWith('#')) {
-      const alias = ALIAS.exec(resolvedExpr)?.[1];
+      while (resolvedExpr.startsWith('#')) {
+        const alias = ALIAS.exec(resolvedExpr)?.[1];
 
-      if (alias === void 0 || alias === null) {
-        throw new ReferenceError(`"${this.name}" rule references an invalid alias`);
+        if (alias === void 0 || alias === null) {
+          throw new ReferenceError(`"${this.name}" rule references an invalid alias`);
+        }
+
+        if (stack.has(alias)) {
+          const _stack = [...stack, alias];
+          throw new ReferenceError(`Alias "${_stack[0]}" is circular. Resolution stack: ${_stack.join(' -> ')}`);
+        }
+
+        stack.add(alias);
+
+        if (this.owner.aliases === null || !(alias in this.owner.aliases)) {
+          throw new ReferenceError(`Alias "${alias}" does not exist`);
+        }
+
+        const aliasValue = this.owner.aliases[alias];
+        let actualAliasValue;
+        if (isSimpleAliasDefinition(aliasValue)) {
+          actualAliasValue = aliasValue;
+        } else {
+          actualAliasValue = Rule.#resolveAliasForFormats(aliasValue, formats);
+        }
+
+        if (actualAliasValue === null) {
+          continue resolve;
+        }
+
+        if (Array.isArray(actualAliasValue)) {
+          expressions.push(...actualAliasValue.map(item => item + resolvedExpr.slice(alias.length + 1)));
+          continue resolve;
+        }
+
+        if (actualAliasValue.length + 1 === expression.length) {
+          resolvedExpr = actualAliasValue;
+        } else {
+          resolvedExpr = actualAliasValue + resolvedExpr.slice(alias.length + 1);
+        }
       }
 
-      if (stack.has(alias)) {
-        const _stack = [...stack, alias];
-        throw new ReferenceError(`Alias "${_stack[0]}" is circular. Resolution stack: ${_stack.join(' -> ')}`);
-      }
-
-      stack.add(alias);
-
-      if (this.owner.aliases === null || !(alias in this.owner.aliases)) {
-        throw new ReferenceError(`Alias "${alias}" does not exist`);
-      }
-
-      const aliasValue = this.owner.aliases[alias];
-      let actualAliasValue;
-      if (typeof aliasValue === 'string') {
-        actualAliasValue = aliasValue;
-      } else {
-        actualAliasValue = this.#resolveAliasForFormats(aliasValue, formats);
-      }
-
-      if (actualAliasValue === null) {
-        return null;
-      }
-
-      if (actualAliasValue.length + 1 === expr.length) {
-        resolvedExpr = actualAliasValue;
-      } else {
-        resolvedExpr = actualAliasValue + resolvedExpr.slice(alias.length + 1);
-      }
+      stack.clear();
+      resolvedExpressions.push(resolvedExpr);
     }
 
-    return resolvedExpr;
+    return resolvedExpressions;
   }
 
-  #resolveAliasForFormats({ targets }: RulesetScopedAliasDefinition, formats: Set<Format> | null): string | null {
+  static #resolveAliasForFormats(
+    { targets }: RulesetScopedAliasDefinition,
+    formats: Set<Format> | null,
+  ): string | string[] | null {
     if (formats === null || formats.size === 0) {
       return null;
     }
