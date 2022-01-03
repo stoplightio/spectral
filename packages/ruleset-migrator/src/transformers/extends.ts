@@ -35,8 +35,8 @@ async function processExtend(
   });
 }
 
-const transformer: Transformer = function (registerHook) {
-  registerHook(
+const transformer: Transformer = function (hooks) {
+  hooks.add([
     /^(\/overrides\/\d+)?\/extends$/,
     async (input, ctx): Promise<namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier> => {
       const _extends = input as Ruleset['extends'];
@@ -58,5 +58,5 @@ const transformer: Transformer = function (registerHook) {
 
       return b.arrayExpression(extendedRulesets);
     },
-  );
+  ]);
 };

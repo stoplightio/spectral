@@ -29,7 +29,7 @@ export type Hook = [
   hook: (input: unknown, ctx: TransformerCtx) => Promise<ExpressionKind | null | void> | ExpressionKind | null | void,
 ];
 
-export type Transformer = (registerHook: (...params: Hook) => void) => void;
+export type Transformer = (hooks: Set<Hook>) => void;
 
 export type TransformerCtx = {
   readonly tree: Tree;

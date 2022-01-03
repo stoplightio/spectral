@@ -53,35 +53,38 @@ function getDiagnosticSeverity(severity: DiagnosticSeverity | string): Diagnosti
   return Number.isNaN(Number(severity)) ? SEVERITY_MAP[severity] : Number(severity);
 }
 
-const transformer: Transformer = function (registerHook) {
-  registerHook(/^$/, (_ruleset): void => {
-    const ruleset = _ruleset as Ruleset;
-    if (ruleset.rules === void 0) return;
+const transformer: Transformer = function (hooks) {
+  hooks.add([
+    /^$/,
+    (_ruleset): void => {
+      const ruleset = _ruleset as Ruleset;
+      if (ruleset.rules === void 0) return;
 
-    const { rules } = ruleset;
+      const { rules } = ruleset;
 
-    // this is to make sure order of rules is preserved after transformation
-    ruleset.rules = createOrderedLiteral(rules);
-    const order = Object.keys(rules);
+      // this is to make sure order of rules is preserved after transformation
+      ruleset.rules = createOrderedLiteral(rules);
+      const order = Object.keys(rules);
 
-    for (const [i, key] of order.entries()) {
-      if (!(key in REPLACEMENTS)) continue;
-      if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
-      const newName = REPLACEMENTS[key];
-      if (newName in rules) {
-        rules[newName] = max(String(rules[key]), String(rules[newName]));
-      } else {
-        rules[newName] ??= rules[key];
+      for (const [i, key] of order.entries()) {
+        if (!(key in REPLACEMENTS)) continue;
+        if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
+        const newName = REPLACEMENTS[key];
+        if (newName in rules) {
+          rules[newName] = max(String(rules[key]), String(rules[newName]));
+        } else {
+          rules[newName] ??= rules[key];
+        }
+
+        order[i] = newName;
+        delete rules[key];
       }
 
-      order[i] = newName;
-      delete rules[key];
-    }
+      setOrder(rules, [...new Set([...order])]);
+    },
+  ]);
 
-    setOrder(rules, [...new Set([...order])]);
-  });
-
-  registerHook(
+  hooks.add([
     /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,
     (value, ctx): namedTypes.Identifier | namedTypes.UnaryExpression => {
       assertString(value);
@@ -93,5 +96,5 @@ const transformer: Transformer = function (registerHook) {
       const alias = ctx.tree.scope.load(`function-${value}`);
       return alias !== void 0 ? b.identifier(alias) : b.unaryExpression('void', b.literal(0));
     },
-  );
+  ]);
 };

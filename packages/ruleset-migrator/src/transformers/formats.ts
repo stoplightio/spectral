@@ -35,8 +35,8 @@ function transform(input: unknown, ctx: TransformerCtx): namedTypes.ArrayExpress
 
 export { transformer as default };
 
-const transformer: Transformer = function (registerHook) {
-  registerHook(/^\/aliases\/[^/]+\/targets\/\d+\/formats$/, transform);
-  registerHook(/^(\/overrides\/\d+)?\/formats$/, transform);
-  registerHook(/^(\/overrides\/\d+)?\/rules\/[^/]+\/formats$/, transform);
+const transformer: Transformer = function (hooks) {
+  hooks.add([/^\/aliases\/[^/]+\/targets\/\d+\/formats$/, transform]);
+  hooks.add([/^(\/overrides\/\d+)?\/formats$/, transform]);
+  hooks.add([/^(\/overrides\/\d+)?\/rules\/[^/]+\/formats$/, transform]);
 };

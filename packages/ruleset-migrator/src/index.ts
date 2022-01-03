@@ -50,7 +50,7 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   };
 
   for (const transformer of transformers) {
-    transformer((...hook) => void ctx.hooks.add(hook));
+    transformer(ctx.hooks);
   }
 
   tree.ruleset = await process(ruleset, ctx);
