@@ -80,11 +80,14 @@ export type RulesetScopedAliasDefinition = {
   description?: string;
   targets: {
     formats: FormatsSet | Format[];
-    given: string;
+    given: string | (string[] & { 0: string });
   }[];
 };
 
-export type RulesetAliasesDefinition = Record<string, string | RulesetScopedAliasDefinition>;
+export type RulesetAliasesDefinition = Record<
+  string,
+  string | (string[] & { 0: string }) | RulesetScopedAliasDefinition
+>;
 
 export type RulesetDefinition = Readonly<
   {
