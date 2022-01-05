@@ -26,10 +26,10 @@ export type MigrationOptions = {
 
 export type Hook = [
   pattern: RegExp,
-  hook: (input: unknown) => Promise<ExpressionKind | null | void> | ExpressionKind | null | void,
+  hook: (input: unknown, ctx: TransformerCtx) => Promise<ExpressionKind | null | void> | ExpressionKind | null | void,
 ];
 
-export type Transformer = (ctx: TransformerCtx) => void;
+export type Transformer = (hooks: Set<Hook>) => void;
 
 export type TransformerCtx = {
   readonly tree: Tree;

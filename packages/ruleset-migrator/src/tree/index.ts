@@ -129,4 +129,22 @@ export class Tree {
 
     return resolved;
   }
+
+  public fork(): Tree {
+    const scope = this.scope.fork();
+    return new Proxy(this, {
+      get: (target, prop): Tree[keyof Tree] => {
+        if (prop === 'scope') {
+          return scope;
+        }
+
+        const value = Reflect.get(target, prop, target) as Tree[keyof Tree];
+        if (typeof value === 'function') {
+          return value.bind(target);
+        }
+
+        return value;
+      },
+    });
+  }
 }

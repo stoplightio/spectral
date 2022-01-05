@@ -1,0 +1,8 @@
+rules:
+  rule:
+    given: $
+    then:
+      function: do-nothing
+functionsDir: custom-functions
+functions:
+  - do-nothing

@@ -22,28 +22,23 @@ async function processExtend(
     return ctx.tree.addImport(REPLACEMENTS[name], '@stoplight/spectral-rulesets');
   }
 
-  const existingCwd = ctx.cwd;
-  const filepath = ctx.tree.resolveModule(name, existingCwd);
+  const filepath = ctx.tree.resolveModule(name, ctx.cwd);
 
   if (KNOWN_JS_EXTS.test(path.extname(filepath))) {
     return ctx.tree.addImport(`${path.basename(filepath, true)}_${path.extname(filepath)}`, filepath, true);
   }
 
-  const scope = ctx.tree.scope;
-  try {
-    ctx.cwd = path.dirname(filepath);
-    ctx.tree.scope = ctx.tree.scope.fork();
-    return await process(await ctx.read(filepath, ctx.opts.fs, ctx.opts.fetch), ctx.hooks);
-  } finally {
-    ctx.tree.scope = scope;
-    ctx.cwd = existingCwd;
-  }
+  return await process(await ctx.read(filepath, ctx.opts.fs, ctx.opts.fetch), {
+    ...ctx,
+    cwd: path.dirname(filepath),
+    tree: ctx.tree.fork(),
+  });
 }
 
-const transformer: Transformer = function (ctx) {
-  ctx.hooks.add([
+const transformer: Transformer = function (hooks) {
+  hooks.add([
     /^(\/overrides\/\d+)?\/extends$/,
-    async (input): Promise<namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier> => {
+    async (input, ctx): Promise<namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier> => {
       const _extends = input as Ruleset['extends'];
 
       if (typeof _extends === 'string') {
