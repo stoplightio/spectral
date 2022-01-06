@@ -7,10 +7,16 @@ import { printValue } from '@stoplight/spectral-runtime';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
 import { Ruleset } from './ruleset';
 import { Format } from './format';
-import type { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition, RulesetScopedAliasDefinition } from './types';
+import type {
+  GivenDefinition,
+  HumanReadableDiagnosticSeverity,
+  IRuleThen,
+  RuleDefinition,
+  RulesetScopedAliasDefinition,
+} from './types';
 import { minimatch } from './utils/minimatch';
 import { FormatsSet } from './utils/formatsSet';
-import { isSimpleAliasDefinition } from './utils/isSimpleAlias';
+import { isSimpleAliasDefinition } from './utils/guards';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
@@ -24,7 +30,7 @@ export interface IRule {
   recommended: boolean;
   documentationUrl: string | null;
   then: IRuleThen[];
-  given: string[];
+  given: GivenDefinition;
 }
 
 export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {

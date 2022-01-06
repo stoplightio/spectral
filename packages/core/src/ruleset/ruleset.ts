@@ -15,7 +15,7 @@ import { mergeRulesets } from './mergers/rulesets';
 import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { FormatsSet } from './utils/formatsSet';
-import { isSimpleAliasDefinition } from './utils/isSimpleAlias';
+import { isSimpleAliasDefinition } from './utils/guards';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;

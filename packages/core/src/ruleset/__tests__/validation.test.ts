@@ -78,7 +78,7 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
         rules: {
           rule: {
             documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
-            given: '',
+            given: '$',
             then: {
               function: '',
             },
@@ -372,7 +372,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
       ).toThrow(new RulesetValidationError('Error at #/aliases: must be object'));
     });
 
-    it.each([null, 5, [], {}])('recognizes %p as an invalid type of aliases', alias => {
+    it.each([null, 5])('recognizes %p as an invalid type of aliases', alias => {
       expect(
         assertValidRuleset.bind(null, {
           rules: {},
@@ -382,7 +382,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         }),
       ).toThrow(
         new RulesetValidationError(
-          'Error at #/aliases/alias: the value of an alias must be a valid JSON Path expression, a reference to the existing Alias optionally paired with a JSON Path expression subset, or contain a valid set of targets',
+          'Error at #/aliases/alias: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
         ),
       );
     });
@@ -402,7 +402,21 @@ Error at #/rules/rule/formats/1: must be a valid format`,
       );
     });
 
-    it.each(['', 'foo'])('given %s value used as an alias, throws', value => {
+    it.each<[unknown, string]>([
+      [
+        '',
+        'Error at #/aliases/PathItem: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+      ],
+      [
+        'foo',
+        'Error at #/aliases/PathItem: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+      ],
+      [[], 'Error at #/aliases/PathItem: must be a non-empty array of expressions'],
+      [
+        [0],
+        'Error at #/aliases/PathItem/0: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+      ],
+    ])('given %s value used as an alias, throws', (value, error) => {
       expect(
         assertValidRuleset.bind(null, {
           rules: {},
@@ -410,14 +424,25 @@ Error at #/rules/rule/formats/1: must be a valid format`,
             PathItem: value,
           },
         }),
-      ).toThrow(
-        new RulesetValidationError(
-          'Error at #/aliases/PathItem: the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
-        ),
-      );
+      ).toThrow(new RulesetValidationError(error));
     });
 
     describe('given scoped aliases', () => {
+      it('demands targets to be present', () => {
+        expect(
+          assertValidRuleset.bind(null, {
+            rules: {},
+            aliases: {
+              alias: {},
+            },
+          }),
+        ).toThrow(
+          new RulesetValidationError(
+            'Error at #/aliases/alias: targets must be present and have at least a single alias definition',
+          ),
+        );
+      });
+
       it.each(['Info', 'Info-Description', 'Info_Description', 'Response404', 'errorMessage'])(
         'recognizes %s as a valid key of an alias',
         alias => {
@@ -552,7 +577,7 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
           }),
         ).toThrow(
           new RulesetValidationError(
-            `Error at #/aliases/SchemaObject/targets/1/given: the value of an alias must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset`,
+            `Error at #/aliases/SchemaObject/targets/1/given: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset`,
           ),
         );
       });

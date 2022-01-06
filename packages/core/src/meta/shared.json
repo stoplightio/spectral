@@ -32,6 +32,31 @@
         }
       ],
       "errorMessage": "the value has to be one of: 0, 1, 2, 3 or \"error\", \"warn\", \"info\", \"hint\", \"off\""
+    },
+    "Given": {
+      "$anchor": "given",
+      "if": {
+        "type": "array"
+      },
+      "then": {
+        "type": "array",
+        "items": {
+          "$ref": "path-expression"
+        },
+        "minItems": 1,
+        "errorMessage": {
+          "minItems": "must be a non-empty array of expressions"
+        }
+      },
+      "else": {
+        "$ref": "path-expression"
+      }
+    },
+    "PathExpression": {
+      "$id": "path-expression",
+      "type": "string",
+      "pattern": "^[$#]",
+      "errorMessage": "must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
     }
   }
 }

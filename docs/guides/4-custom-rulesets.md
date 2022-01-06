@@ -329,6 +329,7 @@ Define aliases for commonly used JSONPath expressions on a global level which ca
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
 This is the JSON Schema definition describing aliases.
+It's a superset of `given`, with the notable difference being the possibility to distinguish between different formats.
 
 ```json
 {
