@@ -2010,7 +2010,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.1.0, @stoplight/spectral-core@^1.3.0, @stoplight/spectral-core@^1.5.1, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.0, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.1.0, @stoplight/spectral-core@^1.5.1, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.0, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -2045,7 +2045,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.0.1, @stoplight/spectral-formats@workspace:packages/formats":
+"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.0.2, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
@@ -2056,7 +2056,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-functions@*, @stoplight/spectral-functions@>=1, @stoplight/spectral-functions@^1.0.0, @stoplight/spectral-functions@^1.1.2, @stoplight/spectral-functions@workspace:packages/functions":
+"@stoplight/spectral-functions@*, @stoplight/spectral-functions@>=1, @stoplight/spectral-functions@^1.0.0, @stoplight/spectral-functions@^1.5.1, @stoplight/spectral-functions@workspace:packages/functions":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-functions@workspace:packages/functions"
   dependencies:
@@ -2156,17 +2156,17 @@ __metadata:
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.1
-    "@stoplight/json": 3.17.0
+    "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
-    "@stoplight/spectral-core": ^1.3.0
-    "@stoplight/spectral-formats": ^1.0.1
-    "@stoplight/spectral-functions": ^1.1.2
+    "@stoplight/spectral-core": ^1.8.1
+    "@stoplight/spectral-formats": ^1.0.2
+    "@stoplight/spectral-functions": ^1.5.1
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": "*"
-    "@stoplight/spectral-runtime": ^1.0.0
+    "@stoplight/spectral-runtime": ^1.1.1
     "@stoplight/types": ^12.3.0
     "@types/json-schema": ^7.0.7
-    ajv: ~8.6.0
+    ajv: ^8.8.2
     ajv-formats: ~2.1.0
     immer: ^9.0.6
     json-schema-traverse: ^1.0.0
@@ -2175,7 +2175,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-runtime@^1.0.0, @stoplight/spectral-runtime@^1.1.0, @stoplight/spectral-runtime@workspace:packages/runtime":
+"@stoplight/spectral-runtime@^1.0.0, @stoplight/spectral-runtime@^1.1.0, @stoplight/spectral-runtime@^1.1.1, @stoplight/spectral-runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-runtime@workspace:packages/runtime"
   dependencies:
@@ -2834,15 +2834,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.0, ajv@npm:^8.0.1, ajv@npm:^8.6.0, ajv@npm:^8.6.3, ajv@npm:~8.6.0":
-  version: 8.6.3
-  resolution: "ajv@npm:8.6.3"
+"ajv@npm:^8.0.0, ajv@npm:^8.0.1, ajv@npm:^8.6.0, ajv@npm:^8.6.3, ajv@npm:^8.8.2":
+  version: 8.8.2
+  resolution: "ajv@npm:8.8.2"
   dependencies:
     fast-deep-equal: ^3.1.1
     json-schema-traverse: ^1.0.0
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
-  checksum: 690ffb9408415fdab43686b3f92037ba0c8362f5d0709a123ba3fb546e6ad81414455f80a2b5cc432ce924afe9864671198f022bc331a19c072d4ede152ec3ca
+  checksum: 90849ef03c4f4f7051d15f655120137b89e3205537d683beebd39d95f40c0ca00ea8476cd999602d2f433863e7e4bf1b81d1869d1e07f4dcf56d71b6430a605c
   languageName: node
   linkType: hard
 
