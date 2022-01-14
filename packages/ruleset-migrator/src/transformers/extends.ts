@@ -22,7 +22,7 @@ async function processExtend(
     return ctx.tree.addImport(REPLACEMENTS[name], '@stoplight/spectral-rulesets');
   }
 
-  const filepath = ctx.tree.resolveModule(name, ctx.cwd);
+  const filepath = ctx.tree.resolveModule(name, ctx, 'ruleset');
 
   if (KNOWN_JS_EXTS.test(path.extname(filepath))) {
     return ctx.tree.addImport(`${path.basename(filepath, true)}_${path.extname(filepath)}`, filepath, true);
@@ -30,7 +30,7 @@ async function processExtend(
 
   return await process(await ctx.read(filepath, ctx.opts.fs, ctx.opts.fetch), {
     ...ctx,
-    cwd: path.dirname(filepath),
+    filepath,
     tree: ctx.tree.fork(),
   });
 }

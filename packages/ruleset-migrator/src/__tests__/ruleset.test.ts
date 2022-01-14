@@ -1,10 +1,11 @@
 import { fs } from 'memfs';
-import * as path from 'path';
+import * as path from '@stoplight/path';
 import * as prettier from 'prettier/standalone';
 import * as parserBabel from 'prettier/parser-babel';
 import { Ruleset } from '@stoplight/spectral-core';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fetchMock from 'fetch-mock';
+import { serveAssets } from '@stoplight/spectral-test-utils';
 
 import { migrateRuleset } from '..';
 import fixtures from './__fixtures__/.cache/index.json';
@@ -172,10 +173,23 @@ describe('migrator', () => {
 
   describe('custom npm registry', () => {
     it('should be supported', async () => {
+      serveAssets({
+        'https://unpkg.com/custom-npm-ruleset': {
+          functions: ['test'],
+          rules: {
+            rule2: {
+              then: {
+                given: '$',
+                function: 'test',
+              },
+            },
+          },
+        },
+      });
       await fs.promises.writeFile(
         path.join(cwd, 'custom-npm-provider.json'),
         JSON.stringify({
-          extends: 'spectral:asyncapi',
+          extends: ['custom-npm-ruleset'],
           formats: ['oas2'],
           rules: {
             rule: {
@@ -195,9 +209,18 @@ describe('migrator', () => {
         }),
       ).toEqual(`import {oas2} from "https://unpkg.com/@stoplight/spectral-formats";
 import {truthy} from "https://unpkg.com/@stoplight/spectral-functions";
-import {asyncapi} from "https://unpkg.com/@stoplight/spectral-rulesets";
+import test from "https://unpkg.com/custom-npm-ruleset/functions/test.js";
 export default {
-  "extends": asyncapi,
+  "extends": [{
+    "rules": {
+      "rule2": {
+        "then": {
+          "given": "$",
+          "function": test
+        }
+      }
+    }
+  }],
   "formats": [oas2],
   "rules": {
     "rule": {
