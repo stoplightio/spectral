@@ -1,4 +1,4 @@
-import * as reserved from 'reserved';
+import reserved from 'reserved';
 
 const REGISTERED_WORDS = [
   ...reserved,

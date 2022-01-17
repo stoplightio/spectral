@@ -1,4 +1,4 @@
-import * as nock from 'nock';
+import nock from 'nock';
 import * as nodeFs from 'fs';
 import { URL } from 'url';
 import { dirname, isURL } from '@stoplight/path';

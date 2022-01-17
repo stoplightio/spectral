@@ -1,5 +1,5 @@
 import { join, resolve } from '@stoplight/path';
-import * as nock from 'nock';
+import nock from 'nock';
 import * as yargs from 'yargs';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';

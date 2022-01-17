@@ -21,6 +21,7 @@
     "moduleResolution": "node",
     "target": "ES2019",
     "module": "CommonJS",
+    "esModuleInterop": true,
     "lib": ["es2020"],
     "strict": true,
     "pretty": true,

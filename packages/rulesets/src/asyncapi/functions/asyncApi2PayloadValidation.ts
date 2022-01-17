@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import * as betterAjvErrors from '@stoplight/better-ajv-errors';
+import betterAjvErrors from '@stoplight/better-ajv-errors';
 import * as asyncApi2Schema from '../schemas/schema.asyncapi2.json';
 
 const fakeSchemaObjectId = 'asyncapi2#/definitions/schema';

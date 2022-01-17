@@ -1,4 +1,4 @@
-import * as mm from 'minimatch';
+import mm from 'minimatch';
 
 const DEFAULT_OPTS = { matchBase: true };
 

@@ -1,6 +1,6 @@
 import { defaultComputeResultFingerprint, prepareResults } from '../prepareResults';
 
-import * as duplicateValidationResults from './__fixtures__/duplicate-validation-results.json';
+import duplicateValidationResults from './__fixtures__/duplicate-validation-results.json';
 
 describe('prepareResults util', () => {
   it('deduplicate exact validation results', () => {

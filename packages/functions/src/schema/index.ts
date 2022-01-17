@@ -1,5 +1,5 @@
 import type { ErrorObject } from 'ajv';
-import * as betterAjvErrors from '@stoplight/better-ajv-errors';
+import betterAjvErrors from '@stoplight/better-ajv-errors';
 import { detectDialect } from '@stoplight/spectral-formats';
 import { createAjvInstances } from './ajv';
 import MissingRefError from 'ajv/dist/compile/ref_error';

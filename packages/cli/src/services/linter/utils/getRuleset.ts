@@ -11,7 +11,7 @@ import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
 import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
 import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
 import { isError, isObject } from 'lodash';
-import * as commonjs from '@rollup/plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs';
 import { ErrorWithCause } from 'pony-cause';
 
 async function getDefaultRulesetFile(): Promise<Optional<string>> {
@@ -60,23 +60,13 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
       ruleset = await bundleRuleset(rulesetFile, {
         target: 'node',
         format: 'commonjs',
-        plugins: [
-          stdin(migratedRuleset, rulesetFile),
-          builtins(),
-          // sigh, 2021 and we still do not use ESM
-          (commonjs as unknown as typeof import('@rollup/plugin-commonjs').default)(),
-          ...node({ fs, fetch }),
-        ],
+        plugins: [stdin(migratedRuleset, rulesetFile), builtins(), commonjs(), ...node({ fs, fetch })],
       });
     } else {
       ruleset = await bundleRuleset(rulesetFile, {
         target: 'node',
         format: 'commonjs',
-        plugins: [
-          builtins(),
-          (commonjs as unknown as typeof import('@rollup/plugin-commonjs').default)(),
-          ...node({ fs, fetch }),
-        ],
+        plugins: [builtins(), commonjs(), ...node({ fs, fetch })],
       });
     }
   } catch (e) {

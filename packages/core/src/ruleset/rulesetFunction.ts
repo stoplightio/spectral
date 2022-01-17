@@ -2,7 +2,7 @@ import Ajv, { ErrorObject } from 'ajv';
 import addFormats from 'ajv-formats';
 import ajvErrors from 'ajv-errors';
 import type { RequiredError } from 'ajv/dist/vocabularies/validation/required';
-import type { AdditionalPropertiesError } from 'ajv/lib/vocabularies/applicator/additionalProperties';
+import type { AdditionalPropertiesError } from 'ajv/dist/vocabularies/applicator/additionalProperties';
 import type { EnumError } from 'ajv/dist/vocabularies/validation/enum';
 import type { JSONSchema7 } from 'json-schema';
 
