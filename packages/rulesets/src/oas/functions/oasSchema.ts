@@ -1,5 +1,5 @@
 import type { SchemaObject, ErrorObject } from 'ajv';
-import * as traverse from 'json-schema-traverse';
+import traverse from 'json-schema-traverse';
 import { schema as schemaFn, SchemaOptions } from '@stoplight/spectral-functions';
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { oas2, oas3_1, extractDraftVersion, oas3_0 } from '@stoplight/spectral-formats';
