@@ -385,7 +385,7 @@ aliases:
           - $.components.parameters[*]
 ```
 
-Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSONPath syntax, like dot notation: `"given": "#InfoContact.name"`.
+Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSONPath syntax, like dot notation: `"given": "#ParameterObject.name"`.
 
 > This will be followed by our core rulesets providing a common set of aliases for OpenAPI and AsyncAPI so that our users don't have to do the work at all. If you have ideas about what kind of aliases could be useful leave your thoughts [here](https://roadmap.stoplight.io).
 
