@@ -328,68 +328,7 @@ Targeting certain parts of an OpenAPI spec is powerful but it can become cumbers
 Define aliases for commonly used JSONPath expressions on a global level which can then be reused across the ruleset.
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
-This is the JSON Schema definition describing aliases.
 It's a superset of `given`, with the notable difference being the possibility to distinguish between different formats.
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "propertyNames": {
-    "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
-  },
-  "additionalProperties": {
-    "oneOf": [
-      {
-        "$ref": "#/$defs/Alias"
-      },
-      {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "targets": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "object",
-              "properties": {
-                "formats": {
-                  "$ref": "shared#formats"
-                },
-                "given": {
-                  "$ref": "#/$defs/Alias"
-                }
-              },
-              "required": ["formats", "given"]
-            }
-          }
-        },
-        "required": ["targets"]
-      }
-    ]
-  },
-  "$defs": {
-    "Alias": {
-      "oneOf": [
-        {
-          "$id": "alias-value",
-          "type": "string",
-          "pattern": "^[$#]"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "alias-value"
-          },
-          "minItems": 1
-        }
-      ]
-    }
-  }
-}
-```
 
 **Example**
 
