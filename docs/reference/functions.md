@@ -155,7 +155,7 @@ camel-case-name:
 
 ## schema
 
-Use JSON Schema (draft 4, 6 or 7) to treat the contents of the \$given JSON Path as a JSON instance.
+Use JSON Schema (draft 4, 6, 7, 2019-09, or 2020-12) to treat the contents of the \$given JSON Path as a JSON instance.
 
 <!-- title: functionOptions -->
 
