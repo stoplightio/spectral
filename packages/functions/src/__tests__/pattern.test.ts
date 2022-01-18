@@ -1,6 +1,9 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import pattern from '../pattern';
+import AggregateError = require('es-aggregate-error');
 
 const runPattern = testFunction.bind(null, pattern);
 
@@ -49,25 +52,51 @@ describe('Core Functions / Pattern', () => {
       },
     );
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         null,
-        '"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }',
+        [
+          new RulesetValidationError(
+            '"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }',
+            [],
+          ),
+        ],
       ],
       [
         {},
-        `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
+        [
+          new RulesetValidationError(
+            `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
+            [],
+          ),
+        ],
       ],
-      [{ foo: true }, '"pattern" function does not support "foo" option'],
-      [{ match: 2 }, '"pattern" function and its "match" option must be string or RegExp instance'],
-      [{ notMatch: null }, '"pattern" function and its "notMatch" option must be string or RegExp instance'],
+      [{ foo: true }, [new RulesetValidationError('"pattern" function does not support "foo" option', [])]],
+      [
+        { match: 2 },
+        [new RulesetValidationError('"pattern" function and its "match" option must be string or RegExp instance', [])],
+      ],
+      [
+        { notMatch: null },
+        [
+          new RulesetValidationError(
+            '"pattern" function and its "notMatch" option must be string or RegExp instance',
+            [],
+          ),
+        ],
+      ],
       [
         { match: 4, notMatch: 10 },
-        `"pattern" function and its "match" option must be string or RegExp instance
-"pattern" function and its "notMatch" option must be string or RegExp instance`,
+        [
+          new RulesetValidationError(`"pattern" function and its "match" option must be string or RegExp instance`, []),
+          new RulesetValidationError(
+            `"pattern" function and its "notMatch" option must be string or RegExp instance`,
+            [],
+          ),
+        ],
       ],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runPattern('abc', opts)).rejects.toThrow(new RulesetValidationError(error));
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runPattern('abc', opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

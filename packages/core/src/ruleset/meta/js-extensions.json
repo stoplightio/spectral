@@ -40,12 +40,12 @@
     },
     "Format": {
       "$anchor": "format",
-      "spectral-runtime": "format",
+      "x-spectral-runtime": "format",
       "errorMessage": "must be a valid format"
     },
     "Function": {
       "$anchor": "function",
-      "spectral-runtime": "function",
+      "x-spectral-runtime": "ruleset-function",
       "type": "object",
       "properties": {
         "function": true

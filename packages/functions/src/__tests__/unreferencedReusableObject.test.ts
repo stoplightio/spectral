@@ -1,6 +1,9 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import unreferencedReusableObject from '../unreferencedReusableObject';
+import AggregateError = require('es-aggregate-error');
 
 const runUnreferencedReusableObject = testFunction.bind(null, unreferencedReusableObject);
 
@@ -24,40 +27,65 @@ describe('Core Functions / UnreferencedReusableObject', () => {
       expect(await runUnreferencedReusableObject({}, opts)).toEqual([]);
     });
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         null,
-        '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+        [
+          new RulesetValidationError(
+            '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+            [],
+          ),
+        ],
       ],
       [
         2,
-        '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+        [
+          new RulesetValidationError(
+            '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+            [],
+          ),
+        ],
       ],
       [
         {},
-        '"unreferencedReusableObject" function is missing "reusableObjectsLocation" option. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+        [
+          new RulesetValidationError(
+            '"unreferencedReusableObject" function is missing "reusableObjectsLocation" option. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
+            [],
+          ),
+        ],
       ],
       [
         {
           reusableObjectsLocation: '#',
           foo: true,
         },
-        '"unreferencedReusableObject" function does not support "foo" option',
+        [new RulesetValidationError('"unreferencedReusableObject" function does not support "foo" option', [])],
       ],
       [
         {
           reusableObjectsLocation: 2,
         },
-        '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
+        [
+          new RulesetValidationError(
+            '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
+            [],
+          ),
+        ],
       ],
       [
         {
           reusableObjectsLocation: 'foo',
         },
-        '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
+        [
+          new RulesetValidationError(
+            '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
+            [],
+          ),
+        ],
       ],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runUnreferencedReusableObject({}, opts)).rejects.toThrow(new RulesetValidationError(error));
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runUnreferencedReusableObject({}, opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

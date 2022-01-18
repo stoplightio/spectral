@@ -8,56 +8,58 @@ import type { JSONSchema7 } from 'json-schema';
 
 import { printPath, PrintStyle, printValue } from '@stoplight/spectral-runtime';
 
-import { RulesetValidationError } from './validation';
+import { RulesetValidationError } from './validation/index';
 import { IFunctionResult, JSONSchema, RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import { isObject } from 'lodash';
+import AggregateError = require('es-aggregate-error');
 
 const ajv = new Ajv({ allErrors: true, allowUnionTypes: true, strict: true, keywords: ['x-internal'] });
 ajvErrors(ajv);
 addFormats(ajv);
 
 export class RulesetFunctionValidationError extends RulesetValidationError {
-  constructor(fn: string, errors: ErrorObject[]) {
-    const messages = errors.map(error => {
-      switch (error.keyword) {
-        case 'type': {
-          const path = printPath(error.instancePath.slice(1).split('/'), PrintStyle.Dot);
-          const values = Array.isArray(error.params.type) ? error.params.type.join(', ') : String(error.params.type);
+  constructor(fn: string, error: ErrorObject) {
+    super(RulesetFunctionValidationError.printMessage(fn, error), error.instancePath.slice(1).split('/'));
+  }
 
-          return `"${fn}" function and its "${path}" option accepts only the following types: ${values}`;
-        }
+  private static printMessage(fn: string, error: ErrorObject): string {
+    switch (error.keyword) {
+      case 'type': {
+        const path = printPath(error.instancePath.slice(1).split('/'), PrintStyle.Dot);
+        const values = Array.isArray(error.params.type) ? error.params.type.join(', ') : String(error.params.type);
 
-        case 'required': {
-          const missingProperty = (error as RequiredError).params.missingProperty;
-          const missingPropertyPath =
-            error.instancePath === ''
-              ? missingProperty
-              : printPath([...error.instancePath.slice(1).split('/'), missingProperty], PrintStyle.Dot);
-
-          return `"${fn}" function is missing "${missingPropertyPath}" option`;
-        }
-
-        case 'additionalProperties': {
-          const additionalProperty = (error as AdditionalPropertiesError).params.additionalProperty;
-          const additionalPropertyPath =
-            error.instancePath === ''
-              ? additionalProperty
-              : printPath([...error.instancePath.slice(1).split('/'), additionalProperty], PrintStyle.Dot);
-
-          return `"${fn}" function does not support "${additionalPropertyPath}" option`;
-        }
-
-        case 'enum': {
-          const path = printPath(error.instancePath.slice(1).split('/'), PrintStyle.Dot);
-          const values = (error as EnumError).params.allowedValues.map(printValue).join(', ');
-
-          return `"${fn}" function and its "${path}" option accepts only the following values: ${values}`;
-        }
-        default:
-          return error.message;
+        return `"${fn}" function and its "${path}" option accepts only the following types: ${values}`;
       }
-    });
 
-    super(messages.join('\n'));
+      case 'required': {
+        const missingProperty = (error as RequiredError).params.missingProperty;
+        const missingPropertyPath =
+          error.instancePath === ''
+            ? missingProperty
+            : printPath([...error.instancePath.slice(1).split('/'), missingProperty], PrintStyle.Dot);
+
+        return `"${fn}" function is missing "${missingPropertyPath}" option`;
+      }
+
+      case 'additionalProperties': {
+        const additionalProperty = (error as AdditionalPropertiesError).params.additionalProperty;
+        const additionalPropertyPath =
+          error.instancePath === ''
+            ? additionalProperty
+            : printPath([...error.instancePath.slice(1).split('/'), additionalProperty], PrintStyle.Dot);
+
+        return `"${fn}" function does not support "${additionalPropertyPath}" option`;
+      }
+
+      case 'enum': {
+        const path = printPath(error.instancePath.slice(1).split('/'), PrintStyle.Dot);
+        const values = (error as EnumError).params.allowedValues.map(printValue).join(', ');
+
+        return `"${fn}" function and its "${path}" option accepts only the following values: ${values}`;
+      }
+      default:
+        return error.message ?? 'unknown error';
+    }
   }
 }
 
@@ -138,25 +140,27 @@ export function createRulesetFunction<I extends unknown, O extends unknown>(
 
   Reflect.defineProperty(wrappedFn, 'name', { value: fn.name });
 
-  const validOpts = new Set<unknown>();
+  const validOpts = new WeakSet();
   wrappedFn.validator = function (o: unknown): asserts o is O {
-    if (validOpts.has(o)) return; // I don't like this.
+    if (isObject(o) && validOpts.has(o)) return; // I don't like this.
 
     if (validateOptions(o)) {
-      validOpts.add(o);
+      if (isObject(o)) validOpts.add(o);
       return;
     }
 
     if (options === null) {
-      throw new TypeError(`"${fn.name || '<unknown>'}" function does not accept any options`);
+      throw new RulesetValidationError(`"${fn.name || '<unknown>'}" function does not accept any options`, []);
     } else if (
       'errors' in validateOptions &&
       Array.isArray(validateOptions.errors) &&
       validateOptions.errors.length > 0
     ) {
-      throw new RulesetFunctionValidationError(fn.name || '<unknown>', validateOptions.errors);
+      throw new AggregateError(
+        validateOptions.errors.map(error => new RulesetFunctionValidationError(fn.name || '<unknown>', error)),
+      );
     } else {
-      throw new Error(`"functionOptions" of "${fn.name || '<unknown>'}" function must be valid`);
+      throw new RulesetValidationError(`"functionOptions" of "${fn.name || '<unknown>'}" function must be valid`, []);
     }
   };
 

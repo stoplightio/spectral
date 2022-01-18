@@ -1,6 +1,9 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import xor from '../xor';
+import AggregateError = require('es-aggregate-error');
 
 const runXor = testFunction.bind(null, xor);
 
@@ -63,25 +66,67 @@ describe('Core Functions / Xor', () => {
       expect(await runXor([], opts)).toEqual([]);
     });
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         null,
-        '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+        [
+          new RulesetValidationError(
+            '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+            [],
+          ),
+        ],
       ],
       [
         2,
-        '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+        [
+          new RulesetValidationError(
+            '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+            [],
+          ),
+        ],
       ],
-      [{ properties: ['foo', 'bar'], foo: true }, '"xor" function does not support "foo" option'],
+      [
+        { properties: ['foo', 'bar'], foo: true },
+        [new RulesetValidationError('"xor" function does not support "foo" option', [])],
+      ],
       [
         { properties: ['foo', 'bar', 'baz'] },
-        '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
+        [
+          new RulesetValidationError(
+            '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
+            [],
+          ),
+        ],
       ],
-      [{ properties: ['foo', {}] }, '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]'],
-      [{ properties: ['foo'] }, '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]'],
-      [{ properties: [] }, '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]'],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runXor({}, opts)).rejects.toThrow(new RulesetValidationError(error));
+      [
+        { properties: ['foo', {}] },
+        [
+          new RulesetValidationError(
+            '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
+            [],
+          ),
+        ],
+      ],
+      [
+        { properties: ['foo'] },
+        [
+          new RulesetValidationError(
+            '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
+            [],
+          ),
+        ],
+      ],
+      [
+        { properties: [] },
+        [
+          new RulesetValidationError(
+            '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
+            [],
+          ),
+        ],
+      ],
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runXor({}, opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });
