@@ -29,6 +29,13 @@ import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import { Formatter } from './types';
 import { groupBySource, xmlEscape } from './utils';
 
+/**
+ * Prepares the given text for inclusion in an XML CDATA section.
+ */
+function prepareForCdata(text: string): string {
+  return text.replace(']]>', ']]]]><![CDATA[>');
+}
+
 export const junit: Formatter = (results, { failSeverity }) => {
   let output = '';
 
@@ -50,8 +57,8 @@ export const junit: Formatter = (results, { failSeverity }) => {
         output += `<failure message="${xmlEscape(result.message)}">`;
         output += '<![CDATA[';
         output += `line ${result.range.start.line + 1}, col ${result.range.start.character + 1}, `;
-        output += `${xmlEscape(result.message)} (${result.code}) `;
-        output += `at path ${xmlEscape(printPath(result.path, PrintStyle.EscapedPointer))}`;
+        output += `${prepareForCdata(result.message)} (${result.code}) `;
+        output += `at path ${prepareForCdata(printPath(result.path, PrintStyle.EscapedPointer))}`;
         output += ']]>';
         output += `</failure>`;
         output += '</testcase>\n';
