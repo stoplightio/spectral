@@ -27,11 +27,13 @@ Spectral has [built-in functions](../reference/functions.md) such as `truthy` or
 
 The `given` property is conceptually quite like a selector in CSS, in that it picks the part of the document to apply rules to.
 
-It has a specific syntax known as [JSON Path](https://jsonpath.com/), which if you are familiar with XPath is quite similar. JSON Path is not yet a standard (it [will be](https://tools.ietf.org/html/draft-normington-jsonpath-00) someday), and has a few competing implementations. Spectral uses [jsonpath-plus](https://www.npmjs.com/package/jsonpath-plus) for the implementation, which supports all the main JSON Path functionality and a little bit more, but this syntax may differ slightly from other JSON Path implementations.
+It has a specific syntax known as [JSONPath](https://goessner.net/articles/JsonPath/index.html), which if you are familiar with XPath is quite similar. JSONPath is not yet a standard (it [will be](https://tools.ietf.org/html/draft-normington-jsonpath-00) someday), and has a few competing implementations. Spectral uses [nimma](https://www.npmjs.com/package/nimma) as its main implementation, and sometimes resorts to [jsonpath-plus](https://www.npmjs.com/package/jsonpath-plus) to ensure a good backwards-compatibility.
+Both of them support all the main JSONPath functionality and a little bit more, but this syntax may differ slightly from other JSONPath implementations.
 
-Your `given` value can be a string containing any valid JSON Path Plus expression, or an array of expressions to apply a rule to multiple parts of a document.
+Your `given` value can be a string containing any valid JSONPath expression, or an array of expressions to apply a rule to multiple parts of a document.
+You can also consume your [aliases][#aliases] here if you have some defined.
 
-Use the [JSON Path Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
+Use the [JSONPath Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
 
 ### Severity
 
@@ -92,7 +94,7 @@ then:
   function: truthy
 ```
 
-The `field` keyword is optional, and is for applying the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSON Path. The value can also be `@key` to apply the rule to a keys of an object.
+The `field` keyword is optional, and is for applying the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSONPath. The value can also be `@key` to apply the rule to a keys of an object.
 
 ```yaml
 given: "$.responses"
@@ -322,15 +324,11 @@ For now the JSON, YAML, and JS, are all being maintained, and there are no curre
 
 ## Aliases
 
-Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSON path expressions across various rules. Define aliases for commonly used JSON paths on a global level which can then be reused across the ruleset.
+Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSONPath expressions across various rules.
+Define aliases for commonly used JSONPath expressions on a global level which can then be reused across the ruleset.
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
-
-```
-aliases: {
-  {Name}: '{JSONPath}'
-}
-```
+It's a superset of `given`, with the notable difference being the possibility to distinguish between different formats.
 
 **Example**
 
@@ -343,7 +341,51 @@ aliases:
   Paths: "$.paths[*]~"
 ```
 
-Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSON Path syntax, like dot notation: `"given": "#InfoContact.name"`.
+If you deal with a variety of different spec, you may find the above approach insufficient, particularly when the shape of the document is notably different.
+In such a case, you may want to consider using scoped aliases.
+
+```yaml
+aliases:
+  SharedParameterObject:
+    description: an optional property describing the purpose of the alias
+    targets:
+      - formats:
+          - oas2
+        given: $.parameters[*]
+      - formats:
+          - oas3
+        given: $.components.parameters[*]
+```
+
+Now, if you referenced `SharedParameterObject` alias, the chosen path would be determined based on the document you use.
+For instance, if a given document matched OpenAPI 2.x, `$.parameters[*]` would be used as the JSONPath expression.
+
+Having a closer look on the example above, one may notice that it'd be still somewhat complicated to target _all_ Parameter Objects
+that a specific OpenAPI document may contain.
+To make it more feasible and avoid overly complex JSONPath expressions, `given` can be an array.
+
+```yaml
+aliases:
+  PathItemObject: $.paths[*]
+  OperationObject: "#PathItem[get,put,post,delete,options,head,patch,trace]"
+  ParameterObject:
+    description: an optional property describing the purpose of the alias
+    targets:
+      - formats:
+          - oas2
+        given:
+          - "#PathItemObject.parameters[*]"
+          - "#OperationObject.parameters[*]"
+          - $.parameters[*]
+      - formats:
+          - oas3
+        given:
+          - "#PathItemObject.parameters[*]"
+          - "#OperationObject.parameters[*]"
+          - $.components.parameters[*]
+```
+
+Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSONPath syntax, like dot notation: `"given": "#ParameterObject.name"`.
 
 > This will be followed by our core rulesets providing a common set of aliases for OpenAPI and AsyncAPI so that our users don't have to do the work at all. If you have ideas about what kind of aliases could be useful leave your thoughts [here](https://roadmap.stoplight.io).
 
@@ -354,7 +396,7 @@ Previously Spectral supported exceptions, which were limited in their ability to
 Overrides can be used to:
 
 - Override rulesets to apply on particular files/folders `files: ['schemas/**/*.draft7.json']`
-- Override rulesets to apply on particular JSON Path's `files: ['**#/components/schemas/Item']`
+- Override rulesets to apply on particular JSONPath's `files: ['**#/components/schemas/Item']`
 - Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
 - Override particular rules
 
@@ -377,7 +419,7 @@ overrides:
             type: number
 ```
 
-One can also combine a glob for a filepath with a JSON Path after the anchor, i.e.:
+One can also combine a glob for a filepath with a JSONPath after the anchor, i.e.:
 
 ```yaml
 overrides:

@@ -1,6 +1,6 @@
 import type { JsonPath } from '@stoplight/types';
 import type { IDocumentInventory } from '../documentInventory';
-import type { IRule } from '../ruleset/rule/rule';
+import type { IRule } from '../ruleset/rule';
 import type { IDocument } from '../document';
 import type { JSONSchema7 } from 'json-schema';
 
