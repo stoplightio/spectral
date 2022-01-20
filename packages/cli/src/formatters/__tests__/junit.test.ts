@@ -4,6 +4,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 
 const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');
 const mixedErrors = require('./__fixtures__/mixed-errors.json');
+const specialXmlStrings = require('./__fixtures__/errors-with-special-xml-strings.json');
 
 describe('JUnit formatter', () => {
   let parse: Parser['parseStringPromise'];
@@ -69,7 +70,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: "should have required property '$ref'",
                     },
-                    _: 'line 36, col 22, should have required property &apos;$ref&apos; (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1',
+                    _: "line 36, col 22, should have required property '$ref' (oas3-schema) at path #/paths/~1pets/get/responses/200/headers/header-1",
                   },
                 ],
               },
@@ -159,6 +160,58 @@ describe('JUnit formatter', () => {
                       message: 'Info must contain Stoplight',
                     },
                     _: 'line 5, col 14, Info must contain Stoplight (info-matches-stoplight) at path #/info/title',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+  });
+
+  test('handles special XML strings properly', async () => {
+    const result = await parse(junit(specialXmlStrings, { failSeverity: DiagnosticSeverity.Error }));
+    expect(result).toEqual({
+      testsuites: {
+        testsuite: [
+          {
+            $: {
+              errors: '0',
+              failures: '2',
+              name: '',
+              package: 'org.spectral',
+              tests: '2',
+              time: '0',
+            },
+            testcase: [
+              {
+                $: {
+                  classname: '',
+                  name: 'org.spectral.special-xml-strings(#/root/\'/"/leaf)',
+                  time: '0',
+                },
+                failure: [
+                  {
+                    $: {
+                      message: 'start \' " < > end',
+                    },
+                    _: 'line 1, col 1, start \' " < > end (special-xml-strings) at path #/root/\'/"/leaf',
+                  },
+                ],
+              },
+              {
+                $: {
+                  classname: '',
+                  name: 'org.spectral.special-cdata-strings(#/root/]]>/<![CDATA[/leaf)',
+                  time: '0',
+                },
+                failure: [
+                  {
+                    $: {
+                      message: 'start <![CDATA[ ]]> <![CDATA[ end',
+                    },
+                    _: 'line 1, col 1, start <![CDATA[ ]]> <![CDATA[ end (special-cdata-strings) at path #/root/]]>/<![CDATA[/leaf',
                   },
                 ],
               },
