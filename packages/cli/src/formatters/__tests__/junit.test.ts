@@ -188,7 +188,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '',
-                  name: 'org.spectral.special-xml-strings',
+                  name: 'org.spectral.special-xml-strings(#/root/\'/"/leaf)',
                   time: '0',
                 },
                 failure: [
@@ -203,7 +203,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '',
-                  name: 'org.spectral.special-cdata-strings',
+                  name: 'org.spectral.special-cdata-strings(#/root/]]>/<![CDATA[/leaf)',
                   time: '0',
                 },
                 failure: [
