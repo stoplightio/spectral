@@ -32,7 +32,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.invalid-schema.oas3',
-                  name: 'org.spectral.oas3-schema',
+                  name: 'org.spectral.oas3-schema(#/paths/~1pets/get/responses/200/headers/header-1)',
                   time: '0',
                 },
                 failure: [
@@ -47,7 +47,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.invalid-schema.oas3',
-                  name: 'org.spectral.oas3-schema',
+                  name: 'org.spectral.oas3-schema(#/paths/~1pets/get/responses/200/headers/header-1)',
                   time: '0',
                 },
                 failure: [
@@ -62,7 +62,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.invalid-schema.oas3',
-                  name: 'org.spectral.oas3-schema',
+                  name: 'org.spectral.oas3-schema(#/paths/~1pets/get/responses/200/headers/header-1)',
                   time: '0',
                 },
                 failure: [
@@ -99,7 +99,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',
-                  name: 'org.spectral.info-matches-stoplight',
+                  name: 'org.spectral.info-matches-stoplight(#/info/title)',
                   time: '0',
                 },
                 failure: [
@@ -136,7 +136,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',
-                  name: 'org.spectral.info-description',
+                  name: 'org.spectral.info-description(#/info)',
                   time: '0',
                 },
                 failure: [
@@ -151,7 +151,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '/home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.oas3',
-                  name: 'org.spectral.info-matches-stoplight',
+                  name: 'org.spectral.info-matches-stoplight(#/info/title)',
                   time: '0',
                 },
                 failure: [
