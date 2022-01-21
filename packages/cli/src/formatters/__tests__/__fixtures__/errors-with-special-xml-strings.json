@@ -1,0 +1,46 @@
+[
+  {
+    "code": "special-xml-strings",
+    "message": "start ' \" < > end",
+    "path": [
+      "root",
+      "'",
+      "\"",
+      "leaf"
+    ],
+    "severity": 0,
+    "source": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "character": 0
+      },
+      "end": {
+        "line": 0,
+        "character": 0
+      }
+    }
+  },
+  {
+    "code": "special-cdata-strings",
+    "message": "start <![CDATA[ ]]> <![CDATA[ end",
+    "path": [
+      "root",
+      "]]>",
+      "<![CDATA[",
+      "leaf"
+    ],
+    "severity": 0,
+    "source": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "character": 0
+      },
+      "end": {
+        "line": 0,
+        "character": 0
+      }
+    }
+  }
+]

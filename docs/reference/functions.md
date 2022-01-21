@@ -155,15 +155,15 @@ camel-case-name:
 
 ## schema
 
-Use JSON Schema (draft 4, 6 or 7) to treat the contents of the \$given JSON Path as a JSON instance.
+Use JSON Schema (draft 4, 6, 7, 2019-09, or 2020-12) to treat the contents of the \$given JSON Path as a JSON instance.
 
 <!-- title: functionOptions -->
 
-| name      | description                                                            | type         | required? |
-| --------- | ---------------------------------------------------------------------- | ------------ | --------- | --------------------------------------------------- | --- |
-| schema    | a valid JSON Schema document                                           | `JSONSchema` | yes       |
-| dialect   | the JSON Schema draft used by function. "auto" by default              | `'auto'      | 'draft4'  | 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'` | no  |
-| allErrors | returns all errors when `true`; otherwise only returns the first error | `boolean`    | no        |
+| name      | description                                                            | type                                                                   | required? |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------- |
+| schema    | a valid JSON Schema document                                           | `JSONSchema`                                                           | yes       |
+| dialect   | the JSON Schema draft used by function. "auto" by default              | `'auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'` | no        |
+| allErrors | returns all errors when `true`; otherwise only returns the first error | `boolean`                                                              | no        |
 
 <!-- title: example -->
 

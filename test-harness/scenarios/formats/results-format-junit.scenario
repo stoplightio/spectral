@@ -56,6 +56,6 @@ info:
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
 <testsuite package="org.spectral" time="0" tests="1" errors="0" failures="1" name="{document}">
-<testcase time="0" name="org.spectral.api-servers" classname="{document}"><failure message="&quot;servers&quot; must be present and non-empty array."><![CDATA[line 1, col 1, &quot;servers&quot; must be present and non-empty array. (api-servers) at path #]]></failure></testcase>
+<testcase time="0" name="org.spectral.api-servers(#)" classname="{document}"><failure message="&quot;servers&quot; must be present and non-empty array."><![CDATA[line 1, col 1, "servers" must be present and non-empty array. (api-servers) at path #]]></failure></testcase>
 </testsuite>
 </testsuites>
