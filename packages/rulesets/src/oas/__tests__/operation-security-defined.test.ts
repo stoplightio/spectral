@@ -1,9 +1,9 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from './__helpers__/tester';
 
-testRule('operation-security-defined', [
+testRule('oas-security-defined', [
   {
-    name: 'a correct object (just in body)',
+    name: 'oas2: a correct object (just in body)',
     document: {
       securityDefinitions: {
         apikey: {},
@@ -24,7 +24,7 @@ testRule('operation-security-defined', [
   },
 
   {
-    name: 'invalid object',
+    name: 'oas2: invalid object',
     document: {
       swagger: '2.0',
       securityDefinitions: {},
@@ -50,7 +50,7 @@ testRule('operation-security-defined', [
     ],
   },
   {
-    name: 'securityScheme defined',
+    name: 'oas3: securityScheme defined',
     document: {
       openapi: '3.0.0',
 
@@ -92,7 +92,7 @@ testRule('operation-security-defined', [
     ],
   },
   {
-    name: 'validate a correct object (just in body)',
+    name: 'oas3: validate a correct object (just in body)',
     document: {
       openapi: '3.0.2',
       components: {
@@ -116,7 +116,7 @@ testRule('operation-security-defined', [
   },
 
   {
-    name: 'return errors on invalid object',
+    name: 'oas3: return errors on invalid object',
     document: {
       openapi: '3.0.2',
       components: {},

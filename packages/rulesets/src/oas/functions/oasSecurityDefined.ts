@@ -1,8 +1,6 @@
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
-
-import { isObject } from './utils/isObject';
 import { oas2 } from '@stoplight/spectral-formats';
-import { get as _get } from 'lodash';
+import { isPlainObject } from '@stoplight/json';
 
 export default createRulesetFunction<unknown[], null>(
   {
@@ -12,17 +10,21 @@ export default createRulesetFunction<unknown[], null>(
     options: null,
   },
   function oasOpSecurityDefined(targetVal, _options, ctx) {
+    if (!ctx.document.formats || !isPlainObject(ctx.document.data)) return;
+
     const results: IFunctionResult[] = [];
 
-    if (!ctx.document.formats) return results;
-
     const isOAS2 = ctx.document.formats?.has(oas2);
-    const schemes: unknown = _get(ctx.document.data, isOAS2 ? 'securityDefinitions' : 'components.securitySchemes');
+    const schemes: unknown = isOAS2
+      ? ctx.document.data.securityDefinitions
+      : isPlainObject(ctx.document.data.components)
+      ? ctx.document.data.components.securitySchemes
+      : null;
 
-    const allDefs = isObject(schemes) ? Object.keys(schemes) : [];
+    const allDefs = isPlainObject(schemes) ? Object.keys(schemes) : [];
 
     for (const [index, value] of targetVal.entries()) {
-      if (!isObject(value)) {
+      if (!isPlainObject(value)) {
         continue;
       }
 
@@ -30,7 +32,7 @@ export default createRulesetFunction<unknown[], null>(
 
       if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
         results.push({
-          message: 'Operation must not reference an undefined security scheme.',
+          message: 'Must not reference an undefined security scheme.',
           path: [...ctx.path, index],
         });
       }

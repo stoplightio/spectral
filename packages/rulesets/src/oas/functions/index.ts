@@ -4,7 +4,7 @@ export { default as oasDocumentSchema } from './oasDocumentSchema';
 export { default as oasOpFormDataConsumeCheck } from './oasOpFormDataConsumeCheck';
 export { default as oasOpSuccessResponse } from './oasOpSuccessResponse';
 export { default as oasExample } from './oasExample';
-export { default as oasOpSecurityDefined } from './oasOpSecurityDefined';
+export { default as oasSecurityDefined } from './oasSecurityDefined';
 export { default as typedEnum } from './typedEnum';
 export { default as refSiblings } from './refSiblings';
 export { default as oasPathParam } from './oasPathParam';

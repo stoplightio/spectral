@@ -21,7 +21,7 @@ import {
   oasExample,
   oasUnusedComponent,
   oasDocumentSchema,
-  oasOpSecurityDefined,
+  oasSecurityDefined,
   oasSchema,
   oasDiscriminator,
 } from './functions';
@@ -32,8 +32,9 @@ const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3, oas3_0, oas3_1],
   aliases: {
-    PathItem: '$.paths[*]',
-    OperationObject: '#PathItem[get,put,post,delete,options,head,patch,trace]',
+    PathItem: ['$.paths[*]'],
+    OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    SecurityRequirementObject: ['$.security', '#OperationObject.security'],
   },
   rules: {
     'operation-success-response': {
@@ -448,15 +449,14 @@ const ruleset = {
         function: truthy,
       },
     },
-    'operation-security-defined': {
+    'oas-security-defined': {
       description:
         'Operation "security" values must match a scheme defined in the "securityDefinitions"/"securitySchemes" object.',
       recommended: true,
       type: 'validation',
-      given:
-        "$.paths[*][?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )].security",
+      given: ['#SecurityRequirementObject'],
       then: {
-        function: oasOpSecurityDefined,
+        function: oasSecurityDefined,
       },
     },
     'oas2-valid-schema-example': {
