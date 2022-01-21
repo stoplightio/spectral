@@ -31,7 +31,7 @@ It has a specific syntax known as [JSONPath](https://goessner.net/articles/JsonP
 Both of them support all the main JSONPath functionality and a little bit more, but this syntax may differ slightly from other JSONPath implementations.
 
 Your `given` value can be a string containing any valid JSONPath expression, or an array of expressions to apply a rule to multiple parts of a document.
-You can also consume your [aliases][#aliases] here if you have some defined.
+You can also consume your (aliases)[#aliases] here if you have some defined.
 
 Use the [JSONPath Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
 
@@ -328,17 +328,22 @@ Targeting certain parts of an OpenAPI spec is powerful but it can become cumbers
 Define aliases for commonly used JSONPath expressions on a global level which can then be reused across the ruleset.
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset.
-It's a superset of `given`, with the notable difference being the possibility to distinguish between different formats.
+It's similar to `given`, with the notable difference being the possibility to distinguish between different formats.
 
 **Example**
 
 ```yaml
 aliases:
-  HeaderNames: "$..parameters.[?(@.in === 'header')].name"
-  Info: "$..info"
-  InfoDescription: "#Info.description"
-  InfoContact: "#Info.contact"
-  Paths: "$.paths[*]~"
+  HeaderNames:
+    - "$..parameters.[?(@.in === 'header')].name"
+  Info:
+    - "$..info"
+  InfoDescription:
+    - "#Info.description"
+  InfoContact:
+    - "#Info.contact"
+  Paths:
+    - "$.paths[*]~"
 ```
 
 If you deal with a variety of different spec, you may find the above approach insufficient, particularly when the shape of the document is notably different.
@@ -351,10 +356,12 @@ aliases:
     targets:
       - formats:
           - oas2
-        given: $.parameters[*]
+        given:
+          - $.parameters[*]
       - formats:
           - oas3
-        given: $.components.parameters[*]
+        given:
+          - $.components.parameters[*]
 ```
 
 Now, if you referenced `SharedParameterObject` alias, the chosen path would be determined based on the document you use.
@@ -366,8 +373,10 @@ To make it more feasible and avoid overly complex JSONPath expressions, `given` 
 
 ```yaml
 aliases:
-  PathItemObject: $.paths[*]
-  OperationObject: "#PathItem[get,put,post,delete,options,head,patch,trace]"
+  PathItemObject:
+    - $.paths[*]
+  OperationObject:
+    - "#PathItem[get,put,post,delete,options,head,patch,trace]"
   ParameterObject:
     description: an optional property describing the purpose of the alias
     targets:

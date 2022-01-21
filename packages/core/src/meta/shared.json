@@ -39,6 +39,7 @@
         "type": "array"
       },
       "then": {
+        "$anchor": "arrayish-given",
         "type": "array",
         "items": {
           "$ref": "path-expression"
