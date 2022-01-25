@@ -16,8 +16,9 @@ const transformer: Transformer = function (hooks) {
         for (const fn of functions) {
           assertString(fn);
           const resolved = ctx.tree.resolveModule(
-            `${fn}.js`,
-            path.join(ctx.cwd, typeof functionsDir === 'string' ? functionsDir : 'functions'),
+            path.join('./', typeof functionsDir === 'string' ? functionsDir : 'functions', `./${fn}.js`),
+            ctx,
+            'function',
           );
           const fnName = path.basename(resolved, true);
           const identifier = ctx.tree.addImport(fnName, resolved, true);
