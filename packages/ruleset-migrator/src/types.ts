@@ -37,6 +37,8 @@ export type TransformerCtx = {
     fetch: Fetch;
   };
   readonly hooks: Set<Hook>;
-  cwd: string;
+  readonly cwd: string;
+  readonly filepath: string;
+  readonly npmRegistry: string | null;
   read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset>;
 };

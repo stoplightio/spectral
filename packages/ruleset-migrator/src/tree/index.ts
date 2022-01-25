@@ -1,12 +1,14 @@
 import { namedTypes, builders as b } from 'ast-types';
 import * as path from '@stoplight/path';
 import * as astring from 'astring';
-import { MigrationOptions } from '../types';
+import { MigrationOptions, TransformerCtx } from '../types';
 import { commonjs } from './commonjs';
 import { esm } from './esm';
 import { IModule } from './types';
 import requireResolve from '../requireResolve';
 import { Scope } from './scope';
+import { isPackageImport } from '../utils/isPackageImport';
+import { isKnownNpmRegistry } from '../utils/isKnownNpmRegistry';
 
 export { Scope };
 
@@ -31,7 +33,7 @@ export class Tree {
 
   readonly #npmRegistry;
   readonly #module: IModule;
-  readonly #localPaths = new Set<string>();
+  readonly #resolvedPaths = new Set<string>();
 
   public ruleset?: namedTypes.ObjectExpression;
   public scope: Scope;
@@ -82,7 +84,7 @@ export class Tree {
           .sort(sortImports)
           .flatMap(([source, identifiers]) => {
             const resolvedSource =
-              this.#npmRegistry !== null && !this.#localPaths.has(source)
+              this.#npmRegistry !== null && !this.#resolvedPaths.has(source) && !source.startsWith(this.#npmRegistry)
                 ? path.join(this.#npmRegistry, source)
                 : source;
 
@@ -121,10 +123,28 @@ export class Tree {
     return b.identifier(uniqName);
   }
 
-  public resolveModule(identifier: string, cwd: string): string {
-    const resolved = path.isURL(identifier) ? identifier : requireResolve?.(identifier) ?? path.join(cwd, identifier);
-    if (resolved.startsWith(cwd)) {
-      this.#localPaths.add(resolved);
+  public resolveModule(identifier: string, ctx: TransformerCtx, kind: 'function' | 'ruleset'): string {
+    let resolved: string;
+    if (path.isURL(identifier) || path.isAbsolute(identifier)) {
+      resolved = identifier;
+      this.#resolvedPaths.add(identifier);
+    } else if (kind === 'ruleset' && isPackageImport(identifier)) {
+      resolved =
+        ctx.npmRegistry !== null
+          ? path.join(ctx.npmRegistry, identifier)
+          : requireResolve?.(identifier, { paths: [ctx.cwd] }) ?? path.join(ctx.cwd, identifier);
+    } else if (
+      (ctx.npmRegistry !== null && ctx.filepath.startsWith(ctx.npmRegistry)) ||
+      isKnownNpmRegistry(ctx.filepath)
+    ) {
+      // npm repos need a different resolution
+      // they should have the following pattern
+      // <origin>/<pkg-name>
+      // <origin>/<pkg-name>/<asset> where asset can be a custom fn, etc.
+      resolved = path.join(ctx.filepath, identifier);
+    } else {
+      resolved = path.join(ctx.filepath, '..', identifier);
+      this.#resolvedPaths.add(resolved);
     }
 
     return resolved;
