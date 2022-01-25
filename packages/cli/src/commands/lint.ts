@@ -1,9 +1,10 @@
 import { Dictionary } from '@stoplight/types';
-import { pick } from 'lodash';
+import { isPlainObject } from '@stoplight/json';
+import { difference, noop, pick } from 'lodash';
 import { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
-
 import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
+
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
 import { FailSeverity, ILintConfig, OutputFormat } from '../services/config';
@@ -34,76 +35,43 @@ const lintCommand: CommandModule = {
           return [(process.stdin as ReadStream & { fd: 0 }).fd];
         },
       })
+      .middleware((argv: Dictionary<unknown>) => {
+        const [format] = argv.format as string[] & { 0: string };
+        if (typeof argv.output === 'string') {
+          argv.output = { [format]: argv.output };
+        }
+      })
       .check((argv: Dictionary<unknown>) => {
         if (!Array.isArray(argv.documents) || argv.documents.length === 0) {
           throw new TypeError('No documents provided.');
         }
 
-        const formats = String(argv.format).split(',');
-        if (!formats.every(f => (formatOptions as string[]).includes(f))) {
-          throw new TypeError('Unspecified format');
+        const format = argv.format as string[] & { 0: string };
+        const output = argv.output as Dictionary<unknown> | undefined;
+
+        if (format.length === 1) {
+          if (output === void 0 || Object.keys(output).length === 1) {
+            return true;
+          }
+
+          throw new TypeError('Output must be either string or unspecified when a single format is specified');
         }
 
-        if (formats.length > 1 && argv.output === void 0) {
-          throw new TypeError('Outputs needed when more than one format is specified');
+        if (!isPlainObject(output)) {
+          throw new TypeError('Multiple outputs have to be provided when more than a single format is specified');
         }
 
-        if (argv.output !== void 0) {
-          const output = String(argv.output)
-            .split(',')
-            .map(out => out.split(/(?<=^[^:]+):/));
+        const keys = Object.keys(output);
+        if (format.length !== keys.length) {
+          throw new TypeError('The number of outputs must match the number of formats');
+        }
 
-          if (output.length > 1 && !output.every(o => o.length == 2)) {
-            throw new TypeError('With multiple outputs they should all specify a format');
-          }
-
-          if (formats.length > 1 && output[0].length == 1) {
-            throw new TypeError('With multiple formats multiple outputs should be defined');
-          }
-
-          // multiple outputs should all contains the format part
-          if (output.length > 1 && output.some(o => o.length != 2)) {
-            throw new TypeError('Invalid output');
-          }
-
-          if ((output.length == 1 && output[0].length == 2) || output.length > 1) {
-            // output formats should be specified
-            if (!output.every(o => (formatOptions as string[]).includes(o[0]))) {
-              throw new TypeError('Unspecified output format');
-            }
-
-            // output formats should all be given on --format flag
-            const outputFormats = output.map(o => o[0]);
-            if (!outputFormats.every(f => formats.includes(f))) {
-              throw new TypeError('Output formats contain some unspecified format');
-            }
-
-            // only one output format can miss with respoect to formats (it goes to stdout)
-            if (formats.filter(f => !outputFormats.includes(f)).length > 1) {
-              throw new TypeError('Too few outputs defined');
-            }
-          }
+        const diff = difference(format, keys);
+        if (diff.length !== 0) {
+          throw new TypeError(`Missing outputs for the following formats: ${diff.join(', ')}`);
         }
 
         return true;
-      })
-      .middleware((argv: Dictionary<unknown>) => {
-        const format = String(argv.format).split(',');
-        if (argv.output !== void 0) {
-          let output = String(argv.output)
-            .split(',')
-            .map(out => out.split(/(?<=^[^:]+):/));
-
-          if (output[0].length == 1) output = [[format[0], output[0][0]]];
-
-          const outputObj: Dictionary<string> = Object.fromEntries(output);
-          const stdout = format.find(f => !Object.keys(outputObj).includes(f));
-          if (stdout !== undefined) outputObj[stdout] = 'stdout';
-          argv.output = outputObj;
-        } else {
-          argv.output = { [format[0]]: 'stdout' };
-        }
-        argv.format = format;
       })
       .options({
         encoding: {
@@ -116,13 +84,16 @@ const lintCommand: CommandModule = {
         format: {
           alias: 'f',
           description: 'formatters to use for outputting results, more than one can be given joining them with a comma',
+          choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
+          coerce(values: string | string[]) {
+            return Array.isArray(values) ? values : [values];
+          },
         },
         output: {
           alias: 'o',
-          description:
-            "where to ouput results, can be a single file name, multiple '<format>:<filename>' strings joined by comma or missing for use stdout",
+          description: `where to output results, can be a single file name, multiple "output.<format>" or missing to print to stdout`,
           type: 'string',
         },
         'stdin-filepath': {
@@ -215,15 +186,12 @@ const lintCommand: CommandModule = {
           console.log(`No results with a severity of '${failSeverity}' or higher found!`);
         }
 
-        for (const [format, out] of Object.entries(output).sort(([f1, _o1], [f2, _o2]) =>
-          f1 > f2 ? 1 : f1 == f2 ? 0 : -1,
-        )) {
-          const formattedOutput = formatOutput(results, format as OutputFormat, {
-            failSeverity: getDiagnosticSeverity(failSeverity),
-          });
-          void writeOutput(formattedOutput, out == 'stdout' ? undefined : out);
-        }
-        return void 0;
+        return Promise.all(
+          format.map(f => {
+            const formattedOutput = formatOutput(results, f, { failSeverity: getDiagnosticSeverity(failSeverity) });
+            return writeOutput(formattedOutput, output?.[f]);
+          }),
+        ).then(noop);
       })
       .catch(fail);
   },

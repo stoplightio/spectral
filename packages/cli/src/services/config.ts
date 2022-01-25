@@ -16,7 +16,7 @@ export enum OutputFormat {
 export interface ILintConfig {
   encoding: 'utf8' | 'ascii' | 'utf-8' | 'utf16le' | 'ucs2' | 'ucs-2' | 'base64' | 'latin1' | 'binary' | 'hex';
   format: OutputFormat[];
-  output: Dictionary<string>;
+  output?: Dictionary<string>;
   resolver?: string;
   ruleset?: string;
   stdinFilepath?: string;
