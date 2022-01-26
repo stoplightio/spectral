@@ -116,11 +116,21 @@ extends:
   - example-spectral-ruleset
 ```
 
-Pegging a ruleset on given version is possible:
+Pegging a ruleset on given version is possible through a `package.json`:
+
+```json
+{
+  "dependencies": {
+    "example-spectral-ruleset": "0.2.0"
+  }
+}
+```
+
+Or through the use of CDNs for NPM repository, such as [unpkg.com](https://unpkg.com/):
 
 ```yaml
 extends:
-  - "example-spectral-ruleset@0.2.0"
+  - "https://unpkg.com/example-spectral-ruleset@0.2.0"
 ```
 
 ## Filesystem
