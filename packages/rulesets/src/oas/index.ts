@@ -32,8 +32,8 @@ const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3, oas3_0, oas3_1],
   aliases: {
-    PathItem: '$.paths[*]',
-    OperationObject: '#PathItem[get,put,post,delete,options,head,patch,trace]',
+    PathItem: ['$.paths[*]'],
+    OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
   },
   rules: {
     'operation-success-response': {

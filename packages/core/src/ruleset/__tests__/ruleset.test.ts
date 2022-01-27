@@ -1004,10 +1004,10 @@ describe('Ruleset', () => {
         print(
           new Ruleset({
             aliases: {
-              Info: '$.info',
-              PathItem: '$.paths[*][*]',
-              Description: '$..description',
-              Name: '$..name',
+              Info: ['$.info'],
+              PathItem: ['$.paths[*][*]'],
+              Description: ['$..description'],
+              Name: ['$..name'],
             },
 
             rules: {
@@ -1066,10 +1066,10 @@ describe('Ruleset', () => {
           JSON.stringify(
             new Ruleset({
               aliases: {
-                Info: '$.info',
-                PathItem: '$.paths[*][*]',
-                Description: '$..description',
-                Name: '$..name',
+                Info: ['$.info'],
+                PathItem: ['$.paths[*][*]'],
+                Description: ['$..description'],
+                Name: ['$..name'],
               },
 
               rules: {
@@ -1108,10 +1108,10 @@ describe('Ruleset', () => {
           incompatibleValues: DiagnosticSeverity.Error,
         },
         aliases: {
-          Info: '$.info',
-          PathItem: '$.paths[*][*]',
-          Description: '$..description',
-          Name: '$..name',
+          Info: ['$.info'],
+          PathItem: ['$.paths[*][*]'],
+          Description: ['$..description'],
+          Name: ['$..name'],
         },
         rules: {
           'valid-path': {
@@ -1179,10 +1179,10 @@ describe('Ruleset', () => {
         print(
           new Ruleset({
             aliases: {
-              Info: '$.info',
-              InfoDescription: '#Info.description',
-              InfoContact: '#Info.contact',
-              InfoContactName: '#InfoContact.name',
+              Info: ['$.info'],
+              InfoDescription: ['#Info.description'],
+              InfoContact: ['#Info.contact'],
+              InfoContactName: ['#InfoContact.name'],
             },
 
             rules: {
@@ -1241,7 +1241,7 @@ describe('Ruleset', () => {
           new Ruleset({
             extends: {
               aliases: {
-                PathItem: '$.paths[*][*]',
+                PathItem: ['$.paths[*][*]'],
               },
               rules: {},
             },
@@ -1262,10 +1262,10 @@ describe('Ruleset', () => {
         () =>
           new Ruleset({
             aliases: {
-              Root: '#Info',
-              Info: '#Root.test',
-              Contact: '#Info',
-              Test: '#Contact.test',
+              Root: ['#Info'],
+              Info: ['#Root.test'],
+              Contact: ['#Info'],
+              Test: ['#Contact.test'],
             },
             rules: {
               'valid-path': {
@@ -1287,9 +1287,9 @@ describe('Ruleset', () => {
           new Ruleset({
             extends: {
               aliases: {
-                PathItem: '$.paths[*][*]',
-                Description: '$..description',
-                Name: '$..name',
+                PathItem: ['$.paths[*][*]'],
+                Description: ['$..description'],
+                Name: ['$..name'],
               },
               rules: {},
             },
@@ -1331,17 +1331,17 @@ describe('Ruleset', () => {
               targets: [
                 {
                   formats: [draft4],
-                  given: '$..id',
+                  given: ['$..id'],
                 },
                 {
                   formats: [draft6, draft7],
-                  given: '$..$id',
+                  given: ['$..$id'],
                 },
               ],
             },
 
-            PathItem: '$.paths[*]',
-            OperationObject: '#PathItem[get,put,post,delete,options,head,patch,trace]',
+            PathItem: ['$.paths[*]'],
+            OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
             ParametersDefinitionsObject: {
               targets: [
                 { formats: [oas2], given: ['$.parameters'] },
@@ -1461,7 +1461,7 @@ describe('Ruleset', () => {
               targets: [
                 {
                   formats: [draft6],
-                  given: '$..$id',
+                  given: ['$..$id'],
                 },
               ],
             },
@@ -1500,11 +1500,11 @@ describe('Ruleset', () => {
                     targets: [
                       {
                         formats: [draft4],
-                        given: '$..id',
+                        given: ['$..id'],
                       },
                       {
                         formats: [draft6, draft7],
-                        given: '$..$id',
+                        given: ['$..$id'],
                       },
                     ],
                   },
@@ -1536,11 +1536,11 @@ describe('Ruleset', () => {
               targets: [
                 {
                   formats: ['draft4'],
-                  given: '$..id',
+                  given: ['$..id'],
                 },
                 {
                   formats: ['draft6', 'draft7'],
-                  given: '$..$id',
+                  given: ['$..$id'],
                 },
               ],
             },
