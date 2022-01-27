@@ -191,7 +191,7 @@
                     "$ref": "shared#formats"
                   },
                   "given": {
-                    "$ref": "shared#given"
+                    "$ref": "shared#arrayish-given"
                   }
                 },
                 "required": ["formats", "given"],
@@ -208,7 +208,7 @@
           }
         },
         "else": {
-          "$ref": "shared#given"
+          "$ref": "shared#arrayish-given"
         }
       }
     }

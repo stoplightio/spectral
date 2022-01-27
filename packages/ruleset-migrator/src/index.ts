@@ -8,13 +8,10 @@ import { Scope, Tree } from './tree';
 import { builders as b, namedTypes } from 'ast-types';
 import { ExpressionKind } from 'ast-types/gen/kinds';
 import { assertRuleset } from './validation';
-import requireResolve from './requireResolve';
 import { Ruleset } from './validation/types';
 
 async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset> {
-  const input = isURL(filepath)
-    ? await (await fetch(filepath)).text()
-    : await fs.promises.readFile(requireResolve?.(filepath) ?? filepath, 'utf8');
+  const input = isURL(filepath) ? await (await fetch(filepath)).text() : await fs.promises.readFile(filepath, 'utf8');
 
   const { data: ruleset } =
     extname(filepath) === '.json'
@@ -40,11 +37,13 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   const hooks = new Set<Hook>();
   const ctx: TransformerCtx = {
     cwd,
+    filepath,
     tree,
     opts: {
       fetch,
       ...opts,
     },
+    npmRegistry: npmRegistry ?? null,
     hooks,
     read,
   };

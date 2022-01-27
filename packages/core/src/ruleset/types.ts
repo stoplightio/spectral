@@ -82,11 +82,11 @@ export type RulesetScopedAliasDefinition = {
   description?: string;
   targets: {
     formats: FormatsSet | Format[];
-    given: GivenDefinition;
+    given: string[];
   }[];
 };
 
-export type RulesetAliasesDefinition = Record<string, GivenDefinition | RulesetScopedAliasDefinition>;
+export type RulesetAliasesDefinition = Record<string, string[] | RulesetScopedAliasDefinition>;
 
 export type RulesetDefinition = Readonly<
   {
