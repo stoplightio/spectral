@@ -5,7 +5,7 @@ paths: {}
 ====asset:ruleset.js====
 export default { rules: {} };
 ====command====
-{bin} lint {document} --format html ---format json --output.json foo.json --ruleset "{asset:ruleset.js}"
+{bin} lint {document} --format junit --format html ---format json --output.json foo.json --ruleset "{asset:ruleset.js}"
 ====status====
 1
 ====stderr====

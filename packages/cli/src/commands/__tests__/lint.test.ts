@@ -77,6 +77,7 @@ describe('lint', () => {
       expect(lint).toBeCalledWith([0], {
         encoding: 'utf8',
         format: ['stylish'],
+        output: { stylish: '<stdout>' },
         ignoreUnknownFormat: false,
         failOnUnmatchedGlobs: false,
       });
@@ -89,6 +90,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf8',
       format: ['stylish'],
+      output: { stylish: '<stdout>' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -100,6 +102,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith([doc], {
       encoding: 'ascii',
       format: ['stylish'],
+      output: { stylish: '<stdout>' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -111,6 +114,7 @@ describe('lint', () => {
     expect(lint).toBeCalledWith([doc], {
       encoding: 'ascii',
       format: ['json'],
+      output: { json: '<stdout>' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -166,11 +170,23 @@ describe('lint', () => {
     expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
   });
 
+  it('writes formatted output to multiple files and stdout when using format and output flags', async () => {
+    (formatOutput as jest.Mock).mockClear();
+    (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
+
+    await run(`lint --format html --format json --output.json foo.json ./__fixtures__/empty-oas2-document.json`);
+    await new Promise(resolve => void process.nextTick(resolve));
+    expect(writeOutput).toBeCalledTimes(2);
+    expect(writeOutput).nthCalledWith(1, '<formatted output>', '<stdout>');
+    expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
+  });
+
   it('passes ignore-unknown-format to lint', async () => {
     await run('lint --ignore-unknown-format ./__fixtures__/empty-oas2-document.json');
     expect(lint).toHaveBeenCalledWith([expect.any(String)], {
       encoding: 'utf8',
       format: ['stylish'],
+      output: { stylish: '<stdout>' },
       ignoreUnknownFormat: true,
       failOnUnmatchedGlobs: false,
     });
@@ -181,6 +197,7 @@ describe('lint', () => {
     expect(lint).toHaveBeenCalledWith([expect.any(String)], {
       encoding: 'utf8',
       format: ['stylish'],
+      output: { stylish: '<stdout>' },
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: true,
     });

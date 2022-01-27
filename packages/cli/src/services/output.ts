@@ -1,14 +1,11 @@
-import { Dictionary } from '@stoplight/types';
+import * as process from 'process';
 import { IRuleResult } from '@stoplight/spectral-core';
-import { writeFile } from 'fs';
-import { promisify } from 'util';
+import { promises as fs } from 'fs';
 import { html, json, junit, stylish, teamcity, text, pretty } from '../formatters';
 import { Formatter, FormatterOptions } from '../formatters/types';
 import type { OutputFormat } from './config';
 
-const writeFileAsync = promisify(writeFile);
-
-const formatters: Dictionary<Formatter, OutputFormat> = {
+const formatters: Record<OutputFormat, Formatter> = {
   json,
   stylish,
   pretty,
@@ -22,10 +19,10 @@ export function formatOutput(results: IRuleResult[], format: OutputFormat, forma
   return formatters[format](results, formatOptions);
 }
 
-export async function writeOutput(outputStr: string, outputFile?: string): Promise<void> {
-  if (outputFile) {
-    return void (await writeFileAsync(outputFile, outputStr));
+export async function writeOutput(outputStr: string, outputFile: string): Promise<void> {
+  if (outputFile !== '<stdout>') {
+    await fs.writeFile(outputFile, outputStr);
+  } else {
+    process.stdout.write(outputStr);
   }
-
-  console.log(outputStr);
 }

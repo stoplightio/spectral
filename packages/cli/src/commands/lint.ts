@@ -36,9 +36,21 @@ const lintCommand: CommandModule = {
         },
       })
       .middleware((argv: Dictionary<unknown>) => {
-        const [format] = argv.format as string[] & { 0: string };
-        if (typeof argv.output === 'string') {
-          argv.output = { [format]: argv.output };
+        const formats = argv.format as string[] & { 0: string };
+        if (argv.output === void 0) {
+          argv.output = { [formats[0]]: '<stdout>' };
+        } else if (typeof argv.output === 'string') {
+          argv.output = { [formats[0]]: argv.output };
+        } else {
+          const output = argv.output as Dictionary<unknown>;
+          if (Object.keys(output).length + 1 >= formats.length) {
+            return;
+          }
+
+          const firstMissingFormat = formats.find(f => !(f in output));
+          if (firstMissingFormat !== void 0) {
+            output[firstMissingFormat] = '<stdout>';
+          }
         }
       })
       .check((argv: Dictionary<unknown>) => {
@@ -189,7 +201,7 @@ const lintCommand: CommandModule = {
         return Promise.all(
           format.map(f => {
             const formattedOutput = formatOutput(results, f, { failSeverity: getDiagnosticSeverity(failSeverity) });
-            return writeOutput(formattedOutput, output?.[f]);
+            return writeOutput(formattedOutput, output?.[f] ?? '<stdout>');
           }),
         ).then(noop);
       })
