@@ -30,7 +30,7 @@
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
-    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/*/CHANGELOG.md docs/**/*.md README.md",
+    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/rulesets/src/{asyncapi,oas}/schemas/*.json packages/*/CHANGELOG.md docs/**/*.md README.md",
     "pretest": "yarn workspace @stoplight/spectral-ruleset-migrator pretest",
     "test": "yarn pretest && yarn test.karma && yarn test.jest",
     "test.harness": "jest -c ./test-harness/jest.config.js",
@@ -110,6 +110,9 @@
       "prettier --write"
     ],
     "packages/core/src/meta/*.json": [
+      "prettier --ignore-path .eslintignore --write"
+    ],
+    "packages/rulesets/src/{asyncapi,oas}/schemas/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
   },
