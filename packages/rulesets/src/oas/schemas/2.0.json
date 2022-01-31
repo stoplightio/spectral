@@ -1253,7 +1253,7 @@
     "oauth2ImplicitSecurity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "flow", "authorizationUrl","scopes"],
+      "required": ["type", "flow", "authorizationUrl", "scopes"],
       "properties": {
         "type": {
           "type": "string",
@@ -1283,7 +1283,7 @@
     "oauth2PasswordSecurity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "flow", "tokenUrl","scopes"],
+      "required": ["type", "flow", "tokenUrl", "scopes"],
       "properties": {
         "type": {
           "type": "string",
@@ -1313,7 +1313,7 @@
     "oauth2ApplicationSecurity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "flow", "tokenUrl","scopes"],
+      "required": ["type", "flow", "tokenUrl", "scopes"],
       "properties": {
         "type": {
           "type": "string",
@@ -1343,7 +1343,7 @@
     "oauth2AccessCodeSecurity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "flow", "authorizationUrl", "tokenUrl","scopes"],
+      "required": ["type", "flow", "authorizationUrl", "tokenUrl", "scopes"],
       "properties": {
         "type": {
           "type": "string",
