@@ -8,7 +8,7 @@ const scenarioId = '{scenarioId}';
 
 module.exports = {
   aliases: {
-    Info: '$.info',
+    Info: ['$.info'],
   },
   rules: {
     'description-matches-stoplight': {
