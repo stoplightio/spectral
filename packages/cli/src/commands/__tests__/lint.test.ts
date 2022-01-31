@@ -12,9 +12,13 @@ jest.mock('../../services/linter');
 
 function run(command: string) {
   const parser = yargs.command(lintCommand).help();
-  return new Promise(done => {
+  return new Promise((resolve, reject) => {
     parser.parse(command, (err: Error, argv: unknown, output: string) => {
-      done(output);
+      if (err) {
+        reject(`${err.message}\n${output}`);
+      } else {
+        resolve(output);
+      }
     });
   });
 }
@@ -60,10 +64,9 @@ describe('lint', () => {
     process.stdin.isTTY = isTTY;
   });
 
-  it('shows help when no document and no STDIN are present', async () => {
+  it('shows help when no document and no STDIN are present', () => {
     process.stdin.isTTY = true;
-    const output = await run('lint');
-    expect(output).toContain('documents  Location of JSON/YAML documents');
+    return expect(run('lint')).rejects.toContain('documents  Location of JSON/YAML documents');
   });
 
   describe('when STDIN is present', () => {
@@ -204,7 +207,7 @@ describe('lint', () => {
   });
 
   it('shows help if unknown format is passed', () => {
-    return expect(run('lint -f foo ./__fixtures__/empty-oas2-document.json')).resolves.toContain(
+    return expect(run('lint -f foo ./__fixtures__/empty-oas2-document.json')).rejects.toContain(
       'documents  Location of JSON/YAML documents. Can be either a file, a glob or',
     );
   });
