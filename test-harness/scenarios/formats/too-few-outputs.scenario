@@ -1,11 +1,11 @@
 ====test====
-Requires valid options
+Fails when too few --output options are provided
 ====document====
-{}
-====asset:ruleset====
-rules: {}
+paths: {}
+====asset:ruleset.js====
+export default { rules: {} };
 ====command====
-{bin} lint {document} -r "{asset:ruleset}" -rip && echo "FAIL"
+{bin} lint {document} --format junit --format html ---format json --output.json foo.json --ruleset "{asset:ruleset.js}"
 ====status====
 1
 ====stderr====
@@ -20,7 +20,6 @@ Options:
       --version                  Show version number  [boolean]
       --help                     Show help  [boolean]
   -e, --encoding                 text encoding to use  [string] [choices: "utf8", "ascii", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1"] [default: "utf8"]
-  -f, --format                   formatters to use for outputting results, more than one can be given joining them with a comma  [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty"] [default: "stylish"]
   -o, --output                   where to output results, can be a single file name, multiple "output.<format>" or missing to print to stdout  [string]
       --stdin-filepath           path to a file to pretend that stdin comes from  [string]
       --resolver                 path to custom json-ref-resolver instance  [string]
@@ -32,4 +31,4 @@ Options:
   -v, --verbose                  increase verbosity  [boolean]
   -q, --quiet                    no logging - output only  [boolean]
 
-Unknown arguments: i, p
+The number of outputs must match the number of formats
