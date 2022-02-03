@@ -449,6 +449,7 @@ const ruleset = {
     },
     'oas2-operation-security-defined': {
       description: 'Operation "security" values must match a scheme defined in the "securityDefinitions" object.',
+      message: '{{error}}',
       recommended: true,
       formats: [oas2],
       type: 'validation',
@@ -590,6 +591,7 @@ const ruleset = {
     'oas3-operation-security-defined': {
       description:
         'Operation "security" values must match a scheme defined in the "components.securitySchemes" object.',
+      message: '{{error}}',
       recommended: true,
       formats: [oas3],
       type: 'validation',
