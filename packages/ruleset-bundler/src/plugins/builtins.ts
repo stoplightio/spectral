@@ -11,15 +11,21 @@ type Module = 'core' | 'formats' | 'functions' | 'parsers' | 'ref-resolver' | 'r
 type GlobalModules = Record<`@stoplight/spectral-${Module}`, string>;
 type Overrides = Record<keyof GlobalModules, Record<string, unknown>>;
 
+const NAME = '@stoplight-spectral/builtins';
+
 function registerModule(
+  instanceId: number,
   id: keyof GlobalModules,
   members: Record<string, unknown>,
   overrides: Partial<Overrides>,
 ): [string, string] {
   const actualOverrides = overrides[id];
-  globalThis[Symbol.for(id)] = actualOverrides ? { ...members, ...actualOverrides } : members;
+  const instances = (globalThis[Symbol.for(NAME)] ??= {}) as Record<string, Partial<Overrides>>;
+  const root = (instances[instanceId] ??= {});
 
-  const m = `globalThis[Symbol.for('${id}')]`;
+  root[id] = actualOverrides ? { ...members, ...actualOverrides } : members;
+
+  const m = `globalThis[Symbol.for('${NAME}')]['${instanceId}']['${id}']`;
   let code = '';
   for (const member of Object.keys(members)) {
     code += `export const ${member} = ${m}['${member}'];\n`;
@@ -29,26 +35,28 @@ function registerModule(
 }
 
 export const builtins = (overrides: Partial<Overrides> = {}): Plugin => {
+  const instanceId = Math.round(Math.random() * 1_000_000);
+
   const modules = Object.fromEntries([
-    registerModule('@stoplight/spectral-core', core, overrides),
-    registerModule('@stoplight/spectral-formats', formats, overrides),
-    registerModule('@stoplight/spectral-functions', functions, overrides),
-    registerModule('@stoplight/spectral-parsers', parsers, overrides),
-    registerModule('@stoplight/spectral-ref-resolver', refResolver, overrides),
-    registerModule('@stoplight/spectral-rulesets', rulesets, overrides),
-    registerModule('@stoplight/spectral-runtime', runtime, overrides),
+    registerModule(instanceId, '@stoplight/spectral-core', core, overrides),
+    registerModule(instanceId, '@stoplight/spectral-formats', formats, overrides),
+    registerModule(instanceId, '@stoplight/spectral-functions', functions, overrides),
+    registerModule(instanceId, '@stoplight/spectral-parsers', parsers, overrides),
+    registerModule(instanceId, '@stoplight/spectral-ref-resolver', refResolver, overrides),
+    registerModule(instanceId, '@stoplight/spectral-rulesets', rulesets, overrides),
+    registerModule(instanceId, '@stoplight/spectral-runtime', runtime, overrides),
   ]) as GlobalModules;
 
   return {
-    name: '@stoplight-spectral/builtins',
-    resolveId(id) {
+    name: NAME,
+    resolveId(id): string | null {
       if (id in modules) {
         return id;
       }
 
       return null;
     },
-    load(id) {
+    load(id): string | undefined {
       if (id in modules) {
         return modules[id] as string;
       }
