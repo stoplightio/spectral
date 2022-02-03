@@ -31,7 +31,7 @@ It has a specific syntax known as [JSONPath](https://goessner.net/articles/JsonP
 Both of them support all the main JSONPath functionality and a little bit more, but this syntax may differ slightly from other JSONPath implementations.
 
 Your `given` value can be a string containing any valid JSONPath expression, or an array of expressions to apply a rule to multiple parts of a document.
-You can also consume your (aliases)[#aliases] here if you have some defined.
+You can also consume your [aliases](#aliases) here if you have some defined.
 
 Use the [JSONPath Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
 
