@@ -132,28 +132,3 @@ const spectral = new Spectral({ resolver: customFileResolver });
 The custom resolver we've just created will resolve all remote file refs relatively to the current working directory.
 
 More on that can be found in the [json-ref-resolver repo](https://github.com/stoplightio/json-ref-resolver).
-
-### Using a Custom De-duplication Strategy
-
-By default, Spectral will de-duplicate results based on the result code and document location. You can customize this
-behavior with the `computeFingerprint` option. For example, here is the default fingerprint implementation:
-
-The final reported results are de-duplicated based on their computed fingerprint.
-
-```ts
-const spectral = new Spectral({
-  computeFingerprint: (rule: IRuleResult, hash) => {
-    let id = String(rule.code);
-
-    if (rule.path && rule.path.length) {
-      id += JSON.stringify(rule.path);
-    } else if (rule.range) {
-      id += JSON.stringify(rule.range);
-    }
-
-    if (rule.source) id += rule.source;
-
-    return hash(id);
-  },
-});
-```
