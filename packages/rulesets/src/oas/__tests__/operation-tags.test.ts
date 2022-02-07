@@ -37,4 +37,26 @@ testRule('operation-tags', [
       },
     ],
   },
+
+  {
+    name: 'tags is empty',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/todos': {
+          get: {
+            tags: [],
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        code: 'operation-tags',
+        message: 'Operation must have non-empty "tags" array.',
+        path: ['paths', '/todos', 'get', 'tags'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
 ]);
