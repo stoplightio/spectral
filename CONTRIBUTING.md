@@ -170,7 +170,7 @@ yarn test.harness
 3. In your terminal, navigate to the directory you cloned Spectral into.
 4. Install the dependencies: `yarn`
 5. Build Spectral: `yarn build`
-6. Run Spectral from your local installation: `./packages/cli/dist/index.js lint [openapi_spec_file]`
+6. Run Spectral from your local installation: `node ./packages/cli/dist/index.js lint [openapi_spec_file] --ruleset /path/to/ruleset.yaml`
 7. Create a new branch for your work: `git checkout -b [name_of_your_new_branch]`
 8. Make changes, add tests, and then run the tests: `yarn test` and `yarn workspace @stoplight/spectral-cli build.binary && yarn test.harness`
 9. Update the documentation if appropriate. For example, if you added a new rule to an OpenAPI ruleset,

@@ -290,7 +290,14 @@ const ruleset = {
       given: '#OperationObject',
       then: {
         field: 'tags',
-        function: truthy,
+        function: schema,
+        functionOptions: {
+          dialect: 'draft7',
+          schema: {
+            type: 'array',
+            minItems: 1,
+          },
+        },
       },
     },
     'path-declarations-must-exist': {
