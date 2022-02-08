@@ -54,11 +54,11 @@
     "strip-ansi": "6.0",
     "text-table": "0.2",
     "tslib": "^2.3.0",
-    "yargs": "17.2.1"
+    "yargs": "17.3.1"
   },
   "devDependencies": {
     "@types/xml2js": "^0.4.9",
-    "@types/yargs": "^17.0.5",
+    "@types/yargs": "^17.0.8",
     "copyfiles": "^2.4.1",
     "jest-when": "^3.4.2",
     "nock": "^13.1.3",
