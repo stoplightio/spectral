@@ -218,6 +218,7 @@ jobs:
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:latest;
             fi
             echo "Docker tags:";
             docker images stoplight/spectral --format="{{ .Tag }}";
@@ -227,6 +228,7 @@ jobs:
               docker push stoplight/spectral:${FULL_VERSION};
               docker push stoplight/spectral:${MINOR_VERSION};
               docker push stoplight/spectral:${MAJOR_VERSION};
+              docker push stoplight/spectral:latest;
               echo "Pushed stoplight/spectral:${FULL_VERSION}";
             fi
             if [[ -n "$DOCKER_BRANCH" ]]; then
