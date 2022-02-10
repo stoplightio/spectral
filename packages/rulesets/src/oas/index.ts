@@ -123,22 +123,14 @@ const ruleset = {
       severity: 'warn',
       recommended: true,
       message: '{{error}}',
-      given: '$..enum',
+      given: ["$..[?(@property !== 'properties' && @ && @.enum)]"],
       then: {
+        field: 'enum',
         function: oasSchema,
         functionOptions: {
           schema: {
-            oneOf: [
-              {
-                type: 'array',
-                uniqueItems: true,
-              },
-              {
-                not: {
-                  type: 'array',
-                },
-              },
-            ],
+            type: 'array',
+            uniqueItems: true,
           },
         },
       },
