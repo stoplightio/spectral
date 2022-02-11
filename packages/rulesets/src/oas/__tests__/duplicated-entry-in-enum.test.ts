@@ -42,16 +42,6 @@ testRule('duplicated-entry-in-enum', [
         path: ['definitions', 'Test', 'enum'],
         severity: DiagnosticSeverity.Warning,
       },
-      {
-        message: '"enum" property must not be valid',
-        path: [ 'definitions', 'Test', 'enum' ],
-        severity: DiagnosticSeverity.Warning,
-      },
-      {
-        message: '"enum" property must match exactly one schema in oneOf',
-        path: [ 'definitions', 'Test', 'enum' ],
-        severity: DiagnosticSeverity.Warning,
-      }
     ],
   },
 
@@ -113,16 +103,6 @@ testRule('duplicated-entry-in-enum', [
         path: ['components', 'schemas', 'Test', 'enum'],
         severity: DiagnosticSeverity.Warning,
       },
-      {
-        message: '"enum" property must not be valid',
-        path: [ 'components', 'schemas', 'Test', 'enum' ],
-        severity: DiagnosticSeverity.Warning,
-      },
-      {
-        message: '"enum" property must match exactly one schema in oneOf',
-        path: [ 'components', 'schemas', 'Test', 'enum' ],
-        severity: DiagnosticSeverity.Warning,
-      }
     ],
   },
 ]);
