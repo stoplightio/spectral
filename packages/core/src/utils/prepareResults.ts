@@ -21,6 +21,10 @@ export const defaultComputeResultFingerprint: ComputeFingerprintFunc = (rule, ha
     id += rule.source;
   }
 
+  if (rule.message !== void 0) {
+    id += rule.message;
+  }
+
   return hash(id);
 };
 
