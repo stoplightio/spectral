@@ -2376,7 +2376,7 @@ __metadata:
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.0.4
-    nimma: 0.1.7
+    nimma: 0.1.8
     nock: ^13.1.0
     simple-eval: 1.0.0
     treeify: ^1.1.0
@@ -9242,9 +9242,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nimma@npm:0.1.7":
-  version: 0.1.7
-  resolution: "nimma@npm:0.1.7"
+"nimma@npm:0.1.8":
+  version: 0.1.8
+  resolution: "nimma@npm:0.1.8"
   dependencies:
     "@jsep-plugin/regex": ^1.0.1
     "@jsep-plugin/ternary": ^1.0.2
@@ -9257,7 +9257,7 @@ __metadata:
       optional: true
     lodash.topath:
       optional: true
-  checksum: 6dcf4aa3dd35c714142f04cfde76727202e1aea802cde0584ef35eabf45d217a9352c55e65045ff91956bb348b3b07ede4ca13af5a6bc8e7ce2f3b2ca353f9bd
+  checksum: 0e2f832b20f7c4cc4497c82fef1bd1fee6512db5251eb59223445f9ea7749c3baa981389ef5008b46efd0aa4e11472b62e81118b5933aeafd6f234d87dd49df7
   languageName: node
   linkType: hard
 
