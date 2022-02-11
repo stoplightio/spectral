@@ -43,7 +43,7 @@ const lintCommand: CommandModule = {
           argv.output = { [formats[0]]: argv.output };
         } else {
           const output = argv.output as Dictionary<unknown>;
-          if (Object.keys(output).length + 1 >= formats.length) {
+          if (Object.keys(output).length >= formats.length) {
             return;
           }
 
