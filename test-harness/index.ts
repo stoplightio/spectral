@@ -5,7 +5,7 @@ import * as fg from 'fast-glob';
 import { escapeRegExp } from 'lodash';
 import * as fs from 'fs';
 import * as tmp from 'tmp';
-import { applyReplacements, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
+import { applyReplacements, IS_WINDOWS, normalizeLineEndings, parseScenarioFile, tmpFile } from './helpers';
 import { spawnNode } from './spawn';
 
 const spectralBin = path.join(__dirname, '../packages/cli/binaries/spectral');
@@ -109,7 +109,8 @@ describe('cli acceptance tests', () => {
         expect(stdout).toEqual(normalizeLineEndings(expectedStdout));
       }
 
-      if (scenario.status !== void 0) {
+      if (scenario.status !== void 0 && !IS_WINDOWS) {
+        // ignoring Windows for the time being, as the spawned instance of powershell returns either 0 or 1
         expect(`status:${status}`).toEqual(`status:${scenario.status}`);
       }
     });

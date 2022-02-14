@@ -4,7 +4,7 @@ Requires valid options
 {}
 ====asset:ruleset====
 rules: {}
-====command====
+====command-nix====
 {bin} lint {document} -r "{asset:ruleset}" -rip && echo "FAIL"
 ====status====
 1

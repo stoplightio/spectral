@@ -4,7 +4,7 @@ Errors when no document is provided
 #!/bin/bash
 
 script -qfec "$(printf "%q " "$@")" /dev/null
-====command====
+====command-nix====
 bash {asset:faketty.sh} {bin} lint
 ====status====
 1

@@ -37,7 +37,7 @@ version: 1.0.0
     }
   }
 }
-====command====
+====command-nix====
 cat {document} | {bin} lint -r "{asset:ruleset.json}"
 ====status====
 1
