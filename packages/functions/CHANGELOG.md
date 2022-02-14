@@ -1,3 +1,27 @@
+# [@stoplight/spectral-functions-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.5.0...@stoplight/spectral-functions-v1.5.1) (2021-12-29)
+
+### Bug Fixes
+
+- update nimma & json-schema ([#2012](https://github.com/stoplightio/spectral/issues/2012)) ([67a6104](https://github.com/stoplightio/spectral/commit/67a6104d9283788462b1c4c229733d5371c041ca))
+
+# [@stoplight/spectral-functions-v1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.4.0...@stoplight/spectral-functions-v1.5.0) (2021-12-10)
+
+### Features
+
+- annotate internal options ([#1991](https://github.com/stoplightio/spectral/issues/1991)) ([259698f](https://github.com/stoplightio/spectral/commit/259698fd488543bdeda4c825f19f6591b1ad39a3))
+
+# [@stoplight/spectral-functions-v1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.3.0...@stoplight/spectral-functions-v1.4.0) (2021-10-20)
+
+### Features
+
+- revamp Ajv integration ([#1845](https://github.com/stoplightio/spectral/issues/1845)) ([a958000](https://github.com/stoplightio/spectral/commit/a9580007a550446e4c0fc1757d35851454dc899e))
+
+# [@stoplight/spectral-functions-v1.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.2.1...@stoplight/spectral-functions-v1.3.0) (2021-10-19)
+
+### Features
+
+- export functionOptions ([#1904](https://github.com/stoplightio/spectral/issues/1904)) ([2f26ed6](https://github.com/stoplightio/spectral/commit/2f26ed672c98cbd308fc1dd1daff803d36dcd42d))
+
 # [@stoplight/spectral-functions-v1.2.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.2.0...@stoplight/spectral-functions-v1.2.1) (2021-09-14)
 
 ### Performance Improvements
@@ -12,7 +36,7 @@
 
 ### Features
 
-- output Ajv qruntime exceptions ([#1801](https://github.com/stoplightio/spectral/issues/1801)) ([5a19625](https://github.com/stoplightio/spectral/commit/5a1962555355d8583c73114c01dcad5077db0d53))
+- output Ajv runtime exceptions ([#1801](https://github.com/stoplightio/spectral/issues/1801)) ([5a19625](https://github.com/stoplightio/spectral/commit/5a1962555355d8583c73114c01dcad5077db0d53))
 
 # [@stoplight/spectral-functions-v1.1.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.1.1...@stoplight/spectral-functions-v1.1.2) (2021-08-17)
 

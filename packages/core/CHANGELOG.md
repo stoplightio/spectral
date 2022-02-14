@@ -1,3 +1,49 @@
+# [@stoplight/spectral-core-v1.10.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.10.0...@stoplight/spectral-core-v1.10.1) (2022-02-14)
+
+### Bug Fixes
+
+- consider `message` when de-duplicating results ([#2052](https://github.com/stoplightio/spectral/issues/2052)) ([b07cc7b](https://github.com/stoplightio/spectral/commit/b07cc7b94e65277e1328e4511508db923330ab52))
+
+# [@stoplight/spectral-core-v1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.9.0...@stoplight/spectral-core-v1.10.0) (2022-01-28)
+
+### Features
+
+- aliases take only array-ish given ([#2033](https://github.com/stoplightio/spectral/issues/2033)) ([263dc20](https://github.com/stoplightio/spectral/commit/263dc20581c3c24c2903f5522d8b212d15c01df6))
+
+# [@stoplight/spectral-core-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.8.1...@stoplight/spectral-core-v1.9.0) (2022-01-19)
+
+- support multiple JSONPath expressions for aliases ([#2016](https://github.com/stoplightio/spectral/issues/2016)) ([f1b2c2c](https://github.com/stoplightio/spectral/commit/f1b2c2c81dbf5a3ddec4d3b212b4b942d0a88055))
+
+# [@stoplight/spectral-core-v1.8.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.8.0...@stoplight/spectral-core-v1.8.1) (2021-12-29)
+
+### Bug Fixes
+
+- update nimma & json-schema ([#2012](https://github.com/stoplightio/spectral/issues/2012)) ([67a6104](https://github.com/stoplightio/spectral/commit/67a6104d9283788462b1c4c229733d5371c041ca))
+
+# [@stoplight/spectral-core-v1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.7.0...@stoplight/spectral-core-v1.8.0) (2021-12-15)
+
+### Features
+
+- include 'description' for ruleset ([#2000](https://github.com/stoplightio/spectral/issues/2000)) ([aacae2c](https://github.com/stoplightio/spectral/commit/aacae2c6b037c5411247644bfb8b5eecea046a1d))
+
+# [@stoplight/spectral-core-v1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.6.1...@stoplight/spectral-core-v1.7.0) (2021-12-10)
+
+### Features
+
+- expose x-internal to annotate internal opts ([#1993](https://github.com/stoplightio/spectral/issues/1993)) ([0287319](https://github.com/stoplightio/spectral/commit/028731980892882a8ba637a76046bb5a42c92b79))
+
+# [@stoplight/spectral-core-v1.6.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.6.0...@stoplight/spectral-core-v1.6.1) (2021-11-04)
+
+### Bug Fixes
+
+- fixed jsonpath expressions may occasionally yield incorrect results ([#1917](https://github.com/stoplightio/spectral/issues/1917)) ([1a5a227](https://github.com/stoplightio/spectral/commit/1a5a227d6319dcc2b1ad8cfefffe044a7a4b3cbc))
+
+# [@stoplight/spectral-core-v1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.5.1...@stoplight/spectral-core-v1.6.0) (2021-10-12)
+
+### Features
+
+- support scoped aliases ([#1840](https://github.com/stoplightio/spectral/issues/1840)) ([b278497](https://github.com/stoplightio/spectral/commit/b278497a414323dea433e48596aaa58abf269f5d))
+
 # [@stoplight/spectral-core-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.5.0...@stoplight/spectral-core-v1.5.1) (2021-09-14)
 
 ### Bug Fixes

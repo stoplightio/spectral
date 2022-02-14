@@ -1,3 +1,9 @@
+# [@stoplight/spectral-formats-v1.0.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.0.1...@stoplight/spectral-formats-v1.0.2) (2021-12-30)
+
+### Bug Fixes
+
+- missing tslib dependency ([febd0ae](https://github.com/stoplightio/spectral/commit/febd0aee044b481950a7773c21f6e4f686f1768f))
+
 # [@stoplight/spectral-formats-v1.0.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.0.0...@stoplight/spectral-formats-v1.0.1) (2021-07-27)
 
 ### Bug Fixes
