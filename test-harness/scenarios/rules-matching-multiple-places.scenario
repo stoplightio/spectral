@@ -13,8 +13,8 @@ schemas:
         type: boolean
   address:
 ====command====
-{bin} lint {document} -r "{asset:ruleset}" --ignore-unknown-format
-====asset:ruleset====
+{bin} lint {document} -r "{asset:ruleset.js}" --ignore-unknown-format
+====asset:ruleset.js====
 const { truthy, pattern } = require("@stoplight/spectral-functions");
 
 module.exports = {

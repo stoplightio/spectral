@@ -2435,6 +2435,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-powershell@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@types/node-powershell@npm:3.1.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: f91abe853ee5d7a276630bea3d57770c45e6b0033f25a95cd9c2dc3bc6dda1bde7a3b95d23461a55d2b2266fdddd2a607030ece8f8a405cf5710046a7689cf52
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:^15.12.4":
   version: 15.12.4
   resolution: "@types/node@npm:15.12.4"
@@ -3527,7 +3536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^2.0.0":
+"chalk@npm:^2.0.0, chalk@npm:^2.4.1":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
   dependencies:
@@ -7875,6 +7884,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^2.1.0":
+  version: 2.1.11
+  resolution: "nanoid@npm:2.1.11"
+  checksum: 18cd14386816873849787eb4e65667021bfdeb019a8f14c74287c23594c67b7c0e8f42c7d69f6aedf05cd3d100f1ddc41184f9f9b6b17fbaea1c3ee3f0704eec
+  languageName: node
+  linkType: hard
+
 "napi-build-utils@npm:^1.0.1":
   version: 1.0.2
   resolution: "napi-build-utils@npm:1.0.2"
@@ -8012,6 +8028,16 @@ __metadata:
   version: 1.0.0
   resolution: "node-modules-regexp@npm:1.0.0"
   checksum: 99541903536c5ce552786f0fca7f06b88df595e62e423c21fa86a1674ee2363dad1f7482d1bec20b4bd9fa5f262f88e6e5cb788fc56411113f2fe2e97783a3a7
+  languageName: node
+  linkType: hard
+
+"node-powershell@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "node-powershell@npm:4.0.0"
+  dependencies:
+    chalk: ^2.4.1
+    shortid: ^2.2.14
+  checksum: 31b156d15cc71cc762560e021a32f8d70b53b8abfd30e11e148931010fde3938b3294772b85652563578b654b2f029f23ee51d7bfa260dd3c6748e188efc062b
   languageName: node
   linkType: hard
 
@@ -9203,6 +9229,7 @@ __metadata:
     "@types/lodash": ^4.14.176
     "@types/node": ^15.12.4
     "@types/node-fetch": ^2.5.12
+    "@types/node-powershell": ^3.1.1
     "@types/text-table": ^0.2.2
     "@types/tmp": ^0.2.2
     "@typescript-eslint/eslint-plugin": ^4.33.0
@@ -9225,6 +9252,7 @@ __metadata:
     karma-typescript-es6-transform: ^5.5.2
     lint-staged: ^11.2.6
     memfs: ^3.3.0
+    node-powershell: ^4.0.0
     prettier: ^2.4.1
     ts-jest: ^27.0.7
     ts-node: ^10.4.0
@@ -9383,6 +9411,15 @@ __metadata:
   version: 3.0.0
   resolution: "shebang-regex@npm:3.0.0"
   checksum: 1a2bcae50de99034fcd92ad4212d8e01eedf52c7ec7830eedcf886622804fe36884278f2be8be0ea5fde3fd1c23911643a4e0f726c8685b61871c8908af01222
+  languageName: node
+  linkType: hard
+
+"shortid@npm:^2.2.14":
+  version: 2.2.16
+  resolution: "shortid@npm:2.2.16"
+  dependencies:
+    nanoid: ^2.1.0
+  checksum: 0790ce22fe20aacc226915160da178b5a6af7814d1796404684f6699b60f77e291d39ad3b6b2b4c6efcf5553e1deeee7e29a48b8f46955de1425e67ab934e309
   languageName: node
   linkType: hard
 

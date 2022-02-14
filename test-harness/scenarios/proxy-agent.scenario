@@ -9,7 +9,7 @@ PROXY=http://localhost:3001
 module.exports = {
   rules: {}
 }
-====command====
+====command-nix====
 {bin} lint {document} --ignore-unknown-format --ruleset "{asset:ruleset}"
 ====stdout====
 {document}

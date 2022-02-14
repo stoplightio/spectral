@@ -49,13 +49,13 @@ info:
     }
   }
 }
-====command====
-{bin} lint {document} --ruleset "{asset:ruleset.json}" --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
+====command-nix====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --format=text --output={asset:output.txt} > /dev/null; cat {asset:output.txt}
+====command-win====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --format=text --output={asset:output.txt} | Out-Null; cat {asset:output.txt}
 ====asset:output.txt====
 ====stdout====
-{document}
- 1:1  warning  api-servers       "servers" must be present and non-empty array.
- 2:6  warning  info-contact      Info object must have a "contact" object.                 info
- 2:6  warning  info-description  Info "description" must be present and non-empty string.  info
+{document}:1:1 warning api-servers ""servers" must be present and non-empty array."
+{document}:2:6 warning info-contact "Info object must have a "contact" object."
+{document}:2:6 warning info-description "Info "description" must be present and non-empty string."
 
-✖ 3 problems (0 errors, 3 warnings, 0 infos, 0 hints)
