@@ -1,8 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
   "version": "1.10.1",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -15,6 +13,19 @@
   "files": [
     "dist"
   ],
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    },
+    "./ruleset/validation": {
+      "types": "./dist/ruleset/validation/index.d.ts",
+      "require": "./dist/ruleset/validation/index.js"
+    }
+  },
   "engines": {
     "node": "^12.20 || >= 14.13"
   },

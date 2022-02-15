@@ -6,7 +6,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
 import { print } from './__helpers__/print';
-import { RulesetValidationError } from '../validation';
+import { RulesetValidationError } from '../validation/index';
 import { isPlainObject } from '@stoplight/json';
 import { Format } from '../format';
 import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';

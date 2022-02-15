@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@stoplight/spectral-core/meta/extensions",
+  "$defs": {
+    "Extends": {
+      "$anchor": "extends",
+      "oneOf": [
+        {
+          "$id": "ruleset",
+          "$ref": "ruleset.schema#",
+          "errorMessage": "must be a valid ruleset"
+        },
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "ruleset"
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "additionalItems": false,
+                "items": [
+                  {
+                    "$ref": "ruleset"
+                  },
+                  {
+                    "type": "string",
+                    "enum": ["off", "recommended", "all"],
+                    "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "errorMessage": "must be a valid ruleset"
+    },
+    "Format": {
+      "$anchor": "format",
+      "spectral-runtime": "format",
+      "errorMessage": "must be a valid format"
+    },
+    "Function": {
+      "$anchor": "function",
+      "spectral-runtime": "function",
+      "type": "object",
+      "properties": {
+        "function": true
+      },
+      "required": ["function"]
+    },
+    "Functions": {
+      "$anchor": "functions",
+      "not": {}
+    },
+    "FunctionsDir": {
+      "$anchor": "functionsDir",
+      "not": {}
+    }
+  }
+}
