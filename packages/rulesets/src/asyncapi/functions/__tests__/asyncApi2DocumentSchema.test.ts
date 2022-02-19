@@ -43,7 +43,7 @@ describe('asyncApi2DocumentSchema', () => {
       ).toEqual([
         {
           code: 'asyncapi-schema',
-          message: '"info" property must have required property "title".',
+          message: '"info" property must have required property "title"',
           path: ['info'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -131,14 +131,14 @@ describe('asyncApi2DocumentSchema', () => {
       ).toEqual([
         {
           code: 'asyncapi-schema',
-          message: '"0" property type must be string.',
+          message: '"0" property type must be string',
           path: ['channels', '/user/signedup', 'servers', '0'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
         },
         {
           code: 'asyncapi-schema',
-          message: '"2" property type must be string.',
+          message: '"2" property type must be string',
           path: ['channels', '/user/signedup', 'servers', '2'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -184,7 +184,7 @@ describe('asyncApi2DocumentSchema', () => {
       ).toEqual([
         {
           code: 'asyncapi-schema',
-          message: '"kafka" property must have required property "url".',
+          message: '"kafka" property must have required property "url"',
           path: ['components', 'servers', 'kafka'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),

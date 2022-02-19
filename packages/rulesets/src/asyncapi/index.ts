@@ -273,8 +273,8 @@ export default {
     },
     'asyncapi-schema': {
       description: 'Validate structure of AsyncAPI v2 specification.',
-      message: '{{error}}.',
-      severity: 0,
+      message: '{{error}}',
+      severity: 'error',
       recommended: true,
       type: 'validation',
       given: '$',
