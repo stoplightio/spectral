@@ -1,4 +1,4 @@
-import { asyncApi2 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -8,13 +8,13 @@ import {
   alphabetical,
 } from '@stoplight/spectral-functions';
 
+import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
-import * as asyncApi2Schema from './schemas/schema.asyncapi2.json';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
-  formats: [asyncApi2],
+  formats: [aas2_0, aas2_1, aas2_2, aas2_3],
   rules: {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
@@ -272,18 +272,14 @@ export default {
       },
     },
     'asyncapi-schema': {
-      description: 'Validate structure of AsyncAPI v2.0.0 Specification.',
-      message: '{{error}}',
-      severity: 'error',
+      description: 'Validate structure of AsyncAPI v2 specification.',
+      message: '{{error}}.',
+      severity: 0,
       recommended: true,
       type: 'validation',
       given: '$',
       then: {
-        function: schema,
-        functionOptions: {
-          allErrors: true,
-          schema: asyncApi2Schema,
-        },
+        function: asyncApi2DocumentSchema,
       },
     },
     'asyncapi-server-no-empty-variable': {
