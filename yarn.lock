@@ -2378,6 +2378,7 @@ __metadata:
     minimatch: 3.0.4
     nimma: 0.1.8
     nock: ^13.1.0
+    pony-cause: ^1.0.0
     simple-eval: 1.0.0
     treeify: ^1.1.0
     tslib: ^2.3.0
