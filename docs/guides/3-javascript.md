@@ -53,7 +53,7 @@ Find out how to add formats, rules and functions below.
 
 ## Loading Rulesets
 
-Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`.
+Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.setRuleset()`.
 
 ```js
 const { Spectral } = require("@stoplight/spectral-core");
