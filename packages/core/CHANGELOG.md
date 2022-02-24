@@ -1,9 +1,8 @@
 # [@stoplight/spectral-core-v1.10.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.10.1...@stoplight/spectral-core-v1.10.2) (2022-02-24)
 
-
 ### Bug Fixes
 
-* **core:** bump nimma from 0.1.7 to 0.1.8 ([#2058](https://github.com/stoplightio/spectral/issues/2058)) ([fb756f2](https://github.com/stoplightio/spectral/commit/fb756f2e582e533d79c1ac3ed5cef2e8f8b1b299))
+- bump nimma from 0.1.7 to 0.1.8 ([#2058](https://github.com/stoplightio/spectral/issues/2058)) ([fb756f2](https://github.com/stoplightio/spectral/commit/fb756f2e582e533d79c1ac3ed5cef2e8f8b1b299))
 
 # [@stoplight/spectral-core-v1.10.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.10.0...@stoplight/spectral-core-v1.10.1) (2022-02-14)
 
