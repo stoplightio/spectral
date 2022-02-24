@@ -17,6 +17,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@asyncapi/specs@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "@asyncapi/specs@npm:2.13.0"
+  checksum: 94355c96ac2562bfd9118a3e33dd36359196d070684da952f6b0f800b588b426d012fbf96f85b7341ec74f401e3487934b92e43f48e086fa956eab29b90ab694
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:7.12.11":
   version: 7.12.11
   resolution: "@babel/code-frame@npm:7.12.11"
@@ -2384,7 +2391,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.0.2, @stoplight/spectral-formats@workspace:packages/formats":
+"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.1.0, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
@@ -2495,11 +2502,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
+    "@asyncapi/specs": ^2.13.0
     "@stoplight/better-ajv-errors": 1.0.1
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.8.1
-    "@stoplight/spectral-formats": ^1.0.2
+    "@stoplight/spectral-formats": ^1.1.0
     "@stoplight/spectral-functions": ^1.5.1
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": "*"
