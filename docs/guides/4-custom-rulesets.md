@@ -402,38 +402,53 @@ Rulesets can then reference aliases in the [given](#given) keyword, either in fu
 
 Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or changing parts of a rule. Overrides is the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
 
-Overrides can be used to:
+Overrides can be used to apply rulesets on:
 
-- Override rulesets to apply on particular files/folders `files: ['schemas/**/*.draft7.json']`
-- Override rulesets to apply on particular JSONPath's `files: ['**#/components/schemas/Item']`
-- Override rulesets to apply on particular formats `formats: [jsonSchemaDraft7]`
+- Particular formats `formats: [jsonSchemaDraft7]`
+- Particular files/folders `files: ['schemas/**/*.draft7.json']`
+- Particular elements of files `files: ['**#/components/schemas/Item']`
 - Override particular rules
 
 **Example**
 
 ```yaml
 overrides:
-  - files:
-      - schemas/**/*.draft7.json
-    formats:
-      - json-schema-draft7
-    rules:
-      valid-number-validation:
-        given:
-          - $..exclusiveMinimum
-          - $..exclusiveMaximum
-        then:
-          function: schema
-          functionOptions:
-            type: number
+  formats:
+    - json-schema-draft7
+  files:
+    - schemas/**/*.draft7.json
+  rules:
+    valid-number-validation:
+      given:
+        - $..exclusiveMinimum
+        - $..exclusiveMaximum
+      then:
+        function: schema
+        functionOptions:
+          type: number
 ```
 
-One can also combine a glob for a filepath with a JSONPath after the anchor, i.e.:
+To apply an override to particular elements of files, combine a glob for a filepath
+with a [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) after the anchor, i.e.:
 
 ```yaml
 overrides:
   - files:
       - "legacy/**/*.oas.json#/paths"
+    rules:
+      some-inherited-rule: "off"
+```
+
+JSON Pointers have a different syntax than JSON Paths used in the `given` component of a rule.
+In JSON Pointers, path components are prefixed with a "/" and then concatenated to form the pointer.
+Since "/" has a special meaning in JSON pointer, it must be encoded as "~1" when it appears in a component, and "~" must be encoded as "~0".
+
+You can test JSON Pointer expressions in the [JSON Query online evaluator](https://www.jsonquerytool.com/) by choosing "JSONPointer" as the Transform.
+
+```yaml
+overrides:
+  - files:
+      - "legacy/**/*.oas.json#/paths/~1Pets~1{petId}/get/parameters/0"
     rules:
       some-inherited-rule: "off"
 ```
