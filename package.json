@@ -38,7 +38,7 @@
     "test.karma": "karma start",
     "prepare": "husky install",
     "prerelease": "patch-package",
-    "release": "yarn prerelease && HUSKY=0 yarn workspaces foreach run release"
+    "release": "yarn prerelease && yarn workspaces foreach run release"
   },
   "workspaces": {
     "packages": [
