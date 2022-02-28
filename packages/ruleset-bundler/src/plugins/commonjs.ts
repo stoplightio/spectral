@@ -1,1 +1,3 @@
-export { default as commonjs } from '@rollup/plugin-commonjs';
+import { default as commonjs } from '@rollup/plugin-commonjs';
+
+export { commonjs };
