@@ -3,8 +3,8 @@ import { Ruleset } from '../validation/types';
 
 export { transformer as default };
 
-const transformer: Transformer = function (ctx) {
-  ctx.hooks.add([
+const transformer: Transformer = function (hooks) {
+  hooks.add([
     /^$/,
     (_ruleset): void => {
       const ruleset = _ruleset as Ruleset;

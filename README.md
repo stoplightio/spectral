@@ -34,20 +34,28 @@ Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/ge
 
 **Create a Ruleset**
 
-Spectral, being a generic YAML/JSON linter, needs a ruleset in order to be able to lint files.
-You can learn more about the rulesets [here](./docs/getting-started/3-rulesets.md).
+Spectral, being a generic YAML/JSON linter, needs a ruleset to lint files. There are two ways to get a ruleset:
 
-If you intend to lint an OpenAPI or AsyncAPI document, we have a few predefined rulesets you can extend to get Spectral up and running.
-To reference them, you can run the following command:
+1. Run this command to get our predefined rulesets based on OpenAPI or AsyncAPI:
 
 ```bash
 printf '{\n  "extends": ["spectral:oas", "spectral:asyncapi"]\n}\n' > .spectral.json
 ```
 
+2. Create your [own ruleset](./docs/getting-started/3-rulesets.md).
+
 **Lint**
 
+Use this command to lint with the predefined ruleset or a ruleset stored in the same directory as your API document:
+
 ```bash
-spectral lint petstore.yaml
+spectral lint myapifile.yaml
+```
+
+Use this command to lint with a custom ruleset or one that is located in a different directory than your API document:
+
+```bash
+spectral lint myapifile.yaml --ruleset myruleset.json
 ```
 
 ## 📖 Documentation

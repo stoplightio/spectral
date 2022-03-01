@@ -1,11 +1,12 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import * as betterAjvErrors from '@stoplight/better-ajv-errors';
-import * as asyncApi2Schema from '../schemas/schema.asyncapi2.json';
+import betterAjvErrors from '@stoplight/better-ajv-errors';
 
-const fakeSchemaObjectId = 'asyncapi2#/definitions/schema';
-const asyncApi2SchemaObject = { $ref: fakeSchemaObjectId };
+// use latest AsyncAPI JSON Schema because there are no differences of Schema Object definitions between the 2.X.X.
+import * as asyncApi2Schema from '@asyncapi/specs/schemas/2.3.0.json';
+
+const asyncApi2SchemaObject = { $ref: 'asyncapi2#/definitions/schema' };
 
 const ajv = new Ajv({
   allErrors: true,
@@ -14,7 +15,7 @@ const ajv = new Ajv({
 
 addFormats(ajv);
 
-ajv.addSchema(asyncApi2Schema, asyncApi2Schema.$id);
+ajv.addSchema(asyncApi2Schema, 'asyncapi2');
 
 const ajvValidationFn = ajv.compile(asyncApi2SchemaObject);
 

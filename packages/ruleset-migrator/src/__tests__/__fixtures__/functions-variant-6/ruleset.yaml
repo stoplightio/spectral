@@ -1,0 +1,6 @@
+rules:
+  rule:
+    given: $
+    then:
+      function: truthy
+functionsDir: custom-fns

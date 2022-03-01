@@ -8,13 +8,10 @@ import { Scope, Tree } from './tree';
 import { builders as b, namedTypes } from 'ast-types';
 import { ExpressionKind } from 'ast-types/gen/kinds';
 import { assertRuleset } from './validation';
-import requireResolve from './requireResolve';
 import { Ruleset } from './validation/types';
 
 async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset> {
-  const input = isURL(filepath)
-    ? await (await fetch(filepath)).text()
-    : await fs.promises.readFile(requireResolve?.(filepath) ?? filepath, 'utf8');
+  const input = isURL(filepath) ? await (await fetch(filepath)).text() : await fs.promises.readFile(filepath, 'utf8');
 
   const { data: ruleset } =
     extname(filepath) === '.json'
@@ -40,28 +37,30 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   const hooks = new Set<Hook>();
   const ctx: TransformerCtx = {
     cwd,
+    filepath,
     tree,
     opts: {
       fetch,
       ...opts,
     },
+    npmRegistry: npmRegistry ?? null,
     hooks,
     read,
   };
 
   for (const transformer of transformers) {
-    transformer(ctx);
+    transformer(ctx.hooks);
   }
 
-  tree.ruleset = await process(ruleset, hooks);
+  tree.ruleset = await process(ruleset, ctx);
 
   return tree.toString();
 }
 
-async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise<ExpressionKind | null> {
-  for (const [pattern, fn] of hooks) {
+async function _process(input: unknown, ctx: TransformerCtx, path: string): Promise<ExpressionKind | null> {
+  for (const [pattern, fn] of ctx.hooks) {
     if (pattern.test(path)) {
-      const output = await fn(input);
+      const output = await fn(input, ctx);
 
       if (output !== void 0) {
         return output;
@@ -71,7 +70,9 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
 
   if (Array.isArray(input)) {
     return b.arrayExpression(
-      (await Promise.all(input.map((item, i) => _process(item, hooks, `${path}/${String(i)}`)))).filter(Boolean),
+      (await Promise.all(input.map(async (item, i) => await _process(item, ctx, `${path}/${String(i)}`)))).filter(
+        Boolean,
+      ),
     );
   } else if (typeof input === 'number' || typeof input === 'boolean' || typeof input === 'string') {
     return b.literal(input);
@@ -87,7 +88,7 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
     (
       await Promise.all(
         Object.entries(input).map(async ([key, value]) => {
-          const propertyValue = await _process(value, hooks, `${path}/${key}`);
+          const propertyValue = await _process(value, ctx, `${path}/${key}`);
 
           if (propertyValue !== null) {
             return b.property('init', b.identifier(JSON.stringify(key)), propertyValue);
@@ -100,6 +101,6 @@ async function _process(input: unknown, hooks: Set<Hook>, path: string): Promise
   );
 }
 
-export async function process(input: Ruleset, hooks: Set<Hook>): Promise<namedTypes.ObjectExpression> {
-  return (await _process(input, hooks, '')) as namedTypes.ObjectExpression;
+export async function process(input: Ruleset, ctx: TransformerCtx): Promise<namedTypes.ObjectExpression> {
+  return (await _process(input, ctx, '')) as namedTypes.ObjectExpression;
 }

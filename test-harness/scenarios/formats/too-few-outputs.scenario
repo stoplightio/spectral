@@ -1,0 +1,34 @@
+====test====
+Fails when too few --output options are provided
+====document====
+paths: {}
+====asset:ruleset.js====
+export default { rules: {} };
+====command====
+{bin} lint {document} --format junit --format html ---format json --output.json foo.json --ruleset "{asset:ruleset.js}"
+====status====
+1
+====stderr====
+spectral lint [documents..]
+
+lint JSON/YAML documents from files or URLs
+
+Positionals:
+  documents  Location of JSON/YAML documents. Can be either a file, a glob or fetchable resource(s) on the web.  [array] [default: []]
+
+Options:
+      --version                  Show version number  [boolean]
+      --help                     Show help  [boolean]
+  -e, --encoding                 text encoding to use  [string] [choices: "utf8", "ascii", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1"] [default: "utf8"]
+  -o, --output                   where to output results, can be a single file name, multiple "output.<format>" or missing to print to stdout  [string]
+      --stdin-filepath           path to a file to pretend that stdin comes from  [string]
+      --resolver                 path to custom json-ref-resolver instance  [string]
+  -r, --ruleset                  path/URL to a ruleset file  [string]
+  -F, --fail-severity            results of this level or above will trigger a failure exit code  [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
+  -D, --display-only-failures    only output results equal to or greater than --fail-severity  [boolean] [default: false]
+      --ignore-unknown-format    do not warn about unmatched formats  [boolean] [default: false]
+      --fail-on-unmatched-globs  fail on unmatched glob patterns  [boolean] [default: false]
+  -v, --verbose                  increase verbosity  [boolean]
+  -q, --quiet                    no logging - output only  [boolean]
+
+The number of outputs must match the number of formats

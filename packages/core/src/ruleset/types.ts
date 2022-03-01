@@ -35,7 +35,7 @@ export type RuleDefinition = {
   recommended?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
-  given: string | string[];
+  given: GivenDefinition;
 
   // If false, rule will operate on original (unresolved) data
   // If undefined or true, resolved data will be supplied
@@ -56,6 +56,8 @@ export interface IRuleThen {
   // Options passed to the function
   functionOptions?: unknown;
 }
+
+export type GivenDefinition = string | string[];
 
 export type RulesetExtendsDefinition =
   | RulesetDefinition
@@ -79,18 +81,18 @@ export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & Rul
 export type RulesetScopedAliasDefinition = {
   description?: string;
   targets: {
-    formats: FormatsSet;
-    given: string;
+    formats: FormatsSet | Format[];
+    given: string[];
   }[];
 };
 
-export type RulesetAliasesDefinition = Record<string, string | RulesetScopedAliasDefinition>;
+export type RulesetAliasesDefinition = Record<string, string[] | RulesetScopedAliasDefinition>;
 
 export type RulesetDefinition = Readonly<
   {
     documentationUrl?: string;
     description?: string;
-    formats?: Format<any>[];
+    formats?: FormatsSet | Format[];
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;
     aliases?: RulesetAliasesDefinition;

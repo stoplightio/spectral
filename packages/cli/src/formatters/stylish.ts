@@ -24,14 +24,14 @@
  * @author Sindre Sorhus
  */
 
-import { DiagnosticSeverity, IRange } from '@stoplight/types';
-import * as chalk from 'chalk';
+import type { DiagnosticSeverity, IRange } from '@stoplight/types';
+import chalk from 'chalk';
 import stripAnsi = require('strip-ansi');
-import * as table from 'text-table';
+import table from 'text-table';
 import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
-import { IRuleResult } from '@stoplight/spectral-core';
+import type { IRuleResult } from '@stoplight/spectral-core';
 
-import { Formatter } from './types';
+import type { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
 
 // -----------------------------------------------------------------------------

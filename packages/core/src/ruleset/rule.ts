@@ -1,20 +1,22 @@
 import { isString } from 'lodash';
-import { JsonPath, Optional, DiagnosticSeverity } from '@stoplight/types';
+import { DiagnosticSeverity, JsonPath, Optional } from '@stoplight/types';
 import { dirname, relative } from '@stoplight/path';
 import { pathToPointer } from '@stoplight/json';
 import { printValue } from '@stoplight/spectral-runtime';
 
-import { getDiagnosticSeverity, DEFAULT_SEVERITY_LEVEL } from '../utils/severity';
-import { Ruleset } from '../ruleset';
-import { Format } from '../format';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
+import { Ruleset } from './ruleset';
+import { Format } from './format';
 import type {
   HumanReadableDiagnosticSeverity,
   IRuleThen,
   RuleDefinition,
+  RulesetAliasesDefinition,
   RulesetScopedAliasDefinition,
-} from '../types';
-import { minimatch } from '../utils/minimatch';
-import { FormatsSet } from '../utils/formatsSet';
+} from './types';
+import { minimatch } from './utils/minimatch';
+import { FormatsSet } from './utils/formatsSet';
+import { isSimpleAliasDefinition } from './utils/guards';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
@@ -139,22 +141,25 @@ export class Rule implements IRule {
     const actualGiven = Array.isArray(given) ? given : [given];
     this.#given = this.owner.hasComplexAliases
       ? actualGiven
-      : actualGiven.map(expr => this.#resolveAlias(expr, null)).filter(isString);
+      : actualGiven.flatMap(expr => Rule.#resolveAlias(this.owner.aliases, expr, null, new Set())).filter(isString);
   }
 
-  public getGivenForFormats(formats: Set<Format<any>> | null): string[] {
+  public getGivenForFormats(formats: Set<Format> | null): string[] {
     return this.owner.hasComplexAliases
-      ? this.#given.map(expr => this.#resolveAlias(expr, formats)).filter(isString)
+      ? this.#given.flatMap(expr => Rule.#resolveAlias(this.owner.aliases, expr, formats, new Set()))
       : this.#given;
   }
 
-  #resolveAlias(expr: string, formats: Set<Format> | null): string | null {
-    let resolvedExpr = expr;
+  static #resolveAlias(
+    aliases: RulesetAliasesDefinition | null,
+    expr: string,
+    formats: Set<Format> | null,
+    stack: Set<string>,
+  ): string[] {
+    const resolvedExpressions: string[] = [];
 
-    const stack = new Set<string>();
-
-    while (resolvedExpr.startsWith('#')) {
-      const alias = ALIAS.exec(resolvedExpr)?.[1];
+    if (expr.startsWith('#')) {
+      const alias = ALIAS.exec(expr)?.[1];
 
       if (alias === void 0 || alias === null) {
         throw new ReferenceError(`"${this.name}" rule references an invalid alias`);
@@ -167,33 +172,36 @@ export class Rule implements IRule {
 
       stack.add(alias);
 
-      if (this.owner.aliases === null || !(alias in this.owner.aliases)) {
+      if (aliases === null || !(alias in aliases)) {
         throw new ReferenceError(`Alias "${alias}" does not exist`);
       }
 
-      const aliasValue = this.owner.aliases[alias];
-      let actualAliasValue;
-      if (typeof aliasValue === 'string') {
+      const aliasValue = aliases[alias];
+      let actualAliasValue: string[] | null;
+      if (isSimpleAliasDefinition(aliasValue)) {
         actualAliasValue = aliasValue;
       } else {
-        actualAliasValue = this.#resolveAliasForFormats(aliasValue, formats);
+        actualAliasValue = Rule.#resolveAliasForFormats(aliasValue, formats);
       }
 
-      if (actualAliasValue === null) {
-        return null;
+      if (actualAliasValue !== null) {
+        resolvedExpressions.push(
+          ...actualAliasValue.flatMap(item =>
+            Rule.#resolveAlias(aliases, item + expr.slice(alias.length + 1), formats, new Set([...stack])),
+          ),
+        );
       }
-
-      if (actualAliasValue.length + 1 === expr.length) {
-        resolvedExpr = actualAliasValue;
-      } else {
-        resolvedExpr = actualAliasValue + resolvedExpr.slice(alias.length + 1);
-      }
+    } else {
+      resolvedExpressions.push(expr);
     }
 
-    return resolvedExpr;
+    return resolvedExpressions;
   }
 
-  #resolveAliasForFormats({ targets }: RulesetScopedAliasDefinition, formats: Set<Format> | null): string | null {
+  static #resolveAliasForFormats(
+    { targets }: RulesetScopedAliasDefinition,
+    formats: Set<Format> | null,
+  ): string[] | null {
     if (formats === null || formats.size === 0) {
       return null;
     }

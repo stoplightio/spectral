@@ -38,17 +38,7 @@
           "type": "boolean"
         },
         "given": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          ]
+          "$ref": "shared#given"
         },
         "resolved": {
           "type": "boolean"

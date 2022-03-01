@@ -53,8 +53,8 @@ function getDiagnosticSeverity(severity: DiagnosticSeverity | string): Diagnosti
   return Number.isNaN(Number(severity)) ? SEVERITY_MAP[severity] : Number(severity);
 }
 
-const transformer: Transformer = function (ctx) {
-  ctx.hooks.add([
+const transformer: Transformer = function (hooks) {
+  hooks.add([
     /^$/,
     (_ruleset): void => {
       const ruleset = _ruleset as Ruleset;
@@ -84,9 +84,9 @@ const transformer: Transformer = function (ctx) {
     },
   ]);
 
-  ctx.hooks.add([
+  hooks.add([
     /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,
-    (value): namedTypes.Identifier | namedTypes.UnaryExpression => {
+    (value, ctx): namedTypes.Identifier | namedTypes.UnaryExpression => {
       assertString(value);
 
       if (KNOWN_FUNCTIONS.includes(value)) {

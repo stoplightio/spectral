@@ -1,9 +1,10 @@
 import { Dictionary } from '@stoplight/types';
-import { pick } from 'lodash';
+import { isPlainObject } from '@stoplight/json';
+import { difference, noop, pick } from 'lodash';
 import { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
-
 import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
+
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
 import { FailSeverity, ILintConfig, OutputFormat } from '../services/config';
@@ -34,13 +35,52 @@ const lintCommand: CommandModule = {
           return [(process.stdin as ReadStream & { fd: 0 }).fd];
         },
       })
-      .check((argv: Dictionary<unknown>) => {
-        if (argv.format !== void 0 && !(formatOptions as string[]).includes(String(argv.format))) {
-          throw new TypeError('Unspecified format');
-        }
+      .middleware((argv: Dictionary<unknown>) => {
+        const formats = argv.format as string[] & { 0: string };
+        if (argv.output === void 0) {
+          argv.output = { [formats[0]]: '<stdout>' };
+        } else if (typeof argv.output === 'string') {
+          argv.output = { [formats[0]]: argv.output };
+        } else {
+          const output = argv.output as Dictionary<unknown>;
+          if (Object.keys(output).length >= formats.length) {
+            return;
+          }
 
+          const firstMissingFormat = formats.find(f => !(f in output));
+          if (firstMissingFormat !== void 0) {
+            output[firstMissingFormat] = '<stdout>';
+          }
+        }
+      })
+      .check((argv: Dictionary<unknown>) => {
         if (!Array.isArray(argv.documents) || argv.documents.length === 0) {
           throw new TypeError('No documents provided.');
+        }
+
+        const format = argv.format as string[] & { 0: string };
+        const output = argv.output as Dictionary<unknown> | undefined;
+
+        if (format.length === 1) {
+          if (output === void 0 || Object.keys(output).length === 1) {
+            return true;
+          }
+
+          throw new TypeError('Output must be either string or unspecified when a single format is specified');
+        }
+
+        if (!isPlainObject(output)) {
+          throw new TypeError('Multiple outputs have to be provided when more than a single format is specified');
+        }
+
+        const keys = Object.keys(output);
+        if (format.length !== keys.length) {
+          throw new TypeError('The number of outputs must match the number of formats');
+        }
+
+        const diff = difference(format, keys);
+        if (diff.length !== 0) {
+          throw new TypeError(`Missing outputs for the following formats: ${diff.join(', ')}`);
         }
 
         return true;
@@ -55,14 +95,17 @@ const lintCommand: CommandModule = {
         },
         format: {
           alias: 'f',
-          description: 'formatter to use for outputting results',
+          description: 'formatters to use for outputting results, more than one can be given joining them with a comma',
           choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
+          coerce(values: string | string[]) {
+            return Array.isArray(values) ? values : [values];
+          },
         },
         output: {
           alias: 'o',
-          description: 'output to a file instead of stdout',
+          description: `where to output results, can be a single file name, multiple "output.<format>" or missing to print to stdout`,
           type: 'string',
         },
         'stdin-filepath': {
@@ -154,8 +197,13 @@ const lintCommand: CommandModule = {
         } else if (config.quiet !== true) {
           console.log(`No results with a severity of '${failSeverity}' or higher found!`);
         }
-        const formattedOutput = formatOutput(results, format, { failSeverity: getDiagnosticSeverity(failSeverity) });
-        return writeOutput(formattedOutput, output);
+
+        return Promise.all(
+          format.map(f => {
+            const formattedOutput = formatOutput(results, f, { failSeverity: getDiagnosticSeverity(failSeverity) });
+            return writeOutput(formattedOutput, output?.[f] ?? '<stdout>');
+          }),
+        ).then(noop);
       })
       .catch(fail);
   },

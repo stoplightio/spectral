@@ -18,7 +18,7 @@ const REPLACEMENTS = Object.fromEntries(
   ]),
 );
 
-function transform(ctx: TransformerCtx, input: unknown): namedTypes.ArrayExpression {
+function transform(input: unknown, ctx: TransformerCtx): namedTypes.ArrayExpression {
   assertArray(input);
 
   return b.arrayExpression(
@@ -35,10 +35,8 @@ function transform(ctx: TransformerCtx, input: unknown): namedTypes.ArrayExpress
 
 export { transformer as default };
 
-const transformer: Transformer = function (ctx) {
-  const t = transform.bind(null, ctx);
-
-  ctx.hooks.add([/^\/aliases\/[^/]+\/targets\/\d+\/formats$/, t]);
-  ctx.hooks.add([/^(\/overrides\/\d+)?\/formats$/, t]);
-  ctx.hooks.add([/^(\/overrides\/\d+)?\/rules\/[^/]+\/formats$/, t]);
+const transformer: Transformer = function (hooks) {
+  hooks.add([/^\/aliases\/[^/]+\/targets\/\d+\/formats$/, transform]);
+  hooks.add([/^(\/overrides\/\d+)?\/formats$/, transform]);
+  hooks.add([/^(\/overrides\/\d+)?\/rules\/[^/]+\/formats$/, transform]);
 };

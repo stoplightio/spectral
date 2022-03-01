@@ -30,24 +30,39 @@ commands:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+            - &yarn-cache-key yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn install --immutable
       - save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+          key: *yarn-cache-key
           paths:
             - ~/.yarn
 
-  install-and-build:
+  build:
     description: >-
-      Build everything required to run the test suite
+      Build everything required to run the test suite and to release the package
     steps:
-      - cached-dependencies
       - run:
           name: Build the code
           command: yarn build
+
+  build-binary:
+    parameters:
+      targets:
+        type: string
+    steps:
+      - run:
+          name: Create the Spectral Binary
+          command: yarn workspace @stoplight/spectral-cli pkg . --public --targets << parameters.targets >> --output binaries/spectral
+
+  install-and-build:
+    description: >-
+      Install and build everything required to run the test suite
+    steps:
+      - cached-dependencies
+      - build
 
   lint-code:
     steps:
@@ -79,10 +94,16 @@ commands:
           command: yarn test.jest --maxWorkers=<< parameters.max-workers >>
 
   test-harness:
+    parameters:
+      os:
+        type: enum
+        enum:
+          - linux
+          - windows
+        default: linux
     steps:
-      - run:
-          name: Create the Spectral Binary
-          command: yarn workspace @stoplight/spectral-cli build.binary
+      - build-binary:
+          targets: << parameters.os >>
       - run:
           name: Run harness tests
           command: yarn test.harness
@@ -91,14 +112,8 @@ commands:
     steps:
       - checkout
       - cached-dependencies
-      - run:
-          name: Install semantic-release
-          command: |
-            yarn add --dev semantic-release@18.0 semantic-release-monorepo@7.0 @semantic-release/git@10.0 patch-package@6.4
-            yarn patch-package
-
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: yarn build
+      - build
 
 jobs:
   lint:
@@ -125,7 +140,8 @@ jobs:
       - checkout
       - install-and-build
       - test-node
-      - test-harness
+      - test-harness:
+          os: linux
 
   test-browser:
     docker:
@@ -144,9 +160,11 @@ jobs:
     steps:
       - checkout
       - cached-dependencies
-      - run: yarn build
+      - build
       - test-node:
           max-workers: 3
+      - test-harness:
+          os: windows
 
   build-nix-binaries:
     docker:
@@ -154,7 +172,8 @@ jobs:
     steps:
       - checkout
       - install-and-build
-      - run: yarn workspace @stoplight/spectral-cli build.nix
+      - build-binary:
+          targets: linux,macos,alpine
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
@@ -167,7 +186,8 @@ jobs:
       - checkout
       - cached-dependencies
       - run: yarn build
-      - run: yarn workspace @stoplight/spectral-cli build.windows
+      - build-binary:
+          targets: windows
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
@@ -218,6 +238,7 @@ jobs:
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:latest;
             fi
             echo "Docker tags:";
             docker images stoplight/spectral --format="{{ .Tag }}";
@@ -227,6 +248,7 @@ jobs:
               docker push stoplight/spectral:${FULL_VERSION};
               docker push stoplight/spectral:${MINOR_VERSION};
               docker push stoplight/spectral:${MAJOR_VERSION};
+              docker push stoplight/spectral:latest;
               echo "Pushed stoplight/spectral:${FULL_VERSION}";
             fi
             if [[ -n "$DOCKER_BRANCH" ]]; then
@@ -268,14 +290,13 @@ workflows:
       - approve-release:
           type: approval
           filters: *default-branch-filter
+      - release:
+          filters: *default-branch-filter
           requires:
             - lint
             - test-node
             - test-windows
             - test-browser
-      - release:
-          filters: *default-branch-filter
-          requires:
             - approve-release
 
   release:

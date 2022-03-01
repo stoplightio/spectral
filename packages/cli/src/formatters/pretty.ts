@@ -26,7 +26,7 @@
 
 import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import { IDiagnostic, IRange } from '@stoplight/types';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 
 import { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSummary, getSeverityName, groupBySource } from './utils';

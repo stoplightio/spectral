@@ -1,5 +1,5 @@
 import { normalize } from '@stoplight/path';
-import * as fg from 'fast-glob';
+import fg from 'fast-glob';
 
 const GLOB_OPTIONS = {
   absolute: true,

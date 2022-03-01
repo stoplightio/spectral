@@ -1004,10 +1004,10 @@ describe('Ruleset', () => {
         print(
           new Ruleset({
             aliases: {
-              Info: '$.info',
-              PathItem: '$.paths[*][*]',
-              Description: '$..description',
-              Name: '$..name',
+              Info: ['$.info'],
+              PathItem: ['$.paths[*][*]'],
+              Description: ['$..description'],
+              Name: ['$..name'],
             },
 
             rules: {
@@ -1066,10 +1066,10 @@ describe('Ruleset', () => {
           JSON.stringify(
             new Ruleset({
               aliases: {
-                Info: '$.info',
-                PathItem: '$.paths[*][*]',
-                Description: '$..description',
-                Name: '$..name',
+                Info: ['$.info'],
+                PathItem: ['$.paths[*][*]'],
+                Description: ['$..description'],
+                Name: ['$..name'],
               },
 
               rules: {
@@ -1108,10 +1108,10 @@ describe('Ruleset', () => {
           incompatibleValues: DiagnosticSeverity.Error,
         },
         aliases: {
-          Info: '$.info',
-          PathItem: '$.paths[*][*]',
-          Description: '$..description',
-          Name: '$..name',
+          Info: ['$.info'],
+          PathItem: ['$.paths[*][*]'],
+          Description: ['$..description'],
+          Name: ['$..name'],
         },
         rules: {
           'valid-path': {
@@ -1179,10 +1179,10 @@ describe('Ruleset', () => {
         print(
           new Ruleset({
             aliases: {
-              Info: '$.info',
-              InfoDescription: '#Info.description',
-              InfoContact: '#Info.contact',
-              InfoContactName: '#InfoContact.name',
+              Info: ['$.info'],
+              InfoDescription: ['#Info.description'],
+              InfoContact: ['#Info.contact'],
+              InfoContactName: ['#InfoContact.name'],
             },
 
             rules: {
@@ -1241,7 +1241,7 @@ describe('Ruleset', () => {
           new Ruleset({
             extends: {
               aliases: {
-                PathItem: '$.paths[*][*]',
+                PathItem: ['$.paths[*][*]'],
               },
               rules: {},
             },
@@ -1262,10 +1262,10 @@ describe('Ruleset', () => {
         () =>
           new Ruleset({
             aliases: {
-              Root: '#Info',
-              Info: '#Root.test',
-              Contact: '#Info',
-              Test: '#Contact.test',
+              Root: ['#Info'],
+              Info: ['#Root.test'],
+              Contact: ['#Info'],
+              Test: ['#Contact.test'],
             },
             rules: {
               'valid-path': {
@@ -1287,9 +1287,9 @@ describe('Ruleset', () => {
           new Ruleset({
             extends: {
               aliases: {
-                PathItem: '$.paths[*][*]',
-                Description: '$..description',
-                Name: '$..name',
+                PathItem: ['$.paths[*][*]'],
+                Description: ['$..description'],
+                Name: ['$..name'],
               },
               rules: {},
             },
@@ -1313,13 +1313,17 @@ describe('Ruleset', () => {
     });
 
     describe('scoped aliases', () => {
+      const createStubFormat =
+        (): Format<unknown> =>
+        (input): input is unknown =>
+          true;
+
       it('should resolve locally defined aliases according to their targets', () => {
-        const draft4: Format<JSONSchema4> = (input): input is JSONSchema4 =>
-          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-04/schema#';
-        const draft6: Format<JSONSchema6> = (input): input is JSONSchema6 =>
-          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-06/schema#';
-        const draft7: Format<JSONSchema7> = (input): input is JSONSchema7 =>
-          isPlainObject(input) && input.$schema === 'http://json-schema.org/draft-07/schema#';
+        const oas2 = createStubFormat();
+        const oas3 = createStubFormat();
+        const draft4 = createStubFormat();
+        const draft6 = createStubFormat();
+        const draft7 = createStubFormat();
 
         const ruleset = new Ruleset({
           aliases: {
@@ -1327,16 +1331,41 @@ describe('Ruleset', () => {
               targets: [
                 {
                   formats: [draft4],
-                  given: '$..id',
+                  given: ['$..id'],
                 },
                 {
                   formats: [draft6, draft7],
-                  given: '$..$id',
+                  given: ['$..$id'],
                 },
               ],
             },
+
+            PathItem: ['$.paths[*]'],
+            OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+            ParametersDefinitionsObject: {
+              targets: [
+                { formats: [oas2], given: ['$.parameters'] },
+                { formats: [oas3], given: ['$.components.parameters'] },
+              ],
+            },
+            ParametersObject: {
+              targets: [
+                { formats: [oas2], given: ['#PathItem.parameters', '#OperationObject.parameters'] },
+                {
+                  formats: [oas3],
+                  given: ['#PathItem.parameters', '#OperationObject.parameters'],
+                },
+              ],
+            },
+            ParameterObject: ['#ParametersDefinitionsObject[*]', '#ParametersObject[?(@ && !@.$ref)]'],
           },
           rules: {
+            'valid-parameter': {
+              given: '#ParameterObject',
+              then: {
+                function: truthy,
+              },
+            },
             'valid-id': {
               given: '#Id',
               then: {
@@ -1355,6 +1384,69 @@ describe('Ruleset', () => {
         expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft6, draft7]))).toStrictEqual([
           '$..$id',
         ]);
+
+        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new FormatsSet([oas2]))).toStrictEqual([
+          '$.parameters[*]',
+          '$.paths[*].parameters[?(@ && !@.$ref)]',
+          '$.paths[*][get,put,post,delete,options,head,patch,trace].parameters[?(@ && !@.$ref)]',
+        ]);
+        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new FormatsSet([oas3]))).toStrictEqual([
+          '$.components.parameters[*]',
+          '$.paths[*].parameters[?(@ && !@.$ref)]',
+          '$.paths[*][get,put,post,delete,options,head,patch,trace].parameters[?(@ && !@.$ref)]',
+        ]);
+        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new FormatsSet([oas2, oas3]))).toStrictEqual([
+          '$.components.parameters[*]',
+          '$.paths[*].parameters[?(@ && !@.$ref)]',
+          '$.paths[*][get,put,post,delete,options,head,patch,trace].parameters[?(@ && !@.$ref)]',
+        ]);
+      });
+
+      it('given circular alias, should throw', () => {
+        const oas3 = createStubFormat();
+
+        const ruleset = new Ruleset({
+          aliases: {
+            Components: {
+              targets: [
+                {
+                  formats: [oas3],
+                  given: ['#HeaderObject'],
+                },
+              ],
+            },
+            HeaderObjects: {
+              targets: [
+                {
+                  formats: [oas3],
+                  given: ['#Components.headers'],
+                },
+              ],
+            },
+            HeaderObject: {
+              targets: [
+                {
+                  formats: [oas3],
+                  given: ['#HeaderObjects[*]'],
+                },
+              ],
+            },
+          },
+          rules: {
+            'valid-header': {
+              given: '#HeaderObject',
+              then: {
+                function: truthy,
+              },
+            },
+          },
+        });
+
+        expect(() => ruleset.rules['valid-header'].getGivenForFormats(new FormatsSet([oas3]))).toThrowError(
+          ReferenceError(
+            'Alias "HeaderObject" is circular. Resolution stack: HeaderObject -> HeaderObjects -> Components -> HeaderObject',
+          ),
+        );
       });
 
       it('should drop aliases not matching any target', () => {
@@ -1369,7 +1461,7 @@ describe('Ruleset', () => {
               targets: [
                 {
                   formats: [draft6],
-                  given: '$..$id',
+                  given: ['$..$id'],
                 },
               ],
             },
@@ -1408,11 +1500,11 @@ describe('Ruleset', () => {
                     targets: [
                       {
                         formats: [draft4],
-                        given: '$..id',
+                        given: ['$..id'],
                       },
                       {
                         formats: [draft6, draft7],
-                        given: '$..$id',
+                        given: ['$..$id'],
                       },
                     ],
                   },
@@ -1444,11 +1536,11 @@ describe('Ruleset', () => {
               targets: [
                 {
                   formats: ['draft4'],
-                  given: '$..id',
+                  given: ['$..id'],
                 },
                 {
                   formats: ['draft6', 'draft7'],
-                  given: '$..$id',
+                  given: ['$..$id'],
                 },
               ],
             },

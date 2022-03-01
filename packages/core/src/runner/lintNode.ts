@@ -6,7 +6,7 @@ import { Document } from '../document';
 import { IFunctionResult, IGivenNode, RulesetFunctionContext } from '../types';
 import { IRunnerInternalContext } from './types';
 import { getLintTargets, MessageVars, message } from './utils';
-import { Rule } from '../ruleset/rule/rule';
+import { Rule } from '../ruleset/rule';
 
 export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule: Rule): void => {
   const fnContext: RulesetFunctionContext = {

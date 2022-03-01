@@ -36,7 +36,7 @@ Respects stdin filepath
 ====asset:document.yaml====
 description: Test
 title: Oops
-====command====
+====command-nix====
 cat {asset:document.yaml} | {bin} lint --ruleset "{asset:ruleset.json}" --stdin-filepath={asset:document.yaml}
 ====stdout====
 {asset:document.yaml}

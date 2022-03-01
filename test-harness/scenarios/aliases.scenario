@@ -11,10 +11,10 @@ const { truthy, falsy } = require('@stoplight/spectral-functions');
 
 module.exports = {
   aliases: {
-    Info: '$..info',
-    InfoDescription: '#Info.description',
-    InfoContact: '#Info.contact',
-    InfoContactName: '#InfoContact.name',
+    Info: ['$..info'],
+    InfoDescription: ['#Info.description'],
+    InfoContact: ['#Info.contact'],
+    InfoContactName: ['#InfoContact.name'],
   },
   rules: {
     'valid-info': {

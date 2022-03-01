@@ -1,35 +1,48 @@
 import { dirname, parse, join, normalize, isAbsolute, isURL } from '@stoplight/path';
-import type { Plugin } from 'rollup';
+import type { Plugin, PluginContext } from 'rollup';
 import type { IO } from '../types';
 
-export const virtualFs = ({ fs }: IO): Plugin => ({
-  name: '@stoplight-spectral/virtual-fs',
-  resolveId(source, importer) {
-    const { protocol } = parse(source);
+export const virtualFs = ({ fs }: IO): Plugin => {
+  const recognized = new WeakMap<PluginContext, string[]>();
 
-    if (protocol === 'http' || protocol === 'https') {
-      return null;
-    }
+  return {
+    name: '@stoplight-spectral/virtual-fs',
 
-    if (protocol !== 'file' && !/^[./]/.test(source)) {
-      return null;
-    }
+    resolveId(source, importer): string | null {
+      const { protocol } = parse(source);
 
-    if (isAbsolute(source)) {
-      return normalize(source);
-    }
+      if (protocol === 'http' || protocol === 'https') {
+        return null;
+      }
 
-    if (importer !== void 0) {
-      return join(dirname(importer), source);
-    }
+      if (protocol !== 'file' && !/^[./]/.test(source)) {
+        return null;
+      }
 
-    return source;
-  },
-  load(id) {
-    if (!isURL(id)) {
-      return fs.promises.readFile(id, 'utf8');
-    }
+      let resolvedSource = source;
 
-    return;
-  },
-});
+      if (isAbsolute(source)) {
+        resolvedSource = normalize(source);
+      } else if (importer !== void 0) {
+        resolvedSource = join(dirname(importer), source);
+      }
+
+      let existingEntries = recognized.get(this);
+      if (existingEntries === void 0) {
+        existingEntries = [];
+        recognized.set(this, existingEntries);
+      }
+
+      existingEntries.push(resolvedSource);
+
+      return resolvedSource;
+    },
+    load(id): Promise<string> | undefined {
+      if (!isURL(id) && recognized.get(this)?.includes(id) === true) {
+        return fs.promises.readFile(id, 'utf8');
+      }
+
+      return;
+    },
+  };
+};

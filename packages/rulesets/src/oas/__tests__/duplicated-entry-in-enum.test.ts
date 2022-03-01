@@ -25,30 +25,6 @@ testRule('duplicated-entry-in-enum', [
   },
 
   {
-    name: 'oas2: enum is an object property',
-    document: {
-      openapi: '3.0.2',
-      components: {
-        schemas: {
-          schema: {
-            type: 'object',
-            properties: {
-              enum: {
-                type: 'array',
-                items: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-
-    errors: [],
-  },
-
-  {
     name: 'oas2: enum with duplicated entries',
     document: {
       swagger: '2.0',
@@ -70,9 +46,24 @@ testRule('duplicated-entry-in-enum', [
   },
 
   {
-    name: 'oas3: empty object',
+    name: 'oas3: enum is a property',
     document: {
-      openapi: '3.0.0',
+      openapi: '3.0.2',
+      components: {
+        schemas: {
+          schema: {
+            type: 'object',
+            properties: {
+              enum: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     errors: [],
   },

@@ -28,8 +28,10 @@ Will fail and return 1 as exit code because errors exist
     }
   }
 }
-====command====
+====command-nix====
 {bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity=error
+====command-win====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity error
 ====status====
 1
 ====stdout====

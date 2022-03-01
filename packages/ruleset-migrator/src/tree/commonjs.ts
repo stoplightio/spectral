@@ -35,7 +35,16 @@ export const commonjs = <IModule>{
   ): namedTypes.VariableDeclaration {
     return b.variableDeclaration('const', [
       b.variableDeclarator(
-        b.objectPattern(identifiers.map(([imported, local]) => b.property('init', imported, local))),
+        b.objectPattern(
+          identifiers.map(([imported, local]) =>
+            b.property.from({
+              kind: 'init',
+              key: imported,
+              value: local,
+              shorthand: local.name === imported.name,
+            }),
+          ),
+        ),
         b.callExpression(b.identifier('require'), [b.literal(source)]),
       ),
     ]);

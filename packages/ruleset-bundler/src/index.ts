@@ -1,6 +1,7 @@
 import { rollup, Plugin } from 'rollup';
 import { isURL } from '@stoplight/path';
 import { isPackageImport } from './utils/isPackageImport';
+import { dedupeRollupPlugins } from './utils/dedupeRollupPlugins';
 
 export type BundleOptions = {
   plugins: Plugin[];
@@ -17,7 +18,7 @@ export async function bundleRuleset(
 ): Promise<string> {
   const bundle = await rollup({
     input,
-    plugins,
+    plugins: dedupeRollupPlugins(plugins),
     treeshake,
     watch: false,
     perf: false,

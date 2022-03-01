@@ -1,3 +1,46 @@
+# [@stoplight/spectral-ruleset-migrator-v1.7.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.1...@stoplight/spectral-ruleset-migrator-v1.7.2) (2022-01-26)
+
+### Bug Fixes
+
+- resolve npm packages correctly ([#2022](https://github.com/stoplightio/spectral/issues/2022)) ([843e47c](https://github.com/stoplightio/spectral/commit/843e47cc10c58067bae6bab4f5d9c1ed53dba7ed))
+
+# [@stoplight/spectral-ruleset-migrator-v1.7.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.0...@stoplight/spectral-ruleset-migrator-v1.7.1) (2022-01-05)
+
+### Bug Fixes
+
+- order of functions property should not matter ([#2014](https://github.com/stoplightio/spectral/issues/2014)) ([a29a204](https://github.com/stoplightio/spectral/commit/a29a204f86a760ac532fd930a9390ae7e92db7c7))
+
+# [@stoplight/spectral-ruleset-migrator-v1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.6.1...@stoplight/spectral-ruleset-migrator-v1.7.0) (2022-01-04)
+
+### Features
+
+- sort imports ([5e57f80](https://github.com/stoplightio/spectral/commit/5e57f80c322a251f3098c676d771ffdd0c5ee8be))
+- use shorthand properties for CJS ([cfeec4d](https://github.com/stoplightio/spectral/commit/cfeec4d66d99ddfc18674b1ae3af059de0d98383))
+
+# [@stoplight/spectral-ruleset-migrator-v1.6.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.6.0...@stoplight/spectral-ruleset-migrator-v1.6.1) (2021-12-30)
+
+### Bug Fixes
+
+- missing tslib dependency ([57cf295](https://github.com/stoplightio/spectral/commit/57cf2957254e29e026c69e718b7a96e610be00c8))
+
+# [@stoplight/spectral-ruleset-migrator-v1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.5.2...@stoplight/spectral-ruleset-migrator-v1.6.0) (2021-12-15)
+
+### Features
+
+- **ruleset-bundler:** add ruleset loader ([#1988](https://github.com/stoplightio/spectral/issues/1988)) ([a2c84dc](https://github.com/stoplightio/spectral/commit/a2c84dc76611b842b3bf85d4f68360a0bc6d48d6))
+
+# [@stoplight/spectral-ruleset-migrator-v1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.5.1...@stoplight/spectral-ruleset-migrator-v1.5.2) (2021-11-09)
+
+### Bug Fixes
+
+- nested local dependencies not resolved correctly ([#1940](https://github.com/stoplightio/spectral/issues/1940)) ([f2428f9](https://github.com/stoplightio/spectral/commit/f2428f9f24639671fdb009f11b3f46a5799028d4))
+
+# [@stoplight/spectral-ruleset-migrator-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.5.0...@stoplight/spectral-ruleset-migrator-v1.5.1) (2021-10-25)
+
+### Bug Fixes
+
+- order contains duplicate keys ([#1912](https://github.com/stoplightio/spectral/issues/1912)) ([1abfd3a](https://github.com/stoplightio/spectral/commit/1abfd3a89b781080964623b42313ee1d1f06a0f1))
+
 # [@stoplight/spectral-ruleset-migrator-v1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.4.4...@stoplight/spectral-ruleset-migrator-v1.5.0) (2021-09-27)
 
 ### Features
