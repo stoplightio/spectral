@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-bundler-v1.2.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.2.0...@stoplight/spectral-ruleset-bundler-v1.2.1) (2022-02-28)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** __importDefault undefined ([874a80e](https://github.com/stoplightio/spectral/commit/874a80e9d8e36d96bfbb467e340aab337227bfa7))
+
 # [@stoplight/spectral-ruleset-bundler-v1.2.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.1.1...@stoplight/spectral-ruleset-bundler-v1.2.0) (2022-02-25)
 
 

@@ -1,3 +1,17 @@
+# [@stoplight/spectral-rulesets-v1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.5.1...@stoplight/spectral-rulesets-v1.5.2) (2022-02-28)
+
+
+### Bug Fixes
+
+* **rulesets:** __importDefault undefined ([fdd647b](https://github.com/stoplightio/spectral/commit/fdd647b36b8d05c264b2320f0c8ea108e587d686))
+
+# [@stoplight/spectral-rulesets-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.5.0...@stoplight/spectral-rulesets-v1.5.1) (2022-02-28)
+
+
+### Bug Fixes
+
+* **rulesets:** __importDefault undefined ([c123bdf](https://github.com/stoplightio/spectral/commit/c123bdf1dfe4d303bf477dc5c211e5b09bb37ed6))
+
 # [@stoplight/spectral-rulesets-v1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.4.3...@stoplight/spectral-rulesets-v1.5.0) (2022-02-24)
 
 ### Features
