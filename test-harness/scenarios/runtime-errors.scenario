@@ -1,0 +1,68 @@
+====test====
+Logs all runtime errors thrown during the linting process
+====document====
+schemas:
+  user:
+    type: object
+    properties:
+      name:
+        type: number
+      age:
+        type: number
+      occupation:
+        type: boolean
+  addresses:
+    -
+====command====
+{bin} lint {document} -r "{asset:ruleset.js}"
+====asset:ruleset.js====
+const { truthy } = require("@stoplight/spectral-functions");
+
+function validAddress(input) {
+  throw new TypeError(`Cannot read properties of null (reading 'test')`);
+}
+
+function upperCase() {
+  return String(input).toLowerCase() === String(input).toUpperCase();
+}
+
+module.exports = {
+   "rules": {
+      "valid-user-properties": {
+         "severity": "error",
+         "given": [
+            "$.schemas.user.properties.name",
+            "$.schemas.user.properties.occupation"
+         ],
+         "then": {
+            "field": "type",
+            "function": upperCase,
+         }
+      },
+      "valid-address": {
+        "given": [
+          "$..addresses[*]",
+        ],
+        "then": {
+          "function": validAddress
+        }
+      },
+      "require-user-and-address": {
+         "severity": "error",
+         "given": [
+            "$.schemas.user",
+         ],
+         "then": {
+            "function": truthy
+         }
+      }
+   }
+}
+====status====
+2
+====stderr====
+Error running Spectral!
+Use --verbose flag to print the error stack.
+Error #1: Function "upperCase" threw an exception: input is not defined
+Error #2: Function "upperCase" threw an exception: input is not defined
+Error #3: Function "validAddress" threw an exception: Cannot read properties of null (reading 'test')

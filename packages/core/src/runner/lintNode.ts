@@ -1,6 +1,7 @@
 import { JsonPath } from '@stoplight/types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '@stoplight/spectral-runtime';
-import { get } from 'lodash';
+import { get, isError } from 'lodash';
+import { ErrorWithCause } from 'pony-cause';
 
 import { Document } from '../document';
 import { IFunctionResult, IGivenNode, RulesetFunctionContext } from '../types';
@@ -24,10 +25,20 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
     for (const target of targets) {
       const path = target.path.length > 0 ? [...givenPath, ...target.path] : givenPath;
 
-      const targetResults = then.function(target.value, then.functionOptions ?? null, {
-        ...fnContext,
-        path,
-      });
+      let targetResults;
+      try {
+        targetResults = then.function(target.value, then.functionOptions ?? null, {
+          ...fnContext,
+          path,
+        });
+      } catch (e) {
+        throw new ErrorWithCause(
+          `Function "${then.function.name}" threw an exception${isError(e) ? `: ${e.message}` : ''}`,
+          {
+            cause: e,
+          },
+        );
+      }
 
       if (targetResults === void 0) continue;
 
