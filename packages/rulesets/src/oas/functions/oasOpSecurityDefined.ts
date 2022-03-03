@@ -20,13 +20,16 @@ type Options = {
   schemesPath: JsonPath;
 };
 
-export default createRulesetFunction<{ paths: Record<string, unknown> }, Options>(
+export default createRulesetFunction<{ paths: Record<string, unknown>; security: unknown[] }, Options>(
   {
     input: {
       type: 'object',
       properties: {
         paths: {
           type: 'object',
+        },
+        security: {
+          type: 'array',
         },
       },
     },
@@ -50,6 +53,29 @@ export default createRulesetFunction<{ paths: Record<string, unknown> }, Options
     const schemes = _get(targetVal, schemesPath);
     const allDefs = isObject(schemes) ? Object.keys(schemes) : [];
 
+    // Check global security requirements
+
+    const { security } = targetVal;
+
+    if (Array.isArray(security)) {
+      for (const [index, value] of security.entries()) {
+        if (!isObject(value)) {
+          continue;
+        }
+
+        const securityKeys = Object.keys(value);
+
+        for (const securityKey of securityKeys) {
+          if (!allDefs.includes(securityKey)) {
+            results.push({
+              message: `API "security" values must match a scheme defined in the "${schemesPath.join('.')}" object.`,
+              path: ['security', index, securityKey],
+            });
+          }
+        }
+      }
+    }
+
     for (const { path, operation, value } of getAllOperations(paths)) {
       if (!isObject(value)) continue;
 
@@ -66,11 +92,15 @@ export default createRulesetFunction<{ paths: Record<string, unknown> }, Options
 
         const securityKeys = Object.keys(value);
 
-        if (securityKeys.length > 0 && !allDefs.includes(securityKeys[0])) {
-          results.push({
-            message: 'Operation must not reference an undefined security scheme.',
-            path: ['paths', path, operation, 'security', index],
-          });
+        for (const securityKey of securityKeys) {
+          if (!allDefs.includes(securityKey)) {
+            results.push({
+              message: `Operation "security" values must match a scheme defined in the "${schemesPath.join(
+                '.',
+              )}" object.`,
+              path: ['paths', path, operation, 'security', index, securityKey],
+            });
+          }
         }
       }
     }
