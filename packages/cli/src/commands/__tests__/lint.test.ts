@@ -1,12 +1,16 @@
 import * as yargs from 'yargs';
-import { noop } from 'lodash';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '@stoplight/spectral-core';
+import * as process from 'process';
+import { ErrorWithCause } from 'pony-cause';
+import AggregateError from 'es-aggregate-error';
 
 import { lint } from '../../services/linter';
 import { formatOutput, writeOutput } from '../../services/output';
 import lintCommand from '../lint';
+import chalk from 'chalk';
 
+jest.mock('process');
 jest.mock('../../services/output');
 jest.mock('../../services/linter');
 
@@ -24,9 +28,6 @@ function run(command: string) {
 }
 
 describe('lint', () => {
-  let errorSpy: jest.SpyInstance;
-  const { isTTY } = process.stdin;
-
   const results: IRuleResult[] = [
     {
       code: 'parser',
@@ -47,29 +48,26 @@ describe('lint', () => {
   ];
 
   beforeEach(() => {
-    (lint as jest.Mock).mockClear();
     (lint as jest.Mock).mockResolvedValueOnce(results);
-
-    (formatOutput as jest.Mock).mockClear();
     (formatOutput as jest.Mock).mockReturnValueOnce('<formatted output>');
-
-    (writeOutput as jest.Mock).mockClear();
     (writeOutput as jest.Mock).mockResolvedValueOnce(undefined);
-
-    errorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
   });
 
   afterEach(() => {
-    errorSpy.mockRestore();
-    process.stdin.isTTY = isTTY;
+    process.stdin.isTTY = true;
+    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('shows help when no document and no STDIN are present', () => {
-    process.stdin.isTTY = true;
     return expect(run('lint')).rejects.toContain('documents  Location of JSON/YAML documents');
   });
 
   describe('when STDIN is present', () => {
+    beforeEach(() => {
+      process.stdin.isTTY = false;
+    });
+
     it('does not show help when documents are missing', async () => {
       const output = await run('lint');
       expect(output).not.toContain('documents  Location of JSON/YAML documents');
@@ -150,35 +148,29 @@ describe('lint', () => {
 
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
     await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
-    await new Promise(resolve => void process.nextTick(resolve));
     expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
   });
 
   it('writes formatted output to a file', async () => {
     await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
-    await new Promise(resolve => void process.nextTick(resolve));
     expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
   });
 
   it('writes formatted output to multiple files when using format and output flags', async () => {
-    (formatOutput as jest.Mock).mockClear();
     (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
 
     await run(
       `lint --format html --format json --output.json foo.json --output.html foo.html ./__fixtures__/empty-oas2-document.json`,
     );
-    await new Promise(resolve => void process.nextTick(resolve));
     expect(writeOutput).toBeCalledTimes(2);
     expect(writeOutput).nthCalledWith(1, '<formatted output>', 'foo.html');
     expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
   });
 
   it('writes formatted output to multiple files and stdout when using format and output flags', async () => {
-    (formatOutput as jest.Mock).mockClear();
     (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
 
     await run(`lint --format html --format json --output.json foo.json ./__fixtures__/empty-oas2-document.json`);
-    await new Promise(resolve => void process.nextTick(resolve));
     expect(writeOutput).toBeCalledTimes(2);
     expect(writeOutput).nthCalledWith(1, '<formatted output>', '<stdout>');
     expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
@@ -216,8 +208,51 @@ describe('lint', () => {
     const error = new Error('Failure');
     (lint as jest.Mock).mockReset();
     (lint as jest.Mock).mockRejectedValueOnce(error);
-    await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
-    await new Promise(resolve => void process.nextTick(resolve));
-    expect(errorSpy).toBeCalledWith('Failure');
+    await run(`lint ./__fixtures__/empty-oas2-document.json`);
+    expect(process.stderr.write).nthCalledWith(1, chalk.red('Error running Spectral!\n'));
+    expect(process.stderr.write).nthCalledWith(2, chalk.red('Use --verbose flag to print the error stack.\n'));
+    expect(process.stderr.write).nthCalledWith(3, `Error #1: ${chalk.red('Failure')}\n`);
+  });
+
+  it('prints each error separately', async () => {
+    (lint as jest.Mock).mockReset();
+    (lint as jest.Mock).mockRejectedValueOnce(
+      new AggregateError([
+        new Error('some unhandled exception'),
+        new TypeError('another one'),
+        new ErrorWithCause('some error with cause', { cause: 'original exception' }),
+      ]),
+    );
+    await run(`lint ./__fixtures__/empty-oas2-document.json`);
+    expect(process.stderr.write).nthCalledWith(3, `Error #1: ${chalk.red('some unhandled exception')}\n`);
+    expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
+    expect(process.stderr.write).nthCalledWith(5, `Error #3: ${chalk.red('original exception')}\n`);
+  });
+
+  it('given verbose flag, prints each error together with their stacks', async () => {
+    (lint as jest.Mock).mockReset();
+    (lint as jest.Mock).mockRejectedValueOnce(
+      new AggregateError([
+        new Error('some unhandled exception'),
+        new TypeError('another one'),
+        new ErrorWithCause('some error with cause', { cause: 'original exception' }),
+      ]),
+    );
+
+    await run(`lint --verbose ./__fixtures__/empty-oas2-document.json`);
+
+    expect(process.stderr.write).nthCalledWith(2, `Error #1: ${chalk.red('some unhandled exception')}\n`);
+    expect(process.stderr.write).nthCalledWith(
+      3,
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:236`),
+    );
+
+    expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
+    expect(process.stderr.write).nthCalledWith(
+      5,
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:237`),
+    );
+
+    expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);
   });
 });

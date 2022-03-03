@@ -5,6 +5,7 @@ import * as Parsers from '@stoplight/spectral-parsers';
 import { getRuleset, listFiles, segregateEntriesPerKind, readFileDescriptor } from './utils';
 import { getResolver } from './utils/getResolver';
 import { ILintConfig } from '../config';
+import { CLIError } from '../../errors';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
   const spectral = new Spectral({
@@ -25,7 +26,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
 
   if (unmatchedPatterns.length > 0) {
     if (flags.failOnUnmatchedGlobs) {
-      throw new Error(`Unmatched glob patterns: \`${unmatchedPatterns.join(',')}\``);
+      throw new CLIError(`Unmatched glob patterns: \`${unmatchedPatterns.join(',')}\``);
     }
 
     for (const unmatchedPattern of unmatchedPatterns) {

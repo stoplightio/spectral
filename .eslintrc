@@ -84,10 +84,12 @@
 
     {
       "files": [
-        "src/**/__tests__/**/*.jest.test.{ts,js}"
+        "src/**/__tests__/**/*.jest.test.{ts,js}",
+        "__mocks__/**/*.{ts,js}"
       ],
       "env": {
-        "jest": true
+        "jest": true,
+        "node": true
       }
     },
 

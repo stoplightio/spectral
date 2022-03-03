@@ -1,11 +1,14 @@
 import { join, resolve } from '@stoplight/path';
 import nock from 'nock';
 import * as yargs from 'yargs';
-import lintCommand from '../../commands/lint';
-import { lint } from '../linter';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RulesetValidationError } from '@stoplight/spectral-core';
+import * as process from 'process';
 
+import lintCommand from '../../commands/lint';
+import { lint } from '../linter';
+
+jest.mock('process');
 jest.mock('../output');
 
 const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
@@ -29,25 +32,16 @@ async function run(command: string) {
 }
 
 describe('Linter service', () => {
-  let consoleLogSpy: jest.SpyInstance;
-  let consoleErrorSpy: jest.SpyInstance;
   let processCwdSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    const noop = () => {
-      /* no-op */
-    };
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(noop);
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
-
-    processCwdSpy = jest.spyOn(process, 'cwd').mockReturnValue(join(__dirname, '__fixtures__'));
+    (process.cwd as jest.Mock).mockReturnValue(join(__dirname, '__fixtures__'));
+    processCwdSpy = jest.spyOn(globalThis.process, 'cwd').mockImplementation(process.cwd);
   });
 
   afterEach(() => {
-    consoleLogSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
     processCwdSpy.mockRestore();
-
+    jest.clearAllMocks();
     nock.cleanAll();
   });
 
@@ -93,7 +87,7 @@ describe('Linter service', () => {
   });
 
   it('demands some ruleset to be present', () => {
-    processCwdSpy.mockReturnValue(join(__dirname, '__fixtures__/resolver'));
+    (process.cwd as jest.Mock).mockReturnValue(join(__dirname, '__fixtures__/resolver'));
     return expect(run(`lint stoplight-info-document.json`)).rejects.toThrow(
       'No ruleset has been found. Please provide a ruleset using the --ruleset CLI argument, or make sure your ruleset file matches .?spectral.(js|ya?ml|json)',
     );

@@ -40,7 +40,7 @@ module.exports = (config: Config): void => {
             'nimma/legacy': require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
             'node-fetch': require.resolve('./__karma__/fetch'),
             fs: require.resolve('./__karma__/fs'),
-            process: require.resolve('./__karma__/process'),
+            process: require.resolve('./__mocks__/process'),
             perf_hooks: require.resolve('./__karma__/perf_hooks'),
             fsevents: require.resolve('./__karma__/fsevents'),
           },

@@ -22,7 +22,7 @@
     "target": "ES2019",
     "module": "CommonJS",
     "esModuleInterop": true,
-    "lib": ["es2020"],
+    "lib": ["es2021"],
     "strict": true,
     "pretty": true,
     "experimentalDecorators": true,
