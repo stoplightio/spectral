@@ -17,7 +17,7 @@ module.exports = (config: Config): void => {
     files: ['./__karma__/jest.ts', 'packages/*/src/**/*.ts'],
 
     // list of files / patterns to exclude
-    exclude: ['packages/cli/**', '**/*.jest.test.ts'],
+    exclude: ['packages/cli/**', 'packages/ruleset-bundler/src/plugins/commonjs.ts', '**/*.jest.test.ts'],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -41,6 +41,7 @@ module.exports = (config: Config): void => {
             'node-fetch': require.resolve('./__karma__/fetch'),
             fs: require.resolve('./__karma__/fs'),
             process: require.resolve('./__karma__/process'),
+            perf_hooks: require.resolve('./__karma__/perf_hooks'),
             fsevents: require.resolve('./__karma__/fsevents'),
           },
         },
