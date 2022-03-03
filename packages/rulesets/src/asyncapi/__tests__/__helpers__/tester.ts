@@ -1,3 +1,3 @@
-import testRule from '../../../__tests__/__helpers__/tester';
+import testRule, { createWithRules } from '../../../__tests__/__helpers__/tester';
 
-export { testRule as default };
+export { testRule as default, createWithRules };

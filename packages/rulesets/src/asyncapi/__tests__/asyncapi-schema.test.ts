@@ -14,7 +14,6 @@ testRule('asyncapi-schema', [
     },
     errors: [],
   },
-
   {
     name: 'channels property is missing',
     document: {
@@ -24,8 +23,6 @@ testRule('asyncapi-schema', [
         version: '1.0',
       },
     },
-    errors: [
-      { message: 'Object must have required property "channels"', path: [], severity: DiagnosticSeverity.Error },
-    ],
+    errors: [{ message: 'Object must have required property "channels"', severity: DiagnosticSeverity.Error }],
   },
 ]);

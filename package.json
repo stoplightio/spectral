@@ -30,7 +30,7 @@
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
-    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/rulesets/src/{asyncapi,oas}/schemas/*.json packages/*/CHANGELOG.md docs/**/*.md README.md",
+    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/meta/*.json packages/rulesets/src/{asyncapi,oas}/schemas/*.json docs/**/*.md README.md",
     "pretest": "yarn workspace @stoplight/spectral-ruleset-migrator pretest",
     "test": "yarn pretest && yarn test.karma && yarn test.jest",
     "test.harness": "jest -c ./test-harness/jest.config.js",
@@ -38,7 +38,7 @@
     "test.karma": "karma start",
     "prepare": "husky install",
     "prerelease": "patch-package",
-    "release": "yarn prerelease && HUSKY=0 yarn workspaces foreach run release"
+    "release": "yarn prerelease && yarn workspaces foreach run release"
   },
   "workspaces": {
     "packages": [
@@ -100,7 +100,7 @@
     "node-powershell": "^4.0.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "semantic-release": "^19.0.2",
+    "semantic-release": "^18.0.1",
     "semantic-release-monorepo": "^7.0.5",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
@@ -109,9 +109,6 @@
   "lint-staged": {
     "*.{ts,js}": [
       "eslint --fix --cache --cache-location .cache/.eslintcache"
-    ],
-    "packages/*/CHANGELOG.md": [
-      "prettier --write"
     ],
     "docs/**/*.md": [
       "prettier --ignore-path .eslintignore --write"

@@ -1,2 +1,4 @@
-export { default as oas } from './oas';
-export { default as asyncapi } from './asyncapi';
+import { default as oas } from './oas';
+import { default as asyncapi } from './asyncapi';
+
+export { oas, asyncapi };

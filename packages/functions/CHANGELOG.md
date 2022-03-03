@@ -1,3 +1,10 @@
+# [@stoplight/spectral-functions-v1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.5.1...@stoplight/spectral-functions-v1.5.2) (2022-02-28)
+
+
+### Bug Fixes
+
+* **functions:** __importDefault undefined ([609ecb1](https://github.com/stoplightio/spectral/commit/609ecb1b23f354459f96687f27f911e915cb6ab3))
+
 # [@stoplight/spectral-functions-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.5.0...@stoplight/spectral-functions-v1.5.1) (2021-12-29)
 
 ### Bug Fixes
