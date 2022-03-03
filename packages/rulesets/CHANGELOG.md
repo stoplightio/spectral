@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.5.2...@stoplight/spectral-rulesets-v1.6.0) (2022-03-03)
+
+
+### Features
+
+* **rulesets:** validate API security in oas-operation-security-defined ([#2046](https://github.com/stoplightio/spectral/issues/2046)) ([5540250](https://github.com/stoplightio/spectral/commit/5540250035f0df290eb0cb0106606a2918471ec5))
+
 # [@stoplight/spectral-rulesets-v1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.5.1...@stoplight/spectral-rulesets-v1.5.2) (2022-02-28)
 
 
