@@ -8,20 +8,7 @@ import * as process from 'process';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';
 
-jest.mock('process', () => ({
-  exit: jest.fn(),
-  cwd: jest.fn(),
-  stdin: {
-    fd: 0,
-    isTTY: true,
-  },
-  stdout: {
-    write: jest.fn(),
-  },
-  stderr: {
-    write: jest.fn(),
-  },
-}));
+jest.mock('process');
 jest.mock('../output');
 
 const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');

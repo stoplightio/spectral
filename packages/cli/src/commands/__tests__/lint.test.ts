@@ -10,19 +10,7 @@ import { formatOutput, writeOutput } from '../../services/output';
 import lintCommand from '../lint';
 import chalk from 'chalk';
 
-jest.mock('process', () => ({
-  exit: jest.fn(),
-  stdin: {
-    fd: 0,
-    isTTY: true,
-  },
-  stdout: {
-    write: jest.fn(),
-  },
-  stderr: {
-    write: jest.fn(),
-  },
-}));
+jest.mock('process');
 jest.mock('../../services/output');
 jest.mock('../../services/linter');
 
@@ -256,13 +244,13 @@ describe('lint', () => {
     expect(process.stderr.write).nthCalledWith(2, `Error #1: ${chalk.red('some unhandled exception')}\n`);
     expect(process.stderr.write).nthCalledWith(
       3,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:248`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:236`),
     );
 
     expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
     expect(process.stderr.write).nthCalledWith(
       5,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:249`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:237`),
     );
 
     expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);
