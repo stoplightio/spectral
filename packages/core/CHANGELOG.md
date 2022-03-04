@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.10.2...@stoplight/spectral-core-v1.11.0) (2022-03-03)
+
+
+### Features
+
+* **cli:** improve error logging ([#2071](https://github.com/stoplightio/spectral/issues/2071)) ([b194368](https://github.com/stoplightio/spectral/commit/b194368164d92dce31b7ceba84ccc94fbe51f979))
+
 # [@stoplight/spectral-core-v1.10.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.10.1...@stoplight/spectral-core-v1.10.2) (2022-02-24)
 
 ### Bug Fixes
