@@ -12,11 +12,7 @@ jest.mock('fs', () => ({
     writeFile: jest.fn().mockResolvedValue(void 0),
   },
 }));
-jest.mock('process', () => ({
-  stdout: {
-    write: jest.fn(),
-  },
-}));
+jest.mock('process');
 
 describe('Output service', () => {
   describe('formatOutput', () => {

@@ -1,3 +1,10 @@
+# [@stoplight/spectral-cli-v6.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.2.1...@stoplight/spectral-cli-v6.3.0) (2022-03-03)
+
+
+### Features
+
+* **cli:** improve error logging ([#2071](https://github.com/stoplightio/spectral/issues/2071)) ([b194368](https://github.com/stoplightio/spectral/commit/b194368164d92dce31b7ceba84ccc94fbe51f979))
+
 # [@stoplight/spectral-cli-v6.2.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.2.0...@stoplight/spectral-cli-v6.2.1) (2022-02-08)
 
 ### Bug Fixes

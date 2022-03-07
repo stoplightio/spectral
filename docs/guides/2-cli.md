@@ -1,9 +1,15 @@
 # Spectral CLI
 
-[Once installed](../getting-started/2-installation.md), Spectral can be run via the command-line:
+[Once Spectral is installed](../getting-started/2-installation.md) and [you have a ruleset](../../README.md#installation-and-usage), run Spectral via the command-line:
 
 ```bash
 spectral lint petstore.yaml
+```
+
+Use this command to lint with a custom ruleset or one that is located in a different directory than your API document:
+
+```bash
+spectral lint petstore.yaml --ruleset myruleset.json
 ```
 
 You can lint multiple files at the same time by passing on multiple arguments:

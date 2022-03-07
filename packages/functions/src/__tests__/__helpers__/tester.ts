@@ -38,18 +38,27 @@ export default async function <O = unknown>(
         path: error.path,
         message: error.message,
       }));
-  } catch (e: unknown) {
-    if (
-      e instanceof Error &&
-      Array.isArray((e as Error & { errors?: unknown }).errors) &&
-      (e as Error & { errors: unknown[] }).errors.length === 1
-    ) {
-      const actualError = (e as Error & { errors: [unknown] }).errors[0];
-      throw actualError instanceof Error && 'cause' in (actualError as Error & { cause?: unknown })
-        ? (actualError as Error & { cause: unknown }).cause
-        : actualError;
+  } catch (error: unknown) {
+    if (!(error instanceof Error)) {
+      throw error;
+    }
+
+    const errors = Array.isArray((error as Error & { errors?: unknown }).errors)
+      ? (error as Error & { errors: unknown[] }).errors
+      : [error];
+
+    if (errors.length === 1) {
+      throw getCause(errors[0]);
     } else {
-      throw e;
+      throw error;
     }
   }
+}
+
+function getCause(error: unknown): unknown {
+  if (error instanceof Error && 'cause' in (error as Error & { cause?: unknown })) {
+    return getCause((error as Error & { cause?: unknown }).cause);
+  }
+
+  return error;
 }

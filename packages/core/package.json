@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -50,7 +50,8 @@
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
     "minimatch": "3.0.4",
-    "nimma": "0.1.7",
+    "nimma": "0.1.8",
+    "pony-cause": "^1.0.0",
     "simple-eval": "1.0.0",
     "tslib": "^2.3.0"
   },

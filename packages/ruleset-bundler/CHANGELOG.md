@@ -1,3 +1,24 @@
+# [@stoplight/spectral-ruleset-bundler-v1.2.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.2.0...@stoplight/spectral-ruleset-bundler-v1.2.1) (2022-02-28)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** __importDefault undefined ([874a80e](https://github.com/stoplightio/spectral/commit/874a80e9d8e36d96bfbb467e340aab337227bfa7))
+
+# [@stoplight/spectral-ruleset-bundler-v1.2.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.1.1...@stoplight/spectral-ruleset-bundler-v1.2.0) (2022-02-25)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** builtins plugin should create a new instance for each module ([b06903c](https://github.com/stoplightio/spectral/commit/b06903ce71f556809b06a21ce3a299625b3760e0))
+* **ruleset-bundler:** virtualFs plugin incompatible with commonjs plugin ([a48381b](https://github.com/stoplightio/spectral/commit/a48381bdf86c7c9015dd67daa8bda767ea727376))
+
+
+### Features
+
+* **ruleset-bundler:** expose commonjs plugin ([91a4b80](https://github.com/stoplightio/spectral/commit/91a4b807dc1e9b7ed700b6645eff711cfa1d5bef))
+* **ruleset-bundler:** plugins should be easy to override ([0263bf0](https://github.com/stoplightio/spectral/commit/0263bf0234b11d6bb17b7b7feef6ba5716cc8f01))
+
 # [@stoplight/spectral-ruleset-bundler-v1.1.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.1.0...@stoplight/spectral-ruleset-bundler-v1.1.1) (2021-12-30)
 
 ### Bug Fixes

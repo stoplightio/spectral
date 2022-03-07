@@ -66,7 +66,7 @@ Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md)
 extends:
   - ./config/spectral.json
   - https://example.org/api/style.yaml
-  - some-npm-module
+  - some-npm-module # note that this would be treated as any other npm package, therefore it has to be placed under node_modules and have a valid package.json.
 ```
 
 The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
