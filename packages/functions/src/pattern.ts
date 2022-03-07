@@ -27,6 +27,7 @@ const cache = new Map<string, RegExp>();
 function getFromCache(pattern: string): RegExp {
   const existingPattern = cache.get(pattern);
   if (existingPattern !== void 0) {
+    existingPattern.lastIndex = 0;
     return existingPattern;
   }
 

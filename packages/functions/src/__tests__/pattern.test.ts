@@ -18,6 +18,12 @@ describe('Core Functions / Pattern', () => {
       expect(await runPattern('aBc', { match: '/[abc]+/im' })).toEqual([]);
     });
 
+    it('should return same results when given a global (g) marker (pattern cache usecase)', async () => {
+      expect(await runPattern('abc', { match: '/[abc]+/gi' })).toEqual([]);
+      expect(await runPattern('abc', { match: '/[abc]+/gi' })).toEqual([]);
+      expect(await runPattern('abc', { match: '/[abc]+/gi' })).toEqual([]);
+    });
+
     it('given string regex containing invalid flags, should throw an exception', async () => {
       await expect(runPattern('aBc', { match: '/[abc]+/invalid' })).rejects.toThrow(
         "Invalid flags supplied to RegExp constructor 'invalid'",
