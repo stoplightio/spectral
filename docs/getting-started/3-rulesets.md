@@ -75,7 +75,11 @@ The `extends` keyword can be combined with extra rules in order to extend and ov
 
 Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these formats:
 
-- `asyncapi2` (AsyncAPI v2.0)
+- `aas2` (AsyncAPI v2.x)
+- `aas2_0` (AsyncAPI v2.0.0)
+- `aas2_1` (AsyncAPI v2.1.0)
+- `aas2_2` (AsyncAPI v2.2.0)
+- `aas2_3` (AsyncAPI v2.3.0)
 - `oas2` (OpenAPI v2.0)
 - `oas3` (OpenAPI v3.x)
 - `oas3.0` (OpenAPI v3.0.x)
