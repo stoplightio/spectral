@@ -3,7 +3,7 @@
 export interface Ruleset {
   aliases?: {
     [k: string]:
-      | string
+      | string[]
       | {
           description?: string;
           targets: [
@@ -42,7 +42,7 @@ export interface Ruleset {
                   | 'json-schema-2020-12'
                 )[]
               ];
-              given: string;
+              given: string[];
               [k: string]: unknown;
             },
             ...{
@@ -80,7 +80,7 @@ export interface Ruleset {
                   | 'json-schema-2020-12'
                 )[]
               ];
-              given: string;
+              given: string[];
               [k: string]: unknown;
             }[]
           ];
