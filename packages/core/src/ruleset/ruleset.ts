@@ -41,15 +41,14 @@ export type StringifiedRuleset = {
 
 export class Ruleset {
   public readonly id = SEED++;
-
-  protected readonly extends: Ruleset[] | null;
   public readonly formats = new FormatsSet();
   public readonly overrides: RulesetOverridesDefinition | null;
   public readonly aliases: RulesetAliasesDefinition | null;
   public readonly hasComplexAliases: boolean;
   public readonly rules: Record<string, Rule>;
   public readonly definition: RulesetDefinition;
-
+  public readonly shorthands: Record<string, string> | null;
+  protected readonly extends: Ruleset[] | null;
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
   constructor(readonly maybeDefinition: unknown, context?: RulesetContext) {
@@ -65,7 +64,6 @@ export class Ruleset {
     }
 
     this.definition = definition;
-
     this.#context = {
       severity: 'recommended',
       ...context,
@@ -149,10 +147,19 @@ export class Ruleset {
     }
 
     this.rules = this.#getRules();
+    this.shorthands = this.#getJsonPathShorthands();
   }
 
   get source(): string | null {
     return this.#context.source ?? null;
+  }
+
+  public get parserOptions(): ParserOptions {
+    return { ...DEFAULT_PARSER_OPTIONS, ...this.definition.parserOptions };
+  }
+
+  public static isDefaultRulesetFile(uri: string): boolean {
+    return DEFAULT_RULESET_FILE.test(uri);
   }
 
   public fromSource(source: string | null): Ruleset {
@@ -259,6 +266,40 @@ export class Ruleset {
     return ruleset;
   }
 
+  public toJSON(): Omit<StringifiedRuleset, 'extends' | 'rules'> & {
+    extends: Ruleset['extends'];
+    rules: Ruleset['rules'];
+  } {
+    return {
+      id: this.id,
+      extends: this.extends,
+      source: this.source,
+      aliases: this.aliases,
+      formats: this.formats.size === 0 ? null : this.formats,
+      rules: this.rules,
+      overrides: this.overrides,
+      parserOptions: this.parserOptions,
+    };
+  }
+
+  #getJsonPathShorthands(): Record<string, string> {
+    const shorthands = {};
+
+    if (this.extends !== null && this.extends.length > 0) {
+      for (const extendedRuleset of this.extends) {
+        if (extendedRuleset === this || extendedRuleset.shorthands === null) continue;
+        for (const [name, value] of Object.entries(extendedRuleset.shorthands)) {
+          shorthands[name] = value;
+        }
+      }
+    }
+
+    return {
+      ...this.definition.shorthands,
+      ...shorthands,
+    };
+  }
+
   #getRules(): Record<string, Rule> {
     const rules: Record<string, Rule> = {};
 
@@ -299,29 +340,5 @@ export class Ruleset {
     }
 
     return rules;
-  }
-
-  public get parserOptions(): ParserOptions {
-    return { ...DEFAULT_PARSER_OPTIONS, ...this.definition.parserOptions };
-  }
-
-  public static isDefaultRulesetFile(uri: string): boolean {
-    return DEFAULT_RULESET_FILE.test(uri);
-  }
-
-  public toJSON(): Omit<StringifiedRuleset, 'extends' | 'rules'> & {
-    extends: Ruleset['extends'];
-    rules: Ruleset['rules'];
-  } {
-    return {
-      id: this.id,
-      extends: this.extends,
-      source: this.source,
-      aliases: this.aliases,
-      formats: this.formats.size === 0 ? null : this.formats,
-      rules: this.rules,
-      overrides: this.overrides,
-      parserOptions: this.parserOptions,
-    };
   }
 }

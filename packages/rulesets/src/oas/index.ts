@@ -28,6 +28,26 @@ import {
 
 export { ruleset as default };
 
+const shorthands: Record<string, string> = {
+  schema: [
+    ...[
+      'not',
+      'if',
+      'then',
+      'else',
+      'unevaluatedProperties',
+      'additionalProperties',
+      'propertyNames',
+      'items',
+      'unevaluatedItems',
+    ].map(k => `scope.path[scope.path.length - 1] === '${k}'`),
+    ...['prefixItems', 'items', 'allOf', 'oneOf', 'anyOf'].map(
+      k => `scope.path[scope.path.length - 2] === '${k}' && Number.isInteger(scope.path[scope.path.length - 1])`,
+    ),
+    ...['patternProperties', 'properties'].map(k => `scope.path[scope.path.length - 2] === '${k}'`),
+  ].join(' || '),
+};
+
 const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3, oas3_0, oas3_1],
@@ -39,7 +59,7 @@ const ruleset = {
         { formats: [oas3], given: ['$.components.responses', '#OperationObject.responses'] },
       ],
     },
-    ResponseObject: '#ResponsesObject[*]', // [(@ && !@.$ref)]
+    ResponseObject: ['#ResponsesObject[*]'], // [(@ && !@.$ref)]
     ParametersDefinitionsObject: {
       targets: [
         { formats: [oas2], given: ['$.parameters'] },
@@ -64,7 +84,7 @@ const ruleset = {
         },
       ],
     },
-    EncodingObject: '#MediaTypeObject.encoding',
+    EncodingObject: ['#MediaTypeObject.encoding'],
     MediaTypeObject: ['#RequestBodyObject.content', '#ParameterObject.content', '#ResponseObject.content'],
     HeadersObject: {
       targets: [
@@ -86,8 +106,34 @@ const ruleset = {
     },
     RequestBodyObject: ['#OperationObject.requestBody', '$.components.requestBodies[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
-    SchemaObject: ['#MediaTypeObject.schema', '#ParameterObject.schema', '$.components.schemas[*]'],
+    SchemaObject: {
+      targets: [
+        {
+          formats: [oas2],
+          given: [
+            '#MediaTypeObject.schema',
+            '#MediaTypeObject.schema..@@schema()',
+            '#ParameterObject.schema',
+            '#ParameterObject.schema..@@schema()',
+            '$.definitions[*]',
+            '$.definitions[*]..@@schema()',
+          ],
+        },
+        {
+          formats: [oas3],
+          given: [
+            '#MediaTypeObject.schema',
+            '#MediaTypeObject.schema..@@schema()',
+            '#ParameterObject.schema',
+            '#ParameterObject.schema..@@schema()',
+            '$.components.schemas[*]',
+            '$.components.schemas[*]..@@schema()',
+          ],
+        },
+      ],
+    },
   },
+  shorthands,
   rules: {
     'operation-success-response': {
       description: 'Operation must have at least one "2xx" or "3xx" response.',
@@ -176,7 +222,7 @@ const ruleset = {
       severity: 'warn',
       recommended: true,
       message: '{{error}}',
-      given: ["#SchemaObject"],
+      given: ['#SchemaObject'],
       then: {
         field: 'enum',
         function: oasSchema,
@@ -521,7 +567,11 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       type: 'validation',
-      given: ['#SchemaObject..[?(@ && @.example)]'],
+      given: [
+        "$..definitions..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..responses..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+      ],
       then: {
         function: oasExample,
         functionOptions: {
@@ -538,7 +588,7 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       type: 'validation',
-      given: '#MediaTypeObject',
+      given: '$..responses..[?(@ && @.schema && @.examples)]',
       then: {
         function: oasExample,
         functionOptions: {
@@ -694,7 +744,11 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       type: 'validation',
-      given: '#MediaTypeObject',
+      given: [
+        '$..content..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..headers..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..parameters..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+      ],
       then: {
         function: oasExample,
         functionOptions: {
@@ -711,7 +765,12 @@ const ruleset = {
       formats: [oas3],
       recommended: true,
       type: 'validation',
-      given: ['#SchemaObject', '#SchemaObject..[?(@ && @.example)]'],
+      given: [
+        "$.components.schemas..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..content..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..headers..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+      ],
       then: {
         function: oasExample,
         functionOptions: {

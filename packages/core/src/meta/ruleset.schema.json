@@ -19,6 +19,7 @@
     "formats": {
       "$ref": "shared#formats"
     },
+    "shorthands": true,
     "extends": {
       "oneOf": [
         {

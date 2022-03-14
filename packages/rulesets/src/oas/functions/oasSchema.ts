@@ -33,6 +33,8 @@ export default createRulesetFunction<unknown, Options>(
     },
   },
   function oasSchema(targetVal, opts, context) {
+    if (targetVal === void 0) return;
+
     const formats = context.document.formats;
 
     let { schema } = opts;
