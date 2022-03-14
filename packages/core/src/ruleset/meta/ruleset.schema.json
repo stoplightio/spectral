@@ -27,6 +27,7 @@
     "formats": {
       "$ref": "shared#formats"
     },
+    "shorthands": true,
     "extends": {
       "$ref": "extensions#extends"
     },

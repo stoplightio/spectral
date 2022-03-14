@@ -29,6 +29,26 @@ import { uniquenessTags } from '../shared/functions';
 
 export { ruleset as default };
 
+const shorthands: Record<string, string> = {
+  schema: [
+    ...[
+      'not',
+      'if',
+      'then',
+      'else',
+      'unevaluatedProperties',
+      'additionalProperties',
+      'propertyNames',
+      'items',
+      'unevaluatedItems',
+    ].map(k => `scope.path[scope.path.length - 1] === '${k}'`),
+    ...['prefixItems', 'items', 'allOf', 'oneOf', 'anyOf'].map(
+      k => `scope.path[scope.path.length - 2] === '${k}' && Number.isInteger(scope.path[scope.path.length - 1])`,
+    ),
+    ...['patternProperties', 'properties'].map(k => `scope.path[scope.path.length - 2] === '${k}'`),
+  ].join(' || '),
+};
+
 const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
   formats: [oas2, oas3, oas3_0, oas3_1],
@@ -40,7 +60,11 @@ const ruleset = {
         { formats: [oas3], given: ['$.components.responses', '#OperationObject.responses'] },
       ],
     },
-    ResponseObject: '#ResponsesObject[*]', // [(@ && !@.$ref)]
+<<<<<<< Updated upstream
+    ResponseObject: ['#ResponsesObject[*]'], // [(@ && !@.$ref)]
+=======
+    ResponseObject: ['#ResponsesObject[*]'],
+>>>>>>> Stashed changes
     ParametersDefinitionsObject: {
       targets: [
         { formats: [oas2], given: ['$.parameters'] },
@@ -58,14 +82,21 @@ const ruleset = {
     },
     ParameterObject: {
       targets: [
+<<<<<<< Updated upstream
         { formats: [oas2], given: ['#ParametersDefinitionsObject[*]', '#ParametersObject[*]'] }, // ?(@ && !@.$ref)
         {
           formats: [oas3],
           given: ['#ParametersDefinitionsObject[*]', '#ParametersObject[*]'], // [?(@ && !@.$ref)]
+=======
+        { formats: [oas2], given: ['#ParametersDefinitionsObject[*]', '#ParametersObject[*]'] },
+        {
+          formats: [oas3],
+          given: ['#ParametersDefinitionsObject[*]', '#ParametersObject[*]'],
+>>>>>>> Stashed changes
         },
       ],
     },
-    EncodingObject: '#MediaTypeObject.encoding',
+    EncodingObject: ['#MediaTypeObject.encoding'],
     MediaTypeObject: ['#RequestBodyObject.content', '#ParameterObject.content', '#ResponseObject.content'],
     HeadersObject: {
       targets: [
@@ -81,14 +112,44 @@ const ruleset = {
         { formats: [oas2], given: ['#ResponseObject.headers[*]'] },
         {
           formats: [oas3],
+<<<<<<< Updated upstream
           given: ['#HeadersObject[*]'], // ?(@ && !$.ref)
+=======
+          given: ['#HeadersObject[*]'],
+>>>>>>> Stashed changes
         },
       ],
     },
     RequestBodyObject: ['#OperationObject.requestBody', '$.components.requestBodies[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
-    SchemaObject: ['#MediaTypeObject.schema', '#ParameterObject.schema', '$.components.schemas[*]'],
+    SchemaObject: {
+      targets: [
+        {
+          formats: [oas2],
+          given: [
+            '#MediaTypeObject.schema',
+            '#MediaTypeObject.schema..@@schema()',
+            '#ParameterObject.schema',
+            '#ParameterObject.schema..@@schema()',
+            '$.definitions[*]',
+            '$.definitions[*]..@@schema()',
+          ],
+        },
+        {
+          formats: [oas3],
+          given: [
+            '#MediaTypeObject.schema',
+            '#MediaTypeObject.schema..@@schema()',
+            '#ParameterObject.schema',
+            '#ParameterObject.schema..@@schema()',
+            '$.components.schemas[*]',
+            '$.components.schemas[*]..@@schema()',
+          ],
+        },
+      ],
+    },
   },
+  shorthands,
   rules: {
     'operation-success-response': {
       description: 'Operation must have at least one "2xx" or "3xx" response.',
@@ -126,8 +187,9 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       type: 'validation',
-      given: '#OperationObject.parameters',
+      given: '#OperationObject',
       then: {
+        field: 'parameters',
         function: oasOpParams,
       },
     },
@@ -177,7 +239,7 @@ const ruleset = {
       severity: 'warn',
       recommended: true,
       message: '{{error}}',
-      given: ["#SchemaObject"],
+      given: ['#SchemaObject'],
       then: {
         field: 'enum',
         function: oasSchema,
@@ -237,7 +299,7 @@ const ruleset = {
       then: {
         function: pattern,
         functionOptions: {
-          notMatch: 'eval\\(',
+          notMatch: /eval\(/,
         },
       },
     },
@@ -257,9 +319,8 @@ const ruleset = {
       description: 'OpenAPI object must have alphabetical "tags".',
       recommended: false,
       type: 'style',
-      given: '$',
+      given: '$.tags',
       then: {
-        field: 'tags',
         function: alphabetical,
         functionOptions: {
           keyedBy: 'name',
@@ -424,7 +485,7 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       type: 'validation',
-      given: '$..[?(@ && @.enum && @.type)]',
+      given: '#SchemaObject',
       then: {
         function: typedEnum,
       },
@@ -533,7 +594,11 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       type: 'validation',
-      given: ['#SchemaObject..[?(@ && @.example)]'],
+      given: [
+        "$..definitions..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..responses..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+      ],
       then: {
         function: oasExample,
         functionOptions: {
@@ -550,7 +615,7 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       type: 'validation',
-      given: '#MediaTypeObject',
+      given: '$..responses..[?(@ && @.schema && @.examples)]',
       then: {
         function: oasExample,
         functionOptions: {
@@ -566,8 +631,9 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       type: 'validation',
-      given: '$..anyOf',
+      given: '#SchemaObject',
       then: {
+        field: 'anyOf',
         function: undefined,
       },
     },
@@ -577,8 +643,9 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       type: 'validation',
-      given: '$..oneOf',
+      given: '#SchemaObject',
       then: {
+        field: 'oneOf',
         function: undefined,
       },
     },
@@ -706,7 +773,11 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       type: 'validation',
-      given: '#MediaTypeObject',
+      given: [
+        '$..content..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..headers..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..parameters..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+      ],
       then: {
         function: oasExample,
         functionOptions: {
@@ -723,7 +794,7 @@ const ruleset = {
       formats: [oas3],
       recommended: true,
       type: 'validation',
-      given: ['#SchemaObject', '#SchemaObject..[?(@ && @.example)]'],
+      given: ['#SchemaObject'],
       then: {
         function: oasExample,
         functionOptions: {

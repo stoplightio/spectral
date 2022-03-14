@@ -50,7 +50,7 @@ export class Ruleset {
   public readonly hasComplexAliases: boolean;
   public readonly rules: Record<string, Rule>;
   public readonly definition: RulesetDefinition;
-
+  public readonly shorthands: Record<string, string> | null;
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
   constructor(readonly maybeDefinition: unknown, context?: RulesetContext) {
@@ -150,6 +150,7 @@ export class Ruleset {
     }
 
     this.rules = this.#getRules();
+    this.shorthands = this.#getJsonPathShorthands();
   }
 
   get source(): string | null {
@@ -258,6 +259,24 @@ export class Ruleset {
     }
 
     return ruleset;
+  }
+
+  #getJsonPathShorthands(): Record<string, string> {
+    const shorthands = {};
+
+    if (this.extends !== null && this.extends.length > 0) {
+      for (const extendedRuleset of this.extends) {
+        if (extendedRuleset === this || extendedRuleset.shorthands === null) continue;
+        for (const [name, value] of Object.entries(extendedRuleset.shorthands)) {
+          shorthands[name] = value;
+        }
+      }
+    }
+
+    return {
+      ...this.definition.shorthands,
+      ...shorthands,
+    };
   }
 
   #getRules(): Record<string, Rule> {

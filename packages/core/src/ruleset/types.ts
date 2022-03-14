@@ -96,6 +96,11 @@ export type RulesetDefinition = Readonly<
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;
     aliases?: RulesetAliasesDefinition;
+<<<<<<< Updated upstream
+    shorthands?: Record<string, string>;
+=======
+    shorthands?: Record<string, any>;
+>>>>>>> Stashed changes
   } & Readonly<
     | {
         overrides: RulesetOverridesDefinition;

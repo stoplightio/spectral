@@ -6,7 +6,7 @@ import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext } from './types';
 import { Ruleset } from '../ruleset/ruleset';
-import Nimma, { Callback } from 'nimma/legacy'; // legacy = Node v12, nimma without /legacy supports only 14+
+import Nimma, { Callback } from 'nimma';
 import { jsonPathPlus } from 'nimma/fallbacks';
 import { isPlainObject } from '@stoplight/json';
 
@@ -60,11 +60,16 @@ export class Runner {
     const unresolvedJsonPaths = Object.keys(callbacks.unresolved);
 
     if (resolvedJsonPaths.length > 0) {
-      execute(runnerContext.documentInventory.resolved, callbacks.resolved, resolvedJsonPaths);
+      execute(runnerContext.documentInventory.resolved, callbacks.resolved, resolvedJsonPaths, ruleset.shorthands);
     }
 
     if (unresolvedJsonPaths.length > 0) {
-      execute(runnerContext.documentInventory.unresolved, callbacks.unresolved, unresolvedJsonPaths);
+      execute(
+        runnerContext.documentInventory.unresolved,
+        callbacks.unresolved,
+        unresolvedJsonPaths,
+        ruleset.shorthands,
+      );
     }
 
     this.runtime.emit('beforeTeardown');
@@ -83,7 +88,12 @@ export class Runner {
   }
 }
 
-function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPathExpressions: string[]): void {
+function execute(
+  input: unknown,
+  callbacks: Record<string, Callback[]>,
+  jsonPathExpressions: string[],
+  customShorthands: Record<string, string> | null,
+): void {
   if (!isPlainObject(input) && !Array.isArray(input)) {
     for (const cb of callbacks.$ ?? []) {
       cb({
@@ -96,10 +106,10 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
   }
 
   const nimma = new Nimma(jsonPathExpressions, {
+    customShorthands,
     fallback: jsonPathPlus,
     unsafe: false,
     output: 'auto',
-    customShorthands: {},
   });
 
   nimma.query(

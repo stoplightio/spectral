@@ -44,6 +44,7 @@ export function createWithRules(rules: (keyof Ruleset['rules'])[]): Spectral {
       [aasRuleset as RulesetDefinition, 'off'],
       [oasRuleset as RulesetDefinition, 'off'],
     ],
+    shorthands: oasRuleset.shorthands,
     rules: rules.reduce((obj, name) => {
       obj[name] = true;
       return obj;

@@ -25,7 +25,7 @@ export function mergeRulesets(left: MergeableRuleset, right: MergeableRuleset, i
     ...right,
   };
 
-  if ('extends' in ruleset && 'extends' in ruleset) {
+  if ('extends' in ruleset) {
     const rightExtensions = getExtensions(ruleset.extends);
     (ruleset as Omit<RulesetDefinition, 'extends'> & { extends: RulesetExtendsDefinition }).extends = [
       ...(Array.isArray(ruleset.extends) ? ruleset.extends : [ruleset.extends]).filter(
