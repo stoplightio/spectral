@@ -6,11 +6,11 @@ module.exports = {
       targets: [
         {
           formats: [oas2],
-          given: '$.definitions[*]',
+          given: ['$.definitions[*]'],
         },
         {
           formats: [oas3_0, oas3_1],
-          given: '$.components.schemas[*]',
+          given: ['$.components.schemas[*]'],
         },
       ],
     },
