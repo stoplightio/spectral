@@ -1,3 +1,4 @@
+import { CustomDiagnosticSeverity, CUSTOM_SEVERITY_COLORS } from '@iso20022/custom-rulesets';
 import { DiagnosticSeverity } from '@stoplight/types';
 
 const SEVERITY_COLORS = {
@@ -7,6 +8,11 @@ const SEVERITY_COLORS = {
   [DiagnosticSeverity.Hint]: 'white',
 };
 
-export function getColorForSeverity(severity: DiagnosticSeverity): string {
-  return SEVERITY_COLORS[severity];
+const EXTENDED_SEVERITY_COLORS = {
+  ...SEVERITY_COLORS,
+  ...CUSTOM_SEVERITY_COLORS,
+};
+
+export function getColorForSeverity(severity: DiagnosticSeverity | CustomDiagnosticSeverity): string {
+  return EXTENDED_SEVERITY_COLORS[severity];
 }

@@ -6,6 +6,7 @@ export type MessageVars = {
   property: Segment;
   error: string;
   description: string | null;
+  reference: string | null;
   value: unknown;
   path: string;
 };

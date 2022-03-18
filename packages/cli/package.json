@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/stoplightio/spectral.git"
+    "url": "https://github.com/pablonxt/spectral.git"
   },
   "scripts": {
     "build.binary": "pkg . --output ./binaries/spectral",
@@ -33,6 +33,7 @@
     "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
+    "@iso20022/custom-rulesets": "../iso20022",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@stoplight/json": "3.17.0",
     "@stoplight/path": "1.3.2",

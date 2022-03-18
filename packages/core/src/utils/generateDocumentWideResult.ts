@@ -1,17 +1,18 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { IDocument } from '../document';
-import { Document } from '../document';
+import { Document, IDocument } from '../document';
 import { IRuleResult } from '../types/spectral';
 
 export const generateDocumentWideResult = (
   document: IDocument,
   message: string,
+  reference: string,
   severity: DiagnosticSeverity,
   code: string | number,
 ): IRuleResult => {
   return {
     range: document.getRangeForJsonPath([], true) ?? Document.DEFAULT_RANGE,
     message,
+    reference,
     code,
     severity,
     ...(document.source !== null ? { source: document.source } : null),

@@ -1,19 +1,18 @@
 import { stringify } from '@stoplight/json';
-import { DiagnosticSeverity } from '@stoplight/types';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-resolver';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { memoize } from 'lodash';
-
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
+import { getDiagnosticSeverity } from './ruleset';
+import { Format } from './ruleset/format';
+import { Ruleset } from './ruleset/ruleset';
+import { ParserOptions, RulesetDefinition } from './ruleset/types';
 import { Runner, RunnerRuntime } from './runner';
 import { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
-import { Ruleset } from './ruleset/ruleset';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
-import { ParserOptions, RulesetDefinition } from './ruleset/types';
-import { Format } from './ruleset/format';
-import { getDiagnosticSeverity } from './ruleset';
 
 memoize.Cache = WeakMap;
 
@@ -107,6 +106,7 @@ export class Spectral {
       `The provided document does not match any of the registered formats [${formats
         .map(fn => fn.displayName ?? fn.name)
         .join(', ')}]`,
+      '',
       DiagnosticSeverity.Warning,
       'unrecognized-format',
     );

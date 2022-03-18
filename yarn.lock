@@ -1468,6 +1468,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iso20022/custom-rulesets@file:../iso20022::locator=%40stoplight%2Fspectral-cli%40workspace%3Apackages%2Fcli":
+  version: 1.0.0
+  resolution: "@iso20022/custom-rulesets@file:../iso20022#../iso20022::hash=1a5606&locator=%40stoplight%2Fspectral-cli%40workspace%3Apackages%2Fcli"
+  checksum: 8a5f293490b2a721db0f19ec7442029a2efb159f68eed81f6789d1e32766f21385905d9691c0685dda5336d14ace0c3c45bdeb6a70ea03e0bfe365b575477ba3
+  languageName: node
+  linkType: hard
+
+"@iso20022/custom-rulesets@file:../iso20022::locator=%40stoplight%2Fspectral-core%40workspace%3Apackages%2Fcore":
+  version: 1.0.0
+  resolution: "@iso20022/custom-rulesets@file:../iso20022#../iso20022::hash=1a5606&locator=%40stoplight%2Fspectral-core%40workspace%3Apackages%2Fcore"
+  checksum: 8a5f293490b2a721db0f19ec7442029a2efb159f68eed81f6789d1e32766f21385905d9691c0685dda5336d14ace0c3c45bdeb6a70ea03e0bfe365b575477ba3
+  languageName: node
+  linkType: hard
+
+"@iso20022/custom-rulesets@workspace:packages/iso20022":
+  version: 0.0.0-use.local
+  resolution: "@iso20022/custom-rulesets@workspace:packages/iso20022"
+  languageName: unknown
+  linkType: soft
+
 "@istanbuljs/load-nyc-config@npm:^1.0.0":
   version: 1.0.0
   resolution: "@istanbuljs/load-nyc-config@npm:1.0.0"
@@ -2338,6 +2358,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-cli@workspace:packages/cli"
   dependencies:
+    "@iso20022/custom-rulesets": ../iso20022
     "@rollup/plugin-commonjs": ^20.0.0
     "@stoplight/json": 3.17.0
     "@stoplight/path": 1.3.2
@@ -2380,6 +2401,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
+    "@iso20022/custom-rulesets": ../iso20022
     "@stoplight/better-ajv-errors": 1.0.1
     "@stoplight/json": ~3.17.1
     "@stoplight/lifecycle": 2.3.2

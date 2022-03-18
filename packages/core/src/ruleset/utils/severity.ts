@@ -1,3 +1,4 @@
+import { CustomDiagnosticSeverity, CustomHumanReadableSeverity, CUSTOM_SEVERITY_MAP } from '@iso20022/custom-rulesets';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { HumanReadableDiagnosticSeverity } from '../types';
 
@@ -11,11 +12,23 @@ const SEVERITY_MAP: Record<HumanReadableDiagnosticSeverity, DiagnosticSeverity |
   off: -1,
 };
 
+const EXTENDED_SEVERITY_MAP: Record<
+  HumanReadableDiagnosticSeverity | CustomHumanReadableSeverity,
+  DiagnosticSeverity | CustomDiagnosticSeverity | -1
+> = {
+  ...SEVERITY_MAP,
+  ...CUSTOM_SEVERITY_MAP,
+};
+
 export function getDiagnosticSeverity(
-  severity: DiagnosticSeverity | HumanReadableDiagnosticSeverity,
-): DiagnosticSeverity | -1 {
+  severity:
+    | DiagnosticSeverity
+    | CustomDiagnosticSeverity
+    | HumanReadableDiagnosticSeverity
+    | CustomHumanReadableSeverity,
+): DiagnosticSeverity | CustomDiagnosticSeverity | -1 {
   if (Number.isNaN(Number(severity))) {
-    return SEVERITY_MAP[severity] as DiagnosticSeverity | -1;
+    return EXTENDED_SEVERITY_MAP[severity] as DiagnosticSeverity | CustomDiagnosticSeverity | -1;
   }
 
   return Number(severity);

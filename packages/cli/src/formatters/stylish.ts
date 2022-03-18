@@ -24,15 +24,15 @@
  * @author Sindre Sorhus
  */
 
+import { CustomDiagnosticSeverity } from '@iso20022/custom-rulesets';
+import type { IRuleResult } from '@stoplight/spectral-core';
+import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import type { DiagnosticSeverity, IRange } from '@stoplight/types';
 import chalk from 'chalk';
-import stripAnsi = require('strip-ansi');
 import table from 'text-table';
-import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
-import type { IRuleResult } from '@stoplight/spectral-core';
-
 import type { Formatter } from './types';
 import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
+import stripAnsi = require('strip-ansi');
 
 // -----------------------------------------------------------------------------
 // Helpers
@@ -44,7 +44,7 @@ function formatRange(range?: IRange): string {
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
 }
 
-function getMessageType(severity: DiagnosticSeverity): string {
+function getMessageType(severity: DiagnosticSeverity | CustomDiagnosticSeverity): string {
   const color = getColorForSeverity(severity);
   const name = getSeverityName(severity);
 
@@ -71,6 +71,7 @@ export const stylish: Formatter = results => {
       getMessageType(result.severity),
       result.code ?? '',
       result.message,
+      result.reference ?? '',
       printPath(result.path, PrintStyle.Dot),
     ]);
 

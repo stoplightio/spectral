@@ -1,12 +1,11 @@
-import { isString } from 'lodash';
-import { DiagnosticSeverity, JsonPath, Optional } from '@stoplight/types';
-import { dirname, relative } from '@stoplight/path';
+import { CustomDiagnosticSeverity, CustomHumanReadableSeverity } from '@iso20022/custom-rulesets';
 import { pathToPointer } from '@stoplight/json';
+import { dirname, relative } from '@stoplight/path';
 import { printValue } from '@stoplight/spectral-runtime';
-
-import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
-import { Ruleset } from './ruleset';
+import { DiagnosticSeverity, JsonPath, Optional } from '@stoplight/types';
+import { isString } from 'lodash';
 import { Format } from './format';
+import { Ruleset } from './ruleset';
 import type {
   HumanReadableDiagnosticSeverity,
   IRuleThen,
@@ -14,16 +13,18 @@ import type {
   RulesetAliasesDefinition,
   RulesetScopedAliasDefinition,
 } from './types';
-import { minimatch } from './utils/minimatch';
 import { FormatsSet } from './utils/formatsSet';
 import { isSimpleAliasDefinition } from './utils/guards';
+import { minimatch } from './utils/minimatch';
+import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
 export interface IRule {
   description: string | null;
   message: string | null;
-  severity: DiagnosticSeverity;
+  reference: string | null;
+  severity: DiagnosticSeverity | CustomDiagnosticSeverity;
   resolved: boolean;
   formats: Set<Format> | null;
   enabled: boolean;
@@ -43,7 +44,8 @@ export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {
 export class Rule implements IRule {
   public description: string | null;
   public message: string | null;
-  #severity!: DiagnosticSeverity;
+  public reference: string | null;
+  #severity!: DiagnosticSeverity | CustomDiagnosticSeverity;
   public resolved: boolean;
   public formats: FormatsSet | null;
   #enabled: boolean;
@@ -61,6 +63,7 @@ export class Rule implements IRule {
     this.#enabled = this.recommended;
     this.description = definition.description ?? null;
     this.message = definition.message ?? null;
+    this.reference = definition.reference ?? null;
     this.documentationUrl = definition.documentationUrl ?? null;
     this.severity = definition.severity;
     this.resolved = definition.resolved !== false;
@@ -69,7 +72,10 @@ export class Rule implements IRule {
     this.given = definition.given;
   }
 
-  public overrides?: { rulesetSource: string; definition: Map<string, Map<string, DiagnosticSeverity | -1>> };
+  public overrides?: {
+    rulesetSource: string;
+    definition: Map<string, Map<string, DiagnosticSeverity | CustomDiagnosticSeverity | -1>>;
+  };
 
   public get enabled(): boolean {
     return this.#enabled || this.overrides !== void 0;
@@ -79,13 +85,13 @@ export class Rule implements IRule {
     this.#enabled = enabled;
   }
 
-  public getSeverityForSource(source: string, path: JsonPath): DiagnosticSeverity | -1 {
+  public getSeverityForSource(source: string, path: JsonPath): DiagnosticSeverity | CustomDiagnosticSeverity | -1 {
     if (this.overrides === void 0 || this.overrides.definition.size === 0) {
       return this.severity;
     }
 
     const relativeSource = relative(dirname(this.overrides.rulesetSource), source);
-    const relevantOverrides: Map<string, DiagnosticSeverity | -1>[] = [];
+    const relevantOverrides: Map<string, DiagnosticSeverity | CustomDiagnosticSeverity | -1>[] = [];
 
     for (const [source, override] of this.overrides.definition.entries()) {
       if (minimatch(relativeSource, source)) {
@@ -97,7 +103,7 @@ export class Rule implements IRule {
       return this.severity;
     }
 
-    let severity: DiagnosticSeverity = this.severity;
+    let severity: DiagnosticSeverity | CustomDiagnosticSeverity = this.severity;
     let closestPointer = '';
     const pointer = pathToPointer(path);
 
@@ -113,11 +119,15 @@ export class Rule implements IRule {
     return severity;
   }
 
-  public get severity(): DiagnosticSeverity {
+  public get severity(): DiagnosticSeverity | CustomDiagnosticSeverity {
     return this.#severity;
   }
 
-  public set severity(severity: Optional<HumanReadableDiagnosticSeverity | DiagnosticSeverity>) {
+  public set severity(
+    severity: Optional<
+      HumanReadableDiagnosticSeverity | CustomHumanReadableSeverity | DiagnosticSeverity | CustomDiagnosticSeverity
+    >,
+  ) {
     if (severity === void 0) {
       this.#severity = DEFAULT_SEVERITY_LEVEL;
     } else {
@@ -247,6 +257,7 @@ export class Rule implements IRule {
       recommended: this.recommended,
       enabled: this.enabled,
       description: this.description,
+      reference: this.reference,
       message: this.message,
       documentationUrl: this.documentationUrl,
       severity: this.severity,

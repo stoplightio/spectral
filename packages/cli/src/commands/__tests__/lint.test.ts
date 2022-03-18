@@ -1,14 +1,13 @@
-import * as yargs from 'yargs';
-import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '@stoplight/spectral-core';
-import * as process from 'process';
-import { ErrorWithCause } from 'pony-cause';
+import { DiagnosticSeverity } from '@stoplight/types';
+import chalk from 'chalk';
 import AggregateError from 'es-aggregate-error';
-
+import { ErrorWithCause } from 'pony-cause';
+import * as process from 'process';
+import * as yargs from 'yargs';
 import { lint } from '../../services/linter';
 import { formatOutput, writeOutput } from '../../services/output';
 import lintCommand from '../lint';
-import chalk from 'chalk';
 
 jest.mock('process');
 jest.mock('../../services/output');
@@ -74,11 +73,12 @@ describe('lint', () => {
     });
 
     it('calls with lint with STDIN file descriptor', async () => {
-      await run('lint');
+      await run('lint -S true');
       expect(lint).toBeCalledWith([0], {
         encoding: 'utf8',
         format: ['stylish'],
         output: { stylish: '<stdout>' },
+        standard: true,
         ignoreUnknownFormat: false,
         failOnUnmatchedGlobs: false,
       });
@@ -87,11 +87,12 @@ describe('lint', () => {
 
   it('calls lint with document and default options', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    await run(`lint ${doc}`);
+    await run(`lint ${doc} -S true`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf8',
       format: ['stylish'],
       output: { stylish: '<stdout>' },
+      standard: true,
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -99,11 +100,12 @@ describe('lint', () => {
 
   it('calls lint with document and custom encoding', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    await run(`lint --encoding ascii ${doc}`);
+    await run(`lint --encoding ascii ${doc} -S true`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'ascii',
       format: ['stylish'],
       output: { stylish: '<stdout>' },
+      standard: true,
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -111,11 +113,12 @@ describe('lint', () => {
 
   it('calls lint with document and custom encoding and format', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
-    await run(`lint -f json --encoding ascii ${doc}`);
+    await run(`lint -f json --encoding ascii ${doc} -S true`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'ascii',
       format: ['json'],
       output: { json: '<stdout>' },
+      standard: true,
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: false,
     });
@@ -124,7 +127,7 @@ describe('lint', () => {
   it('calls lint with document and custom ruleset', async () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
-    await run(`lint -r ${ruleset} ${doc}`);
+    await run(`lint -r ${ruleset} ${doc} -S true`);
     expect(lint).toBeCalledWith(
       [doc],
       expect.objectContaining({
@@ -137,7 +140,7 @@ describe('lint', () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
     const ruleset2 = 'custom-ruleset-2.json';
-    await run(`lint --r ${ruleset} -r ${ruleset2} ${doc}`);
+    await run(`lint --r ${ruleset} -r ${ruleset2} ${doc} -S true`);
     expect(lint).toBeCalledWith(
       [doc],
       expect.objectContaining({
@@ -147,12 +150,12 @@ describe('lint', () => {
   });
 
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
-    await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
+    await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json -S true`);
     expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
   });
 
   it('writes formatted output to a file', async () => {
-    await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json`);
+    await run(`lint -o foo.json ./__fixtures__/empty-oas2-document.json -S true`);
     expect(writeOutput).toBeCalledWith('<formatted output>', 'foo.json');
   });
 
@@ -160,7 +163,7 @@ describe('lint', () => {
     (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
 
     await run(
-      `lint --format html --format json --output.json foo.json --output.html foo.html ./__fixtures__/empty-oas2-document.json`,
+      `lint --format html --format json --output.json foo.json --output.html foo.html ./__fixtures__/empty-oas2-document.json -S true`,
     );
     expect(writeOutput).toBeCalledTimes(2);
     expect(writeOutput).nthCalledWith(1, '<formatted output>', 'foo.html');
@@ -170,7 +173,9 @@ describe('lint', () => {
   it('writes formatted output to multiple files and stdout when using format and output flags', async () => {
     (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
 
-    await run(`lint --format html --format json --output.json foo.json ./__fixtures__/empty-oas2-document.json`);
+    await run(
+      `lint --format html --format json --output.json foo.json ./__fixtures__/empty-oas2-document.json -S true`,
+    );
     expect(writeOutput).toBeCalledTimes(2);
     expect(writeOutput).nthCalledWith(1, '<formatted output>', '<stdout>');
     expect(writeOutput).nthCalledWith(2, '<formatted output>', 'foo.json');
@@ -182,6 +187,7 @@ describe('lint', () => {
       encoding: 'utf8',
       format: ['stylish'],
       output: { stylish: '<stdout>' },
+      standard: false,
       ignoreUnknownFormat: true,
       failOnUnmatchedGlobs: false,
     });
@@ -193,6 +199,7 @@ describe('lint', () => {
       encoding: 'utf8',
       format: ['stylish'],
       output: { stylish: '<stdout>' },
+      standard: false,
       ignoreUnknownFormat: false,
       failOnUnmatchedGlobs: true,
     });
@@ -239,18 +246,18 @@ describe('lint', () => {
       ]),
     );
 
-    await run(`lint --verbose ./__fixtures__/empty-oas2-document.json`);
+    await run(`lint --verbose ./__fixtures__/empty-oas2-document.json -S true`);
 
     expect(process.stderr.write).nthCalledWith(2, `Error #1: ${chalk.red('some unhandled exception')}\n`);
     expect(process.stderr.write).nthCalledWith(
       3,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:236`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:242`),
     );
 
     expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
     expect(process.stderr.write).nthCalledWith(
       5,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:237`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:243`),
     );
 
     expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);

@@ -93,6 +93,7 @@ function processTargetResults(
       error: result.message,
       path: printPath(path, PrintStyle.EscapedPointer),
       description: rule.description,
+      reference: rule.reference,
       value,
     };
 
@@ -108,6 +109,7 @@ function processTargetResults(
       message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
       path,
       severity,
+      reference: rule.reference,
       ...(source !== null ? { source } : null),
       range,
     });

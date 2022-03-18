@@ -5,6 +5,7 @@ export const json: Formatter = results => {
     return {
       code: result.code,
       path: result.path,
+      reference: result.reference,
       message: result.message,
       severity: result.severity,
       range: result.range,

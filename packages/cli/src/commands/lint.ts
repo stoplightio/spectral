@@ -1,19 +1,17 @@
-import { Dictionary } from '@stoplight/types';
 import { isPlainObject } from '@stoplight/json';
 import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
-import { isError, difference, pick } from 'lodash';
+import { Dictionary } from '@stoplight/types';
+import chalk from 'chalk';
+import { difference, isError, pick } from 'lodash';
+import type { ErrorWithCause } from 'pony-cause';
+import * as process from 'process';
+import StackTracey from 'stacktracey';
 import type { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
-import * as process from 'process';
-import chalk from 'chalk';
-import type { ErrorWithCause } from 'pony-cause';
-import StackTracey from 'stacktracey';
-
+import { CLIError } from '../errors';
+import { FailSeverity, ILintConfig, OutputFormat } from '../services/config';
 import { lint } from '../services/linter';
 import { formatOutput, writeOutput } from '../services/output';
-import { FailSeverity, ILintConfig, OutputFormat } from '../services/config';
-
-import { CLIError } from '../errors';
 
 const formatOptions = Object.values(OutputFormat);
 
@@ -140,6 +138,12 @@ const lintCommand: CommandModule = {
           type: 'boolean',
           default: false,
         },
+        standard: {
+          alias: 'S',
+          description: 'use standard spectral behaviour',
+          type: 'boolean',
+          default: false,
+        },
         'ignore-unknown-format': {
           description: 'do not warn about unmatched formats',
           type: 'boolean',
@@ -167,6 +171,7 @@ const lintCommand: CommandModule = {
       documents,
       failSeverity,
       displayOnlyFailures,
+      standard = false,
       ruleset,
       stdinFilepath,
       format,
@@ -179,6 +184,7 @@ const lintCommand: CommandModule = {
       documents: Array<number | string>;
       failSeverity: FailSeverity;
       displayOnlyFailures: boolean;
+      standard: boolean;
     };
 
     try {
@@ -189,6 +195,7 @@ const lintCommand: CommandModule = {
         ignoreUnknownFormat,
         failOnUnmatchedGlobs,
         ruleset,
+        standard,
         stdinFilepath,
         ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['verbose', 'quiet', 'resolver']),
       });

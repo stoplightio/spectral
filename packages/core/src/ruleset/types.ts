@@ -1,17 +1,31 @@
+import { CustomDiagnosticSeverity, CustomHumanReadableSeverity } from '@iso20022/custom-rulesets';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { Format } from './format';
 import { RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import { Format } from './format';
 import { FormatsSet } from './utils/formatsSet';
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';
-export type FileRuleSeverityDefinition = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
+export type FileRuleSeverityDefinition =
+  | DiagnosticSeverity
+  | CustomDiagnosticSeverity
+  | HumanReadableDiagnosticSeverity
+  | CustomHumanReadableSeverity
+  | boolean;
 export type FileRulesetSeverityDefinition = 'off' | 'recommended' | 'all';
 
 export type FileRuleDefinition = RuleDefinition | FileRuleSeverityDefinition;
 
 export type ParserOptions = {
-  duplicateKeys: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
-  incompatibleValues: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
+  duplicateKeys:
+    | DiagnosticSeverity
+    | CustomDiagnosticSeverity
+    | HumanReadableDiagnosticSeverity
+    | CustomHumanReadableSeverity;
+  incompatibleValues:
+    | DiagnosticSeverity
+    | CustomDiagnosticSeverity
+    | HumanReadableDiagnosticSeverity
+    | CustomHumanReadableSeverity;
 };
 
 export type RuleDefinition = {
@@ -21,6 +35,9 @@ export type RuleDefinition = {
 
   documentationUrl?: string;
 
+  // A documentation reference
+  reference?: string;
+
   // A meaningful feedback about the error
   message?: string;
 
@@ -28,7 +45,11 @@ export type RuleDefinition = {
   description?: string;
 
   // The severity of results this rule generates
-  severity?: DiagnosticSeverity | HumanReadableDiagnosticSeverity;
+  severity?:
+    | DiagnosticSeverity
+    | CustomDiagnosticSeverity
+    | HumanReadableDiagnosticSeverity
+    | CustomHumanReadableSeverity;
 
   // some rules are more important than others, recommended rules will be enabled by default
   // true by default

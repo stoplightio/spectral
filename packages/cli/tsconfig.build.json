@@ -14,5 +14,6 @@
     { "path":  "../ruleset-bundler/tsconfig.build.json" },
     { "path":  "../ruleset-migrator/tsconfig.build.json" },
     { "path":  "../runtime/tsconfig.build.json" },
+    { "path":  "../iso20022/tsconfig.build.json" },
   ]
 }

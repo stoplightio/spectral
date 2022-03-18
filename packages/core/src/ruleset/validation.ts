@@ -1,9 +1,9 @@
-import Ajv, { _, ErrorObject } from 'ajv';
-import addFormats from 'ajv-formats';
-import addErrors from 'ajv-errors';
+import { ruleSchemaExtended, rulesetSchemaExtended, sharedExtended } from '@iso20022/custom-rulesets';
 import { isPlainObject } from '@stoplight/json';
 import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
-
+import Ajv, { ErrorObject, _ } from 'ajv';
+import addErrors from 'ajv-errors';
+import addFormats from 'ajv-formats';
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
 import * as shared from '../meta/shared.json';
@@ -39,6 +39,7 @@ ajv.addKeyword({
   },
 });
 
+const validateExtended = ajv.addSchema(ruleSchemaExtended).addSchema(sharedExtended).compile(rulesetSchemaExtended);
 const validate = ajv.addSchema(ruleSchema).addSchema(shared).compile(rulesetSchema);
 
 export class RulesetValidationError extends Error {
@@ -104,7 +105,10 @@ class RulesetAjvValidationError extends RulesetValidationError {
   }
 }
 
-export function assertValidRuleset(ruleset: unknown): asserts ruleset is RulesetDefinition {
+export function assertValidRuleset(
+  ruleset: unknown,
+  standardBehaviour: boolean | undefined,
+): asserts ruleset is RulesetDefinition {
   if (!isPlainObject(ruleset)) {
     throw new Error('Provided ruleset is not an object');
   }
@@ -113,7 +117,10 @@ export function assertValidRuleset(ruleset: unknown): asserts ruleset is Ruleset
     throw new RulesetValidationError('Ruleset must have rules or extends or overrides defined');
   }
 
-  if (!validate(ruleset)) {
+  if (
+    ((standardBehaviour ?? true) && !validate(ruleset)) ||
+    (!(standardBehaviour ?? false) && !validateExtended(ruleset))
+  ) {
     throw new RulesetAjvValidationError(ruleset, validate.errors ?? []);
   }
 }

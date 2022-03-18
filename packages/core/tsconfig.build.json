@@ -11,5 +11,6 @@
     { "path":  "../parsers/tsconfig.build.json" },
     { "path":  "../runtime/tsconfig.build.json" },
     { "path":  "../ref-resolver/tsconfig.build.json" },
+    { "path":  "../iso20022/tsconfig.build.json" },
   ]
 }

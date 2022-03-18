@@ -1,5 +1,10 @@
+import { CustomDiagnosticSeverity } from '@iso20022/custom-rulesets';
+import { extractPointerFromRef, extractSourceFromRef, isPlainObject } from '@stoplight/json';
 import { dirname, relative } from '@stoplight/path';
-import { minimatch } from './utils/minimatch';
+import { DiagnosticSeverity } from '@stoplight/types';
+import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
+import { mergeRule } from './mergers/rules';
+import { mergeRulesets } from './mergers/rulesets';
 import { Rule, StringifiedRule } from './rule';
 import {
   FileRulesetSeverityDefinition,
@@ -8,14 +13,10 @@ import {
   RulesetDefinition,
   RulesetOverridesDefinition,
 } from './types';
-import { assertValidRuleset } from './validation';
-import { mergeRule } from './mergers/rules';
-import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
-import { mergeRulesets } from './mergers/rulesets';
-import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
-import { DiagnosticSeverity } from '@stoplight/types';
 import { FormatsSet } from './utils/formatsSet';
 import { isSimpleAliasDefinition } from './utils/guards';
+import { minimatch } from './utils/minimatch';
+import { assertValidRuleset } from './validation';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
@@ -52,15 +53,15 @@ export class Ruleset {
 
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
-  constructor(readonly maybeDefinition: unknown, context?: RulesetContext) {
+  constructor(readonly maybeDefinition: unknown, context?: RulesetContext, standardBehaviour?: boolean | undefined) {
     let definition: RulesetDefinition;
     if (isPlainObject(maybeDefinition) && 'extends' in maybeDefinition) {
       const { extends: _, ...def } = maybeDefinition;
       // we don't want to validate extends - this is going to happen later on (line 29)
-      assertValidRuleset({ extends: [], ...def });
+      assertValidRuleset({ extends: [], ...def }, standardBehaviour);
       definition = maybeDefinition as RulesetDefinition;
     } else {
-      assertValidRuleset(maybeDefinition);
+      assertValidRuleset(maybeDefinition, standardBehaviour);
       definition = maybeDefinition;
     }
 
@@ -179,7 +180,7 @@ export class Ruleset {
       string, // ruleName
       {
         rulesetSource: string;
-        definition: Map<string, Map<string, DiagnosticSeverity | -1>>; // Map<Source, Map<Pointer, Severity>>>
+        definition: Map<string, Map<string, DiagnosticSeverity | CustomDiagnosticSeverity | -1>>; // Map<Source, Map<Pointer, Severity>>>
       }
     > = {};
 

@@ -1,18 +1,17 @@
 /* eslint-disable no-console */
 import { Document, IRuleResult, Spectral } from '@stoplight/spectral-core';
-import { readParsable, IFileReadOptions } from '@stoplight/spectral-runtime';
 import * as Parsers from '@stoplight/spectral-parsers';
-import { getRuleset, listFiles, segregateEntriesPerKind, readFileDescriptor } from './utils';
-import { getResolver } from './utils/getResolver';
-import { ILintConfig } from '../config';
+import { IFileReadOptions, readParsable } from '@stoplight/spectral-runtime';
 import { CLIError } from '../../errors';
+import { ILintConfig } from '../config';
+import { getRuleset, listFiles, readFileDescriptor, segregateEntriesPerKind } from './utils';
+import { getResolver } from './utils/getResolver';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
   const spectral = new Spectral({
     resolver: getResolver(flags.resolver, process.env.PROXY),
   });
-
-  const ruleset = await getRuleset(flags.ruleset);
+  const ruleset = await getRuleset(flags.ruleset, flags.standard);
 
   spectral.setRuleset(ruleset);
   if (flags.verbose === true) {

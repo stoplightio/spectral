@@ -1,13 +1,13 @@
-import { DiagnosticSeverity, IDiagnostic, JsonPath, Segment } from '@stoplight/types';
+import { ResolveError } from '@stoplight/spectral-ref-resolver';
+import { DiagnosticSeverity, JsonPath, Segment } from '@stoplight/types';
 import { uniqBy } from 'lodash';
 import { Document, IDocument } from './document';
-import { IRuleResult } from './types';
-import { ResolveError } from '@stoplight/spectral-ref-resolver';
+import { IRuleResult, ISpectralDiagnostic } from './types';
 
 const toUpperCase = (word: string): string => word.toUpperCase();
 const splitWord = (word: string, end: string, start: string): string => `${end} ${start.toLowerCase()}`;
 
-export function getDiagnosticErrorMessage(diagnostic: IDiagnostic): string {
+export function getDiagnosticErrorMessage(diagnostic: ISpectralDiagnostic): string {
   const key = getPropertyKey(diagnostic.path);
   let prettifiedMessage = diagnostic.message.replace(/^[a-z]/, toUpperCase);
 
@@ -31,11 +31,15 @@ const getPropertyKey = (path: JsonPath | undefined): Segment | void => {
   }
 };
 
-export function formatParserDiagnostics(diagnostics: ReadonlyArray<IDiagnostic>, source: string | null): IRuleResult[] {
+export function formatParserDiagnostics(
+  diagnostics: ReadonlyArray<ISpectralDiagnostic>,
+  source: string | null,
+): IRuleResult[] {
   return diagnostics.map(diagnostic => ({
     ...diagnostic,
     code: 'parser',
     message: getDiagnosticErrorMessage(diagnostic),
+    reference: '',
     path: diagnostic.path ?? [],
     ...(source !== null ? { source } : null),
   }));
@@ -51,6 +55,7 @@ export const formatResolverErrors = (document: IDocument, diagnostics: ResolveEr
       code: 'invalid-ref',
       path,
       message: prettyPrintResolverErrorMessage(error.message),
+      reference: '',
       severity: DiagnosticSeverity.Error,
       range,
       ...(source !== null ? { source } : null),

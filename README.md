@@ -46,16 +46,28 @@ printf '{\n  "extends": ["spectral:oas", "spectral:asyncapi"]\n}\n' > .spectral.
 
 **Lint**
 
-Use this command to lint with the predefined ruleset or a ruleset stored in the same directory as your API document:
+Use this command to lint with the predefined iso20022 ruleset:
 
 ```bash
 spectral lint myapifile.yaml
 ```
 
-Use this command to lint with a custom ruleset or one that is located in a different directory than your API document:
+Use this command to lint with the predefined ruleset or a ruleset stored in the same directory as your API document:
+
+```bash
+spectral lint myapifile.yaml -S true
+```
+
+Use this command to lint with a custom iso20022 ruleset or one that is located in a different directory than your API document:
 
 ```bash
 spectral lint myapifile.yaml --ruleset myruleset.json
+```
+
+Use this command to lint with a custom ruleset or one that is located in a different directory than your API document:
+
+```bash
+spectral lint myapifile.yaml --ruleset myruleset.json  -S true
 ```
 
 ## 📖 Documentation

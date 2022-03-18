@@ -1,7 +1,8 @@
-import { Dictionary } from '@stoplight/types';
+import { CustomHumanReadableSeverity } from '@iso20022/custom-rulesets';
 import { HumanReadableDiagnosticSeverity } from '@stoplight/spectral-core';
+import { Dictionary } from '@stoplight/types';
 
-export type FailSeverity = HumanReadableDiagnosticSeverity;
+export type FailSeverity = HumanReadableDiagnosticSeverity | CustomHumanReadableSeverity;
 
 export enum OutputFormat {
   JSON = 'json',
@@ -24,4 +25,5 @@ export interface ILintConfig {
   failOnUnmatchedGlobs: boolean;
   verbose?: boolean;
   quiet?: boolean;
+  standard?: boolean;
 }

@@ -1,24 +1,29 @@
-import { Optional } from '@stoplight/types';
-import { Ruleset, RulesetDefinition } from '@stoplight/spectral-core';
-import * as fs from 'fs';
-import * as path from '@stoplight/path';
-import * as process from 'process';
-import { createRequire } from 'module';
-import { fetch } from '@stoplight/spectral-runtime';
-import { migrateRuleset } from '@stoplight/spectral-ruleset-migrator';
-import { bundleRuleset } from '@stoplight/spectral-ruleset-bundler';
-import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
-import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
-import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
-import { isError, isObject } from 'lodash';
+import { CUSTOM_RULESET_DEFAULT } from '@iso20022/custom-rulesets';
 import commonjs from '@rollup/plugin-commonjs';
+import * as path from '@stoplight/path';
+import { Ruleset, RulesetDefinition } from '@stoplight/spectral-core';
+import { bundleRuleset } from '@stoplight/spectral-ruleset-bundler';
+import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
+import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
+import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
+import { migrateRuleset } from '@stoplight/spectral-ruleset-migrator';
+import { fetch } from '@stoplight/spectral-runtime';
+import { Optional } from '@stoplight/types';
+import * as fs from 'fs';
+import { isError, isObject } from 'lodash';
+import { createRequire } from 'module';
+import * as process from 'process';
 import { CLIError } from '../../../errors';
 
-async function getDefaultRulesetFile(): Promise<Optional<string>> {
+async function getDefaultRulesetFile(standardBehaviour: boolean | undefined): Promise<Optional<string>> {
   const cwd = process.cwd();
-  for (const filename of await fs.promises.readdir(cwd)) {
-    if (Ruleset.isDefaultRulesetFile(filename)) {
-      return path.join(cwd, filename);
+  if (!(standardBehaviour ?? false)) {
+    return CUSTOM_RULESET_DEFAULT;
+  } else {
+    for (const filename of await fs.promises.readdir(cwd)) {
+      if (Ruleset.isDefaultRulesetFile(filename)) {
+        return path.join(cwd, filename);
+      }
     }
   }
 
@@ -33,9 +38,12 @@ function isErrorWithCode(error: Error | (Error & { code: unknown })): error is E
   return 'code' in error && typeof error.code === 'string';
 }
 
-export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset> {
+export async function getRuleset(
+  rulesetFile: Optional<string>,
+  standardBehaviour: Optional<boolean | undefined>,
+): Promise<Ruleset> {
   if (rulesetFile === void 0) {
-    rulesetFile = await getDefaultRulesetFile();
+    rulesetFile = await getDefaultRulesetFile(standardBehaviour);
   } else if (!path.isAbsolute(rulesetFile)) {
     rulesetFile = path.join(process.cwd(), rulesetFile);
   }
@@ -76,11 +84,14 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
 
     throw new CLIError(`Could not read ruleset at ${rulesetFile}.`);
   }
-
-  return new Ruleset(load(ruleset, rulesetFile), {
-    severity: 'recommended',
-    source: rulesetFile,
-  });
+  return new Ruleset(
+    load(ruleset, rulesetFile),
+    {
+      severity: 'recommended',
+      source: rulesetFile,
+    },
+    standardBehaviour,
+  );
 }
 
 function load(source: string, uri: string): RulesetDefinition {

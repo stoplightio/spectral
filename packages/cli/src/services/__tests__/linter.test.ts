@@ -1,10 +1,9 @@
 import { join, resolve } from '@stoplight/path';
-import nock from 'nock';
-import * as yargs from 'yargs';
-import { DiagnosticSeverity } from '@stoplight/types';
 import { RulesetValidationError } from '@stoplight/spectral-core';
+import { DiagnosticSeverity } from '@stoplight/types';
+import nock from 'nock';
 import * as process from 'process';
-
+import * as yargs from 'yargs';
 import lintCommand from '../../commands/lint';
 import { lint } from '../linter';
 
@@ -88,7 +87,7 @@ describe('Linter service', () => {
 
   it('demands some ruleset to be present', () => {
     (process.cwd as jest.Mock).mockReturnValue(join(__dirname, '__fixtures__/resolver'));
-    return expect(run(`lint stoplight-info-document.json`)).rejects.toThrow(
+    return expect(run(`lint stoplight-info-document.json -S true`)).rejects.toThrow(
       'No ruleset has been found. Please provide a ruleset using the --ruleset CLI argument, or make sure your ruleset file matches .?spectral.(js|ya?ml|json)',
     );
   });
@@ -96,13 +95,13 @@ describe('Linter service', () => {
   describe('when document is local file', () => {
     describe('and the file is expected to have no warnings', () => {
       it('outputs no issues', () => {
-        return expect(run(`lint stoplight-info-document.json`)).resolves.toEqual([]);
+        return expect(run(`lint stoplight-info-document.json -S true`)).resolves.toEqual([]);
       });
     });
 
     describe('and the file is expected to trigger warnings', () => {
       it('outputs warnings', async () => {
-        return expect(run('lint missing-stoplight-info-document.json')).resolves.toEqual([
+        return expect(run('lint missing-stoplight-info-document.json -S true')).resolves.toEqual([
           {
             code: 'info-matches-stoplight',
             message: 'Info must contain Stoplight',
@@ -122,7 +121,7 @@ describe('Linter service', () => {
       join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
     ];
 
-    return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
+    return expect(run(['lint -S true', ...documents].join(' '))).resolves.toEqual([
       {
         code: 'info-matches-stoplight',
         message: 'Info must contain Stoplight',
@@ -146,7 +145,7 @@ describe('Linter service', () => {
     const documents = join(__dirname, `./__fixtures__/missing-stoplight-info*.json`);
 
     it('outputs issues for each file', () => {
-      return expect(run(`lint ${documents}`)).resolves.toEqual([
+      return expect(run(`lint ${documents} -S true`)).resolves.toEqual([
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
@@ -167,7 +166,7 @@ describe('Linter service', () => {
     });
 
     it('unixifies patterns', () => {
-      return expect(run(`lint } ${documents.replace(/\//g, '\\')}`)).resolves.toEqual([
+      return expect(run(`lint } ${documents.replace(/\//g, '\\')} -S true`)).resolves.toEqual([
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
@@ -275,13 +274,13 @@ describe('Linter service', () => {
         'Content-Type': 'application/yaml',
       });
 
-      return expect(run('lint http://foo.local/openapi')).resolves.toEqual([]);
+      return expect(run('lint http://foo.local/openapi -S true')).resolves.toEqual([]);
     });
 
     it('throws if cannot load URI', () => {
       nock('http://foo.local').persist().get('/openapi').reply(404);
 
-      return expect(run('lint http://foo.local/openapi')).rejects.toThrow(
+      return expect(run('lint http://foo.local/openapi -S true')).rejects.toThrow(
         'Could not parse http://foo.local/openapi: Not Found',
       );
     });
@@ -292,7 +291,7 @@ describe('Linter service', () => {
         'Content-Type': 'application/yaml',
       });
 
-      return expect(run(`lint http://foo.local/openapi`)).resolves.toEqual([
+      return expect(run(`lint http://foo.local/openapi  -S true`)).resolves.toEqual([
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
@@ -307,7 +306,7 @@ describe('Linter service', () => {
 
   describe('when using default ruleset file', () => {
     it('respects rules from a ruleset file', () => {
-      return expect(run('lint missing-stoplight-info-document.json')).resolves.toEqual([
+      return expect(run('lint missing-stoplight-info-document.json -S true')).resolves.toEqual([
         expect.objectContaining({
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
@@ -445,7 +444,7 @@ describe('Linter service', () => {
       const resolver = join(__dirname, '__fixtures__/resolver/resolver.js');
       const document = join(__dirname, '__fixtures__/resolver/document.json');
 
-      expect(await run(`lint --resolver ${resolver} ${document}`)).toEqual([
+      expect(await run(`lint --resolver ${resolver} ${document} -S true`)).toEqual([
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',

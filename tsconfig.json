@@ -14,7 +14,7 @@
       "@stoplight/spectral-ruleset-bundler/plugins/*": ["packages/ruleset-bundler/src/plugins/*"],
       "@stoplight/spectral-ruleset-migrator": ["packages/ruleset-migrator/src/index.ts"],
       "@stoplight/spectral-rulesets": ["packages/rulesets/src/index.ts"],
-
+      "@iso20022/custom-rulesets": ["packages/iso20022/src/index.ts"],
       "nimma/fallbacks": ["node_modules/nimma/dist/cjs/fallbacks/"],
       "nimma/legacy": ["node_modules/nimma/dist/legacy/cjs/"]
     },
