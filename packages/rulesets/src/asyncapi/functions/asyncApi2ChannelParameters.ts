@@ -12,13 +12,15 @@ export default createRulesetFunction<{ parameters: Record<string, unknown> }, nu
     const path = ctx.path[ctx.path.length - 1] as string;
     const results: IFunctionResult[] = [];
 
-    let parameters = parseUrlVariables(path);
+    const parameters = parseUrlVariables(path);
     if (!parameters || parameters.length === 0) return;
 
     const missingParameters = getMissingProps(parameters, targetVal.parameters);
     if (missingParameters.length) {
       results.push({
-        message: `Not all channel's parameters are described with "parameters" object. Missed: ${missingParameters.join(', ')}.`,
+        message: `Not all channel's parameters are described with "parameters" object. Missed: ${missingParameters.join(
+          ', ',
+        )}.`,
         path: [...ctx.path, 'parameters'],
       });
     }

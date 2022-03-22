@@ -63,10 +63,7 @@ export default {
       severity: 'error',
       type: 'validation',
       recommended: true,
-      given: [
-        '$.channels.*',
-        '$.components.channels.*',
-      ],
+      given: ['$.channels.*', '$.components.channels.*'],
       then: {
         function: asyncApi2ChannelParameters,
       },
@@ -304,10 +301,7 @@ export default {
       severity: 'error',
       type: 'validation',
       recommended: true,
-      given: [
-        '$.servers.*',
-        '$.components.servers.*',
-      ],
+      given: ['$.servers.*', '$.components.servers.*'],
       then: {
         function: asyncApi2ServerVariables,
       },

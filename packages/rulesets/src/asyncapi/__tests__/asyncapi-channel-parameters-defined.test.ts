@@ -9,8 +9,8 @@ testRule('asyncapi-channel-parameters-defined', [
       channels: {
         'users/{userId}/signedUp': {
           parameters: {
-            userId: {}
-          }
+            userId: {},
+          },
         },
       },
     },
@@ -24,14 +24,14 @@ testRule('asyncapi-channel-parameters-defined', [
       channels: {
         'users/{userId}/{anotherParam}/signedUp': {
           parameters: {
-            userId: {}
-          }
+            userId: {},
+          },
         },
       },
     },
     errors: [
       {
-        message: 'Not all channel\'s parameters are described with \"parameters\" object. Missed: anotherParam.',
+        message: 'Not all channel\'s parameters are described with "parameters" object. Missed: anotherParam.',
         path: ['channels', 'users/{userId}/{anotherParam}/signedUp', 'parameters'],
         severity: DiagnosticSeverity.Error,
       },
@@ -45,14 +45,15 @@ testRule('asyncapi-channel-parameters-defined', [
       channels: {
         'users/{userId}/{anotherParam1}/{anotherParam2}/signedUp': {
           parameters: {
-            userId: {}
-          }
+            userId: {},
+          },
         },
       },
     },
     errors: [
       {
-        message: 'Not all channel\'s parameters are described with \"parameters\" object. Missed: anotherParam1, anotherParam2.',
+        message:
+          'Not all channel\'s parameters are described with "parameters" object. Missed: anotherParam1, anotherParam2.',
         path: ['channels', 'users/{userId}/{anotherParam1}/{anotherParam2}/signedUp', 'parameters'],
         severity: DiagnosticSeverity.Error,
       },
@@ -67,15 +68,15 @@ testRule('asyncapi-channel-parameters-defined', [
         channels: {
           'users/{userId}/{anotherParam}/signedUp': {
             parameters: {
-              userId: {}
-            }
+              userId: {},
+            },
           },
         },
-      }
+      },
     },
     errors: [
       {
-        message: 'Not all channel\'s parameters are described with \"parameters\" object. Missed: anotherParam.',
+        message: 'Not all channel\'s parameters are described with "parameters" object. Missed: anotherParam.',
         path: ['components', 'channels', 'users/{userId}/{anotherParam}/signedUp', 'parameters'],
         severity: DiagnosticSeverity.Error,
       },
@@ -92,18 +93,18 @@ testRule('asyncapi-channel-parameters-defined', [
             userId: {},
             anotherParam1: {},
             anotherParam2: {},
-          }
+          },
         },
       },
     },
     errors: [
       {
-        message: 'Channel\'s \"parameters\" object has redundant defined \"anotherParam1\" parameter.',
+        message: 'Channel\'s "parameters" object has redundant defined "anotherParam1" parameter.',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'anotherParam1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Channel\'s \"parameters\" object has redundant defined \"anotherParam2\" parameter.',
+        message: 'Channel\'s "parameters" object has redundant defined "anotherParam2" parameter.',
         path: ['channels', 'users/{userId}/signedUp', 'parameters', 'anotherParam2'],
         severity: DiagnosticSeverity.Error,
       },
@@ -121,19 +122,19 @@ testRule('asyncapi-channel-parameters-defined', [
               userId: {},
               anotherParam1: {},
               anotherParam2: {},
-            }
+            },
           },
         },
       },
     },
     errors: [
       {
-        message: 'Channel\'s \"parameters\" object has redundant defined \"anotherParam1\" parameter.',
+        message: 'Channel\'s "parameters" object has redundant defined "anotherParam1" parameter.',
         path: ['components', 'channels', 'users/{userId}/signedUp', 'parameters', 'anotherParam1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Channel\'s \"parameters\" object has redundant defined \"anotherParam2\" parameter.',
+        message: 'Channel\'s "parameters" object has redundant defined "anotherParam2" parameter.',
         path: ['components', 'channels', 'users/{userId}/signedUp', 'parameters', 'anotherParam2'],
         severity: DiagnosticSeverity.Error,
       },

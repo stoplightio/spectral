@@ -11,8 +11,8 @@ testRule('asyncapi-server-variables-defined', [
           url: '{sub}.stoplight.io',
           protocol: 'https',
           variables: {
-            sub: {}
-          }
+            sub: {},
+          },
         },
       },
     },
@@ -28,14 +28,14 @@ testRule('asyncapi-server-variables-defined', [
           url: '{sub}.{anotherParam}.stoplight.io',
           protocol: 'https',
           variables: {
-            sub: {}
-          }
+            sub: {},
+          },
         },
       },
     },
     errors: [
       {
-        message: 'Not all server\'s variables are described with \"variables\" object. Missed: anotherParam.',
+        message: 'Not all server\'s variables are described with "variables" object. Missed: anotherParam.',
         path: ['servers', 'production', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
@@ -51,14 +51,15 @@ testRule('asyncapi-server-variables-defined', [
           url: '{sub}.{anotherParam1}.{anotherParam2}.stoplight.io',
           protocol: 'https',
           variables: {
-            sub: {}
-          }
+            sub: {},
+          },
         },
       },
     },
     errors: [
       {
-        message: 'Not all server\'s variables are described with \"variables\" object. Missed: anotherParam1, anotherParam2.',
+        message:
+          'Not all server\'s variables are described with "variables" object. Missed: anotherParam1, anotherParam2.',
         path: ['servers', 'production', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
@@ -75,15 +76,15 @@ testRule('asyncapi-server-variables-defined', [
             url: '{sub}.{anotherParam}.stoplight.io',
             protocol: 'https',
             variables: {
-              sub: {}
-            }
+              sub: {},
+            },
           },
         },
-      }
+      },
     },
     errors: [
       {
-        message: 'Not all server\'s variables are described with \"variables\" object. Missed: anotherParam.',
+        message: 'Not all server\'s variables are described with "variables" object. Missed: anotherParam.',
         path: ['components', 'servers', 'production', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
@@ -102,18 +103,18 @@ testRule('asyncapi-server-variables-defined', [
             sub: {},
             anotherParam1: {},
             anotherParam2: {},
-          }
+          },
         },
       },
     },
     errors: [
       {
-        message: 'Server\'s \"variables\" object has redundant defined \"anotherParam1\" url variable.',
+        message: 'Server\'s "variables" object has redundant defined "anotherParam1" url variable.',
         path: ['servers', 'production', 'variables', 'anotherParam1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s \"variables\" object has redundant defined \"anotherParam2\" url variable.',
+        message: 'Server\'s "variables" object has redundant defined "anotherParam2" url variable.',
         path: ['servers', 'production', 'variables', 'anotherParam2'],
         severity: DiagnosticSeverity.Error,
       },
@@ -133,19 +134,19 @@ testRule('asyncapi-server-variables-defined', [
               sub: {},
               anotherParam1: {},
               anotherParam2: {},
-            }
+            },
           },
         },
-      }
+      },
     },
     errors: [
       {
-        message: 'Server\'s \"variables\" object has redundant defined \"anotherParam1\" url variable.',
+        message: 'Server\'s "variables" object has redundant defined "anotherParam1" url variable.',
         path: ['components', 'servers', 'production', 'variables', 'anotherParam1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s \"variables\" object has redundant defined \"anotherParam2\" url variable.',
+        message: 'Server\'s "variables" object has redundant defined "anotherParam2" url variable.',
         path: ['components', 'servers', 'production', 'variables', 'anotherParam2'],
         severity: DiagnosticSeverity.Error,
       },
