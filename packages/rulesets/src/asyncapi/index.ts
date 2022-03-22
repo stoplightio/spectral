@@ -8,9 +8,11 @@ import {
   alphabetical,
 } from '@stoplight/spectral-functions';
 
+import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
+import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -53,6 +55,20 @@ export default {
         functionOptions: {
           notMatch: '.+\\/$',
         },
+      },
+    },
+    'asyncapi-channel-parameters-defined': {
+      description: 'Channel parameters must be defined and there must be no redundant parameters.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: [
+        '$.channels.*',
+        '$.components.channels.*',
+      ],
+      then: {
+        function: asyncApi2ChannelParameters,
       },
     },
     'asyncapi-headers-schema-type-object': {
@@ -280,6 +296,20 @@ export default {
       given: '$',
       then: {
         function: asyncApi2DocumentSchema,
+      },
+    },
+    'asyncapi-server-variables-defined': {
+      description: 'Server variables must be defined and there must be no redundant variables.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: [
+        '$.servers.*',
+        '$.components.servers.*',
+      ],
+      then: {
+        function: asyncApi2ServerVariables,
       },
     },
     'asyncapi-server-no-empty-variable': {
