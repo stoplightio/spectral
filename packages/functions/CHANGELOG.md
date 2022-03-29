@@ -1,3 +1,10 @@
+# [@stoplight/spectral-functions-v1.6.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.0...@stoplight/spectral-functions-v1.6.1) (2022-03-08)
+
+
+### Bug Fixes
+
+* **functions:** reset RegExp.lastIndex to zero when using cached RegExp objects ([#2079](https://github.com/stoplightio/spectral/issues/2079)) ([4839527](https://github.com/stoplightio/spectral/commit/48395273d28fc58ab450277681956b1b50f3f8ee))
+
 # [@stoplight/spectral-functions-v1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.5.2...@stoplight/spectral-functions-v1.6.0) (2022-03-03)
 
 

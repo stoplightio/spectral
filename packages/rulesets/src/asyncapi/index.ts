@@ -381,5 +381,18 @@ export default {
         },
       },
     },
+    'asyncapi-unused-components-server': {
+      description: 'Potentially unused components server has been detected.',
+      recommended: true,
+      type: 'style',
+      resolved: false,
+      given: '$.components.servers',
+      then: {
+        function: unreferencedReusableObject,
+        functionOptions: {
+          reusableObjectsLocation: '#/components/servers',
+        },
+      },
+    },
   },
 };

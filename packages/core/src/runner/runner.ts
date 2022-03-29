@@ -110,6 +110,7 @@ function execute(
     fallback: jsonPathPlus,
     unsafe: false,
     output: 'auto',
+    customShorthands: {},
   });
 
   nimma.query(
