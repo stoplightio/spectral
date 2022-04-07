@@ -57,7 +57,7 @@ export default {
         },
       },
     },
-    'asyncapi-channel-parameters-defined': {
+    'asyncapi-channel-parameters': {
       description: 'Channel parameters must be defined and there must be no redundant parameters.',
       message: '{{error}}',
       severity: 'error',
@@ -295,7 +295,7 @@ export default {
         function: asyncApi2DocumentSchema,
       },
     },
-    'asyncapi-server-variables-defined': {
+    'asyncapi-server-variables': {
       description: 'Server variables must be defined and there must be no redundant variables.',
       message: '{{error}}',
       severity: 'error',

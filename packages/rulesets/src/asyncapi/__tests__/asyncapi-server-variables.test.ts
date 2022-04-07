@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from './__helpers__/tester';
 
-testRule('asyncapi-server-variables-defined', [
+testRule('asyncapi-server-variables', [
   {
     name: 'valid case',
     document: {

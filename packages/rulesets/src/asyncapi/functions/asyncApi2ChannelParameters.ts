@@ -1,5 +1,8 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import { parseUrlVariables, getMissingProps, getRedundantProps } from './utils';
+
+import { parseUrlVariables } from './utils/parseUrlVariables';
+import { getMissingProps } from './utils/getMissingProps';
+import { getRedundantProps } from './utils/getRedundantProps';
 
 import type { IFunctionResult } from '@stoplight/spectral-core';
 
@@ -13,7 +16,7 @@ export default createRulesetFunction<{ parameters: Record<string, unknown> }, nu
     const results: IFunctionResult[] = [];
 
     const parameters = parseUrlVariables(path);
-    if (!parameters || parameters.length === 0) return;
+    if (parameters.length === 0) return;
 
     const missingParameters = getMissingProps(parameters, targetVal.parameters);
     if (missingParameters.length) {

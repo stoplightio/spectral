@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from './__helpers__/tester';
 
-testRule('asyncapi-channel-parameters-defined', [
+testRule('asyncapi-channel-parameters', [
   {
     name: 'valid case',
     document: {
