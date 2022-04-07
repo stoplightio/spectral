@@ -250,6 +250,28 @@ tags:
   - name: "Badger"
 ```
 
+### asyncapi-tags-uniqueness
+
+OpenAPI object should have non-duplicated tag names (identifiers).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+tags:
+  - name: "Badger"
+  - name: "Badger"
+```
+
+**Good Example**
+
+```yaml
+tags:
+  - name: "Aardvark"
+  - name: "Badger"
+```
+
 ### openapi-tags
 
 OpenAPI object should have non-empty `tags` array.
