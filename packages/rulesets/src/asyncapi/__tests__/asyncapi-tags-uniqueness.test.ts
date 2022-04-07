@@ -19,8 +19,8 @@ testRule('asyncapi-tags-uniqueness', [
     },
     errors: [
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['tags', '1', 'name'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -43,13 +43,13 @@ testRule('asyncapi-tags-uniqueness', [
     },
     errors: [
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['channels', 'someChannel', 'publish', 'tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['channels', 'someChannel', 'publish', 'tags', '1', 'name'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['channels', 'someChannel', 'subscribe', 'tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['channels', 'someChannel', 'subscribe', 'tags', '1', 'name'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -80,13 +80,13 @@ testRule('asyncapi-tags-uniqueness', [
     },
     errors: [
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['channels', 'someChannel', 'publish', 'traits', '0', 'tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['channels', 'someChannel', 'publish', 'traits', '0', 'tags', '1', 'name'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['channels', 'someChannel', 'subscribe', 'traits', '0', 'tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['channels', 'someChannel', 'subscribe', 'traits', '0', 'tags', '1', 'name'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -106,8 +106,8 @@ testRule('asyncapi-tags-uniqueness', [
     },
     errors: [
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['components', 'messages', 'someMessage', 'tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['components', 'messages', 'someMessage', 'tags', '1', 'name'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -131,8 +131,28 @@ testRule('asyncapi-tags-uniqueness', [
     },
     errors: [
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['components', 'messages', 'someMessage', 'traits', '0', 'tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['components', 'messages', 'someMessage', 'traits', '0', 'tags', '1', 'name'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'tags has duplicated more that two times this same name',
+    document: {
+      asyncapi: '2.0.0',
+      tags: [{ name: 'one' }, { name: 'one' }, { name: 'two' }, { name: 'one' }],
+    },
+    errors: [
+      {
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['tags', '1', 'name'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['tags', '3', 'name'],
         severity: DiagnosticSeverity.Error,
       },
     ],

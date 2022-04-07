@@ -11,7 +11,7 @@ import {
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
-import asyncApi2UniquenessTags from './functions/asyncApi2UniquenessTags';
+import { uniquenessTags } from '../shared/functions';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -390,7 +390,7 @@ export default {
         '$.components.messageTraits.*.tags',
       ],
       then: {
-        function: asyncApi2UniquenessTags,
+        function: uniquenessTags,
       },
     },
     'asyncapi-tags': {

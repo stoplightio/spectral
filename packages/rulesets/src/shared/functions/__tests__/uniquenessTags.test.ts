@@ -1,10 +1,10 @@
-import asyncApi2UniquenessTags from '../asyncApi2UniquenessTags';
+import uniquenessTags from '../uniquenessTags';
 
 function runValidation(targetVal: Array<{ name: string }>) {
-  return asyncApi2UniquenessTags(targetVal, null, { path: ['tags'], documentInventory: {} } as any);
+  return uniquenessTags(targetVal, null, { path: ['tags'], documentInventory: {} } as any);
 }
 
-describe('asyncApi2UniquenessTags', () => {
+describe('uniquenessTags', () => {
   test('should skip empty tags', () => {
     const results = runValidation([]);
     expect(results).toEqual([]);
@@ -43,8 +43,8 @@ describe('asyncApi2UniquenessTags', () => {
     const results = runValidation(tags);
     expect(results).toEqual([
       {
-        message: 'Tags contains duplicate tag names: one.',
-        path: ['tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['tags', 2, 'name'],
       },
     ]);
   });
@@ -66,13 +66,24 @@ describe('asyncApi2UniquenessTags', () => {
       {
         name: 'two',
       },
+      {
+        name: 'two',
+      },
     ];
 
     const results = runValidation(tags);
     expect(results).toEqual([
       {
-        message: 'Tags contains duplicate tag names: one, two.',
-        path: ['tags'],
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['tags', 3, 'name'],
+      },
+      {
+        message: '"tags" object contains duplicate tag name "two".',
+        path: ['tags', 4, 'name'],
+      },
+      {
+        message: '"tags" object contains duplicate tag name "two".',
+        path: ['tags', 5, 'name'],
       },
     ]);
   });
