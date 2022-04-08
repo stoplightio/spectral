@@ -8,7 +8,18 @@ import type { IFunctionResult } from '@stoplight/spectral-core';
 
 export default createRulesetFunction<{ url: string; variables: Record<string, unknown> }, null>(
   {
-    input: null,
+    input: {
+      type: 'object',
+      properties: {
+        url: {
+          type: 'string',
+        },
+        variables: {
+          type: 'object',
+        }
+      },
+      required: ['url', 'variables'],
+    },
     options: null,
   },
   function asyncApi2ServerVariables(targetVal, _, ctx) {

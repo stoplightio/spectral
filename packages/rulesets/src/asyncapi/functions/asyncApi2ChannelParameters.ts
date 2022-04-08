@@ -8,7 +8,15 @@ import type { IFunctionResult } from '@stoplight/spectral-core';
 
 export default createRulesetFunction<{ parameters: Record<string, unknown> }, null>(
   {
-    input: null,
+    input: {
+      type: 'object',
+      properties: {
+        parameters: {
+          type: 'object',
+        }
+      },
+      required: ['parameters'],
+    },
     options: null,
   },
   function asyncApi2ChannelParameters(targetVal, _, ctx) {

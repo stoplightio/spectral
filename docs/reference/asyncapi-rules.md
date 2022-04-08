@@ -24,7 +24,7 @@ Keep trailing slashes off of channel names, as it can cause some confusion. Most
 
 **Recommended:** Yes
 
-### asyncapi-channel-parameters-defined
+### asyncapi-channel-parameters
 
 All channel parameters should be defined in the `parameters` object of the channel. They should also not contain redundant parameters that do not exist in the channel address.
 
@@ -294,7 +294,7 @@ Server URL should not point at example.com.
 
 **Recommended:** No
 
-### asyncapi-server-variables-defined
+### asyncapi-server-variables
 
 All server URL variables should be defined in the `variables` object of the server. They should also not contain redundant variables that do not exist in the server address.
 
