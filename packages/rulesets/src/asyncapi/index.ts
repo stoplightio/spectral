@@ -9,6 +9,7 @@ import {
 } from '@stoplight/spectral-functions';
 
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
+import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 
@@ -150,6 +151,16 @@ export default {
       then: {
         field: 'description',
         function: truthy,
+      },
+    },
+    'asyncapi-operation-operationId-uniqueness': {
+      description: '"operationId" must be unique across all the operations.',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      given: '$',
+      then: {
+        function: asyncApi2OperationIdUniqueness,
       },
     },
     'asyncapi-operation-operationId': {
