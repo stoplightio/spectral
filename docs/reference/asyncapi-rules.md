@@ -30,6 +30,48 @@ All channel parameters should be defined in the `parameters` object of the chann
 
 **Recommended:** Yes
 
+### asyncapi-channel-servers
+
+Channel servers must be defined in the `servers` object.
+
+**Bad Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - development
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - production
+```
+
+**Recommended:** Yes
+
 ### asyncapi-headers-schema-type-object
 
 The schema definition of the application headers must be of type “object”.
@@ -368,6 +410,12 @@ servers:
 Server URL should not point at example.com.
 
 **Recommended:** No
+
+### asyncapi-server-security
+
+Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
 
 ### asyncapi-server-variables
 
