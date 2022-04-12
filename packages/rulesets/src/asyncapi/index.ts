@@ -9,6 +9,7 @@ import {
 } from '@stoplight/spectral-functions';
 
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
+import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 
@@ -140,6 +141,31 @@ export default {
       then: {
         field: 'info.license',
         function: truthy,
+      },
+    },
+    'asyncapi-message-examples': {
+      description: 'Message...',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: [
+        // messages
+        '$.channels.*.[publish,subscribe].message',
+        '$.channels.*.[publish,subscribe].message.oneOf.*',
+        '$.components.channels.*.[publish,subscribe].message',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*',
+        '$.components.messages.*',
+        // message traits
+        '$.channels.*.[publish,subscribe].message.traits.*',
+        '$.channels.*.[publish,subscribe].message.oneOf.*.traits.*',
+        '$.components.channels.*.[publish,subscribe].message.traits.*',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*.traits.*',
+        '$.components.messages.*.traits.*',
+        '$.components.messageTraits.*',
+      ],
+      then: {
+        function: asyncApi2MessageExamplesValidation,
       },
     },
     'asyncapi-operation-description': {
