@@ -19,8 +19,11 @@ export interface MessageFragment {
 }
 
 function getMessageExamples(message: MessageFragment): Array<{ path: JsonPath; value: MessageExample }> {
+  if (!Array.isArray(message.examples)) {
+    return [];
+  }
   return (
-    message.examples?.map((example, index) => {
+    message.examples.map((example, index) => {
       return {
         path: ['examples', index],
         value: example,
