@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-migrator-v1.7.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.2...@stoplight/spectral-ruleset-migrator-v1.7.3) (2022-03-10)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** validate aliases correctly ([#2085](https://github.com/stoplightio/spectral/issues/2085)) ([1f4ab20](https://github.com/stoplightio/spectral/commit/1f4ab208c21c7a1d1263dfd50cc6da658568e871))
+
 # [@stoplight/spectral-ruleset-migrator-v1.7.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.1...@stoplight/spectral-ruleset-migrator-v1.7.2) (2022-01-26)
 
 ### Bug Fixes
