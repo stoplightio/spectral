@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@stoplight/spectral-core/meta/extensions",
+  "$defs": {
+    "Extends": {
+      "$anchor": "extends",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "additionalItems": false,
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "enum": ["all", "recommended", "off"],
+                    "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Format": {
+      "$anchor": "format",
+      "enum": [
+        "oas2",
+        "oas3",
+        "oas3.0",
+        "oas3.1",
+        "asyncapi2",
+        "json-schema",
+        "json-schema-loose",
+        "json-schema-draft4",
+        "json-schema-draft6",
+        "json-schema-draft7",
+        "json-schema-draft-2019-09",
+        "json-schema-2019-09",
+        "json-schema-draft-2020-12",
+        "json-schema-2020-12"
+      ],
+      "errorMessage": "must be a valid format"
+    },
+    "Functions": {
+      "$anchor": "functions",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "FunctionsDir": {
+      "$anchor": "functionsDir",
+      "type": "string"
+    },
+    "Function": {
+      "$anchor": "function",
+      "type": "object",
+      "properties": {
+        "function": {
+          "type": "string"
+        }
+      },
+      "required": ["function"]
+    }
+  }
+}

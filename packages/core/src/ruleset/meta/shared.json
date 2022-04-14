@@ -6,14 +6,9 @@
       "$anchor": "formats",
       "type": "array",
       "items": {
-        "$ref": "#format"
+        "$ref": "extensions#format"
       },
       "errorMessage": "must be an array of formats"
-    },
-    "Format": {
-      "$anchor": "format",
-      "spectral-runtime": "spectral-format",
-      "errorMessage": "must be a valid format"
     },
     "DiagnosticSeverity": {
       "enum": [-1, 0, 1, 2, 3]

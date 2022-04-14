@@ -13,9 +13,7 @@
           }
         },
         {
-          "type": "object",
-          "spectral-runtime": "ruleset-function",
-          "required": ["function"]
+          "$ref": "extensions#function"
         }
       ]
     },
