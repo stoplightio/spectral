@@ -1,4 +1,4 @@
-export { assertValidRuleset, RulesetValidationError } from './validation';
+export { assertValidRuleset, RulesetValidationError } from './validation/index';
 export { getDiagnosticSeverity } from './utils';
 export { createRulesetFunction, SchemaDefinition as RulesetFunctionSchemaDefinition } from './rulesetFunction';
 export { Format } from './format';

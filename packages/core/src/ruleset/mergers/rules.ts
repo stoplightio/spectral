@@ -1,5 +1,5 @@
 import { Optional } from '@stoplight/types';
-import { assertValidRule } from '../validation';
+import { assertValidRule } from '../validation/assertions';
 import { Rule } from '../rule';
 import type { Ruleset } from '../ruleset';
 import { FileRuleDefinition } from '../types';
