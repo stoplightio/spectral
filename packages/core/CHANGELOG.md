@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.11.1...@stoplight/spectral-core-v1.12.0) (2022-04-18)
+
+
+### Features
+
+* **core:** support JSON ruleset validation ([#2062](https://github.com/stoplightio/spectral/issues/2062)) ([aeb7d5b](https://github.com/stoplightio/spectral/commit/aeb7d5b842741d85229fb2c8575ae2c58c8dfbb8))
+
 # [@stoplight/spectral-core-v1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.11.0...@stoplight/spectral-core-v1.11.1) (2022-03-16)
 
 
