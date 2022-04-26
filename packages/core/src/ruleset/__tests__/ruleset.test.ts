@@ -68,6 +68,18 @@ describe('Ruleset', () => {
       expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
     });
 
+    it('given ruleset with extends set to off, should disable all rules but explicitly redeclared', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-redeclared'));
+      expect(Object.keys(rules)).toEqual([
+        'description-matches-stoplight',
+        'title-matches-stoplight',
+        'contact-name-matches-stoplight',
+        'overridable-rule',
+      ]);
+
+      expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
+    });
+
     it('given nested extends with severity set to off', async () => {
       const { rules } = await loadRuleset(import('./__fixtures__/severity/off-proxy'));
       expect(Object.keys(rules)).toEqual([

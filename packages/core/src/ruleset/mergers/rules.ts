@@ -39,7 +39,10 @@ export function mergeRule(
       break;
     case 'object':
       if (existingRule !== void 0) {
-        Object.assign(existingRule, rule, { owner: existingRule.owner });
+        Object.assign(existingRule, rule, {
+          enabled: true,
+          owner: existingRule.owner,
+        });
       } else {
         assertValidRule(rule);
         return new Rule(name, rule, ruleset);
