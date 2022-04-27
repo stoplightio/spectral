@@ -19,11 +19,15 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
+    },
+    "./ruleset": {
+      "types": "./dist/ruleset/index.d.ts",
+      "default": "./dist/ruleset/index.js"
     },
     "./ruleset/validation": {
       "types": "./dist/ruleset/validation/index.d.ts",
-      "require": "./dist/ruleset/validation/index.js"
+      "default": "./dist/ruleset/validation/index.js"
     }
   },
   "engines": {
@@ -40,12 +44,12 @@
     "@stoplight/spectral-parsers": "^1.0.0",
     "@stoplight/spectral-ref-resolver": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.0.0",
-    "@stoplight/types": "12.3.0",
+    "@stoplight/types": "13.0.0",
+    "@types/json-schema": "^7.0.7",
     "ajv": "^8.6.0",
     "ajv-errors": "~3.0.0",
     "ajv-formats": "~2.1.0",
     "blueimp-md5": "2.18.0",
-    "json-schema": "0.4.0",
     "jsonpath-plus": "6.0.1",
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
@@ -60,7 +64,6 @@
     "@stoplight/spectral-functions": "*",
     "@stoplight/spectral-parsers": "*",
     "@stoplight/yaml": "^4.2.2",
-    "@types/json-schema": "^7.0.7",
     "@types/minimatch": "^3.0.5",
     "@types/treeify": "^1.0.0",
     "nock": "^13.1.0",

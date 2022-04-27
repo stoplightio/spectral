@@ -2389,7 +2389,7 @@ __metadata:
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.0
     "@stoplight/spectral-runtime": ^1.0.0
-    "@stoplight/types": 12.3.0
+    "@stoplight/types": 13.0.0
     "@stoplight/yaml": ^4.2.2
     "@types/json-schema": ^7.0.7
     "@types/minimatch": ^3.0.5
@@ -2398,7 +2398,6 @@ __metadata:
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.0
     blueimp-md5: 2.18.0
-    json-schema: 0.4.0
     jsonpath-plus: 6.0.1
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
@@ -2559,13 +2558,33 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/types@npm:12.3.0, @stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0":
+"@stoplight/types@npm:12.3.0":
   version: 12.3.0
   resolution: "@stoplight/types@npm:12.3.0"
   dependencies:
     "@types/json-schema": ^7.0.4
     utility-types: ^3.10.0
   checksum: 28065540d2d30743bfaa4ab09df3dc1e2a216f14962f78e27d8e53eda7f293f64eba8703be53b8d179dff403f54764e0823baa578fa85f78280d21b0ae22e773
+  languageName: node
+  linkType: hard
+
+"@stoplight/types@npm:13.0.0":
+  version: 13.0.0
+  resolution: "@stoplight/types@npm:13.0.0"
+  dependencies:
+    "@types/json-schema": ^7.0.4
+    utility-types: ^3.10.0
+  checksum: 40a3995fe4f654b9761908eb41b4369d22241220e96aa0f3ace4541c160d995ddd52dee32fa574a87d7ba3f573befc40ca8708712f34e5f815162addb170f7f3
+  languageName: node
+  linkType: hard
+
+"@stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0":
+  version: 12.5.0
+  resolution: "@stoplight/types@npm:12.5.0"
+  dependencies:
+    "@types/json-schema": ^7.0.4
+    utility-types: ^3.10.0
+  checksum: fe4a09df6e1c2f0cdb53f474b180cc7b8184e814e1ac4427d199642f10958335f597060530a908c0e5800ba2569d077afe124a51deaee466255ce942e1e03941
   languageName: node
   linkType: hard
 
@@ -3147,16 +3166,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.1.0, acorn@npm:^8.2.4, acorn@npm:^8.4.1":
-  version: 8.5.0
-  resolution: "acorn@npm:8.5.0"
-  bin:
-    acorn: bin/acorn
-  checksum: 2e4c1dbed3da327684863debf31d341bf8882c6893c506653872c00977eee45675feb9129255d6c74c88424d2b20d889ca6de5b39776e5e3cccfc756b3ca1da8
-  languageName: node
-  linkType: hard
-
-"acorn@npm:^8.7.0":
+"acorn@npm:^8.1.0, acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.7.0":
   version: 8.7.0
   resolution: "acorn@npm:8.7.0"
   bin:
@@ -8093,7 +8103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:0.4.0, json-schema@npm:^0.4.0":
+"json-schema@npm:^0.4.0":
   version: 0.4.0
   resolution: "json-schema@npm:0.4.0"
   checksum: 66389434c3469e698da0df2e7ac5a3281bcff75e797a5c127db7c5b56270e01ae13d9afa3c03344f76e32e81678337a8c912bdbb75101c62e487dc3778461d72
