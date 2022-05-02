@@ -1,4 +1,4 @@
-import { aas2_0, aas2_1, aas2_2, aas2_3 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -14,7 +14,7 @@ import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
-  formats: [aas2_0, aas2_1, aas2_2, aas2_3],
+  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4],
   rules: {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
