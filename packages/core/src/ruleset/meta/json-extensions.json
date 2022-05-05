@@ -36,22 +36,7 @@
     },
     "Format": {
       "$anchor": "format",
-      "enum": [
-        "oas2",
-        "oas3",
-        "oas3.0",
-        "oas3.1",
-        "asyncapi2",
-        "json-schema",
-        "json-schema-loose",
-        "json-schema-draft4",
-        "json-schema-draft6",
-        "json-schema-draft7",
-        "json-schema-draft-2019-09",
-        "json-schema-2019-09",
-        "json-schema-draft-2020-12",
-        "json-schema-2020-12"
-      ],
+      "type": "string",
       "errorMessage": "must be a valid format"
     },
     "Functions": {

@@ -691,12 +691,12 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
 
   it.each([
     [
-      [2, 'a'],
+      [2, null],
       `Error at #/formats/0: must be a valid format
 Error at #/formats/1: must be a valid format`,
     ],
     [2, 'Error at #/formats: must be an array of formats'],
-    [[''], 'Error at #/formats/0: must be a valid format'],
+    [[null], 'Error at #/formats/0: must be a valid format'],
   ])('recognizes invalid ruleset %p formats syntax', (formats, error) => {
     expect(
       assertValidRuleset.bind(
@@ -715,7 +715,7 @@ Error at #/formats/1: must be a valid format`,
       assertValidRuleset.bind(
         null,
         {
-          formats: ['json-schema-loose'],
+          formats: ['json-schema-loose', 'aas2_3'],
           rules: {
             rule: {
               given: '$.info',
@@ -733,7 +733,7 @@ Error at #/formats/1: must be a valid format`,
 
   it.each([
     [
-      [2, 'a'],
+      [2, null],
       `Error at #/rules/rule/formats/0: must be a valid format
 Error at #/rules/rule/formats/1: must be a valid format`,
     ],
