@@ -36,7 +36,10 @@ export async function bundleRuleset(
         : target === 'browser'
         ? id => isURL(id)
         : (id, importer) =>
-            id.startsWith('node:') || (!isURL(id) && isPackageImport(id) && (importer === void 0 || !isURL(importer))),
+            id.startsWith('node:') ||
+            (!isURL(id) &&
+              isPackageImport(id) &&
+              (importer === void 0 || !isURL(importer) || id.startsWith('@stoplight/spectral-'))),
   });
 
   return (await bundle.generate({ format: format ?? (target === 'runtime' ? 'iife' : 'esm'), exports: 'auto' }))
