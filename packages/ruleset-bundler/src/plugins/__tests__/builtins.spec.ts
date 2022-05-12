@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 import * as runtime from '@stoplight/spectral-runtime';
+import { fetch } from '@stoplight/spectral-runtime';
 import * as functions from '@stoplight/spectral-functions';
 
 jest.mock?.('fs');
@@ -9,6 +10,7 @@ import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
 import { builtins } from '../builtins';
+import { node } from '../../presets/node';
 
 describe('Builtins Plugin', () => {
   let io: IO;
@@ -256,5 +258,58 @@ export { input as default };
         globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions'],
       ).toStrictEqual(functions);
     });
+  });
+
+  it('support bundling remote js ruleset with builtin modules', async () => {
+    serveAssets({
+      'https://tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
+import { oas } from '@stoplight/spectral-rulesets';
+
+export default {
+extends: [oas],
+rules: {
+  'my-rule': {
+    given: '$',
+    then: {
+      function: schema,
+      functionOptions: {
+        schema: {
+          type: 'object',
+        },
+      },
+    },
+  },
+},
+};`,
+    });
+
+    const code = await bundleRuleset('https://tmp/input.js', {
+      target: 'node',
+      plugins: [builtins(), ...node({ fs, fetch }), virtualFs(io)],
+    });
+
+    expect(code).toContain(`var input = {
+extends: [oas],
+rules: {
+  'my-rule': {
+    given: '$',
+    then: {
+      function: schema,
+      functionOptions: {
+        schema: {
+          type: 'object',
+        },
+      },
+    },
+  },
+},
+};
+
+export { input as default };
+`);
+
+    expect(
+      globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions'],
+    ).toStrictEqual(functions);
   });
 });
