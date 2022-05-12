@@ -1,7 +1,7 @@
-import { DiagnosticSeverity } from '@stoplight/types';
-import { Format } from './format';
-import { RulesetFunction, RulesetFunctionWithValidator } from '../types';
-import { FormatsSet } from './utils/formatsSet';
+import type { DiagnosticSeverity } from '@stoplight/types';
+import type { Format } from './format';
+import type { RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import type { Formats } from './formats';
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';
 export type FileRuleSeverityDefinition = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
@@ -17,7 +17,7 @@ export type ParserOptions = {
 export type RuleDefinition = {
   type?: 'validation' | 'style';
 
-  formats?: Format[];
+  formats?: Formats | Format[];
 
   documentationUrl?: string;
 
@@ -81,7 +81,7 @@ export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & Rul
 export type RulesetScopedAliasDefinition = {
   description?: string;
   targets: {
-    formats: FormatsSet | Format[];
+    formats: Formats | Format[];
     given: string[];
   }[];
 };
@@ -92,7 +92,7 @@ export type RulesetDefinition = Readonly<
   {
     documentationUrl?: string;
     description?: string;
-    formats?: FormatsSet | Format[];
+    formats?: Formats | Format[];
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;
     aliases?: RulesetAliasesDefinition;
@@ -112,3 +112,10 @@ export type RulesetDefinition = Readonly<
       }
   >
 >;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Stringifable<T> = T extends object
+  ? {
+      [P in keyof T]: Stringifable<T[P]> | { toJSON?(): Stringifable<T[P]> };
+    }
+  : T;

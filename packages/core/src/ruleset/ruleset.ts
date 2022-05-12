@@ -1,20 +1,21 @@
 import { dirname, relative } from '@stoplight/path';
+import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
+import { DiagnosticSeverity } from '@stoplight/types';
 import { minimatch } from './utils/minimatch';
 import { Rule, StringifiedRule } from './rule';
-import {
+import type {
   FileRulesetSeverityDefinition,
   ParserOptions,
   RulesetAliasesDefinition,
   RulesetDefinition,
   RulesetOverridesDefinition,
+  Stringifable,
 } from './types';
-import { assertValidRuleset } from './validation';
+import { assertValidRuleset } from './validation/index';
 import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
-import { isPlainObject, extractPointerFromRef, extractSourceFromRef } from '@stoplight/json';
-import { DiagnosticSeverity } from '@stoplight/types';
-import { FormatsSet } from './utils/formatsSet';
+import { Formats } from './formats';
 import { isSimpleAliasDefinition } from './utils/guards';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
@@ -33,7 +34,7 @@ export type StringifiedRuleset = {
   extends: StringifiedRuleset[] | null;
   source: string | null;
   aliases: RulesetAliasesDefinition | null;
-  formats: FormatsSet | null;
+  formats: Formats | null;
   rules: Record<string, StringifiedRule>;
   overrides: RulesetOverridesDefinition | null;
   parserOptions: ParserOptions;
@@ -43,7 +44,7 @@ export class Ruleset {
   public readonly id = SEED++;
 
   protected readonly extends: Ruleset[] | null;
-  public readonly formats = new FormatsSet();
+  public readonly formats = new Formats();
   public readonly overrides: RulesetOverridesDefinition | null;
   public readonly aliases: RulesetAliasesDefinition | null;
   public readonly hasComplexAliases: boolean;
@@ -86,7 +87,7 @@ export class Ruleset {
               hasComplexAliases = true;
 
               const targets = value.targets.map(target => ({
-                formats: new FormatsSet(target.formats),
+                formats: new Formats(target.formats),
                 given: target.given,
               }));
 
@@ -286,10 +287,9 @@ export class Ruleset {
             this.formats.add(format);
           }
         } else if (rule.owner !== this) {
-          rule.formats =
-            rule.owner.definition.formats === void 0 ? null : new FormatsSet(rule.owner.definition.formats);
+          rule.formats = rule.owner.definition.formats === void 0 ? null : new Formats(rule.owner.definition.formats);
         } else if (this.definition.formats !== void 0) {
-          rule.formats = new FormatsSet(this.definition.formats);
+          rule.formats = new Formats(this.definition.formats);
         }
 
         if (this.definition.documentationUrl !== void 0 && rule.documentationUrl === null) {
@@ -309,10 +309,7 @@ export class Ruleset {
     return DEFAULT_RULESET_FILE.test(uri);
   }
 
-  public toJSON(): Omit<StringifiedRuleset, 'extends' | 'rules'> & {
-    extends: Ruleset['extends'];
-    rules: Ruleset['rules'];
-  } {
+  public toJSON(): Stringifable<StringifiedRuleset> {
     return {
       id: this.id,
       extends: this.extends,

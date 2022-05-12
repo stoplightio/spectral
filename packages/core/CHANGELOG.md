@@ -1,3 +1,17 @@
+# [@stoplight/spectral-core-v1.12.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.0...@stoplight/spectral-core-v1.12.1) (2022-04-29)
+
+
+### Bug Fixes
+
+* **core:** redeclared rules should always be re-enabled ([#2138](https://github.com/stoplightio/spectral/issues/2138)) ([6def6be](https://github.com/stoplightio/spectral/commit/6def6be4bc3f318c8e93d2e1c0df2ff1b803a178))
+
+# [@stoplight/spectral-core-v1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.11.1...@stoplight/spectral-core-v1.12.0) (2022-04-18)
+
+
+### Features
+
+* **core:** support JSON ruleset validation ([#2062](https://github.com/stoplightio/spectral/issues/2062)) ([aeb7d5b](https://github.com/stoplightio/spectral/commit/aeb7d5b842741d85229fb2c8575ae2c58c8dfbb8))
+
 # [@stoplight/spectral-core-v1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.11.0...@stoplight/spectral-core-v1.11.1) (2022-03-16)
 
 

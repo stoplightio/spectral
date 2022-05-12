@@ -454,3 +454,71 @@ overrides:
 ```
 
 In the event of multiple matches, the order of definition takes place, with the last one having the higher priority.
+
+### Caveats
+
+Please bear in mind that overrides are only applied to the _root_ documents. If your documents have any external dependencies, i.e. $refs, the overrides won't apply.
+
+**Example:**
+
+Given the following 2 YAML documents
+
+```yaml
+# my-document.yaml
+openapi: "3.1.0"
+paths: {}
+components:
+  schemas:
+    User:
+      $ref: "./User.yaml"
+```
+
+```yaml
+# User.yaml
+title: ""
+type: object
+properties:
+  id:
+    type: string
+required:
+  - id
+```
+
+and the ruleset below
+
+```json
+{
+  "rules": {
+    "empty-title-property": {
+      "message": "Title must not be empty",
+      "given": "$..title",
+      "then": {
+        "function": "truthy"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "files": ["User.yaml"],
+      "rules": {
+        "empty-title-property": "off"
+      }
+    }
+  ]
+}
+```
+
+running `spectral lint my-document.yaml` will result in
+
+```
+/project/User.yaml
+ 1:8  warning  empty-title-property  Title must not be empty  title
+
+✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
+```
+
+while executing `spectral lint User.yaml` will output
+
+```
+No results with a severity of 'error' or higher found!
+```

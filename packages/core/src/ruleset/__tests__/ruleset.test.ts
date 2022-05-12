@@ -6,11 +6,11 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
 import { print } from './__helpers__/print';
-import { RulesetValidationError } from '../validation';
+import { RulesetValidationError } from '../validation/index';
 import { isPlainObject } from '@stoplight/json';
 import { Format } from '../format';
-import { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
-import { FormatsSet } from '../utils/formatsSet';
+import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
+import { Formats } from '../formats';
 
 async function loadRuleset(mod: Promise<{ default: RulesetDefinition }>, source?: string): Promise<Ruleset> {
   return new Ruleset((await mod).default, { source });
@@ -58,6 +58,18 @@ describe('Ruleset', () => {
 
     it('given ruleset with extends set to off, should disable all rules but explicitly enabled', async () => {
       const { rules } = await loadRuleset(import('./__fixtures__/severity/off'));
+      expect(Object.keys(rules)).toEqual([
+        'description-matches-stoplight',
+        'title-matches-stoplight',
+        'contact-name-matches-stoplight',
+        'overridable-rule',
+      ]);
+
+      expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
+    });
+
+    it('given ruleset with extends set to off, should disable all rules but explicitly redeclared', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-redeclared'));
       expect(Object.keys(rules)).toEqual([
         'description-matches-stoplight',
         'title-matches-stoplight',
@@ -1378,24 +1390,22 @@ describe('Ruleset', () => {
           },
         });
 
-        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft4]))).toStrictEqual(['$..id']);
-        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft6]))).toStrictEqual(['$..$id']);
-        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft7]))).toStrictEqual(['$..$id']);
-        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft6, draft7]))).toStrictEqual([
-          '$..$id',
-        ]);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([draft4]))).toStrictEqual(['$..id']);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([draft6]))).toStrictEqual(['$..$id']);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([draft7]))).toStrictEqual(['$..$id']);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([draft6, draft7]))).toStrictEqual(['$..$id']);
 
-        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new FormatsSet([oas2]))).toStrictEqual([
+        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new Formats([oas2]))).toStrictEqual([
           '$.parameters[*]',
           '$.paths[*].parameters[?(@ && !@.$ref)]',
           '$.paths[*][get,put,post,delete,options,head,patch,trace].parameters[?(@ && !@.$ref)]',
         ]);
-        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new FormatsSet([oas3]))).toStrictEqual([
+        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new Formats([oas3]))).toStrictEqual([
           '$.components.parameters[*]',
           '$.paths[*].parameters[?(@ && !@.$ref)]',
           '$.paths[*][get,put,post,delete,options,head,patch,trace].parameters[?(@ && !@.$ref)]',
         ]);
-        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new FormatsSet([oas2, oas3]))).toStrictEqual([
+        expect(ruleset.rules['valid-parameter'].getGivenForFormats(new Formats([oas2, oas3]))).toStrictEqual([
           '$.components.parameters[*]',
           '$.paths[*].parameters[?(@ && !@.$ref)]',
           '$.paths[*][get,put,post,delete,options,head,patch,trace].parameters[?(@ && !@.$ref)]',
@@ -1442,7 +1452,7 @@ describe('Ruleset', () => {
           },
         });
 
-        expect(() => ruleset.rules['valid-header'].getGivenForFormats(new FormatsSet([oas3]))).toThrowError(
+        expect(() => ruleset.rules['valid-header'].getGivenForFormats(new Formats([oas3]))).toThrowError(
           ReferenceError(
             'Alias "HeaderObject" is circular. Resolution stack: HeaderObject -> HeaderObjects -> Components -> HeaderObject',
           ),
@@ -1479,8 +1489,8 @@ describe('Ruleset', () => {
           },
         });
 
-        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([draft7]))).toStrictEqual([]);
-        expect(ruleset.rules['valid-id'].getGivenForFormats(new FormatsSet([]))).toStrictEqual([]);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([draft7]))).toStrictEqual([]);
+        expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([]))).toStrictEqual([]);
       });
 
       it('should be serializable', () => {

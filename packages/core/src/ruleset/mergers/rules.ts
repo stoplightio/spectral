@@ -1,5 +1,5 @@
 import { Optional } from '@stoplight/types';
-import { assertValidRule } from '../validation';
+import { assertValidRule } from '../validation/assertions';
 import { Rule } from '../rule';
 import type { Ruleset } from '../ruleset';
 import { FileRuleDefinition } from '../types';
@@ -39,7 +39,10 @@ export function mergeRule(
       break;
     case 'object':
       if (existingRule !== void 0) {
-        Object.assign(existingRule, rule, { owner: existingRule.owner });
+        Object.assign(existingRule, rule, {
+          enabled: true,
+          owner: existingRule.owner,
+        });
       } else {
         assertValidRule(rule);
         return new Rule(name, rule, ruleset);

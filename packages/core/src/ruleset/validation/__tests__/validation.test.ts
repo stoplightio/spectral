@@ -1,14 +1,16 @@
-import { schema, truthy } from '@stoplight/spectral-functions';
-import { Format } from '../format';
-import { assertValidRuleset, RulesetValidationError } from '../validation';
-import { RulesetDefinition, RulesetOverridesDefinition } from '../types';
-const invalidRuleset = require('./__fixtures__/invalid-ruleset.json');
-const validRuleset = require('./__fixtures__/valid-flat-ruleset.json');
+import { truthy } from '@stoplight/spectral-functions';
+import type { Format } from '../../format';
+
+import { assertValidRuleset, RulesetValidationError } from '../index';
+import invalidRuleset from './__fixtures__/invalid-ruleset';
+import validRuleset from './__fixtures__/valid-flat-ruleset';
+
+import { RulesetDefinition, RulesetOverridesDefinition } from '../../types';
 
 const formatA: Format = () => false;
 const formatB: Format = () => false;
 
-describe('Ruleset Validation', () => {
+describe('JS Ruleset Validation', () => {
   it('given primitive type, throws', () => {
     expect(assertValidRuleset.bind(null, null)).toThrow('Provided ruleset is not an object');
     expect(assertValidRuleset.bind(null, 2)).toThrow('Provided ruleset is not an object');
@@ -140,22 +142,6 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
       assertValidRuleset.bind(null, {
         extends: [[rulesetA, 'off'], rulesetB],
         rules: {},
-      }),
-    ).not.toThrow();
-  });
-
-  it('recognizes string extends syntax', () => {
-    expect(
-      assertValidRuleset.bind(null, {
-        rules: {
-          foo: {
-            given: '$',
-            then: {
-              function: schema,
-              functionOptions: {},
-            },
-          },
-        },
       }),
     ).not.toThrow();
   });
@@ -653,5 +639,122 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
 Error at #/parserOptions/incompatibleValues: the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"`),
       );
     });
+  });
+});
+
+// we only check the most notable differences here, since the rest of the validation process is common to both JS and JSON
+describe('JSON Ruleset Validation', () => {
+  it('recognizes valid array-ish extends syntax', () => {
+    expect(
+      assertValidRuleset.bind(
+        null,
+        {
+          extends: [['rulesetA', 'off'], 'rulesetB'],
+          rules: {},
+        },
+        'json',
+      ),
+    ).not.toThrow();
+  });
+
+  it.each<[unknown, string]>([
+    [[['test', 'test']], `Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`],
+    [
+      [['bar', 'test'], {}],
+      `Error at #/extends/1: must be string
+Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
+    ],
+  ])('recognizes invalid array-ish extends syntax %p', (_extends, message) => {
+    expect(
+      assertValidRuleset.bind(
+        null,
+        {
+          extends: _extends,
+        },
+        'json',
+      ),
+    ).toThrow(new RulesetValidationError(message));
+  });
+
+  it('recognizes valid ruleset formats syntax', () => {
+    expect(
+      assertValidRuleset.bind(
+        null,
+        {
+          formats: ['oas2'],
+          rules: {},
+        },
+        'json',
+      ),
+    ).not.toThrow();
+  });
+
+  it.each([
+    [
+      [2, 'a'],
+      `Error at #/formats/0: must be a valid format
+Error at #/formats/1: must be a valid format`,
+    ],
+    [2, 'Error at #/formats: must be an array of formats'],
+    [[''], 'Error at #/formats/0: must be a valid format'],
+  ])('recognizes invalid ruleset %p formats syntax', (formats, error) => {
+    expect(
+      assertValidRuleset.bind(
+        null,
+        {
+          formats,
+          rules: {},
+        },
+        'json',
+      ),
+    ).toThrow(new RulesetValidationError(error));
+  });
+
+  it('recognizes valid rule formats syntax', () => {
+    expect(
+      assertValidRuleset.bind(
+        null,
+        {
+          formats: ['json-schema-loose'],
+          rules: {
+            rule: {
+              given: '$.info',
+              then: {
+                function: 'truthy',
+              },
+              formats: ['oas2'],
+            },
+          },
+        },
+        'json',
+      ),
+    ).not.toThrow();
+  });
+
+  it.each([
+    [
+      [2, 'a'],
+      `Error at #/rules/rule/formats/0: must be a valid format
+Error at #/rules/rule/formats/1: must be a valid format`,
+    ],
+    [2, 'Error at #/rules/rule/formats: must be an array of formats'],
+  ])('recognizes invalid rule %p formats syntax', (formats, error) => {
+    expect(
+      assertValidRuleset.bind(
+        null,
+        {
+          rules: {
+            rule: {
+              given: '$.info',
+              then: {
+                function: 'truthy',
+              },
+              formats,
+            },
+          },
+        },
+        'json',
+      ),
+    ).toThrow(new RulesetValidationError(error));
   });
 });
