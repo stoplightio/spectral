@@ -83,9 +83,10 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 ## ⚙️ Integrations
 
-- [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) uses Spectral to validate and lint OpenAPI documents.
-- [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
-- [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
+- [GitHub Action](https://github.com/stoplightio/spectral-action) - lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
+- [Jetbrains Plugin](https://plugins.jetbrains.com/plugin/18520-spectral), Automatic linting of your OpenAPI specifications and highlighting in your editor.
+- [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) - Uses Spectral to validate and lint OpenAPI documents.
+- [VS Code Spectral](https://marketplace.visualstudio.com/items?itemName=stoplight.spectral), all the power of Spectral without leaving VS Code.
 
 ## 🏁 Help Others Utilize Spectral
 
