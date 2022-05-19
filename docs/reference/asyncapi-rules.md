@@ -271,7 +271,7 @@ Operation `security` values must match a scheme defined in the `components.secur
 
 ```yaml
 channels:
-  'user/signup':
+  "user/signup":
     publish:
       security:
         - petstore_auth: []
@@ -284,7 +284,7 @@ components:
 
 ```yaml
 channels:
-  'user/signup':
+  "user/signup":
     publish:
       security:
         - not_defined: []
