@@ -261,6 +261,38 @@ This operation ID is essentially a reference for the operation. Tools may use it
 
 **Recommended:** Yes
 
+### asyncapi-operation-security
+
+Operation `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+channels:
+  'user/signup':
+    publish:
+      security:
+        - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+channels:
+  'user/signup':
+    publish:
+      security:
+        - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
 ### asyncapi-parameter-description
 
 Parameter objects should have a `description`.
@@ -416,6 +448,32 @@ Server URL should not point at example.com.
 Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
 
 **Recommended:** Yes
+
+**Good Example**
+
+```yaml
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
 
 ### asyncapi-server-variables
 
