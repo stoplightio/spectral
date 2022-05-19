@@ -343,7 +343,7 @@ tags:
 
 ### asyncapi-tags-uniqueness
 
-Tags have duplicate names (identifiers).
+Tags must not have duplicate names (identifiers).
 
 **Recommended:** Yes
 

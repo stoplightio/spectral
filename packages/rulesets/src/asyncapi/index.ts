@@ -360,7 +360,7 @@ export default {
       },
     },
     'asyncapi-tags-uniqueness': {
-      description: 'Each tags must have a unique names.',
+      description: 'Each tag must have a unique name.',
       message: '{{error}}',
       severity: 'error',
       recommended: true,

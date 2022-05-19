@@ -250,9 +250,9 @@ tags:
   - name: "Badger"
 ```
 
-### asyncapi-tags-uniqueness
+### openapi-tags-uniqueness
 
-OpenAPI object should have non-duplicated tag names (identifiers).
+OpenAPI object must not have duplicated tag names (identifiers).
 
 **Recommended:** Yes
 
