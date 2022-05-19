@@ -1,18 +1,20 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from './__helpers__/tester';
 
-testRule('asyncapi-server-security', [
+testRule('asyncapi-operation-security', [
   {
     name: 'valid case',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              petstore_auth: [],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                petstore_auth: [],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -27,14 +29,16 @@ testRule('asyncapi-server-security', [
   {
     name: 'valid case (oauth2)',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              petstore_auth: ['write:pets'],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                petstore_auth: ['write:pets'],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -57,16 +61,18 @@ testRule('asyncapi-server-security', [
   },
 
   {
-    name: 'invalid case',
+    name: 'invalid case (publish operation)',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              not_defined: [],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                not_defined: [],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -77,8 +83,38 @@ testRule('asyncapi-server-security', [
     },
     errors: [
       {
-        message: 'Server must not reference an undefined security scheme.',
-        path: ['servers', 'production', 'security', '0', 'not_defined'],
+        message: 'Operation must not reference an undefined security scheme.',
+        path: ['channels', 'channel', 'publish', 'security', '0', 'not_defined'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'invalid case (subscribe operation)',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          subscribe: {
+            security: [
+              {
+                not_defined: [],
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          petstore_auth: {},
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Operation must not reference an undefined security scheme.',
+        path: ['channels', 'channel', 'subscribe', 'security', '0', 'not_defined'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -87,14 +123,16 @@ testRule('asyncapi-server-security', [
   {
     name: 'invalid case (oauth2)',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              petstore_auth: ['write:pets', 'not:defined'],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                petstore_auth: ['write:pets', 'not:defined'],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -116,7 +154,7 @@ testRule('asyncapi-server-security', [
     errors: [
       {
         message: 'Non-existing security scope for the specified security scheme. Available: [write:pets, read:pets]',
-        path: ['servers', 'production', 'security', '0', 'petstore_auth', '1'],
+        path: ['channels', 'channel', 'publish', 'security', '0', 'petstore_auth', '1'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -125,14 +163,16 @@ testRule('asyncapi-server-security', [
   {
     name: 'invalid case (oauth2) - multiple flows and not defined scopes',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              petstore_auth: ['write:pets', 'not:defined1', 'not:defined2'],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                petstore_auth: ['write:pets', 'not:defined1', 'not:defined2'],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -167,13 +207,13 @@ testRule('asyncapi-server-security', [
       {
         message:
           'Non-existing security scope for the specified security scheme. Available: [write:pets, read:pets, write:dogs, read:dogs, write:cats, read:cats]',
-        path: ['servers', 'production', 'security', '0', 'petstore_auth', '1'],
+        path: ['channels', 'channel', 'publish', 'security', '0', 'petstore_auth', '1'],
         severity: DiagnosticSeverity.Error,
       },
       {
         message:
           'Non-existing security scope for the specified security scheme. Available: [write:pets, read:pets, write:dogs, read:dogs, write:cats, read:cats]',
-        path: ['servers', 'production', 'security', '0', 'petstore_auth', '2'],
+        path: ['channels', 'channel', 'publish', 'security', '0', 'petstore_auth', '2'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -182,14 +222,16 @@ testRule('asyncapi-server-security', [
   {
     name: 'invalid case (oauth2) - not valid flow',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              petstore_auth: ['write:pets', 'not:defined'],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                petstore_auth: ['write:pets', 'not:defined'],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -217,7 +259,7 @@ testRule('asyncapi-server-security', [
     errors: [
       {
         message: 'Non-existing security scope for the specified security scheme. Available: [write:pets, read:pets]',
-        path: ['servers', 'production', 'security', '0', 'petstore_auth', '1'],
+        path: ['channels', 'channel', 'publish', 'security', '0', 'petstore_auth', '1'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -226,17 +268,19 @@ testRule('asyncapi-server-security', [
   {
     name: 'invalid case (multiple securities)',
     document: {
-      asyncapi: '2.0.0',
-      servers: {
-        production: {
-          security: [
-            {
-              not_defined: [],
-            },
-            {
-              petstore_auth: ['write:pets', 'not:defined'],
-            },
-          ],
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {
+            security: [
+              {
+                not_defined: [],
+              },
+              {
+                petstore_auth: ['write:pets', 'not:defined'],
+              },
+            ],
+          },
         },
       },
       components: {
@@ -263,13 +307,13 @@ testRule('asyncapi-server-security', [
     },
     errors: [
       {
-        message: 'Server must not reference an undefined security scheme.',
-        path: ['servers', 'production', 'security', '0', 'not_defined'],
+        message: 'Operation must not reference an undefined security scheme.',
+        path: ['channels', 'channel', 'publish', 'security', '0', 'not_defined'],
         severity: DiagnosticSeverity.Error,
       },
       {
         message: 'Non-existing security scope for the specified security scheme. Available: [write:pets, read:pets]',
-        path: ['servers', 'production', 'security', '1', 'petstore_auth', '1'],
+        path: ['channels', 'channel', 'publish', 'security', '1', 'petstore_auth', '1'],
         severity: DiagnosticSeverity.Error,
       },
     ],

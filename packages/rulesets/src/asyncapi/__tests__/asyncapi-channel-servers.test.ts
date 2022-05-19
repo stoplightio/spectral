@@ -35,6 +35,29 @@ testRule('asyncapi-channel-servers', [
   },
 
   {
+    name: 'valid case - without defined servers in the root',
+    document: {
+      asyncapi: '2.2.0',
+      channels: {
+        channel: {},
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'valid case - without defined channels in the root',
+    document: {
+      asyncapi: '2.2.0',
+      servers: {
+        development: {},
+        production: {},
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'valid case - with empty array',
     document: {
       asyncapi: '2.2.0',

@@ -25,7 +25,7 @@ function getAllScopes(oauth2: OAuth2Security): string[] {
   return Array.from(new Set(scopes));
 }
 
-export default createRulesetFunction<Record<string, string[]>, null>(
+export default createRulesetFunction<Record<string, string[]>, { objectType: 'Server' | 'Operation' }>(
   {
     input: {
       type: 'object',
@@ -36,9 +36,17 @@ export default createRulesetFunction<Record<string, string[]>, null>(
         },
       },
     },
-    options: null,
+    options: {
+      type: 'object',
+      properties: {
+        objectType: {
+          type: 'string',
+          enum: ['Server', 'Operation'],
+        },
+      },
+    },
   },
-  function asyncApi2Security(targetVal = {}, _, ctx) {
+  function asyncApi2Security(targetVal = {}, { objectType }, ctx) {
     const results: IFunctionResult[] = [];
     const spec = ctx.document.data as {
       components: { securitySchemes: Record<string, { type: string; flows?: OAuth2Security }> };
@@ -49,7 +57,7 @@ export default createRulesetFunction<Record<string, string[]>, null>(
     Object.keys(targetVal).forEach(securityKey => {
       if (!securitySchemesKeys.includes(securityKey)) {
         results.push({
-          message: `Server must not reference an undefined security scheme.`,
+          message: `${objectType} must not reference an undefined security scheme.`,
           path: [...ctx.path, securityKey],
         });
       }

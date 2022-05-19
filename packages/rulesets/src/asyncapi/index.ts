@@ -227,6 +227,20 @@ export default {
         function: truthy,
       },
     },
+    'asyncapi-operation-security': {
+      description: 'Operation have to reference a defined security schemes.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: '$.channels[*][publish,subscribe].security.*',
+      then: {
+        function: asyncApi2Security,
+        functionOptions: {
+          objectType: 'Operation',
+        },
+      },
+    },
     'asyncapi-parameter-description': {
       description: 'Parameter objects must have "description".',
       recommended: false,
@@ -402,6 +416,9 @@ export default {
       given: '$.servers.*.security.*',
       then: {
         function: asyncApi2Security,
+        functionOptions: {
+          objectType: 'Server',
+        },
       },
     },
     'asyncapi-servers': {

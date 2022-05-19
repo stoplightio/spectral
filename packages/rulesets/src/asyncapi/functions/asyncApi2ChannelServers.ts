@@ -36,7 +36,7 @@ export default createRulesetFunction<
     if (!targetVal.channels) return results;
     const serverNames = Object.keys(targetVal.servers ?? {});
 
-    Object.entries(targetVal.channels).forEach(([channelAddress, channel]) => {
+    Object.entries(targetVal.channels ?? {}).forEach(([channelAddress, channel]) => {
       if (!channel.servers) return;
 
       channel.servers.forEach((serverName, index) => {
