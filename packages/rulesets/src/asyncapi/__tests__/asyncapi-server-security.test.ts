@@ -25,6 +25,22 @@ testRule('asyncapi-server-security', [
   },
 
   {
+    name: 'valid case (without security field)',
+    document: {
+      asyncapi: '2.0.0',
+      servers: {
+        production: {},
+      },
+      components: {
+        securitySchemes: {
+          petstore_auth: {},
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'valid case (oauth2)',
     document: {
       asyncapi: '2.0.0',

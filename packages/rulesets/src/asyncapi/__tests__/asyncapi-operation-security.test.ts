@@ -27,6 +27,25 @@ testRule('asyncapi-operation-security', [
   },
 
   {
+    name: 'valid case (without security field)',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        channel: {
+          publish: {},
+          subscribe: {},
+        },
+      },
+      components: {
+        securitySchemes: {
+          petstore_auth: {},
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'valid case (oauth2)',
     document: {
       asyncapi: '2.4.0',
