@@ -144,7 +144,7 @@ export default {
       },
     },
     'asyncapi-message-examples': {
-      description: 'Message...',
+      description: 'Examples of message object should follow by "payload" and "headers" schemas.',
       message: '{{error}}',
       severity: 'error',
       type: 'validation',
