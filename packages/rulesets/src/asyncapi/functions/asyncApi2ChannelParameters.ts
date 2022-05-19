@@ -13,7 +13,7 @@ export default createRulesetFunction<{ parameters: Record<string, unknown> }, nu
       properties: {
         parameters: {
           type: 'object',
-        }
+        },
       },
       required: ['parameters'],
     },

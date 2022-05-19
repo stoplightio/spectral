@@ -16,7 +16,7 @@ export default createRulesetFunction<{ url: string; variables: Record<string, un
         },
         variables: {
           type: 'object',
-        }
+        },
       },
       required: ['url', 'variables'],
     },
