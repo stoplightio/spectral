@@ -48,7 +48,7 @@ where you may need to run a rule on the "raw" un-resolved document.
 
 For example, if you want to enforce conventions on the folder structure used for
 [splitting up
-documents](https://stoplight.io/blog/keeping-openapi-dry-and-portable/?utm_source=github&utm_medium=spectral&utm_campaign=docs).
+documents](https://blog.stoplight.io/keeping-openapi-dry-and-portable?utm_medium=spectral&utm_source=github&utm_campaign=docs).
 
 If your rule needs to access the raw `$ref` reference values, you can set
 `resolved: false` to allow the rule to receive the raw un-resolved version of
