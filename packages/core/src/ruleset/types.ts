@@ -1,6 +1,7 @@
-import { DiagnosticSeverity } from '@stoplight/types';
-import { Format } from './format';
-import { RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import type { DiagnosticSeverity } from '@stoplight/types';
+import type { Format } from './format';
+import type { RulesetFunction, RulesetFunctionWithValidator } from '../types';
+import type { Formats } from './formats';
 
 export type HumanReadableDiagnosticSeverity = 'error' | 'warn' | 'info' | 'hint' | 'off';
 export type FileRuleSeverityDefinition = DiagnosticSeverity | HumanReadableDiagnosticSeverity | boolean;
@@ -16,7 +17,7 @@ export type ParserOptions = {
 export type RuleDefinition = {
   type?: 'validation' | 'style';
 
-  formats?: Format[];
+  formats?: Formats | Format[];
 
   documentationUrl?: string;
 
@@ -34,7 +35,7 @@ export type RuleDefinition = {
   recommended?: boolean;
 
   // Filter the target down to a subset[] with a JSON path
-  given: string | string[];
+  given: GivenDefinition;
 
   // If false, rule will operate on original (unresolved) data
   // If undefined or true, resolved data will be supplied
@@ -56,6 +57,8 @@ export interface IRuleThen {
   functionOptions?: unknown;
 }
 
+export type GivenDefinition = string | string[];
+
 export type RulesetExtendsDefinition =
   | RulesetDefinition
   | (RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition])[];
@@ -75,12 +78,21 @@ export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'par
   );
 
 export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & RulesetOverrideDefinition>;
-export type RulesetAliasesDefinition = Record<string, string>;
+export type RulesetScopedAliasDefinition = {
+  description?: string;
+  targets: {
+    formats: Formats | Format[];
+    given: string[];
+  }[];
+};
+
+export type RulesetAliasesDefinition = Record<string, string[] | RulesetScopedAliasDefinition>;
 
 export type RulesetDefinition = Readonly<
   {
     documentationUrl?: string;
-    formats?: Format<any>[];
+    description?: string;
+    formats?: Formats | Format[];
     parserOptions?: Partial<ParserOptions>;
     overrides?: RulesetOverridesDefinition;
     aliases?: RulesetAliasesDefinition;
@@ -100,3 +112,10 @@ export type RulesetDefinition = Readonly<
       }
   >
 >;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Stringifable<T> = T extends object
+  ? {
+      [P in keyof T]: Stringifable<T[P]> | { toJSON?(): Stringifable<T[P]> };
+    }
+  : T;

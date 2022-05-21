@@ -1,5 +1,5 @@
-[![](../../docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
-[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-cli?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-cli) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
+[![](https://raw.githubusercontent.com/stoplightio/spectral/develop/docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
+[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/develop)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-cli?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-cli) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents
@@ -8,7 +8,7 @@
 - **Custom Functions**: Create custom functions for advanced use cases
 - **JSON Validation**: Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
 
-![Spectral linting an OpenAPI document from the CLI with results being output](../../docs/img/demo.svg)
+![Spectral linting an OpenAPI document from the CLI with results being output](https://raw.githubusercontent.com/stoplightio/spectral/develop/docs/img/demo.svg)
 
 # Overview
 

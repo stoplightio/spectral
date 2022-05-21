@@ -5,32 +5,41 @@ import { Ruleset } from '../validation/types';
 
 export { transformer as default };
 
-const transformer: Transformer = function (ctx) {
-  ctx.hooks.add([
+const transformer: Transformer = function (hooks) {
+  hooks.add([
     /^$/,
-    (_ruleset): void => {
+    (_ruleset, ctx): void => {
       const ruleset = _ruleset as Ruleset;
       const { functionsDir, functions } = ruleset;
 
       if (Array.isArray(functions) && functions.length > 0) {
-        ruleset.functions = functions.map(fn => path.join(ctx.cwd, functionsDir ?? 'functions', `${fn}.js`));
-        delete ruleset.functionsDir;
+        for (const fn of functions) {
+          assertString(fn);
+          const resolved = ctx.tree.resolveModule(
+            path.join('./', typeof functionsDir === 'string' ? functionsDir : 'functions', `./${fn}.js`),
+            ctx,
+            'function',
+          );
+          const fnName = path.basename(resolved, true);
+          const identifier = ctx.tree.addImport(fnName, resolved, true);
+          ctx.tree.scope.store(`function-${fnName}`, identifier.name);
+        }
       }
     },
   ]);
 
-  ctx.hooks.add([
+  hooks.add([
     /^\/functions$/,
     (value): null => {
       assertArray(value);
+      return null;
+    },
+  ]);
 
-      for (const fn of value) {
-        assertString(fn);
-        const fnName = path.basename(fn, true);
-        const identifier = ctx.tree.addImport(fnName, fn, true);
-        ctx.tree.scope.store(`function-${fnName}`, identifier.name);
-      }
-
+  hooks.add([
+    /^\/functionsDir$/,
+    (value): null => {
+      assertString(value);
       return null;
     },
   ]);

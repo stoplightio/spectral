@@ -1335,7 +1335,7 @@
     },
     "PasswordOAuthFlow": {
       "type": "object",
-      "required": ["tokenUrl"],
+      "required": ["tokenUrl", "scopes"],
       "properties": {
         "tokenUrl": {
           "type": "string",
@@ -1359,7 +1359,7 @@
     },
     "ClientCredentialsFlow": {
       "type": "object",
-      "required": ["tokenUrl"],
+      "required": ["tokenUrl", "scopes"],
       "properties": {
         "tokenUrl": {
           "type": "string",
@@ -1383,7 +1383,7 @@
     },
     "AuthorizationCodeOAuthFlow": {
       "type": "object",
-      "required": ["authorizationUrl", "tokenUrl"],
+      "required": ["authorizationUrl", "tokenUrl", "scopes"],
       "properties": {
         "authorizationUrl": {
           "type": "string",

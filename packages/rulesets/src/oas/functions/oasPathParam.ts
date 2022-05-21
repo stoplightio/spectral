@@ -2,7 +2,7 @@ import type { JsonPath, Segment } from '@stoplight/types';
 import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
 
-const pathRegex = /(\{[a-zA-Z0-9_-]+\})+/g;
+const pathRegex = /(\{;?\??[a-zA-Z0-9_-]+\*?\})/g;
 
 interface IParam {
   in?: string;
@@ -118,7 +118,7 @@ export const oasPathParam: IFunction = targetVal => {
     let match;
 
     while ((match = pathRegex.exec(path))) {
-      const p = match[0].replace(/[{}]/g, '');
+      const p = match[0].replace(/[{}?*;]/g, '');
       if (pathElements.includes(p)) {
         results.push(generateResult(`Path "${path}" must not use parameter "{${p}}" multiple times.`, ['paths', path]));
       } else {

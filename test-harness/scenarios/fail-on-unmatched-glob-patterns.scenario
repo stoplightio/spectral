@@ -4,7 +4,7 @@ Reports unmatched glob patterns
 module.exports = {
   rules: {}
 }
-====command====
+====command-nix====
 {bin} lint ./*oops.{yml,yaml,json} --fail-on-unmatched-globs --ruleset "{asset:ruleset}"
 ====status====
 2

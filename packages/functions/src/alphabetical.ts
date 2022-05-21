@@ -2,6 +2,8 @@ import { isObject } from 'lodash';
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { printValue } from '@stoplight/spectral-runtime';
 
+import { optionSchemas } from './optionSchemas';
+
 export type Options = {
   /** if sorting array of objects, which key to use for comparison */
   keyedBy?: string;
@@ -42,18 +44,7 @@ export default createRulesetFunction<Record<string, unknown> | unknown[], Option
     input: {
       type: ['object', 'array'],
     },
-    options: {
-      type: ['object', 'null'],
-      properties: {
-        keyedBy: {
-          type: 'string',
-        },
-      },
-      additionalProperties: false,
-      errorMessage: {
-        type: `"alphabetical" function has invalid options specified. Example valid options: null (no options), { "keyedBy": "my-key" }`,
-      },
-    },
+    options: optionSchemas.alphabetical,
   },
   function alphabetical(targetVal, opts, { path, documentInventory }) {
     let targetArray: unknown[];

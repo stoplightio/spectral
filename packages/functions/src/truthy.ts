@@ -1,9 +1,11 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
+import { optionSchemas } from './optionSchemas';
+
 export default createRulesetFunction<unknown, null>(
   {
     input: null,
-    options: null,
+    options: optionSchemas.truthy,
   },
   function truthy(input) {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions

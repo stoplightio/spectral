@@ -1,11 +1,14 @@
 import { join, resolve } from '@stoplight/path';
-import * as nock from 'nock';
+import nock from 'nock';
 import * as yargs from 'yargs';
-import lintCommand from '../../commands/lint';
-import { lint } from '../linter';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RulesetValidationError } from '@stoplight/spectral-core';
+import * as process from 'process';
 
+import lintCommand from '../../commands/lint';
+import { lint } from '../linter';
+
+jest.mock('process');
 jest.mock('../output');
 
 const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
@@ -29,25 +32,16 @@ async function run(command: string) {
 }
 
 describe('Linter service', () => {
-  let consoleLogSpy: jest.SpyInstance;
-  let consoleErrorSpy: jest.SpyInstance;
   let processCwdSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    const noop = () => {
-      /* no-op */
-    };
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(noop);
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(noop);
-
-    processCwdSpy = jest.spyOn(process, 'cwd').mockReturnValue(join(__dirname, '__fixtures__'));
+    (process.cwd as jest.Mock).mockReturnValue(join(__dirname, '__fixtures__'));
+    processCwdSpy = jest.spyOn(globalThis.process, 'cwd').mockImplementation(process.cwd);
   });
 
   afterEach(() => {
-    consoleLogSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
     processCwdSpy.mockRestore();
-
+    jest.clearAllMocks();
     nock.cleanAll();
   });
 
@@ -93,7 +87,7 @@ describe('Linter service', () => {
   });
 
   it('demands some ruleset to be present', () => {
-    processCwdSpy.mockReturnValue(join(__dirname, '__fixtures__/resolver'));
+    (process.cwd as jest.Mock).mockReturnValue(join(__dirname, '__fixtures__/resolver'));
     return expect(run(`lint stoplight-info-document.json`)).rejects.toThrow(
       'No ruleset has been found. Please provide a ruleset using the --ruleset CLI argument, or make sure your ruleset file matches .?spectral.(js|ya?ml|json)',
     );
@@ -124,8 +118,8 @@ describe('Linter service', () => {
 
   it('given a list of files is provided, outputs issues for each file', () => {
     const documents = [
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
       join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-      join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
     ];
 
     return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
@@ -145,6 +139,29 @@ describe('Linter service', () => {
         severity: DiagnosticSeverity.Warning,
         source: documents[1],
       },
+    ]);
+  });
+
+  it('sorts linting results in an alphabetical order', () => {
+    const documents = [
+      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+    ];
+
+    return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+      }),
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      }),
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      }),
     ]);
   });
 
@@ -212,7 +229,9 @@ describe('Linter service', () => {
 
     describe('when single ruleset option provided', () => {
       it('outputs "does not exist" error', () => {
-        return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow('Cannot find module');
+        return expect(run(`lint ${validOas3SpecPath} -r non-existent-path`)).rejects.toThrow(
+          `Could not read ruleset at ${join(process.cwd(), 'non-existent-path')}.`,
+        );
       });
 
       it('outputs "invalid ruleset" error', () => {
@@ -241,6 +260,25 @@ describe('Linter service', () => {
     describe('given legacy ruleset', () => {
       it('outputs warnings', async () => {
         const output = await run(`lint ${validOas3SpecPath} -r ${join(__dirname, '__fixtures__/ruleset.json')}`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+
+      it('supports https', async () => {
+        nock('http://foo.local')
+          .persist()
+          .get('/ruleset.json')
+          .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
+            'Content-Type': 'application/yaml',
+          });
+
+        const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json`);
         expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
         expect(output).toEqual(
           expect.not.arrayContaining([

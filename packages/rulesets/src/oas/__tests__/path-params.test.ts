@@ -472,4 +472,104 @@ testRule('path-params', [
     },
     errors: [],
   },
+
+  {
+    name: 'No error with special characters in path parameter',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/foo/{;bar}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+              style: 'matrix',
+              description: 'Shared common parameter.',
+            },
+          ],
+          get: {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+                style: 'matrix',
+                description: 'Operation level parameter.',
+              },
+            ],
+          },
+        },
+        '/bar/{;?baz*}': {
+          parameters: [
+            {
+              name: 'baz',
+              in: 'path',
+              required: true,
+              style: 'matrix',
+              description: 'Shared common parameter.',
+            },
+          ],
+          get: {
+            parameters: [
+              {
+                name: 'baz',
+                in: 'path',
+                required: true,
+                style: 'matrix',
+                description: 'Operation level parameter.',
+              },
+            ],
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'No error with multiple path parameters together',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/foo/{bar}{baz}': {
+          parameters: [
+            {
+              name: 'bar',
+              in: 'path',
+              required: true,
+              style: 'matrix',
+              description: 'Shared common parameter.',
+            },
+            {
+              name: 'baz',
+              in: 'path',
+              required: true,
+              style: 'matrix',
+              description: 'Shared common parameter.',
+            },
+          ],
+          get: {
+            parameters: [
+              {
+                name: 'bar',
+                in: 'path',
+                required: true,
+                style: 'matrix',
+                description: 'Operation level parameter.',
+              },
+              {
+                name: 'baz',
+                in: 'path',
+                required: true,
+                style: 'matrix',
+                description: 'Operation level parameter.',
+              },
+            ],
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);

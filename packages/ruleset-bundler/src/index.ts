@@ -1,6 +1,7 @@
 import { rollup, Plugin } from 'rollup';
 import { isURL } from '@stoplight/path';
-import { isValidPackageName } from './utils/isValidPackageName';
+import { isPackageImport } from './utils/isPackageImport';
+import { dedupeRollupPlugins } from './utils/dedupeRollupPlugins';
 
 export type BundleOptions = {
   plugins: Plugin[];
@@ -9,13 +10,15 @@ export type BundleOptions = {
   treeshake?: boolean; // false by default
 };
 
+export { IO } from './types';
+
 export async function bundleRuleset(
   input: string,
   { target = 'browser', plugins, format, treeshake = false }: BundleOptions,
 ): Promise<string> {
   const bundle = await rollup({
     input,
-    plugins,
+    plugins: dedupeRollupPlugins(plugins),
     treeshake,
     watch: false,
     perf: false,
@@ -33,8 +36,7 @@ export async function bundleRuleset(
         : target === 'browser'
         ? id => isURL(id)
         : (id, importer) =>
-            id.startsWith('node:') ||
-            (!isURL(id) && isValidPackageName(id) && (importer === void 0 || !isURL(importer))),
+            id.startsWith('node:') || (!isURL(id) && isPackageImport(id) && (importer === void 0 || !isURL(importer))),
   });
 
   return (await bundle.generate({ format: format ?? (target === 'runtime' ? 'iife' : 'esm'), exports: 'auto' }))

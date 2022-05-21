@@ -53,22 +53,62 @@ Find out how to add formats, rules and functions below.
 
 ## Loading Rulesets
 
-Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be loaded using `Spectral.loadRuleset()`.
+Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be set using `Spectral.setRuleset()`.
 
 ```js
 const { Spectral } = require("@stoplight/spectral-core");
-const ruleset = require("./my-ruleset"); // if you use a YAML/JSON ruleset, make sure to use @stoplight/spectral-ruleset-migrator first.
-
-const myOpenApiDocument = `
-openapi: 3.0.0
-# here goes the rest of document
-`;
+const ruleset = require("./my-ruleset"); // this works only for JS ruleset, look at the section below to learn how to load a YAML/JSON ruleset
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
-spectral.run(myOpenApiDocument).then(results => {
-  console.log("here are the results", results);
-});
+// lint
+```
+
+### Loading YAML/JSON rulesets
+
+#### Node.js
+
+```js
+const path = require("path");
+const fs = require("fs");
+
+const { Spectral } = require("@stoplight/spectral-core");
+const { fetch } = require("@stoplight/spectral-runtime"); // can also use isomorphic-fetch, etc.. If you ruleset does not reference any external assets, you can provide some stub instead.
+const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
+// const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
+
+const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
+
+const spectral = new Spectral();
+s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
+// or, if you use module.exports (CommonJS) s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
+```
+
+#### Browser
+
+```js
+const { Spectral } = require("@stoplight/spectral-core");
+const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
+// const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
+
+const myRuleset = `extends: spectral:oas
+rules: {}`;
+
+const fs = {
+  promises: {
+    async readFile(filepath) {
+      if (filepath === "/.spectral.yaml") {
+        return myRuleset;
+      }
+
+      throw new Error(`Could not read ${filepath}`);
+    },
+  },
+};
+
+const spectral = new Spectral();
+s.setRuleset(await bundleAndLoadRuleset("/.spectral.yaml", { fs, fetch }));
+// or, if you use module.exports (CommonJS) s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
 ```
 
 ## Advanced
@@ -132,28 +172,3 @@ const spectral = new Spectral({ resolver: customFileResolver });
 The custom resolver we've just created will resolve all remote file refs relatively to the current working directory.
 
 More on that can be found in the [json-ref-resolver repo](https://github.com/stoplightio/json-ref-resolver).
-
-### Using a Custom De-duplication Strategy
-
-By default, Spectral will de-duplicate results based on the result code and document location. You can customize this
-behavior with the `computeFingerprint` option. For example, here is the default fingerprint implementation:
-
-The final reported results are de-duplicated based on their computed fingerprint.
-
-```ts
-const spectral = new Spectral({
-  computeFingerprint: (rule: IRuleResult, hash) => {
-    let id = String(rule.code);
-
-    if (rule.path && rule.path.length) {
-      id += JSON.stringify(rule.path);
-    } else if (rule.range) {
-      id += JSON.stringify(rule.range);
-    }
-
-    if (rule.source) id += rule.source;
-
-    return hash(id);
-  },
-});
-```

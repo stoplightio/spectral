@@ -1,4 +1,5 @@
-const { oas2: oas2 } = require('@stoplight/spectral-formats');
+const { oas2 } = require('@stoplight/spectral-formats');
+const { truthy } = require('@stoplight/spectral-functions');
 module.exports = {
   rules: {
     'oas3-schema': 'error',
@@ -11,7 +12,7 @@ module.exports = {
       given:
         "$.paths.*[?( @property === 'get' || @property === 'put' || @property === 'post' || @property === 'delete' || @property === 'options' || @property === 'head' || @property === 'patch' || @property === 'trace' )]",
       then: {
-        function: void 0,
+        function: truthy,
         functionOptions: null,
       },
     },

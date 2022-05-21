@@ -14,7 +14,7 @@ Or mix and match!
 extends:
   - ./config/spectral.json
   - https://example.org/api/style.yaml
-  - some-npm-module
+  - some-npm-module # note that this would be treated as any other npm package, therefore it has to live under node_modules, and have a valid package.json.
 ```
 
 There are various pros and cons to each approach, so see what is right for you.
@@ -109,18 +109,28 @@ module.exports = function (targetVal, { min }) {
 };
 ```
 
-Developers wanting to pull in your ruleset can just reference the module name in `extends`:
+Developers wanting to pull in your ruleset can just install the package using yarn or npm and reference the module name in `extends`:
 
 ```yaml
 extends:
   - example-spectral-ruleset
 ```
 
-Pegging a ruleset on given version is possible:
+Pegging a ruleset on given version is possible through a `package.json`:
+
+```json
+{
+  "dependencies": {
+    "example-spectral-ruleset": "0.2.0"
+  }
+}
+```
+
+If you Spectral in a browser or don't want to install the package, you can also reference that package through the use of CDNs for NPM repository, such as [unpkg.com](https://unpkg.com/):
 
 ```yaml
 extends:
-  - "example-spectral-ruleset@0.2.0"
+  - "https://unpkg.com/example-spectral-ruleset@0.2.0"
 ```
 
 ## Filesystem

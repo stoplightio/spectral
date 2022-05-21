@@ -1,0 +1,48 @@
+====test====
+Custom Functions can use Deno/Browser-like imports
+====document====
+id: aBc
+====asset:ruleset.mjs====
+import upperCase from './upper-case.mjs';
+import equalsAbc from './equals-abc.mjs';
+
+export default {
+  rules: {
+    'upper-case-rule': {
+      given: '$.id',
+      then: {
+        function: upperCase,
+      },
+    },
+    'equals-abc-rule': {
+      given: '$.id',
+      then: {
+        function: equalsAbc,
+      },
+    },
+  }
+};
+====asset:upper-case.mjs====
+import { upperCase } from 'https://cdn.skypack.dev/lodash?dist=es2018';
+
+export default (input) => {
+  if (input !== upperCase(input)) {
+    return [{ message: 'must be upper case' }];
+  }
+};
+====asset:equals-abc.mjs====
+import fnv1a from 'https://unpkg.com/@sindresorhus/fnv1a@3.0.0';
+
+export default (input) => {
+  if (1552166763 !== fnv1a(input)) {
+    return [{ message: 'must equal "ABC"' }];
+  }
+};
+====command====
+{bin} lint {document} --ruleset "{asset:ruleset.mjs}"
+====stdout====
+{document}
+ 1:5  warning  equals-abc-rule  must equal "ABC"    id
+ 1:5  warning  upper-case-rule  must be upper case  id
+
+✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)

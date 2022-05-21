@@ -1,0 +1,5 @@
+rules:
+  oas2-valid-response-schema-example: error
+  oas2-valid-definition-example: hint
+  oas3-valid-header-schema-example: off
+  oas3-valid-parameter-schema-example: warn

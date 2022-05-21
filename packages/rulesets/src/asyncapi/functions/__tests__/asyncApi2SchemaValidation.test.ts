@@ -1,7 +1,7 @@
 import asyncApi2SchemaValidation from '../asyncApi2SchemaValidation';
 
 function runPayloadValidation(targetVal: any, opts: { type: 'examples' | 'default' }) {
-  return asyncApi2SchemaValidation(targetVal, opts, { path: [] } as any);
+  return asyncApi2SchemaValidation(targetVal, opts, { path: [], documentInventory: {} } as any);
 }
 
 describe('asyncApi2SchemaValidation', () => {

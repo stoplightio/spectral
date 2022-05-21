@@ -66,7 +66,7 @@ Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md)
 extends:
   - ./config/spectral.json
   - https://example.org/api/style.yaml
-  - some-npm-module
+  - some-npm-module # note that this would be treated as any other npm package, therefore it has to be placed under node_modules and have a valid package.json.
 ```
 
 The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
@@ -75,7 +75,12 @@ The `extends` keyword can be combined with extra rules in order to extend and ov
 
 Formats are an optional way to specify which API description formats a rule, or ruleset, is applicable to. Currently Spectral supports these formats:
 
-- `asyncapi2` (AsyncAPI v2.0)
+- `aas2` (AsyncAPI v2.x)
+- `aas2_0` (AsyncAPI v2.0.0)
+- `aas2_1` (AsyncAPI v2.1.0)
+- `aas2_2` (AsyncAPI v2.2.0)
+- `aas2_3` (AsyncAPI v2.3.0)
+- `aas2_4` (AsyncAPI v2.4.0)
 - `oas2` (OpenAPI v2.0)
 - `oas3` (OpenAPI v3.x)
 - `oas3.0` (OpenAPI v3.0.x)

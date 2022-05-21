@@ -36,7 +36,7 @@ version: 1.0.0
     }
   }
 }
-====command====
+====command-nix====
 cat {document} | {bin} lint --ruleset "{asset:ruleset.json}"
 ====stdout====
 <STDIN>

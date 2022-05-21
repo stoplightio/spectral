@@ -1,14 +1,18 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
+import * as process from 'process';
 import * as formatters from '../../formatters';
 import { OutputFormat } from '../config';
 import { formatOutput, writeOutput } from '../output';
 
 jest.mock('../../formatters');
 jest.mock('fs', () => ({
-  ...jest.requireActual<typeof import('fs')>('fs'),
-  writeFile: jest.fn(),
+  readFileSync: jest.requireActual('fs').readFileSync,
+  promises: {
+    writeFile: jest.fn().mockResolvedValue(void 0),
+  },
 }));
+jest.mock('process');
 
 describe('Output service', () => {
   describe('formatOutput', () => {
@@ -40,33 +44,17 @@ describe('Output service', () => {
   });
 
   describe('writeOutput', () => {
-    let logSpy: jest.SpyInstance;
-
-    beforeEach(() => {
-      logSpy = jest.spyOn(console, 'log').mockImplementation(() => {
-        /* disable logging */
-      });
-    });
-
-    afterEach(() => {
-      logSpy.mockRestore();
-    });
-
     it('given outputFile, writes output to a specified path', async () => {
-      (fs.writeFile as any as jest.Mock).mockImplementationOnce((path, val, cb) => {
-        cb(null, void 0);
-      });
-
       const output = '{}';
       const outputFile = 'foo.json';
       expect(await writeOutput(output, outputFile)).toBeUndefined();
-      expect(fs.writeFile).toBeCalledWith(outputFile, output, expect.any(Function));
+      expect(fs.promises.writeFile).toBeCalledWith(outputFile, output);
     });
 
-    it('given no outputFile, print output to console', async () => {
+    it('given <stdout>, print output to console', async () => {
       const output = '{}';
-      expect(await writeOutput(output)).toBeUndefined();
-      expect(logSpy).toBeCalledWith(output);
+      expect(await writeOutput(output, '<stdout>')).toBeUndefined();
+      expect(process.stdout.write).toBeCalledWith(output);
     });
   });
 });

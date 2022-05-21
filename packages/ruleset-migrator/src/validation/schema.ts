@@ -9,7 +9,10 @@ const schema = {
       additionalProperties: {
         oneOf: [
           {
-            type: 'string',
+            type: 'array',
+            items: {
+              type: 'string',
+            },
           },
           {
             type: 'object',
@@ -27,7 +30,10 @@ const schema = {
                       $ref: '#/properties/formats',
                     },
                     given: {
-                      type: 'string',
+                      type: 'array',
+                      items: {
+                        type: 'string',
+                      },
                     },
                   },
                   required: ['formats', 'given'],

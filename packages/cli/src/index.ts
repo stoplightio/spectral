@@ -8,7 +8,7 @@ import type * as Agent from 'proxy-agent';
 
 if (typeof process.env.PROXY === 'string') {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const ProxyAgent = require('proxy-agent') as typeof Agent;
+  const ProxyAgent = require('proxy-agent') as typeof Agent['default'];
   DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(process.env.PROXY);
 }
 

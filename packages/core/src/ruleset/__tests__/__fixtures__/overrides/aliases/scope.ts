@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import {falsy, pattern, truthy} from '@stoplight/spectral-functions';
+import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
 import { RulesetDefinition } from '@stoplight/spectral-core';
 
 export { ruleset as default };
 
 const ruleset: RulesetDefinition = {
   aliases: {
-    Stoplight: '$..stoplight',
+    Stoplight: ['$..stoplight'],
   },
   overrides: [
     {
@@ -29,7 +29,7 @@ const ruleset: RulesetDefinition = {
     {
       files: ['**/*.json'],
       aliases: {
-        Value: '$..value',
+        Value: ['$..value'],
       },
       rules: {
         'truthy-stoplight-property': {

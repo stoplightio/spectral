@@ -1,0 +1,28 @@
+{
+  "functionsDir": ".spectral",
+  "functions": [
+    "my-fn",
+    "upper-case",
+    "lower-case"
+  ],
+  "rules": {
+    "odd-rule": {
+      "given": "$",
+      "then": {
+        "function": "my-fn"
+      }
+    },
+    "upper-case-rule": {
+      "given": "$",
+      "then": {
+        "function": "upper-case"
+      }
+    },
+    "lower-case-rule": {
+      "given": "$",
+      "then": {
+        "function": "lower-case"
+      }
+    }
+  }
+}

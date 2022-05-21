@@ -1,5 +1,5 @@
 import { normalize } from '@stoplight/path';
-import * as fg from 'fast-glob';
+import fg from 'fast-glob';
 
 const GLOB_OPTIONS = {
   absolute: true,
@@ -9,6 +9,8 @@ const GLOB_OPTIONS = {
 async function match(pattern: fg.Pattern | fg.Pattern[]): Promise<string[]> {
   return (await fg(pattern, GLOB_OPTIONS)).map(normalize);
 }
+
+const compareString = (a: string, b: string): number => a.localeCompare(b);
 
 export async function listFiles(patterns: string[], ignoreUnmatchedGlobs: boolean): Promise<[string[], string[]]> {
   const { files, urls } = patterns.reduce<{
@@ -49,5 +51,5 @@ export async function listFiles(patterns: string[], ignoreUnmatchedGlobs: boolea
     );
   }
 
-  return [[...urls, ...filesFound], fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
+  return [[...urls, ...filesFound].sort(compareString), fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
 }

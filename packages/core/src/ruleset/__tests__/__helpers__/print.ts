@@ -1,5 +1,5 @@
 import { asTree } from 'treeify';
-import { Rule } from '../../rule/rule';
+import { Rule } from '../../rule';
 import { Ruleset } from '../../ruleset';
 import { RulesetDefinition } from '../../types';
 import { Format } from '../../format';

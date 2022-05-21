@@ -451,6 +451,12 @@ OpenAPI host `schemes` must be present and non-empty array.
 
 **Recommended:** Yes
 
+### oas2-discriminator
+
+The discriminator property MUST be defined at this schema and it MUST be in the required property list.
+
+**Recommended:** Yes
+
 ### oas2-host-not-example
 
 Server URL should not point at example.com.

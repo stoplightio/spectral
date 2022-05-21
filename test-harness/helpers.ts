@@ -2,7 +2,7 @@ import { Dictionary, Optional } from '@stoplight/types';
 import * as tmp from 'tmp';
 import * as fs from 'fs';
 
-const IS_WINDOWS = process.platform === 'win32';
+export const IS_WINDOWS = process.platform === 'win32';
 
 export interface IScenarioFile {
   test: string;
@@ -44,14 +44,24 @@ export function parseScenarioFile(data: string): IScenarioFile {
   const stderr = getItem(split, 'stderr');
   const env = getItem(split, 'env');
 
+  // either command only
+  // or command-nix OR command-win OR (command-nix AND command-win)
+  //
+  // eg. command => Same script is run whatever the platform
+  //     command-nix only => The test only works on Linux based systems
+  //     command-nix & command-win => The test works on every platform, through different syntaxes
   if (command === void 0) {
-    if (commandWindows !== void 0 && commandUnix !== void 0) {
-      throw new Error('No ====command==== provided');
+    if (commandWindows === void 0 && commandUnix === void 0) {
+      throw new Error('No ====command[-nix|-win]==== provided');
     }
-
-    command = IS_WINDOWS ? commandWindows : commandUnix;
   } else if (commandWindows !== void 0 || commandUnix !== void 0) {
     throw new Error('===command==== cannot be used along ====command-nix==== or ====command-win====');
+  }
+
+  if (IS_WINDOWS) {
+    command = commandWindows ?? command;
+  } else {
+    command = commandUnix ?? command;
   }
 
   const assets = split.reduce<string[][]>((filtered, item, i) => {
@@ -127,6 +137,4 @@ export const applyReplacements = (str: string, values: Dictionary<string>): stri
   return str.replace(BRACES, replacer);
 };
 
-export const normalizeLineEndings = (str: string): string => {
-  return str.replace(/\r?\n/g, '\n');
-};
+export const normalizeLineEndings = (str: string): string => str.replace(/\r?\n+/g, '');

@@ -62,6 +62,15 @@ The value should be `false`, `""`, `0`, `null` or `undefined`. Basically anythin
 
 Count the length of a string an or array, the number of properties in an object, or a numeric value, and define minimum and/or maximum values.
 
+<!-- title: functionOptions -->
+
+| name | description                 | type   | required? |
+| ---- | --------------------------- | ------ | --------- |
+| min  | the minimum length to match | number | no        |
+| max  | the maximum length to match | number | no        |
+
+At the very least `min` or `max` have to be provided. You can specify both as well.
+
 <!-- title: example -->
 
 ```yaml
@@ -146,14 +155,15 @@ camel-case-name:
 
 ## schema
 
-Use JSON Schema (draft 4, 6 or 7) to treat the contents of the \$given JSON Path as a JSON instance.
+Use JSON Schema (draft 4, 6, 7, 2019-09, or 2020-12) to treat the contents of the \$given JSON Path as a JSON instance.
 
 <!-- title: functionOptions -->
 
-| name      | description                                                            | type         | required? |
-| --------- | ---------------------------------------------------------------------- | ------------ | --------- |
-| schema    | a valid JSON Schema document                                           | `JSONSchema` | yes       |
-| allErrors | returns all errors when `true`; otherwise only returns the first error | `boolean`    | no        |
+| name      | description                                                            | type                                                                   | required? |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------- |
+| schema    | a valid JSON Schema document                                           | `JSONSchema`                                                           | yes       |
+| dialect   | the JSON Schema draft used by function. "auto" by default              | `'auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'` | no        |
+| allErrors | returns all errors when `true`; otherwise only returns the first error | `boolean`                                                              | no        |
 
 <!-- title: example -->
 

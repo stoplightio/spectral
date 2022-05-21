@@ -1,5 +1,5 @@
 import { IDiagnostic, JsonPath } from '@stoplight/types';
-import { JSONSchema7 } from 'json-schema';
+import type { JSONSchema7 } from 'json-schema';
 import type { Resolver } from '@stoplight/spectral-ref-resolver';
 
 export interface IConstructorOpts {

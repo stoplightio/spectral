@@ -1,5 +1,9 @@
 # Changelog
 
+**THIS CHANGELOG IS NO LONGER MAINTAINED**
+
+**EACH SUB-PACKAGE LISTED UNDER PACKAGES/ HAS ITS OWN CHANGELOG**
+
 <!-- markdown-link-check-disable -->
 
 All notable changes to this project will be documented in this file.

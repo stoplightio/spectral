@@ -26,10 +26,10 @@ export type MigrationOptions = {
 
 export type Hook = [
   pattern: RegExp,
-  hook: (input: unknown) => Promise<ExpressionKind | null | void> | ExpressionKind | null | void,
+  hook: (input: unknown, ctx: TransformerCtx) => Promise<ExpressionKind | null | void> | ExpressionKind | null | void,
 ];
 
-export type Transformer = (ctx: TransformerCtx) => void;
+export type Transformer = (hooks: Set<Hook>) => void;
 
 export type TransformerCtx = {
   readonly tree: Tree;
@@ -37,6 +37,8 @@ export type TransformerCtx = {
     fetch: Fetch;
   };
   readonly hooks: Set<Hook>;
-  cwd: string;
+  readonly cwd: string;
+  readonly filepath: string;
+  readonly npmRegistry: string | null;
   read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset>;
 };

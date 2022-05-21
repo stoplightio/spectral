@@ -10,47 +10,59 @@ executors:
 
 defaults:
   default-branch: &default-branch develop
+  default-branch-filter: &default-branch-filter
+    branches:
+      only:
+        - *default-branch
   release-tag-filter: &release-tag-filter
     branches:
       ignore: /.*/
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "12.21"
-    - lts
-    - current
+    - "12.22"
+    - "14.18"
+    - "16.13"
 
 commands:
   cached-dependencies:
-    parameters:
-      os:
-        type: string
-        default: linux
-      flags:
-        type: string
-        default: ''
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - yarn-packages-<< parameters.os >>-{{ checksum "yarn.lock" }}
+            - &yarn-cache-key yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
-          command: yarn --frozen-lockfile --cache-folder $HOME/.cache/yarn << parameters.flags >>
+          command: yarn install --immutable
       - save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-<< parameters.os >>-{{ checksum "yarn.lock" }}
+          key: *yarn-cache-key
           paths:
-            - ~/.cache/yarn
+            - ~/.yarn
 
-  install-and-build:
+  build:
     description: >-
-      Build everything required to run the test suite
+      Build everything required to run the test suite and to release the package
     steps:
-      - cached-dependencies
       - run:
           name: Build the code
           command: yarn build
+
+  build-binary:
+    parameters:
+      targets:
+        type: string
+    steps:
+      - run:
+          name: Create the Spectral Binary
+          command: yarn workspace @stoplight/spectral-cli pkg . --public --targets << parameters.targets >> --output binaries/spectral
+
+  install-and-build:
+    description: >-
+      Install and build everything required to run the test suite
+    steps:
+      - cached-dependencies
+      - build
 
   lint-code:
     steps:
@@ -68,25 +80,30 @@ commands:
     steps:
       - run:
           name: Lint commit messages
-          command: |
-            echo "$(git log -1 --pretty=format:"%s")" | npx commitlint
+          command: node ./scripts/lint-commit-messages.mjs
 
   test-node:
     parameters:
       max-workers:
         type: integer
-        default: 2
+        default: 3
     steps:
       - run: yarn pretest
       - run:
           name: Run node tests
-          command: yarn test.jest --coverage --maxWorkers=<< parameters.max-workers >>
+          command: yarn test.jest --maxWorkers=<< parameters.max-workers >>
 
   test-harness:
+    parameters:
+      os:
+        type: enum
+        enum:
+          - linux
+          - windows
+        default: linux
     steps:
-      - run:
-          name: Create the Spectral Binary
-          command: yarn workspace @stoplight/spectral-cli build.binary
+      - build-binary:
+          targets: << parameters.os >>
       - run:
           name: Run harness tests
           command: yarn test.harness
@@ -96,7 +113,7 @@ commands:
       - checkout
       - cached-dependencies
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-      - run: yarn build
+      - build
 
 jobs:
   lint:
@@ -115,11 +132,16 @@ jobs:
         type: string
     docker:
       - image: circleci/node:<< parameters.node-version >>
+    # we should be able to restore the default when the following issue is resolved
+    # - https://github.com/kulshekhar/ts-jest/issues/1967
+    # - https://github.com/facebook/jest/issues/10550
+    resource_class: medium+
     steps:
       - checkout
       - install-and-build
       - test-node
-      - test-harness
+      - test-harness:
+          os: linux
 
   test-browser:
     docker:
@@ -137,12 +159,12 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - cached-dependencies:
-          os: windows
-          flags: "--ignore-engines"
-      - run: yarn build
+      - cached-dependencies
+      - build
       - test-node:
           max-workers: 3
+      - test-harness:
+          os: windows
 
   build-nix-binaries:
     docker:
@@ -150,7 +172,8 @@ jobs:
     steps:
       - checkout
       - install-and-build
-      - run: yarn workspace @stoplight/spectral-cli build.nix
+      - build-binary:
+          targets: linux,macos,alpine
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
@@ -160,11 +183,11 @@ jobs:
     executor:
       name: windows/default
     steps:
-      - cached-dependencies:
-          os: windows
-          flags: "--ignore-engines"
+      - checkout
+      - cached-dependencies
       - run: yarn build
-      - run: yarn workspace @stoplight/spectral-cli build.windows
+      - build-binary:
+          targets: windows
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
@@ -215,6 +238,7 @@ jobs:
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
               docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
+              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:latest;
             fi
             echo "Docker tags:";
             docker images stoplight/spectral --format="{{ .Tag }}";
@@ -224,6 +248,7 @@ jobs:
               docker push stoplight/spectral:${FULL_VERSION};
               docker push stoplight/spectral:${MINOR_VERSION};
               docker push stoplight/spectral:${MAJOR_VERSION};
+              docker push stoplight/spectral:latest;
               echo "Pushed stoplight/spectral:${FULL_VERSION}";
             fi
             if [[ -n "$DOCKER_BRANCH" ]]; then
@@ -258,9 +283,21 @@ workflows:
           matrix:
             parameters:
               node-version: *node-versions
-      - test-windows
+      - test-windows:
+          filters: *default-branch-filter
       - test-browser
       - lint
+      - approve-release:
+          type: approval
+          filters: *default-branch-filter
+      - release:
+          filters: *default-branch-filter
+          requires:
+            - lint
+            - test-node
+            - test-windows
+            - test-browser
+            - approve-release
 
   release:
     jobs:
@@ -282,10 +319,7 @@ workflows:
     triggers:
       - schedule:
           cron: "0 12 * * 1-5"
-          filters:
-            branches:
-              only:
-                - *default-branch
+          filters: *default-branch-filter
     jobs:
       - lint
       - test-node:

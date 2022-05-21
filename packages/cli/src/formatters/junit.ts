@@ -29,6 +29,13 @@ import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import { Formatter } from './types';
 import { groupBySource, xmlEscape } from './utils';
 
+/**
+ * Prepares the given text for inclusion in an XML CDATA section.
+ */
+function prepareForCdata(text: string): string {
+  return text.replace(']]>', ']]]]><![CDATA[>');
+}
+
 export const junit: Formatter = (results, { failSeverity }) => {
   let output = '';
 
@@ -46,12 +53,15 @@ export const junit: Formatter = (results, { failSeverity }) => {
       output += `<testsuite package="org.spectral" time="0" tests="${filteredValidationResults.length}" errors="0" failures="${filteredValidationResults.length}" name="${source}">\n`;
 
       for (const result of filteredValidationResults) {
-        output += `<testcase time="0" name="org.spectral.${result.code ?? 'unknown'}" classname="${classname}">`;
+        const path = printPath(result.path, PrintStyle.EscapedPointer);
+        output += `<testcase time="0" name="org.spectral.${result.code ?? 'unknown'}${
+          path.length > 0 ? `(${xmlEscape(path)})` : ''
+        }" classname="${classname}">`;
         output += `<failure message="${xmlEscape(result.message)}">`;
         output += '<![CDATA[';
         output += `line ${result.range.start.line + 1}, col ${result.range.start.character + 1}, `;
-        output += `${xmlEscape(result.message)} (${result.code}) `;
-        output += `at path ${xmlEscape(printPath(result.path, PrintStyle.EscapedPointer))}`;
+        output += `${prepareForCdata(result.message)} (${result.code}) `;
+        output += `at path ${prepareForCdata(path)}`;
         output += ']]>';
         output += `</failure>`;
         output += '</testcase>\n';
