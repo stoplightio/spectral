@@ -1266,7 +1266,7 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(ReferenceError('Alias "PathItem-" does not exist'));
+      ).toThrowError('Error at #/rules/valid-path/given: Alias "PathItem-" does not exist');
     });
 
     it('given circular alias, should throw', () => {
@@ -1289,7 +1289,7 @@ describe('Ruleset', () => {
             },
           }),
       ).toThrowError(
-        ReferenceError('Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info'),
+        'Error at #/rules/valid-path/given: Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info',
       );
     });
 
@@ -1321,7 +1321,9 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(ReferenceError('Alias "PathItem" does not exist'));
+      ).toThrowError(`Error at #/rules/valid-path/given: Alias "PathItem" does not exist
+Error at #/rules/valid-name-and-description/given/0: Alias "Name" does not exist
+Error at #/rules/valid-name-and-description/given/1: Alias "Description" does not exist`);
     });
 
     describe('scoped aliases', () => {

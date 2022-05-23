@@ -338,11 +338,12 @@ Error at #/rules/rule/formats/1: must be a valid format`,
       },
     );
 
-    it.each(['#Info', '#i', '#Info.contact', '#Info[*]'])('recognizes %s as a valid value of an alias', value => {
+    it.each(['#Info', '#Info.contact', '#Info[*]'])('recognizes %s as a valid value of an alias', value => {
       expect(
         assertValidRuleset.bind(null, {
           rules: {},
           aliases: {
+            Info: ['$'],
             alias: [value],
           },
         }),
@@ -450,11 +451,26 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         },
       );
 
-      it.each(['#Info', '#i', '#Info.contact', '#Info[*]'])('recognizes %s as a valid value of an alias', value => {
+      it.each(['#Info', '#Info.contact', '#Info[*]'])('recognizes %s as a valid value of an alias', value => {
         expect(
           assertValidRuleset.bind(null, {
-            rules: {},
+            rules: {
+              a: {
+                given: '#alias',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
             aliases: {
+              Info: {
+                targets: [
+                  {
+                    formats: [formatA],
+                    given: ['$'],
+                  },
+                ],
+              },
               alias: {
                 targets: [
                   {
@@ -551,7 +567,7 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
                 targets: [
                   {
                     formats: [formatA],
-                    given: ['#.definitions[*]'],
+                    given: ['$.definitions[*]'],
                   },
                   {
                     formats: [formatA, formatB],

@@ -1,13 +1,17 @@
+import { isPlainObject } from '@stoplight/json';
 import Ajv, { _, ValidateFunction } from 'ajv';
+import names from 'ajv/dist/compile/names';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';
+import { isError, get } from 'lodash';
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as shared from '../meta/shared.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
 import * as jsExtensions from '../meta/js-extensions.json';
 import * as jsonExtensions from '../meta/json-extensions.json';
-
-const message = _`'spectral-message'`;
+import { resolveAlias } from '../alias';
+import type { RulesetFunction, RulesetFunctionWithValidator } from '../../types';
+import { Formats } from '../formats';
 
 const validators: { [key in 'js' | 'json']: null | ValidateFunction } = {
   js: null,
@@ -26,6 +30,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     strictRequired: false,
     keywords: ['$anchor'],
     schemas: [ruleSchema, shared],
+    passContext: true,
   });
   addFormats(ajv);
   addErrors(ajv);
@@ -33,8 +38,8 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     keyword: 'spectral-runtime',
     schemaType: 'string',
     error: {
-      message(ctx) {
-        return _`${ctx.data}[Symbol.for(${message})]`;
+      message(cxt) {
+        return _`${cxt.params?.message ? cxt.params.message : ''}`;
       },
     },
     code(cxt) {
@@ -44,12 +49,29 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
         case 'format':
           cxt.fail(_`typeof ${data} !== "function"`);
           break;
-        case 'ruleset-function':
-          cxt.pass(_`typeof ${data}.function === "function"`);
-          cxt.pass(
-            _`(() => { try { ${data}.function.validator && ${data}.function.validator('functionOptions' in ${data} ? ${data} : null); } catch (e) { ${data}[${message}] = e.message } })()`,
+        case 'ruleset-function': {
+          cxt.gen.if(_`typeof ${data}.function !== "function"`);
+          cxt.error(false, { message: 'function is not defined' });
+          cxt.gen.endIf();
+          const fn = cxt.gen.const(
+            'spectralFunction',
+            _`this.validateFunction(${data}.function, ${data}.functionOptions)`,
           );
+          cxt.gen.if(_`${fn} !== void 0`);
+          cxt.error(false, { message: fn });
+          cxt.gen.endIf();
           break;
+        }
+        case 'alias': {
+          const alias = cxt.gen.const(
+            'spectralAlias',
+            _`this.validateAlias(${names.rootData}, ${data}, ${names.instancePath})`,
+          );
+          cxt.gen.if(_`${alias} !== void 0`);
+          cxt.error(false, { message: alias });
+          cxt.gen.endIf();
+          break;
+        }
       }
     },
   });
@@ -61,6 +83,56 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
   }
 
   const validator = ajv.compile(rulesetSchema);
-  validators[format] = validator;
+  validators[format] = new Proxy(validator, {
+    apply(target, thisArg, args: unknown[]): unknown {
+      return Reflect.apply(target, { validateAlias, validateFunction }, args);
+    },
+  });
   return validator;
+}
+
+function getOverrides(overrides: unknown, key: string): Record<string, unknown> | null {
+  if (!Array.isArray(overrides)) return null;
+
+  const index = Number(key);
+  if (Number.isNaN(index)) return null;
+  if (index < 0 && index >= overrides.length) return null;
+
+  const actualOverrides: unknown = overrides[index];
+  // @ts-ignore
+  return isPlainObject(actualOverrides) ? actualOverrides.aliases : null;
+}
+
+export function validateAlias(
+  ruleset: { aliases?: Record<string, unknown>; overrides?: Record<string, unknown> },
+  alias: string,
+  path: string,
+): string | void {
+  try {
+    const parsedPath = path.slice(1).split('/');
+    const formats: unknown = get(ruleset, [...parsedPath.slice(0, parsedPath.indexOf('rules') + 2), 'formats']);
+
+    const aliases =
+      parsedPath[0] === 'overrides'
+        ? {
+            ...ruleset.aliases,
+            ...getOverrides(ruleset.overrides, parsedPath[1]),
+          }
+        : ruleset.aliases;
+
+    resolveAlias(aliases ?? null, alias, Array.isArray(formats) ? new Formats(formats) : null);
+  } catch (ex) {
+    return isError(ex) ? ex.message : 'invalid alias';
+  }
+}
+
+export function validateFunction(fn: RulesetFunction | RulesetFunctionWithValidator, opts: unknown): string | void {
+  if (!('validator' in fn)) return;
+
+  try {
+    const validator: RulesetFunctionWithValidator['validator'] = fn.validator.bind(fn);
+    validator(opts);
+  } catch (ex) {
+    return isError(ex) ? ex.message : 'invalid options';
+  }
 }

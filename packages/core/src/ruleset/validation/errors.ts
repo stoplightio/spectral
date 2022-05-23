@@ -27,7 +27,9 @@ export class RulesetAjvValidationError extends RulesetValidationError {
 
     l: for (let i = 0; i < sortedErrors.length; i++) {
       const error = sortedErrors[i];
-      const prevError = i === 0 ? null : sortedErrors[i - 1];
+      const prevError = filteredErrors.length === 0 ? null : filteredErrors[filteredErrors.length - 1];
+
+      if (error.keyword === 'if') continue;
 
       if (GENERIC_INSTANCE_PATH.test(error.instancePath)) {
         let x = 1;

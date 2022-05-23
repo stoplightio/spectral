@@ -21,72 +21,77 @@
       "$ref": "shared#severity"
     }
   },
-  "oneOf": [
-    {
-      "properties": {
-        "description": {
+  "if": {
+    "type": "object"
+  },
+  "then": {
+    "type": "object",
+    "properties": {
+      "description": {
+        "type": "string"
+      },
+      "documentationUrl": {
+        "type": "string",
+        "format": "url",
+        "errorMessage": "must be a valid URL"
+      },
+      "recommended": {
+        "type": "boolean"
+      },
+      "given": {
+        "$ref": "shared#given"
+      },
+      "resolved": {
+        "type": "boolean"
+      },
+      "severity": {
+        "$ref": "#/$defs/Severity"
+      },
+      "message": {
+        "type": "string"
+      },
+      "tags": {
+        "items": {
           "type": "string"
         },
-        "documentationUrl": {
-          "type": "string",
-          "format": "url",
-          "errorMessage": "must be a valid URL"
-        },
-        "recommended": {
-          "type": "boolean"
-        },
-        "given": {
-          "$ref": "shared#given"
-        },
-        "resolved": {
-          "type": "boolean"
-        },
-        "severity": {
-          "$ref": "#/$defs/Severity"
-        },
-        "message": {
-          "type": "string"
-        },
-        "tags": {
-          "items": {
-            "type": "string"
+        "type": "array"
+      },
+      "formats": {
+        "$ref": "shared#formats"
+      },
+      "then": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Then"
           },
-          "type": "array"
-        },
-        "formats": {
-          "$ref": "shared#formats"
-        },
-        "then": {
-          "anyOf": [
-            {
+          {
+            "items": {
               "$ref": "#/$defs/Then"
             },
-            {
-              "items": {
-                "$ref": "#/$defs/Then"
-              },
-              "type": "array"
-            }
-          ]
-        },
-        "type": {
-          "enum": ["style", "validation"],
-          "type": "string",
-          "errorMessage": "allowed types are \"style\" and \"validation\""
-        }
+            "type": "array"
+          }
+        ]
       },
-      "required": ["given", "then"],
-      "type": "object",
-      "additionalProperties": false,
-      "errorMessage": {
-        "required": "the rule must have at least \"given\" and \"then\" properties"
+      "type": {
+        "enum": ["style", "validation"],
+        "type": "string",
+        "errorMessage": "allowed types are \"style\" and \"validation\""
       }
     },
-    {
-      "$ref": "shared#/$defs/HumanReadableSeverity"
-    },
-    {
-      "type": "boolean"
+    "required": ["given", "then"],
+    "additionalProperties": false,
+    "errorMessage": {
+      "required": "the rule must have at least \"given\" and \"then\" properties"
     }
-  ]
+  },
+  "else": {
+    "oneOf": [
+      {
+        "$ref": "shared#/$defs/HumanReadableSeverity"
+      },
+      {
+        "type": "boolean"
+      }
+    ]
+  }
 }

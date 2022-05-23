@@ -50,9 +50,26 @@
     },
     "PathExpression": {
       "$id": "path-expression",
-      "type": "string",
-      "pattern": "^[$#]",
-      "errorMessage": "must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "type": "string",
+        "if": {
+          "pattern": "^#"
+        },
+        "then": {
+          "spectral-runtime": "alias"
+        },
+        "else": {
+          "pattern": "^\\$",
+          "errorMessage": "must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+        }
+      },
+      "else": {
+        "not": {},
+        "errorMessage": "must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+      }
     }
   }
 }
