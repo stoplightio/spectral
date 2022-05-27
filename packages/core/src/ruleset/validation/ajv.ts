@@ -1,4 +1,3 @@
-import { isPlainObject } from '@stoplight/json';
 import Ajv, { _, ValidateFunction } from 'ajv';
 import names from 'ajv/dist/compile/names';
 import addFormats from 'ajv-formats';
@@ -91,18 +90,6 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
   return validator;
 }
 
-function getOverrides(overrides: unknown, key: string): Record<string, unknown> | null {
-  if (!Array.isArray(overrides)) return null;
-
-  const index = Number(key);
-  if (Number.isNaN(index)) return null;
-  if (index < 0 && index >= overrides.length) return null;
-
-  const actualOverrides: unknown = overrides[index];
-  // @ts-ignore
-  return isPlainObject(actualOverrides) ? actualOverrides.aliases : null;
-}
-
 export function validateAlias(
   ruleset: { aliases?: Record<string, unknown>; overrides?: Record<string, unknown> },
   alias: string,
@@ -110,17 +97,11 @@ export function validateAlias(
 ): string | void {
   try {
     const parsedPath = path.slice(1).split('/');
+    // skip overrides for now
+    if (parsedPath[0] === 'overrides') return;
+
     const formats: unknown = get(ruleset, [...parsedPath.slice(0, parsedPath.indexOf('rules') + 2), 'formats']);
-
-    const aliases =
-      parsedPath[0] === 'overrides'
-        ? {
-            ...ruleset.aliases,
-            ...getOverrides(ruleset.overrides, parsedPath[1]),
-          }
-        : ruleset.aliases;
-
-    resolveAlias(aliases ?? null, alias, Array.isArray(formats) ? new Formats(formats) : null);
+    resolveAlias(ruleset.aliases ?? null, alias, Array.isArray(formats) ? new Formats(formats) : null);
   } catch (ex) {
     return isError(ex) ? ex.message : 'invalid alias';
   }

@@ -1,5 +1,5 @@
 import { isPlainObject } from '@stoplight/json';
-import { createValidator, validateAlias, validateFunction } from './ajv';
+import { createValidator } from './ajv';
 import { RulesetAjvValidationError, RulesetValidationError } from './errors';
 import type { FileRuleDefinition, RuleDefinition, RulesetDefinition } from '../types';
 
@@ -17,7 +17,7 @@ export function assertValidRuleset(
 
   const validate = createValidator(format);
 
-  if (!validate.call({ validateAlias, validateFunction }, ruleset)) {
+  if (!validate(ruleset)) {
     throw new RulesetAjvValidationError(ruleset, validate.errors ?? []);
   }
 }
