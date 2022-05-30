@@ -26,6 +26,7 @@ export default createRulesetFunction<Tags, null>(
             type: 'string',
           },
         },
+        required: ['name'],
       },
     },
     options: null,
