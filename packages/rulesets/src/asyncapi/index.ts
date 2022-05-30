@@ -13,6 +13,7 @@ import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
+import { uniquenessTags } from '../shared/functions';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -380,6 +381,40 @@ export default {
         functionOptions: {
           keyedBy: 'name',
         },
+      },
+    },
+    'asyncapi-tags-uniqueness': {
+      description: 'Each tag must have a unique name.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      given: [
+        // root
+        '$.tags',
+        // operations
+        '$.channels.*.[publish,subscribe].tags',
+        '$.components.channels.*.[publish,subscribe].tags',
+        // operation traits
+        '$.channels.*.[publish,subscribe].traits.*.tags',
+        '$.components.channels.*.[publish,subscribe].traits.*.tags',
+        '$.components.operationTraits.*.tags',
+        // messages
+        '$.channels.*.[publish,subscribe].message.tags',
+        '$.channels.*.[publish,subscribe].message.oneOf.*.tags',
+        '$.components.channels.*.[publish,subscribe].message.tags',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*.tags',
+        '$.components.messages.*.tags',
+        // message traits
+        '$.channels.*.[publish,subscribe].message.traits.*.tags',
+        '$.channels.*.[publish,subscribe].message.oneOf.*.traits.*.tags',
+        '$.components.channels.*.[publish,subscribe].message.traits.*.tags',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*.traits.*.tags',
+        '$.components.messages.*.traits.*.tags',
+        '$.components.messageTraits.*.tags',
+      ],
+      then: {
+        function: uniquenessTags,
       },
     },
     'asyncapi-tags': {
