@@ -36,7 +36,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     schemaType: 'string',
     error: {
       message(cxt) {
-        return _`${cxt.params?.message ? cxt.params.message : ''}`;
+        return _`${cxt.params?.message !== void 0 ? cxt.params.message : ''}`;
       },
     },
     code(cxt) {
