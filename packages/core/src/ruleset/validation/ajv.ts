@@ -2,15 +2,13 @@ import Ajv, { _, ValidateFunction } from 'ajv';
 import names from 'ajv/dist/compile/names';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';
-import { isError, get } from 'lodash';
 import * as ruleSchema from '../meta/rule.schema.json';
 import * as shared from '../meta/shared.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
 import * as jsExtensions from '../meta/js-extensions.json';
 import * as jsonExtensions from '../meta/json-extensions.json';
-import { resolveAlias } from '../alias';
-import type { RulesetFunction, RulesetFunctionWithValidator } from '../../types';
-import { Formats } from '../formats';
+import { validateAlias } from './validators/alias';
+import { validateFunction } from './validators/function';
 
 const validators: { [key in 'js' | 'json']: null | ValidateFunction } = {
   js: null,
@@ -81,39 +79,12 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     ajv.addSchema(jsonExtensions);
   }
 
-  const validator = ajv.compile(rulesetSchema);
-  validators[format] = new Proxy(validator, {
+  const validator = new Proxy(ajv.compile(rulesetSchema), {
     apply(target, thisArg, args: unknown[]): unknown {
       return Reflect.apply(target, { validateAlias, validateFunction }, args);
     },
   });
+
+  validators[format] = validator;
   return validator;
-}
-
-export function validateAlias(
-  ruleset: { aliases?: Record<string, unknown>; overrides?: Record<string, unknown> },
-  alias: string,
-  path: string,
-): string | void {
-  try {
-    const parsedPath = path.slice(1).split('/');
-    // skip overrides for now
-    if (parsedPath[0] === 'overrides') return;
-
-    const formats: unknown = get(ruleset, [...parsedPath.slice(0, parsedPath.indexOf('rules') + 2), 'formats']);
-    resolveAlias(ruleset.aliases ?? null, alias, Array.isArray(formats) ? new Formats(formats) : null);
-  } catch (ex) {
-    return isError(ex) ? ex.message : 'invalid alias';
-  }
-}
-
-export function validateFunction(fn: RulesetFunction | RulesetFunctionWithValidator, opts: unknown): string | void {
-  if (!('validator' in fn)) return;
-
-  try {
-    const validator: RulesetFunctionWithValidator['validator'] = fn.validator.bind(fn);
-    validator(opts);
-  } catch (ex) {
-    return isError(ex) ? ex.message : 'invalid options';
-  }
 }
