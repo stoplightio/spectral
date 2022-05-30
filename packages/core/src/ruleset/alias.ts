@@ -3,21 +3,6 @@ import type { RulesetScopedAliasDefinition } from './types';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
 
-const CACHE = new (class {
-  // maybe try to cache array-ish given?
-  #store = new WeakMap<Record<string, unknown>, Map<string, string[]>>();
-
-  add(ruleset: Record<string, unknown>, expression: string, resolvedExpressions: string[]): void {
-    let existing = this.#store.get(ruleset);
-    if (!existing) {
-      existing = new Map();
-      this.#store.set(ruleset, existing);
-    }
-
-    existing.set(expression, resolvedExpressions);
-  }
-})();
-
 export function resolveAliasForFormats(
   { targets }: RulesetScopedAliasDefinition,
   formats: Set<unknown> | null,
@@ -92,10 +77,6 @@ function _resolveAlias(
     }
   } else {
     resolvedExpressions.push(expression);
-  }
-
-  if (aliases !== null) {
-    CACHE.add(aliases, expression, resolvedExpressions);
   }
 
   return resolvedExpressions;
