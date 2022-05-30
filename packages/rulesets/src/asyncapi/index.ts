@@ -8,9 +8,13 @@ import {
   alphabetical,
 } from '@stoplight/spectral-functions';
 
+import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
+import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
+import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
+import { uniquenessTags } from '../shared/functions';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -53,6 +57,17 @@ export default {
         functionOptions: {
           notMatch: '.+\\/$',
         },
+      },
+    },
+    'asyncapi-channel-parameters': {
+      description: 'Channel parameters must be defined and there must be no redundant parameters.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: ['$.channels.*', '$.components.channels.*'],
+      then: {
+        function: asyncApi2ChannelParameters,
       },
     },
     'asyncapi-headers-schema-type-object': {
@@ -150,6 +165,16 @@ export default {
       then: {
         field: 'description',
         function: truthy,
+      },
+    },
+    'asyncapi-operation-operationId-uniqueness': {
+      description: '"operationId" must be unique across all the operations.',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      given: '$',
+      then: {
+        function: asyncApi2OperationIdUniqueness,
       },
     },
     'asyncapi-operation-operationId': {
@@ -282,6 +307,17 @@ export default {
         function: asyncApi2DocumentSchema,
       },
     },
+    'asyncapi-server-variables': {
+      description: 'Server variables must be defined and there must be no redundant variables.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: ['$.servers.*', '$.components.servers.*'],
+      then: {
+        function: asyncApi2ServerVariables,
+      },
+    },
     'asyncapi-server-no-empty-variable': {
       description: 'Server URL must not have empty variable substitution pattern.',
       recommended: true,
@@ -356,6 +392,40 @@ export default {
         functionOptions: {
           keyedBy: 'name',
         },
+      },
+    },
+    'asyncapi-tags-uniqueness': {
+      description: 'Each tag must have a unique name.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      given: [
+        // root
+        '$.tags',
+        // operations
+        '$.channels.*.[publish,subscribe].tags',
+        '$.components.channels.*.[publish,subscribe].tags',
+        // operation traits
+        '$.channels.*.[publish,subscribe].traits.*.tags',
+        '$.components.channels.*.[publish,subscribe].traits.*.tags',
+        '$.components.operationTraits.*.tags',
+        // messages
+        '$.channels.*.[publish,subscribe].message.tags',
+        '$.channels.*.[publish,subscribe].message.oneOf.*.tags',
+        '$.components.channels.*.[publish,subscribe].message.tags',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*.tags',
+        '$.components.messages.*.tags',
+        // message traits
+        '$.channels.*.[publish,subscribe].message.traits.*.tags',
+        '$.channels.*.[publish,subscribe].message.oneOf.*.traits.*.tags',
+        '$.components.channels.*.[publish,subscribe].message.traits.*.tags',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*.traits.*.tags',
+        '$.components.messages.*.traits.*.tags',
+        '$.components.messageTraits.*.tags',
+      ],
+      then: {
+        function: uniquenessTags,
       },
     },
     'asyncapi-tags': {
