@@ -138,6 +138,36 @@ Operation objects should have a description.
 
 **Recommended:** Yes
 
+### asyncapi-operation-operationId-uniqueness
+
+`operationId` must be unique across all the operations (except these one defined in the components).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      operationId: turn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      operationId: turn
+```
+
+**Good Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      operationId: turnOn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      operationId: turnOff
+```
+
 ### asyncapi-operation-operationId
 
 This operation ID is essentially a reference for the operation. Tools may use it for defining function names, class method names, and even URL hashes in documentation systems.
