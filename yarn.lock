@@ -17,10 +17,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@asyncapi/specs@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "@asyncapi/specs@npm:2.13.0"
-  checksum: 94355c96ac2562bfd9118a3e33dd36359196d070684da952f6b0f800b588b426d012fbf96f85b7341ec74f401e3487934b92e43f48e086fa956eab29b90ab694
+"@asyncapi/specs@npm:^2.14.0":
+  version: 2.14.0
+  resolution: "@asyncapi/specs@npm:2.14.0"
+  checksum: 066c23c493df54c44c319433bdcf8482a3acd584e32c0073e6a9f5b167d61bde23a252621be2b28bbaf1466636f6cafaab570795de403f0c671358784d4b12ed
   languageName: node
   linkType: hard
 
@@ -2298,7 +2298,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:3.17.0, @stoplight/json@npm:^3.17.0, @stoplight/json@npm:~3.17.0, @stoplight/json@npm:~3.17.1":
+"@stoplight/json@npm:3.17.0, @stoplight/json@npm:~3.17.0, @stoplight/json@npm:~3.17.1":
   version: 3.17.0
   resolution: "@stoplight/json@npm:3.17.0"
   dependencies:
@@ -2308,6 +2308,19 @@ __metadata:
     lodash: ^4.17.21
     safe-stable-stringify: ^1.1
   checksum: 452bb6963d35196420d1214320223c38d3c7858a0420ad222d347c6bcaf69a5897add288ae7305f6cf46ff1f078c037f4c9deb42911f8f0907bcfbd97dcfbd62
+  languageName: node
+  linkType: hard
+
+"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:~3.18.1":
+  version: 3.18.1
+  resolution: "@stoplight/json@npm:3.18.1"
+  dependencies:
+    "@stoplight/ordered-object-literal": ^1.0.2
+    "@stoplight/types": ^13.0.0
+    jsonc-parser: ~2.2.1
+    lodash: ^4.17.21
+    safe-stable-stringify: ^1.1
+  checksum: 9df3e06421541b6d7f0fbec3f928e67f0d46ef8d4cf79986345164551baef727580e85659c6b9658be578eecd253a6eb23dbe04bccf074d251e6b17a5fddf0a8
   languageName: node
   linkType: hard
 
@@ -2381,7 +2394,7 @@ __metadata:
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.1
-    "@stoplight/json": ~3.17.1
+    "@stoplight/json": ~3.18.1
     "@stoplight/lifecycle": 2.3.2
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-formats": "*"
@@ -2389,7 +2402,7 @@ __metadata:
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.0
     "@stoplight/spectral-runtime": ^1.0.0
-    "@stoplight/types": 12.3.0
+    "@stoplight/types": 13.1.0
     "@stoplight/yaml": ^4.2.2
     "@types/json-schema": ^7.0.7
     "@types/minimatch": ^3.0.5
@@ -2398,12 +2411,11 @@ __metadata:
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.0
     blueimp-md5: 2.18.0
-    json-schema: 0.4.0
     jsonpath-plus: 6.0.1
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.0.4
-    nimma: 0.2.0
+    nimma: 0.2.1
     nock: ^13.1.0
     pony-cause: ^1.0.0
     simple-eval: 1.0.0
@@ -2412,7 +2424,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.1.0, @stoplight/spectral-formats@workspace:packages/formats":
+"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.2.0, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
@@ -2524,17 +2536,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
-    "@asyncapi/specs": ^2.13.0
+    "@asyncapi/specs": ^2.14.0
     "@stoplight/better-ajv-errors": 1.0.1
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.8.1
-    "@stoplight/spectral-formats": ^1.1.0
+    "@stoplight/spectral-formats": ^1.2.0
     "@stoplight/spectral-functions": ^1.5.1
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": "*"
     "@stoplight/spectral-runtime": ^1.1.1
-    "@stoplight/types": ^12.3.0
+    "@stoplight/types": ^12.5.0
     "@types/json-schema": ^7.0.7
     ajv: ^8.8.2
     ajv-formats: ~2.1.0
@@ -2559,13 +2571,33 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/types@npm:12.3.0, @stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0":
+"@stoplight/types@npm:12.3.0":
   version: 12.3.0
   resolution: "@stoplight/types@npm:12.3.0"
   dependencies:
     "@types/json-schema": ^7.0.4
     utility-types: ^3.10.0
   checksum: 28065540d2d30743bfaa4ab09df3dc1e2a216f14962f78e27d8e53eda7f293f64eba8703be53b8d179dff403f54764e0823baa578fa85f78280d21b0ae22e773
+  languageName: node
+  linkType: hard
+
+"@stoplight/types@npm:13.1.0, @stoplight/types@npm:^13.0.0":
+  version: 13.1.0
+  resolution: "@stoplight/types@npm:13.1.0"
+  dependencies:
+    "@types/json-schema": ^7.0.4
+    utility-types: ^3.10.0
+  checksum: 4caf5374e541a38f905d2e83c81beea8250990fe458fcc299d0acc75bde60d8db17ace2c98afa15ab12014b6f0b536dc8d1d22bc9ce498c60493b9267edab72f
+  languageName: node
+  linkType: hard
+
+"@stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0, @stoplight/types@npm:^12.5.0":
+  version: 12.5.0
+  resolution: "@stoplight/types@npm:12.5.0"
+  dependencies:
+    "@types/json-schema": ^7.0.4
+    utility-types: ^3.10.0
+  checksum: fe4a09df6e1c2f0cdb53f474b180cc7b8184e814e1ac4427d199642f10958335f597060530a908c0e5800ba2569d077afe124a51deaee466255ce942e1e03941
   languageName: node
   linkType: hard
 
@@ -3147,16 +3179,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.1.0, acorn@npm:^8.2.4, acorn@npm:^8.4.1":
-  version: 8.5.0
-  resolution: "acorn@npm:8.5.0"
-  bin:
-    acorn: bin/acorn
-  checksum: 2e4c1dbed3da327684863debf31d341bf8882c6893c506653872c00977eee45675feb9129255d6c74c88424d2b20d889ca6de5b39776e5e3cccfc756b3ca1da8
-  languageName: node
-  linkType: hard
-
-"acorn@npm:^8.7.0":
+"acorn@npm:^8.1.0, acorn@npm:^8.2.4, acorn@npm:^8.4.1, acorn@npm:^8.7.0":
   version: 8.7.0
   resolution: "acorn@npm:8.7.0"
   bin:
@@ -8093,7 +8116,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema@npm:0.4.0, json-schema@npm:^0.4.0":
+"json-schema@npm:^0.4.0":
   version: 0.4.0
   resolution: "json-schema@npm:0.4.0"
   checksum: 66389434c3469e698da0df2e7ac5a3281bcff75e797a5c127db7c5b56270e01ae13d9afa3c03344f76e32e81678337a8c912bdbb75101c62e487dc3778461d72
@@ -9337,9 +9360,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nimma@npm:0.2.0":
-  version: 0.2.0
-  resolution: "nimma@npm:0.2.0"
+"nimma@npm:0.2.1":
+  version: 0.2.1
+  resolution: "nimma@npm:0.2.1"
   dependencies:
     "@jsep-plugin/regex": ^1.0.1
     "@jsep-plugin/ternary": ^1.0.2
@@ -9352,7 +9375,7 @@ __metadata:
       optional: true
     lodash.topath:
       optional: true
-  checksum: ed404ab3aca227a51e924e2b8d7d9ae75695c6c3fbdbaffee9990b42b5491f3c240ef3cdbbaffd1b9c3564bf062c936cb8b921de6b21ce8aa22733a00597fd2d
+  checksum: 5cba1ef3509aca12e33c34fce66cc10ceba23c989b900c26cce39e18685b7036f801924d5a892069c274f875e1616bfdcf4a36fc25400e154f9df252cfc0eb2f
   languageName: node
   linkType: hard
 

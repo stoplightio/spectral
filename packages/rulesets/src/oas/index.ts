@@ -25,6 +25,7 @@ import {
   oasSchema,
   oasDiscriminator,
 } from './functions';
+import { uniquenessTags } from '../shared/functions';
 
 export { ruleset as default };
 
@@ -210,6 +211,17 @@ const ruleset = {
         functionOptions: {
           keyedBy: 'name',
         },
+      },
+    },
+    'openapi-tags-uniqueness': {
+      description: 'Each tag must have a unique name.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      given: '$.tags',
+      then: {
+        function: uniquenessTags,
       },
     },
     'openapi-tags': {

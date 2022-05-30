@@ -13,9 +13,10 @@ import type {
   RuleDefinition,
   RulesetAliasesDefinition,
   RulesetScopedAliasDefinition,
+  Stringifable,
 } from './types';
 import { minimatch } from './utils/minimatch';
-import { FormatsSet } from './utils/formatsSet';
+import { Formats } from './formats';
 import { isSimpleAliasDefinition } from './utils/guards';
 
 const ALIAS = /^#([A-Za-z0-9_-]+)/;
@@ -25,7 +26,7 @@ export interface IRule {
   message: string | null;
   severity: DiagnosticSeverity;
   resolved: boolean;
-  formats: Set<Format> | null;
+  formats: Formats | null;
   enabled: boolean;
   recommended: boolean;
   documentationUrl: string | null;
@@ -35,7 +36,7 @@ export interface IRule {
 
 export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {
   name: string;
-  formats: FormatsSet | null;
+  formats: string[] | null;
   then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
   owner: number;
 };
@@ -45,7 +46,7 @@ export class Rule implements IRule {
   public message: string | null;
   #severity!: DiagnosticSeverity;
   public resolved: boolean;
-  public formats: FormatsSet | null;
+  public formats: Formats | null;
   #enabled: boolean;
   public recommended: boolean;
   public documentationUrl: string | null;
@@ -64,7 +65,7 @@ export class Rule implements IRule {
     this.documentationUrl = definition.documentationUrl ?? null;
     this.severity = definition.severity;
     this.resolved = definition.resolved !== false;
-    this.formats = 'formats' in definition ? new FormatsSet(definition.formats) : null;
+    this.formats = 'formats' in definition ? new Formats(definition.formats) : null;
     this.then = definition.then;
     this.given = definition.given;
   }
@@ -241,7 +242,7 @@ export class Rule implements IRule {
     return new Rule(this.name, this.definition, this.owner);
   }
 
-  public toJSON(): StringifiedRule {
+  public toJSON(): Stringifable<StringifiedRule> {
     return {
       name: this.name,
       recommended: this.recommended,

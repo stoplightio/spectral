@@ -1,3 +1,10 @@
+# [@stoplight/spectral-cli-v6.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.3.0...@stoplight/spectral-cli-v6.4.0) (2022-05-12)
+
+
+### Features
+
+* **cli:** sort linting results alphabetically ([#2147](https://github.com/stoplightio/spectral/issues/2147)) ([84d48cf](https://github.com/stoplightio/spectral/commit/84d48cf5e02780f0cbb9ae9074c03a618c2bc462))
+
 # [@stoplight/spectral-cli-v6.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.2.1...@stoplight/spectral-cli-v6.3.0) (2022-03-03)
 
 

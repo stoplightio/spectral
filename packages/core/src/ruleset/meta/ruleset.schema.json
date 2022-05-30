@@ -9,49 +9,26 @@
       "format": "url",
       "errorMessage": "must be a valid URL"
     },
-    "description": { "type": "string" },
+    "description": {
+      "type": "string"
+    },
     "rules": {
       "type": "object",
       "additionalProperties": {
         "$ref": "rule.schema#"
       }
     },
+    "functions": {
+      "$ref": "extensions#functions"
+    },
+    "functionsDir": {
+      "$ref": "extensions#functionsDir"
+    },
     "formats": {
       "$ref": "shared#formats"
     },
     "extends": {
-      "oneOf": [
-        {
-          "$ref": "#",
-          "errorMessage": "must be a valid ruleset"
-        },
-        {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "$ref": "#/properties/extends/oneOf/0"
-              },
-              {
-                "type": "array",
-                "minItems": 2,
-                "additionalItems": false,
-                "items": [
-                  {
-                    "$ref": "#"
-                  },
-                  {
-                    "type": "string",
-                    "enum": ["off", "recommended", "all"],
-                    "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      "errorMessage": "must be a valid ruleset"
+      "$ref": "extensions#extends"
     },
     "parserOptions": {
       "type": "object",

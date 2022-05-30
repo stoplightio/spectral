@@ -1,6 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
-import { aas2_0, aas2_1, aas2_2, aas2_3 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
 
 import type { ErrorObject } from 'ajv';
 import type { IFunctionResult, Format } from '@stoplight/spectral-core';
@@ -10,6 +10,7 @@ import * as asyncAPI2_0_0Schema from '@asyncapi/specs/schemas/2.0.0.json';
 import * as asyncAPI2_1_0Schema from '@asyncapi/specs/schemas/2.1.0.json';
 import * as asyncAPI2_2_0Schema from '@asyncapi/specs/schemas/2.2.0.json';
 import * as asyncAPI2_3_0Schema from '@asyncapi/specs/schemas/2.3.0.json';
+import * as asyncAPI2_4_0Schema from '@asyncapi/specs/schemas/2.4.0.json';
 
 function shouldIgnoreError(error: ErrorObject): boolean {
   return (
@@ -81,6 +82,8 @@ function getSchema(formats: Set<Format>): Record<string, unknown> | void {
       return asyncAPI2_2_0Schema;
     case formats.has(aas2_3):
       return asyncAPI2_3_0Schema;
+    case formats.has(aas2_4):
+      return asyncAPI2_4_0Schema;
     default:
       return;
   }
@@ -91,7 +94,7 @@ export default createRulesetFunction<unknown, null>(
     input: null,
     options: null,
   },
-  function oasDocumentSchema(targetVal, _, context) {
+  function asyncApi2DocumentSchema(targetVal, _, context) {
     const formats = context.document.formats;
     if (formats === null || formats === void 0) return;
 
