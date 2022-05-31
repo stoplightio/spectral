@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -38,13 +38,13 @@
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.1",
-    "@stoplight/json": "~3.17.1",
+    "@stoplight/json": "~3.18.1",
     "@stoplight/lifecycle": "2.3.2",
     "@stoplight/path": "1.3.2",
     "@stoplight/spectral-parsers": "^1.0.0",
     "@stoplight/spectral-ref-resolver": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.0.0",
-    "@stoplight/types": "13.0.0",
+    "@stoplight/types": "13.1.0",
     "@types/json-schema": "^7.0.7",
     "ajv": "^8.6.0",
     "ajv-errors": "~3.0.0",
@@ -54,7 +54,7 @@
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
     "minimatch": "3.0.4",
-    "nimma": "0.2.0",
+    "nimma": "0.2.1",
     "pony-cause": "^1.0.0",
     "simple-eval": "1.0.0",
     "tslib": "^2.3.0"

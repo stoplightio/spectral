@@ -10,6 +10,8 @@ async function match(pattern: fg.Pattern | fg.Pattern[]): Promise<string[]> {
   return (await fg(pattern, GLOB_OPTIONS)).map(normalize);
 }
 
+const compareString = (a: string, b: string): number => a.localeCompare(b);
+
 export async function listFiles(patterns: string[], ignoreUnmatchedGlobs: boolean): Promise<[string[], string[]]> {
   const { files, urls } = patterns.reduce<{
     files: string[];
@@ -49,5 +51,5 @@ export async function listFiles(patterns: string[], ignoreUnmatchedGlobs: boolea
     );
   }
 
-  return [[...urls, ...filesFound], fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
+  return [[...urls, ...filesFound].sort(compareString), fileSearchWithoutResult]; // let's normalize OS paths produced by fast-glob to have consistent paths across all platforms
 }
