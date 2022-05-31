@@ -1,9 +1,7 @@
 import * as fs from 'fs';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 import * as runtime from '@stoplight/spectral-runtime';
-import { fetch } from '@stoplight/spectral-runtime';
 import * as functions from '@stoplight/spectral-functions';
-import commonjs from '@rollup/plugin-commonjs';
 
 jest.mock?.('fs');
 
@@ -11,7 +9,6 @@ import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
 import { builtins } from '../builtins';
-import { node } from '../../presets/node';
 
 describe('Builtins Plugin', () => {
   let io: IO;
@@ -260,6 +257,4 @@ export { input as default };
       ).toStrictEqual(functions);
     });
   });
-
-
 });
