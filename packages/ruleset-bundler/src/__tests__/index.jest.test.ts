@@ -8,6 +8,7 @@ import { browser } from '../presets/browser';
 import { commonjs } from '../plugins/commonjs';
 import { virtualFs } from '../plugins/virtualFs';
 import { runtime } from '../presets/runtime';
+import { builtins } from '../plugins/builtins';
 
 jest.mock('fs');
 
@@ -96,5 +97,52 @@ var spectral = {
 };
 
 export { spectral as default };`);
+  });
+
+  it('given node target, should support commonjs for remote ruleset with builtin modules', async () => {
+    serveAssets({
+      'https://tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
+import { oas } from '@stoplight/spectral-rulesets';
+
+export default {
+extends: [oas],
+rules: {
+  'my-rule': {
+    given: '$',
+    then: {
+      function: schema,
+      functionOptions: {
+        schema: {
+          type: 'object',
+        },
+      },
+    },
+  },
+},
+};`,
+    });
+
+    const code = await bundleRuleset('https://tmp/input.js', {
+      target: 'node',
+      format: 'commonjs',
+      plugins: [builtins(), commonjs(), ...node({ fs, fetch }), virtualFs(io)],
+    });
+
+    expect(code).toContain(`var input = {
+extends: [spectralRulesets.oas],
+rules: {
+  'my-rule': {
+    given: '$',
+    then: {
+      function: spectralFunctions.schema,
+      functionOptions: {
+        schema: {
+          type: 'object',
+        },
+      },
+    },
+  },
+},
+};`);
   });
 });

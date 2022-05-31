@@ -261,54 +261,5 @@ export { input as default };
     });
   });
 
-  it('support bundling remote js ruleset with builtin modules as commonjs', async () => {
-    serveAssets({
-      'https://tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
-import { oas } from '@stoplight/spectral-rulesets';
 
-export default {
-extends: [oas],
-rules: {
-  'my-rule': {
-    given: '$',
-    then: {
-      function: schema,
-      functionOptions: {
-        schema: {
-          type: 'object',
-        },
-      },
-    },
-  },
-},
-};`,
-    });
-
-    const code = await bundleRuleset('https://tmp/input.js', {
-      target: 'node',
-      format: 'commonjs',
-      plugins: [builtins(),commonjs(), ...node({ fs, fetch }), virtualFs(io)],
-    });
-
-    expect(code).toContain(`var input = {
-extends: [spectralRulesets.oas],
-rules: {
-  'my-rule': {
-    given: '$',
-    then: {
-      function: spectralFunctions.schema,
-      functionOptions: {
-        schema: {
-          type: 'object',
-        },
-      },
-    },
-  },
-},
-};`);
-
-    expect(
-      globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions'],
-    ).toStrictEqual(functions);
-  });
 });
