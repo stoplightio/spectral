@@ -3,6 +3,7 @@ import { serveAssets } from '@stoplight/spectral-test-utils';
 import * as runtime from '@stoplight/spectral-runtime';
 import { fetch } from '@stoplight/spectral-runtime';
 import * as functions from '@stoplight/spectral-functions';
+import commonjs from '@rollup/plugin-commonjs';
 
 jest.mock?.('fs');
 
@@ -260,7 +261,7 @@ export { input as default };
     });
   });
 
-  it('support bundling remote js ruleset with builtin modules', async () => {
+  it('support bundling remote js ruleset with builtin modules as commonjs', async () => {
     serveAssets({
       'https://tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
 import { oas } from '@stoplight/spectral-rulesets';
@@ -285,16 +286,17 @@ rules: {
 
     const code = await bundleRuleset('https://tmp/input.js', {
       target: 'node',
-      plugins: [builtins(), ...node({ fs, fetch }), virtualFs(io)],
+      format: 'commonjs',
+      plugins: [builtins(),commonjs(), ...node({ fs, fetch }), virtualFs(io)],
     });
 
     expect(code).toContain(`var input = {
-extends: [oas],
+extends: [spectralRulesets.oas],
 rules: {
   'my-rule': {
     given: '$',
     then: {
-      function: schema,
+      function: spectralFunctions.schema,
       functionOptions: {
         schema: {
           type: 'object',
@@ -303,10 +305,7 @@ rules: {
     },
   },
 },
-};
-
-export { input as default };
-`);
+};`);
 
     expect(
       globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions'],
