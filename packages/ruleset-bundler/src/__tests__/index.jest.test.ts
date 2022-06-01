@@ -101,25 +101,26 @@ export { spectral as default };`);
 
   it('given node target, should support commonjs for remote ruleset with builtin modules', async () => {
     serveAssets({
-      'https://tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
-import { oas } from '@stoplight/spectral-rulesets';
-
-export default {
-extends: [oas],
-rules: {
-  'my-rule': {
-    given: '$',
-    then: {
-      function: schema,
-      functionOptions: {
-        schema: {
-          type: 'object',
+      'https://tmp/input.js': `var spectralFormats = require('@stoplight/spectral-formats');
+var spectralFunctions = require('@stoplight/spectral-functions');
+const ruleset = {
+  rules: {
+    'my-rule': {
+      given: '$',
+      then: {
+        function: spectralFunctions.schema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+          },
         },
       },
     },
   },
-},
-};`,
+};
+
+module.exports = ruleset;
+`
     });
 
     const code = await bundleRuleset('https://tmp/input.js', {
@@ -128,21 +129,20 @@ rules: {
       plugins: [builtins(), commonjs(), ...node({ fs, fetch }), virtualFs(io)],
     });
 
-    expect(code).toContain(`var input = {
-extends: [spectralRulesets.oas],
-rules: {
-  'my-rule': {
-    given: '$',
-    then: {
-      function: spectralFunctions.schema,
-      functionOptions: {
-        schema: {
-          type: 'object',
+    expect(code).toContain(`const ruleset = {
+  rules: {
+    'my-rule': {
+      given: '$',
+      then: {
+        function: spectralFunctions.schema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+          },
         },
       },
     },
   },
-},
 };`);
   });
 });
