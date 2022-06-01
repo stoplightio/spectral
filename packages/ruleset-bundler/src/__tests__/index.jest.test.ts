@@ -119,7 +119,7 @@ const ruleset = {
   },
 };
 module.exports = ruleset;
-`
+`,
     });
 
     const code = await bundleRuleset('https://tmp/input.js', {
