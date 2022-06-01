@@ -118,7 +118,6 @@ const ruleset = {
     },
   },
 };
-
 module.exports = ruleset;
 `
     });
