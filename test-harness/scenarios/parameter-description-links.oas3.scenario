@@ -33,4 +33,4 @@ module.exports = {
 ====command====
 {bin} lint --ruleset "{asset:ruleset}" {document}
 ====stdout====
-No results with a severity of 'error' or higher found!
+No results with a severity of 'error' found!

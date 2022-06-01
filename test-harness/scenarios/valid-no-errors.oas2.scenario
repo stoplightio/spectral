@@ -20,4 +20,4 @@ module.exports = oas;
 ====command====
 {bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
-No results with a severity of 'error' or higher found!
+No results with a severity of 'error' found!
