@@ -54,7 +54,7 @@
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
     "minimatch": "3.0.4",
-    "nimma": "0.2.1",
+    "nimma": "0.2.2",
     "pony-cause": "^1.0.0",
     "simple-eval": "1.0.0",
     "tslib": "^2.3.0"
