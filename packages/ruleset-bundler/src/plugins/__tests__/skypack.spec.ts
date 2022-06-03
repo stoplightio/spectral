@@ -11,12 +11,21 @@ import { skypack } from '../skypack';
 
 describe('Skypack Plugin', () => {
   let io: IO;
+  let warnSpy: jest.SpyInstance;
 
   beforeEach(() => {
     io = {
       fs,
       fetch,
     };
+
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      /* no-op */
+    });
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
   });
 
   describe.each<BundleOptions['target']>(['browser'])('given %s target', target => {
