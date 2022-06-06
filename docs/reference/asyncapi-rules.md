@@ -24,6 +24,12 @@ Keep trailing slashes off of channel names, as it can cause some confusion. Most
 
 **Recommended:** Yes
 
+### asyncapi-channel-parameters
+
+All channel parameters should be defined in the `parameters` object of the channel. They should also not contain redundant parameters that do not exist in the channel address.
+
+**Recommended:** Yes
+
 ### asyncapi-headers-schema-type-object
 
 The schema definition of the application headers must be of type “object”.
@@ -176,6 +182,36 @@ components:
 Operation objects should have a description.
 
 **Recommended:** Yes
+
+### asyncapi-operation-operationId-uniqueness
+
+`operationId` must be unique across all the operations (except these one defined in the components).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      operationId: turn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      operationId: turn
+```
+
+**Good Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      operationId: turnOn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      operationId: turnOff
+```
 
 ### asyncapi-operation-operationId
 
@@ -333,6 +369,12 @@ Server URL should not point at example.com.
 
 **Recommended:** No
 
+### asyncapi-server-variables
+
+All server URL variables should be defined in the `variables` object of the server. They should also not contain redundant variables that do not exist in the server address.
+
+**Recommended:** Yes
+
 ### asyncapi-servers
 
 A non empty `servers` object is expected to be located at the root of the document.
@@ -385,6 +427,28 @@ tags:
 ```
 
 **Recommended:** No
+
+### asyncapi-tags-uniqueness
+
+Tags must not have duplicate names (identifiers).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+tags:
+  - name: "Badger"
+  - name: "Badger"
+```
+
+**Good Example**
+
+```yaml
+tags:
+  - name: "Aardvark"
+  - name: "Badger"
+```
 
 ### asyncapi-tags
 

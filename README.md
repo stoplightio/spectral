@@ -79,7 +79,7 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 ### How is this different to Ajv
 
-[Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv used under the hood for this), but that's just one of many functions.
+[Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv under the hood for this), but that's just one of many functions.
 
 ### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
 
@@ -91,9 +91,10 @@ No problem! A hosted version of Spectral comes **free** with the Stoplight platf
 
 ## ⚙️ Integrations
 
-- [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) uses Spectral to validate and lint OpenAPI documents.
-- [Spectral GitHub Action](https://github.com/stoplightio/spectral-action), lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
-- [VS Code Spectral](https://github.com/stoplightio/vscode-spectral), all the power of Spectral without leaving VS Code.
+- [GitHub Action](https://github.com/stoplightio/spectral-action) - lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
+- [Jetbrains Plugin](https://plugins.jetbrains.com/plugin/18520-spectral), Automatic linting of your OpenAPI specifications and highlighting in your editor.
+- [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) - Uses Spectral to validate and lint OpenAPI documents.
+- [VS Code Spectral](https://marketplace.visualstudio.com/items?itemName=stoplight.spectral), all the power of Spectral without leaving VS Code.
 
 ## 🏁 Help Others Utilize Spectral
 

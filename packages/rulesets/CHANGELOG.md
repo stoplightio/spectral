@@ -1,3 +1,12 @@
+# [@stoplight/spectral-rulesets-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.8.0...@stoplight/spectral-rulesets-v1.9.0) (2022-05-31)
+
+
+### Features
+
+* **rulesets:** add rules for validation of server variables and channel parameters ([#2101](https://github.com/stoplightio/spectral/issues/2101)) ([9acc633](https://github.com/stoplightio/spectral/commit/9acc63375309bd7babe8b0130bd64fbbdbc56738))
+* **rulesets:** add rules for validation uniqueness of tag names ([#2104](https://github.com/stoplightio/spectral/issues/2104)) ([4447d81](https://github.com/stoplightio/spectral/commit/4447d81ace5aab90e7cd48a8e182103b6a90ee81))
+* **rulesets:** check uniqueness of AsyncAPI operations ([#2121](https://github.com/stoplightio/spectral/issues/2121)) ([8b3cce4](https://github.com/stoplightio/spectral/commit/8b3cce4bc054df7843e50312eae225ca8a7a50b0))
+
 # [@stoplight/spectral-rulesets-v1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.7.0...@stoplight/spectral-rulesets-v1.8.0) (2022-05-03)
 
 
