@@ -43,4 +43,4 @@ servers:
 ====status====
 0
 ====stdout====
-No results with a severity of 'error' or higher found!
+No results with a severity of 'error' found!

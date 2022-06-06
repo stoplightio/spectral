@@ -1,3 +1,10 @@
+# [@stoplight/spectral-cli-v6.4.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.0...@stoplight/spectral-cli-v6.4.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* **cli:** do not show 'or higher' if severity equals error ([#2172](https://github.com/stoplightio/spectral/issues/2172)) ([f31ec63](https://github.com/stoplightio/spectral/commit/f31ec636c912f3c9a53672e87a13ad724921b902))
+
 # [@stoplight/spectral-cli-v6.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.3.0...@stoplight/spectral-cli-v6.4.0) (2022-05-12)
 
 

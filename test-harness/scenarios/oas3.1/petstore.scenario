@@ -196,4 +196,4 @@ rules:
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset.yaml}
 ====stdout====
-No results with a severity of 'error' or higher found!
+No results with a severity of 'error' found!
