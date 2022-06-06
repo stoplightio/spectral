@@ -1,24 +1,26 @@
 /*eslint-env node*/
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
-const path = require('path');
-const { mapValues } = require('lodash');
-const { compilerOptions } = require('./tsconfig.json');
+import { pathsToModuleNameMapper } from 'ts-jest';
+import * as path from 'path';
+import * as fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const { compilerOptions } = JSON.parse(fs.readFileSync('./tsconfig.json', 'utf8'));
 
 const projectDefault = {
-  preset: 'ts-jest',
   moduleNameMapper: {
-    ...mapValues(pathsToModuleNameMapper(compilerOptions.paths), v => path.join(__dirname, v)),
+    ...Object.fromEntries(
+      Object.entries(pathsToModuleNameMapper(compilerOptions.paths)).map(([k, v]) => [k, path.join(__dirname, v)]),
+    ),
     '^@stoplight/spectral\\-test\\-utils$': '<rootDir>/test-utils/node/index.ts',
   },
   testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      useIsolatedModules: true,
-    },
+  transform: {
+    '^.+\\.ts$': ['@swc/jest'],
   },
 };
 
-module.exports = {
+export default {
   projects: [
     {
       ...projectDefault,
@@ -58,6 +60,7 @@ module.exports = {
         name: '@stoplight/spectral-ruleset-bundler',
         color: 'blueBright',
       },
+      setupFilesAfterEnv: ['<rootDir>/packages/ruleset-bundler/jest.setup.mjs'],
       testMatch: ['<rootDir>/packages/ruleset-bundler/src/**/__tests__/**/*.{test,spec}.ts'],
     },
     {
@@ -87,6 +90,7 @@ module.exports = {
         name: '@stoplight/spectral-rulesets',
         color: 'cyanBright',
       },
+      setupFilesAfterEnv: ['<rootDir>/packages/rulesets/jest.setup.mjs'],
       testMatch: ['<rootDir>/packages/rulesets/src/**/__tests__/**/*.{test,spec}.ts'],
     },
     {

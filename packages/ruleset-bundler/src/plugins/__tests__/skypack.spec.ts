@@ -2,8 +2,6 @@ import * as fs from 'fs';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 import { fetch } from '@stoplight/spectral-runtime';
 
-jest.mock?.('fs');
-
 import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
