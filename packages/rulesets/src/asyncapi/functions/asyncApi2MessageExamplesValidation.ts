@@ -54,7 +54,17 @@ function validate(
 
 export default createRulesetFunction<MessageFragment, null>(
   {
-    input: null,
+    input: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+        },
+        summary: {
+          type: 'string',
+        },
+      },
+    },
     options: null,
   },
   function asyncApi2MessageExamplesValidation(targetVal, _, ctx) {
