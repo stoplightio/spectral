@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.9.0...@stoplight/spectral-rulesets-v1.10.0) (2022-06-07)
+
+
+### Features
+
+* **rulesets:** add rule to validate AsyncAPI message's examples ([#2126](https://github.com/stoplightio/spectral/issues/2126)) ([87ef046](https://github.com/stoplightio/spectral/commit/87ef0464c1d31a8887c847e339a4b1bef3e5ad93))
+
 # [@stoplight/spectral-rulesets-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.8.0...@stoplight/spectral-rulesets-v1.9.0) (2022-05-31)
 
 
