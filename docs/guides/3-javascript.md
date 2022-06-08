@@ -20,15 +20,15 @@ yarn global add @stoplight/spectral-core
 
 ## Getting Started
 
-Similar to using Spectral in the CLI, there's two things you'll need to run Spectral in JS:
+Similar to using Spectral in the CLI, there are two things you'll need to run Spectral in JS:
 
-- a string or a file representing an API specification
-- an object or a file representing a ruleset
+- A string or a file representing an API specification
+- An object or a file representing a ruleset
 
 As an example, here's a script of Spectral in action:
 
 ```js
-// example.mjs
+// example-1.mjs
 import spectralCore from "@stoplight/spectral-core";
 const { Spectral, Document } = spectralCore;
 import Parsers from "@stoplight/spectral-parsers"; // make sure to install the package if you intend to use default parsers!
@@ -69,12 +69,24 @@ And here's the same example using CommonJS:
 
 ## Load Rulesets and API Specification Files
 
-Here's another example that shows how to load an external API specification file, and an external ruleset:
+Let's look at some other examples and how to work with external files.
 
 ### Load a JSON/YAML Ruleset
 
+If you would like to run these examples, make sure that you have:
+
+- An OpenAPI specification file in the same directory as your script named `petstore.yaml`. You can use the one found [here](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml).
+- A ruleset file named `.spectral.yaml`. It can have the following contents:
+
+```yaml
+extends:
+  - spectral:oas
+```
+
+Here's an example that shows how to load an external API specification file, and an external YAML ruleset:
+
 ```js
-// example.mjs
+// example-2.mjs
 import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as path from "node:path";
@@ -89,15 +101,15 @@ const { fetch } = spectralRuntime;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const myDocument = new Document(
-  // load an API specification file from your project's root directory
+  // load an API specification file from your project's root directory. You can use the petstore.yaml example from here: https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml
   fs.readFileSync(join(__dirname, 'petstore.yaml'), 'utf-8').trim(),
   Parsers.Yaml,
   'petstore.yaml'
 );
 
 const spectral = new Spectral();
-// load a ruleset file from your project's root directory
-const rulesetFilepath = path.join(__dirname, "ruleset.yaml");
+// load a ruleset file from your project's root directory. 
+const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
 spectral.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
 
 spectral.run(myDocument).then(console.log);
@@ -123,7 +135,7 @@ s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
 
 ### Load a JavaScript Ruleset
 
-Starting in Spectral v6.0, we add support for rulesets to be written using JavaScript. 
+Starting in Spectral v6.0, we added support for rulesets to be written using JavaScript. 
 
 You can find more information about it [here](./4-custom-rulesets.md#alternative-js-ruleset-format).
 
@@ -188,7 +200,7 @@ const spectral = new Spectral({
 
 ### Using a Custom Resolver
 
-Spectral lets you provide any custom \$ref resolver. By default, http(s) and file protocols are resolved, relatively to
+Spectral lets you provide any custom \$ref resolver. By default, HTTP(S) and file protocols are resolved, relatively to
 the document Spectral lints against. You can also add support for additional protocols, or adjust the resolution. In order to achieve that, you need to create a custom json-ref-resolver instance.
 
 For example:
