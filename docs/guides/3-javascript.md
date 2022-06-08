@@ -6,7 +6,7 @@ The Spectral CLI is a thin wrapper around a JavaScript (TypeScript) API, which c
 
 In order to consume the Spectral JS API you need to install the appropriate package.
 
-For NPM users:
+For npm users:
 
 ```bash
 npm install -g @stoplight/spectral-core
