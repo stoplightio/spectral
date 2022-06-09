@@ -82,7 +82,7 @@ Let's look at some other examples and how to work with external files.
 
 ### Load a JSON/YAML Ruleset
 
-If you would like to run these examples, make sure that you have:
+If you would like to run this example, make sure that you have:
 
 - An OpenAPI specification file in the same directory as your script named `petstore.yaml`. You can use the one found [here](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml).
 - A ruleset file named `.spectral.yaml`. It can have the following contents:
@@ -92,7 +92,7 @@ extends:
   - spectral:oas
 ```
 
-Here's an example that shows how to load an external API specification file, and an external YAML ruleset:
+Here's a script that shows how to load an external API specification file, and an external YAML ruleset:
 
 ```js
 // example-2.mjs
@@ -145,10 +145,10 @@ spectral.setRuleset(ruleset);
 Here's an example script of how you could run Spectral in the browser:
 
 ```js
-const { Spectral } = require("@stoplight/spectral-core");
-const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
+import { Spectral } from "@stoplight/spectral-core"
+import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
 
-// create a ruleset that just extends the spectral:oas ruleset
+// create a ruleset that extends the spectral:oas ruleset
 const myRuleset = `extends: spectral:oas
 rules: {}`;
 
@@ -173,18 +173,21 @@ s.setRuleset(await bundleAndLoadRuleset("/.spectral.yaml", { fs, fetch }));
 
 ### How to Use a Proxy
 
-Spectral supports HTTP(S) proxies when fetching remote assets.
+Spectral supports HTTP(S) proxies when fetching remote assets:
 
 ```js
-const { Spectral } = require("@stoplight/spectral-core");
-const ProxyAgent = require("proxy-agent");
-const { createHttpAndFileResolver } = require("@stoplight/spectral-ref-resolver");
+import { Spectral } from "@stoplight/spectral-core";
+import ProxyAgent from "proxy-agent";
+import { createHttpAndFileResolver } from "@stoplight/spectral-ref-resolver";
 
+// start Spectral using a proxy
 const spectral = new Spectral({
   resolver: createHttpAndFileResolver({ agent: new ProxyAgent(process.env.PROXY) }),
 });
 
-// lint as usual - $refs and rules will be requested using the proxy
+// ... load document
+
+// ... lint document - $refs and rules will be requested using the proxy
 ```
 
 ### How to Use a Custom Resolver
@@ -195,10 +198,10 @@ the document Spectral lints against. You can also add support for additional pro
 For example:
 
 ```js
-const path = require("path");
-const fs = require("fs");
-const { Spectral } = require("@stoplight/spectral-cli");
-const { Resolver } = require("@stoplight/json-ref-resolver");
+import { join } from "path";
+import { readFile } from "fs";
+import { Spectral } from "@stoplight/spectral-cli";
+import { Resolver } from "@stoplight/json-ref-resolver";
 
 const customFileResolver = new Resolver({
   resolvers: {
@@ -207,7 +210,7 @@ const customFileResolver = new Resolver({
         return new Promise((resolve, reject) => {
           const basePath = process.cwd();
           const refPath = ref.path();
-          fs.readFile(path.join(basePath, refPath), "utf8", (err, data) => {
+          readFile(path.join(basePath, refPath), "utf8", (err, data) => {
             if (err) {
               reject(err);
             } else {
@@ -222,7 +225,9 @@ const customFileResolver = new Resolver({
 
 const spectral = new Spectral({ resolver: customFileResolver });
 
-// lint document as usual
+// ... load document
+
+// ... lint document - $refs and rules will be requested using the proxy
 ```
 
 The custom resolver we've just created will resolve all remote file refs relatively to the current working directory.
