@@ -169,7 +169,7 @@ s.setRuleset(await bundleAndLoadRuleset("/.spectral.yaml", { fs, fetch }));
 
 ### Load Multiple Rulesets
 
-If you'd like to use the `bundleAndLoadRuleset` method to load multiple rulesets, you'll have to create a new Spectral ruleset file, and use the [`extends`](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets#extending-rulesets) functionality to extend the rulesets you'd like to use.
+If you'd like to use the `bundleAndLoadRuleset` method to load multiple rulesets, you'll have to create a new Spectral ruleset file, and use the [`extends`](../getting-started/3-rulesets.md#extending-rulesets) functionality to extend the rulesets you'd like to use.
 
 ## Advanced
 
