@@ -18,6 +18,20 @@ For Yarn users:
 yarn global add @stoplight/spectral-core
 ```
 
+### CommonJS and ES6
+
+The examples we're showing in this page are written in ES6. If you're using CommonJS, you have to import an additional module:
+
+```js
+const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
+```
+
+And if you're using the `bundleAndLoadRuleset`, you'll have to pass that variable as a parameter:
+
+```js
+s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
+```
+
 ## Getting Started
 
 Similar to using Spectral in the CLI, there are two things you'll need to run Spectral in JS:
@@ -60,11 +74,6 @@ spectral.setRuleset({
 
 // we lint our document using the ruleset we passed to the Spectral object
 spectral.run(myDocument).then(console.log);
-```
-
-And here's the same example using CommonJS:
-
-```js
 ```
 
 ## Load Rulesets and API Specification Files
@@ -115,24 +124,6 @@ spectral.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
 spectral.run(myDocument).then(console.log);
 ```
 
-And here's the same example using CommonJS:
-
-```js
-const path = require("path");
-const fs = require("fs");
-
-const { Spectral } = require("@stoplight/spectral-core");
-const { fetch } = require("@stoplight/spectral-runtime"); // can also use isomorphic-fetch, etc.. If you ruleset does not reference any external assets, you can provide some stub instead.
-const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
-// const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
-
-const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
-
-const spectral = new Spectral();
-s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
-// or, if you use module.exports (CommonJS) s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
-```
-
 ### Load a JavaScript Ruleset
 
 Starting in Spectral v6.0, we added support for rulesets to be written using JavaScript. 
@@ -156,7 +147,6 @@ Here's an example script of how you could run Spectral in the browser:
 ```js
 const { Spectral } = require("@stoplight/spectral-core");
 const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
-// const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
 
 // create a ruleset that just extends the spectral:oas ruleset
 const myRuleset = `extends: spectral:oas
@@ -177,12 +167,11 @@ const fs = {
 
 const spectral = new Spectral();
 s.setRuleset(await bundleAndLoadRuleset("/.spectral.yaml", { fs, fetch }));
-// or, if you use module.exports (CommonJS) s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
 ```
 
 ## Advanced
 
-### Using a Proxy
+### How to Use a Proxy
 
 Spectral supports HTTP(S) proxies when fetching remote assets.
 
@@ -198,7 +187,7 @@ const spectral = new Spectral({
 // lint as usual - $refs and rules will be requested using the proxy
 ```
 
-### Using a Custom Resolver
+### How to Use a Custom Resolver
 
 Spectral lets you provide any custom \$ref resolver. By default, HTTP(S) and file protocols are resolved, relatively to
 the document Spectral lints against. You can also add support for additional protocols, or adjust the resolution. In order to achieve that, you need to create a custom json-ref-resolver instance.
