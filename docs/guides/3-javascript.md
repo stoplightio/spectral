@@ -18,9 +18,9 @@ For Yarn users:
 yarn global add @stoplight/spectral-core
 ```
 
-### CommonJS and ES6
+### CommonJS and ESM
 
-The examples on this page are written in ES6. If you're using CommonJS, you have to import an additional module:
+The examples on this page are written in ESM. If you're using CommonJS, you have to import an additional module:
 
 ```js
 const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
