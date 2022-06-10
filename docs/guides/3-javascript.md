@@ -18,20 +18,6 @@ For Yarn users:
 yarn global add @stoplight/spectral-core
 ```
 
-### CommonJS and ESM
-
-The examples on this page are written in ESM. If you're using CommonJS, you have to import an additional module:
-
-```js
-const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
-```
-
-And if you're using the `bundleAndLoadRuleset`, you'll have to pass that variable as a parameter:
-
-```js
-s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
-```
-
 ## Get Started
 
 Similar to using Spectral in the CLI, there are two things you'll need to run Spectral in JS:
@@ -115,7 +101,7 @@ const myDocument = new Document(
 );
 
 const spectral = new Spectral();
-// load a ruleset file from your project's root directory. 
+// load a ruleset file from your project's root directory.
 const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
 spectral.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
 
@@ -124,7 +110,7 @@ spectral.run(myDocument).then(console.log);
 
 ### Load a JavaScript Ruleset
 
-Starting in Spectral v6.0, support was added for rulesets to be written using JavaScript. 
+Starting in Spectral v6.0, support was added for rulesets to be written using JavaScript.
 
 You can find more information about it [here](./4-custom-rulesets.md#alternative-js-ruleset-format).
 
@@ -199,11 +185,11 @@ the document Spectral lints against. You can also add support for additional pro
 
 For example:
 
-```js title="example-5.mjs" lineNumbers
-import { join } from "path";
-import { readFile } from "fs";
-import { Spectral } from "@stoplight/spectral-cli";
-import { Resolver } from "@stoplight/json-ref-resolver";
+```js title="example-5.cjs" lineNumbers
+const path = require("path");
+const fs = require("fs");
+const { Spectral } = require("@stoplight/spectral-cli");
+const { Resolver } = require("@stoplight/json-ref-resolver");
 
 const customFileResolver = new Resolver({
   resolvers: {
@@ -212,7 +198,7 @@ const customFileResolver = new Resolver({
         return new Promise((resolve, reject) => {
           const basePath = process.cwd();
           const refPath = ref.path();
-          readFile(path.join(basePath, refPath), "utf8", (err, data) => {
+          fs.readFile(path.join(basePath, refPath), "utf8", (err, data) => {
             if (err) {
               reject(err);
             } else {
