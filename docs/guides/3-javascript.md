@@ -83,7 +83,7 @@ Here's a script that shows how to load an external API specification file, and a
 import * as fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as path from "node:path";
-import { join } from 'path';
+import { join } from "path";
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
 import Parsers from "@stoplight/spectral-parsers"; // make sure to install the package if you intend to use default parsers!
 import spectralCore from "@stoplight/spectral-core";
@@ -95,9 +95,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const myDocument = new Document(
   // load an API specification file from your project's root directory. You can use the petstore.yaml example from here: https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml
-  fs.readFileSync(join(__dirname, 'petstore.yaml'), 'utf-8').trim(),
+  fs.readFileSync(join(__dirname, "petstore.yaml"), "utf-8").trim(),
   Parsers.Yaml,
-  'petstore.yaml'
+  "petstore.yaml",
 );
 
 const spectral = new Spectral();
@@ -116,7 +116,7 @@ You can find more information about it [here](./4-custom-rulesets.md#alternative
 
 To load a JavaScript ruleset, you have to import it similar to how you would import a module:
 
-```js  lineNumbers
+```js lineNumbers
 import { Spectral } from "@stoplight/spectral-core";
 import ruleset from "./my-javascript-ruleset";
 
@@ -129,7 +129,7 @@ spectral.setRuleset(ruleset);
 Here's an example script of how you could run Spectral in the browser:
 
 ```js title="example-3.mjs" lineNumbers
-import { Spectral } from "@stoplight/spectral-core"
+import { Spectral } from "@stoplight/spectral-core";
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
 
 // create a ruleset that extends the spectral:oas ruleset
