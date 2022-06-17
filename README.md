@@ -29,42 +29,45 @@ yarn global add @stoplight/spectral-cli
 
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation) in our documentation.
 
-**Create a Ruleset**
+**Create a local rRuleset**
 
 Spectral, being a generic YAML/JSON linter, needs a ruleset to lint files. There are two ways to get a ruleset:
 
 1. Run this command to get our predefined rulesets based on OpenAPI or AsyncAPI:
 
 ```bash
-printf '{\n  "extends": ["spectral:oas", "spectral:asyncapi"]\n}\n' > .spectral.json
+echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
 ```
 
 1. Create your [own ruleset](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets)
 
 **Lint**
 
-Use this command to lint with the predefined ruleset or a ruleset stored in the same directory as your API document:
+Use this command if you have defined the ruleset in the the same directory as the documents you are linting:
 
 ```bash
 spectral lint myapifile.yaml
 ```
 
-Use this command to lint with a custom ruleset or one that is located in a different directory than your API document:
+Use this command to lint with a custom ruleset, or one that is located in a different directory than the documents being linted:
 
 ```bash
-spectral lint myapifile.yaml --ruleset myruleset.json
+spectral lint myapifile.yaml --ruleset myruleset.yaml
 ```
 
 ## 📖 Documentation
 
 - [Documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md)
   - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
-  - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
-  - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
-  - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
-  - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Don't like our rules? Throw 'em out and make your own.
-  - [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
-    Take a look at our [getting started documentation](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md), then peek through some of our guides:
+  - [Rulesets](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets) - Understand the structure of a ruleset so you can tweak and make your own rules.
+
+Once you've had a look through some of the getting started material, some of our guides might help you become a power user.
+
+- [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
+- [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
+- [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
+- [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Need something more than the core rulesets provide? Fancy building your own API Style Guide? Learn how to create a custom ruleset.
+- [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
 
 ## ℹ️ Support
 
