@@ -2,13 +2,10 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/master)](https://circleci.com/gh/stoplightio/spectral) [![NPM Downloads](https://img.shields.io/npm/dw/@stoplight/spectral?color=blue)](https://www.npmjs.com/package/@stoplight/spectral) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
-- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3** and **AsyncAPI** Documents
-- **JSON Path Support**: Use JSON path to apply rules to specific parts of your objects
-- **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
+- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x** and **AsyncAPI** Documents
+- **API Style Guides**: Automated API Style Guides using rulesets improve consistency across all your APIs
+- **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/e5b9616d6d50c-custom-rulesets#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - **Custom Functions**: Create custom functions for advanced use cases
-- **JSON Validation**: Validate JSON with [Ajv](https://www.npmjs.com/package/ajv)
-
-![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/demo.svg)
 
 # Overview
 
@@ -30,7 +27,7 @@ npm install -g @stoplight/spectral-cli
 yarn global add @stoplight/spectral-cli
 ```
 
-Find more [installation methods](https://meta.stoplight.io/docs/spectral/docs/getting-started/2-installation.md) in our documentation.
+Find more [installation methods](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation) in our documentation.
 
 **Create a Ruleset**
 
@@ -42,7 +39,7 @@ Spectral, being a generic YAML/JSON linter, needs a ruleset to lint files. There
 printf '{\n  "extends": ["spectral:oas", "spectral:asyncapi"]\n}\n' > .spectral.json
 ```
 
-2. Create your [own ruleset](./docs/getting-started/3-rulesets.md).
+1. Create your [own ruleset](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets)
 
 **Lint**
 
@@ -81,13 +78,13 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 [Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv under the hood for this), but that's just one of many functions.
 
-### I want to lint my OpenAPI documents but don't want to implement Spectral right now.
+### I want to lint my OpenAPI documents but don't want to implement Spectral right now
 
 No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_medium=spectral&utm_campaign=readme).
 
 ### What is the difference between Spectral and Speccy
 
-[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI). It's mostly been abandoned now, and is JavaScript not TypeScript.
+[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but has since been abandoned by its maintainers. It was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI), so you could use this for standardizing Kubernetes manifests or anything else.
 
 ## ⚙️ Integrations
 
