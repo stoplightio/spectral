@@ -250,15 +250,19 @@ Optionally provide a documentation URL to your ruleset in order to help end-user
 Whatever you link you provide, the rule name will be appended as an anchor.
 
 ```yaml
-extends: spectral:oas
-documentationUrl: https://www.example.com/docs/api-ruleset.md
+# 👇 This line allows people to find more information
+documentationUrl: https://www.example.com/docs/api-style-guide.md
 rules:
-  tag-description:
-    description: Please provide a description for each tag.
-    given: $.tags[*]
+  no-http-basic:
+    description: "Consider a more secure alternative to HTTP Basic."
+    message: "HTTP Basic is a pretty insecure way to pass credentials around, please consider an alternative."
+    severity: error
+    given: $.components.securitySchemes[*]
     then:
-      field: description
-      function: truthy
+      field: scheme
+      function: pattern
+      functionOptions:
+        notMatch: basic
 ```
 
 In this example, violations of the `tag-description` rule would indicate `https://www.example.com/docs/api-ruleset.md#tag-description` as the location for finding out more about the rule.
@@ -269,7 +273,6 @@ If you wish to override a documentation URL for a particular rule, you can do so
 
 ```yaml
 extends: spectral:oas
-documentationUrl: https://www.example.com/docs/api-ruleset.md
 rules:
   tag-description:
     description: Please provide a description for each tag.
