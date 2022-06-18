@@ -3,7 +3,7 @@
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x** and **AsyncAPI** Documents
-- **API Style Guides**: Automated API Style Guides using rulesets improve consistency across all your APIs
+- **API Style Guides**: Automated [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices?utm_source=github&utm_medium=spectral&utm_campaign=readme) using rulesets improve consistency across all your APIs
 - **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/e5b9616d6d50c-custom-rulesets#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - **Custom Functions**: Create custom functions for advanced use cases
 
