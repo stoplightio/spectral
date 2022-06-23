@@ -4,7 +4,7 @@ Customising existing rulesets might be all you need at first, but at some point 
 
 If you'd like to make sure your APIs are consistent and high quality before they've even built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what error formats should be used. Read our article _[Six Things You Should Include in Your API Style Guide](https://blog.stoplight.io/six-things-you-should-include-in-your-api-style-guide?utm_source=github&utm_medium=spectral&utm_campaign=docs)._
 
-Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is vaid. Whatever you want to do, to start with you'll need to create some rules.
+Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is valid. Whatever you want to do, to start with you'll need to create some rules.
 
 ## Adding Rules
 

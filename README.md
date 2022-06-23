@@ -29,7 +29,7 @@ yarn global add @stoplight/spectral-cli
 
 Find more [installation methods](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation) in our documentation.
 
-**Create a local rRuleset**
+**Create a local ruleset**
 
 Spectral, being a generic YAML/JSON linter, needs a ruleset to lint files. There are two ways to get a ruleset:
 
@@ -61,13 +61,13 @@ spectral lint myapifile.yaml --ruleset myruleset.yaml
   - [Getting Started](https://meta.stoplight.io/docs/spectral/docs/getting-started/1-concepts.md) - The basics of Spectral.
   - [Rulesets](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets) - Understand the structure of a ruleset so you can tweak and make your own rules.
 
-Once you've had a look through some of the getting started material, some of our guides might help you become a power user.
+Once you've had a look through the getting started material, some of these guides can help you become a power user.
 
 - [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like!
 - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
 - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
 - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Need something more than the core rulesets provide? Fancy building your own API Style Guide? Learn how to create a custom ruleset.
-- [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Rules can do absolutely anything, just write a little code.
+- [Custom Functions](https://meta.stoplight.io/docs/spectral/docs/guides/5-custom-functions.md) - Handle more advanced rules, by writing a little JavaScript/TypeScript and calling it as a function.
 
 ## ℹ️ Support
 
@@ -83,7 +83,7 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 ### I want to lint my OpenAPI documents but don't want to implement Spectral right now
 
-No problem! A hosted version of Spectral comes **free** with the Stoplight platform. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_medium=spectral&utm_campaign=readme).
+No problem! A hosted version of Spectral is embedded in the Stoplight platform. Use the intuitive [Style Guide Editor](https://meta.stoplight.io/docs/platform/71b92b2b5e388-style-guide-overview) to create your own rules, targets, and functions. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_medium=spectral&utm_campaign=readme).
 
 ### What is the difference between Spectral and Speccy
 
