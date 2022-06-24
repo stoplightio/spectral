@@ -4,11 +4,11 @@ The power of integrating linting into the design-first workflow, or any workflow
 
 To achieve this, Spectral has three key concepts:
 
-- **Rulesets** act as a container for rules and functions.
 - **Rules** filter your object down to a set of target values and specify the function that is used to evaluate those values.
 - **Functions** accept a value and return issues if the value is incorrect.
+- **Rulesets** act as a container for rules and functions.
 
-Rules can be comprised of one of more functions. For example:
+Rules can be comprised of one of more functions, to standardize structured content, like making sure your OpenAPI descriptions match your [API style guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices):
 
 - HTTP Basic is not allowed at this company
 - All operations are secured with a security schema
