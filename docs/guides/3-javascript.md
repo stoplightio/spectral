@@ -22,7 +22,7 @@ yarn global add @stoplight/spectral-core
 
 Similar to using Spectral in the CLI, there are two things you'll need to run Spectral in JS:
 
-- A string or a file representing an API specification
+- A string or a file containing your structured data (OpenAPI, AsyncAPI, Kubernetes, etc).
 - An object or a file representing a ruleset
 
 As an example, here's a script of Spectral in action:
@@ -69,7 +69,7 @@ Let's look at some other examples and how to work with external files.
 
 If you would like to run this example, make sure that you have:
 
-- An OpenAPI specification file in the same directory as your script named `petstore.yaml`. You can use the one found [here](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml).
+- An OpenAPI description document in the same directory as your script named `petstore.yaml`. You can use the one found [here](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml).
 - A ruleset file named `.spectral.yaml`. It can have the following contents:
 
 ```yaml
