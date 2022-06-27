@@ -69,7 +69,7 @@ Let's look at some other examples and how to work with external files.
 
 If you would like to run this example, make sure that you have:
 
-- An OpenAPI description document in the same directory as your script named `petstore.yaml`. You can use the one found [here](https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml).
+- An OpenAPI description document in the same directory as your script named `openapi.yaml`. You can use the one found [here](https://github.com/stoplightio/Public-APIs/blob/master/reference/plaid/openapi.yaml).
 - A ruleset file named `.spectral.yaml`. It can have the following contents:
 
 ```yaml
@@ -94,10 +94,10 @@ const { fetch } = spectralRuntime;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const myDocument = new Document(
-  // load an API specification file from your project's root directory. You can use the petstore.yaml example from here: https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml
-  fs.readFileSync(join(__dirname, "petstore.yaml"), "utf-8").trim(),
+  // load an API specification file from your project's root directory. You can use the openapi.yaml example from here: https://github.com/stoplightio/Public-APIs/blob/master/reference/plaid/openapi.yaml
+  fs.readFileSync(join(__dirname, "openapi.yaml"), "utf-8").trim(),
   Parsers.Yaml,
-  "petstore.yaml",
+  "openapi.yaml",
 );
 
 const spectral = new Spectral();
