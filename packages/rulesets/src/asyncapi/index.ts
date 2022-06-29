@@ -9,6 +9,7 @@ import {
 } from '@stoplight/spectral-functions';
 
 import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
+import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
@@ -16,6 +17,7 @@ import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
 import { uniquenessTags } from '../shared/functions';
+import asyncApi2Security from './functions/asyncApi2Security';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -69,6 +71,17 @@ export default {
       given: ['$.channels.*', '$.components.channels.*'],
       then: {
         function: asyncApi2ChannelParameters,
+      },
+    },
+    'asyncapi-channel-servers': {
+      description: 'Channel servers must be defined in the "servers" object.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: '$',
+      then: {
+        function: asyncApi2ChannelServers,
       },
     },
     'asyncapi-headers-schema-type-object': {
@@ -212,6 +225,20 @@ export default {
       then: {
         field: 'operationId',
         function: truthy,
+      },
+    },
+    'asyncapi-operation-security': {
+      description: 'Operation have to reference a defined security schemes.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: '$.channels[*][publish,subscribe].security.*',
+      then: {
+        function: asyncApi2Security,
+        functionOptions: {
+          objectType: 'Operation',
+        },
       },
     },
     'asyncapi-parameter-description': {
@@ -377,6 +404,20 @@ export default {
         function: pattern,
         functionOptions: {
           notMatch: 'example\\.com',
+        },
+      },
+    },
+    'asyncapi-server-security': {
+      description: 'Server have to reference a defined security schemes.',
+      message: '{{error}}',
+      severity: 'error',
+      type: 'validation',
+      recommended: true,
+      given: '$.servers.*.security.*',
+      then: {
+        function: asyncApi2Security,
+        functionOptions: {
+          objectType: 'Server',
         },
       },
     },
