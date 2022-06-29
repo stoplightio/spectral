@@ -309,4 +309,79 @@ export { spectral as default };
 `);
     });
   });
+
+  it('given fullOutput set to true, should expose the entire built chunk', async () => {
+    serveAssets({
+      '/p/.spectral/my-fn.mjs': `import {isOdd} from './helpers/index.mjs';
+
+export default (input) => {
+  if (!isOdd(input)) {
+    return [{ message: 'must be odd' }];
+  }
+};`,
+
+      'https://cdn.skypack.dev/lodash.uppercase': `export * from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';
+export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';`,
+
+      'https://cdn.skypack.dev/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js':
+        'export default (a) => a.toUpperCase()',
+
+      '/p/.spectral/upper-case.mjs': `import upperCase from 'https://cdn.skypack.dev/lodash.uppercase';
+
+export default (input) => {
+  if (upperCase(input) !== input) {
+    return [{ message: 'must be upper case' }];
+  }
+};`,
+
+      '/p/.spectral/lower-case.mjs': `import lowerCase from 'lodash.lowercase';
+
+export default (input) => {
+  if (lowerCase(input) !== input) {
+    return [{ message: 'must be lower case' }];
+  }
+};`,
+
+      '/p/.spectral/helpers/index.mjs': `export * from './is-odd.mjs';`,
+      '/p/.spectral/helpers/is-odd.mjs': `export const isOdd = (value) => value % 2 === 1`,
+
+      '/p/spectral.mjs': `import myFn from './.spectral/my-fn.mjs';
+import lowerCase from './.spectral/lower-case.mjs';
+import upperCase from './.spectral/upper-case.mjs';
+
+export default {
+  rules: {
+    'odd-rule': {
+       given: '$',
+       then: { function: myFn },
+    },
+    'upper-case-rule': {
+       given: '$',
+       then: { function: upperCase },
+    },
+    'lower-case-rule': {
+       given: '$',
+       then: { function: lowerCase },
+    },
+  },
+};`,
+    });
+
+    const bundle = await bundleRuleset('/p/spectral.mjs', {
+      target: 'node',
+      plugins: [...node(io), virtualFs(io)],
+      fullOutput: true,
+    });
+
+    expect(Object.keys(bundle.modules).sort()).toStrictEqual([
+      '/p/.spectral/helpers/index.mjs',
+      '/p/.spectral/helpers/is-odd.mjs',
+      '/p/.spectral/lower-case.mjs',
+      '/p/.spectral/my-fn.mjs',
+      '/p/.spectral/upper-case.mjs',
+      '/p/spectral.mjs',
+      'https://cdn.skypack.dev/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js',
+      'https://cdn.skypack.dev/lodash.uppercase',
+    ]);
+  });
 });
