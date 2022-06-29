@@ -1,4 +1,4 @@
-import { rollup, Plugin, RenderedChunk } from 'rollup';
+import { rollup, Plugin, OutputChunk } from 'rollup';
 import { isURL } from '@stoplight/path';
 import { isPackageImport } from './utils/isPackageImport';
 import { dedupeRollupPlugins } from './utils/dedupeRollupPlugins';
@@ -20,11 +20,11 @@ export async function bundleRuleset(
 export async function bundleRuleset(
   input: string,
   opts: Omit<BundleOptions, 'fullOutput'> & { fullOutput: true },
-): Promise<RenderedChunk>;
+): Promise<OutputChunk>;
 export async function bundleRuleset(
   input: string,
   { target = 'browser', plugins, format, treeshake = false, fullOutput = false }: BundleOptions,
-): Promise<string | RenderedChunk> {
+): Promise<string | OutputChunk> {
   const bundle = await rollup({
     input,
     plugins: dedupeRollupPlugins(plugins),
