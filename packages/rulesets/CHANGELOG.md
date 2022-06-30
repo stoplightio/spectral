@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.10.0...@stoplight/spectral-rulesets-v1.11.0) (2022-06-30)
+
+
+### Features
+
+* **rulesets:** validate channel servers, server securities and operation securities ([#2122](https://github.com/stoplightio/spectral/issues/2122)) ([9accd31](https://github.com/stoplightio/spectral/commit/9accd31cd2df544e09383b2236fd8a9c18369447))
+
 # [@stoplight/spectral-rulesets-v1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.9.0...@stoplight/spectral-rulesets-v1.10.0) (2022-06-07)
 
 
