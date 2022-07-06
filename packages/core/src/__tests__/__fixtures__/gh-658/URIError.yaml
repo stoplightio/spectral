@@ -28,6 +28,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          $ref: './lib.yaml#/components/responses/NotFoundResponse'
         "500":
           description: No Bueno.
           content:
