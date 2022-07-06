@@ -1,20 +1,14 @@
-import { extractSourceFromRef, hasRef, isLocalRef } from '@stoplight/json';
+import { extractSourceFromRef, isLocalRef } from '@stoplight/json';
 import { extname, resolve } from '@stoplight/path';
 import { Dictionary, IParserResult, JsonPath } from '@stoplight/types';
-import { get, isObjectLike } from 'lodash';
+import { isObjectLike } from 'lodash';
 import { Document, IDocument } from './document';
 import { Resolver, ResolveResult } from '@stoplight/spectral-ref-resolver';
 
 import { formatParserDiagnostics, formatResolverErrors } from './errorMessages';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { IRuleResult } from './types';
-import {
-  getClosestJsonPath,
-  getEndRef,
-  isAbsoluteRef,
-  safePointerToPath,
-  traverseObjUntilRef,
-} from '@stoplight/spectral-runtime';
+import { getClosestJsonPath, isAbsoluteRef, traverseObjUntilRef } from '@stoplight/spectral-runtime';
 import { Format } from './ruleset/format';
 
 export type DocumentInventoryItem = {
@@ -86,77 +80,119 @@ export class DocumentInventory implements IDocumentInventory {
   public findAssociatedItemForPath(path: JsonPath, resolved: boolean): DocumentInventoryItem | null {
     if (!resolved) {
       const newPath: JsonPath = getClosestJsonPath(this.unresolved, path);
-
-      return {
+      const item: DocumentInventoryItem = {
         document: this.document,
         path: newPath,
         missingPropertyPath: path,
       };
+      return item;
     }
 
     try {
       const newPath: JsonPath = getClosestJsonPath(this.resolved, path);
-      let $ref = traverseObjUntilRef(this.unresolved, newPath);
+      const $ref = traverseObjUntilRef(this.unresolved, newPath);
 
       if ($ref === null) {
-        return {
+        const item: DocumentInventoryItem = {
           document: this.document,
           path: getClosestJsonPath(this.unresolved, path),
           missingPropertyPath: path,
         };
+        return item;
       }
 
       const missingPropertyPath =
         newPath.length === 0 ? [] : path.slice(path.lastIndexOf(newPath[newPath.length - 1]) + 1);
 
       let { source } = this;
+      if (source === null || this.graph === null) {
+        return null;
+      }
 
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        if (source === null || this.graph === null) return null;
+      let refMap = this.graph.getNodeData(source).refMap;
+      let resolvedDoc = this.document;
 
-        $ref = getEndRef(this.graph.getNodeData(source).refMap, $ref);
+      // Add '#' on the beginning of "path" to simplify the logic below.
+      const adjustedPath: JsonPath = [...'#', ...path];
 
-        if ($ref === null) return null;
+      // Walk through the segments of 'path' one at a time, looking for
+      // json path locations containing a $ref.
+      let refMapKey = '';
+      for (const segment of adjustedPath) {
+        if (refMapKey.length) {
+          refMapKey = refMapKey.concat('/');
+        }
+        refMapKey = refMapKey.concat(segment.toString().replace(/\//g, '~1'));
 
-        const scopedPath = [...safePointerToPath($ref), ...newPath];
-        let resolvedDoc = this.document;
+        // If our current refMapKey value is in fact a key in refMap,
+        // then we'll "reverse-resolve" it by replacing refMapKey with
+        // the actual value of that key within refMap.
+        // It's possible that we have a "ref to a ref", so we'll do this
+        // "reverse-resolve" step in a while loop.
+        while (refMapKey in refMap) {
+          const newRef = refMap[refMapKey];
+          if (isLocalRef(newRef)) {
+            refMapKey = newRef;
+          } else {
+            const extractedSource = extractSourceFromRef(newRef);
+            if (extractedSource === null) {
+              const item: DocumentInventoryItem = {
+                document: resolvedDoc,
+                path: getClosestJsonPath(resolvedDoc.data, path),
+                missingPropertyPath: path,
+              };
+              return item;
+            }
 
-        if (isLocalRef($ref)) {
-          resolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
-        } else {
-          const extractedSource = extractSourceFromRef($ref);
+            // Update 'source' to reflect the filename within the external ref.
+            source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
 
-          if (extractedSource === null) {
-            return {
-              document: resolvedDoc,
-              path: getClosestJsonPath(resolvedDoc.data, path),
-              missingPropertyPath: path,
-            };
-          }
+            // Update "resolvedDoc" to reflect the new "source" value and make sure we found an actual document.
+            const newResolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
+            if (newResolvedDoc === null || newResolvedDoc === undefined) {
+              const item: DocumentInventoryItem = {
+                document: resolvedDoc,
+                path: getClosestJsonPath(resolvedDoc.data, path),
+                missingPropertyPath: path,
+              };
+              return item;
+            }
+            resolvedDoc = newResolvedDoc;
 
-          source = isAbsoluteRef(extractedSource) ? extractedSource : resolve(source, '..', extractedSource);
+            // Update "refMap" to reflect the new "source" value.
+            refMap = this.graph.getNodeData(source).refMap;
 
-          resolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
-          const obj: unknown =
-            scopedPath.length === 0 || hasRef(resolvedDoc.data) ? resolvedDoc.data : get(resolvedDoc.data, scopedPath);
-
-          if (hasRef(obj)) {
-            $ref = obj.$ref;
-            continue;
+            refMapKey = newRef.indexOf('#') >= 0 ? newRef.slice(newRef.indexOf('#')) : '#';
           }
         }
-
-        const closestPath = getClosestJsonPath(resolvedDoc.data, scopedPath);
-        return {
-          document: resolvedDoc,
-          path: closestPath,
-          missingPropertyPath: [...closestPath, ...missingPropertyPath],
-        };
       }
-    } catch {
+
+      const closestPath = getClosestJsonPath(resolvedDoc.data, this.convertRefMapKeyToPath(refMapKey));
+      const item: DocumentInventoryItem = {
+        document: resolvedDoc,
+        path: closestPath,
+        missingPropertyPath: [...closestPath, ...missingPropertyPath],
+      };
+      return item;
+    } catch (e) {
+      // console.warn(`Caught exception! e=${e}`);
       return null;
     }
+  }
+
+  protected convertRefMapKeyToPath(refPath: string): JsonPath {
+    const jsonPath: JsonPath = [];
+
+    if (refPath.startsWith('#/')) {
+      refPath = refPath.slice(2);
+    }
+
+    const pathSegments: string[] = refPath.split('/');
+    for (const pathSegment of pathSegments) {
+      jsonPath.push(pathSegment.replace('~1', '/'));
+    }
+
+    return jsonPath;
   }
 
   protected parseResolveResult: Resolver['parseResolveResult'] = resolveOpts => {
