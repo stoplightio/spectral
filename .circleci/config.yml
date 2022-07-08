@@ -23,8 +23,17 @@ defaults:
     - "12.22"
     - "14.18"
     - "16.13"
+  pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
 
 commands:
+  compute-hashes:
+    description: Compute commit SHAs to be used for caching purposes
+    steps:
+      - run:
+         command: |
+            git rev-parse HEAD~1 > /tmp/previous-commit-sha
+            git rev-parse HEAD > /tmp/current-commit-sha
+
   cached-dependencies:
     steps:
       - restore_cache:
@@ -55,6 +64,8 @@ commands:
     steps:
       - run:
           name: Create the Spectral Binary
+          environment:
+            PKG_CACHE_PATH: *pkg-cache-path
           command: yarn workspace @stoplight/spectral-cli pkg . --public --targets << parameters.targets >> --output binaries/spectral
 
   install-and-build:
@@ -101,12 +112,30 @@ commands:
           - linux
           - windows
         default: linux
+      node-version:
+        type: string
+      max-workers:
+        type: integer
+        default: 3
     steps:
+      - compute-hashes
+      - restore_cache:
+          name: Restore test-harness artifacts
+          keys:
+            - test-harness-{{ checksum "/tmp/previous-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>
       - build-binary:
           targets: << parameters.os >>
       - run:
           name: Run harness tests
-          command: yarn test.harness
+          command: yarn test.harness --maxWorkers=<< parameters.max-workers >>
+      - save_cache:
+          name: Retain test-harness artifacts
+          key: test-harness-{{ checksum "/tmp/current-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>
+          paths:
+            - ./.cache/spectral-test-harness
+            - *pkg-cache-path
+            - ./test-harness/tests/
+          when: always
 
   prepare-release:
     steps:
@@ -142,6 +171,8 @@ jobs:
       - test-node
       - test-harness:
           os: linux
+          node-version: << parameters.node-version >>
+          max-workers: 3
 
   test-browser:
     docker:
@@ -165,6 +196,8 @@ jobs:
           max-workers: 3
       - test-harness:
           os: windows
+          node-version: current
+          max-workers: 3
 
   build-nix-binaries:
     docker:
