@@ -119,16 +119,16 @@ You can also have multiple `then`s to target different properties in the same ob
 
 ```yaml
 contact-properties:
-    description: Contact object must have "name", "url", and "email".
-    given: $.info.contact
-    severity: warn
-    then:
-      - field: name
-        function: truthy
-      - field: url
-        function: truthy
-      - field: email
-        function: truthy
+  description: Contact object must have "name", "url", and "email".
+  given: $.info.contact
+  severity: warn
+  then:
+    - field: name
+      function: truthy
+    - field: url
+      function: truthy
+    - field: email
+      function: truthy
 ```
 
 ### Message
