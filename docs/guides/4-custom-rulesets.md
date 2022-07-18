@@ -86,7 +86,7 @@ rules:
 
 The `then` part of the rule explains which function to apply to the `given` JSONPath. The function you apply [may be one of the core functions](../reference/functions.md) or it may be [a custom function](./5-custom-functions.md).
 
-`then` has two required keywords:
+`then` has two main keywords:
 
 ```yaml
 then:
@@ -113,6 +113,22 @@ responses:
     foo: bar
   456avbas:
     foo: bar
+```
+
+You can also have multiple `then`s to target different properties in the same object, or to use different functions. For example, you can have one rule that will check if an object has multiple properties:
+
+```yaml
+contact-properties:
+    description: Contact object must have "name", "url", and "email".
+    given: $.info.contact
+    severity: warn
+    then:
+      - field: name
+        function: truthy
+      - field: url
+        function: truthy
+      - field: email
+        function: truthy
 ```
 
 ### Message
