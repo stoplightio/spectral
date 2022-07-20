@@ -1,4 +1,4 @@
-import { extractSourceFromRef, isLocalRef } from '@stoplight/json';
+import { decodePointerFragment, encodePointerFragment, extractSourceFromRef, isLocalRef } from '@stoplight/json';
 import { extname, resolve } from '@stoplight/path';
 import { Dictionary, IParserResult, JsonPath } from '@stoplight/types';
 import { isObjectLike } from 'lodash';
@@ -113,16 +113,17 @@ export class DocumentInventory implements IDocumentInventory {
       let resolvedDoc = this.document;
 
       // Add '#' on the beginning of "path" to simplify the logic below.
-      const adjustedPath: JsonPath = [...'#', ...path];
+      const adjustedPath: string[] = ['#', ...path.map(String)];
 
       // Walk through the segments of 'path' one at a time, looking for
       // json path locations containing a $ref.
       let refMapKey = '';
       for (const segment of adjustedPath) {
-        if (refMapKey.length) {
-          refMapKey = refMapKey.concat('/');
+        if (refMapKey.length > 0) {
+          refMapKey += '/';
         }
-        refMapKey = refMapKey.concat(segment.toString().replace(/\//g, '~1'));
+
+        refMapKey += encodePointerFragment(segment);
 
         // If our current refMapKey value is in fact a key in refMap,
         // then we'll "reverse-resolve" it by replacing refMapKey with
@@ -149,7 +150,7 @@ export class DocumentInventory implements IDocumentInventory {
 
             // Update "resolvedDoc" to reflect the new "source" value and make sure we found an actual document.
             const newResolvedDoc = source === this.document.source ? this.document : this.referencedDocuments[source];
-            if (newResolvedDoc === null || newResolvedDoc === undefined) {
+            if (newResolvedDoc === null || newResolvedDoc === void 0) {
               const item: DocumentInventoryItem = {
                 document: resolvedDoc,
                 path: getClosestJsonPath(resolvedDoc.data, path),
@@ -157,6 +158,7 @@ export class DocumentInventory implements IDocumentInventory {
               };
               return item;
             }
+
             resolvedDoc = newResolvedDoc;
 
             // Update "refMap" to reflect the new "source" value.
@@ -174,25 +176,17 @@ export class DocumentInventory implements IDocumentInventory {
         missingPropertyPath: [...closestPath, ...missingPropertyPath],
       };
       return item;
-    } catch (e) {
-      // console.warn(`Caught exception! e=${e}`);
+    } catch {
       return null;
     }
   }
 
   protected convertRefMapKeyToPath(refPath: string): JsonPath {
-    const jsonPath: JsonPath = [];
-
     if (refPath.startsWith('#/')) {
       refPath = refPath.slice(2);
     }
 
-    const pathSegments: string[] = refPath.split('/');
-    for (const pathSegment of pathSegments) {
-      jsonPath.push(pathSegment.replace('~1', '/'));
-    }
-
-    return jsonPath;
+    return refPath.split('/').map(decodePointerFragment);
   }
 
   protected parseResolveResult: Resolver['parseResolveResult'] = resolveOpts => {
