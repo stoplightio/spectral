@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.12.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.3...@stoplight/spectral-core-v1.12.4) (2022-07-21)
+
+
+### Bug Fixes
+
+* **core:** fix 'resolved vs unresolved' json path mapping ([#2202](https://github.com/stoplightio/spectral/issues/2202)) ([157ec59](https://github.com/stoplightio/spectral/commit/157ec592d8b3276094284fead7a08541b3f46f61))
+
 # [@stoplight/spectral-core-v1.12.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.2...@stoplight/spectral-core-v1.12.3) (2022-06-29)
 
 
