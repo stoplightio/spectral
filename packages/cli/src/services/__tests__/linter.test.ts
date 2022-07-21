@@ -472,9 +472,10 @@ describe('Linter service', () => {
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
+          path: [],
           range: expect.any(Object),
           severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('__fixtures__/resolver/document.json'),
         },
       ]);
     });
