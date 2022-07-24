@@ -27,10 +27,10 @@ defaults:
 
 commands:
   compute-hashes:
-    description: Compute commit SHAs to be used for caching purposes
     steps:
       - run:
-         command: |
+          name: Compute commit SHAs to be used for caching purposes
+          command: |
             git rev-parse HEAD~1 > /tmp/previous-commit-sha
             git rev-parse HEAD > /tmp/current-commit-sha
 
