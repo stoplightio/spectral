@@ -2,7 +2,9 @@ import * as path from '@stoplight/path';
 import * as swc from '@swc/core';
 import fg from 'fast-glob';
 import * as fileEntryCache from 'file-entry-cache';
-import * as fs from 'fs/promises';
+import * as _fs from 'fs';
+
+const { promises: fs } = _fs;
 
 import { applyReplacements } from '../src/utils';
 import { IScenarioFile, parseScenarioFile } from '../src/parser';
