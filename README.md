@@ -9,11 +9,13 @@
 
 # Overview
 
-- [Installation and Usage](#-installation-and-Usage)
-- [Documentation](#-documentation)
-- [Support](#-support)
-- [FAQs](#-faqs)
-- [Contributing](#-contributing)
+- [🧰 Installation and Usage](#-installation-and-usage)
+- [📖 Documentation](#-documentation)
+- [ℹ️ Support](#ℹ️-support)
+- [🌎 Real-World Rulesets](#-real-world-rulesets)
+- [⚙️ Integrations](#️-integrations)
+- [👏 Contributing](#-contributing)
+- [🌲 Sponsor Spectral by Planting a Tree](#-sponsor-spectral-by-planting-a-tree)
 
 ## 🧰 Installation and Usage
 
@@ -75,19 +77,18 @@ If you need help using Spectral or have any questions, please use [GitHub Discus
 
 If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
 
-## ❓ FAQs
+## 🌎 Real-World Rulesets
 
-### How is this different to Ajv
+Plenty of companies are using Spectral just to make sure their OpenAPI is valid, but more and more companies are building full API Style Guides using it. Here are some public examples you can use to get your API Style Guide started.
 
-[Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv under the hood for this), but that's just one of many functions.
+- [Adidas](https://github.com/adidas/api-guidelines/blob/master/.spectral.yml) - Adidas were one of the first companies to release their API Style Guide in a written guide _and_ a Spectral ruleset. Lots of good rules to try in here.
+- [APIs You Won't Hate](https://github.com/apisyouwonthate/style-guide) - An opinionated collection of rules based on advice in the [APIs You Won't Hate](https://apisyouwonthate.com/) community.
+- [Azure](https://github.com/Azure/azure-api-style-guide/blob/main/spectral.yaml) - Ruleset and complimentary style guide for creating OpenAPI 2 or 3 definitions of Azure services.
+- [Box](https://github.com/box/box-openapi/blob/main/.spectral.yml) - Lots of [Custom Functions](https://meta.stoplight.io/docs/spectral/ZG9jOjI1MTkw-custom-functions) being used to enforce good practices that the Box API governance folks are interested in.
+- [DigitalOcean](https://github.com/digitalocean/openapi/blob/main/spectral/ruleset.yml) - Keeping their OpenAPI nice and tidy, enforcing use of `$ref` (probably to minimize conflicts), naming conventions for Operation IDs, and all sorts of other handy OpenAPI tips.
+- [Tranascom](https://github.com/transcom/mymove/blob/master/swagger-def/.spectral.yml) - Don't even think about using anything other than `application/json`.
 
-### I want to lint my OpenAPI documents but don't want to implement Spectral right now
-
-No problem! A hosted version of Spectral is embedded in the Stoplight platform. Use the intuitive [Style Guide Editor](https://meta.stoplight.io/docs/platform/71b92b2b5e388-style-guide-overview) to create your own rules, targets, and functions. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_medium=spectral&utm_campaign=readme).
-
-### What is the difference between Spectral and Speccy
-
-[Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but has since been abandoned by its maintainers. It was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI), so you could use this for standardizing Kubernetes manifests or anything else.
+Here are [more real-world examples](https://github.com/stoplightio/spectral-rulesets) of Spectral in action.
 
 ## ⚙️ Integrations
 
