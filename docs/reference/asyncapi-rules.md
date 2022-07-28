@@ -219,6 +219,41 @@ components:
 
 **Recommended:** Yes
 
+### asyncapi-message-messageId-uniqueness
+
+`messageId` must be unique across all the messages (except these one defined in the components).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      message:
+        messageId: turnMessage
+      operationId: turn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      message:
+        messageId: turnMessage
+```
+
+**Good Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      message:
+        messageId: turnOnMessage
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      message:
+        messageId: turnOffMessage
+```
+
 ### asyncapi-operation-description
 
 Operation objects should have a description.
