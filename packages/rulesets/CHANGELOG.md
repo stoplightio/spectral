@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.0...@stoplight/spectral-rulesets-v1.11.1) (2022-07-28)
+
+
+### Bug Fixes
+
+* **functions:** handle percent encoded in unreferencedReusableObject([#2212](https://github.com/stoplightio/spectral/issues/2212)) ([d16b5a6](https://github.com/stoplightio/spectral/commit/d16b5a65d1a144ff1752c6ced1af87a343cda068))
+
 # [@stoplight/spectral-rulesets-v1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.10.0...@stoplight/spectral-rulesets-v1.11.0) (2022-06-30)
 
 
