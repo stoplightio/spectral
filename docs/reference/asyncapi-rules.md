@@ -233,7 +233,6 @@ channels:
     publish:
       message:
         messageId: turnMessage
-      operationId: turn
   smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
     publish:
       message:
