@@ -47,7 +47,8 @@ commands:
           name: Save Yarn Package Cache
           key: *yarn-cache-key
           paths:
-            - ~/.yarn
+            - ~/.yarn # Unix
+            - ~/AppData/Local/Yarn/Berry/cache # Windows
 
   build:
     description: >-
