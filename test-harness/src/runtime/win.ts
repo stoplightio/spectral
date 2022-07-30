@@ -4,6 +4,8 @@ import type { SpawnFn } from '@stoplight/spectral-test-harness';
 
 import { normalizeLineEndings } from '../utils';
 
+export { normalizeLineEndings, applyReplacements } from '../utils';
+
 const r = /(.*)LASTEXITCODE=(.*)/s;
 
 export const spawnNode: SpawnFn = async (command, env, cwd) => {
