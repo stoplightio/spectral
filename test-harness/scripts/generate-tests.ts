@@ -78,8 +78,8 @@ function getChangedScenarios(changedFiles: string[], scenarios: string[]): strin
 
       await loadAssets(env.__dirname, env, scenario);
 
-      if (scenario.command !== void 0) {
-        scenario.command = applyReplacements(scenario.command!, env);
+      if (scenario.command !== null) {
+        scenario.command = applyReplacements(scenario.command, env);
       }
 
       const { code } = await swc.transformFile(path.join(__dirname, '../src/suite.ts'), {
