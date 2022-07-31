@@ -98,7 +98,7 @@ commands:
     parameters:
       max-workers:
         type: integer
-        default: 3
+        default: 2
     steps:
       - run: yarn pretest
       - run:
@@ -117,7 +117,7 @@ commands:
         type: string
       max-workers:
         type: integer
-        default: 3
+        default: 2
     steps:
       - compute-hashes
       - restore_cache:
@@ -149,6 +149,7 @@ jobs:
   lint:
     docker:
       - image: circleci/node:lts
+    resource_class: small
     steps:
       - checkout
       - cached-dependencies
@@ -162,10 +163,7 @@ jobs:
         type: string
     docker:
       - image: circleci/node:<< parameters.node-version >>
-    # we should be able to restore the default when the following issue is resolved
-    # - https://github.com/kulshekhar/ts-jest/issues/1967
-    # - https://github.com/facebook/jest/issues/10550
-    resource_class: medium+
+    resource_class: medium
     steps:
       - checkout
       - install-and-build
@@ -173,7 +171,7 @@ jobs:
       - test-harness:
           os: linux
           node-version: << parameters.node-version >>
-          max-workers: 3
+          max-workers: 2
 
   test-browser:
     docker:
