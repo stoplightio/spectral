@@ -317,7 +317,8 @@ workflows:
           matrix:
             parameters:
               node-version: *node-versions
-      - test-windows
+      - test-windows:
+          filters: *default-branch-filter
       - test-browser
       - lint
       - approve-release:
