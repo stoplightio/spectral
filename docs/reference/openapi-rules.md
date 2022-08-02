@@ -730,7 +730,7 @@ Parameter objects should have a `description`.
 
 ### oas3-valid-media-example
 
-Examples must be valid against their defined schema.
+Examples must be valid against their defined schema. This rule is applied to Media objects, such as requests and responses.
 
 **Recommended:** Yes
 
@@ -796,7 +796,7 @@ paths:
 
 ### oas3-valid-schema-example
 
-Examples must be valid against their defined schema.
+Examples must be valid against their defined schema. This rule is applied to Schema objects.
 
 **Recommended:** Yes
 
