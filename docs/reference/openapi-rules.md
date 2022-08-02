@@ -724,17 +724,18 @@ Examples must be valid against their defined schema.
 For example, if you have a Pet object with a `name` and `petType` properties as type `string`, the examples properties type should match the schema:
 
 ```yaml
-Pet:
-  title: Pet
-  type: object
-  properties:
-    name:
-      type: string
-    petType:
-      type: string
-  required:
-    - name
-    - petType
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      name:
+        type: string
+      petType:
+        type: string
+    required:
+      - name
+      - petType
 ```
 
 **Good Example**
@@ -773,4 +774,50 @@ paths:
             Get Pet:
               name: 'Bubbles'
               petType: 123
+```
+
+### oas3-valid-schema-example
+
+Examples must be valid against their defined schema.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      name:
+        type: string
+        example: Bubbles
+      petType:
+        type: string
+        example: dog
+    required:
+      - name
+      - petType
+```
+
+**Bad Example**
+
+This would throw an error since the example value for `name` is an `integer`, not a `string`.
+
+```yaml
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      name:
+        type: string
+        example: 123
+      petType:
+        type: string
+        example: dog
+    required:
+      - name
+      - petType
 ```
