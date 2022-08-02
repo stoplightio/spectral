@@ -518,7 +518,7 @@ Examples must be valid against their defined schema. Common reasons you may see 
 - The value used for property examples is not the same type indicated in the schema (`string` vs. `integer`, for example).
 - Examples contain properties not included in the schema.
 
-**Recommended:** 
+**Recommended:** Yes
 
 For example, if you have a User object with an `id` property as type `integer`:
 
@@ -714,3 +714,63 @@ Validate structure of OpenAPI v3 specification.
 Parameter objects should have a `description`.
 
 **Recommended:** No
+
+### oas3-valid-media-example
+
+Examples must be valid against their defined schema.
+
+**Recommended:** Yes
+
+For example, if you have a Pet object with a `name` and `petType` properties as type `string`, the examples properties type should match the schema:
+
+```yaml
+Pet:
+    title: Pet
+    type: object
+    properties:
+      name:
+        type: string
+      petType:
+        type: string
+    required:
+      - name
+      - petType
+```
+
+**Good Example**
+
+```yaml
+paths:
+  '/pet/{name}':
+    get:
+      ...
+      responses:
+        '200':
+          description: Pet Found
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            Get Pet:
+              name: 'Bubbles'
+              petType: 'dog'
+```
+
+**Bad Example**
+
+This would throw an error since `petType` is an `integer`, not a `string`.
+
+```yaml
+paths:
+  '/pet/{name}':
+    get:
+      ...
+      responses:
+        '200':
+          description: Pet Found
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            Get Pet:
+              name: 'Bubbles'
+              petType: 123
+```
