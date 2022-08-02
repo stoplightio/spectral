@@ -511,6 +511,62 @@ Potential unused reusable `definition` entry has been detected.
 
 **Recommended:** Yes
 
+### oas2-valid-media-example
+
+Examples must be valid against their defined schema. Common reasons you may see errors are:
+
+- The value used for property examples is not the same type indicated in the schema (`string` vs. `integer`, for example).
+- Examples contain properties not included in the schema.
+
+**Recommended:** 
+
+For example, if you have a User object with an `id` property as type `integer`:
+
+```yaml
+User:
+    title: User
+    type: object
+    properties:
+      id:
+        type: integer
+    required:
+      - id
+```
+
+**Good Example**
+
+```yaml
+paths:
+  '/users/{userId}':
+    get:
+      ...
+      responses:
+        '200':
+          description: User Found
+          schema:
+            $ref: '#/definitions/User'
+          examples:
+            Get User Alice Smith:
+              id: 142
+```
+
+**Bad Example**
+
+```yaml
+paths:
+  '/users/{userId}':
+    get:
+      ...
+      responses:
+        '200':
+          description: User Found
+          schema:
+            $ref: '#/definitions/User'
+          examples:
+            Get User Alice Smith:
+              id: "smith, alice"
+```
+
 ### oas2-anyOf
 
 OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.
