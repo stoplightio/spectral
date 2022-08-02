@@ -454,12 +454,6 @@ TheBadModel:
 
 These rules will only apply to OpenAPI v2.0 documents.
 
-### oas2-operation-formData-consume-check
-
-Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
-
-**Recommended:** Yes
-
 ### oas2-api-host
 
 OpenAPI `host` must be present and non-empty string.
@@ -487,6 +481,12 @@ Server URL should not point at example.com.
 ### oas2-host-trailing-slash
 
 Server URL should not have a trailing slash.
+
+**Recommended:** Yes
+
+### oas2-operation-formData-consume-check
+
+Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
 
 **Recommended:** Yes
 
