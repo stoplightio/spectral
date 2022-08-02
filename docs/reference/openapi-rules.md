@@ -524,13 +524,13 @@ For example, if you have a User object with an `id` property as type `integer`:
 
 ```yaml
 User:
-    title: User
-    type: object
-    properties:
-      id:
-        type: integer
-    required:
-      - id
+  title: User
+  type: object
+  properties:
+    id:
+      type: integer
+  required:
+    - id
 ```
 
 **Good Example**
@@ -725,16 +725,16 @@ For example, if you have a Pet object with a `name` and `petType` properties as 
 
 ```yaml
 Pet:
-    title: Pet
-    type: object
-    properties:
-      name:
-        type: string
-      petType:
-        type: string
-    required:
-      - name
-      - petType
+  title: Pet
+  type: object
+  properties:
+    name:
+      type: string
+    petType:
+      type: string
+  required:
+    - name
+    - petType
 ```
 
 **Good Example**
