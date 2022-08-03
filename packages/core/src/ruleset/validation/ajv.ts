@@ -30,11 +30,14 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
   addFormats(ajv);
   addErrors(ajv);
   ajv.addKeyword({
-    keyword: 'spectral-runtime',
+    keyword: 'x-spectral-runtime',
     schemaType: 'string',
     error: {
-      message(ctx) {
-        return _`${ctx.data}[Symbol.for(${message})]`;
+      message(cxt) {
+        return _`${cxt.data}[Symbol.for(${message})]`;
+      },
+      params(cxt) {
+        return _`${cxt.data}[Symbol.for(${message})] ? { "errors": ${cxt.data}[Symbol.for(${message})].errors || [${cxt.data}[Symbol.for(${message})]] } : {}`;
       },
     },
     code(cxt) {
@@ -47,7 +50,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
         case 'ruleset-function':
           cxt.pass(_`typeof ${data}.function === "function"`);
           cxt.pass(
-            _`(() => { try { ${data}.function.validator && ${data}.function.validator('functionOptions' in ${data} ? ${data} : null); } catch (e) { ${data}[${message}] = e.message } })()`,
+            _`(() => { try { ${data}.function.validator && ${data}.function.validator('functionOptions' in ${data} ? ${data}.functionOptions : null); return true; } catch (e) { ${data}[Symbol.for(${message})] = e; return false; } })()`,
           );
           break;
       }

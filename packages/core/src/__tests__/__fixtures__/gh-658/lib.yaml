@@ -22,3 +22,26 @@ components:
           type: string
         test:
           $ref: ./URIError.yaml#/components/schemas/Foo
+    NotFound:
+      oneOf:
+        - $ref: '#/components/schemas/DoesntExist'
+        - $ref: '#/components/schemas/JustCantFindIt'
+    DoesntExist:
+      type: object
+      properties:
+        id:
+          type: string
+    JustCantFindIt:
+      type: object
+      properties:
+        name:
+          type: string
+
+  responses:
+    NotFoundResponse:
+      description: Not Found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+      

@@ -30,6 +30,48 @@ All channel parameters should be defined in the `parameters` object of the chann
 
 **Recommended:** Yes
 
+### asyncapi-channel-servers
+
+Channel servers must be defined in the `servers` object.
+
+**Bad Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - development
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - production
+```
+
+**Recommended:** Yes
+
 ### asyncapi-headers-schema-type-object
 
 The schema definition of the application headers must be of type “object”.
@@ -132,6 +174,51 @@ info:
     name: MIT
 ```
 
+### asyncapi-message-examples
+
+All `examples` in message object should follow by `payload` and `headers` schemas.
+
+**Bad Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Bad API
+  version: "1.0.0"
+components:
+  messages:
+    someMessage:
+      payload:
+        type: string
+      headers:
+        type: object
+      examples:
+        - payload: 2137
+          headers: someHeader
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Good API
+  version: "1.0.0"
+components:
+  messages:
+    someMessage:
+      payload:
+        type: string
+      headers:
+        type: object
+      examples:
+        - payload: foobar
+          headers:
+            someHeader: someValue
+```
+
+**Recommended:** Yes
+
 ### asyncapi-operation-description
 
 Operation objects should have a description.
@@ -173,6 +260,38 @@ channels:
 This operation ID is essentially a reference for the operation. Tools may use it for defining function names, class method names, and even URL hashes in documentation systems.
 
 **Recommended:** Yes
+
+### asyncapi-operation-security
+
+Operation `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+channels:
+  "user/signup":
+    publish:
+      security:
+        - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+channels:
+  "user/signup":
+    publish:
+      security:
+        - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
 
 ### asyncapi-parameter-description
 
@@ -323,6 +442,38 @@ servers:
 Server URL should not point at example.com.
 
 **Recommended:** No
+
+### asyncapi-server-security
+
+Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
 
 ### asyncapi-server-variables
 

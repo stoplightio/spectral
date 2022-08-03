@@ -259,7 +259,7 @@ describe('Ruleset', () => {
   describe('error handling', () => {
     it('given empty ruleset, should throw a user friendly error', () => {
       expect(() => new Ruleset({})).toThrowError(
-        new RulesetValidationError('Ruleset must have rules or extends or overrides defined'),
+        new RulesetValidationError('Ruleset must have rules or extends or overrides defined', []),
       );
     });
   });

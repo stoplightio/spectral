@@ -190,7 +190,7 @@ describe('Spectral', () => {
 
     const results = await s.run(new Document(fs.readFileSync(documentUri, 'utf8'), Parsers.Yaml, documentUri));
 
-    expect(results.length).toEqual(3);
+    expect(results.length).toEqual(5);
 
     return expect(results).toEqual([
       expect.objectContaining({
@@ -204,6 +204,36 @@ describe('Spectral', () => {
           start: {
             character: 20,
             line: 20,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: ['components', 'schemas', 'DoesntExist', 'properties', 'id'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 32,
+          },
+          start: {
+            character: 11,
+            line: 31,
+          },
+        },
+      }),
+
+      expect.objectContaining({
+        path: ['components', 'schemas', 'JustCantFindIt', 'properties', 'name'],
+        source: expect.stringContaining('/src/__tests__/__fixtures__/gh-658/lib.yaml'),
+        range: {
+          end: {
+            character: 22,
+            line: 37,
+          },
+          start: {
+            character: 13,
+            line: 36,
           },
         },
       }),
@@ -229,11 +259,11 @@ describe('Spectral', () => {
         range: {
           end: {
             character: 18,
-            line: 43,
+            line: 45,
           },
           start: {
             character: 8,
-            line: 42,
+            line: 44,
           },
         },
       }),

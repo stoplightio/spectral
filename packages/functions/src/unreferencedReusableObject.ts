@@ -1,5 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { safePointerToPath } from '@stoplight/spectral-runtime';
+import { decodePointer } from '@stoplight/json';
 
 import { optionSchemas } from './optionSchemas';
 
@@ -24,7 +25,9 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
 
     const defined = Object.keys(data).map(name => `${normalizedSource}${opts.reusableObjectsLocation}/${name}`);
 
-    const orphans = defined.filter(defPath => !graph.hasNode(defPath));
+    const decodedNodes = new Set(graph.overallOrder().map(n => decodePointer(n)));
+
+    const orphans = defined.filter(defPath => !decodedNodes.has(defPath));
 
     return orphans.map(orphanPath => {
       return {

@@ -6,7 +6,7 @@ In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of
 
 ## OpenAPI v2 & v3
 
-These rules apply to both OpenAPI v2 and v3.
+These rules apply to both OpenAPI v2.0, v3.0, and most likely v3.1, although there are some differences.
 
 ### operation-success-response
 
@@ -186,7 +186,7 @@ info:
 
 ### no-\$ref-siblings
 
-An object exposing a `$ref` property cannot be further extended with additional properties.
+Prior to OpenAPI v3.1, keywords next to `$ref` were be ignored by most tooling, but not all. This leads to inconsistent experiences depending on what combinations of tools are used. As of v3.1 $ref siblings are allowed, so this rule will not be applied.
 
 **Recommended:** Yes
 
@@ -195,9 +195,8 @@ An object exposing a `$ref` property cannot be further extended with additional 
 ```yaml
 TheBadModel:
   $ref: "#/components/TheBadModelProperties"
-  examples: # <= This property will be ignored
-    an_example:
-      name: something
+  # This property should be ignored
+  example: May or may not show up
 ```
 
 ### no-eval-in-markdown
@@ -502,15 +501,13 @@ Ignores empty `security` values for cases where authentication is explicitly not
 
 Potential unused reusable `definition` entry has been detected.
 
-_Warning:_ This rule may identify false positives when linting a specification
-that acts as a library (a container storing reusable objects, leveraged by other
-specifications that reference those objects).
+<!-- theme: warning -->
 
-**Recommended:** Yes
-
-### oas2-valid-example
-
-Examples must be valid against their defined schema.
+> #### Warning
+>
+> This rule may identify false positives when linting a specification
+> that acts as a library (a container storing reusable objects, leveraged by other
+> specifications that reference those objects).
 
 **Recommended:** Yes
 
@@ -640,15 +637,13 @@ servers:
 
 Potential unused reusable `components` entry has been detected.
 
-_Warning:_ This rule may identify false positives when linting a specification
-that acts as a library (a container storing reusable objects, leveraged by other
-specifications that reference those objects).
+<!-- theme: warning -->
 
-**Recommended:** Yes
-
-### oas3-valid-example
-
-Examples must be valid against their defined schema.
+> #### Warning
+>
+> This rule may identify false positives when linting a specification
+> that acts as a library (a container storing reusable objects, leveraged by other
+> specifications that reference those objects).
 
 **Recommended:** Yes
 

@@ -1,6 +1,7 @@
 // Karma configuration
 // Generated on Tue Jul 02 2019 17:18:30 GMT+0200 (Central European Summer Time)
 
+import * as path from 'path';
 import type { TransformCallback, TransformContext } from 'karma-typescript';
 import type { Config } from 'karma';
 
@@ -14,7 +15,7 @@ module.exports = (config: Config): void => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./__karma__/jest.ts', 'packages/*/src/**/*.ts'],
+    files: ['./__karma__/jest.ts', './test-utils/*.ts', 'packages/*/src/**/*.ts'],
 
     // list of files / patterns to exclude
     exclude: ['packages/cli/**', 'packages/ruleset-bundler/src/plugins/commonjs.ts', '**/*.jest.test.ts'],
@@ -24,6 +25,7 @@ module.exports = (config: Config): void => {
     preprocessors: {
       'packages/*/src/**/*.ts': ['karma-typescript'],
       './__karma__/**/*.ts': ['karma-typescript'],
+      './test-utils/*.ts': ['karma-typescript'],
     },
 
     // @ts-expect-error: non-standard - karmaTypeScriptConfig
@@ -35,6 +37,7 @@ module.exports = (config: Config): void => {
         resolve: {
           alias: {
             '@stoplight/spectral-test-utils': require.resolve('./test-utils/browser/index.js'),
+            '@stoplight/spectral-test-utils/matchers': path.join(__dirname, './test-utils/matchers.ts'),
             nimma: require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
             'nimma/fallbacks': require.resolve('./node_modules/nimma/dist/legacy/cjs/fallbacks/index.js'),
             'nimma/legacy': require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),

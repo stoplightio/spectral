@@ -1,28 +1,39 @@
 # Spectral in JavaScript
 
-The Spectral CLI is a thin wrapper around a JavaScript (TypeScript) API, which can be used independently to do all the same things outside of the CLI.
+The Spectral CLI is a thin wrapper around a JavaScript (TypeScript) API, which can be used independently to do all the same things outside of the CLI, such as linting YAML and JSON documents from a string or an object.
 
-Assuming it has been installed as a Node module via NPM/Yarn, it can be used to lint YAML and JSON documents from a string, or from an object.
+## Prerequisites
 
-First of all, in order to consume the JS API you need to install the appropriate package(s).
+To use the Spectral JS API, you need to install the appropriate package.
+
+For npm users:
 
 ```bash
 npm install -g @stoplight/spectral-core
 ```
 
-If you are a Yarn user:
+For Yarn users:
 
 ```bash
 yarn global add @stoplight/spectral-core
 ```
 
-## Linting a YAML String
+## Get Started
 
-```js
-const { Spectral, Document } = require("@stoplight/spectral-core");
-const Parsers = require("@stoplight/spectral-parsers"); // make sure to install the package if you intend to use default parsers!
-const { truthy } = require("@stoplight/spectral-functions"); // this has to be installed as well
+Similar to using Spectral in the CLI, there are two things you'll need to run Spectral in JS:
 
+- A string or a file containing your structured data (OpenAPI, AsyncAPI, Kubernetes, etc).
+- An object or a file representing a ruleset
+
+As an example, here's a script of Spectral in action:
+
+```js title="example-1.mjs" lineNumbers
+import spectralCore from "@stoplight/spectral-core";
+const { Spectral, Document } = spectralCore;
+import Parsers from "@stoplight/spectral-parsers"; // make sure to install the package if you intend to use default parsers!
+import { truthy } from "@stoplight/spectral-functions"; // this has to be installed as well
+
+// this will be our API specification document
 const myDocument = new Document(
   `---
 responses:
@@ -34,7 +45,7 @@ responses:
 
 const spectral = new Spectral();
 spectral.setRuleset({
-  // a ruleset has to be provided
+  // this will be our ruleset
   rules: {
     "no-empty-description": {
       given: "$..description",
@@ -45,55 +56,87 @@ spectral.setRuleset({
     },
   },
 });
+
+// we lint our document using the ruleset we passed to the Spectral object
 spectral.run(myDocument).then(console.log);
 ```
 
-This will run Spectral with no formats, rules or functions, so it's not going to do anything besides \$ref resolving.
-Find out how to add formats, rules and functions below.
+## Load Rulesets and API Specification Files
 
-## Loading Rulesets
+Let's look at some other examples and how to work with external files.
 
-Spectral comes with some rulesets that are very specific to OpenAPI v2/v3, and they can be set using `Spectral.setRuleset()`.
+### Load a JSON/YAML Ruleset
 
-```js
-const { Spectral } = require("@stoplight/spectral-core");
-const ruleset = require("./my-ruleset"); // this works only for JS ruleset, look at the section below to learn how to load a YAML/JSON ruleset
+If you would like to run this example, make sure that you have:
+
+- An OpenAPI description document in the same directory as your script named `openapi.yaml`. You can use the one found [here](https://github.com/stoplightio/Public-APIs/blob/master/reference/plaid/openapi.yaml).
+- A ruleset file named `.spectral.yaml`. It can have the following contents:
+
+```yaml
+extends:
+  - spectral:oas
+```
+
+Here's a script that shows how to load an external API specification file, and an external YAML ruleset:
+
+```js title="example-2.mjs" lineNumbers
+import * as fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import * as path from "node:path";
+import { join } from "path";
+import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
+import Parsers from "@stoplight/spectral-parsers"; // make sure to install the package if you intend to use default parsers!
+import spectralCore from "@stoplight/spectral-core";
+const { Spectral, Document } = spectralCore;
+import spectralRuntime from "@stoplight/spectral-runtime";
+const { fetch } = spectralRuntime;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const myDocument = new Document(
+  // load an API specification file from your project's root directory. You can use the openapi.yaml example from here: https://github.com/stoplightio/Public-APIs/blob/master/reference/plaid/openapi.yaml
+  fs.readFileSync(join(__dirname, "openapi.yaml"), "utf-8").trim(),
+  Parsers.Yaml,
+  "openapi.yaml",
+);
+
+const spectral = new Spectral();
+// load a ruleset file from your project's root directory.
+const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
+spectral.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
+
+spectral.run(myDocument).then(console.log);
+```
+
+### Load a JavaScript Ruleset
+
+Starting in Spectral v6.0, support was added for rulesets to be written using JavaScript.
+
+You can find more information about it [here](./4-custom-rulesets.md#alternative-js-ruleset-format).
+
+To load a JavaScript ruleset, you have to import it similar to how you would import a module:
+
+```js lineNumbers
+import { Spectral } from "@stoplight/spectral-core";
+import ruleset from "./my-javascript-ruleset";
 
 const spectral = new Spectral();
 spectral.setRuleset(ruleset);
-// lint
 ```
 
-### Loading YAML/JSON rulesets
+### Browser
 
-#### Node.js
+Here's an example script of how you could run Spectral in the browser:
 
-```js
-const path = require("path");
-const fs = require("fs");
+```js title="example-3.mjs" lineNumbers
+import { Spectral } from "@stoplight/spectral-core";
+import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
 
-const { Spectral } = require("@stoplight/spectral-core");
-const { fetch } = require("@stoplight/spectral-runtime"); // can also use isomorphic-fetch, etc.. If you ruleset does not reference any external assets, you can provide some stub instead.
-const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
-// const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
-
-const rulesetFilepath = path.join(__dirname, ".spectral.yaml");
-
-const spectral = new Spectral();
-s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }));
-// or, if you use module.exports (CommonJS) s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
-```
-
-#### Browser
-
-```js
-const { Spectral } = require("@stoplight/spectral-core");
-const { bundleAndLoadRuleset } = require("@stoplight/spectral-ruleset-bundler/with-loader");
-// const { commonjs } = require("@stoplight/spectral-ruleset-bundler/plugins/commonjs"); needed if you want to use CommonJS
-
+// create a ruleset that extends the spectral:oas ruleset
 const myRuleset = `extends: spectral:oas
 rules: {}`;
 
+// try to load an external ruleset
 const fs = {
   promises: {
     async readFile(filepath) {
@@ -108,37 +151,41 @@ const fs = {
 
 const spectral = new Spectral();
 s.setRuleset(await bundleAndLoadRuleset("/.spectral.yaml", { fs, fetch }));
-// or, if you use module.exports (CommonJS) s.setRuleset(await bundleAndLoadRuleset(rulesetFilepath, { fs, fetch }), [commonjs()]);
 ```
+
+### Load Multiple Rulesets
+
+If you'd like to use the `bundleAndLoadRuleset` method to load multiple rulesets, you'll have to create a new Spectral ruleset file, and use the [`extends`](../getting-started/3-rulesets.md#extending-rulesets) functionality to extend the rulesets you'd like to use.
 
 ## Advanced
 
-### Using a Proxy
+### How to Use a Proxy
 
-Spectral supports HTTP(S) proxies when fetching remote assets.
+Spectral supports HTTP(S) proxies when fetching remote assets:
 
-```js
-const { Spectral } = require("@stoplight/spectral-core");
-const ProxyAgent = require("proxy-agent");
-const { createHttpAndFileResolver } = require("@stoplight/spectral-ref-resolver");
+```js title="example-4.mjs" lineNumbers
+import { Spectral } from "@stoplight/spectral-core";
+import ProxyAgent from "proxy-agent";
+import { createHttpAndFileResolver } from "@stoplight/spectral-ref-resolver";
 
+// start Spectral using a proxy
 const spectral = new Spectral({
   resolver: createHttpAndFileResolver({ agent: new ProxyAgent(process.env.PROXY) }),
 });
 
-// lint as usual - $refs and rules will be requested using the proxy
+// ... load document
+
+// ... lint document - $refs and rules will be requested using the proxy
 ```
 
-### Using a Custom Resolver
+### How to Use a Custom Resolver
 
-Spectral lets you provide any custom \$ref resolver. By default, http(s) and file protocols are resolved, relatively to
-the document Spectral lints against. If you'd like support any additional protocol or adjust the resolution, you are
-absolutely fine to do it. In order to achieve that, you need to create a custom json-ref-resolver instance.
+Spectral lets you provide any custom \$ref resolver. By default, HTTP(S) and file protocols are resolved, relatively to
+the document Spectral lints against. You can also add support for additional protocols, or adjust the resolution. To achieve that, you need to create a custom json-ref-resolver instance.
 
-You can find more information about how to create custom resolvers in
-the [@stoplight/json-ref-resolver](https://github.com/stoplightio/json-ref-resolver) repository.
+For example:
 
-```js
+```js title="example-5.cjs" lineNumbers
 const path = require("path");
 const fs = require("fs");
 const { Spectral } = require("@stoplight/spectral-cli");
@@ -166,9 +213,12 @@ const customFileResolver = new Resolver({
 
 const spectral = new Spectral({ resolver: customFileResolver });
 
-// lint document as usual
+// ... load document
+
+// ... lint document - $refs and rules will be requested using the proxy
 ```
 
-The custom resolver we've just created will resolve all remote file refs relatively to the current working directory.
+This custom resolver will resolve all remote file refs relatively to the current working directory.
 
-More on that can be found in the [json-ref-resolver repo](https://github.com/stoplightio/json-ref-resolver).
+You can find more information about how to create custom resolvers in
+the [@stoplight/json-ref-resolver](https://github.com/stoplightio/json-ref-resolver) repository.

@@ -1,6 +1,9 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import defined from '../defined';
 import testFunction from './__helpers__/tester';
 import { RulesetValidationError } from '@stoplight/spectral-core';
+import AggregateError = require('es-aggregate-error');
 
 const runDefined = testFunction.bind(null, defined);
 
@@ -20,8 +23,8 @@ describe('Core Functions / Defined', () => {
 
   describe('validation', () => {
     it.each([{}, 2])('given invalid %p options, should throw', async opts => {
-      await expect(runDefined([], opts)).rejects.toThrow(
-        new RulesetValidationError('"defined" function does not accept any options'),
+      await expect(runDefined([], opts)).rejects.toThrowAggregateError(
+        new AggregateError([new RulesetValidationError('"defined" function does not accept any options', [])]),
       );
     });
   });
