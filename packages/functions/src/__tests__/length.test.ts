@@ -1,6 +1,8 @@
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import length from '../length';
+import '@stoplight/spectral-test-utils/matchers';
+import AggregateError = require('es-aggregate-error');
 
 const runLength = testFunction.bind(null, length);
 
@@ -52,31 +54,66 @@ describe('Core Functions / Length', () => {
       expect(await runLength('foo', opts)).toEqual([]);
     });
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         null,
-        '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
+        [
+          new RulesetValidationError(
+            '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
+            [],
+          ),
+        ],
       ],
       [
         2,
-        '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
+        [
+          new RulesetValidationError(
+            '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
+            [],
+          ),
+        ],
       ],
       [
         {
           min: 2,
           foo: true,
         },
-        '"length" function does not support "foo" option',
+        [new RulesetValidationError('"length" function does not support "foo" option', [])],
       ],
-      [{ min: '2' }, '"length" function and its "min" option accepts only the following types: number'],
-      [{ max: '2' }, `"length" function and its "max" option accepts only the following types: number`],
+      [
+        { min: '2' },
+        [
+          new RulesetValidationError(
+            '"length" function and its "min" option accepts only the following types: number',
+            [],
+          ),
+        ],
+      ],
+
+      [
+        { max: '2' },
+        [
+          new RulesetValidationError(
+            `"length" function and its "max" option accepts only the following types: number`,
+            [],
+          ),
+        ],
+      ],
       [
         { min: '4', max: '2' },
-        `"length" function and its "min" option accepts only the following types: number
-"length" function and its "max" option accepts only the following types: number`,
+        [
+          new RulesetValidationError(
+            `"length" function and its "min" option accepts only the following types: number`,
+            [],
+          ),
+          new RulesetValidationError(
+            `"length" function and its "max" option accepts only the following types: number`,
+            [],
+          ),
+        ],
       ],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runLength('foo', opts)).rejects.toThrow(new RulesetValidationError(error));
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runLength('foo', opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

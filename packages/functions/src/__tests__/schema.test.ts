@@ -2,6 +2,8 @@ import type { JSONSchema6 as JSONSchema } from 'json-schema';
 import schema from '../schema';
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
+import '@stoplight/spectral-test-utils/matchers';
+import AggregateError = require('es-aggregate-error');
 
 const runSchema = testFunction.bind(null, schema);
 
@@ -476,28 +478,57 @@ describe('Core Functions / Schema', () => {
       expect(await runSchema('', opts)).toBeInstanceOf(Array);
     });
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         2,
-        '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
+        [
+          new RulesetValidationError(
+            '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
+            [],
+          ),
+        ],
       ],
-      [{ schema: { type: 'object' }, foo: true }, '"schema" function does not support "foo" option'],
-      [{ schema: { type: 'object' }, oasVersion: 1 }, '"schema" function does not support "oasVersion" option'],
+      [
+        { schema: { type: 'object' }, foo: true },
+        [new RulesetValidationError('"schema" function does not support "foo" option', [])],
+      ],
+      [
+        { schema: { type: 'object' }, oasVersion: 1 },
+        [new RulesetValidationError('"schema" function does not support "oasVersion" option', [])],
+      ],
       [
         { schema: { type: 'object' }, dialect: 'foo' },
-        '"schema" function and its "dialect" option accepts only the following values: "auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"',
+        [
+          new RulesetValidationError(
+            '"schema" function and its "dialect" option accepts only the following values: "auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"',
+            [],
+          ),
+        ],
       ],
       [
         { schema: { type: 'object' }, allErrors: null },
-        '"schema" function and its "allErrors" option accepts only the following types: boolean',
+        [
+          new RulesetValidationError(
+            '"schema" function and its "allErrors" option accepts only the following types: boolean',
+            [],
+          ),
+        ],
       ],
       [
         { schema: null, allErrors: null },
-        `"schema" function and its "schema" option accepts only the following types: object
-"schema" function and its "allErrors" option accepts only the following types: boolean`,
+        [
+          new RulesetValidationError(
+            `"schema" function and its "schema" option accepts only the following types: object`,
+            [],
+          ),
+          new RulesetValidationError(
+            `"schema" function and its "allErrors" option accepts only the following types: boolean`,
+            [],
+          ),
+        ],
       ],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runSchema([], opts)).rejects.toThrow(new RulesetValidationError(error));
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runSchema([], opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

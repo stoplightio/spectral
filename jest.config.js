@@ -8,9 +8,7 @@ const projectDefault = {
   preset: 'ts-jest',
   moduleNameMapper: {
     ...mapValues(pathsToModuleNameMapper(compilerOptions.paths), v => path.join(__dirname, v)),
-    '^@stoplight/spectral-test-utils$': '<rootDir>/test-utils/node/index.ts',
-    '^nimma/fallbacks$': '<rootDir>/node_modules/nimma/dist/cjs/fallbacks/index.js',
-    '^nimma/legacy$': '<rootDir>/node_modules/nimma/dist/legacy/cjs/index.js',
+    '^@stoplight/spectral\\-test\\-utils$': '<rootDir>/test-utils/node/index.ts',
   },
   testEnvironment: 'node',
   globals: {
