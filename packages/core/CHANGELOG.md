@@ -1,3 +1,31 @@
+# [@stoplight/spectral-core-v1.12.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.3...@stoplight/spectral-core-v1.12.4) (2022-07-21)
+
+
+### Bug Fixes
+
+* **core:** fix 'resolved vs unresolved' json path mapping ([#2202](https://github.com/stoplightio/spectral/issues/2202)) ([157ec59](https://github.com/stoplightio/spectral/commit/157ec592d8b3276094284fead7a08541b3f46f61))
+
+# [@stoplight/spectral-core-v1.12.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.2...@stoplight/spectral-core-v1.12.3) (2022-06-29)
+
+
+### Bug Fixes
+
+* **core:** bump nimma from 0.2.1 to 0.2.2 ([#2173](https://github.com/stoplightio/spectral/issues/2173)) ([65ba74f](https://github.com/stoplightio/spectral/commit/65ba74f6a681a8ad7a3cd3eec687544a3972b2b8))
+
+# [@stoplight/spectral-core-v1.12.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.1...@stoplight/spectral-core-v1.12.2) (2022-05-18)
+
+
+### Bug Fixes
+
+* **core:** bump nimma from 0.2.0 to 0.2.1 ([#2157](https://github.com/stoplightio/spectral/issues/2157)) ([4d5ebeb](https://github.com/stoplightio/spectral/commit/4d5ebebb65cb8f6c44faa5b629311f5b25dd6bfe))
+
+# [@stoplight/spectral-core-v1.12.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.0...@stoplight/spectral-core-v1.12.1) (2022-04-29)
+
+
+### Bug Fixes
+
+* **core:** redeclared rules should always be re-enabled ([#2138](https://github.com/stoplightio/spectral/issues/2138)) ([6def6be](https://github.com/stoplightio/spectral/commit/6def6be4bc3f318c8e93d2e1c0df2ff1b803a178))
+
 # [@stoplight/spectral-core-v1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.11.1...@stoplight/spectral-core-v1.12.0) (2022-04-18)
 
 

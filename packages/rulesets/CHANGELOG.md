@@ -1,3 +1,40 @@
+# [@stoplight/spectral-rulesets-v1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.0...@stoplight/spectral-rulesets-v1.11.1) (2022-07-28)
+
+
+### Bug Fixes
+
+* **functions:** handle percent encoded in unreferencedReusableObject([#2212](https://github.com/stoplightio/spectral/issues/2212)) ([d16b5a6](https://github.com/stoplightio/spectral/commit/d16b5a65d1a144ff1752c6ced1af87a343cda068))
+
+# [@stoplight/spectral-rulesets-v1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.10.0...@stoplight/spectral-rulesets-v1.11.0) (2022-06-30)
+
+
+### Features
+
+* **rulesets:** validate channel servers, server securities and operation securities ([#2122](https://github.com/stoplightio/spectral/issues/2122)) ([9accd31](https://github.com/stoplightio/spectral/commit/9accd31cd2df544e09383b2236fd8a9c18369447))
+
+# [@stoplight/spectral-rulesets-v1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.9.0...@stoplight/spectral-rulesets-v1.10.0) (2022-06-07)
+
+
+### Features
+
+* **rulesets:** add rule to validate AsyncAPI message's examples ([#2126](https://github.com/stoplightio/spectral/issues/2126)) ([87ef046](https://github.com/stoplightio/spectral/commit/87ef0464c1d31a8887c847e339a4b1bef3e5ad93))
+
+# [@stoplight/spectral-rulesets-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.8.0...@stoplight/spectral-rulesets-v1.9.0) (2022-05-31)
+
+
+### Features
+
+* **rulesets:** add rules for validation of server variables and channel parameters ([#2101](https://github.com/stoplightio/spectral/issues/2101)) ([9acc633](https://github.com/stoplightio/spectral/commit/9acc63375309bd7babe8b0130bd64fbbdbc56738))
+* **rulesets:** add rules for validation uniqueness of tag names ([#2104](https://github.com/stoplightio/spectral/issues/2104)) ([4447d81](https://github.com/stoplightio/spectral/commit/4447d81ace5aab90e7cd48a8e182103b6a90ee81))
+* **rulesets:** check uniqueness of AsyncAPI operations ([#2121](https://github.com/stoplightio/spectral/issues/2121)) ([8b3cce4](https://github.com/stoplightio/spectral/commit/8b3cce4bc054df7843e50312eae225ca8a7a50b0))
+
+# [@stoplight/spectral-rulesets-v1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.7.0...@stoplight/spectral-rulesets-v1.8.0) (2022-05-03)
+
+
+### Features
+
+* **rulesets:** support AsyncAPI 2.4 ([#2146](https://github.com/stoplightio/spectral/issues/2146)) ([7364b2d](https://github.com/stoplightio/spectral/commit/7364b2dd602f4f2a9367d8a8653b621b9fef4326))
+
 # [@stoplight/spectral-rulesets-v1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.6.0...@stoplight/spectral-rulesets-v1.7.0) (2022-03-24)
 
 

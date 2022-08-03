@@ -122,8 +122,8 @@ describe('Linter service', () => {
 
   it('given a list of files is provided, outputs issues for each file', () => {
     const documents = [
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
       join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-      join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
     ];
 
     return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
@@ -143,6 +143,29 @@ describe('Linter service', () => {
         severity: DiagnosticSeverity.Warning,
         source: documents[1],
       },
+    ]);
+  });
+
+  it('sorts linting results in an alphabetical order', () => {
+    const documents = [
+      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+    ];
+
+    return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+      }),
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      }),
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      }),
     ]);
   });
 
@@ -499,9 +522,10 @@ describe('Linter service', () => {
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
+          path: [],
           range: expect.any(Object),
           severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('__fixtures__/resolver/document.json'),
         },
       ]);
     });

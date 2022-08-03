@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-bundler-v1.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.2.1...@stoplight/spectral-ruleset-bundler-v1.3.0) (2022-06-30)
+
+
+### Features
+
+* **ruleset-bundler:** add fullOutput option to bundleRuleset ([#2194](https://github.com/stoplightio/spectral/issues/2194)) ([a31d34c](https://github.com/stoplightio/spectral/commit/a31d34c529fb91303c8c250bfc012985ecec469a))
+
 # [@stoplight/spectral-ruleset-bundler-v1.2.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.2.0...@stoplight/spectral-ruleset-bundler-v1.2.1) (2022-02-28)
 
 

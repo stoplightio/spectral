@@ -1,4 +1,4 @@
-import { rollup, Plugin } from 'rollup';
+import { rollup, Plugin, OutputChunk } from 'rollup';
 import { isURL } from '@stoplight/path';
 import { isPackageImport } from './utils/isPackageImport';
 import { dedupeRollupPlugins } from './utils/dedupeRollupPlugins';
@@ -8,14 +8,23 @@ export type BundleOptions = {
   target: 'node' | 'browser' | 'runtime';
   format?: 'esm' | 'commonjs' | 'iife';
   treeshake?: boolean; // false by default
+  fullOutput?: boolean;
 };
 
 export { IO } from './types';
 
 export async function bundleRuleset(
   input: string,
-  { target = 'browser', plugins, format, treeshake = false }: BundleOptions,
-): Promise<string> {
+  opts: Omit<BundleOptions, 'fullOutput'> | (Omit<BundleOptions, 'fullOutput'> & { fullOutput: false }),
+): Promise<string>;
+export async function bundleRuleset(
+  input: string,
+  opts: Omit<BundleOptions, 'fullOutput'> & { fullOutput: true },
+): Promise<OutputChunk>;
+export async function bundleRuleset(
+  input: string,
+  { target = 'browser', plugins, format, treeshake = false, fullOutput = false }: BundleOptions,
+): Promise<string | OutputChunk> {
   const bundle = await rollup({
     input,
     plugins: dedupeRollupPlugins(plugins),
@@ -39,6 +48,12 @@ export async function bundleRuleset(
             id.startsWith('node:') || (!isURL(id) && isPackageImport(id) && (importer === void 0 || !isURL(importer))),
   });
 
-  return (await bundle.generate({ format: format ?? (target === 'runtime' ? 'iife' : 'esm'), exports: 'auto' }))
-    .output[0].code;
+  const chunks = (await bundle.generate({ format: format ?? (target === 'runtime' ? 'iife' : 'esm'), exports: 'auto' }))
+    .output;
+
+  if (fullOutput) {
+    return chunks[0];
+  }
+
+  return chunks[0].code;
 }
