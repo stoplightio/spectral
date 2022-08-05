@@ -30,7 +30,7 @@ Or [yarn](https://yarnpkg.com/):
 yarn global add @stoplight/spectral-cli
 ```
 
-You can find more [installation methods](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation) in our documentation.
+You can find more installation methods [here](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation).
 
 ## 💻 Usage
 
@@ -48,13 +48,13 @@ If you would like to create your own rules, check out the [Custom Rulesets](http
 
 ### 2. Lint
 
-Use this command if you have a ruleset file in the the same directory as the documents you are linting:
+Use this command if you have a ruleset file in the same directory as the documents you are linting:
 
 ```bash
 spectral lint myapifile.yaml
 ```
 
-Use this command to lint with a custom ruleset, or one that is located in a different directory than the documents being linted:
+Use this command to lint with a custom ruleset, or one that's located in a different directory than the documents being linted:
 
 ```bash
 spectral lint myapifile.yaml --ruleset myruleset.yaml
@@ -82,7 +82,7 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 ## ❓ FAQs
 
-### How is this different to Ajv
+### How's this different to Ajv
 
 [Ajv](https://www.npmjs.com/package/ajv) is a JSON Schema validator, and Spectral is a JSON/YAML linter. Instead of just validating against JSON Schema, it can be used to write rules for any sort of JSON/YAML object, which could be JSON Schema, or OpenAPI, or anything similar. Spectral does expose a [`schema` function](https://meta.stoplight.io/docs/spectral/docs/reference/functions.md) that you can use in your rules to validate all or part of the target object with JSON Schema (we even use Ajv under the hood for this), but that's just one of many functions.
 
@@ -90,16 +90,16 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 No problem! A hosted version of Spectral is embedded in the Stoplight platform. Use the intuitive [Style Guide Editor](https://meta.stoplight.io/docs/platform/71b92b2b5e388-style-guide-overview) to create your own rules, targets, and functions. Sign up for a free account [here](https://stoplight.io/?utm_source=github&utm_medium=spectral&utm_campaign=readme).
 
-### What is the difference between Spectral and Speccy
+### What's the difference between Spectral and Speccy
 
 [Speccy](https://github.com/wework/speccy) was a great inspiration for Spectral, but has since been abandoned by its maintainers. It was designed to work only with OpenAPI v3. Spectral can apply rules to _any_ JSON/YAML object (including OpenAPI v2/v3 and AsyncAPI), so you could use this for standardizing Kubernetes manifests or anything else.
 
 ## ⚙️ Integrations
 
 - [GitHub Action](https://github.com/stoplightio/spectral-action) - lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
-- [Jetbrains Plugin](https://plugins.jetbrains.com/plugin/18520-spectral), Automatic linting of your OpenAPI specifications and highlighting in your editor.
+- [Jetbrains Plugin](https://plugins.jetbrains.com/plugin/18520-spectral) - Automatic linting of your OpenAPI specifications and highlighting in your editor.
 - [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) - Uses Spectral to validate and lint OpenAPI documents.
-- [VS Code Spectral](https://marketplace.visualstudio.com/items?itemName=stoplight.spectral), all the power of Spectral without leaving VS Code.
+- [VS Code Spectral Extension](https://marketplace.visualstudio.com/items?itemName=stoplight.spectral) - All the power of Spectral without leaving VS Code.
 
 ## 🏁 Help Others Utilize Spectral
 
