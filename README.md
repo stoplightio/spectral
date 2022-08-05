@@ -9,41 +9,46 @@
 
 # Overview
 
-- [Installation and Usage](#-installation-and-Usage)
+- [Installation](#-installation)
+- [Usage](#-usage)
 - [Documentation](#-documentation)
 - [Support](#-support)
 - [FAQs](#-faqs)
 - [Contributing](#-contributing)
 
-## 🧰 Installation and Usage
+## 🧰 Installation
 
-**Install**
+The easiest way to install spectral is to use either [npm](https://www.npmjs.com/):
 
 ```bash
 npm install -g @stoplight/spectral-cli
+```
 
-# OR
+Or [yarn](https://yarnpkg.com/):
 
+```
 yarn global add @stoplight/spectral-cli
 ```
 
-Find more [installation methods](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation) in our documentation.
+You can find more [installation methods](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation) in our documentation.
 
-**Create a local ruleset**
+## 💻 Usage
 
-Spectral, being a generic YAML/JSON linter, needs a ruleset to lint files. There are two ways to get a ruleset:
+### 1. Create a local ruleset
 
-1. Run this command to get our predefined rulesets based on OpenAPI or AsyncAPI:
+Spectral, being a generic YAML/JSON linter, **needs a ruleset** to lint files. A ruleset is a JSON or YAML file (often the file will be called `.spectral.yaml`) that contains a collection of rules, which can be used to lint other JSON or YAML files such as an API description.
+
+To get started, run this command in your terminal to create a `.spectral.yaml` file that will use Spectral's predefined rulesets based on OpenAPI or AsyncAPI:
 
 ```bash
 echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
 ```
 
-1. Create your [own ruleset](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets)
+If you would like to create your own rules, check out the [Custom Rulesets](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets) page.
 
-**Lint**
+### 2. Lint
 
-Use this command if you have defined the ruleset in the the same directory as the documents you are linting:
+Use this command if you have a ruleset file in the the same directory as the documents you are linting:
 
 ```bash
 spectral lint myapifile.yaml
