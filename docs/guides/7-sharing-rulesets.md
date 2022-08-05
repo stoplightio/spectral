@@ -5,7 +5,7 @@ A [ruleset](../getting-started/3-rulesets.md) becomes infinitely more useful whe
 To help you out distribute your rulesets among the others, Spectral provides a few ways to load rulesets from a variety of resources:
 
 - via a HTTP server
-- via [NPM](#NPM)
+- via [NPM](#npm)
 - via the filesystem
 
 Or mix and match!
