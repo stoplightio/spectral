@@ -8,86 +8,6 @@ In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of
 
 These rules apply to both OpenAPI v2.0, v3.0, and most likely v3.1, although there are some differences.
 
-### operation-success-response
-
-Operation must have at least one `2xx` or `3xx` response. Any API operation (endpoint) can fail, but presumably it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
-
-**Recommended:** Yes
-
-**Bad Example**
-
-```yaml
-paths:
-  /path:
-    get:
-      responses:
-        418:
-          description: teapot
-```
-
-### operation-operationId-unique
-
-Every operation must have a unique `operationId`.
-
-Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, all sorts of things like that.
-
-**Recommended:** Yes
-
-**Bad Example**
-
-```yaml
-paths:
-  /pet:
-    patch:
-      operationId: "update-pet"
-      responses:
-        200:
-          description: ok
-    put:
-      operationId: "update-pet"
-      responses:
-        200:
-          description: ok
-```
-
-**Good Example**
-
-```yaml
-paths:
-  /pet:
-    patch:
-      operationId: "update-pet"
-      responses:
-        200:
-          description: ok
-    put:
-      operationId: "replace-pet"
-      responses:
-        200:
-          description: ok
-```
-
-### operation-parameters
-
-Operation parameters are unique and non-repeating.
-
-1. Operations must have unique `name` + `in` parameters.
-2. Operation cannot have both `in: body` and `in: formData` parameters. (OpenAPI v2.0)
-3. Operation must have only one `in: body` parameter. (OpenAPI v2.0)
-
-**Recommended:** Yes
-
-### path-params
-
-Path parameters are correct and valid.
-
-1. For every parameters referenced in the path string (i.e: `/users/{userId}`), the parameter must be defined in either
-   `path.parameters`, or `operation.parameters` objects (Non standard HTTP operations will be silently ignored.)
-
-2. every `path.parameters` and `operation.parameters` parameter must be used in the path string.
-
-**Recommended:** Yes
-
 ### contact-properties
 
 The [info-contact](#info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url` and `email`.
@@ -108,6 +28,44 @@ info:
     name: A-Team
     email: a-team@goarmy.com
     url: goarmy.com/apis/support
+```
+
+### duplicated-entry-in-enum
+
+Each value of an `enum` must be different from one another.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+TheGoodModel:
+  type: object
+  properties:
+    number_of_connectors:
+      type: integer
+      description: The number of extension points.
+      enum:
+        - 1
+        - 2
+        - 4
+        - 8
+```
+
+**Bad Example**
+
+```yaml
+TheBadModel:
+  type: object
+  properties:
+    number_of_connectors:
+      type: integer
+      description: The number of extension points.
+      enum:
+        - 1
+        - 2
+        - 3
+        - 2
 ```
 
 ### info-contact
@@ -227,6 +185,21 @@ info:
   title: 'some title with <script>alert("You are Hacked");</script>',
 ```
 
+### openapi-tags
+
+OpenAPI object should have non-empty `tags` array.
+
+Why? Well, you _can_ reference tags arbitrarily in operations, and definition is optional...
+
+```yaml
+/invoices/{id}/items:
+  get:
+    tags:
+      - Invoice Items
+```
+
+Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
+
 ### openapi-tags-alphabetical
 
 OpenAPI object should have alphabetical `tags`. This will be sorted by the `name` property.
@@ -271,21 +244,6 @@ tags:
   - name: "Badger"
 ```
 
-### openapi-tags
-
-OpenAPI object should have non-empty `tags` array.
-
-Why? Well, you _can_ reference tags arbitrarily in operations, and definition is optional...
-
-```yaml
-/invoices/{id}/items:
-  get:
-    tags:
-      - Invoice Items
-```
-
-Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
-
 **Recommended:** No
 
 ### operation-description
@@ -299,6 +257,48 @@ This operation ID is essentially a reference for the operation, which can be use
 Make the value `lower-hyphen-case`, and try and think of a name for the action which does not relate to the HTTP message. Base it off the actual action being performed. `create-polygon`? `search-by-polygon`? `filter-companies`?
 
 **Recommended:** Yes
+
+### operation-operationId-unique
+
+Every operation must have a unique `operationId`.
+
+Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, all sorts of things like that.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+paths:
+  /pet:
+    patch:
+      operationId: "update-pet"
+      responses:
+        200:
+          description: ok
+    put:
+      operationId: "update-pet"
+      responses:
+        200:
+          description: ok
+```
+
+**Good Example**
+
+```yaml
+paths:
+  /pet:
+    patch:
+      operationId: "update-pet"
+      responses:
+        200:
+          description: ok
+    put:
+      operationId: "replace-pet"
+      responses:
+        200:
+          description: ok
+```
 
 ### operation-operationId-valid-in-url
 
@@ -315,11 +315,38 @@ paths:
       operationId: get cats
 ```
 
+### operation-parameters
+
+Operation parameters are unique and non-repeating.
+
+1. Operations must have unique `name` + `in` parameters.
+2. Operation cannot have both `in: body` and `in: formData` parameters. (OpenAPI v2.0)
+3. Operation must have only one `in: body` parameter. (OpenAPI v2.0)
+
+**Recommended:** Yes
+
 ### operation-singular-tag
 
 Use just one tag for an operation, which is helpful for some documentation systems which use tags to avoid duplicate content.
 
 **Recommended:** No
+
+### operation-success-response
+
+Operation must have at least one `2xx` or `3xx` response. Any API operation (endpoint) can fail, but presumably it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+paths:
+  /path:
+    get:
+      responses:
+        418:
+          description: teapot
+```
 
 ### operation-tags
 
@@ -348,6 +375,17 @@ Keep trailing slashes off of paths, as it can cause some confusion. Some web too
 ### path-not-include-query
 
 Don't put query string items in the path, they belong in parameters with `in: query`.
+
+**Recommended:** Yes
+
+### path-params
+
+Path parameters are correct and valid.
+
+1. For every parameters referenced in the path string (i.e: `/users/{userId}`), the parameter must be defined in either
+   `path.parameters`, or `operation.parameters` objects (Non standard HTTP operations will be silently ignored.)
+
+2. every `path.parameters` and `operation.parameters` parameter must be used in the path string.
 
 **Recommended:** Yes
 
@@ -412,51 +450,13 @@ TheBadModel:
         - 8
 ```
 
-### duplicated-entry-in-enum
-
-Each value of an `enum` must be different from one another.
-
-**Recommended:** Yes
-
-**Good Example**
-
-```yaml
-TheGoodModel:
-  type: object
-  properties:
-    number_of_connectors:
-      type: integer
-      description: The number of extension points.
-      enum:
-        - 1
-        - 2
-        - 4
-        - 8
-```
-
-**Bad Example**
-
-```yaml
-TheBadModel:
-  type: object
-  properties:
-    number_of_connectors:
-      type: integer
-      description: The number of extension points.
-      enum:
-        - 1
-        - 2
-        - 3
-        - 2
-```
-
 ## OpenAPI v2.0-only
 
 These rules will only apply to OpenAPI v2.0 documents.
 
-### oas2-operation-formData-consume-check
+### oas2-anyOf
 
-Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
+OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.
 
 **Recommended:** Yes
 
@@ -490,10 +490,34 @@ Server URL should not have a trailing slash.
 
 **Recommended:** Yes
 
+### oas2-oneOf
+
+OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.
+
+**Recommended:** Yes
+
+### oas2-operation-formData-consume-check
+
+Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
+
+**Recommended:** Yes
+
 ### oas2-operation-security-defined
 
 Operation `security` values must match a scheme defined in the `securityDefinitions` object.
 Ignores empty `security` values for cases where authentication is explicitly not required or optional.
+
+**Recommended:** Yes
+
+### oas2-parameter-description
+
+Parameter objects should have a `description`.
+
+**Recommended:** No
+
+### oas2-schema
+
+Validate structure of OpenAPI v2 specification.
 
 **Recommended:** Yes
 
@@ -511,29 +535,74 @@ Potential unused reusable `definition` entry has been detected.
 
 **Recommended:** Yes
 
-### oas2-anyOf
+### oas2-valid-media-example
 
-OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.
+Examples must be valid against their defined schema. Common reasons you may see errors are:
 
-**Recommended:** Yes
-
-### oas2-oneOf
-
-OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.
+- The value used for property examples is not the same type indicated in the schema (`string` vs. `integer`, for example).
+- Examples contain properties not included in the schema.
 
 **Recommended:** Yes
 
-### oas2-schema
+For example, if you have a Pet object with an `id` property as type `integer`, and `name` and `petType` properties as type `string`, the examples properties type should match the schema:
 
-Validate structure of OpenAPI v2 specification.
+```yaml
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      petType:
+        type: string
+    required:
+      - id
+      - name
+      - petType
+```
 
-**Recommended:** Yes
+**Good Example**
 
-### oas2-parameter-description
+```yaml
+paths:
+  '/pet/{petId}':
+    get:
+      ...
+      responses:
+        '200':
+          description: Pet Found
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            Get Pet Bubbles:
+              id: 123
+              name: 'Bubbles'
+              petType: 'dog'
+```
 
-Parameter objects should have a `description`.
+**Bad Example**
 
-**Recommended:** No
+This would throw an error since `petType` is an `integer`, not a `string`.
+
+```yaml
+paths:
+  '/pet/{petId}':
+    get:
+      ...
+      responses:
+        '200':
+          description: Pet Found
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            Get Pet Bubbles:
+              id: 123
+              name: 'Bubbles'
+              petType: 123
+```
 
 ## OpenAPI v3-only
 
@@ -586,6 +655,18 @@ paths:
 ### oas3-operation-security-defined
 
 Operation `security` values must match a scheme defined in the `components.securitySchemes` object.
+
+**Recommended:** Yes
+
+### oas3-parameter-description
+
+Parameter objects should have a `description`.
+
+**Recommended:** No
+
+### oas3-schema
+
+Validate structure of OpenAPI v3 specification.
 
 **Recommended:** Yes
 
@@ -647,14 +728,121 @@ Potential unused reusable `components` entry has been detected.
 
 **Recommended:** Yes
 
-### oas3-schema
+### oas3-valid-media-example
 
-Validate structure of OpenAPI v3 specification.
+Examples must be valid against their defined schema. This rule is applied to Media Type objects.
 
 **Recommended:** Yes
 
-### oas3-parameter-description
+For example, if you have a Pet object with an `id` property as type `integer`, and `name` and `petType` properties as type `string`, the examples properties type should match the schema:
 
-Parameter objects should have a `description`.
+```yaml
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      petType:
+        type: string
+    required:
+      - id
+      - name
+      - petType
+```
 
-**Recommended:** No
+**Good Example**
+
+```yaml
+paths:
+  '/pet/{petId}':
+    get:
+      ...
+      responses:
+        '200':
+          description: Pet Found
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            Get Pet Bubbles:
+              id: 123
+              name: 'Bubbles'
+              petType: 'dog'
+```
+
+**Bad Example**
+
+This would throw an error since `petType` is an `integer`, not a `string`.
+
+```yaml
+paths:
+  '/pet/{petId}':
+    get:
+      ...
+      responses:
+        '200':
+          description: Pet Found
+          schema:
+            $ref: '#/definitions/Pet'
+          examples:
+            Get Pet Bubbles:
+              id: 123
+              name: 'Bubbles'
+              petType: 123
+```
+
+### oas3-valid-schema-example
+
+Examples must be valid against their defined schema. This rule is applied to Schema objects.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 123
+      name:
+        type: string
+        example: Bubbles
+      petType:
+        type: string
+        example: dog
+    required:
+      - id
+      - name
+      - petType
+```
+
+**Bad Example**
+
+This would throw an error since the example value for `petType` is an `integer`, not a `string`.
+
+```yaml
+schemas:
+  Pet:
+    title: Pet
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 123
+      name:
+        type: string
+        example: Bubbles
+      petType:
+        type: string
+        example: 123
+    required:
+      - name
+      - petType
+```
