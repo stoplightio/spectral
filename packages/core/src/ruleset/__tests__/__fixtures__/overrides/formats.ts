@@ -22,7 +22,9 @@ const ruleset: RulesetDefinition = {
           then: {
             function: schema,
             functionOptions: {
-              type: 'number',
+              schema: {
+                type: 'number',
+              },
             },
           },
         },
@@ -39,7 +41,9 @@ const ruleset: RulesetDefinition = {
           then: {
             function: schema,
             functionOptions: {
-              type: 'boolean',
+              schema: {
+                type: 'boolean',
+              },
             },
           },
         },

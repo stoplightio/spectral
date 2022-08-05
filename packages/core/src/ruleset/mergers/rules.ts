@@ -44,7 +44,7 @@ export function mergeRule(
           owner: existingRule.owner,
         });
       } else {
-        assertValidRule(rule);
+        assertValidRule(rule, name);
         return new Rule(name, rule, ruleset);
       }
 

@@ -1,3 +1,10 @@
+# [@stoplight/spectral-cli-v6.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.2...@stoplight/spectral-cli-v6.5.0) (2022-08-03)
+
+
+### Features
+
+* **core:** improve validation ([#2026](https://github.com/stoplightio/spectral/issues/2026)) ([8315162](https://github.com/stoplightio/spectral/commit/83151628824592117d842a8965c9557841966b1a))
+
 # [@stoplight/spectral-cli-v6.4.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.1...@stoplight/spectral-cli-v6.4.2) (2022-07-21)
 
 

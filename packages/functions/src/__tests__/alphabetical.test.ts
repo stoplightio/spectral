@@ -2,8 +2,11 @@ import * as Parsers from '@stoplight/spectral-parsers';
 import { Document, RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import alphabetical from '../alphabetical';
+import AggregateError = require('es-aggregate-error');
 
 const runAlphabetical = testFunction.bind(null, alphabetical);
+
+import '@stoplight/spectral-test-utils/matchers';
 
 describe('Core Functions / Alphabetical', () => {
   it('given falsy target, should return no error message', async () => {
@@ -137,7 +140,9 @@ describe('Core Functions / Alphabetical', () => {
       ],
       [{ keyedBy: 2 }, '"alphabetical" function and its "keyedBy" option accepts only the following types: string'],
     ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runAlphabetical([], opts)).rejects.toThrow(new RulesetValidationError(error));
+      await expect(runAlphabetical([], opts)).rejects.toThrowAggregateError(
+        new AggregateError([new RulesetValidationError(error, [])]),
+      );
     });
   });
 });

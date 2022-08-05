@@ -1,3 +1,10 @@
+# [@stoplight/spectral-functions-v1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.2...@stoplight/spectral-functions-v1.7.0) (2022-08-03)
+
+
+### Features
+
+* **core:** improve validation ([#2026](https://github.com/stoplightio/spectral/issues/2026)) ([8315162](https://github.com/stoplightio/spectral/commit/83151628824592117d842a8965c9557841966b1a))
+
 # [@stoplight/spectral-functions-v1.6.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.1...@stoplight/spectral-functions-v1.6.2) (2022-07-28)
 
 
