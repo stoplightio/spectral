@@ -36,7 +36,7 @@ You can find more installation methods [here](https://meta.stoplight.io/docs/spe
 
 ### 1. Create a local ruleset
 
-Spectral, being a generic YAML/JSON linter, **needs a ruleset** to lint files. A ruleset is a JSON or YAML file (often the file will be called `.spectral.yaml`) that contains a collection of rules, which can be used to lint other JSON or YAML files such as an API description.
+Spectral, being a generic YAML/JSON linter, **needs a ruleset** to lint files. A ruleset is a JSON, YAML, or JavaScript/TypeScript file (often the file will be called `.spectral.yaml` for a YAML ruleset) that contains a collection of rules, which can be used to lint other JSON or YAML files such as an API description.
 
 To get started, run this command in your terminal to create a `.spectral.yaml` file that will use Spectral's predefined rulesets based on OpenAPI or AsyncAPI:
 
