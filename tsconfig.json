@@ -44,7 +44,7 @@
     "declaration": true,
     "removeComments": true,
     "skipLibCheck": true,
-    "noEmitHelpers": true,
+    "noEmitHelpers": false,
     "importHelpers": true
   }
 }
