@@ -1336,17 +1336,11 @@ describe('Ruleset', () => {
       ).toThrowAggregateError(
         new AggregateError([
           new RulesetValidationError('Alias "PathItem" does not exist', ['rules', 'valid-path', 'given']),
-          new RulesetValidationError('Alias "Name" does not exist', [
-            'rules',
-            'valid-name-and-description',
-            'given',
-            '0',
-          ]),
+          new RulesetValidationError('Alias "Name" does not exist', ['rules', 'valid-name-and-description', 'given']),
           new RulesetValidationError(`Alias "Description" does not exist`, [
             'rules',
             'valid-name-and-description',
             'given',
-            '1',
           ]),
         ]),
       );
