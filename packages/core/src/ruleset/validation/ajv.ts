@@ -39,7 +39,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
         return _`${cxt.params?.message !== void 0 ? cxt.params.message : ''}`;
       },
       params(cxt) {
-        return _`{ errors: ${cxt.params?.errors !== void 0 && cxt.params.errors} ?? [] }`;
+        return _`{ errors: ${cxt.params?.errors !== void 0 && cxt.params.errors} || [] }`;
       },
     },
     code(cxt) {
@@ -52,7 +52,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
         case 'ruleset-function': {
           const fn = cxt.gen.const(
             'spectralFunction',
-            _`this.validateFunction(${data}.function, ${data}.functionOptions ?? null, ${names.instancePath})`,
+            _`this.validateFunction(${data}.function, ${data}.functionOptions === void 0 ? null : ${data}.functionOptions, ${names.instancePath})`,
           );
           cxt.gen.if(_`${fn} !== void 0`);
           cxt.error(false, { errors: fn });
