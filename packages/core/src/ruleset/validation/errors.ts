@@ -1,8 +1,11 @@
-import { ErrorObject } from 'ajv';
-import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
+import type { ErrorObject } from 'ajv';
+import type { IDiagnostic, JsonPath } from '@stoplight/types';
+import { isAggregateError } from '../../guards/isAggregateError';
 
-export class RulesetValidationError extends Error {
-  constructor(public readonly message: string) {
+type RulesetValidationSingleError = Pick<IDiagnostic, 'message' | 'path'>;
+
+export class RulesetValidationError extends Error implements RulesetValidationSingleError {
+  constructor(public readonly message: string, public readonly path: JsonPath) {
     super(message);
   }
 }
@@ -10,58 +13,59 @@ export class RulesetValidationError extends Error {
 const RULE_INSTANCE_PATH = /^\/rules\/[^/]+/;
 const GENERIC_INSTANCE_PATH = /^\/(?:aliases|extends|overrides(?:\/\d+\/extends)?)/;
 
-export class RulesetAjvValidationError extends RulesetValidationError {
-  constructor(public ruleset: Record<string, unknown>, public errors: ErrorObject[]) {
-    super(RulesetAjvValidationError.serializeAjvErrors(ruleset, errors));
-  }
+export function convertAjvErrors(errors: ErrorObject[]): RulesetValidationError[] {
+  const sortedErrors = [...errors]
+    .sort((errorA, errorB) => {
+      const diff = errorA.instancePath.length - errorB.instancePath.length;
+      return diff === 0 ? (errorA.keyword === 'errorMessage' && errorB.keyword !== 'errorMessage' ? -1 : 0) : diff;
+    })
+    .filter((error, i, sortedErrors) => i === 0 || sortedErrors[i - 1].instancePath !== error.instancePath);
 
-  public static serializeAjvErrors(ruleset: Record<string, unknown>, errors: ErrorObject[]): string {
-    const sortedErrors = [...errors]
-      .sort((errorA, errorB) => {
-        const diff = errorA.instancePath.length - errorB.instancePath.length;
-        return diff === 0 ? (errorA.keyword === 'errorMessage' && errorB.keyword !== 'errorMessage' ? -1 : 0) : diff;
-      })
-      .filter((error, i, sortedErrors) => i === 0 || sortedErrors[i - 1].instancePath !== error.instancePath);
+  const filteredErrors: ErrorObject[] = [];
 
-    const filteredErrors: ErrorObject[] = [];
+  l: for (let i = 0; i < sortedErrors.length; i++) {
+    const error = sortedErrors[i];
+    const prevError = filteredErrors.length === 0 ? null : filteredErrors[filteredErrors.length - 1];
 
-    l: for (let i = 0; i < sortedErrors.length; i++) {
-      const error = sortedErrors[i];
-      const prevError = filteredErrors.length === 0 ? null : filteredErrors[filteredErrors.length - 1];
+    if (error.keyword === 'if') continue;
 
-      if (error.keyword === 'if') continue;
-
-      if (GENERIC_INSTANCE_PATH.test(error.instancePath)) {
-        let x = 1;
-        while (i + x < sortedErrors.length) {
-          if (
-            sortedErrors[i + x].instancePath.startsWith(error.instancePath) ||
-            !GENERIC_INSTANCE_PATH.test(sortedErrors[i + x].instancePath)
-          ) {
-            continue l;
-          }
-
-          x++;
+    if (GENERIC_INSTANCE_PATH.test(error.instancePath)) {
+      let x = 1;
+      while (i + x < sortedErrors.length) {
+        if (
+          sortedErrors[i + x].instancePath.startsWith(error.instancePath) ||
+          !GENERIC_INSTANCE_PATH.test(sortedErrors[i + x].instancePath)
+        ) {
+          continue l;
         }
-      } else if (prevError === null) {
-        filteredErrors.push(error);
-        continue;
-      } else {
-        const match = RULE_INSTANCE_PATH.exec(error.instancePath);
 
-        if (match !== null && match[0] !== match.input && match[0] === prevError.instancePath) {
-          filteredErrors.pop();
-        }
+        x++;
       }
-
+    } else if (prevError === null) {
       filteredErrors.push(error);
+      continue;
+    } else {
+      const match = RULE_INSTANCE_PATH.exec(error.instancePath);
+
+      if (match !== null && match[0] !== match.input && match[0] === prevError.instancePath) {
+        filteredErrors.pop();
+      }
     }
 
-    return filteredErrors
-      .map(
-        ({ message, instancePath }) =>
-          `Error at ${printPath(instancePath.slice(1).split('/'), PrintStyle.Pointer)}: ${message ?? ''}`,
-      )
-      .join('\n');
+    filteredErrors.push(error);
   }
+
+  return filteredErrors.flatMap(error =>
+    error.keyword === 'x-spectral-runtime'
+      ? flatErrors(error.params.errors)
+      : new RulesetValidationError(error.message ?? 'unknown error', error.instancePath.slice(1).split('/')),
+  );
+}
+
+function flatErrors(error: RulesetValidationError | AggregateError): RulesetValidationError | RulesetValidationError[] {
+  if (isAggregateError(error)) {
+    return error.errors.flatMap(flatErrors);
+  }
+
+  return error;
 }

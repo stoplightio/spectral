@@ -1,6 +1,9 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import enumeration from '../enumeration';
 import testFunction from './__helpers__/tester';
+import AggregateError = require('es-aggregate-error');
 
 const runEnumeration = testFunction.bind(null, enumeration);
 
@@ -31,30 +34,45 @@ describe('Core Functions / Enumeration', () => {
       ).toEqual([]);
     });
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         {
           values: ['foo', 2],
           foo: true,
         },
-        '"enumeration" function does not support "foo" option',
+        [new RulesetValidationError('"enumeration" function does not support "foo" option', [])],
       ],
       [
         {
           values: [{}],
         },
-        '"enumeration" and its "values" option support only arrays of primitive values, i.e. ["Berlin", "London", "Paris"]',
+        [
+          new RulesetValidationError(
+            '"enumeration" and its "values" option support only arrays of primitive values, i.e. ["Berlin", "London", "Paris"]',
+            [],
+          ),
+        ],
       ],
       [
         null,
-        '"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }',
+        [
+          new RulesetValidationError(
+            '"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }',
+            [],
+          ),
+        ],
       ],
       [
         2,
-        '"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }',
+        [
+          new RulesetValidationError(
+            '"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }',
+            [],
+          ),
+        ],
       ],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runEnumeration('foo', opts)).rejects.toThrow(new RulesetValidationError(error));
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runEnumeration('foo', opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

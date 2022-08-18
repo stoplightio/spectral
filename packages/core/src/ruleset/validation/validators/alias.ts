@@ -1,7 +1,8 @@
 import { isPlainObject } from '@stoplight/json';
-import { get, isError } from 'lodash';
+import { get } from 'lodash';
 import { resolveAlias } from '../../alias';
 import { Formats } from '../../formats';
+import { wrapError } from './common/error';
 
 function getOverrides(overrides: unknown, key: string): Record<string, unknown> | null {
   if (!Array.isArray(overrides)) return null;
@@ -18,7 +19,7 @@ export function validateAlias(
   ruleset: { aliases?: Record<string, unknown>; overrides?: Record<string, unknown> },
   alias: string,
   path: string,
-): string | void {
+): Error | void {
   try {
     const parsedPath = path.slice(1).split('/');
     const formats: unknown = get(ruleset, [...parsedPath.slice(0, parsedPath.indexOf('rules') + 2), 'formats']);
@@ -33,6 +34,6 @@ export function validateAlias(
 
     resolveAlias(aliases ?? null, alias, Array.isArray(formats) ? new Formats(formats) : null);
   } catch (ex) {
-    return isError(ex) ? ex.message : 'invalid alias';
+    return wrapError(ex, path);
   }
 }

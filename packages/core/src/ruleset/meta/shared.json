@@ -59,7 +59,7 @@
           "pattern": "^#"
         },
         "then": {
-          "spectral-runtime": "alias"
+          "x-spectral-runtime": "alias"
         },
         "else": {
           "pattern": "^\\$",

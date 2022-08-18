@@ -6,7 +6,9 @@ import {
   IRuleResult,
   RulesetFunction,
   RulesetFunctionWithValidator,
+  RulesetValidationError,
 } from '@stoplight/spectral-core';
+import { isAggregateError } from '@stoplight/spectral-core/src/guards/isAggregateError';
 
 export default async function <O = unknown>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,49 +18,37 @@ export default async function <O = unknown>(
   rule?: Partial<Omit<RuleDefinition, 'then'>> & { then?: Partial<RuleDefinition['then']> },
 ): Promise<Pick<IRuleResult, 'path' | 'message'>[]> {
   const s = new Spectral();
-  s.setRuleset({
-    rules: {
-      'my-rule': {
-        given: '$',
-        ...rule,
-        then: {
-          ...(rule?.then as Ruleset['rules']['then']),
-          function: fn,
-          functionOptions: opts,
+  try {
+    s.setRuleset({
+      rules: {
+        'my-rule': {
+          given: '$',
+          ...rule,
+          then: {
+            ...(rule?.then as Ruleset['rules']['then']),
+            function: fn,
+            functionOptions: opts,
+          },
         },
       },
-    },
-  });
-
-  try {
-    const results = await s.run(input instanceof Document ? input : JSON.stringify(input));
-    return results
-      .filter(result => result.code === 'my-rule')
-      .map(error => ({
-        path: error.path,
-        message: error.message,
-      }));
-  } catch (error: unknown) {
-    if (!(error instanceof Error)) {
-      throw error;
+    });
+  } catch (ex) {
+    if (isAggregateError(ex)) {
+      for (const e of ex.errors) {
+        if (e instanceof RulesetValidationError) {
+          e.path.length = 0;
+        }
+      }
     }
 
-    const errors = Array.isArray((error as Error & { errors?: unknown }).errors)
-      ? (error as Error & { errors: unknown[] }).errors
-      : [error];
-
-    if (errors.length === 1) {
-      throw getCause(errors[0]);
-    } else {
-      throw error;
-    }
-  }
-}
-
-function getCause(error: unknown): unknown {
-  if (error instanceof Error && 'cause' in (error as Error & { cause?: unknown })) {
-    return getCause((error as Error & { cause?: unknown }).cause);
+    throw ex;
   }
 
-  return error;
+  const results = await s.run(input instanceof Document ? input : JSON.stringify(input));
+  return results
+    .filter(result => result.code === 'my-rule')
+    .map(error => ({
+      path: error.path,
+      message: error.message,
+    }));
 }

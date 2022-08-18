@@ -1,7 +1,10 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { oas2 } from '@stoplight/spectral-formats';
 import { pattern, truthy } from '@stoplight/spectral-functions';
 import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import AggregateError = require('es-aggregate-error');
 
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
@@ -259,7 +262,7 @@ describe('Ruleset', () => {
   describe('error handling', () => {
     it('given empty ruleset, should throw a user friendly error', () => {
       expect(() => new Ruleset({})).toThrowError(
-        new RulesetValidationError('Ruleset must have rules or extends or overrides defined'),
+        new RulesetValidationError('Ruleset must have rules or extends or overrides defined', []),
       );
     });
   });
@@ -1266,7 +1269,11 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError('Error at #/rules/valid-path/given: Alias "PathItem-" does not exist');
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('Alias "PathItem-" does not exist', ['rules', 'valid-path', 'given']),
+        ]),
+      );
     });
 
     it('given circular alias, should throw', () => {
@@ -1288,8 +1295,13 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(
-        'Error at #/rules/valid-path/given: Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info',
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError(
+            'Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info',
+            ['rules', 'valid-path', 'given'],
+          ),
+        ]),
       );
     });
 
@@ -1321,9 +1333,23 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(`Error at #/rules/valid-path/given: Alias "PathItem" does not exist
-Error at #/rules/valid-name-and-description/given/0: Alias "Name" does not exist
-Error at #/rules/valid-name-and-description/given/1: Alias "Description" does not exist`);
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('Alias "PathItem" does not exist', ['rules', 'valid-path', 'given']),
+          new RulesetValidationError('Alias "Name" does not exist', [
+            'rules',
+            'valid-name-and-description',
+            'given',
+            '0',
+          ]),
+          new RulesetValidationError(`Alias "Description" does not exist`, [
+            'rules',
+            'valid-name-and-description',
+            'given',
+            '1',
+          ]),
+        ]),
+      );
     });
 
     describe('scoped aliases', () => {
@@ -1454,7 +1480,7 @@ Error at #/rules/valid-name-and-description/given/1: Alias "Description" does no
           },
         });
 
-        expect(() => ruleset.rules['valid-header'].getGivenForFormats(new Formats([oas3]))).toThrowError(
+        expect(() => ruleset.rules['valid-header'].getGivenForFormats(new Formats([oas3]))).toThrow(
           ReferenceError(
             'Alias "HeaderObject" is circular. Resolution stack: HeaderObject -> HeaderObjects -> Components -> HeaderObject',
           ),

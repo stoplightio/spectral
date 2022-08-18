@@ -1,13 +1,27 @@
-import { isError } from 'lodash';
 import type { RulesetFunction, RulesetFunctionWithValidator } from '../../../types';
+import { wrapError } from './common/error';
 
-export function validateFunction(fn: RulesetFunction | RulesetFunctionWithValidator, opts: unknown): string | void {
-  if (!('validator' in fn)) return;
+function assertRulesetFunction(
+  maybeRulesetFunction: unknown,
+): asserts maybeRulesetFunction is RulesetFunction | RulesetFunctionWithValidator {
+  if (typeof maybeRulesetFunction !== 'function') {
+    throw Error('Function is not defined');
+  }
+}
 
+export function validateFunction(
+  fn: unknown | RulesetFunction | RulesetFunctionWithValidator,
+  opts: unknown,
+  path: string,
+): Error | void {
   try {
+    assertRulesetFunction(fn);
+
+    if (!('validator' in fn)) return;
+
     const validator: RulesetFunctionWithValidator['validator'] = fn.validator.bind(fn);
     validator(opts);
   } catch (ex) {
-    return isError(ex) ? ex.message : 'invalid options';
+    return wrapError(ex, path);
   }
 }

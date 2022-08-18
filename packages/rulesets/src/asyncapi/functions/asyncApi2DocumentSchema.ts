@@ -94,7 +94,7 @@ export default createRulesetFunction<unknown, null>(
     input: null,
     options: null,
   },
-  function oasDocumentSchema(targetVal, _, context) {
+  function asyncApi2DocumentSchema(targetVal, _, context) {
     const formats = context.document.formats;
     if (formats === null || formats === void 0) return;
 

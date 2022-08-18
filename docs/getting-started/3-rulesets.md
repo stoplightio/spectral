@@ -14,13 +14,15 @@ Rules might look a bit like this:
 
 ```yaml
 rules:
-  my-rule-name:
-    description: Tags must have a description.
-    given: $.tags[*]
-    severity: error
+  paths-kebab-case:
+    description: Should paths be kebab-case.
+    message: "{{property}} should be kebab-case (lower-case and separated with hyphens)"
+    severity: warn
+    given: $.paths[*]~
     then:
-      field: description
-      function: truthy
+      function: pattern
+      functionOptions:
+        match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
 Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
@@ -83,8 +85,8 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `aas2_4` (AsyncAPI v2.4.0)
 - `oas2` (OpenAPI v2.0)
 - `oas3` (OpenAPI v3.x)
-- `oas3.0` (OpenAPI v3.0.x)
-- `oas3.1` (OpenAPI v3.1.x)
+- `oas3_0` (OpenAPI v3.0.x)
+- `oas3_1` (OpenAPI v3.1.x)
 - `json-schema` (`$schema` says this is some JSON Schema draft)
 - `json-schema-loose` (looks like JSON Schema, but no `$schema` found)
 - `json-schema-draft4` (`$schema` says this is JSON Schema Draft 04)

@@ -1,3 +1,24 @@
+# [@stoplight/spectral-cli-v6.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.2...@stoplight/spectral-cli-v6.5.0) (2022-08-03)
+
+
+### Features
+
+* **core:** improve validation ([#2026](https://github.com/stoplightio/spectral/issues/2026)) ([8315162](https://github.com/stoplightio/spectral/commit/83151628824592117d842a8965c9557841966b1a))
+
+# [@stoplight/spectral-cli-v6.4.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.1...@stoplight/spectral-cli-v6.4.2) (2022-07-21)
+
+
+### Bug Fixes
+
+* **core:** fix 'resolved vs unresolved' json path mapping ([#2202](https://github.com/stoplightio/spectral/issues/2202)) ([157ec59](https://github.com/stoplightio/spectral/commit/157ec592d8b3276094284fead7a08541b3f46f61))
+
+# [@stoplight/spectral-cli-v6.4.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.0...@stoplight/spectral-cli-v6.4.1) (2022-06-01)
+
+
+### Bug Fixes
+
+* **cli:** do not show 'or higher' if severity equals error ([#2172](https://github.com/stoplightio/spectral/issues/2172)) ([f31ec63](https://github.com/stoplightio/spectral/commit/f31ec636c912f3c9a53672e87a13ad724921b902))
+
 # [@stoplight/spectral-cli-v6.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.3.0...@stoplight/spectral-cli-v6.4.0) (2022-05-12)
 
 

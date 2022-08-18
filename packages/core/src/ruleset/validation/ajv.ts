@@ -32,11 +32,14 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
   addFormats(ajv);
   addErrors(ajv);
   ajv.addKeyword({
-    keyword: 'spectral-runtime',
+    keyword: 'x-spectral-runtime',
     schemaType: 'string',
     error: {
       message(cxt) {
         return _`${cxt.params?.message !== void 0 ? cxt.params.message : ''}`;
+      },
+      params(cxt) {
+        return _`{ errors: ${cxt.params?.errors !== void 0 && cxt.params.errors} ?? [] }`;
       },
     },
     code(cxt) {
@@ -47,15 +50,12 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
           cxt.fail(_`typeof ${data} !== "function"`);
           break;
         case 'ruleset-function': {
-          cxt.gen.if(_`typeof ${data}.function !== "function"`);
-          cxt.error(false, { message: 'function is not defined' });
-          cxt.gen.endIf();
           const fn = cxt.gen.const(
             'spectralFunction',
-            _`this.validateFunction(${data}.function, ${data}.functionOptions)`,
+            _`this.validateFunction(${data}.function, ${data}.functionOptions, ${names.instancePath})`,
           );
           cxt.gen.if(_`${fn} !== void 0`);
-          cxt.error(false, { message: fn });
+          cxt.error(false, { errors: fn });
           cxt.gen.endIf();
           break;
         }
@@ -65,7 +65,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
             _`this.validateAlias(${names.rootData}, ${data}, ${names.instancePath})`,
           );
           cxt.gen.if(_`${alias} !== void 0`);
-          cxt.error(false, { message: alias });
+          cxt.error(false, { errors: alias });
           cxt.gen.endIf();
           break;
         }

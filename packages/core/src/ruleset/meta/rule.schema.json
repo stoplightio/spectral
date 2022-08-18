@@ -60,17 +60,18 @@
         "$ref": "shared#formats"
       },
       "then": {
-        "anyOf": [
-          {
+        "if": {
+          "type": "array"
+        },
+        "then": {
+          "type": "array",
+          "items": {
             "$ref": "#/$defs/Then"
-          },
-          {
-            "items": {
-              "$ref": "#/$defs/Then"
-            },
-            "type": "array"
           }
-        ]
+        },
+        "else": {
+          "$ref": "#/$defs/Then"
+        }
       },
       "type": {
         "enum": ["style", "validation"],
