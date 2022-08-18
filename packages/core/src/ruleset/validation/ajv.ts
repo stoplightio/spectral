@@ -52,7 +52,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
         case 'ruleset-function': {
           const fn = cxt.gen.const(
             'spectralFunction',
-            _`this.validateFunction(${data}.function, ${data}.functionOptions, ${names.instancePath})`,
+            _`this.validateFunction(${data}.function, ${data}.functionOptions ?? null, ${names.instancePath})`,
           );
           cxt.gen.if(_`${fn} !== void 0`);
           cxt.error(false, { errors: fn });

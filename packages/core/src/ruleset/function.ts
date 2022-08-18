@@ -91,7 +91,7 @@ type Schema = (
 
 export type SchemaDefinition = Schema | boolean;
 
-const DEFAULT_OPTIONS_VALIDATOR = (o: unknown): boolean => o === void 0 || o === null;
+const DEFAULT_OPTIONS_VALIDATOR = (o: unknown): boolean => o === null;
 
 export function createRulesetFunction<I extends unknown, O extends unknown>(
   {
