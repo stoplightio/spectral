@@ -1,6 +1,9 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import truthy from '../truthy';
 import testFunction from './__helpers__/tester';
+import AggregateError = require('es-aggregate-error');
 
 const runTruthy = testFunction.bind(null, truthy);
 
@@ -20,8 +23,8 @@ describe('Core Functions / Truthy', () => {
 
   describe('validation', () => {
     it.each([{}, 2])('given invalid %p options, should throw', async opts => {
-      await expect(runTruthy([], opts)).rejects.toThrow(
-        new RulesetValidationError('"truthy" function does not accept any options'),
+      await expect(runTruthy([], opts)).rejects.toThrowAggregateError(
+        new AggregateError([new RulesetValidationError('"truthy" function does not accept any options', [])]),
       );
     });
   });
