@@ -95,7 +95,7 @@ Here are [more real-world examples](https://github.com/stoplightio/spectral-rule
 
 ## ⚙️ Integrations
 
-- [GitHub Action](https://github.com/stoplightio/spectral-action) - lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
+- [GitHub Action](https://github.com/stoplightio/spectral-action) - Lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [Jetbrains Plugin](https://plugins.jetbrains.com/plugin/18520-spectral) - Automatic linting of your OpenAPI specifications and highlighting in your editor.
 - [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) - Uses Spectral to validate and lint OpenAPI documents.
 - [VS Code Spectral Extension](https://marketplace.visualstudio.com/items?itemName=stoplight.spectral) - All the power of Spectral without leaving VS Code.
