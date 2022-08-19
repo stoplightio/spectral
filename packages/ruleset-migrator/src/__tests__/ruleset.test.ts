@@ -171,6 +171,61 @@ describe('migrator', () => {
     });
   });
 
+  it('should follow links correctly', async () => {
+    serveAssets({
+      'http://domain/bitbucket/projects/API/repos/spectral-rules/raw/.spectral.yml?at=refs%2Fheads%2Fmaster': {
+        extends: ['spectral:oas', 'oas-rules.yml'],
+        rules: {
+          'valid-type': 'error',
+        },
+      },
+      'http://domain/bitbucket/projects/API/repos/spectral-rules/raw/oas-rules.yml': {
+        rules: {
+          'valid-type': {
+            given: '$',
+            function: {
+              then: 'truthy',
+            },
+          },
+        },
+      },
+    });
+
+    await fs.promises.writeFile(
+      path.join(cwd, 'ruleset.json'),
+      JSON.stringify({
+        extends: [
+          'http://domain/bitbucket/projects/API/repos/spectral-rules/raw/.spectral.yml?at=refs%2Fheads%2Fmaster',
+        ],
+      }),
+    );
+
+    expect(
+      await migrateRuleset(path.join(cwd, 'ruleset.json'), {
+        format: 'esm',
+        fs: fs as any,
+      }),
+    ).toEqual(`import {oas} from "@stoplight/spectral-rulesets";
+export default {
+  "extends": [{
+    "extends": [oas, {
+      "rules": {
+        "valid-type": {
+          "given": "$",
+          "function": {
+            "then": "truthy"
+          }
+        }
+      }
+    }],
+    "rules": {
+      "valid-type": "error"
+    }
+  }]
+};
+`);
+  });
+
   describe('custom npm registry', () => {
     it('should be supported', async () => {
       serveAssets({
