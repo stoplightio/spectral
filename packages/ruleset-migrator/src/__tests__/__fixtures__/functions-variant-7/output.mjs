@@ -3,7 +3,7 @@ export default {
     rule: {
       given: '$',
       then: {
-        function: void 0,
+        function: ReferenceError('Function "do-nothing" is not defined'),
       },
     },
   },

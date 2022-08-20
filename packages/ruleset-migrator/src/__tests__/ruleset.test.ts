@@ -4,6 +4,8 @@ import * as prettier from 'prettier/standalone';
 import * as parserBabel from 'prettier/parser-babel';
 import { Ruleset } from '@stoplight/spectral-core';
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as functions from '@stoplight/spectral-functions';
+import * as formats from '@stoplight/spectral-formats';
 import * as fetchMock from 'fetch-mock';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 
@@ -36,6 +38,14 @@ describe('migrator', () => {
           await migrateRuleset(ruleset, {
             format,
             fs: vol as any,
+            modules: {
+              functions: {
+                '@stoplight/spectral-functions': functions,
+              },
+              formats: {
+                '@stoplight/spectral-formats': formats,
+              },
+            },
           }),
           { parser: 'babel', plugins: [parserBabel] },
         ),
@@ -150,14 +160,18 @@ describe('migrator', () => {
   });
 
   describe('error handling', () => {
-    it('given unknown format, should throw', async () => {
+    it('given a potentially unknown format, should leave a reference error', async () => {
       await vol.promises.writeFile(path.join(cwd, 'unknown-format.json'), `{ "formats": ["json-schema-draft-2"] }`);
       await expect(
         migrateRuleset(path.join(cwd, 'unknown-format.json'), {
           format: 'esm',
           fs: vol as any,
         }),
-      ).rejects.toThrow('Invalid ruleset provided');
+      ).resolves.toEqual(`import {jsonSchemaDraft2} from "@stoplight/spectral-formats";
+export default {
+  "formats": [jsonSchemaDraft2 || ReferenceError("Format \\"json-schema-draft-2\\" is not defined")]
+};
+`);
     });
   });
 
@@ -211,12 +225,12 @@ export default {
       }
     }
   }],
-  "formats": [oas2],
+  "formats": [oas2 || ReferenceError("Format \\"oas2\\" is not defined")],
   "rules": {
     "rule": {
       "then": {
         "given": "$",
-        "function": truthy
+        "function": truthy || ReferenceError("Function \\"truthy\\" is not defined")
       }
     }
   }

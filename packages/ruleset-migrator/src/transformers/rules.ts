@@ -1,15 +1,13 @@
 import { builders as b, namedTypes } from 'ast-types';
-import * as functions from '@stoplight/spectral-functions';
 import createOrderedLiteral, { setOrder } from '@stoplight/ordered-object-literal';
 import { DiagnosticSeverity } from '@stoplight/types';
+import { isPlainObject } from '@stoplight/json';
 
-import { Transformer } from '../types';
-import { assertString } from '../validation';
-import { Ruleset } from '../validation/types';
+import type { Hook, Transformer, TransformerCtx } from '../types';
+import { isString } from '../utils/guards';
+import { raiseError } from '../utils/ast';
 
 export { transformer as default };
-
-const KNOWN_FUNCTIONS = Object.keys(functions);
 
 const REPLACEMENTS: Record<string, string> = {
   'operation-2xx-response': 'operation-default-response',
@@ -53,14 +51,20 @@ function getDiagnosticSeverity(severity: DiagnosticSeverity | string): Diagnosti
   return Number.isNaN(Number(severity)) ? SEVERITY_MAP[severity] : Number(severity);
 }
 
-const transformer: Transformer = function (hooks) {
-  hooks.add([
-    /^$/,
-    (_ruleset): void => {
-      const ruleset = _ruleset as Ruleset;
-      if (ruleset.rules === void 0) return;
+function createMissingFunctionError(name: string): namedTypes.CallExpression {
+  return raiseError(`Function "${name}" is not defined`);
+}
 
+const transformer: Transformer = function (hooks) {
+  const store = new WeakMap<TransformerCtx, unknown>();
+
+  hooks.add(<Hook<{ rules: Record<string, unknown> }>>[
+    /^$/,
+    (input): input is { rules: Record<string, unknown> } => isPlainObject(input) && isPlainObject(input.rules),
+    (ruleset, ctx): void => {
       const { rules } = ruleset;
+
+      store.set(ctx, ruleset['functions']);
 
       // this is to make sure order of rules is preserved after transformation
       ruleset.rules = createOrderedLiteral(rules);
@@ -70,6 +74,7 @@ const transformer: Transformer = function (hooks) {
         if (!(key in REPLACEMENTS)) continue;
         if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
         const newName = REPLACEMENTS[key];
+        // getReplacement(ctx.modules[ctx.filepath]
         if (newName in rules) {
           rules[newName] = max(String(rules[key]), String(rules[newName]));
         } else {
@@ -84,17 +89,27 @@ const transformer: Transformer = function (hooks) {
     },
   ]);
 
-  hooks.add([
+  hooks.add(<Hook<string>>[
     /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,
-    (value, ctx): namedTypes.Identifier | namedTypes.UnaryExpression => {
-      assertString(value);
+    isString,
+    (value, ctx): namedTypes.Identifier | namedTypes.LogicalExpression | namedTypes.CallExpression => {
+      const functions = store.get(ctx);
 
-      if (KNOWN_FUNCTIONS.includes(value)) {
-        return ctx.tree.addImport(value, '@stoplight/spectral-functions');
+      if (Array.isArray(functions) && functions.includes(value)) {
+        const alias = ctx.tree.scope.load(`function-${value}`);
+        return alias !== void 0 ? b.identifier(alias) : createMissingFunctionError(value);
       }
 
-      const alias = ctx.tree.scope.load(`function-${value}`);
-      return alias !== void 0 ? b.identifier(alias) : b.unaryExpression('void', b.literal(0));
+      if (ctx.modules.functions === null) {
+        return b.logicalExpression(
+          '||',
+          ctx.tree.addImport(value, '@stoplight/spectral-functions'),
+          createMissingFunctionError(value),
+        );
+      }
+
+      const resolved = ctx.modules.resolveModule(ctx.modules.functions, value);
+      return resolved === null ? createMissingFunctionError(value) : ctx.tree.addImport(value, resolved);
     },
   ]);
 };

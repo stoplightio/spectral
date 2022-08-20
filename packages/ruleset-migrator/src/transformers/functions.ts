@@ -1,46 +1,31 @@
 import * as path from '@stoplight/path';
-import type { Transformer } from '../types';
-import { assertArray, assertString } from '../validation';
-import { Ruleset } from '../validation/types';
+import type { Hook, Transformer } from '../types';
+import { isPlainObject } from '@stoplight/json';
 
 export { transformer as default };
 
 const transformer: Transformer = function (hooks) {
-  hooks.add([
+  hooks.add(<Hook<{ functionsDir?: unknown; functions: unknown[] }>>[
     /^$/,
-    (_ruleset, ctx): void => {
-      const ruleset = _ruleset as Ruleset;
+    (input): input is { functionsDir?: unknown; functions: unknown[] } =>
+      isPlainObject(input) && Array.isArray(input.functions),
+    (ruleset, ctx): void => {
       const { functionsDir, functions } = ruleset;
 
-      if (Array.isArray(functions) && functions.length > 0) {
-        for (const fn of functions) {
-          assertString(fn);
-          const resolved = ctx.tree.resolveModule(
-            path.join('./', typeof functionsDir === 'string' ? functionsDir : 'functions', `./${fn}.js`),
-            ctx,
-            'function',
-          );
-          const fnName = path.basename(resolved, true);
-          const identifier = ctx.tree.addImport(fnName, resolved, true);
-          ctx.tree.scope.store(`function-${fnName}`, identifier.name);
-        }
+      for (const fn of functions) {
+        if (typeof fn !== 'string') continue;
+        const resolved = ctx.tree.resolveModule(
+          path.join('./', typeof functionsDir === 'string' ? functionsDir : 'functions', `./${fn}.js`),
+          ctx,
+          'function',
+        );
+        const fnName = path.basename(resolved, true);
+        const identifier = ctx.tree.addImport(fnName, resolved, true);
+        ctx.tree.scope.store(`function-${fnName}`, identifier.name);
       }
     },
   ]);
 
-  hooks.add([
-    /^\/functions$/,
-    (value): null => {
-      assertArray(value);
-      return null;
-    },
-  ]);
-
-  hooks.add([
-    /^\/functionsDir$/,
-    (value): null => {
-      assertString(value);
-      return null;
-    },
-  ]);
+  hooks.add([/^\/functions$/, (input): input is { functions: unknown[] } => Array.isArray(input), (): null => null]);
+  hooks.add([/^\/functionsDir$/, (input): input is string => typeof input === 'string', (): null => null]);
 };

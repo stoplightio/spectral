@@ -55,7 +55,7 @@ export class Tree {
     if (existingImportDeclaration === void 0) {
       const identifier = Tree.identifier(specifier, scope);
       this.#importDeclarations.set(source, [
-        { imported: b.identifier(specifier), local: identifier, default: _default },
+        { imported: b.identifier(Tree.safeIdentifier(specifier)), local: identifier, default: _default },
       ]);
       return identifier;
     } else {
@@ -66,7 +66,11 @@ export class Tree {
       }
 
       const identifier = Tree.identifier(specifier, scope);
-      existingImportDeclaration.push({ imported: b.identifier(specifier), local: identifier, default: _default });
+      existingImportDeclaration.push({
+        imported: b.identifier(Tree.safeIdentifier(specifier)),
+        local: identifier,
+        default: _default,
+      });
       return identifier;
     }
   }
@@ -110,8 +114,12 @@ export class Tree {
     );
   }
 
+  public static safeIdentifier(name: string): string {
+    return name.replace(/[^$_0-9A-Za-z]/g, '').replace(/^([0-9])/, '_$1');
+  }
+
   public static identifier(name: string, scope: Scope): namedTypes.Identifier {
-    const baseName = name.replace(/[^$_0-9A-Za-z]/g, '').replace(/^([0-9])/, '_$1');
+    const baseName = Tree.safeIdentifier(name);
     let uniqName = baseName;
     let i = 0;
     while (scope.has(uniqName)) {

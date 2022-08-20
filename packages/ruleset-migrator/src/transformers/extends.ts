@@ -1,9 +1,9 @@
 import { builders as b, namedTypes } from 'ast-types';
 import * as path from '@stoplight/path';
-import { Transformer, TransformerCtx } from '../types';
-import { Ruleset } from '../validation/types';
-import { assertArray } from '../validation';
+import { Hook, Transformer, TransformerCtx } from '../types';
 import { process } from '..';
+import { isString } from '../utils/guards';
+import { dumpJson } from '../utils/ast';
 
 const REPLACEMENTS = {
   'spectral:oas': 'oas',
@@ -35,24 +35,43 @@ async function processExtend(
   });
 }
 
-const transformer: Transformer = function (hooks) {
-  hooks.add([
-    /^(\/overrides\/\d+)?\/extends$/,
-    async (input, ctx): Promise<namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier> => {
-      const _extends = input as Ruleset['extends'];
+function isValidArrayExtends(maybeExtends: unknown): maybeExtends is [string, string] {
+  return (
+    Array.isArray(maybeExtends) &&
+    maybeExtends.length === 2 &&
+    typeof maybeExtends[0] === 'string' &&
+    typeof maybeExtends[1] === 'string'
+  );
+}
 
+const transformer: Transformer = function (hooks) {
+  hooks.add(<Hook<string | unknown[]>>[
+    /^(\/overrides\/\d+)?\/extends$/,
+    (input): input is string | unknown[] => isString(input) || Array.isArray(input),
+    async (
+      _extends,
+      ctx,
+    ): Promise<
+      namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Literal | namedTypes.Identifier
+    > => {
       if (typeof _extends === 'string') {
         return processExtend(ctx, _extends);
       }
 
-      assertArray(_extends);
-      const extendedRulesets: (namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier)[] = [];
+      const extendedRulesets: (
+        | namedTypes.ArrayExpression
+        | namedTypes.ObjectExpression
+        | namedTypes.Literal
+        | namedTypes.Identifier
+      )[] = [];
 
       for (const ruleset of _extends) {
         if (typeof ruleset === 'string') {
           extendedRulesets.push(await processExtend(ctx, ruleset));
-        } else {
+        } else if (isValidArrayExtends(ruleset)) {
           extendedRulesets.push(b.arrayExpression([await processExtend(ctx, ruleset[0]), b.literal(ruleset[1])]));
+        } else {
+          extendedRulesets.push(dumpJson(ruleset));
         }
       }
 

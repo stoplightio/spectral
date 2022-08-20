@@ -6,26 +6,23 @@ import { Fetch, Hook, MigrationOptions, TransformerCtx } from './types';
 import transformers from './transformers';
 import { Scope, Tree } from './tree';
 import { builders as b, namedTypes } from 'ast-types';
-import { ExpressionKind } from 'ast-types/gen/kinds';
-import { assertRuleset } from './validation';
-import { Ruleset } from './validation/types';
+import type { ExpressionKind } from 'ast-types/gen/kinds';
 
-async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset> {
+async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<unknown> {
   const input = isURL(filepath) ? await (await fetch(filepath)).text() : await fs.promises.readFile(filepath, 'utf8');
 
-  const { data: ruleset } =
+  const { data } =
     extname(filepath) === '.json'
       ? parseJsonWithPointers<unknown>(input)
       : parseYamlWithPointers<unknown>(input, {
           mergeKeys: true,
         });
 
-  assertRuleset(ruleset);
-  return ruleset;
+  return data;
 }
 
 export async function migrateRuleset(filepath: string, opts: MigrationOptions): Promise<string> {
-  const { fs, fetch = defaultFetch, format, npmRegistry } = opts;
+  const { fs, fetch = defaultFetch, format, npmRegistry, modules } = opts;
   const cwd = dirname(filepath);
   const tree = new Tree({
     format,
@@ -43,6 +40,18 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
       fetch,
       ...opts,
     },
+    modules: {
+      functions: modules?.functions ?? null,
+      formats: modules?.formats ?? null,
+      resolveModule(modules: Readonly<Record<string, Record<string, unknown>>>, specifier): string | null {
+        const resolvedModules = Object.entries(modules).filter(([, module]) => specifier in module);
+        if (resolvedModules.length > 1) {
+          throw Error(`"${specifier}" resolves to more than a single module`);
+        }
+
+        return resolvedModules.length === 0 ? null : resolvedModules[0][0];
+      },
+    },
     npmRegistry: npmRegistry ?? null,
     hooks,
     read,
@@ -58,8 +67,8 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
 }
 
 async function _process(input: unknown, ctx: TransformerCtx, path: string): Promise<ExpressionKind | null> {
-  for (const [pattern, fn] of ctx.hooks) {
-    if (pattern.test(path)) {
+  for (const [pattern, guard, fn] of ctx.hooks) {
+    if (pattern.test(path) && guard(input)) {
       const output = await fn(input, ctx);
 
       if (output !== void 0) {
@@ -101,6 +110,6 @@ async function _process(input: unknown, ctx: TransformerCtx, path: string): Prom
   );
 }
 
-export async function process(input: Ruleset, ctx: TransformerCtx): Promise<namedTypes.ObjectExpression> {
+export async function process(input: unknown, ctx: TransformerCtx): Promise<namedTypes.ObjectExpression> {
   return (await _process(input, ctx, '')) as namedTypes.ObjectExpression;
 }

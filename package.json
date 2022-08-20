@@ -24,8 +24,7 @@
   },
   "scripts": {
     "clean": "rimraf .cache packages/*/{dist,.cache}",
-    "prebuild": "yarn workspace @stoplight/spectral-ruleset-migrator prebuild",
-    "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
+    "build": "tsc --build ./tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",

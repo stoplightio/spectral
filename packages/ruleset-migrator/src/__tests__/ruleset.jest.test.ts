@@ -77,12 +77,12 @@ export default {
       }
     }
   }],
-  "formats": [oas2],
+  "formats": [oas2 || ReferenceError("Format \\"oas2\\" is not defined")],
   "rules": {
     "rule": {
       "then": {
         "given": "$",
-        "function": truthy
+        "function": truthy || ReferenceError("Function \\"truthy\\" is not defined")
       }
     }
   }
