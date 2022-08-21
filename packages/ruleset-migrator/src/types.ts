@@ -5,6 +5,10 @@ import type { ExpressionKind } from 'ast-types/gen/kinds';
 
 export type Fetch = Window['fetch'] | typeof import('@stoplight/spectral-runtime').fetch;
 
+export type GlobalModules = Readonly<
+  Record<'rulesets' | 'functions' | 'formats', Readonly<Record<string, Record<string, unknown>>> | null>
+>;
+
 export type MigrationOptions = Readonly<{
   fs: Readonly<{
     promises: Readonly<{
@@ -12,10 +16,7 @@ export type MigrationOptions = Readonly<{
     }>;
   }>;
   fetch?: Fetch;
-  modules?: Readonly<{
-    functions?: Readonly<Record<string, Record<string, unknown>>>;
-    formats?: Readonly<Record<string, Record<string, unknown>>>;
-  }>;
+  modules?: Partial<GlobalModules>;
 }> &
   (
     | {
@@ -45,10 +46,5 @@ export type TransformerCtx = {
   readonly cwd: string;
   readonly filepath: string;
   readonly npmRegistry: string | null;
-  readonly modules: {
-    functions: Readonly<Record<string, Record<string, unknown>>> | null;
-    formats: Readonly<Record<string, Record<string, unknown>>> | null;
-    resolveModule(modules: Record<string, Record<string, unknown>>, specifier: string): string | null;
-  };
   read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<unknown>;
 };

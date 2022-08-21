@@ -74,7 +74,6 @@ const transformer: Transformer = function (hooks) {
         if (!(key in REPLACEMENTS)) continue;
         if (typeof rules[key] === 'object') continue; // we do not touch new definitions (aka custom rules). If one defines a rule like operation-2xx-response in their own ruleset, we shouldn't touch it.
         const newName = REPLACEMENTS[key];
-        // getReplacement(ctx.modules[ctx.filepath]
         if (newName in rules) {
           rules[newName] = max(String(rules[key]), String(rules[newName]));
         } else {
@@ -100,7 +99,9 @@ const transformer: Transformer = function (hooks) {
         return alias !== void 0 ? b.identifier(alias) : createMissingFunctionError(value);
       }
 
-      if (ctx.modules.functions === null) {
+      const availableStaticModules = ctx.tree.modules.listStaticModules('function');
+
+      if (availableStaticModules.length === 0) {
         return b.logicalExpression(
           '||',
           ctx.tree.addImport(value, '@stoplight/spectral-functions'),
@@ -108,7 +109,7 @@ const transformer: Transformer = function (hooks) {
         );
       }
 
-      const resolved = ctx.modules.resolveModule(ctx.modules.functions, value);
+      const resolved = ctx.tree.modules.resolveStaticModule('function', value);
       return resolved === null ? createMissingFunctionError(value) : ctx.tree.addImport(value, resolved);
     },
   ]);

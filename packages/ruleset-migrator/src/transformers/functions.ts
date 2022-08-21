@@ -14,10 +14,10 @@ const transformer: Transformer = function (hooks) {
 
       for (const fn of functions) {
         if (typeof fn !== 'string') continue;
-        const resolved = ctx.tree.resolveModule(
-          path.join('./', typeof functionsDir === 'string' ? functionsDir : 'functions', `./${fn}.js`),
-          ctx,
+        const resolved = ctx.tree.modules.resolveModule(
           'function',
+          ctx,
+          path.join('./', typeof functionsDir === 'string' ? functionsDir : 'functions', `./${fn}.js`),
         );
         const fnName = path.basename(resolved, true);
         const identifier = ctx.tree.addImport(fnName, resolved, true);

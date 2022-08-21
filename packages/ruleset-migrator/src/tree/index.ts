@@ -1,16 +1,14 @@
 import { namedTypes, builders as b } from 'ast-types';
 import * as path from '@stoplight/path';
 import * as astring from 'astring';
-import { MigrationOptions, TransformerCtx } from '../types';
+import { MigrationOptions } from '../types';
 import { commonjs } from './commonjs';
 import { esm } from './esm';
 import { IModule } from './types';
-import requireResolve from '../requireResolve';
 import { Scope } from './scope';
-import { isPackageImport } from '../utils/isPackageImport';
-import { isKnownNpmRegistry } from '../utils/isKnownNpmRegistry';
+import { Modules } from './modules';
 
-export { Scope };
+export { Scope, Modules };
 
 type ImportDefinition = { imported: namedTypes.Identifier; local: namedTypes.Identifier; default: boolean };
 
@@ -33,13 +31,19 @@ export class Tree {
 
   readonly #npmRegistry;
   readonly #module: IModule;
-  readonly #resolvedPaths = new Set<string>();
 
   public ruleset?: namedTypes.ObjectExpression;
-  public scope: Scope;
+  public readonly scope: Scope;
+  public readonly modules: Modules;
 
-  constructor({ format, npmRegistry, scope }: Pick<MigrationOptions, 'format' | 'npmRegistry'> & { scope: Scope }) {
+  constructor({
+    format,
+    npmRegistry,
+    scope,
+    modules,
+  }: Pick<MigrationOptions, 'format' | 'npmRegistry'> & { scope: Scope; modules: Modules }) {
     this.scope = scope;
+    this.modules = modules;
     this.#npmRegistry = npmRegistry ?? null;
     this.#module = format === 'commonjs' ? commonjs : esm;
     if (format === 'commonjs' && this.#npmRegistry !== null) {
@@ -88,7 +92,7 @@ export class Tree {
           .sort(sortImports)
           .flatMap(([source, identifiers]) => {
             const resolvedSource =
-              this.#npmRegistry !== null && !this.#resolvedPaths.has(source) && !source.startsWith(this.#npmRegistry)
+              this.#npmRegistry !== null && !this.modules.isResolved(source) && !source.startsWith(this.#npmRegistry)
                 ? path.join(this.#npmRegistry, source)
                 : source;
 
@@ -129,33 +133,6 @@ export class Tree {
     scope.add(uniqName);
 
     return b.identifier(uniqName);
-  }
-
-  public resolveModule(identifier: string, ctx: TransformerCtx, kind: 'function' | 'ruleset'): string {
-    let resolved: string;
-    if (path.isURL(identifier) || path.isAbsolute(identifier)) {
-      resolved = identifier;
-      this.#resolvedPaths.add(identifier);
-    } else if (kind === 'ruleset' && isPackageImport(identifier)) {
-      resolved =
-        ctx.npmRegistry !== null
-          ? path.join(ctx.npmRegistry, identifier)
-          : requireResolve?.(identifier, { paths: [ctx.cwd] }) ?? path.join(ctx.cwd, identifier);
-    } else if (
-      (ctx.npmRegistry !== null && ctx.filepath.startsWith(ctx.npmRegistry)) ||
-      isKnownNpmRegistry(ctx.filepath)
-    ) {
-      // npm repos need a different resolution
-      // they should have the following pattern
-      // <origin>/<pkg-name>
-      // <origin>/<pkg-name>/<asset> where asset can be a custom fn, etc.
-      resolved = path.join(ctx.filepath, identifier);
-    } else {
-      resolved = path.join(ctx.filepath, '..', identifier);
-      this.#resolvedPaths.add(resolved);
-    }
-
-    return resolved;
   }
 
   public fork(): Tree {

@@ -1,6 +1,6 @@
 import { builders as b, namedTypes } from 'ast-types';
 import * as path from '@stoplight/path';
-import { Hook, Transformer, TransformerCtx } from '../types';
+import type { Hook, Transformer, TransformerCtx } from '../types';
 import { process } from '..';
 import { isString } from '../utils/guards';
 import { dumpJson } from '../utils/ast';
@@ -22,7 +22,7 @@ async function processExtend(
     return ctx.tree.addImport(REPLACEMENTS[name], '@stoplight/spectral-rulesets');
   }
 
-  const filepath = ctx.tree.resolveModule(name, ctx, 'ruleset');
+  const filepath = ctx.tree.modules.resolveModule('ruleset', ctx, name);
 
   if (KNOWN_JS_EXTS.test(path.extname(filepath))) {
     return ctx.tree.addImport(`${path.basename(filepath, true)}_${path.extname(filepath)}`, filepath, true);
@@ -51,9 +51,7 @@ const transformer: Transformer = function (hooks) {
     async (
       _extends,
       ctx,
-    ): Promise<
-      namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Literal | namedTypes.Identifier
-    > => {
+    ): Promise<namedTypes.ArrayExpression | namedTypes.ObjectExpression | namedTypes.Identifier> => {
       if (typeof _extends === 'string') {
         return processExtend(ctx, _extends);
       }

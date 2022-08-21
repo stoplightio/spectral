@@ -2,11 +2,11 @@ import { parseWithPointers as parseJsonWithPointers, safeStringify } from '@stop
 import { parseWithPointers as parseYamlWithPointers } from '@stoplight/yaml';
 import { fetch as defaultFetch } from '@stoplight/spectral-runtime';
 import { dirname, extname, isURL } from '@stoplight/path';
-import { Fetch, Hook, MigrationOptions, TransformerCtx } from './types';
-import transformers from './transformers';
-import { Scope, Tree } from './tree';
 import { builders as b, namedTypes } from 'ast-types';
 import type { ExpressionKind } from 'ast-types/gen/kinds';
+import type { Fetch, Hook, MigrationOptions, TransformerCtx } from './types';
+import transformers from './transformers';
+import { Scope, Tree, Modules } from './tree';
 
 async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<unknown> {
   const input = isURL(filepath) ? await (await fetch(filepath)).text() : await fs.promises.readFile(filepath, 'utf8');
@@ -28,6 +28,14 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
     format,
     npmRegistry,
     scope: new Scope(),
+    modules: new Modules(
+      {
+        rulesets: modules?.rulesets ?? null,
+        functions: modules?.functions ?? null,
+        formats: modules?.formats ?? null,
+      },
+      npmRegistry,
+    ),
   });
 
   const ruleset = await read(filepath, fs, fetch);
@@ -39,18 +47,6 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
     opts: {
       fetch,
       ...opts,
-    },
-    modules: {
-      functions: modules?.functions ?? null,
-      formats: modules?.formats ?? null,
-      resolveModule(modules: Readonly<Record<string, Record<string, unknown>>>, specifier): string | null {
-        const resolvedModules = Object.entries(modules).filter(([, module]) => specifier in module);
-        if (resolvedModules.length > 1) {
-          throw Error(`"${specifier}" resolves to more than a single module`);
-        }
-
-        return resolvedModules.length === 0 ? null : resolvedModules[0][0];
-      },
     },
     npmRegistry: npmRegistry ?? null,
     hooks,

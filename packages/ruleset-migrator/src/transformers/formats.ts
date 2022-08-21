@@ -31,8 +31,9 @@ function transform(
   ctx: TransformerCtx,
 ): namedTypes.Identifier | namedTypes.LogicalExpression | namedTypes.CallExpression {
   const actualFormat = REPLACEMENTS[format];
+  const availableStaticModules = ctx.tree.modules.listStaticModules('format');
 
-  if (ctx.modules.formats === null) {
+  if (availableStaticModules.length === 0) {
     return b.logicalExpression(
       '||',
       ctx.tree.addImport(actualFormat, '@stoplight/spectral-formats'),
@@ -40,7 +41,7 @@ function transform(
     );
   }
 
-  const resolved = ctx.modules.resolveModule(ctx.modules.formats, actualFormat);
+  const resolved = ctx.tree.modules.resolveStaticModule('format', actualFormat);
   return resolved === null ? createMissingFormatError(format) : ctx.tree.addImport(actualFormat, resolved);
 }
 
