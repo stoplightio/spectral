@@ -2468,9 +2468,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-parsers@workspace:packages/parsers"
   dependencies:
-    "@stoplight/json": 3.17.0
-    "@stoplight/types": 12.3.0
-    "@stoplight/yaml": 4.2.2
+    "@stoplight/json": ~3.20.1
+    "@stoplight/types": ^13.6.0
+    "@stoplight/yaml": ~4.2.3
     tslib: ^2.3.1
   languageName: unknown
   linkType: soft
@@ -2600,7 +2600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/types@npm:^13.6.0, @stoplight/types@npm:~13.6.0":
+"@stoplight/types@npm:^13.0.0, @stoplight/types@npm:^13.6.0, @stoplight/types@npm:~13.6.0":
   version: 13.6.0
   resolution: "@stoplight/types@npm:13.6.0"
   dependencies:
@@ -2617,7 +2617,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/yaml@npm:4.2.2, @stoplight/yaml@npm:^4.2.2":
+"@stoplight/yaml@npm:4.2.2":
   version: 4.2.2
   resolution: "@stoplight/yaml@npm:4.2.2"
   dependencies:
@@ -2626,6 +2626,18 @@ __metadata:
     "@stoplight/yaml-ast-parser": 0.0.48
     tslib: ^2.2.0
   checksum: 4ca96f28783672aa4e2ecf71ed80c9842997a5d145a77db0af74c717254d1a48e49e883451b90c29521742421745cb45e1434e9af8ed801d5ce02c7a4fe1ce8d
+  languageName: node
+  linkType: hard
+
+"@stoplight/yaml@npm:^4.2.2, @stoplight/yaml@npm:~4.2.3":
+  version: 4.2.3
+  resolution: "@stoplight/yaml@npm:4.2.3"
+  dependencies:
+    "@stoplight/ordered-object-literal": ^1.0.1
+    "@stoplight/types": ^13.0.0
+    "@stoplight/yaml-ast-parser": 0.0.48
+    tslib: ^2.2.0
+  checksum: 8e61c4499c0849dafecf487e51e10d4d3e99192834dd87eba4b27c20c42d3fe1b5b022f9c3eb63b96249b46d7277ffb4ce37447d84d01d4768b88d142e3d0e15
   languageName: node
   linkType: hard
 
