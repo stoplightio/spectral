@@ -2269,6 +2269,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stoplight/better-ajv-errors@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@stoplight/better-ajv-errors@npm:1.0.3"
+  dependencies:
+    jsonpointer: ^5.0.0
+    leven: ^3.1.0
+  peerDependencies:
+    ajv: ">=8"
+  checksum: 642fe5636a72a86de72e4ffc7bbf07499fc09d8446b386f31d3667b07dd1849d921c38a74c109a9e2554d405b6e90dc150728a0c455bf93f158ff139e0538ddd
+  languageName: node
+  linkType: hard
+
 "@stoplight/json-ref-readers@npm:1.2.2":
   version: 1.2.2
   resolution: "@stoplight/json-ref-readers@npm:1.2.2"
@@ -2298,7 +2310,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:3.17.0, @stoplight/json@npm:~3.17.0, @stoplight/json@npm:~3.17.1":
+"@stoplight/json@npm:3.17.0, @stoplight/json@npm:~3.17.0":
   version: 3.17.0
   resolution: "@stoplight/json@npm:3.17.0"
   dependencies:
@@ -2311,7 +2323,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:~3.18.1":
+"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:^3.17.1, @stoplight/json@npm:~3.18.1":
   version: 3.18.1
   resolution: "@stoplight/json@npm:3.18.1"
   dependencies:
@@ -2441,8 +2453,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-functions@workspace:packages/functions"
   dependencies:
-    "@stoplight/better-ajv-errors": 1.0.1
-    "@stoplight/json": ~3.17.1
+    "@stoplight/better-ajv-errors": 1.0.3
+    "@stoplight/json": ^3.17.1
     "@stoplight/spectral-core": ^1.7.0
     "@stoplight/spectral-formats": ^1.0.0
     "@stoplight/spectral-parsers": "*"

@@ -22,8 +22,8 @@
     "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
-    "@stoplight/better-ajv-errors": "1.0.1",
-    "@stoplight/json": "~3.17.1",
+    "@stoplight/better-ajv-errors": "1.0.3",
+    "@stoplight/json": "^3.17.1",
     "@stoplight/spectral-core": "^1.7.0",
     "@stoplight/spectral-formats": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.1.0",
