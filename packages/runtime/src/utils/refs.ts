@@ -1,6 +1,6 @@
 import { isPlainObject, extractPointerFromRef, hasRef, pointerToPath } from '@stoplight/json';
 import { isAbsolute } from '@stoplight/path';
-import { Dictionary, JsonPath } from '@stoplight/types';
+import type { Dictionary, JsonPath } from '@stoplight/types';
 import { isObject } from 'lodash';
 
 const PROTOCOL_REGEX = /^[a-z]+:\/\//i;

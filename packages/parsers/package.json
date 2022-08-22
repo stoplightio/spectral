@@ -21,9 +21,9 @@
     "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
-    "@stoplight/json": "3.17.0",
-    "@stoplight/types": "12.3.0",
-    "@stoplight/yaml": "4.2.2",
+    "@stoplight/json": "~3.20.1",
+    "@stoplight/types": "^13.6.0",
+    "@stoplight/yaml": "~4.2.3",
     "tslib": "^2.3.1"
   }
 }

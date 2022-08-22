@@ -2345,15 +2345,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/better-ajv-errors@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@stoplight/better-ajv-errors@npm:1.0.1"
+"@stoplight/better-ajv-errors@npm:1.0.3":
+  version: 1.0.3
+  resolution: "@stoplight/better-ajv-errors@npm:1.0.3"
   dependencies:
     jsonpointer: ^5.0.0
     leven: ^3.1.0
   peerDependencies:
     ajv: ">=8"
-  checksum: b129f91e3356eb37e002ac22d0b92332cd57b9a3aadb2d511aba625c9f10be270c96cdc8417ace201304e24463e0df6e1ac202613deeee1448ee82062ab4bfd3
+  checksum: 642fe5636a72a86de72e4ffc7bbf07499fc09d8446b386f31d3667b07dd1849d921c38a74c109a9e2554d405b6e90dc150728a0c455bf93f158ff139e0538ddd
   languageName: node
   linkType: hard
 
@@ -2386,7 +2386,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:3.17.0, @stoplight/json@npm:~3.17.0, @stoplight/json@npm:~3.17.1":
+"@stoplight/json@npm:3.17.0, @stoplight/json@npm:~3.17.0":
   version: 3.17.0
   resolution: "@stoplight/json@npm:3.17.0"
   dependencies:
@@ -2399,16 +2399,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:~3.18.1":
-  version: 3.18.1
-  resolution: "@stoplight/json@npm:3.18.1"
+"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:^3.17.1, @stoplight/json@npm:^3.20.1, @stoplight/json@npm:~3.20.1":
+  version: 3.20.1
+  resolution: "@stoplight/json@npm:3.20.1"
   dependencies:
-    "@stoplight/ordered-object-literal": ^1.0.2
-    "@stoplight/types": ^13.0.0
+    "@stoplight/ordered-object-literal": ^1.0.3
+    "@stoplight/path": ^1.3.2
+    "@stoplight/types": ^13.6.0
     jsonc-parser: ~2.2.1
     lodash: ^4.17.21
     safe-stable-stringify: ^1.1
-  checksum: 9df3e06421541b6d7f0fbec3f928e67f0d46ef8d4cf79986345164551baef727580e85659c6b9658be578eecd253a6eb23dbe04bccf074d251e6b17a5fddf0a8
+  checksum: 6d74d82909fb40435fa764cf808fae97293b1b0f5825062807c1a41acbf95587c9e19883faf0b8c49acb9bba2f3662a11a28d52064c12bf05e5fca133249955d
   languageName: node
   linkType: hard
 
@@ -2421,10 +2422,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/ordered-object-literal@npm:1.0.2, @stoplight/ordered-object-literal@npm:^1.0.1, @stoplight/ordered-object-literal@npm:^1.0.2":
+"@stoplight/ordered-object-literal@npm:1.0.2":
   version: 1.0.2
   resolution: "@stoplight/ordered-object-literal@npm:1.0.2"
   checksum: 46eba542a594885aa57e786883046217cfbe1b7bb4261899b12b30fb76058139c4e3b5bd4061e388bf0f327bb6e18b9858c4e47ff129fceb2b1afee4bf45cfa5
+  languageName: node
+  linkType: hard
+
+"@stoplight/ordered-object-literal@npm:^1.0.1, @stoplight/ordered-object-literal@npm:^1.0.2, @stoplight/ordered-object-literal@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@stoplight/ordered-object-literal@npm:1.0.3"
+  checksum: 091c0e5569e00f40a8bbd3ec0304d3282dac24dc6fc22dad594e008390c2022b4d32557cfb10528aa81a44fe4067085a2b973716f3e710318b3a08ff32c12d6c
   languageName: node
   linkType: hard
 
@@ -2481,8 +2489,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
-    "@stoplight/better-ajv-errors": 1.0.1
-    "@stoplight/json": ~3.18.1
+    "@stoplight/better-ajv-errors": 1.0.3
+    "@stoplight/json": ~3.20.1
     "@stoplight/lifecycle": 2.3.2
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-formats": "*"
@@ -2490,7 +2498,7 @@ __metadata:
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.0
     "@stoplight/spectral-runtime": ^1.0.0
-    "@stoplight/types": ~13.2.0
+    "@stoplight/types": ~13.6.0
     "@stoplight/yaml": ^4.2.2
     "@types/es-aggregate-error": ^1.0.2
     "@types/json-schema": ^7.0.11
@@ -2529,13 +2537,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-functions@workspace:packages/functions"
   dependencies:
-    "@stoplight/better-ajv-errors": 1.0.1
-    "@stoplight/json": ~3.17.1
+    "@stoplight/better-ajv-errors": 1.0.3
+    "@stoplight/json": ^3.17.1
     "@stoplight/spectral-core": ^1.7.0
     "@stoplight/spectral-formats": ^1.0.0
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-runtime": ^1.1.0
-    "@stoplight/types": 12.3.0
     ajv: ^8.6.3
     ajv-draft-04: ~1.0.0
     ajv-errors: ~3.0.0
@@ -2549,9 +2556,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-parsers@workspace:packages/parsers"
   dependencies:
-    "@stoplight/json": 3.17.0
-    "@stoplight/types": 12.3.0
-    "@stoplight/yaml": 4.2.2
+    "@stoplight/json": ~3.20.1
+    "@stoplight/types": ^13.6.0
+    "@stoplight/yaml": ~4.2.3
     tslib: ^2.3.1
   languageName: unknown
   linkType: soft
@@ -2627,7 +2634,7 @@ __metadata:
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
     "@asyncapi/specs": ^2.14.0
-    "@stoplight/better-ajv-errors": 1.0.1
+    "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.8.1
@@ -2636,7 +2643,7 @@ __metadata:
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": "*"
     "@stoplight/spectral-runtime": ^1.1.1
-    "@stoplight/types": ^12.5.0
+    "@stoplight/types": ^13.6.0
     "@types/json-schema": ^7.0.7
     ajv: ^8.8.2
     ajv-formats: ~2.1.0
@@ -2651,9 +2658,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-runtime@workspace:packages/runtime"
   dependencies:
-    "@stoplight/json": ^3.17.0
+    "@stoplight/json": ^3.20.1
     "@stoplight/path": ^1.3.2
-    "@stoplight/types": ^12.3.0
+    "@stoplight/types": ^13.6.0
     abort-controller: ^3.0.0
     lodash: ^4.17.21
     node-fetch: ^2.6.7
@@ -2671,7 +2678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0, @stoplight/types@npm:^12.5.0":
+"@stoplight/types@npm:^12.0.0, @stoplight/types@npm:^12.3.0":
   version: 12.5.0
   resolution: "@stoplight/types@npm:12.5.0"
   dependencies:
@@ -2681,13 +2688,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/types@npm:^13.0.0, @stoplight/types@npm:~13.2.0":
-  version: 13.2.0
-  resolution: "@stoplight/types@npm:13.2.0"
+"@stoplight/types@npm:^13.0.0, @stoplight/types@npm:^13.6.0, @stoplight/types@npm:~13.6.0":
+  version: 13.6.0
+  resolution: "@stoplight/types@npm:13.6.0"
   dependencies:
     "@types/json-schema": ^7.0.4
     utility-types: ^3.10.0
-  checksum: 902fd852552698f21189d4c9c2cf32136a69c5c494b6f92e3d929c8b9dd5c113fbef13aeb9d6dab386aa0f5205733998e4e4436ec19e8a165886e548c1dfc011
+  checksum: 4cc81cf29decc0392f15c71b21fd11cd806bcf99168ae4509ed41c2b7dbcfbd5a83c7f9f320edb5a518cc483fd18dd8794c54b232fb6a6f2a7b6e9fb6ca20269
   languageName: node
   linkType: hard
 
@@ -2698,7 +2705,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/yaml@npm:4.2.2, @stoplight/yaml@npm:^4.2.2":
+"@stoplight/yaml@npm:4.2.2":
   version: 4.2.2
   resolution: "@stoplight/yaml@npm:4.2.2"
   dependencies:
@@ -2707,6 +2714,18 @@ __metadata:
     "@stoplight/yaml-ast-parser": 0.0.48
     tslib: ^2.2.0
   checksum: 4ca96f28783672aa4e2ecf71ed80c9842997a5d145a77db0af74c717254d1a48e49e883451b90c29521742421745cb45e1434e9af8ed801d5ce02c7a4fe1ce8d
+  languageName: node
+  linkType: hard
+
+"@stoplight/yaml@npm:^4.2.2, @stoplight/yaml@npm:~4.2.3":
+  version: 4.2.3
+  resolution: "@stoplight/yaml@npm:4.2.3"
+  dependencies:
+    "@stoplight/ordered-object-literal": ^1.0.1
+    "@stoplight/types": ^13.0.0
+    "@stoplight/yaml-ast-parser": 0.0.48
+    tslib: ^2.2.0
+  checksum: 8e61c4499c0849dafecf487e51e10d4d3e99192834dd87eba4b27c20c42d3fe1b5b022f9c3eb63b96249b46d7277ffb4ce37447d84d01d4768b88d142e3d0e15
   languageName: node
   linkType: hard
 

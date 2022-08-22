@@ -1,3 +1,10 @@
+# [@stoplight/spectral-functions-v1.7.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.7.0...@stoplight/spectral-functions-v1.7.1) (2022-08-22)
+
+
+### Bug Fixes
+
+* **functions:** bump stoplight/better-ajv-errors ([bd0c5fb](https://github.com/stoplightio/spectral/commit/bd0c5fb620bfa17341d4541159b3235b733ca316))
+
 # [@stoplight/spectral-functions-v1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.2...@stoplight/spectral-functions-v1.7.0) (2022-08-03)
 
 
