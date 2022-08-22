@@ -39,33 +39,31 @@ module.exports = {
 ====asset:spectral.js====
 const base = require('{asset:base.js}')
 
-const assetId = '{scenarioId}';
-
 module.exports = {
   extends: base,
   overrides: [
     {
-      files: [`${assetId}-legacy/**/*.json`],
+      files: [`legacy/**/*.json`],
       rules: {
         'description-matches-stoplight': 'error',
         'title-matches-stoplight': 'warn',
       },
     },
     {
-      files: [`${assetId}-v2/**/*.json#/address`],
+      files: [`v2/**/*.json#/address`],
       rules: {
         'title-matches-stoplight': 'error'
       },
     },
     {
-      files: [`${assetId}-v2/**/*.json`],
+      files: [`v2/**/*.json`],
       rules: {
         'description-matches-stoplight': 'info',
         'title-matches-stoplight': 'hint',
       },
     },
     {
-      files: [`${assetId}-v2/**/*.json#/address/street`, `${assetId}-v2/**/*.json#/address/city`],
+      files: [`v2/**/*.json#/address/street`, `v2/**/*.json#/address/city`],
       rules: {
         'title-matches-stoplight': 'warn'
       },
