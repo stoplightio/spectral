@@ -1,0 +1,59 @@
+diff --git a/dist/transform.js b/dist/transform.js
+index a7535512bf40951dc867c0e96e236cf9dde88407..6515f09c2cc50afaff758b007b7b56106ee4bd89 100644
+--- a/dist/transform.js
++++ b/dist/transform.js
+@@ -3,37 +3,19 @@ var babel = require("@babel/core");
+ var acorn = require("acorn");
+ var log4js = require("log4js");
+ var log;
+-var walk;
+ var isEs6 = function (ast) {
+-    var es6NodeFound = false;
+     if (ast.body) {
+-        var visitNode = function (node, state, c) {
+-            if (!es6NodeFound) {
+-                walk.base[node.type](node, state, c);
+-                switch (node.type) {
+-                    case "ArrowFunctionExpression":
+-                    case "ClassDeclaration":
+-                    case "ExportAllDeclaration":
+-                    case "ExportDefaultDeclaration":
+-                    case "ExportNamedDeclaration":
+-                    case "ImportDeclaration":
+-                        es6NodeFound = true;
+-                        break;
+-                    case "VariableDeclaration":
+-                        if (node.kind === "const" || node.kind === "let") {
+-                            es6NodeFound = true;
+-                        }
+-                        break;
+-                    default:
+-                }
++        for (const node of ast.body) {
++            switch (node.type) {
++                case "ExportAllDeclaration":
++                case "ExportDefaultDeclaration":
++                case "ExportNamedDeclaration":
++                case "ImportDeclaration":
++                      return true;
+             }
+-        };
+-        walk.recursive(ast, null, {
+-            Expression: visitNode,
+-            Statement: visitNode
+-        });
++        }
+     }
+-    return es6NodeFound;
++    return false;
+ };
+ var configure = function (options) {
+     options = options || {};
+@@ -71,7 +53,6 @@ var configure = function (options) {
+             }
+         });
+         log = log4js.getLogger("es6-transform.karma-typescript");
+-        walk = require("acorn-walk");
+     };
+     return Object.assign(transform, { initialize: initialize });
+ };
