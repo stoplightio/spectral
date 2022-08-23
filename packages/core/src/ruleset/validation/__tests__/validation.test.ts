@@ -41,13 +41,18 @@ describe('JS Ruleset Validation', () => {
     expect(assertValidRuleset.bind(null, invalidRuleset)).toThrowAggregateError(
       new AggregateError([
         new RulesetValidationError('the rule must have at least "given" and "then" properties', [
-          '/rules/no-given-no-then',
+          'rules',
+          'no-given-no-then',
         ]),
         new RulesetValidationError('allowed types are "style" and "validation"', [
-          '#/rules/rule-with-invalid-enum/type',
+          'rules',
+          'rule-with-invalid-enum',
+          'type',
         ]),
         new RulesetValidationError('the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"', [
-          '#/rules/rule-with-invalid-enum/severity',
+          'rules',
+          'rule-with-invalid-enum',
+          'severity',
         ]),
       ]),
     );
@@ -427,7 +432,7 @@ describe('JS Ruleset Validation', () => {
         [
           new RulesetValidationError(
             'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
-            ['aliases', 'PathItem'],
+            ['aliases', 'PathItem', '0'],
           ),
         ],
       ],
@@ -436,7 +441,7 @@ describe('JS Ruleset Validation', () => {
         [
           new RulesetValidationError(
             'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
-            ['aliases', 'PathItem'],
+            ['aliases', 'PathItem', '0'],
           ),
         ],
       ],
@@ -446,7 +451,7 @@ describe('JS Ruleset Validation', () => {
         [
           new RulesetValidationError(
             'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
-            ['aliases', 'PathItem'],
+            ['aliases', 'PathItem', '0'],
           ),
         ],
       ],
@@ -472,7 +477,10 @@ describe('JS Ruleset Validation', () => {
           }),
         ).toThrowAggregateError(
           new AggregateError([
-            new RulesetValidationError('targets must be present and have at least a single alias definition', []),
+            new RulesetValidationError('targets must be present and have at least a single alias definition', [
+              'aliases',
+              'alias',
+            ]),
           ]),
         );
       });
