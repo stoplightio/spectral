@@ -9,6 +9,18 @@ declare global {
   }
 }
 
+function toPlainObject(ex: unknown): Record<string, unknown> {
+  if (ex instanceof Error) {
+    return {
+      ...ex,
+      message: ex.message,
+      name: ex.name,
+    };
+  }
+
+  return Object(ex);
+}
+
 expect.extend({
   toThrowAggregateError(received, expected) {
     let error: unknown;
@@ -23,11 +35,12 @@ expect.extend({
       error = received;
     }
 
-    expect(error).toBeInstanceOf(Error);
+    expect(error).toEqual(expected);
     expect((error as AggregateError).errors).toEqual(expected.errors);
+    expect((error as AggregateError).errors.map(toPlainObject)).toEqual(expected.errors.map(toPlainObject));
 
     return {
-      message: () => 'All errors matched!',
+      message: (): string => 'All errors matched!',
       pass: true,
     };
   },
