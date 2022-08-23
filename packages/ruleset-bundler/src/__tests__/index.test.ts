@@ -8,8 +8,6 @@ import { runtime } from '../presets/runtime';
 import { browser } from '../presets/browser';
 import { virtualFs } from '../plugins/virtualFs';
 
-jest.mock?.('fs');
-
 describe('Ruleset Bundler', () => {
   let io: IO;
 

@@ -1,5 +1,5 @@
 import { Dictionary } from '@stoplight/types';
-import eval from 'simple-eval';
+import _eval from 'simple-eval';
 
 export type Transformer<V = Record<string, unknown>> = (this: V, ...args: unknown[]) => string;
 
@@ -24,7 +24,7 @@ export class Replacer<V extends Record<string, unknown>> {
 
       if (shouldEvaluate) {
         return String(
-          eval(identifier, {
+          _eval(identifier, {
             ...Object.entries(this.functions).reduce((fns, [name, fn]) => {
               fns[name] = fn.bind(values);
               return fns;

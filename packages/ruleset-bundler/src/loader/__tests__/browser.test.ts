@@ -5,8 +5,6 @@ import { bundleAndLoadRuleset } from '../browser';
 import { IO } from '../../types';
 import { DiagnosticSeverity } from '@stoplight/types';
 
-jest.mock?.('fs');
-
 describe('bundleAndLoadRuleset browser', () => {
   let io: IO;
 
