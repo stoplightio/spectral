@@ -45,8 +45,8 @@
     "prettier": "^2.4.1"
   },
   "scripts": {
-    "pretest": "ts-node ./scripts/generate-test-fixtures.ts && yarn prebuild",
-    "prebuild": "ts-node ./scripts/compile-schemas.ts",
+    "pretest": "ts-node -T ./scripts/generate-test-fixtures.ts && yarn prebuild",
+    "prebuild": "ts-node -T ./scripts/compile-schemas.ts",
     "release": "semantic-release -e semantic-release-monorepo"
   }
 }

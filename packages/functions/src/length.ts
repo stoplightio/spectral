@@ -1,4 +1,3 @@
-import type { Optional } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { printValue } from '@stoplight/spectral-runtime';
 import { isPlainObject } from '@stoplight/json';
@@ -36,7 +35,7 @@ export default createRulesetFunction<unknown[] | Record<string, unknown> | strin
       value = targetVal.length;
     }
 
-    let results: Optional<IFunctionResult[]>;
+    let results: IFunctionResult[] | undefined;
 
     if ('min' in opts && value < opts.min) {
       results = [

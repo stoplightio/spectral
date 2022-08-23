@@ -4,8 +4,6 @@ Respect overrides with rules-only
 const { DiagnosticSeverity } = require('@stoplight/types');
 const { pattern } = require('@stoplight/spectral-functions');
 
-const scenarioId = '{scenarioId}';
-
 module.exports = {
   rules: {
     'description-matches-stoplight': {
@@ -47,14 +45,14 @@ module.exports = {
   },
   overrides: [
     {
-      files: [`${scenarioId}-legacy/**/*.json`],
+      files: [`legacy/**/*.json`],
       rules: {
         'description-matches-stoplight': 'error',
         'title-matches-stoplight': 'warn',
       },
     },
     {
-      files: [`${scenarioId}-v2/**/*.json`],
+      files: [`v2/**/*.json`],
       rules: {
         'description-matches-stoplight': 'info',
         'title-matches-stoplight': 'hint',

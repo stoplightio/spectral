@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.11.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.2...@stoplight/spectral-rulesets-v1.11.3) (2022-08-22)
+
+
+### Bug Fixes
+
+* **rulesets:** bump @stoplight/better-ajv-errors from 1.0.1 to 1.0.3 ([4f55c4f](https://github.com/stoplightio/spectral/commit/4f55c4f7162cc530bc79b617bb52874e3629ea29))
+
 # [@stoplight/spectral-rulesets-v1.11.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.1...@stoplight/spectral-rulesets-v1.11.2) (2022-08-15)
 
 

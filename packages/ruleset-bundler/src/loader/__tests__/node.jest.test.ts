@@ -6,6 +6,8 @@ import { bundleAndLoadRuleset } from '../node';
 import { IO } from '../../types';
 import { DiagnosticSeverity } from '@stoplight/types';
 
+jest.unmock('fs');
+
 describe('bundleAndLoadRuleset node', () => {
   let io: IO;
 

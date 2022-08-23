@@ -10,8 +10,6 @@ import { virtualFs } from '../plugins/virtualFs';
 import { runtime } from '../presets/runtime';
 import { builtins } from '../plugins/builtins';
 
-jest.mock('fs');
-
 describe('Ruleset Bundler', () => {
   let io: IO;
 

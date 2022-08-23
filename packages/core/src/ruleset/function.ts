@@ -93,7 +93,7 @@ export type SchemaDefinition = Schema | boolean;
 
 const DEFAULT_OPTIONS_VALIDATOR = (o: unknown): boolean => o === null;
 
-export function createRulesetFunction<I extends unknown, O extends unknown>(
+export function createRulesetFunction<I, O>(
   {
     input,
     errorOnInvalidInput = false,

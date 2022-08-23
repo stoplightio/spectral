@@ -8,7 +8,12 @@ import {
   RulesetFunctionWithValidator,
   RulesetValidationError,
 } from '@stoplight/spectral-core';
-import { isAggregateError } from '@stoplight/spectral-core/src/guards/isAggregateError';
+
+import { isError } from 'lodash';
+
+function isAggregateError(maybeAggregateError: unknown): maybeAggregateError is Error & { errors: unknown[] } {
+  return isError(maybeAggregateError) && maybeAggregateError.constructor.name === 'AggregateError';
+}
 
 export default async function <O = unknown>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
