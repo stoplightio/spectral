@@ -10,6 +10,7 @@
 - a rule in the ruleset:
   - had an invalid `given`, i.e. the JSON Path expression is not valid from syntax's standpoint
 - the ruleset contains `except` entries and the input is passed through stdin
+- a JSON Path alias cannot be resolved
 
 ### Runtime
 

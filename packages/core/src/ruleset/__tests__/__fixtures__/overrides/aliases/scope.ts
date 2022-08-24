@@ -44,6 +44,9 @@ const ruleset: RulesetDefinition = {
     },
     {
       files: ['legacy/**/*.json'],
+      aliases: {
+        Value: ['$..value'],
+      },
       rules: {
         'falsy-value': {
           given: '#Value',

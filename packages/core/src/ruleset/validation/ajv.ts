@@ -1,4 +1,5 @@
 import Ajv, { _, ValidateFunction } from 'ajv';
+import names from 'ajv/dist/compile/names';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';
 import * as ruleSchema from '../meta/rule.schema.json';
@@ -6,8 +7,8 @@ import * as shared from '../meta/shared.json';
 import * as rulesetSchema from '../meta/ruleset.schema.json';
 import * as jsExtensions from '../meta/js-extensions.json';
 import * as jsonExtensions from '../meta/json-extensions.json';
-
-const message = _`'spectral-message'`;
+import { validateAlias } from './validators/alias';
+import { validateFunction } from './validators/function';
 
 const validators: { [key in 'js' | 'json']: null | ValidateFunction } = {
   js: null,
@@ -26,6 +27,7 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     strictRequired: false,
     keywords: ['$anchor'],
     schemas: [ruleSchema, shared],
+    passContext: true,
   });
   addFormats(ajv);
   addErrors(ajv);
@@ -34,10 +36,10 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     schemaType: 'string',
     error: {
       message(cxt) {
-        return _`${cxt.data}[Symbol.for(${message})]`;
+        return _`${cxt.params?.message !== void 0 ? cxt.params.message : ''}`;
       },
       params(cxt) {
-        return _`${cxt.data}[Symbol.for(${message})] ? { "errors": ${cxt.data}[Symbol.for(${message})].errors || [${cxt.data}[Symbol.for(${message})]] } : {}`;
+        return _`{ errors: ${cxt.params?.errors !== void 0 && cxt.params.errors} || [] }`;
       },
     },
     code(cxt) {
@@ -47,12 +49,26 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
         case 'format':
           cxt.fail(_`typeof ${data} !== "function"`);
           break;
-        case 'ruleset-function':
-          cxt.pass(_`typeof ${data}.function === "function"`);
-          cxt.pass(
-            _`(() => { try { ${data}.function.validator && ${data}.function.validator('functionOptions' in ${data} ? ${data}.functionOptions : null); return true; } catch (e) { ${data}[Symbol.for(${message})] = e; return false; } })()`,
+        case 'ruleset-function': {
+          const fn = cxt.gen.const(
+            'spectralFunction',
+            _`this.validateFunction(${data}.function, ${data}.functionOptions === void 0 ? null : ${data}.functionOptions, ${names.instancePath})`,
           );
+          cxt.gen.if(_`${fn} !== void 0`);
+          cxt.error(false, { errors: fn });
+          cxt.gen.endIf();
           break;
+        }
+        case 'alias': {
+          const alias = cxt.gen.const(
+            'spectralAlias',
+            _`this.validateAlias(${names.rootData}, ${data}, ${names.instancePath})`,
+          );
+          cxt.gen.if(_`${alias} !== void 0`);
+          cxt.error(false, { errors: alias });
+          cxt.gen.endIf();
+          break;
+        }
       }
     },
   });
@@ -63,7 +79,12 @@ export function createValidator(format: 'js' | 'json'): ValidateFunction {
     ajv.addSchema(jsonExtensions);
   }
 
-  const validator = ajv.compile(rulesetSchema);
+  const validator = new Proxy(ajv.compile(rulesetSchema), {
+    apply(target, thisArg, args: unknown[]): unknown {
+      return Reflect.apply(target, { validateAlias, validateFunction }, args);
+    },
+  });
+
   validators[format] = validator;
   return validator;
 }
