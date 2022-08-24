@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.3...@stoplight/spectral-rulesets-v1.12.0) (2022-08-24)
+
+
+### Features
+
+* **rulesets:** check uniqueness of AsyncAPI messages ([#2224](https://github.com/stoplightio/spectral/issues/2224)) ([297531b](https://github.com/stoplightio/spectral/commit/297531bbc6f26393d325a101b59f9e8b1f57e21e))
+
 # [@stoplight/spectral-rulesets-v1.11.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.2...@stoplight/spectral-rulesets-v1.11.3) (2022-08-22)
 
 
