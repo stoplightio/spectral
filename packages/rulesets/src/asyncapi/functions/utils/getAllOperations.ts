@@ -2,15 +2,16 @@ import { isPlainObject } from '@stoplight/json';
 
 import type { JsonPath } from '@stoplight/types';
 
+type OperationObject = Record<string, unknown>;
 type AsyncAPI = {
-  channels?: Record<string, { subscribe?: Record<string, unknown>; publish?: Record<string, unknown> }>;
+  channels?: Record<string, { subscribe?: OperationObject; publish?: OperationObject }>;
 };
-type Operation = { path: JsonPath; kind: 'subscribe' | 'publish'; operation: Record<string, unknown> };
+type Result = { path: JsonPath; kind: 'subscribe' | 'publish'; operation: OperationObject };
 
-export function* getAllOperations(asyncapi: AsyncAPI): IterableIterator<Operation> {
+export function* getAllOperations(asyncapi: AsyncAPI): IterableIterator<Result> {
   const channels = asyncapi?.channels;
   if (!isPlainObject(channels)) {
-    return [];
+    return {};
   }
 
   for (const [channelAddress, channel] of Object.entries(channels)) {
