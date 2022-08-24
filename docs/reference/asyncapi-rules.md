@@ -221,7 +221,7 @@ components:
 
 ### asyncapi-message-messageId-uniqueness
 
-`messageId` must be unique across all the messages (except these one defined in the components).
+`messageId` must be unique across all the messages (except those one defined in the components).
 
 **Recommended:** Yes
 
