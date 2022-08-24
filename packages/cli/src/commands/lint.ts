@@ -209,7 +209,7 @@ const lintCommand: CommandModule = {
       } else if (config.quiet !== true) {
         const isErrorSeverity = getDiagnosticSeverity(failSeverity) === DiagnosticSeverity.Error;
         process.stdout.write(
-          `No results with a severity of '${failSeverity}' ${isErrorSeverity ? '' : 'or higher '}found!`,
+          `No results with a severity of '${failSeverity}' ${isErrorSeverity ? '' : 'or higher '}found!\n`,
         );
       }
     } catch (ex) {
