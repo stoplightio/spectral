@@ -1,5 +1,6 @@
 import type { ErrorObject } from 'ajv';
 import type { IDiagnostic, JsonPath } from '@stoplight/types';
+import { isAggregateError } from '../../guards/isAggregateError';
 
 type RulesetValidationSingleError = Pick<IDiagnostic, 'message' | 'path'>;
 
@@ -24,7 +25,9 @@ export function convertAjvErrors(errors: ErrorObject[]): RulesetValidationError[
 
   l: for (let i = 0; i < sortedErrors.length; i++) {
     const error = sortedErrors[i];
-    const prevError = i === 0 ? null : sortedErrors[i - 1];
+    const prevError = filteredErrors.length === 0 ? null : filteredErrors[filteredErrors.length - 1];
+
+    if (error.keyword === 'if') continue;
 
     if (GENERIC_INSTANCE_PATH.test(error.instancePath)) {
       let x = 1;
@@ -54,7 +57,15 @@ export function convertAjvErrors(errors: ErrorObject[]): RulesetValidationError[
 
   return filteredErrors.flatMap(error =>
     error.keyword === 'x-spectral-runtime'
-      ? (error.params.errors as RulesetValidationError[])
+      ? flatErrors(error.params.errors)
       : new RulesetValidationError(error.message ?? 'unknown error', error.instancePath.slice(1).split('/')),
   );
+}
+
+function flatErrors(error: RulesetValidationError | AggregateError): RulesetValidationError | RulesetValidationError[] {
+  if (isAggregateError(error)) {
+    return error.errors.flatMap(flatErrors);
+  }
+
+  return error;
 }

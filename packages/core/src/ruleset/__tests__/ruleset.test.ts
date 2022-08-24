@@ -1,7 +1,10 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { oas2 } from '@stoplight/spectral-formats';
 import { pattern, truthy } from '@stoplight/spectral-functions';
 import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import AggregateError = require('es-aggregate-error');
 
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
@@ -1266,7 +1269,11 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(ReferenceError('Alias "PathItem-" does not exist'));
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('Alias "PathItem-" does not exist', ['rules', 'valid-path', 'given']),
+        ]),
+      );
     });
 
     it('given circular alias, should throw', () => {
@@ -1288,8 +1295,13 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(
-        ReferenceError('Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info'),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError(
+            'Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info',
+            ['rules', 'valid-path', 'given'],
+          ),
+        ]),
       );
     });
 
@@ -1321,7 +1333,17 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(ReferenceError('Alias "PathItem" does not exist'));
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('Alias "PathItem" does not exist', ['rules', 'valid-path', 'given']),
+          new RulesetValidationError('Alias "Name" does not exist', ['rules', 'valid-name-and-description', 'given']),
+          new RulesetValidationError(`Alias "Description" does not exist`, [
+            'rules',
+            'valid-name-and-description',
+            'given',
+          ]),
+        ]),
+      );
     });
 
     describe('scoped aliases', () => {
