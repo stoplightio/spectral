@@ -1,3 +1,24 @@
+# [@stoplight/spectral-functions-v1.7.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.7.0...@stoplight/spectral-functions-v1.7.1) (2022-08-22)
+
+
+### Bug Fixes
+
+* **functions:** bump stoplight/better-ajv-errors ([bd0c5fb](https://github.com/stoplightio/spectral/commit/bd0c5fb620bfa17341d4541159b3235b733ca316))
+
+# [@stoplight/spectral-functions-v1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.2...@stoplight/spectral-functions-v1.7.0) (2022-08-03)
+
+
+### Features
+
+* **core:** improve validation ([#2026](https://github.com/stoplightio/spectral/issues/2026)) ([8315162](https://github.com/stoplightio/spectral/commit/83151628824592117d842a8965c9557841966b1a))
+
+# [@stoplight/spectral-functions-v1.6.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.1...@stoplight/spectral-functions-v1.6.2) (2022-07-28)
+
+
+### Bug Fixes
+
+* **functions:** handle percent encoded in unreferencedReusableObject([#2212](https://github.com/stoplightio/spectral/issues/2212)) ([d16b5a6](https://github.com/stoplightio/spectral/commit/d16b5a65d1a144ff1752c6ced1af87a343cda068))
+
 # [@stoplight/spectral-functions-v1.6.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.6.0...@stoplight/spectral-functions-v1.6.1) (2022-03-08)
 
 

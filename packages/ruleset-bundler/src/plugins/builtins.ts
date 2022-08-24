@@ -5,7 +5,7 @@ import * as parsers from '@stoplight/spectral-parsers';
 import * as refResolver from '@stoplight/spectral-ref-resolver';
 import * as rulesets from '@stoplight/spectral-rulesets';
 import * as runtime from '@stoplight/spectral-runtime';
-import type { Plugin } from 'rollup';
+import type { Plugin, InputOptions } from 'rollup';
 
 type Module = 'core' | 'formats' | 'functions' | 'parsers' | 'ref-resolver' | 'rulesets' | 'runtime';
 type GlobalModules = Record<`@stoplight/spectral-${Module}`, string>;
@@ -49,6 +49,20 @@ export const builtins = (overrides: Partial<Overrides> = {}): Plugin => {
 
   return {
     name: NAME,
+    options(rawOptions): InputOptions {
+      const external = rawOptions.external;
+
+      if (typeof external === 'function') {
+        return {
+          ...rawOptions,
+          external: <typeof external>(
+            ((id, importer, isResolved) => !(id in modules) && external(id, importer, isResolved))
+          ),
+        };
+      }
+
+      return rawOptions;
+    },
     resolveId(id): string | null {
       if (id in modules) {
         return id;

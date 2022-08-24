@@ -1,4 +1,5 @@
 **/__fixtures__/**
 /test-harness/**/*.yaml
+/test-harness/tests/
 /packages/*/dist
 /packages/*/CHANGELOG.md

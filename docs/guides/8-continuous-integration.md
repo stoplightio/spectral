@@ -47,6 +47,32 @@ Learn more about [CircleCI Configuration](https://circleci.com/docs/2.0/config-i
 
 Spectral has a pre-built [Spectral GitHub Action](https://github.com/stoplightio/spectral-action) which should speed up implementing Spectral in your GitHub repository.
 
+## GitLab
+
+GitLab users can add the following to their `.gitlab-ci.yml` files:
+
+```yaml
+stages:
+  - lint
+
+lint:spectral:
+  stage: lint
+  image:
+    name: stoplight/spectral
+    entrypoint: [""]
+  script:
+    - spectral lint -D -f junit -o spectral-report.xml openapi.yaml
+  artifacts:
+    when: always
+    expire_in: 2 weeks
+    reports:
+      junit: $CI_PROJECT_DIR/spectral-report.xml
+```
+
+Note that this CI job exposes Spectral results on the merge request page, along with any other test output you may have. To ensure that GitLab can parse the output of spectral, we use the `-f junit`flag.
+
+You will also need to edit your `openapi.yaml` file to point to the particular documents you want to lint.
+
 ## Jenkins
 
 Instructions coming soon...

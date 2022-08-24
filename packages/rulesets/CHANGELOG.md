@@ -1,3 +1,24 @@
+# [@stoplight/spectral-rulesets-v1.11.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.2...@stoplight/spectral-rulesets-v1.11.3) (2022-08-22)
+
+
+### Bug Fixes
+
+* **rulesets:** bump @stoplight/better-ajv-errors from 1.0.1 to 1.0.3 ([4f55c4f](https://github.com/stoplightio/spectral/commit/4f55c4f7162cc530bc79b617bb52874e3629ea29))
+
+# [@stoplight/spectral-rulesets-v1.11.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.1...@stoplight/spectral-rulesets-v1.11.2) (2022-08-15)
+
+
+### Bug Fixes
+
+* **rulesets:** __importDefault undefined ([#2243](https://github.com/stoplightio/spectral/issues/2243)) ([660f090](https://github.com/stoplightio/spectral/commit/660f09067e2ca56c401ecfdf8df313986a828f2c))
+
+# [@stoplight/spectral-rulesets-v1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.0...@stoplight/spectral-rulesets-v1.11.1) (2022-07-28)
+
+
+### Bug Fixes
+
+* **functions:** handle percent encoded in unreferencedReusableObject([#2212](https://github.com/stoplightio/spectral/issues/2212)) ([d16b5a6](https://github.com/stoplightio/spectral/commit/d16b5a65d1a144ff1752c6ced1af87a343cda068))
+
 # [@stoplight/spectral-rulesets-v1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.10.0...@stoplight/spectral-rulesets-v1.11.0) (2022-06-30)
 
 

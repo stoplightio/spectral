@@ -14,13 +14,15 @@ Rules might look a bit like this:
 
 ```yaml
 rules:
-  my-rule-name:
-    description: Tags must have a description.
-    given: $.tags[*]
-    severity: error
+  paths-kebab-case:
+    description: Should paths be kebab-case.
+    message: "{{property}} should be kebab-case (lower-case and separated with hyphens)"
+    severity: warn
+    given: $.paths[*]~
     then:
-      field: description
-      function: truthy
+      function: pattern
+      functionOptions:
+        match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
 Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.

@@ -1,1 +1,3 @@
-export { default as uniquenessTags } from './uniquenessTags';
+import { default as uniquenessTags } from './uniquenessTags';
+
+export { uniquenessTags };

@@ -1,4 +1,3 @@
-import type { Optional } from '@stoplight/types';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { printValue } from '@stoplight/spectral-runtime';
 
@@ -55,7 +54,7 @@ export default createRulesetFunction<string, Options>(
     options: optionSchemas.pattern,
   },
   function pattern(targetVal, opts) {
-    let results: Optional<IFunctionResult[]>;
+    let results: IFunctionResult[] | undefined;
 
     if ('match' in opts) {
       const pattern = getFromCache(opts.match);

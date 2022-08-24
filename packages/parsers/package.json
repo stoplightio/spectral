@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-parsers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -21,9 +21,9 @@
     "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
-    "@stoplight/json": "3.17.0",
-    "@stoplight/types": "12.3.0",
-    "@stoplight/yaml": "4.2.2",
+    "@stoplight/json": "~3.20.1",
+    "@stoplight/types": "^13.6.0",
+    "@stoplight/yaml": "~4.2.3",
     "tslib": "^2.3.1"
   }
 }

@@ -1,14 +1,19 @@
-import { truthy } from '@stoplight/spectral-functions';
-import type { Format } from '../../format';
+import '@stoplight/spectral-test-utils/matchers';
 
 import { assertValidRuleset, RulesetValidationError } from '../index';
+import AggregateError = require('es-aggregate-error');
 import invalidRuleset from './__fixtures__/invalid-ruleset';
 import validRuleset from './__fixtures__/valid-flat-ruleset';
 
+import type { Format } from '../../format';
 import { RulesetDefinition, RulesetOverridesDefinition } from '../../types';
 
 const formatA: Format = () => false;
 const formatB: Format = () => false;
+
+function truthy() {
+  // no-op
+}
 
 describe('JS Ruleset Validation', () => {
   it('given primitive type, throws', () => {
@@ -33,10 +38,23 @@ describe('JS Ruleset Validation', () => {
   });
 
   it('given invalid ruleset, throws', () => {
-    expect(assertValidRuleset.bind(null, invalidRuleset)).toThrow(
-      new RulesetValidationError(`Error at #/rules/no-given-no-then: the rule must have at least "given" and "then" properties
-Error at #/rules/rule-with-invalid-enum/type: allowed types are "style" and "validation"
-Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"`),
+    expect(assertValidRuleset.bind(null, invalidRuleset)).toThrowAggregateError(
+      new AggregateError([
+        new RulesetValidationError('the rule must have at least "given" and "then" properties', [
+          'rules',
+          'no-given-no-then',
+        ]),
+        new RulesetValidationError('allowed types are "style" and "validation"', [
+          'rules',
+          'rule-with-invalid-enum',
+          'type',
+        ]),
+        new RulesetValidationError('the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"', [
+          'rules',
+          'rule-with-invalid-enum',
+          'severity',
+        ]),
+      ]),
     );
   });
 
@@ -47,8 +65,8 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
   it.each([false, 2, null, 'foo', '12.foo.com'])(
     'given invalid %s documentationUrl in a rule, throws',
     documentationUrl => {
-      expect(assertValidRuleset.bind(null, { documentationUrl, rules: {} })).toThrow(
-        new RulesetValidationError('Error at #/documentationUrl: must be a valid URL'),
+      expect(assertValidRuleset.bind(null, { documentationUrl, rules: {} })).toThrowAggregateError(
+        new AggregateError([new RulesetValidationError('must be a valid URL', ['documentationUrl'])]),
       );
 
       expect(
@@ -58,12 +76,14 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
               documentationUrl,
               given: '$',
               then: {
-                function: '',
+                function: truthy,
               },
             },
           },
         }),
-      ).toThrow(new RulesetValidationError('Error at #/rules/rule/documentationUrl: must be a valid URL'));
+      ).toThrowAggregateError(
+        new AggregateError([new RulesetValidationError('must be a valid URL', ['rules', 'rule', 'documentationUrl'])]),
+      );
     },
   );
 
@@ -82,25 +102,10 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
             documentationUrl: 'https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/openapi-rules.md',
             given: '$',
             then: {
-              function: '',
+              function: truthy,
             },
           },
         },
-      }),
-    ).not.toThrow();
-  });
-
-  it.each([false, 2, null])('given invalid %s description in a ruleset, throws', description => {
-    expect(assertValidRuleset.bind(null, { description, rules: {} })).toThrow(
-      new RulesetValidationError('Error at #/description: must be string'),
-    );
-  });
-
-  it('recognizes valid description in a ruleset', () => {
-    expect(
-      assertValidRuleset.bind(null, {
-        description: 'This is the ruleset description',
-        rules: {},
       }),
     ).not.toThrow();
   });
@@ -120,7 +125,7 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
           rule: {
             given: '$.info',
             then: {
-              function: 'truthy',
+              function: truthy,
             },
             severity,
           },
@@ -146,19 +151,24 @@ Error at #/rules/rule-with-invalid-enum/severity: the value has to be one of: 0,
     ).not.toThrow();
   });
 
-  it.each<[unknown, string]>([
-    [[[{ rules: {} }, 'test']], `Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`],
+  it.each<[unknown, RulesetValidationError[]]>([
+    [
+      [[{ rules: {} }, 'test']],
+      [new RulesetValidationError('allowed types are "off", "recommended" and "all"', ['extends', '0', '1'])],
+    ],
     [
       [[{ rules: {} }, 'test'], 'foo'],
-      `Error at #/extends/1: must be a valid ruleset
-Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
+      [
+        new RulesetValidationError('must be a valid ruleset', ['extends', '1']),
+        new RulesetValidationError('allowed types are "off", "recommended" and "all"', ['extends', '0', '1']),
+      ],
     ],
-  ])('recognizes invalid array-ish extends syntax %p', (_extends, message) => {
+  ])('recognizes invalid array-ish extends syntax %p', (_extends, errors) => {
     expect(
       assertValidRuleset.bind(null, {
         extends: _extends,
       }),
-    ).toThrow(new RulesetValidationError(message));
+    ).toThrowAggregateError(new AggregateError(errors));
   });
 
   it('recognizes valid ruleset formats syntax', () => {
@@ -173,18 +183,20 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
   it.each([
     [
       [2, 'a'],
-      `Error at #/formats/0: must be a valid format
-Error at #/formats/1: must be a valid format`,
+      new AggregateError([
+        new RulesetValidationError('must be a valid format', ['formats', '0']),
+        new RulesetValidationError('must be a valid format', ['formats', '1']),
+      ]),
     ],
-    [2, 'Error at #/formats: must be an array of formats'],
-    [[''], 'Error at #/formats/0: must be a valid format'],
+    [2, new AggregateError([new RulesetValidationError('must be an array of formats', ['formats'])])],
+    [[''], new AggregateError([new RulesetValidationError('must be a valid format', ['formats', '0'])])],
   ])('recognizes invalid ruleset %p formats syntax', (formats, error) => {
     expect(
       assertValidRuleset.bind(null, {
         formats,
         rules: {},
       }),
-    ).toThrow(new RulesetValidationError(error));
+    ).toThrowAggregateError(error);
   });
 
   it('recognizes valid rule formats syntax', () => {
@@ -195,7 +207,7 @@ Error at #/formats/1: must be a valid format`,
           rule: {
             given: '$.info',
             then: {
-              function: 'truthy',
+              function: truthy,
             },
             formats: [formatA],
           },
@@ -207,10 +219,12 @@ Error at #/formats/1: must be a valid format`,
   it.each([
     [
       [2, 'a'],
-      `Error at #/rules/rule/formats/0: must be a valid format
-Error at #/rules/rule/formats/1: must be a valid format`,
+      new AggregateError([
+        new RulesetValidationError('must be a valid format', ['rules', 'rule', 'formats', '0']),
+        new RulesetValidationError('must be a valid format', ['rules', 'rule', 'formats', '1']),
+      ]),
     ],
-    [2, 'Error at #/rules/rule/formats: must be an array of formats'],
+    [2, new AggregateError([new RulesetValidationError('must be an array of formats', ['rules', 'rule', 'formats'])])],
   ])('recognizes invalid rule %p formats syntax', (formats, error) => {
     expect(
       assertValidRuleset.bind(null, {
@@ -218,13 +232,13 @@ Error at #/rules/rule/formats/1: must be a valid format`,
           rule: {
             given: '$.info',
             then: {
-              function: 'truthy',
+              function: truthy,
             },
             formats,
           },
         },
       }),
-    ).toThrow(new RulesetValidationError(error));
+    ).toThrowAggregateError(error);
   });
 
   describe('overrides validation', () => {
@@ -233,7 +247,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         assertValidRuleset.bind(null, {
           overrides: null,
         }),
-      ).toThrow(new RulesetValidationError('Error at #/overrides: must be array'));
+      ).toThrowAggregateError(new AggregateError([new RulesetValidationError('must be array', ['overrides'])]));
     });
 
     it('given an empty overrides, throws', () => {
@@ -241,7 +255,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         assertValidRuleset.bind(null, {
           overrides: [],
         }),
-      ).toThrow(new RulesetValidationError('Error at #/overrides: must not be empty'));
+      ).toThrowAggregateError(new AggregateError([new RulesetValidationError('must not be empty', ['overrides'])]));
     });
 
     it('given an invalid pattern, throws', () => {
@@ -249,10 +263,13 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         assertValidRuleset.bind(null, {
           overrides: [2],
         }),
-      ).toThrow(
-        new RulesetValidationError(
-          'Error at #/overrides/0: must be a override, i.e. { "files": ["v2/**/*.json"], "rules": {} }',
-        ),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('must be a override, i.e. { "files": ["v2/**/*.json"], "rules": {} }', [
+            'overrides',
+            '0',
+          ]),
+        ]),
       );
     });
 
@@ -261,16 +278,28 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         rules: {},
       };
 
-      it.each<[Partial<RulesetDefinition>, string]>([
-        [{ extends: [rulesetA] }, 'Error at #/overrides/0: must contain rules when JSON Pointers are defined'],
-        [{ formats: [formatB] }, 'Error at #/overrides/0: must contain rules when JSON Pointers are defined'],
+      it.each<[Partial<RulesetDefinition>, RulesetValidationError]>([
+        [
+          { extends: [rulesetA] },
+          new RulesetValidationError('must contain rules when JSON Pointers are defined', ['overrides', '0']),
+        ],
+        [
+          { formats: [formatB] },
+          new RulesetValidationError('must contain rules when JSON Pointers are defined', ['overrides', '0']),
+        ],
         [
           { rules: {}, formats: [formatB] },
-          'Error at #/overrides/0: must not override any other property than rules when JSON Pointers are defined',
+          new RulesetValidationError('must not override any other property than rules when JSON Pointers are defined', [
+            'overrides',
+            '0',
+          ]),
         ],
         [
           { rules: {}, extends: [rulesetA] },
-          'Error at #/overrides/0: must not override any other property than rules when JSON Pointers are defined',
+          new RulesetValidationError('must not override any other property than rules when JSON Pointers are defined', [
+            'overrides',
+            '0',
+          ]),
         ],
         [
           {
@@ -283,7 +312,10 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               },
             },
           },
-          'Error at #/overrides/0/rules/definition: the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+          new RulesetValidationError(
+            'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+            ['overrides', '0', 'rules', 'definition'],
+          ),
         ],
       ])('given an override containing a pointer and %p, throws', (ruleset, error) => {
         expect(
@@ -295,7 +327,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               },
             ],
           }),
-        ).toThrow(new RulesetValidationError(error));
+        ).toThrowAggregateError(new AggregateError([error]));
       });
 
       it.each<RulesetOverridesDefinition>([
@@ -355,7 +387,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
           rules: {},
           aliases: null,
         }),
-      ).toThrow(new RulesetValidationError('Error at #/aliases: must be object'));
+      ).toThrowAggregateError(new AggregateError([new RulesetValidationError('must be object', ['aliases'])]));
     });
 
     it.each([null, 5])('recognizes %p as an invalid type of aliases', value => {
@@ -366,10 +398,13 @@ Error at #/rules/rule/formats/1: must be a valid format`,
             alias: [value],
           },
         }),
-      ).toThrow(
-        new RulesetValidationError(
-          'Error at #/aliases/alias/0: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
-        ),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError(
+            'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+            ['aliases', 'alias', '0'],
+          ),
+        ]),
       );
     });
 
@@ -381,28 +416,46 @@ Error at #/rules/rule/formats/1: must be a valid format`,
             [key]: ['$.foo'],
           },
         }),
-      ).toThrow(
-        new RulesetValidationError(
-          'Error at #/aliases: to avoid confusion the name must match /^[A-Za-z][A-Za-z0-9_-]*$/ regular expression',
-        ),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError(
+            'to avoid confusion the name must match /^[A-Za-z][A-Za-z0-9_-]*$/ regular expression',
+            ['aliases'],
+          ),
+        ]),
       );
     });
 
-    it.each<[unknown[], string]>([
+    it.each<[unknown[], RulesetValidationError[]]>([
       [
         [''],
-        'Error at #/aliases/PathItem/0: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+        [
+          new RulesetValidationError(
+            'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+            ['aliases', 'PathItem', '0'],
+          ),
+        ],
       ],
       [
         ['foo'],
-        'Error at #/aliases/PathItem/0: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+        [
+          new RulesetValidationError(
+            'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+            ['aliases', 'PathItem', '0'],
+          ),
+        ],
       ],
-      [[], 'Error at #/aliases/PathItem: must be a non-empty array of expressions'],
+      [[], [new RulesetValidationError('must be a non-empty array of expressions', ['aliases', 'PathItem'])]],
       [
         [0],
-        'Error at #/aliases/PathItem/0: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+        [
+          new RulesetValidationError(
+            'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+            ['aliases', 'PathItem', '0'],
+          ),
+        ],
       ],
-    ])('given %s value used as an alias, throws', (value, error) => {
+    ])('given %s value used as an alias, throws', (value, errors) => {
       expect(
         assertValidRuleset.bind(null, {
           rules: {},
@@ -410,7 +463,7 @@ Error at #/rules/rule/formats/1: must be a valid format`,
             PathItem: value,
           },
         }),
-      ).toThrow(new RulesetValidationError(error));
+      ).toThrowAggregateError(new AggregateError(errors));
     });
 
     describe('given scoped aliases', () => {
@@ -422,10 +475,13 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               alias: {},
             },
           }),
-        ).toThrow(
-          new RulesetValidationError(
-            'Error at #/aliases/alias: targets must be present and have at least a single alias definition',
-          ),
+        ).toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError('targets must be present and have at least a single alias definition', [
+              'aliases',
+              'alias',
+            ]),
+          ]),
         );
       });
 
@@ -478,7 +534,9 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               },
             },
           }),
-        ).toThrow(new RulesetValidationError('Error at #/aliases/SchemaObject/targets: must be array'));
+        ).toThrowAggregateError(
+          new AggregateError([new RulesetValidationError('must be array', ['aliases', 'SchemaObject', 'targets'])]),
+        );
       });
 
       it('demands some target', () => {
@@ -491,10 +549,14 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               },
             },
           }),
-        ).toThrow(
-          new RulesetValidationError(
-            'Error at #/aliases/SchemaObject/targets: targets must have at least a single alias definition',
-          ),
+        ).toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError('targets must have at least a single alias definition', [
+              'aliases',
+              'SchemaObject',
+              'targets',
+            ]),
+          ]),
         );
       });
 
@@ -508,10 +570,15 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               },
             },
           }),
-        ).toThrow(
-          new RulesetValidationError(
-            'Error at #/aliases/SchemaObject/targets/0: a valid target must contain given and non-empty formats',
-          ),
+        ).toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError('a valid target must contain given and non-empty formats', [
+              'aliases',
+              'SchemaObject',
+              'targets',
+              '0',
+            ]),
+          ]),
         );
       });
 
@@ -534,11 +601,25 @@ Error at #/rules/rule/formats/1: must be a valid format`,
               },
             },
           }),
-        ).toThrow(
-          new RulesetValidationError(
-            `Error at #/aliases/SchemaObject/targets/0/formats/0: must be a valid format
-Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
-          ),
+        ).toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError('must be a valid format', [
+              'aliases',
+              'SchemaObject',
+              'targets',
+              '0',
+              'formats',
+              '0',
+            ]),
+            new RulesetValidationError('must be a valid format', [
+              'aliases',
+              'SchemaObject',
+              'targets',
+              '1',
+              'formats',
+              '1',
+            ]),
+          ]),
         );
       });
 
@@ -561,10 +642,13 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
               },
             },
           }),
-        ).toThrow(
-          new RulesetValidationError(
-            `Error at #/aliases/SchemaObject/targets/1/given/0: must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset`,
-          ),
+        ).toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError(
+              'must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset',
+              ['aliases', 'SchemaObject', 'targets', '1', 'given', '0'],
+            ),
+          ]),
         );
       });
     });
@@ -579,7 +663,7 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
               rule: {
                 given: '$',
                 then: {
-                  function: 'foo',
+                  function: truthy,
                 },
               },
             },
@@ -593,7 +677,7 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
                 given: '$',
                 then: {
                   field: 'test',
-                  function: 'foo',
+                  function: truthy,
                 },
               },
             },
@@ -634,9 +718,17 @@ Error at #/aliases/SchemaObject/targets/1/formats/1: must be a valid format`,
             duplicateKeys: 'foo',
           },
         }),
-      ).toThrow(
-        new RulesetValidationError(`Error at #/parserOptions/duplicateKeys: the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"
-Error at #/parserOptions/incompatibleValues: the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"`),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError(
+            'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+            ['parserOptions', 'duplicateKeys'],
+          ),
+          new RulesetValidationError(
+            'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+            ['parserOptions', 'incompatibleValues'],
+          ),
+        ]),
       );
     });
   });
@@ -657,14 +749,19 @@ describe('JSON Ruleset Validation', () => {
     ).not.toThrow();
   });
 
-  it.each<[unknown, string]>([
-    [[['test', 'test']], `Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`],
+  it.each<[unknown, RulesetValidationError[]]>([
+    [
+      [['test', 'test']],
+      [new RulesetValidationError('allowed types are "off", "recommended" and "all"', ['extends', '0', '1'])],
+    ],
     [
       [['bar', 'test'], {}],
-      `Error at #/extends/1: must be string
-Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
+      [
+        new RulesetValidationError('must be string', ['extends', '1']),
+        new RulesetValidationError(`allowed types are "off", "recommended" and "all"`, ['extends', '0', '1']),
+      ],
     ],
-  ])('recognizes invalid array-ish extends syntax %p', (_extends, message) => {
+  ])('recognizes invalid array-ish extends syntax %p', (_extends, errors) => {
     expect(
       assertValidRuleset.bind(
         null,
@@ -673,7 +770,7 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
         },
         'json',
       ),
-    ).toThrow(new RulesetValidationError(message));
+    ).toThrowAggregateError(new AggregateError(errors));
   });
 
   it('recognizes valid ruleset formats syntax', () => {
@@ -689,15 +786,17 @@ Error at #/extends/0/1: allowed types are "off", "recommended" and "all"`,
     ).not.toThrow();
   });
 
-  it.each([
+  it.each<[unknown, RulesetValidationError[]]>([
     [
       [2, 'a'],
-      `Error at #/formats/0: must be a valid format
-Error at #/formats/1: must be a valid format`,
+      [
+        new RulesetValidationError('must be a valid format', ['formats', '0']),
+        new RulesetValidationError('must be a valid format', ['formats', '1']),
+      ],
     ],
-    [2, 'Error at #/formats: must be an array of formats'],
-    [[''], 'Error at #/formats/0: must be a valid format'],
-  ])('recognizes invalid ruleset %p formats syntax', (formats, error) => {
+    [2, [new RulesetValidationError('must be an array of formats', ['formats'])]],
+    [[''], [new RulesetValidationError('must be a valid format', ['formats', '0'])]],
+  ])('recognizes invalid ruleset %p formats syntax', (formats, errors) => {
     expect(
       assertValidRuleset.bind(
         null,
@@ -707,7 +806,7 @@ Error at #/formats/1: must be a valid format`,
         },
         'json',
       ),
-    ).toThrow(new RulesetValidationError(error));
+    ).toThrowAggregateError(new AggregateError(errors));
   });
 
   it('recognizes valid rule formats syntax', () => {
@@ -731,14 +830,16 @@ Error at #/formats/1: must be a valid format`,
     ).not.toThrow();
   });
 
-  it.each([
+  it.each<[unknown, RulesetValidationError[]]>([
     [
       [2, 'a'],
-      `Error at #/rules/rule/formats/0: must be a valid format
-Error at #/rules/rule/formats/1: must be a valid format`,
+      [
+        new RulesetValidationError('must be a valid format', ['rules', 'rule', 'formats', '0']),
+        new RulesetValidationError('must be a valid format', ['rules', 'rule', 'formats', '1']),
+      ],
     ],
-    [2, 'Error at #/rules/rule/formats: must be an array of formats'],
-  ])('recognizes invalid rule %p formats syntax', (formats, error) => {
+    [2, [new RulesetValidationError('must be an array of formats', ['rules', 'rule', 'formats'])]],
+  ])('recognizes invalid rule %p formats syntax', (formats, errors) => {
     expect(
       assertValidRuleset.bind(
         null,
@@ -755,6 +856,6 @@ Error at #/rules/rule/formats/1: must be a valid format`,
         },
         'json',
       ),
-    ).toThrow(new RulesetValidationError(error));
+    ).toThrowAggregateError(new AggregateError(errors));
   });
 });

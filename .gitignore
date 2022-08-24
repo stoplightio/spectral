@@ -12,6 +12,7 @@ node_modules
 
 packages/cli/binaries
 /test-harness/tmp/
+/test-harness/tests/
 packages/*/dist
 
 # testing
@@ -31,7 +32,6 @@ packages/*/dist
 .vscode
 .idea
 .nyc_output
-.DS_Store
 .awcache
 .cache-loader
 .cache

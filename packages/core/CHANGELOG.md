@@ -1,3 +1,17 @@
+# [@stoplight/spectral-core-v1.13.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.13.0...@stoplight/spectral-core-v1.13.1) (2022-08-22)
+
+
+### Bug Fixes
+
+* **core:** bump @stoplight/better-ajv-errors from 1.0.1 to 1.0.3 ([7f9bcba](https://github.com/stoplightio/spectral/commit/7f9bcba147fb78329bcce1828df560849a0d342e))
+
+# [@stoplight/spectral-core-v1.13.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.4...@stoplight/spectral-core-v1.13.0) (2022-08-03)
+
+
+### Features
+
+* **core:** improve validation ([#2026](https://github.com/stoplightio/spectral/issues/2026)) ([8315162](https://github.com/stoplightio/spectral/commit/83151628824592117d842a8965c9557841966b1a))
+
 # [@stoplight/spectral-core-v1.12.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.3...@stoplight/spectral-core-v1.12.4) (2022-07-21)
 
 
