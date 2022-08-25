@@ -14,7 +14,7 @@ yarn global add @stoplight/spectral-cli
 
 ## Executable Binaries
 
-For users without Node and/or NPM/Yarn, we provide standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). The quickest way to install the appropriate package for your operating system is via this shell script:
+For users without Node.js and/or npm/Yarn, we provide standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). The quickest way to install the appropriate package for your operating system is via this shell script:
 
 ```bash
 curl -L https://raw.github.com/stoplightio/spectral/master/scripts/install.sh | sh

@@ -1,6 +1,6 @@
 # Continuous Integration
 
-Spectral CLI can be run anywhere that NPM packages can be installed and run via CLI, which these days is pretty much any CI solution going.
+Spectral CLI can be run anywhere that npm packages can be installed and run via CLI, which these days is pretty much any CI solution going.
 
 Here are some examples of Spectral in various CI solutions to give you an idea.
 

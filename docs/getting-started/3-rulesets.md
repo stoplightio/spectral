@@ -62,7 +62,7 @@ Rulesets can extend other rulesets using the `extends` property, allowing you to
 extends: spectral:oas
 ```
 
-Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
+Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even npm modules.
 
 ```yaml
 extends:
