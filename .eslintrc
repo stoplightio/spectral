@@ -46,6 +46,7 @@
         "@typescript-eslint/strict-boolean-expressions": "warn",
         "@typescript-eslint/no-throw-literal": "error",
         "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/no-unsafe-argument": "warn",
 
         "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/*.{test,spec}.ts", "**/__tests__/__helpers__/*.ts"] }]
       }

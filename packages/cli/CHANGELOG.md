@@ -1,3 +1,10 @@
+# [@stoplight/spectral-cli-v6.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.5.0...@stoplight/spectral-cli-v6.5.1) (2022-08-24)
+
+
+### Bug Fixes
+
+* **cli:** missing line break ([#2251](https://github.com/stoplightio/spectral/issues/2251)) ([d16bf9a](https://github.com/stoplightio/spectral/commit/d16bf9a2d7bb28932f0ea0ef58b786dc8f471ff1))
+
 # [@stoplight/spectral-cli-v6.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.4.2...@stoplight/spectral-cli-v6.5.0) (2022-08-03)
 
 

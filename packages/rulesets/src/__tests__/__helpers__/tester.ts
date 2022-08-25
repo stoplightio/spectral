@@ -1,5 +1,3 @@
-jest.mock?.('fs');
-
 import { serveAssets } from '@stoplight/spectral-test-utils';
 import { IRuleResult, Spectral, Document, RulesetDefinition } from '@stoplight/spectral-core';
 import { httpAndFileResolver } from '@stoplight/spectral-ref-resolver';

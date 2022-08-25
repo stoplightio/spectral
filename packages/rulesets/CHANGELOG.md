@@ -1,3 +1,17 @@
+# [@stoplight/spectral-rulesets-v1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.3...@stoplight/spectral-rulesets-v1.12.0) (2022-08-24)
+
+
+### Features
+
+* **rulesets:** check uniqueness of AsyncAPI messages ([#2224](https://github.com/stoplightio/spectral/issues/2224)) ([297531b](https://github.com/stoplightio/spectral/commit/297531bbc6f26393d325a101b59f9e8b1f57e21e))
+
+# [@stoplight/spectral-rulesets-v1.11.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.2...@stoplight/spectral-rulesets-v1.11.3) (2022-08-22)
+
+
+### Bug Fixes
+
+* **rulesets:** bump @stoplight/better-ajv-errors from 1.0.1 to 1.0.3 ([4f55c4f](https://github.com/stoplightio/spectral/commit/4f55c4f7162cc530bc79b617bb52874e3629ea29))
+
 # [@stoplight/spectral-rulesets-v1.11.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.1...@stoplight/spectral-rulesets-v1.11.2) (2022-08-15)
 
 

@@ -2,7 +2,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const scopes = ['repo', 'test-harness', 'deps-dev', ...fs.readdirSync(path.join(__dirname, './packages'))];
+const scopes = [
+  'repo',
+  'test-harness',
+  'test-utils',
+  'deps-dev',
+  ...fs.readdirSync(path.join(__dirname, './packages')),
+];
 
 module.exports = {
   extends: ['@commitlint/config-conventional'],

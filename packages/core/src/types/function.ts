@@ -4,7 +4,7 @@ import type { IRule } from '../ruleset/rule';
 import type { IDocument } from '../document';
 import type { JSONSchema7 } from 'json-schema';
 
-export type RulesetFunction<I extends unknown = unknown, O extends unknown = unknown> = (
+export type RulesetFunction<I = unknown, O = unknown> = (
   input: I,
   options: O,
   context: RulesetFunctionContext,
@@ -19,10 +19,7 @@ export type RulesetFunctionContext = {
 
 export type IFunction = RulesetFunction;
 
-export type RulesetFunctionWithValidator<I extends unknown = unknown, O extends unknown = unknown> = RulesetFunction<
-  I,
-  O
-> & {
+export type RulesetFunctionWithValidator<I = unknown, O = unknown> = RulesetFunction<I, O> & {
   validator<O = unknown>(options: unknown): asserts options is O;
   readonly schemas: Readonly<{
     input: Readonly<JSONSchema7> | null;

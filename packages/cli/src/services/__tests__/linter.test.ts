@@ -229,10 +229,6 @@ describe('Linter service', () => {
           run(`lint ${validCustomOas3SpecPath} -r ${invalidNestedRulesetPath}`),
         ).rejects.toThrowAggregateError(
           new AggregateError([
-            new RulesetValidationError('must be equal to one of the allowed values', [
-              'rules',
-              'rule-with-invalid-enum',
-            ]),
             new RulesetValidationError('the rule must have at least "given" and "then" properties', [
               'rules',
               'rule-without-given-nor-them',
@@ -241,10 +237,6 @@ describe('Linter service', () => {
               'rules',
               'rule-with-invalid-enum',
               'type',
-            ]),
-            new RulesetValidationError('must be equal to one of the allowed values', [
-              'rules',
-              'rule-without-given-nor-them',
             ]),
             new RulesetValidationError(
               'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
@@ -265,10 +257,6 @@ describe('Linter service', () => {
       it('outputs "invalid ruleset" error', () => {
         return expect(run(`lint ${validOas3SpecPath} -r ${invalidRulesetPath}`)).rejects.toThrowAggregateError(
           new AggregateError([
-            new RulesetValidationError('must be equal to one of the allowed values', [
-              'rules',
-              'rule-with-invalid-enum',
-            ]),
             new RulesetValidationError('the rule must have at least "given" and "then" properties', [
               'rules',
               'rule-without-given-nor-them',
@@ -277,10 +265,6 @@ describe('Linter service', () => {
               'rules',
               'rule-with-invalid-enum',
               'type',
-            ]),
-            new RulesetValidationError('must be equal to one of the allowed values', [
-              'rules',
-              'rule-without-given-nor-them',
             ]),
             new RulesetValidationError(
               'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',

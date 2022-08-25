@@ -12,6 +12,7 @@ import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
 import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
+import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniqueness';
 import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
@@ -194,6 +195,16 @@ export default {
       ],
       then: {
         function: asyncApi2MessageExamplesValidation,
+      },
+    },
+    'asyncapi-message-messageId-uniqueness': {
+      description: '"messageId" must be unique across all the messages.',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      given: '$',
+      then: {
+        function: asyncApi2MessageIdUniqueness,
       },
     },
     'asyncapi-operation-description': {
