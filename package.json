@@ -104,7 +104,7 @@
     "node-powershell": "^4.0.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "semantic-release": "^18.0.1",
+    "semantic-release": "^19.0.5",
     "semantic-release-monorepo": "^7.0.5",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.2",
