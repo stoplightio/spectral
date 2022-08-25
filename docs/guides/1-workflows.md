@@ -50,7 +50,7 @@ See our [CLI documentation](./2-cli.md) to see what other arguments and options 
 
 ## Continuous Integration
 
-Spectral can be used in any CI environment that runs run NodeJS or our Docker image: Jenkins, CircleCI, GitHub Actions, etc.
+Spectral can be used in any CI environment that runs Node.js or our Docker image: Jenkins, CircleCI, GitHub Actions, etc.
 
 By enabling the JUnit output format when you lint, most CI servers will show visual results helping people realise what mistakes were made and where.
 
