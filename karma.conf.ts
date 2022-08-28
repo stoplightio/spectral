@@ -49,7 +49,7 @@ module.exports = (config: Config): void => {
           },
         },
         acornOptions: {
-          ecmaVersion: 11,
+          ecmaVersion: 13,
         },
         transforms: [
           require('karma-typescript-es6-transform')({
