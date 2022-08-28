@@ -22,7 +22,6 @@ defaults:
   node-versions: &node-versions
     - "14.20.0"
     - "16.17.0"
-    - "18.8.0"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
 
 commands:
