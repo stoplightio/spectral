@@ -31,7 +31,7 @@
     }
   },
   "engines": {
-    "node": "^12.20 || >= 14.13"
+    "node": ">= 14.13"
   },
   "scripts": {
     "release": "semantic-release -e semantic-release-monorepo"
@@ -52,11 +52,11 @@
     "ajv-formats": "~2.1.0",
     "blueimp-md5": "2.18.0",
     "es-aggregate-error": "^1.0.7",
-    "jsonpath-plus": "6.0.1",
+    "jsonpath-plus": "7.1.0",
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
     "minimatch": "3.1.2",
-    "nimma": "0.2.2",
+    "nimma": "0.3.1",
     "pony-cause": "^1.0.0",
     "simple-eval": "1.0.0",
     "tslib": "^2.3.0"

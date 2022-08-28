@@ -20,9 +20,9 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "12.22"
-    - "14.18"
-    - "16.13"
+    - "14.20"
+    - "16.17"
+    - "18.8"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
 
 commands:
