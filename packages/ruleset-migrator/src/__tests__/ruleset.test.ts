@@ -101,7 +101,9 @@ describe('migrator', () => {
     const ruleset = new Ruleset(_module.exports);
 
     expect(Object.keys(ruleset.rules)).toEqual([
-      ...Object.keys(require('@stoplight/spectral-rulesets').oas.rules),
+      ...Object.keys(
+        require('@stoplight/spectral-rulesets').oas.rules as typeof import('@stoplight/spectral-rulesets').oas.rules,
+      ),
       'valid-type',
     ]);
 

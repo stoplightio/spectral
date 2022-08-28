@@ -5,7 +5,7 @@ import { process } from '..';
 import { isString } from '../utils/guards';
 import { dumpJson } from '../utils/ast';
 
-const REPLACEMENTS = {
+const REPLACEMENTS: Record<string, string> = {
   'spectral:oas': 'oas',
   'spectral:asyncapi': 'asyncapi',
 };

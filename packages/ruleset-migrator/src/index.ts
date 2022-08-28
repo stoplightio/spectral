@@ -39,7 +39,7 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   });
 
   const ruleset = await read(filepath, fs, fetch);
-  const hooks = new Set<Hook>();
+  const hooks = new Set<Hook<unknown>>();
   const ctx: TransformerCtx = {
     cwd,
     filepath,
