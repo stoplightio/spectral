@@ -38,9 +38,8 @@ module.exports = (config: Config): void => {
           alias: {
             '@stoplight/spectral-test-utils': require.resolve('./test-utils/browser/index.js'),
             '@stoplight/spectral-test-utils/matchers': path.join(__dirname, './test-utils/matchers.ts'),
-            nimma: require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
-            'nimma/fallbacks': require.resolve('./node_modules/nimma/dist/legacy/cjs/fallbacks/index.js'),
-            'nimma/legacy': require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
+            nimma: require.resolve('./node_modules/nimma/dist/cjs/index.js'),
+            'nimma/fallbacks': require.resolve('./node_modules/nimma/dist/cjs/fallbacks/index.js'),
             'node-fetch': require.resolve('./__karma__/fetch'),
             fs: require.resolve('./__karma__/fs'),
             process: require.resolve('./__mocks__/process'),
