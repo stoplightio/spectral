@@ -1808,21 +1808,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsep-plugin/regex@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@jsep-plugin/regex@npm:1.0.1"
+"@jsep-plugin/regex@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@jsep-plugin/regex@npm:1.0.2"
   peerDependencies:
     jsep: ^0.4.0||^1.0.0
-  checksum: db0f196af5142deb250fca04bdec373dc3d1c3d3a925acddad4dfa0422d89cdfde3fe45c6b0bfe825965c9cbaf7a20c9bb02251c49cf2b84679595b52bc44618
+  checksum: b19f1cb160d5b026f93aeaf586cf506288c4ce588dc7e7b794f1da3ea950e969bdd6b2cfc7e31ad4b9b7860d15db116f7bb0a0cee9d0db59109869312f2fbf92
   languageName: node
   linkType: hard
 
-"@jsep-plugin/ternary@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@jsep-plugin/ternary@npm:1.0.2"
+"@jsep-plugin/ternary@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@jsep-plugin/ternary@npm:1.1.2"
   peerDependencies:
     jsep: ^0.4.0||^1.0.0
-  checksum: f2be94dd194f8c0f2367b457e2b20261f4317be49fad2336bd81b3ee97278e721bf4bc17c0a152c5530460f75bee2d60baeb132b7f50e044bf1352abafa6c7a8
+  checksum: dcecd91d67c35bbd040a0dafd6c8d313587ffae408278c860fc6b75437eeb0feb6202a09d46e55a26513b36c7fd6f357339a23d7905d1b7f8fbb27400d75b974
   languageName: node
   linkType: hard
 
@@ -2541,11 +2541,11 @@ __metadata:
     ajv-formats: ~2.1.0
     blueimp-md5: 2.18.0
     es-aggregate-error: ^1.0.7
-    jsonpath-plus: 6.0.1
+    jsonpath-plus: 7.1.0
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.1.2
-    nimma: 0.2.2
+    nimma: 0.3.1
     nock: ^13.1.0
     pony-cause: ^1.0.0
     simple-eval: 1.0.0
@@ -3822,12 +3822,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.7.5, astring@npm:^1.8.1":
+"astring@npm:^1.7.5":
   version: 1.8.1
   resolution: "astring@npm:1.8.1"
   bin:
     astring: bin/astring
   checksum: 2a86ff8cc0c8f25694865cb8b22cdff784b8a0b115bd970c3def864618f22fe6ea78c3bef3ecdc359b2e5eb254a16d408ab06fa52a44e887b298cbf980a8083c
+  languageName: node
+  linkType: hard
+
+"astring@npm:^1.8.3":
+  version: 1.8.3
+  resolution: "astring@npm:1.8.3"
+  bin:
+    astring: bin/astring
+  checksum: 72fc85de7420ca6edeee15157fd65c5253a8cb1ced979ba66ecc439fa569f1c1cc242e4c0a9fc5a6380bf73fb5ec894dc65cf1dc0f3d1cab8c707b31df7daa1c
   languageName: node
   linkType: hard
 
@@ -8229,10 +8238,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsep@npm:^1.1.2, jsep@npm:^1.2.0":
+"jsep@npm:^1.1.2":
   version: 1.2.0
   resolution: "jsep@npm:1.2.0"
   checksum: 7166871e91f6be3409658b7417955a72bba4341b664e9cf062c9e0150e7f465aedc4d8fbb67e7967e3c224cbb41f155a0c16df489614421578cb96f1ba1c5519
+  languageName: node
+  linkType: hard
+
+"jsep@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "jsep@npm:1.3.6"
+  checksum: e166a8fa453878e0b64cc82025db13bb6d4835b36de892373722f7cecd9cdaed05dc61db090a0d84426783ff0aab419d1719801b2014796beb873030a3c8b12a
   languageName: node
   linkType: hard
 
@@ -8396,10 +8412,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonpath-plus@npm:6.0.1, jsonpath-plus@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "jsonpath-plus@npm:6.0.1"
-  checksum: bddec34b742249c5b38077dfcd8eb479fab4e077943253017326503ce4f527ef66938288c728712fd923907493d6eaba69a43015dc3dd9fdf48d89028ae7f466
+"jsonpath-plus@npm:7.1.0, jsonpath-plus@npm:^6.0.0 || ^7.0.0":
+  version: 7.1.0
+  resolution: "jsonpath-plus@npm:7.1.0"
+  checksum: a4005dc860c6b7e339229842537ceb6eb839d87a3447f989792b9c64f2564bbbd40663515f9481fb5a1b6cb0f988afba5b0b150e0285c463b794a45ed1aaf555
   languageName: node
   linkType: hard
 
@@ -9537,22 +9553,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nimma@npm:0.2.2":
-  version: 0.2.2
-  resolution: "nimma@npm:0.2.2"
+"nimma@npm:0.3.1":
+  version: 0.3.1
+  resolution: "nimma@npm:0.3.1"
   dependencies:
-    "@jsep-plugin/regex": ^1.0.1
-    "@jsep-plugin/ternary": ^1.0.2
-    astring: ^1.8.1
-    jsep: ^1.2.0
-    jsonpath-plus: ^6.0.1
+    "@jsep-plugin/regex": ^1.0.2
+    "@jsep-plugin/ternary": ^1.1.2
+    astring: ^1.8.3
+    jsep: ^1.3.6
+    jsonpath-plus: ^6.0.0 || ^7.0.0
     lodash.topath: ^4.5.2
   dependenciesMeta:
     jsonpath-plus:
       optional: true
     lodash.topath:
       optional: true
-  checksum: 09369253a962e6cdddd37c4994d414a5fa00abc955c4d91946140b45b57465749a9f05663a64812ad5ac70caacb7ca22a8fc7c8db002032d0768c83dbba7b3ad
+  checksum: e477cb66b8f18c04c043b884e993fe921a758f80d1aed292b121b45b0ad0bc98ee26bbbc203d0fe73f910f59ce54fa41a35c98c6c5f3bb616ec9184e94427889
   languageName: node
   linkType: hard
 
