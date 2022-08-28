@@ -1,5 +1,5 @@
-import { parseWithPointers as parseJsonWithPointers, safeStringify } from '@stoplight/json';
-import { parseWithPointers as parseYamlWithPointers } from '@stoplight/yaml';
+import { safeStringify } from '@stoplight/json';
+import * as Parsers from '@stoplight/spectral-parsers';
 import { fetch as defaultFetch } from '@stoplight/spectral-runtime';
 import { dirname, extname, isURL } from '@stoplight/path';
 import { builders as b, namedTypes } from 'ast-types';
@@ -11,12 +11,7 @@ import { Scope, Tree, Modules } from './tree';
 async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<unknown> {
   const input = isURL(filepath) ? await (await fetch(filepath)).text() : await fs.promises.readFile(filepath, 'utf8');
 
-  const { data } =
-    extname(filepath) === '.json'
-      ? parseJsonWithPointers<unknown>(input)
-      : parseYamlWithPointers<unknown>(input, {
-          mergeKeys: true,
-        });
+  const { data } = extname(filepath) === '.json' ? Parsers.Json.parse(input) : Parsers.Yaml.parse(input);
 
   return data;
 }

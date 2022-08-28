@@ -2603,7 +2603,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-parsers@*, @stoplight/spectral-parsers@>=1, @stoplight/spectral-parsers@^1.0.1, @stoplight/spectral-parsers@workspace:packages/parsers":
+"@stoplight/spectral-parsers@*, @stoplight/spectral-parsers@>=1, @stoplight/spectral-parsers@^1.0.1, @stoplight/spectral-parsers@^1.0.2, @stoplight/spectral-parsers@workspace:packages/parsers":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-parsers@workspace:packages/parsers"
   dependencies:
@@ -2662,10 +2662,10 @@ __metadata:
     "@stoplight/spectral-core": "*"
     "@stoplight/spectral-formats": "*"
     "@stoplight/spectral-functions": "*"
+    "@stoplight/spectral-parsers": ^1.0.2
     "@stoplight/spectral-rulesets": "*"
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
-    "@stoplight/yaml": 4.2.3
     "@types/node": "*"
     ast-types: 0.14.2
     astring: ^1.7.5
@@ -2754,7 +2754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/yaml@npm:4.2.3, @stoplight/yaml@npm:^4.2.2, @stoplight/yaml@npm:~4.2.3":
+"@stoplight/yaml@npm:^4.2.2, @stoplight/yaml@npm:~4.2.3":
   version: 4.2.3
   resolution: "@stoplight/yaml@npm:4.2.3"
   dependencies:
