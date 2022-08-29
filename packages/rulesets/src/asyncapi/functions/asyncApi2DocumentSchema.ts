@@ -104,7 +104,7 @@ function getSchema(formats: Set<Format>): Record<string, unknown> | void {
   }
 }
 
-// For optimizing the retrieving/creation of AJV's validation funcition for a given AsyncAPI version.
+// For optimizing the retrieving/creation of AJV's validation function for a given AsyncAPI version.
 // Currently each validation run creates a separate `documentInventory` (needed by `schemaFn`), which serves as an identifier for the weakMap's element of available AJV's validation functions.
 // This variable will always be the same for each validation run, regardless of the number of runs or Spectral instances.
 const CONST_DOCUMENT_INVENTORY: RulesetFunctionContext['documentInventory'] =
