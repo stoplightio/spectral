@@ -3,7 +3,7 @@ import { schema as schemaFn } from '@stoplight/spectral-functions';
 import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
 
 import type { ErrorObject } from 'ajv';
-import type { IFunctionResult, Format } from '@stoplight/spectral-core';
+import type { IFunctionResult, Format, RulesetFunctionContext } from '@stoplight/spectral-core';
 
 // import only 2.X.X AsyncAPI JSON Schemas for better treeshaking
 import * as asyncAPI2_0_0Schema from '@asyncapi/specs/schemas/2.0.0.json';
@@ -75,6 +75,18 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
+function filterRefErrors(errors: IFunctionResult[]) {
+  return errors
+    .filter(err => err.message === 'Property "$ref" is not expected to be here')
+    .map(err => {
+      err.message = 'Referencing here is not allowed';
+      if (err.path && err.path[err.path.length - 1] !== '$ref') {
+        err.path.push('$ref');
+      }
+      return err;
+    });
+}
+
 function getSchema(formats: Set<Format>): Record<string, unknown> | void {
   switch (true) {
     case formats.has(aas2_0):
@@ -92,24 +104,51 @@ function getSchema(formats: Set<Format>): Record<string, unknown> | void {
   }
 }
 
-export default createRulesetFunction<unknown, null>(
+// For optimizing the retrieving/creation of AJV's validation funcition for a given AsyncAPI version.
+// Currently each validation run creates a separate `documentInventory` (needed by `schemaFn`), which serves as an identifier for the weakMap's element of available AJV's validation functions.
+// This variable will always be the same for each validation run, regardless of the number of runs or Spectral instances.
+const CONST_DOCUMENT_INVENTORY: RulesetFunctionContext['documentInventory'] =
+  {} as RulesetFunctionContext['documentInventory'];
+
+export default createRulesetFunction<unknown, { resolved: boolean }>(
   {
     input: null,
-    options: null,
+    options: {
+      type: 'object',
+      properties: {
+        resolved: {
+          type: 'boolean',
+        },
+      },
+      required: ['resolved'],
+    },
   },
-  function asyncApi2DocumentSchema(targetVal, _, context) {
+  function asyncApi2DocumentSchema(targetVal, options, context) {
     const formats = context.document.formats;
     if (formats === null || formats === void 0) return;
 
     const schema = getSchema(formats);
     if (schema === void 0) return;
 
-    const errors = schemaFn(targetVal, { allErrors: true, schema, prepareResults }, context);
+    const errors = schemaFn(
+      targetVal,
+      {
+        allErrors: true,
+        schema,
+        prepareResults: options.resolved ? prepareResults : undefined,
+      },
+      { ...context, documentInventory: CONST_DOCUMENT_INVENTORY },
+    );
 
-    if (Array.isArray(errors)) {
-      applyManualReplacements(errors);
+    if (!Array.isArray(errors)) {
+      return;
     }
 
-    return errors;
+    if (options.resolved) {
+      applyManualReplacements(errors);
+      return errors;
+    } else {
+      return filterRefErrors(errors);
+    }
   },
 );
