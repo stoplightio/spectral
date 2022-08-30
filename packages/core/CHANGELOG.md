@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.14.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.0...@stoplight/spectral-core-v1.14.1) (2022-08-30)
+
+
+### Performance Improvements
+
+* **core:** bump jsonpath-plus to 7.1.0 ([#2259](https://github.com/stoplightio/spectral/issues/2259)) ([aacdcd7](https://github.com/stoplightio/spectral/commit/aacdcd77f0ff38c880f6292904449d0af5e7eed4))
+
 # [@stoplight/spectral-core-v1.14.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.13.1...@stoplight/spectral-core-v1.14.0) (2022-08-24)
 
 
