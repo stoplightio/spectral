@@ -20,8 +20,9 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "14.20.0"
-    - "16.17.0"
+    - "12.22"
+    - "14.18"
+    - "16.13"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
 
 commands:
@@ -161,7 +162,7 @@ jobs:
       node-version:
         type: string
     docker:
-      - image: cimg/node:<< parameters.node-version >>
+      - image: circleci/node:<< parameters.node-version >>
     resource_class: medium
     steps:
       - checkout

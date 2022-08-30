@@ -6,7 +6,7 @@ import { lintNode } from './lintNode';
 import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext } from './types';
 import { Ruleset } from '../ruleset/ruleset';
-import Nimma, { Callback } from 'nimma';
+import Nimma, { Callback } from 'nimma/legacy';
 import { jsonPathPlus } from 'nimma/fallbacks';
 import { isPlainObject } from '@stoplight/json';
 
