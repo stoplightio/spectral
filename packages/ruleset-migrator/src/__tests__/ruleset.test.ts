@@ -181,7 +181,7 @@ describe('migrator', () => {
       },
     });
 
-    await fs.promises.writeFile(
+    await vol.promises.writeFile(
       path.join(cwd, 'ruleset.json'),
       JSON.stringify({
         extends: [
@@ -193,7 +193,7 @@ describe('migrator', () => {
     expect(
       await migrateRuleset(path.join(cwd, 'ruleset.json'), {
         format: 'esm',
-        fs: fs as any,
+        fs: vol as any,
       }),
     ).toEqual(`import {oas} from "@stoplight/spectral-rulesets";
 export default {
