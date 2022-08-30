@@ -3850,16 +3850,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.7.5":
-  version: 1.8.1
-  resolution: "astring@npm:1.8.1"
-  bin:
-    astring: bin/astring
-  checksum: 2a86ff8cc0c8f25694865cb8b22cdff784b8a0b115bd970c3def864618f22fe6ea78c3bef3ecdc359b2e5eb254a16d408ab06fa52a44e887b298cbf980a8083c
-  languageName: node
-  linkType: hard
-
-"astring@npm:^1.8.1":
+"astring@npm:^1.7.5, astring@npm:^1.8.1":
   version: 1.8.3
   resolution: "astring@npm:1.8.3"
   bin:
@@ -8313,14 +8304,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsep@npm:^1.1.2":
-  version: 1.2.0
-  resolution: "jsep@npm:1.2.0"
-  checksum: 7166871e91f6be3409658b7417955a72bba4341b664e9cf062c9e0150e7f465aedc4d8fbb67e7967e3c224cbb41f155a0c16df489614421578cb96f1ba1c5519
-  languageName: node
-  linkType: hard
-
-"jsep@npm:^1.2.0":
+"jsep@npm:^1.1.2, jsep@npm:^1.2.0":
   version: 1.3.6
   resolution: "jsep@npm:1.3.6"
   checksum: e166a8fa453878e0b64cc82025db13bb6d4835b36de892373722f7cecd9cdaed05dc61db090a0d84426783ff0aab419d1719801b2014796beb873030a3c8b12a
