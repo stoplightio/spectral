@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-migrator-v1.7.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.3...@stoplight/spectral-ruleset-migrator-v1.7.4) (2022-08-30)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** http/https uris not followed correctly ([#2247](https://github.com/stoplightio/spectral/issues/2247)) ([573e112](https://github.com/stoplightio/spectral/commit/573e112c694d1876546faf208c53cd2e66c7f713))
+
 # [@stoplight/spectral-ruleset-migrator-v1.7.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.2...@stoplight/spectral-ruleset-migrator-v1.7.3) (2022-03-10)
 
 
