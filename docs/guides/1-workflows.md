@@ -35,7 +35,7 @@ For example, if the API has a bunch of URLs with underscores, then becoming cons
 
 Here's an example of a Spectral Git hook using [Husky](https://github.com/typicode/husky):
 
-```jsonc
+```json
 // package.json
 {
   "husky": {
