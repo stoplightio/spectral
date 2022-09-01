@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -21,13 +21,13 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "dependencies": {
-    "@stoplight/json": "~3.17.0",
-    "@stoplight/ordered-object-literal": "1.0.2",
+    "@stoplight/json": "~3.20.1",
+    "@stoplight/ordered-object-literal": "~1.0.4",
     "@stoplight/path": "1.3.2",
     "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.1.0",
-    "@stoplight/types": "^12.3.0",
-    "@stoplight/yaml": "4.2.2",
+    "@stoplight/types": "^13.6.0",
+    "@stoplight/yaml": "~4.2.3",
     "@types/node": "*",
     "ajv": "^8.6.0",
     "ast-types": "0.14.2",

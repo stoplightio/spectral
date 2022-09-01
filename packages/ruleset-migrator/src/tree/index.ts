@@ -128,11 +128,6 @@ export class Tree {
     if (path.isURL(identifier) || path.isAbsolute(identifier)) {
       resolved = identifier;
       this.#resolvedPaths.add(identifier);
-    } else if (kind === 'ruleset' && isPackageImport(identifier)) {
-      resolved =
-        ctx.npmRegistry !== null
-          ? path.join(ctx.npmRegistry, identifier)
-          : requireResolve?.(identifier, { paths: [ctx.cwd] }) ?? path.join(ctx.cwd, identifier);
     } else if (
       (ctx.npmRegistry !== null && ctx.filepath.startsWith(ctx.npmRegistry)) ||
       isKnownNpmRegistry(ctx.filepath)
@@ -142,6 +137,11 @@ export class Tree {
       // <origin>/<pkg-name>
       // <origin>/<pkg-name>/<asset> where asset can be a custom fn, etc.
       resolved = path.join(ctx.filepath, identifier);
+    } else if (kind === 'ruleset' && !path.isURL(ctx.filepath) && isPackageImport(identifier)) {
+      resolved =
+        ctx.npmRegistry !== null
+          ? path.join(ctx.npmRegistry, identifier)
+          : requireResolve?.(identifier, { paths: [ctx.cwd] }) ?? path.join(ctx.cwd, identifier);
     } else {
       resolved = path.join(ctx.filepath, '..', identifier);
       this.#resolvedPaths.add(resolved);
