@@ -1326,6 +1326,52 @@ responses:: !!foo
     ]);
   });
 
+  test('should handle utf8 surrogate pairs', async () => {
+    const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
+    const ruleset: RulesetDefinition = {
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            function: truthy,
+          },
+        },
+      },
+    };
+
+    const spectral = new Spectral();
+    spectral.setRuleset(new Ruleset(ruleset, { source: path.join(path.dirname(documentUri), 'ruleset.json') }));
+
+    const document = new Document(
+      JSON.stringify({
+        '\uD87E\uDC04-WORKS': {
+          type: null,
+        },
+        '\uD83D-WORKS-AS-WELL': {
+          type: {
+            foo: {
+              type: null,
+            },
+          },
+        },
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+
+    const results = await spectral.run(document);
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['\uD87E\uDC04-WORKS', 'type'],
+      }),
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['\uD83D-WORKS-AS-WELL', 'type', 'foo', 'type'],
+      }),
+    ]);
+  });
+
   describe('Pointers in overrides', () => {
     test('should be supported', async () => {
       const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
