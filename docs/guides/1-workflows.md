@@ -54,6 +54,6 @@ See our [CLI documentation](./2-cli.md) to see what other arguments and options 
 
 Spectral can be used in any CI environment that runs Node.js or our Docker image: Jenkins, CircleCI, GitHub Actions, etc.
 
-By enabling the JUnit output format when you lint, most CI servers will show visual results helping people realize what mistakes were made and where.
+By enabling the JUnit output format when you lint, most CI servers will show visual results helping people realize which mistakes were made and where.
 
 Read our [Continuous Integration guide](8-continuous-integration.md) for more information on setting things up in your CI of choice.

@@ -245,7 +245,7 @@ parserOptions:
 
 Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
 
-Whatever link you provide, the rule name will be appended as an anchor.
+The rule name is appended to the link as an anchor.
 
 ```yaml
 # 👇 This line allows people to find more information

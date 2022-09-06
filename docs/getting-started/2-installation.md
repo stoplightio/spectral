@@ -20,7 +20,7 @@ For users without Node.js and/or npm/Yarn, we provide standalone packages for [a
 curl -L https://raw.github.com/stoplightio/spectral/master/scripts/install.sh | sh
 ```
 
-The binaries do _not_ auto-update, so you will need to run it again to install new versions.
+The binaries do _not_ auto-update, so you will need to run the command again to install new versions.
 
 ## Docker
 

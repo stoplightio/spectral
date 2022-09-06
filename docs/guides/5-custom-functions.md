@@ -266,7 +266,7 @@ As of Spectral 5.4.0, custom functions can also be asynchronous.
 <!-- theme: warning -->
 
 > Ideally linting should always be deterministic, which means if it's run 10 times it should return the same results 10 times. To ensure this is the case, please refrain from introducing any logic that is prone to non-deterministic behavior. Examples of this might be contacting an external service you have no control over, or that is unstable, or that changes the way it responds over time.
-> While, it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchange information, i.e. obtaining a dictionary file, with a locally running server, etc.
+> While it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchange information, i.e. obtaining a dictionary file, with a locally running server, etc.
 
 **functions/dictionary.js**
 
@@ -354,7 +354,7 @@ Custom functions are only available in the ruleset which defines them, so loadin
 
 ## Performance Tips
 
-Try to avoid allocating objects as much as possible if your custom function is very generic, and therefore is expected to be used by plenty of rules.
+Try to avoid allocating objects if your custom function is very generic, and therefore is expected to be used by plenty of rules.
 
 If your document is big, and the JSON path expression is loose (meaning it matches a lot of properties), your function might be called hundreds of thousands of times.
 
