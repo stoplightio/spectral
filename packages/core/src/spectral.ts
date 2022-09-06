@@ -2,7 +2,6 @@ import { stringify } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-resolver';
-import { memoize } from 'lodash';
 
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
@@ -12,8 +11,6 @@ import type { Format, ParserOptions, RulesetDefinition } from './ruleset/index';
 import { Ruleset } from './ruleset/ruleset';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
 import { getDiagnosticSeverity } from './ruleset';
-
-memoize.Cache = WeakMap;
 
 export * from './types';
 
