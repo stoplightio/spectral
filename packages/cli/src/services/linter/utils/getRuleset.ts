@@ -25,10 +25,6 @@ async function getDefaultRulesetFile(): Promise<Optional<string>> {
   return;
 }
 
-function isBasicRuleset(filepath: string): boolean {
-  return /\.(json|ya?ml)$/.test(path.extname(filepath));
-}
-
 function isErrorWithCode(error: Error | (Error & { code: unknown })): error is Error & { code: string } {
   return 'code' in error && typeof error.code === 'string';
 }
@@ -49,7 +45,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   let ruleset: string;
 
   try {
-    if (isBasicRuleset(rulesetFile)) {
+    if (await isBasicRuleset(rulesetFile)) {
       const migratedRuleset = await migrateRuleset(rulesetFile, {
         format: 'esm',
         fs,
@@ -103,4 +99,32 @@ function load(source: string, uri: string): RulesetDefinition {
   }
 
   return m.exports;
+}
+
+function stripSearchFromUrl(url: string): string {
+  try {
+    const { href, search } = new URL(url);
+    return href.slice(0, href.length - search.length);
+  } catch {
+    return url;
+  }
+}
+
+async function isBasicRuleset(uri: string): Promise<boolean> {
+  if (path.isURL(uri)) {
+    uri = stripSearchFromUrl(uri);
+  }
+
+  if (/\.(json|ya?ml)$/.test(path.extname(uri))) {
+    return true;
+  }
+
+  try {
+    const contentType = (await fetch(uri)).headers.get('Content-Type');
+    return (
+      contentType !== null && ['application/yaml', 'text/yaml', 'application/json', 'text/json'].includes(contentType)
+    );
+  } catch {
+    return false;
+  }
 }

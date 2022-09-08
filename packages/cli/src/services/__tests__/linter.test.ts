@@ -313,10 +313,49 @@ describe('Linter service', () => {
           .persist()
           .get('/ruleset.json')
           .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
-            'Content-Type': 'application/yaml',
+            'Content-Type': 'application/json',
           });
 
         const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+
+      it('fallbacks to Content-Type', async () => {
+        nock('http://foo.local')
+          .persist()
+          .get('/ruleset')
+          .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
+            'Content-Type': 'application/json',
+          });
+
+        const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+
+      it('ignores query parameters', async () => {
+        nock('http://foo.local')
+          .persist()
+          .get('/ruleset.json')
+          .query({ token: 'bar' })
+          .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
+            'Content-Type': 'text/plain', // GitHub raw like
+          });
+
+        const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json?token=bar`);
         expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
         expect(output).toEqual(
           expect.not.arrayContaining([
