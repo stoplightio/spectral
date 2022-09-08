@@ -4,8 +4,8 @@ A [ruleset](../getting-started/3-rulesets.md) becomes infinitely more useful whe
 
 To help you out distribute your rulesets among the others, Spectral provides a few ways to load rulesets from a variety of resources:
 
-- via a HTTP server
-- via [NPM](#npm)
+- via an HTTP server
+- via [npm](#npm)
 - via the filesystem
 
 Or mix and match!
@@ -21,7 +21,7 @@ There are various pros and cons to each approach, so see what is right for you.
 
 ## HTTP Server
 
-At its most basic level, a Spectral ruleset is just a JSON or YAML file. It can be hosted anywhere you like: on your web hosting, Amazon S3, or anywhere text files are accessible, and then pulled into your own local ruleset in the filesystem:
+At its most basic level, a Spectral ruleset is just a JSON or YAML file. It can be hosted anywhere you like: on your web hosting, Amazon S3, or anywhere text files are accessible, and then pulled into your local ruleset in the filesystem:
 
 **ruleset.yaml**
 
@@ -44,11 +44,11 @@ As with any ruleset, you can pass these directly to the [Spectral CLI](./2-cli.m
 spectral lint -r https://example.com/some-ruleset.yml
 ```
 
-## NPM
+## npm
 
-As Spectral is a [NPM](https://www.npmjs.com/) package, we support loading rulesets from other NPM packages.
+As Spectral is an [npm](https://www.npmjs.com/) package, we support loading rulesets from other npm packages.
 
-Not only it lets you serve files without a need for hosting your own server or uploading it somewhere else, but also supports versioning out of the box, and makes it easy to bundle a ruleset with custom rulesets.
+Not only does it let you serve files without a need for hosting your own server or uploading it somewhere else, but also supports versioning out of the box, and makes it easy to bundle a ruleset with custom rulesets.
 
 This is a very basic example showing how the directory structure as well as package.json may look like.
 
@@ -116,7 +116,7 @@ extends:
   - example-spectral-ruleset
 ```
 
-Pegging a ruleset on given version is possible through a `package.json`:
+Locking a ruleset on a given version is possible through `package.json`:
 
 ```json
 {
@@ -126,7 +126,7 @@ Pegging a ruleset on given version is possible through a `package.json`:
 }
 ```
 
-If you Spectral in a browser or don't want to install the package, you can also reference that package through the use of CDNs for NPM repository, such as [unpkg.com](https://unpkg.com/):
+If you use Spectral in a browser or don't want to install the package, you can also reference that package through the use of CDNs for npm repositories, such as [unpkg.com](https://unpkg.com/):
 
 ```yaml
 extends:

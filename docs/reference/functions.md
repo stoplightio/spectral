@@ -56,11 +56,11 @@ whitelisted-tags:
 
 ## falsy
 
-The value should be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (!!targetVal)`.
+The value should be `false`, `""`, `0`, `null` or `undefined`. Basically, anything that would not trigger this: `if (!!targetVal)`.
 
 ## length
 
-Count the length of a string an or array, the number of properties in an object, or a numeric value, and define minimum and/or maximum values.
+Count the length of a string or an array, the number of properties in an object, or a numeric value, and define minimum and/or maximum values.
 
 <!-- title: functionOptions -->
 
@@ -69,7 +69,7 @@ Count the length of a string an or array, the number of properties in an object,
 | min  | the minimum length to match | number | no        |
 | max  | the maximum length to match | number | no        |
 
-At the very least `min` or `max` have to be provided. You can specify both as well.
+At the very least `min` or `max` has to be provided. You can specify both as well.
 
 <!-- title: example -->
 
@@ -186,7 +186,7 @@ oas3-api-servers:
 
 ## truthy
 
-The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (targetVal)`.
+The value should not be `false`, `""`, `0`, `null`, or `undefined`. Basically, anything that would not trigger this: `if (targetVal)`.
 
 <!-- title: example -->
 
@@ -205,8 +205,7 @@ important-fields:
 
 ## defined
 
-The value must be defined, meaning it must be anything but `undefined`.
-It's the opposite of what undefined function does.
+The value must be defined, meaning it must be anything but `undefined`. It's the opposite of what the undefined function does.
 
 ## undefined
 

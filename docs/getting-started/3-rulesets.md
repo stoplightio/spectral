@@ -15,7 +15,7 @@ Rules might look a bit like this:
 ```yaml
 rules:
   paths-kebab-case:
-    description: Should paths be kebab-case.
+    description: Paths should be kebab-case.
     message: "{{property}} should be kebab-case (lower-case and separated with hyphens)"
     severity: warn
     given: $.paths[*]~
@@ -62,7 +62,7 @@ Rulesets can extend other rulesets using the `extends` property, allowing you to
 extends: spectral:oas
 ```
 
-Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
+Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even npm modules.
 
 ```yaml
 extends:
@@ -95,7 +95,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `json-schema-2019-09` (`$schema` says this is JSON Schema 2019-09)
 - `json-schema-2020-12` (`$schema` says this is JSON Schema 2020-12)
 
-Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
+Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the `formats` key is here to help.
 
 ```yaml
 rules:
