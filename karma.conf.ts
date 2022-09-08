@@ -42,6 +42,7 @@ module.exports = (config: Config): void => {
             'nimma/fallbacks': require.resolve('./node_modules/nimma/dist/legacy/cjs/fallbacks/index.js'),
             'nimma/legacy': require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
             'node-fetch': require.resolve('./__karma__/fetch'),
+            '^rollup$': 'rollup/dist/rollup.browser.js',
             fs: require.resolve('./__karma__/fs'),
             process: require.resolve('./__mocks__/process'),
             perf_hooks: require.resolve('./__karma__/perf_hooks'),
