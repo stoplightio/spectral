@@ -1,4 +1,4 @@
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
+import { all_aas2, from_aas2_4 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -22,7 +22,7 @@ import asyncApi2Security from './functions/asyncApi2Security';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
-  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4],
+  formats: all_aas2,
   rules: {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
@@ -223,6 +223,23 @@ export default {
         function: asyncApi2MessageIdUniqueness,
       },
     },
+    'asyncapi-message-messageId': {
+      description: 'Message should have a "messageId" field defined.',
+      recommended: true,
+      formats: from_aas2_4,
+      type: 'style',
+      given: [
+        '$.channels.*.[publish,subscribe][?(@property === "message" && @.oneOf == void 0)]',
+        '$.channels.*.[publish,subscribe].message.oneOf.*',
+        '$.components.channels.*.[publish,subscribe][?(@property === "message" && @.oneOf == void 0)]',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*',
+        '$.components.messages.*',
+      ],
+      then: {
+        field: 'messageId',
+        function: truthy,
+      },
+    },
     'asyncapi-operation-description': {
       description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
@@ -244,11 +261,10 @@ export default {
       },
     },
     'asyncapi-operation-operationId': {
-      description: 'Operation must have "operationId".',
-      severity: 'error',
+      description: 'Operation should have a "operationId" field defined.',
       recommended: true,
-      type: 'validation',
-      given: '$.channels[*][publish,subscribe]',
+      type: 'style',
+      given: ['$.channels[*][publish,subscribe]', '$.components.channels[*][publish,subscribe]'],
       then: {
         field: 'operationId',
         function: truthy,

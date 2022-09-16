@@ -259,6 +259,12 @@ channels:
         messageId: turnOffMessage
 ```
 
+### asyncapi-message-messageId
+
+Each Message should have a "messageId" field defined. It is recommended, but still optional. Tools can use it to define function names, class method names and even URL passwords in documentation systems.
+
+**Recommended:** Yes
+
 ### asyncapi-operation-description
 
 Operation objects should have a description.
@@ -297,7 +303,7 @@ channels:
 
 ### asyncapi-operation-operationId
 
-This operation ID is essentially a reference for the operation. Tools may use it for defining function names, class method names, and even URL hashes in documentation systems.
+Each Operation should have a "operationId" field defined. It is recommended, but still optional. Tools can use it to define function names, class method names and even URL passwords in documentation systems.
 
 **Recommended:** Yes
 

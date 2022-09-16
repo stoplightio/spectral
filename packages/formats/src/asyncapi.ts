@@ -39,3 +39,9 @@ aas2_3.displayName = 'AsyncAPI 2.3.x';
 export const aas2_4: Format = (document: unknown): boolean =>
   isAas2(document) && aas2_4Regex.test(String((document as MaybeAAS2).asyncapi));
 aas2_4.displayName = 'AsyncAPI 2.4.x';
+
+export const all_aas2: Format[] = [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4];
+export const from_aas2_1: Format[] = [aas2_1, aas2_2, aas2_3, aas2_4];
+export const from_aas2_2: Format[] = [aas2_2, aas2_3, aas2_4];
+export const from_aas2_3: Format[] = [aas2_3, aas2_4];
+export const from_aas2_4: Format[] = [aas2_4];
