@@ -106,7 +106,36 @@ export default createRulesetFunction({
       },
     ];
   }
-};
+});
+```
+
+You can alo name the custom function by importing `IFunctionResult`. This can help debug any errors as the function name will be printed out in any error messages:
+
+```js
+import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
+
+export default createRulesetFunction({
+  input: null,
+  options: {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      value: true,
+    },
+    required: ['value'],
+  },
+}, function customEquals (input, options): IFunctionResult[] => {
+
+  const { value } = options;
+
+  if (targetVal !== value) {
+    return [
+      {
+        message: `Value must equal ${value}.`,
+      },
+    ];
+  }
+});
 ```
 
 ### input
