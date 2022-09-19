@@ -33,6 +33,121 @@ testRule('asyncapi-message-examples', [
   },
 
   {
+    name: 'valid case (with omitted payload)',
+    document: {
+      asyncapi: '2.0.0',
+      channels: {
+        someChannel: {
+          publish: {
+            message: {
+              headers: {
+                type: 'object',
+              },
+              examples: [
+                {
+                  payload: 'foobar',
+                  headers: {
+                    someKey: 'someValue',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'valid case (with omitted headers)',
+    document: {
+      asyncapi: '2.0.0',
+      channels: {
+        someChannel: {
+          publish: {
+            message: {
+              payload: {
+                type: 'string',
+              },
+              examples: [
+                {
+                  payload: 'foobar',
+                  headers: {
+                    someKey: 'someValue',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'valid case (with omitted paylaod and headers)',
+    document: {
+      asyncapi: '2.0.0',
+      channels: {
+        someChannel: {
+          publish: {
+            message: {
+              examples: [
+                {
+                  payload: 'foobar',
+                  headers: {
+                    someKey: 'someValue',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'valid case (with traits)',
+    document: {
+      asyncapi: '2.0.0',
+      channels: {
+        someChannel: {
+          publish: {
+            message: {
+              payload: {
+                type: 'string',
+              },
+              headers: {
+                type: 'object',
+              },
+              examples: [
+                {
+                  payload: 2137,
+                  headers: {
+                    someKey: 'someValue',
+                  },
+                },
+              ],
+              traits: [
+                {
+                  payload: {
+                    type: 'number',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'invalid case',
     document: {
       asyncapi: '2.0.0',
@@ -190,6 +305,49 @@ testRule('asyncapi-message-examples', [
       {
         message: '"headers" property type must be object',
         path: ['components', 'messages', 'someMessage', 'examples', '0', 'headers'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'invalid case (with traits)',
+    document: {
+      asyncapi: '2.0.0',
+      channels: {
+        someChannel: {
+          publish: {
+            message: {
+              payload: {
+                type: 'number',
+              },
+              headers: {
+                type: 'object',
+              },
+              examples: [
+                {
+                  payload: 2137,
+                  headers: {
+                    someKey: 'someValue',
+                  },
+                },
+              ],
+              traits: [
+                {
+                  payload: {
+                    type: 'string',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"payload" property type must be string',
+        path: ['channels', 'someChannel', 'publish', 'message', 'examples', '0', 'payload'],
         severity: DiagnosticSeverity.Error,
       },
     ],

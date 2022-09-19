@@ -4,6 +4,7 @@ import { schema as schemaFn } from '@stoplight/spectral-functions';
 import type { JsonPath } from '@stoplight/types';
 import type { IFunctionResult, RulesetFunctionContext } from '@stoplight/spectral-core';
 import type { JSONSchema7 } from 'json-schema';
+import { mergeTraits } from './utils/mergeTraits';
 
 interface MessageExample {
   name?: string;
@@ -15,6 +16,7 @@ interface MessageExample {
 export interface MessageFragment {
   payload: unknown;
   headers: unknown;
+  traits?: any[];
   examples?: MessageExample[];
 }
 
@@ -68,6 +70,7 @@ export default createRulesetFunction<MessageFragment, null>(
     options: null,
   },
   function asyncApi2MessageExamplesValidation(targetVal, _, ctx) {
+    targetVal = mergeTraits(targetVal); // first merge all traits of message
     if (!targetVal.examples) return;
     const examples = getMessageExamples(targetVal);
 
@@ -76,7 +79,8 @@ export default createRulesetFunction<MessageFragment, null>(
     for (const example of examples) {
       // validate payload
       if (example.value.payload !== undefined) {
-        const errors = validate(example.value.payload, example.path, 'payload', targetVal.payload, ctx);
+        const payload = targetVal.payload ?? {}; // if payload is undefined we treat it as any schema
+        const errors = validate(example.value.payload, example.path, 'payload', payload, ctx);
         if (Array.isArray(errors)) {
           results.push(...errors);
         }
@@ -84,7 +88,8 @@ export default createRulesetFunction<MessageFragment, null>(
 
       // validate headers
       if (example.value.headers !== undefined) {
-        const errors = validate(example.value.headers, example.path, 'headers', targetVal.headers, ctx);
+        const headers = targetVal.headers ?? {}; // if headers are undefined we treat them as any schema
+        const errors = validate(example.value.headers, example.path, 'headers', headers, ctx);
         if (Array.isArray(errors)) {
           results.push(...errors);
         }
