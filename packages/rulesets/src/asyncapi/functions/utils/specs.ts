@@ -17,6 +17,6 @@ export const specs = {
   '2.5.0': asyncAPI2_5_0Schema,
 };
 
-export function getCopyOfSchema(version: AsyncAPISpecVersion): Record<string, unknown> {
-  return JSON.parse(JSON.stringify(specs[version])) as Record<string, unknown>;
+export function getCopyOfSchema(version: AsyncAPISpecVersion): Record<string, any> {
+  return JSON.parse(JSON.stringify(specs[version])) as Record<string, any>;
 }
