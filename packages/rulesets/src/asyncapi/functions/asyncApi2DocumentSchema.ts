@@ -113,7 +113,7 @@ export default createRulesetFunction<unknown, null>(
     options: null,
   },
   function asyncApi2DocumentSchema(targetVal, _, context) {
-    const formats = context.document.formats;
+    const formats = context.document?.formats;
     if (formats === null || formats === void 0) return;
 
     const schema = getSchema(formats);
