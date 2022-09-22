@@ -497,7 +497,7 @@ export default {
       given: [
         // root
         '$.tags',
-        // root
+        // servers
         '$.servers.*.tags',
         '$.components.servers.*.tags',
         // operations
