@@ -51,6 +51,14 @@ testRule('asyncapi-payload', [
   },
 
   {
+    name: 'valid case (2.5.0 version)',
+    document: produce(document, (draft: any) => {
+      draft.asyncapi = '2.5.0';
+    }),
+    errors: [],
+  },
+
+  {
     name: 'components.messages.{message}.payload is not valid against the AsyncApi2 schema object',
     document: produce(document, (draft: any) => {
       draft.components.messages.aMessage.payload.deprecated = 17;

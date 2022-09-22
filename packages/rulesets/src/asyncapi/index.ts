@@ -1,4 +1,4 @@
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -22,7 +22,7 @@ import asyncApi2Security from './functions/asyncApi2Security';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
-  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4],
+  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5],
   rules: {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
@@ -497,6 +497,9 @@ export default {
       given: [
         // root
         '$.tags',
+        // root
+        '$.servers.*.tags',
+        '$.components.servers.*.tags',
         // operations
         '$.channels.*.[publish,subscribe].tags',
         '$.components.channels.*.[publish,subscribe].tags',

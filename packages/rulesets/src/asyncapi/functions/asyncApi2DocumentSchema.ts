@@ -1,16 +1,12 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5 } from '@stoplight/spectral-formats';
+
+import { getCopyOfSchema } from './utils/specs';
 
 import type { ErrorObject } from 'ajv';
 import type { IFunctionResult, Format } from '@stoplight/spectral-core';
-
-// import only 2.X.X AsyncAPI JSON Schemas for better treeshaking
-import * as asyncAPI2_0_0Schema from '@asyncapi/specs/schemas/2.0.0.json';
-import * as asyncAPI2_1_0Schema from '@asyncapi/specs/schemas/2.1.0.json';
-import * as asyncAPI2_2_0Schema from '@asyncapi/specs/schemas/2.2.0.json';
-import * as asyncAPI2_3_0Schema from '@asyncapi/specs/schemas/2.3.0.json';
-import * as asyncAPI2_4_0Schema from '@asyncapi/specs/schemas/2.4.0.json';
+import type { AsyncAPISpecVersion } from './utils/specs';
 
 export const asyncApiSpecVersions = ['2.0.0', '2.1.0', '2.2.0', '2.3.0', '2.4.0'];
 export const latestAsyncApiVersion = asyncApiSpecVersions[asyncApiSpecVersions.length - 1];
@@ -75,18 +71,37 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
+const serializedSchemas = new Map<AsyncAPISpecVersion, Record<string, unknown>>();
+function getSerializedSchema(version: AsyncAPISpecVersion): Record<string, unknown> {
+  const schema = serializedSchemas.get(version);
+  if (schema) {
+    return schema;
+  }
+
+  // Copy to not operate on the original json schema - between imports (in different modules) we operate on this same schema.
+  const copied = getCopyOfSchema(version);
+  // Remove the meta schemas because they are already present within Ajv, and it's not possible to add duplicated schemas.
+  delete copied.definitions!['http://json-schema.org/draft-07/schema'];
+  delete copied.definitions!['http://json-schema.org/draft-04/schema'];
+
+  serializedSchemas.set(version, copied);
+  return copied;
+}
+
 function getSchema(formats: Set<Format>): Record<string, unknown> | void {
   switch (true) {
-    case formats.has(aas2_0):
-      return asyncAPI2_0_0Schema;
-    case formats.has(aas2_1):
-      return asyncAPI2_1_0Schema;
-    case formats.has(aas2_2):
-      return asyncAPI2_2_0Schema;
-    case formats.has(aas2_3):
-      return asyncAPI2_3_0Schema;
+    case formats.has(aas2_5):
+      return getSerializedSchema('2.5.0');
     case formats.has(aas2_4):
-      return asyncAPI2_4_0Schema;
+      return getSerializedSchema('2.4.0');
+    case formats.has(aas2_3):
+      return getSerializedSchema('2.3.0');
+    case formats.has(aas2_2):
+      return getSerializedSchema('2.2.0');
+    case formats.has(aas2_1):
+      return getSerializedSchema('2.1.0');
+    case formats.has(aas2_0):
+      return getSerializedSchema('2.0.0');
     default:
       return;
   }
