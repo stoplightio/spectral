@@ -23,9 +23,9 @@ addFormats(ajv);
  * To validate the schema of the payload we just need a small portion of official AsyncAPI spec JSON Schema, the Schema Object in particular. The definition of Schema Object must be
  * included in the returned JSON Schema.
  */
-function preparePayloadSchema(version: AsyncAPISpecVersion): Record<string, any> {
+function preparePayloadSchema(version: AsyncAPISpecVersion): Record<string, unknown> {
   // Copy to not operate on the original json schema - between imports (in different modules) we operate on this same schema.
-  const copied = getCopyOfSchema(version);
+  const copied = getCopyOfSchema(version) as { definitions: Record<string, unknown> };
   // Remove the meta schemas because they are already present within Ajv, and it's not possible to add duplicated schemas.
   delete copied.definitions['http://json-schema.org/draft-07/schema'];
   delete copied.definitions['http://json-schema.org/draft-04/schema'];
