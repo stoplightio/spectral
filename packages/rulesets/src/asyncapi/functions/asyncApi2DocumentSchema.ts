@@ -81,8 +81,8 @@ function getSerializedSchema(version: AsyncAPISpecVersion): Record<string, unkno
   // Copy to not operate on the original json schema - between imports (in different modules) we operate on this same schema.
   const copied = getCopyOfSchema(version);
   // Remove the meta schemas because they are already present within Ajv, and it's not possible to add duplicated schemas.
-  delete copied.definitions!['http://json-schema.org/draft-07/schema'];
-  delete copied.definitions!['http://json-schema.org/draft-04/schema'];
+  delete copied!.definitions!['http://json-schema.org/draft-07/schema'];
+  delete copied!.definitions!['http://json-schema.org/draft-04/schema'];
 
   serializedSchemas.set(version, copied);
   return copied;
