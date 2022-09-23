@@ -12,6 +12,9 @@ import * as asyncAPI2_2_0Schema from '@asyncapi/specs/schemas/2.2.0.json';
 import * as asyncAPI2_3_0Schema from '@asyncapi/specs/schemas/2.3.0.json';
 import * as asyncAPI2_4_0Schema from '@asyncapi/specs/schemas/2.4.0.json';
 
+export const asyncApiSpecVersions = ['2.0.0', '2.1.0', '2.2.0', '2.3.0', '2.4.0'];
+export const latestAsyncApiVersion = asyncApiSpecVersions[asyncApiSpecVersions.length - 1];
+
 function shouldIgnoreError(error: ErrorObject): boolean {
   return (
     // oneOf is a fairly error as we have 2 options to choose from for most of the time.
