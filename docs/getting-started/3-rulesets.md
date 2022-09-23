@@ -6,7 +6,7 @@ These rules are taking parameters, and calling functions on certain parts of ano
 
 ## Anatomy of a Ruleset
 
-A ruleset is a JSON or YAML file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
+A ruleset is a JSON, YAML, or JavaScript file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
 
 ### Rules
 
