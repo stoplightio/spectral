@@ -10,7 +10,7 @@ import {
 
 import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
-import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
+import asyncApi2DocumentSchema, { latestAsyncApiVersion } from './functions/asyncApi2DocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniqueness';
 import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
@@ -170,6 +170,22 @@ export default {
       then: {
         field: 'info.license',
         function: truthy,
+      },
+    },
+    'asyncapi-latest-version': {
+      description: 'Checking if the AsyncAPI document is using the latest version.',
+      message: `The latest version is not used. You should update to the "${latestAsyncApiVersion}" version.`,
+      recommended: true,
+      type: 'style',
+      severity: 'info',
+      given: '$.asyncapi',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            const: latestAsyncApiVersion,
+          },
+        },
       },
     },
     'asyncapi-message-examples': {

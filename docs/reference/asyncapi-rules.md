@@ -174,6 +174,12 @@ info:
     name: MIT
 ```
 
+### asyncapi-latest-version
+
+Checking if the AsyncAPI document is using the latest version.
+
+**Recommended:** Yes
+
 ### asyncapi-message-examples
 
 All `examples` in message object should follow `payload` and `headers` schemas.
