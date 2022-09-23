@@ -291,9 +291,9 @@ If none of the [core functions](../reference/functions.md) do what you want, you
 
 ## Alternative JS Ruleset Format
 
-Spectral v6.0 added support for an alternative ruleset format, similar to the JSON and YAML formats, but now entirely in Javascript.
+Spectral v6.0 added support for a JavaScript ruleset format, similar to the JSON and YAML formats.
 
-This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries like normal, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
+This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
 
 **Example**
 
@@ -336,8 +336,6 @@ export default {
 This code example adds two rules: `valid-rule` and `only-new-json-schema`, things should look fairly familiar for anyone who has used the JSON or YAML formats.
 
 For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
-
-For now the JSON, YAML, and JS formats are all being maintained, and there are no current plans to drop support for any of them.
 
 ## Aliases
 
