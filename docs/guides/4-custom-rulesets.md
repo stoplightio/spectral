@@ -567,20 +567,20 @@ import { oas3 } from "@stoplight/spectral-formats";
 
 export default {
   rules: {
-    'api-home-get': {
-      description: 'APIs root path (`/`) MUST have a GET operation.',
+    "api-home-get": {
+      description: "APIs root path (`/`) MUST have a GET operation.",
       message: "Otherwise people won't know how to get it.",
       given: "$.paths[/]",
       then: {
         field: "get",
         function: truthy,
       },
-      severity: 'warn',
+      severity: "warn",
     },
 
     // Author: Phil Sturgeon (https://github.com/philsturgeon)
-    'no-numeric-ids': {
-      description: 'Avoid exposing IDs as an integer, UUIDs are preferred.',
+    "no-numeric-ids": {
+      description: "Avoid exposing IDs as an integer, UUIDs are preferred.",
       given: '$.paths..parameters[*].[?(@property === "name" && (@ === "id" || @.match(/(_id|Id)$/)))]^.schema',
       then: {
         function: schema,
@@ -590,36 +590,36 @@ export default {
             not: {
               properties: {
                 type: {
-                  const: "integer"
-                }
-              }
+                  const: "integer",
+                },
+              },
             },
             properties: {
               format: {
-                const: 'uuid'
-              }
-            }
-          }
-        }
+                const: "uuid",
+              },
+            },
+          },
+        },
       },
-      severity: 'error',
+      severity: "error",
     },
 
     // Author: Nauman Ali (https://github.com/naumanali-stoplight)
-    'no-global-versioning': {
-      description: 'Using global versions just forces all your clients to do a lot more work for each upgrade. Please consider using API Evolution instead.',
-      message: 'Server URL should not contain global versions',
+    "no-global-versioning": {
+      description: "Using global versions just forces all your clients to do a lot more work for each upgrade. Please consider using API Evolution instead.",
+      message: "Server URL should not contain global versions",
       given: "$.servers[*].url",
       then: {
         function: pattern,
         functionOptions: {
-          notMatch: '/v[1-9]'
-        }
+          notMatch: "/v[1-9]",
+        },
       },
       formats: [oas3],
-      severity: 'warn',
-    }
-  }
+      severity: "warn",
+    },
+  },
 };
 ```
 
