@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.13.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.12.0...@stoplight/spectral-rulesets-v1.13.0) (2022-09-26)
+
+
+### Features
+
+* **rulesets:** add rule to check if the AsyncAPI document is using the latest version ([#2282](https://github.com/stoplightio/spectral/issues/2282)) ([366779f](https://github.com/stoplightio/spectral/commit/366779f8b3029cbe474df91356ce0ba13ff0f369))
+
 # [@stoplight/spectral-rulesets-v1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.11.3...@stoplight/spectral-rulesets-v1.12.0) (2022-08-24)
 
 
