@@ -289,56 +289,6 @@ Several functions [are provided by default](../reference/functions.md) for your 
 
 If none of the [core functions](../reference/functions.md) do what you want, you can [write your own custom functions](./5-custom-functions.md).
 
-## Alternative JS Ruleset Format
-
-Spectral v6.0 added support for an alternative ruleset format, similar to the JSON and YAML formats, but now entirely in Javascript.
-
-This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries like normal, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
-
-**Example**
-
-```js
-//you can import popular functions from libraries
-import { isObject } from "https://cdn.jsdelivr.net/npm/lodash-es/+esm";
-import { truthy, schema } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions/+esm";
-// you can stick to an older version if you want to for some reason. That's fine
-import { alphabetical } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions@1.0.4/+esm";
-import { oasRuleset } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-rulesets/+esm";
-import { oas2 } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-formats/+esm";
-
-import { verifyType } from "./verifyType.mjs";
-
-const $SCHEMA_DRAFT_2020_XX_REGEX = /^https?:\/\/json-schema.org\/draft\/2020-\d\d\/(?:hyper-)?schema#?$/;
-
-const JSONSchemaDraft2020_XX = document => isObject(document) && "$schema" in document && $SCHEMA_DRAFT_2020_XX_REGEX.test(document.$schema);
-
-export default {
-  formats: [oas2, oas3],
-  extends: [oasRuleset],
-  rules: {
-    "valid-rule": {
-      given: "$.info",
-      then: {
-        function: truthy,
-      },
-    },
-    "only-new-json-schema": {
-      formats: [JSONSchemaDraft2020_XX],
-      given: "$..type",
-      then: {
-        function: verifyType,
-      },
-    },
-  },
-};
-```
-
-This code example adds two rules: `valid-rule` and `only-new-json-schema`, things should look fairly familiar for anyone who has used the JSON or YAML formats.
-
-For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
-
-For now the JSON, YAML, and JS formats are all being maintained, and there are no current plans to drop support for any of them.
-
 ## Aliases
 
 Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSONPath expressions across various rules.
@@ -578,3 +528,114 @@ While executing `spectral lint User.yaml` will output:
 ```
 No results with a severity of 'error' or higher found!
 ```
+
+## Alternative JS Ruleset Format
+
+Spectral v6.0 added support for a JavaScript ruleset format, similar to the JSON and YAML formats.
+
+This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
+
+**Example**
+
+To create a JavaScript ruleset, the first step is creating a folder. In your terminal, run the following commands:
+
+```
+mkdir style-guide
+cd style-guide
+```
+
+Next, install two dependencies using [npm](https://www.npmjs.com/):
+
+```
+npm install --save @stoplight/spectral-functions
+npm install --save @stoplight/spectral-formats
+```
+
+Installing these packages is not required for creating a JavaScript ruleset, but we'll use them in our example to create some common rules used with Spectral and to target a specific OpenAPI format.
+
+Next, let's create a JavaScript file to hold our ruleset:
+
+```
+touch spectral.js
+```
+
+And inside the file, let's create a couple rules:
+
+```js
+import { truthy, undefined as pattern, schema } from "@stoplight/spectral-functions";
+import { oas3 } from "@stoplight/spectral-formats";
+
+export default {
+  rules: {
+    "api-home-get": {
+      description: "APIs root path (`/`) MUST have a GET operation.",
+      message: "Otherwise people won't know how to get it.",
+      given: "$.paths[/]",
+      then: {
+        field: "get",
+        function: truthy,
+      },
+      severity: "warn",
+    },
+
+    // Author: Phil Sturgeon (https://github.com/philsturgeon)
+    "no-numeric-ids": {
+      description: "Avoid exposing IDs as an integer, UUIDs are preferred.",
+      given: '$.paths..parameters[*].[?(@property === "name" && (@ === "id" || @.match(/(_id|Id)$/)))]^.schema',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: "object",
+            not: {
+              properties: {
+                type: {
+                  const: "integer",
+                },
+              },
+            },
+            properties: {
+              format: {
+                const: "uuid",
+              },
+            },
+          },
+        },
+      },
+      severity: "error",
+    },
+
+    // Author: Nauman Ali (https://github.com/naumanali-stoplight)
+    "no-global-versioning": {
+      description: "Using global versions just forces all your clients to do a lot more work for each upgrade. Please consider using API Evolution instead.",
+      message: "Server URL should not contain global versions",
+      given: "$.servers[*].url",
+      then: {
+        function: pattern,
+        functionOptions: {
+          notMatch: "/v[1-9]",
+        },
+      },
+      formats: [oas3],
+      severity: "warn",
+    },
+  },
+};
+```
+
+For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
+
+This code example should look fairly familiar for anyone who has used the JSON or YAML formats. The next steps for using this ruleset would be publishing it as an npm package, and then installing that package as part of your API project and referencing in your Spectral ruleset as:
+
+```
+extends: ["@your-js-ruleset"]
+```
+
+Or using unpkg:
+
+```
+extends:
+  - https://unpkg.com/@your-js-ruleset
+```
+
+For a more detailed example of creating a JavaScript ruleset and publishing it to npm, check out [Distribute Spectral Style Guides with npm](https://apisyouwonthate.com/blog/distribute-spectral-style-guides-with-npm) at APIs You Won't Hate.

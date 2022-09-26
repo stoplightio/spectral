@@ -1,12 +1,12 @@
 # Rulesets
 
-Rulesets are collections of rules written in JSON or YAML, which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
+Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
 
 These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
 
 ## Anatomy of a Ruleset
 
-A ruleset is a JSON or YAML file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
+A ruleset is a JSON, YAML, or JavaScript file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
 
 ### Rules
 
