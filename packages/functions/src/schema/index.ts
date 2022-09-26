@@ -12,10 +12,14 @@ export type Options = {
   schema: Record<string, unknown> | JSONSchema;
   allErrors?: boolean;
   dialect?: 'auto' | 'draft4' | 'draft6' | 'draft7' | 'draft2019-09' | 'draft2020-12';
+  uniqueId?: object;
   prepareResults?(errors: ErrorObject[]): void;
 };
 
-const instances = new WeakMap<RulesetFunctionContext['documentInventory'], ReturnType<typeof createAjvInstances>>();
+const instances = new WeakMap<
+  object | RulesetFunctionContext['documentInventory'],
+  ReturnType<typeof createAjvInstances>
+>();
 
 export default createRulesetFunction<unknown, Options>(
   {
@@ -32,10 +36,11 @@ export default createRulesetFunction<unknown, Options>(
       ];
     }
 
+    const uniqueId = opts.uniqueId ?? documentInventory;
     const assignAjvInstance =
-      instances.get(documentInventory) ??
+      instances.get(uniqueId) ??
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      instances.set(documentInventory, createAjvInstances()).get(documentInventory)!;
+      instances.set(uniqueId, createAjvInstances()).get(uniqueId)!;
 
     const results: IFunctionResult[] = [];
 

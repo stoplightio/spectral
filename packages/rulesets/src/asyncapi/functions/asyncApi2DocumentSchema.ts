@@ -3,7 +3,7 @@ import { schema as schemaFn } from '@stoplight/spectral-functions';
 import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
 
 import type { ErrorObject } from 'ajv';
-import type { IFunctionResult, Format, RulesetFunctionContext } from '@stoplight/spectral-core';
+import type { IFunctionResult, Format } from '@stoplight/spectral-core';
 
 // import only 2.X.X AsyncAPI JSON Schemas for better treeshaking
 import * as asyncAPI2_0_0Schema from '@asyncapi/specs/schemas/2.0.0.json';
@@ -75,7 +75,7 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
-function filterRefErrors(errors: IFunctionResult[]) {
+function filterAndSerializeRefErrors(errors: IFunctionResult[]) {
   return errors
     .filter(err => err.message === 'Property "$ref" is not expected to be here')
     .map(err => {
@@ -105,10 +105,7 @@ function getSchema(formats: Set<Format>): Record<string, unknown> | void {
 }
 
 // For optimizing the retrieving/creation of AJV's validation function for a given AsyncAPI version.
-// Currently each validation run creates a separate `documentInventory` (needed by `schemaFn`), which serves as an identifier for the weakMap's element of available AJV's validation functions.
-// This variable will always be the same for each validation run, regardless of the number of runs or Spectral instances.
-const CONST_DOCUMENT_INVENTORY: RulesetFunctionContext['documentInventory'] =
-  {} as RulesetFunctionContext['documentInventory'];
+const UNIQUE_AJV_ID = {};
 
 export default createRulesetFunction<unknown, { resolved: boolean }>(
   {
@@ -123,8 +120,8 @@ export default createRulesetFunction<unknown, { resolved: boolean }>(
       required: ['resolved'],
     },
   },
-  function asyncApi2DocumentSchema(targetVal, options, context) {
-    const formats = context.document.formats;
+  function asyncApi2DocumentSchema(targetVal, options, ctx) {
+    const formats = ctx.document.formats;
     if (formats === null || formats === void 0) return;
 
     const schema = getSchema(formats);
@@ -136,8 +133,9 @@ export default createRulesetFunction<unknown, { resolved: boolean }>(
         allErrors: true,
         schema,
         prepareResults: options.resolved ? prepareResults : undefined,
+        uniqueId: UNIQUE_AJV_ID,
       },
-      { ...context, documentInventory: CONST_DOCUMENT_INVENTORY },
+      ctx,
     );
 
     if (!Array.isArray(errors)) {
@@ -148,7 +146,7 @@ export default createRulesetFunction<unknown, { resolved: boolean }>(
       applyManualReplacements(errors);
       return errors;
     } else {
-      return filterRefErrors(errors);
+      return filterAndSerializeRefErrors(errors);
     }
   },
 );

@@ -33,7 +33,7 @@ testRule('asyncapi-schema', [
   },
 
   {
-    name: 'valid case (case when other errors should also occur but we filter them out - operations cannot be references)',
+    name: 'valid case (case when other errors should also occur but we filter them out)',
     document: {
       asyncapi: '2.0.0',
       info: {

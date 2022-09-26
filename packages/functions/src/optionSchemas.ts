@@ -168,6 +168,11 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         default: false,
         description: 'Returns all errors when true; otherwise only returns the first error.',
       },
+      uniqueId: {
+        type: 'object',
+        description:
+          'Assigns a unique id (by reference to the JS object) to a schema. It is used to optimize the creation of a validation function for a given schema; a given function will be stored by given id and retrieved between execution of validation.',
+      },
       prepareResults: {
         'x-internal': true,
       },
