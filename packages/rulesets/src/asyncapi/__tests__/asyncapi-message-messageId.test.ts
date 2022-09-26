@@ -43,6 +43,33 @@ testRule('asyncapi-message-messageId', [
   },
 
   {
+    name: 'valid case (with traits)',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        one: {
+          publish: {
+            message: {
+              traits: [
+                {},
+                {
+                  messageId: 'firstId',
+                },
+              ],
+            },
+          },
+          subscribe: {
+            message: {
+              messageId: 'secondId',
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'invalid case',
     document: {
       asyncapi: '2.4.0',
@@ -89,6 +116,14 @@ testRule('asyncapi-message-messageId', [
                   messageId: 'someId',
                 },
                 {},
+                {
+                  traits: [
+                    {},
+                    {
+                      messageId: 'anotherId',
+                    },
+                  ],
+                },
               ],
             },
           },
@@ -109,6 +144,34 @@ testRule('asyncapi-message-messageId', [
       {
         message: 'Message should have a "messageId" field defined.',
         path: ['channels', 'one', 'subscribe', 'message', 'oneOf', '2'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'invalid case (with traits)',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        one: {
+          publish: {
+            message: {
+              traits: [{}, {}],
+            },
+          },
+          subscribe: {
+            message: {
+              messageId: 'secondId',
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Message should have a "messageId" field defined.',
+        path: ['channels', 'one', 'publish', 'message'],
         severity: DiagnosticSeverity.Warning,
       },
     ],

@@ -1,4 +1,4 @@
-import { all_aas2, from_aas2_4 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -10,6 +10,7 @@ import {
 
 import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
+import asyncApi2CheckId from './functions/asyncApi2CheckId';
 import asyncApi2DocumentSchema, { latestAsyncApiVersion } from './functions/asyncApi2DocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniqueness';
@@ -17,8 +18,13 @@ import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniq
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
-import { uniquenessTags } from '../shared/functions';
 import asyncApi2Security from './functions/asyncApi2Security';
+import { uniquenessTags } from '../shared/functions';
+
+import type { Format } from '@stoplight/spectral-core';
+
+const all_aas2: Format[] = [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4];
+const from_aas2_4: Format[] = [aas2_4];
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -236,8 +242,10 @@ export default {
         '$.components.messages.*',
       ],
       then: {
-        field: 'messageId',
-        function: truthy,
+        function: asyncApi2CheckId,
+        functionOptions: {
+          idField: 'messageId',
+        },
       },
     },
     'asyncapi-operation-description': {
@@ -266,8 +274,10 @@ export default {
       type: 'style',
       given: ['$.channels[*][publish,subscribe]', '$.components.channels[*][publish,subscribe]'],
       then: {
-        field: 'operationId',
-        function: truthy,
+        function: asyncApi2CheckId,
+        functionOptions: {
+          idField: 'operationId',
+        },
       },
     },
     'asyncapi-operation-security': {
