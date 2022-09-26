@@ -635,7 +635,7 @@ Or using unpkg:
 
 ```
 extends:
-  - https://unpkg.com/@your-js-ruleset@1.0/ruleset.js
+  - https://unpkg.com/@your-js-ruleset
 ```
 
 For a more detailed example of creating a JavaScript ruleset and publishing it to npm, check out [Distribute Spectral Style Guides with npm](https://apisyouwonthate.com/blog/distribute-spectral-style-guides-with-npm) at APIs You Won't Hate.
