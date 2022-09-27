@@ -56,14 +56,14 @@ testRule('asyncapi-operation-operationId', [
     },
     errors: [
       {
-        message: 'Operation should have a "operationId" field defined.',
+        message: 'Operation must have an "operationId" field defined.',
         path: ['channels', 'one', 'publish'],
-        severity: DiagnosticSeverity.Warning,
+        severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Operation should have a "operationId" field defined.',
+        message: 'Operation must have an "operationId" field defined.',
         path: ['channels', 'one', 'subscribe'],
-        severity: DiagnosticSeverity.Warning,
+        severity: DiagnosticSeverity.Error,
       },
     ],
   },
@@ -85,9 +85,9 @@ testRule('asyncapi-operation-operationId', [
     },
     errors: [
       {
-        message: 'Operation should have a "operationId" field defined.',
+        message: 'Operation must have an "operationId" field defined.',
         path: ['channels', 'one', 'publish'],
-        severity: DiagnosticSeverity.Warning,
+        severity: DiagnosticSeverity.Error,
       },
     ],
   },

@@ -269,9 +269,10 @@ export default {
       },
     },
     'asyncapi-operation-operationId': {
-      description: 'Operation should have a "operationId" field defined.',
+      description: 'Operation must have an "operationId" field defined.',
+      severity: 'error',
       recommended: true,
-      type: 'style',
+      type: 'validation',
       given: ['$.channels[*][publish,subscribe]', '$.components.channels[*][publish,subscribe]'],
       then: {
         function: asyncApi2CheckId,

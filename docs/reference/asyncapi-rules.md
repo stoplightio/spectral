@@ -261,7 +261,7 @@ channels:
 
 ### asyncapi-message-messageId
 
-Each Message should have a "messageId" field defined. It is recommended, but still optional. Tools can use it to define function names, class method names and even URL passwords in documentation systems.
+Each Message should have a "messageId" field defined. It is recommended, but still optional. Tools can use it to define function names, class method names and even URL hashes in documentation systems.
 
 **Recommended:** Yes
 
@@ -303,7 +303,7 @@ channels:
 
 ### asyncapi-operation-operationId
 
-Each Operation should have a "operationId" field defined. It is recommended, but still optional. Tools can use it to define function names, class method names and even URL passwords in documentation systems.
+Each Operation must have an "operationId" field defined. Tools can use it to define function names, class method names and even URL hashes in documentation systems.
 
 **Recommended:** Yes
 
