@@ -172,6 +172,7 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         type: 'object',
         description:
           'Assigns a unique id (by reference to the JS object) to a schema. It is used to optimize the creation of a validation function for a given schema; a given function will be stored by given id and retrieved between execution of validation.',
+        'x-internal': true,
       },
       prepareResults: {
         'x-internal': true,
