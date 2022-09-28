@@ -37,9 +37,14 @@ const ERROR_MAP = [
 // That being said, we always strip both oneOf and $ref, since we are always interested in the first error.
 export function prepareResults(errors: ErrorObject[]): void {
   // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
-  for (const error of errors) {
+  for (let i = 0; i < errors.length; i++) {
+    const error = errors[i];
+
     if (error.keyword === 'additionalProperties') {
       error.instancePath = `${error.instancePath}/${String(error.params['additionalProperty'])}`;
+    } else if (error.keyword === 'required' && error.params.missingProperty === '$ref') {
+      errors.splice(i, 1);
+      i--;
     }
   }
 

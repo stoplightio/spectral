@@ -1,7 +1,11 @@
+import { aas2_0 } from '@stoplight/spectral-formats';
 import asyncApi2PayloadValidation from '../asyncApi2PayloadValidation';
 
 function runPayloadValidation(targetVal: any) {
-  return asyncApi2PayloadValidation(targetVal, null, { path: ['components', 'messages', 'aMessage'] } as any);
+  return asyncApi2PayloadValidation(targetVal, null, {
+    path: ['components', 'messages', 'aMessage'],
+    document: { formats: new Set([aas2_0]) },
+  } as any);
 }
 
 describe('asyncApi2PayloadValidation', () => {
