@@ -447,6 +447,12 @@ Validate structure of AsyncAPI v2 specification.
 
 **Recommended:** Yes
 
+### asyncapi-schema-unresolved
+
+Validate unresolved (all "$ref" have not been replaced with the objects they point to) structure of AsyncAPI v2 specification.
+
+**Recommended:** Yes
+
 ### asyncapi-server-no-empty-variable
 
 Server URL variable declarations cannot be empty, ex.`gigantic-server.com/{}` is invalid.

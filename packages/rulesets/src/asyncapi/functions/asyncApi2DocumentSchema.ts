@@ -75,6 +75,18 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
+function filterAndSerializeRefErrors(errors: IFunctionResult[]) {
+  return errors
+    .filter(err => err.message === 'Property "$ref" is not expected to be here')
+    .map(err => {
+      err.message = 'Referencing here is not allowed';
+      if (err.path && err.path[err.path.length - 1] !== '$ref') {
+        err.path.push('$ref');
+      }
+      return err;
+    });
+}
+
 function getSchema(formats: Set<Format>): Record<string, unknown> | void {
   switch (true) {
     case formats.has(aas2_0):
@@ -92,24 +104,49 @@ function getSchema(formats: Set<Format>): Record<string, unknown> | void {
   }
 }
 
-export default createRulesetFunction<unknown, null>(
+// For optimizing the retrieving/creation of AJV's validation function for a given AsyncAPI version.
+const UNIQUE_AJV_ID = {};
+
+export default createRulesetFunction<unknown, { resolved: boolean }>(
   {
     input: null,
-    options: null,
+    options: {
+      type: 'object',
+      properties: {
+        resolved: {
+          type: 'boolean',
+        },
+      },
+      required: ['resolved'],
+    },
   },
-  function asyncApi2DocumentSchema(targetVal, _, context) {
-    const formats = context.document.formats;
+  function asyncApi2DocumentSchema(targetVal, options, ctx) {
+    const formats = ctx.document.formats;
     if (formats === null || formats === void 0) return;
 
     const schema = getSchema(formats);
     if (schema === void 0) return;
 
-    const errors = schemaFn(targetVal, { allErrors: true, schema, prepareResults }, context);
+    const errors = schemaFn(
+      targetVal,
+      {
+        allErrors: true,
+        schema,
+        prepareResults: options.resolved ? prepareResults : undefined,
+        uniqueId: UNIQUE_AJV_ID,
+      },
+      ctx,
+    );
 
-    if (Array.isArray(errors)) {
-      applyManualReplacements(errors);
+    if (!Array.isArray(errors)) {
+      return;
     }
 
-    return errors;
+    if (options.resolved) {
+      applyManualReplacements(errors);
+      return errors;
+    } else {
+      return filterAndSerializeRefErrors(errors);
+    }
   },
 );

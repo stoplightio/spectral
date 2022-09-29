@@ -385,6 +385,25 @@ export default {
       given: '$',
       then: {
         function: asyncApi2DocumentSchema,
+        functionOptions: {
+          resolved: true,
+        },
+      },
+    },
+    'asyncapi-schema-unresolved': {
+      description:
+        'Validate unresolved (all "$ref" have not been replaced with the objects they point to) structure of AsyncAPI v2 specification.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      type: 'validation',
+      resolved: false,
+      given: '$',
+      then: {
+        function: asyncApi2DocumentSchema,
+        functionOptions: {
+          resolved: false,
+        },
       },
     },
     'asyncapi-server-variables': {
