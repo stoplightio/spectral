@@ -21,7 +21,7 @@
     "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
-    "@asyncapi/specs": "2.15.0-next-spec.2",
+    "@asyncapi/specs": "^3.2.0",
     "@stoplight/better-ajv-errors": "1.0.3",
     "@stoplight/json": "^3.17.0",
     "@stoplight/spectral-core": "^1.8.1",
