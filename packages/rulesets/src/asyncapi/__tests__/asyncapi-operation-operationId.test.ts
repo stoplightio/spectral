@@ -1,39 +1,94 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import produce from 'immer';
 import testRule from './__helpers__/tester';
-
-const document = {
-  asyncapi: '2.0.0',
-  channels: {
-    one: {
-      publish: {
-        operationId: 'onePubId',
-      },
-      subscribe: {
-        operationId: 'oneSubId',
-      },
-    },
-  },
-};
 
 testRule('asyncapi-operation-operationId', [
   {
     name: 'valid case',
-    document,
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        one: {
+          publish: {
+            operationId: 'firstId',
+          },
+          subscribe: {
+            operationId: 'secondId',
+          },
+        },
+      },
+    },
     errors: [],
   },
 
-  ...['publish', 'subscribe'].map(property => ({
-    name: `channels.{channel}.${property}.operationId property is missing`,
-    document: produce(document, draft => {
-      delete draft.channels.one[property].operationId;
-    }),
+  {
+    name: 'valid case (with traits)',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        one: {
+          publish: {
+            traits: [
+              {},
+              {
+                operationId: 'firstId',
+              },
+            ],
+          },
+          subscribe: {
+            operationId: 'secondId',
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'invalid case',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        one: {
+          publish: {},
+          subscribe: {},
+        },
+      },
+    },
     errors: [
       {
-        message: 'Operation must have "operationId".',
-        path: ['channels', 'one', property],
+        message: 'Operation must have an "operationId" field defined.',
+        path: ['channels', 'one', 'publish'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'Operation must have an "operationId" field defined.',
+        path: ['channels', 'one', 'subscribe'],
         severity: DiagnosticSeverity.Error,
       },
     ],
-  })),
+  },
+
+  {
+    name: 'invalid case (with traits)',
+    document: {
+      asyncapi: '2.4.0',
+      channels: {
+        one: {
+          publish: {
+            traits: [{}, {}],
+          },
+          subscribe: {
+            operationId: 'secondId',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Operation must have an "operationId" field defined.',
+        path: ['channels', 'one', 'publish'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
 ]);

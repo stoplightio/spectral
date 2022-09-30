@@ -10,6 +10,7 @@ import {
 
 import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
+import asyncApi2CheckId from './functions/asyncApi2CheckId';
 import asyncApi2DocumentSchema, { latestAsyncApiVersion } from './functions/asyncApi2DocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniqueness';
@@ -17,12 +18,17 @@ import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniq
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
-import { uniquenessTags } from '../shared/functions';
 import asyncApi2Security from './functions/asyncApi2Security';
+import { uniquenessTags } from '../shared/functions';
+
+import type { Format } from '@stoplight/spectral-core';
+
+const all_aas2: Format[] = [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4];
+const from_aas2_4: Format[] = [aas2_4];
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
-  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4],
+  formats: all_aas2,
   rules: {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
@@ -223,6 +229,25 @@ export default {
         function: asyncApi2MessageIdUniqueness,
       },
     },
+    'asyncapi-message-messageId': {
+      description: 'Message should have a "messageId" field defined.',
+      recommended: true,
+      formats: from_aas2_4,
+      type: 'style',
+      given: [
+        '$.channels.*.[publish,subscribe][?(@property === "message" && @.oneOf == void 0)]',
+        '$.channels.*.[publish,subscribe].message.oneOf.*',
+        '$.components.channels.*.[publish,subscribe][?(@property === "message" && @.oneOf == void 0)]',
+        '$.components.channels.*.[publish,subscribe].message.oneOf.*',
+        '$.components.messages.*',
+      ],
+      then: {
+        function: asyncApi2CheckId,
+        functionOptions: {
+          idField: 'messageId',
+        },
+      },
+    },
     'asyncapi-operation-description': {
       description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
@@ -244,14 +269,16 @@ export default {
       },
     },
     'asyncapi-operation-operationId': {
-      description: 'Operation must have "operationId".',
+      description: 'Operation must have an "operationId" field defined.',
       severity: 'error',
       recommended: true,
       type: 'validation',
-      given: '$.channels[*][publish,subscribe]',
+      given: ['$.channels[*][publish,subscribe]', '$.components.channels[*][publish,subscribe]'],
       then: {
-        field: 'operationId',
-        function: truthy,
+        function: asyncApi2CheckId,
+        functionOptions: {
+          idField: 'operationId',
+        },
       },
     },
     'asyncapi-operation-security': {
