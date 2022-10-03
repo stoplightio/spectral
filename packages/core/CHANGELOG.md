@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.14.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.1...@stoplight/spectral-core-v1.14.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* **core:** async functions have undefined paths ([#2304](https://github.com/stoplightio/spectral/issues/2304)) ([df257b3](https://github.com/stoplightio/spectral/commit/df257b3c8f3fd5a169eee2d0013c6e346ab86178))
+
 # [@stoplight/spectral-core-v1.14.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.0...@stoplight/spectral-core-v1.14.1) (2022-08-30)
 
 
