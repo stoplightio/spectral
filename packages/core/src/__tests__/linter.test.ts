@@ -1540,4 +1540,55 @@ responses:: !!foo
       ]);
     });
   });
+
+  test.concurrent('should retain path in async functions', async () => {
+    const spectral = new Spectral();
+    const documentUri = path.join(__dirname, './__fixtures__/test.json');
+    spectral.setRuleset({
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            async function() {
+              return [
+                {
+                  message: 'Restricted type',
+                },
+              ];
+            },
+          },
+        },
+      },
+    });
+
+    const document = new Document(
+      JSON.stringify({
+        oneOf: [
+          {
+            type: ['number'],
+          },
+          {
+            type: ['string'],
+          },
+        ],
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+
+    const results = spectral.run(document);
+
+    await expect(results).resolves.toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '0', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '1', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
+  });
 });
