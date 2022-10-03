@@ -204,13 +204,6 @@ describe('asyncApi2DocumentSchema', () => {
           message: 'must be string',
         },
         {
-          keyword: 'required',
-          instancePath: '/paths/test/post/parameters/0/schema',
-          schemaPath: '#/definitions/Reference/required',
-          params: { missingProperty: '$ref' },
-          message: "must have required property '$ref'",
-        },
-        {
           keyword: 'oneOf',
           instancePath: '/paths/test/post/parameters/0/schema',
           schemaPath: '#/properties/schema/oneOf',
@@ -324,15 +317,6 @@ describe('asyncApi2DocumentSchema', () => {
             type: 'string',
           },
           schemaPath: '#/properties/type/type',
-        },
-        {
-          instancePath: '/paths/foo/post/parameters/0/schema',
-          keyword: 'required',
-          message: "must have required property '$ref'",
-          params: {
-            missingProperty: '$ref',
-          },
-          schemaPath: '#/definitions/Reference/required',
         },
         {
           instancePath: '/paths/baz/post/parameters/0/schema',
