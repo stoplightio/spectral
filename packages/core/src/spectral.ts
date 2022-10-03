@@ -6,7 +6,7 @@ import { memoize } from 'lodash';
 
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import { Runner, RunnerRuntime } from './runner';
+import { Runner } from './runner';
 import { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
 import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
 import { Ruleset } from './ruleset/ruleset';
@@ -24,8 +24,6 @@ export class Spectral {
 
   public ruleset?: Ruleset;
 
-  protected readonly runtime: RunnerRuntime;
-
   private readonly _computeFingerprint: ComputeFingerprintFunc;
 
   constructor(protected readonly opts?: IConstructorOpts) {
@@ -36,8 +34,6 @@ export class Spectral {
     } else {
       this._resolver = createHttpAndFileResolver();
     }
-
-    this.runtime = new RunnerRuntime();
   }
 
   protected parseDocument(target: IParsedResult | IDocument | Record<string, unknown> | string): IDocument {
@@ -65,7 +61,7 @@ export class Spectral {
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 
-    const runner = new Runner(this.runtime, inventory);
+    const runner = new Runner(inventory);
     runner.results.push(...this._filterParserErrors(document.diagnostics, ruleset.parserOptions));
 
     if (document.formats === void 0) {
@@ -97,7 +93,6 @@ export class Spectral {
   }
 
   public setRuleset(ruleset: RulesetDefinition | Ruleset): void {
-    this.runtime.revoke();
     this.ruleset = ruleset instanceof Ruleset ? ruleset : new Ruleset(ruleset);
   }
 

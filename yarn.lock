@@ -2490,15 +2490,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/lifecycle@npm:2.3.2":
-  version: 2.3.2
-  resolution: "@stoplight/lifecycle@npm:2.3.2"
-  dependencies:
-    wolfy87-eventemitter: ~5.2.8
-  checksum: ee60a3e5dda82bc2d58a2f2922bae8abd0cb874daa7e17d3b759747bcdf1de20b029524583de69001d5a1640f31fb61a84b322283043e425a4b25b3b682dba00
-  languageName: node
-  linkType: hard
-
 "@stoplight/ordered-object-literal@npm:^1.0.1, @stoplight/ordered-object-literal@npm:^1.0.2, @stoplight/ordered-object-literal@npm:^1.0.3, @stoplight/ordered-object-literal@npm:~1.0.4":
   version: 1.0.4
   resolution: "@stoplight/ordered-object-literal@npm:1.0.4"
@@ -2561,7 +2552,6 @@ __metadata:
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ~3.20.1
-    "@stoplight/lifecycle": 2.3.2
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-formats": "*"
     "@stoplight/spectral-functions": "*"
@@ -3259,9 +3249,9 @@ __metadata:
   linkType: hard
 
 "@types/urijs@npm:^1.19.16":
-  version: 1.19.17
-  resolution: "@types/urijs@npm:1.19.17"
-  checksum: 51241ca915d00b1d30cda1199304295269b91d234470c00529d282f3ec3eefb22d1ff8b51532a17d921c2bcaea025340ba3f6a91f8f6982b126765faaaf9c75c
+  version: 1.19.19
+  resolution: "@types/urijs@npm:1.19.19"
+  checksum: 2c08d41782149a243b374b28be009ca461f541c440d8d47c9d75b1d3255ff7169b34bb721cf2dd6266c2c44be6b70fc6d67a1abad50c4dae369774042b1facd8
   languageName: node
   linkType: hard
 
@@ -13394,13 +13384,6 @@ __metadata:
   dependencies:
     string-width: ^1.0.2 || 2 || 3 || 4
   checksum: d5fc37cd561f9daee3c80e03b92ed3e84d80dde3365a8767263d03dacfc8fa06b065ffe1df00d8c2a09f731482fcacae745abfbb478d4af36d0a891fad4834d3
-  languageName: node
-  linkType: hard
-
-"wolfy87-eventemitter@npm:~5.2.8":
-  version: 5.2.9
-  resolution: "wolfy87-eventemitter@npm:5.2.9"
-  checksum: 753b03fb876d5704378b08c02926b2040eb5c4c27288bee66b6d9b6e5bf7b194072d36afd33d80bdd94f3c4316dd72064ef1aa3629a514a6df5473187a304622
   languageName: node
   linkType: hard
 
