@@ -2444,22 +2444,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json-ref-resolver@npm:3.1.3":
-  version: 3.1.3
-  resolution: "@stoplight/json-ref-resolver@npm:3.1.3"
+"@stoplight/json-ref-resolver@npm:~3.1.4":
+  version: 3.1.4
+  resolution: "@stoplight/json-ref-resolver@npm:3.1.4"
   dependencies:
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
-    "@stoplight/types": ^12.3.0
-    "@types/urijs": ^1.19.16
+    "@stoplight/types": ^12.3.0 || ^13.0.0
+    "@types/urijs": ^1.19.19
     dependency-graph: ~0.11.0
     fast-memoize: ^2.5.2
     immer: ^9.0.6
-    lodash.get: ^4.4.2
-    lodash.set: ^4.3.2
+    lodash: ^4.17.21
     tslib: ^2.3.1
-    urijs: ^1.19.6
-  checksum: 3aba23c9a5ee270dbeb6e3b9dd38b8c5579dce88194145e590d54b5385ea2a0a0c411a39a98506c9b7d767f12952480e836d3d3c2559721388c4abfb070e69d7
+    urijs: ^1.19.11
+  checksum: 9da64dc9209420d335d00487c1a50094debb2511ca8ab2c755baea275a7fc4d70695cedbbf1b2d72f05034be395fde47e1b42957b1a7a21325850d5ccc5e60e4
   languageName: node
   linkType: hard
 
@@ -2628,8 +2627,8 @@ __metadata:
   resolution: "@stoplight/spectral-ref-resolver@workspace:packages/ref-resolver"
   dependencies:
     "@stoplight/json-ref-readers": 1.2.2
-    "@stoplight/json-ref-resolver": 3.1.3
-    "@stoplight/spectral-runtime": ^1.0.0
+    "@stoplight/json-ref-resolver": ~3.1.4
+    "@stoplight/spectral-runtime": ^1.1.2
     dependency-graph: 0.11.0
     tslib: ^2.3.1
   languageName: unknown
@@ -2714,7 +2713,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-runtime@^1.0.0, @stoplight/spectral-runtime@^1.1.0, @stoplight/spectral-runtime@^1.1.1, @stoplight/spectral-runtime@workspace:packages/runtime":
+"@stoplight/spectral-runtime@^1.0.0, @stoplight/spectral-runtime@^1.1.0, @stoplight/spectral-runtime@^1.1.1, @stoplight/spectral-runtime@^1.1.2, @stoplight/spectral-runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-runtime@workspace:packages/runtime"
   dependencies:
@@ -2745,6 +2744,16 @@ __metadata:
     "@types/json-schema": ^7.0.4
     utility-types: ^3.10.0
   checksum: fe4a09df6e1c2f0cdb53f474b180cc7b8184e814e1ac4427d199642f10958335f597060530a908c0e5800ba2569d077afe124a51deaee466255ce942e1e03941
+  languageName: node
+  linkType: hard
+
+"@stoplight/types@npm:^12.3.0 || ^13.0.0":
+  version: 13.7.0
+  resolution: "@stoplight/types@npm:13.7.0"
+  dependencies:
+    "@types/json-schema": ^7.0.4
+    utility-types: ^3.10.0
+  checksum: c38f3b65129c9e09a7fa890a1794a1b8147e29055056efb34dd05f8e433c1bb4b79538ea0a6640f1ebecbad51d415c4f60e9ca426ae09f2dc9df6ed46b27deed
   languageName: node
   linkType: hard
 
@@ -3248,7 +3257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/urijs@npm:^1.19.16":
+"@types/urijs@npm:^1.19.19":
   version: 1.19.19
   resolution: "@types/urijs@npm:1.19.19"
   checksum: 2c08d41782149a243b374b28be009ca461f541c440d8d47c9d75b1d3255ff7169b34bb721cf2dd6266c2c44be6b70fc6d67a1abad50c4dae369774042b1facd8
@@ -8888,7 +8897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4, lodash.get@npm:^4.4.2":
+"lodash.get@npm:^4":
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
   checksum: e403047ddb03181c9d0e92df9556570e2b67e0f0a930fcbbbd779370972368f5568e914f913e93f3b08f6d492abc71e14d4e9b7a18916c31fa04bd2306efe545
@@ -13133,7 +13142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"urijs@npm:^1.19.6":
+"urijs@npm:^1.19.11":
   version: 1.19.11
   resolution: "urijs@npm:1.19.11"
   checksum: f9b95004560754d30fd7dbee44b47414d662dc9863f1cf5632a7c7983648df11d23c0be73b9b4f9554463b61d5b0a520b70df9e1ee963ebb4af02e6da2cc80f3
