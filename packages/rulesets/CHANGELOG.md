@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.14.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.13.0...@stoplight/spectral-rulesets-v1.14.0) (2022-10-03)
+
+
+### Features
+
+* **rulesets:** add support for 2.5.0 AsyncAPI ([#2292](https://github.com/stoplightio/spectral/issues/2292)) ([0cb2e85](https://github.com/stoplightio/spectral/commit/0cb2e853147b494b5e6a0c41d2fd891d43e3cf8f))
+
 # [@stoplight/spectral-rulesets-v1.13.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.12.0...@stoplight/spectral-rulesets-v1.13.0) (2022-09-26)
 
 
