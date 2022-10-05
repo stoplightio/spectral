@@ -8,9 +8,6 @@ import type { ErrorObject } from 'ajv';
 import type { IFunctionResult, Format } from '@stoplight/spectral-core';
 import type { AsyncAPISpecVersion } from './utils/specs';
 
-export const asyncApiSpecVersions = ['2.0.0', '2.1.0', '2.2.0', '2.3.0', '2.4.0'];
-export const latestAsyncApiVersion = asyncApiSpecVersions[asyncApiSpecVersions.length - 1];
-
 function shouldIgnoreError(error: ErrorObject): boolean {
   return (
     // oneOf is a fairly error as we have 2 options to choose from for most of the time.

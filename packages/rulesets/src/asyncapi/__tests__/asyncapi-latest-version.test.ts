@@ -1,12 +1,12 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { latestAsyncApiVersion } from '../functions/asyncApi2DocumentSchema';
+import { latestVersion } from '../functions/utils/specs';
 import testRule from './__helpers__/tester';
 
 testRule('asyncapi-latest-version', [
   {
     name: 'valid case',
     document: {
-      asyncapi: latestAsyncApiVersion,
+      asyncapi: latestVersion,
     },
     errors: [],
   },
@@ -18,7 +18,7 @@ testRule('asyncapi-latest-version', [
     },
     errors: [
       {
-        message: `The latest version is not used. You should update to the "${latestAsyncApiVersion}" version.`,
+        message: `The latest version is not used. You should update to the "${latestVersion}" version.`,
         path: ['asyncapi'],
         severity: DiagnosticSeverity.Information,
       },

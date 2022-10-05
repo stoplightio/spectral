@@ -1,10 +1,11 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
 
+import { mergeTraits } from './utils/mergeTraits';
+
 import type { JsonPath } from '@stoplight/types';
 import type { IFunctionResult, RulesetFunctionContext } from '@stoplight/spectral-core';
 import type { JSONSchema7 } from 'json-schema';
-import { mergeTraits } from './utils/mergeTraits';
 
 interface MessageExample {
   name?: string;
@@ -20,7 +21,7 @@ export interface MessageFragment {
   examples?: MessageExample[];
 }
 
-function getMessageExamples(message: MessageFragment): Array<{ path: JsonPath; value: MessageExample }> {
+function getMessageExamples(message: MessageFragment): Array<{ path: JsonPath; example: MessageExample }> {
   if (!Array.isArray(message.examples)) {
     return [];
   }
@@ -28,7 +29,7 @@ function getMessageExamples(message: MessageFragment): Array<{ path: JsonPath; v
     message.examples.map((example, index) => {
       return {
         path: ['examples', index],
-        value: example,
+        example,
       };
     }) ?? []
   );
@@ -78,18 +79,18 @@ export default createRulesetFunction<MessageFragment, null>(
 
     for (const example of examples) {
       // validate payload
-      if (example.value.payload !== undefined) {
+      if (example.example.payload !== undefined) {
         const payload = targetVal.payload ?? {}; // if payload is undefined we treat it as any schema
-        const errors = validate(example.value.payload, example.path, 'payload', payload, ctx);
+        const errors = validate(example.example.payload, example.path, 'payload', payload, ctx);
         if (Array.isArray(errors)) {
           results.push(...errors);
         }
       }
 
       // validate headers
-      if (example.value.headers !== undefined) {
+      if (example.example.headers !== undefined) {
         const headers = targetVal.headers ?? {}; // if headers are undefined we treat them as any schema
-        const errors = validate(example.value.headers, example.path, 'headers', headers, ctx);
+        const errors = validate(example.example.headers, example.path, 'headers', headers, ctx);
         if (Array.isArray(errors)) {
           results.push(...errors);
         }
