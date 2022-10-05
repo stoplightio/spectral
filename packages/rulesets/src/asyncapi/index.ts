@@ -10,7 +10,7 @@ import {
 
 import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
 import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
-import asyncApi2DocumentSchema, { latestAsyncApiVersion } from './functions/asyncApi2DocumentSchema';
+import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniqueness';
 import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
@@ -19,6 +19,7 @@ import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
 import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
 import { uniquenessTags } from '../shared/functions';
 import asyncApi2Security from './functions/asyncApi2Security';
+import { latestVersion } from './functions/utils/specs';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
@@ -174,7 +175,7 @@ export default {
     },
     'asyncapi-latest-version': {
       description: 'Checking if the AsyncAPI document is using the latest version.',
-      message: `The latest version is not used. You should update to the "${latestAsyncApiVersion}" version.`,
+      message: `The latest version is not used. You should update to the "${latestVersion}" version.`,
       recommended: true,
       type: 'style',
       severity: 'info',
@@ -183,7 +184,7 @@ export default {
         function: schema,
         functionOptions: {
           schema: {
-            const: latestAsyncApiVersion,
+            const: latestVersion,
           },
         },
       },
