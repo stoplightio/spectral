@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.14.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.14.0...@stoplight/spectral-rulesets-v1.14.1) (2022-10-06)
+
+
+### Bug Fixes
+
+* **rulesets:** handle empty payload and headers in AsyncAPI message's examples validation ([#2284](https://github.com/stoplightio/spectral/issues/2284)) ([4068221](https://github.com/stoplightio/spectral/commit/406822182635dde897ce97fffdc15f23ad35deab))
+
 # [@stoplight/spectral-rulesets-v1.14.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.13.0...@stoplight/spectral-rulesets-v1.14.0) (2022-10-03)
 
 
