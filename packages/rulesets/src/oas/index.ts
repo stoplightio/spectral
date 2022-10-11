@@ -40,7 +40,6 @@ const ruleset = {
     'operation-success-response': {
       description: 'Operation must have at least one "2xx" or "3xx" response.',
       recommended: true,
-      type: 'style',
       given: '#OperationObject',
       then: {
         field: 'responses',
@@ -52,7 +51,6 @@ const ruleset = {
         'Operations with "in: formData" parameter must include "application/x-www-form-urlencoded" or "multipart/form-data" in their "consumes" property.',
       recommended: true,
       formats: [oas2],
-      type: 'validation',
       given: '#OperationObject',
       then: {
         function: oasOpFormDataConsumeCheck,
@@ -61,7 +59,6 @@ const ruleset = {
     'operation-operationId-unique': {
       description: 'Every operation must have unique "operationId".',
       recommended: true,
-      type: 'validation',
       severity: 0,
       given: '$',
       then: {
@@ -72,7 +69,6 @@ const ruleset = {
       description: 'Operation parameters are unique and non-repeating.',
       message: '{{error}}',
       recommended: true,
-      type: 'validation',
       given: '#OperationObject.parameters',
       then: {
         function: oasOpParams,
@@ -81,7 +77,6 @@ const ruleset = {
     'operation-tag-defined': {
       description: 'Operation tags must be defined in global tags.',
       recommended: true,
-      type: 'validation',
       given: '$',
       then: {
         function: oasTagDefined,
@@ -90,7 +85,6 @@ const ruleset = {
     'path-params': {
       description: 'Path parameters must be defined and valid.',
       message: '{{error}}',
-      type: 'validation',
       severity: 0,
       recommended: true,
       given: '$',
@@ -101,7 +95,6 @@ const ruleset = {
     'contact-properties': {
       description: 'Contact object must have "name", "url" and "email".',
       recommended: false,
-      type: 'style',
       given: '$.info.contact',
       then: [
         {
@@ -120,7 +113,6 @@ const ruleset = {
     },
     'duplicated-entry-in-enum': {
       description: 'Enum values must not have duplicate entry.',
-      type: 'validation',
       severity: 'warn',
       recommended: true,
       message: '{{error}}',
@@ -139,7 +131,6 @@ const ruleset = {
     'info-contact': {
       description: 'Info object must have "contact" object.',
       recommended: true,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.contact',
@@ -149,7 +140,6 @@ const ruleset = {
     'info-description': {
       description: 'Info "description" must be present and non-empty string.',
       recommended: true,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.description',
@@ -159,7 +149,6 @@ const ruleset = {
     'info-license': {
       description: 'Info object must have "license" object.',
       recommended: false,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.license',
@@ -169,7 +158,6 @@ const ruleset = {
     'license-url': {
       description: 'License object must include "url".',
       recommended: false,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.license.url',
@@ -179,7 +167,6 @@ const ruleset = {
     'no-eval-in-markdown': {
       description: 'Markdown descriptions must not have "eval(".',
       recommended: true,
-      type: 'style',
       given: '$..[description,title]',
       then: {
         function: pattern,
@@ -191,7 +178,6 @@ const ruleset = {
     'no-script-tags-in-markdown': {
       description: 'Markdown descriptions must not have "<script>" tags.',
       recommended: true,
-      type: 'style',
       given: '$..[description,title]',
       then: {
         function: pattern,
@@ -203,7 +189,6 @@ const ruleset = {
     'openapi-tags-alphabetical': {
       description: 'OpenAPI object must have alphabetical "tags".',
       recommended: false,
-      type: 'style',
       given: '$',
       then: {
         field: 'tags',
@@ -218,7 +203,6 @@ const ruleset = {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: '$.tags',
       then: {
         function: uniquenessTags,
@@ -227,7 +211,6 @@ const ruleset = {
     'openapi-tags': {
       description: 'OpenAPI object must have non-empty "tags" array.',
       recommended: false,
-      type: 'style',
       given: '$',
       then: {
         field: 'tags',
@@ -244,7 +227,6 @@ const ruleset = {
     'operation-description': {
       description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
-      type: 'style',
       given: '#OperationObject',
       then: {
         field: 'description',
@@ -254,7 +236,6 @@ const ruleset = {
     'operation-operationId': {
       description: 'Operation must have "operationId".',
       recommended: true,
-      type: 'style',
       given: '#OperationObject',
       then: {
         field: 'operationId',
@@ -264,7 +245,6 @@ const ruleset = {
     'operation-operationId-valid-in-url': {
       message: 'operationId must not characters that are invalid when used in URL.',
       recommended: true,
-      type: 'validation',
       given: '#OperationObject',
       then: {
         field: 'operationId',
@@ -277,7 +257,6 @@ const ruleset = {
     'operation-singular-tag': {
       description: 'Operation must not have more than a single tag.',
       recommended: false,
-      type: 'style',
       given: '#OperationObject',
       then: {
         field: 'tags',
@@ -290,7 +269,6 @@ const ruleset = {
     'operation-tags': {
       description: 'Operation must have non-empty "tags" array.',
       recommended: true,
-      type: 'style',
       given: '#OperationObject',
       then: {
         field: 'tags',
@@ -307,7 +285,6 @@ const ruleset = {
     'path-declarations-must-exist': {
       message: 'Path parameter declarations must not be empty, ex."/given/{}" is invalid.',
       recommended: true,
-      type: 'style',
       given: '$.paths',
       then: {
         field: '@key',
@@ -320,7 +297,6 @@ const ruleset = {
     'path-keys-no-trailing-slash': {
       message: 'Path must not end with slash.',
       recommended: true,
-      type: 'style',
       given: '$.paths',
       then: {
         field: '@key',
@@ -333,7 +309,6 @@ const ruleset = {
     'path-not-include-query': {
       description: 'Path must not include query string.',
       recommended: true,
-      type: 'style',
       given: '$.paths',
       then: {
         field: '@key',
@@ -346,7 +321,6 @@ const ruleset = {
     'tag-description': {
       description: 'Tag object must have "description".',
       recommended: false,
-      type: 'style',
       given: '$.tags[*]',
       then: {
         field: 'description',
@@ -357,7 +331,6 @@ const ruleset = {
       formats: [oas2, oas3_0],
       description: 'Property must not be placed among $ref',
       message: '{{error}}',
-      type: 'validation',
       severity: 0,
       recommended: true,
       resolved: false,
@@ -370,7 +343,6 @@ const ruleset = {
       description: 'Enum values must respect the specified type.',
       message: '{{error}}',
       recommended: true,
-      type: 'validation',
       given: '$..[?(@ && @.enum && @.type)]',
       then: {
         function: typedEnum,
@@ -380,7 +352,6 @@ const ruleset = {
       description: 'OpenAPI "host" must be present and non-empty string.',
       recommended: true,
       formats: [oas2],
-      type: 'style',
       given: '$',
       then: {
         field: 'host',
@@ -391,7 +362,6 @@ const ruleset = {
       description: 'OpenAPI host "schemes" must be present and non-empty array.',
       recommended: true,
       formats: [oas2],
-      type: 'style',
       given: '$',
       then: {
         field: 'schemes',
@@ -415,7 +385,6 @@ const ruleset = {
       severity: 0,
       message: '{{error}}',
       given: '$.definitions[?(@.discriminator)]',
-      type: 'validation',
       then: {
         function: oasDiscriminator,
       },
@@ -425,7 +394,6 @@ const ruleset = {
       recommended: false,
       formats: [oas2],
       given: '$',
-      type: 'style',
       then: {
         field: 'host',
         function: pattern,
@@ -439,7 +407,6 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       given: '$',
-      type: 'style',
       then: {
         field: 'host',
         function: pattern,
@@ -453,7 +420,6 @@ const ruleset = {
       recommended: false,
       formats: [oas2],
       given: '$..parameters[?(@ && @.in)]',
-      type: 'style',
       then: {
         field: 'description',
         function: truthy,
@@ -464,7 +430,6 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       formats: [oas2],
-      type: 'validation',
       given: '$',
       then: {
         function: oasOpSecurityDefined,
@@ -479,7 +444,6 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       severity: 0,
-      type: 'validation',
       given: [
         "$..definitions..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
         "$..parameters..[?(@property !== 'properties' && @ && (@.example !== void 0 || @['x-example'] !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
@@ -500,7 +464,6 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       severity: 0,
-      type: 'validation',
       given: '$..responses..[?(@ && @.schema && @.examples)]',
       then: {
         function: oasExample,
@@ -516,7 +479,6 @@ const ruleset = {
       description: 'anyOf is not available in OpenAPI v2, it was added in OpenAPI v3',
       recommended: true,
       formats: [oas2],
-      type: 'validation',
       given: '$..anyOf',
       then: {
         function: undefined,
@@ -527,7 +489,6 @@ const ruleset = {
       description: 'oneOf is not available in OpenAPI v2, it was added in OpenAPI v3',
       recommended: true,
       formats: [oas2],
-      type: 'validation',
       given: '$..oneOf',
       then: {
         function: undefined,
@@ -539,7 +500,6 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       severity: 0,
-      type: 'validation',
       given: '$',
       then: {
         function: oasDocumentSchema,
@@ -550,7 +510,6 @@ const ruleset = {
       recommended: true,
       resolved: false,
       formats: [oas2],
-      type: 'style',
       given: '$.definitions',
       then: {
         function: unreferencedReusableObject,
@@ -563,7 +522,6 @@ const ruleset = {
       description: 'OpenAPI "servers" must be present and non-empty array.',
       recommended: true,
       formats: [oas3],
-      type: 'style',
       given: '$',
       then: {
         field: 'servers',
@@ -584,7 +542,6 @@ const ruleset = {
       description: 'Examples must have either "value" or "externalValue" field.',
       recommended: true,
       formats: [oas3],
-      type: 'style',
       given: [
         '$.components.examples[*]',
         '$.paths[*][*]..content[*].examples[*]',
@@ -606,7 +563,6 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       formats: [oas3],
-      type: 'validation',
       given: '$',
       then: {
         function: oasOpSecurityDefined,
@@ -619,7 +575,6 @@ const ruleset = {
       description: 'Parameter objects must have "description".',
       recommended: false,
       formats: [oas3],
-      type: 'style',
       given: [
         '#PathItem.parameters[?(@ && @.in)]',
         '#OperationObject.parameters[?(@ && @.in)]',
@@ -634,7 +589,6 @@ const ruleset = {
       description: 'Server URL must not point at example.com.',
       recommended: false,
       formats: [oas3],
-      type: 'style',
       given: '$.servers[*].url',
       then: {
         function: pattern,
@@ -647,7 +601,6 @@ const ruleset = {
       description: 'Server URL must not have trailing slash.',
       recommended: true,
       formats: [oas3],
-      type: 'style',
       given: '$.servers[*].url',
       then: {
         function: pattern,
@@ -662,7 +615,6 @@ const ruleset = {
       recommended: true,
       severity: 0,
       formats: [oas3],
-      type: 'validation',
       given: [
         '$..content..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
         '$..headers..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
@@ -683,7 +635,6 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       recommended: true,
-      type: 'validation',
       given: [
         "$.components.schemas..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
         "$..content..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
@@ -705,7 +656,6 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       recommended: true,
-      type: 'validation',
       given: '$',
       then: {
         function: oasDocumentSchema,
@@ -715,7 +665,6 @@ const ruleset = {
       message: 'Potentially unused component has been detected.',
       recommended: true,
       formats: [oas3],
-      type: 'style',
       resolved: false,
       given: '$',
       then: {

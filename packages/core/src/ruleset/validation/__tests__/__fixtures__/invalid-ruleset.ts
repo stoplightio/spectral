@@ -18,7 +18,6 @@ export default {
         function: truthy,
       },
       severity: 'must not be a string',
-      type: 'some bs type value',
     },
   },
 };

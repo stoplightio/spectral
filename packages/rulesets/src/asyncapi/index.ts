@@ -28,7 +28,6 @@ export default {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
       recommended: true,
-      type: 'style',
       given: '$.channels',
       then: {
         field: '@key',
@@ -41,7 +40,6 @@ export default {
     'asyncapi-channel-no-query-nor-fragment': {
       description: 'Channel path must not include query ("?") or fragment ("#") delimiter.',
       recommended: true,
-      type: 'style',
       given: '$.channels',
       then: {
         field: '@key',
@@ -54,7 +52,6 @@ export default {
     'asyncapi-channel-no-trailing-slash': {
       description: 'Channel path must not end with slash.',
       recommended: true,
-      type: 'style',
       given: '$.channels',
       then: {
         field: '@key',
@@ -68,7 +65,6 @@ export default {
       description: 'Channel parameters must be defined and there must be no redundant parameters.',
       message: '{{error}}',
       severity: 'error',
-      type: 'validation',
       recommended: true,
       given: ['$.channels.*', '$.components.channels.*'],
       then: {
@@ -79,7 +75,6 @@ export default {
       description: 'Channel servers must be defined in the "servers" object.',
       message: '{{error}}',
       severity: 'error',
-      type: 'validation',
       recommended: true,
       given: '$',
       then: {
@@ -91,7 +86,6 @@ export default {
       message: 'Headers schema type must be "object" ({{error}}).',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         '$.components.messageTraits.*.headers',
         '$.components.messages.*.headers',
@@ -116,7 +110,6 @@ export default {
     'asyncapi-info-contact-properties': {
       description: 'Contact object must have "name", "url" and "email".',
       recommended: true,
-      type: 'style',
       given: '$.info.contact',
       then: [
         {
@@ -136,7 +129,6 @@ export default {
     'asyncapi-info-contact': {
       description: 'Info object must have "contact" object.',
       recommended: true,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.contact',
@@ -146,7 +138,6 @@ export default {
     'asyncapi-info-description': {
       description: 'Info "description" must be present and non-empty string.',
       recommended: true,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.description',
@@ -156,7 +147,6 @@ export default {
     'asyncapi-info-license-url': {
       description: 'License object must include "url".',
       recommended: false,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.license.url',
@@ -166,7 +156,6 @@ export default {
     'asyncapi-info-license': {
       description: 'Info object must have "license" object.',
       recommended: true,
-      type: 'style',
       given: '$',
       then: {
         field: 'info.license',
@@ -177,7 +166,6 @@ export default {
       description: 'Checking if the AsyncAPI document is using the latest version.',
       message: `The latest version is not used. You should update to the "${latestVersion}" version.`,
       recommended: true,
-      type: 'style',
       severity: 'info',
       given: '$.asyncapi',
       then: {
@@ -193,7 +181,6 @@ export default {
       description: 'Examples of message object should follow by "payload" and "headers" schemas.',
       message: '{{error}}',
       severity: 'error',
-      type: 'validation',
       recommended: true,
       given: [
         // messages
@@ -218,7 +205,6 @@ export default {
       description: '"messageId" must be unique across all the messages.',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: '$',
       then: {
         function: asyncApi2MessageIdUniqueness,
@@ -227,7 +213,6 @@ export default {
     'asyncapi-operation-description': {
       description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
-      type: 'style',
       given: '$.channels[*][publish,subscribe]',
       then: {
         field: 'description',
@@ -238,7 +223,6 @@ export default {
       description: '"operationId" must be unique across all the operations.',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: '$',
       then: {
         function: asyncApi2OperationIdUniqueness,
@@ -248,7 +232,6 @@ export default {
       description: 'Operation must have "operationId".',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: '$.channels[*][publish,subscribe]',
       then: {
         field: 'operationId',
@@ -259,7 +242,6 @@ export default {
       description: 'Operation have to reference a defined security schemes.',
       message: '{{error}}',
       severity: 'error',
-      type: 'validation',
       recommended: true,
       given: '$.channels[*][publish,subscribe].security.*',
       then: {
@@ -272,7 +254,6 @@ export default {
     'asyncapi-parameter-description': {
       description: 'Parameter objects must have "description".',
       recommended: false,
-      type: 'style',
       given: ['$.components.parameters.*', '$.channels.*.parameters.*'],
       then: {
         field: 'description',
@@ -284,7 +265,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload.default^',
         '$.components.messages[?(@.schemaFormat === void 0)].payload.default^',
@@ -302,7 +282,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload.examples^',
         '$.components.messages[?(@.schemaFormat === void 0)].payload.examples^',
@@ -319,7 +298,6 @@ export default {
       description: 'Message schema validation is only supported with default unspecified "schemaFormat".',
       severity: 'info',
       recommended: true,
-      type: 'validation',
       given: ['$.components.messageTraits.*', '$.components.messages.*', '$.channels[*][publish,subscribe].message'],
       then: {
         field: 'schemaFormat',
@@ -331,7 +309,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload',
         '$.components.messages[?(@.schemaFormat === void 0)].payload',
@@ -346,7 +323,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         '$.components.schemas.*.default^',
         '$.components.parameters.*.schema.default^',
@@ -364,7 +340,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         '$.components.schemas.*.examples^',
         '$.components.parameters.*.schema.examples^',
@@ -382,7 +357,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: '$',
       then: {
         function: asyncApi2DocumentSchema,
@@ -392,7 +366,6 @@ export default {
       description: 'Server variables must be defined and there must be no redundant variables.',
       message: '{{error}}',
       severity: 'error',
-      type: 'validation',
       recommended: true,
       given: ['$.servers.*', '$.components.servers.*'],
       then: {
@@ -402,7 +375,6 @@ export default {
     'asyncapi-server-no-empty-variable': {
       description: 'Server URL must not have empty variable substitution pattern.',
       recommended: true,
-      type: 'style',
       given: '$.servers[*].url',
       then: {
         function: pattern,
@@ -414,7 +386,6 @@ export default {
     'asyncapi-server-no-trailing-slash': {
       description: 'Server URL must not end with slash.',
       recommended: true,
-      type: 'style',
       given: '$.servers[*].url',
       then: {
         function: pattern,
@@ -426,7 +397,6 @@ export default {
     'asyncapi-server-not-example-com': {
       description: 'Server URL must not point at example.com.',
       recommended: false,
-      type: 'style',
       given: '$.servers[*].url',
       then: {
         function: pattern,
@@ -439,7 +409,6 @@ export default {
       description: 'Server have to reference a defined security schemes.',
       message: '{{error}}',
       severity: 'error',
-      type: 'validation',
       recommended: true,
       given: '$.servers.*.security.*',
       then: {
@@ -452,7 +421,6 @@ export default {
     'asyncapi-servers': {
       description: 'AsyncAPI object must have non-empty "servers" object.',
       recommended: true,
-      type: 'validation',
       given: '$',
       then: {
         field: 'servers',
@@ -469,7 +437,6 @@ export default {
     'asyncapi-tag-description': {
       description: 'Tag object must have "description".',
       recommended: false,
-      type: 'style',
       given: '$.tags[*]',
       then: {
         field: 'description',
@@ -479,7 +446,6 @@ export default {
     'asyncapi-tags-alphabetical': {
       description: 'AsyncAPI object must have alphabetical "tags".',
       recommended: false,
-      type: 'style',
       given: '$',
       then: {
         field: 'tags',
@@ -494,7 +460,6 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
-      type: 'validation',
       given: [
         // root
         '$.tags',
@@ -529,7 +494,6 @@ export default {
     'asyncapi-tags': {
       description: 'AsyncAPI object must have non-empty "tags" array.',
       recommended: true,
-      type: 'style',
       given: '$',
       then: {
         field: 'tags',
@@ -539,7 +503,6 @@ export default {
     'asyncapi-unused-components-schema': {
       description: 'Potentially unused components schema has been detected.',
       recommended: true,
-      type: 'style',
       resolved: false,
       given: '$.components.schemas',
       then: {
@@ -552,7 +515,6 @@ export default {
     'asyncapi-unused-components-server': {
       description: 'Potentially unused components server has been detected.',
       recommended: true,
-      type: 'style',
       resolved: false,
       given: '$.components.servers',
       then: {
