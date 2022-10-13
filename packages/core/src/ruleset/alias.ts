@@ -44,12 +44,12 @@ function _resolveAlias(
     const alias = ALIAS.exec(expression)?.[1];
 
     if (alias === void 0 || alias === null) {
-      throw new ReferenceError(`Alias must match /^#([A-Za-z0-9_-]+)/`);
+      throw new TypeError(`Alias must match /^#([A-Za-z0-9_-]+)/`);
     }
 
     if (stack.has(alias)) {
       const _stack = [...stack, alias];
-      throw new ReferenceError(`Alias "${_stack[0]}" is circular. Resolution stack: ${_stack.join(' -> ')}`);
+      throw new Error(`Alias "${_stack[0]}" is circular. Resolution stack: ${_stack.join(' -> ')}`);
     }
 
     stack.add(alias);

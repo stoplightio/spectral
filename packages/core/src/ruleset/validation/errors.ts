@@ -2,10 +2,31 @@ import type { ErrorObject } from 'ajv';
 import type { IDiagnostic, JsonPath } from '@stoplight/types';
 import { isAggregateError } from '../../guards/isAggregateError';
 
-type RulesetValidationSingleError = Pick<IDiagnostic, 'message' | 'path'>;
+export type RulesetValidationErrorCode =
+  | 'generic-validation-error'
+  | 'invalid-ruleset-definition'
+  | 'invalid-parser-options-definition'
+  | 'invalid-alias-definition'
+  | 'invalid-extend-definition'
+  | 'invalid-rule-definition'
+  | 'invalid-override-definition'
+  | 'invalid-function-options'
+  | 'invalid-given-definition'
+  | 'invalid-severity'
+  | 'invalid-format'
+  | 'undefined-function'
+  | 'undefined-alias';
 
-export class RulesetValidationError extends Error implements RulesetValidationSingleError {
-  constructor(public readonly message: string, public readonly path: JsonPath) {
+interface IRulesetValidationSingleError extends Pick<IDiagnostic, 'message' | 'path'> {
+  code: RulesetValidationErrorCode;
+}
+
+export class RulesetValidationError extends Error implements IRulesetValidationSingleError {
+  constructor(
+    public readonly code: RulesetValidationErrorCode,
+    public readonly message: string,
+    public readonly path: JsonPath,
+  ) {
     super(message);
   }
 }
@@ -55,11 +76,14 @@ export function convertAjvErrors(errors: ErrorObject[]): RulesetValidationError[
     filteredErrors.push(error);
   }
 
-  return filteredErrors.flatMap(error =>
-    error.keyword === 'x-spectral-runtime'
-      ? flatErrors(error.params.errors)
-      : new RulesetValidationError(error.message ?? 'unknown error', error.instancePath.slice(1).split('/')),
-  );
+  return filteredErrors.flatMap(error => {
+    if (error.keyword === 'x-spectral-runtime') {
+      return flatErrors(error.params.errors);
+    }
+
+    const path = error.instancePath.slice(1).split('/');
+    return new RulesetValidationError(inferErrorCode(path, error.keyword), error.message ?? 'unknown error', path);
+  });
 }
 
 function flatErrors(error: RulesetValidationError | AggregateError): RulesetValidationError | RulesetValidationError[] {
@@ -68,4 +92,73 @@ function flatErrors(error: RulesetValidationError | AggregateError): RulesetVali
   }
 
   return error;
+}
+
+function inferErrorCode(path: string[], keyword: string): RulesetValidationErrorCode {
+  if (path.length === 0) {
+    return 'generic-validation-error';
+  }
+
+  if (path.length === 1 && keyword !== 'errorMessage') {
+    return 'invalid-ruleset-definition';
+  }
+
+  switch (path[0]) {
+    case 'rules':
+      return inferErrorCodeFromRulesError(path);
+    case 'parserOptions':
+      return 'invalid-parser-options-definition';
+    case 'aliases':
+      return inferErrorCodeFromAliasesError(path);
+    case 'extends':
+      return 'invalid-extend-definition';
+    case 'overrides':
+      return inferErrorCodeFromOverrideError(path, keyword);
+    case 'formats':
+      if (path.length === 1) {
+        return 'invalid-ruleset-definition';
+      }
+
+      return 'invalid-format';
+    default:
+      return 'generic-validation-error';
+  }
+}
+
+function inferErrorCodeFromRulesError(path: string[]): RulesetValidationErrorCode {
+  if (path.length === 3 && path[2] === 'severity') {
+    return 'invalid-severity';
+  }
+
+  if (path.length === 4 && path[2] === 'formats') {
+    return 'invalid-format';
+  }
+
+  if (path.length === 4 && path[2] === 'given') {
+    return 'invalid-given-definition';
+  }
+
+  return 'invalid-rule-definition';
+}
+
+function inferErrorCodeFromOverrideError(path: string[], keyword: string): RulesetValidationErrorCode {
+  if (path.length >= 3) {
+    return inferErrorCode(path.slice(2), keyword);
+  }
+
+  return 'invalid-override-definition';
+}
+
+function inferErrorCodeFromAliasesError(path: string[]): RulesetValidationErrorCode {
+  if (path.length === 6) {
+    if (path[4] === 'given') {
+      return 'invalid-given-definition';
+    }
+
+    if (path[4] === 'formats') {
+      return 'invalid-format';
+    }
+  }
+
+  return 'invalid-alias-definition';
 }

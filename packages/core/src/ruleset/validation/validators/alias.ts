@@ -2,7 +2,8 @@ import { isPlainObject } from '@stoplight/json';
 import { get } from 'lodash';
 import { resolveAlias } from '../../alias';
 import { Formats } from '../../formats';
-import { wrapError } from './common/error';
+import { toParsedPath, wrapError } from './common/error';
+import { RulesetValidationError } from '../errors';
 
 function getOverrides(overrides: unknown, key: string): Record<string, unknown> | null {
   if (!Array.isArray(overrides)) return null;
@@ -20,8 +21,9 @@ export function validateAlias(
   alias: string,
   path: string,
 ): Error | void {
+  const parsedPath = toParsedPath(path);
+
   try {
-    const parsedPath = path.slice(1).split('/');
     const formats: unknown = get(ruleset, [...parsedPath.slice(0, parsedPath.indexOf('rules') + 2), 'formats']);
 
     const aliases =
@@ -34,6 +36,10 @@ export function validateAlias(
 
     resolveAlias(aliases ?? null, alias, Array.isArray(formats) ? new Formats(formats) : null);
   } catch (ex) {
+    if (ex instanceof ReferenceError) {
+      return new RulesetValidationError('undefined-alias', ex.message, parsedPath);
+    }
+
     return wrapError(ex, path);
   }
 }
