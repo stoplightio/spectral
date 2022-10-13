@@ -233,6 +233,11 @@ describe('Linter service', () => {
               'rules',
               'rule-without-given-nor-them',
             ]),
+            new RulesetValidationError('allowed types are "style" and "validation"', [
+              'rules',
+              'rule-with-invalid-enum',
+              'type',
+            ]),
             new RulesetValidationError(
               'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
               ['rules', 'rule-with-invalid-enum', 'severity'],
@@ -255,6 +260,11 @@ describe('Linter service', () => {
             new RulesetValidationError('the rule must have at least "given" and "then" properties', [
               'rules',
               'rule-without-given-nor-them',
+            ]),
+            new RulesetValidationError('allowed types are "style" and "validation"', [
+              'rules',
+              'rule-with-invalid-enum',
+              'type',
             ]),
             new RulesetValidationError(
               'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',

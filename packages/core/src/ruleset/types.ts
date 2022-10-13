@@ -15,6 +15,8 @@ export type ParserOptions = {
 };
 
 export type RuleDefinition = {
+  type?: 'validation' | 'style';
+
   formats?: Formats | Format[];
 
   documentationUrl?: string;

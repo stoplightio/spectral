@@ -44,6 +44,11 @@ describe('JS Ruleset Validation', () => {
           'rules',
           'no-given-no-then',
         ]),
+        new RulesetValidationError('allowed types are "style" and "validation"', [
+          'rules',
+          'rule-with-invalid-enum',
+          'type',
+        ]),
         new RulesetValidationError('the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"', [
           'rules',
           'rule-with-invalid-enum',

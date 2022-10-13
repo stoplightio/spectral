@@ -18,6 +18,7 @@ module.exports = {
         function: truthy
       },
       severity: 'some bs severity value',
+      type: 'some bs type value',
     }
   }
 }

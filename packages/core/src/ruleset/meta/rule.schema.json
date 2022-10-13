@@ -72,6 +72,11 @@
         "else": {
           "$ref": "#/$defs/Then"
         }
+      },
+      "type": {
+        "enum": ["style", "validation"],
+        "type": "string",
+        "errorMessage": "allowed types are \"style\" and \"validation\""
       }
     },
     "required": ["given", "then"],
