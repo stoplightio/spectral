@@ -9,11 +9,15 @@ export function assertValidRuleset(
   format: 'js' | 'json' = 'js',
 ): asserts ruleset is RulesetDefinition {
   if (!isPlainObject(ruleset)) {
-    throw new RulesetValidationError('Provided ruleset is not an object', []);
+    throw new RulesetValidationError('invalid-ruleset-definition', 'Provided ruleset is not an object', []);
   }
 
   if (!('rules' in ruleset) && !('extends' in ruleset) && !('overrides' in ruleset)) {
-    throw new RulesetValidationError('Ruleset must have rules or extends or overrides defined', []);
+    throw new RulesetValidationError(
+      'invalid-ruleset-definition',
+      'Ruleset must have rules or extends or overrides defined',
+      [],
+    );
   }
 
   const validate = createValidator(format);
@@ -29,6 +33,6 @@ function isRuleDefinition(rule: FileRuleDefinition): rule is RuleDefinition {
 
 export function assertValidRule(rule: FileRuleDefinition, name: string): asserts rule is RuleDefinition {
   if (!isRuleDefinition(rule)) {
-    throw new RulesetValidationError('Rule definition expected', ['rules', name]);
+    throw new RulesetValidationError('invalid-rule-definition', 'Rule definition expected', ['rules', name]);
   }
 }
