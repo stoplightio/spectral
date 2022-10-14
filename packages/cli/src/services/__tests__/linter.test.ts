@@ -229,16 +229,18 @@ describe('Linter service', () => {
           run(`lint ${validCustomOas3SpecPath} -r ${invalidNestedRulesetPath}`),
         ).rejects.toThrowAggregateError(
           new AggregateError([
-            new RulesetValidationError('the rule must have at least "given" and "then" properties', [
-              'rules',
-              'rule-without-given-nor-them',
-            ]),
-            new RulesetValidationError('allowed types are "style" and "validation"', [
+            new RulesetValidationError(
+              'invalid-rule-definition',
+              'the rule must have at least "given" and "then" properties',
+              ['rules', 'rule-without-given-nor-them'],
+            ),
+            new RulesetValidationError('invalid-rule-definition', 'allowed types are "style" and "validation"', [
               'rules',
               'rule-with-invalid-enum',
               'type',
             ]),
             new RulesetValidationError(
+              'invalid-severity',
               'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
               ['rules', 'rule-with-invalid-enum', 'severity'],
             ),
@@ -257,16 +259,18 @@ describe('Linter service', () => {
       it('outputs "invalid ruleset" error', () => {
         return expect(run(`lint ${validOas3SpecPath} -r ${invalidRulesetPath}`)).rejects.toThrowAggregateError(
           new AggregateError([
-            new RulesetValidationError('the rule must have at least "given" and "then" properties', [
-              'rules',
-              'rule-without-given-nor-them',
-            ]),
-            new RulesetValidationError('allowed types are "style" and "validation"', [
+            new RulesetValidationError(
+              'invalid-rule-definition',
+              'the rule must have at least "given" and "then" properties',
+              ['rules', 'rule-without-given-nor-them'],
+            ),
+            new RulesetValidationError('invalid-rule-definition', 'allowed types are "style" and "validation"', [
               'rules',
               'rule-with-invalid-enum',
               'type',
             ]),
             new RulesetValidationError(
+              'invalid-severity',
               'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
               ['rules', 'rule-with-invalid-enum', 'severity'],
             ),
