@@ -6,7 +6,7 @@ Ruleset files are often named `.spectral.yaml`, but that's not a requirement.
 
 Rules take certain parameters and then call functions on parts of another YAML or JSON object being linted.
 
-Here's what a rule might look like:
+Here's what a ruleset with a single rule might look like:
 
 ```yaml
 rules:
@@ -21,7 +21,7 @@ rules:
         match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
-The example above is a single rule that can be used in an OpenAPI description. It will look at all the `paths` properties to make sure they are kebab-case (lower-case and separated with hyphens).
+The example above is a rule that can be used in an OpenAPI description. It will look at all the `paths` properties to make sure they are kebab-case (lower-case and separated with hyphens).
 
 Breaking down each part of the rule:
 
@@ -29,6 +29,15 @@ Breaking down each part of the rule:
 - `severity` will help define the importance of following the rule
 - The `given` keyword tells Spectral what part of the JSON or YAML file to target by using [JSONPath](http://jsonpath.com/) (Spectral uses [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
 - The `then` property includes the `function` type and options that tells Spectral how to apply the function to the JSON or YAML file, and make sure that the rule is being followed or not. Spectral has a set of [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+
+## Core Rulesets
+
+Spectral comes with two rulesets included:
+
+- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
+- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
+
+You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
 
 ### JSONPath Plus
 
@@ -149,12 +158,3 @@ rules:
 ```
 
 Custom formats can be registered via the [JS API](../guides/3-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
-
-## Core Rulesets
-
-Spectral comes with two rulesets included:
-
-- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
-- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
-
-You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
