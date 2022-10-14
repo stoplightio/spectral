@@ -24,7 +24,9 @@ describe('Core Functions / Defined', () => {
   describe('validation', () => {
     it.each([{}, 2])('given invalid %p options, should throw', async opts => {
       await expect(runDefined([], opts)).rejects.toThrowAggregateError(
-        new AggregateError([new RulesetValidationError('"defined" function does not accept any options', [])]),
+        new AggregateError([
+          new RulesetValidationError('invalid-function-options', '"defined" function does not accept any options', []),
+        ]),
       );
     });
   });
