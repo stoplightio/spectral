@@ -296,3 +296,12 @@ rules:
 ```
 
 Custom formats can be registered via the [JS API](../guides/3-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
+
+## Core Rulesets
+
+Spectral comes with two rulesets included:
+
+- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
+- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
+
+You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
