@@ -71,6 +71,7 @@ describe('Core Functions / Xor', () => {
         null,
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
             [],
           ),
@@ -80,6 +81,7 @@ describe('Core Functions / Xor', () => {
         2,
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
             [],
           ),
@@ -87,12 +89,13 @@ describe('Core Functions / Xor', () => {
       ],
       [
         { properties: ['foo', 'bar'], foo: true },
-        [new RulesetValidationError('"xor" function does not support "foo" option', [])],
+        [new RulesetValidationError('invalid-function-options', '"xor" function does not support "foo" option', [])],
       ],
       [
         { properties: ['foo', 'bar', 'baz'] },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
             [],
           ),
@@ -102,6 +105,7 @@ describe('Core Functions / Xor', () => {
         { properties: ['foo', {}] },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
             [],
           ),
@@ -111,6 +115,7 @@ describe('Core Functions / Xor', () => {
         { properties: ['foo'] },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
             [],
           ),
@@ -120,6 +125,7 @@ describe('Core Functions / Xor', () => {
         { properties: [] },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
             [],
           ),

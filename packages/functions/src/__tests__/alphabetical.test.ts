@@ -141,7 +141,7 @@ describe('Core Functions / Alphabetical', () => {
       [{ keyedBy: 2 }, '"alphabetical" function and its "keyedBy" option accepts only the following types: string'],
     ])('given invalid %p options, should throw', async (opts, error) => {
       await expect(runAlphabetical([], opts)).rejects.toThrowAggregateError(
-        new AggregateError([new RulesetValidationError(error, [])]),
+        new AggregateError([new RulesetValidationError('invalid-function-options', error, [])]),
       );
     });
   });

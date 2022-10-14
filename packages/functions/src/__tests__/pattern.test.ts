@@ -57,6 +57,7 @@ describe('Core Functions / Pattern', () => {
         null,
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }',
             [],
           ),
@@ -66,20 +67,37 @@ describe('Core Functions / Pattern', () => {
         {},
         [
           new RulesetValidationError(
+            'invalid-function-options',
             `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
             [],
           ),
         ],
       ],
-      [{ foo: true }, [new RulesetValidationError('"pattern" function does not support "foo" option', [])]],
+      [
+        { foo: true },
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"pattern" function does not support "foo" option',
+            [],
+          ),
+        ],
+      ],
       [
         { match: 2 },
-        [new RulesetValidationError('"pattern" function and its "match" option must be string or RegExp instance', [])],
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"pattern" function and its "match" option must be string or RegExp instance',
+            [],
+          ),
+        ],
       ],
       [
         { notMatch: null },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"pattern" function and its "notMatch" option must be string or RegExp instance',
             [],
           ),
@@ -88,8 +106,13 @@ describe('Core Functions / Pattern', () => {
       [
         { match: 4, notMatch: 10 },
         [
-          new RulesetValidationError(`"pattern" function and its "match" option must be string or RegExp instance`, []),
           new RulesetValidationError(
+            'invalid-function-options',
+            `"pattern" function and its "match" option must be string or RegExp instance`,
+            [],
+          ),
+          new RulesetValidationError(
+            'invalid-function-options',
             `"pattern" function and its "notMatch" option must be string or RegExp instance`,
             [],
           ),

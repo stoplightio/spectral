@@ -24,7 +24,9 @@ describe('Core Functions / Truthy', () => {
   describe('validation', () => {
     it.each([{}, 2])('given invalid %p options, should throw', async opts => {
       await expect(runTruthy([], opts)).rejects.toThrowAggregateError(
-        new AggregateError([new RulesetValidationError('"truthy" function does not accept any options', [])]),
+        new AggregateError([
+          new RulesetValidationError('invalid-function-options', '"truthy" function does not accept any options', []),
+        ]),
       );
     });
   });
