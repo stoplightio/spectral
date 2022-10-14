@@ -1,6 +1,6 @@
 # Rulesets
 
-Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
+Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files, such as OpenAPI or AsyncAPI descriptions. Meta, we know! 😎
 
 Ruleset files are often named `.spectral.yaml`, but that's not a requirement.
 
@@ -21,11 +21,14 @@ rules:
         match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
-The example above is a single rule that looks at all the `paths` to make sure they are kebab-case (lower-case and separated with hyphens).
+The example above is a single rule that can be used in an OpenAPI description. It will look at all the `paths` properties to make sure they are kebab-case (lower-case and separated with hyphens).
 
-The `given` keyword tells Spectral what part of the JSON or YAML file to target by using [JSONPath](http://jsonpath.com/) (Spectral uses [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
+Breaking down each part of the rule:
 
-The `then` property includes the `function` type and options that tells Spectral how to apply the function to the JSON or YAML file, and make sure that the rule is being followed or not. Spectral has a set of [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+- `description` and `message` will help users quickly understand what the goal of the rule is
+- `severity` will help define the importance of following the rule
+- The `given` keyword tells Spectral what part of the JSON or YAML file to target by using [JSONPath](http://jsonpath.com/) (Spectral uses [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
+- The `then` property includes the `function` type and options that tells Spectral how to apply the function to the JSON or YAML file, and make sure that the rule is being followed or not. Spectral has a set of [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
 ### JSONPath Plus
 
