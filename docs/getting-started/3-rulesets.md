@@ -6,6 +6,25 @@ Ruleset files are often named `.spectral.yaml`, but that's not a requirement.
 
 Rules take certain parameters and then call functions on parts of another YAML or JSON object being linted.
 
+## Create a Ruleset
+
+The fastest way to create a ruleset is to use the `extends` property to leverage an existing ruleset.
+
+Spectral comes with two built-in rulesets:
+
+- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
+- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
+
+To create a ruleset that extends both rulesets, in your terminal run:
+
+```bash
+echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
+```
+
+The newly created ruleset file can then be used to lint any OpenAPI v2/v3 or AsyncAPI descriptions.
+
+## Write Your First Rule
+
 Here's what a ruleset with a single rule might look like:
 
 ```yaml
@@ -21,7 +40,7 @@ rules:
         match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
-The example above is a rule that can be used in an OpenAPI description. It will look at all the `paths` properties to make sure they are kebab-case (lower-case and separated with hyphens).
+The example above is a rule that can be used to validate an OpenAPI description. It will look at all the `paths` properties to make sure they are kebab-case (lower-case and separated with hyphens).
 
 Breaking down each part of the rule:
 
@@ -29,6 +48,10 @@ Breaking down each part of the rule:
 - `severity` will help define the importance of following the rule
 - The `given` keyword tells Spectral what part of the JSON or YAML file to target by using [JSONPath](http://jsonpath.com/) (Spectral uses [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
 - The `then` property includes the `function` type and options that tells Spectral how to apply the function to the JSON or YAML file, and make sure that the rule is being followed or not. Spectral has a set of [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+
+## Next Steps
+
+For more information about creating Rulesets and Rules, see [Custom Rulesets](../guides/4-custom-rulesets.md).
 
 ## Ruleset Properties
 
