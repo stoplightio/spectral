@@ -61,22 +61,3 @@ Spectral comes with two rulesets included:
 - `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
 
 You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
-
-### Extending Rulesets
-
-Rulesets can extend other rulesets using the `extends` property, allowing you to pull in other rulesets.
-
-```yaml
-extends: spectral:oas
-```
-
-Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even npm modules.
-
-```yaml
-extends:
-  - ./config/spectral.json
-  - https://example.org/api/style.yaml
-  - some-npm-module # note that this would be treated as any other npm package, therefore it has to be placed under node_modules and have a valid package.json.
-```
-
-The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
