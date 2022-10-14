@@ -47,29 +47,6 @@ Spectral comes with two rulesets included:
 
 You can also make your own: read more about [Custom Rulesets](../guides/4-custom-rulesets.md).
 
-### JSONPath Plus
-
-As mentioned, Spectral uses JSONPath Plus which expands on the original JSONPath specification to add some additional operators and makes explicit some behaviors the original did not spell out.
-
-Here are some convenient **additions or elaborations**:
-
-- `^` for grabbing the **parent** of a matching item
-- `~` for grabbing **property names** of matching items (as array)
-- **Type selectors** for obtaining:
-  - Basic JSON types: `@null()`, `@boolean()`, `@number()`, `@string()`, `@array()`, `@object()`
-  - `@integer()`
-  - The compound type `@scalar()` (which also accepts `undefined` and
-    non-finite numbers when querying JavaScript objects as well as all of the basic non-object/non-function types)
-  - `@other()` usable in conjunction with a user-defined `otherTypeCallback`
-  - Non-JSON types that can nevertheless be used when querying
-    non-JSON JavaScript objects (`@undefined()`, `@function()`, `@nonFinite()`)
-- `@path`/`@parent`/`@property`/`@parentProperty`/`@root` **shorthand selectors** within filters
-- **Escaping**
-  - `` ` `` for escaping remaining sequence
-  - `@['...']`/`?@['...']` syntax for escaping special characters within
-    property names in filters
-- Documents `$..` (**getting all parent components**)
-
 ### Extending Rulesets
 
 Rulesets can extend other rulesets using the `extends` property, allowing you to pull in other rulesets.
