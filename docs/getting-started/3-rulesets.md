@@ -53,14 +53,6 @@ Breaking down each part of the rule:
 
 For more information about creating Rulesets and Rules, see [Custom Rulesets](../guides/4-custom-rulesets.md).
 
-## Ruleset Properties
-
-There are three properties that can be used at the root level of a ruleset:
-
-- `rules` (required): An array of rules.
-- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
-- `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets.
-
 ## Core Rulesets
 
 Spectral comes with two rulesets included:

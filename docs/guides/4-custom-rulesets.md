@@ -6,6 +6,15 @@ If you'd like to make sure your APIs are consistent and high quality even before
 
 Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is valid. Whatever you want to do, to start with you'll need to create some rules.
 
+## Ruleset Properties
+
+There are three properties that can be used at the root level of a ruleset:
+
+- `rules` (required): An array of rules.
+- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
+- `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets.
+- `documentationUrl` (optional): A URL that contains more information about the ruleset and rules in it. Can help provide users more context on why the ruleset exists and how it should be used.
+
 ## Adding Rules
 
 Add your own rules under the `rules` property in your `.spectral.yml`, or another ruleset file.
