@@ -281,14 +281,6 @@ rules:
       function: truthy
 ```
 
-## Core Functions
-
-Several functions [are provided by default](../reference/functions.md) for your rules.
-
-## Custom Functions
-
-If none of the [core functions](../reference/functions.md) do what you want, you can [write your own custom functions](./5-custom-functions.md).
-
 ## Aliases
 
 Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSONPath expressions across various rules.
