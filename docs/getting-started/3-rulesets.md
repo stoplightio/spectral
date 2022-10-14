@@ -2,15 +2,11 @@
 
 Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
 
-These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
+Ruleset files are often named `.spectral.yaml`, but that's not a requirement.
 
-## Anatomy of a Ruleset
+Rules take certain parameters and then call functions on parts of another YAML or JSON object being linted.
 
-A ruleset is a JSON, YAML, or JavaScript file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
-
-### Rules
-
-Rules might look a bit like this:
+Here's what a rule might look like:
 
 ```yaml
 rules:
@@ -25,15 +21,15 @@ rules:
         match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
-Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+The example above is a single rule that looks at all the `paths` to make sure they are kebab-case (lower-case and separated with hyphens).
 
-Rules then target certain chunks of the JSON/YAML with the `given` keyword, which is a [JSONPath](http://jsonpath.com/) (actually, we use [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
+The `given` keyword tells Spectral what part of the JSON or YAML file to target by using [JSONPath](http://jsonpath.com/) (Spectral uses [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
 
-The example above adds a single rule that looks at the root level `tags` object's children to make sure they all have a `description` property.
+The `then` property includes the `function` type and options that tells Spectral how to apply the function to the JSON or YAML file, and make sure that the rule is being followed or not. Spectral has a set of [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
 ### JSONPath Plus
 
-As mentioned, spectral is using JSONPath Plus which expands on the original JSONPath specification to add some additional operators and makes explicit some behaviors the original did not spell out.
+As mentioned, Spectral uses JSONPath Plus which expands on the original JSONPath specification to add some additional operators and makes explicit some behaviors the original did not spell out.
 
 Here are some convenient **additions or elaborations**:
 
