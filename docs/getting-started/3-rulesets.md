@@ -30,6 +30,14 @@ Breaking down each part of the rule:
 - The `given` keyword tells Spectral what part of the JSON or YAML file to target by using [JSONPath](http://jsonpath.com/) (Spectral uses [JSONPath Plus](https://www.npmjs.com/package/jsonpath-plus)).
 - The `then` property includes the `function` type and options that tells Spectral how to apply the function to the JSON or YAML file, and make sure that the rule is being followed or not. Spectral has a set of [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
 
+## Ruleset Properties
+
+There are three properties that can be used at the root level of a ruleset:
+
+- `rules` (required): An array of rules.
+- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
+- `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets.
+
 ## Core Rulesets
 
 Spectral comes with two rulesets included:
