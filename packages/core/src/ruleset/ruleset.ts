@@ -17,6 +17,7 @@ import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
 import { Formats } from './formats';
 import { isSimpleAliasDefinition } from './utils/guards';
+import type { Stringified } from './types';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
@@ -29,9 +30,9 @@ type RulesetContext = {
 
 let SEED = 1;
 
-export type StringifiedRuleset = {
+type RulesetJson = {
   id: number;
-  extends: StringifiedRuleset[] | null;
+  extends: RulesetJson[] | null;
   source: string | null;
   aliases: RulesetAliasesDefinition | null;
   formats: Formats | null;
@@ -39,6 +40,8 @@ export type StringifiedRuleset = {
   overrides: RulesetOverridesDefinition | null;
   parserOptions: ParserOptions;
 };
+
+export type StringifiedRuleset = Stringified<RulesetJson>;
 
 export class Ruleset {
   public readonly id = SEED++;
@@ -309,7 +312,7 @@ export class Ruleset {
     return DEFAULT_RULESET_FILE.test(uri);
   }
 
-  public toJSON(): Stringifable<StringifiedRuleset> {
+  public toJSON(): Stringifable<RulesetJson> {
     return {
       id: this.id,
       extends: this.extends,
