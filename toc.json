@@ -54,9 +54,40 @@
       "uri": "/docs/guides/3-javascript.md"
     },
     {
-      "type": "item",
+      "type": "group",
       "title": "Custom Rulesets",
-      "uri": "/docs/guides/4-custom-rulesets.md"
+      "items": [
+        {
+          "type": "item",
+          "title": "Overview",
+          "uri": "/docs/guides/4-custom-rulesets.md"
+        },
+        {
+          "type": "item",
+          "title": "Extends",
+          "uri": "/docs/guides/4a-extends.md"
+        },
+        {
+          "type": "item",
+          "title": "Recommended",
+          "uri": "/docs/guides/4b-recommended.md"
+        },
+        {
+          "type": "item",
+          "title": "Aliases",
+          "uri": "/docs/guides/4c-aliases.md"
+        },
+        {
+          "type": "item",
+          "title": "Overrides",
+          "uri": "/docs/guides/4d-overrides.md"
+        },
+        {
+          "type": "item",
+          "title": "JavaScript Ruleset Format",
+          "uri": "/docs/guides/4e-js-rulesets.md"
+        }
+      ]
     },
     {
       "type": "item",
