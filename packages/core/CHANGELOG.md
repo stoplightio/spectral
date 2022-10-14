@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.15.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.2...@stoplight/spectral-core-v1.15.0) (2022-10-14)
+
+
+### Features
+
+* **core:** include error codes in RulesetValidationError ([c01c6b5](https://github.com/stoplightio/spectral/commit/c01c6b587314337792597714ebd955b761a67649))
+
 # [@stoplight/spectral-core-v1.14.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.1...@stoplight/spectral-core-v1.14.2) (2022-10-03)
 
 
