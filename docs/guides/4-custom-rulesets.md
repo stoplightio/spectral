@@ -8,16 +8,16 @@ Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom dat
 
 ## Ruleset Properties
 
-There are three properties that can be used at the root level of a ruleset:
+There are four properties that can be used at the root level of a ruleset:
 
 - `rules` (required): An array of rules.
 - `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
 - `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets.
 - `documentationUrl` (optional): A URL that contains more information about the ruleset and rules in it. Can help provide users more context on why the ruleset exists and how it should be used.
 
-## Adding Rules
+## Add Rules
 
-Add your own rules under the `rules` property in your `.spectral.yml`, or another ruleset file.
+Add your own rules under the `rules` property in your ruleset file.
 
 ```yaml
 rules:
@@ -31,6 +31,8 @@ rules:
 ```
 
 Spectral has [built-in functions](../reference/functions.md) such as `truthy` or `pattern`, which can be used to power rules.
+
+## Rules Properties
 
 ### Given
 
