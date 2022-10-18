@@ -16,7 +16,7 @@ There are five properties that can be used at the root level of a ruleset:
 
 Rules are at the core of how rulesets work, so let's look at how to create a rule and its properties.
 
-## Rules
+## Rules Properties
 
 Rules can be added under the `rules` property in your ruleset file.
 
@@ -31,9 +31,7 @@ rules:
       function: truthy
 ```
 
-The example above is a valid ruleset with a single rule.
-
-## Rules Properties
+The example above is a valid ruleset with a single rule. Let's look at all the properties that can be used for a rule.
 
 ### Given
 
