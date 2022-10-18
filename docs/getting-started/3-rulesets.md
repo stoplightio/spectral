@@ -56,3 +56,5 @@ Breaking down each part of the rule:
 ## Next Steps
 
 For more information about creating Rulesets and Rules, see [Custom Rulesets](../guides/4-custom-rulesets.md).
+
+For more examples of existing rulesets you can use, see [Real-World Rulesets](../../README.md#🌎-real-world-rulesets) in our README.
