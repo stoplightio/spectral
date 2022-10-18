@@ -71,7 +71,7 @@ Here's an example of a rule that can access `$ref` values:
 rules:
   my-rule-name:
     description: Parameters must be references
-    given: $.paths.[*][get,post,put,delete,options]
+    given: $.paths[*][get,post,put,delete,options]
     severity: error
     resolved: false
     then:
