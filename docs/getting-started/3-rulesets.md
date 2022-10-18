@@ -21,7 +21,11 @@ To create a ruleset that extends both rulesets, in your terminal run:
 echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
 ```
 
-The newly created ruleset file can then be used to lint any OpenAPI v2/v3 or AsyncAPI descriptions.
+The newly created ruleset file can then be used to lint any OpenAPI v2/v3 or AsyncAPI descriptions by using the `spectral lint` command:
+
+```bash
+spectral lint myapifile.yaml
+```
 
 ## Write Your First Rule
 
