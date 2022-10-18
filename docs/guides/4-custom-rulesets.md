@@ -299,10 +299,3 @@ parserOptions:
 ```
 
 `parserOptions` is not inherited by extended rulesets.
-
-## Core Rulesets
-
-Spectral comes with two rulesets included:
-
-- `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
-- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
