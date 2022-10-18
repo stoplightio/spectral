@@ -1,19 +1,20 @@
 # Custom Rulesets
 
-Customizing existing rulesets might be all you need at first, but at some point, you will want to make a custom ruleset. For example, the OpenAPI and AsyncAPI rulesets help create better quality descriptions of APIs, but you could create a custom ruleset to tell you how to make better APIs. This approach is how huge companies automate [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs), instead of writing up giant Wiki documents that nobody reads.
+Customizing existing rulesets might be all you need at first, but at some point, you will want to make a custom ruleset. For example, the OpenAPI and AsyncAPI rulesets help create API descriptions that are valid according to their specifications, but you could create a custom ruleset to tell you how to make better APIs. This approach is how huge companies automate [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs), instead of writing up giant Wiki documents.
 
-If you'd like to make sure your APIs are consistent and high quality even before they're built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what error formats should be used. Read our article _[Six Things You Should Include in Your API Style Guide](https://blog.stoplight.io/six-things-you-should-include-in-your-api-style-guide?utm_source=github&utm_medium=spectral&utm_campaign=docs)._
-
-Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is valid. Whatever you want to do, to start with you'll need to create some rules.
+Let's look through the various keywords that make up a ruleset, so you can learn how to tweak a distributed ruleset to work for you, or make your own ruleset from scratch to power your organizations API Style Guide.
 
 ## Ruleset Properties
 
-There are four properties that can be used at the root level of a ruleset:
+There are five properties that can be used at the root level of a ruleset:
 
 - `rules` (required): An array of rules.
-- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
 - `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets.
+- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
 - `documentationUrl` (optional): A URL that contains more information about the ruleset and rules in it. Can help provide users more context on why the ruleset exists and how it should be used.
+- `parserOptions` (optional): Can be used to tune the severity of duplicate keys or invalid values in your ruleset.
+
+Rules are at the core of how rulesets work, so let's look at how to create a rule and its properties.
 
 ## Add Rules
 
@@ -51,45 +52,6 @@ Use the [JSONPath Online Evaluator](http://jsonpath.com/) to determine what `giv
 The `severity` keyword is optional and can be `error`, `warn`, `info`, or `hint`.
 
 The default value is `warn`.
-
-### Resolved
-
-By default, Spectral processes each rule on a "resolved" document (a file where
-all `$ref` JSON Schema references have been replaced with the objects they point
-to). While this is typically the desired behavior, there are some use cases
-where you may need to run a rule on the "raw" un-resolved document.
-
-For example, if you want to enforce conventions on the folder structure used for
-[splitting up
-documents](https://blog.stoplight.io/keeping-openapi-dry-and-portable?utm_medium=spectral&utm_source=github&utm_campaign=docs).
-
-If your rule needs to access the raw `$ref` reference values, you can set `resolved: false` to allow the rule to receive the raw un-resolved version of the document. Otherwise `resolved: true` is the default.
-
-Here's an example of a rule that can access `$ref` values:
-
-```yaml
-rules:
-  my-rule-name:
-    description: Parameters must be references
-    given: $.paths[*][get,post,put,delete,options]
-    severity: error
-    resolved: false
-    then:
-      field: parameters
-      function: schema
-      functionOptions:
-        schema:
-          type: array
-          items:
-            type: object
-            properties:
-              $ref:
-                type: string
-            required:
-              - $ref
-```
-
-**In most cases, you will want to operate on a resolved document.**
 
 ### Then
 
@@ -140,6 +102,45 @@ contact-properties:
       function: truthy
 ```
 
+### Resolved
+
+By default, Spectral processes each rule on a "resolved" document (a file where
+all `$ref` JSON Schema references have been replaced with the objects they point
+to). While this is typically the desired behavior, there are some use cases
+where you may need to run a rule on the "raw" un-resolved document.
+
+For example, if you want to enforce conventions on the folder structure used for
+[splitting up
+documents](https://blog.stoplight.io/keeping-openapi-dry-and-portable?utm_medium=spectral&utm_source=github&utm_campaign=docs).
+
+If your rule needs to access the raw `$ref` reference values, you can set `resolved: false` to allow the rule to receive the raw un-resolved version of the document. Otherwise `resolved: true` is the default.
+
+Here's an example of a rule that can access `$ref` values:
+
+```yaml
+rules:
+  my-rule-name:
+    description: Parameters must be references
+    given: $.paths[*][get,post,put,delete,options]
+    severity: error
+    resolved: false
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              $ref:
+                type: string
+            required:
+              - $ref
+```
+
+**In most cases, you will want to operate on a resolved document.**
+
 ### Message
 
 To help you create meaningful messages for results, Spectral comes with a couple of placeholders that are evaluated at runtime.
@@ -164,61 +165,6 @@ message: "{{value}} is greater than 0"
 
 ```yaml
 message: "{{path}} cannot point at remote reference"
-```
-
-## Parsing Options
-
-<!-- TODO: expand on this topic -->
-
-If you do not care about duplicate keys or invalid values (such as non-string mapping keys in YAML), you can tune their severity using the `parserOptions` setting.
-
-```yaml
-extends: spectral:oas
-parserOptions:
-  duplicateKeys: warn # error is the default value
-  incompatibleValues: off # error is the default value
-```
-
-`parserOptions` is not inherited by extended rulesets.
-
-## Documentation URL
-
-Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
-
-The rule name is appended to the link as an anchor.
-
-```yaml
-# 👇 This line allows people to find more information
-documentationUrl: https://www.example.com/docs/api-style-guide.md
-rules:
-  no-http-basic:
-    description: "Consider a more secure alternative to HTTP Basic."
-    message: "HTTP Basic is a pretty insecure way to pass credentials around, please consider an alternative."
-    severity: error
-    given: $.components.securitySchemes[*]
-    then:
-      field: scheme
-      function: pattern
-      functionOptions:
-        notMatch: basic
-```
-
-In this example, violations of the `no-http-basic` rule would indicate `https://www.example.com/docs/api-style-guide.md#no-http-basic` as the location for finding out more about the rule.
-
-If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
-
-If you wish to override a documentation URL for a particular rule, you can do so by specifying `documentationUrl`.
-
-```yaml
-extends: spectral:oas
-rules:
-  tag-description:
-    description: Please provide a description for each tag.
-    documentationUrl: https://www.example.com/docs/tag-description.md
-    given: $.tags[*]
-    then:
-      field: description
-      function: truthy
 ```
 
 ## Formats
@@ -298,6 +244,61 @@ rules:
 ```
 
 Custom formats can be registered via the [JS API](../guides/3-javascript.md), but the [CLI](../guides/2-cli.md) is limited to using the predefined formats.
+
+## Documentation URL
+
+Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
+
+The rule name is appended to the link as an anchor.
+
+```yaml
+# 👇 This line allows people to find more information
+documentationUrl: https://www.example.com/docs/api-style-guide.md
+rules:
+  no-http-basic:
+    description: "Consider a more secure alternative to HTTP Basic."
+    message: "HTTP Basic is a pretty insecure way to pass credentials around, please consider an alternative."
+    severity: error
+    given: $.components.securitySchemes[*]
+    then:
+      field: scheme
+      function: pattern
+      functionOptions:
+        notMatch: basic
+```
+
+In this example, violations of the `no-http-basic` rule would indicate `https://www.example.com/docs/api-style-guide.md#no-http-basic` as the location for finding out more about the rule.
+
+If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
+
+If you wish to override a documentation URL for a particular rule, you can do so by specifying `documentationUrl`.
+
+```yaml
+extends: spectral:oas
+rules:
+  tag-description:
+    description: Please provide a description for each tag.
+    documentationUrl: https://www.example.com/docs/tag-description.md
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+```
+
+## Parsing Options
+
+<!-- TODO: expand on this topic -->
+
+If you do not care about duplicate keys or invalid values (such as non-string mapping keys in YAML), you can tune their severity using the `parserOptions` setting.
+
+```yaml
+extends: spectral:oas
+parserOptions:
+  duplicateKeys: warn # error is the default value
+  incompatibleValues: off # error is the default value
+```
+
+`parserOptions` is not inherited by extended rulesets.
 
 ## Core Rulesets
 
