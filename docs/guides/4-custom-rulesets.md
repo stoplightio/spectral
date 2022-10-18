@@ -13,6 +13,8 @@ There are five properties that can be used at the root level of a ruleset:
 - `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions. Can be applied at the ruleset and/or rule level.
 - `documentationUrl` (optional): A URL that contains more information about the ruleset and rules in it. Can help provide users more context on why the ruleset exists and how it should be used.
 - `parserOptions` (optional): Can be used to tune the severity of duplicate keys or invalid values in your ruleset.
+- `aliases` (optional):
+- `overrides` (optional):
 
 Rules are at the core of how rulesets work, so let's look at how to create a rule and its properties.
 
@@ -31,7 +33,19 @@ rules:
       function: truthy
 ```
 
-The example above is a valid ruleset with a single rule. Let's look at all the properties that can be used for a rule.
+The example above is a valid ruleset with a single rule that can be used to lint an OpenAPI description, and validate that all `tags` have a description field.
+
+Rules can have the following properties:
+
+- `description`
+- `message`
+- `formats`
+- `recommended`
+- `severity`
+- `given`
+- `then`
+
+Let's look at all the properties that can be used for a rule.
 
 ### Given
 
