@@ -10,7 +10,7 @@ There are five properties that can be used at the root level of a ruleset:
 
 - `rules` (required): An array of rules.
 - `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets.
-- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions.
+- `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions. Can be applied at the ruleset and/or rule level.
 - `documentationUrl` (optional): A URL that contains more information about the ruleset and rules in it. Can help provide users more context on why the ruleset exists and how it should be used.
 - `parserOptions` (optional): Can be used to tune the severity of duplicate keys or invalid values in your ruleset.
 
