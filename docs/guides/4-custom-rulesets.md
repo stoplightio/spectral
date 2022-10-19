@@ -1,6 +1,6 @@
 # Rulesets
 
-Spectral comes with two rulesets built-in: [OpenAPI](../reference/openapi-rules.md) and [AsyncAPI](../reference/asyncapi-rules.md). They're a good point for getting started, but the true power of Spectral comes with customizing and creating a ruleset that fits your project or organization. Creating a ruleset can help you and your team level up your API design and API development process, and help you create better APIs.
+Spectral comes with two rulesets built-in: [OpenAPI](../reference/openapi-rules.md) and [AsyncAPI](../reference/asyncapi-rules.md). They're good starting points, but the true power of Spectral comes with customizing and creating a ruleset that fits your project or organization. Creating a ruleset can help you and your team level up your API design and API development process, and help you create better APIs.
 
 Let's look through the various keywords that make up a ruleset, so you can learn how to tweak a distributed ruleset to work for you, or make your own ruleset from scratch to power your organizations [API Style Guide](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs).
 
