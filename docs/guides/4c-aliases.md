@@ -4,6 +4,7 @@ Targeting certain parts of an OpenAPI spec is powerful but it can become cumbers
 Define aliases for commonly used JSONPath expressions on a global level which can then be reused across the ruleset.
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset, or alternatively, within an override.
+
 It's similar to `given`, with the notable difference being the possibility to distinguish between different formats.
 
 **Example**
@@ -41,6 +42,7 @@ aliases:
 ```
 
 Now, if you referenced the `SharedParameterObject` alias, the chosen path would be determined based on the document you use.
+
 For instance, if a given document matched OpenAPI 2.x, `$.parameters[*]` would be used as the JSONPath expression.
 
 Having a closer look at the example above, one may notice that it'd be still somewhat complicated to target _all_ Parameter Objects that a specific OpenAPI document may contain. To make it more feasible and avoid overly complex JSONPath expressions, `given` can be an array.

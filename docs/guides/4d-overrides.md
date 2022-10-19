@@ -28,8 +28,7 @@ overrides:
           type: number
 ```
 
-To apply an override to particular elements of files, combine a glob for a filepath
-with a [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) after the anchor, i.e.:
+To apply an override to particular elements of files, combine a glob for a filepath with a [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) after the anchor, i.e.:
 
 ```yaml
 overrides:
@@ -40,7 +39,9 @@ overrides:
 ```
 
 JSON Pointers have a different syntax than JSON Paths used in the `given` component of a rule.
+
 In JSON Pointers, path components are prefixed with a "/" and then concatenated to form the pointer.
+
 Since "/" has a special meaning in JSON pointer, it must be encoded as "~1" when it appears in a component, and "~" must be encoded as "~0".
 
 You can test JSON Pointer expressions in the [JSON Query online evaluator](https://www.jsonquerytool.com/) by choosing "JSONPointer" as the Transform.
