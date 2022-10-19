@@ -1,4 +1,4 @@
-# Custom Rulesets
+# Rulesets
 
 Customizing existing rulesets might be all you need at first, but at some point, you will want to make a custom ruleset. For example, the OpenAPI and AsyncAPI rulesets help create API descriptions that are valid according to their specifications, but you could create a custom ruleset to tell you how to make better APIs. This approach is how huge companies automate [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs), instead of writing up giant Wiki documents.
 

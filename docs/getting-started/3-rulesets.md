@@ -1,4 +1,4 @@
-# Rulesets
+# Create a Ruleset
 
 Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files, such as OpenAPI or AsyncAPI descriptions. Meta, we know! 😎
 
@@ -6,7 +6,7 @@ Ruleset files are often named `.spectral.yaml`, but that's not a requirement.
 
 Rules take certain parameters and then call functions on parts of another YAML or JSON object being linted.
 
-## Create a Ruleset
+## Extend an Existing Ruleset
 
 The fastest way to create a ruleset is to use the `extends` property to leverage an existing ruleset.
 
