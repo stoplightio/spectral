@@ -55,7 +55,7 @@
     },
     {
       "type": "group",
-      "title": "Custom Rulesets",
+      "title": "Rulesets",
       "items": [
         {
           "type": "item",
