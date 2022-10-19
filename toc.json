@@ -64,6 +64,11 @@
         },
         {
           "type": "item",
+          "title": "Rules",
+          "uri": "/docs/guides/4f-rules.md"
+        },
+        {
+          "type": "item",
           "title": "Extends",
           "uri": "/docs/guides/4a-extends.md"
         },
