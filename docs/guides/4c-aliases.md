@@ -70,7 +70,7 @@ aliases:
           - $.components.parameters[*]
 ```
 
-Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSONPath syntax, like dot notation: `"given": "#ParameterObject.name"`.
+Rulesets can then reference aliases in the [given](./4a-rules.md#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSONPath syntax, like dot notation: `"given": "#ParameterObject.name"`.
 
 Keep in mind that an alias has to be explicitly defined either at the root level or inside an override. This is to avoid ambiguity.
 
