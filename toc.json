@@ -74,11 +74,6 @@
         },
         {
           "type": "item",
-          "title": "Recommended",
-          "uri": "/docs/guides/4e-recommended.md"
-        },
-        {
-          "type": "item",
           "title": "Aliases",
           "uri": "/docs/guides/4c-aliases.md"
         },
@@ -86,6 +81,11 @@
           "type": "item",
           "title": "Overrides",
           "uri": "/docs/guides/4d-overrides.md"
+        },
+        {
+          "type": "item",
+          "title": "Recommended",
+          "uri": "/docs/guides/4e-recommended.md"
         },
         {
           "type": "item",
