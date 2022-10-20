@@ -65,17 +65,17 @@
         {
           "type": "item",
           "title": "Rules",
-          "uri": "/docs/guides/4f-rules.md"
+          "uri": "/docs/guides/4a-rules.md"
         },
         {
           "type": "item",
           "title": "Extends",
-          "uri": "/docs/guides/4a-extends.md"
+          "uri": "/docs/guides/4b-extends.md"
         },
         {
           "type": "item",
           "title": "Recommended",
-          "uri": "/docs/guides/4b-recommended.md"
+          "uri": "/docs/guides/4e-recommended.md"
         },
         {
           "type": "item",
@@ -90,7 +90,7 @@
         {
           "type": "item",
           "title": "JavaScript Ruleset Format",
-          "uri": "/docs/guides/4e-js-rulesets.md"
+          "uri": "/docs/guides/4f-js-rulesets.md"
         }
       ]
     },

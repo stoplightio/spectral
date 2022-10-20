@@ -8,15 +8,15 @@ Let's look through the various keywords that make up a ruleset, so you can learn
 
 There are five properties that can be used at the root level of a ruleset:
 
-- `rules` (required): An array of rules. See [Rules](./4f-rules.md) for more details.
-- `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets. See [Extends](./4a-extends.md) for more details.
+- `rules` (required): An array of rules. See [Rules](./4a-rules.md) for more details.
+- `extends` (optional): A reference to other rulesets. Used to extend and customize existing rulesets. See [Extends](./4b-extends.md) for more details.
 - `formats` (optional): The format that the ruleset should apply to. For example `oas3` for any OpenAPI v3.x descriptions. Can be applied at the ruleset and/or rule level. See [Formats](#formats) for more details.
 - `documentationUrl` (optional): A URL that contains more information about the ruleset and rules in it. Can help provide users more context on why the ruleset exists and how it should be used. See [Documentation URL](#documentation-url) for more details.
 - `parserOptions` (optional): Can be used to tune the severity of duplicate keys or invalid values in your ruleset. See [Parsing Options](#parsing-options) for more details.
 - `aliases` (optional): An array of key-value pairs that can be used to define commonly used JSONPath expressions, to be reused across a ruleset. See [Aliases](./4c-aliases.md) for more details.
 - `overrides` (optional): Can be used to customize which formats, files, or parts of files, that a ruleset should be applied to. See [Overrides](./4d-overrides.md) for more details.
 
-Rules are the most important part of a ruleset. For more details on rules and its properties, see [Rules](./4f-rules.md).
+Rules are the most important part of a ruleset. For more details on rules and its properties, see [Rules](./4a-rules.md).
 
 ### Formats
 

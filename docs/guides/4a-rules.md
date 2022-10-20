@@ -27,7 +27,7 @@ Rules can have the following properties:
 - `message` (optional): A message that will be displayed in the `spectral lint` output. Can be customized to use placeholder values that are evaluated at runtime, such as `{{description}}` or `{{error}}`.
 - `severity` (optional): The severity of the rule. Used to differentiate between rules that must be followed (`error`) and warnings or hints. Default value is `warn`.
 - `formats` (optional): The format that the rule should apply to. For example `oas3` for any OpenAPI v3.x descriptions. Can be applied at the ruleset and/or rule level. See [Formats](./4-custom-rulesets.md#formats) for more details.
-- `recommended` (optional): Recommended is a property that is used when extending a ruleset, where users can define if they would like to enforce all rules (`recommended` set to `true` and `false`) or only recommended rules (`recommended` set to `true`). Recommended can be used to help slowly roll out a ruleset across API landscapes with a lot of legacy APIs. Default value is `true`. See [Recommended](./4b-recommended.md) for more details.
+- `recommended` (optional): Recommended is a property that is used when extending a ruleset, where users can define if they would like to enforce all rules (`recommended` set to `true` and `false`) or only recommended rules (`recommended` set to `true`). Recommended can be used to help slowly roll out a ruleset across API landscapes with a lot of legacy APIs. Default value is `true`. See [Recommended](./4e-recommended.md) for more details.
 - `resolved` (optional): Used to apply a rule to a document that is not "resolved", where `$ref` JSON Schema references have not been replaced with the objects they point to.
 
 Let's look at all the properties that can be used for a rule.
