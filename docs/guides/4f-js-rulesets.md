@@ -2,7 +2,11 @@
 
 Spectral v6.0 added support for a JavaScript ruleset format, similar to the JSON and YAML formats.
 
-This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
+This has a few benefits:
+
+- It lets you explicitly load formats or rulesets to get control over versioning.
+- You can load common functions from popular JS libraries.
+- It feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
 
 **Example**
 
@@ -20,15 +24,15 @@ npm install --save @stoplight/spectral-functions
 npm install --save @stoplight/spectral-formats
 ```
 
-Installing these packages is not required for creating a JavaScript ruleset, but we'll use them in our example to create some common rules used with Spectral and to target a specific OpenAPI format.
+Installing these packages is not required for creating a JavaScript ruleset, but you'll use them in the example to create some common rules used with Spectral and to target a specific OpenAPI format.
 
-Next, let's create a JavaScript file to hold our ruleset:
+Next, create a JavaScript file to hold your ruleset:
 
 ```
 touch spectral.js
 ```
 
-And inside the file, let's create a couple rules:
+Inside the file, create a couple of rules:
 
 ```js
 import { truthy, undefined as pattern, schema } from "@stoplight/spectral-functions";
@@ -92,7 +96,7 @@ export default {
 };
 ```
 
-For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
+If you use custom functions, the keywords `functions` and `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
 
 This code example should look fairly familiar for anyone who has used the JSON or YAML formats. The next steps for using this ruleset would be publishing it as an npm package, and then installing that package as part of your API project and referencing in your Spectral ruleset as:
 

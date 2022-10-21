@@ -14,7 +14,7 @@ Far more rules exist than just the recommended ones, there are various other rul
 extends: [[spectral:oas, all]]
 ```
 
-You can do this with your rulesets, and slide new rules in as not recommended for a while so that only the most interested active API designers/developers get them at first, then eventually roll them out to everyone if they are well received.
+You can do this with your rulesets, and initially set new rules as "not recommended" so that the most interested active API designers/developers use them at first. Then, eventually roll them out to everyone if they are well received.
 
 ### Disabling Rules
 
@@ -26,11 +26,11 @@ rules:
   operation-operationId-unique: off
 ```
 
-The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exception - we turned `operation-operationId-unique` off.
+The example above runs all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exception; `operation-operationId-unique` is set to off.
 
 ### Enabling Rules
 
-Sometimes you might want to apply a limited number of rules from another ruleset. To do this, use the `extends` property with `off` as the second argument. This will avoid running any rules from the extended ruleset as they will all be disabled. Then you can pick and choose which rules you would like to enable.
+Sometimes you might want to apply a limited number of rules from another ruleset. To do this, use the `extends` property with `off` as the second argument. This avoids running any rules from the extended ruleset as they will all be disabled. Then you can pick and choose which rules you would like to enable.
 
 ```yaml
 extends: [[spectral:oas, off]]
@@ -38,4 +38,4 @@ rules:
   operation-operationId-unique: true
 ```
 
-The example above will only run the rule `operation-operationId-unique` that we enabled since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
+The example above only runs the rule `operation-operationId-unique` that we enabled since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.

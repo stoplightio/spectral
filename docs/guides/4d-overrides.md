@@ -1,6 +1,6 @@
 ## Overrides
 
-Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or change parts of a rule. Overrides is the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
+Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or change parts of a rule. Overrides are the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
 
 Overrides can be used to apply rulesets on:
 
@@ -58,7 +58,7 @@ In the event of multiple matches, the order of definition takes place, with the 
 
 ### Caveats
 
-Please bear in mind that overrides are only applied to the _root_ documents. If your documents have any external dependencies, i.e. $refs, the overrides won't apply.
+Overrides are only applied to the _root_ documents. If your documents have any external dependencies, i.e. $refs, the overrides won't apply.
 
 **Example:**
 

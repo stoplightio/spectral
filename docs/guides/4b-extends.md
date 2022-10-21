@@ -15,7 +15,7 @@ extends:
   - some-npm-module # note that this would be treated as any other npm package, therefore it has to be placed under node_modules and have a valid package.json.
 ```
 
-The `extends` keyword can be combined with extra rules in order to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
+The `extends` keyword can be combined with extra rules to extend and override rulesets. Learn more about that in [custom rulesets](../guides/4-custom-rulesets.md).
 
 ## Modify Rules
 
@@ -34,7 +34,7 @@ rules:
 
 This provides a new description, but anything can be changed.
 
-If you're just looking to change the severity of the rule, there is a handy shortcut.
+If you're just looking to change the severity of the rule, there's a handy shortcut.
 
 ## Change Rule Severity
 
@@ -46,4 +46,4 @@ rules:
   operation-success-response: warn
 ```
 
-Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
+See [Severity](./4a-rules.md#severity) for more details.

@@ -1,7 +1,8 @@
 ## Aliases
 
 Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSONPath expressions across various rules.
-Define aliases for commonly used JSONPath expressions on a global level which can then be reused across the ruleset.
+
+Define aliases for commonly used JSONPath expressions on a global level and then reuse them across the ruleset.
 
 Aliases can be defined in an array of key-value pairs at the root level of the ruleset, or alternatively, within an override.
 
