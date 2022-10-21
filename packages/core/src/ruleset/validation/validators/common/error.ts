@@ -10,15 +10,19 @@ function toRulesetValidationError(this: ReadonlyArray<string>, ex: unknown): Rul
     return ex;
   }
 
-  return new RulesetValidationError(isError(ex) ? ex.message : String(ex), [...this]);
+  return new RulesetValidationError('generic-validation-error', isError(ex) ? ex.message : String(ex), [...this]);
 }
 
 export function wrapError(ex: unknown, path: string): Error {
-  const parsedPath = path.slice(1).split('/');
+  const parsedPath = toParsedPath(path);
 
   if (isAggregateError(ex)) {
     return new AggregateError(ex.errors.map(toRulesetValidationError, parsedPath));
   }
 
   return toRulesetValidationError.call(parsedPath, ex);
+}
+
+export function toParsedPath(path: string): string[] {
+  return path.slice(1).split('/');
 }

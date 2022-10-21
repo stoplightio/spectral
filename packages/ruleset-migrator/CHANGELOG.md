@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-migrator-v1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.4...@stoplight/spectral-ruleset-migrator-v1.8.0) (2022-10-14)
+
+
+### Features
+
+* **ruleset-migrator:** relax validation ([#2307](https://github.com/stoplightio/spectral/issues/2307)) ([d5ce09e](https://github.com/stoplightio/spectral/commit/d5ce09e7e1f5006a63d890850f46f4fc3dac0152))
+
 # [@stoplight/spectral-ruleset-migrator-v1.7.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.3...@stoplight/spectral-ruleset-migrator-v1.7.4) (2022-08-30)
 
 

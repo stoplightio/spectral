@@ -483,6 +483,7 @@ describe('Core Functions / Schema', () => {
         2,
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
             [],
           ),
@@ -490,16 +491,23 @@ describe('Core Functions / Schema', () => {
       ],
       [
         { schema: { type: 'object' }, foo: true },
-        [new RulesetValidationError('"schema" function does not support "foo" option', [])],
+        [new RulesetValidationError('invalid-function-options', '"schema" function does not support "foo" option', [])],
       ],
       [
         { schema: { type: 'object' }, oasVersion: 1 },
-        [new RulesetValidationError('"schema" function does not support "oasVersion" option', [])],
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"schema" function does not support "oasVersion" option',
+            [],
+          ),
+        ],
       ],
       [
         { schema: { type: 'object' }, dialect: 'foo' },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"schema" function and its "dialect" option accepts only the following values: "auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"',
             [],
           ),
@@ -509,6 +517,7 @@ describe('Core Functions / Schema', () => {
         { schema: { type: 'object' }, allErrors: null },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"schema" function and its "allErrors" option accepts only the following types: boolean',
             [],
           ),
@@ -518,10 +527,12 @@ describe('Core Functions / Schema', () => {
         { schema: null, allErrors: null },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             `"schema" function and its "schema" option accepts only the following types: object`,
             [],
           ),
           new RulesetValidationError(
+            'invalid-function-options',
             `"schema" function and its "allErrors" option accepts only the following types: boolean`,
             [],
           ),

@@ -1,4 +1,4 @@
-import { aas2, aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '../asyncapi';
+import { aas2, aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5 } from '../asyncapi';
 
 describe('AsyncAPI format', () => {
   describe('AsyncAPI 2.x', () => {
@@ -85,6 +85,19 @@ describe('AsyncAPI format', () => {
       'does not recognize %s version',
       version => {
         expect(aas2_4({ asyncapi: version }, null)).toBe(false);
+      },
+    );
+  });
+
+  describe('AsyncAPI 2.5', () => {
+    it.each(['2.5.0', '2.5.2'])('recognizes %s version correctly', version => {
+      expect(aas2_5({ asyncapi: version }, null)).toBe(true);
+    });
+
+    it.each(['2', '2.3', '2.0.0', '2.1.0', '2.1.37', '2.2.0', '2.3.0', '2.4.0', '2.4.3', '2.6.0', '2.6.4'])(
+      'does not recognize %s version',
+      version => {
+        expect(aas2_5({ asyncapi: version }, null)).toBe(false);
       },
     );
   });

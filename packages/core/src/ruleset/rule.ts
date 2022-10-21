@@ -11,6 +11,7 @@ import type { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition, String
 import { minimatch } from './utils/minimatch';
 import { Formats } from './formats';
 import { resolveAlias } from './alias';
+import type { Stringified } from './types';
 
 export interface IRule {
   description: string | null;
@@ -25,12 +26,13 @@ export interface IRule {
   given: string[];
 }
 
-export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {
+type RuleJson = Omit<IRule, 'then'> & {
   name: string;
-  formats: string[] | null;
   then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
   owner: number;
 };
+
+export type StringifiedRule = Stringified<RuleJson>;
 
 export class Rule implements IRule {
   public description: string | null;
@@ -164,7 +166,7 @@ export class Rule implements IRule {
     return new Rule(this.name, this.definition, this.owner);
   }
 
-  public toJSON(): Stringifable<StringifiedRule> {
+  public toJSON(): Stringifable<RuleJson> {
     return {
       name: this.name,
       recommended: this.recommended,

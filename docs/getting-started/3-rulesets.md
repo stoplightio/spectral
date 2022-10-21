@@ -1,12 +1,12 @@
 # Rulesets
 
-Rulesets are collections of rules written in JSON or YAML, which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
+Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
 
 These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
 
 ## Anatomy of a Ruleset
 
-A ruleset is a JSON or YAML file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
+A ruleset is a JSON, YAML, or JavaScript file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
 
 ### Rules
 
@@ -83,6 +83,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `aas2_2` (AsyncAPI v2.2.0)
 - `aas2_3` (AsyncAPI v2.3.0)
 - `aas2_4` (AsyncAPI v2.4.0)
+- `aas2_5` (AsyncAPI v2.5.0)
 - `oas2` (OpenAPI v2.0)
 - `oas3` (OpenAPI v3.x)
 - `oas3_0` (OpenAPI v3.0.x)

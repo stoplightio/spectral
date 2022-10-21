@@ -7,7 +7,6 @@ module.exports = {
     'no-swagger': {
       message: 'Use OpenAPI instead ;)',
       given: '$..*',
-      type: 'style',
       then: {
         function: pattern,
         functionOptions: {

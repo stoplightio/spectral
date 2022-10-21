@@ -113,9 +113,14 @@ export type RulesetDefinition = Readonly<
   >
 >;
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type Stringifable<T> = T extends object
   ? {
       [P in keyof T]: Stringifable<T[P]> | { toJSON?(): Stringifable<T[P]> };
+    }
+  : T;
+
+export type Stringified<T> = T extends object
+  ? {
+      [P in keyof T]: NonNullable<T[P]> extends { toJSON(): infer R } ? R : Stringified<T[P]>;
     }
   : T;

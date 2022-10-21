@@ -27,6 +27,28 @@ testRule('asyncapi-tags-uniqueness', [
   },
 
   {
+    name: 'tags has duplicated names (server)',
+    document: {
+      asyncapi: '2.5.0',
+      servers: {
+        someServer: {
+          tags: [{ name: 'one' }, { name: 'one' }],
+        },
+        anotherServer: {
+          tags: [{ name: 'one' }, { name: 'two' }],
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"tags" object contains duplicate tag name "one".',
+        path: ['servers', 'someServer', 'tags', '1', 'name'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
     name: 'tags has duplicated names (operation)',
     document: {
       asyncapi: '2.0.0',

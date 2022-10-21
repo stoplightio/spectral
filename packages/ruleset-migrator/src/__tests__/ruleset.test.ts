@@ -149,16 +149,18 @@ describe('migrator', () => {
 `);
   });
 
-  describe('error handling', () => {
-    it('given unknown format, should throw', async () => {
-      await vol.promises.writeFile(path.join(cwd, 'unknown-format.json'), `{ "formats": ["json-schema-draft-2"] }`);
-      await expect(
-        migrateRuleset(path.join(cwd, 'unknown-format.json'), {
-          format: 'esm',
-          fs: vol as any,
-        }),
-      ).rejects.toThrow('Invalid ruleset provided');
-    });
+  it('given an unknown format, should not throw', async () => {
+    await vol.promises.writeFile(path.join(cwd, 'unknown-format.json'), `{ "formats": ["json-schema-draft-2"] }`);
+    await expect(
+      migrateRuleset(path.join(cwd, 'unknown-format.json'), {
+        format: 'esm',
+        fs: vol as any,
+      }),
+    ).resolves.toEqual(`import {jsonSchemaDraft2} from "@stoplight/spectral-formats";
+export default {
+  "formats": [jsonSchemaDraft2]
+};
+`);
   });
 
   it('should follow links correctly', async () => {
