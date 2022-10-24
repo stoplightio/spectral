@@ -1,7 +1,7 @@
 import { IDocument } from '../document';
 import { DocumentInventory } from '../documentInventory';
 import { IRuleResult } from '../types';
-import { ComputeFingerprintFunc, prepareResults } from '../utils';
+import { prepareResults } from './utils/results';
 import { lintNode } from './lintNode';
 import { IRunnerInternalContext } from './types';
 import { Ruleset } from '../ruleset/ruleset';
@@ -69,8 +69,8 @@ export class Runner {
     }
   }
 
-  public getResults(computeFingerprint: ComputeFingerprintFunc): IRuleResult[] {
-    return prepareResults(this.results, computeFingerprint);
+  public getResults(): IRuleResult[] {
+    return prepareResults(this.results);
   }
 }
 

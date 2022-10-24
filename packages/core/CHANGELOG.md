@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.15.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.0...@stoplight/spectral-core-v1.15.1) (2022-10-24)
+
+
+### Bug Fixes
+
+* **core:** support utf8 surrogates ([#2267](https://github.com/stoplightio/spectral/issues/2267)) ([a1bd6d2](https://github.com/stoplightio/spectral/commit/a1bd6d29b473aff257dbf66264ebdf471fae07cc))
+
 # [@stoplight/spectral-core-v1.15.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.2...@stoplight/spectral-core-v1.15.0) (2022-10-14)
 
 

@@ -98,7 +98,7 @@
     "karma-chrome-launcher": "^3.1.1",
     "karma-jasmine": "^5.1.0",
     "karma-typescript": "^5.5.3",
-    "karma-typescript-es6-transform": "^5.5.3",
+    "karma-typescript-es6-transform": "patch:karma-typescript-es6-transform@5.5.3#.yarn/patches/karma-typescript-es6-transform-npm-5.5.3-3d93c75049",
     "lint-staged": "^11.2.6",
     "memfs": "^3.3.0",
     "node-powershell": "^4.0.0",
@@ -127,5 +127,8 @@
       "prettier --ignore-path .eslintignore --write"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.1.0",
+  "resolutions": {
+    "karma-typescript-es6-transform@5.5.3": "patch:karma-typescript-es6-transform@npm:5.5.3#.yarn/patches/karma-typescript-es6-transform-npm-5.5.3-3d93c75049"
+  }
 }

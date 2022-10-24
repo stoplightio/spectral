@@ -4,15 +4,21 @@ import { isURL } from '@stoplight/path';
 
 const DATA_URIS = /^(?:data|node|file):/;
 
-export const skypack = (): Plugin => ({
-  name: '@stoplight-spectral/skypack',
-  resolveId(id) {
-    if (DATA_URIS.test(id) || isURL(id)) return;
+export const skypack = (opts?: { ignoreList?: (string | RegExp)[] }): Plugin => {
+  return <Plugin>{
+    name: '@stoplight-spectral/skypack',
+    resolveId(id) {
+      if (DATA_URIS.test(id) || isURL(id)) return;
 
-    if (isPackageImport(id)) {
-      return `https://cdn.skypack.dev/${id}`;
-    }
+      const isIgnored =
+        opts?.ignoreList !== void 0 &&
+        opts.ignoreList.some(ignored => (typeof ignored === 'string' ? ignored === id : ignored.test(id)));
 
-    return;
-  },
-});
+      if (!isIgnored && isPackageImport(id)) {
+        return `https://cdn.skypack.dev/${id}`;
+      }
+
+      return;
+    },
+  };
+};
