@@ -2566,7 +2566,6 @@ __metadata:
     ajv: ^8.6.0
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.0
-    blueimp-md5: 2.18.0
     es-aggregate-error: ^1.0.7
     jsonpath-plus: 7.1.0
     lodash: ~4.17.21
@@ -4021,13 +4020,6 @@ __metadata:
     inherits: ^2.0.4
     readable-stream: ^3.4.0
   checksum: 9e8521fa7e83aa9427c6f8ccdcba6e8167ef30cc9a22df26effcc5ab682ef91d2cbc23a239f945d099289e4bbcfae7a192e9c28c84c6202e710a0dfec3722662
-  languageName: node
-  linkType: hard
-
-"blueimp-md5@npm:2.18.0":
-  version: 2.18.0
-  resolution: "blueimp-md5@npm:2.18.0"
-  checksum: 2f4e5c77af0b322dc0679549bb64c8ab0ebaea729544cd860ec5f8ddb56e781ba446ad7782925cf9a4dec790eb465496b960b8a089ae68b39a720fe7c9c7d36d
   languageName: node
   linkType: hard
 
@@ -8508,7 +8500,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"karma-typescript-es6-transform@npm:^5.5.3":
+"karma-typescript-es6-transform@npm:5.5.3":
   version: 5.5.3
   resolution: "karma-typescript-es6-transform@npm:5.5.3"
   dependencies:
@@ -8519,6 +8511,20 @@ __metadata:
     log4js: ^6.3.0
     magic-string: ^0.25.7
   checksum: 2ece7b115c340b26d6548aaf5ba369eb70e9ab9d2f9bc1cf70d7c5df7c6a6a4c43eadfd4cdebcd536f2b2f880bee51591c2526bec72dcb5894c8ee1ea6cfa483
+  languageName: node
+  linkType: hard
+
+"karma-typescript-es6-transform@patch:karma-typescript-es6-transform@5.5.3#.yarn/patches/karma-typescript-es6-transform-npm-5.5.3-3d93c75049::locator=root%40workspace%3A.":
+  version: 5.5.3
+  resolution: "karma-typescript-es6-transform@patch:karma-typescript-es6-transform@npm%3A5.5.3#.yarn/patches/karma-typescript-es6-transform-npm-5.5.3-3d93c75049::version=5.5.3&hash=6cd81e&locator=root%40workspace%3A."
+  dependencies:
+    "@babel/core": ^7.11.1
+    "@babel/preset-env": ^7.11.0
+    acorn: ^8.1.0
+    acorn-walk: ^8.0.2
+    log4js: ^6.3.0
+    magic-string: ^0.25.7
+  checksum: 41404545a2bcee68a525f1dc41429fcd6497a869aa8c0d8a077adf7043ea7843bd602e1adb0354e0a4e77fa39152364801af0e5b1b691a849023f6140e209992
   languageName: node
   linkType: hard
 
@@ -11580,7 +11586,7 @@ __metadata:
     karma-chrome-launcher: ^3.1.1
     karma-jasmine: ^5.1.0
     karma-typescript: ^5.5.3
-    karma-typescript-es6-transform: ^5.5.3
+    karma-typescript-es6-transform: "patch:karma-typescript-es6-transform@5.5.3#.yarn/patches/karma-typescript-es6-transform-npm-5.5.3-3d93c75049"
     lint-staged: ^11.2.6
     memfs: ^3.3.0
     node-powershell: ^4.0.0
