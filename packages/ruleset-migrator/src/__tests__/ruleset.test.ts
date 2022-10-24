@@ -18,6 +18,11 @@ afterAll(() => {
   vol.reset();
 });
 
+function createFetchMockSandbox() {
+  // something is off with default module interop in Karma :man_shrugging:
+  return ((fetchMock as { default?: typeof import('fetch-mock') }).default ?? fetchMock).sandbox();
+}
+
 const scenarios = Object.keys(fixtures)
   .filter(key => path.basename(key) === 'output.mjs')
   .map(key => path.dirname(key));
@@ -99,8 +104,7 @@ describe('migrator', () => {
   });
 
   it('should accept custom fetch implementation', async () => {
-    // something is off with default module interop in Karma :man_shrugging:
-    const fetch = ((fetchMock as { default?: typeof import('fetch-mock') }).default ?? fetchMock).sandbox();
+    const fetch = createFetchMockSandbox();
 
     await vol.promises.writeFile(
       path.join(cwd, 'ruleset.json'),
@@ -122,6 +126,9 @@ describe('migrator', () => {
             },
           },
         },
+      },
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
       },
     });
 
@@ -214,6 +221,36 @@ export default {
       "valid-type": "error"
     }
   }]
+};
+`);
+  });
+
+  it('should use Content-Type detection', async () => {
+    const fetch = createFetchMockSandbox();
+
+    await vol.promises.writeFile(
+      path.join(cwd, 'ruleset.json'),
+      JSON.stringify({
+        extends: ['https://spectral.stoplight.io/ruleset'],
+      }),
+    );
+
+    fetch.get('https://spectral.stoplight.io/ruleset', {
+      body: `export default { rules: {} }`,
+      headers: {
+        'Content-Type': 'application/javascript; charset=utf-8',
+      },
+    });
+
+    expect(
+      await migrateRuleset(path.join(cwd, 'ruleset.json'), {
+        format: 'esm',
+        fs: vol as any,
+        fetch,
+      }),
+    ).toEqual(`import ruleset_ from "https://spectral.stoplight.io/ruleset";
+export default {
+  "extends": [ruleset_]
 };
 `);
   });
