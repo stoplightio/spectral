@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-bundler-v1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.3...@stoplight/spectral-ruleset-bundler-v1.4.0) (2022-10-24)
+
+
+### Features
+
+* **ruleset-bundler:** skypack plugin accepts ignore list ([#2318](https://github.com/stoplightio/spectral/issues/2318)) ([6e6d0de](https://github.com/stoplightio/spectral/commit/6e6d0de91a5916838cbfa3915284ea83be63eb7a))
+
 # [@stoplight/spectral-ruleset-bundler-v1.3.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.2...@stoplight/spectral-ruleset-bundler-v1.3.3) (2022-10-21)
 
 
