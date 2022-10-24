@@ -5,7 +5,7 @@ import * as path from '@stoplight/path';
 import * as process from 'process';
 import { createRequire } from 'module';
 import { fetch } from '@stoplight/spectral-runtime';
-import { migrateRuleset } from '@stoplight/spectral-ruleset-migrator';
+import { migrateRuleset, isBasicRuleset } from '@stoplight/spectral-ruleset-migrator';
 import { bundleRuleset } from '@stoplight/spectral-ruleset-bundler';
 import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
 import { commonjs } from '@stoplight/spectral-ruleset-bundler/plugins/commonjs';
@@ -23,10 +23,6 @@ async function getDefaultRulesetFile(): Promise<Optional<string>> {
   }
 
   return;
-}
-
-function isBasicRuleset(filepath: string): boolean {
-  return /\.(json|ya?ml)$/.test(path.extname(filepath));
 }
 
 function isErrorWithCode(error: Error | (Error & { code: unknown })): error is Error & { code: string } {
@@ -49,7 +45,7 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   let ruleset: string;
 
   try {
-    if (isBasicRuleset(rulesetFile)) {
+    if (await isBasicRuleset(rulesetFile)) {
       const migratedRuleset = await migrateRuleset(rulesetFile, {
         format: 'esm',
         fs,
