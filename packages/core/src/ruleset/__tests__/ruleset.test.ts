@@ -262,7 +262,11 @@ describe('Ruleset', () => {
   describe('error handling', () => {
     it('given empty ruleset, should throw a user friendly error', () => {
       expect(() => new Ruleset({})).toThrowError(
-        new RulesetValidationError('Ruleset must have rules or extends or overrides defined', []),
+        new RulesetValidationError(
+          'invalid-ruleset-definition',
+          'Ruleset must have rules or extends or overrides defined',
+          [],
+        ),
       );
     });
   });
@@ -1271,7 +1275,11 @@ describe('Ruleset', () => {
           }),
       ).toThrowAggregateError(
         new AggregateError([
-          new RulesetValidationError('Alias "PathItem-" does not exist', ['rules', 'valid-path', 'given']),
+          new RulesetValidationError('undefined-alias', 'Alias "PathItem-" does not exist', [
+            'rules',
+            'valid-path',
+            'given',
+          ]),
         ]),
       );
     });
@@ -1298,6 +1306,7 @@ describe('Ruleset', () => {
       ).toThrowAggregateError(
         new AggregateError([
           new RulesetValidationError(
+            'generic-validation-error',
             'Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info',
             ['rules', 'valid-path', 'given'],
           ),
@@ -1335,9 +1344,17 @@ describe('Ruleset', () => {
           }),
       ).toThrowAggregateError(
         new AggregateError([
-          new RulesetValidationError('Alias "PathItem" does not exist', ['rules', 'valid-path', 'given']),
-          new RulesetValidationError('Alias "Name" does not exist', ['rules', 'valid-name-and-description', 'given']),
-          new RulesetValidationError(`Alias "Description" does not exist`, [
+          new RulesetValidationError('undefined-alias', 'Alias "PathItem" does not exist', [
+            'rules',
+            'valid-path',
+            'given',
+          ]),
+          new RulesetValidationError('undefined-alias', 'Alias "Name" does not exist', [
+            'rules',
+            'valid-name-and-description',
+            'given',
+          ]),
+          new RulesetValidationError('undefined-alias', `Alias "Description" does not exist`, [
             'rules',
             'valid-name-and-description',
             'given',

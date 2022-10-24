@@ -10,7 +10,7 @@ These rules apply to both OpenAPI v2.0, v3.0, and most likely v3.1, although the
 
 ### contact-properties
 
-The [info-contact](#info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url` and `email`.
+The [info-contact](#info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url`, and `email`.
 
 Putting in the name of the developer/team/department/company responsible for the API, along with the support email and help-desk/GitHub Issues/whatever URL means people know where to go for help. This can mean more money in the bank, instead of developers just wandering off or complaining online.
 
@@ -22,7 +22,7 @@ Putting in the name of the developer/team/department/company responsible for the
 openapi: "3.0.2"
 info:
   title: Awesome API
-  description: A very well defined API
+  description: A very well-defined API
   version: "1.0"
   contact:
     name: A-Team
@@ -72,7 +72,7 @@ TheBadModel:
 
 Info object should contain `contact` object.
 
-Hopefully your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
+Hopefully, your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
 
 **Recommended:** Yes
 
@@ -144,7 +144,7 @@ info:
 
 ### no-\$ref-siblings
 
-Prior to OpenAPI v3.1, keywords next to `$ref` were be ignored by most tooling, but not all. This leads to inconsistent experiences depending on what combinations of tools are used. As of v3.1 $ref siblings are allowed, so this rule will not be applied.
+Before OpenAPI v3.1, keywords next to `$ref` were ignored by most tooling, but not all. This leads to inconsistent experiences depending on what combinations of tools are used. As of v3.1 $ref siblings are allowed, so this rule will not be applied.
 
 **Recommended:** Yes
 
@@ -159,7 +159,7 @@ TheBadModel:
 
 ### no-eval-in-markdown
 
-This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like inject `eval()` JavaScript statements, it could lead to an XSS attack.
+This rule protects against an edge case, for anyone bringing in description documents from third parties and using the parsed content rendered in HTML/JS. If one of those third parties does something shady like injecting `eval()` JavaScript statements, it could lead to an XSS attack.
 
 **Recommended:** Yes
 
@@ -173,7 +173,7 @@ info:
 
 ### no-script-tags-in-markdown
 
-This rule protects against a potential hack, for anyone bringing in description documents from third parties then generating HTML documentation. If one of those third parties does something shady like inject `<script>` tags, they could easily execute arbitrary code on your domain, which if it's the same as your main application could be all sorts of terrible.
+This rule protects against a potential hack, for anyone bringing in description documents from third parties and then generating HTML documentation. If one of those third parties does something shady like injecting `<script>` tags, they could easily execute arbitrary code on your domain, which if it's the same as your main application could be all sorts of terrible.
 
 **Recommended:** Yes
 
@@ -262,7 +262,7 @@ Make the value `lower-hyphen-case`, and try and think of a name for the action w
 
 Every operation must have a unique `operationId`.
 
-Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, all sorts of things like that.
+Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, among other things.
 
 **Recommended:** Yes
 
@@ -302,7 +302,7 @@ paths:
 
 ### operation-operationId-valid-in-url
 
-Seeing as operationId is often used for unique URLs in documentation systems, it's a good idea to avoid non-URL safe characters.
+Seeing as operationId is often used for unique URLs in documentation systems, it's a good idea to avoid non-URL-safe characters.
 
 **Recommended:** Yes
 
@@ -333,7 +333,7 @@ Use just one tag for an operation, which is helpful for some documentation syste
 
 ### operation-success-response
 
-Operation must have at least one `2xx` or `3xx` response. Any API operation (endpoint) can fail, but presumably it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
+Operation must have at least one `2xx` or `3xx` response. Any API operation (endpoint) can fail, but presumably, it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
 
 **Recommended:** Yes
 
@@ -368,7 +368,7 @@ Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
 
 ### path-keys-no-trailing-slash
 
-Keep trailing slashes off of paths, as it can cause some confusion. Some web tooling (like mock servers, real servers, code generators, application frameworks, etc.) will treat `example.com/foo` and `example.com/foo/` as the same thing, but other tooling will not. Avoid any confusion by just documenting them without the slash, and maybe some tooling will let people shove a / on there when they're using it or maybe not, but at least the docs are suggesting how it should be done properly.
+Keep trailing slashes off of paths, as it can cause some confusion. Some web tooling (like mock servers, real servers, code generators, application frameworks, etc.) will treat `example.com/foo` and `example.com/foo/` as the same thing, but other tooling will not. Avoid any confusion by just documenting them without the slash, and maybe some tooling will let people shove a / on there when they're using it, or maybe not, but at least the docs are suggesting how it should be done properly.
 
 **Recommended:** Yes
 
@@ -382,8 +382,8 @@ Don't put query string items in the path, they belong in parameters with `in: qu
 
 Path parameters are correct and valid.
 
-1. For every parameters referenced in the path string (i.e: `/users/{userId}`), the parameter must be defined in either
-   `path.parameters`, or `operation.parameters` objects (Non standard HTTP operations will be silently ignored.)
+1. For every parameter referenced in the path string (i.e: `/users/{userId}`), the parameter must be defined in either
+   `path.parameters`, or `operation.parameters` objects (non-standard HTTP operations will be silently ignored.)
 
 2. every `path.parameters` and `operation.parameters` parameter must be used in the path string.
 
@@ -396,12 +396,12 @@ Tags alone are not very descriptive. Give folks a bit more information to work w
 ```yaml
 tags:
   - name: "Aardvark"
-    description: Funny nosed pig-head racoon.
+    description: Funny-nosed pig-head raccoon.
   - name: "Badger"
     description: Angry short-legged omnivores.
 ```
 
-If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, anything. What is clear to the folks writing the document is probably not as clear to others.
+If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, or anything. What is clear to the folks writing the document is probably not as clear to others.
 
 ```yaml
 tags:
@@ -480,7 +480,7 @@ The discriminator property MUST be defined at this schema and it MUST be in the 
 
 ### oas2-host-not-example
 
-Server URL should not point at example.com.
+Server URL should not point to example.com.
 
 **Recommended:** No
 
@@ -544,7 +544,7 @@ Examples must be valid against their defined schema. Common reasons you may see 
 
 **Recommended:** Yes
 
-For example, if you have a Pet object with an `id` property as type `integer`, and `name` and `petType` properties as type `string`, the examples properties type should match the schema:
+For example, if you have a Pet object with an `id` property as type `integer`, and `name` and `petType` properties as type `string`, the `examples` properties type should match the schema:
 
 ```yaml
 schemas:
@@ -614,7 +614,7 @@ OpenAPI `servers` must be present and non-empty array.
 
 **Recommended:** Yes
 
-Share links to any and all servers that people might care about. If this is going to be given to internal people then usually that is localhost (so they know the right port number), staging, and production.
+Share links to any servers that people might care about. If this is going to be given to internal people then usually that is localhost (so they know the right port number), staging, and production.
 
 ```yaml
 servers:
@@ -672,7 +672,7 @@ Validate structure of OpenAPI v3 specification.
 
 ### oas3-server-not-example.com
 
-Server URL should not point at example.com.
+Server URL should not point to example.com.
 
 **Recommended:** No
 

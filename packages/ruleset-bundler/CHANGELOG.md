@@ -1,3 +1,17 @@
+# [@stoplight/spectral-ruleset-bundler-v1.3.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.2...@stoplight/spectral-ruleset-bundler-v1.3.3) (2022-10-21)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** virtualFs plugin not recognizing files ([#2271](https://github.com/stoplightio/spectral/issues/2271)) ([4bc38b3](https://github.com/stoplightio/spectral/commit/4bc38b3f20b2420b893f2b4f4a0b1af54e15d3e0))
+
+# [@stoplight/spectral-ruleset-bundler-v1.3.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.1...@stoplight/spectral-ruleset-bundler-v1.3.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** address Rollup.js warning ([1e36673](https://github.com/stoplightio/spectral/commit/1e366731f01d95f1dc4ad47cf8fdebcda61ff19d))
+
 # [@stoplight/spectral-ruleset-bundler-v1.3.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.0...@stoplight/spectral-ruleset-bundler-v1.3.1) (2022-08-03)
 
 

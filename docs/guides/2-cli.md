@@ -18,7 +18,7 @@ You can lint multiple files at the same time by passing on multiple arguments:
 spectral lint petstore.yaml https://example.com/petstore/openapi-v2.json https://example.com/todos/openapi-v3.json
 ```
 
-Alternatively you can use [glob syntax](https://github.com/mrmlnc/fast-glob#basic-syntax) to match multiple files at once:
+Alternatively, you can use [glob syntax](https://github.com/mrmlnc/fast-glob#basic-syntax) to match multiple files at once:
 
 ```bash
 spectral lint ./reference/**/*.oas*.{json,yml,yaml}
@@ -62,21 +62,21 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 
 ## Error Results
 
-Spectral has a few different error severities: `error`, `warn`, `info` and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, but since v5.0, only the presence of errors will cause a failure status code of 1. Seeing results and getting a failure code for it are now two different things.
+Spectral has a few different error severities: `error`, `warn`, `info`, and `hint`, and they are in "order" from highest to lowest. By default, all results will be shown regardless of severity, but since v5.0, only the presence of errors will cause a failure status code of 1. Seeing results and getting a failure code for it are now two different things.
 
 The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` would return a failure status code of 1 for any info results or higher. Using `--fail-severity=warn` will cause a failure status code for errors or warnings.
 
-Changing the fail severity will not affect output. To change what results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the specified fail severity.
+Changing the fail severity will not affect output. To change the results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This will strip out any results which are below the specified fail severity.
 
 ## Proxying
 
-To have requests made from Spectral be proxied through a server, you'd need to specify PROXY environment variable:
+To have requests made from Spectral be proxied through a server, you'd need to specify the `PROXY` environment variable:
 
 `PROXY=<<PROXY_SERVER_ADDRESS>> spectral lint spec.yaml`
 
 ## Custom \$ref Resolving
 
-If you want to customize \$ref resolving, you can leverage `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
+If you want to customize \$ref resolving, you can leverage the `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
 
 ### Example
 
@@ -87,7 +87,7 @@ const { Resolver } = require("@stoplight/json-ref-resolver");
 
 module.exports = new Resolver({
   resolvers: {
-    // pass any resolver for protocol you need
+    // pass any resolver for the protocol you need
   },
 });
 ```

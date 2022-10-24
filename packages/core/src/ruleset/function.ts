@@ -19,7 +19,11 @@ addFormats(ajv);
 
 export class RulesetFunctionValidationError extends RulesetValidationError {
   constructor(fn: string, error: ErrorObject) {
-    super(RulesetFunctionValidationError.printMessage(fn, error), error.instancePath.slice(1).split('/'));
+    super(
+      'invalid-function-options',
+      RulesetFunctionValidationError.printMessage(fn, error),
+      error.instancePath.slice(1).split('/'),
+    );
   }
 
   private static printMessage(fn: string, error: ErrorObject): string {
@@ -150,7 +154,11 @@ export function createRulesetFunction<I, O>(
     }
 
     if (options === null) {
-      throw new RulesetValidationError(`"${fn.name || '<unknown>'}" function does not accept any options`, []);
+      throw new RulesetValidationError(
+        'invalid-function-options',
+        `"${fn.name || '<unknown>'}" function does not accept any options`,
+        [],
+      );
     } else if (
       'errors' in validateOptions &&
       Array.isArray(validateOptions.errors) &&
@@ -160,7 +168,11 @@ export function createRulesetFunction<I, O>(
         validateOptions.errors.map(error => new RulesetFunctionValidationError(fn.name || '<unknown>', error)),
       );
     } else {
-      throw new RulesetValidationError(`"functionOptions" of "${fn.name || '<unknown>'}" function must be valid`, []);
+      throw new RulesetValidationError(
+        'invalid-function-options',
+        `"functionOptions" of "${fn.name || '<unknown>'}" function must be valid`,
+        [],
+      );
     }
   };
 

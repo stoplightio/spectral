@@ -379,6 +379,7 @@ describe('Core Functions / Casing', () => {
         { type: 'foo' },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"casing" function and its "type" option accept the following values: flat, camel, pascal, kebab, cobol, snake, macro',
             [],
           ),
@@ -386,7 +387,7 @@ describe('Core Functions / Casing', () => {
       ],
       [
         { type: 'macro', foo: true },
-        [new RulesetValidationError('"casing" function does not support "foo" option', [])],
+        [new RulesetValidationError('invalid-function-options', '"casing" function does not support "foo" option', [])],
       ],
       [
         {
@@ -394,7 +395,13 @@ describe('Core Functions / Casing', () => {
           disallowDigits: false,
           separator: {},
         },
-        [new RulesetValidationError('"casing" function is missing "separator.char" option', [])],
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function is missing "separator.char" option',
+            [],
+          ),
+        ],
       ],
       [
         {
@@ -402,11 +409,23 @@ describe('Core Functions / Casing', () => {
           disallowDigits: false,
           separator: { allowLeading: true },
         },
-        [new RulesetValidationError('"casing" function is missing "separator.char" option', [])],
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function is missing "separator.char" option',
+            [],
+          ),
+        ],
       ],
       [
         { type: 'snake', separator: { char: 'a', foo: true } },
-        [new RulesetValidationError('"casing" function does not support "separator.foo" option', [])],
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function does not support "separator.foo" option',
+            [],
+          ),
+        ],
       ],
       [
         {
@@ -417,6 +436,7 @@ describe('Core Functions / Casing', () => {
         },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"',
             [],
           ),
@@ -431,6 +451,7 @@ describe('Core Functions / Casing', () => {
         },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"',
             [],
           ),

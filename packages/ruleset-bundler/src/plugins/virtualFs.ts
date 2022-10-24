@@ -1,9 +1,9 @@
 import { dirname, parse, join, normalize, isAbsolute, isURL } from '@stoplight/path';
-import type { Plugin, PluginContext } from 'rollup';
+import type { Plugin } from 'rollup';
 import type { IO } from '../types';
 
 export const virtualFs = ({ fs }: IO): Plugin => {
-  const recognized = new WeakMap<PluginContext, string[]>();
+  const recognized = new Set();
 
   return {
     name: '@stoplight-spectral/virtual-fs',
@@ -27,18 +27,12 @@ export const virtualFs = ({ fs }: IO): Plugin => {
         resolvedSource = join(dirname(importer), source);
       }
 
-      let existingEntries = recognized.get(this);
-      if (existingEntries === void 0) {
-        existingEntries = [];
-        recognized.set(this, existingEntries);
-      }
-
-      existingEntries.push(resolvedSource);
+      recognized.add(resolvedSource);
 
       return resolvedSource;
     },
     load(id): Promise<string> | undefined {
-      if (!isURL(id) && recognized.get(this)?.includes(id) === true) {
+      if (!isURL(id) && recognized.has(id)) {
         return fs.promises.readFile(id, 'utf8');
       }
 

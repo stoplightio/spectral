@@ -6,7 +6,6 @@ module.exports = {
       message: 'Info must contain Stoplight',
       given: '$.info',
       recommended: true,
-      type: 'style',
       then: {
         field: 'title',
         function: pattern,

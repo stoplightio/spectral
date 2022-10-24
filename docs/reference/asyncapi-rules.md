@@ -40,7 +40,7 @@ Channel servers must be defined in the `servers` object.
 asyncapi: "2.0.0"
 info:
   title: Awesome API
-  description: A very well defined API
+  description: A very well-defined API
   version: "1.0"
 servers:
   production:
@@ -58,7 +58,7 @@ channels:
 asyncapi: "2.0.0"
 info:
   title: Awesome API
-  description: A very well defined API
+  description: A very well-defined API
   version: "1.0"
 servers:
   production:
@@ -80,7 +80,7 @@ The schema definition of the application headers must be of type “object”.
 
 ### asyncapi-info-contact-properties
 
-The [asyncapi-info-contact](#asyncapi-info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url` and `email`.
+The [asyncapi-info-contact](#asyncapi-info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url`, and `email`.
 
 Putting in the name of the developer/team/department/company responsible for the API, along with the support email and help-desk/GitHub Issues/whatever URL means people know where to go for help. This can mean more money in the bank, instead of developers just wandering off or complaining online.
 
@@ -92,7 +92,7 @@ Putting in the name of the developer/team/department/company responsible for the
 asyncapi: "2.0.0"
 info:
   title: Awesome API
-  description: A very well defined API
+  description: A very well-defined API
   version: "1.0"
   contact:
     name: A-Team
@@ -104,7 +104,7 @@ info:
 
 Info object should contain `contact` object.
 
-Hopefully your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
+Hopefully, your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
 
 **Recommended:** Yes
 
@@ -174,9 +174,15 @@ info:
     name: MIT
 ```
 
+### asyncapi-latest-version
+
+Checking if the AsyncAPI document is using the latest version.
+
+**Recommended:** Yes
+
 ### asyncapi-message-examples
 
-All `examples` in message object should follow by `payload` and `headers` schemas.
+All `examples` in message object should follow `payload` and `headers` schemas.
 
 **Bad Example**
 
@@ -261,7 +267,7 @@ Operation objects should have a description.
 
 ### asyncapi-operation-operationId-uniqueness
 
-`operationId` must be unique across all the operations (except these one defined in the components).
+`operationId` must be unique across all the operations (except the ones defined in the components).
 
 **Recommended:** Yes
 
@@ -413,7 +419,7 @@ application/vnd.aai.asyncapi+yaml;version=2.0.0
 
 At this point, explicitly setting `schemaFormat` is not supported by Spectral, so if you use it this rule will emit an info message and skip validating the payload.
 
-Other formats such as OpenAPI Schema Object, JSON Schema Draft 07 and Avro will be added in various upcoming versions.
+Other formats such as OpenAPI Schema Object, JSON Schema Draft 07, and Avro will be added in various upcoming versions.
 
 **Recommended:** Yes
 
@@ -473,7 +479,7 @@ servers:
 
 ### asyncapi-server-not-example-com
 
-Server URL should not point at example.com.
+Server URL should not point to example.com.
 
 **Recommended:** No
 
@@ -517,7 +523,7 @@ All server URL variables should be defined in the `variables` object of the serv
 
 ### asyncapi-servers
 
-A non empty `servers` object is expected to be located at the root of the document.
+A non-empty `servers` object is expected to be located at the root of the document.
 
 **Recommended:** Yes
 
@@ -528,12 +534,12 @@ Tags alone are not very descriptive. Give folks a bit more information to work w
 ```yaml
 tags:
   - name: "Aardvark"
-    description: Funny nosed pig-head racoon.
+    description: Funny-nosed pig-head raccoon.
   - name: "Badger"
     description: Angry short-legged omnivores.
 ```
 
-If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, anything. What is clear to the folks writing the document is probably not as clear to others.
+If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, or anything. What is clear to the folks writing the document is probably not as clear to others.
 
 ```yaml
 tags:

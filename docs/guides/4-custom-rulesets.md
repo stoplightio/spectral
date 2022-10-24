@@ -1,8 +1,8 @@
 # Custom Rulesets
 
-Customising existing rulesets might be all you need at first, but at some point you will want to make a custom ruleset. For example, the OpenAPI and AsyncAPI rulesets help create better quality descriptions of APIs, but you could create a custom ruleset to tell you how to make better APIs. This approach is how huge companies automate [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs), instead of writing up giant Wiki documents that nobody reads.
+Customizing existing rulesets might be all you need at first, but at some point, you will want to make a custom ruleset. For example, the OpenAPI and AsyncAPI rulesets help create better quality descriptions of APIs, but you could create a custom ruleset to tell you how to make better APIs. This approach is how huge companies automate [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs), instead of writing up giant Wiki documents that nobody reads.
 
-If you'd like to make sure your APIs are consistent and high quality before they've even built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what error formats should be used. Read our article _[Six Things You Should Include in Your API Style Guide](https://blog.stoplight.io/six-things-you-should-include-in-your-api-style-guide?utm_source=github&utm_medium=spectral&utm_campaign=docs)._
+If you'd like to make sure your APIs are consistent and high quality even before they're built, create a ruleset with rules that define how URLs should work, what security schemes are appropriate, or what error formats should be used. Read our article _[Six Things You Should Include in Your API Style Guide](https://blog.stoplight.io/six-things-you-should-include-in-your-api-style-guide?utm_source=github&utm_medium=spectral&utm_campaign=docs)._
 
 Or you can create a custom ruleset to make sure your Jekyll or Gatsby custom data is valid. Whatever you want to do, to start with you'll need to create some rules.
 
@@ -52,9 +52,7 @@ For example, if you want to enforce conventions on the folder structure used for
 [splitting up
 documents](https://blog.stoplight.io/keeping-openapi-dry-and-portable?utm_medium=spectral&utm_source=github&utm_campaign=docs).
 
-If your rule needs to access the raw `$ref` reference values, you can set
-`resolved: false` to allow the rule to receive the raw un-resolved version of
-the document. Otherwise `resolved: true` is the default.
+If your rule needs to access the raw `$ref` reference values, you can set `resolved: false` to allow the rule to receive the raw un-resolved version of the document. Otherwise `resolved: true` is the default.
 
 Here's an example of a rule that can access `$ref` values:
 
@@ -94,7 +92,7 @@ then:
   function: truthy
 ```
 
-The `field` keyword is optional, and is for applying the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSONPath. The value can also be `@key` to apply the rule to a keys of an object.
+The `field` keyword is optional and is used to apply the function to a specific property in an object. If omitted the function will be applied to the entire target of the `given` JSONPath. The value can also be `@key` to apply the rule to the keys of an object.
 
 ```yaml
 given: "$.responses"
@@ -174,7 +172,7 @@ rules:
 
 This provides a new description, but anything can be changed.
 
-If you're just looking change the severity of the rule, there is a handy shortcut.
+If you're just looking to change the severity of the rule, there is a handy shortcut.
 
 ### Changing Rule Severity
 
@@ -190,7 +188,7 @@ Available severity levels are `error`, `warn`, `info`, `hint`, and `off`.
 
 ## Recommended or All
 
-Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes with a lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use-case.
+Rules by default are considered "recommended" (equivalent to a rule having) `recommended: true` but they can also be marked as not recommended with `recommended: false`. This can help scenarios like rolling out rulesets across API landscapes with a lot of legacy APIs which might have a hard time following every rule immediately. A two-tier system for rules can be helpful here, to avoid requiring several rulesets for this basic use case.
 
 You can try this out with the core OpenAPI ruleset. If you simply extend the ruleset, by default you will only get the recommended rules.
 
@@ -198,7 +196,7 @@ You can try this out with the core OpenAPI ruleset. If you simply extend the rul
 extends: [[spectral:oas, recommended]]
 ```
 
-Far more rule exist than just the recommended ones, there are various other rules which will help you create high quality OpenAPI descriptions.
+Far more rules exist than just the recommended ones, there are various other rules which will help you create high-quality OpenAPI descriptions.
 
 ```yaml
 extends: [[spectral:oas, all]]
@@ -216,7 +214,7 @@ rules:
   operation-operationId-unique: off
 ```
 
-The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exceptions - we turned `operation-operationId-unique` off.
+The example above will run all of the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exception - we turned `operation-operationId-unique` off.
 
 ### Enabling Rules
 
@@ -228,11 +226,11 @@ rules:
   operation-operationId-unique: true
 ```
 
-The example above will run the single rule that we enabled, since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
+The example above will only run the rule `operation-operationId-unique` that we enabled since we passed `off` to disable all rules by default when extending the `spectral:oas` ruleset.
 
 ## Parsing Options
 
-If you do not care about duplicate keys or invalid values (such as non-string mapping keys in YAML), you can tune their severity using `parserOptions` setting.
+If you do not care about duplicate keys or invalid values (such as non-string mapping keys in YAML), you can tune their severity using the `parserOptions` setting.
 
 ```yaml
 extends: spectral:oas
@@ -247,7 +245,7 @@ parserOptions:
 
 Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
 
-Whatever you link you provide, the rule name will be appended as an anchor.
+The rule name is appended to the link as an anchor.
 
 ```yaml
 # 👇 This line allows people to find more information
@@ -291,56 +289,6 @@ Several functions [are provided by default](../reference/functions.md) for your 
 
 If none of the [core functions](../reference/functions.md) do what you want, you can [write your own custom functions](./5-custom-functions.md).
 
-## Alternative JS Ruleset Format
-
-Spectral v6.0 added support for an alternative ruleset format, similar to the JSON and YAML formats, but now entirely in Javascript.
-
-This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries like normal, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
-
-**Example**
-
-```js
-//you can import popular functions from libraries
-import { isObject } from "https://cdn.jsdelivr.net/npm/lodash-es/+esm";
-import { truthy, schema } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions/+esm";
-// you can stick to an older version if you want to for some reason. That's fine
-import { alphabetical } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-functions@1.0.4/+esm";
-import { oasRuleset } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-rulesets/+esm";
-import { oas2 } from "https://cdn.jsdelivr.net/npm/@stoplight/spectral-formats/+esm";
-
-import { verifyType } from "./verifyType.mjs";
-
-const $SCHEMA_DRAFT_2020_XX_REGEX = /^https?:\/\/json-schema.org\/draft\/2020-\d\d\/(?:hyper-)?schema#?$/;
-
-const JSONSchemaDraft2020_XX = document => isObject(document) && "$schema" in document && $SCHEMA_DRAFT_2020_XX_REGEX.test(document.$schema);
-
-export default {
-  formats: [oas2, oas3],
-  extends: [oasRuleset],
-  rules: {
-    "valid-rule": {
-      given: "$.info",
-      then: {
-        function: truthy,
-      },
-    },
-    "only-new-json-schema": {
-      formats: [JSONSchemaDraft2020_XX],
-      given: "$..type",
-      then: {
-        function: verifyType,
-      },
-    },
-  },
-};
-```
-
-This code example adds two rules: `valid-rule` and `only-new-json-schema`, things should look fairly familiar for anyone who has used the JSON or YAML formats.
-
-For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
-
-For now the JSON, YAML, and JS, are all being maintained, and there are no current plans to drop support for any of them.
-
 ## Aliases
 
 Targeting certain parts of an OpenAPI spec is powerful but it can become cumbersome to write and repeat complex JSONPath expressions across various rules.
@@ -365,7 +313,7 @@ aliases:
     - "$.paths[*]~"
 ```
 
-If you deal with a variety of different spec, you may find the above approach insufficient, particularly when the shape of the document is notably different.
+If you deal with a variety of different specs, you may find the above approach insufficient, particularly when the shape of the document is notably different.
 In such a case, you may want to consider using scoped aliases.
 
 ```yaml
@@ -383,12 +331,10 @@ aliases:
           - $.components.parameters[*]
 ```
 
-Now, if you referenced `SharedParameterObject` alias, the chosen path would be determined based on the document you use.
+Now, if you referenced the `SharedParameterObject` alias, the chosen path would be determined based on the document you use.
 For instance, if a given document matched OpenAPI 2.x, `$.parameters[*]` would be used as the JSONPath expression.
 
-Having a closer look on the example above, one may notice that it'd be still somewhat complicated to target _all_ Parameter Objects
-that a specific OpenAPI document may contain.
-To make it more feasible and avoid overly complex JSONPath expressions, `given` can be an array.
+Having a closer look at the example above, one may notice that it'd be still somewhat complicated to target _all_ Parameter Objects that a specific OpenAPI document may contain. To make it more feasible and avoid overly complex JSONPath expressions, `given` can be an array.
 
 ```yaml
 aliases:
@@ -415,8 +361,7 @@ aliases:
 
 Rulesets can then reference aliases in the [given](#given) keyword, either in full: `"given": "#Paths"`, or use it as a prefix for further JSONPath syntax, like dot notation: `"given": "#ParameterObject.name"`.
 
-Bear in mind that an alias has to be explicitly defined in either at the top-level or inside an override.
-This is to avoid ambiguity.
+Keep in mind that an alias has to be explicitly defined either at the root level or inside an override. This is to avoid ambiguity.
 
 ```yaml
 aliases:
@@ -451,7 +396,7 @@ overrides:
       - legacy/**/*.json
     rules:
       falsy-value:
-        given: "#Value" # invalid because undeclared both at the top-level and the override. Note that this could be technically resolvable for some JSON documents, because the previous override block has the alias, but to spare some headaches, we demand an alias to be explicitly defined.
+        given: "#Value" # invalid because undeclared both at the top-level and the override. Note that this could be technically resolvable for some JSON documents because the previous override block has the alias, but to spare some headaches, we demand an alias to be explicitly defined.
         severity: error
         then:
           function: falsy
@@ -461,7 +406,7 @@ overrides:
 
 ## Overrides
 
-Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or changing parts of a rule. Overrides is the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
+Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or change parts of a rule. Overrides is the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
 
 Overrides can be used to apply rulesets on:
 
@@ -522,7 +467,7 @@ Please bear in mind that overrides are only applied to the _root_ documents. If 
 
 **Example:**
 
-Given the following 2 YAML documents
+Given the following 2 YAML documents:
 
 ```yaml
 # my-document.yaml
@@ -545,7 +490,7 @@ required:
   - id
 ```
 
-and the ruleset below
+And the ruleset below:
 
 ```json
 {
@@ -569,7 +514,7 @@ and the ruleset below
 }
 ```
 
-running `spectral lint my-document.yaml` will result in
+Running `spectral lint my-document.yaml` will result in the following output:
 
 ```
 /project/User.yaml
@@ -578,8 +523,119 @@ running `spectral lint my-document.yaml` will result in
 ✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
 ```
 
-while executing `spectral lint User.yaml` will output
+While executing `spectral lint User.yaml` will output:
 
 ```
 No results with a severity of 'error' or higher found!
 ```
+
+## Alternative JS Ruleset Format
+
+Spectral v6.0 added support for a JavaScript ruleset format, similar to the JSON and YAML formats.
+
+This has a few benefits: it lets you explicitly load formats or rulesets to get control over versioning, you can load common functions from popular JS libraries, and in general feels a lot more welcoming to developers experienced with JavaScript, especially when it comes to working with custom functions.
+
+**Example**
+
+To create a JavaScript ruleset, the first step is creating a folder. In your terminal, run the following commands:
+
+```
+mkdir style-guide
+cd style-guide
+```
+
+Next, install two dependencies using [npm](https://www.npmjs.com/):
+
+```
+npm install --save @stoplight/spectral-functions
+npm install --save @stoplight/spectral-formats
+```
+
+Installing these packages is not required for creating a JavaScript ruleset, but we'll use them in our example to create some common rules used with Spectral and to target a specific OpenAPI format.
+
+Next, let's create a JavaScript file to hold our ruleset:
+
+```
+touch spectral.js
+```
+
+And inside the file, let's create a couple rules:
+
+```js
+import { truthy, undefined as pattern, schema } from "@stoplight/spectral-functions";
+import { oas3 } from "@stoplight/spectral-formats";
+
+export default {
+  rules: {
+    "api-home-get": {
+      description: "APIs root path (`/`) MUST have a GET operation.",
+      message: "Otherwise people won't know how to get it.",
+      given: "$.paths[/]",
+      then: {
+        field: "get",
+        function: truthy,
+      },
+      severity: "warn",
+    },
+
+    // Author: Phil Sturgeon (https://github.com/philsturgeon)
+    "no-numeric-ids": {
+      description: "Avoid exposing IDs as an integer, UUIDs are preferred.",
+      given: '$.paths..parameters[*].[?(@property === "name" && (@ === "id" || @.match(/(_id|Id)$/)))]^.schema',
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            type: "object",
+            not: {
+              properties: {
+                type: {
+                  const: "integer",
+                },
+              },
+            },
+            properties: {
+              format: {
+                const: "uuid",
+              },
+            },
+          },
+        },
+      },
+      severity: "error",
+    },
+
+    // Author: Nauman Ali (https://github.com/naumanali-stoplight)
+    "no-global-versioning": {
+      description: "Using global versions just forces all your clients to do a lot more work for each upgrade. Please consider using API Evolution instead.",
+      message: "Server URL should not contain global versions",
+      given: "$.servers[*].url",
+      then: {
+        function: pattern,
+        functionOptions: {
+          notMatch: "/v[1-9]",
+        },
+      },
+      formats: [oas3],
+      severity: "warn",
+    },
+  },
+};
+```
+
+For those of you using custom functions, the keywords `functions` & `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
+
+This code example should look fairly familiar for anyone who has used the JSON or YAML formats. The next steps for using this ruleset would be publishing it as an npm package, and then installing that package as part of your API project and referencing in your Spectral ruleset as:
+
+```
+extends: ["@your-js-ruleset"]
+```
+
+Or using unpkg:
+
+```
+extends:
+  - https://unpkg.com/@your-js-ruleset
+```
+
+For a more detailed example of creating a JavaScript ruleset and publishing it to npm, check out [Distribute Spectral Style Guides with npm](https://apisyouwonthate.com/blog/distribute-spectral-style-guides-with-npm) at APIs You Won't Hate.

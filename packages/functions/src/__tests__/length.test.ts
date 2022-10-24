@@ -59,6 +59,7 @@ describe('Core Functions / Length', () => {
         null,
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
             [],
           ),
@@ -68,6 +69,7 @@ describe('Core Functions / Length', () => {
         2,
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
             [],
           ),
@@ -78,12 +80,13 @@ describe('Core Functions / Length', () => {
           min: 2,
           foo: true,
         },
-        [new RulesetValidationError('"length" function does not support "foo" option', [])],
+        [new RulesetValidationError('invalid-function-options', '"length" function does not support "foo" option', [])],
       ],
       [
         { min: '2' },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             '"length" function and its "min" option accepts only the following types: number',
             [],
           ),
@@ -94,6 +97,7 @@ describe('Core Functions / Length', () => {
         { max: '2' },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             `"length" function and its "max" option accepts only the following types: number`,
             [],
           ),
@@ -103,10 +107,12 @@ describe('Core Functions / Length', () => {
         { min: '4', max: '2' },
         [
           new RulesetValidationError(
+            'invalid-function-options',
             `"length" function and its "min" option accepts only the following types: number`,
             [],
           ),
           new RulesetValidationError(
+            'invalid-function-options',
             `"length" function and its "max" option accepts only the following types: number`,
             [],
           ),

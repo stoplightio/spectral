@@ -3,7 +3,6 @@ import { DocumentInventory } from '../documentInventory';
 import { IRuleResult } from '../types';
 import { prepareResults } from './utils/results';
 import { lintNode } from './lintNode';
-import { RunnerRuntime } from './runtime';
 import { IRunnerInternalContext } from './types';
 import { Ruleset } from '../ruleset/ruleset';
 import Nimma, { Callback } from 'nimma/legacy'; // legacy = Node v12, nimma without /legacy supports only 14+
@@ -13,7 +12,7 @@ import { isPlainObject } from '@stoplight/json';
 export class Runner {
   public readonly results: IRuleResult[];
 
-  constructor(protected readonly runtime: RunnerRuntime, protected readonly inventory: DocumentInventory) {
+  constructor(protected readonly inventory: DocumentInventory) {
     this.results = [...this.inventory.diagnostics, ...(this.inventory.errors ?? [])];
   }
 
@@ -26,8 +25,6 @@ export class Runner {
   }
 
   public async run(ruleset: Ruleset): Promise<void> {
-    this.runtime.emit('setup');
-
     const { inventory: documentInventory } = this;
     const { rules } = ruleset;
     const formats = this.document.formats ?? null;
@@ -67,14 +64,8 @@ export class Runner {
       execute(runnerContext.documentInventory.unresolved, callbacks.unresolved, unresolvedJsonPaths);
     }
 
-    this.runtime.emit('beforeTeardown');
-
-    try {
-      if (runnerContext.promises.length > 0) {
-        await Promise.all(runnerContext.promises);
-      }
-    } finally {
-      this.runtime.emit('afterTeardown');
+    if (runnerContext.promises.length > 0) {
+      await Promise.all(runnerContext.promises);
     }
   }
 

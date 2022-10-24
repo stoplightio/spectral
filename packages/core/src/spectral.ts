@@ -5,7 +5,7 @@ import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-res
 
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import { Runner, RunnerRuntime } from './runner';
+import { Runner } from './runner';
 import type { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
 import type { Format, ParserOptions, RulesetDefinition } from './ruleset/index';
 import { Ruleset } from './ruleset/ruleset';
@@ -19,16 +19,12 @@ export class Spectral {
 
   public ruleset?: Ruleset;
 
-  protected readonly runtime: RunnerRuntime;
-
   constructor(protected readonly opts?: IConstructorOpts) {
     if (opts?.resolver !== void 0) {
       this._resolver = opts.resolver;
     } else {
       this._resolver = createHttpAndFileResolver();
     }
-
-    this.runtime = new RunnerRuntime();
   }
 
   protected parseDocument(target: IParsedResult | IDocument | Record<string, unknown> | string): IDocument {
@@ -56,7 +52,7 @@ export class Spectral {
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 
-    const runner = new Runner(this.runtime, inventory);
+    const runner = new Runner(inventory);
     runner.results.push(...this._filterParserErrors(document.diagnostics, ruleset.parserOptions));
 
     if (document.formats === void 0) {
@@ -88,7 +84,6 @@ export class Spectral {
   }
 
   public setRuleset(ruleset: RulesetDefinition | Ruleset): void {
-    this.runtime.revoke();
     this.ruleset = ruleset instanceof Ruleset ? ruleset : new Ruleset(ruleset);
   }
 

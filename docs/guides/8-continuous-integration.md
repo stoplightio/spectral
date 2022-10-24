@@ -1,6 +1,6 @@
 # Continuous Integration
 
-Spectral CLI can be run anywhere that NPM packages can be installed and run via CLI, which these days is pretty much any CI solution going.
+Spectral CLI can be run anywhere that npm packages can be installed and run via CLI, which these days is pretty much any CI solution going.
 
 Here are some examples of Spectral in various CI solutions to give you an idea.
 
@@ -37,7 +37,9 @@ workflows:
       - lint
 ```
 
-Change the `openapi.yaml` to point to whatever documents you want to lint, and use -f (format) to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the errors in the Test interface.
+Make sure to change `openapi.yaml` to point to whatever documents you want to lint.
+
+The `-f` (format) flag is used in the script to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the errors in the Test interface.
 
 ![On the CircleCI build results page there is a tab called Tests, which will show Spectral results so long as the junit format has been enabled](../img/ci-circleci.png)
 
@@ -69,9 +71,9 @@ lint:spectral:
       junit: $CI_PROJECT_DIR/spectral-report.xml
 ```
 
-Note that this CI job exposes Spectral results on the merge request page, along with any other test output you may have. To ensure that GitLab can parse the output of spectral, we use the `-f junit`flag.
+Make sure to change `openapi.yaml` to point to whatever documents you want to lint.
 
-You will also need to edit your `openapi.yaml` file to point to the particular documents you want to lint.
+The `-f` (format) flag is used in the script to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the Spectral output on the merge request page.
 
 ## Jenkins
 

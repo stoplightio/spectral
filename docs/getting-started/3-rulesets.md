@@ -1,12 +1,12 @@
 # Rulesets
 
-Rulesets are collections of rules written in JSON or YAML, which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
+Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files. Meta, we know! 😎
 
 These rules are taking parameters, and calling functions on certain parts of another YAML or JSON object being linted.
 
 ## Anatomy of a Ruleset
 
-A ruleset is a JSON or YAML file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
+A ruleset is a JSON, YAML, or JavaScript file ([often the file will be called `.spectral.yaml`](../guides/2-cli.md#using-a-ruleset-file)), and there are two main parts.
 
 ### Rules
 
@@ -15,7 +15,7 @@ Rules might look a bit like this:
 ```yaml
 rules:
   paths-kebab-case:
-    description: Should paths be kebab-case.
+    description: Paths should be kebab-case.
     message: "{{property}} should be kebab-case (lower-case and separated with hyphens)"
     severity: warn
     given: $.paths[*]~
@@ -62,7 +62,7 @@ Rulesets can extend other rulesets using the `extends` property, allowing you to
 extends: spectral:oas
 ```
 
-Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even NPM modules.
+Extends can reference any [distributed ruleset](../guides/7-sharing-rulesets.md). It can be a single string, or an array of strings, and can contain either local file paths, URLs, or even npm modules.
 
 ```yaml
 extends:
@@ -83,6 +83,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `aas2_2` (AsyncAPI v2.2.0)
 - `aas2_3` (AsyncAPI v2.3.0)
 - `aas2_4` (AsyncAPI v2.4.0)
+- `aas2_5` (AsyncAPI v2.5.0)
 - `oas2` (OpenAPI v2.0)
 - `oas3` (OpenAPI v3.x)
 - `oas3_0` (OpenAPI v3.0.x)
@@ -95,7 +96,7 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `json-schema-2019-09` (`$schema` says this is JSON Schema 2019-09)
 - `json-schema-2020-12` (`$schema` says this is JSON Schema 2020-12)
 
-Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the formats key is here to help.
+Specifying the format is optional, so you can completely ignore this if all the rules you are writing apply to any document you lint, or if you have specific rulesets for different formats. If you'd like to use one ruleset for multiple formats, the `formats` key is here to help.
 
 ```yaml
 rules:

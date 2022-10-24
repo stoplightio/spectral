@@ -1,11 +1,12 @@
 import type { RulesetFunction, RulesetFunctionWithValidator } from '../../../types';
-import { wrapError } from './common/error';
+import { toParsedPath, wrapError } from './common/error';
+import { RulesetValidationError } from '../errors';
 
 function assertRulesetFunction(
   maybeRulesetFunction: unknown,
 ): asserts maybeRulesetFunction is RulesetFunction | RulesetFunctionWithValidator {
   if (typeof maybeRulesetFunction !== 'function') {
-    throw Error('Function is not defined');
+    throw ReferenceError('Function is not defined');
   }
 }
 
@@ -22,6 +23,10 @@ export function validateFunction(
     const validator: RulesetFunctionWithValidator['validator'] = fn.validator.bind(fn);
     validator(opts);
   } catch (ex) {
+    if (ex instanceof ReferenceError) {
+      return new RulesetValidationError('undefined-function', ex.message, toParsedPath(path));
+    }
+
     return wrapError(ex, path);
   }
 }

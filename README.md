@@ -3,7 +3,7 @@
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x** and **AsyncAPI** Documents
-- **API Style Guides**: Automated [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices?utm_source=github&utm_medium=spectral&utm_campaign=readme) using rulesets improve consistency across all your APIs
+- **API Style Guides**: Automated [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices?utm_source=github.com&utm_medium=referral&utm_campaign=github_repo_spectral) using rulesets improve consistency across all your APIs
 - **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/e5b9616d6d50c-custom-rulesets#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - **Custom Functions**: Create custom functions for advanced use cases
 
@@ -97,7 +97,7 @@ Here are [more real-world examples](https://github.com/stoplightio/spectral-rule
 
 - [GitHub Action](https://github.com/stoplightio/spectral-action) - Lints documents in your repo, built by [Vincenzo Chianese](https://github.com/XVincentX/).
 - [Jetbrains Plugin](https://plugins.jetbrains.com/plugin/18520-spectral) - Automatic linting of your OpenAPI specifications and highlighting in your editor.
-- [Stoplight Studio](https://stoplight.io/studio?utm_source=github&utm_medium=spectral&utm_campaign=readme) - Uses Spectral to validate and lint OpenAPI documents.
+- [Stoplight Studio](https://stoplight.io/studio?utm_source=github.com&utm_medium=referral&utm_campaign=github_repo_spectral) - Uses Spectral to validate and lint OpenAPI documents.
 - [VS Code Spectral Extension](https://marketplace.visualstudio.com/items?itemName=stoplight.spectral) - All the power of Spectral without leaving VS Code.
 
 ## 🏁 Help Others Utilize Spectral
