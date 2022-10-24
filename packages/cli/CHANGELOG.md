@@ -1,3 +1,15 @@
+# [@stoplight/spectral-cli-v6.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.5.1...@stoplight/spectral-cli-v6.6.0) (2022-10-24)
+
+
+### Bug Fixes
+
+* **cli:** peer dependency incorrectly met ([#2268](https://github.com/stoplightio/spectral/issues/2268)) ([1b70398](https://github.com/stoplightio/spectral/commit/1b70398c8ff1d033ba971c9f41f3694203ff7b29))
+
+
+### Features
+
+* **cli:** use Content-Type header to detect ruleset format ([#2272](https://github.com/stoplightio/spectral/issues/2272)) ([b4c3c11](https://github.com/stoplightio/spectral/commit/b4c3c113abe155dc7537432741bbe1a1641d694a))
+
 # [@stoplight/spectral-cli-v6.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.5.0...@stoplight/spectral-cli-v6.5.1) (2022-08-24)
 
 
