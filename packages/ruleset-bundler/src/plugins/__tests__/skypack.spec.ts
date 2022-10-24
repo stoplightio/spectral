@@ -124,4 +124,38 @@ fs.writeFileSync(path.join(__dirname, './output.js'), 'export default {}');
 `);
     });
   });
+
+  it('should respect ignore list', async () => {
+    serveAssets({
+      '/tmp/input.js': `import { createRulesetFunction } from '@stoplight/spectral-core/ruleset/validation';
+import { parse } from '@stoplight/yaml';
+import { isPlainObject } from '@stoplight/json';
+
+export default createRulesetFunction({}, input => {
+  assert.ok(isPlainObject(parse(input)));
+})
+`,
+    });
+
+    const code = await bundleRuleset('/tmp/input.js', {
+      target: 'browser',
+      plugins: [
+        skypack({
+          ignoreList: [/^@stoplight\/spectral-/, '@stoplight/json'],
+        }),
+        virtualFs(io),
+      ],
+    });
+
+    expect(code).toEqual(`import { createRulesetFunction } from '@stoplight/spectral-core/ruleset/validation';
+import { parse } from 'https://cdn.skypack.dev/@stoplight/yaml';
+import { isPlainObject } from '@stoplight/json';
+
+var input = createRulesetFunction({}, input => {
+  assert.ok(isPlainObject(parse(input)));
+});
+
+export { input as default };
+`);
+  });
 });
