@@ -5,7 +5,7 @@ import * as path from '@stoplight/path';
 import * as process from 'process';
 import { createRequire } from 'module';
 import { fetch } from '@stoplight/spectral-runtime';
-import { migrateRuleset } from '@stoplight/spectral-ruleset-migrator';
+import { migrateRuleset, isBasicRuleset } from '@stoplight/spectral-ruleset-migrator';
 import { bundleRuleset } from '@stoplight/spectral-ruleset-bundler';
 import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
 import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
@@ -99,32 +99,4 @@ function load(source: string, uri: string): RulesetDefinition {
   }
 
   return m.exports;
-}
-
-function stripSearchFromUrl(url: string): string {
-  try {
-    const { href, search } = new URL(url);
-    return href.slice(0, href.length - search.length);
-  } catch {
-    return url;
-  }
-}
-
-async function isBasicRuleset(uri: string): Promise<boolean> {
-  if (path.isURL(uri)) {
-    uri = stripSearchFromUrl(uri);
-  }
-
-  if (/\.(json|ya?ml)$/.test(path.extname(uri))) {
-    return true;
-  }
-
-  try {
-    const contentType = (await fetch(uri)).headers.get('Content-Type');
-    return (
-      contentType !== null && ['application/yaml', 'text/yaml', 'application/json', 'text/json'].includes(contentType)
-    );
-  } catch {
-    return false;
-  }
 }

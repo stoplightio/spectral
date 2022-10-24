@@ -2514,7 +2514,7 @@ __metadata:
     "@stoplight/spectral-parsers": ^1.0.1
     "@stoplight/spectral-ref-resolver": 1.0.2
     "@stoplight/spectral-ruleset-bundler": ^1.0.0
-    "@stoplight/spectral-ruleset-migrator": ^1.5.0
+    "@stoplight/spectral-ruleset-migrator": ^1.9.0
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
     "@stoplight/types": 12.3.0
@@ -2660,7 +2660,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ruleset-migrator@^1.5.0, @stoplight/spectral-ruleset-migrator@^1.7.4, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
+"@stoplight/spectral-ruleset-migrator@^1.7.4, @stoplight/spectral-ruleset-migrator@^1.9.0, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator"
   dependencies:
