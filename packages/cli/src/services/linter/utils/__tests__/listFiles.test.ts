@@ -1,6 +1,5 @@
 import * as path from '@stoplight/path';
 import * as fg from 'fast-glob';
-import { when } from 'jest-when';
 import { listFiles } from '../listFiles';
 
 jest.mock('fast-glob', () => jest.fn(async () => []));
@@ -25,11 +24,13 @@ describe('listFiles CLI util', () => {
   it('given disabled ignoredUnmatchedGlobs, reports unmatched patterns', async () => {
     const list = [path.join(__dirname, 'foo/a.json'), path.join(__dirname, 'foo/b.json')];
 
-    when(fg as unknown as jest.Mock)
-      .calledWith('./foo/*.json', expect.any(Object))
-      .mockResolvedValueOnce([...list])
-      .calledWith('bar/**/baz*.yaml', expect.any(Object))
-      .mockResolvedValueOnce([]);
+    (fg as unknown as jest.Mock).mockImplementation(async pattern => {
+      if (pattern === './foo/*.json') {
+        return list;
+      }
+
+      return [];
+    });
 
     expect(await listFiles(['./foo/*.json', 'bar/**/baz*.yaml'], false)).toEqual([list, ['bar/**/baz*.yaml']]);
   });
