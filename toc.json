@@ -21,7 +21,7 @@
     },
     {
       "type": "item",
-      "title": "Rulesets",
+      "title": "Create a Ruleset",
       "uri": "/docs/getting-started/3-rulesets.md"
     },
     {
@@ -54,9 +54,45 @@
       "uri": "/docs/guides/3-javascript.md"
     },
     {
-      "type": "item",
-      "title": "Custom Rulesets",
-      "uri": "/docs/guides/4-custom-rulesets.md"
+      "type": "group",
+      "title": "Rulesets",
+      "items": [
+        {
+          "type": "item",
+          "title": "Overview",
+          "uri": "/docs/guides/4-custom-rulesets.md"
+        },
+        {
+          "type": "item",
+          "title": "Rules",
+          "uri": "/docs/guides/4a-rules.md"
+        },
+        {
+          "type": "item",
+          "title": "Extends",
+          "uri": "/docs/guides/4b-extends.md"
+        },
+        {
+          "type": "item",
+          "title": "Aliases",
+          "uri": "/docs/guides/4c-aliases.md"
+        },
+        {
+          "type": "item",
+          "title": "Overrides",
+          "uri": "/docs/guides/4d-overrides.md"
+        },
+        {
+          "type": "item",
+          "title": "Recommended",
+          "uri": "/docs/guides/4e-recommended.md"
+        },
+        {
+          "type": "item",
+          "title": "JavaScript Ruleset Format",
+          "uri": "/docs/guides/4f-js-rulesets.md"
+        }
+      ]
     },
     {
       "type": "item",
