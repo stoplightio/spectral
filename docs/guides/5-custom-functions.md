@@ -98,7 +98,7 @@ export default createRulesetFunction(
       required: ["value"],
     },
   },
-  (input, options) => {
+  (targetVal, options) => {
     const { value } = options;
 
     if (targetVal !== value) {
@@ -129,7 +129,7 @@ export default createRulesetFunction(
       required: ["value"],
     },
   },
-  function customEquals(input, options) {
+  function customEquals(targetVal, options) {
     const { value } = options;
 
     if (targetVal !== value) {
@@ -237,7 +237,7 @@ export default createRulesetFunction(
     },
     options: null,
   },
-  (input, options, { path }) => {
+  (targetVal, options, { path }) => {
     const seen = [];
     const results = [];
 
