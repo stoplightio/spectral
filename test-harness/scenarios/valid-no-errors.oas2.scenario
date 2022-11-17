@@ -9,7 +9,7 @@ info:
   contact:
     name: fred
 host: localhost
-schemes: 
+schemes:
   - http
 paths: {}
 tags:

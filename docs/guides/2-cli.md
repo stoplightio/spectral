@@ -39,6 +39,7 @@ Other options include:
       --stdin-filepath           path to a file to pretend that stdin comes from                                [string]
       --resolver                 path to custom json-ref-resolver instance                                      [string]
   -r, --ruleset                  path/URL to a ruleset file                                                     [string]
+  -s, --scoring-config           path/URL to a scoring config file                                       [string]
   -F, --fail-severity            results of this level or above will trigger a failure exit code
                                                   [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   -D, --display-only-failures    only output results equal to or greater than --fail-severity [boolean] [default: false]
@@ -59,6 +60,92 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 
 - [OpenAPI ruleset](../reference/openapi-rules.md)
 - [AsyncAPI ruleset](../reference/asyncapi-rules.md)
+
+## Scoring the API
+
+Scoring an API definition is a way to understand in a high level, how compliant is the API definition with the rulesets provided. This helps teams to understand the quality of the APIs regarding the definition.
+
+The scoring is produced in two different metrics:
+
+- A number scoring. Who cames as substracting from 100% from any error or warning
+- A letter, who groups numeric scorings in letters from A (better) to any
+
+Also it introduces a quality gate, were an API scoring below the specific threshold will fail in a pipeline.
+
+Enabling scoring is done using a new parameter called --scoring-config or -s and the scoring configuration file, where you can define how an error or a warning affects to the scoring
+
+Usage:
+
+```bash
+ spectral lint ./reference/**/*.oas*.{json,yml,yaml} --ruleset mycustomruleset.js --scoring-config ./scoringFile.json
+```
+
+or
+
+```bash
+spectral lint ./reference/**/*.oas*.{json,yml,yaml} -r mycustomruleset.js -s ./scoringFile.json
+```
+
+Heres an example of this scoringFile config file:
+
+```
+    {
+      "scoringSubtract":
+        {
+          "error":
+           {
+             1:55,
+             2:65,
+             3:75,
+             6:85,
+             10:95
+           }
+          "warn":
+           {
+             1:3,
+             2:7,
+             3:10,
+             6:15,
+             10:18
+           }
+        },
+      "scoringLetter":
+        {
+          "A":75,
+          "B":65,
+          "C":55,
+          "D":45,
+          "E":0
+        },
+      "threshold":50,
+      "warningsSubtract": true,
+      "uniqueErrors": false
+    }
+```
+
+Where:
+
+- scoringSubtract : An object with a key/value pair objects for every result level we want to subtract percentage, with the percentage to subtract from number of results on every result type
+- scoringLetter : An object with key/value pairs with scoring letter and scoring percentage, that the result must be greater , for this letter
+- threshold : A number with minimum percentage value to provide valid the file we are checking
+- warningsSubtract : A boolean to setup if accumulate the result types to less the scoring percentage or stop counting on most critical result types
+- uniqueErrors : A boolean to setup a count with unique errors or with all of them
+
+Example:
+
+    With previous scoring config file, if we have:
+
+    1 error, the scoring is 45% and D
+    2 errors, the scoring is 35% and E
+    3 errors, the scoring is 25% and E
+    4 errors, the scoring is 25% and E
+    and so on
+
+Output:
+
+    Below your output log you can see the scoring, like:
+
+    ✖ SCORING: A (93%)
 
 ## Error Results
 

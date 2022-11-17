@@ -19,6 +19,7 @@ export interface ILintConfig {
   output?: Dictionary<string>;
   resolver?: string;
   ruleset?: string;
+  scoringConfig?: string;
   stdinFilepath?: string;
   ignoreUnknownFormat: boolean;
   failOnUnmatchedGlobs: boolean;

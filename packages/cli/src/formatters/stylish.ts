@@ -24,15 +24,28 @@
  * @author Sindre Sorhus
  */
 
-import type { DiagnosticSeverity, IRange } from '@stoplight/types';
+import { ISpectralDiagnostic } from '@stoplight/spectral-core';
+import type { IRange } from '@stoplight/types';
+import { DiagnosticSeverity } from '@stoplight/types';
 import chalk from 'chalk';
 import stripAnsi = require('strip-ansi');
 import table from 'text-table';
 import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import type { IRuleResult } from '@stoplight/spectral-core';
 
-import type { Formatter } from './types';
-import { getColorForSeverity, getHighestSeverity, getSeverityName, getSummary, groupBySource } from './utils';
+import type { Formatter, FormatterOptions } from './types';
+import {
+  getColorForSeverity,
+  getHighestSeverity,
+  getSummary,
+  getSeverityName,
+  groupBySource,
+  getScoringText,
+  getCountsBySeverity,
+  uniqueErrors,
+} from './utils';
+
+const version = process.env.npm_package_version;
 
 // -----------------------------------------------------------------------------
 // Helpers
@@ -55,11 +68,30 @@ function getMessageType(severity: DiagnosticSeverity): string {
 // Public Interface
 // -----------------------------------------------------------------------------
 
-export const stylish: Formatter = results => {
+export const stylish: Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => {
   let output = '\n';
+  if (options.scoringConfig !== void 0) {
+    if (options.scoringConfig.customScoring !== void 0) {
+      output += `${options.scoringConfig.customScoring}${version as string}\n`;
+    }
+  }
+  output += '\n';
+  const uniqueResults = uniqueErrors(results);
   const groupedResults = groupBySource(results);
-  const summaryColor = getColorForSeverity(getHighestSeverity(results));
+  const summaryColor = getColorForSeverity(getHighestSeverity(uniqueResults));
   const summaryText = getSummary(groupedResults);
+
+  let groupedUniqueResults = { ...groupedResults };
+  let scoringColor = '';
+  let scoringText = null;
+
+  if (options.scoringConfig !== void 0) {
+    if (options.scoringConfig.uniqueErrors) {
+      groupedUniqueResults = { ...groupBySource(uniqueResults) };
+    }
+    scoringColor = getColorForSeverity(DiagnosticSeverity.Information);
+    scoringText = getScoringText(getCountsBySeverity(groupedUniqueResults), options.scoringConfig);
+  }
 
   Object.keys(groupedResults).map(path => {
     const pathResults = groupedResults[path];
@@ -92,6 +124,15 @@ export const stylish: Formatter = results => {
   }
 
   output += chalk[summaryColor].bold(`\u2716 ${summaryText}\n`);
+  if (options.scoringConfig !== void 0) {
+    output += chalk[scoringColor].bold(`\u2716${scoringText !== null ? ` ${scoringText}` : ''}\n`);
+    const scoring = +(scoringText !== null ? scoringText.replace('%', '').split(/[()]+/)[1] : 0);
+    if (scoring >= options.scoringConfig.threshold) {
+      output += chalk['green'].bold(`\u2716 PASSED!\n`);
+    } else {
+      output += chalk['red'].bold(`\u2716 NOT PASSED!\n`);
+    }
+  }
 
   return output;
 };

@@ -146,6 +146,22 @@ describe('lint', () => {
     );
   });
 
+  it('calls lint with document, ruleset and scoring config file', async () => {
+    const doc = './__fixtures__/empty-oas2-document.json';
+    const ruleset = 'custom-ruleset.json';
+    const configFile = 'scoring-config.json';
+    await run(`lint -r ${ruleset} -s ${configFile} ${doc}`);
+    expect(lint).toBeCalledWith([doc], {
+      encoding: 'utf8',
+      format: ['stylish'],
+      output: { stylish: '<stdout>' },
+      ruleset: 'custom-ruleset.json',
+      stdinFilepath: undefined,
+      ignoreUnknownFormat: false,
+      failOnUnmatchedGlobs: false,
+    });
+  });
+
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
     await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
     expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
@@ -244,13 +260,13 @@ describe('lint', () => {
     expect(process.stderr.write).nthCalledWith(2, `Error #1: ${chalk.red('some unhandled exception')}\n`);
     expect(process.stderr.write).nthCalledWith(
       3,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:236`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:252`),
     );
 
     expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
     expect(process.stderr.write).nthCalledWith(
       5,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:237`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:253`),
     );
 
     expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);
