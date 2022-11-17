@@ -5,10 +5,7 @@
     "composite": true,
     "rootDir": "src",
     "outDir": "dist",
-    "tsBuildInfoFile": ".cache/.tsbuildinfo"
+    "tsBuildInfoFile": "../../.cache/tsc/rulesets.tsbuildinfo"
   },
-  "references": [
-    { "path":  "../formats/tsconfig.build.json" },
-    { "path":  "../functions/tsconfig.build.json" },
-  ]
+  "references": [{ "path": "../formats/tsconfig.build.json" }, { "path": "../functions/tsconfig.build.json" }]
 }

@@ -59,6 +59,32 @@ commands:
           name: Build the code
           command: yarn build
 
+  cached-build:
+    description: >-
+      Build everything required to run the test suite and to release the package
+    steps:
+      - compute-hashes
+      - restore_cache:
+          name: Restore packages/*/dist and .tsbuildinfo
+          keys:
+            - tsc-build-{{ checksum "/tmp/previous-commit-sha" }}
+      - build
+      - save_cache:
+          name: Retain packages/*/dist and .tsbuildinfo
+          key: tsc-build-{{ checksum "/tmp/current-commit-sha" }}
+          paths: # https://ideas.circleci.com/cloud-feature-requests/p/support-wildcards-in-savecachepaths
+            - ./.cache/tsc
+            - ./packages/cli/dist
+            - ./packages/core/dist
+            - ./packages/formats/dist
+            - ./packages/functions/dist
+            - ./packages/parsers/dist
+            - ./packages/ref-resolver/dist
+            - ./packages/ruleset-bundler/dist
+            - ./packages/ruleset-migrator/dist
+            - ./packages/rulesets/dist
+            - ./packages/runtime/dist
+
   build-binary:
     parameters:
       targets:
@@ -75,13 +101,29 @@ commands:
       Install and build everything required to run the test suite
     steps:
       - cached-dependencies
-      - build
+      - when:
+          condition:
+            equal: [ *default-branch, << pipeline.git.branch >> ]
+          steps:
+            - build
+      - unless:
+          condition:
+            equal: [ *default-branch, << pipeline.git.branch >> ]
+          steps:
+            - cached-build
 
   lint-code:
     steps:
+      - restore_cache:
+          keys:
+            - &eslint-cache-key v1-eslint-cache
       - run:
           name: Lint code
           command: yarn lint.eslint
+      - save_cache:
+          key: *eslint-cache-key
+          paths:
+            - .cache/.eslintcache
 
   lint-documentation:
     steps:

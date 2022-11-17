@@ -23,7 +23,7 @@
     "node": "^12.20 || >= 14.13"
   },
   "scripts": {
-    "clean": "rimraf .cache packages/*/{dist,.cache}",
+    "clean": "rimraf .cache packages/*/dist",
     "prebuild": "yarn workspace @stoplight/spectral-ruleset-migrator prebuild",
     "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",

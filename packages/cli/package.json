@@ -25,8 +25,9 @@
   },
   "scripts": {
     "build.binary": "pkg . --output ./binaries/spectral",
-    "build.windows": "pkg . --targets windows --out-path ./binaries",
-    "build.nix": "pkg . --targets linux,macos,alpine --out-path ./binaries",
+    "build.windows": "pkg . --targets windows --out-path ./binaries/x64",
+    "build.arm": "pkg . --no-bytecode --public-packages \"*\" --public --targets linux-arm64,macos-arm64,alpine-arm64 --out-path ./binaries/arm64",
+    "build.nix": "pkg . --targets linux,macos,alpine --out-path ./binaries/x64",
     "postbuild": "copyfiles -u 1 \"./src/formatters/html/*.html\" \"./dist/\"",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
     "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts",

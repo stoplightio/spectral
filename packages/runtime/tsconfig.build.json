@@ -5,6 +5,6 @@
     "composite": true,
     "rootDir": "src",
     "outDir": "dist",
-    "tsBuildInfoFile": ".cache/.tsbuildinfo"
+    "tsBuildInfoFile": "../../.cache/tsc/runtime.tsbuildinfo"
   }
 }

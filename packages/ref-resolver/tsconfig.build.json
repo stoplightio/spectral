@@ -5,7 +5,7 @@
     "composite": true,
     "rootDir": "src",
     "outDir": "dist",
-    "tsBuildInfoFile": ".cache/.tsbuildinfo"
+    "tsBuildInfoFile": "../../.cache/tsc/ref-resolver.tsbuildinfo"
   },
-  "references": [{ "path":  "../runtime/tsconfig.build.json" }]
+  "references": [{ "path": "../runtime/tsconfig.build.json" }]
 }

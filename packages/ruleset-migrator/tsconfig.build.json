@@ -5,10 +5,7 @@
     "composite": true,
     "rootDir": "src",
     "outDir": "dist",
-    "tsBuildInfoFile": ".cache/.tsbuildinfo"
+    "tsBuildInfoFile": "../../.cache/tsc/ruleset-migrator.tsbuildinfo"
   },
-  "references": [
-    { "path":  "../functions/tsconfig.build.json" },
-    { "path":  "../runtime/tsconfig.build.json" },
-  ]
+  "references": [{ "path": "../functions/tsconfig.build.json" }, { "path": "../runtime/tsconfig.build.json" }]
 }
