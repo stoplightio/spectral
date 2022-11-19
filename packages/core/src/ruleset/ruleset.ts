@@ -63,10 +63,10 @@ export class Ruleset {
     if (isPlainObject(maybeDefinition) && 'extends' in maybeDefinition) {
       const { extends: _, ...def } = maybeDefinition;
       // we don't want to validate extends - this is going to happen later on (line 29)
-      assertValidRuleset({ extends: [], ...def });
+      assertValidRuleset({ extends: [], ...def }, 'js');
       definition = maybeDefinition as RulesetDefinition;
     } else {
-      assertValidRuleset(maybeDefinition);
+      assertValidRuleset(maybeDefinition, 'js');
       definition = maybeDefinition;
     }
 
