@@ -127,6 +127,9 @@ readFile();`,
       expect(code)
         .toEqual(`const fetch = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['fetch'];
 const DEFAULT_REQUEST_OPTIONS = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['DEFAULT_REQUEST_OPTIONS'];
+const isAggregateError = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['isAggregateError'];
+const isErrorWithCause = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['isErrorWithCause'];
+const getErrors = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['getErrors'];
 const decodeSegmentFragment = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['decodeSegmentFragment'];
 const printError = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printError'];
 const PrintStyle = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['PrintStyle'];
