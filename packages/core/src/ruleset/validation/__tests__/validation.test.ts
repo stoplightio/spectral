@@ -761,7 +761,12 @@ describe('JS Ruleset Validation', () => {
         }),
       ).toThrowAggregateError(
         new AggregateError([
-          new RulesetValidationError('undefined-function', 'Function is not defined', ['rules', 'rule', 'then']),
+          new RulesetValidationError('undefined-function', 'Function is not defined', [
+            'rules',
+            'rule',
+            'then',
+            'function',
+          ]),
         ]),
       );
     });
