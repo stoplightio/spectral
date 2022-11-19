@@ -34,7 +34,7 @@ describe('Core Functions / UnreferencedReusableObject', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -44,7 +44,7 @@ describe('Core Functions / UnreferencedReusableObject', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"unreferencedReusableObject" function has invalid options specified. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -54,7 +54,7 @@ describe('Core Functions / UnreferencedReusableObject', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"unreferencedReusableObject" function is missing "reusableObjectsLocation" option. Example valid options: { "reusableObjectsLocation": "#/components/schemas" }, { "reusableObjectsLocation": "#/$defs" }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -67,7 +67,7 @@ describe('Core Functions / UnreferencedReusableObject', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"unreferencedReusableObject" function does not support "foo" option',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'foo'],
           ),
         ],
       ],
@@ -79,7 +79,7 @@ describe('Core Functions / UnreferencedReusableObject', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'reusableObjectsLocation'],
           ),
         ],
       ],
@@ -91,7 +91,7 @@ describe('Core Functions / UnreferencedReusableObject', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"unreferencedReusableObject" and its "reusableObjectsLocation" option support only valid JSON Pointer fragments, i.e. "#", "#/foo", "#/paths/~1user"',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'reusableObjectsLocation'],
           ),
         ],
       ],

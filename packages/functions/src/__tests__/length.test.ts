@@ -61,7 +61,7 @@ describe('Core Functions / Length', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -71,7 +71,7 @@ describe('Core Functions / Length', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -80,15 +80,23 @@ describe('Core Functions / Length', () => {
           min: 2,
           foo: true,
         },
-        [new RulesetValidationError('invalid-function-options', '"length" function does not support "foo" option', [])],
+        [
+          new RulesetValidationError('invalid-function-options', '"length" function does not support "foo" option', [
+            'rules',
+            'my-rule',
+            'then',
+            'functionOptions',
+            'foo',
+          ]),
+        ],
       ],
       [
         { min: '2' },
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"length" function and its "min" option accepts only the following types: number',
-            [],
+            `"length" function and its "min" option accepts only the following types: number`,
+            ['rules', 'my-rule', 'then', 'functionOptions', 'min'],
           ),
         ],
       ],
@@ -99,7 +107,7 @@ describe('Core Functions / Length', () => {
           new RulesetValidationError(
             'invalid-function-options',
             `"length" function and its "max" option accepts only the following types: number`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'max'],
           ),
         ],
       ],
@@ -109,12 +117,12 @@ describe('Core Functions / Length', () => {
           new RulesetValidationError(
             'invalid-function-options',
             `"length" function and its "min" option accepts only the following types: number`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'min'],
           ),
           new RulesetValidationError(
             'invalid-function-options',
             `"length" function and its "max" option accepts only the following types: number`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'max'],
           ),
         ],
       ],

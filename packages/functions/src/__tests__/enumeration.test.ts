@@ -44,7 +44,7 @@ describe('Core Functions / Enumeration', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"enumeration" function does not support "foo" option',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'foo'],
           ),
         ],
       ],
@@ -56,7 +56,7 @@ describe('Core Functions / Enumeration', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"enumeration" and its "values" option support only arrays of primitive values, i.e. ["Berlin", "London", "Paris"]',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'values'],
           ),
         ],
       ],
@@ -66,7 +66,7 @@ describe('Core Functions / Enumeration', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -76,7 +76,7 @@ describe('Core Functions / Enumeration', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"enumeration" function has invalid options specified. Example valid options: { "values": ["Berlin", "London", "Paris"] }, { "values": [2, 3, 5, 8, 13, 21] }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],

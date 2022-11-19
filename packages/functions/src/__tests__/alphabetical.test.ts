@@ -132,17 +132,33 @@ describe('Core Functions / Alphabetical', () => {
       expect(await runAlphabetical([], opts)).toEqual([]);
     });
 
-    it.each<[unknown, string]>([
-      [{ foo: true }, '"alphabetical" function does not support "foo" option'],
+    it.each<[unknown, RulesetValidationError]>([
+      [
+        { foo: true },
+        new RulesetValidationError(
+          'invalid-function-options',
+          '"alphabetical" function does not support "foo" option',
+          ['rules', 'my-rule', 'then', 'functionOptions', 'foo'],
+        ),
+      ],
       [
         2,
-        '"alphabetical" function has invalid options specified. Example valid options: null (no options), { "keyedBy": "my-key" }',
+        new RulesetValidationError(
+          'invalid-function-options',
+          '"alphabetical" function has invalid options specified. Example valid options: null (no options), { "keyedBy": "my-key" }',
+          ['rules', 'my-rule', 'then', 'functionOptions'],
+        ),
       ],
-      [{ keyedBy: 2 }, '"alphabetical" function and its "keyedBy" option accepts only the following types: string'],
+      [
+        { keyedBy: 2 },
+        new RulesetValidationError(
+          'invalid-function-options',
+          '"alphabetical" function and its "keyedBy" option accepts only the following types: string',
+          ['rules', 'my-rule', 'then', 'functionOptions', 'keyedBy'],
+        ),
+      ],
     ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runAlphabetical([], opts)).rejects.toThrowAggregateError(
-        new AggregateError([new RulesetValidationError('invalid-function-options', error, [])]),
-      );
+      await expect(runAlphabetical([], opts)).rejects.toThrowAggregateError(new AggregateError([error]));
     });
   });
 });
