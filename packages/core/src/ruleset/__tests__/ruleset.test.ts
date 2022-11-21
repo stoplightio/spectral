@@ -315,6 +315,30 @@ describe('Ruleset', () => {
 `);
   });
 
+  it('should respect extensions', async () => {
+    const ruleset = {
+      rules: {
+        'foo-rule': {
+          given: '$',
+          then: {
+            function() {
+              return;
+            },
+          },
+          extensions: {
+            foo: 'bar',
+          },
+        },
+      },
+    };
+
+    const rulesetInstance = new Ruleset(ruleset);
+
+    expect(rulesetInstance.rules['foo-rule'].extensions).toEqual({
+      foo: 'bar',
+    });
+  });
+
   it('should include parserOptions', async () => {
     const { parserOptions } = await loadRuleset(import('./__fixtures__/parser-options-ruleset'));
 
