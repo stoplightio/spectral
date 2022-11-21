@@ -84,12 +84,12 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 ## 🌎 Real-World Rulesets
 
-Stoplight has a set of Spectral rulesets that we have created to help users get started with Stoplight's Style Guides. You can find them on [API Stylebook](https://apistylebook.stoplight.io/), and you can download the source Spectral file by selecting a style guide on the project sidebar and selecting **Export** -> **Spectral File(s)** on the top-right. A few noteworthy style guides are:
+Stoplight has a set of Spectral rulesets that were created to help users get started with Stoplight's Style Guides. You can find them on [API Stylebook](https://apistylebook.stoplight.io/), and you can download the source Spectral file by selecting a style guide on the project sidebar and selecting **Export** -> **Spectral File(s)** on the top-right. A few noteworthy style guides are:
 
 - [OWASP Top 10](https://apistylebook.stoplight.io/docs/owasp-top-10) - Set of rules to enforce [OWASP security guidelines](https://owasp.org/www-project-api-security/).
 - [URL Style Guidelines](https://apistylebook.stoplight.io/docs/url-guidelines) - Set of rules to help developers make better and consistent endpoints.
 
-And there're also rulesets created by many companies to improve their APIs. You can use these as is to lint your OpenAPI descriptions, or use these as a reference to learn more about what rules you would want in your own ruleset:
+And there are also rulesets created by many companies to improve their APIs. You can use these as is to lint your OpenAPI descriptions, or use these as a reference to learn more about what rules you would want in your own ruleset:
 
 - [Adidas](https://github.com/adidas/api-guidelines/blob/master/.spectral.yml) - Adidas were one of the first companies to release their API Style Guide in a written guide _and_ a Spectral ruleset. Lots of good rules to try in here.
 - [APIs You Won't Hate](https://github.com/apisyouwonthate/style-guide) - An opinionated collection of rules based on advice in the [APIs You Won't Hate](https://apisyouwonthate.com/) community.
