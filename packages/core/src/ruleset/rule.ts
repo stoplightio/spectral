@@ -11,7 +11,7 @@ import type { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition, String
 import { minimatch } from './utils/minimatch';
 import { Formats } from './formats';
 import { resolveAlias } from './alias';
-import type { Stringified } from './types';
+import type { Stringified, FileRulesetSeverityDefinition } from './types';
 
 export interface IRule {
   description: string | null;
@@ -71,6 +71,10 @@ export class Rule implements IRule {
 
   public set enabled(enabled: boolean) {
     this.#enabled = enabled;
+  }
+
+  public static isEnabled(rule: IRule, severity: FileRulesetSeverityDefinition): boolean {
+    return severity === 'all' || (severity === 'recommended' && rule.recommended);
   }
 
   public getSeverityForSource(source: string, path: JsonPath): DiagnosticSeverity | -1 {
