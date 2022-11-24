@@ -27,7 +27,7 @@ export interface IRule {
   extensions: Record<string, unknown> | null;
 }
 
-type RuleJson = Omit<IRule, 'then' | 'extensions'> & {
+type RuleJson = Omit<IRule, 'then'> & {
   name: string;
   then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
   owner: number;
@@ -187,6 +187,7 @@ export class Rule implements IRule {
       })),
       given: Array.isArray(this.definition.given) ? this.definition.given : [this.definition.given],
       owner: this.owner.id,
+      extensions: this.extensions,
     };
   }
 }
