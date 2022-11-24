@@ -84,12 +84,20 @@ If you have a bug or feature request, please [create an issue](https://github.co
 
 ## 🌎 Real-World Rulesets
 
+Stoplight has a set of Spectral rulesets that were created to help users get started with Stoplight's Style Guides. You can find them on [API Stylebook](https://apistylebook.stoplight.io/), and you can download the source Spectral file by selecting a style guide on the project sidebar and selecting **Export** -> **Spectral File(s)** on the top-right. A few noteworthy style guides are:
+
+- [OWASP Top 10](https://apistylebook.stoplight.io/docs/owasp-top-10) - Set of rules to enforce [OWASP security guidelines](https://owasp.org/www-project-api-security/).
+- [URL Style Guidelines](https://apistylebook.stoplight.io/docs/url-guidelines) - Set of rules to help developers make better and consistent endpoints.
+
+There are also rulesets created by many companies to improve their APIs. You can use these as is to lint your OpenAPI descriptions, or use these as a reference to learn more about what rules you would want in your own ruleset:
+
 - [Adidas](https://github.com/adidas/api-guidelines/blob/master/.spectral.yml) - Adidas were one of the first companies to release their API Style Guide in a written guide _and_ a Spectral ruleset. Lots of good rules to try in here.
 - [APIs You Won't Hate](https://github.com/apisyouwonthate/style-guide) - An opinionated collection of rules based on advice in the [APIs You Won't Hate](https://apisyouwonthate.com/) community.
 - [Azure](https://github.com/Azure/azure-api-style-guide/blob/main/spectral.yaml) - Ruleset and complimentary style guide for creating OpenAPI 2 or 3 definitions of Azure services.
 - [Box](https://github.com/box/box-openapi/blob/main/.spectral.yml) - Lots of [Custom Functions](https://meta.stoplight.io/docs/spectral/ZG9jOjI1MTkw-custom-functions) being used to enforce good practices that the Box API governance folks are interested in.
 - [DigitalOcean](https://github.com/digitalocean/openapi/blob/main/spectral/ruleset.yml) - Keeping their OpenAPI nice and tidy, enforcing use of `$ref` (probably to minimize conflicts), naming conventions for Operation IDs, and all sorts of other handy OpenAPI tips.
 - [Tranascom](https://github.com/transcom/mymove/blob/master/swagger-def/.spectral.yml) - Don't even think about using anything other than `application/json`.
+- [Zalando](https://apistylebook.stoplight.io/docs/zalando-restful-api-guidelines) - Based on [Zalando's RESTFUL API Guidelines](https://github.com/zalando/restful-api-guidelines), covers a wide-range of API topics such as versioning standards, property naming standards, the default format for request/response properties, and more.
 
 Here are [more real-world examples](https://github.com/stoplightio/spectral-rulesets) of Spectral in action.
 

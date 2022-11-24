@@ -95,6 +95,13 @@ describe('Ruleset', () => {
       expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
     });
 
+    it('given nested extends with severity set to off #2', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-proxy2'));
+      expect(Object.keys(rules)).toEqual(['custom-info-description']);
+
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
     it('given nested extends with severity set to off and explicit override to error', async () => {
       const { rules } = await loadRuleset(import('./__fixtures__/severity/error'));
       expect(Object.keys(rules)).toEqual([
