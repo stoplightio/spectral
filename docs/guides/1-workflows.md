@@ -25,7 +25,7 @@ If the API description documents live in some other format, such as comments or 
 swagger generate spec -o ./tmp/openapi.json && spectral lint ./tmp/openapi.json
 ```
 
-After you've written your code and your API is already in production, if Spectral points anything out with your API description, figuring out what to do next might be troublesome.
+After you've written your code and your API is already in production, if Spectral points anything out with your API description, figuring out what to do next could be troublesome.
 
 For example, if the API has a bunch of URLs with underscores, then becoming consistent is either a case of waiting for the next major version and changing things in there, or taking a more evolution-based approach, aliasing `/example_url` to `/example-url`, then look into [deprecating the old URL](https://apisyouwonthate.com/blog/api-evolution-for-rest-http-apis/).
 
@@ -48,12 +48,12 @@ Here's an example of a Spectral Git hook using [Husky](https://github.com/typico
 }
 ```
 
-See our [CLI documentation](./2-cli.md) to see what other arguments and options can be used.
+See the [CLI documentation](./2-cli.md) to see what other arguments and options can be used.
 
 ## Continuous Integration
 
-Spectral can be used in any CI environment that runs Node.js or our Docker image: Jenkins, CircleCI, GitHub Actions, etc.
+Spectral can be used in any CI environment that runs Node.js or a Docker image: Jenkins, CircleCI, GitHub Actions, etc.
 
-By enabling the JUnit output format when you lint, most CI servers will show visual results helping people realize which mistakes were made and where.
+By enabling the JUnit output format when you lint, most CI servers can show visual results helping people realize which mistakes were made and where.
 
-Read our [Continuous Integration guide](8-continuous-integration.md) for more information on setting things up in your CI of choice.
+Read the [Continuous Integration guide](8-continuous-integration.md) for more information on setting things up in your CI of choice.
