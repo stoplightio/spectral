@@ -24,6 +24,7 @@ export interface IRule {
   documentationUrl: string | null;
   then: IRuleThen[];
   given: string[];
+  extensions: Record<string, unknown> | null;
 }
 
 type RuleJson = Omit<IRule, 'then'> & {
@@ -43,6 +44,7 @@ export class Rule implements IRule {
   #enabled: boolean;
   public recommended: boolean;
   public documentationUrl: string | null;
+  public extensions: Record<string, unknown> | null;
   #then!: IRuleThen[];
   #given!: string[];
 
@@ -61,6 +63,7 @@ export class Rule implements IRule {
     this.formats = 'formats' in definition ? new Formats(definition.formats) : null;
     this.then = definition.then;
     this.given = definition.given;
+    this.extensions = definition.extensions ?? null;
   }
 
   public overrides?: { rulesetSource: string; definition: Map<string, Map<string, DiagnosticSeverity | -1>> };
@@ -188,6 +191,7 @@ export class Rule implements IRule {
       })),
       given: Array.isArray(this.definition.given) ? this.definition.given : [this.definition.given],
       owner: this.owner.id,
+      extensions: this.extensions,
     };
   }
 }
