@@ -35,7 +35,7 @@ describe('Core Functions / Length', () => {
     async input => {
       expect(await runLength(input, { min: 4 })).toEqual([
         {
-          message: 'The document must not be longer than 4',
+          message: 'The document must be longer than 4',
           path: [],
         },
       ]);
