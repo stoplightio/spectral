@@ -40,7 +40,7 @@ export default createRulesetFunction<unknown[] | Record<string, unknown> | strin
     if ('min' in opts && value < opts.min) {
       results = [
         {
-          message: `#{{print("property")}}must not be longer than ${printValue(opts.min)}`,
+          message: `#{{print("property")}}must be longer than ${printValue(opts.min)}`,
         },
       ];
     }
