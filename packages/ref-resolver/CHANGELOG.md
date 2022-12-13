@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ref-resolver-v1.0.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ref-resolver-v1.0.2...@stoplight/spectral-ref-resolver-v1.0.3) (2022-12-13)
+
+
+### Bug Fixes
+
+* **ref-resolver:** bump @stoplight/json-ref-resolver from ~3.1.4 to ~3.1.5 ([#3635](https://github.com/stoplightio/spectral/issues/3635)) ([215ae93](https://github.com/stoplightio/spectral/commit/215ae93a3b06d73cc10a07b6c43c718450a2a2fd))
+
 # [@stoplight/spectral-ref-resolver-v1.0.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ref-resolver-v1.0.1...@stoplight/spectral-ref-resolver-v1.0.2) (2022-10-03)
 
 
