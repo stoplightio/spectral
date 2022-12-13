@@ -1,3 +1,10 @@
+# [@stoplight/spectral-functions-v1.7.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.7.1...@stoplight/spectral-functions-v1.7.2) (2022-12-13)
+
+
+### Bug Fixes
+
+* **rulesets:** length.min said "must not be longer than" ([#2355](https://github.com/stoplightio/spectral/issues/2355)) ([df3b6f9](https://github.com/stoplightio/spectral/commit/df3b6f917cf46456f698445ed67fabbb4306eb4c))
+
 # [@stoplight/spectral-functions-v1.7.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-v1.7.0...@stoplight/spectral-functions-v1.7.1) (2022-08-22)
 
 

@@ -2427,9 +2427,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json-ref-resolver@npm:~3.1.4":
-  version: 3.1.4
-  resolution: "@stoplight/json-ref-resolver@npm:3.1.4"
+"@stoplight/json-ref-resolver@npm:~3.1.5":
+  version: 3.1.5
+  resolution: "@stoplight/json-ref-resolver@npm:3.1.5"
   dependencies:
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
@@ -2441,7 +2441,7 @@ __metadata:
     lodash: ^4.17.21
     tslib: ^2.3.1
     urijs: ^1.19.11
-  checksum: 9da64dc9209420d335d00487c1a50094debb2511ca8ab2c755baea275a7fc4d70695cedbbf1b2d72f05034be395fde47e1b42957b1a7a21325850d5ccc5e60e4
+  checksum: b2df82e899717ffa7bab9ec4c380f206511b3971d242724afd34e8b964e5aa7be2a52e32ba48d435548a9ac13a63a2271ca69182abec8506fc3bb3cc129f6380
   languageName: node
   linkType: hard
 
@@ -2594,7 +2594,7 @@ __metadata:
   resolution: "@stoplight/spectral-ref-resolver@workspace:packages/ref-resolver"
   dependencies:
     "@stoplight/json-ref-readers": 1.2.2
-    "@stoplight/json-ref-resolver": ~3.1.4
+    "@stoplight/json-ref-resolver": ~3.1.5
     "@stoplight/spectral-runtime": ^1.1.2
     dependency-graph: 0.11.0
     tslib: ^2.3.1
@@ -5488,8 +5488,8 @@ __metadata:
   linkType: hard
 
 "engine.io@npm:~6.2.0":
-  version: 6.2.0
-  resolution: "engine.io@npm:6.2.0"
+  version: 6.2.1
+  resolution: "engine.io@npm:6.2.1"
   dependencies:
     "@types/cookie": ^0.4.1
     "@types/cors": ^2.8.12
@@ -5501,7 +5501,7 @@ __metadata:
     debug: ~4.3.1
     engine.io-parser: ~5.0.3
     ws: ~8.2.3
-  checksum: cc485c5ba2e0c4f6ca02dcafd192b22f9dad89d01dc815005298780d3fb910db4cebab4696e8615290c473c2eeb259e8bee2a1fb7ab594d9c80f9f3485771911
+  checksum: 626d7a77f2f6d3e1f888c43932e2f34222201b6c0bc4bcbb0ead054cc170a1df3bf0d6f8b34432e68d7223346b7aa5ed34fbda1e706ef02b7801789465e34f40
   languageName: node
   linkType: hard
 

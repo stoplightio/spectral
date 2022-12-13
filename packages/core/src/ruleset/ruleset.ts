@@ -20,12 +20,14 @@ import { isSimpleAliasDefinition } from './utils/guards';
 import type { Stringified } from './types';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
+const EXPLICIT_SEVERITY = Symbol('@stoplight/spectral/ruleset/#explicit-severity');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
 
 type RulesetContext = {
   readonly severity?: FileRulesetSeverityDefinition;
   readonly source?: string;
   readonly [STACK_SYMBOL]?: Map<RulesetDefinition, Ruleset>;
+  readonly [EXPLICIT_SEVERITY]?: boolean;
 };
 
 let SEED = 1;
@@ -110,8 +112,9 @@ export class Ruleset {
             (extensions, extension) => {
               let actualExtension;
               let severity: FileRulesetSeverityDefinition = 'recommended';
+              const explicitSeverity = Array.isArray(extension);
 
-              if (Array.isArray(extension)) {
+              if (explicitSeverity) {
                 [actualExtension, severity] = extension;
               } else {
                 actualExtension = extension;
@@ -123,7 +126,13 @@ export class Ruleset {
                 return extensions;
               }
 
-              extensions.push(new Ruleset(actualExtension, { severity, [STACK_SYMBOL]: stack }));
+              extensions.push(
+                new Ruleset(actualExtension, {
+                  severity,
+                  [STACK_SYMBOL]: stack,
+                  [EXPLICIT_SEVERITY]: explicitSeverity,
+                }),
+              );
               return extensions;
             },
             [],
@@ -271,6 +280,9 @@ export class Ruleset {
         if (extendedRuleset === this) continue;
         for (const rule of Object.values(extendedRuleset.rules)) {
           rules[rule.name] = rule;
+          if (this.#context[STACK_SYMBOL] !== void 0 && this.#context[EXPLICIT_SEVERITY] === true) {
+            rule.enabled = Rule.isEnabled(rule, this.#context.severity);
+          }
         }
       }
     }
@@ -281,8 +293,7 @@ export class Ruleset {
         rules[name] = rule;
 
         if (rule.owner === this) {
-          rule.enabled =
-            this.#context.severity === 'all' || (this.#context.severity === 'recommended' && rule.recommended);
+          rule.enabled = Rule.isEnabled(rule, this.#context.severity);
         }
 
         if (rule.formats !== null) {

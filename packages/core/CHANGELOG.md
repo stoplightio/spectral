@@ -1,3 +1,17 @@
+# [@stoplight/spectral-core-v1.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.2...@stoplight/spectral-core-v1.16.0) (2022-11-30)
+
+
+### Features
+
+* **core:** support end-user extensions in the rule definitions ([#2345](https://github.com/stoplightio/spectral/issues/2345)) ([365fced](https://github.com/stoplightio/spectral/commit/365fcedb7c140946767ed28a92a120b3adb08e47))
+
+# [@stoplight/spectral-core-v1.15.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.1...@stoplight/spectral-core-v1.15.2) (2022-11-22)
+
+
+### Bug Fixes
+
+* **core:** improve deep ruleset inheritance ([#2326](https://github.com/stoplightio/spectral/issues/2326)) ([378b4b8](https://github.com/stoplightio/spectral/commit/378b4b89769635e8b45d5325c15cfa00881b70bd))
+
 # [@stoplight/spectral-core-v1.15.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.0...@stoplight/spectral-core-v1.15.1) (2022-10-24)
 
 

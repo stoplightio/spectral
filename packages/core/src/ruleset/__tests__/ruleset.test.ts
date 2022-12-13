@@ -95,6 +95,13 @@ describe('Ruleset', () => {
       expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
     });
 
+    it('given nested extends with severity set to off #2', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-proxy2'));
+      expect(Object.keys(rules)).toEqual(['custom-info-description']);
+
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
     it('given nested extends with severity set to off and explicit override to error', async () => {
       const { rules } = await loadRuleset(import('./__fixtures__/severity/error'));
       expect(Object.keys(rules)).toEqual([
@@ -240,6 +247,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['$'],
             message: null,
@@ -313,6 +321,30 @@ describe('Ruleset', () => {
       ├─ severity: 1
       └─ documentationUrl: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/bar-rule.md
 `);
+  });
+
+  it('should respect extensions', async () => {
+    const ruleset = {
+      rules: {
+        'foo-rule': {
+          given: '$',
+          then: {
+            function() {
+              return;
+            },
+          },
+          extensions: {
+            foo: 'bar',
+          },
+        },
+      },
+    };
+
+    const rulesetInstance = new Ruleset(ruleset);
+
+    expect(rulesetInstance.rules['foo-rule'].extensions).toEqual({
+      foo: 'bar',
+    });
   });
 
   it('should include parserOptions', async () => {
@@ -574,6 +606,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: false,
+            extensions: null,
             formats: null,
             given: ['$.info.contact'],
             message: 'Contact name must contain Stoplight',
@@ -593,6 +626,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['$.info'],
             message: 'Description must contain Stoplight',
@@ -612,6 +646,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['$.info'],
             message: 'Title must contain Stoplight',
@@ -1137,6 +1172,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['#PathItem'],
             message: null,
@@ -1156,6 +1192,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['#Name', '#Description'],
             message: null,
@@ -1175,6 +1212,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['#Info.contact'],
             message: null,
@@ -1599,6 +1637,7 @@ describe('Ruleset', () => {
               description: null,
               documentationUrl: null,
               enabled: true,
+              extensions: null,
               formats: null,
               given: ['#Id'],
               message: null,

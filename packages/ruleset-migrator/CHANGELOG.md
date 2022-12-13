@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-migrator-v1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.0...@stoplight/spectral-ruleset-migrator-v1.9.1) (2022-11-23)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** avoid positive lookbehinds ([#2349](https://github.com/stoplightio/spectral/issues/2349)) ([455c324](https://github.com/stoplightio/spectral/commit/455c32487b6f25465c1204186006e2c830f48eb3))
+
 # [@stoplight/spectral-ruleset-migrator-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.8.0...@stoplight/spectral-ruleset-migrator-v1.9.0) (2022-10-24)
 
 
