@@ -1637,4 +1637,49 @@ responses:: !!foo
       }),
     ]);
   });
+
+  test.concurrent('should handle direct circular file $refs', async () => {
+    const spectral = new Spectral();
+    spectral.setRuleset({
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            function() {
+              return [
+                {
+                  message: 'Restricted type',
+                },
+              ];
+            },
+          },
+        },
+      },
+    });
+
+    const documentUri = path.join(__dirname, './__fixtures__/test.json');
+    const document = new Document(
+      JSON.stringify({
+        oneOf: [
+          {
+            type: 'number',
+          },
+          {
+            $ref: './test.json',
+          },
+        ],
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+    const results = spectral.run(document);
+
+    await expect(results).resolves.toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '0', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
+  });
 });
