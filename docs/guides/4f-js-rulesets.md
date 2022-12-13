@@ -98,7 +98,7 @@ export default {
 
 If you use custom functions, the keywords `functions` and `functionOptions` have been removed, as they were designed to help Spectral find your functions. Now functions are passed as a variable, instead of using a string that contains the name like the JSON/YAML formats.
 
-This code example should look familiar for anyone who has used the JSON or YAML formats. The next steps for using this ruleset would be publishing it as an npm package, and then installing that package as part of your API project and referencing in your Spectral ruleset as:
+Next, publish the ruleset as an npm package, and then install that package as part of your API project and reference it in your Spectral ruleset as:
 
 ```
 extends: ["@your-js-ruleset"]

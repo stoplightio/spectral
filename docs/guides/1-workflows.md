@@ -25,7 +25,7 @@ If the API description documents live in some other format, such as comments or 
 swagger generate spec -o ./tmp/openapi.json && spectral lint ./tmp/openapi.json
 ```
 
-After you've written your code and your API is already in production, if Spectral points anything out with your API description, figuring out what to do next could be troublesome.
+After your API is in production, changing problems that Spectral finds could be troublesome.
 
 For example, if the API has a bunch of URLs with underscores, then becoming consistent is either a case of waiting for the next major version and changing things in there, or taking a more evolution-based approach, aliasing `/example_url` to `/example-url`, then look into [deprecating the old URL](https://apisyouwonthate.com/blog/api-evolution-for-rest-http-apis/).
 

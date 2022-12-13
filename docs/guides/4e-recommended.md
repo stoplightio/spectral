@@ -8,7 +8,7 @@ You can try this out with the core OpenAPI ruleset. If you simply extend the rul
 extends: [[spectral:oas, recommended]]
 ```
 
-Far more rules exist than just the recommended ones, there are other rules which can help you create high-quality OpenAPI descriptions.
+Far more rules exist than just the recommended ones. There are other rules to help you create high-quality OpenAPI descriptions.
 
 ```yaml
 extends: [[spectral:oas, all]]

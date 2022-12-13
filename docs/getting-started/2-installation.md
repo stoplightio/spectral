@@ -14,13 +14,13 @@ yarn global add @stoplight/spectral-cli
 
 ## Executable Binaries
 
-For users without Node.js and/or npm/Yarn, you can use the standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). The quickest way to install the appropriate package for your operating system is via this shell script:
+If you don't have Node.js and/or npm/Yarn, use the standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). The quickest way to install the appropriate package for your operating system is via this shell script:
 
 ```bash
 curl -L https://raw.github.com/stoplightio/spectral/master/scripts/install.sh | sh
 ```
 
-The binaries **don't autoupdate**, so you have to run the command again to install new versions.
+The binaries **don't autoupdate**, so you must run the command again to install new versions.
 
 ## Docker
 

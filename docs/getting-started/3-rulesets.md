@@ -1,6 +1,6 @@
 # Create a Ruleset
 
-Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format), which can be used to power powerful linting of other JSON or YAML files, such as OpenAPI or AsyncAPI descriptions.
+Rulesets are collections of rules written in JSON, YAML, or [JavaScript](../guides/4-custom-rulesets.md#alternative-js-ruleset-format). Rulesets provide powerful linting of other JSON or YAML files, such as OpenAPI or AsyncAPI descriptions.
 
 Ruleset files are often named `.spectral.yaml`, but that's not a requirement.
 
@@ -29,7 +29,7 @@ spectral lint myapifile.yaml
 
 ## Write Your First Rule
 
-Here's what a ruleset with a single rule looks like:
+Here's an example of a ruleset with a single rule:
 
 ```yaml
 rules:
@@ -44,7 +44,7 @@ rules:
         match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9_]+})+$"
 ```
 
-The example above is a rule that can be used to validate an OpenAPI description. It looks at all the `paths` properties to make sure they're kebab-case (lower-case and separated with hyphens).
+The example rule validates an OpenAPI description by ensuring the `paths` properties uses kebab-case (lower-case and separated with hyphens).
 
 Breaking down each part of the rule:
 

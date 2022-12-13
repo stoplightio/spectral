@@ -267,9 +267,7 @@ export default createRulesetFunction(
 );
 ```
 
-It's worth keeping in mind, Spectral attempts to deduplicate messages when they have the same `code` and target the same `path`.
-
-As such, if your custom function returns more than one result, you should specify a different `path` for each result.
+Spectral attempts to deduplicate messages when they have the same `code` and target the same `path`. As such, if your custom function returns more than one result, you should specify a different `path` for each result.
 
 ## Referencing Core Functions
 
@@ -299,8 +297,8 @@ As of Spectral 5.4.0, custom functions can also be asynchronous.
 
 <!-- theme: warning -->
 
-> Ideally linting should always be deterministic, which means if it's run 10 times it should return the same results 10 times. To ensure this is the case, please refrain from introducing any logic that's prone to non-deterministic behavior. Examples of this might be contacting an external service you have no control over, or that's unstable, or that changes the way it responds over time.
-> While it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchange information, such as obtaining a dictionary file, with a locally running server, etc.
+> Ideally linting should always be deterministic, which means if it's run 10 times it should return the same results 10 times. To ensure this is the case, refrain from introducing any logic that's prone to non-deterministic behavior. Examples of this might be contacting an external service you have no control over, or that's unstable, or that changes the way it responds over time.
+> While it may seem tempting to have a function that does so, the primary use case is to support libraries that makes `async fs` calls or exchange information, such as obtaining a dictionary file, with a locally running server, etc.
 
 **functions/dictionary.js**
 
@@ -359,7 +357,7 @@ rules:
 
 ## Security Concerns
 
-Please, do keep in mind that for the time being, the code **isn't** executed in a sandbox environment, so be careful when including external rulesets.
+Keep in mind that for the time being, the code **isn't** executed in a sandbox environment, so be careful when including external rulesets.
 
 This indicates that almost any arbitrary code can be executed.
 

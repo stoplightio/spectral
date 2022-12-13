@@ -62,11 +62,11 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 
 ## Error Results
 
-Spectral has a few different error severities: `error`, `warn`, `info`, and `hint`, and they're in "order" from highest to lowest. By default, all results are shown regardless of severity, but since v5.0, only the presence of errors causes a failure status code of 1. Seeing results and getting a failure code for it are now two different things.
+Spectral has a few different error severities: `error`, `warn`, `info`, and `hint`, and they're in order from highest to lowest. By default, all results are shown regardless of severity, but since v5.0, only the presence of errors causes a failure status code of 1. Seeing results and getting a failure code for it are now two different things.
 
-The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` would return a failure status code of 1 for any info results or higher. Using `--fail-severity=warn` causes a failure status code for errors or warnings.
+The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` returns a failure status code of 1 for any info results or higher. Using `--fail-severity=warn` causes a failure status code for errors or warnings.
 
-Changing the fail severity wont' affect output. To change the results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This strips out any results which are below the specified fail severity.
+Changing the fail severity wont' affect output. To change the results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This removes any results which are below the specified fail severity.
 
 ## Proxying
 
@@ -76,7 +76,7 @@ To have requests made from Spectral be proxied through a server, you'd need to s
 
 ## Custom \$ref Resolving
 
-If you want to customize \$ref resolving, you can use the `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
+To customize $ref resolving, use the `--resolver` flag and pass a path to the JS file exporting a custom instance of json-ref-resolver Resolver.
 
 ### Example
 

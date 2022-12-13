@@ -70,7 +70,7 @@ spectral lint myapifile.yaml --ruleset myruleset.yaml
 
 Once you've had a look through the getting started material, some of these guides can help you become a power user.
 
-- [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git-hooks, Continuous Integration, GitHub Actions, wherever you like.
+- [Different Workflows](https://meta.stoplight.io/docs/spectral/docs/guides/1-workflows.md) - When and where should you use Spectral? Editors, Git hooks, continuous integration, GitHub Actions, wherever you like!
 - [Using the command-line interface](https://meta.stoplight.io/docs/spectral/docs/guides/2-cli.md) - Quickest way to get going with Spectral is in the CLI.
 - [Using the JavaScript API](https://meta.stoplight.io/docs/spectral/docs/guides/3-javascript.md) - Access the _raw power_ of Spectral via the JS, or hey, TypeScript if you want.
 - [Custom Rulesets](https://meta.stoplight.io/docs/spectral/docs/guides/4-custom-rulesets.md) - Need something more than the core rulesets provide? Fancy building your own API Style Guide? Learn how to create a custom ruleset.
@@ -78,9 +78,9 @@ Once you've had a look through the getting started material, some of these guide
 
 ## ℹ️ Support
 
-If you need help using Spectral or have any questions, please use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions), or visit the [Stoplight Community Discord](https://discord.com/invite/stoplight). These communities are a great place to share your rulesets, or show off tools that use Spectral.
+If you need help using Spectral or have any questions, you can use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions), or visit the [Stoplight Community Discord](https://discord.com/invite/stoplight). These communities are a great place to share your rulesets, or show off tools that use Spectral.
 
-If you have a bug or feature request, please [create an issue](https://github.com/stoplightio/spectral/issues).
+If you have a bug or feature request, [create an issue for it](https://github.com/stoplightio/spectral/issues).
 
 ## 🌎 Real-World Rulesets
 
@@ -131,6 +131,6 @@ Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE).
 
 ## 🌲 Sponsor Spectral by Planting a Tree
 
-If you would like to thank Stoplight for creating Spectral, we ask that you [**buy the world a tree**][stoplight_forest].
+If you would like to thank Stoplight for creating Spectral, [**buy the world a tree**][stoplight_forest].
 
 [stoplight_forest]: https://ecologi.com/stoplightinc
