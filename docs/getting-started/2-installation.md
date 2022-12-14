@@ -14,13 +14,13 @@ yarn global add @stoplight/spectral-cli
 
 ## Executable Binaries
 
-For users without Node.js and/or npm/Yarn, we provide standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). The quickest way to install the appropriate package for your operating system is via this shell script:
+If you don't have Node.js and/or npm/Yarn, use the standalone packages for [all major platforms](https://github.com/stoplightio/spectral/releases). The quickest way to install the appropriate package for your operating system is via this shell script:
 
 ```bash
 curl -L https://raw.github.com/stoplightio/spectral/master/scripts/install.sh | sh
 ```
 
-The binaries do _not_ auto-update, so you will need to run the command again to install new versions.
+The binaries **don't autoupdate**, so you must run the command again to install new versions.
 
 ## Docker
 
@@ -48,4 +48,4 @@ validate_open-api:
     - spectral lint file.yaml
 ```
 
-For more details about `entrypoint: [""]` see this issue on GitLab [here](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2692#note_50147081)
+For more details about `entrypoint: [""]` see [this issue on GitLab](https://gitlab.com/gitlab-org/gitlab-runner/-/issues/2692#note_50147081).

@@ -58,7 +58,7 @@ In the event of multiple matches, the order of definition takes place, with the 
 
 ### Caveats
 
-Overrides are only applied to the _root_ documents. If your documents have any external dependencies, i.e. $refs, the overrides won't apply.
+Overrides are only applied to the _root_ documents. If your documents have any external dependencies ($refs), the overrides won't apply.
 
 **Example:**
 
@@ -109,7 +109,7 @@ And the ruleset below:
 }
 ```
 
-Running `spectral lint my-document.yaml` will result in the following output:
+Running `spectral lint my-document.yaml` results in the following output:
 
 ```
 /project/User.yaml
@@ -118,7 +118,7 @@ Running `spectral lint my-document.yaml` will result in the following output:
 ✖ 1 problem (0 errors, 1 warning, 0 infos, 0 hints)
 ```
 
-While executing `spectral lint User.yaml` will output:
+While executing `spectral lint User.yaml` outputs:
 
 ```
 No results with a severity of 'error' or higher found!

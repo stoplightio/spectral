@@ -1,6 +1,6 @@
 # Custom Functions
 
-If the core functions are not enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use custom functions.
+If the core functions aren't enough for your [custom ruleset](../getting-started/3-rulesets.md), Spectral allows you to write and use custom functions.
 
 Start by creating a directory to contain your new functions. By default, Spectral looks for the `functions/` folder.
 
@@ -41,11 +41,11 @@ greeting:
   message: hello
 ```
 
-If the message was goodbye, we'd have a problem.
+If the message was goodbye, Spectral would throw an exception.
 
 ## Writing Functions
 
-A custom function might be any JavaScript function compliant with `RulesetFunction` type.
+A custom function can be any JavaScript function compliant with `RulesetFunction` type.
 
 ```ts
 export type RulesetFunction<I extends unknown = unknown, O extends unknown = unknown> = (
@@ -81,7 +81,7 @@ rules:
         value: "abc"
 ```
 
-Where the function `functions/equals.js` might look like:
+Where the function `functions/equals.js` looks like:
 
 ```js
 import { createRulesetFunction } from "@stoplight/spectral-core";
@@ -112,7 +112,7 @@ export default createRulesetFunction(
 );
 ```
 
-You can also name the custom function by using `createRulesetFunction` and passing a named function. This can help debug any errors as the function name will be printed out in any error messages:
+You can also name the custom function by using `createRulesetFunction` and passing a named function. This can help debug any errors as the function name is printed out in any error messages:
 
 ```js
 import { createRulesetFunction } from "@stoplight/spectral-core";
@@ -149,7 +149,7 @@ export default createRulesetFunction(
 
 It's based on `given` [JSON Path][jsonpath] expression defined on the rule and optionally `field` if placed on `then`.
 
-For example, a rule might have `given` with a JSON Path expression of `$`, and the following partial OpenAPI document:
+For example, a rule can have `given` with a JSON Path expression of `$`, and the following partial OpenAPI document:
 
 ```yaml
 openapi: 3.0.0
@@ -178,7 +178,7 @@ operation-id-kebab-case:
 
 `context.path` contains a resolved property path pointing to a place in the document.
 
-`context.document` provides access to the document that we attempt to lint. You may find it useful if you'd like to see which formats were applied to it, or in case you'd like to get its unresolved version.
+`context.document` provides access to the document that Spectral is attempting to lint. You may find it useful if you'd like to see which formats were applied to it, or in case you'd like to get its unresolved version.
 
 `context.documentInventory` provides access to resolved and unresolved documents, the $ref resolution graph, as well as some other advanced properties. You shouldn't need it most of the time.
 
@@ -193,7 +193,7 @@ The process of creating a function involves 2 steps:
 
 ## Returning Multiple Results
 
-Many functions will return a single message, but a function can return multiple messages.
+Many functions return a single message, but a function can return multiple messages.
 
 For example, if a rule is created to make sure something is unique, it could either:
 
@@ -201,7 +201,7 @@ For example, if a rule is created to make sure something is unique, it could eit
 - Return a single error for the array value which contains the first offending non-unique item
 - Return multiple errors for each duplicate value located
 
-How exactly you chose to implement messages depends on the rule at hand and probably personal preference too.
+How exactly you chose to implement messages depends on the rule at hand, as well as personal preference.
 
 **my-ruleset.yaml**
 
@@ -267,9 +267,7 @@ export default createRulesetFunction(
 );
 ```
 
-It's worth keeping in mind, Spectral will attempt to deduplicate messages when they have the same `code` and target the same `path`.
-
-As such, if your custom function might return more than one result, you should specify a different `path` for each result.
+Spectral attempts to deduplicate messages when they have the same `code` and target the same `path`. As such, if your custom function returns more than one result, you should specify a different `path` for each result.
 
 ## Referencing Core Functions
 
@@ -299,8 +297,8 @@ As of Spectral 5.4.0, custom functions can also be asynchronous.
 
 <!-- theme: warning -->
 
-> Ideally linting should always be deterministic, which means if it's run 10 times it should return the same results 10 times. To ensure this is the case, please refrain from introducing any logic that is prone to non-deterministic behavior. Examples of this might be contacting an external service you have no control over, or that is unstable, or that changes the way it responds over time.
-> While it may seem tempting to have a function that does so, the primary use case is to support libraries that makes async fs calls or exchange information, i.e. obtaining a dictionary file, with a locally running server, etc.
+> Ideally linting should always be deterministic, which means if it's run 10 times it should return the same results 10 times. To ensure this is the case, refrain from introducing any logic that's prone to non-deterministic behavior. Examples of this might be contacting an external service you have no control over, or that's unstable, or that changes the way it responds over time.
+> While it may seem tempting to have a function that does so, the primary use case is to support libraries that makes `async fs` calls or exchange information, such as obtaining a dictionary file, with a locally running server, etc.
 
 **functions/dictionary.js**
 
@@ -359,7 +357,7 @@ rules:
 
 ## Security Concerns
 
-Please, do keep in mind that for the time being, the code is **not** executed in a sandboxed environment, so be very careful when including external rulesets.
+Keep in mind that for the time being, the code **isn't** executed in a sandbox environment, so be careful when including external rulesets.
 
 This indicates that almost any arbitrary code can be executed.
 
@@ -367,9 +365,9 @@ Potential risks include:
 
 - Data/credentials infiltration
 - Data tampering
-- Running cpu-intensive tasks, i.e. crypto-mining
+- Running cpu-intensive tasks, such as crypto-mining
 
-While the risk is relatively low, you should be careful about including **external rulesets** you are not in charge of, in particular those that leverage custom functions.
+While the risk is relatively low, you should be careful about including **external rulesets** you aren't in charge of, in particular those that use custom functions.
 
 You are strongly encouraged to review the custom functions a given ruleset provides.
 What you should hunt for is:
@@ -384,13 +382,13 @@ If you notice any weirdness, consider forking the ruleset and removing any evil-
 
 Core functions can be overridden with custom rulesets, so if you'd like to make your own `truthy` function you can do so.
 
-Custom functions are only available in the ruleset which defines them, so loading a `foo` function in one ruleset will not affect a `foo` function in another ruleset.
+Custom functions are only available in the ruleset which defines them, so loading a `foo` function in one ruleset isn't going to affect a `foo` function in another ruleset.
 
 ## Performance Tips
 
-Try to avoid allocating objects if your custom function is very generic, and therefore is expected to be used by plenty of rules.
+Try to avoid allocating objects if your custom function is generic, and therefore is expected to be used by plenty of rules.
 
-If your document is big, and the JSON path expression is loose (meaning it matches a lot of properties), your function might be called hundreds of thousands of times.
+If your document is big, and the JSON path expression is loose (meaning it matches a lot of properties), your function could be called hundreds of thousands of times.
 
 ```js
 // bad
@@ -416,7 +414,7 @@ export default (targetVal, { excludedWords }) => {
 
 ## Supporting Multiple Environments
 
-Spectral is meant to support a variety of environments, so ideally your function should behave similarly in Node.js and browser contexts. Do not rely on globals or functions specific to a particular environment. For example, do not expect the browser `window` global to always be available, since this global is not available in Node.js environments.
+Spectral is meant to support a variety of environments, so ideally your function should behave similarly in Node.js and browser contexts. Don't rely on globals or functions specific to a particular environment. For example, don't expect the browser `window` global to always be available, since this global isn't available in Node.js environments.
 
 If you need to access environment-specific APIs, make sure you provide an alternative for other environments. A good example of such a situation is `fetch` - a function available natively in a browser context, but missing in Node.js.
 
@@ -424,7 +422,7 @@ To keep your code cross-platform, you'd need to use a cross-platform package suc
 
 ## Code Transpilation
 
-We encourage you to not transpile the code to ES5 if you can help it. Spectral does not support older environments than ES2019, so there is no need to bloat the bundle with useless transformations and polyfills. Ship untransformed async/await, do not include unneeded shims, it's all good.
+We encourage you to not transpile the code to ES5 if you can help it. Spectral doesn't support older environments than ES2019, so there is no need to bloat the bundle with useless transformations and polyfills. Ship untransformed async/await, don't include unneeded shims, it's all good.
 
 Before 6.x, Spectral hadn't supported ES Modules, yet as of recently using ES Modules is the recommended way to do things.
 
