@@ -42,6 +42,9 @@ export type RuleDefinition = {
   resolved?: boolean;
 
   then: IRuleThen | IRuleThen[];
+
+  // User extensions/metadata point
+  extensions?: Record<string, unknown>;
 };
 
 export interface IRuleThen {

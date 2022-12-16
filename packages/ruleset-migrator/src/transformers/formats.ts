@@ -26,18 +26,11 @@ const FORMATS = [
 
 function safeFormat(format: string): string {
   return format
-    .replace(/\.|(?<=[0-9])-(?=[0-9])/g, '_')
+    .replace(/\.|([0-9])-(?=[0-9])/g, '$1_')
     .replace(/-([0-9a-z])/g, (match, char) => String(char).toUpperCase());
 }
 
-const REPLACEMENTS = Object.fromEntries(
-  FORMATS.map(format => [
-    format,
-    (ALIASES[format] ?? format)
-      .replace(/\.|(?<=[0-9])-(?=[0-9])/g, '_')
-      .replace(/-([0-9a-z])/g, (match, char) => String(char).toUpperCase()),
-  ]),
-);
+const REPLACEMENTS = Object.fromEntries(FORMATS.map(format => [format, safeFormat(ALIASES[format] ?? format)]));
 
 function transform(input: unknown, ctx: TransformerCtx): namedTypes.ArrayExpression {
   assertArray(input);

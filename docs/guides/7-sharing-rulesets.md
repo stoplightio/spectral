@@ -1,6 +1,6 @@
 # Sharing & Distributing Rulesets
 
-A [ruleset](../getting-started/3-rulesets.md) becomes infinitely more useful when other developers are using it. By itself, it's just a way of enforcing some rules on a single project, but when distributed a ruleset can become a "style guide" for enforcing consistency across a whole bunch of projects!
+A [ruleset](../getting-started/3-rulesets.md) becomes infinitely more useful when other developers are using it. By itself, it's just a way of enforcing some rules on a single project, but when distributed a ruleset can become a "style guide" for enforcing consistency across a whole bunch of projects.
 
 To help you out distribute your rulesets among the others, Spectral provides a few ways to load rulesets from a variety of resources:
 
@@ -8,7 +8,7 @@ To help you out distribute your rulesets among the others, Spectral provides a f
 - via [npm](#npm)
 - via the filesystem
 
-Or mix and match!
+Or mix and match:
 
 ```yaml
 extends:
@@ -17,7 +17,7 @@ extends:
   - some-npm-module # note that this would be treated as any other npm package, therefore it has to live under node_modules, and have a valid package.json.
 ```
 
-There are various pros and cons to each approach, so see what is right for you.
+There are pros and cons to each approach, so see what's right for you.
 
 ## HTTP Server
 
@@ -46,11 +46,11 @@ spectral lint -r https://example.com/some-ruleset.yml
 
 ## npm
 
-As Spectral is an [npm](https://www.npmjs.com/) package, we support loading rulesets from other npm packages.
+As Spectral is an [npm](https://www.npmjs.com/) package, it supports loading rulesets from other npm packages.
 
 Not only does it let you serve files without a need for hosting your own server or uploading it somewhere else, but also supports versioning out of the box, and makes it easy to bundle a ruleset with custom rulesets.
 
-This is a very basic example showing how the directory structure as well as package.json may look like.
+This is a basic example showing how the directory structure as well as package.json may look like.
 
 **package.json**
 
@@ -148,4 +148,4 @@ extends:
   - ./style-guide/spectral.json
 ```
 
-If you need custom functions this will work, as `functionsDir` can point to a directory inside `style-guide/` and all the JavaScript files can live in there too.
+This works if you need custom functions, as `functionsDir` can point to a directory inside `style-guide/` and all the JavaScript files can live in there too.

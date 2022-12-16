@@ -3,14 +3,13 @@ import * as path from '@stoplight/path';
 import { Transformer, TransformerCtx } from '../types';
 import { Ruleset } from '../validation/types';
 import { assertArray } from '../validation';
-import { process } from '..';
+import { process } from '../index';
+import { isBasicRuleset } from '../utils/isBasicRuleset';
 
 const REPLACEMENTS = {
   'spectral:oas': 'oas',
   'spectral:asyncapi': 'asyncapi',
 };
-
-const KNOWN_JS_EXTS = /^\.[cm]?js$/;
 
 export { transformer as default };
 
@@ -24,7 +23,7 @@ async function processExtend(
 
   const filepath = ctx.tree.resolveModule(name, ctx, 'ruleset');
 
-  if (KNOWN_JS_EXTS.test(path.extname(filepath))) {
+  if (!(await isBasicRuleset(filepath, ctx.opts.fetch))) {
     return ctx.tree.addImport(`${path.basename(filepath, true)}_${path.extname(filepath)}`, filepath, true);
   }
 

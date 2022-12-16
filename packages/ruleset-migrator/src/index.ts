@@ -10,6 +10,8 @@ import { ExpressionKind } from 'ast-types/gen/kinds';
 import { assertRuleset } from './validation';
 import { Ruleset } from './validation/types';
 
+export { isBasicRuleset } from './utils/isBasicRuleset';
+
 async function read(filepath: string, fs: MigrationOptions['fs'], fetch: Fetch): Promise<Ruleset> {
   const input = isURL(filepath) ? await (await fetch(filepath)).text() : await fs.promises.readFile(filepath, 'utf8');
 

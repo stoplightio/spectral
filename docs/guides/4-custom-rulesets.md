@@ -1,8 +1,8 @@
 # Rulesets
 
-Spectral comes with two rulesets built-in: [OpenAPI](../reference/openapi-rules.md) and [AsyncAPI](../reference/asyncapi-rules.md). They're good starting points, but the true power of Spectral comes with customizing and creating a ruleset that fits your project or organization. Creating a ruleset can help you and your team level up your API design and API development process, and help you create better APIs.
+Spectral comes with two rulesets built-in: [OpenAPI](../reference/openapi-rules.md) and [AsyncAPI](../reference/asyncapi-rules.md). They're good starting points, but the true power of Spectral comes with customizing and creating a ruleset that fits your project or organization. Creating a ruleset can help you and your team improve your API design and API development process, and help you create better APIs.
 
-Let's look through the various keywords that make up a ruleset, so you can learn how to tweak a distributed ruleset to work for you, or make your own ruleset from scratch to power your organizations [API Style Guide](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs).
+Let's look through the keywords that make up a ruleset, so you can learn how to tweak a distributed ruleset to work for you, or make your own ruleset from scratch to power your organizations [API Style Guide](https://stoplight.io/api-style-guides-guidelines-and-best-practices/?utm_source=github&utm_medium=spectral&utm_campaign=docs).
 
 ## Ruleset Properties
 
@@ -55,7 +55,7 @@ rules:
       # ...
 ```
 
-Now all the rules in this ruleset will only be applied if the specified format is detected.
+Now all the rules in this ruleset are applied if the specified format is detected.
 
 If you'd like to use one ruleset for multiple formats but some rules only apply to one format, you can place the `formats` keyword at the rule level instead:
 
@@ -79,7 +79,7 @@ Custom formats can be registered via the [JS API](../guides/3-javascript.md), bu
 
 ### Documentation URL
 
-Optionally provide a documentation URL to your ruleset in order to help end-users find more information about various warnings. Result messages will sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
+Optionally provide a documentation URL to your ruleset to help end-users find more information about warnings. Result messages are sometimes be more than enough to explain what the problem is, but it can also be beneficial to explain _why_ a message exists, and this is a great place to do that.
 
 The rule name is appended to the link as an anchor.
 
@@ -101,9 +101,9 @@ rules:
 
 In this example, violations of the `no-http-basic` rule would indicate `https://www.example.com/docs/api-style-guide.md#no-http-basic` as the location for finding out more about the rule.
 
-If no `documentationUrl` is provided, no links will show up, and users will just have to rely on the error messages to figure out how the errors can be fixed.
+If no `documentationUrl` is provided, no links are displayed, and users have to rely on the error messages to figure out how the errors can be fixed.
 
-If you wish to override a documentation URL for a particular rule, you can do so by specifying `documentationUrl`.
+If you wish to override a documentation URL of a particular rule, you can do so by specifying `documentationUrl`.
 
 ```yaml
 extends: spectral:oas
@@ -130,4 +130,4 @@ parserOptions:
   incompatibleValues: off # error is the default value
 ```
 
-`parserOptions` is not inherited by extended rulesets.
+`parserOptions` isn't inherited by extended rulesets.

@@ -1,5 +1,43 @@
-import { IPosition } from '@stoplight/types';
-import { IRuleResult } from '../types';
+import type { IPosition } from '@stoplight/types';
+import type { ISpectralDiagnostic } from '../../types';
+
+const computeResultFingerprint = (rule: ISpectralDiagnostic): string => {
+  let id = String(rule.code);
+
+  if (rule.path.length > 0) {
+    id += JSON.stringify(rule.path);
+  } else {
+    id += JSON.stringify(rule.range);
+  }
+
+  if (rule.source !== void 0) {
+    id += rule.source;
+  }
+
+  if (rule.message !== void 0) {
+    id += rule.message;
+  }
+
+  return id;
+};
+
+export const prepareResults = (results: ISpectralDiagnostic[]): ISpectralDiagnostic[] => {
+  return sortResults(deduplicateResults(results));
+};
+
+const deduplicateResults = (results: ISpectralDiagnostic[]): ISpectralDiagnostic[] => {
+  const fingerprints = new Set<string>();
+
+  return results.filter(result => {
+    const fingerprint = computeResultFingerprint(result);
+    if (fingerprints.has(fingerprint)) {
+      return false;
+    }
+
+    fingerprints.add(fingerprint);
+    return true;
+  });
+};
 
 const compareCode = (left: string | number | undefined, right: string | number | undefined): number => {
   if (left === void 0 && right === void 0) {
@@ -57,7 +95,7 @@ export const comparePosition = (left: IPosition, right: IPosition): -1 | 0 | 1 =
   return normalize(diffChar);
 };
 
-export const compareResults = (left: IRuleResult, right: IRuleResult): -1 | 0 | 1 => {
+export const compareResults = (left: ISpectralDiagnostic, right: ISpectralDiagnostic): -1 | 0 | 1 => {
   const diffSource = compareSource(left.source, right.source);
 
   if (diffSource !== 0) {
@@ -81,6 +119,6 @@ export const compareResults = (left: IRuleResult, right: IRuleResult): -1 | 0 | 
   return normalize(diffPath);
 };
 
-export const sortResults = (results: IRuleResult[]): IRuleResult[] => {
+export const sortResults = (results: ISpectralDiagnostic[]): ISpectralDiagnostic[] => {
   return [...results].sort(compareResults);
 };

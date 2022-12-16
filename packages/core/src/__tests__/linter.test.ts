@@ -1326,6 +1326,52 @@ responses:: !!foo
     ]);
   });
 
+  test('should handle utf8 surrogate pairs', async () => {
+    const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
+    const ruleset: RulesetDefinition = {
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            function: truthy,
+          },
+        },
+      },
+    };
+
+    const spectral = new Spectral();
+    spectral.setRuleset(new Ruleset(ruleset, { source: path.join(path.dirname(documentUri), 'ruleset.json') }));
+
+    const document = new Document(
+      JSON.stringify({
+        '\uD87E\uDC04-WORKS': {
+          type: null,
+        },
+        '\uD83D-WORKS-AS-WELL': {
+          type: {
+            foo: {
+              type: null,
+            },
+          },
+        },
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+
+    const results = await spectral.run(document);
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['\uD87E\uDC04-WORKS', 'type'],
+      }),
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['\uD83D-WORKS-AS-WELL', 'type', 'foo', 'type'],
+      }),
+    ]);
+  });
+
   describe('Pointers in overrides', () => {
     test('should be supported', async () => {
       const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
@@ -1587,6 +1633,51 @@ responses:: !!foo
       expect.objectContaining({
         code: 'valid-type',
         path: ['oneOf', '1', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
+  });
+
+  test.concurrent('should handle direct circular file $refs', async () => {
+    const spectral = new Spectral();
+    spectral.setRuleset({
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            function() {
+              return [
+                {
+                  message: 'Restricted type',
+                },
+              ];
+            },
+          },
+        },
+      },
+    });
+
+    const documentUri = path.join(__dirname, './__fixtures__/test.json');
+    const document = new Document(
+      JSON.stringify({
+        oneOf: [
+          {
+            type: 'number',
+          },
+          {
+            $ref: './test.json',
+          },
+        ],
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+    const results = spectral.run(document);
+
+    await expect(results).resolves.toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '0', 'type'],
         severity: DiagnosticSeverity.Warning,
       }),
     ]);

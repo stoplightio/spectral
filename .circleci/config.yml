@@ -21,8 +21,9 @@ defaults:
       only: /^v.*/
   node-versions: &node-versions
     - "12.22"
-    - "14.18"
-    - "16.13"
+    - "14.21"
+    - "16.18"
+    - "18.12"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
 
 commands:
@@ -148,7 +149,7 @@ commands:
 jobs:
   lint:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     resource_class: small
     steps:
       - checkout
@@ -162,7 +163,7 @@ jobs:
       node-version:
         type: string
     docker:
-      - image: circleci/node:<< parameters.node-version >>
+      - image: cimg/node:<< parameters.node-version >>
     resource_class: medium
     steps:
       - checkout
@@ -200,7 +201,7 @@ jobs:
 
   build-nix-binaries:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - checkout
       - install-and-build
@@ -227,7 +228,7 @@ jobs:
 
   release-docker:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - checkout
       - setup_remote_docker:
@@ -290,7 +291,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - prepare-release
       - run: yarn release
