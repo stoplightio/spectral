@@ -136,7 +136,6 @@ const lintCommand: CommandModule = {
           type: 'string',
         },
         'scoring-config': {
-          alias: 's',
           description: 'path/URL to a scoring config file',
           type: 'string',
         },
