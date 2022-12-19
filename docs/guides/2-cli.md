@@ -129,7 +129,7 @@ Where:
 - scoringLetter : An object with key/value pairs with scoring letter and scoring percentage, that the result must be greater , for this letter
 - threshold : A number with minimum percentage value to provide valid the file we are checking
 - warningsSubtract : A boolean to setup if accumulate the result types to less the scoring percentage or stop counting on most critical result types
-- uniqueErrors : A boolean to setup a count with unique errors or with all of them
+- uniqueErrors : A boolean to setup a count with unique errors or with all of them. An error is considered unique if its code and message have not been seen yet
 
 Example:
 
