@@ -25,6 +25,7 @@ extends: [[spectral:oas, all]]
 rules:
   operation-operationId-unique: off
 ```
+
 The example above runs all the rules defined in the `spectral:oas` ruleset (rather than the default behavior that runs only the recommended ones), with one exception; `operation-operationId-unique` is set to off.
 
 ### Enabling Rules
