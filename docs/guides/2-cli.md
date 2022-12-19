@@ -39,7 +39,7 @@ Other options include:
       --stdin-filepath           path to a file to pretend that stdin comes from                                [string]
       --resolver                 path to custom json-ref-resolver instance                                      [string]
   -r, --ruleset                  path/URL to a ruleset file                                                     [string]
-      --scoring-config           path/URL to a scoring config file                                       [string]
+      --scoring-config           path/URL to a scoring config file                                              [string]
   -F, --fail-severity            results of this level or above will trigger a failure exit code
                                                   [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   -D, --display-only-failures    only output results equal to or greater than --fail-severity [boolean] [default: false]
@@ -72,18 +72,12 @@ The scoring is produced in two different metrics:
 
 Also it introduces a quality gate, were an API scoring below the specific threshold will fail in a pipeline.
 
-Enabling scoring is done using a new parameter called --scoring-config or -s and the scoring configuration file, where you can define how an error or a warning affects to the scoring
+Enabling scoring is done using a new parameter called --scoring-config and the scoring configuration file, where you can define how an error or a warning affects to the scoring
 
 Usage:
 
 ```bash
  spectral lint ./reference/**/*.oas*.{json,yml,yaml} --ruleset mycustomruleset.js --scoring-config ./scoringFile.json
-```
-
-or
-
-```bash
-spectral lint ./reference/**/*.oas*.{json,yml,yaml} -r mycustomruleset.js -s ./scoringFile.json
 ```
 
 Heres an example of this scoringFile config file:
