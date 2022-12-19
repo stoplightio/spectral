@@ -11,7 +11,7 @@ export const getScoringConfig = (scoringFile?: string): ScoringConfig | undefine
     scoringFile = path.join(process.cwd(), scoringFile);
   }
 
-  const scoringConfig: ScoringConfig = JSON.parse(fs.readFileSync(scoringFile, 'utf-8')) as ScoringConfig;
+  const scoringConfig: ScoringConfig = JSON.parse(fs.promises.readFile(scoringFile, 'utf8')) as ScoringConfig;
 
   return scoringConfig;
 };
