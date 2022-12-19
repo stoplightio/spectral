@@ -4,14 +4,14 @@ import { ScoringConfig, ScoringTable, ScoringSubtract } from '../types';
 import * as path from '@stoplight/path';
 import fs from 'fs';
 
-export const getScoringConfig = (scoringFile?: string): ScoringConfig | undefined => {
+export const getScoringConfig = async (scoringFile?: string): Promise<ScoringConfig | undefined> => {
   if (scoringFile === void 0) {
     return undefined;
   } else if (!path.isAbsolute(scoringFile)) {
     scoringFile = path.join(process.cwd(), scoringFile);
   }
 
-  const scoringConfig: ScoringConfig = JSON.parse(fs.promises.readFile(scoringFile, 'utf8')) as ScoringConfig;
+  const scoringConfig: ScoringConfig = JSON.parse(await fs.promises.readFile(scoringFile, 'utf8')) as ScoringConfig;
 
   return scoringConfig;
 };

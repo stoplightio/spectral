@@ -42,7 +42,7 @@ import {
   groupBySource,
   getScoringText,
   getCountsBySeverity,
-  uniqueErrors,
+  getUniqueErrors,
 } from './utils';
 
 // -----------------------------------------------------------------------------
@@ -69,7 +69,7 @@ function getMessageType(severity: DiagnosticSeverity): string {
 export const stylish: Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => {
   let output = '\n';
 
-  const uniqueResults = uniqueErrors(results);
+  const uniqueResults = getUniqueErrors(results);
   const groupedResults = groupBySource(results);
   const summaryColor = getColorForSeverity(getHighestSeverity(uniqueResults));
   const summaryText = getSummary(groupedResults);

@@ -20,7 +20,7 @@ import {
   getScoringLevel,
   groupBySource,
   getCountsBySeverity,
-  uniqueErrors,
+  getUniqueErrors,
 } from '../formatters//utils';
 
 const formatOptions = Object.values(OutputFormat);
@@ -210,7 +210,7 @@ const lintCommand: CommandModule = {
         results = filterResultsBySeverity(results, failSeverity);
       }
 
-      const scoringConfigData = getScoringConfig(scoringConfig);
+      const scoringConfigData = await getScoringConfig(scoringConfig);
 
       await Promise.all(
         format.map(f => {
@@ -301,7 +301,7 @@ const scoringThresholdNotEnough = (results: IRuleResult[], scoringConfig: Scorin
     const groupedResults = groupBySource(results);
     let groupedUniqueResults = { ...groupedResults };
     if (scoringConfig.uniqueErrors) {
-      groupedUniqueResults = { ...groupBySource(uniqueErrors(results)) };
+      groupedUniqueResults = { ...groupBySource(getUniqueErrors(results)) };
     }
     return (
       scoringConfig.threshold >

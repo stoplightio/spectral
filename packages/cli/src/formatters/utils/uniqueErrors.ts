@@ -1,6 +1,6 @@
 import { IRuleResult } from '@stoplight/spectral-core';
 
-export const uniqueErrors = (results: IRuleResult[]): IRuleResult[] => {
+export const getUniqueErrors = (results: IRuleResult[]): IRuleResult[] => {
   const filteredResults: IRuleResult[] = [];
   results.forEach((result: IRuleResult) => {
     if (

@@ -38,7 +38,7 @@ import {
   groupBySource,
   getScoringText,
   getCountsBySeverity,
-  uniqueErrors,
+  getUniqueErrors,
 } from './utils';
 
 function formatRange(range?: IRange): string {
@@ -61,7 +61,7 @@ export const pretty: Formatter = (results: ISpectralDiagnostic[], options: Forma
   const PAD_TOP1_LEFT0 = [1, 0, 0, 0];
   const ui = cliui({ width: DEFAULT_TOTAL_WIDTH, wrap: true });
 
-  const uniqueResults = uniqueErrors(results);
+  const uniqueResults = getUniqueErrors(results);
   const groupedResults = groupBySource(results);
   const summaryColor = getColorForSeverity(getHighestSeverity(uniqueResults));
   const summaryText = getSummary(groupedResults);
