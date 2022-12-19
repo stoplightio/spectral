@@ -3,7 +3,6 @@ import { Formatter, FormatterOptions } from './types';
 
 import { groupBySource, getUniqueErrors, getCountsBySeverity, getScoringText } from './utils';
 
-
 export const json: Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => {
   let groupedResults;
   let scoringText = '';

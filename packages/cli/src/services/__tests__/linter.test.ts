@@ -379,7 +379,9 @@ describe('Linter service', () => {
 
       it('outputs no issues', () => {
         return expect(
-          run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath} --scoring-config ${validScoringConfigRulesetPath}`),
+          run(
+            `lint ${validCustomOas3SpecPath} -r ${validRulesetPath} --scoring-config ${validScoringConfigRulesetPath}`,
+          ),
         ).resolves.toEqual([]);
       });
     });
