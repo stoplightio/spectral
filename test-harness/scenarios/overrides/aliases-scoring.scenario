@@ -130,4 +130,4 @@ module.exports = {
 
 ✖ 4 problems (1 error, 1 warning, 1 info, 1 hint)
 ✖ SCORING: E (42%)
-✖ NOT PASSED!
+✖ FAILED!

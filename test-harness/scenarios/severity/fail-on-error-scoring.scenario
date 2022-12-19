@@ -75,4 +75,4 @@ Will fail and return 1 as exit code because errors exist with scoring data
 
 ✖ 3 problems (2 errors, 1 warning, 0 infos, 0 hints)
 ✖ SCORING: E (32%)
-✖ NOT PASSED!
+✖ FAILED!

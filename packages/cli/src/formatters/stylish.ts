@@ -123,7 +123,7 @@ export const stylish: Formatter = (results: ISpectralDiagnostic[], options: Form
     if (scoring >= options.scoringConfig.threshold) {
       output += chalk['green'].bold(`\u2716 PASSED!\n`);
     } else {
-      output += chalk['red'].bold(`\u2716 NOT PASSED!\n`);
+      output += chalk['red'].bold(`\u2716 FAILED!\n`);
     }
   }
 
