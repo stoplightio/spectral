@@ -150,7 +150,7 @@ describe('lint', () => {
     const doc = './__fixtures__/empty-oas2-document.json';
     const ruleset = 'custom-ruleset.json';
     const configFile = 'scoring-config.json';
-    await run(`lint -r ${ruleset} -s ${configFile} ${doc}`);
+    await run(`lint -r ${ruleset} --scoring-config ${configFile} ${doc}`);
     expect(lint).toBeCalledWith([doc], {
       encoding: 'utf8',
       format: ['stylish'],

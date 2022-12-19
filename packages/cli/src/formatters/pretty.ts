@@ -41,8 +41,6 @@ import {
   uniqueErrors,
 } from './utils';
 
-const { version } = require('../../package.json');
-
 function formatRange(range?: IRange): string {
   if (range === void 0) return '';
 
@@ -52,12 +50,7 @@ function formatRange(range?: IRange): string {
 export const pretty: Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => {
   const cliui = require('cliui');
   let output = '\n';
-  if (options.scoringConfig !== void 0) {
-    if (options.scoringConfig.customScoring !== void 0) {
-      output += `${options.scoringConfig.customScoring}${version as string}\n`;
-    }
-  }
-  output += '\n';
+
   const DEFAULT_TOTAL_WIDTH = process.stdout.columns;
   const COLUMNS = [10, 13, 25, 20, 20];
   const variableColumns = DEFAULT_TOTAL_WIDTH - COLUMNS.reduce((a, b) => a + b);

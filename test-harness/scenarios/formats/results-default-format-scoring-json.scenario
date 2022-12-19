@@ -86,7 +86,6 @@ info:
 {bin} lint {document} --format=json --ruleset "{asset:ruleset.json}" --scoring-config "{asset:scoring-config.json}"
 ====stdout====
 {
-	"version": "",
 	"scoring": "A (90%)",
 	"passed": true,
 	"results": [

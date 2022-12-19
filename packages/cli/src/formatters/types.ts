@@ -12,7 +12,6 @@ export interface ScoringLevel {
   [key: string]: number;
 }
 export type ScoringConfig = {
-  customScoring?: string;
   scoringSubtract: ScoringTable[];
   scoringLetter: ScoringLevel[];
   threshold: number;

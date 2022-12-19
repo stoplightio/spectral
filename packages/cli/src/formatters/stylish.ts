@@ -45,8 +45,6 @@ import {
   uniqueErrors,
 } from './utils';
 
-const version = process.env.npm_package_version;
-
 // -----------------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------------
@@ -70,12 +68,7 @@ function getMessageType(severity: DiagnosticSeverity): string {
 
 export const stylish: Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => {
   let output = '\n';
-  if (options.scoringConfig !== void 0) {
-    if (options.scoringConfig.customScoring !== void 0) {
-      output += `${options.scoringConfig.customScoring}${version as string}\n`;
-    }
-  }
-  output += '\n';
+
   const uniqueResults = uniqueErrors(results);
   const groupedResults = groupBySource(results);
   const summaryColor = getColorForSeverity(getHighestSeverity(uniqueResults));

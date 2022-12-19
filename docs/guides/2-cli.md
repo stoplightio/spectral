@@ -39,7 +39,7 @@ Other options include:
       --stdin-filepath           path to a file to pretend that stdin comes from                                [string]
       --resolver                 path to custom json-ref-resolver instance                                      [string]
   -r, --ruleset                  path/URL to a ruleset file                                                     [string]
-  -s, --scoring-config           path/URL to a scoring config file                                       [string]
+      --scoring-config           path/URL to a scoring config file                                       [string]
   -F, --fail-severity            results of this level or above will trigger a failure exit code
                                                   [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
   -D, --display-only-failures    only output results equal to or greater than --fail-severity [boolean] [default: false]

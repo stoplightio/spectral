@@ -373,13 +373,13 @@ describe('Linter service', () => {
     describe('when single scoring-config option provided', () => {
       it('outputs normal output if it does not exist', () => {
         return expect(
-          run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath} -s non-existent-path`),
+          run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath} --scoring-config non-existent-path`),
         ).resolves.toEqual([]);
       });
 
       it('outputs no issues', () => {
         return expect(
-          run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath} -s ${validScoringConfigRulesetPath}`),
+          run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath} --scoring-config ${validScoringConfigRulesetPath}`),
         ).resolves.toEqual([]);
       });
     });
