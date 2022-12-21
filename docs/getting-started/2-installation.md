@@ -1,6 +1,8 @@
 # Installation
 
-You can install Spectral using [npm](https://www.npmjs.com/):
+You can install Spectral using [npm](https://www.npmjs.com/).
+
+To install the [Spectral CLI client](../guides/2-cli.md), use:
 
 ```bash
 npm install -g @stoplight/spectral-cli
@@ -10,6 +12,18 @@ Or if you are a [Yarn](https://yarnpkg.com/) user:
 
 ```bash
 yarn global add @stoplight/spectral-cli
+```
+
+To consume the [Spectral Javascript API](../guides/3-javascript.md), use:
+
+```bash
+npm install -g @stoplight/spectral-core
+```
+
+Or if you are a [Yarn](https://yarnpkg.com/) user:
+
+```bash
+yarn global add @stoplight/spectral-core
 ```
 
 ## Executable Binaries
