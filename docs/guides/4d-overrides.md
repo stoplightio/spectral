@@ -1,6 +1,6 @@
 ## Overrides
 
-Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files, or change parts of a rule. Overrides are the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
+Previously Spectral supported exceptions, which were limited in their ability to target particular rules on specific files or parts of files or change parts of a rule. Overrides are the much more powerful version of exceptions, with the ability to customize ruleset usage for different files and projects without having to duplicate any rules.
 
 Overrides can be used to apply rulesets on:
 
@@ -40,9 +40,9 @@ overrides:
 
 JSON Pointers have a different syntax than JSON Paths used in the `given` component of a rule.
 
-In JSON Pointers, path components are prefixed with a "/" and then concatenated to form the pointer.
+In JSON Pointers, path components are prefixed with a `/` and then concatenated to form the pointer.
 
-Since "/" has a special meaning in JSON pointer, it must be encoded as "~1" when it appears in a component, and "~" must be encoded as "~0".
+Since `/` has a special meaning in JSON pointer, it must be encoded as `~1` when it appears in a component, and `~` must be encoded as `~0`.
 
 You can test JSON Pointer expressions in the [JSON Query online evaluator](https://www.jsonquerytool.com/) by choosing "JSONPointer" as the Transform.
 
@@ -58,9 +58,11 @@ In the event of multiple matches, the order of definition takes place, with the 
 
 ### Caveats
 
+#### External Dependencies ($refs)
+
 Overrides are only applied to the _root_ documents. If your documents have any external dependencies ($refs), the overrides won't apply.
 
-**Example:**
+Example:
 
 Given the following 2 YAML documents:
 
@@ -122,4 +124,19 @@ While executing `spectral lint User.yaml` outputs:
 
 ```
 No results with a severity of 'error' or higher found!
+```
+
+#### Extended Rulesets (extends)
+
+Overrides aren't supported in other files through [extended rulesets (`extends`)](4b-extends.md). For example, if you create a ruleset file (`rulesetA`) that includes another file (`rulesetB`) through `extends`, overrides are ignored if you apply them to `rulesetB`.
+
+However, you can use JS rulesets to inherit overrides. This example shows how to apply an override in `rulesetB`:
+
+```JavaScript
+import rulesetA from './ruleset';
+
+export default {
+  extends: rulesetA,
+  overrides: rulesetA.overrides,
+};
 ```
