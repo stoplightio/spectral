@@ -128,7 +128,7 @@ No results with a severity of 'error' or higher found!
 
 #### Extended Rulesets (extends)
 
-Overrides aren't supported in other files through [extended rulesets    (`extends`)](4b-extends.md). For example, if you create a ruleset file (`rulesetA`) that includes another file (`rulesetB`) through `extends`, overrides are ignored if you apply them to `rulesetB`. 
+Overrides aren't supported in other files through [extended rulesets (`extends`)](4b-extends.md). For example, if you create a ruleset file (`rulesetA`) that includes another file (`rulesetB`) through `extends`, overrides are ignored if you apply them to `rulesetB`.
 
 However, you can use JS rulesets to inherit overrides. This example shows how to apply an override in `rulesetB`:
 
