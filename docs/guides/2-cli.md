@@ -63,12 +63,12 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 
 ## Scoring the API
 
-Scoring an API definition is a way to understand in a high level, how compliant is the API definition with the rulesets provided. This helps teams to understand the quality of the APIs regarding the definition.
+Scoring an API definition is a way to understand at a high level how compliant the API definition is with the rulesets provided. This helps teams to understand the quality of the APIs regarding the definition.
 
 The scoring is produced in two different metrics:
 
-- A number scoring. Who cames as substracting from 100% from any error or warning
-- A letter, who groups numeric scorings in letters from A (better) to any
+- A number scoring: Calculated by subtracting any error or warning from 100%.
+- A letter scoring, which groups numeric scoring in letters from A to Z, with A being the best score.
 
 Also it introduces a quality gate, were an API scoring below the specific threshold will fail in a pipeline.
 
@@ -119,11 +119,11 @@ Heres an example of this scoringFile config file:
 
 Where:
 
-- scoringSubtract : An object with a key/value pair objects for every result level we want to subtract percentage, with the percentage to subtract from number of results on every result type
-- scoringLetter : An object with key/value pairs with scoring letter and scoring percentage, that the result must be greater , for this letter
+- scoringSubtract : An object with key/value pair objects for every result level we want to subtract percentage, with the percentage to subtract from number of results on every result type
+- scoringLetter : An object with key/value pairs with scoring letter and scoring percentage, that the result must be greater, for this letter
 - threshold : A number with minimum percentage value to provide valid the file we are checking
-- warningsSubtract : A boolean to setup if accumulate the result types to less the scoring percentage or stop counting on most critical result types
-- uniqueErrors : A boolean to setup a count with unique errors or with all of them. An error is considered unique if its code and message have not been seen yet
+- warningsSubtract : A boolean to accumulate the result types to less than the scoring percentage or to stop counting on most critical result types
+- uniqueErrors : A boolean to count unique errors or all errors. An error is considered unique if its code and message have not been seen yet
 
 Example:
 
