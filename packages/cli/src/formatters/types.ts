@@ -15,7 +15,7 @@ export type ScoringConfig = {
   scoringSubtract: ScoringTable[];
   scoringLetter: ScoringLevel[];
   threshold: number;
-  warningsSubtract: boolean;
+  onlySubtractHigherSeverityLevel: boolean;
   uniqueErrors: boolean;
 };
 

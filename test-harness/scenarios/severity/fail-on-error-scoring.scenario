@@ -58,7 +58,7 @@ Will fail and return 1 as exit code because errors exist with scoring data
       "E": 0
     },
   "threshold": 50,
-  "warningsSubtract": true,
+  "onlySubtractHigherSeverityLevel": true,
   "uniqueErrors": false
 }
 ====command-nix====

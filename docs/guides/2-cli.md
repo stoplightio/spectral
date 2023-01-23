@@ -112,7 +112,7 @@ Heres an example of this scoringFile config file:
           "E":0
         },
       "threshold":50,
-      "warningsSubtract": true,
+      "onlySubtractHigherSeverityLevel": true,
       "uniqueErrors": false
     }
 ```
@@ -121,8 +121,21 @@ Where:
 
 - scoringSubtract : An object with key/value pair objects for every result level we want to subtract percentage, with the percentage to subtract from number of results on every result type
 - scoringLetter : An object with key/value pairs with scoring letter and scoring percentage, that the result must be greater, for this letter
-- threshold : A number with minimum percentage value to provide valid the file we are checking
-- warningsSubtract : A boolean to accumulate the result types to less than the scoring percentage or to stop counting on most critical result types
+- threshold : A number with minimum percentage value to provide valid the file we are checking. Any scoring below this thresold will mark the API as a failure in the scoring.
+- onlySubtractHigherSeverityLevel : A boolean to decide if only the higher severity level who appears in the results for the API to analize, are subtracted from scoring or every severity level are subtracted from scoring.
+
+See sample:
+
+    true
+
+    API with Errors and Warnings, only Errors substract from scoring
+    API with Warnings, Warnings substract from scoring
+
+    false
+
+    API with Errors and Warnings, Errors and Warnings substracts from scoring
+    API with Warnings, Warnings substract from scoring
+
 - uniqueErrors : A boolean to count unique errors or all errors. An error is considered unique if its code and message have not been seen yet
 
 Example:

@@ -93,7 +93,7 @@ module.exports = {
       "E": 0
     },
   "threshold": 50,
-  "warningsSubtract": true,
+  "onlySubtractHigherSeverityLevel": true,
   "uniqueErrors": false
 }
 ====asset:v2/document.json====

@@ -27,6 +27,6 @@
       "E": 0
     },
   "threshold": 50,
-  "warningsSubtract": true,
+  "onlySubtractHigherSeverityLevel": true,
   "uniqueErrors": false
 }

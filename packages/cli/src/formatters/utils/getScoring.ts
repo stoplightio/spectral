@@ -24,13 +24,13 @@ export const getScoringLevel = (
     [DiagnosticSeverity.Hint]: number;
   },
   scoringSubtract: ScoringTable[],
-  warningsSubtract: boolean,
+  onlySubtractHigherSeverityLevel: boolean,
 ): number => {
   let scoring = 100;
   Object.keys(issuesCount).forEach(key => {
     const scoringKey = Object.keys(SEVERITY_MAP).filter(mappedKey => SEVERITY_MAP[mappedKey] == key)[0];
     if (scoringSubtract[scoringKey] !== void 0) {
-      if (scoring < 100 && !warningsSubtract) return;
+      if (scoring < 100 && !onlySubtractHigherSeverityLevel) return;
       let subtractValue = 0;
       Object.keys(scoringSubtract[scoringKey] as ScoringSubtract[]).forEach((subtractKey: string): void => {
         subtractValue = (
@@ -42,7 +42,7 @@ export const getScoringLevel = (
       scoring -= subtractValue;
     }
   });
-  return scoring;
+  return scoring > 0 ? scoring : 0;
 };
 
 export const getScoringText = (
@@ -54,8 +54,8 @@ export const getScoringText = (
   },
   scoringConfig: ScoringConfig,
 ): string => {
-  const { scoringSubtract, scoringLetter, warningsSubtract } = scoringConfig;
-  const scoring = getScoringLevel(issuesCount, scoringSubtract, warningsSubtract);
+  const { scoringSubtract, scoringLetter, onlySubtractHigherSeverityLevel } = scoringConfig;
+  const scoring = getScoringLevel(issuesCount, scoringSubtract, onlySubtractHigherSeverityLevel);
   let scoringLevel: string = Object.keys(scoringLetter)[Object.keys(scoringLetter).length - 1];
   Object.keys(scoringLetter)
     .reverse()

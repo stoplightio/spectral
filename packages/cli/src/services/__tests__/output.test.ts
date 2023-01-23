@@ -28,7 +28,7 @@ const scoringConfig = {
     E: 0,
   } as unknown as ScoringLevel[],
   threshold: 50,
-  warningsSubtract: true,
+  onlySubtractHigherSeverityLevel: true,
   uniqueErrors: false,
 };
 
