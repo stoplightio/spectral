@@ -308,7 +308,7 @@ const scoringThresholdNotEnough = (results: IRuleResult[], scoringConfig: Scorin
       getScoringLevel(
         getCountsBySeverity(groupedUniqueResults),
         scoringConfig.scoringSubtract,
-        scoringConfig.onlySubtractHigherSeverityLevel
+        scoringConfig.onlySubtractHigherSeverityLevel,
       )
     );
   }
