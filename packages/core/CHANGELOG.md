@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.16.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.16.0...@stoplight/spectral-core-v1.16.1) (2023-01-31)
+
+
+### Bug Fixes
+
+* **core:** reset path in fn context ([#2389](https://github.com/stoplightio/spectral/issues/2389)) ([3d47ec4](https://github.com/stoplightio/spectral/commit/3d47ec432fde46d9d1e59d00c1173d924b6a39a1))
+
 # [@stoplight/spectral-core-v1.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.2...@stoplight/spectral-core-v1.16.0) (2022-11-30)
 
 
