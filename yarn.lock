@@ -27,10 +27,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@asyncapi/specs@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@asyncapi/specs@npm:3.2.0"
-  checksum: 09971262aefc8844ab3e7c0c3652711862ac562dd5d614f23b496185690430a81df8e50eddba657f4141e0fd9548ef622fe6c20f4e3dec8054be23f774798335
+"@asyncapi/specs@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@asyncapi/specs@npm:4.1.0"
+  dependencies:
+    "@types/json-schema": ^7.0.11
+  checksum: 6e95f3c1ef7267480cdfc69f5a015f63b9101874289e31843a629346a3ea07490e3043b296a089bf3458e877c664d83d4b4738dcb53d37d7e13b75c7bc08c879
   languageName: node
   linkType: hard
 
@@ -2677,7 +2679,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
-    "@asyncapi/specs": ^3.2.0
+    "@asyncapi/specs": ^4.1.0
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
