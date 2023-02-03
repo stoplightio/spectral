@@ -28,9 +28,9 @@ __metadata:
   linkType: hard
 
 "@asyncapi/specs@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@asyncapi/specs@npm:3.2.0"
-  checksum: 09971262aefc8844ab3e7c0c3652711862ac562dd5d614f23b496185690430a81df8e50eddba657f4141e0fd9548ef622fe6c20f4e3dec8054be23f774798335
+  version: 3.2.1
+  resolution: "@asyncapi/specs@npm:3.2.1"
+  checksum: 6392d0aaa658905f67553160c725bb0b535e187a120fb2305eb1a223460244a43eea804c00f4985ecbaddb2b04527ce9db51e72117dbe694db547b734f8082dd
   languageName: node
   linkType: hard
 
