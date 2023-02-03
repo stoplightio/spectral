@@ -1,6 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6 } from '@stoplight/spectral-formats';
 
 import { getCopyOfSchema } from './utils/specs';
 
@@ -92,6 +92,8 @@ function getSerializedSchema(version: AsyncAPISpecVersion): Record<string, unkno
 
 function getSchema(formats: Set<Format>): Record<string, any> | void {
   switch (true) {
+    case formats.has(aas2_6):
+      return getSerializedSchema('2.6.0');
     case formats.has(aas2_5):
       return getSerializedSchema('2.5.0');
     case formats.has(aas2_4):
