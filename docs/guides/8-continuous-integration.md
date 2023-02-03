@@ -2,7 +2,7 @@
 
 Spectral CLI can be run anywhere that npm packages can be installed and run via CLI, which these days is pretty much any CI solution going.
 
-Here are some examples of Spectral in various CI solutions to give you an idea.
+Here are some examples of Spectral in CI solutions.
 
 ## CircleCI
 
@@ -41,7 +41,7 @@ Make sure to change `openapi.yaml` to point to whatever documents you want to li
 
 The `-f` (format) flag is used in the script to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the errors in the Test interface.
 
-![On the CircleCI build results page there is a tab called Tests, which will show Spectral results so long as the junit format has been enabled](../img/ci-circleci.png)
+![On the CircleCI build results page there is a tab called Tests, which shows Spectral results if the JUnit format has been enabled](../img/ci-circleci.png)
 
 Learn more about [CircleCI Configuration](https://circleci.com/docs/2.0/config-intro/), or take a look at this [demo repository](https://github.com/philsturgeon/spectral-demo-circleci).
 
@@ -74,7 +74,3 @@ lint:spectral:
 Make sure to change `openapi.yaml` to point to whatever documents you want to lint.
 
 The `-f` (format) flag is used in the script to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the Spectral output on the merge request page.
-
-## Jenkins
-
-Instructions coming soon...

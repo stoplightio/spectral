@@ -193,6 +193,116 @@ describe('asyncApi2DocumentSchema', () => {
     });
   });
 
+  describe('given AsyncAPI 2.4.0 document', () => {
+    test('validate messageId on message', async () => {
+      expect(
+        await s.run({
+          asyncapi: '2.4.0',
+          info: {
+            title: 'Signup service example (internal)',
+            version: '0.1.0',
+          },
+          channels: {
+            '/user/signedup': {
+              subscribe: {
+                message: {
+                  messageId: 'messageId',
+                  payload: {
+                    type: 'object',
+                    properties: {
+                      email: {
+                        type: 'string',
+                        format: 'email',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      ).toEqual([]);
+    });
+  });
+
+  describe('given AsyncAPI 2.5.0 document', () => {
+    test('validate tags on server', async () => {
+      expect(
+        await s.run({
+          asyncapi: '2.5.0',
+          info: {
+            title: 'Signup service example (internal)',
+            version: '0.1.0',
+          },
+          servers: {
+            development: {
+              url: 'https://some-server.com/example',
+              protocol: 'kafka',
+              tags: [
+                {
+                  name: 'env:production',
+                },
+                {
+                  name: 'e-commerce',
+                },
+              ],
+            },
+          },
+          channels: {
+            '/user/signedup': {
+              subscribe: {
+                message: {
+                  messageId: 'messageId',
+                  payload: {
+                    type: 'object',
+                    properties: {
+                      email: {
+                        type: 'string',
+                        format: 'email',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      ).toEqual([]);
+    });
+  });
+
+  describe('given AsyncAPI 2.6.0 document', () => {
+    test('validate valid spec', async () => {
+      expect(
+        await s.run({
+          asyncapi: '2.6.0',
+          info: {
+            title: 'Signup service example (internal)',
+            version: '0.1.0',
+          },
+          channels: {
+            '/user/signedup': {
+              subscribe: {
+                message: {
+                  messageId: 'messageId',
+                  payload: {
+                    type: 'object',
+                    properties: {
+                      email: {
+                        type: 'string',
+                        format: 'email',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      ).toEqual([]);
+    });
+  });
+
   describe('prepareResults', () => {
     test('given oneOf error one of which is required $ref property missing, picks only one error', () => {
       const errors: ErrorObject[] = [

@@ -69,7 +69,7 @@ Let's look at some other examples and how to work with external files.
 
 If you would like to run this example, make sure that you have:
 
-- An OpenAPI description document in the same directory as your script named `openapi.yaml`. You can use the one found [here](https://github.com/stoplightio/Public-APIs/blob/master/reference/plaid/openapi.yaml).
+- An OpenAPI description document in the same directory as your script named `openapi.yaml`. You can use [this OpenAPI description for the Plaid API](https://github.com/stoplightio/Public-APIs/blob/master/reference/plaid/openapi.yaml).
 - A ruleset file named `.spectral.yaml`. It can have the following contents:
 
 ```yaml
@@ -110,9 +110,7 @@ spectral.run(myDocument).then(console.log);
 
 ### Load a JavaScript Ruleset
 
-Starting in Spectral v6.0, support was added for rulesets to be written using JavaScript.
-
-You can find more information about it [here](./4-custom-rulesets.md#alternative-js-ruleset-format).
+Starting in Spectral v6.0, support was added for [rulesets to be written using JavaScript](./4-custom-rulesets.md#alternative-js-ruleset-format).
 
 To load a JavaScript ruleset, you have to import it similar to how you would import a module:
 
@@ -218,7 +216,7 @@ const spectral = new Spectral({ resolver: customFileResolver });
 // ... lint document - $refs and rules will be requested using the proxy
 ```
 
-This custom resolver will resolve all remote file refs relatively to the current working directory.
+This custom resolver resolves all remote file refs relative to the current working directory.
 
 You can find more information about how to create custom resolvers in
 the [@stoplight/json-ref-resolver](https://github.com/stoplightio/json-ref-resolver) repository.
