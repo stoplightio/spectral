@@ -19,9 +19,9 @@
       "default": "./dist/index.js"
     },
     "./with-loader": {
-      "default": "./dist/loader/node.js",
       "node": "./dist/loader/node.js",
-      "browser": "./dist/loader/browser.js"
+      "browser": "./dist/loader/browser.js",
+      "default": "./dist/loader/node.js"
     },
     "./presets/*": {
       "default": "./dist/presets/*.js"
