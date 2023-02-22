@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-migrator-v1.9.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.1...@stoplight/spectral-ruleset-migrator-v1.9.2) (2023-02-22)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** use module for require.resolve ([#2405](https://github.com/stoplightio/spectral/issues/2405)) ([d7c0fa4](https://github.com/stoplightio/spectral/commit/d7c0fa44c506f8f724129c31ee51701fb9699bef))
+
 # [@stoplight/spectral-ruleset-migrator-v1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.0...@stoplight/spectral-ruleset-migrator-v1.9.1) (2022-11-23)
 
 
