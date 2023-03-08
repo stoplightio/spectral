@@ -27,10 +27,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@asyncapi/specs@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@asyncapi/specs@npm:3.2.0"
-  checksum: 09971262aefc8844ab3e7c0c3652711862ac562dd5d614f23b496185690430a81df8e50eddba657f4141e0fd9548ef622fe6c20f4e3dec8054be23f774798335
+"@asyncapi/specs@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@asyncapi/specs@npm:4.1.0"
+  dependencies:
+    "@types/json-schema": ^7.0.11
+  checksum: 6e95f3c1ef7267480cdfc69f5a015f63b9101874289e31843a629346a3ea07490e3043b296a089bf3458e877c664d83d4b4738dcb53d37d7e13b75c7bc08c879
   languageName: node
   linkType: hard
 
@@ -2566,7 +2568,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.4.0, @stoplight/spectral-formats@workspace:packages/formats":
+"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.5.0, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
@@ -2677,12 +2679,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
-    "@asyncapi/specs": ^3.2.0
+    "@asyncapi/specs": ^4.1.0
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.8.1
-    "@stoplight/spectral-formats": ^1.4.0
+    "@stoplight/spectral-formats": ^1.5.0
     "@stoplight/spectral-functions": ^1.5.1
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": "*"
@@ -6943,9 +6945,9 @@ __metadata:
   linkType: hard
 
 "http-cache-semantics@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "http-cache-semantics@npm:4.1.0"
-  checksum: 974de94a81c5474be07f269f9fd8383e92ebb5a448208223bfb39e172a9dbc26feff250192ecc23b9593b3f92098e010406b0f24bd4d588d631f80214648ed42
+  version: 4.1.1
+  resolution: "http-cache-semantics@npm:4.1.1"
+  checksum: 83ac0bc60b17a3a36f9953e7be55e5c8f41acc61b22583060e8dedc9dd5e3607c823a88d0926f9150e571f90946835c7fe150732801010845c72cd8bbff1a236
   languageName: node
   linkType: hard
 
@@ -12893,9 +12895,9 @@ __metadata:
   linkType: hard
 
 "ua-parser-js@npm:^0.7.30":
-  version: 0.7.31
-  resolution: "ua-parser-js@npm:0.7.31"
-  checksum: e2f8324a83d1715601576af85b2b6c03890699aaa7272950fc77ea925c70c5e4f75060ae147dc92124e49f7f0e3d6dd2b0a91e7f40d267e92df8894be967ba8b
+  version: 0.7.33
+  resolution: "ua-parser-js@npm:0.7.33"
+  checksum: 1510e9ec26fcaf0d8c6ae8f1078a8230e8816f083e1b5f453ea19d06b8ef2b8a596601c92148fd41899e8b3e5f83fa69c42332bd5729b931a721040339831696
   languageName: node
   linkType: hard
 

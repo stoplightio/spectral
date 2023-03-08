@@ -6,6 +6,7 @@ const scopes = [
   'repo',
   'test-harness',
   'test-utils',
+  'deps',
   'deps-dev',
   ...fs.readdirSync(path.join(__dirname, './packages')),
 ];
