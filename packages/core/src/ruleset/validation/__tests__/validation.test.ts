@@ -119,6 +119,18 @@ describe('JS Ruleset Validation', () => {
     ).not.toThrow();
   });
 
+  it('allows x- extensions on a ruleset', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        rules: {},
+        'x-internal': true,
+        'x-vars': {
+          foo: 'bar',
+        },
+      }),
+    ).not.toThrow();
+  });
+
   it.each(['error', 'warn', 'info', 'hint', 'off'])('recognizes human-readable %s severity', severity => {
     expect(
       assertValidRuleset.bind(null, {
@@ -842,6 +854,26 @@ describe('JS Ruleset Validation', () => {
         ]),
       );
     });
+  });
+
+  it('allows x- extensions on a rule', () => {
+    expect(
+      assertValidRuleset.bind(null, {
+        rules: {
+          rule: {
+            given: '$',
+            then: {
+              field: 'test',
+              function: truthy,
+            },
+            'x-internal': true,
+            'x-vars': {
+              foo: 'bar',
+            },
+          },
+        },
+      }),
+    ).not.toThrow();
   });
 });
 
