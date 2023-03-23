@@ -125,5 +125,5 @@
       "prettier --ignore-path .eslintignore --write"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.5.0"
 }
