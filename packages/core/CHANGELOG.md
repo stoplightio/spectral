@@ -1,3 +1,10 @@
+# [@stoplight/spectral-core-v1.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.16.1...@stoplight/spectral-core-v1.17.0) (2023-03-23)
+
+
+### Features
+
+* **core:** support x- extensions in the ruleset ([#2440](https://github.com/stoplightio/spectral/issues/2440)) ([964151e](https://github.com/stoplightio/spectral/commit/964151e73b6cc3c0b7c960eac3711ffbeac690ae))
+
 # [@stoplight/spectral-core-v1.16.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.16.0...@stoplight/spectral-core-v1.16.1) (2023-01-31)
 
 

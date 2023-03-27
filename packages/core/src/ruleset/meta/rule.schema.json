@@ -84,6 +84,9 @@
     },
     "required": ["given", "then"],
     "additionalProperties": false,
+    "patternProperties": {
+      "^x-": true
+    },
     "errorMessage": {
       "required": "the rule must have at least \"given\" and \"then\" properties"
     }
