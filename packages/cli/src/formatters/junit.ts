@@ -62,6 +62,9 @@ export const junit: Formatter = (results, { failSeverity }) => {
         output += `line ${result.range.start.line + 1}, col ${result.range.start.character + 1}, `;
         output += `${prepareForCdata(result.message)} (${result.code}) `;
         output += `at path ${prepareForCdata(path)}`;
+        if (result.documentationUrl) {
+          output += `, ${result.documentationUrl}`;
+        }
         output += ']]>';
         output += `</failure>`;
         output += '</testcase>\n';

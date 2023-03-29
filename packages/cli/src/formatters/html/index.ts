@@ -52,6 +52,7 @@ function renderMessages(messages: IRuleResult[], parentIndex: number): string {
         severity: getSeverityName(message.severity),
         message: message.message,
         code: message.code,
+        documentationUrl: message.documentationUrl,
       });
     })
     .join('\n');

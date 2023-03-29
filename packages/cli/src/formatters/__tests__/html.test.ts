@@ -18,36 +18,42 @@ describe('HTML formatter', () => {
     <td>3:10</td>
     <td class="severity clr-hint">hint</td>
     <td>Info object should contain \`contact\` object.</td>
+    <td></td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>3:10</td>
     <td class="severity clr-warning">warning</td>
     <td>OpenAPI object info \`description\` must be present and non-empty string.</td>
+    <td></td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>5:14</td>
     <td class="severity clr-error">error</td>
     <td>Info must contain Stoplight</td>
+    <td></td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>17:13</td>
     <td class="severity clr-information">information</td>
     <td>Operation \`description\` must be present and non-empty string.</td>
+    <td></td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>64:14</td>
     <td class="severity clr-information">information</td>
     <td>Operation \`description\` must be present and non-empty string.</td>
+    <td></td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>86:13</td>
     <td class="severity clr-information">information</td>
     <td>Operation \`description\` must be present and non-empty string.</td>
+    <td></td>
 </tr>`);
   });
 });
