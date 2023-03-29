@@ -151,6 +151,11 @@ const lintCommand: CommandModule = {
           type: 'boolean',
           default: false,
         },
+        'show-documentation-url': {
+          description: 'show documentation url in output result',
+          type: 'boolean',
+          default: false,
+        },
         verbose: {
           alias: 'v',
           description: 'increase verbosity',
@@ -175,6 +180,7 @@ const lintCommand: CommandModule = {
       encoding,
       ignoreUnknownFormat,
       failOnUnmatchedGlobs,
+      showDocumentationUrl,
       ...config
     } = args as unknown as ILintConfig & {
       documents: Array<number | string>;
@@ -189,6 +195,7 @@ const lintCommand: CommandModule = {
         encoding,
         ignoreUnknownFormat,
         failOnUnmatchedGlobs,
+        showDocumentationUrl,
         ruleset,
         stdinFilepath,
         ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['verbose', 'quiet', 'resolver']),
@@ -196,6 +203,10 @@ const lintCommand: CommandModule = {
 
       if (displayOnlyFailures) {
         linterResult.results = filterResultsBySeverity(linterResult.results, failSeverity);
+      }
+
+      if (!showDocumentationUrl) {
+        linterResult.results = removeDocumentationUrlFromResults(linterResult.results);
       }
 
       await Promise.all(
@@ -277,6 +288,10 @@ function printErrorStacks(error: Error, padding: number): string {
 const filterResultsBySeverity = (results: IRuleResult[], failSeverity: FailSeverity): IRuleResult[] => {
   const diagnosticSeverity = getDiagnosticSeverity(failSeverity);
   return results.filter(r => r.severity <= diagnosticSeverity);
+};
+
+const removeDocumentationUrlFromResults = (results: IRuleResult[]): IRuleResult[] => {
+  return results.map(r => ({ ...r, documentationUrl: undefined }));
 };
 
 export const severeEnoughToFail = (results: IRuleResult[], failSeverity: FailSeverity): boolean => {

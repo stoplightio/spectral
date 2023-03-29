@@ -9,6 +9,7 @@ info:
 {
   "rules": {
     "api-servers": {
+      "documentationUrl": "https://www.example.com/docs/api-servers.md",
       "description": "\"servers\" must be present and non-empty array.",
       "recommended": true,
       "given": "$",
@@ -38,6 +39,7 @@ info:
       }
     },
     "info-description": {
+      "documentationUrl": "https://www.example.com/docs/info-description.md",
       "description": "Info \"description\" must be present and non-empty string.",
       "recommended": true,
       "type": "style",
@@ -50,7 +52,7 @@ info:
   }
 }
 ====command====
-{bin} lint {document} --format=html --ruleset "{asset:ruleset.json}"
+{bin} lint {document} --format=html --ruleset "{asset:ruleset.json}" --show-documentation-url
 ====stdout====
 <!DOCTYPE html>
 <html>
@@ -163,7 +165,7 @@ info:
     <td>1:1</td>
     <td class="severity clr-warning">warning</td>
     <td>&quot;servers&quot; must be present and non-empty array.</td>
-    <td></td>
+    <td><a href="https://www.example.com/docs/api-servers.md" target="_blank">documentation</a></td>
 </tr>
 
 <tr style="display:none" class="f-0">
@@ -177,7 +179,7 @@ info:
     <td>2:6</td>
     <td class="severity clr-warning">warning</td>
     <td>Info &quot;description&quot; must be present and non-empty string.</td>
-    <td></td>
+    <td><a href="https://www.example.com/docs/info-description.md" target="_blank">documentation</a></td>
 </tr>
 
     </tbody>

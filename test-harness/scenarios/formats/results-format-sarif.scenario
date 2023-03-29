@@ -1,0 +1,175 @@
+====test====
+Invalid document outputs results when --format=sarif
+====document====
+---
+info:
+  version: 1.0.0
+  title: Stoplight
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "documentationUrl": "https://www.example.com/docs/api-servers.md",
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    },
+    "info-description": {
+      "documentationUrl": "https://www.example.com/docs/info-description.md",
+      "description": "Info \"description\" must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --format=sarif --ruleset "{asset:ruleset.json}"
+====stdout====
+{
+  "$schema": "http://json.schemastore.org/sarif-2.1.0-rtm.6.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "spectral",
+          "rules": [
+            {
+              "id": "api-servers",
+              "shortDescription": {
+                "text": "\"servers\" must be present and non-empty array."
+              },
+              "helpUri": "https://www.example.com/docs/api-servers.md"
+            },
+            {
+              "id": "info-contact",
+              "shortDescription": {
+                "text": "Info object must have a \"contact\" object."
+              }
+            },
+            {
+              "id": "info-description",
+              "shortDescription": {
+                "text": "Info \"description\" must be present and non-empty string."
+              },
+              "helpUri": "https://www.example.com/docs/info-description.md"
+            }
+          ],
+          "version": "6.11.1",
+          "informationUri": "https://github.com/stoplightio/spectral"
+        }
+      },
+      "results": [
+        {
+          "level": "warning",
+          "message": {
+            "text": "\"servers\" must be present and non-empty array."
+          },
+          "ruleId": "api-servers",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "document",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 4,
+                  "endColumn": 19
+                }
+              }
+            }
+          ],
+          "ruleIndex": 0
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Info object must have a \"contact\" object."
+          },
+          "ruleId": "info-contact",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "document",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 6,
+                  "endLine": 4,
+                  "endColumn": 19
+                }
+              }
+            }
+          ],
+          "ruleIndex": 1
+        },
+        {
+          "level": "warning",
+          "message": {
+            "text": "Info \"description\" must be present and non-empty string."
+          },
+          "ruleId": "info-description",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "document",
+                  "index": 0
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 6,
+                  "endLine": 4,
+                  "endColumn": 19
+                }
+              }
+            }
+          ],
+          "ruleIndex": 2
+        }
+      ],
+      "artifacts": [
+        {
+          "sourceLanguage": "unknown",
+          "location": {
+            "uri": "document"
+          }
+        }
+      ]
+    }
+  ]
+}
