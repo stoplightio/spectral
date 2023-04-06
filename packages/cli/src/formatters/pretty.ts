@@ -24,12 +24,22 @@
  * @author Ava Thorn
  */
 
+import { ISpectralDiagnostic } from '@stoplight/spectral-core';
 import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
-import { IDiagnostic, IRange } from '@stoplight/types';
+import { IDiagnostic, IRange, DiagnosticSeverity } from '@stoplight/types';
 import chalk from 'chalk';
 
-import { Formatter } from './types';
-import { getColorForSeverity, getHighestSeverity, getSummary, getSeverityName, groupBySource } from './utils';
+import { Formatter, FormatterOptions } from './types';
+import {
+  getColorForSeverity,
+  getHighestSeverity,
+  getSummary,
+  getSeverityName,
+  groupBySource,
+  getScoringText,
+  getCountsBySeverity,
+  getUniqueErrors,
+} from './utils';
 
 function formatRange(range?: IRange): string {
   if (range === void 0) return '';
@@ -37,9 +47,10 @@ function formatRange(range?: IRange): string {
   return ` ${range.start.line + 1}:${range.start.character + 1}`;
 }
 
-export const pretty: Formatter = results => {
+export const pretty: Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => {
   const cliui = require('cliui');
   let output = '\n';
+
   const DEFAULT_TOTAL_WIDTH = process.stdout.columns;
   const COLUMNS = [10, 13, 25, 20, 20];
   const variableColumns = DEFAULT_TOTAL_WIDTH - COLUMNS.reduce((a, b) => a + b);
@@ -50,9 +61,22 @@ export const pretty: Formatter = results => {
   const PAD_TOP1_LEFT0 = [1, 0, 0, 0];
   const ui = cliui({ width: DEFAULT_TOTAL_WIDTH, wrap: true });
 
+  const uniqueResults = getUniqueErrors(results);
   const groupedResults = groupBySource(results);
-  const summaryColor = getColorForSeverity(getHighestSeverity(results));
+  const summaryColor = getColorForSeverity(getHighestSeverity(uniqueResults));
   const summaryText = getSummary(groupedResults);
+
+  let groupedUniqueResults = { ...groupedResults };
+  let scoringColor = '';
+  let scoringText = null;
+
+  if (options.scoringConfig !== void 0) {
+    if (options.scoringConfig.uniqueErrors) {
+      groupedUniqueResults = { ...groupBySource(uniqueResults) };
+    }
+    scoringColor = getColorForSeverity(DiagnosticSeverity.Information);
+    scoringText = getScoringText(getCountsBySeverity(groupedUniqueResults), options.scoringConfig);
+  }
 
   const uniqueIssues: IDiagnostic['code'][] = [];
   Object.keys(groupedResults).forEach(i => {
@@ -83,6 +107,15 @@ export const pretty: Formatter = results => {
   output += ui.toString();
   output += chalk[summaryColor].bold(`${uniqueIssues.length} Unique Issue(s)\n`);
   output += chalk[summaryColor].bold(`\u2716${summaryText !== null ? ` ${summaryText}` : ''}\n`);
+  if (options.scoringConfig !== void 0) {
+    output += chalk[scoringColor].bold(`\u2716${scoringText !== null ? ` ${scoringText}` : ''}\n`);
+    const scoring = +(scoringText !== null ? scoringText.replace('%', '').split(/[()]+/)[1] : 0);
+    if (scoring >= options.scoringConfig.threshold) {
+      output += chalk['green'].bold(`\u2716 PASSED!\n`);
+    } else {
+      output += chalk['red'].bold(`\u2716 FAILED!\n`);
+    }
+  }
 
   return output;
 };

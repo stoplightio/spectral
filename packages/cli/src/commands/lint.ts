@@ -14,6 +14,14 @@ import { formatOutput, writeOutput } from '../services/output';
 import { FailSeverity, ILintConfig, OutputFormat } from '../services/config';
 
 import { CLIError } from '../errors';
+import { ScoringConfig } from './../formatters/types';
+import {
+  getScoringConfig,
+  getScoringLevel,
+  groupBySource,
+  getCountsBySeverity,
+  getUniqueErrors,
+} from '../formatters//utils';
 
 const formatOptions = Object.values(OutputFormat);
 
@@ -127,6 +135,10 @@ const lintCommand: CommandModule = {
           description: 'path/URL to a ruleset file',
           type: 'string',
         },
+        'scoring-config': {
+          description: 'path/URL to a scoring config file',
+          type: 'string',
+        },
         'fail-severity': {
           alias: 'F',
           description: 'results of this level or above will trigger a failure exit code',
@@ -168,6 +180,7 @@ const lintCommand: CommandModule = {
       failSeverity,
       displayOnlyFailures,
       ruleset,
+      scoringConfig,
       stdinFilepath,
       format,
       output,
@@ -197,20 +210,30 @@ const lintCommand: CommandModule = {
         results = filterResultsBySeverity(results, failSeverity);
       }
 
+      const scoringConfigData = await getScoringConfig(scoringConfig);
+
       await Promise.all(
         format.map(f => {
-          const formattedOutput = formatOutput(results, f, { failSeverity: getDiagnosticSeverity(failSeverity) });
+          const formattedOutput = formatOutput(results, f, {
+            failSeverity: getDiagnosticSeverity(failSeverity),
+            scoringConfig: scoringConfigData,
+          });
           return writeOutput(formattedOutput, output?.[f] ?? '<stdout>');
         }),
       );
 
       if (results.length > 0) {
-        process.exit(severeEnoughToFail(results, failSeverity) ? 1 : 0);
+        process.exit(
+          scoringThresholdNotEnough(results, scoringConfigData) ? 1 : severeEnoughToFail(results, failSeverity) ? 1 : 0,
+        );
       } else if (config.quiet !== true) {
         const isErrorSeverity = getDiagnosticSeverity(failSeverity) === DiagnosticSeverity.Error;
         process.stdout.write(
           `No results with a severity of '${failSeverity}' ${isErrorSeverity ? '' : 'or higher '}found!\n`,
         );
+        if (scoringConfig !== void 0) {
+          process.stdout.write(`SCORING: (100%)\nPASSED!`);
+        }
       }
     } catch (ex) {
       fail(isError(ex) ? ex : new Error(String(ex)), config.verbose === true);
@@ -271,6 +294,25 @@ function printErrorStacks(error: Error, padding: number): string {
 const filterResultsBySeverity = (results: IRuleResult[], failSeverity: FailSeverity): IRuleResult[] => {
   const diagnosticSeverity = getDiagnosticSeverity(failSeverity);
   return results.filter(r => r.severity <= diagnosticSeverity);
+};
+
+const scoringThresholdNotEnough = (results: IRuleResult[], scoringConfig: ScoringConfig | undefined): boolean => {
+  if (scoringConfig !== void 0) {
+    const groupedResults = groupBySource(results);
+    let groupedUniqueResults = { ...groupedResults };
+    if (scoringConfig.uniqueErrors) {
+      groupedUniqueResults = { ...groupBySource(getUniqueErrors(results)) };
+    }
+    return (
+      scoringConfig.threshold >
+      getScoringLevel(
+        getCountsBySeverity(groupedUniqueResults),
+        scoringConfig.scoringSubtract,
+        scoringConfig.onlySubtractHigherSeverityLevel,
+      )
+    );
+  }
+  return false;
 };
 
 export const severeEnoughToFail = (results: IRuleResult[], failSeverity: FailSeverity): boolean => {

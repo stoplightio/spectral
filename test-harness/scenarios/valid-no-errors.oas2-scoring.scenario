@@ -1,0 +1,57 @@
+====test====
+Valid OAS2 document returns no results with scoring data
+====document====
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Stoplight
+  description: lots of text
+  contact:
+    name: fred
+host: localhost
+schemes:
+  - http
+paths: {}
+tags:
+  - name: my-tag
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
+====asset:scoring-config.json====
+{
+  "scoringSubtract":
+    {
+      "error":
+        {
+          "1":55,
+          "2":65,
+          "3":75,
+          "6":85,
+          "10":95
+        },
+     "warn":
+        {
+          "1":3,
+          "2":7,
+          "3":10,
+          "6":15,
+          "10":18
+        }
+    },
+  "scoringLetter":
+    {
+      "A": 75,
+      "B": 65,
+      "C": 55,
+      "D": 45,
+      "E": 0
+    },
+  "threshold": 50,
+  "onlySubtractHigherSeverityLevel": true,
+  "uniqueErrors": false
+}
+====command====
+{bin} lint {document} --ruleset "{asset:ruleset}" --scoring-config "{asset:scoring-config.json}"
+====stdout====
+No results with a severity of 'error' found!
+SCORING: (100%)PASSED!

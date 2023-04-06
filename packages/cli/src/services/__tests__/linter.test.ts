@@ -18,6 +18,7 @@ jest.mock('../output');
 const validCustomOas3SpecPath = resolve(__dirname, '__fixtures__/openapi-3.0-valid-custom.yaml');
 const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.js');
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.js');
+const validScoringConfigRulesetPath = resolve(__dirname, '__fixtures__/scorint-config.json');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
 
 async function run(command: string) {
@@ -364,6 +365,24 @@ describe('Linter service', () => {
             }),
           ]),
         );
+      });
+    });
+  });
+
+  describe('--scoring-config ', () => {
+    describe('when single scoring-config option provided', () => {
+      it('outputs normal output if it does not exist', () => {
+        return expect(
+          run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath} --scoring-config non-existent-path`),
+        ).resolves.toEqual([]);
+      });
+
+      it('outputs no issues', () => {
+        return expect(
+          run(
+            `lint ${validCustomOas3SpecPath} -r ${validRulesetPath} --scoring-config ${validScoringConfigRulesetPath}`,
+          ),
+        ).resolves.toEqual([]);
       });
     });
   });

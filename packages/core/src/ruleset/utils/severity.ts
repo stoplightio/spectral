@@ -3,7 +3,7 @@ import { HumanReadableDiagnosticSeverity } from '../types';
 
 export const DEFAULT_SEVERITY_LEVEL = DiagnosticSeverity.Warning;
 
-const SEVERITY_MAP: Record<HumanReadableDiagnosticSeverity, DiagnosticSeverity | -1> = {
+export const SEVERITY_MAP: Record<HumanReadableDiagnosticSeverity, DiagnosticSeverity | -1> = {
   error: DiagnosticSeverity.Error,
   warn: DiagnosticSeverity.Warning,
   info: DiagnosticSeverity.Information,
