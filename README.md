@@ -101,6 +101,7 @@ There are also rulesets created by many companies to improve their APIs. You can
 - [Zalando](https://apistylebook.stoplight.io/docs/zalando-restful-api-guidelines) - Based on [Zalando's RESTFUL API Guidelines](https://github.com/zalando/restful-api-guidelines), covers a wide-range of API topics such as versioning standards, property naming standards, the default format for request/response properties, and more.
 
 Check out some additional style guides here:
+
 - [Spectral Rulesets by Stoplight](https://github.com/stoplightio/spectral-rulesets)
 - [API Stylebook by Stoplight](https://apistylebook.stoplight.io)
 
