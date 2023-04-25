@@ -941,14 +941,14 @@ describe('JSON Ruleset Validation', () => {
 
   it.each<[unknown, RulesetValidationError[]]>([
     [
-      [2, 'a'],
+      [2, null],
       [
         new RulesetValidationError('invalid-format', 'must be a valid format', ['formats', '0']),
         new RulesetValidationError('invalid-format', 'must be a valid format', ['formats', '1']),
       ],
     ],
     [2, [new RulesetValidationError('invalid-ruleset-definition', 'must be an array of formats', ['formats'])]],
-    [[''], [new RulesetValidationError('invalid-format', 'must be a valid format', ['formats', '0'])]],
+    [[null], [new RulesetValidationError('invalid-format', 'must be a valid format', ['formats', '0'])]],
   ])('recognizes invalid ruleset %p formats syntax', (formats, errors) => {
     expect(
       assertValidRuleset.bind(
@@ -985,7 +985,7 @@ describe('JSON Ruleset Validation', () => {
 
   it.each<[unknown, RulesetValidationError[]]>([
     [
-      [2, 'a'],
+      [2, null],
       [
         new RulesetValidationError('invalid-format', 'must be a valid format', ['rules', 'rule', 'formats', '0']),
         new RulesetValidationError('invalid-format', 'must be a valid format', ['rules', 'rule', 'formats', '1']),
