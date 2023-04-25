@@ -59,7 +59,7 @@ describe('Core Functions / Pattern', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -69,18 +69,20 @@ describe('Core Functions / Pattern', () => {
           new RulesetValidationError(
             'invalid-function-options',
             `"pattern" function has invalid options specified. Example valid options: { "match": "^Stoplight" }, { "notMatch": "Swagger" }, { "match": "Stoplight", "notMatch": "Swagger" }`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
       [
         { foo: true },
         [
-          new RulesetValidationError(
-            'invalid-function-options',
-            '"pattern" function does not support "foo" option',
-            [],
-          ),
+          new RulesetValidationError('invalid-function-options', '"pattern" function does not support "foo" option', [
+            'rules',
+            'my-rule',
+            'then',
+            'functionOptions',
+            'foo',
+          ]),
         ],
       ],
       [
@@ -89,7 +91,7 @@ describe('Core Functions / Pattern', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"pattern" function and its "match" option must be string or RegExp instance',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'match'],
           ),
         ],
       ],
@@ -99,7 +101,7 @@ describe('Core Functions / Pattern', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"pattern" function and its "notMatch" option must be string or RegExp instance',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'notMatch'],
           ),
         ],
       ],
@@ -109,12 +111,12 @@ describe('Core Functions / Pattern', () => {
           new RulesetValidationError(
             'invalid-function-options',
             `"pattern" function and its "match" option must be string or RegExp instance`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'match'],
           ),
           new RulesetValidationError(
             'invalid-function-options',
             `"pattern" function and its "notMatch" option must be string or RegExp instance`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'notMatch'],
           ),
         ],
       ],
