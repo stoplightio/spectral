@@ -90,6 +90,7 @@ export default {
         '$.components.messageTraits.*.headers',
         '$.components.messages.*.headers',
         '$.channels.*.[publish,subscribe].message.headers',
+        '$.channels.*.[publish,subscribe].message.traits[*].headers',
       ],
       then: {
         function: schema,
