@@ -88,6 +88,7 @@ Stoplight has a set of Spectral rulesets that were created to help users get sta
 
 - [OWASP Top 10](https://apistylebook.stoplight.io/docs/owasp-top-10) - Set of rules to enforce [OWASP security guidelines](https://owasp.org/www-project-api-security/).
 - [URL Style Guidelines](https://apistylebook.stoplight.io/docs/url-guidelines) - Set of rules to help developers make better and consistent endpoints.
+- [Documentation](https://github.com/stoplightio/spectral-documentation) - Scan an OpenAPI description to make sure you're leveraging enough of its features to help documentation tools like Stoplight Elements, ReDoc, and Swagger UI build the best quality API Reference Documentation possible.
 
 There are also rulesets created by many companies to improve their APIs. You can use these as is to lint your OpenAPI descriptions, or use these as a reference to learn more about what rules you would want in your own ruleset:
 
@@ -99,7 +100,10 @@ There are also rulesets created by many companies to improve their APIs. You can
 - [Tranascom](https://github.com/transcom/mymove/blob/master/swagger-def/.spectral.yml) - Don't even think about using anything other than `application/json`.
 - [Zalando](https://apistylebook.stoplight.io/docs/zalando-restful-api-guidelines) - Based on [Zalando's RESTFUL API Guidelines](https://github.com/zalando/restful-api-guidelines), covers a wide-range of API topics such as versioning standards, property naming standards, the default format for request/response properties, and more.
 
-Here are [more real-world examples](https://github.com/stoplightio/spectral-rulesets) of Spectral in action.
+Check out some additional style guides here:
+
+- [Spectral Rulesets by Stoplight](https://github.com/stoplightio/spectral-rulesets)
+- [API Stylebook by Stoplight](https://apistylebook.stoplight.io)
 
 ## ⚙️ Integrations
 

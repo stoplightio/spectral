@@ -69,7 +69,10 @@ export default createRulesetFunction<unknown, Options>(
       // let's ignore any $ref errors if schema fn is provided with already resolved content,
       // if our resolver fails to resolve them,
       // ajv is unlikely to do it either, since it won't have access to the whole document, but a small portion of it
-      if (!rule.resolved || !(ex instanceof MissingRefError)) {
+      // We specifically check that "rule" is truthy below because "rule" might be undefined/null if this
+      // code is called from testcases.
+      const ignoreError = rule?.resolved && ex instanceof MissingRefError;
+      if (!ignoreError) {
         results.push({
           message: ex.message,
           path,
