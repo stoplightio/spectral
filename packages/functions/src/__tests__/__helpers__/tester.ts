@@ -6,14 +6,7 @@ import {
   IRuleResult,
   RulesetFunction,
   RulesetFunctionWithValidator,
-  RulesetValidationError,
 } from '@stoplight/spectral-core';
-
-import { isError } from 'lodash';
-
-function isAggregateError(maybeAggregateError: unknown): maybeAggregateError is Error & { errors: unknown[] } {
-  return isError(maybeAggregateError) && maybeAggregateError.constructor.name === 'AggregateError';
-}
 
 export default async function <O = unknown>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,31 +16,19 @@ export default async function <O = unknown>(
   rule?: Partial<Omit<RuleDefinition, 'then'>> & { then?: Partial<RuleDefinition['then']> },
 ): Promise<Pick<IRuleResult, 'path' | 'message'>[]> {
   const s = new Spectral();
-  try {
-    s.setRuleset({
-      rules: {
-        'my-rule': {
-          given: '$',
-          ...rule,
-          then: {
-            ...(rule?.then as Ruleset['rules']['then']),
-            function: fn,
-            functionOptions: opts,
-          },
+  s.setRuleset({
+    rules: {
+      'my-rule': {
+        given: '$',
+        ...rule,
+        then: {
+          ...(rule?.then as Ruleset['rules']['then']),
+          function: fn,
+          functionOptions: opts,
         },
       },
-    });
-  } catch (ex) {
-    if (isAggregateError(ex)) {
-      for (const e of ex.errors) {
-        if (e instanceof RulesetValidationError) {
-          e.path.length = 0;
-        }
-      }
-    }
-
-    throw ex;
-  }
+    },
+  });
 
   const results = await s.run(input instanceof Document ? input : JSON.stringify(input));
   return results

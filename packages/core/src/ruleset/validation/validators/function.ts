@@ -24,7 +24,7 @@ export function validateFunction(
     validator(opts);
   } catch (ex) {
     if (ex instanceof ReferenceError) {
-      return new RulesetValidationError('undefined-function', ex.message, toParsedPath(path));
+      return new RulesetValidationError('undefined-function', ex.message, [...toParsedPath(path), 'function']);
     }
 
     return wrapError(ex, path);
