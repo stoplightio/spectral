@@ -1,3 +1,10 @@
+# [@stoplight/spectral-rulesets-v1.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.15.1...@stoplight/spectral-rulesets-v1.16.0) (2023-04-25)
+
+
+### Features
+
+* **rulesets:** add traits array path to headers rule ([#2460](https://github.com/stoplightio/spectral/issues/2460)) ([9ceabca](https://github.com/stoplightio/spectral/commit/9ceabca80969885c240349d6ebba15c09a4f8697))
+
 # [@stoplight/spectral-rulesets-v1.15.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.15.0...@stoplight/spectral-rulesets-v1.15.1) (2023-04-25)
 
 
