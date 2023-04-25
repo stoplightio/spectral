@@ -1,8 +1,8 @@
 # Continuous Integration
 
-Spectral CLI can be run anywhere that NPM packages can be installed and run via CLI, which these days is pretty much any CI solution going.
+Spectral CLI can be run anywhere that npm packages can be installed and run via CLI, which these days is pretty much any CI solution going.
 
-Here are some examples of Spectral in various CI solutions to give you an idea.
+Here are some examples of Spectral in CI solutions.
 
 ## CircleCI
 
@@ -37,9 +37,11 @@ workflows:
       - lint
 ```
 
-Change the `openapi.yaml` to point to whatever documents you want to lint, and use -f (format) to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the errors in the Test interface.
+Make sure to change `openapi.yaml` to point to whatever documents you want to lint.
 
-![On the CircleCI build results page there is a tab called Tests, which will show Spectral results so long as the junit format has been enabled](../img/ci-circleci.png)
+The `-f` (format) flag is used in the script to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the errors in the Test interface.
+
+![On the CircleCI build results page there is a tab called Tests, which shows Spectral results if the JUnit format has been enabled](../img/ci-circleci.png)
 
 Learn more about [CircleCI Configuration](https://circleci.com/docs/2.0/config-intro/), or take a look at this [demo repository](https://github.com/philsturgeon/spectral-demo-circleci).
 
@@ -47,6 +49,28 @@ Learn more about [CircleCI Configuration](https://circleci.com/docs/2.0/config-i
 
 Spectral has a pre-built [Spectral GitHub Action](https://github.com/stoplightio/spectral-action) which should speed up implementing Spectral in your GitHub repository.
 
-## Jenkins
+## GitLab
 
-Instructions coming soon...
+GitLab users can add the following to their `.gitlab-ci.yml` files:
+
+```yaml
+stages:
+  - lint
+
+lint:spectral:
+  stage: lint
+  image:
+    name: stoplight/spectral
+    entrypoint: [""]
+  script:
+    - spectral lint -D -f junit -o spectral-report.xml openapi.yaml
+  artifacts:
+    when: always
+    expire_in: 2 weeks
+    reports:
+      junit: $CI_PROJECT_DIR/spectral-report.xml
+```
+
+Make sure to change `openapi.yaml` to point to whatever documents you want to lint.
+
+The `-f` (format) flag is used in the script to pick the JUnit output format. This is a standard test format that many CI servers understand, and means you should be able to see the Spectral output on the merge request page.

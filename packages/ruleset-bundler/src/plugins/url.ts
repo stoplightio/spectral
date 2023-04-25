@@ -4,8 +4,9 @@ import type { IO } from '../types';
 
 export const url = ({ fetch }: IO): Plugin => ({
   name: '@stoplight-spectral/url',
-  async resolveId(id, importer) {
+  async resolveId(id, importer, opts): Promise<string | undefined> {
     const resolved = await this.resolve(id, importer, {
+      ...opts,
       skipSelf: true,
     });
 
@@ -32,7 +33,7 @@ export const url = ({ fetch }: IO): Plugin => ({
 
     return;
   },
-  async load(id) {
+  async load(id): Promise<string | undefined> {
     if (!isURL(id)) return;
     const res = await fetch(id);
     if (!res.ok) {

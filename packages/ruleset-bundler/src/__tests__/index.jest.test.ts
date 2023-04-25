@@ -8,8 +8,7 @@ import { browser } from '../presets/browser';
 import { commonjs } from '../plugins/commonjs';
 import { virtualFs } from '../plugins/virtualFs';
 import { runtime } from '../presets/runtime';
-
-jest.mock('fs');
+import { builtins } from '../plugins/builtins';
 
 describe('Ruleset Bundler', () => {
   let io: IO;
@@ -96,5 +95,51 @@ var spectral = {
 };
 
 export { spectral as default };`);
+  });
+
+  it('given node target, should support commonjs for remote ruleset with builtin modules', async () => {
+    serveAssets({
+      'https://tmp/input.js': `var spectralFormats = require('@stoplight/spectral-formats');
+var spectralFunctions = require('@stoplight/spectral-functions');
+const ruleset = {
+  rules: {
+    'my-rule': {
+      given: '$',
+      then: {
+        function: spectralFunctions.schema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+          },
+        },
+      },
+    },
+  },
+};
+module.exports = ruleset;
+`,
+    });
+
+    const code = await bundleRuleset('https://tmp/input.js', {
+      target: 'node',
+      format: 'commonjs',
+      plugins: [builtins(), commonjs(), ...node({ fs, fetch }), virtualFs(io)],
+    });
+
+    expect(code).toContain(`const ruleset = {
+  rules: {
+    'my-rule': {
+      given: '$',
+      then: {
+        function: spectralFunctions.schema,
+        functionOptions: {
+          schema: {
+            type: 'object',
+          },
+        },
+      },
+    },
+  },
+};`);
   });
 });

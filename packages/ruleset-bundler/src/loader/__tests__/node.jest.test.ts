@@ -6,6 +6,8 @@ import { bundleAndLoadRuleset } from '../node';
 import { IO } from '../../types';
 import { DiagnosticSeverity } from '@stoplight/types';
 
+jest.unmock('fs');
+
 describe('bundleAndLoadRuleset node', () => {
   let io: IO;
 
@@ -46,6 +48,7 @@ export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es20
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -64,6 +67,7 @@ export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es20
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -82,6 +86,7 @@ export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es20
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -119,6 +124,7 @@ export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es20
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -137,6 +143,7 @@ export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es20
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -155,6 +162,7 @@ export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es20
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,

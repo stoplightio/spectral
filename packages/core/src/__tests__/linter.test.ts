@@ -1326,6 +1326,52 @@ responses:: !!foo
     ]);
   });
 
+  test('should handle utf8 surrogate pairs', async () => {
+    const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
+    const ruleset: RulesetDefinition = {
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            function: truthy,
+          },
+        },
+      },
+    };
+
+    const spectral = new Spectral();
+    spectral.setRuleset(new Ruleset(ruleset, { source: path.join(path.dirname(documentUri), 'ruleset.json') }));
+
+    const document = new Document(
+      JSON.stringify({
+        '\uD87E\uDC04-WORKS': {
+          type: null,
+        },
+        '\uD83D-WORKS-AS-WELL': {
+          type: {
+            foo: {
+              type: null,
+            },
+          },
+        },
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+
+    const results = await spectral.run(document);
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['\uD87E\uDC04-WORKS', 'type'],
+      }),
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['\uD83D-WORKS-AS-WELL', 'type', 'foo', 'type'],
+      }),
+    ]);
+  });
+
   describe('Pointers in overrides', () => {
     test('should be supported', async () => {
       const documentUri = normalize(path.join(__dirname, './__fixtures__/test.json'));
@@ -1539,5 +1585,168 @@ responses:: !!foo
         }),
       ]);
     });
+  });
+
+  test.concurrent('should retain path in async functions', async () => {
+    const spectral = new Spectral();
+    const documentUri = path.join(__dirname, './__fixtures__/test.json');
+    spectral.setRuleset({
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            async function() {
+              return [
+                {
+                  message: 'Restricted type',
+                },
+              ];
+            },
+          },
+        },
+      },
+    });
+
+    const document = new Document(
+      JSON.stringify({
+        oneOf: [
+          {
+            type: ['number'],
+          },
+          {
+            type: ['string'],
+          },
+        ],
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+
+    const results = spectral.run(document);
+
+    await expect(results).resolves.toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '0', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '1', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
+  });
+
+  test.concurrent('should handle direct circular file $refs', async () => {
+    const spectral = new Spectral();
+    spectral.setRuleset({
+      rules: {
+        'valid-type': {
+          given: '$..type',
+          then: {
+            function() {
+              return [
+                {
+                  message: 'Restricted type',
+                },
+              ];
+            },
+          },
+        },
+      },
+    });
+
+    const documentUri = path.join(__dirname, './__fixtures__/test.json');
+    const document = new Document(
+      JSON.stringify({
+        oneOf: [
+          {
+            type: 'number',
+          },
+          {
+            $ref: './test.json',
+          },
+        ],
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+    const results = spectral.run(document);
+
+    await expect(results).resolves.toEqual([
+      expect.objectContaining({
+        code: 'valid-type',
+        path: ['oneOf', '0', 'type'],
+        severity: DiagnosticSeverity.Warning,
+      }),
+    ]);
+  });
+
+  test.concurrent('should reset path provided in fn context', async () => {
+    const spectral = new Spectral();
+    const fn = jest.fn();
+
+    spectral.setRuleset({
+      rules: {
+        'valid-info': {
+          given: '$.info',
+          then: [
+            {
+              field: 'title',
+              function: truthy,
+            },
+            {
+              function: fn,
+            },
+            {
+              field: 'description',
+              function: truthy,
+            },
+            {
+              function: fn,
+            },
+          ],
+        },
+      },
+    });
+
+    const documentUri = path.join(__dirname, './__fixtures__/test.json');
+    const document = new Document(
+      JSON.stringify({
+        info: {
+          title: 'test',
+          description: 'some description',
+        },
+      }),
+      Parsers.Json,
+      documentUri,
+    );
+
+    await expect(spectral.run(document)).resolves.toEqual([]);
+
+    expect(fn).nthCalledWith(
+      1,
+      {
+        title: 'test',
+        description: 'some description',
+      },
+      null,
+      expect.objectContaining({
+        path: ['info'],
+      }),
+    );
+
+    expect(fn).nthCalledWith(
+      2,
+      {
+        title: 'test',
+        description: 'some description',
+      },
+      null,
+      expect.objectContaining({
+        path: ['info'],
+      }),
+    );
   });
 });

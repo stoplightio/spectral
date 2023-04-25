@@ -1,3 +1,101 @@
+# [@stoplight/spectral-core-v1.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.16.1...@stoplight/spectral-core-v1.17.0) (2023-03-23)
+
+
+### Features
+
+* **core:** support x- extensions in the ruleset ([#2440](https://github.com/stoplightio/spectral/issues/2440)) ([964151e](https://github.com/stoplightio/spectral/commit/964151e73b6cc3c0b7c960eac3711ffbeac690ae))
+
+# [@stoplight/spectral-core-v1.16.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.16.0...@stoplight/spectral-core-v1.16.1) (2023-01-31)
+
+
+### Bug Fixes
+
+* **core:** reset path in fn context ([#2389](https://github.com/stoplightio/spectral/issues/2389)) ([3d47ec4](https://github.com/stoplightio/spectral/commit/3d47ec432fde46d9d1e59d00c1173d924b6a39a1))
+
+# [@stoplight/spectral-core-v1.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.2...@stoplight/spectral-core-v1.16.0) (2022-11-30)
+
+
+### Features
+
+* **core:** support end-user extensions in the rule definitions ([#2345](https://github.com/stoplightio/spectral/issues/2345)) ([365fced](https://github.com/stoplightio/spectral/commit/365fcedb7c140946767ed28a92a120b3adb08e47))
+
+# [@stoplight/spectral-core-v1.15.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.1...@stoplight/spectral-core-v1.15.2) (2022-11-22)
+
+
+### Bug Fixes
+
+* **core:** improve deep ruleset inheritance ([#2326](https://github.com/stoplightio/spectral/issues/2326)) ([378b4b8](https://github.com/stoplightio/spectral/commit/378b4b89769635e8b45d5325c15cfa00881b70bd))
+
+# [@stoplight/spectral-core-v1.15.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.15.0...@stoplight/spectral-core-v1.15.1) (2022-10-24)
+
+
+### Bug Fixes
+
+* **core:** support utf8 surrogates ([#2267](https://github.com/stoplightio/spectral/issues/2267)) ([a1bd6d2](https://github.com/stoplightio/spectral/commit/a1bd6d29b473aff257dbf66264ebdf471fae07cc))
+
+# [@stoplight/spectral-core-v1.15.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.2...@stoplight/spectral-core-v1.15.0) (2022-10-14)
+
+
+### Features
+
+* **core:** include error codes in RulesetValidationError ([c01c6b5](https://github.com/stoplightio/spectral/commit/c01c6b587314337792597714ebd955b761a67649))
+
+# [@stoplight/spectral-core-v1.14.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.1...@stoplight/spectral-core-v1.14.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* **core:** async functions have undefined paths ([#2304](https://github.com/stoplightio/spectral/issues/2304)) ([df257b3](https://github.com/stoplightio/spectral/commit/df257b3c8f3fd5a169eee2d0013c6e346ab86178))
+
+# [@stoplight/spectral-core-v1.14.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.14.0...@stoplight/spectral-core-v1.14.1) (2022-08-30)
+
+
+### Performance Improvements
+
+* **core:** bump jsonpath-plus to 7.1.0 ([#2259](https://github.com/stoplightio/spectral/issues/2259)) ([aacdcd7](https://github.com/stoplightio/spectral/commit/aacdcd77f0ff38c880f6292904449d0af5e7eed4))
+
+# [@stoplight/spectral-core-v1.14.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.13.1...@stoplight/spectral-core-v1.14.0) (2022-08-24)
+
+
+### Features
+
+* **core:** improve alias validation ([#2164](https://github.com/stoplightio/spectral/issues/2164)) ([a15150a](https://github.com/stoplightio/spectral/commit/a15150a7b523fbcf1604359b26260f8bcda0ae62))
+
+# [@stoplight/spectral-core-v1.13.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.13.0...@stoplight/spectral-core-v1.13.1) (2022-08-22)
+
+
+### Bug Fixes
+
+* **core:** bump @stoplight/better-ajv-errors from 1.0.1 to 1.0.3 ([7f9bcba](https://github.com/stoplightio/spectral/commit/7f9bcba147fb78329bcce1828df560849a0d342e))
+
+# [@stoplight/spectral-core-v1.13.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.4...@stoplight/spectral-core-v1.13.0) (2022-08-03)
+
+
+### Features
+
+* **core:** improve validation ([#2026](https://github.com/stoplightio/spectral/issues/2026)) ([8315162](https://github.com/stoplightio/spectral/commit/83151628824592117d842a8965c9557841966b1a))
+
+# [@stoplight/spectral-core-v1.12.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.3...@stoplight/spectral-core-v1.12.4) (2022-07-21)
+
+
+### Bug Fixes
+
+* **core:** fix 'resolved vs unresolved' json path mapping ([#2202](https://github.com/stoplightio/spectral/issues/2202)) ([157ec59](https://github.com/stoplightio/spectral/commit/157ec592d8b3276094284fead7a08541b3f46f61))
+
+# [@stoplight/spectral-core-v1.12.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.2...@stoplight/spectral-core-v1.12.3) (2022-06-29)
+
+
+### Bug Fixes
+
+* **core:** bump nimma from 0.2.1 to 0.2.2 ([#2173](https://github.com/stoplightio/spectral/issues/2173)) ([65ba74f](https://github.com/stoplightio/spectral/commit/65ba74f6a681a8ad7a3cd3eec687544a3972b2b8))
+
+# [@stoplight/spectral-core-v1.12.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.1...@stoplight/spectral-core-v1.12.2) (2022-05-18)
+
+
+### Bug Fixes
+
+* **core:** bump nimma from 0.2.0 to 0.2.1 ([#2157](https://github.com/stoplightio/spectral/issues/2157)) ([4d5ebeb](https://github.com/stoplightio/spectral/commit/4d5ebebb65cb8f6c44faa5b629311f5b25dd6bfe))
+
 # [@stoplight/spectral-core-v1.12.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.12.0...@stoplight/spectral-core-v1.12.1) (2022-04-29)
 
 

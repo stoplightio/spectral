@@ -1,5 +1,5 @@
 import { decodePointerFragment, pathToPointer } from '@stoplight/json';
-import { JsonPath, Segment } from '@stoplight/types';
+import type { JsonPath, Segment } from '@stoplight/types';
 
 export enum PrintStyle {
   Dot = 'dot',

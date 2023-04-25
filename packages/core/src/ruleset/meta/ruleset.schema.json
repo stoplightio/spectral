@@ -101,7 +101,7 @@
               },
               "required": ["files"],
               "errorMessage": {
-                "type": "must be a override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }"
+                "type": "must be an override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }"
               }
             },
             {
@@ -189,6 +189,9 @@
         }
       }
     }
+  },
+  "patternProperties": {
+    "^x-": true
   },
   "anyOf": [
     {

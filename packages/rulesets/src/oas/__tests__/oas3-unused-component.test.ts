@@ -204,4 +204,54 @@ testRule('oas3-unused-component', [
       [indirect2Document.source!]: indirect2Document.data,
     },
   },
+  {
+    name: 'all components are referenced with percent-encoded refs',
+    document: {
+      openapi: '3.0.0',
+      paths: {
+        '/path': {
+          get: {
+            parameters: [
+              {
+                $ref: '#/components/parameters/%24top',
+              },
+            ],
+            responses: {
+              200: {
+                description: 'Success',
+                content: {
+                  'application/json': {
+                    $ref: '#/components/schemas/$resource',
+                  },
+                },
+              },
+              default: {
+                $ref: '#/components/responses/%24default',
+              },
+            },
+          },
+        },
+      },
+      components: {
+        parameters: {
+          $top: {
+            name: '$top',
+            in: 'query',
+            type: 'integer',
+          },
+        },
+        responses: {
+          $default: {
+            description: 'Ruh Roh',
+          },
+        },
+        schemas: {
+          $resource: {
+            type: 'string',
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);

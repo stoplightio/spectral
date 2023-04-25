@@ -1,7 +1,7 @@
-import { Dictionary } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isPlainObject } from '@stoplight/json';
 import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
-import { isError, difference, pick } from 'lodash';
+import { difference, isError, pick } from 'lodash';
 import type { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
 import * as process from 'process';
@@ -207,7 +207,10 @@ const lintCommand: CommandModule = {
       if (results.length > 0) {
         process.exit(severeEnoughToFail(results, failSeverity) ? 1 : 0);
       } else if (config.quiet !== true) {
-        process.stdout.write(`No results with a severity of '${failSeverity}' or higher found!`);
+        const isErrorSeverity = getDiagnosticSeverity(failSeverity) === DiagnosticSeverity.Error;
+        process.stdout.write(
+          `No results with a severity of '${failSeverity}' ${isErrorSeverity ? '' : 'or higher '}found!\n`,
+        );
       }
     } catch (ex) {
       fail(isError(ex) ? ex : new Error(String(ex)), config.verbose === true);

@@ -3,7 +3,6 @@
     "explicitly-recommended": {
       "message": "Should expose a `likeable` property",
       "given": "$",
-      "type": "style",
       "recommended": true,
       "then": {
         "field": "likeable",
@@ -13,7 +12,6 @@
     "implicitly-recommended": {
       "message": "Should expose a `likeable` property",
       "given": "$",
-      "type": "style",
       "then": {
         "field": "likeable",
         "function": "truthy"
@@ -22,7 +20,6 @@
     "explicitly-not-recommended": {
       "message": "Should expose a `likeable` property",
       "given": "$",
-      "type": "style",
       "recommended": false,
       "then": {
         "field": "likeable",

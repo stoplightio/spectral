@@ -2,8 +2,6 @@ import * as fs from 'fs';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 import { fetch } from '@stoplight/spectral-runtime';
 
-jest.mock?.('fs');
-
 import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
@@ -11,12 +9,21 @@ import { skypack } from '../skypack';
 
 describe('Skypack Plugin', () => {
   let io: IO;
+  let warnSpy: jest.SpyInstance;
 
   beforeEach(() => {
     io = {
       fs,
       fetch,
     };
+
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      /* no-op */
+    });
+  });
+
+  afterEach(() => {
+    warnSpy.mockRestore();
   });
 
   describe.each<BundleOptions['target']>(['browser'])('given %s target', target => {
@@ -116,5 +123,39 @@ import * as path from 'path';
 fs.writeFileSync(path.join(__dirname, './output.js'), 'export default {}');
 `);
     });
+  });
+
+  it('should respect ignore list', async () => {
+    serveAssets({
+      '/tmp/input.js': `import { createRulesetFunction } from '@stoplight/spectral-core/ruleset/validation';
+import { parse } from '@stoplight/yaml';
+import { isPlainObject } from '@stoplight/json';
+
+export default createRulesetFunction({}, input => {
+  assert.ok(isPlainObject(parse(input)));
+})
+`,
+    });
+
+    const code = await bundleRuleset('/tmp/input.js', {
+      target: 'browser',
+      plugins: [
+        skypack({
+          ignoreList: [/^@stoplight\/spectral-/, '@stoplight/json'],
+        }),
+        virtualFs(io),
+      ],
+    });
+
+    expect(code).toEqual(`import { createRulesetFunction } from '@stoplight/spectral-core/ruleset/validation';
+import { parse } from 'https://cdn.skypack.dev/@stoplight/yaml';
+import { isPlainObject } from '@stoplight/json';
+
+var input = createRulesetFunction({}, input => {
+  assert.ok(isPlainObject(parse(input)));
+});
+
+export { input as default };
+`);
   });
 });

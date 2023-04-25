@@ -1,8 +1,12 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { join, resolve } from '@stoplight/path';
 import nock from 'nock';
 import * as yargs from 'yargs';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RulesetValidationError } from '@stoplight/spectral-core';
+import '@stoplight/spectral-test-utils/matchers';
+import AggregateError = require('es-aggregate-error');
 import * as process from 'process';
 
 import lintCommand from '../../commands/lint';
@@ -118,8 +122,8 @@ describe('Linter service', () => {
 
   it('given a list of files is provided, outputs issues for each file', () => {
     const documents = [
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
       join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-      join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
     ];
 
     return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
@@ -139,6 +143,29 @@ describe('Linter service', () => {
         severity: DiagnosticSeverity.Warning,
         source: documents[1],
       },
+    ]);
+  });
+
+  it('sorts linting results in an alphabetical order', () => {
+    const documents = [
+      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+    ];
+
+    return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+      }),
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      }),
+      expect.objectContaining({
+        code: 'info-matches-stoplight',
+        source: join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      }),
     ]);
   });
 
@@ -198,8 +225,26 @@ describe('Linter service', () => {
       });
 
       it('fails trying to extend an invalid relative ruleset', () => {
-        return expect(run(`lint ${validCustomOas3SpecPath} -r ${invalidNestedRulesetPath}`)).rejects.toThrowError(
-          RulesetValidationError,
+        return expect(
+          run(`lint ${validCustomOas3SpecPath} -r ${invalidNestedRulesetPath}`),
+        ).rejects.toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError(
+              'invalid-rule-definition',
+              'the rule must have at least "given" and "then" properties',
+              ['rules', 'rule-without-given-nor-them'],
+            ),
+            new RulesetValidationError('invalid-rule-definition', 'allowed types are "style" and "validation"', [
+              'rules',
+              'rule-with-invalid-enum',
+              'type',
+            ]),
+            new RulesetValidationError(
+              'invalid-severity',
+              'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+              ['rules', 'rule-with-invalid-enum', 'severity'],
+            ),
+          ]),
         );
       });
     });
@@ -212,8 +257,24 @@ describe('Linter service', () => {
       });
 
       it('outputs "invalid ruleset" error', () => {
-        return expect(run(`lint ${validOas3SpecPath} -r ${invalidRulesetPath}`)).rejects.toThrowError(
-          RulesetValidationError,
+        return expect(run(`lint ${validOas3SpecPath} -r ${invalidRulesetPath}`)).rejects.toThrowAggregateError(
+          new AggregateError([
+            new RulesetValidationError(
+              'invalid-rule-definition',
+              'the rule must have at least "given" and "then" properties',
+              ['rules', 'rule-without-given-nor-them'],
+            ),
+            new RulesetValidationError('invalid-rule-definition', 'allowed types are "style" and "validation"', [
+              'rules',
+              'rule-with-invalid-enum',
+              'type',
+            ]),
+            new RulesetValidationError(
+              'invalid-severity',
+              'the value has to be one of: 0, 1, 2, 3 or "error", "warn", "info", "hint", "off"',
+              ['rules', 'rule-with-invalid-enum', 'severity'],
+            ),
+          ]),
         );
       });
 
@@ -252,10 +313,49 @@ describe('Linter service', () => {
           .persist()
           .get('/ruleset.json')
           .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
-            'Content-Type': 'application/yaml',
+            'Content-Type': 'application/json',
           });
 
         const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+
+      it('fallbacks to Content-Type', async () => {
+        nock('http://foo.local')
+          .persist()
+          .get('/ruleset')
+          .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
+            'Content-Type': 'application/json',
+          });
+
+        const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset`);
+        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
+        expect(output).toEqual(
+          expect.not.arrayContaining([
+            expect.objectContaining({
+              message: 'Info object should contain `contact` object',
+            }),
+          ]),
+        );
+      });
+
+      it('ignores query parameters', async () => {
+        nock('http://foo.local')
+          .persist()
+          .get('/ruleset.json')
+          .query({ token: 'bar' })
+          .replyWithFile(200, join(__dirname, '__fixtures__/ruleset.json'), {
+            'Content-Type': 'text/plain', // GitHub raw like
+          });
+
+        const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json?token=bar`);
         expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
         expect(output).toEqual(
           expect.not.arrayContaining([
@@ -449,9 +549,10 @@ describe('Linter service', () => {
         {
           code: 'info-matches-stoplight',
           message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
+          path: [],
           range: expect.any(Object),
           severity: DiagnosticSeverity.Warning,
+          source: expect.stringContaining('__fixtures__/resolver/document.json'),
         },
       ]);
     });

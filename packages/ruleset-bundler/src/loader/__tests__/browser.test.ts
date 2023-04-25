@@ -5,8 +5,6 @@ import { bundleAndLoadRuleset } from '../browser';
 import { IO } from '../../types';
 import { DiagnosticSeverity } from '@stoplight/types';
 
-jest.mock?.('fs');
-
 describe('bundleAndLoadRuleset browser', () => {
   let io: IO;
 
@@ -118,6 +116,7 @@ export default {
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -136,6 +135,7 @@ export default {
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -154,6 +154,7 @@ export default {
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -191,6 +192,7 @@ export default {
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -209,6 +211,7 @@ export default {
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,
@@ -227,6 +230,7 @@ export default {
           description: null,
           documentationUrl: null,
           enabled: true,
+          extensions: null,
           formats: null,
           given: ['$'],
           message: null,

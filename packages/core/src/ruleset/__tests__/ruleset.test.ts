@@ -1,7 +1,10 @@
+import '@stoplight/spectral-test-utils/matchers';
+
 import { oas2 } from '@stoplight/spectral-formats';
 import { pattern, truthy } from '@stoplight/spectral-functions';
 import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
+import AggregateError = require('es-aggregate-error');
 
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';
@@ -90,6 +93,13 @@ describe('Ruleset', () => {
       ]);
 
       expect(getEnabledRules(rules)).toEqual(['overridable-rule']);
+    });
+
+    it('given nested extends with severity set to off #2', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-proxy2'));
+      expect(Object.keys(rules)).toEqual(['custom-info-description']);
+
+      expect(getEnabledRules(rules)).toEqual([]);
     });
 
     it('given nested extends with severity set to off and explicit override to error', async () => {
@@ -237,6 +247,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['$'],
             message: null,
@@ -259,7 +270,11 @@ describe('Ruleset', () => {
   describe('error handling', () => {
     it('given empty ruleset, should throw a user friendly error', () => {
       expect(() => new Ruleset({})).toThrowError(
-        new RulesetValidationError('Ruleset must have rules or extends or overrides defined'),
+        new RulesetValidationError(
+          'invalid-ruleset-definition',
+          'Ruleset must have rules or extends or overrides defined',
+          [],
+        ),
       );
     });
   });
@@ -306,6 +321,30 @@ describe('Ruleset', () => {
       ├─ severity: 1
       └─ documentationUrl: https://stoplight.io/p/docs/gh/stoplightio/spectral/docs/reference/bar-rule.md
 `);
+  });
+
+  it('should respect extensions', async () => {
+    const ruleset = {
+      rules: {
+        'foo-rule': {
+          given: '$',
+          then: {
+            function() {
+              return;
+            },
+          },
+          extensions: {
+            foo: 'bar',
+          },
+        },
+      },
+    };
+
+    const rulesetInstance = new Ruleset(ruleset);
+
+    expect(rulesetInstance.rules['foo-rule'].extensions).toEqual({
+      foo: 'bar',
+    });
   });
 
   it('should include parserOptions', async () => {
@@ -567,6 +606,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: false,
+            extensions: null,
             formats: null,
             given: ['$.info.contact'],
             message: 'Contact name must contain Stoplight',
@@ -586,6 +626,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['$.info'],
             message: 'Description must contain Stoplight',
@@ -605,6 +646,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['$.info'],
             message: 'Title must contain Stoplight',
@@ -1130,6 +1172,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['#PathItem'],
             message: null,
@@ -1149,6 +1192,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['#Name', '#Description'],
             message: null,
@@ -1168,6 +1212,7 @@ describe('Ruleset', () => {
             description: null,
             documentationUrl: null,
             enabled: true,
+            extensions: null,
             formats: null,
             given: ['#Info.contact'],
             message: null,
@@ -1266,7 +1311,15 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(ReferenceError('Alias "PathItem-" does not exist'));
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('undefined-alias', 'Alias "PathItem-" does not exist', [
+            'rules',
+            'valid-path',
+            'given',
+          ]),
+        ]),
+      );
     });
 
     it('given circular alias, should throw', () => {
@@ -1288,8 +1341,14 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(
-        ReferenceError('Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info'),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError(
+            'generic-validation-error',
+            'Alias "Test" is circular. Resolution stack: Test -> Contact -> Info -> Root -> Info',
+            ['rules', 'valid-path', 'given'],
+          ),
+        ]),
       );
     });
 
@@ -1321,7 +1380,25 @@ describe('Ruleset', () => {
               },
             },
           }),
-      ).toThrowError(ReferenceError('Alias "PathItem" does not exist'));
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('undefined-alias', 'Alias "PathItem" does not exist', [
+            'rules',
+            'valid-path',
+            'given',
+          ]),
+          new RulesetValidationError('undefined-alias', 'Alias "Name" does not exist', [
+            'rules',
+            'valid-name-and-description',
+            'given',
+          ]),
+          new RulesetValidationError('undefined-alias', `Alias "Description" does not exist`, [
+            'rules',
+            'valid-name-and-description',
+            'given',
+          ]),
+        ]),
+      );
     });
 
     describe('scoped aliases', () => {
@@ -1560,6 +1637,7 @@ describe('Ruleset', () => {
               description: null,
               documentationUrl: null,
               enabled: true,
+              extensions: null,
               formats: null,
               given: ['#Id'],
               message: null,

@@ -2,20 +2,15 @@ import { stringify } from '@stoplight/json';
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-resolver';
-import { memoize } from 'lodash';
 
 import { Document, IDocument, IParsedResult, isParsedResult, ParsedDocument } from './document';
 import { DocumentInventory } from './documentInventory';
-import { Runner, RunnerRuntime } from './runner';
-import { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
-import { ComputeFingerprintFunc, defaultComputeResultFingerprint } from './utils';
+import { Runner } from './runner';
+import type { IConstructorOpts, IRunOpts, ISpectralDiagnostic, ISpectralFullResult } from './types';
+import type { Format, ParserOptions, RulesetDefinition } from './ruleset/index';
 import { Ruleset } from './ruleset/ruleset';
 import { generateDocumentWideResult } from './utils/generateDocumentWideResult';
-import { ParserOptions, RulesetDefinition } from './ruleset/types';
-import { Format } from './ruleset/format';
 import { getDiagnosticSeverity } from './ruleset';
-
-memoize.Cache = WeakMap;
 
 export * from './types';
 
@@ -24,20 +19,12 @@ export class Spectral {
 
   public ruleset?: Ruleset;
 
-  protected readonly runtime: RunnerRuntime;
-
-  private readonly _computeFingerprint: ComputeFingerprintFunc;
-
   constructor(protected readonly opts?: IConstructorOpts) {
-    this._computeFingerprint = memoize(defaultComputeResultFingerprint);
-
     if (opts?.resolver !== void 0) {
       this._resolver = opts.resolver;
     } else {
       this._resolver = createHttpAndFileResolver();
     }
-
-    this.runtime = new RunnerRuntime();
   }
 
   protected parseDocument(target: IParsedResult | IDocument | Record<string, unknown> | string): IDocument {
@@ -65,7 +52,7 @@ export class Spectral {
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 
-    const runner = new Runner(this.runtime, inventory);
+    const runner = new Runner(inventory);
     runner.results.push(...this._filterParserErrors(document.diagnostics, ruleset.parserOptions));
 
     if (document.formats === void 0) {
@@ -81,7 +68,7 @@ export class Spectral {
     }
 
     await runner.run(ruleset);
-    const results = runner.getResults(this._computeFingerprint);
+    const results = runner.getResults();
 
     return {
       resolved: inventory.resolved,
@@ -97,7 +84,6 @@ export class Spectral {
   }
 
   public setRuleset(ruleset: RulesetDefinition | Ruleset): void {
-    this.runtime.revoke();
     this.ruleset = ruleset instanceof Ruleset ? ruleset : new Ruleset(ruleset);
   }
 

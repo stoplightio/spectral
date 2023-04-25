@@ -1,3 +1,52 @@
+# [@stoplight/spectral-ruleset-bundler-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.5.0...@stoplight/spectral-ruleset-bundler-v1.5.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** defaults should be last one ([#2403](https://github.com/stoplightio/spectral/issues/2403)) ([8780cfa](https://github.com/stoplightio/spectral/commit/8780cfac20cfa70b8ca8208f1b15955ca2111746))
+
+# [@stoplight/spectral-ruleset-bundler-v1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.4.0...@stoplight/spectral-ruleset-bundler-v1.5.0) (2022-11-30)
+
+
+### Features
+
+* **core:** support end-user extensions in the rule definitions ([#2345](https://github.com/stoplightio/spectral/issues/2345)) ([365fced](https://github.com/stoplightio/spectral/commit/365fcedb7c140946767ed28a92a120b3adb08e47))
+
+# [@stoplight/spectral-ruleset-bundler-v1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.3...@stoplight/spectral-ruleset-bundler-v1.4.0) (2022-10-24)
+
+
+### Features
+
+* **ruleset-bundler:** skypack plugin accepts ignore list ([#2318](https://github.com/stoplightio/spectral/issues/2318)) ([6e6d0de](https://github.com/stoplightio/spectral/commit/6e6d0de91a5916838cbfa3915284ea83be63eb7a))
+
+# [@stoplight/spectral-ruleset-bundler-v1.3.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.2...@stoplight/spectral-ruleset-bundler-v1.3.3) (2022-10-21)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** virtualFs plugin not recognizing files ([#2271](https://github.com/stoplightio/spectral/issues/2271)) ([4bc38b3](https://github.com/stoplightio/spectral/commit/4bc38b3f20b2420b893f2b4f4a0b1af54e15d3e0))
+
+# [@stoplight/spectral-ruleset-bundler-v1.3.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.1...@stoplight/spectral-ruleset-bundler-v1.3.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** address Rollup.js warning ([1e36673](https://github.com/stoplightio/spectral/commit/1e366731f01d95f1dc4ad47cf8fdebcda61ff19d))
+
+# [@stoplight/spectral-ruleset-bundler-v1.3.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.3.0...@stoplight/spectral-ruleset-bundler-v1.3.1) (2022-08-03)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** never externalize builtins ([#2174](https://github.com/stoplightio/spectral/issues/2174)) ([fb1bbe6](https://github.com/stoplightio/spectral/commit/fb1bbe61278d40c7aefb946997663b360863bae2))
+
+# [@stoplight/spectral-ruleset-bundler-v1.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.2.1...@stoplight/spectral-ruleset-bundler-v1.3.0) (2022-06-30)
+
+
+### Features
+
+* **ruleset-bundler:** add fullOutput option to bundleRuleset ([#2194](https://github.com/stoplightio/spectral/issues/2194)) ([a31d34c](https://github.com/stoplightio/spectral/commit/a31d34c529fb91303c8c250bfc012985ecec469a))
+
 # [@stoplight/spectral-ruleset-bundler-v1.2.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.2.0...@stoplight/spectral-ruleset-bundler-v1.2.1) (2022-02-28)
 
 

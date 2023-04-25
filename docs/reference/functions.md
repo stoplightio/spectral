@@ -17,7 +17,6 @@ Enforce alphabetical content, for simple arrays, or for objects by passing a key
 ```yaml
 openapi-tags-alphabetical:
   description: OpenAPI object should have alphabetical `tags`.
-  type: style
   recommended: true
   given: "$"
   then:
@@ -42,7 +41,6 @@ Does the field value exist in this set of possible values?
 ```yaml
 whitelisted-tags:
   description: Pick from a very restrictive set of tags.
-  type: style
   given: "$.paths.*"
   then:
     field: tags
@@ -56,11 +54,11 @@ whitelisted-tags:
 
 ## falsy
 
-The value should be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (!!targetVal)`.
+The value should be `false`, `""`, `0`, `null` or `undefined`. Basically, anything that would not trigger this: `if (!!targetVal)`.
 
 ## length
 
-Count the length of a string an or array, the number of properties in an object, or a numeric value, and define minimum and/or maximum values.
+Count the length of a string or an array, the number of properties in an object, or a numeric value, and define minimum and/or maximum values.
 
 <!-- title: functionOptions -->
 
@@ -69,14 +67,13 @@ Count the length of a string an or array, the number of properties in an object,
 | min  | the minimum length to match | number | no        |
 | max  | the maximum length to match | number | no        |
 
-At the very least `min` or `max` have to be provided. You can specify both as well.
+At the very least `min` or `max` has to be provided. You can specify both as well.
 
 <!-- title: example -->
 
 ```yaml
 operation-singular-tag:
   description: Operations must have between 1 and 3 tags.
-  type: style
   given: "$.paths.*"
   then:
     field: tags
@@ -102,7 +99,6 @@ Regular expressions!
 ```yaml
 path-no-trailing-slash:
   description: Paths should not end with `#/`.
-  type: style
   given: "$.paths[*]~"
   then:
     function: pattern
@@ -145,7 +141,6 @@ Available types are:
 ```yaml
 camel-case-name:
   description: Name should be camelCased.
-  type: style
   given: "$.name"
   then:
     function: casing
@@ -171,7 +166,6 @@ Use JSON Schema (draft 4, 6, 7, 2019-09, or 2020-12) to treat the contents of th
 oas3-api-servers:
   description: "OpenAPI `servers` must be present and non-empty array."
   recommended: true
-  type: "style"
   given: "$"
   then:
     field: servers
@@ -186,7 +180,7 @@ oas3-api-servers:
 
 ## truthy
 
-The value should not be `false`, `""`, `0`, `null` or `undefined`. Basically anything that would not trigger this: `if (targetVal)`.
+The value should not be `false`, `""`, `0`, `null`, or `undefined`. Basically, anything that would not trigger this: `if (targetVal)`.
 
 <!-- title: example -->
 
@@ -205,8 +199,7 @@ important-fields:
 
 ## defined
 
-The value must be defined, meaning it must be anything but `undefined`.
-It's the opposite of what undefined function does.
+The value must be defined, meaning it must be anything but `undefined`. It's the opposite of what the undefined function does.
 
 ## undefined
 
@@ -234,7 +227,6 @@ _Warning:_ This function may identify false positives when used against a specif
 unused-definition:
   description: Potentially unused definition has been detected.
   recommended: true
-  type: style
   resolved: false
   given: "$.definitions"
   then:
@@ -258,7 +250,6 @@ Communicate that one of these properties is required, and no more than one is al
 ```yaml
 components-examples-value-or-externalValue:
   description: Examples should have either a `value` or `externalValue` field.
-  type: style
   given: "$.components.examples.*"
   then:
     function: xor

@@ -1,3 +1,24 @@
+# [@stoplight/spectral-formats-v1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.4.0...@stoplight/spectral-formats-v1.5.0) (2023-02-03)
+
+
+### Features
+
+* **formats:** support AsyncAPI 2.6.0 ([#2391](https://github.com/stoplightio/spectral/issues/2391)) ([b8e51b4](https://github.com/stoplightio/spectral/commit/b8e51b487e0667908d8148b818007026722cacb7))
+
+# [@stoplight/spectral-formats-v1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.3.0...@stoplight/spectral-formats-v1.4.0) (2022-10-03)
+
+
+### Features
+
+* **formats:** add support for 2.5.0 AsyncAPI ([#2292](https://github.com/stoplightio/spectral/issues/2292)) ([a7f9fa7](https://github.com/stoplightio/spectral/commit/a7f9fa72b80b0327fb1fca6e4ee84f9878618f4e))
+
+# [@stoplight/spectral-formats-v1.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.2.0...@stoplight/spectral-formats-v1.3.0) (2022-10-03)
+
+
+### Features
+
+* **rulesets:** add support for 2.5.0 AsyncAPI ([#2292](https://github.com/stoplightio/spectral/issues/2292)) ([9050785](https://github.com/stoplightio/spectral/commit/90507856be44ae3538c214b12ca9ed242e4db64b))
+
 # [@stoplight/spectral-formats-v1.2.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.1.0...@stoplight/spectral-formats-v1.2.0) (2022-05-02)
 
 

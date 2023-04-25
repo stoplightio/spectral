@@ -1,2 +1,2 @@
-export { RulesetValidationError } from './errors';
+export { RulesetValidationError, RulesetValidationErrorCode } from './errors';
 export { assertValidRuleset } from './assertions';

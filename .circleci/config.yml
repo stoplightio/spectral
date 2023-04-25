@@ -21,10 +21,20 @@ defaults:
       only: /^v.*/
   node-versions: &node-versions
     - "12.22"
-    - "14.18"
-    - "16.13"
+    - "14.21"
+    - "16.18"
+    - "18.12"
+  pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
 
 commands:
+  compute-hashes:
+    steps:
+      - run:
+          name: Compute commit SHAs to be used for caching purposes
+          command: |
+            git rev-parse HEAD~1 > /tmp/previous-commit-sha
+            git rev-parse HEAD > /tmp/current-commit-sha
+
   cached-dependencies:
     steps:
       - restore_cache:
@@ -38,7 +48,8 @@ commands:
           name: Save Yarn Package Cache
           key: *yarn-cache-key
           paths:
-            - ~/.yarn
+            - ~/.yarn # Unix
+            - ~/AppData/Local/Yarn/Berry/cache # Windows
 
   build:
     description: >-
@@ -55,6 +66,8 @@ commands:
     steps:
       - run:
           name: Create the Spectral Binary
+          environment:
+            PKG_CACHE_PATH: *pkg-cache-path
           command: yarn workspace @stoplight/spectral-cli pkg . --public --targets << parameters.targets >> --output binaries/spectral
 
   install-and-build:
@@ -86,7 +99,7 @@ commands:
     parameters:
       max-workers:
         type: integer
-        default: 3
+        default: 2
     steps:
       - run: yarn pretest
       - run:
@@ -101,12 +114,30 @@ commands:
           - linux
           - windows
         default: linux
+      node-version:
+        type: string
+      max-workers:
+        type: integer
+        default: 2
     steps:
+      - compute-hashes
+      - restore_cache:
+          name: Restore test-harness artifacts
+          keys:
+            - test-harness-{{ checksum "/tmp/previous-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>
       - build-binary:
           targets: << parameters.os >>
       - run:
           name: Run harness tests
-          command: yarn test.harness
+          command: yarn test.harness --maxWorkers=<< parameters.max-workers >>
+      - save_cache:
+          name: Retain test-harness artifacts
+          key: test-harness-{{ checksum "/tmp/current-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>
+          paths:
+            - ./.cache/spectral-test-harness
+            - *pkg-cache-path
+            - ./test-harness/tests/
+          when: always
 
   prepare-release:
     steps:
@@ -118,7 +149,8 @@ commands:
 jobs:
   lint:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
+    resource_class: small
     steps:
       - checkout
       - cached-dependencies
@@ -131,17 +163,16 @@ jobs:
       node-version:
         type: string
     docker:
-      - image: circleci/node:<< parameters.node-version >>
-    # we should be able to restore the default when the following issue is resolved
-    # - https://github.com/kulshekhar/ts-jest/issues/1967
-    # - https://github.com/facebook/jest/issues/10550
-    resource_class: medium+
+      - image: cimg/node:<< parameters.node-version >>
+    resource_class: medium
     steps:
       - checkout
       - install-and-build
       - test-node
       - test-harness:
           os: linux
+          node-version: << parameters.node-version >>
+          max-workers: 2
 
   test-browser:
     docker:
@@ -165,10 +196,12 @@ jobs:
           max-workers: 3
       - test-harness:
           os: windows
+          node-version: current
+          max-workers: 3
 
   build-nix-binaries:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - checkout
       - install-and-build
@@ -195,7 +228,7 @@ jobs:
 
   release-docker:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - checkout
       - setup_remote_docker:
@@ -258,7 +291,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - prepare-release
       - run: yarn release

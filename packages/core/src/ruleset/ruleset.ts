@@ -17,21 +17,24 @@ import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
 import { Formats } from './formats';
 import { isSimpleAliasDefinition } from './utils/guards';
+import type { Stringified } from './types';
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
+const EXPLICIT_SEVERITY = Symbol('@stoplight/spectral/ruleset/#explicit-severity');
 const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
 
 type RulesetContext = {
   readonly severity?: FileRulesetSeverityDefinition;
   readonly source?: string;
   readonly [STACK_SYMBOL]?: Map<RulesetDefinition, Ruleset>;
+  readonly [EXPLICIT_SEVERITY]?: boolean;
 };
 
 let SEED = 1;
 
-export type StringifiedRuleset = {
+type RulesetJson = {
   id: number;
-  extends: StringifiedRuleset[] | null;
+  extends: RulesetJson[] | null;
   source: string | null;
   aliases: RulesetAliasesDefinition | null;
   formats: Formats | null;
@@ -39,6 +42,8 @@ export type StringifiedRuleset = {
   overrides: RulesetOverridesDefinition | null;
   parserOptions: ParserOptions;
 };
+
+export type StringifiedRuleset = Stringified<RulesetJson>;
 
 export class Ruleset {
   public readonly id = SEED++;
@@ -107,8 +112,9 @@ export class Ruleset {
             (extensions, extension) => {
               let actualExtension;
               let severity: FileRulesetSeverityDefinition = 'recommended';
+              const explicitSeverity = Array.isArray(extension);
 
-              if (Array.isArray(extension)) {
+              if (explicitSeverity) {
                 [actualExtension, severity] = extension;
               } else {
                 actualExtension = extension;
@@ -120,7 +126,13 @@ export class Ruleset {
                 return extensions;
               }
 
-              extensions.push(new Ruleset(actualExtension, { severity, [STACK_SYMBOL]: stack }));
+              extensions.push(
+                new Ruleset(actualExtension, {
+                  severity,
+                  [STACK_SYMBOL]: stack,
+                  [EXPLICIT_SEVERITY]: explicitSeverity,
+                }),
+              );
               return extensions;
             },
             [],
@@ -268,6 +280,9 @@ export class Ruleset {
         if (extendedRuleset === this) continue;
         for (const rule of Object.values(extendedRuleset.rules)) {
           rules[rule.name] = rule;
+          if (this.#context[STACK_SYMBOL] !== void 0 && this.#context[EXPLICIT_SEVERITY] === true) {
+            rule.enabled = Rule.isEnabled(rule, this.#context.severity);
+          }
         }
       }
     }
@@ -278,8 +293,7 @@ export class Ruleset {
         rules[name] = rule;
 
         if (rule.owner === this) {
-          rule.enabled =
-            this.#context.severity === 'all' || (this.#context.severity === 'recommended' && rule.recommended);
+          rule.enabled = Rule.isEnabled(rule, this.#context.severity);
         }
 
         if (rule.formats !== null) {
@@ -309,7 +323,7 @@ export class Ruleset {
     return DEFAULT_RULESET_FILE.test(uri);
   }
 
-  public toJSON(): Stringifable<StringifiedRuleset> {
+  public toJSON(): Stringifable<RulesetJson> {
     return {
       id: this.id,
       extends: this.extends,

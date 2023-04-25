@@ -201,4 +201,32 @@ testRule('oas2-unused-definition', [
       [indirect2Document.source!]: indirect2Document.data,
     },
   },
+
+  {
+    name: 'all components are referenced with percent-encoded refs',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/path': {
+          post: {
+            parameters: [
+              {
+                name: '$body',
+                in: 'body',
+                schema: {
+                  $ref: '#/definitions/%24body',
+                },
+              },
+            ],
+          },
+        },
+      },
+      definitions: {
+        $body: {
+          type: 'string',
+        },
+      },
+    },
+    errors: [],
+  },
 ]);

@@ -1,6 +1,8 @@
+import '@stoplight/spectral-test-utils/matchers';
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import casing, { CasingType } from '../casing';
 import testFunction from './__helpers__/tester';
+import AggregateError = require('es-aggregate-error');
 
 const runCasing = testFunction.bind(null, casing);
 
@@ -372,19 +374,34 @@ describe('Core Functions / Casing', () => {
       await expect(runCasing('foo', opts)).resolves.toBeInstanceOf(Array);
     });
 
-    it.each<[unknown, string]>([
+    it.each<[unknown, RulesetValidationError[]]>([
       [
         { type: 'foo' },
-        '"casing" function and its "type" option accept the following values: flat, camel, pascal, kebab, cobol, snake, macro',
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function and its "type" option accept the following values: flat, camel, pascal, kebab, cobol, snake, macro',
+            [],
+          ),
+        ],
       ],
-      [{ type: 'macro', foo: true }, '"casing" function does not support "foo" option'],
+      [
+        { type: 'macro', foo: true },
+        [new RulesetValidationError('invalid-function-options', '"casing" function does not support "foo" option', [])],
+      ],
       [
         {
           type: 'pascal',
           disallowDigits: false,
           separator: {},
         },
-        '"casing" function is missing "separator.char" option',
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function is missing "separator.char" option',
+            [],
+          ),
+        ],
       ],
       [
         {
@@ -392,11 +409,23 @@ describe('Core Functions / Casing', () => {
           disallowDigits: false,
           separator: { allowLeading: true },
         },
-        '"casing" function is missing "separator.char" option',
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function is missing "separator.char" option',
+            [],
+          ),
+        ],
       ],
       [
         { type: 'snake', separator: { char: 'a', foo: true } },
-        '"casing" function does not support "separator.foo" option',
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function does not support "separator.foo" option',
+            [],
+          ),
+        ],
       ],
       [
         {
@@ -405,7 +434,13 @@ describe('Core Functions / Casing', () => {
             char: 'fo',
           },
         },
-        '"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"',
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"',
+            [],
+          ),
+        ],
       ],
       [
         {
@@ -414,10 +449,16 @@ describe('Core Functions / Casing', () => {
             char: null,
           },
         },
-        '"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"',
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"casing" function and its "separator.char" option accepts only char, i.e. "I" or "/"',
+            [],
+          ),
+        ],
       ],
-    ])('given invalid %p options, should throw', async (opts, error) => {
-      await expect(runCasing('foo', opts)).rejects.toThrow(new RulesetValidationError(error));
+    ])('given invalid %p options, should throw', async (opts, errors) => {
+      await expect(runCasing('foo', opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

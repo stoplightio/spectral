@@ -1,0 +1,28 @@
+====test====
+Will fail and return 1 as exit code because warnings exist
+====document====
+- type: string
+- type: array
+====asset:ruleset.json====
+{
+  "rules": {
+    "valid-type": {
+      "given": "$..type",
+      "severity": "hint",
+      "then": {
+        "function": "enumeration",
+        "functionOptions": {
+          "values": ["array", "string"]
+        }
+      }
+    }
+  }
+}
+====command-nix====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity=warn
+====command-win====
+{bin} lint {document} --ruleset "{asset:ruleset.json}" --fail-severity warn
+====status====
+0
+====stdout====
+No results with a severity of 'warn' or higher found!

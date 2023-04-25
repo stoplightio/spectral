@@ -3,8 +3,6 @@ import { serveAssets } from '@stoplight/spectral-test-utils';
 import * as runtime from '@stoplight/spectral-runtime';
 import * as functions from '@stoplight/spectral-functions';
 
-jest.mock?.('fs');
-
 import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
@@ -31,7 +29,7 @@ describe('Builtins Plugin', () => {
     randomSpy.mockRestore();
   });
 
-  describe.each<BundleOptions['target']>(['browser', 'runtime'])('given %s target', target => {
+  describe.each<BundleOptions['target']>(['browser', 'node', 'runtime'])('given %s target', target => {
     it('should inline Spectral packages & expose it to the runtime', async () => {
       serveAssets({
         '/tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
@@ -197,64 +195,6 @@ readFile();`,
         ...runtime,
         readFile: readFile2,
       });
-    });
-  });
-
-  describe('given node target', () => {
-    it('should be a no-op', async () => {
-      serveAssets({
-        '/tmp/input.js': `import { schema } from '@stoplight/spectral-functions';
-import { oas } from '@stoplight/spectral-rulesets';
-
-export default {
-  extends: [oas],
-  rules: {
-    'my-rule': {
-      given: '$',
-      then: {
-        function: schema,
-        functionOptions: {
-          schema: {
-            type: 'object',
-          },
-        },
-      },
-    },
-  },
-};`,
-      });
-
-      const code = await bundleRuleset('/tmp/input.js', {
-        target: 'node',
-        plugins: [builtins(), virtualFs(io)],
-      });
-
-      expect(code).toEqual(`import { schema } from '@stoplight/spectral-functions';
-import { oas } from '@stoplight/spectral-rulesets';
-
-var input = {
-  extends: [oas],
-  rules: {
-    'my-rule': {
-      given: '$',
-      then: {
-        function: schema,
-        functionOptions: {
-          schema: {
-            type: 'object',
-          },
-        },
-      },
-    },
-  },
-};
-
-export { input as default };
-`);
-
-      expect(
-        globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions'],
-      ).toStrictEqual(functions);
     });
   });
 });

@@ -7,19 +7,11 @@ import { printValue } from '@stoplight/spectral-runtime';
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
 import { Ruleset } from './ruleset';
 import { Format } from './format';
-import type {
-  HumanReadableDiagnosticSeverity,
-  IRuleThen,
-  RuleDefinition,
-  RulesetAliasesDefinition,
-  RulesetScopedAliasDefinition,
-  Stringifable,
-} from './types';
+import type { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition, Stringifable } from './types';
 import { minimatch } from './utils/minimatch';
 import { Formats } from './formats';
-import { isSimpleAliasDefinition } from './utils/guards';
-
-const ALIAS = /^#([A-Za-z0-9_-]+)/;
+import { resolveAlias } from './alias';
+import type { Stringified, FileRulesetSeverityDefinition } from './types';
 
 export interface IRule {
   description: string | null;
@@ -32,14 +24,16 @@ export interface IRule {
   documentationUrl: string | null;
   then: IRuleThen[];
   given: string[];
+  extensions: Record<string, unknown> | null;
 }
 
-export type StringifiedRule = Omit<IRule, 'formats' | 'then'> & {
+type RuleJson = Omit<IRule, 'then'> & {
   name: string;
-  formats: string[] | null;
   then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
   owner: number;
 };
+
+export type StringifiedRule = Stringified<RuleJson>;
 
 export class Rule implements IRule {
   public description: string | null;
@@ -50,6 +44,7 @@ export class Rule implements IRule {
   #enabled: boolean;
   public recommended: boolean;
   public documentationUrl: string | null;
+  public extensions: Record<string, unknown> | null;
   #then!: IRuleThen[];
   #given!: string[];
 
@@ -68,6 +63,7 @@ export class Rule implements IRule {
     this.formats = 'formats' in definition ? new Formats(definition.formats) : null;
     this.then = definition.then;
     this.given = definition.given;
+    this.extensions = definition.extensions ?? null;
   }
 
   public overrides?: { rulesetSource: string; definition: Map<string, Map<string, DiagnosticSeverity | -1>> };
@@ -78,6 +74,10 @@ export class Rule implements IRule {
 
   public set enabled(enabled: boolean) {
     this.#enabled = enabled;
+  }
+
+  public static isEnabled(rule: IRule, severity: FileRulesetSeverityDefinition): boolean {
+    return severity === 'all' || (severity === 'recommended' && rule.recommended);
   }
 
   public getSeverityForSource(source: string, path: JsonPath): DiagnosticSeverity | -1 {
@@ -142,82 +142,13 @@ export class Rule implements IRule {
     const actualGiven = Array.isArray(given) ? given : [given];
     this.#given = this.owner.hasComplexAliases
       ? actualGiven
-      : actualGiven.flatMap(expr => Rule.#resolveAlias(this.owner.aliases, expr, null, new Set())).filter(isString);
+      : actualGiven.flatMap(expr => resolveAlias(this.owner.aliases, expr, null)).filter(isString);
   }
 
   public getGivenForFormats(formats: Set<Format> | null): string[] {
     return this.owner.hasComplexAliases
-      ? this.#given.flatMap(expr => Rule.#resolveAlias(this.owner.aliases, expr, formats, new Set()))
+      ? this.#given.flatMap(expr => resolveAlias(this.owner.aliases, expr, formats))
       : this.#given;
-  }
-
-  static #resolveAlias(
-    aliases: RulesetAliasesDefinition | null,
-    expr: string,
-    formats: Set<Format> | null,
-    stack: Set<string>,
-  ): string[] {
-    const resolvedExpressions: string[] = [];
-
-    if (expr.startsWith('#')) {
-      const alias = ALIAS.exec(expr)?.[1];
-
-      if (alias === void 0 || alias === null) {
-        throw new ReferenceError(`"${this.name}" rule references an invalid alias`);
-      }
-
-      if (stack.has(alias)) {
-        const _stack = [...stack, alias];
-        throw new ReferenceError(`Alias "${_stack[0]}" is circular. Resolution stack: ${_stack.join(' -> ')}`);
-      }
-
-      stack.add(alias);
-
-      if (aliases === null || !(alias in aliases)) {
-        throw new ReferenceError(`Alias "${alias}" does not exist`);
-      }
-
-      const aliasValue = aliases[alias];
-      let actualAliasValue: string[] | null;
-      if (isSimpleAliasDefinition(aliasValue)) {
-        actualAliasValue = aliasValue;
-      } else {
-        actualAliasValue = Rule.#resolveAliasForFormats(aliasValue, formats);
-      }
-
-      if (actualAliasValue !== null) {
-        resolvedExpressions.push(
-          ...actualAliasValue.flatMap(item =>
-            Rule.#resolveAlias(aliases, item + expr.slice(alias.length + 1), formats, new Set([...stack])),
-          ),
-        );
-      }
-    } else {
-      resolvedExpressions.push(expr);
-    }
-
-    return resolvedExpressions;
-  }
-
-  static #resolveAliasForFormats(
-    { targets }: RulesetScopedAliasDefinition,
-    formats: Set<Format> | null,
-  ): string[] | null {
-    if (formats === null || formats.size === 0) {
-      return null;
-    }
-
-    // we start from the end to be consistent with overrides etc. - we generally tend to pick the "last" value.
-    for (let i = targets.length - 1; i >= 0; i--) {
-      const target = targets[i];
-      for (const format of target.formats) {
-        if (formats.has(format)) {
-          return target.given;
-        }
-      }
-    }
-
-    return null;
   }
 
   public matchesFormat(formats: Set<Format> | null): boolean {
@@ -242,7 +173,7 @@ export class Rule implements IRule {
     return new Rule(this.name, this.definition, this.owner);
   }
 
-  public toJSON(): Stringifable<StringifiedRule> {
+  public toJSON(): Stringifable<RuleJson> {
     return {
       name: this.name,
       recommended: this.recommended,
@@ -260,6 +191,7 @@ export class Rule implements IRule {
       })),
       given: Array.isArray(this.definition.given) ? this.definition.given : [this.definition.given],
       owner: this.owner.id,
+      extensions: this.extensions,
     };
   }
 }

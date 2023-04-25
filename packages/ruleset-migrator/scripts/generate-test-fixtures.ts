@@ -12,21 +12,29 @@ fs.promises.readdir(cwd).then(async ls => {
   for (const dirname of ls) {
     if (dirname === '.cache') continue;
     const dirpath = path.join(cwd, dirname);
-    const bundle = {};
-    bundled[dirname] = bundle;
     promises.push(
-      fs.promises.readFile(path.join(dirpath, 'output.cjs'), 'utf8').then(assign(bundle, 'output.cjs')),
-      fs.promises.readFile(path.join(dirpath, 'output.mjs'), 'utf8').then(assign(bundle, 'output.mjs')),
-      fs.promises.readFile(path.join(dirpath, 'ruleset.yaml'), 'utf8').then(assign(bundle, 'ruleset')),
-      readdir(bundle, dirpath, 'assets').catch(() => {
+      fs.promises
+        .readFile(path.join(dirpath, 'output.cjs'), 'utf8')
+        .then(assign(bundled, path.join(dirname, 'output.cjs'))),
+      fs.promises
+        .readFile(path.join(dirpath, 'output.mjs'), 'utf8')
+        .then(assign(bundled, path.join(dirname, 'output.mjs'))),
+      fs.promises
+        .readFile(path.join(dirpath, 'ruleset.yaml'), 'utf8')
+        .then(assign(bundled, path.join(dirname, 'ruleset'))),
+      readdir(bundled, cwd, path.join(dirname, 'assets')).catch(() => {
         // it may not exist
       }),
     );
   }
 
   await Promise.all(promises);
-  await fs.promises.writeFile(path.join(cwd, '.cache/index.json'), JSON.stringify(bundled, null, 2));
+  await fs.promises.writeFile(path.join(cwd, '.cache/index.json'), JSON.stringify(sortKeys(bundled), null, 2));
 });
+
+function sortKeys<T>(input: T): T {
+  return Object.fromEntries(Object.entries(input).sort(([a], [b]) => a.localeCompare(b))) as T;
+}
 
 function assign(bundled: Record<string, string>, name: string) {
   return async (input: string): Promise<void> => {

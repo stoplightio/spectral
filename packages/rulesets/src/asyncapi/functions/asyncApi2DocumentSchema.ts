@@ -1,16 +1,12 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { schema as schemaFn } from '@stoplight/spectral-functions';
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6 } from '@stoplight/spectral-formats';
+
+import { getCopyOfSchema } from './utils/specs';
 
 import type { ErrorObject } from 'ajv';
 import type { IFunctionResult, Format } from '@stoplight/spectral-core';
-
-// import only 2.X.X AsyncAPI JSON Schemas for better treeshaking
-import * as asyncAPI2_0_0Schema from '@asyncapi/specs/schemas/2.0.0.json';
-import * as asyncAPI2_1_0Schema from '@asyncapi/specs/schemas/2.1.0.json';
-import * as asyncAPI2_2_0Schema from '@asyncapi/specs/schemas/2.2.0.json';
-import * as asyncAPI2_3_0Schema from '@asyncapi/specs/schemas/2.3.0.json';
-import * as asyncAPI2_4_0Schema from '@asyncapi/specs/schemas/2.4.0.json';
+import type { AsyncAPISpecVersion } from './utils/specs';
 
 function shouldIgnoreError(error: ErrorObject): boolean {
   return (
@@ -38,9 +34,14 @@ const ERROR_MAP = [
 // That being said, we always strip both oneOf and $ref, since we are always interested in the first error.
 export function prepareResults(errors: ErrorObject[]): void {
   // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
-  for (const error of errors) {
+  for (let i = 0; i < errors.length; i++) {
+    const error = errors[i];
+
     if (error.keyword === 'additionalProperties') {
       error.instancePath = `${error.instancePath}/${String(error.params['additionalProperty'])}`;
+    } else if (error.keyword === 'required' && error.params.missingProperty === '$ref') {
+      errors.splice(i, 1);
+      i--;
     }
   }
 
@@ -72,18 +73,39 @@ function applyManualReplacements(errors: IFunctionResult[]): void {
   }
 }
 
-function getSchema(formats: Set<Format>): Record<string, unknown> | void {
+const serializedSchemas = new Map<AsyncAPISpecVersion, Record<string, unknown>>();
+function getSerializedSchema(version: AsyncAPISpecVersion): Record<string, unknown> {
+  const schema = serializedSchemas.get(version);
+  if (schema) {
+    return schema;
+  }
+
+  // Copy to not operate on the original json schema - between imports (in different modules) we operate on this same schema.
+  const copied = getCopyOfSchema(version) as { definitions: Record<string, unknown> };
+  // Remove the meta schemas because they are already present within Ajv, and it's not possible to add duplicated schemas.
+  delete copied.definitions['http://json-schema.org/draft-07/schema'];
+  delete copied.definitions['http://json-schema.org/draft-04/schema'];
+
+  serializedSchemas.set(version, copied);
+  return copied;
+}
+
+function getSchema(formats: Set<Format>): Record<string, any> | void {
   switch (true) {
-    case formats.has(aas2_0):
-      return asyncAPI2_0_0Schema;
-    case formats.has(aas2_1):
-      return asyncAPI2_1_0Schema;
-    case formats.has(aas2_2):
-      return asyncAPI2_2_0Schema;
-    case formats.has(aas2_3):
-      return asyncAPI2_3_0Schema;
+    case formats.has(aas2_6):
+      return getSerializedSchema('2.6.0');
+    case formats.has(aas2_5):
+      return getSerializedSchema('2.5.0');
     case formats.has(aas2_4):
-      return asyncAPI2_4_0Schema;
+      return getSerializedSchema('2.4.0');
+    case formats.has(aas2_3):
+      return getSerializedSchema('2.3.0');
+    case formats.has(aas2_2):
+      return getSerializedSchema('2.2.0');
+    case formats.has(aas2_1):
+      return getSerializedSchema('2.1.0');
+    case formats.has(aas2_0):
+      return getSerializedSchema('2.0.0');
     default:
       return;
   }
@@ -94,8 +116,8 @@ export default createRulesetFunction<unknown, null>(
     input: null,
     options: null,
   },
-  function oasDocumentSchema(targetVal, _, context) {
-    const formats = context.document.formats;
+  function asyncApi2DocumentSchema(targetVal, _, context) {
+    const formats = context.document?.formats;
     if (formats === null || formats === void 0) return;
 
     const schema = getSchema(formats);

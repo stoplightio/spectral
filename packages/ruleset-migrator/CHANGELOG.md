@@ -1,3 +1,45 @@
+# [@stoplight/spectral-ruleset-migrator-v1.9.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.2...@stoplight/spectral-ruleset-migrator-v1.9.3) (2023-04-21)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** transform functions under overrides ([#2459](https://github.com/stoplightio/spectral/issues/2459)) ([45e817f](https://github.com/stoplightio/spectral/commit/45e817ffb9b682779c8e20153405879d9205454d))
+
+# [@stoplight/spectral-ruleset-migrator-v1.9.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.1...@stoplight/spectral-ruleset-migrator-v1.9.2) (2023-02-22)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** use module for require.resolve ([#2405](https://github.com/stoplightio/spectral/issues/2405)) ([d7c0fa4](https://github.com/stoplightio/spectral/commit/d7c0fa44c506f8f724129c31ee51701fb9699bef))
+
+# [@stoplight/spectral-ruleset-migrator-v1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.0...@stoplight/spectral-ruleset-migrator-v1.9.1) (2022-11-23)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** avoid positive lookbehinds ([#2349](https://github.com/stoplightio/spectral/issues/2349)) ([455c324](https://github.com/stoplightio/spectral/commit/455c32487b6f25465c1204186006e2c830f48eb3))
+
+# [@stoplight/spectral-ruleset-migrator-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.8.0...@stoplight/spectral-ruleset-migrator-v1.9.0) (2022-10-24)
+
+
+### Features
+
+* **ruleset-migrator:** use Content-Type header to detect ruleset format ([#2317](https://github.com/stoplightio/spectral/issues/2317)) ([7abbe95](https://github.com/stoplightio/spectral/commit/7abbe95db95faf3c823573f9c065e593435d066f))
+
+# [@stoplight/spectral-ruleset-migrator-v1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.4...@stoplight/spectral-ruleset-migrator-v1.8.0) (2022-10-14)
+
+
+### Features
+
+* **ruleset-migrator:** relax validation ([#2307](https://github.com/stoplightio/spectral/issues/2307)) ([d5ce09e](https://github.com/stoplightio/spectral/commit/d5ce09e7e1f5006a63d890850f46f4fc3dac0152))
+
+# [@stoplight/spectral-ruleset-migrator-v1.7.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.3...@stoplight/spectral-ruleset-migrator-v1.7.4) (2022-08-30)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** http/https uris not followed correctly ([#2247](https://github.com/stoplightio/spectral/issues/2247)) ([573e112](https://github.com/stoplightio/spectral/commit/573e112c694d1876546faf208c53cd2e66c7f713))
+
 # [@stoplight/spectral-ruleset-migrator-v1.7.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.7.2...@stoplight/spectral-ruleset-migrator-v1.7.3) (2022-03-10)
 
 

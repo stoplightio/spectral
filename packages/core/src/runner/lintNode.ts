@@ -1,36 +1,36 @@
-import { JsonPath } from '@stoplight/types';
 import { decodeSegmentFragment, getClosestJsonPath, printPath, PrintStyle } from '@stoplight/spectral-runtime';
 import { get, isError } from 'lodash';
 import { ErrorWithCause } from 'pony-cause';
 
 import { Document } from '../document';
-import { IFunctionResult, IGivenNode, RulesetFunctionContext } from '../types';
-import { IRunnerInternalContext } from './types';
+import type { IFunctionResult, IGivenNode, RulesetFunctionContext } from '../types';
+import type { IRunnerInternalContext } from './types';
 import { getLintTargets, MessageVars, message } from './utils';
-import { Rule } from '../ruleset/rule';
+import type { Rule } from '../ruleset/rule';
 
 export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule: Rule): void => {
-  const fnContext: RulesetFunctionContext = {
+  const givenPath = node.path.length > 0 && node.path[0] === '$' ? node.path.slice(1) : node.path.slice();
+
+  const fnContext: RulesetFunctionContext & { rule: Rule } = {
     document: context.documentInventory.document,
     documentInventory: context.documentInventory,
     rule,
-    path: [],
+    path: givenPath,
   };
-
-  const givenPath = node.path.length > 0 && node.path[0] === '$' ? node.path.slice(1) : node.path;
 
   for (const then of rule.then) {
     const targets = getLintTargets(node.value, then.field);
 
     for (const target of targets) {
-      const path = target.path.length > 0 ? [...givenPath, ...target.path] : givenPath;
+      if (target.path.length > 0) {
+        fnContext.path = [...givenPath, ...target.path];
+      } else {
+        fnContext.path = givenPath;
+      }
 
       let targetResults;
       try {
-        targetResults = then.function(target.value, then.functionOptions ?? null, {
-          ...fnContext,
-          path,
-        });
+        targetResults = then.function(target.value, then.functionOptions ?? null, fnContext);
       } catch (e) {
         throw new ErrorWithCause(
           `Function "${then.function.name}" threw an exception${isError(e) ? `: ${e.message}` : ''}`,
@@ -43,25 +43,14 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
       if (targetResults === void 0) continue;
 
       if ('then' in targetResults) {
+        const _fnContext = { ...fnContext };
         context.promises.push(
           targetResults.then(results =>
-            results === void 0
-              ? void 0
-              : void processTargetResults(
-                  context,
-                  results,
-                  rule,
-                  path, // todo: get rid of it somehow.
-                ),
+            results === void 0 ? void 0 : processTargetResults(context, _fnContext, results),
           ),
         );
       } else {
-        processTargetResults(
-          context,
-          targetResults,
-          rule,
-          path, // todo: get rid of it somehow.
-        );
+        processTargetResults(context, fnContext, targetResults);
       }
     }
   }
@@ -69,10 +58,10 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
 
 function processTargetResults(
   context: IRunnerInternalContext,
+  fnContext: RulesetFunctionContext & { rule: Rule },
   results: IFunctionResult[],
-  rule: Rule,
-  targetPath: JsonPath,
 ): void {
+  const { rule, path: targetPath } = fnContext;
   for (const result of results) {
     const escapedJsonPath = (result.path ?? targetPath).map(decodeSegmentFragment);
     const associatedItem = context.documentInventory.findAssociatedItemForPath(escapedJsonPath, rule.resolved);
