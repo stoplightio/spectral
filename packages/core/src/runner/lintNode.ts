@@ -24,6 +24,8 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
     for (const target of targets) {
       if (target.path.length > 0) {
         fnContext.path = [...givenPath, ...target.path];
+      } else {
+        fnContext.path = givenPath;
       }
 
       let targetResults;

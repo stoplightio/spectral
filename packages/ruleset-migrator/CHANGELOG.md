@@ -1,3 +1,24 @@
+# [@stoplight/spectral-ruleset-migrator-v1.9.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.2...@stoplight/spectral-ruleset-migrator-v1.9.3) (2023-04-21)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** transform functions under overrides ([#2459](https://github.com/stoplightio/spectral/issues/2459)) ([45e817f](https://github.com/stoplightio/spectral/commit/45e817ffb9b682779c8e20153405879d9205454d))
+
+# [@stoplight/spectral-ruleset-migrator-v1.9.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.1...@stoplight/spectral-ruleset-migrator-v1.9.2) (2023-02-22)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** use module for require.resolve ([#2405](https://github.com/stoplightio/spectral/issues/2405)) ([d7c0fa4](https://github.com/stoplightio/spectral/commit/d7c0fa44c506f8f724129c31ee51701fb9699bef))
+
+# [@stoplight/spectral-ruleset-migrator-v1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.0...@stoplight/spectral-ruleset-migrator-v1.9.1) (2022-11-23)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** avoid positive lookbehinds ([#2349](https://github.com/stoplightio/spectral/issues/2349)) ([455c324](https://github.com/stoplightio/spectral/commit/455c32487b6f25465c1204186006e2c830f48eb3))
+
 # [@stoplight/spectral-ruleset-migrator-v1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.8.0...@stoplight/spectral-ruleset-migrator-v1.9.0) (2022-10-24)
 
 

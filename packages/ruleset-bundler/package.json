@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-bundler",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -19,9 +19,9 @@
       "default": "./dist/index.js"
     },
     "./with-loader": {
-      "default": "./dist/loader/node.js",
       "node": "./dist/loader/node.js",
-      "browser": "./dist/loader/browser.js"
+      "browser": "./dist/loader/browser.js",
+      "default": "./dist/loader/node.js"
     },
     "./presets/*": {
       "default": "./dist/presets/*.js"

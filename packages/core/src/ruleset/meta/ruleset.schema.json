@@ -190,6 +190,9 @@
       }
     }
   },
+  "patternProperties": {
+    "^x-": true
+  },
   "anyOf": [
     {
       "required": ["extends"]

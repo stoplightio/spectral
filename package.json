@@ -39,7 +39,8 @@
     "test.karma": "karma start",
     "prepare": "husky install",
     "prerelease": "patch-package",
-    "release": "yarn prerelease && yarn workspaces foreach run release"
+    "release": "yarn prerelease && yarn workspaces foreach run release",
+    "jest": "jest"
   },
   "workspaces": {
     "packages": [
@@ -125,5 +126,5 @@
       "prettier --ignore-path .eslintignore --write"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.5.0"
 }

@@ -77,10 +77,16 @@
         "enum": ["style", "validation"],
         "type": "string",
         "errorMessage": "allowed types are \"style\" and \"validation\""
+      },
+      "extensions": {
+        "type": "object"
       }
     },
     "required": ["given", "then"],
     "additionalProperties": false,
+    "patternProperties": {
+      "^x-": true
+    },
     "errorMessage": {
       "required": "the rule must have at least \"given\" and \"then\" properties"
     }

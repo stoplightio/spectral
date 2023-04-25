@@ -11,7 +11,7 @@ import type { HumanReadableDiagnosticSeverity, IRuleThen, RuleDefinition, String
 import { minimatch } from './utils/minimatch';
 import { Formats } from './formats';
 import { resolveAlias } from './alias';
-import type { Stringified } from './types';
+import type { Stringified, FileRulesetSeverityDefinition } from './types';
 
 export interface IRule {
   description: string | null;
@@ -24,6 +24,7 @@ export interface IRule {
   documentationUrl: string | null;
   then: IRuleThen[];
   given: string[];
+  extensions: Record<string, unknown> | null;
 }
 
 type RuleJson = Omit<IRule, 'then'> & {
@@ -43,6 +44,7 @@ export class Rule implements IRule {
   #enabled: boolean;
   public recommended: boolean;
   public documentationUrl: string | null;
+  public extensions: Record<string, unknown> | null;
   #then!: IRuleThen[];
   #given!: string[];
 
@@ -61,6 +63,7 @@ export class Rule implements IRule {
     this.formats = 'formats' in definition ? new Formats(definition.formats) : null;
     this.then = definition.then;
     this.given = definition.given;
+    this.extensions = definition.extensions ?? null;
   }
 
   public overrides?: { rulesetSource: string; definition: Map<string, Map<string, DiagnosticSeverity | -1>> };
@@ -71,6 +74,10 @@ export class Rule implements IRule {
 
   public set enabled(enabled: boolean) {
     this.#enabled = enabled;
+  }
+
+  public static isEnabled(rule: IRule, severity: FileRulesetSeverityDefinition): boolean {
+    return severity === 'all' || (severity === 'recommended' && rule.recommended);
   }
 
   public getSeverityForSource(source: string, path: JsonPath): DiagnosticSeverity | -1 {
@@ -184,6 +191,7 @@ export class Rule implements IRule {
       })),
       given: Array.isArray(this.definition.given) ? this.definition.given : [this.definition.given],
       owner: this.owner.id,
+      extensions: this.extensions,
     };
   }
 }
