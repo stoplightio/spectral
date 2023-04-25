@@ -3,6 +3,7 @@ import type { Dictionary, JsonPath, Optional } from '@stoplight/types';
 import oasSchema, { Options as SchemaOptions } from './oasSchema';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { oas2 } from '@stoplight/spectral-formats';
+import traverse from 'json-schema-traverse';
 
 export type Options = {
   oasVersion: 2 | 3;
@@ -117,45 +118,12 @@ function* getSchemaValidationItems(
  * @param schema the schema to be "de-examplified"
  * @returns 'schema' with example fields removed
  */
-function deExamplify(schema: Record<string, unknown>): Record<string, unknown> {
-  if ('items' in schema && typeof schema.items === 'object') {
-    schema.items = deExamplify(schema.items as Record<string, unknown>);
-  }
-
-  if (Array.isArray(schema.allOf)) {
-    for (let i = 0; i < schema.allOf.length; i++) {
-      schema.allOf[i] = deExamplify(schema.allOf[i] as Record<string, unknown>);
+function deExamplify(schema: Record<string, unknown>): void {
+  traverse(schema, <traverse.Callback>(fragment => {
+    if ('example' in fragment) {
+      delete fragment.example;
     }
-  }
-  if (Array.isArray(schema.anyOf)) {
-    for (let i = 0; i < schema.anyOf.length; i++) {
-      schema.anyOf[i] = deExamplify(schema.anyOf[i] as Record<string, unknown>);
-    }
-  }
-  if (Array.isArray(schema.oneOf)) {
-    for (let i = 0; i < schema.oneOf.length; i++) {
-      schema.oneOf[i] = deExamplify(schema.oneOf[i] as Record<string, unknown>);
-    }
-  }
-  if ('not' in schema && typeof schema.not === 'object') {
-    schema.not = deExamplify(schema.not as Record<string, unknown>);
-  }
-
-  if ('additionalProperties' in schema && typeof schema.additionalProperties === 'object') {
-    schema.additionalProperties = deExamplify(schema.additionalProperties as Record<string, unknown>);
-  }
-
-  if ('properties' in schema && typeof schema.properties === 'object') {
-    for (const propName in schema.properties) {
-      schema.properties[propName] = deExamplify(schema.properties[propName] as Record<string, unknown>);
-    }
-  }
-
-  if ('example' in schema) {
-    delete schema.example;
-  }
-
-  return schema;
+  }));
 }
 
 export default createRulesetFunction<Record<string, unknown>, Options>(
@@ -201,7 +169,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     // This is to avoid problems down in "ajv" which does the actual schema validation.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     schemaOpts.schema = JSON.parse(JSON.stringify(schemaOpts.schema));
-    schemaOpts.schema = deExamplify(schemaOpts.schema);
+    deExamplify(schemaOpts.schema);
 
     for (const validationItem of validationItems) {
       const result = oasSchema(validationItem.value, schemaOpts, {
