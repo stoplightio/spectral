@@ -3,6 +3,7 @@ import type { Dictionary, JsonPath, Optional } from '@stoplight/types';
 import oasSchema, { Options as SchemaOptions } from './oasSchema';
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { oas2 } from '@stoplight/spectral-formats';
+import traverse from 'json-schema-traverse';
 
 export type Options = {
   oasVersion: 2 | 3;
@@ -110,6 +111,21 @@ function* getSchemaValidationItems(
   }
 }
 
+/**
+ * Modifies 'schema' (and all its sub-schemas) to remove all "example" fields.
+ * In this context, "sub-schemas" refers to all schemas reachable from 'schema'
+ * (e.g. properties, additionalProperties, allOf/anyOf/oneOf, not, items, etc.)
+ * @param schema the schema to be "de-examplified"
+ * @returns 'schema' with example fields removed
+ */
+function deExamplify(schema: Record<string, unknown>): void {
+  traverse(schema, <traverse.Callback>(fragment => {
+    if ('example' in fragment) {
+      delete fragment.example;
+    }
+  }));
+}
+
 export default createRulesetFunction<Record<string, unknown>, Options>(
   {
     input: {
@@ -148,6 +164,12 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
       schemaOpts.schema = { ...schemaOpts.schema };
       delete schemaOpts.schema.required;
     }
+
+    // Make a deep copy of the schema and then remove all the "example" fields from it.
+    // This is to avoid problems down in "ajv" which does the actual schema validation.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    schemaOpts.schema = JSON.parse(JSON.stringify(schemaOpts.schema));
+    deExamplify(schemaOpts.schema);
 
     for (const validationItem of validationItems) {
       const result = oasSchema(validationItem.value, schemaOpts, {

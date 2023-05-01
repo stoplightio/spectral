@@ -22,8 +22,25 @@ export class RulesetFunctionValidationError extends RulesetValidationError {
     super(
       'invalid-function-options',
       RulesetFunctionValidationError.printMessage(fn, error),
-      error.instancePath.slice(1).split('/'),
+      RulesetFunctionValidationError.getPath(error),
     );
+  }
+
+  private static getPath(error: ErrorObject): string[] {
+    const path: string[] = [
+      'functionOptions',
+      ...(error.instancePath === '' ? [] : error.instancePath.slice(1).split('/')),
+    ];
+
+    switch (error.keyword) {
+      case 'additionalProperties': {
+        const additionalProperty = (error as AdditionalPropertiesError).params.additionalProperty;
+        path.push(additionalProperty);
+        break;
+      }
+    }
+
+    return path;
   }
 
   private static printMessage(fn: string, error: ErrorObject): string {
@@ -157,7 +174,7 @@ export function createRulesetFunction<I, O>(
       throw new RulesetValidationError(
         'invalid-function-options',
         `"${fn.name || '<unknown>'}" function does not accept any options`,
-        [],
+        ['functionOptions'],
       );
     } else if (
       'errors' in validateOptions &&
@@ -171,7 +188,7 @@ export function createRulesetFunction<I, O>(
       throw new RulesetValidationError(
         'invalid-function-options',
         `"functionOptions" of "${fn.name || '<unknown>'}" function must be valid`,
-        [],
+        ['functionOptions'],
       );
     }
   };

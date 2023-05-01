@@ -1,3 +1,15 @@
+# [@stoplight/spectral-core-v1.18.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.17.0...@stoplight/spectral-core-v1.18.0) (2023-04-25)
+
+
+### Bug Fixes
+
+* **core:** more accurate ruleset error paths ([66b3ca7](https://github.com/stoplightio/spectral/commit/66b3ca704136d5d8a34211e72e2d8a2c522261e4))
+
+
+### Features
+
+* **core:** relax formats validation ([#2151](https://github.com/stoplightio/spectral/issues/2151)) ([de16b4c](https://github.com/stoplightio/spectral/commit/de16b4cbd56cd9836609ab79487a6e3e06df964d))
+
 # [@stoplight/spectral-core-v1.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.16.1...@stoplight/spectral-core-v1.17.0) (2023-03-23)
 
 

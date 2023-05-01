@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-migrator-v1.9.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.2...@stoplight/spectral-ruleset-migrator-v1.9.3) (2023-04-21)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** transform functions under overrides ([#2459](https://github.com/stoplightio/spectral/issues/2459)) ([45e817f](https://github.com/stoplightio/spectral/commit/45e817ffb9b682779c8e20153405879d9205454d))
+
 # [@stoplight/spectral-ruleset-migrator-v1.9.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.1...@stoplight/spectral-ruleset-migrator-v1.9.2) (2023-02-22)
 
 

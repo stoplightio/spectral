@@ -26,6 +26,18 @@ const document = {
         message: cloneDeep(headersBearer),
       },
     },
+    'users/{userId}/loggedIn': {
+      publish: {
+        message: {
+          traits: [cloneDeep(headersBearer)],
+        },
+      },
+      subscribe: {
+        message: {
+          traits: [cloneDeep(headersBearer)],
+        },
+      },
+    },
   },
   components: {
     messageTraits: {
@@ -127,6 +139,35 @@ testRule('asyncapi-headers-schema-type-object', [
           message:
             'Headers schema type must be "object" ("type" property must be equal to one of the allowed values: "object". Did you mean "object"?).',
           path: ['channels', 'users/{userId}/signedUp', property, 'message', 'headers', 'type'],
+          severity: DiagnosticSeverity.Error,
+        },
+      ],
+    },
+
+    {
+      name: `channels.{channel}.${property}.message.traits.[*].headers lacks "type" property`,
+      document: produce(document, draft => {
+        draft.channels['users/{userId}/loggedIn'][property].message.traits[0].headers = { const: 'Hello World!' };
+      }),
+      errors: [
+        {
+          message: 'Headers schema type must be "object" ("headers" property must have required property "type").',
+          path: ['channels', 'users/{userId}/loggedIn', property, 'message', 'traits', '0', 'headers'],
+          severity: DiagnosticSeverity.Error,
+        },
+      ],
+    },
+
+    {
+      name: `channels.{channel}.${property}.message.traits.[*].headers is not of type "object"`,
+      document: produce(document, draft => {
+        draft.channels['users/{userId}/loggedIn'][property].message.traits[0].headers = { type: 'integer' };
+      }),
+      errors: [
+        {
+          message:
+            'Headers schema type must be "object" ("type" property must be equal to one of the allowed values: "object". Did you mean "object"?).',
+          path: ['channels', 'users/{userId}/loggedIn', property, 'message', 'traits', '0', 'headers', 'type'],
           severity: DiagnosticSeverity.Error,
         },
       ],

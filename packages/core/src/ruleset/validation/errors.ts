@@ -18,7 +18,7 @@ export type RulesetValidationErrorCode =
   | 'undefined-alias';
 
 interface IRulesetValidationSingleError extends Pick<IDiagnostic, 'message' | 'path'> {
-  code: RulesetValidationErrorCode;
+  readonly code: RulesetValidationErrorCode;
 }
 
 export class RulesetValidationError extends Error implements IRulesetValidationSingleError {

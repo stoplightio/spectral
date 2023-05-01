@@ -85,7 +85,7 @@ const transformer: Transformer = function (hooks) {
   ]);
 
   hooks.add([
-    /^\/rules\/[^/]+\/then\/(?:[0-9]+\/)?function$/,
+    /^(?:\/overrides\/\d+)?\/rules\/[^/]+\/then\/(?:\d+\/)?function$/,
     (value, ctx): namedTypes.Identifier | namedTypes.UnaryExpression => {
       assertString(value);
 

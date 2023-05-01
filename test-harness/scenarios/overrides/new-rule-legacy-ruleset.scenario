@@ -1,0 +1,62 @@
+====test====
+Respect overrides with rules-only
+====asset:spectral.yaml====
+aliases:
+  OperationObject:
+    - "#PathItem[get,put,post,delete,options,head,patch,trace]"
+  PathItem:
+    - $.paths[*]
+rules:
+  operation-description:
+    given: '#OperationObject'
+    then:
+      field: 'description'
+      function: 'truthy'
+    severity: error
+overrides:
+  - files: ["v2/**/*.json"]
+    rules:
+      summary-description:
+        given: '#OperationObject'
+        then:
+          field: 'summary'
+          function: 'truthy'
+        severity: warn
+====asset:v2/document.json====
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "",
+    "title": ""
+  },
+  "paths": {
+    "/": {
+      "get": {}
+    }
+  }
+}
+====asset:legacy/document.json====
+{
+  "openapi": "3.1.0",
+  "info": {
+    "description": "",
+    "title": ""
+  },
+  "paths": {
+    "/": {
+      "get": {}
+    }
+  }
+}
+====command====
+{bin} lint **/*.json --ruleset {asset:spectral.yaml} --fail-on-unmatched-globs
+====stdout====
+
+{asset:legacy/document.json}
+ 9:13  error  operation-description  "get.description" property must be truthy  paths./.get
+
+{asset:v2/document.json}
+ 9:13    error  operation-description  "get.description" property must be truthy  paths./.get
+ 9:13  warning  summary-description    "get.summary" property must be truthy      paths./.get
+
+✖ 3 problems (2 errors, 1 warning, 0 infos, 0 hints)

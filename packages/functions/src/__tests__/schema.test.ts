@@ -485,13 +485,21 @@ describe('Core Functions / Schema', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"schema" function has invalid options specified. Example valid options: { "schema": { /* any JSON Schema can be defined here */ } , { "schema": { "type": "object" }, "dialect": "auto" }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
       [
         { schema: { type: 'object' }, foo: true },
-        [new RulesetValidationError('invalid-function-options', '"schema" function does not support "foo" option', [])],
+        [
+          new RulesetValidationError('invalid-function-options', '"schema" function does not support "foo" option', [
+            'rules',
+            'my-rule',
+            'then',
+            'functionOptions',
+            'foo',
+          ]),
+        ],
       ],
       [
         { schema: { type: 'object' }, oasVersion: 1 },
@@ -499,7 +507,7 @@ describe('Core Functions / Schema', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"schema" function does not support "oasVersion" option',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'oasVersion'],
           ),
         ],
       ],
@@ -509,7 +517,7 @@ describe('Core Functions / Schema', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"schema" function and its "dialect" option accepts only the following values: "auto", "draft4", "draft6", "draft7", "draft2019-09", "draft2020-12"',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'dialect'],
           ),
         ],
       ],
@@ -519,7 +527,7 @@ describe('Core Functions / Schema', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"schema" function and its "allErrors" option accepts only the following types: boolean',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'allErrors'],
           ),
         ],
       ],
@@ -529,12 +537,12 @@ describe('Core Functions / Schema', () => {
           new RulesetValidationError(
             'invalid-function-options',
             `"schema" function and its "schema" option accepts only the following types: object`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'schema'],
           ),
           new RulesetValidationError(
             'invalid-function-options',
             `"schema" function and its "allErrors" option accepts only the following types: boolean`,
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'allErrors'],
           ),
         ],
       ],

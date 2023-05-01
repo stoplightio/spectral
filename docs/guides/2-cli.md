@@ -60,6 +60,8 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 - [OpenAPI ruleset](../reference/openapi-rules.md)
 - [AsyncAPI ruleset](../reference/asyncapi-rules.md)
 
+> If you use rules created or updated in a hosted [Stoplight API project](https://docs.stoplight.io/docs/platform/branches/pam-716-updated-landing-page/c433d678d027a-create-rules) with the Spectral CLI, you must publish the project from Stoplight before rule updates are used for linting.
+
 ## Error Results
 
 Spectral has a few different error severities: `error`, `warn`, `info`, and `hint`, and they're in order from highest to lowest. By default, all results are shown regardless of severity, but since v5.0, only the presence of errors causes a failure status code of 1. Seeing results and getting a failure code for it are now two different things.

@@ -73,7 +73,7 @@ describe('Core Functions / Xor', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
@@ -83,13 +83,21 @@ describe('Core Functions / Xor', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
       ],
       [
         { properties: ['foo', 'bar'], foo: true },
-        [new RulesetValidationError('invalid-function-options', '"xor" function does not support "foo" option', [])],
+        [
+          new RulesetValidationError('invalid-function-options', '"xor" function does not support "foo" option', [
+            'rules',
+            'my-rule',
+            'then',
+            'functionOptions',
+            'foo',
+          ]),
+        ],
       ],
       [
         { properties: ['foo', 'bar', 'baz'] },
@@ -97,7 +105,7 @@ describe('Core Functions / Xor', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
       ],
@@ -107,7 +115,7 @@ describe('Core Functions / Xor', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
       ],
@@ -117,7 +125,7 @@ describe('Core Functions / Xor', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
       ],
@@ -127,7 +135,7 @@ describe('Core Functions / Xor', () => {
           new RulesetValidationError(
             'invalid-function-options',
             '"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]',
-            [],
+            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
       ],
