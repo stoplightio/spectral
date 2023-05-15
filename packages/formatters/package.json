@@ -1,0 +1,48 @@
+{
+  "name": "@stoplight/spectral-formatters",
+  "version": "1.0.0",
+  "homepage": "https://github.com/stoplightio/spectral",
+  "bugs": "https://github.com/stoplightio/spectral/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "engines": {
+    "node": "^12.20 || >=14.13"
+  },
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/spectral.git"
+  },
+  "scripts": {
+    "release": "semantic-release -e semantic-release-monorepo",
+    "pretest": "yarn prebuild",
+    "prelint": "yarn prebuild",
+    "prebuild": "node scripts/bundle-html-templates.mjs"
+  },
+  "dependencies": {
+    "@stoplight/path": "^2.0.0",
+    "@stoplight/spectral-core": "^1.15.1",
+    "@stoplight/spectral-functions": "^1.0.0",
+    "@stoplight/spectral-runtime": "^1.1.0",
+    "@stoplight/types": "^13.15.0",
+    "@stoplight/yaml": "~4.2.3",
+    "chalk": "4.1.2",
+    "cliui": "7.0.4",
+    "eol": "0.9.1",
+    "lodash": "^4.17.21",
+    "strip-ansi": "6.0",
+    "text-table": "^0.2.0",
+    "tslib": "^2.5.0"
+  },
+  "devDependencies": {
+    "ast-types": "^0.14.2",
+    "astring": "^1.8.4",
+    "eol": "0.9.1",
+    "node-html-parser": "^4.1.5",
+    "xml2js": "^0.5.0"
+  }
+}

@@ -1,0 +1,19 @@
+# @stoplight/spectral-formatters
+
+This project exposes the available formatters from the CLI for users that perform custom validation through Javascript.
+
+## Usage
+
+```ts
+import { pretty } from "@stoplight/spectral-formatters";
+
+const spectral = new Spectral();
+// ...
+const result = await spectral.run(document);
+
+// You can also filter the results here.
+const output = pretty(result);
+
+console.error(output);
+// ...
+```

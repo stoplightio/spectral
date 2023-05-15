@@ -2493,6 +2493,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stoplight/path@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@stoplight/path@npm:2.0.0"
+  checksum: b55071d28fb1eed573039054ae72384f3dc2440f17cf34a872c118c49c88746c578c3d5f672caddb859a0ec99b82a143654cac13c91a2d8f74b0937dcfe4535a
+  languageName: node
+  linkType: hard
+
 "@stoplight/spectral-cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-cli@workspace:packages/cli"
@@ -2500,6 +2507,7 @@ __metadata:
     "@stoplight/json": ~3.20.1
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": ^1.15.1
+    "@stoplight/spectral-formatters": ^1.0.0
     "@stoplight/spectral-parsers": ^1.0.2
     "@stoplight/spectral-ref-resolver": ^1.0.2
     "@stoplight/spectral-ruleset-bundler": ^1.4.0
@@ -2510,22 +2518,15 @@ __metadata:
     "@types/es-aggregate-error": ^1.0.2
     "@types/xml2js": ^0.4.9
     "@types/yargs": ^17.0.8
-    ast-types: ^0.14.2
-    astring: ^1.8.4
     chalk: 4.1.2
-    cliui: 7.0.4
-    eol: 0.9.1
     es-aggregate-error: ^1.0.7
     fast-glob: ~3.2.12
     lodash: ~4.17.21
     nock: ^13.1.3
-    node-html-parser: ^4.1.5
     pkg: ^5.8.0
     pony-cause: ^1.0.0
     proxy-agent: 5.0.0
     stacktracey: ^2.1.7
-    strip-ansi: 6.0
-    text-table: 0.2
     tslib: ^2.3.0
     xml2js: ^0.5.0
     yargs: 17.3.1
@@ -2577,6 +2578,30 @@ __metadata:
     "@stoplight/spectral-core": ^1.8.0
     "@types/json-schema": ^7.0.7
     tslib: ^2.3.1
+  languageName: unknown
+  linkType: soft
+
+"@stoplight/spectral-formatters@^1.0.0, @stoplight/spectral-formatters@workspace:packages/formatters":
+  version: 0.0.0-use.local
+  resolution: "@stoplight/spectral-formatters@workspace:packages/formatters"
+  dependencies:
+    "@stoplight/path": ^2.0.0
+    "@stoplight/spectral-core": ^1.15.1
+    "@stoplight/spectral-functions": ^1.0.0
+    "@stoplight/spectral-runtime": ^1.1.0
+    "@stoplight/types": ^13.15.0
+    "@stoplight/yaml": ~4.2.3
+    ast-types: ^0.14.2
+    astring: ^1.8.4
+    chalk: 4.1.2
+    cliui: 7.0.4
+    eol: 0.9.1
+    lodash: ^4.17.21
+    node-html-parser: ^4.1.5
+    strip-ansi: 6.0
+    text-table: ^0.2.0
+    tslib: ^2.5.0
+    xml2js: ^0.5.0
   languageName: unknown
   linkType: soft
 
@@ -2722,6 +2747,16 @@ __metadata:
     "@types/json-schema": ^7.0.4
     utility-types: ^3.10.0
   checksum: c38f3b65129c9e09a7fa890a1794a1b8147e29055056efb34dd05f8e433c1bb4b79538ea0a6640f1ebecbad51d415c4f60e9ca426ae09f2dc9df6ed46b27deed
+  languageName: node
+  linkType: hard
+
+"@stoplight/types@npm:^13.15.0":
+  version: 13.15.0
+  resolution: "@stoplight/types@npm:13.15.0"
+  dependencies:
+    "@types/json-schema": ^7.0.4
+    utility-types: ^3.10.0
+  checksum: 839f0bbedb791bd6792ef22b6a821ca504b14b705927f7c510c4cdcc591eddc8818c82b8857129501aa809d6f369b82e4487bfe18dfc5ce00e28317ecad2df9a
   languageName: node
   linkType: hard
 
@@ -12410,7 +12445,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"text-table@npm:0.2, text-table@npm:^0.2.0, text-table@npm:~0.2.0":
+"text-table@npm:^0.2.0, text-table@npm:~0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
   checksum: b6937a38c80c7f84d9c11dd75e49d5c44f71d95e810a3250bd1f1797fc7117c57698204adf676b71497acc205d769d65c16ae8fa10afad832ae1322630aef10a
@@ -12694,6 +12729,13 @@ __metadata:
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "tslib@npm:2.5.0"
+  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
   languageName: node
   linkType: hard
 

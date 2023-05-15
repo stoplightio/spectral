@@ -101,6 +101,14 @@ export default {
       },
       testMatch: ['<rootDir>/packages/runtime/src/**/__tests__/*.{test,spec}.ts'],
     },
+    {
+      ...projectDefault,
+      displayName: {
+        name: '@stoplight/spectral-formatters',
+        color: 'magenta',
+      },
+      testMatch: ['<rootDir>/packages/formatters/src/**/__tests__/*.{test,spec}.ts'],
+    },
   ],
   collectCoverageFrom: ['<rootDir>/packages/*/src/**/*.ts', '!<rootDir>/packages/*/src/**/__*__/**/*.ts'],
 };

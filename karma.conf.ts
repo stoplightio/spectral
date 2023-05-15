@@ -18,7 +18,12 @@ module.exports = (config: Config): void => {
     files: ['./__karma__/jest.ts', './test-utils/*.ts', 'packages/*/src/**/*.ts'],
 
     // list of files / patterns to exclude
-    exclude: ['packages/cli/**', 'packages/ruleset-bundler/src/plugins/commonjs.ts', '**/*.jest.test.ts'],
+    exclude: [
+      'packages/cli/**',
+      'packages/formatters/**',
+      'packages/ruleset-bundler/src/plugins/commonjs.ts',
+      '**/*.jest.test.ts',
+    ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor

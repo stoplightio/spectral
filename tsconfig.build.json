@@ -15,6 +15,9 @@
       "path": "./packages/formats/tsconfig.build.json"
     },
     {
+      "path": "./packages/formatters/tsconfig.build.json"
+    },
+    {
       "path": "./packages/functions/tsconfig.build.json"
     },
     {
@@ -34,6 +37,6 @@
     },
     {
       "path": "./packages/runtime/tsconfig.build.json"
-    },
+    }
   ]
 }

@@ -10,7 +10,7 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 
-packages/cli/src/formatters/html/templates.ts
+packages/formatters/src/html/templates.ts
 packages/cli/binaries
 /test-harness/tmp/
 /test-harness/tests/
