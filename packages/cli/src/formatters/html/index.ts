@@ -27,15 +27,15 @@ import template from 'lodash/template';
 import type { IRuleResult } from '@stoplight/spectral-core';
 import { Formatter } from '../types';
 import { getHighestSeverity, getSeverityName, getSummary, getSummaryForSource, groupBySource } from '../utils';
+import templates from './templates';
 
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
 
-// these relative filepaths passed to the template fn will be dynamically replaced with their respective contents at build time
-const pageTemplate = template('./html-template-page.html');
-const messageTemplate = template('./html-template-message.html');
-const resultTemplate = template('./html-template-result.html');
+const pageTemplate = template(templates['html-template-page.html']);
+const messageTemplate = template(templates['html-template-message.html']);
+const resultTemplate = template(templates['html-template-result.html']);
 
 function renderMessages(messages: IRuleResult[], parentIndex: number): string {
   return messages
