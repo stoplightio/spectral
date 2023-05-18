@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as path from 'node:path';
-import * as fs from 'node:fs/promises';
+import { promises as fs } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as astring from 'astring';
 import { builders as b } from 'ast-types';
@@ -11,7 +11,7 @@ import fg from 'fast-glob';
 const cwd = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 fg('src/formatters/html/*.html', { cwd, absolute: true })
-  .then(async files =>
+  .then(files =>
     Promise.all(
       files.map(async file => ({ file: path.basename(file), content: eol.lf(await fs.readFile(file, 'utf8')) })),
     ),
