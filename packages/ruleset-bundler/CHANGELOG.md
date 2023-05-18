@@ -1,3 +1,10 @@
+# [@stoplight/spectral-ruleset-bundler-v1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.5.1...@stoplight/spectral-ruleset-bundler-v1.5.2) (2023-05-17)
+
+
+### Bug Fixes
+
+* **ruleset-bundler:** remove extraneous 'external dependency' warnings ([#2475](https://github.com/stoplightio/spectral/issues/2475)) ([e791534](https://github.com/stoplightio/spectral/commit/e7915342cb434ea871394e969d166f8987083642))
+
 # [@stoplight/spectral-ruleset-bundler-v1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.5.0...@stoplight/spectral-ruleset-bundler-v1.5.1) (2023-02-22)
 
 
