@@ -25,8 +25,7 @@
   "scripts": {
     "clean": "rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspaces foreach run prebuild",
-    "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
-    "postbuild": "yarn workspace @stoplight/spectral-cli postbuild",
+    "build": "yarn prebuild && tsc --build ./tsconfig.build.json",
     "lint": "yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
