@@ -22,22 +22,20 @@
  * @fileoverview HTML reporter
  * @author Julian Laval
  */
-import * as path from '@stoplight/path';
 import { Dictionary } from '@stoplight/types';
-import * as eol from 'eol';
-import * as fs from 'fs';
-import { template } from 'lodash';
+import template from 'lodash/template';
 import type { IRuleResult } from '@stoplight/spectral-core';
 import { Formatter } from '../types';
 import { getHighestSeverity, getSeverityName, getSummary, getSummaryForSource, groupBySource } from '../utils';
+import templates from './templates';
 
 // ------------------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------------------
 
-const pageTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-page.html'), 'utf8')));
-const messageTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-message.html'), 'utf8')));
-const resultTemplate = template(eol.lf(fs.readFileSync(path.join(__dirname, 'html-template-result.html'), 'utf8')));
+const pageTemplate = template(templates['html-template-page.html']);
+const messageTemplate = template(templates['html-template-message.html']);
+const resultTemplate = template(templates['html-template-result.html']);
 
 function renderMessages(messages: IRuleResult[], parentIndex: number): string {
   return messages

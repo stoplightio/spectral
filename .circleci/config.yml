@@ -81,7 +81,9 @@ commands:
     steps:
       - run:
           name: Lint code
-          command: yarn lint.eslint
+          command: |
+            yarn prelint
+            yarn lint.eslint
 
   lint-documentation:
     steps:

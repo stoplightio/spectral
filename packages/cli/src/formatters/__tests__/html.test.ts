@@ -2,7 +2,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from 'node-html-parser';
 import { html } from '../html';
 
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+import mixedErrors from './__fixtures__/mixed-errors.json';
 
 describe('HTML formatter', () => {
   test('should display proper severity levels', () => {

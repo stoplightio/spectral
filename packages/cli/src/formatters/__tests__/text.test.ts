@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { text } from '../text';
 
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+import mixedErrors from './__fixtures__/mixed-errors.json';
 
 describe('Text formatter', () => {
   test('should format messages', () => {

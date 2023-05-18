@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { teamcity } from '../teamcity';
 
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+import mixedErrors from './__fixtures__/mixed-errors.json';
 
 describe('Teamcity formatter', () => {
   test('should format messages', () => {

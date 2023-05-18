@@ -2,8 +2,8 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import chalk from 'chalk';
 import { pretty } from '../pretty';
 
-const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+import oas3SchemaErrors from './__fixtures__/oas3-schema-errors.json';
+import mixedErrors from './__fixtures__/mixed-errors.json';
 
 function setColumnWidth(width: number, func: CallableFunction): void {
   const og = process.stdout.columns;
