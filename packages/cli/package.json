@@ -28,6 +28,7 @@
     "build.windows": "pkg . --targets windows --out-path ./binaries",
     "build.nix": "pkg . --targets linux,macos,alpine --out-path ./binaries",
     "pretest": "yarn prebuild",
+    "prelint": "yarn prebuild",
     "prebuild": "node scripts/bundle-html-templates.mjs",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
     "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts",
