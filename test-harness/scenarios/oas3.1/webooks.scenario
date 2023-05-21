@@ -17,7 +17,7 @@ rules:
 {bin} lint {document} --ruleset {asset:ruleset.yaml}
 ====stdout====
 {document}
- 7:17  error  oas3-schema  "invalidNewPet" property must not have unevaluated properties.  webhooks.invalidNewPet
+ 7:17  error  oas3-schema  "invalidNewPet" property must not have unevaluated properties.  webhooks.invalidNewPet  https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas3-schema
 
 ✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)
 

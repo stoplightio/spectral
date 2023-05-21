@@ -9,6 +9,7 @@ export const json: Formatter = results => {
       severity: result.severity,
       range: result.range,
       source: result.source,
+      documentationUrl: result.documentationUrl,
     };
   });
   return JSON.stringify(outputJson, null, '\t');

@@ -12,7 +12,8 @@ function renderResults(results: IRuleResult[]): string {
       const line = result.range.start.line + 1;
       const character = result.range.start.character + 1;
       const severity = getSeverityName(result.severity);
-      return `${result.source}:${line}:${character} ${severity} ${result.code} "${result.message}"`;
+      const documentationUrl = result.documentationUrl ? ` ${result.documentationUrl}` : '';
+      return `${result.source}:${line}:${character} ${severity} ${result.code} "${result.message}"${documentationUrl}`;
     })
     .join('\n');
 }

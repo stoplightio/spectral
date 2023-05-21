@@ -13,6 +13,7 @@ export interface IRunOpts {
 export interface ISpectralDiagnostic extends IDiagnostic {
   path: JsonPath;
   code: string | number;
+  documentationUrl?: string;
 }
 
 export type IRuleResult = ISpectralDiagnostic;

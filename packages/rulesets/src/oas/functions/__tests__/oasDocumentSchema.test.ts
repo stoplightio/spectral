@@ -39,6 +39,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas2-schema',
+          documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas2-schema',
           message: 'Invalid basic authentication security definition.',
           path: ['securityDefinitions', 'basic'],
           severity: DiagnosticSeverity.Error,
@@ -82,6 +83,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
+          documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas3-schema',
           message: '"type" property type must be string.',
           path: ['paths', '/user', 'get', 'parameters', '0', 'schema', 'type'],
           severity: DiagnosticSeverity.Error,
@@ -120,6 +122,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
+          documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas3-schema',
           message: 'Invalid security scheme.',
           path: ['components', 'securitySchemes', 'basic'],
           severity: DiagnosticSeverity.Error,
@@ -127,6 +130,7 @@ describe('oasDocumentSchema', () => {
         },
         {
           code: 'oas3-schema',
+          documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas3-schema',
           message: 'Property "foo" is not expected to be here.',
           path: ['components', 'securitySchemes', 'basic', 'foo'],
           severity: DiagnosticSeverity.Error,
@@ -157,6 +161,7 @@ describe('oasDocumentSchema', () => {
       ).toEqual([
         {
           code: 'oas3-schema',
+          documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md#oas3-schema',
           message: '"200" property must have required property "description".',
           path: ['paths', '/user', 'get', 'responses', '200'],
           severity: DiagnosticSeverity.Error,
