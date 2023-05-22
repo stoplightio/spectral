@@ -24,7 +24,7 @@
     "prebuild": "node scripts/bundle-html-templates.mjs"
   },
   "dependencies": {
-    "@stoplight/path": "^2.0.0",
+    "@stoplight/path": "^1.3.2",
     "@stoplight/spectral-core": "^1.15.1",
     "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.1.0",
