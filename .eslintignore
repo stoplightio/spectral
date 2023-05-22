@@ -3,3 +3,4 @@
 /test-harness/tests/
 /packages/*/dist
 /packages/*/CHANGELOG.md
+packages/cli/src/formatters/html/templates.ts

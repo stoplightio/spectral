@@ -2,8 +2,8 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import chalk from 'chalk';
 import { stylish } from '../stylish';
 
-const oas3SchemaErrors = require('./__fixtures__/oas3-schema-errors.json');
-const mixedErrors = require('./__fixtures__/mixed-errors.json');
+import oas3SchemaErrors from './__fixtures__/oas3-schema-errors.json';
+import mixedErrors from './__fixtures__/mixed-errors.json';
 
 describe('Stylish formatter', () => {
   test('should prefer message for oas-schema errors', () => {
