@@ -17,3 +17,18 @@ const output = pretty(result);
 console.error(output);
 // ...
 ```
+
+## Available formatters
+
+### Common (available both in the browser and Node.js)
+
+- json
+- stylish
+- junit
+- html
+- text
+- teamcity
+
+### Node.js only
+
+- pretty

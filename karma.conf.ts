@@ -20,7 +20,8 @@ module.exports = (config: Config): void => {
     // list of files / patterns to exclude
     exclude: [
       'packages/cli/**',
-      'packages/formatters/**',
+      'packages/formatters/src/pretty.ts',
+      'packages/formatters/src/index.node.ts',
       'packages/ruleset-bundler/src/plugins/commonjs.ts',
       '**/*.jest.test.ts',
     ],
@@ -37,7 +38,7 @@ module.exports = (config: Config): void => {
     karmaTypescriptConfig: {
       ...require('./tsconfig.json'),
       include: ['**/*.ts'],
-      exclude: ['node_modules'],
+      exclude: ['packages/cli', 'node_modules'],
       bundlerOptions: {
         resolve: {
           alias: {
