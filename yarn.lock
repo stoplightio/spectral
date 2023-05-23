@@ -2737,7 +2737,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.15.1, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.0, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.15.1, @stoplight/spectral-core@^1.18.0, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.0, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -2788,8 +2788,8 @@ __metadata:
   resolution: "@stoplight/spectral-formatters@workspace:packages/formatters"
   dependencies:
     "@stoplight/path": ^1.3.2
-    "@stoplight/spectral-core": ^1.15.1
-    "@stoplight/spectral-runtime": ^1.1.0
+    "@stoplight/spectral-core": ^1.18.0
+    "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.15.0
     ast-types: ^0.14.2
     astring: ^1.8.4
