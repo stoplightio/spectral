@@ -1,3 +1,31 @@
+# [6.7.0](https://github.com/stoplightio/spectral/compare/v6.6.0...v6.7.0) (2023-05-23)
+
+
+### Bug Fixes
+
+* **core:** improve deep ruleset inheritance ([#2326](https://github.com/stoplightio/spectral/issues/2326)) ([378b4b8](https://github.com/stoplightio/spectral/commit/378b4b89769635e8b45d5325c15cfa00881b70bd))
+* **core:** more accurate ruleset error paths ([66b3ca7](https://github.com/stoplightio/spectral/commit/66b3ca704136d5d8a34211e72e2d8a2c522261e4))
+* **core:** reset path in fn context ([#2389](https://github.com/stoplightio/spectral/issues/2389)) ([3d47ec4](https://github.com/stoplightio/spectral/commit/3d47ec432fde46d9d1e59d00c1173d924b6a39a1))
+* **ref-resolver:** bump @stoplight/json-ref-resolver from ~3.1.4 to ~3.1.5 ([#3635](https://github.com/stoplightio/spectral/issues/3635)) ([215ae93](https://github.com/stoplightio/spectral/commit/215ae93a3b06d73cc10a07b6c43c718450a2a2fd))
+* **ruleset-bundler:** defaults should be last one ([#2403](https://github.com/stoplightio/spectral/issues/2403)) ([8780cfa](https://github.com/stoplightio/spectral/commit/8780cfac20cfa70b8ca8208f1b15955ca2111746))
+* **ruleset-bundler:** remove extraneous 'external dependency' warnings ([#2475](https://github.com/stoplightio/spectral/issues/2475)) ([e791534](https://github.com/stoplightio/spectral/commit/e7915342cb434ea871394e969d166f8987083642))
+* **ruleset-migrator:** avoid positive lookbehinds ([#2349](https://github.com/stoplightio/spectral/issues/2349)) ([455c324](https://github.com/stoplightio/spectral/commit/455c32487b6f25465c1204186006e2c830f48eb3))
+* **ruleset-migrator:** transform functions under overrides ([#2459](https://github.com/stoplightio/spectral/issues/2459)) ([45e817f](https://github.com/stoplightio/spectral/commit/45e817ffb9b682779c8e20153405879d9205454d))
+* **ruleset-migrator:** use module for require.resolve ([#2405](https://github.com/stoplightio/spectral/issues/2405)) ([d7c0fa4](https://github.com/stoplightio/spectral/commit/d7c0fa44c506f8f724129c31ee51701fb9699bef))
+* **rulesets:** avoid false errors from ajv ([#2408](https://github.com/stoplightio/spectral/issues/2408)) ([92dab78](https://github.com/stoplightio/spectral/commit/92dab78d0c07e6919c0485cadbe5aa2391a53e8b))
+* **rulesets:** length.min said "must not be longer than" ([#2355](https://github.com/stoplightio/spectral/issues/2355)) ([df3b6f9](https://github.com/stoplightio/spectral/commit/df3b6f917cf46456f698445ed67fabbb4306eb4c))
+
+
+### Features
+
+* **core:** relax formats validation ([#2151](https://github.com/stoplightio/spectral/issues/2151)) ([de16b4c](https://github.com/stoplightio/spectral/commit/de16b4cbd56cd9836609ab79487a6e3e06df964d))
+* **core:** support end-user extensions in the rule definitions ([#2345](https://github.com/stoplightio/spectral/issues/2345)) ([365fced](https://github.com/stoplightio/spectral/commit/365fcedb7c140946767ed28a92a120b3adb08e47))
+* **core:** support x- extensions in the ruleset ([#2440](https://github.com/stoplightio/spectral/issues/2440)) ([964151e](https://github.com/stoplightio/spectral/commit/964151e73b6cc3c0b7c960eac3711ffbeac690ae))
+* **formats:** support AsyncAPI 2.6.0 ([#2391](https://github.com/stoplightio/spectral/issues/2391)) ([b8e51b4](https://github.com/stoplightio/spectral/commit/b8e51b487e0667908d8148b818007026722cacb7))
+* **formatters:** move formatters to a separate package ([#2468](https://github.com/stoplightio/spectral/issues/2468)) ([664e259](https://github.com/stoplightio/spectral/commit/664e25927f31ca24beebecf78ac373668328de23))
+* **rulesets:** add traits array path to headers rule ([#2460](https://github.com/stoplightio/spectral/issues/2460)) ([9ceabca](https://github.com/stoplightio/spectral/commit/9ceabca80969885c240349d6ebba15c09a4f8697))
+* **rulesets:** support AsyncAPI 2.6.0 ([#2391](https://github.com/stoplightio/spectral/issues/2391)) ([94a7801](https://github.com/stoplightio/spectral/commit/94a7801c558948aed085cd9cd1856019681d1c9b))
+
 # [@stoplight/spectral-cli-v6.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.5.1...@stoplight/spectral-cli-v6.6.0) (2022-10-24)
 
 
