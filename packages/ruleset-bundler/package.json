@@ -35,7 +35,7 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "scripts": {
-    "release": "semantic-release"
+    "release": "semantic-release -e semantic-release-monorepo"
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "~22.0.2",

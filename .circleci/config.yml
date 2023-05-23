@@ -145,7 +145,6 @@ commands:
     steps:
       - checkout
       - cached-dependencies
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - build
 
 jobs:

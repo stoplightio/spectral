@@ -2539,7 +2539,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/npm@npm:^10.0.2":
+"@semantic-release/npm@npm:^10.0.2, @semantic-release/npm@npm:^10.0.3":
   version: 10.0.3
   resolution: "@semantic-release/npm@npm:10.0.3"
   dependencies:
@@ -5203,7 +5203,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^8.0.0, cosmiconfig@npm:^8.1.0":
+"cosmiconfig@npm:^8.0.0":
   version: 8.1.3
   resolution: "cosmiconfig@npm:8.1.3"
   dependencies:
@@ -6762,7 +6762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^11.0.0, fs-extra@npm:^11.1.0":
+"fs-extra@npm:^11.0.0":
   version: 11.1.1
   resolution: "fs-extra@npm:11.1.1"
   dependencies:
@@ -12113,6 +12113,7 @@ __metadata:
     "@semantic-release/changelog": ^6.0.3
     "@semantic-release/git": ^10.0.1
     "@semantic-release/github": "https://registry.npmjs.org/@achingbrain/semantic-release-github/-/semantic-release-github-0.0.2.tgz"
+    "@semantic-release/npm": ^10.0.3
     "@semantic-release/release-notes-generator": ^10.0.3
     "@swc/core": ^1.2.210
     "@swc/jest": ^0.2.21
@@ -12150,7 +12151,6 @@ __metadata:
     prettier: ^2.4.1
     semantic-release: ^21.0.2
     semantic-release-monorepo: "https://registry.npmjs.org/@achingbrain/semantic-release-monorepo/-/semantic-release-monorepo-8.0.0.tgz"
-    semantic-release-yarn: ^1.0.0
     ts-jest: ^28.0.5
     ts-node: ^10.8.2
     typescript: ^4.4.4
@@ -12238,26 +12238,6 @@ __metadata:
   peerDependencies:
     semantic-release: ">=11"
   checksum: 7881db3850b3b6314187f4eb7f43db11b262949b45570294e67f4c2ebdb165e994ceebc5725d5705c2c8983c6d9716c845717cffdb8123ab6f91aeaef8af5ff2
-  languageName: node
-  linkType: hard
-
-"semantic-release-yarn@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "semantic-release-yarn@npm:1.0.0"
-  dependencies:
-    "@semantic-release/error": ^3.0.0
-    aggregate-error: ^4.0.1
-    cosmiconfig: ^8.1.0
-    execa: ^7.0.0
-    fs-extra: ^11.1.0
-    js-yaml: ^4.1.0
-    lodash: ^4.17.21
-    nerf-dart: ^1.0.0
-    read-pkg: ^7.1.0
-    semver: ^7.3.8
-  peerDependencies:
-    semantic-release: ">=19.0.0"
-  checksum: 5eb38a09c708dad9d1680a58fd2d0049664331fbdeb7947d79b9bc2a17f0a9e48f85d1181f2857d8fa3c1dddb205f6ca7f661b983378f9f52168fa88037a87ce
   languageName: node
   linkType: hard
 
@@ -12351,7 +12331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.x, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.1.2, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.1":
+"semver@npm:7.x, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.1.2, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.5.1":
   version: 7.5.1
   resolution: "semver@npm:7.5.1"
   dependencies:
