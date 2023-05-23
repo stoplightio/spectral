@@ -20,10 +20,10 @@
       "$anchor": "severity",
       "oneOf": [
         {
-          "$ref": "#/%24defs/DiagnosticSeverity"
+          "$ref": "#/$defs/DiagnosticSeverity"
         },
         {
-          "$ref": "#/%24defs/HumanReadableSeverity"
+          "$ref": "#/$defs/HumanReadableSeverity"
         }
       ],
       "errorMessage": "the value has to be one of: 0, 1, 2, 3 or \"error\", \"warn\", \"info\", \"hint\", \"off\""
