@@ -1,3 +1,10 @@
+# [6.8.0](https://github.com/stoplightio/spectral/compare/v6.7.0...v6.8.0) (2023-05-23)
+
+
+### Features
+
+* **formatters:** release it ([26d3921](https://github.com/stoplightio/spectral/commit/26d39212c6a83cae99f0b171f9165f7d56434de1))
+
 # [6.7.0](https://github.com/stoplightio/spectral/compare/v6.6.0...v6.7.0) (2023-05-23)
 
 
