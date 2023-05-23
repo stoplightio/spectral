@@ -11,15 +11,11 @@
   "files": [
     "/dist"
   ],
+  "type": "commonjs",
   "exports": {
-    ".": {
-      "types": "dist/index.d.ts",
-      "node": {
-        "types": "dist/index.d.ts",
-        "default": "dist/index.node.js"
-      },
-      "default": "dist/index.js"
-    }
+    "types": "./dist/index.d.ts",
+    "node": "./dist/index.node.js",
+    "default": "./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -38,7 +34,6 @@
     "@stoplight/types": "^13.15.0",
     "chalk": "4.1.2",
     "cliui": "7.0.4",
-    "eol": "0.9.1",
     "lodash": "^4.17.21",
     "strip-ansi": "6.0",
     "text-table": "^0.2.0",
