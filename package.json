@@ -48,7 +48,6 @@
     ]
   },
   "release": {
-    "extends": "semantic-release-monorepo",
     "branches": [
       {
         "name": "develop",
