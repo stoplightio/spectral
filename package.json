@@ -48,6 +48,7 @@
     ]
   },
   "release": {
+    "extends": "semantic-release-monorepo",
     "branches": [
       {
         "name": "develop",
@@ -59,7 +60,12 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "semantic-release-yarn",
-      "@semantic-release/github",
+      [
+        "@semantic-release/github",
+        {
+          "addReleases": false
+        }
+      ],
       "@semantic-release/git"
     ]
   },
@@ -67,9 +73,10 @@
     "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^12.1.4",
     "@octokit/core": "^3.5.1",
-    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^8.0.2",
+    "@semantic-release/github": "https://registry.npmjs.org/@achingbrain/semantic-release-github/-/semantic-release-github-0.0.2.tgz",
+    "@semantic-release/release-notes-generator": "^10.0.3",
     "@swc/core": "^1.2.210",
     "@swc/jest": "^0.2.21",
     "@types/file-entry-cache": "^5.0.2",
@@ -82,6 +89,7 @@
     "@types/text-table": "^0.2.2",
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
+    "@w4rlock/semantic-release-plugin-decorators": "^1.0.3",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -103,8 +111,8 @@
     "node-powershell": "^4.0.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.4.1",
-    "semantic-release": "^19.0.5",
-    "semantic-release-monorepo": "^7.0.5",
+    "semantic-release": "^21.0.2",
+    "semantic-release-monorepo": "https://registry.npmjs.org/@achingbrain/semantic-release-monorepo/-/semantic-release-monorepo-8.0.0.tgz",
     "semantic-release-yarn": "^1.0.0",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.2",

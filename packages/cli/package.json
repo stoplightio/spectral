@@ -29,7 +29,7 @@
     "build.nix": "pkg . --targets linux,macos,alpine --out-path ./binaries",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
     "cli:debug": "node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk src/index.ts",
-    "release": "semantic-release -e semantic-release-monorepo"
+    "release": "semantic-release"
   },
   "dependencies": {
     "@stoplight/json": "~3.20.1",

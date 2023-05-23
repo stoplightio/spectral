@@ -19,7 +19,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "release": "semantic-release -e semantic-release-monorepo"
+    "release": "semantic-release"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.3",
