@@ -10,7 +10,7 @@ import fg from 'fast-glob';
 
 const cwd = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-fg('src/formatters/html/*.html', { cwd, absolute: true })
+fg('src/html/*.html', { cwd, absolute: true })
   .then(files =>
     Promise.all(
       files.map(async file => ({ file: path.basename(file), content: eol.lf(await fs.readFile(file, 'utf8')) })),
@@ -21,5 +21,5 @@ fg('src/formatters/html/*.html', { cwd, absolute: true })
       b.objectExpression(items.map(({ file, content }) => b.property('init', b.literal(file), b.literal(content)))),
     );
 
-    await fs.writeFile(path.join(cwd, 'src/formatters/html/templates.ts'), astring.generate(root));
+    await fs.writeFile(path.join(cwd, 'src/html/templates.ts'), astring.generate(root));
   });

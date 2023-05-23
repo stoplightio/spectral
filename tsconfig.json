@@ -7,6 +7,7 @@
       "@stoplight/spectral-core/ruleset": ["packages/core/src/ruleset/index.ts"],
       "@stoplight/spectral-core/ruleset/validation": ["packages/core/src/ruleset/validation/index.ts"],
       "@stoplight/spectral-formats": ["packages/formats/src/index.ts"],
+      "@stoplight/spectral-formatters": ["packages/formatters/src/index.ts"],
       "@stoplight/spectral-functions": ["packages/functions/src/index.ts"],
       "@stoplight/spectral-parsers": ["packages/parsers/src/index.ts"],
       "@stoplight/spectral-ref-resolver": ["packages/ref-resolver/src/index.ts"],

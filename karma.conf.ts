@@ -18,7 +18,13 @@ module.exports = (config: Config): void => {
     files: ['./__karma__/jest.ts', './test-utils/*.ts', 'packages/*/src/**/*.ts'],
 
     // list of files / patterns to exclude
-    exclude: ['packages/cli/**', 'packages/ruleset-bundler/src/plugins/commonjs.ts', '**/*.jest.test.ts'],
+    exclude: [
+      'packages/cli/**',
+      'packages/formatters/src/pretty.ts',
+      'packages/formatters/src/index.node.ts',
+      'packages/ruleset-bundler/src/plugins/commonjs.ts',
+      '**/*.jest.test.ts',
+    ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -32,7 +38,7 @@ module.exports = (config: Config): void => {
     karmaTypescriptConfig: {
       ...require('./tsconfig.json'),
       include: ['**/*.ts'],
-      exclude: ['node_modules'],
+      exclude: ['packages/cli', 'node_modules'],
       bundlerOptions: {
         resolve: {
           alias: {

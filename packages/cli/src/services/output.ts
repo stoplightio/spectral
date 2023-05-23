@@ -1,8 +1,8 @@
 import * as process from 'process';
 import { IRuleResult } from '@stoplight/spectral-core';
 import { promises as fs } from 'fs';
-import { html, json, junit, stylish, teamcity, text, pretty } from '../formatters';
-import { Formatter, FormatterOptions } from '../formatters/types';
+import { html, json, junit, stylish, teamcity, text, pretty } from '@stoplight/spectral-formatters';
+import type { Formatter, FormatterOptions } from '@stoplight/spectral-formatters';
 import type { OutputFormat } from './config';
 
 const formatters: Record<OutputFormat, Formatter> = {

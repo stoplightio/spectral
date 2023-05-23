@@ -1,11 +1,11 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import * as fs from 'fs';
 import * as process from 'process';
-import * as formatters from '../../formatters';
+import * as formatters from '@stoplight/spectral-formatters';
 import { OutputFormat } from '../config';
 import { formatOutput, writeOutput } from '../output';
 
-jest.mock('../../formatters');
+jest.mock('@stoplight/spectral-formatters');
 jest.mock('fs', () => ({
   readFileSync: jest.requireActual('fs').readFileSync,
   promises: {
