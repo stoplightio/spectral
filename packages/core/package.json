@@ -33,9 +33,6 @@
   "engines": {
     "node": "^12.20 || >= 14.13"
   },
-  "scripts": {
-    "release": "semantic-release -e semantic-release-monorepo"
-  },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.3",
     "@stoplight/json": "~3.20.1",

@@ -29,7 +29,6 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "scripts": {
-    "release": "semantic-release -e semantic-release-monorepo",
     "pretest": "yarn prebuild",
     "prelint": "yarn prebuild",
     "prebuild": "node scripts/bundle-html-templates.mjs"

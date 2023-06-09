@@ -17,9 +17,6 @@
     "type": "git",
     "url": "https://github.com/stoplightio/spectral.git"
   },
-  "scripts": {
-    "release": "semantic-release -e semantic-release-monorepo"
-  },
   "dependencies": {
     "@asyncapi/specs": "^4.1.0",
     "@stoplight/better-ajv-errors": "1.0.3",
