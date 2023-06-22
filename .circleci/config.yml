@@ -349,29 +349,3 @@ workflows:
           filters: *release-tag-filter
           requires:
             - upload-artifacts
-
-  scheduled-packages-release:
-    triggers:
-      - schedule:
-          cron: "0 12 * * 1-5"
-          filters: *default-branch-filter
-    jobs:
-      - lint
-      - test-node:
-          matrix:
-            parameters:
-              node-version: *node-versions
-          requires:
-            - lint
-      - test-windows:
-          requires:
-            - lint
-      - test-browser:
-          requires:
-            - lint
-      - release:
-          requires:
-            - lint
-            - test-node
-            - test-windows
-            - test-browser
