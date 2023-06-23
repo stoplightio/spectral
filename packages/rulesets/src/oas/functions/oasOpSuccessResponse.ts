@@ -1,14 +1,14 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import { oas3 } from '@stoplight/spectral-formats';
 
-export const oasOpSuccessResponse = createRulesetFunction<Record<string, unknown>, null>(
+export default createRulesetFunction<Record<string, unknown>, null>(
   {
     input: {
       type: 'object',
     },
     options: null,
   },
-  (input, opts, context) => {
+  function oasOpSuccessResponse(input, opts, context) {
     const isOAS3X = context.document.formats?.has(oas3) === true;
 
     for (const response of Object.keys(input)) {
@@ -28,5 +28,3 @@ export const oasOpSuccessResponse = createRulesetFunction<Record<string, unknown
     ];
   },
 );
-
-export default oasOpSuccessResponse;

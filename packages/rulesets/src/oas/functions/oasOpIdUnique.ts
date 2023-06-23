@@ -1,40 +1,43 @@
-import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
+import type { IFunctionResult } from '@stoplight/spectral-core';
+import { createRulesetFunction } from '@stoplight/spectral-core';
 import { getAllOperations } from './utils/getAllOperations';
 import { isObject } from './utils/isObject';
 
-export const oasOpIdUnique: IFunction = targetVal => {
-  if (!isObject(targetVal) || !isObject(targetVal.paths)) return;
+export default createRulesetFunction<Record<string, unknown>, null>(
+  {
+    input: {
+      type: 'object',
+    },
+    options: null,
+  },
+  function oasOpIdUnique(paths) {
+    const results: IFunctionResult[] = [];
 
-  const results: IFunctionResult[] = [];
+    const seenIds: unknown[] = [];
 
-  const { paths } = targetVal;
+    for (const { path, operation } of getAllOperations(paths)) {
+      const pathValue = paths[path];
 
-  const seenIds: unknown[] = [];
+      if (!isObject(pathValue)) continue;
 
-  for (const { path, operation } of getAllOperations(paths)) {
-    const pathValue = paths[path];
+      const operationValue = pathValue[operation];
 
-    if (!isObject(pathValue)) continue;
+      if (!isObject(operationValue) || !('operationId' in operationValue)) {
+        continue;
+      }
 
-    const operationValue = pathValue[operation];
+      const { operationId } = operationValue;
 
-    if (!isObject(operationValue) || !('operationId' in operationValue)) {
-      continue;
+      if (seenIds.includes(operationId)) {
+        results.push({
+          message: 'operationId must be unique.',
+          path: ['paths', path, operation, 'operationId'],
+        });
+      } else {
+        seenIds.push(operationId);
+      }
     }
 
-    const { operationId } = operationValue;
-
-    if (seenIds.includes(operationId)) {
-      results.push({
-        message: 'operationId must be unique.',
-        path: ['paths', path, operation, 'operationId'],
-      });
-    } else {
-      seenIds.push(operationId);
-    }
-  }
-
-  return results;
-};
-
-export default oasOpIdUnique;
+    return results;
+  },
+);

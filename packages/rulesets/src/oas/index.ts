@@ -60,7 +60,7 @@ const ruleset = {
       description: 'Every operation must have unique "operationId".',
       recommended: true,
       severity: 0,
-      given: '$',
+      given: '$.paths',
       then: {
         function: oasOpIdUnique,
       },
@@ -87,7 +87,7 @@ const ruleset = {
       message: '{{error}}',
       severity: 0,
       recommended: true,
-      given: '$',
+      given: '$.paths',
       then: {
         function: oasPathParam,
       },
