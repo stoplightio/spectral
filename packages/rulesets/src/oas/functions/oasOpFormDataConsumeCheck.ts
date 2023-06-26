@@ -20,6 +20,7 @@ export default createRulesetFunction<Input, null>(
           type: 'array',
         },
       },
+      required: ['consumes', 'parameters'],
     },
     options: null,
   },
