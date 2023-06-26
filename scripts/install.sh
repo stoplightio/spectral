@@ -7,26 +7,40 @@ install () {
 
 set -eu
 
-UNAME=$(uname)
-if [ "$UNAME" != "Linux" ] && [ "$UNAME" != "Darwin" ] ; then
-  echo "Sorry, OS/Architecture not supported: ${UNAME}/${ARCH}. Download binary from https://github.com/stoplightio/spectral/releases"
+KERNEL=$(uname -s)
+ARCH=$(uname -m)
+if [ "$KERNEL" != "Linux" ] && [ "$KERNEL" != "Darwin" ] ; then
+  echo "Sorry, KERNEL/Architecture not supported: ${KERNEL}/${ARCH}. Download binary from https://github.com/stoplightio/spectral/releases"
   exit 1
 fi
 
-if [ "$UNAME" = "Darwin" ] ; then
-  FILENAME="spectral-macos"
-elif [ "$UNAME" = "Linux" ] ; then
-  FILENAME="spectral-linux"
+if [ "$ARCH" != "aarch64" ] && [ "$ARCH" != "arm64" ] && [ "$ARCH" != "x86_64" ] ; then
+  echo "Sorry, KERNEL/Architecture not supported: ${KERNEL}/${ARCH}. Download binary from https://github.com/stoplightio/spectral/releases"
+  exit 1
+fi
+
+if [ "$ARCH" = "x86_64" ] ; then
+  ARCH="x64"
+fi
+
+if [ "$ARCH" = "aarch64" ] ; then
+  ARCH="arm64"
+fi
+
+OS="macos"
+if [ "$KERNEL" = "Linux" ] ; then
+  OS="linux"
   if [ -f /etc/os-release ]; then
     # extract the value for KEY named "NAME"
     DISTRO=$(sed -n -e 's/^NAME="\?\([^"]*\)"\?$/\1/p' /etc/os-release)
     if [ "$DISTRO" = "Alpine Linux" ]; then
       echo "Installing on Alpine Linux."
-      FILENAME="spectral-alpine"
+      OS="alpine"
     fi
   fi
 fi
 
+FILENAME="spectral-${OS}-${ARCH}"
 if [ "$VERSION" = "latest" ] ; then
   URL="https://github.com/stoplightio/spectral/releases/latest/download/${FILENAME}"
 else
