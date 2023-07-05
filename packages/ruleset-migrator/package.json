@@ -14,7 +14,7 @@
     "/dist"
   ],
   "browser": {
-    "./dist/require-resolve.js": false
+    "./dist/requireResolve.js": false
   },
   "repository": {
     "type": "git",
