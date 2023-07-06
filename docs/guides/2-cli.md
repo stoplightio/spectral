@@ -108,7 +108,7 @@ items:
       description: An integer representing the severity level of the rule violation. The severity levels usually follow a specific scale defined by Spectral. 0 equals error, while 3 is hint.
     range:
       type: object
-      description: An object that describes where in the file the issue was found. It contains two sub-properties, start and end, each of which is an object with line and character properties. line and character are integers that represent the line number and the character position within the line, respectively, where the issue starts or ends. All the values are zero indexed. 
+      description: An object that describes where in the file the issue was found. It contains two sub-properties, start and end, each of which is an object with line and character properties. line and character are integers that represent the line number and the character position within the line, respectively, where the issue starts or ends. All the values are zero indexed.
       properties:
         start:
           type: object
