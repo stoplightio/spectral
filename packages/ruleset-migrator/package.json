@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -14,7 +14,7 @@
     "/dist"
   ],
   "browser": {
-    "./dist/require-resolve.js": false
+    "./dist/requireResolve.js": false
   },
   "repository": {
     "type": "git",

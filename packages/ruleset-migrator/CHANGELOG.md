@@ -1,3 +1,10 @@
+## @stoplight/spectral-ruleset-migrator [1.9.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.3...@stoplight/spectral-ruleset-migrator-1.9.4) (2023-07-06)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** correct package.json's browser field ([#2497](https://github.com/stoplightio/spectral/issues/2497)) ([89a6a67](https://github.com/stoplightio/spectral/commit/89a6a677ef78e7f5e28d92d03048709a8ef0b89b))
+
 # [@stoplight/spectral-ruleset-migrator-v1.9.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-v1.9.2...@stoplight/spectral-ruleset-migrator-v1.9.3) (2023-04-21)
 
 
