@@ -2,7 +2,6 @@ import { isString } from 'lodash';
 import { DiagnosticSeverity, JsonPath, Optional } from '@stoplight/types';
 import { dirname, relative } from '@stoplight/path';
 import { pathToPointer } from '@stoplight/json';
-import { printValue } from '@stoplight/spectral-runtime';
 
 import { DEFAULT_SEVERITY_LEVEL, getDiagnosticSeverity } from './utils/severity';
 import { Ruleset } from './ruleset';
@@ -29,7 +28,7 @@ export interface IRule {
 
 type RuleJson = Omit<IRule, 'then'> & {
   name: string;
-  then: (Pick<IRuleThen, 'field'> & { function: string; functionOptions?: string })[];
+  then: (Omit<IRuleThen, 'function'> & { function: string })[];
   owner: number;
 };
 
@@ -185,9 +184,8 @@ export class Rule implements IRule {
       resolved: this.resolved,
       formats: this.formats,
       then: this.then.map(then => ({
-        ...then.function,
+        ...then,
         function: then.function.name,
-        ...('functionOptions' in then ? { functionOptions: printValue(then.functionOptions) } : null),
       })),
       given: Array.isArray(this.definition.given) ? this.definition.given : [this.definition.given],
       owner: this.owner.id,
