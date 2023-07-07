@@ -269,4 +269,31 @@ describe('Spectral', () => {
       }),
     ]);
   });
+
+  test('should dedupe paths containing special characters', async () => {
+    const s = new Spectral({ resolver: httpAndFileResolver });
+    const documentUri = path.join(__dirname, './__fixtures__/gh-2500/input.json');
+
+    s.setRuleset((await import('./__fixtures__/gh-2500/ruleset')).default);
+
+    const results = await s.run(new Document(fs.readFileSync(documentUri, 'utf8'), Parsers.Yaml, documentUri));
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'error-code-defined',
+        path: ['components', 'schemas', 'error', 'properties', 'error', 'properties'],
+        source: documentUri,
+        range: {
+          end: {
+            character: 81,
+            line: 75,
+          },
+          start: {
+            character: 25,
+            line: 51,
+          },
+        },
+      }),
+    ]);
+  });
 });

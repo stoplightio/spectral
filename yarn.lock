@@ -2606,7 +2606,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:^3.17.1, @stoplight/json@npm:^3.20.1, @stoplight/json@npm:~3.20.1":
+"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:^3.17.1, @stoplight/json@npm:^3.20.1, @stoplight/json@npm:~3.21.0":
+  version: 3.21.0
+  resolution: "@stoplight/json@npm:3.21.0"
+  dependencies:
+    "@stoplight/ordered-object-literal": ^1.0.3
+    "@stoplight/path": ^1.3.2
+    "@stoplight/types": ^13.6.0
+    jsonc-parser: ~2.2.1
+    lodash: ^4.17.21
+    safe-stable-stringify: ^1.1
+  checksum: 16fe56a6804cd47837bd82d85a8500c4226669558f3feda55d8fb0cd615ca2261622963700f04f049cf30a3a9764eb3c861516003d948743b6ae85dbbabf8a59
+  languageName: node
+  linkType: hard
+
+"@stoplight/json@npm:~3.20.1":
   version: 3.20.1
   resolution: "@stoplight/json@npm:3.20.1"
   dependencies:
@@ -2674,7 +2688,7 @@ __metadata:
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.3
-    "@stoplight/json": ~3.20.1
+    "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-formats": "*"
     "@stoplight/spectral-functions": "*"
