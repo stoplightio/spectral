@@ -1,4 +1,4 @@
-import { decodePointerFragment, encodePointerFragment, extractSourceFromRef, isLocalRef } from '@stoplight/json';
+import { decodePointerFragment, encodePointerUriFragment, extractSourceFromRef, isLocalRef } from '@stoplight/json';
 import { extname, resolve } from '@stoplight/path';
 import { Dictionary, IParserResult, JsonPath } from '@stoplight/types';
 import { isObjectLike } from 'lodash';
@@ -113,7 +113,7 @@ export class DocumentInventory implements IDocumentInventory {
       let resolvedDoc = this.document;
 
       // Add '#' on the beginning of "path" to simplify the logic below.
-      const adjustedPath: string[] = ['#', ...path.map(String)];
+      const adjustedPath: string[] = ['#', ...path.map(encodePointerUriFragment).map(String)];
 
       // Walk through the segments of 'path' one at a time, looking for
       // json path locations containing a $ref.
@@ -123,7 +123,7 @@ export class DocumentInventory implements IDocumentInventory {
           refMapKey += '/';
         }
 
-        refMapKey += encodePointerFragment(segment);
+        refMapKey += segment;
 
         // If our current refMapKey value is in fact a key in refMap,
         // then we'll "reverse-resolve" it by replacing refMapKey with
