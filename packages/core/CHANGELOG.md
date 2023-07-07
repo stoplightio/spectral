@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.18.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.18.0...@stoplight/spectral-core-1.18.1) (2023-07-07)
+
+
+### Bug Fixes
+
+* **core:** invalid then produced by Rule#toJSON ([#2496](https://github.com/stoplightio/spectral/issues/2496)) ([db91553](https://github.com/stoplightio/spectral/commit/db9155326289ef5c143353719fe71def84ca136e))
+
 # [@stoplight/spectral-core-v1.18.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.17.0...@stoplight/spectral-core-v1.18.0) (2023-04-25)
 
 
