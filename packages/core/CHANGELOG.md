@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.18.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.1...@stoplight/spectral-core-1.18.2) (2023-07-10)
+
+
+### Bug Fixes
+
+* **core:** dedupe paths containing special characters correctly ([758de21](https://github.com/stoplightio/spectral/commit/758de213aa9dd6319c832de54cfee31fe1b86649))
+
 ## @stoplight/spectral-core [1.18.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.18.0...@stoplight/spectral-core-1.18.1) (2023-07-07)
 
 
