@@ -18,11 +18,13 @@ type OutputParams = {
 };
 
 export const githubActions: Formatter = results => {
+  const path = require('path') as { relative: (from: string, to: string) => string };
+
   return results
     .map(result => {
       const params: OutputParams = {
         title: result.code.toString(),
-        file: require('path').relative(process.cwd(), result.source ?? ''),
+        file: path.relative(process.cwd(), result.source ?? ''),
         col: result.range.start.character,
         endColumn: result.range.end.character,
         line: result.range.start.line,
