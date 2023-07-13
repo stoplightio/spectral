@@ -11,6 +11,7 @@ export enum OutputFormat {
   TEXT = 'text',
   TEAMCITY = 'teamcity',
   PRETTY = 'pretty',
+  GITHUB_ACTIONS = 'github-actions',
 }
 
 export interface ILintConfig {
