@@ -18,7 +18,7 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "dependencies": {
-    "@stoplight/json": "~3.20.1",
+    "@stoplight/json": "~3.21.0",
     "@stoplight/types": "^13.6.0",
     "@stoplight/yaml": "~4.2.3",
     "tslib": "^2.3.1"
