@@ -1,3 +1,4 @@
+import { relative } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { Formatter } from './types';
 
@@ -18,13 +19,13 @@ type OutputParams = {
 };
 
 export const githubActions: Formatter = results => {
-  const path = require('path') as { relative: (from: string, to: string) => string };
-
   return results
     .map(result => {
+      // GitHub Actions requires relative path for annotations, determining from working directory here
+      const file = relative(process.cwd(), result.source ?? '');
       const params: OutputParams = {
         title: result.code.toString(),
-        file: path.relative(process.cwd(), result.source ?? ''),
+        file,
         col: result.range.start.character,
         endColumn: result.range.end.character,
         line: result.range.start.line,
