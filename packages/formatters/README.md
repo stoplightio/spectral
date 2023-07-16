@@ -32,3 +32,4 @@ console.error(output);
 ### Node.js only
 
 - pretty
+- github-actions
