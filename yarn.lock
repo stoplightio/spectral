@@ -2588,11 +2588,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/json-ref-resolver@npm:~3.1.5":
-  version: 3.1.5
-  resolution: "@stoplight/json-ref-resolver@npm:3.1.5"
+"@stoplight/json-ref-resolver@npm:~3.1.6":
+  version: 3.1.6
+  resolution: "@stoplight/json-ref-resolver@npm:3.1.6"
   dependencies:
-    "@stoplight/json": ^3.17.0
+    "@stoplight/json": ^3.21.0
     "@stoplight/path": ^1.3.2
     "@stoplight/types": ^12.3.0 || ^13.0.0
     "@types/urijs": ^1.19.19
@@ -2600,13 +2600,13 @@ __metadata:
     fast-memoize: ^2.5.2
     immer: ^9.0.6
     lodash: ^4.17.21
-    tslib: ^2.3.1
+    tslib: ^2.6.0
     urijs: ^1.19.11
-  checksum: b2df82e899717ffa7bab9ec4c380f206511b3971d242724afd34e8b964e5aa7be2a52e32ba48d435548a9ac13a63a2271ca69182abec8506fc3bb3cc129f6380
+  checksum: 57c944cc8cee51b18fd8165aae7431eddf3b6ca96f2de7a264d890f18a869e5abb7750d48a77455ee1c688ac440efa4115bc8e912efce7c83140834bae49879e
   languageName: node
   linkType: hard
 
-"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:^3.17.1, @stoplight/json@npm:^3.20.1, @stoplight/json@npm:~3.21.0":
+"@stoplight/json@npm:^3.17.0, @stoplight/json@npm:^3.17.1, @stoplight/json@npm:^3.20.1, @stoplight/json@npm:^3.21.0, @stoplight/json@npm:~3.21.0":
   version: 3.21.0
   resolution: "@stoplight/json@npm:3.21.0"
   dependencies:
@@ -2774,7 +2774,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-parsers@workspace:packages/parsers"
   dependencies:
-    "@stoplight/json": ~3.20.1
+    "@stoplight/json": ~3.21.0
     "@stoplight/types": ^13.6.0
     "@stoplight/yaml": ~4.2.3
     tslib: ^2.3.1
@@ -2786,7 +2786,7 @@ __metadata:
   resolution: "@stoplight/spectral-ref-resolver@workspace:packages/ref-resolver"
   dependencies:
     "@stoplight/json-ref-readers": 1.2.2
-    "@stoplight/json-ref-resolver": ~3.1.5
+    "@stoplight/json-ref-resolver": ~3.1.6
     "@stoplight/spectral-runtime": ^1.1.2
     dependency-graph: 0.11.0
     tslib: ^2.3.1
@@ -11828,11 +11828,11 @@ __metadata:
   linkType: hard
 
 "semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.6.0":
-  version: 5.7.1
-  resolution: "semver@npm:5.7.1"
+  version: 5.7.2
+  resolution: "semver@npm:5.7.2"
   bin:
-    semver: ./bin/semver
-  checksum: 57fd0acfd0bac382ee87cd52cd0aaa5af086a7dc8d60379dfe65fea491fb2489b6016400813930ecd61fd0952dae75c115287a1b16c234b1550887117744dfaf
+    semver: bin/semver
+  checksum: fb4ab5e0dd1c22ce0c937ea390b4a822147a9c53dbd2a9a0132f12fe382902beef4fbf12cf51bb955248d8d15874ce8cd89532569756384f994309825f10b686
   languageName: node
   linkType: hard
 
@@ -12925,10 +12925,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2, tslib@npm:^2.0.1, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "tslib@npm:2.5.0"
-  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+"tslib@npm:^2, tslib@npm:^2.0.1, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.3.1, tslib@npm:^2.5.0, tslib@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "tslib@npm:2.6.0"
+  checksum: c01066038f950016a18106ddeca4649b4d76caa76ec5a31e2a26e10586a59fceb4ee45e96719bf6c715648e7c14085a81fee5c62f7e9ebee68e77a5396e5538f
   languageName: node
   linkType: hard
 

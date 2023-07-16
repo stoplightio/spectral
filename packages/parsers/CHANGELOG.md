@@ -1,3 +1,10 @@
+## @stoplight/spectral-parsers [1.0.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-parsers-v1.0.2...@stoplight/spectral-parsers-1.0.3) (2023-07-14)
+
+
+### Bug Fixes
+
+* **parsers:** update @stoplight/json from ~3.20.1 to ~3.21.0 ([e906d20](https://github.com/stoplightio/spectral/commit/e906d20f3d12e9958886e1232789d1e2c5cf8771))
+
 # [@stoplight/spectral-parsers-v1.0.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-parsers-v1.0.1...@stoplight/spectral-parsers-v1.0.2) (2022-08-22)
 
 
