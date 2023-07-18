@@ -4,12 +4,14 @@ import * as yargs from 'yargs';
 
 import { DEFAULT_REQUEST_OPTIONS } from '@stoplight/spectral-runtime';
 import lintCommand from './commands/lint';
-import type * as Agent from 'proxy-agent';
 
 if (typeof process.env.PROXY === 'string') {
+  const { protocol } = new URL(process.env.PROXY);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const ProxyAgent = require('proxy-agent') as typeof Agent['default'];
-  DEFAULT_REQUEST_OPTIONS.agent = new ProxyAgent(process.env.PROXY);
+  const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent') as typeof import('hpagent');
+  DEFAULT_REQUEST_OPTIONS.agent = new (protocol === 'https:' ? HttpsProxyAgent : HttpProxyAgent)({
+    proxy: process.env.PROXY,
+  });
 }
 
 export default yargs
