@@ -103,7 +103,10 @@ export class Rule implements IRule {
 
     for (const relevantOverride of relevantOverrides) {
       for (const [overridePath, overrideSeverity] of relevantOverride.entries()) {
-        if (overridePath.length >= closestPointer.length && pointer.startsWith(overridePath)) {
+        if (
+          overridePath.length >= closestPointer.length &&
+          (pointer === overridePath || pointer.startsWith(`${overridePath}/`))
+        ) {
           closestPointer = overridePath;
           severity = overrideSeverity;
         }
