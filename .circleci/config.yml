@@ -20,7 +20,6 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "12.22"
     - "14.21"
     - "16.18"
     - "18.12"

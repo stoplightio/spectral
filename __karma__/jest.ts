@@ -1,26 +1,19 @@
-// @ts-ignore
+// @ts-expect-error: needed by some of the Jest stuff we have here
 process.stdout = {};
 
-import { Expect } from 'expect/build/types';
+import type { Expect } from 'expect';
 import * as JestMock from 'jest-mock';
 
-declare let global: NodeJS.Global & {
+declare let globalThis: NodeJS.Global & {
   jest: typeof JestMock;
   expect: Expect;
   test: jest.It;
 };
 
-global.jest = require('jest-mock');
-global.expect = require('expect');
-global.test = it;
-global.test.concurrent = it;
-
-const message = () => "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
-
-expect.extend({
-  toMatchSnapshot: () => ({ pass: false, message }),
-  toMatchInlineSnapshot: () => ({ pass: false, message }),
-});
+globalThis.jest = require('jest-mock');
+globalThis.expect = require('expect').expect;
+globalThis.test = it;
+globalThis.test.concurrent = it;
 
 // @ts-ignore
 test.each = input => (name: string, fn: Function) => {
