@@ -219,7 +219,7 @@ jobs:
       - checkout
       - install-and-build
       - build-binary:
-          targets: linux,macos,alpine
+          targets: linux-x64,linux-arm64,macos-x64,macos-arm64,alpine-x64,alpine-arm64
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
