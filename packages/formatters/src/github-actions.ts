@@ -36,7 +36,7 @@ export const githubActions: Formatter = results => {
         .map(p => p.join('='))
         .join(',');
 
-      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${result.message}`;
+      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${result.message.replaceAll('\n', '%0A')}`;
     })
     .join('\n');
 };
