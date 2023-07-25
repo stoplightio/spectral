@@ -9,7 +9,7 @@ import { CLIError } from '../../errors';
 
 export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
   const spectral = new Spectral({
-    resolver: getResolver(flags.resolver, process.env.PROXY),
+    resolver: getResolver(flags.resolver),
   });
 
   const ruleset = await getRuleset(flags.ruleset);
