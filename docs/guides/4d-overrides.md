@@ -43,13 +43,15 @@ JSON Pointers have a different syntax than JSON Paths used in the `given` compon
 In JSON Pointers, path components are prefixed with a `/` and then concatenated to form the pointer.
 
 Since `/` has a special meaning in JSON pointer, it must be encoded as `~1` when it appears in a component, and `~` must be encoded as `~0`.
+JSON Pointer must be percent-encoded for use within a URI as specified by the [spec](https://datatracker.ietf.org/doc/html/rfc6901#section-6)
 
 You can test JSON Pointer expressions in the [JSON Query online evaluator](https://www.jsonquerytool.com/) by choosing "JSONPointer" as the Transform.
+Bear in mind the tool above expects plain JSON Pointer, thus you need to decode any previously percent-encoded characters.
 
 ```yaml
 overrides:
   - files:
-      - "legacy/**/*.oas.json#/paths/~1Pets~1{petId}/get/parameters/0"
+      - "legacy/**/*.oas.json#/paths/~1Pets~1%7BpetId%7D/get/parameters/0"
     rules:
       some-inherited-rule: "off"
 ```

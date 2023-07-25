@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.18.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.2...@stoplight/spectral-core-1.18.3) (2023-07-18)
+
+
+### Bug Fixes
+
+* **core:** pointer in overrides are applied too broadly ([#2511](https://github.com/stoplightio/spectral/issues/2511)) ([69403c1](https://github.com/stoplightio/spectral/commit/69403c1dc1dd78937bf4dbab3c392f03c76e2201))
+
 ## @stoplight/spectral-core [1.18.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.1...@stoplight/spectral-core-1.18.2) (2023-07-10)
 
 
