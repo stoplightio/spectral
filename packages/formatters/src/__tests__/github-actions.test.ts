@@ -43,8 +43,8 @@ const results: IRuleResult[] = [
 describe('GitHub Actions formatter', () => {
   test('should be formatted correctly', () => {
     expect(githubActions(results, { failSeverity: DiagnosticSeverity.Error }).split('\n')).toEqual([
-      '::warning title=operation-description,file=__tests__/fixtures/petstore.oas2.yaml,col=8,endColumn=60,line=60,endLine=71::paths./pets.get.description is not truthy',
-      '::warning title=operation-tags,file=__tests__/fixtures/petstore.oas2.yaml,col=8,endColumn=60,line=60,endLine=71::paths./pets.get.tags is not truthy',
+      '::warning title=operation-description,file=__tests__/fixtures/petstore.oas2.yaml,col=9,endColumn=61,line=61,endLine=72::paths./pets.get.description is not truthy',
+      '::warning title=operation-tags,file=__tests__/fixtures/petstore.oas2.yaml,col=9,endColumn=61,line=61,endLine=72::paths./pets.get.tags is not truthy',
     ]);
   });
 });

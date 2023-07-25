@@ -26,10 +26,10 @@ export const githubActions: Formatter = results => {
       const params: OutputParams = {
         title: result.code.toString(),
         file,
-        col: result.range.start.character,
-        endColumn: result.range.end.character,
-        line: result.range.start.line,
-        endLine: result.range.end.line,
+        col: result.range.start.character + 1,
+        endColumn: result.range.end.character + 1,
+        line: result.range.start.line + 1,
+        endLine: result.range.end.line + 1,
       };
 
       const paramsString = Object.entries(params)
