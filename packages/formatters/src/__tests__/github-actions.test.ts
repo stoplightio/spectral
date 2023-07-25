@@ -6,7 +6,7 @@ const cwd = process.cwd();
 const results: IRuleResult[] = [
   {
     code: 'operation-description',
-    message: 'paths./pets.get.description is not truthy',
+    message: 'paths./pets.get.description is not truthy\nMessage can have\nmultiple lines',
     path: ['paths', '/pets', 'get', 'description'],
     severity: 1,
     source: `${cwd}/__tests__/fixtures/petstore.oas2.yaml`,
@@ -43,7 +43,7 @@ const results: IRuleResult[] = [
 describe('GitHub Actions formatter', () => {
   test('should be formatted correctly', () => {
     expect(githubActions(results, { failSeverity: DiagnosticSeverity.Error }).split('\n')).toEqual([
-      '::warning title=operation-description,file=__tests__/fixtures/petstore.oas2.yaml,col=9,endColumn=61,line=61,endLine=72::paths./pets.get.description is not truthy',
+      '::warning title=operation-description,file=__tests__/fixtures/petstore.oas2.yaml,col=9,endColumn=61,line=61,endLine=72::paths./pets.get.description is not truthy%0AMessage can have%0Amultiple lines',
       '::warning title=operation-tags,file=__tests__/fixtures/petstore.oas2.yaml,col=9,endColumn=61,line=61,endLine=72::paths./pets.get.tags is not truthy',
     ]);
   });

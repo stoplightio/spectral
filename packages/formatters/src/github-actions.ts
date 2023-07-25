@@ -36,7 +36,12 @@ export const githubActions: Formatter = results => {
         .map(p => p.join('='))
         .join(',');
 
-      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${result.message.replaceAll('\n', '%0A')}`;
+      // As annotated messages must be one-line due to GitHub's limitation, replacing all LF to %0A here.
+      // see: https://github.com/actions/toolkit/issues/193
+      // FIXME: Use replaceAll instead after removing Node.js 14 support.
+      const message = result.message.replace(/\n/g, '%0A');
+
+      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${message}`;
     })
     .join('\n');
 };
