@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-cli",
-  "version": "6.8.0",
+  "version": "6.9.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -44,9 +44,9 @@
     "@stoplight/types": "^13.6.0",
     "chalk": "4.1.2",
     "fast-glob": "~3.2.12",
+    "hpagent": "~1.2.0",
     "lodash": "~4.17.21",
     "pony-cause": "^1.0.0",
-    "proxy-agent": "5.0.0",
     "stacktracey": "^2.1.7",
     "tslib": "^2.3.0",
     "yargs": "17.3.1"

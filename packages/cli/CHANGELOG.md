@@ -1,3 +1,10 @@
+# @stoplight/spectral-cli [6.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.8.0...@stoplight/spectral-cli-6.9.0) (2023-07-25)
+
+
+### Features
+
+* **cli:** use hpagent ([#2513](https://github.com/stoplightio/spectral/issues/2513)) ([9b2d347](https://github.com/stoplightio/spectral/commit/9b2d3476996f7763c035380beffd2bf46c6051f9))
+
 # [6.8.0](https://github.com/stoplightio/spectral/compare/v6.7.0...v6.8.0) (2023-05-23)
 
 No new changes.
