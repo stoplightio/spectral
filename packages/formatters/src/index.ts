@@ -10,3 +10,7 @@ export type { Formatter, FormatterOptions } from './types';
 export const pretty: Formatter = () => {
   throw Error('pretty formatter is available only in Node.js');
 };
+
+export const githubActions: Formatter = () => {
+  throw Error('github-actions formatter is available only in Node.js');
+};
