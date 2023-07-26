@@ -2824,7 +2824,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator"
   dependencies:
-    "@stoplight/json": ~3.20.1
+    "@stoplight/json": ~3.21.0
     "@stoplight/ordered-object-literal": ~1.0.4
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": "*"
@@ -2886,17 +2886,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/types@npm:^12.3.0 || ^13.0.0, @stoplight/types@npm:^13.0.0, @stoplight/types@npm:^13.15.0, @stoplight/types@npm:^13.6.0":
-  version: 13.15.0
-  resolution: "@stoplight/types@npm:13.15.0"
-  dependencies:
-    "@types/json-schema": ^7.0.4
-    utility-types: ^3.10.0
-  checksum: 839f0bbedb791bd6792ef22b6a821ca504b14b705927f7c510c4cdcc591eddc8818c82b8857129501aa809d6f369b82e4487bfe18dfc5ce00e28317ecad2df9a
-  languageName: node
-  linkType: hard
-
-"@stoplight/types@npm:~13.6.0":
+"@stoplight/types@npm:^12.3.0 || ^13.0.0, @stoplight/types@npm:^13.0.0, @stoplight/types@npm:^13.15.0, @stoplight/types@npm:^13.6.0, @stoplight/types@npm:~13.6.0":
   version: 13.6.0
   resolution: "@stoplight/types@npm:13.6.0"
   dependencies:
