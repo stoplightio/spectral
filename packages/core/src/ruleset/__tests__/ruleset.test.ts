@@ -617,8 +617,11 @@ describe('Ruleset', () => {
             severity: DiagnosticSeverity.Warning,
             then: [
               {
+                field: 'name',
                 function: 'pattern',
-                functionOptions: 'Object{}',
+                functionOptions: {
+                  match: 'Stoplight',
+                },
               },
             ],
           },
@@ -637,8 +640,11 @@ describe('Ruleset', () => {
             severity: DiagnosticSeverity.Error,
             then: [
               {
+                field: 'description',
                 function: 'pattern',
-                functionOptions: 'Object{}',
+                functionOptions: {
+                  match: 'Stoplight',
+                },
               },
             ],
           },
@@ -657,8 +663,11 @@ describe('Ruleset', () => {
             severity: DiagnosticSeverity.Warning,
             then: [
               {
+                field: 'title',
                 function: 'pattern',
-                functionOptions: 'Object{}',
+                functionOptions: {
+                  match: 'Stoplight',
+                },
               },
             ],
           },

@@ -188,7 +188,7 @@ describe('JUnit formatter', () => {
               {
                 $: {
                   classname: '',
-                  name: 'org.spectral.special-xml-strings(#/root/\'/"/leaf)',
+                  name: "org.spectral.special-xml-strings(#/root/'/%22/leaf)",
                   time: '0',
                 },
                 failure: [
@@ -196,14 +196,14 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'start \' " < > end',
                     },
-                    _: 'line 1, col 1, start \' " < > end (special-xml-strings) at path #/root/\'/"/leaf',
+                    _: "line 1, col 1, start ' \" < > end (special-xml-strings) at path #/root/'/%22/leaf",
                   },
                 ],
               },
               {
                 $: {
                   classname: '',
-                  name: 'org.spectral.special-cdata-strings(#/root/]]>/<![CDATA[/leaf)',
+                  name: 'org.spectral.special-cdata-strings(#/root/%5D%5D%3E/%3C!%5BCDATA%5B/leaf)',
                   time: '0',
                 },
                 failure: [
@@ -211,7 +211,7 @@ describe('JUnit formatter', () => {
                     $: {
                       message: 'start <![CDATA[ ]]> <![CDATA[ end',
                     },
-                    _: 'line 1, col 1, start <![CDATA[ ]]> <![CDATA[ end (special-cdata-strings) at path #/root/]]>/<![CDATA[/leaf',
+                    _: 'line 1, col 1, start <![CDATA[ ]]> <![CDATA[ end (special-cdata-strings) at path #/root/%5D%5D%3E/%3C!%5BCDATA%5B/leaf',
                   },
                 ],
               },

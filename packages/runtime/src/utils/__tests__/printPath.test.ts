@@ -85,8 +85,8 @@ describe('printPath util', () => {
     });
 
     it('handles whitespaces', () => {
-      expect(printPath(['a', ' bar ', 'test'], PrintStyle.EscapedPointer)).toEqual('#/a/ bar /test');
-      expect(printPath(['a', ' ', 'test'], PrintStyle.EscapedPointer)).toEqual('#/a/ /test');
+      expect(printPath(['a', ' bar ', 'test'], PrintStyle.EscapedPointer)).toEqual('#/a/%20bar%20/test');
+      expect(printPath(['a', ' ', 'test'], PrintStyle.EscapedPointer)).toEqual('#/a/%20/test');
     });
 
     it('escapes slashes', () => {

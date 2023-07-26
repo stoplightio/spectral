@@ -1571,6 +1571,9 @@ responses:: !!foo
           bar: {
             type: 'number',
           },
+          bars: {
+            type: 'number',
+          },
         }),
         Parsers.Json,
         documentUri,
@@ -1582,6 +1585,11 @@ responses:: !!foo
           code: 'valid-type',
           path: ['bar', 'type'],
           severity: DiagnosticSeverity.Hint,
+        }),
+        expect.objectContaining({
+          code: 'valid-type',
+          path: ['bars', 'type'],
+          severity: DiagnosticSeverity.Error,
         }),
       ]);
     });

@@ -1,3 +1,24 @@
+## @stoplight/spectral-core [1.18.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.2...@stoplight/spectral-core-1.18.3) (2023-07-18)
+
+
+### Bug Fixes
+
+* **core:** pointer in overrides are applied too broadly ([#2511](https://github.com/stoplightio/spectral/issues/2511)) ([69403c1](https://github.com/stoplightio/spectral/commit/69403c1dc1dd78937bf4dbab3c392f03c76e2201))
+
+## @stoplight/spectral-core [1.18.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.1...@stoplight/spectral-core-1.18.2) (2023-07-10)
+
+
+### Bug Fixes
+
+* **core:** dedupe paths containing special characters correctly ([758de21](https://github.com/stoplightio/spectral/commit/758de213aa9dd6319c832de54cfee31fe1b86649))
+
+## @stoplight/spectral-core [1.18.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.18.0...@stoplight/spectral-core-1.18.1) (2023-07-07)
+
+
+### Bug Fixes
+
+* **core:** invalid then produced by Rule#toJSON ([#2496](https://github.com/stoplightio/spectral/issues/2496)) ([db91553](https://github.com/stoplightio/spectral/commit/db9155326289ef5c143353719fe71def84ca136e))
+
 # [@stoplight/spectral-core-v1.18.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-v1.17.0...@stoplight/spectral-core-v1.18.0) (2023-04-25)
 
 

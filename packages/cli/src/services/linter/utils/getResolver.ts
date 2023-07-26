@@ -4,7 +4,7 @@ import { createHttpAndFileResolver, Resolver } from '@stoplight/spectral-ref-res
 import { isError } from 'lodash';
 import { CLIError } from '../../../errors';
 
-export const getResolver = (resolver: Optional<string>, proxy: Optional<string>): Resolver => {
+export const getResolver = (resolver: Optional<string>): Resolver => {
   if (resolver !== void 0) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -12,12 +12,6 @@ export const getResolver = (resolver: Optional<string>, proxy: Optional<string>)
     } catch (ex) {
       throw new CLIError(isError(ex) ? formatMessage(ex.message) : String(ex));
     }
-  }
-
-  if (typeof proxy === 'string') {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const ProxyAgent = require('proxy-agent') as typeof import('proxy-agent');
-    return createHttpAndFileResolver({ agent: new ProxyAgent(process.env.PROXY) });
   }
 
   return createHttpAndFileResolver();

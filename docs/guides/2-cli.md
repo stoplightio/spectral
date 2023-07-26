@@ -33,7 +33,8 @@ Other options include:
           [string] [choices: "utf8", "ascii", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1"] [default: "utf8"]
   -f, --format                   formatters to use for outputting results, more than one can be given joining them with
                                  a comma
-               [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty"] [default: "stylish"]
+        [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty", "github-actions"] [default:
+                                                                                                              "stylish"]
   -o, --output                   where to output results, can be a single file name, multiple "output.<format>" or
                                  missing to print to stdout                                                     [string]
       --stdin-filepath           path to a file to pretend that stdin comes from                                [string]
@@ -69,6 +70,111 @@ Spectral has a few different error severities: `error`, `warn`, `info`, and `hin
 The default behavior can be modified with the `--fail-severity=` option. Setting fail severity to `--fail-severity=info` returns a failure status code of 1 for any info results or higher. Using `--fail-severity=warn` causes a failure status code for errors or warnings.
 
 Changing the fail severity wont' affect output. To change the results Spectral CLI prints to the screen, add the `--display-only-failures` switch (or just `-D` for short). This removes any results which are below the specified fail severity.
+
+## Formatters
+
+### JSON Formatter
+
+Spectral's JSON formatter outputs the results of a Spectral analysis in a JSON format that is easily parsable and human-readable. The output can be used to programmatically access and process the results of the analysis. You can enable this by adding `-f json --quiet` to the cli command.
+
+Here's the schema for the output:
+
+<!--
+type: tab
+title: Schema
+-->
+
+```yaml json_schema
+type: array
+items:
+  type: object
+  properties:
+    code:
+      type: string
+      description: A string that represents the rule code that has been violated or triggered in Spectral. This code is unique to each rule defined in Spectral.
+    path:
+      type: array
+      description: An array of strings that indicate the location within the analyzed document where the rule was triggered. It shows the "path" in the document structure to the issue.
+      items:
+        type: string
+    message:
+      type: string
+      description: A string that contains a human-readable message describing the issue found by Spectral. This message typically provides information on why the rule was triggered and how to fix the issue.
+    severity:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      description: An integer representing the severity level of the rule violation. The severity levels usually follow a specific scale defined by Spectral. 0 equals error, while 3 is hint.
+    range:
+      type: object
+      description: An object that describes where in the file the issue was found. It contains two sub-properties, start and end, each of which is an object with line and character properties. line and character are integers that represent the line number and the character position within the line, respectively, where the issue starts or ends. All the values are zero indexed.
+      properties:
+        start:
+          type: object
+          properties:
+            line:
+              type: integer
+              minimum: 0
+            character:
+              type: integer
+              minimum: 0
+          required:
+            - line
+            - character
+        end:
+          type: object
+          properties:
+            line:
+              type: integer
+              minimum: 0
+            character:
+              type: integer
+              minimum: 0
+          required:
+            - line
+            - character
+    source:
+      type: string
+      description: A string that contains the file path of the document that was analyzed by Spectral. It points to the source of the issue.
+  required:
+    - code
+    - path
+    - message
+    - severity
+    - range
+    - source
+```
+
+<!--
+type: tab
+title: Example
+-->
+
+```json
+[
+  {
+    "code": "invalid-response",
+    "path": ["paths", "/users/{id}", "get", "responses", "200"],
+    "message": "The '200' response should include a schema definition.",
+    "severity": 2,
+    "range": {
+      "start": {
+        "line": 32,
+        "character": 12
+      },
+      "end": {
+        "line": 35,
+        "character": 14
+      }
+    },
+    "source": "/Users/johndoe/projects/api-definition/openapi.yaml"
+  }
+]
+```
+
+<!-- type: tab-end -->
 
 ## Proxying
 
