@@ -1,3 +1,10 @@
+# @stoplight/spectral-cli [6.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.9.0...@stoplight/spectral-cli-6.10.0) (2023-07-26)
+
+
+### Features
+
+* **cli:** require newer version of all Spectral dependencies ([10ddd97](https://github.com/stoplightio/spectral/commit/10ddd97b6609a58c3542dccf4019488095b38064))
+
 # @stoplight/spectral-cli [6.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-v6.8.0...@stoplight/spectral-cli-6.9.0) (2023-07-25)
 
 
