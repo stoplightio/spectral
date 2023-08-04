@@ -1,3 +1,10 @@
+## @stoplight/spectral-cli [6.10.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.10.0...@stoplight/spectral-cli-6.10.1) (2023-08-04)
+
+
+### Bug Fixes
+
+* **cli:** choose proxy agent based on requester protocol ([#2521](https://github.com/stoplightio/spectral/issues/2521)) ([056f2e1](https://github.com/stoplightio/spectral/commit/056f2e1eef966b807734fb00aae071411feabe75))
+
 # @stoplight/spectral-cli [6.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.9.0...@stoplight/spectral-cli-6.10.0) (2023-07-26)
 
 
