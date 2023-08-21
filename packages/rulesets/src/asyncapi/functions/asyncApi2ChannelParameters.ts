@@ -1,10 +1,9 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 
-import { parseUrlVariables } from './utils/parseUrlVariables';
-import { getMissingProps } from './utils/getMissingProps';
-import { getRedundantProps } from './utils/getRedundantProps';
-
 import type { IFunctionResult } from '@stoplight/spectral-core';
+import { parseUrlVariables } from '../../shared/functions/serverVariables/utils/parseUrlVariables';
+import { getMissingProps } from '../../shared/utils/getMissingProps';
+import { getRedundantProps } from '../../shared/utils/getRedundantProps';
 
 export default createRulesetFunction<{ parameters: Record<string, unknown> }, null>(
   {
@@ -26,7 +25,7 @@ export default createRulesetFunction<{ parameters: Record<string, unknown> }, nu
     const parameters = parseUrlVariables(path);
     if (parameters.length === 0) return;
 
-    const missingParameters = getMissingProps(parameters, targetVal.parameters);
+    const missingParameters = getMissingProps(parameters, Object.keys(targetVal.parameters));
     if (missingParameters.length) {
       results.push({
         message: `Not all channel's parameters are described with "parameters" object. Missed: ${missingParameters.join(
@@ -36,7 +35,7 @@ export default createRulesetFunction<{ parameters: Record<string, unknown> }, nu
       });
     }
 
-    const redundantParameters = getRedundantProps(parameters, targetVal.parameters);
+    const redundantParameters = getRedundantProps(parameters, Object.keys(targetVal.parameters));
     if (redundantParameters.length) {
       redundantParameters.forEach(param => {
         results.push({

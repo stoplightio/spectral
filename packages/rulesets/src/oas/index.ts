@@ -26,6 +26,7 @@ import {
   oasDiscriminator,
 } from './functions';
 import { uniquenessTags } from '../shared/functions';
+import serverVariables from '../shared/functions/serverVariables';
 
 export { ruleset as default };
 
@@ -669,6 +670,20 @@ const ruleset = {
       given: '$',
       then: {
         function: oasUnusedComponent,
+      },
+    },
+    'openapi-server-variables': {
+      description: 'Server variables must be defined and there must be no redundant variables.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      // todo: link objects?
+      given: ['$.servers[*]', '#PathItem.servers[*]', '#OperationObject.servers[*]'],
+      then: {
+        function: serverVariables,
+        functionOptions: {
+          checkSubstitutions: true,
+        },
       },
     },
   },
