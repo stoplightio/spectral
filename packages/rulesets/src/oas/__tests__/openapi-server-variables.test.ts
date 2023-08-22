@@ -24,6 +24,41 @@ testRule('openapi-server-variables', [
           },
         },
       ],
+      paths: {
+        '/': {
+          servers: [],
+          responses: {
+            '2xx': {
+              links: {
+                user: {
+                  $ref: '#/components/links/User',
+                },
+              },
+            },
+          },
+        },
+        '/user': {
+          get: {
+            operationId: 'getUser',
+          },
+        },
+      },
+      components: {
+        links: {
+          User: {
+            operationId: 'getUser',
+            parameters: [],
+            server: {
+              url: 'https://{env}.stoplight.io',
+              variables: {
+                env: {
+                  default: 'v2',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     errors: [],
   },
@@ -163,6 +198,7 @@ testRule('openapi-server-variables', [
       ],
       paths: {
         '/': {
+          operationId: 'test',
           servers: [
             {
               url: 'https://{env}.stoplight.io',
@@ -176,6 +212,22 @@ testRule('openapi-server-variables', [
           ],
         },
       },
+      components: {
+        links: {
+          Address: {
+            operationId: 'test',
+            server: {
+              url: 'https://{env}.stoplight.io',
+              variables: {
+                env: {
+                  enum: [],
+                  default: 'staging',
+                },
+              },
+            },
+          },
+        },
+      },
     },
     errors: [
       {
@@ -186,6 +238,11 @@ testRule('openapi-server-variables', [
       {
         message: 'Server Variable "env" has a default not listed in the enum',
         path: ['paths', '/', 'servers', '0', 'variables', 'env', 'default'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'Server Variable "env" has a default not listed in the enum',
+        path: ['components', 'links', 'Address', 'server', 'variables', 'env', 'default'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -201,6 +258,14 @@ testRule('openapi-server-variables', [
           variables: {
             port: {
               enum: ['invalid port', 'another-one', '443'],
+            },
+          },
+        },
+        {
+          url: '{username}',
+          variables: {
+            username: {
+              enum: ['stoplight', 'io'],
             },
           },
         },
@@ -225,6 +290,11 @@ testRule('openapi-server-variables', [
         message:
           'A few substitutions of server variables resulted in invalid URLs: https://stoplight.io:invalid%20port, https://stoplight.io:another-one',
         path: ['servers', '0', 'variables'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'A few substitutions of server variables resulted in invalid URLs: stoplight, io',
+        path: ['servers', '1', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
       {

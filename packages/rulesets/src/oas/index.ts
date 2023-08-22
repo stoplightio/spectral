@@ -36,6 +36,26 @@ const ruleset = {
   aliases: {
     PathItem: ['$.paths[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    ResponseObject: {
+      targets: [
+        {
+          formats: [oas2],
+          given: ['#OperationObject.responses[*]', '$.responses[*]'],
+        },
+        {
+          formats: [oas3],
+          given: ['#OperationObject.responses[*]', '$.components.responses[*]'],
+        },
+      ],
+    },
+    LinkObject: {
+      targets: [
+        {
+          formats: [oas3],
+          given: ['$.components.links[*]', '#ResponseObject.links[*]'],
+        },
+      ],
+    },
   },
   rules: {
     'operation-success-response': {
@@ -673,12 +693,11 @@ const ruleset = {
       },
     },
     'openapi-server-variables': {
-      description: 'Server variables must be defined and there must be no redundant variables.',
+      description: 'Server variables must be defined and valid and there must be no redundant variables.',
       message: '{{error}}',
-      severity: 'error',
+      severity: 0,
       recommended: true,
-      // todo: link objects?
-      given: ['$.servers[*]', '#PathItem.servers[*]', '#OperationObject.servers[*]'],
+      given: ['$.servers[*]', '#PathItem.servers[*]', '#OperationObject.servers[*]', '#LinkObject.server'],
       then: {
         function: serverVariables,
         functionOptions: {
@@ -687,4 +706,4 @@ const ruleset = {
       },
     },
   },
-};
+} as const;
