@@ -706,4 +706,4 @@ const ruleset = {
       },
     },
   },
-} as const;
+};
