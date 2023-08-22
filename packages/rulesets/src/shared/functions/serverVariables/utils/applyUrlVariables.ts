@@ -14,8 +14,7 @@ function* _applyUrlVariables(
   const [name, values] = variables[i];
   let x = 0;
   while (x < values.length) {
-    // fixme: String.prototype.replaceAll is not available in Node 12 & 14
-    const substitutedValue = url.replaceAll(`{${name}}`, encodeURI(values[x]));
+    const substitutedValue = url.replace(RegExp(escapeRegexp(`{${name}}`), 'g'), encodeURI(values[x]));
 
     if (i === variables.length - 1) {
       yield substitutedValue;
@@ -25,4 +24,9 @@ function* _applyUrlVariables(
 
     x++;
   }
+}
+
+// https://github.com/tc39/proposal-regex-escaping/blob/main/polyfill.js
+function escapeRegexp(value: string): string {
+  return value.replace(/[\\^$*+?.()|[\]{}]/g, '\\$&');
 }
