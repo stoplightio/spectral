@@ -1,0 +1,13 @@
+diff --git a/node_modules/multi-semantic-release/lib/multiSemanticRelease.js b/node_modules/multi-semantic-release/lib/multiSemanticRelease.js
+index 912a363..e651119 100644
+--- a/node_modules/multi-semantic-release/lib/multiSemanticRelease.js
++++ b/node_modules/multi-semantic-release/lib/multiSemanticRelease.js
+@@ -191,7 +191,7 @@ async function releasePackage(pkg, createInlinePlugin, multiContext, flags) {
+ 	// Add the package name into tagFormat.
+ 	// Thought about doing a single release for the tag (merging several packages), but it's impossible to prevent Github releasing while allowing NPM to continue.
+ 	// It'd also be difficult to merge all the assets into one release without full editing/overriding the plugins.
+-	options.tagFormat = name + "@${version}";
++	options.tagFormat = name + "-${version}";
+ 
+ 	// This options are needed for plugins that do not rely on `pluginOptions` and extract them independently.
+ 	options._pkgOptions = pkgOptions;

@@ -1,0 +1,6 @@
+extends: spectral:oas
+
+except:
+  "#/info":
+    - info-contact
+    - info-description

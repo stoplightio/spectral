@@ -1,0 +1,11 @@
+{
+  "$schema": "",
+  "definitions": {
+    "info": {
+      "description": 0,
+      "contact": {
+        "name": "test"
+      }
+    }
+  }
+}

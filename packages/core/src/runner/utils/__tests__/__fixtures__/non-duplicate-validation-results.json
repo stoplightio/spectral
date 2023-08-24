@@ -1,0 +1,80 @@
+[
+  {
+    "code": "valid-schema-example-in-content",
+    "message": "\"schema.example\" property type should be integer",
+    "path": [
+      "paths",
+      "/resource",
+      "get",
+      "responses",
+      "200",
+      "content",
+      "application/json",
+      "schema",
+      "example"
+    ],
+    "severity": 0,
+    "range": {
+      "start": {
+        "line": 20,
+        "character": 15
+      },
+      "end": {
+        "line": 20,
+        "character": 19
+      }
+    }
+  },
+  {
+    "code": "valid-schema-example-in-content",
+    "message": "\"schema.example\" has some other valid problem",
+    "path": [
+      "paths",
+      "/resource",
+      "get",
+      "responses",
+      "200",
+      "content",
+      "application/json",
+      "schema",
+      "example"
+    ],
+    "severity": 0,
+    "range": {
+      "start": {
+        "line": 20,
+        "character": 15
+      },
+      "end": {
+        "line": 20,
+        "character": 19
+      }
+    }
+  },
+  {
+    "code": "valid-schema-example-in-content",
+    "message": "\"schema.example\" property type should be integer",
+    "path": [
+      "paths",
+      "/resource",
+      "get",
+      "responses",
+      "200",
+      "content",
+      "application/json",
+      "schema",
+      "example"
+    ],
+    "severity": 0,
+    "range": {
+      "start": {
+        "line": 20,
+        "character": 15
+      },
+      "end": {
+        "line": 20,
+        "character": 19
+      }
+    }
+  }
+]

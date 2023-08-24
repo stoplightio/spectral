@@ -1,14 +1,20 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+node_modules
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-/binaries
-/rulesets
-/__karma__/__fixtures__/
+packages/formatters/src/html/templates.ts
+packages/cli/binaries
 /test-harness/tmp/
+/test-harness/tests/
+packages/*/dist
 
 # testing
 /coverage
@@ -27,7 +33,6 @@
 .vscode
 .idea
 .nyc_output
-.DS_Store
 .awcache
 .cache-loader
 .cache

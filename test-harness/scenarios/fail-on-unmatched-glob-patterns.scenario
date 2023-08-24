@@ -1,7 +1,11 @@
 ====test====
 Reports unmatched glob patterns
-====command====
-{bin} lint ./*oops.{yml,yaml,json} --fail-on-unmatched-globs
+====asset:ruleset====
+module.exports = {
+  rules: {}
+}
+====command-nix====
+{bin} lint ./*oops.{yml,yaml,json} --fail-on-unmatched-globs --ruleset "{asset:ruleset}"
 ====status====
 2
 ====stderr====

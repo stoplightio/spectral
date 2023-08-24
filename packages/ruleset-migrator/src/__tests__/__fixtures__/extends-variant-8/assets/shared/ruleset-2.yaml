@@ -1,0 +1,6 @@
+rules:
+  my-rule:
+    message: ruleset 2
+    given: $
+    then:
+      function: falsy

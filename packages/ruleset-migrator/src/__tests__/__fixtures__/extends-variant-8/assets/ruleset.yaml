@@ -1,0 +1,9 @@
+extends:
+  - ./shared/ruleset-2.yaml
+  - ./shared/ruleset-3.yaml
+rules:
+  my-rule:
+    message: ruleset
+    given: $
+    then:
+      function: truthy

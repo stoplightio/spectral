@@ -1,6 +1,6 @@
 # AsyncAPI Rules
 
-Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](https://www.asyncapi.com/docs/specifications/2.0.0/).
+Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](https://www.asyncapi.com/docs/specifications/v2.0.0).
 
 In your ruleset file you can add `extends: "spectral:asyncapi"` and you'll get all of the following rules applied.
 
@@ -24,6 +24,54 @@ Keep trailing slashes off of channel names, as it can cause some confusion. Most
 
 **Recommended:** Yes
 
+### asyncapi-channel-parameters
+
+All channel parameters should be defined in the `parameters` object of the channel. They should also not contain redundant parameters that do not exist in the channel address.
+
+**Recommended:** Yes
+
+### asyncapi-channel-servers
+
+Channel servers must be defined in the `servers` object.
+
+**Bad Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well-defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - development
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well-defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - production
+```
+
+**Recommended:** Yes
+
 ### asyncapi-headers-schema-type-object
 
 The schema definition of the application headers must be of type “object”.
@@ -32,7 +80,7 @@ The schema definition of the application headers must be of type “object”.
 
 ### asyncapi-info-contact-properties
 
-The [asyncapi-info-contact](#asyncapi-info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url` and `email`.
+The [asyncapi-info-contact](#asyncapi-info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url`, and `email`.
 
 Putting in the name of the developer/team/department/company responsible for the API, along with the support email and help-desk/GitHub Issues/whatever URL means people know where to go for help. This can mean more money in the bank, instead of developers just wandering off or complaining online.
 
@@ -44,7 +92,7 @@ Putting in the name of the developer/team/department/company responsible for the
 asyncapi: "2.0.0"
 info:
   title: Awesome API
-  description: A very well defined API
+  description: A very well-defined API
   version: "1.0"
   contact:
     name: A-Team
@@ -56,7 +104,7 @@ info:
 
 Info object should contain `contact` object.
 
-Hopefully your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
+Hopefully, your API description document is so good that nobody ever needs to contact you with questions, but that is rarely the case. The contact object has a few different options for contact details.
 
 **Recommended:** Yes
 
@@ -89,7 +137,6 @@ info:
   title: Descriptive API
   description: >+
     Some description about the general point of this API, and why it exists when another similar but different API also exists.
-
 ```
 
 ### asyncapi-info-license-url
@@ -127,17 +174,164 @@ info:
     name: MIT
 ```
 
+### asyncapi-latest-version
+
+Checking if the AsyncAPI document is using the latest version.
+
+**Recommended:** Yes
+
+### asyncapi-message-examples
+
+All `examples` in message object should follow `payload` and `headers` schemas.
+
+**Bad Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Bad API
+  version: "1.0.0"
+components:
+  messages:
+    someMessage:
+      payload:
+        type: string
+      headers:
+        type: object
+      examples:
+        - payload: 2137
+          headers: someHeader
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Good API
+  version: "1.0.0"
+components:
+  messages:
+    someMessage:
+      payload:
+        type: string
+      headers:
+        type: object
+      examples:
+        - payload: foobar
+          headers:
+            someHeader: someValue
+```
+
+**Recommended:** Yes
+
+### asyncapi-message-messageId-uniqueness
+
+`messageId` must be unique across all the messages (except those one defined in the components).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      message:
+        messageId: turnMessage
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      message:
+        messageId: turnMessage
+```
+
+**Good Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      message:
+        messageId: turnOnMessage
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      message:
+        messageId: turnOffMessage
+```
+
 ### asyncapi-operation-description
 
 Operation objects should have a description.
 
 **Recommended:** Yes
 
+### asyncapi-operation-operationId-uniqueness
+
+`operationId` must be unique across all the operations (except the ones defined in the components).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      operationId: turn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      operationId: turn
+```
+
+**Good Example**
+
+```yaml
+channels:
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.on:
+    publish:
+      operationId: turnOn
+  smartylighting.streetlights.1.0.action.{streetlightId}.turn.off:
+    publish:
+      operationId: turnOff
+```
+
 ### asyncapi-operation-operationId
 
 This operation ID is essentially a reference for the operation. Tools may use it for defining function names, class method names, and even URL hashes in documentation systems.
 
 **Recommended:** Yes
+
+### asyncapi-operation-security
+
+Operation `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+channels:
+  "user/signup":
+    publish:
+      security:
+        - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+channels:
+  "user/signup":
+    publish:
+      security:
+        - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
 
 ### asyncapi-parameter-description
 
@@ -225,7 +419,7 @@ application/vnd.aai.asyncapi+yaml;version=2.0.0
 
 At this point, explicitly setting `schemaFormat` is not supported by Spectral, so if you use it this rule will emit an info message and skip validating the payload.
 
-Other formats such as OpenAPI Schema Object, JSON Schema Draft 07 and Avro will be added in various upcoming versions.
+Other formats such as OpenAPI Schema Object, JSON Schema Draft 07, and Avro will be added in various upcoming versions.
 
 **Recommended:** Yes
 
@@ -285,13 +479,51 @@ servers:
 
 ### asyncapi-server-not-example-com
 
-Server URL should not point at example.com.
+Server URL should not point to example.com.
 
 **Recommended:** No
 
+### asyncapi-server-security
+
+Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+### asyncapi-server-variables
+
+All server URL variables should be defined in the `variables` object of the server. They should also not contain redundant variables that do not exist in the server address.
+
+**Recommended:** Yes
+
 ### asyncapi-servers
 
-A non empty `servers` object is expected to be located at the root of the document.
+A non-empty `servers` object is expected to be located at the root of the document.
 
 **Recommended:** Yes
 
@@ -302,19 +534,18 @@ Tags alone are not very descriptive. Give folks a bit more information to work w
 ```yaml
 tags:
   - name: "Aardvark"
-    description: Funny nosed pig-head racoon.
+    description: Funny-nosed pig-head raccoon.
   - name: "Badger"
     description: Angry short-legged omnivores.
 ```
 
-If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, anything. What is clear to the folks writing the document is probably not as clear to others.
+If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, or anything. What is clear to the folks writing the document is probably not as clear to others.
 
 ```yaml
 tags:
   - name: Invoice Items
     description: |+
       Giant long explanation about what this business concept is, because other people _might_ not have a clue!
-
 ```
 
 **Recommended:** No
@@ -343,6 +574,28 @@ tags:
 
 **Recommended:** No
 
+### asyncapi-tags-uniqueness
+
+Tags must not have duplicate names (identifiers).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+tags:
+  - name: "Badger"
+  - name: "Badger"
+```
+
+**Good Example**
+
+```yaml
+tags:
+  - name: "Aardvark"
+  - name: "Badger"
+```
+
 ### asyncapi-tags
 
 AsyncAPI object should have non-empty `tags` array.
@@ -363,6 +616,18 @@ Defining tags allows you to add more information like a `description`. For more 
 ### asyncapi-unused-components-schema
 
 Potential unused reusable `schema` entry has been detected.
+
+<!-- theme: warning -->
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
+
+### asyncapi-unused-components-server
+
+Potential unused reusable `server` entry has been detected.
 
 <!-- theme: warning -->
 

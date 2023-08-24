@@ -1,7 +1,0 @@
-{
-  "extends": [],
-  "parserOptions": {
-    "incompatibleValues": "off",
-    "duplicateKeys": "warn"
-  }
-}

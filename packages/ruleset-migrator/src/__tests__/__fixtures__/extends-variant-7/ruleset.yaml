@@ -1,0 +1,15 @@
+formats:
+  - oas2
+  - oas3
+extends:
+  - ./assets/ruleset.yaml
+  - ./assets/ruleset-2.yaml
+  - ./assets/ruleset-3.yaml
+functions:
+  - pascalCase
+rules:
+  my-rule:
+    given: $
+    then:
+      function: pascalCase
+

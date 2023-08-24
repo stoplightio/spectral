@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@stoplight/spectral-core/meta/extensions",
+  "$defs": {
+    "Extends": {
+      "$anchor": "extends",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "minItems": 2,
+                "additionalItems": false,
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "enum": ["all", "recommended", "off"],
+                    "errorMessage": "allowed types are \"off\", \"recommended\" and \"all\""
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Format": {
+      "$anchor": "format",
+      "type": "string",
+      "errorMessage": "must be a valid format"
+    },
+    "Functions": {
+      "$anchor": "functions",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "FunctionsDir": {
+      "$anchor": "functionsDir",
+      "type": "string"
+    },
+    "Function": {
+      "$anchor": "function",
+      "type": "object",
+      "properties": {
+        "function": {
+          "type": "string"
+        }
+      },
+      "required": ["function"]
+    }
+  }
+}

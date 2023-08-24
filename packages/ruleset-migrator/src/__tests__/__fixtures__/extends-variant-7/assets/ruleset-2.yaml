@@ -1,0 +1,9 @@
+formats:
+  - oas3.0
+functions:
+  - pascalCase
+rules:
+  my-rule:
+    given: $
+    then:
+      function: pascalCase

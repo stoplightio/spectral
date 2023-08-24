@@ -1,9 +1,11 @@
 // Karma configuration
 // Generated on Tue Jul 02 2019 17:18:30 GMT+0200 (Central European Summer Time)
 
+import * as path from 'path';
 import type { TransformCallback, TransformContext } from 'karma-typescript';
+import type { Config } from 'karma';
 
-module.exports = (config: any) => {
+module.exports = (config: Config): void => {
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -13,33 +15,48 @@ module.exports = (config: any) => {
     frameworks: ['jasmine', 'karma-typescript'],
 
     // list of files / patterns to load in the browser
-    files: ['./__karma__/jest.ts', './setupKarma.ts', './setupTests.ts', 'src/**/*.ts'],
+    files: ['./__karma__/jest.ts', './test-utils/*.ts', 'packages/*/src/**/*.ts'],
 
     // list of files / patterns to exclude
-    exclude: ['src/cli/**', 'src/formatters/**', 'src/**/*.jest.test.ts'],
+    exclude: [
+      'packages/cli/**',
+      'packages/formatters/src/pretty.ts',
+      'packages/formatters/src/index.node.ts',
+      'packages/ruleset-bundler/src/plugins/commonjs.ts',
+      '**/*.jest.test.ts',
+    ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.ts': ['karma-typescript', 'env'],
+      'packages/*/src/**/*.ts': ['karma-typescript'],
       './__karma__/**/*.ts': ['karma-typescript'],
-      './setupKarma.ts': ['karma-typescript'],
-      './setupTests.ts': ['karma-typescript'],
+      './test-utils/*.ts': ['karma-typescript'],
     },
 
-    envPreprocessor: ['USE_NIMMA'],
-
+    // @ts-expect-error: non-standard - karmaTypeScriptConfig
     karmaTypescriptConfig: {
       ...require('./tsconfig.json'),
       include: ['**/*.ts'],
+      exclude: ['packages/cli', 'node_modules'],
       bundlerOptions: {
         resolve: {
           alias: {
+            '@stoplight/spectral-test-utils': require.resolve('./test-utils/browser/index.js'),
+            '@stoplight/spectral-test-utils/matchers': path.join(__dirname, './test-utils/matchers.ts'),
+            nimma: require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
+            'nimma/fallbacks': require.resolve('./node_modules/nimma/dist/legacy/cjs/fallbacks/index.js'),
+            'nimma/legacy': require.resolve('./node_modules/nimma/dist/legacy/cjs/index.js'),
             'node-fetch': require.resolve('./__karma__/fetch'),
+            '^rollup$': 'rollup/dist/rollup.browser.js',
+            fs: require.resolve('./__karma__/fs'),
+            process: require.resolve('./__mocks__/process'),
+            perf_hooks: require.resolve('./__karma__/perf_hooks'),
+            fsevents: require.resolve('./__karma__/fsevents'),
           },
         },
         acornOptions: {
-          ecmaVersion: 11,
+          ecmaVersion: 13,
         },
         transforms: [
           require('karma-typescript-es6-transform')({

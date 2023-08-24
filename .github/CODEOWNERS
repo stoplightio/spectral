@@ -1,0 +1,9 @@
+* @stoplightio/oss-spectral
+
+README.md @stoplightio/documentation
+
+toc.json @stoplightio/documentation
+
+/docs @stoplightio/documentation
+
+/packages/rulesets/src/asyncapi @magicmatatjahu @smoya @jonaslagoni

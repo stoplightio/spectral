@@ -1,0 +1,8 @@
+[
+  {
+    "$ref": "common.json#/0"
+  },
+  {
+    "$ref": "common.json#/1"
+  }
+]

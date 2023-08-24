@@ -1,3 +1,0 @@
-rules: {}
-except:
-  "one.yaml##": ["my-rule"]

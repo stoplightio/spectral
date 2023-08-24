@@ -1,0 +1,8 @@
+functions:
+  - pascalCase
+functionsDir: ./fns
+rules:
+  my-rule:
+    given: $
+    then:
+      function: pascalCase

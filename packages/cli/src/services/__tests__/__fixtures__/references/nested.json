@@ -1,0 +1,12 @@
+{
+  "swagger": "2.0",
+  "host": "d",
+  "info": {
+    "$ref": "./common/info-ref.json"
+  },
+  "paths": {
+    "/test": {
+      "$ref": "./common/paths.json#/paths/~1test"
+    }
+  }
+}

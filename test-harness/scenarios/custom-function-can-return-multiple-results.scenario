@@ -1,11 +1,6 @@
 ====test====
 Custom function can return multiple results
 ====document====
-openapi: 3.0.2
-info:
-  title: Test Spec
-  version: 0.0.0
-
 tags:
   - name: a-tag
     description: A tag
@@ -22,15 +17,13 @@ paths: {}
 
 const NAME_PROPERTY = 'name';
 
-module.exports = (targetVal, _opts, paths) => {
+module.exports = (targetVal, _opts, { path: rootPath }) => {
   if (!Array.isArray(targetVal)) {
     return;
   }
 
   const seen = [];
   const results = [];
-
-  const rootPath = paths.target !== void 0 ? paths.target : paths.given;
 
   for (let i = 0; i < targetVal.length; i++) {
     if (targetVal[i] === null || typeof targetVal[i] !== 'object') {
@@ -58,28 +51,24 @@ module.exports = (targetVal, _opts, paths) => {
   return results;
 };
 ====asset:ruleset====
-extends: [spectral:oas]
+const fn = require('{asset:fn.js}');
 
-functions: ["{asset:fn.js|filename|no-ext}"]
-functionsDir: "."
-
-rules:
-  unique-tag-names:
-    message: "Tags should have distinct names: {{error}}"
-    given: "$.tags"
-    then:
-      function: "{asset:fn.js|filename|no-ext}"
+module.exports = {
+  rules: {
+    'unique-tag-names': {
+      message: "Tags should have distinct names: {{error}}",
+      given: "$.tags",
+      then: {
+        function: fn,
+      },
+    },
+  },
+}
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset "{asset:ruleset}"
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.0.x detected
-
 {document}
-  1:1   warning  oas3-api-servers  OpenAPI `servers` must be present and non-empty array.
-  2:6   warning  info-contact      Info object should contain `contact` object.                             info
-  2:6   warning  info-description  OpenAPI object info `description` must be present and non-empty string.  info
- 11:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'              tags[2].name
- 13:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'              tags[3].name
+ 6:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'  tags[2].name
+ 8:11  warning  unique-tag-names  Tags should have distinct names: Duplicate tag name 'a-tag'  tags[3].name
 
-✖ 5 problems (0 errors, 5 warnings, 0 infos, 0 hints)
+✖ 2 problems (0 errors, 2 warnings, 0 infos, 0 hints)

@@ -56,8 +56,11 @@ Loose JSON Schema can be validated
   ]
 }
 ====asset:loose-schema-ruleset====
-{
-  "formats": ["json-schema-loose"],
+const { jsonSchemaLoose } = require('@stoplight/spectral-formats');
+const { falsy, truthy } = require('@stoplight/spectral-functions');
+
+module.exports = {
+  "formats": [jsonSchemaLoose],
   "rules": {
     "no-root-all-of": {
       "description": "No root allOf combiner",
@@ -68,7 +71,7 @@ Loose JSON Schema can be validated
       "given": "$",
       "then": {
         "field": "allOf",
-        "function": "falsy"
+        "function": falsy
       }
     },
     "no-empty-description": {
@@ -78,7 +81,7 @@ Loose JSON Schema can be validated
       "type": "validation",
       "given": "$..description",
       "then": {
-        "function": "truthy"
+        "function": truthy
       }
     }
   }
@@ -86,8 +89,6 @@ Loose JSON Schema can be validated
 ====command====
 {bin} lint {document} --ruleset {asset:loose-schema-ruleset}
 ====stdout====
-JSON Schema (loose) detected
-
 {document}
  3:11    error  no-root-all-of        No root allOf combiner         allOf
  6:22  warning  no-empty-description  Description must not be empty  allOf[0].description

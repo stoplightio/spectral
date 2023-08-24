@@ -1,0 +1,166 @@
+{
+  "items": [
+    {
+      "type": "item",
+      "title": "Overview",
+      "uri": "/README.md"
+    },
+    {
+      "type": "divider",
+      "title": "Getting Started"
+    },
+    {
+      "type": "item",
+      "title": "Concepts",
+      "uri": "/docs/getting-started/1-concepts.md"
+    },
+    {
+      "type": "item",
+      "title": "Installation",
+      "uri": "/docs/getting-started/2-installation.md"
+    },
+    {
+      "type": "item",
+      "title": "Create a Ruleset",
+      "uri": "/docs/getting-started/3-rulesets.md"
+    },
+    {
+      "type": "item",
+      "title": "OpenAPI Support",
+      "uri": "/docs/getting-started/4-openapi.md"
+    },
+    {
+      "type": "item",
+      "title": "AsyncAPI Support",
+      "uri": "/docs/getting-started/5-asyncapi.md"
+    },
+    {
+      "type": "divider",
+      "title": "Guides"
+    },
+    {
+      "type": "item",
+      "title": "Workflows",
+      "uri": "/docs/guides/1-workflows.md"
+    },
+    {
+      "type": "item",
+      "title": "Spectral CLI",
+      "uri": "/docs/guides/2-cli.md"
+    },
+    {
+      "type": "item",
+      "title": "Spectral in JavaScript",
+      "uri": "/docs/guides/3-javascript.md"
+    },
+    {
+      "type": "group",
+      "title": "Rulesets",
+      "items": [
+        {
+          "type": "item",
+          "title": "Overview",
+          "uri": "/docs/guides/4-custom-rulesets.md"
+        },
+        {
+          "type": "item",
+          "title": "Rules",
+          "uri": "/docs/guides/4a-rules.md"
+        },
+        {
+          "type": "item",
+          "title": "Extends",
+          "uri": "/docs/guides/4b-extends.md"
+        },
+        {
+          "type": "item",
+          "title": "Aliases",
+          "uri": "/docs/guides/4c-aliases.md"
+        },
+        {
+          "type": "item",
+          "title": "Overrides",
+          "uri": "/docs/guides/4d-overrides.md"
+        },
+        {
+          "type": "item",
+          "title": "Recommended",
+          "uri": "/docs/guides/4e-recommended.md"
+        },
+        {
+          "type": "item",
+          "title": "JavaScript Ruleset Format",
+          "uri": "/docs/guides/4f-js-rulesets.md"
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "title": "Custom Functions",
+      "uri": "/docs/guides/5-custom-functions.md"
+    },
+    {
+      "type": "item",
+      "title": "Sharing & Distributing Rulesets",
+      "uri": "/docs/guides/7-sharing-rulesets.md"
+    },
+    {
+      "type": "item",
+      "title": "Continuous Integration",
+      "uri": "/docs/guides/8-continuous-integration.md"
+    },
+    {
+      "type": "item",
+      "title": "Tips & Tricks",
+      "uri": "/docs/guides/8-tips-and-tricks.md"
+    },
+    {
+      "type": "divider",
+      "title": "Migration Guides"
+    },
+    {
+      "type": "item",
+      "title": "Spectral v2/v3 to v4 Migration Guide",
+      "uri": "/docs/migration-guides/4.0.md"
+    },
+    {
+      "type": "item",
+      "title": "Spectral v4 to v5 Migration Guide",
+      "uri": "/docs/migration-guides/5.0.md"
+    },
+    {
+      "type": "item",
+      "title": "Spectral v5 to v6 Migration Guide",
+      "uri": "/docs/migration-guides/6.0.md"
+    },
+    {
+      "type": "divider",
+      "title": "Reference"
+    },
+    {
+      "type": "item",
+      "title": "OpenAPI Rules",
+      "uri": "/docs/reference/openapi-rules.md"
+    },
+    {
+      "type": "item",
+      "title": "AsyncAPI Rules",
+      "uri": "/docs/reference/asyncapi-rules.md"
+    },
+    {
+      "type": "item",
+      "title": "Core Functions",
+      "uri": "/docs/reference/functions.md"
+    },
+    {
+      "type": "item",
+      "title": "Error Handling",
+      "uri": "/docs/reference/error-handling.md"
+    },
+    {
+      "type": "item",
+      "title": "YAML support",
+      "uri": "/docs/reference/yaml.md"
+    }
+  ]
+}

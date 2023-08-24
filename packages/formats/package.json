@@ -1,0 +1,27 @@
+{
+  "name": "@stoplight/spectral-formats",
+  "version": "1.5.0",
+  "sideEffects": false,
+  "homepage": "https://github.com/stoplightio/spectral",
+  "bugs": "https://github.com/stoplightio/spectral/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/spectral"
+  },
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "@stoplight/json": "^3.17.0",
+    "@stoplight/spectral-core": "^1.8.0",
+    "@types/json-schema": "^7.0.7",
+    "tslib": "^2.3.1"
+  }
+}

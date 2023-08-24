@@ -1,35 +1,41 @@
 # Workflows
 
-When and where should you use Spectral? It depends a lot how you are creating and managing your API description documents, but probably wherever they are being made.
+When and where you use Spectral depends on how you are creating and managing your API description documents or other files you are trying to lint.
 
-- Run [Spectral CLI](2-cli.md) against design docs and get feedback very early on.
-- Run Spectral in [Stoplight Studio](https://stoplight.io/studio/) or [VS Code](https://github.com/stoplightio/vscode-spectral) automatically as you work, without switching to the CLI.
+You can:
+
+1. Run [Spectral CLI](2-cli.md) against design docs and get early feedback.
+2. Run Spectral in [Stoplight Studio](https://stoplight.io/studio/?utm_source=github&utm_medium=spectral&utm_campaign=docs) or [VS Code](https://github.com/stoplightio/vscode-spectral?utm_source=github&utm_medium=spectral&utm_campaign=docs) as you work to avoid switching to CLI.
+3. Run Spectral as a [Git hook](#git-hooks) to enforce linting as part of the commit process.
+4. Use [Continuous Integration](#continuous-integration) to reject pull requests that don't match your rulesets and style guide.
 
 ## Linting Design-First Workflows
 
-If the developer is just in the early stages of planning and designing the API, they could run Spectral against their design docs and get feedback very early on. If they are using Studio, Spectral will be running automatically as they work, without the developer even needing to switch to the CLI.
+If you are using [Stoplight Studio](https://stoplight.io/studio/?utm_source=github&utm_medium=spectral&utm_campaign=docs), Spectral automatically runs as you work so you never need to switch to the CLI.
 
-Seeing these errors and warnings will help nudge the developer towards creating consistent APIs, quickly and easily, without needing to have "OpenAPI Gatekeepers" to enforce the rules manually. Those folks are not infallible, they can miss things, but Spectral can be used to free those people up for bigger and better things.
+Seeing these errors and warnings facilitate consistent APIs, quickly and easily, without requiring "OpenAPI Gatekeepers" to manually enforce the rules.
 
 ## Linting Code-First Workflows
 
-Using Spectral gets a little tricky for developers who are following a code-first (a.k.a "design-second") workflow. If the API description documents live in YAML or JSON files then its fine, and the design-first workflow can be used: with new changes being linted.
+Using Spectral gets a little tricky for developers who are following a code-first (a.k.a "design-second") workflow. If the API description documents live in YAML or JSON files, the design-first workflow can be used, with new changes being linted.
 
-If the API description documents live in some other format, maybe as comments or annotations inside code, Spectral has no way to read that. Hopefully that annotations-based tool has some sort of export option on the CLI. Here's an example for those using [go-swagger](https://github.com/go-swagger/go-swagger).
+If the API description documents live in some other format, such as comments or annotations inside code, consider using a tool with an export option on the CLI. Here's an example using [go-swagger](https://github.com/go-swagger/go-swagger):
 
 ```bash
 swagger generate spec -o ./tmp/openapi.json && spectral lint ./tmp/openapi.json
 ```
 
-Sadly by the time you've already written your code, if Spectral points anything out related to your actual API, and not providing feedback on the API description document itself, figuring out what to do next might be troublesome.
+After your API is in production, changing problems that Spectral finds could be troublesome.
 
-For example if the API has a bunch of URLs with underscores, then becoming consistent is either a case of waiting for the next major version and changing things in there, or taking a more evolution-based approach, aliasing `/example_url` to `/example-url`, then look into [deprecating the old URL](https://apisyouwonthate.com/blog/api-evolution-for-rest-http-apis/).
+For example, if the API has a bunch of URLs with underscores, then becoming consistent is either a case of waiting for the next major version and changing things in there, or taking a more evolution-based approach, aliasing `/example_url` to `/example-url`, then look into [deprecating the old URL](https://apisyouwonthate.com/blog/api-evolution-for-rest-http-apis/).
 
 ## Git-hooks
 
-Folks will forget to run Spectral, and that means they can commit broken or (low quality) documents. Adding a git commit hook can be a simple solution to this using something like [Husky](https://github.com/typicode/husky).
+[Git hooks](https://git-scm.com/docs/githooks) are programs or commands you can set up and have them run when you commit or push. They can help lint your commit messages, run tests, or even lint your API descriptions with Spectral.
 
-```jsonc
+Here's an example of a Spectral Git hook using [Husky](https://github.com/typicode/husky):
+
+```json
 // package.json
 {
   "husky": {
@@ -42,23 +48,12 @@ Folks will forget to run Spectral, and that means they can commit broken or (low
 }
 ```
 
-See our [CLI documentation](./2-cli.md) to see what other arguments and options can be used.
+See the [CLI documentation](./2-cli.md) to see what other arguments and options can be used.
 
 ## Continuous Integration
 
-Running Spectral on CI servers is just a case of doing what you'd do in the CI.
+Spectral can be used in any CI environment that runs Node.js or a Docker image: Jenkins, CircleCI, GitHub Actions, etc.
 
-```yaml
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:12
-    steps:
-      - checkout
-      - run:
-          name: "API Description Linter"
-          command: npx @stoplight/spectral lint somefile.yaml -- --ruleset=config/custom-ruleset.yaml
-```
+By enabling the JUnit output format when you lint, most CI servers can show visual results helping people realize which mistakes were made and where.
 
-We plan to add JUnit/xUnit test results in a future version, so tools like CircleCI can show test results in a more visual way. For now, the commands exit code will alert CI that there was a problem, and the console output will say why.
+Read the [Continuous Integration guide](8-continuous-integration.md) for more information on setting things up in your CI of choice.

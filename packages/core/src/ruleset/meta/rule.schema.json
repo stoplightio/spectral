@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@stoplight/spectral-core/meta/rule.schema",
+  "$defs": {
+    "Then": {
+      "type": "object",
+      "allOf": [
+        {
+          "properties": {
+            "field": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "$ref": "extensions#function"
+        }
+      ]
+    },
+    "Severity": {
+      "$ref": "shared#severity"
+    }
+  },
+  "if": {
+    "type": "object"
+  },
+  "then": {
+    "type": "object",
+    "properties": {
+      "description": {
+        "type": "string"
+      },
+      "documentationUrl": {
+        "type": "string",
+        "format": "url",
+        "errorMessage": "must be a valid URL"
+      },
+      "recommended": {
+        "type": "boolean"
+      },
+      "given": {
+        "$ref": "shared#given"
+      },
+      "resolved": {
+        "type": "boolean"
+      },
+      "severity": {
+        "$ref": "#/$defs/Severity"
+      },
+      "message": {
+        "type": "string"
+      },
+      "tags": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "formats": {
+        "$ref": "shared#formats"
+      },
+      "then": {
+        "if": {
+          "type": "array"
+        },
+        "then": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Then"
+          }
+        },
+        "else": {
+          "$ref": "#/$defs/Then"
+        }
+      },
+      "type": {
+        "enum": ["style", "validation"],
+        "type": "string",
+        "errorMessage": "allowed types are \"style\" and \"validation\""
+      },
+      "extensions": {
+        "type": "object"
+      }
+    },
+    "required": ["given", "then"],
+    "additionalProperties": false,
+    "patternProperties": {
+      "^x-": true
+    },
+    "errorMessage": {
+      "required": "the rule must have at least \"given\" and \"then\" properties"
+    }
+  },
+  "else": {
+    "oneOf": [
+      {
+        "$ref": "shared#/$defs/HumanReadableSeverity"
+      },
+      {
+        "type": "boolean"
+      }
+    ]
+  }
+}

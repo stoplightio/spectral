@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "@stoplight/spectral-core/meta/shared",
+  "$defs": {
+    "Formats": {
+      "$anchor": "formats",
+      "type": "array",
+      "items": {
+        "$ref": "extensions#format"
+      },
+      "errorMessage": "must be an array of formats"
+    },
+    "DiagnosticSeverity": {
+      "enum": [-1, 0, 1, 2, 3]
+    },
+    "HumanReadableSeverity": {
+      "enum": ["error", "warn", "info", "hint", "off"]
+    },
+    "Severity": {
+      "$anchor": "severity",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DiagnosticSeverity"
+        },
+        {
+          "$ref": "#/$defs/HumanReadableSeverity"
+        }
+      ],
+      "errorMessage": "the value has to be one of: 0, 1, 2, 3 or \"error\", \"warn\", \"info\", \"hint\", \"off\""
+    },
+    "Given": {
+      "$anchor": "given",
+      "if": {
+        "type": "array"
+      },
+      "then": {
+        "$anchor": "arrayish-given",
+        "type": "array",
+        "items": {
+          "$ref": "path-expression"
+        },
+        "minItems": 1,
+        "errorMessage": {
+          "minItems": "must be a non-empty array of expressions"
+        }
+      },
+      "else": {
+        "$ref": "path-expression"
+      }
+    },
+    "PathExpression": {
+      "$id": "path-expression",
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "type": "string",
+        "if": {
+          "pattern": "^#"
+        },
+        "then": {
+          "x-spectral-runtime": "alias"
+        },
+        "else": {
+          "pattern": "^\\$",
+          "errorMessage": "must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+        }
+      },
+      "else": {
+        "not": {},
+        "errorMessage": "must be a valid JSON Path expression or a reference to the existing Alias optionally paired with a JSON Path expression subset"
+      }
+    }
+  }
+}

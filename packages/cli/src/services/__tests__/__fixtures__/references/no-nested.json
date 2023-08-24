@@ -1,0 +1,9 @@
+{
+  "info": {
+    "$ref": "./common/info.json#/definitions/info"
+  },
+  "paths": {
+    "/test": {},
+    "foo": {}
+  }
+}

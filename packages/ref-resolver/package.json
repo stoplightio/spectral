@@ -1,0 +1,27 @@
+{
+  "name": "@stoplight/spectral-ref-resolver",
+  "version": "1.0.4",
+  "homepage": "https://github.com/stoplightio/spectral",
+  "bugs": "https://github.com/stoplightio/spectral/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/spectral.git"
+  },
+  "dependencies": {
+    "@stoplight/json-ref-readers": "1.2.2",
+    "@stoplight/json-ref-resolver": "~3.1.6",
+    "@stoplight/spectral-runtime": "^1.1.2",
+    "dependency-graph": "0.11.0",
+    "tslib": "^2.3.1"
+  }
+}

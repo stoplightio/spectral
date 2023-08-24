@@ -10,6 +10,16 @@ info:
     name: Bob the Builder
 servers:
   - url: 'http://localhost:3000'
+  - url: 'https://{username}.localhost:3000/{basePath}'
+    variables:
+      username:
+        default: demo
+        description: this value is assigned by the service provider, in this example `gigantic-server.com`
+      port:
+        enum:
+          - '8443'
+          - '443'
+        default: '8443'
 paths:
   '/users/{userId}':
     parameters:
@@ -20,6 +30,7 @@ paths:
         schema:
           type: integer
     get:
+      x-internal: true
       summary: Get User Info by User ID
       responses:
         '200':
@@ -178,13 +189,11 @@ components:
           exclusiveMinimum: 18
           examples:
             - 36
-====asset:ruleset====
+====asset:ruleset.yaml====
 extends: [[spectral:oas, off]]
 rules:
   oas3-schema: error
 ====command====
-{bin} lint {document} --ruleset {asset:ruleset}
+{bin} lint {document} --ruleset {asset:ruleset.yaml}
 ====stdout====
-OpenAPI 3.x detected
-OpenAPI 3.1.x detected
-No results with a severity of 'error' or higher found!
+No results with a severity of 'error' found!

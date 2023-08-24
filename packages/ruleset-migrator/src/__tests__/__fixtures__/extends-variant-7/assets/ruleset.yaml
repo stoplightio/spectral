@@ -1,0 +1,11 @@
+formats:
+  - oas2
+  - oas3.1
+functions:
+  - pascalCase
+  - oas3
+rules:
+  my-rule:
+    given: $
+    then:
+      function: truthy

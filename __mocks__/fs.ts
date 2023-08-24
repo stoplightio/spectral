@@ -1,6 +1,10 @@
-const fs = jest.requireActual('fs');
+/* eslint-disable @typescript-eslint/unbound-method */
+import { fs } from 'memfs';
 
-module.exports = {
-  ...fs,
-  writeFile: jest.fn((source: unknown, opts: unknown, cb: Function) => cb(null)),
-};
+export const promises = fs.promises;
+export const readFile = fs.readFile;
+export const readFileSync = fs.readFileSync;
+export const writeFileSync = fs.writeFileSync;
+export const mkdirSync = fs.mkdirSync;
+export const rmdirSync = fs.rmdirSync;
+export const access = fs.access;
