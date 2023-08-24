@@ -26,6 +26,7 @@ import {
   oasDiscriminator,
 } from './functions';
 import { uniquenessTags } from '../shared/functions';
+import runtimeExpression from './functions/runtimeExpression';
 
 export { ruleset as default };
 
@@ -35,6 +36,18 @@ const ruleset = {
   aliases: {
     PathItem: ['$.paths[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    ResponseObject: {
+      targets: [
+        {
+          formats: [oas2],
+          given: ['#OperationObject.responses[*]', '$.responses[*]'],
+        },
+        {
+          formats: [oas3],
+          given: ['#OperationObject.responses[*]', '$.components.responses[*]'],
+        },
+      ],
+    },
   },
   rules: {
     'operation-success-response': {
@@ -669,6 +682,17 @@ const ruleset = {
       given: '$',
       then: {
         function: oasUnusedComponent,
+      },
+    },
+    'oas3-links-parameters-expression': {
+      description: "The links.parameters object's values should be valid runtime expressions.",
+      message: '{{error}}',
+      severity: 0,
+      formats: [oas3],
+      recommended: true,
+      given: '#ResponseObject.links[*].parameters',
+      then: {
+        function: runtimeExpression,
       },
     },
   },
