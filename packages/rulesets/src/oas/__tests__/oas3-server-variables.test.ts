@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from './__helpers__/tester';
 
-testRule('openapi-server-variables', [
+testRule('oas3-server-variables', [
   {
     name: 'valid case',
     document: {

@@ -692,7 +692,7 @@ const ruleset = {
         function: oasUnusedComponent,
       },
     },
-    'openapi-server-variables': {
+    'oas3-server-variables': {
       description: 'Server variables must be defined and valid and there must be no redundant variables.',
       message: '{{error}}',
       severity: 0,
