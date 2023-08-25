@@ -3307,10 +3307,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:^15.12.4":
-  version: 15.12.4
-  resolution: "@types/node@npm:15.12.4"
-  checksum: 1731c610eb87d2051d32d0f64f2b14b4e75443ab40ab4882e50fdaa4e5e1013240a6d249213bec1f83b2c3ba24f6d5233159a4deac0bb51751809f5cb6082735
+"@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:^18.17.7":
+  version: 18.17.7
+  resolution: "@types/node@npm:18.17.7"
+  checksum: cb327da222eb9dc2a8e86c957bef58b16f20a2f6b109e43ff10267e83b342bcba5257e800438dd54deb2bd66bb7815539a759c6dcf91e1b0b08b3add1d5886c8
   languageName: node
   linkType: hard
 
@@ -11461,7 +11461,7 @@ __metadata:
     "@types/jest": ^28.1.6
     "@types/karma": ^6.3.3
     "@types/lodash": ^4.14.176
-    "@types/node": ^15.12.4
+    "@types/node": ^18.17.7
     "@types/node-fetch": ^2.5.12
     "@types/node-powershell": ^3.1.1
     "@types/text-table": ^0.2.2
