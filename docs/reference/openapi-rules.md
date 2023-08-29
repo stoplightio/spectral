@@ -859,10 +859,10 @@ This rule ensures that server variables defined in OpenAPI Specification 3 (OAS3
 
 ```yaml
 servers:
-  - url: '<https://api>.{region}.example.com/v1'
+  - url: "<https://api>.{region}.example.com/v1"
     variables:
       version:
-        default: 'v1'
+        default: "v1"
 ```
 
 In this example, the variable **`{region}`** in the URL is not defined within the **`variables`** object.
@@ -871,10 +871,10 @@ In this example, the variable **`{region}`** in the URL is not defined within th
 
 ```yaml
 servers:
-  - url: 'https://api.example.com/v1'
+  - url: "https://api.example.com/v1"
     variables:
       region:
-        default: 'us-west'
+        default: "us-west"
 ```
 
 Here, the variable **`region`** is defined but not used in the server URL.
@@ -883,13 +883,13 @@ Here, the variable **`region`** is defined but not used in the server URL.
 
 ```yaml
 servers:
-  - url: 'https://api.{region}.example.com/v1'
+  - url: "https://api.{region}.example.com/v1"
     variables:
       region:
-        default: 'us-south'
+        default: "us-south"
         enum:
-          - 'us-west'
-          - 'us-east'
+          - "us-west"
+          - "us-east"
 ```
 
 The default value 'us-south' isn't one of the allowed values in the **`enum`**.
@@ -898,10 +898,10 @@ The default value 'us-south' isn't one of the allowed values in the **`enum`**.
 
 ```yaml
 servers:
-  - url: 'https://api.example.com:{port}/v1'
+  - url: "https://api.example.com:{port}/v1"
     variables:
       port:
-        default: '8o80'
+        default: "8o80"
 ```
 
 Substituting the default value of **`{port}`** results in an invalid URL.
@@ -910,15 +910,15 @@ Substituting the default value of **`{port}`** results in an invalid URL.
 
 ```yaml
 servers:
-  - url: 'https://api.{region}.example.com/{version}'
+  - url: "https://api.{region}.example.com/{version}"
     variables:
       region:
-        default: 'us-west'
+        default: "us-west"
         enum:
-          - 'us-west'
-          - 'us-east'
+          - "us-west"
+          - "us-east"
       version:
-        default: 'v1'
+        default: "v1"
 ```
 
 In this example, both **`{region}`** and **`{version}`** variables are properly defined and used in the server URL. Also, the default value for **`region`** is within the allowed values.
