@@ -92,7 +92,7 @@ testRule('asyncapi-server-variables', [
   },
 
   {
-    name: 'server has redundant url variables',
+    name: 'server has unused url variables',
     document: {
       asyncapi: '2.0.0',
       servers: {
@@ -109,12 +109,12 @@ testRule('asyncapi-server-variables', [
     },
     errors: [
       {
-        message: 'Server\'s "variables" object has redundant defined "anotherParam1" url variable.',
+        message: 'Server\'s "variables" object has unused defined "anotherParam1" url variable.',
         path: ['servers', 'production', 'variables', 'anotherParam1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s "variables" object has redundant defined "anotherParam2" url variable.',
+        message: 'Server\'s "variables" object has unused defined "anotherParam2" url variable.',
         path: ['servers', 'production', 'variables', 'anotherParam2'],
         severity: DiagnosticSeverity.Error,
       },
@@ -122,7 +122,7 @@ testRule('asyncapi-server-variables', [
   },
 
   {
-    name: 'server has redundant url variables (in the components.servers)',
+    name: 'server has unused url variables (in the components.servers)',
     document: {
       asyncapi: '2.3.0',
       components: {
@@ -141,12 +141,12 @@ testRule('asyncapi-server-variables', [
     },
     errors: [
       {
-        message: 'Server\'s "variables" object has redundant defined "anotherParam1" url variable.',
+        message: 'Server\'s "variables" object has unused defined "anotherParam1" url variable.',
         path: ['components', 'servers', 'production', 'variables', 'anotherParam1'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s "variables" object has redundant defined "anotherParam2" url variable.',
+        message: 'Server\'s "variables" object has unused defined "anotherParam2" url variable.',
         path: ['components', 'servers', 'production', 'variables', 'anotherParam2'],
         severity: DiagnosticSeverity.Error,
       },
