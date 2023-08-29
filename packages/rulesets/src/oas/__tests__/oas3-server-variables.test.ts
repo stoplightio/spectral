@@ -112,7 +112,7 @@ testRule('oas3-server-variables', [
   },
 
   {
-    name: 'server has redundant url variables',
+    name: 'server has unused url variables',
     document: {
       openapi: '3.1.0',
       servers: [
@@ -159,22 +159,22 @@ testRule('oas3-server-variables', [
     },
     errors: [
       {
-        message: 'Server\'s "variables" object has redundant defined "env" url variable.',
+        message: 'Server\'s "variables" object has unused defined "env" url variable.',
         path: ['servers', '0', 'variables', 'env'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s "variables" object has redundant defined "port" url variable.',
+        message: 'Server\'s "variables" object has unused defined "port" url variable.',
         path: ['paths', '/', 'servers', '0', 'variables', 'port'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s "variables" object has redundant defined "port" url variable.',
+        message: 'Server\'s "variables" object has unused defined "port" url variable.',
         path: ['paths', '/', 'get', 'servers', '0', 'variables', 'port'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server\'s "variables" object has redundant defined "env" url variable.',
+        message: 'Server\'s "variables" object has unused defined "env" url variable.',
         path: ['paths', '/', 'get', 'servers', '0', 'variables', 'env'],
         severity: DiagnosticSeverity.Error,
       },

@@ -87,7 +87,7 @@ export default createRulesetFunction<Input, Options>(
     const redundantVariables = getRedundantProps(foundVariables, definedVariablesKeys);
     for (const variable of redundantVariables) {
       results.push({
-        message: `Server's "variables" object has redundant defined "${variable}" url variable.`,
+        message: `Server's "variables" object has unused defined "${variable}" url variable.`,
         path: [...ctx.path, 'variables', variable],
       });
     }
