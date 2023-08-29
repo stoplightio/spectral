@@ -693,7 +693,7 @@ const ruleset = {
       },
     },
     'oas3-server-variables': {
-      description: 'Server variables must be defined and valid and there must be no redundant variables.',
+      description: 'Server variables must be defined and valid and there must be no unused variables.',
       message: '{{error}}',
       severity: 0,
       recommended: true,
