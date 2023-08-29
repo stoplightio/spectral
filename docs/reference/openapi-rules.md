@@ -859,7 +859,7 @@ This rule ensures that server variables defined in OpenAPI Specification 3 (OAS3
 
 ```yaml
 servers:
-  - url: "<https://api>.{region}.example.com/v1"
+  - url: "https://api.{region}.example.com/v1"
     variables:
       version:
         default: "v1"
