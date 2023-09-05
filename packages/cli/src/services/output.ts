@@ -1,7 +1,17 @@
 import * as process from 'process';
 import { IRuleResult } from '@stoplight/spectral-core';
 import { promises as fs } from 'fs';
-import { html, json, junit, stylish, teamcity, text, pretty, githubActions } from '@stoplight/spectral-formatters';
+import {
+  html,
+  json,
+  junit,
+  stylish,
+  teamcity,
+  text,
+  pretty,
+  githubActions,
+  sarif,
+} from '@stoplight/spectral-formatters';
 import type { Formatter, FormatterOptions } from '@stoplight/spectral-formatters';
 import type { OutputFormat } from './config';
 
@@ -14,6 +24,7 @@ const formatters: Record<OutputFormat, Formatter> = {
   text,
   teamcity,
   'github-actions': githubActions,
+  sarif,
 };
 
 export function formatOutput(results: IRuleResult[], format: OutputFormat, formatOptions: FormatterOptions): string {

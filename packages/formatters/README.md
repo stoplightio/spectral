@@ -33,3 +33,4 @@ console.error(output);
 
 - pretty
 - github-actions
+- sarif

@@ -12,6 +12,7 @@ export enum OutputFormat {
   TEAMCITY = 'teamcity',
   PRETTY = 'pretty',
   GITHUB_ACTIONS = 'github-actions',
+  SARIF = 'sarif',
 }
 
 export interface ILintConfig {

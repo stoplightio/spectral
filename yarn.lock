@@ -2730,6 +2730,7 @@ __metadata:
     eol: 0.9.1
     lodash: ^4.17.21
     node-html-parser: ^4.1.5
+    node-sarif-builder: ^2.0.3
     strip-ansi: 6.0
     text-table: ^0.2.0
     tslib: ^2.5.0
@@ -3339,6 +3340,13 @@ __metadata:
   version: 2.3.0
   resolution: "@types/prettier@npm:2.3.0"
   checksum: 8dd9b5263fd91001d72ca4e2ff89fb0d1ba23a450bd723b4478eb651755a2f1151af14ab90c4f7dadba607142757b340c1d7271ae56806563c76719d3321ec20
+  languageName: node
+  linkType: hard
+
+"@types/sarif@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "@types/sarif@npm:2.1.4"
+  checksum: 1ff924e9ffe468f93c8751d6e8192ca126380a328ba7d8f7abb6d3e7d66080f9d3c93c4db94ddca569b65a2f6d3b82dfe9b79f23500ebb69e0f6d2d12a1dc5c4
   languageName: node
   linkType: hard
 
@@ -9802,6 +9810,16 @@ __metadata:
   version: 2.0.6
   resolution: "node-releases@npm:2.0.6"
   checksum: e86a926dc9fbb3b41b4c4a89d998afdf140e20a4e8dbe6c0a807f7b2948b42ea97d7fd3ad4868041487b6e9ee98409829c6e4d84a734a4215dff060a7fbeb4bf
+  languageName: node
+  linkType: hard
+
+"node-sarif-builder@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "node-sarif-builder@npm:2.0.3"
+  dependencies:
+    "@types/sarif": ^2.1.4
+    fs-extra: ^10.0.0
+  checksum: 397dd9bfb0780c6753fb47d1fd0465f3c8a935082cb1bbd7ad6232d18b6343d9d499c6bc572ad0415db282efd6058fe8b7a6657020434adef4fbf93a8b95306e
   languageName: node
   linkType: hard
 

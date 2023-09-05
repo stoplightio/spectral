@@ -14,3 +14,7 @@ export const pretty: Formatter = () => {
 export const githubActions: Formatter = () => {
   throw Error('github-actions formatter is available only in Node.js');
 };
+
+export const sarif: Formatter = () => {
+  throw Error('sarif formatter is available only in Node.js');
+};
