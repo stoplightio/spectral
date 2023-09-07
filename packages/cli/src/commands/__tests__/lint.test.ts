@@ -48,7 +48,7 @@ describe('lint', () => {
   ];
 
   beforeEach(() => {
-    (lint as jest.Mock).mockResolvedValueOnce(results);
+    (lint as jest.Mock).mockResolvedValueOnce({ results: results, resolvedRuleset: {} });
     (formatOutput as jest.Mock).mockReturnValueOnce('<formatted output>');
     (writeOutput as jest.Mock).mockResolvedValueOnce(undefined);
   });
@@ -148,7 +148,7 @@ describe('lint', () => {
 
   it.each(['json', 'stylish'])('calls formatOutput with %s format', async format => {
     await run(`lint -f ${format} ./__fixtures__/empty-oas2-document.json`);
-    expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error });
+    expect(formatOutput).toBeCalledWith(results, format, { failSeverity: DiagnosticSeverity.Error }, expect.anything());
   });
 
   it('writes formatted output to a file', async () => {

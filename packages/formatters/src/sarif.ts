@@ -17,7 +17,7 @@ const OUTPUT_TYPES: Dictionary<Result.level, DiagnosticSeverity> = {
   [DiagnosticSeverity.Hint]: 'note',
 };
 
-export const sarif: Formatter = results => {
+export const sarif: Formatter = (results, _, ruleset) => {
   const sarifBuilder = new SarifBuilder({
     $schema: 'http://json.schemastore.org/sarif-2.1.0-rtm.6.json',
     version: '2.1.0',
@@ -30,27 +30,26 @@ export const sarif: Formatter = results => {
     url: 'https://github.com/stoplightio/spectral',
   });
 
-  const uniqueRuleIds = new Set<string>();
-  results.forEach(result => {
-    const ruleId = result.code.toString();
-
-    // add to rules
-    if (!uniqueRuleIds.has(ruleId)) {
-      uniqueRuleIds.add(ruleId);
+  // add rules
+  if (ruleset != null) {
+    for (const rule of Object.values(ruleset.rules)) {
       const sarifRuleBuilder = new SarifRuleBuilder().initSimple({
-        ruleId,
-        shortDescriptionText: result.message,
+        ruleId: rule.name,
+        shortDescriptionText: rule.description ?? 'No description.',
+        helpUri: rule.documentationUrl !== null ? rule.documentationUrl : undefined,
       });
       sarifRunBuilder.addRule(sarifRuleBuilder);
     }
+  }
 
-    // add to results
+  // add results
+  results.forEach(result => {
     const sarifResultBuilder = new SarifResultBuilder();
     const severity: DiagnosticSeverity = result.severity || DiagnosticSeverity.Error;
     sarifResultBuilder.initSimple({
       level: OUTPUT_TYPES[severity] || 'error',
       messageText: result.message,
-      ruleId: ruleId,
+      ruleId: result.code.toString(),
       fileUri: relative(process.cwd(), result.source ?? '').replace(/\\/g, '/'),
       startLine: (result.range.start.line || 1) + 1,
       startColumn: result.range.start.character || 1,
@@ -59,7 +58,6 @@ export const sarif: Formatter = results => {
     });
     sarifRunBuilder.addResult(sarifResultBuilder);
   });
-
   sarifBuilder.addRun(sarifRunBuilder);
   return sarifBuilder.buildSarifJsonString({ indent: true });
 };

@@ -31,7 +31,7 @@ function forceWrapped(s: string, wrapType: number): string {
 describe('Pretty formatter', () => {
   test('should not wrap when terminal width is wide enough', () => {
     setColumnWidth(185, function (): void {
-      const result = pretty(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error });
+      const result = pretty(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error }, null);
       expect(result).toContain(
         `${chalk.red('36:22')}       ${chalk.red.inverse('ERROR')}        ${chalk.red.bold(
           'oas3-schema',
@@ -58,7 +58,7 @@ describe('Pretty formatter', () => {
   });
   xtest('should wrap when terminal width is very small', () => {
     setColumnWidth(120, function (): void {
-      const result = pretty(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error });
+      const result = pretty(oas3SchemaErrors, { failSeverity: DiagnosticSeverity.Error }, null);
       expect(result).toContain(`
 File:   /home/Stoplight/spectral/src/__tests__/__fixtures__/petstore.invalid-schema.oas3.yaml
 ${chalk.red(
@@ -82,7 +82,7 @@ ${chalk.red.bold('1 Unique Issue(s)')}\n`);
   });
   test('should display proper severity level', () => {
     setColumnWidth(185, function (): void {
-      const result = pretty(mixedErrors, { failSeverity: DiagnosticSeverity.Error });
+      const result = pretty(mixedErrors, { failSeverity: DiagnosticSeverity.Error }, null);
       expect(
         result,
       ).toContain(`${chalk.white('3:10')}        ${chalk.white.inverse('HINT')}         ${chalk.white.bold('info-contact')}                    ${chalk.gray('Info object should contain `contact` object.')}                     ${chalk.cyan('info')}

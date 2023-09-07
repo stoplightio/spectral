@@ -10,7 +10,7 @@ import AggregateError = require('es-aggregate-error');
 import * as process from 'process';
 
 import lintCommand from '../../commands/lint';
-import { lint } from '../linter';
+import { LinterResult, lint } from '../linter';
 
 jest.mock('process');
 jest.mock('../output');
@@ -20,7 +20,7 @@ const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.js')
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.js');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
 
-async function run(command: string) {
+async function run(command: string): Promise<LinterResult> {
   const parser = yargs.command(lintCommand);
   const { documents, ...opts } = await new Promise<any>((resolve, reject) => {
     parser.parse(`${command} --ignore-unknown-format`, {}, (err, argv) => {
@@ -50,44 +50,44 @@ describe('Linter service', () => {
   });
 
   it('handles relative path to a document', async () => {
-    const results = await run('lint -r ./gh-474/ruleset.js ./gh-474/document.json');
-
-    expect(results).toEqual([
-      {
-        code: 'defined-name',
-        message: '"name" property must be truthy',
-        path: ['0', 'name'],
-        range: {
-          end: {
-            character: 16,
-            line: 1,
+    return run('lint -r ./gh-474/ruleset.js ./gh-474/document.json').then(linterResult => {
+      return expect(linterResult.results).toEqual([
+        {
+          code: 'defined-name',
+          message: '"name" property must be truthy',
+          path: ['0', 'name'],
+          range: {
+            end: {
+              character: 16,
+              line: 1,
+            },
+            start: {
+              character: 12,
+              line: 1,
+            },
           },
-          start: {
-            character: 12,
-            line: 1,
-          },
+          severity: DiagnosticSeverity.Warning,
+          source: join(__dirname, './__fixtures__/gh-474/common.json'),
         },
-        severity: DiagnosticSeverity.Warning,
-        source: join(__dirname, './__fixtures__/gh-474/common.json'),
-      },
-      {
-        code: 'defined-name',
-        message: '"name" property must be truthy',
-        path: ['1', 'name'],
-        range: {
-          end: {
-            character: 16,
-            line: 2,
+        {
+          code: 'defined-name',
+          message: '"name" property must be truthy',
+          path: ['1', 'name'],
+          range: {
+            end: {
+              character: 16,
+              line: 2,
+            },
+            start: {
+              character: 12,
+              line: 2,
+            },
           },
-          start: {
-            character: 12,
-            line: 2,
-          },
+          severity: DiagnosticSeverity.Warning,
+          source: join(__dirname, './__fixtures__/gh-474/common.json'),
         },
-        severity: DiagnosticSeverity.Warning,
-        source: join(__dirname, './__fixtures__/gh-474/common.json'),
-      },
-    ]);
+      ]);
+    });
   });
 
   it('demands some ruleset to be present', () => {
@@ -100,13 +100,120 @@ describe('Linter service', () => {
   describe('when document is local file', () => {
     describe('and the file is expected to have no warnings', () => {
       it('outputs no issues', () => {
-        return expect(run(`lint stoplight-info-document.json`)).resolves.toEqual([]);
+        return run(`lint stoplight-info-document.json`).then(linterResult => {
+          return expect(linterResult.results).toEqual([]);
+        });
       });
     });
 
     describe('and the file is expected to trigger warnings', () => {
       it('outputs warnings', async () => {
-        return expect(run('lint missing-stoplight-info-document.json')).resolves.toEqual([
+        return run(`lint missing-stoplight-info-document.json`).then(linterResult => {
+          return expect(linterResult.results).toEqual([
+            {
+              code: 'info-matches-stoplight',
+              message: 'Info must contain Stoplight',
+              path: ['info', 'title'],
+              range: expect.any(Object),
+              severity: DiagnosticSeverity.Warning,
+              source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+            },
+          ]);
+        });
+      });
+    });
+  });
+
+  it('given a list of files is provided, outputs issues for each file', () => {
+    const documents = [
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+    ];
+
+    return run(['lint', ...documents].join(' ')).then(linterResult => {
+      return expect(linterResult.results).toEqual([
+        {
+          code: 'info-matches-stoplight',
+          message: 'Info must contain Stoplight',
+          path: ['info', 'title'],
+          range: expect.any(Object),
+          severity: DiagnosticSeverity.Warning,
+          source: documents[0],
+        },
+        {
+          code: 'info-matches-stoplight',
+          message: 'Info must contain Stoplight',
+          path: ['info', 'title'],
+          range: expect.any(Object),
+          severity: DiagnosticSeverity.Warning,
+          source: documents[1],
+        },
+      ]);
+    });
+  });
+
+  it('sorts linting results in an alphabetical order', () => {
+    const documents = [
+      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+      join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+    ];
+
+    return run(['lint', ...documents].join(' ')).then(linterResult => {
+      return expect(linterResult.results).toEqual([
+        expect.objectContaining({
+          code: 'info-matches-stoplight',
+          source: join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
+        }),
+        expect.objectContaining({
+          code: 'info-matches-stoplight',
+          source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+        }),
+        expect.objectContaining({
+          code: 'info-matches-stoplight',
+          source: join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
+        }),
+      ]);
+    });
+  });
+
+  describe('when glob is provided', () => {
+    const documents = join(__dirname, `./__fixtures__/missing-stoplight-info*.json`);
+
+    it('outputs issues for each file', () => {
+      return run(`lint ${documents}`).then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          {
+            code: 'info-matches-stoplight',
+            message: 'Info must contain Stoplight',
+            path: ['info', 'title'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+            source: join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
+          },
+          {
+            code: 'info-matches-stoplight',
+            message: 'Info must contain Stoplight',
+            path: ['info', 'title'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+            source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
+          },
+        ]);
+      });
+    });
+
+    it('unixifies patterns', () => {
+      return run(`lint } ${documents.replace(/\//g, '\\')}`).then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          {
+            code: 'info-matches-stoplight',
+            message: 'Info must contain Stoplight',
+            path: ['info', 'title'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+            source: join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
+          },
           {
             code: 'info-matches-stoplight',
             message: 'Info must contain Stoplight',
@@ -120,108 +227,15 @@ describe('Linter service', () => {
     });
   });
 
-  it('given a list of files is provided, outputs issues for each file', () => {
-    const documents = [
-      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
-      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-    ];
-
-    return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
-      {
-        code: 'info-matches-stoplight',
-        message: 'Info must contain Stoplight',
-        path: ['info', 'title'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Warning,
-        source: documents[0],
-      },
-      {
-        code: 'info-matches-stoplight',
-        message: 'Info must contain Stoplight',
-        path: ['info', 'title'],
-        range: expect.any(Object),
-        severity: DiagnosticSeverity.Warning,
-        source: documents[1],
-      },
-    ]);
-  });
-
-  it('sorts linting results in an alphabetical order', () => {
-    const documents = [
-      join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-      join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
-      join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
-    ];
-
-    return expect(run(['lint', ...documents].join(' '))).resolves.toEqual([
-      expect.objectContaining({
-        code: 'info-matches-stoplight',
-        source: join(__dirname, `./__fixtures__/invalid-stoplight-info-document.json`),
-      }),
-      expect.objectContaining({
-        code: 'info-matches-stoplight',
-        source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-      }),
-      expect.objectContaining({
-        code: 'info-matches-stoplight',
-        source: join(__dirname, `./__fixtures__/openapi-3.0-valid.yaml`),
-      }),
-    ]);
-  });
-
-  describe('when glob is provided', () => {
-    const documents = join(__dirname, `./__fixtures__/missing-stoplight-info*.json`);
-
-    it('outputs issues for each file', () => {
-      return expect(run(`lint ${documents}`)).resolves.toEqual([
-        {
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Warning,
-          source: join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
-        },
-        {
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Warning,
-          source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-        },
-      ]);
-    });
-
-    it('unixifies patterns', () => {
-      return expect(run(`lint } ${documents.replace(/\//g, '\\')}`)).resolves.toEqual([
-        {
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Warning,
-          source: join(__dirname, `./__fixtures__/missing-stoplight-info-document-copy.json`),
-        },
-        {
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Warning,
-          source: join(__dirname, `./__fixtures__/missing-stoplight-info-document.json`),
-        },
-      ]);
-    });
-  });
-
   describe('--ruleset', () => {
     const validNestedRulesetPath = join(__dirname, '__fixtures__/ruleset-extends-valid.js');
     const invalidNestedRulesetPath = join(__dirname, '__fixtures__/ruleset-extends-invalid.js');
 
     describe('extends feature', () => {
       it('extends a valid relative ruleset', () => {
-        return expect(run(`lint ${validCustomOas3SpecPath} -r ${validNestedRulesetPath}`)).resolves.toEqual([]);
+        return run(`lint ${validCustomOas3SpecPath} -r ${validNestedRulesetPath}`).then(linterResult => {
+          return expect(linterResult.results).toEqual([]);
+        });
       });
 
       it('fails trying to extend an invalid relative ruleset', () => {
@@ -279,13 +293,17 @@ describe('Linter service', () => {
       });
 
       it('outputs no issues', () => {
-        return expect(run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath}`)).resolves.toEqual([]);
+        return run(`lint ${validCustomOas3SpecPath} -r ${validRulesetPath}`).then(linterResult => {
+          return expect(linterResult.results).toEqual([]);
+        });
       });
 
       it('outputs warnings', async () => {
         const output = await run(`lint ${validOas3SpecPath} -r ${validRulesetPath}`);
-        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
-        expect(output).toEqual(
+        expect(output.results).toEqual(
+          expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]),
+        );
+        expect(output.results).toEqual(
           expect.not.arrayContaining([
             expect.objectContaining({
               message: 'Info object should contain `contact` object',
@@ -298,8 +316,10 @@ describe('Linter service', () => {
     describe('given legacy ruleset', () => {
       it('outputs warnings', async () => {
         const output = await run(`lint ${validOas3SpecPath} -r ${join(__dirname, '__fixtures__/ruleset.json')}`);
-        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
-        expect(output).toEqual(
+        expect(output.results).toEqual(
+          expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]),
+        );
+        expect(output.results).toEqual(
           expect.not.arrayContaining([
             expect.objectContaining({
               message: 'Info object should contain `contact` object',
@@ -317,8 +337,10 @@ describe('Linter service', () => {
           });
 
         const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json`);
-        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
-        expect(output).toEqual(
+        expect(output.results).toEqual(
+          expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]),
+        );
+        expect(output.results).toEqual(
           expect.not.arrayContaining([
             expect.objectContaining({
               message: 'Info object should contain `contact` object',
@@ -336,8 +358,10 @@ describe('Linter service', () => {
           });
 
         const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset`);
-        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
-        expect(output).toEqual(
+        expect(output.results).toEqual(
+          expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]),
+        );
+        expect(output.results).toEqual(
           expect.not.arrayContaining([
             expect.objectContaining({
               message: 'Info object should contain `contact` object',
@@ -356,8 +380,10 @@ describe('Linter service', () => {
           });
 
         const output = await run(`lint ${validOas3SpecPath} -r http://foo.local/ruleset.json?token=bar`);
-        expect(output).toEqual(expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]));
-        expect(output).toEqual(
+        expect(output.results).toEqual(
+          expect.arrayContaining([expect.objectContaining({ code: 'info-matches-stoplight' })]),
+        );
+        expect(output.results).toEqual(
           expect.not.arrayContaining([
             expect.objectContaining({
               message: 'Info object should contain `contact` object',
@@ -375,7 +401,9 @@ describe('Linter service', () => {
         'Content-Type': 'application/yaml',
       });
 
-      return expect(run('lint http://foo.local/openapi')).resolves.toEqual([]);
+      return run('lint http://foo.local/openapi').then(linterResult => {
+        return expect(linterResult.results).toEqual([]);
+      });
     });
 
     it('throws if cannot load URI', () => {
@@ -392,151 +420,159 @@ describe('Linter service', () => {
         'Content-Type': 'application/yaml',
       });
 
-      return expect(run(`lint http://foo.local/openapi`)).resolves.toEqual([
-        {
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-          path: ['info', 'title'],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Warning,
-          source: 'http://foo.local/openapi',
-        },
-      ]);
+      return run(`lint http://foo.local/openapi`).then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          {
+            code: 'info-matches-stoplight',
+            message: 'Info must contain Stoplight',
+            path: ['info', 'title'],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+            source: 'http://foo.local/openapi',
+          },
+        ]);
+      });
     });
   });
 
   describe('when using default ruleset file', () => {
     it('respects rules from a ruleset file', () => {
-      return expect(run('lint missing-stoplight-info-document.json')).resolves.toEqual([
-        expect.objectContaining({
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-        }),
-      ]);
+      return run('lint missing-stoplight-info-document.json').then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          expect.objectContaining({
+            code: 'info-matches-stoplight',
+            message: 'Info must contain Stoplight',
+          }),
+        ]);
+      });
     });
   });
 
   describe('$ref linting', () => {
     it('outputs errors occurring in referenced files', () => {
-      return expect(run(`lint -r references/ruleset.js references/no-nested.json`)).resolves.toEqual([
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: '"info" property must have required property "version"',
-          path: ['definitions', 'info'],
-          range: {
-            end: {
-              character: 5,
-              line: 8,
+      return run(`lint -r references/ruleset.js references/no-nested.json`).then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: '"info" property must have required property "version"',
+            path: ['definitions', 'info'],
+            range: {
+              end: {
+                character: 5,
+                line: 8,
+              },
+              start: {
+                character: 12,
+                line: 3,
+              },
             },
-            start: {
-              character: 12,
-              line: 3,
+            source: expect.stringContaining('/__tests__/__fixtures__/references/common/info.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: '"description" property type must be string',
+            path: ['definitions', 'info', 'description'],
+            range: {
+              end: {
+                character: 22,
+                line: 4,
+              },
+              start: {
+                character: 21,
+                line: 4,
+              },
             },
-          },
-          source: expect.stringContaining('/__tests__/__fixtures__/references/common/info.json'),
-        }),
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: '"description" property type must be string',
-          path: ['definitions', 'info', 'description'],
-          range: {
-            end: {
-              character: 22,
-              line: 4,
+            source: expect.stringContaining('/__tests__/__fixtures__/references/common/info.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: 'Property "foo" is not expected to be here',
+            path: ['paths'],
+            range: {
+              end: {
+                character: 13,
+                line: 6,
+              },
+              start: {
+                character: 10,
+                line: 4,
+              },
             },
-            start: {
-              character: 21,
-              line: 4,
-            },
-          },
-          source: expect.stringContaining('/__tests__/__fixtures__/references/common/info.json'),
-        }),
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: 'Property "foo" is not expected to be here',
-          path: ['paths'],
-          range: {
-            end: {
-              character: 13,
-              line: 6,
-            },
-            start: {
-              character: 10,
-              line: 4,
-            },
-          },
-          source: expect.stringContaining('__tests__/__fixtures__/references/no-nested.json'),
-        }),
-      ]);
+            source: expect.stringContaining('__tests__/__fixtures__/references/no-nested.json'),
+          }),
+        ]);
+      });
     });
 
     it('outputs errors occurring in nested referenced files', () => {
-      return expect(run(`lint -r references/ruleset.js references/nested.json`)).resolves.toEqual([
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: '"info" property must have required property "version"',
-          path: [],
-          range: {
-            end: {
-              character: 1,
-              line: 3,
+      return run(`lint -r references/ruleset.js references/nested.json`).then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: '"info" property must have required property "version"',
+            path: [],
+            range: {
+              end: {
+                character: 1,
+                line: 3,
+              },
+              start: {
+                character: 0,
+                line: 0,
+              },
             },
-            start: {
-              character: 0,
-              line: 0,
+            source: expect.stringContaining('__tests__/__fixtures__/references/common/contact.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: '"description" property type must be string',
+            path: ['description'],
+            range: {
+              end: {
+                character: 18,
+                line: 2,
+              },
+              start: {
+                character: 17,
+                line: 2,
+              },
             },
-          },
-          source: expect.stringContaining('__tests__/__fixtures__/references/common/contact.json'),
-        }),
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: '"description" property type must be string',
-          path: ['description'],
-          range: {
-            end: {
-              character: 18,
-              line: 2,
+            source: expect.stringContaining('__tests__/__fixtures__/references/common/contact.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: '"get" property must have required property "responses"',
+            path: ['paths', '/test', 'get'],
+            range: {
+              end: {
+                character: 7,
+                line: 5,
+              },
+              start: {
+                character: 13,
+                line: 3,
+              },
             },
-            start: {
-              character: 17,
-              line: 2,
+            source: expect.stringContaining('__tests__/__fixtures__/references/common/paths.json'),
+          }),
+          expect.objectContaining({
+            code: 'valid-schema',
+            message: '"response" property type must be number',
+            path: ['paths', '/test', 'get', 'response'],
+            range: {
+              end: {
+                character: 25,
+                line: 4,
+              },
+              start: {
+                character: 20,
+                line: 4,
+              },
             },
-          },
-          source: expect.stringContaining('__tests__/__fixtures__/references/common/contact.json'),
-        }),
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: '"get" property must have required property "responses"',
-          path: ['paths', '/test', 'get'],
-          range: {
-            end: {
-              character: 7,
-              line: 5,
-            },
-            start: {
-              character: 13,
-              line: 3,
-            },
-          },
-          source: expect.stringContaining('__tests__/__fixtures__/references/common/paths.json'),
-        }),
-        expect.objectContaining({
-          code: 'valid-schema',
-          message: '"response" property type must be number',
-          path: ['paths', '/test', 'get', 'response'],
-          range: {
-            end: {
-              character: 25,
-              line: 4,
-            },
-            start: {
-              character: 20,
-              line: 4,
-            },
-          },
-          source: expect.stringContaining('__tests__/__fixtures__/references/common/paths.json'),
-        }),
-      ]);
+            source: expect.stringContaining('__tests__/__fixtures__/references/common/paths.json'),
+          }),
+        ]);
+      });
     });
   });
 
@@ -545,16 +581,18 @@ describe('Linter service', () => {
       const resolver = join(__dirname, '__fixtures__/resolver/resolver.js');
       const document = join(__dirname, '__fixtures__/resolver/document.json');
 
-      expect(await run(`lint --resolver ${resolver} ${document}`)).toEqual([
-        {
-          code: 'info-matches-stoplight',
-          message: 'Info must contain Stoplight',
-          path: [],
-          range: expect.any(Object),
-          severity: DiagnosticSeverity.Warning,
-          source: expect.stringContaining('__fixtures__/resolver/document.json'),
-        },
-      ]);
+      return run(`lint --resolver ${resolver} ${document}`).then(linterResult => {
+        return expect(linterResult.results).toEqual([
+          {
+            code: 'info-matches-stoplight',
+            message: 'Info must contain Stoplight',
+            path: [],
+            range: expect.any(Object),
+            severity: DiagnosticSeverity.Warning,
+            source: expect.stringContaining('__fixtures__/resolver/document.json'),
+          },
+        ]);
+      });
     });
   });
 });

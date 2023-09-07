@@ -1,5 +1,5 @@
 import * as process from 'process';
-import { IRuleResult } from '@stoplight/spectral-core';
+import { IRuleResult, Ruleset } from '@stoplight/spectral-core';
 import { promises as fs } from 'fs';
 import {
   html,
@@ -27,8 +27,13 @@ const formatters: Record<OutputFormat, Formatter> = {
   sarif,
 };
 
-export function formatOutput(results: IRuleResult[], format: OutputFormat, formatOptions: FormatterOptions): string {
-  return formatters[format](results, formatOptions);
+export function formatOutput(
+  results: IRuleResult[],
+  format: OutputFormat,
+  formatOptions: FormatterOptions,
+  ruleset: Ruleset,
+): string {
+  return formatters[format](results, formatOptions, ruleset);
 }
 
 export async function writeOutput(outputStr: string, outputFile: string): Promise<void> {

@@ -1,12 +1,13 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { IRuleResult } from '@stoplight/spectral-core';
 import { sarif, sarifToolVersion } from '../sarif';
+import { getRuleset } from '@stoplight/spectral-cli/src/services/linter/utils';
 
 const cwd = process.cwd();
 const results: IRuleResult[] = [
   {
     code: 'operation-description',
-    message: 'paths./pets.get.description is not truthy\nMessage can have\nmultiple lines',
+    message: 'paths./pets.get.description is not truthy\nMessages can differ from the rule description',
     path: ['paths', '/pets', 'get', 'description'],
     severity: 1,
     source: `${cwd}/__tests__/fixtures/petstore.oas2.yaml`,
@@ -41,8 +42,9 @@ const results: IRuleResult[] = [
 ];
 
 describe('Sarif formatter', () => {
-  test('should be formatted correctly', () => {
-    const output = sarif(results, { failSeverity: DiagnosticSeverity.Error });
+  test('should be formatted correctly', async () => {
+    const ruleset = await getRuleset(`${__dirname}/__fixtures__/sairf-rules.yml`);
+    const output = sarif(results, { failSeverity: DiagnosticSeverity.Error }, ruleset);
     const outputObject = JSON.parse(output);
     const expectedObject = JSON.parse(`
     {
@@ -57,7 +59,7 @@ describe('Sarif formatter', () => {
                 {
                   "id": "operation-description",
                   "shortDescription": {
-                    "text": "paths./pets.get.description is not truthy\\nMessage can have\\nmultiple lines"
+                    "text": "paths./pets.get.description is not truthy"
                   }
                 },
                 {
@@ -75,7 +77,7 @@ describe('Sarif formatter', () => {
             {
               "level": "warning",
               "message": {
-                "text": "paths./pets.get.description is not truthy\\nMessage can have\\nmultiple lines"
+                "text": "paths./pets.get.description is not truthy\\nMessages can differ from the rule description"
               },
               "ruleId": "operation-description",
               "locations": [
