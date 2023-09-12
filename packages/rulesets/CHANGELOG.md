@@ -1,3 +1,10 @@
+# @stoplight/spectral-rulesets [1.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.16.0...@stoplight/spectral-rulesets-1.17.0) (2023-08-29)
+
+
+### Features
+
+* **rulesets:** add oas3-server-variables rule ([#2526](https://github.com/stoplightio/spectral/issues/2526)) ([4c4de85](https://github.com/stoplightio/spectral/commit/4c4de85f5bfe5a1eb8ecdbfa8b9b9b4d7b8f6031))
+
 # [@stoplight/spectral-rulesets-v1.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.15.1...@stoplight/spectral-rulesets-v1.16.0) (2023-04-25)
 
 

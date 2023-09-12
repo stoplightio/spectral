@@ -16,7 +16,7 @@ import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniquene
 import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
 import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
 import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
-import asyncApi2ServerVariables from './functions/asyncApi2ServerVariables';
+import serverVariables from '../shared/functions/serverVariables';
 import { uniquenessTags } from '../shared/functions';
 import asyncApi2Security from './functions/asyncApi2Security';
 import { latestVersion } from './functions/utils/specs';
@@ -370,7 +370,7 @@ export default {
       recommended: true,
       given: ['$.servers.*', '$.components.servers.*'],
       then: {
-        function: asyncApi2ServerVariables,
+        function: serverVariables,
       },
     },
     'asyncapi-server-no-empty-variable': {

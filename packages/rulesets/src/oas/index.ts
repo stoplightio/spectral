@@ -26,6 +26,7 @@ import {
   oasDiscriminator,
 } from './functions';
 import { uniquenessTags } from '../shared/functions';
+import serverVariables from '../shared/functions/serverVariables';
 
 export { ruleset as default };
 
@@ -35,6 +36,26 @@ const ruleset = {
   aliases: {
     PathItem: ['$.paths[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    ResponseObject: {
+      targets: [
+        {
+          formats: [oas2],
+          given: ['#OperationObject.responses[*]', '$.responses[*]'],
+        },
+        {
+          formats: [oas3],
+          given: ['#OperationObject.responses[*]', '$.components.responses[*]'],
+        },
+      ],
+    },
+    LinkObject: {
+      targets: [
+        {
+          formats: [oas3],
+          given: ['$.components.links[*]', '#ResponseObject.links[*]'],
+        },
+      ],
+    },
   },
   rules: {
     'operation-success-response': {
@@ -669,6 +690,19 @@ const ruleset = {
       given: '$',
       then: {
         function: oasUnusedComponent,
+      },
+    },
+    'oas3-server-variables': {
+      description: 'Server variables must be defined and valid and there must be no unused variables.',
+      message: '{{error}}',
+      severity: 0,
+      recommended: true,
+      given: ['$.servers[*]', '#PathItem.servers[*]', '#OperationObject.servers[*]', '#LinkObject.server'],
+      then: {
+        function: serverVariables,
+        functionOptions: {
+          checkSubstitutions: true,
+        },
       },
     },
   },

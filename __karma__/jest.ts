@@ -1,26 +1,15 @@
-// @ts-ignore
-process.stdout = {};
+import type * as JestMock from 'jest-mock';
 
-import { Expect } from 'expect/build/types';
-import * as JestMock from 'jest-mock';
-
-declare let global: NodeJS.Global & {
+declare const globalThis: Global & {
   jest: typeof JestMock;
-  expect: Expect;
+  expect: jest.Expect;
   test: jest.It;
 };
 
-global.jest = require('jest-mock');
-global.expect = require('expect');
-global.test = it;
-global.test.concurrent = it;
-
-const message = () => "Good try. An email has been sent to Vincenzo and Jakub, and they'll find you. :troll: ;)";
-
-expect.extend({
-  toMatchSnapshot: () => ({ pass: false, message }),
-  toMatchInlineSnapshot: () => ({ pass: false, message }),
-});
+globalThis.jest = require('jest-mock');
+globalThis.expect = require('expect');
+globalThis.test = it;
+globalThis.test.concurrent = it;
 
 // @ts-ignore
 test.each = input => (name: string, fn: Function) => {
