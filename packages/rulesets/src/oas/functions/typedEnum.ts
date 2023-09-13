@@ -48,7 +48,7 @@ function getTypes(input: Input, formats: Document['formats']): string | string[]
   return type;
 }
 
-export const typedEnum = createRulesetFunction<Input, null>(
+export default createRulesetFunction<Input, null>(
   {
     input: {
       type: 'object',
@@ -74,7 +74,7 @@ export const typedEnum = createRulesetFunction<Input, null>(
     },
     options: null,
   },
-  function (input, opts, context) {
+  function typedEnum(input, opts, context) {
     const { enum: enumValues } = input;
     const type = getTypes(input, context.document.formats);
     const checkForInteger = type === 'integer' || (Array.isArray(type) && type.includes('integer'));
@@ -98,5 +98,3 @@ export const typedEnum = createRulesetFunction<Input, null>(
     return results;
   },
 );
-
-export default typedEnum;
