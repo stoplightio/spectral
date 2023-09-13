@@ -23,6 +23,7 @@ type Input = {
 
 type Options = {
   checkSubstitutions?: boolean;
+  requireDefault?: boolean;
 } | null;
 
 export default createRulesetFunction<Input, Options>(
@@ -72,60 +73,54 @@ export default createRulesetFunction<Input, Options>(
           type: 'boolean',
           default: 'false',
         },
+        requireDefault: {
+          type: 'boolean',
+          default: 'false',
+        },
       },
       additionalProperties: false,
     },
   },
   function serverVariables({ url, variables }, opts, ctx) {
-    if (variables === void 0) return;
-
     const results: IFunctionResult[] = [];
 
     const foundVariables = parseUrlVariables(url);
-    const definedVariablesKeys = Object.keys(variables);
+    const definedVariablesKeys = variables === void 0 ? [] : Object.keys(variables);
 
-    const redundantVariables = getRedundantProps(foundVariables, definedVariablesKeys);
-    for (const variable of redundantVariables) {
-      results.push({
-        message: `Server's "variables" object has unused defined "${variable}" url variable.`,
-        path: [...ctx.path, 'variables', variable],
-      });
-    }
+    accumulateRedundantVariables(results, ctx.path, foundVariables, definedVariablesKeys);
 
     if (foundVariables.length === 0) return results;
 
-    const missingVariables = getMissingProps(foundVariables, definedVariablesKeys);
-    if (missingVariables.length > 0) {
-      results.push({
-        message: `Not all server's variables are described with "variables" object. Missed: ${missingVariables.join(
-          ', ',
-        )}.`,
-        path: [...ctx.path, 'variables'],
-      });
-    }
+    accumulateMissingVariables(results, ctx.path, foundVariables, definedVariablesKeys);
+
+    if (variables === void 0) return results;
 
     const variablePairs: [key: string, values: string[]][] = [];
 
     for (const key of definedVariablesKeys) {
-      if (redundantVariables.includes(key)) continue;
+      if (!foundVariables.includes(key)) continue;
 
-      const values = variables[key];
+      const variable = variables[key];
 
-      if ('enum' in values) {
-        variablePairs.push([key, values.enum]);
+      if ('enum' in variable) {
+        variablePairs.push([key, variable.enum]);
 
-        if ('default' in values && !values.enum.includes(values.default)) {
-          results.push({
-            message: `Server Variable "${key}" has a default not listed in the enum`,
-            path: [...ctx.path, 'variables', key, 'default'],
-          });
-        }
+        checkVariableEnumValues(results, ctx.path, key, variable.enum, variable.default);
+      } else if ('default' in variable) {
+        variablePairs.push([key, [variable.default]]);
       } else {
-        variablePairs.push([key, [values.default ?? '']]);
+        variablePairs.push([key, []]);
+      }
+
+      if (!('default' in variable) && opts?.requireDefault === true) {
+        results.push({
+          message: `Server Variable "${key}" has a missing default.`,
+          path: [...ctx.path, 'variables', key],
+        });
       }
     }
 
-    if (opts?.checkSubstitutions === true && variablePairs.length > 0) {
+    if (opts?.checkSubstitutions === true) {
       checkSubstitutions(results, ctx.path, url, variablePairs);
     }
 
@@ -133,12 +128,65 @@ export default createRulesetFunction<Input, Options>(
   },
 );
 
+function accumulateRedundantVariables(
+  results: IFunctionResult[],
+  path: JsonPath,
+  foundVariables: string[],
+  definedVariablesKeys: string[],
+): void {
+  if (definedVariablesKeys.length === 0) return;
+
+  const redundantVariables = getRedundantProps(foundVariables, definedVariablesKeys);
+  for (const variable of redundantVariables) {
+    results.push({
+      message: `Server's "variables" object has unused defined "${variable}" url variable.`,
+      path: [...path, 'variables', variable],
+    });
+  }
+}
+
+function accumulateMissingVariables(
+  results: IFunctionResult[],
+  path: JsonPath,
+  foundVariables: string[],
+  definedVariablesKeys: string[],
+): void {
+  const missingVariables =
+    definedVariablesKeys.length === 0 ? foundVariables : getMissingProps(foundVariables, definedVariablesKeys);
+
+  if (missingVariables.length > 0) {
+    results.push({
+      message: `Not all server's variables are described with "variables" object. Missed: ${missingVariables.join(
+        ', ',
+      )}.`,
+      path: [...path, 'variables'],
+    });
+  }
+}
+
+function checkVariableEnumValues(
+  results: IFunctionResult[],
+  path: JsonPath,
+  name: string,
+  enumValues: string[],
+  defaultValue: string | undefined,
+): void {
+  if (defaultValue !== void 0 && !enumValues.includes(defaultValue)) {
+    results.push({
+      message: `Server Variable "${name}" has a default not listed in the enum.`,
+      path: [...path, 'variables', name, 'default'],
+    });
+  }
+}
+
 function checkSubstitutions(
   results: IFunctionResult[],
   path: JsonPath,
   url: string,
   variables: [key: string, values: string[]][],
 ): void {
+  if (variables.length === 0) return;
+
   const invalidUrls: string[] = [];
 
   for (const substitutedUrl of applyUrlVariables(url, variables)) {

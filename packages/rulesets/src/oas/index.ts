@@ -702,6 +702,7 @@ const ruleset = {
         function: serverVariables,
         functionOptions: {
           checkSubstitutions: true,
+          requireDefault: true,
         },
       },
     },
