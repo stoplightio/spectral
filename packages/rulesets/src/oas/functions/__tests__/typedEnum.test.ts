@@ -1,4 +1,4 @@
-import { typedEnum } from '../typedEnum';
+import typedEnum from '../typedEnum';
 import { Document } from '@stoplight/spectral-core';
 import * as Parsers from '@stoplight/spectral-parsers';
 

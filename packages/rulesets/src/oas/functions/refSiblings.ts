@@ -1,5 +1,6 @@
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import type { IFunctionResult } from '@stoplight/spectral-core';
 import type { JsonPath } from '@stoplight/types';
-import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
 
 function getParentValue(document: unknown, path: JsonPath): unknown {
@@ -20,32 +21,33 @@ function getParentValue(document: unknown, path: JsonPath): unknown {
   return piece;
 }
 
-const refSiblings: IFunction = (targetVal, opts, { document, path }) => {
-  const value = getParentValue(document.data, path);
+export default createRulesetFunction<unknown, null>(
+  {
+    input: null,
+    options: null,
+  },
+  function refSiblings(targetVal, opts, { document, path }) {
+    const value = getParentValue(document.data, path);
+    if (!isObject(value)) return;
 
-  if (!isObject(value)) {
-    return;
-  }
-
-  const keys = Object.keys(value);
-  if (keys.length === 1) {
-    return;
-  }
-
-  const results: IFunctionResult[] = [];
-  const actualObjPath = path.slice(0, -1);
-
-  for (const key of keys) {
-    if (key === '$ref') {
-      continue;
+    const keys = Object.keys(value);
+    if (keys.length === 1) {
+      return;
     }
-    results.push({
-      message: '$ref must not be placed next to any other properties',
-      path: [...actualObjPath, key],
-    });
-  }
 
-  return results;
-};
+    const results: IFunctionResult[] = [];
+    const actualObjPath = path.slice(0, -1);
 
-export default refSiblings;
+    for (const key of keys) {
+      if (key === '$ref') {
+        continue;
+      }
+      results.push({
+        message: '$ref must not be placed next to any other properties',
+        path: [...actualObjPath, key],
+      });
+    }
+
+    return results;
+  },
+);

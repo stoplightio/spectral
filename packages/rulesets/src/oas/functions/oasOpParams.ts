@@ -1,81 +1,87 @@
-import type { IFunction, IFunctionResult } from '@stoplight/spectral-core';
-import type { Dictionary } from '@stoplight/types';
+import type { IFunctionResult } from '@stoplight/spectral-core';
 import { isObject } from './utils/isObject';
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
 function computeFingerprint(param: Record<string, unknown>): string {
   return `${String(param.in)}-${String(param.name)}`;
 }
 
-export const oasOpParams: IFunction = (params, _opts, { path }) => {
-  /**
-   * This function verifies:
-   *
-   * 1. Operations must have unique `name` + `in` parameters.
-   * 2. Operation cannot have both `in:body` and `in:formData` parameters
-   * 3. Operation must have only one `in:body` parameter.
-   */
+export default createRulesetFunction<unknown[], null>(
+  {
+    input: {
+      type: 'array',
+    },
+    options: null,
+  },
+  function oasOpParams(params, _opts, { path }) {
+    /**
+     * This function verifies:
+     *
+     * 1. Operations must have unique `name` + `in` parameters.
+     * 2. Operation cannot have both `in:body` and `in:formData` parameters
+     * 3. Operation must have only one `in:body` parameter.
+     */
 
-  if (!Array.isArray(params)) return;
+    if (!Array.isArray(params)) return;
 
-  if (params.length < 2) return;
+    if (params.length < 2) return;
 
-  const results: IFunctionResult[] = [];
+    const results: IFunctionResult[] = [];
 
-  const count: Dictionary<number[]> = {
-    body: [],
-    formData: [],
-  };
-  const list: string[] = [];
-  const duplicates: number[] = [];
+    const count: Record<string, number[]> = {
+      body: [],
+      formData: [],
+    };
+    const list: string[] = [];
+    const duplicates: number[] = [];
 
-  let index = -1;
+    let index = -1;
 
-  for (const param of params) {
-    index++;
+    for (const param of params) {
+      index++;
 
-    if (!isObject(param)) continue;
+      if (!isObject(param)) continue;
 
-    // skip params that are refs
-    if ('$ref' in param) continue;
+      // skip params that are refs
+      if ('$ref' in param) continue;
 
-    // Operations must have unique `name` + `in` parameters.
-    const fingerprint = computeFingerprint(param);
-    if (list.includes(fingerprint)) {
-      duplicates.push(index);
-    } else {
-      list.push(fingerprint);
+      // Operations must have unique `name` + `in` parameters.
+      const fingerprint = computeFingerprint(param);
+      if (list.includes(fingerprint)) {
+        duplicates.push(index);
+      } else {
+        list.push(fingerprint);
+      }
+
+      if (typeof param.in === 'string' && param.in in count) {
+        count[param.in].push(index);
+      }
     }
 
-    if (typeof param.in === 'string' && param.in in count) {
-      count[param.in].push(index);
+    if (duplicates.length > 0) {
+      for (const i of duplicates) {
+        results.push({
+          message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
+          path: [...path, i],
+        });
+      }
     }
-  }
 
-  if (duplicates.length > 0) {
-    for (const i of duplicates) {
+    if (count.body.length > 0 && count.formData.length > 0) {
       results.push({
-        message: 'A parameter in this operation already exposes the same combination of "name" and "in" values.',
-        path: [...path, i],
+        message: 'Operation must not have both "in:body" and "in:formData" parameters.',
       });
     }
-  }
 
-  if (count.body.length > 0 && count.formData.length > 0) {
-    results.push({
-      message: 'Operation must not have both "in:body" and "in:formData" parameters.',
-    });
-  }
-
-  if (count.body.length > 1) {
-    for (let i = 1; i < count.body.length; i++) {
-      results.push({
-        message: 'Operation must not have more than a single instance of the "in:body" parameter.',
-        path: [...path, count.body[i]],
-      });
+    if (count.body.length > 1) {
+      for (let i = 1; i < count.body.length; i++) {
+        results.push({
+          message: 'Operation must not have more than a single instance of the "in:body" parameter.',
+          path: [...path, count.body[i]],
+        });
+      }
     }
-  }
 
-  return results;
-};
-
-export default oasOpParams;
+    return results;
+  },
+);
