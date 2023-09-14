@@ -6,7 +6,7 @@ import mixedErrors from './__fixtures__/mixed-errors.json';
 
 describe('HTML formatter', () => {
   test('should display proper severity levels', () => {
-    const result = parse(html(mixedErrors, { failSeverity: DiagnosticSeverity.Error }, null));
+    const result = parse(html(mixedErrors, { failSeverity: DiagnosticSeverity.Error }));
     const table = result.querySelector('table tbody');
     expect(table.innerHTML.trim()).toEqual(`<tr class="bg-error" data-group="f-0">
     <th colspan="4">

@@ -1,14 +1,8 @@
-import { Formatter } from './types';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { relative } from '@stoplight/path';
 import { SarifBuilder, SarifRunBuilder, SarifResultBuilder, SarifRuleBuilder } from 'node-sarif-builder';
-import { Result } from 'sarif';
-
-const pkg = require('../../cli/package.json') as PackageJson;
-
-interface PackageJson {
-  version: string;
-}
+import type { Result } from 'sarif';
+import type { Formatter } from './types';
 
 const OUTPUT_TYPES: Dictionary<Result.level, DiagnosticSeverity> = {
   [DiagnosticSeverity.Error]: 'error',
@@ -17,7 +11,11 @@ const OUTPUT_TYPES: Dictionary<Result.level, DiagnosticSeverity> = {
   [DiagnosticSeverity.Hint]: 'note',
 };
 
-export const sarif: Formatter = (results, _, ruleset) => {
+export const sarif: Formatter = (results, _, ctx) => {
+  if (ctx === void 0) {
+    throw Error('sarif formatter requires ctx');
+  }
+
   const sarifBuilder = new SarifBuilder({
     $schema: 'http://json.schemastore.org/sarif-2.1.0-rtm.6.json',
     version: '2.1.0',
@@ -26,24 +24,22 @@ export const sarif: Formatter = (results, _, ruleset) => {
 
   const sarifRunBuilder = new SarifRunBuilder().initSimple({
     toolDriverName: 'spectral',
-    toolDriverVersion: pkg.version,
+    toolDriverVersion: ctx.spectralVersion,
     url: 'https://github.com/stoplightio/spectral',
   });
 
   // add rules
-  if (ruleset != null) {
-    for (const rule of Object.values(ruleset.rules)) {
-      const sarifRuleBuilder = new SarifRuleBuilder().initSimple({
-        ruleId: rule.name,
-        shortDescriptionText: rule.description ?? 'No description.',
-        helpUri: rule.documentationUrl !== null ? rule.documentationUrl : undefined,
-      });
-      sarifRunBuilder.addRule(sarifRuleBuilder);
-    }
+  for (const rule of Object.values(ctx.ruleset.rules)) {
+    const sarifRuleBuilder = new SarifRuleBuilder().initSimple({
+      ruleId: rule.name,
+      shortDescriptionText: rule.description ?? 'No description.',
+      helpUri: rule.documentationUrl !== null ? rule.documentationUrl : undefined,
+    });
+    sarifRunBuilder.addRule(sarifRuleBuilder);
   }
 
   // add results
-  results.forEach(result => {
+  for (const result of results) {
     const sarifResultBuilder = new SarifResultBuilder();
     const severity: DiagnosticSeverity = result.severity || DiagnosticSeverity.Error;
     sarifResultBuilder.initSimple({
@@ -51,15 +47,14 @@ export const sarif: Formatter = (results, _, ruleset) => {
       messageText: result.message,
       ruleId: result.code.toString(),
       fileUri: relative(process.cwd(), result.source ?? '').replace(/\\/g, '/'),
-      startLine: (result.range.start.line || 1) + 1,
-      startColumn: result.range.start.character || 1,
-      endLine: (result.range.end.line || 1) + 1,
-      endColumn: result.range.end.character || 1,
+      startLine: result.range.start.line + 1,
+      startColumn: result.range.start.character + 1,
+      endLine: result.range.end.line + 1,
+      endColumn: result.range.end.character + 1,
     });
     sarifRunBuilder.addResult(sarifResultBuilder);
-  });
+  }
+
   sarifBuilder.addRun(sarifRunBuilder);
   return sarifBuilder.buildSarifJsonString({ indent: true });
 };
-
-export const sarifToolVersion: string = pkg.version;

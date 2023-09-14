@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import type { IRuleResult } from '@stoplight/spectral-core';
-import { sarif, sarifToolVersion } from '../sarif';
-import { getRuleset } from '@stoplight/spectral-cli/src/services/linter/utils';
+import { Ruleset } from '@stoplight/spectral-core';
+import { sarif } from '../sarif';
 
 const cwd = process.cwd();
 const results: IRuleResult[] = [
@@ -9,7 +9,7 @@ const results: IRuleResult[] = [
     code: 'operation-description',
     message: 'paths./pets.get.description is not truthy\nMessages can differ from the rule description',
     path: ['paths', '/pets', 'get', 'description'],
-    severity: 1,
+    severity: DiagnosticSeverity.Warning,
     source: `${cwd}/__tests__/fixtures/petstore.oas2.yaml`,
     range: {
       start: {
@@ -26,7 +26,7 @@ const results: IRuleResult[] = [
     code: 'operation-tags',
     message: 'paths./pets.get.tags is not truthy',
     path: ['paths', '/pets', 'get', 'tags'],
-    severity: 0,
+    severity: DiagnosticSeverity.Error,
     source: `${cwd}/__tests__/fixtures/petstore.oas2.yaml`,
     range: {
       start: {
@@ -43,97 +43,129 @@ const results: IRuleResult[] = [
 
 describe('Sarif formatter', () => {
   test('should be formatted correctly', async () => {
-    const ruleset = await getRuleset(`${__dirname}/__fixtures__/sairf-rules.yml`);
-    const output = sarif(results, { failSeverity: DiagnosticSeverity.Error }, ruleset);
+    const sarifToolVersion = '6.11';
+    const ruleset = new Ruleset({
+      rules: {
+        'operation-description': {
+          description: 'paths./pets.get.description is not truthy',
+          message: 'paths./pets.get.description is not truthy\nMessages can differ from the rule description',
+          severity: DiagnosticSeverity.Error,
+          given: '$.paths[*][*]',
+          then: {
+            field: 'description',
+            function: function truthy() {
+              return false;
+            },
+          },
+        },
+        'operation-tags': {
+          description: 'paths./pets.get.tags is not truthy',
+          message: 'paths./pets.get.tags is not truthy\nMessages can differ from the rule description',
+          severity: DiagnosticSeverity.Error,
+          given: '$.paths[*][*]',
+          then: {
+            field: 'description',
+            function: function truthy() {
+              return false;
+            },
+          },
+        },
+      },
+    });
+
+    const output = sarif(
+      results,
+      { failSeverity: DiagnosticSeverity.Error },
+      { ruleset, spectralVersion: sarifToolVersion },
+    );
+
     const outputObject = JSON.parse(output);
-    const expectedObject = JSON.parse(`
-    {
-      "$schema": "http://json.schemastore.org/sarif-2.1.0-rtm.6.json",
-      "version": "2.1.0",
-      "runs": [
+    expect(outputObject).toStrictEqual({
+      $schema: 'http://json.schemastore.org/sarif-2.1.0-rtm.6.json',
+      version: '2.1.0',
+      runs: [
         {
-          "tool": {
-            "driver": {
-              "name": "spectral",
-              "rules": [
+          tool: {
+            driver: {
+              name: 'spectral',
+              rules: [
                 {
-                  "id": "operation-description",
-                  "shortDescription": {
-                    "text": "paths./pets.get.description is not truthy"
-                  }
+                  id: 'operation-description',
+                  shortDescription: {
+                    text: 'paths./pets.get.description is not truthy',
+                  },
                 },
                 {
-                  "id": "operation-tags",
-                  "shortDescription": {
-                    "text": "paths./pets.get.tags is not truthy"
-                  }
-                }
+                  id: 'operation-tags',
+                  shortDescription: {
+                    text: 'paths./pets.get.tags is not truthy',
+                  },
+                },
               ],
-              "version": "${sarifToolVersion}",
-              "informationUri": "https://github.com/stoplightio/spectral"
-            }
+              version: sarifToolVersion,
+              informationUri: 'https://github.com/stoplightio/spectral',
+            },
           },
-          "results": [
+          results: [
             {
-              "level": "warning",
-              "message": {
-                "text": "paths./pets.get.description is not truthy\\nMessages can differ from the rule description"
+              level: 'warning',
+              message: {
+                text: 'paths./pets.get.description is not truthy\nMessages can differ from the rule description',
               },
-              "ruleId": "operation-description",
-              "locations": [
+              ruleId: 'operation-description',
+              locations: [
                 {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "__tests__/fixtures/petstore.oas2.yaml",
-                      "index": 0
+                  physicalLocation: {
+                    artifactLocation: {
+                      uri: '__tests__/fixtures/petstore.oas2.yaml',
+                      index: 0,
                     },
-                    "region": {
-                      "startLine": 61,
-                      "startColumn": 8,
-                      "endLine": 72,
-                      "endColumn": 60
-                    }
-                  }
-                }
+                    region: {
+                      startLine: 61,
+                      startColumn: 9,
+                      endLine: 72,
+                      endColumn: 61,
+                    },
+                  },
+                },
               ],
-              "ruleIndex": 0
+              ruleIndex: 0,
             },
             {
-              "level": "error",
-              "message": {
-                "text": "paths./pets.get.tags is not truthy"
+              level: 'error',
+              message: {
+                text: 'paths./pets.get.tags is not truthy',
               },
-              "ruleId": "operation-tags",
-              "locations": [
+              ruleId: 'operation-tags',
+              locations: [
                 {
-                  "physicalLocation": {
-                    "artifactLocation": {
-                      "uri": "__tests__/fixtures/petstore.oas2.yaml",
-                      "index": 0
+                  physicalLocation: {
+                    artifactLocation: {
+                      uri: '__tests__/fixtures/petstore.oas2.yaml',
+                      index: 0,
                     },
-                    "region": {
-                      "startLine": 61,
-                      "startColumn": 8,
-                      "endLine": 72,
-                      "endColumn": 60
-                    }
-                  }
-                }
+                    region: {
+                      startLine: 61,
+                      startColumn: 9,
+                      endLine: 72,
+                      endColumn: 61,
+                    },
+                  },
+                },
               ],
-              "ruleIndex": 1
-            }
+              ruleIndex: 1,
+            },
           ],
-          "artifacts": [
+          artifacts: [
             {
-              "sourceLanguage": "YAML",
-              "location": {
-                "uri": "__tests__/fixtures/petstore.oas2.yaml"
-              }
-            }
-          ]
-        }
-      ]
-    }`);
-    expect(outputObject).toEqual(expectedObject);
+              sourceLanguage: 'YAML',
+              location: {
+                uri: '__tests__/fixtures/petstore.oas2.yaml',
+              },
+            },
+          ],
+        },
+      ],
+    });
   });
 });

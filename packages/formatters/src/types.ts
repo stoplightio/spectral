@@ -5,4 +5,9 @@ export type FormatterOptions = {
   failSeverity: DiagnosticSeverity;
 };
 
-export type Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions, ruleset: Ruleset | null) => string;
+export type FormatterContext = {
+  ruleset: Ruleset;
+  spectralVersion: string;
+};
+
+export type Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions, ctx?: FormatterContext) => string;
