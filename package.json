@@ -37,7 +37,7 @@
     "test.harness": "yarn pretest.harness && jest -c test-harness/jest.config.mjs",
     "test.jest": "jest --silent --cacheDirectory=.cache/.jest",
     "test.karma": "karma start",
-    "prepare": "husky install",
+    "prepare": "husky install && yarn workspaces foreach run prepare",
     "prerelease": "patch-package",
     "release": "yarn prerelease && multi-semantic-release --deps.bump=satisfy",
     "jest": "jest"
@@ -58,6 +58,12 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
+      [
+        "@semantic-release/exec",
+        {
+          "publishCmd": "node scripts/inline-version.mjs ${nextRelease.version}"
+        }
+      ],
       "@semantic-release/npm",
       [
         "@semantic-release/github",
@@ -73,6 +79,7 @@
     "@commitlint/config-conventional": "^12.1.4",
     "@octokit/core": "^3.5.1",
     "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^8.1.0",
     "@semantic-release/npm": "^9.0.2",
