@@ -14,6 +14,7 @@ import {
 } from '@stoplight/spectral-formatters';
 import type { Formatter, FormatterOptions } from '@stoplight/spectral-formatters';
 import type { OutputFormat } from './config';
+import { VERSION } from '../version';
 
 const formatters: Record<OutputFormat, Formatter> = {
   json,
@@ -33,7 +34,10 @@ export function formatOutput(
   formatOptions: FormatterOptions,
   ruleset: Ruleset,
 ): string {
-  return formatters[format](results, formatOptions, ruleset);
+  return formatters[format](results, formatOptions, {
+    ruleset,
+    spectralVersion: VERSION,
+  });
 }
 
 export async function writeOutput(outputStr: string, outputFile: string): Promise<void> {
