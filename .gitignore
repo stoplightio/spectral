@@ -12,6 +12,7 @@ node_modules
 
 packages/formatters/src/html/templates.ts
 packages/cli/binaries
+packages/cli/src/version.ts
 /test-harness/tmp/
 /test-harness/tests/
 packages/*/dist
