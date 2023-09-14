@@ -25,7 +25,8 @@
   "scripts": {
     "clean": "rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspaces foreach run prebuild",
-    "build": "yarn prebuild && tsc --build ./tsconfig.build.json",
+    "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
+    "postbuild": "yarn workspaces foreach run postbuild",
     "prelint": "yarn workspaces foreach run prelint",
     "lint": "yarn prelint && yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
@@ -37,7 +38,7 @@
     "test.harness": "yarn pretest.harness && jest -c test-harness/jest.config.mjs",
     "test.jest": "jest --silent --cacheDirectory=.cache/.jest",
     "test.karma": "karma start",
-    "prepare": "husky install",
+    "prepare": "husky install && yarn workspaces foreach run prepare",
     "prerelease": "patch-package",
     "release": "yarn prerelease && multi-semantic-release --deps.bump=satisfy",
     "jest": "jest"

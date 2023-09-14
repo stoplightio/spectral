@@ -24,6 +24,8 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "scripts": {
+    "prepare": "node scripts/inline-version.mjs",
+    "postbuild": "node scripts/inline-version.mjs",
     "build.binary": "pkg . --output ./binaries/spectral",
     "build.windows": "pkg . --targets windows --out-path ./binaries",
     "build.nix": "pkg . --targets linux-x64,linux-arm64,macos-x64,macos-arm64,alpine-x64,alpine-arm64 --out-path ./binaries",
