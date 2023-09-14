@@ -21,7 +21,7 @@ import {
   oasExample,
   oasUnusedComponent,
   oasDocumentSchema,
-  oasOpSecurityDefined,
+  oasSecurityDefined,
   oasSchema,
   oasDiscriminator,
 } from './functions';
@@ -36,6 +36,7 @@ const ruleset = {
   aliases: {
     PathItem: ['$.paths[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    SecurityRequirementObject: ['$.security[*]', '#OperationObject.security[*]'],
     ResponseObject: {
       targets: [
         {
@@ -451,11 +452,11 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       formats: [oas2],
-      given: '$',
+      given: '#SecurityRequirementObject',
       then: {
-        function: oasOpSecurityDefined,
+        function: oasSecurityDefined,
         functionOptions: {
-          schemesPath: ['securityDefinitions'],
+          oasVersion: 2,
         },
       },
     },
@@ -584,11 +585,11 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       formats: [oas3],
-      given: '$',
+      given: '#SecurityRequirementObject',
       then: {
-        function: oasOpSecurityDefined,
+        function: oasSecurityDefined,
         functionOptions: {
-          schemesPath: ['components', 'securitySchemes'],
+          oasVersion: 3,
         },
       },
     },
