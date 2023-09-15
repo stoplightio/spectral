@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Document, IRuleResult, Spectral } from '@stoplight/spectral-core';
+import { Document, IRuleResult, Ruleset, Spectral } from '@stoplight/spectral-core';
 import { readParsable, IFileReadOptions } from '@stoplight/spectral-runtime';
 import * as Parsers from '@stoplight/spectral-parsers';
 import { getRuleset, listFiles, segregateEntriesPerKind, readFileDescriptor } from './utils';
@@ -7,7 +7,12 @@ import { getResolver } from './utils/getResolver';
 import { ILintConfig } from '../config';
 import { CLIError } from '../../errors';
 
-export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<IRuleResult[]> {
+export interface LinterResult {
+  results: IRuleResult[];
+  resolvedRuleset: Ruleset;
+}
+
+export async function lint(documents: Array<number | string>, flags: ILintConfig): Promise<LinterResult> {
   const spectral = new Spectral({
     resolver: getResolver(flags.resolver),
   });
@@ -48,7 +53,10 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     );
   }
 
-  return results;
+  return {
+    results: results,
+    resolvedRuleset: ruleset,
+  };
 }
 
 const createDocument = async (

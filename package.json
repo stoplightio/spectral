@@ -25,7 +25,8 @@
   "scripts": {
     "clean": "rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspaces foreach run prebuild",
-    "build": "yarn prebuild && tsc --build ./tsconfig.build.json",
+    "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
+    "postbuild": "yarn workspaces foreach run postbuild",
     "prelint": "yarn workspaces foreach run prelint",
     "lint": "yarn prelint && yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
