@@ -1,9 +1,11 @@
-import * as fs from 'node:fs/promises';
+import * as fs from 'node:fs';
+import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
 const cwd = join(fileURLToPath(import.meta.url), '../..');
 
-const { version } = JSON.parse(await fs.readFile(join(cwd, 'package.json'), 'utf8'));
+const version =
+  process.argv.length === 3 ? process.argv[2] : JSON.parse(fs.readFileSync(join(cwd, 'package.json'), 'utf8')).version;
 
-await fs.writeFile(join(cwd, 'src/version.ts'), `export const VERSION = '${version}';\n`);
+fs.writeFileSync(join(cwd, 'src/version.ts'), `export const VERSION = '${version}';\n`);
