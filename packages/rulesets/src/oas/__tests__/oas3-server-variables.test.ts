@@ -70,7 +70,6 @@ testRule('oas3-server-variables', [
       servers: [
         {
           url: '{protocol}://stoplight.io:{port}',
-          variables: {},
         },
       ],
       paths: {
@@ -85,7 +84,6 @@ testRule('oas3-server-variables', [
             servers: [
               {
                 url: 'https://{env}.stoplight.io',
-                variables: {},
               },
             ],
           },
@@ -95,7 +93,7 @@ testRule('oas3-server-variables', [
     errors: [
       {
         message: 'Not all server\'s variables are described with "variables" object. Missed: protocol, port.',
-        path: ['servers', '0', 'variables'],
+        path: ['servers', '0'],
         severity: DiagnosticSeverity.Error,
       },
       {
@@ -105,7 +103,7 @@ testRule('oas3-server-variables', [
       },
       {
         message: 'Not all server\'s variables are described with "variables" object. Missed: env.',
-        path: ['paths', '/', 'get', 'servers', '0', 'variables'],
+        path: ['paths', '/', 'get', 'servers', '0'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -124,6 +122,7 @@ testRule('oas3-server-variables', [
             },
             env: {
               enum: ['staging', 'integration'],
+              default: 'staging',
             },
           },
         },
@@ -139,6 +138,7 @@ testRule('oas3-server-variables', [
                 },
                 env: {
                   enum: ['staging', 'integration'],
+                  default: 'staging',
                 },
               },
             },
@@ -182,7 +182,48 @@ testRule('oas3-server-variables', [
   },
 
   {
-    name: 'server has an unlisted default',
+    name: 'server variable has a missing default',
+    document: {
+      openapi: '3.1.0',
+      servers: [
+        {
+          url: 'https://{env}.stoplight.io',
+          variables: {
+            env: {
+              enum: ['staging', 'integration'],
+            },
+          },
+        },
+      ],
+      paths: {
+        '/': {
+          servers: [
+            {
+              url: 'https://stoplight.io:{port}',
+              variables: {
+                port: {},
+              },
+            },
+          ],
+        },
+      },
+    },
+    errors: [
+      {
+        code: 'oas3-server-variables',
+        message: 'Server Variable "env" has a missing default.',
+        path: ['servers', '0', 'variables', 'env'],
+      },
+      {
+        code: 'oas3-server-variables',
+        message: 'Server Variable "port" has a missing default.',
+        path: ['paths', '/', 'servers', '0', 'variables', 'port'],
+      },
+    ],
+  },
+
+  {
+    name: 'server variable has an unlisted default',
     document: {
       openapi: '3.1.0',
       servers: [
@@ -231,17 +272,17 @@ testRule('oas3-server-variables', [
     },
     errors: [
       {
-        message: 'Server Variable "port" has a default not listed in the enum',
+        message: 'Server Variable "port" has a default not listed in the enum.',
         path: ['servers', '0', 'variables', 'port', 'default'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server Variable "env" has a default not listed in the enum',
+        message: 'Server Variable "env" has a default not listed in the enum.',
         path: ['paths', '/', 'servers', '0', 'variables', 'env', 'default'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'Server Variable "env" has a default not listed in the enum',
+        message: 'Server Variable "env" has a default not listed in the enum.',
         path: ['components', 'links', 'Address', 'server', 'variables', 'env', 'default'],
         severity: DiagnosticSeverity.Error,
       },
@@ -258,6 +299,7 @@ testRule('oas3-server-variables', [
           variables: {
             port: {
               enum: ['invalid port', 'another-one', '443'],
+              default: '443',
             },
           },
         },
@@ -266,6 +308,7 @@ testRule('oas3-server-variables', [
           variables: {
             username: {
               enum: ['stoplight', 'io'],
+              default: 'stoplight',
             },
           },
         },
@@ -278,6 +321,7 @@ testRule('oas3-server-variables', [
               variables: {
                 base: {
                   enum: ['http', 'https', 'ftp', 'ftps', 'ssh', 'smtp'],
+                  default: 'https',
                 },
               },
             },
