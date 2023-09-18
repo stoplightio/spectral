@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.17.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.17.0...@stoplight/spectral-rulesets-1.17.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* **rulesets:** tweak server variables function ([#2533](https://github.com/stoplightio/spectral/issues/2533)) ([244cbda](https://github.com/stoplightio/spectral/commit/244cbda1256e218d9ab24288e772162b5230323d))
+
 # @stoplight/spectral-rulesets [1.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.16.0...@stoplight/spectral-rulesets-1.17.0) (2023-08-29)
 
 
