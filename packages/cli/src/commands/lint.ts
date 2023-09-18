@@ -182,7 +182,7 @@ const lintCommand: CommandModule = {
     };
 
     try {
-      let results = await lint(documents, {
+      const linterResult = await lint(documents, {
         format,
         output,
         encoding,
@@ -194,18 +194,23 @@ const lintCommand: CommandModule = {
       });
 
       if (displayOnlyFailures) {
-        results = filterResultsBySeverity(results, failSeverity);
+        linterResult.results = filterResultsBySeverity(linterResult.results, failSeverity);
       }
 
       await Promise.all(
         format.map(f => {
-          const formattedOutput = formatOutput(results, f, { failSeverity: getDiagnosticSeverity(failSeverity) });
+          const formattedOutput = formatOutput(
+            linterResult.results,
+            f,
+            { failSeverity: getDiagnosticSeverity(failSeverity) },
+            linterResult.resolvedRuleset,
+          );
           return writeOutput(formattedOutput, output?.[f] ?? '<stdout>');
         }),
       );
 
-      if (results.length > 0) {
-        process.exit(severeEnoughToFail(results, failSeverity) ? 1 : 0);
+      if (linterResult.results.length > 0) {
+        process.exit(severeEnoughToFail(linterResult.results, failSeverity) ? 1 : 0);
       } else if (config.quiet !== true) {
         const isErrorSeverity = getDiagnosticSeverity(failSeverity) === DiagnosticSeverity.Error;
         process.stdout.write(

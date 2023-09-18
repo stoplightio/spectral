@@ -2453,6 +2453,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@semantic-release/exec@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@semantic-release/exec@npm:6.0.3"
+  dependencies:
+    "@semantic-release/error": ^3.0.0
+    aggregate-error: ^3.0.0
+    debug: ^4.0.0
+    execa: ^5.0.0
+    lodash: ^4.17.4
+    parse-json: ^5.0.0
+  peerDependencies:
+    semantic-release: ">=18.0.0"
+  checksum: c6ad2f02ff01a4709c4914f560d0343efea9afe993c733ff971da8bf89604a1460d87b26a1a2ace5992c5ace8e8d384cf314504e0c4b623fc8433e8e8d9e2fe0
+  languageName: node
+  linkType: hard
+
 "@semantic-release/git@npm:^10.0.1":
   version: 10.0.1
   resolution: "@semantic-release/git@npm:10.0.1"
@@ -2641,7 +2657,7 @@ __metadata:
     "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": ^1.18.3
-    "@stoplight/spectral-formatters": ^1.2.0
+    "@stoplight/spectral-formatters": ^1.3.0
     "@stoplight/spectral-parsers": ^1.0.3
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-bundler": ^1.5.2
@@ -2715,7 +2731,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formatters@^1.2.0, @stoplight/spectral-formatters@workspace:packages/formatters":
+"@stoplight/spectral-formatters@^1.3.0, @stoplight/spectral-formatters@workspace:packages/formatters":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formatters@workspace:packages/formatters"
   dependencies:
@@ -2730,6 +2746,7 @@ __metadata:
     eol: 0.9.1
     lodash: ^4.17.21
     node-html-parser: ^4.1.5
+    node-sarif-builder: ^2.0.3
     strip-ansi: 6.0
     text-table: ^0.2.0
     tslib: ^2.5.0
@@ -3339,6 +3356,13 @@ __metadata:
   version: 2.3.0
   resolution: "@types/prettier@npm:2.3.0"
   checksum: 8dd9b5263fd91001d72ca4e2ff89fb0d1ba23a450bd723b4478eb651755a2f1151af14ab90c4f7dadba607142757b340c1d7271ae56806563c76719d3321ec20
+  languageName: node
+  linkType: hard
+
+"@types/sarif@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "@types/sarif@npm:2.1.4"
+  checksum: 1ff924e9ffe468f93c8751d6e8192ca126380a328ba7d8f7abb6d3e7d66080f9d3c93c4db94ddca569b65a2f6d3b82dfe9b79f23500ebb69e0f6d2d12a1dc5c4
   languageName: node
   linkType: hard
 
@@ -9805,6 +9829,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-sarif-builder@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "node-sarif-builder@npm:2.0.3"
+  dependencies:
+    "@types/sarif": ^2.1.4
+    fs-extra: ^10.0.0
+  checksum: 397dd9bfb0780c6753fb47d1fd0465f3c8a935082cb1bbd7ad6232d18b6343d9d499c6bc572ad0415db282efd6058fe8b7a6657020434adef4fbf93a8b95306e
+  languageName: node
+  linkType: hard
+
 "nopt@npm:^5.0.0":
   version: 5.0.0
   resolution: "nopt@npm:5.0.0"
@@ -11451,6 +11485,7 @@ __metadata:
     "@commitlint/config-conventional": ^12.1.4
     "@octokit/core": ^3.5.1
     "@semantic-release/changelog": ^6.0.3
+    "@semantic-release/exec": ^6.0.3
     "@semantic-release/git": ^10.0.1
     "@semantic-release/github": ^8.1.0
     "@semantic-release/npm": ^9.0.2

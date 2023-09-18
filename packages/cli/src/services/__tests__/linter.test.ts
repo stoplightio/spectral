@@ -10,7 +10,7 @@ import AggregateError = require('es-aggregate-error');
 import * as process from 'process';
 
 import lintCommand from '../../commands/lint';
-import { lint } from '../linter';
+import { LinterResult, lint } from '../linter';
 
 jest.mock('process');
 jest.mock('../output');
@@ -20,7 +20,7 @@ const invalidRulesetPath = resolve(__dirname, '__fixtures__/ruleset-invalid.js')
 const validRulesetPath = resolve(__dirname, '__fixtures__/ruleset-valid.js');
 const validOas3SpecPath = resolve(__dirname, './__fixtures__/openapi-3.0-valid.yaml');
 
-async function run(command: string) {
+async function run(command: string): Promise<LinterResult['results']> {
   const parser = yargs.command(lintCommand);
   const { documents, ...opts } = await new Promise<any>((resolve, reject) => {
     parser.parse(`${command} --ignore-unknown-format`, {}, (err, argv) => {
@@ -32,7 +32,7 @@ async function run(command: string) {
     });
   });
 
-  return lint(documents, opts);
+  return (await lint(documents, opts)).results;
 }
 
 describe('Linter service', () => {
