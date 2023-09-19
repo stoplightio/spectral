@@ -6,10 +6,16 @@ type Options = {
   oasVersion: 2 | 3;
 };
 
-export default createRulesetFunction<Record<string, unknown>, Options>(
+export default createRulesetFunction<Record<string, string[]>, Options>(
   {
     input: {
       type: 'object',
+      additionalProperties: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      },
     },
     options: {
       type: 'object',
@@ -45,9 +51,41 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
           message: `${object} "security" values must match a scheme defined in the "${location}" object.`,
           path: [...path, schemeName],
         });
+
+        continue;
+      }
+
+      const scope = input[schemeName];
+      for (let i = 0; i < scope.length; i++) {
+        const scopeName = scope[i];
+        if (!isScopeDefined(oasVersion, scopeName, allDefs[schemeName])) {
+          results ??= [];
+          results.push({
+            message: `"${scopeName}" must be listed among scopes.`,
+            path: [...path, schemeName, i],
+          });
+        }
       }
     }
 
     return results;
   },
 );
+
+function isScopeDefined(oasVersion: 2 | 3, scopeName: string, securityScheme: unknown): boolean {
+  if (!isPlainObject(securityScheme)) return false;
+
+  if (oasVersion === 2) {
+    return isPlainObject(securityScheme.scopes) && scopeName in securityScheme.scopes;
+  }
+
+  if (isPlainObject(securityScheme.flows)) {
+    for (const flow of Object.values(securityScheme.flows)) {
+      if (isPlainObject(flow) && isPlainObject(flow.scopes) && scopeName in flow.scopes) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
