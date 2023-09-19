@@ -6,7 +6,7 @@ type Options = {
   oasVersion: 2 | 3;
 };
 
-export default createRulesetFunction<Record<string, unknown>[], Options>(
+export default createRulesetFunction<Record<string, unknown>, Options>(
   {
     input: {
       type: 'object',
@@ -38,11 +38,11 @@ export default createRulesetFunction<Record<string, unknown>[], Options>(
 
     for (const schemeName of schemeNames) {
       if (!isPlainObject(allDefs) || !(schemeName in allDefs)) {
-        const scope = path.length == 2 ? 'API' : 'Operation';
+        const object = path.length == 2 ? 'API' : 'Operation';
         const location = oasVersion === 2 ? 'securityDefinitions' : 'components.securitySchemes';
         results ??= [];
         results.push({
-          message: `${scope} "security" values must match a scheme defined in the "${location}" object.`,
+          message: `${object} "security" values must match a scheme defined in the "${location}" object.`,
           path: [...path, schemeName],
         });
       }
