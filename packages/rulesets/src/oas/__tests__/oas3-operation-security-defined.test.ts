@@ -116,6 +116,7 @@ testRule('oas3-operation-security-defined', [
                 apikey: [],
                 basic: [],
               },
+              {},
             ],
           },
         },
