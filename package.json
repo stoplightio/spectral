@@ -62,7 +62,7 @@
       [
         "@semantic-release/exec",
         {
-          "publishCmd": "node scripts/inline-version.mjs ${nextRelease.version}"
+          "publishCmd": "test -f scripts/inline-version.mjs && node scripts/inline-version.mjs --verbose ${nextRelease.version}"
         }
       ],
       "@semantic-release/npm",
