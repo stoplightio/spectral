@@ -1,3 +1,10 @@
+# @stoplight/spectral-rulesets [1.18.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.17.1...@stoplight/spectral-rulesets-1.18.0) (2023-10-03)
+
+
+### Features
+
+* **rulesets:** add scope validation to oas{2,3}-operation-security-defined rules ([#2538](https://github.com/stoplightio/spectral/issues/2538)) ([68aacd6](https://github.com/stoplightio/spectral/commit/68aacd615dc6830ef9d856fcad74f1ec2b2a0ca2))
+
 ## @stoplight/spectral-rulesets [1.17.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.17.0...@stoplight/spectral-rulesets-1.17.1) (2023-09-18)
 
 
