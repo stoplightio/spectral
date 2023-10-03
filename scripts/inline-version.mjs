@@ -1,12 +1,11 @@
 import * as fs from 'node:fs';
 import process from 'node:process';
-import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
-const cwd = join(fileURLToPath(import.meta.url), '../..');
+const cwd = process.cwd();
 const filepath = join(cwd, 'src/version.ts');
 
-const version = getVersionFromArgv() || JSON.parse(fs.readFileSync(join(cwd, 'package.json'), 'utf8')).version;
+const { name, version } = getVersionFromArgv() || JSON.parse(fs.readFileSync(join(cwd, 'package.json'), 'utf8'));
 
 try {
   const existingVersion = /VERSION = '([^']+)';/.exec(fs.readFileSync(filepath, 'utf8'));
@@ -20,7 +19,7 @@ try {
 
 fs.writeFileSync(filepath, `export const VERSION = '${version}';\n`);
 
-log(`Inlined ${version} version.`);
+log(`Inlined ${version} version in ${name}.`);
 
 function isNewerVersion(current, next) {
   const [curMajor, curMinor, curPatch] = current.split('.').map(Number);
