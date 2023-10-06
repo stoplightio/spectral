@@ -40,4 +40,26 @@ testRule('oas2-operation-formData-consume-check', [
       },
     ],
   },
+
+  {
+    name: 'return error when consumes is missing',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/path1': {
+          get: {
+            parameters: [{ in: 'formData', name: 'test' }],
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message:
+          'Operations with "in: formData" parameter must include "application/x-www-form-urlencoded" or "multipart/form-data" in their "consumes" property.',
+        path: ['paths', '/path1', 'get'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
 ]);
