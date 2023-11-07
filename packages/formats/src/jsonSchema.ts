@@ -17,6 +17,8 @@ const hasValidJSONSchemaType = (document: Partial<{ type?: unknown }>): boolean 
   return Array.isArray(document.type) && document.type.every(type => KNOWN_JSON_SCHEMA_TYPES.includes(type));
 };
 
+const hasValidJSONSchemaEnumKeyword = (document: Record<string, unknown>): boolean => Array.isArray(document['enum']);
+
 const hasValidJSONSchemaCompoundKeyword = (document: Record<string, unknown>): boolean =>
   KNOWN_JSON_SCHEMA_COMPOUND_KEYWORDS.some(
     combiner => combiner in document && typeof document[combiner] === 'object' && document[combiner] !== null,
@@ -43,7 +45,10 @@ export const jsonSchemaLoose: Format<Record<string, unknown>> = (
   document: unknown,
 ): document is Record<string, unknown> =>
   isPlainObject(document) &&
-  (isJsonSchema(document) || hasValidJSONSchemaType(document) || hasValidJSONSchemaCompoundKeyword(document));
+  (isJsonSchema(document) ||
+    hasValidJSONSchemaType(document) ||
+    hasValidJSONSchemaEnumKeyword(document) ||
+    hasValidJSONSchemaCompoundKeyword(document));
 
 jsonSchemaLoose.displayName = 'JSON Schema (loose)';
 
