@@ -137,6 +137,9 @@ export class Tree {
       // <origin>/<pkg-name>
       // <origin>/<pkg-name>/<asset> where asset can be a custom fn, etc.
       resolved = path.join(ctx.filepath, identifier);
+    } else if (kind === 'ruleset' && requireResolve?.(identifier, { paths: [ctx.cwd] })) {
+      // this is an npm installed ruleset
+      resolved = requireResolve?.(identifier, { paths: [ctx.cwd] });
     } else if (kind === 'ruleset' && !path.isURL(ctx.filepath) && isPackageImport(identifier)) {
       resolved =
         ctx.npmRegistry !== null
