@@ -42,7 +42,7 @@ function createRegex(pattern: string): RegExp {
     return new RegExp(splitRegex[1], splitRegex[2]);
   } else {
     // without slashes like [a-b]+
-    return new RegExp(pattern);
+    return new RegExp(pattern, 'u');
   }
 }
 
