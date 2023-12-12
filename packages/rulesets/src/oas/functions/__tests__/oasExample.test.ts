@@ -114,6 +114,9 @@ describe('oasExample', () => {
                     type: 'object',
                     required: ['id', 'url'],
                     properties: {
+                      'x-stoplight': {
+                        id: 'abc',
+                      },
                       id: {
                         type: 'string',
                       },
@@ -121,6 +124,9 @@ describe('oasExample', () => {
                         type: 'string',
                         format: 'uri',
                       },
+                    },
+                    'x-stoplight': {
+                      id: 'abc',
                     },
                     example: {
                       id: 'bf23bc970b78d27691e8',

@@ -111,17 +111,37 @@ function* getSchemaValidationItems(
   }
 }
 
+const KNOWN_TRAVERSE_KEYWORDS = [
+  /* eslint-disable @typescript-eslint/no-unsafe-argument */
+  ...Object.keys(traverse['keywords']),
+  ...Object.keys(traverse['arrayKeywords']),
+  ...Object.keys(traverse['propsKeywords']),
+  /* eslint-enable @typescript-eslint/no-unsafe-argument */
+];
+
 /**
- * Modifies 'schema' (and all its sub-schemas) to remove all "example" fields.
+ * Modifies 'schema' (and all its sub-schemas) to remove all id fields from non-schema objects
  * In this context, "sub-schemas" refers to all schemas reachable from 'schema'
  * (e.g. properties, additionalProperties, allOf/anyOf/oneOf, not, items, etc.)
- * @param schema the schema to be "de-examplified"
- * @returns 'schema' with example fields removed
+ * @param schema the schema to be sanitized
+ * @returns 'schema' with id fields removed
  */
-function deExamplify(schema: Record<string, unknown>): void {
-  traverse(schema, <traverse.Callback>(fragment => {
-    if ('example' in fragment) {
-      delete fragment.example;
+function cleanSchema(schema: Record<string, unknown>): void {
+  traverse(schema, { allKeys: true }, <traverse.Callback>((
+    fragment,
+    jsonPtr,
+    rootSchema,
+    parentJsonPtr,
+    parentKeyword,
+  ) => {
+    if (parentKeyword === void 0 || KNOWN_TRAVERSE_KEYWORDS.includes(parentKeyword)) return;
+
+    if ('id' in fragment) {
+      delete fragment.id;
+    }
+
+    if ('$id' in fragment) {
+      delete fragment.id;
     }
   }));
 }
@@ -165,11 +185,11 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
       delete schemaOpts.schema.required;
     }
 
-    // Make a deep copy of the schema and then remove all the "example" fields from it.
+    // Make a deep copy of the schema and then remove all objects containing id or $id and that are not schema objects.
     // This is to avoid problems down in "ajv" which does the actual schema validation.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     schemaOpts.schema = JSON.parse(JSON.stringify(schemaOpts.schema));
-    deExamplify(schemaOpts.schema);
+    cleanSchema(schemaOpts.schema);
 
     for (const validationItem of validationItems) {
       const result = oasSchema(validationItem.value, schemaOpts, {
