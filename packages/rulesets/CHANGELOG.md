@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.18.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.18.0...@stoplight/spectral-rulesets-1.18.1) (2023-12-13)
+
+
+### Bug Fixes
+
+* **rulesets:** oasExample should clean id fields from non-schema objects ([#2561](https://github.com/stoplightio/spectral/issues/2561)) ([7f7583e](https://github.com/stoplightio/spectral/commit/7f7583e37e9e7d18bc2d7c9ae50939a540b5d720))
+
 # @stoplight/spectral-rulesets [1.18.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.17.1...@stoplight/spectral-rulesets-1.18.0) (2023-10-03)
 
 
