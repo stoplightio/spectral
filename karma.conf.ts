@@ -24,7 +24,6 @@ module.exports = (config: Config): void => {
       'packages/formatters/src/github-actions.ts',
       'packages/formatters/src/sarif.ts',
       'packages/formatters/src/index.node.ts',
-      'packages/ruleset-bundler/src/plugins/commonjs.ts',
       '**/*.jest.test.ts',
     ],
 
