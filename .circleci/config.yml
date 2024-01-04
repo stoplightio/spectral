@@ -398,7 +398,6 @@ workflows:
           filters: *default-branch-filter
       - test-browser
       - lint
-      - build-nix-binaries
       - approve-release:
           type: approval
           filters: *default-branch-filter
