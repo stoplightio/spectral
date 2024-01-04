@@ -65,6 +65,9 @@ commands:
     parameters:
       targets:
         type: string
+      bytecode:
+        type: boolean
+        default: true
     steps:
       - restore_cache:
           name: Restore pkg cache
@@ -74,12 +77,20 @@ commands:
           name: Create the Spectral Binary
           environment:
             PKG_CACHE_PATH: *pkg-cache-path
-          command: yarn workspace @stoplight/spectral-cli pkg . --debug --public --targets << parameters.targets >> --output binaries/spectral
+          command: |
+            if [ "<< parameters.bytecode >>" = true ]
+            then
+              yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets << parameters.targets >> --output binaries/spectral
+            else
+              yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --debug --public --public-packages "*" --targets << parameters.targets >> --output binaries/spectral
+            fi
       - save_cache:
           name: Retain pkg cache
           key: *pkg-cache-key
           paths:
             - *pkg-cache-path
+      - store_artifacts:
+          path: /home/circleci/project/packages/cli/binaries
 
   install-and-build:
     description: >-
@@ -103,6 +114,8 @@ commands:
           name: Build ldid
           working_directory: /tmp
           command: |
+            sudo apt-get update -y
+            sudo apt-get -y install libplist-dev
             curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v<< parameters.version >>.tar.gz | tar -xz
             mv ldid-<< parameters.version >> ldid
             make -C ldid
@@ -254,15 +267,13 @@ jobs:
       - image: cimg/node:lts
     steps:
       - checkout
-      - run:
-          name: Configure binfmt
-          command: |
-            sudo apt-get update -y
-            sudo apt-get -y install binfmt-support qemu-user-static libplist-dev
       - install-ldid
       - install-and-build
+      # - build-binary:
+          # targets: linux-x64,macos-x64,alpine-x64
       - build-binary:
-          targets: linux-x64,linux-arm64,macos-x64,macos-arm64,alpine-x64,alpine-arm64
+          targets: macos-arm64,linux-arm64,alpine-arm64
+          bytecode: false
       - persist_to_workspace:
           root: ./packages/cli/
           paths:
