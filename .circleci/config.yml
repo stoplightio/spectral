@@ -6,7 +6,7 @@ orbs:
 executors:
   linux:
     docker:
-      - image: cimg/base:2021.07
+      - image: cimg/base:2024.01
 
 defaults:
   default-branch: &default-branch develop
@@ -26,6 +26,7 @@ defaults:
     - &node-active-lts "18.17"
     - &node-current "20.5"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
+  ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
 
 commands:
   compute-hashes:
@@ -65,11 +66,20 @@ commands:
       targets:
         type: string
     steps:
+      - restore_cache:
+          name: Restore pkg cache
+          keys:
+            - pkg-cache-{{ parameters.targets }}
       - run:
           name: Create the Spectral Binary
           environment:
             PKG_CACHE_PATH: *pkg-cache-path
           command: yarn workspace @stoplight/spectral-cli pkg . --public --targets << parameters.targets >> --output binaries/spectral
+      - save_cache:
+          name: Retain pkg cache
+          key: pkg-cache-{{ parameters.targets }}
+          paths:
+            - *pkg-cache-path
 
   install-and-build:
     description: >-
@@ -77,6 +87,34 @@ commands:
     steps:
       - cached-dependencies
       - build
+
+  install-ldid:
+    description: Install ldid
+    parameters:
+      version:
+        type: string
+        default: *ldid-version
+    steps:
+      - restore_cache:
+          name: Restore built ldid binary
+          keys:
+            - ldid-binary-<< parameters.version >>-{{ arch }}
+      - run:
+          name: Build ldid
+          working_directory: /tmp
+          command: |
+            curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v<< parameters.version >>.tar.gz | tar -xz
+            mv ldid-<< parameters.version >> ldid
+            make -C ldid
+      - save_cache:
+          name: Retain ldid binary
+          key: ldid-binary-<< parameters.version >>-{{ arch }}
+          paths:
+            - /tmp/ldid
+      - run:
+          name: Install ldid
+          working_directory: /tmp/ldid
+          command: make install
 
   lint-code:
     steps:
@@ -138,7 +176,6 @@ commands:
           key: test-harness-{{ checksum "/tmp/current-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>
           paths:
             - ./.cache/spectral-test-harness
-            - *pkg-cache-path
             - ./test-harness/tests/
           when: always
 
@@ -217,6 +254,12 @@ jobs:
       - image: cimg/node:lts
     steps:
       - checkout
+      - run:
+          name: Configure binfmt
+          command: |
+            sudo apt-get update -y
+            sudo apt-get -y install binfmt-support qemu-user-static libplist-dev
+      - install-ldid
       - install-and-build
       - build-binary:
           targets: linux-x64,linux-arm64,macos-x64,macos-arm64,alpine-x64,alpine-arm64
