@@ -22,9 +22,10 @@ defaults:
   node-versions: &node-versions
     - "12.22"
     - "14.21"
-    - &node-maintenance-lts "16.20"
-    - &node-active-lts "18.17"
-    - &node-current "20.5"
+    - "16.20"
+    - &node-maintenance-lts "18.19"
+    - &node-active-lts "20.10"
+    - &node-current "21.5"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
 
@@ -65,6 +66,12 @@ commands:
     parameters:
       targets:
         type: string
+      node-version:
+        type: enum
+        enum:
+          - *node-maintenance-lts
+          - *node-active-lts
+        default: *node-maintenance-lts
       bytecode:
         type: boolean
         default: true
@@ -72,18 +79,22 @@ commands:
       - restore_cache:
           name: Restore pkg cache
           keys:
-            - &pkg-cache-key pkg-cache-<< parameters.targets >>
+            - &pkg-cache-key pkg-cache-<< parameters.targets >>-<< parameters.node-version >>
       - run:
           name: Create the Spectral Binary
           environment:
             PKG_CACHE_PATH: *pkg-cache-path
           command: |
+            node_version=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
+            targets=$(echo "<< parameters.targets >>" | awk -v node_version="$node_version" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
             if [ "<< parameters.bytecode >>" = true ]
             then
-              yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets << parameters.targets >> --output binaries/spectral
+              yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $targets --output binaries/spectral
             else
-              yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --debug --public --public-packages "*" --targets << parameters.targets >> --output binaries/spectral
+              yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $targets --output binaries/spectral
             fi
+            
+
       - save_cache:
           name: Retain pkg cache
           key: *pkg-cache-key
