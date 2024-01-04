@@ -67,10 +67,7 @@ commands:
       targets:
         type: string
       node-version:
-        type: enum
-        enum:
-          - *node-maintenance-lts
-          - *node-active-lts
+        type: string
         default: *node-maintenance-lts
       bytecode:
         type: boolean
@@ -85,23 +82,23 @@ commands:
           environment:
             PKG_CACHE_PATH: *pkg-cache-path
           command: |
-            node_version=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
-            targets=$(echo "<< parameters.targets >>" | awk -v node_version="$node_version" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
+            NODE_VERSION=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
+            TARGETS=$(echo "<< parameters.targets >>" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
+            export ARCH=$(echo << parameters.targets >> | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
+
             if [ "<< parameters.bytecode >>" = true ]
             then
-              yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $targets --output binaries/spectral
+              yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $TARGETS --output binaries/spectral
             else
-              yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $targets --output binaries/spectral
+              yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $TARGETS --output binaries/spectral
             fi
             
-
+            (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
       - save_cache:
           name: Retain pkg cache
           key: *pkg-cache-key
           paths:
             - *pkg-cache-path
-      - store_artifacts:
-          path: /home/circleci/project/packages/cli/binaries
 
   install-and-build:
     description: >-
@@ -192,6 +189,7 @@ commands:
             - test-harness-{{ checksum "/tmp/previous-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>
       - build-binary:
           targets: << parameters.os >>
+          node-version: << parameters.node-version >>
       - run:
           name: Run harness tests
           command: yarn test.harness --maxWorkers=<< parameters.max-workers >>
@@ -280,8 +278,8 @@ jobs:
       - checkout
       - install-ldid
       - install-and-build
-      # - build-binary:
-          # targets: linux-x64,macos-x64,alpine-x64
+      - build-binary:
+          targets: linux-x64,macos-x64,alpine-x64
       - build-binary:
           targets: macos-arm64,linux-arm64,alpine-arm64
           bytecode: false
@@ -289,6 +287,8 @@ jobs:
           root: ./packages/cli/
           paths:
             - binaries
+      - store_artifacts:
+          path: /home/circleci/project/packages/cli/binaries
 
   build-windows-binary:
     executor:
