@@ -124,9 +124,12 @@ commands:
           command: |
             sudo apt-get update -y
             sudo apt-get -y install libplist-dev
-            curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v<< parameters.version >>.tar.gz | tar -xz
-            mv ldid-<< parameters.version >> ldid
-            make -C ldid
+            if [ ! -d ldid ]
+            then
+              curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v<< parameters.version >>.tar.gz | tar -xz
+              mv ldid-<< parameters.version >> ldid
+              make -C ldid
+            fi
       - save_cache:
           name: Retain ldid binary
           key: ldid-binary-<< parameters.version >>-{{ arch }}
