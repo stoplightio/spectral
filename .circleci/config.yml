@@ -22,10 +22,9 @@ defaults:
   node-versions: &node-versions
     - "12.22"
     - "14.21"
-    - "16.20"
-    - &node-maintenance-lts "18.19"
-    - &node-active-lts "20.10"
-    - &node-current "21.5"
+    - &node-maintenance-lts "16.20"
+    - &node-active-lts "18.17"
+    - &node-current "20.5"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
 
@@ -68,7 +67,7 @@ commands:
         type: string
       node-version:
         type: string
-        default: *node-maintenance-lts
+        default: *node-active-lts
       bytecode:
         type: boolean
         default: true
@@ -290,8 +289,6 @@ jobs:
           root: ./packages/cli/
           paths:
             - binaries
-      - store_artifacts:
-          path: /home/circleci/project/packages/cli/binaries
 
   build-windows-binary:
     executor:
