@@ -23,7 +23,8 @@
     "node": "^12.20 || >= 14.13"
   },
   "scripts": {
-    "clean": "rimraf .cache packages/*/{dist,.cache}",
+    "preclean": "yarn workspaces foreach run preclean",
+    "clean": "yarn preclean && rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspaces foreach run prebuild",
     "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn workspaces foreach run postbuild",

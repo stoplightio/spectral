@@ -1,7 +1,7 @@
 {
   "title": "A JSON Schema for Swagger 2.0 API.",
   "$id": "http://swagger.io/v2/schema.json#",
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "required": ["swagger", "info", "paths"],
   "additionalProperties": false,
@@ -1029,7 +1029,6 @@
           "$ref": "http://json-schema.org/draft-04/schema#/definitions/stringArray"
         },
         "type": {
-          "type": "string",
           "enum": ["file"]
         },
         "readOnly": {
@@ -1048,7 +1047,6 @@
       "additionalProperties": false,
       "properties": {
         "type": {
-          "type": "string",
           "enum": ["string", "number", "integer", "boolean", "array"]
         },
         "format": {
@@ -1211,7 +1209,6 @@
       "required": ["type"],
       "properties": {
         "type": {
-          "type": "string",
           "enum": ["basic"]
         },
         "description": {
@@ -1230,14 +1227,12 @@
       "required": ["type", "name", "in"],
       "properties": {
         "type": {
-          "type": "string",
           "enum": ["apiKey"]
         },
         "name": {
           "type": "string"
         },
         "in": {
-          "type": "string",
           "enum": ["header", "query"]
         },
         "description": {
@@ -1256,11 +1251,9 @@
       "required": ["type", "flow", "authorizationUrl", "scopes"],
       "properties": {
         "type": {
-          "type": "string",
           "enum": ["oauth2"]
         },
         "flow": {
-          "type": "string",
           "enum": ["implicit"]
         },
         "scopes": {
@@ -1286,11 +1279,9 @@
       "required": ["type", "flow", "tokenUrl", "scopes"],
       "properties": {
         "type": {
-          "type": "string",
           "enum": ["oauth2"]
         },
         "flow": {
-          "type": "string",
           "enum": ["password"]
         },
         "scopes": {
@@ -1316,12 +1307,10 @@
       "required": ["type", "flow", "tokenUrl", "scopes"],
       "properties": {
         "type": {
-          "type": "string",
-          "enum": ["oauth2"]
+          "const": "oauth2"
         },
         "flow": {
-          "type": "string",
-          "enum": ["application"]
+          "const": "application"
         },
         "scopes": {
           "$ref": "#/definitions/oauth2Scopes"
@@ -1346,12 +1335,10 @@
       "required": ["type", "flow", "authorizationUrl", "tokenUrl", "scopes"],
       "properties": {
         "type": {
-          "type": "string",
-          "enum": ["oauth2"]
+          "const": "oauth2"
         },
         "flow": {
-          "type": "string",
-          "enum": ["accessCode"]
+          "const": "accessCode"
         },
         "scopes": {
           "$ref": "#/definitions/oauth2Scopes"
@@ -1407,18 +1394,15 @@
       "type": "array",
       "description": "The transfer protocol of the API.",
       "items": {
-        "type": "string",
         "enum": ["http", "https", "ws", "wss"]
       },
       "uniqueItems": true
     },
     "collectionFormat": {
-      "type": "string",
       "enum": ["csv", "ssv", "tsv", "pipes"],
       "default": "csv"
     },
     "collectionFormatWithMulti": {
-      "type": "string",
       "enum": ["csv", "ssv", "tsv", "pipes", "multi"],
       "default": "csv"
     },
