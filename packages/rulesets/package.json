@@ -50,17 +50,15 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@rollup/plugin-sucrase": "^5.0.2",
-    "@rollup/plugin-terser": "^0.4.4",
     "@stoplight/path": "^1.3.2",
     "@stoplight/spectral-parsers": "*",
     "@stoplight/spectral-ref-resolver": "*",
     "gzip-size": "^6.0.0",
-    "immer": "^9.0.6"
+    "immer": "^9.0.6",
+    "terser": "^5.26.0"
   },
   "scripts": {
     "compile-schemas": "ts-node -T ./scripts/compile-schemas.ts",
-    "postbuild": "ts-node -T ./scripts/bundle.ts",
     "prelint": "yarn compile-schemas --quiet",
     "pretest": "yarn compile-schemas --quiet",
     "prebuild": "yarn compile-schemas --quiet"

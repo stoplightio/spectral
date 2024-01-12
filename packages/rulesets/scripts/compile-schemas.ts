@@ -7,6 +7,8 @@ import standaloneCode from 'ajv/dist/standalone/index.js';
 import ajvErrors from 'ajv-errors';
 import ajvFormats from 'ajv-formats';
 import chalk from 'chalk';
+import { minify } from 'terser';
+import { sync } from 'gzip-size';
 
 const cwd = path.join(__dirname, '../src');
 
@@ -39,14 +41,13 @@ Promise.all(schemas)
       code: {
         esm: true,
         source: true,
-        optimize: 1,
       },
     });
 
     ajvFormats(ajv);
     ajvErrors(ajv);
 
-    const target = path.join(cwd, 'oas/schemas/compiled.ts');
+    const target = path.join(cwd, 'oas/schemas/validators.ts');
     const basename = path.basename(target);
     const code = standaloneCode(ajv, {
       oas2_0: 'http://swagger.io/v2/schema.json',
@@ -54,9 +55,28 @@ Promise.all(schemas)
       oas3_1: 'https://spec.openapis.org/oas/3.1/schema/2021-09-28',
     });
 
-    log('writing %s size is %dKB', path.join(target, '..', basename), Math.round((code.length / 1024) * 100) / 100);
+    const minified = (
+      await minify(code, {
+        compress: {
+          passes: 2,
+        },
+        ecma: 2020,
+        module: true,
+        format: {
+          comments: false,
+        },
+      })
+    ).code as string;
 
-    await fs.promises.writeFile(path.join(target, '..', basename), ['// @ts-nocheck', code].join('\n'));
+    log(
+      'writing %s size is %dKB (original), %dKB (minified) %dKB (minified + gzipped)',
+      path.join(target, '..', basename),
+      Math.round((code.length / 1024) * 100) / 100,
+      Math.round((minified.length / 1024) * 100) / 100,
+      Math.round((sync(minified) / 1024) * 100) / 100,
+    );
+
+    await fs.promises.writeFile(path.join(target, '..', basename), ['// @ts-nocheck', minified].join('\n'));
   })
   .then(() => {
     log(chalk.green('Validators generated.'));
