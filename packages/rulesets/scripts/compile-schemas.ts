@@ -13,7 +13,9 @@ import { sync } from 'gzip-size';
 const cwd = path.join(__dirname, '../src');
 
 const schemas = [
-  'oas/schemas/json-schema-draft-04.json',
+  'oas/schemas/json-schema/draft-04.json',
+  'oas/schemas/json-schema/draft-2020-12/index.json',
+  'oas/schemas/json-schema/draft-2020-12/validation.json',
   'oas/schemas/oas/v2.0.json',
   'oas/schemas/oas/v3.0.json',
   'oas/schemas/oas/v3.1/dialect.schema.json',

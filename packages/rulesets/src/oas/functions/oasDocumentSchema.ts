@@ -16,17 +16,14 @@ export default createRulesetFunction<unknown, null>(
     const formats = context.document.formats;
     if (formats === null || formats === void 0) return;
 
-    const validator = formats.has(oas2)
-      ? validators.oas2_0
-      : formats.has(oas3_1)
-      ? validators.oas3_1
-      : validators.oas3_0;
+    const schema = formats.has(oas2) ? 'oas2_0' : formats.has(oas3_1) ? 'oas3_1' : 'oas3_0';
+    const validator = validators[schema];
 
     validator(input);
 
-    const errors = validator['errors'] as ErrorObject[] | undefined;
+    const errors = validator['errors'] as ErrorObject[] | null;
 
-    return errors?.filter(isRelevantError).map(e => processError(input, e));
+    return errors?.reduce<IFunctionResult[]>((errors, e) => processError(errors, input, schema, e), []);
   },
 );
 
@@ -34,19 +31,27 @@ function isRelevantError(error: ErrorObject): boolean {
   return error.keyword !== 'if';
 }
 
-function processError(input: unknown, error: ErrorObject): IFunctionResult {
+function processError(
+  errors: IFunctionResult[],
+  input: unknown,
+  schema: 'oas2_0' | 'oas3_0' | 'oas3_1',
+  error: ErrorObject,
+): IFunctionResult[] {
+  if (!isRelevantError(error)) {
+    return errors;
+  }
+
   const path = error.instancePath === '' ? [] : error.instancePath.slice(1).split('/');
   const property = path.length === 0 ? null : path[path.length - 1];
+
+  let message: string;
 
   switch (error.keyword) {
     case 'additionalProperties': {
       const additionalProperty = error.params['additionalProperty'] as string;
       path.push(additionalProperty);
-
-      return {
-        message: `Property "${additionalProperty}" is not expected to be here`,
-        path,
-      };
+      message = `Property "${additionalProperty}" is not expected to be here`;
+      break;
     }
 
     case 'enum': {
@@ -71,24 +76,24 @@ function processError(input: unknown, error: ErrorObject): IFunctionResult {
         }
       }
 
-      return {
-        message: `${cleanAjvMessage(property, error.message)}: ${printedValues}${suggestion}`,
-        path,
-      };
+      message = `${cleanAjvMessage(property, error.message)}: ${printedValues}${suggestion}`;
+      break;
     }
 
     case 'errorMessage':
-      return {
-        message: String(error.message),
-        path,
-      };
+      message = String(error.message);
+      break;
 
     default:
-      return {
-        message: cleanAjvMessage(property, error.message),
-        path,
-      };
+      message = cleanAjvMessage(property, error.message);
   }
+
+  errors.push({
+    message,
+    path,
+  });
+
+  return errors;
 }
 
 function findBestMatch(value: string, allowedValues: unknown[]): string | null {

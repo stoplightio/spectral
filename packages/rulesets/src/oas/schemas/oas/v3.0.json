@@ -497,14 +497,22 @@
             "$ref": "#/definitions/Reference"
           },
           "else": {
-            "oneOf": [
-              {
-                "$ref": "#/definitions/Schema"
-              },
-              {
+            "if": {
+              "type": "object"
+            },
+            "then": {
+              "$ref": "#/definitions/Schema"
+            },
+            "else": {
+              "if": {
                 "type": "boolean"
+              },
+              "then": true,
+              "else": {
+                "not": true,
+                "errorMessage": "\"additionalProperties\" property must be a valid Schema Object"
               }
-            ]
+            }
           },
           "default": true
         },

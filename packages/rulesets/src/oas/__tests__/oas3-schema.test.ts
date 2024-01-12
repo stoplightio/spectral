@@ -151,52 +151,6 @@ testRule('oas3-schema', [
   },
 
   {
-    name: 'oas3.1: paths is not required',
-    document: {
-      openapi: '3.1.0',
-      info: {
-        title: 'Example jsonSchemaDialect error',
-        version: '1.0.0',
-      },
-      webhooks: {},
-    },
-    errors: [],
-  },
-
-  {
-    name: 'oas3.1: uri template as server url',
-    document: {
-      openapi: '3.1.0',
-      info: {
-        title: 'Server URL may have variables',
-        version: '1.0.0',
-      },
-      webhooks: {},
-      // https://spec.openapis.org/oas/v3.1.0#server-object-example
-      servers: [
-        {
-          url: 'https://{username}.gigantic-server.com:{port}/{basePath}',
-          description: 'The production API server',
-          variables: {
-            username: {
-              default: 'demo',
-              description: 'this value is assigned by the service provider, in this example `gigantic-server.com`',
-            },
-            port: {
-              enum: ['8443', '443'],
-              default: '8443',
-            },
-            basePath: {
-              default: 'v2',
-            },
-          },
-        },
-      ],
-    },
-    errors: [],
-  },
-
-  {
     name: 'oas3.0: validate parameters',
     document: {
       openapi: '3.0.1',
@@ -319,6 +273,7 @@ testRule('oas3-schema', [
       },
     ],
   },
+
   {
     name: 'oas3.0: validate responses',
     document: {
@@ -382,5 +337,247 @@ testRule('oas3-schema', [
         severity: DiagnosticSeverity.Error,
       },
     ],
+  },
+
+  {
+    name: 'oas3.0: validate schemas',
+    document: {
+      openapi: '3.0.3',
+      info: {
+        title: 'our-api',
+        version: '1.0',
+      },
+      paths: {
+        '/config': {
+          parameters: [
+            {
+              schema: null,
+              name: 'id',
+              in: 'query',
+              required: false,
+              description: 'Id of an existing config.',
+            },
+          ],
+          get: {
+            summary: 'Get User Info by User ID',
+            operationId: 'get-users-settings',
+            responses: {
+              '200': {
+                description: 'Settings for User Found',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        key: {
+                          type: 'string,',
+                        },
+                        value: {
+                          type: 'string',
+                        },
+                      },
+                      required: ['key', 'value'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Schema: {
+            type: 'object',
+            additionalProperties: {
+              type: 'int',
+            },
+          },
+          Schema_2: {
+            type: 'object',
+            additionalProperties: 'invalid',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"schema" property must be object.',
+        path: ['paths', '/config', 'parameters', '0', 'schema'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "number", "object", "string". Did you mean "string"?.',
+        path: [
+          'paths',
+          '/config',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'key',
+          'type',
+        ],
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "number", "object", "string". Did you mean "integer"?.',
+        path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"additionalProperties" property must be a valid Schema Object.',
+        path: ['components', 'schemas', 'Schema_2', 'additionalProperties'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: paths is not required',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example jsonSchemaDialect error',
+        version: '1.0.0',
+      },
+      webhooks: {},
+    },
+    errors: [],
+  },
+
+  {
+    name: 'oas3.1: validate schemas',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'our-api',
+        version: '1.0',
+      },
+      paths: {
+        '/config': {
+          parameters: [
+            {
+              schema: null,
+              name: 'id',
+              in: 'query',
+              required: false,
+              description: 'Id of an existing config.',
+            },
+          ],
+          get: {
+            summary: 'Get User Info by User ID',
+            operationId: 'get-users-settings',
+            responses: {
+              '200': {
+                description: 'Settings for User Found',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        key: {
+                          type: 'string,',
+                        },
+                        value: {
+                          type: 'string',
+                        },
+                      },
+                      required: ['key', 'value'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Schema: {
+            type: 'object',
+            additionalProperties: {
+              type: 'int',
+            },
+          },
+          Schema_2: {
+            type: 'object',
+            additionalProperties: 'invalid',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"schema" property must be a valid Schema Object.',
+        path: ['paths', '/config', 'parameters', '0', 'schema'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "null", "number", "object", "string". Did you mean "string"?.',
+        path: [
+          'paths',
+          '/config',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'key',
+          'type',
+        ],
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "null", "number", "object", "string". Did you mean "integer"?.',
+        path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"additionalProperties" property must be a valid Schema Object.',
+        path: ['components', 'schemas', 'Schema_2', 'additionalProperties'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: uri template as server url',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Server URL may have variables',
+        version: '1.0.0',
+      },
+      webhooks: {},
+      // https://spec.openapis.org/oas/v3.1.0#server-object-example
+      servers: [
+        {
+          url: 'https://{username}.gigantic-server.com:{port}/{basePath}',
+          description: 'The production API server',
+          variables: {
+            username: {
+              default: 'demo',
+              description: 'this value is assigned by the service provider, in this example `gigantic-server.com`',
+            },
+            port: {
+              enum: ['8443', '443'],
+              default: '8443',
+            },
+            basePath: {
+              default: 'v2',
+            },
+          },
+        },
+      ],
+    },
+    errors: [],
   },
 ]);

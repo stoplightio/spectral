@@ -350,14 +350,16 @@
       }
     },
     "responseValue": {
-      "oneOf": [
-        {
-          "$ref": "#/definitions/response"
-        },
-        {
-          "$ref": "#/definitions/jsonReference"
-        }
-      ]
+      "if": {
+        "type": "object",
+        "required": ["$ref"]
+      },
+      "then": {
+        "$ref": "#/definitions/jsonReference"
+      },
+      "else": {
+        "$ref": "#/definitions/response"
+      }
     },
     "response": {
       "type": "object",
@@ -930,14 +932,22 @@
           "$ref": "http://json-schema.org/draft-04/schema#/properties/enum"
         },
         "additionalProperties": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/schema"
-            },
-            {
+          "if": {
+            "type": "object"
+          },
+          "then": {
+            "$ref": "#/definitions/schema"
+          },
+          "else": {
+            "if": {
               "type": "boolean"
+            },
+            "then": true,
+            "else": {
+              "not": true,
+              "errorMessage": "\"additionalProperties\" property must be a valid schema"
             }
-          ],
+          },
           "default": {}
         },
         "type": {
@@ -1379,14 +1389,16 @@
       "description": "The parameters needed to send a valid API call.",
       "additionalItems": false,
       "items": {
-        "oneOf": [
-          {
-            "$ref": "#/definitions/parameter"
-          },
-          {
-            "$ref": "#/definitions/jsonReference"
-          }
-        ]
+        "if": {
+          "type": "object",
+          "required": ["$ref"]
+        },
+        "then": {
+          "$ref": "#/definitions/jsonReference"
+        },
+        "else": {
+          "$ref": "#/definitions/parameter"
+        }
       },
       "uniqueItems": true
     },

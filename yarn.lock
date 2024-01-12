@@ -2850,6 +2850,7 @@ __metadata:
     "@types/json-schema": ^7.0.7
     ajv: ^8.12.0
     ajv-formats: ~2.1.0
+    ajv-merge-patch: ^5.0.1
     gzip-size: ^6.0.0
     immer: ^9.0.6
     json-schema-traverse: ^1.0.0
@@ -3720,6 +3721,18 @@ __metadata:
     ajv:
       optional: true
   checksum: 4a287d937f1ebaad4683249a4c40c0fa3beed30d9ddc0adba04859026a622da0d317851316ea64b3680dc60f5c3c708105ddd5d5db8fe595d9d0207fd19f90b7
+  languageName: node
+  linkType: hard
+
+"ajv-merge-patch@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "ajv-merge-patch@npm:5.0.1"
+  dependencies:
+    fast-json-patch: ^2.0.6
+    json-merge-patch: ^1.0.2
+  peerDependencies:
+    ajv: ">=8.0.0"
+  checksum: 1f9354c26fe7af840d50fbd83b29ab65f3edeeb9f75c1257a42a89ee67526b49fa3232e5989ceb30090e38caf6e437d65623e5cef0a538a36e3d872c03e0ec4e
   languageName: node
   linkType: hard
 
@@ -6293,6 +6306,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-deep-equal@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "fast-deep-equal@npm:2.0.1"
+  checksum: b701835a87985e0ec4925bdf1f0c1e7eb56309b5d12d534d5b4b69d95a54d65bb16861c081781ead55f73f12d6c60ba668713391ee7fbf6b0567026f579b7b0b
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -6317,6 +6337,15 @@ __metadata:
     merge2: ^1.3.0
     micromatch: ^4.0.4
   checksum: 0b1990f6ce831c7e28c4d505edcdaad8e27e88ab9fa65eedadb730438cfc7cde4910d6c975d6b7b8dc8a73da4773702ebcfcd6e3518e73938bb1383badfe01c2
+  languageName: node
+  linkType: hard
+
+"fast-json-patch@npm:^2.0.6":
+  version: 2.2.1
+  resolution: "fast-json-patch@npm:2.2.1"
+  dependencies:
+    fast-deep-equal: ^2.0.1
+  checksum: 955aebb3f873d1fb0452a5d8c34865ce4c3c6cdafeb7d3ad98d43b467de9a5a0d304132f8595fd2b373f8f4d200605947e865286b180f3a55e8377a634893164
   languageName: node
   linkType: hard
 
@@ -8412,6 +8441,15 @@ __metadata:
   bin:
     jsesc: bin/jsesc
   checksum: b8b44cbfc92f198ad972fba706ee6a1dfa7485321ee8c0b25f5cedd538dcb20cde3197de16a7265430fce8277a12db066219369e3d51055038946039f6e20e17
+  languageName: node
+  linkType: hard
+
+"json-merge-patch@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "json-merge-patch@npm:1.0.2"
+  dependencies:
+    fast-deep-equal: ^3.1.3
+  checksum: 06867dbb93c9c3a698fba8a89f5ec1bd7a19697667a97d084d893c3ecd9ccecac07f251a531ffdf0c80df042ef3f33b5f67cdd7d73933c9cf7d9ebeaf1be24f5
   languageName: node
   linkType: hard
 
