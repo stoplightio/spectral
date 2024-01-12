@@ -7,8 +7,6 @@ import standaloneCode from 'ajv/dist/standalone/index.js';
 import ajvErrors from 'ajv-errors';
 import ajvFormats from 'ajv-formats';
 import chalk from 'chalk';
-import { minify } from 'terser';
-import { sync } from 'gzip-size';
 
 const cwd = path.join(__dirname, '../src');
 
@@ -56,33 +54,9 @@ Promise.all(schemas)
       oas3_1: 'https://spec.openapis.org/oas/3.1/schema/2021-09-28',
     });
 
-    const minified = (
-      await minify(code, {
-        compress: {
-          passes: 2,
-          ecma: 2020,
-        },
-        ecma: 2020,
-        module: true,
-        mangle: {
-          toplevel: true,
-          module: true,
-        },
-        format: {
-          comments: false,
-        },
-      })
-    ).code!;
+    log('writing %s size is %dKB', path.join(target, '..', basename), Math.round((code.length / 1024) * 100) / 100);
 
-    log(
-      'writing %s size is %dKB (original), %dKB (minified) %dKB (minified + gzipped)',
-      path.join(target, '..', basename),
-      Math.round((code.length / 1024) * 100) / 100,
-      Math.round((minified.length / 1024) * 100) / 100,
-      Math.round((sync(minified) / 1024) * 100) / 100,
-    );
-
-    await fs.promises.writeFile(path.join(target, '..', basename), ['// @ts-nocheck', minified].join('\n'));
+    await fs.promises.writeFile(path.join(target, '..', basename), ['// @ts-nocheck', code].join('\n'));
   })
   .then(() => {
     log(chalk.green('Validators generated.'));
