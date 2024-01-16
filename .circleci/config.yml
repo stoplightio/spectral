@@ -168,7 +168,12 @@ commands:
       - run: yarn pretest
       - run:
           name: Run node tests
-          command: yarn test.jest --maxWorkers=<< parameters.max-workers >>
+          command: yarn test.jest --maxWorkers=<< parameters.max-workers >> --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./reports/
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+      - store_test_results:
+          path: ./reports/
 
   test-harness:
     parameters:
@@ -194,7 +199,12 @@ commands:
           node-version: << parameters.node-version >>
       - run:
           name: Run harness tests
-          command: yarn test.harness --maxWorkers=<< parameters.max-workers >>
+          command: yarn test.harness --maxWorkers=<< parameters.max-workers >>  --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./reports/
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+      - store_test_results:
+          path: ./reports/
       - save_cache:
           name: Retain test-harness artifacts
           key: test-harness-{{ checksum "/tmp/current-commit-sha" }}-<< parameters.os >>-<< parameters.node-version >>

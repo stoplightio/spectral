@@ -1,18 +1,21 @@
 /*eslint-env node*/
-import { pathsToModuleNameMapper } from 'ts-jest';
-import * as path from 'path';
 import * as fs from 'fs';
-import { fileURLToPath } from 'url';
+import escapeRegexp from 'lodash/escapeRegExp.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { compilerOptions } = JSON.parse(fs.readFileSync('./tsconfig.json', 'utf8'));
 
 const projectDefault = {
   moduleNameMapper: {
-    ...Object.fromEntries(
-      Object.entries(pathsToModuleNameMapper(compilerOptions.paths)).map(([k, v]) => [k, path.join(__dirname, v)]),
-    ),
-    '^@stoplight/spectral\\-test\\-utils$': '<rootDir>/test-utils/node/index.ts',
+    ...Object.entries(compilerOptions.paths).reduce((paths, [mod, [path]]) => {
+      if (mod.endsWith('/*')) {
+        paths[`^${escapeRegexp(mod.slice(0, -1))}(.*)`] = `<rootDir>/${path.replace('*', '$1')}`;
+      } else {
+        paths[`^${escapeRegexp(mod)}$`] = `<rootDir>/${path}`;
+      }
+
+      return paths;
+    }, {}),
+    '^@stoplight/spectral-test-utils$': '<rootDir>/test-utils/node/index.ts',
   },
   testEnvironment: 'node',
   transform: {
