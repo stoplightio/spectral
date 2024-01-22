@@ -711,24 +711,18 @@ const ruleset = {
       message: 'Servers should not be defined in a webhook.',
       formats: [oas3_1],
       recommended: true,
-      given: ['$.webhooks[*]'],
+      given: ['$.webhooks.servers'],
       then: {
         function: undefined,
-        functionOptions: {
-          properties: ['servers'],
-        },
       },
     },
     'oas3_1-callbacks-in-webhook': {
       message: 'Callbacks should not be defined in a webhook.',
       formats: [oas3_1],
       recommended: true,
-      given: ['$.webhooks[*][*]'],
+      given: ['$.webhooks[*][*].callbacks'],
       then: {
         function: undefined,
-        functionOptions: {
-          properties: ['callbacks'],
-        },
       },
     },
   },

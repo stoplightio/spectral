@@ -1,7 +1,7 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from '../../__tests__/__helpers__/tester';
 
-testRule('oas3_1-servers-in-webhook', [
+testRule('oas3_1-callbacks-in-webhook', [
   {
     name: 'callbacks defined in webhook',
     document: {
