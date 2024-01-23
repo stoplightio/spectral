@@ -923,6 +923,25 @@ servers:
 
 In this example, both **`{region}`** and **`{version}`** variables are properly defined and used in the server URL. Also, the default value for **`region`** is within the allowed values.
 
+### oas3_callbacks_in_callbacks
+
+A callback should not be defined within another callback.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+paths:
+  /path:
+    get:
+      callbacks:
+        onData:
+          /data:
+            post:
+              callbacks: ...
+```
+
 ### oas3_1-servers-in-webhook
 
 Servers should not be defined in a webhook.
