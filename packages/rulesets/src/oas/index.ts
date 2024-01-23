@@ -711,7 +711,7 @@ const ruleset = {
       message: 'Servers should not be defined in a webhook.',
       formats: [oas3_1],
       recommended: true,
-      given: ['$.webhooks.servers'],
+      given: ['$.webhooks.servers', '$.webhooks[*][*].servers'],
       then: {
         function: undefined,
       },

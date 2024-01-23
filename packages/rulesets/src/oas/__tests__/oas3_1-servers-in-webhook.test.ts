@@ -8,12 +8,22 @@ testRule('oas3_1-servers-in-webhook', [
       openapi: '3.1.0',
       webhooks: {
         servers: [],
+        newPet: {
+          post: {
+            servers: [],
+          },
+        },
       },
     },
     errors: [
       {
         message: 'Servers should not be defined in a webhook.',
         path: ['webhooks', 'servers'],
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        message: 'Servers should not be defined in a webhook.',
+        path: ['webhooks', 'newPet', 'post', 'servers'],
         severity: DiagnosticSeverity.Warning,
       },
     ],

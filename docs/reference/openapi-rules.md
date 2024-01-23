@@ -931,11 +931,25 @@ Servers should not be defined in a webhook.
 
 **Bad Example**
 
+At the path item object level:
+
 ```yaml
 webhooks:
   servers:
     - url: https://example.com/
     - url: https://example.com/api/
+```
+
+or
+
+At the operation level:
+
+```yaml
+webhooks:
+  newPet:
+    post:
+      servers:
+        -url: https://example.com/
 ```
 
 ### oas3_1-callbacks-in-webhook
