@@ -313,6 +313,158 @@ testRule('oas3-valid-media-example', [
   },
 
   {
+    name: 'Ignore required readOnly parameters on requests',
+    document: {
+      openapi: '3.0.0',
+      paths: {
+        '/': {
+          post: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    required: ['ro', 'wo'],
+                    properties: {
+                      ro: {
+                        type: 'string',
+                        readOnly: true,
+                      },
+                      wo: {
+                        type: 'string',
+                        writeOnly: true,
+                      },
+                      other: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                  example: {
+                    other: 'foobar',
+                    wo: 'some',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          foo: {
+            content: {
+              'application/json': {
+                schema: {
+                  required: ['ro', 'wo', 'other'],
+                  properties: {
+                    ro: {
+                      type: 'string',
+                      readOnly: true,
+                    },
+                    wo: {
+                      type: 'string',
+                      writeOnly: true,
+                    },
+                    other: {
+                      type: 'string',
+                    },
+                  },
+                },
+                examples: {
+                  valid: {
+                    summary: 'should be valid',
+                    value: {
+                      other: 'foo',
+                      wo: 'some',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'Ignore required writeOnly parameters on responses',
+    document: {
+      openapi: '3.0.0',
+      paths: {
+        '/': {
+          post: {
+            responses: {
+              '200': {
+                content: {
+                  'application/json': {
+                    schema: {
+                      required: ['ro', 'wo'],
+                      properties: {
+                        ro: {
+                          type: 'string',
+                          readOnly: true,
+                        },
+                        wo: {
+                          type: 'string',
+                          writeOnly: true,
+                        },
+                        other: {
+                          type: 'string',
+                        },
+                      },
+                    },
+                    example: {
+                      other: 'foobar',
+                      ro: 'some',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        responses: {
+          foo: {
+            content: {
+              'application/json': {
+                schema: {
+                  required: ['ro', 'wo', 'other'],
+                  properties: {
+                    ro: {
+                      type: 'string',
+                      readOnly: true,
+                    },
+                    wo: {
+                      type: 'string',
+                      writeOnly: true,
+                    },
+                    other: {
+                      type: 'string',
+                    },
+                  },
+                },
+                examples: {
+                  valid: {
+                    summary: 'should be valid',
+                    value: {
+                      other: 'foo',
+                      ro: 'some',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'parameters: will fail when complex example is used',
     document: {
       openapi: '3.0.0',

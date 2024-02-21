@@ -45,4 +45,70 @@ testRule('oas2-valid-media-example', [
       },
     ],
   },
+
+  {
+    name: 'Ignore required writeOnly parameters on responses',
+    document: {
+      swagger: '2.0',
+      paths: {
+        '/': {
+          post: {
+            responses: {
+              '200': {
+                schema: {
+                  required: ['ro', 'wo'],
+                  properties: {
+                    ro: {
+                      type: 'string',
+                      readOnly: true,
+                    },
+                    wo: {
+                      type: 'string',
+                      writeOnly: true,
+                    },
+                    other: {
+                      type: 'string',
+                    },
+                  },
+                },
+                examples: {
+                  'application/json': {
+                    other: 'foobar',
+                    ro: 'some',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        foo: {
+          schema: {
+            required: ['ro', 'wo', 'other'],
+            properties: {
+              ro: {
+                type: 'string',
+                readOnly: true,
+              },
+              wo: {
+                type: 'string',
+                writeOnly: true,
+              },
+              other: {
+                type: 'string',
+              },
+            },
+          },
+          examples: {
+            'application/json': {
+              other: 'foo',
+              ro: 'some',
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);
