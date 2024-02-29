@@ -5,7 +5,7 @@ import { bundleRuleset } from '../index';
 import { IO } from '../types';
 import { node } from '../presets/node';
 import { browser } from '../presets/browser';
-import { commonjs } from '../plugins/commonjs';
+import { commonjs } from '@stoplight/spectral-cli/src/services/linter/utils/commonjs';
 import { virtualFs } from '../plugins/virtualFs';
 import { runtime } from '../presets/runtime';
 import { builtins } from '../plugins/builtins';
