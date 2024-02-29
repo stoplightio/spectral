@@ -922,3 +922,66 @@ servers:
 ```
 
 In this example, both **`{region}`** and **`{version}`** variables are properly defined and used in the server URL. Also, the default value for **`region`** is within the allowed values.
+
+### oas3_callbacks_in_callbacks
+
+A callback should not be defined within another callback.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+paths:
+  /path:
+    get:
+      callbacks:
+        onData:
+          /data:
+            post:
+              callbacks: ...
+```
+
+### oas3_1-servers-in-webhook
+
+Servers should not be defined in a webhook.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+At the path item object level:
+
+```yaml
+webhooks:
+  servers:
+    - url: https://example.com/
+    - url: https://example.com/api/
+```
+
+or
+
+At the operation level:
+
+```yaml
+webhooks:
+  newPet:
+    post:
+      servers:
+        -url: https://example.com/
+```
+
+### oas3_1-callbacks-in-webhook
+
+Callbacks should not be defined in a webhook.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+webhooks:
+  newPet:
+    post:
+      callbacks: ...
+```
