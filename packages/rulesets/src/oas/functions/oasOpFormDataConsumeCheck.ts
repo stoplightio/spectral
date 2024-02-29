@@ -4,7 +4,7 @@ import { isObject } from './utils/isObject';
 const validConsumeValue = /(application\/x-www-form-urlencoded|multipart\/form-data)/;
 
 type Input = {
-  consumes: unknown[];
+  consumes?: unknown[];
   parameters: unknown[];
 };
 
@@ -20,12 +20,15 @@ export default createRulesetFunction<Input, null>(
           type: 'array',
         },
       },
-      required: ['consumes', 'parameters'],
+      required: ['parameters'],
     },
     options: null,
   },
   function oasOpFormDataConsumeCheck({ parameters, consumes }) {
-    if (parameters.some(p => isObject(p) && p.in === 'formData') && !validConsumeValue.test(consumes?.join(','))) {
+    if (
+      !consumes ||
+      (parameters.some(p => isObject(p) && p.in === 'formData') && !validConsumeValue.test(consumes?.join(',')))
+    ) {
       return [
         {
           message:
