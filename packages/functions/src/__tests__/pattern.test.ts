@@ -36,6 +36,11 @@ describe('Core Functions / Pattern', () => {
     it('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', async () => {
       expect(await runPattern('def', { notMatch: '/[abc]+/i' })).toEqual([]);
     });
+
+    it('should support unicode', async () => {
+      expect(await runPattern('DüsseldorfKölnМосква北京市إسرائيل', { match: '^\\p{Letter}+$' })).toEqual([]);
+      expect(await runPattern('DüsseldorfKölnМосква北京市إسرائيل', { match: '/^\\p{Letter}+$/u' })).toEqual([]);
+    });
   });
 
   describe('given match and notMatch regexes', () => {
