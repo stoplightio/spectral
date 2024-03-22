@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@stoplight/json": "~3.21.0",
-    "@stoplight/types": "^13.6.0",
-    "@stoplight/yaml": "~4.2.3",
+    "@stoplight/types": "^14.1.1",
+    "@stoplight/yaml": "~4.3.0",
     "tslib": "^2.3.1"
   }
 }
