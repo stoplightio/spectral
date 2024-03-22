@@ -23,7 +23,8 @@
     "node": "^12.20 || >= 14.13"
   },
   "scripts": {
-    "clean": "rimraf .cache packages/*/{dist,.cache}",
+    "preclean": "yarn workspaces foreach run preclean",
+    "clean": "yarn preclean && rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspaces foreach run prebuild",
     "build": "yarn prebuild && tsc --build ./tsconfig.build.json && yarn postbuild",
     "postbuild": "yarn workspaces foreach run postbuild",
@@ -31,7 +32,7 @@
     "lint": "yarn prelint && yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
-    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/ruleset/meta/*.json packages/rulesets/src/{asyncapi,oas}/schemas/*.json docs/**/*.md README.md",
+    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/ruleset/meta/*.json packages/rulesets/src/{asyncapi,oas}/schemas/**/*.json docs/**/*.md README.md",
     "pretest": "yarn workspaces foreach run pretest",
     "test": "yarn pretest && yarn test.karma && yarn test.jest",
     "pretest.harness": "ts-node -T test-harness/scripts/generate-tests.ts",
@@ -137,7 +138,7 @@
     "packages/core/src/ruleset/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ],
-    "packages/rulesets/src/{asyncapi,oas}/schemas/*.json": [
+    "packages/rulesets/src/{asyncapi,oas}/schemas/**/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
   },

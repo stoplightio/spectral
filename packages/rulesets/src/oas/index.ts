@@ -522,6 +522,7 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       severity: 0,
+      resolved: false,
       given: '$',
       then: {
         function: oasDocumentSchema,
@@ -678,6 +679,7 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       recommended: true,
+      resolved: false,
       given: '$',
       then: {
         function: oasDocumentSchema,

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stoplight.io/json-schema/draft/2020-12",
+  "$vocabulary": {
+    "https://json-schema.org/draft/2020-12/vocab/core": true,
+    "https://json-schema.org/draft/2020-12/vocab/applicator": true,
+    "https://json-schema.org/draft/2020-12/vocab/unevaluated": true,
+    "https://json-schema.org/draft/2020-12/vocab/validation": true,
+    "https://json-schema.org/draft/2020-12/vocab/meta-data": true,
+    "https://json-schema.org/draft/2020-12/vocab/format-annotation": true,
+    "https://json-schema.org/draft/2020-12/vocab/content": true
+  },
+  "$dynamicAnchor": "meta",
+
+  "title": "Core and Validation specifications meta-schema",
+
+  "if": {
+    "type": "object"
+  },
+  "then": {
+    "allOf": [
+      { "$ref": "https://json-schema.org/draft/2020-12/meta/core" },
+      { "$ref": "https://json-schema.org/draft/2020-12/meta/applicator" },
+      { "$ref": "https://json-schema.org/draft/2020-12/meta/unevaluated" },
+      { "$ref": "https://stoplight.io/json-schema/draft/2020-12/meta/validation" },
+      { "$ref": "https://json-schema.org/draft/2020-12/meta/meta-data" },
+      { "$ref": "https://json-schema.org/draft/2020-12/meta/format-annotation" },
+      { "$ref": "https://json-schema.org/draft/2020-12/meta/content" }
+    ],
+    "properties": {
+      "definitions": {
+        "$ref": "https://json-schema.org/draft/2020-12/schema#/properties/definitions"
+      },
+      "dependencies": {
+        "$ref": "https://json-schema.org/draft/2020-12/schema#/properties/dependencies"
+      },
+      "$recursiveAnchor": {
+        "$ref": "https://json-schema.org/draft/2020-12/schema#/properties/%24recursiveAnchor"
+      },
+      "$recursiveRef": {
+        "$ref": "https://json-schema.org/draft/2020-12/schema#/properties/%24recursiveRef"
+      }
+    }
+  },
+  "else": {
+    "if": {
+      "type": "boolean"
+    },
+    "then": true,
+    "else": {
+      "not": true,
+      "errorMessage": "\"{{property}}\" property must be a valid Schema Object"
+    }
+  },
+  "$comment": "This meta-schema also defines keywords that have appeared in previous drafts in order to prevent incompatible extensions as they remain in common use."
+}
