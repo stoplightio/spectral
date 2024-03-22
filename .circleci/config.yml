@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  windows: circleci/windows@2.4.1
+  windows: circleci/windows@5.0
 
 executors:
   linux:
@@ -23,7 +23,7 @@ defaults:
     - "12.22"
     - "14.21"
     - &node-maintenance-lts "16.20"
-    - &node-active-lts "18.17"
+    - &node-active-lts "18.18"
     - &node-current "20.5"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
@@ -76,23 +76,38 @@ commands:
           name: Restore pkg cache
           keys:
             - &pkg-cache-key pkg-cache-<< parameters.targets >>-<< parameters.node-version >>
-      - run:
-          name: Create the Spectral Binary
-          environment:
-            PKG_CACHE_PATH: *pkg-cache-path
-          command: |
-            NODE_VERSION=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
-            TARGETS=$(echo "<< parameters.targets >>" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
-            export ARCH=$(echo << parameters.targets >> | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
-
-            if [ "<< parameters.bytecode >>" = true ]
-            then
-              yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $TARGETS --output binaries/spectral
-            else
-              yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $TARGETS --output binaries/spectral
-            fi
-            
-            (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
+      - when:
+          condition: &is-windows
+            equal:
+              - windows
+              - << parameters.targets >>
+          steps:
+            - run:
+                name: Create the Spectral Binary
+                environment:
+                  PKG_CACHE_PATH: *pkg-cache-path
+                command: |
+                  yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node<< parameters.node-version >>-windows --output binaries/spectral
+      - unless:
+          condition: *is-windows
+          steps:
+            - run:
+                name: Create the Spectral Binary
+                environment:
+                  PKG_CACHE_PATH: *pkg-cache-path
+                command: |
+                  NODE_VERSION=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
+                  TARGETS=$(echo "<< parameters.targets >>" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
+                  export ARCH=$(echo << parameters.targets >> | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
+      
+                  if [ "<< parameters.bytecode >>" = true ]
+                  then
+                    yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $TARGETS --output binaries/spectral
+                  else
+                    yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $TARGETS --output binaries/spectral
+                  fi
+                  
+                  (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
       - save_cache:
           name: Retain pkg cache
           key: *pkg-cache-key
@@ -264,13 +279,18 @@ jobs:
       name: windows/default
     steps:
       - checkout
+      - run:
+          name: Enable Corepack
+          command: |
+            npm install -g corepack
+            corepack enable
       - cached-dependencies
       - build
       - test-node:
           max-workers: 3
       - test-harness:
           os: windows
-          node-version: current
+          node-version: *node-active-lts
           max-workers: 3
 
   build-nix-binaries:
