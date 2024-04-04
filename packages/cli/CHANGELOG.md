@@ -1,3 +1,10 @@
+## @stoplight/spectral-cli [6.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.11.0...@stoplight/spectral-cli-6.11.1) (2024-04-04)
+
+
+### Bug Fixes
+
+* **cli:** clarify usage of --format ([#2575](https://github.com/stoplightio/spectral/issues/2575)) ([96eee89](https://github.com/stoplightio/spectral/commit/96eee89d3210931b8ffeffe44c44d7e9f610c0b0))
+
 # @stoplight/spectral-cli [6.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.10.1...@stoplight/spectral-cli-6.11.0) (2023-09-15)
 
 
