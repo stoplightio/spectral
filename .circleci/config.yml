@@ -302,7 +302,7 @@ jobs:
       - test-harness:
           os: windows
           node-version: *node-active-lts
-          max-workers: 3
+          max-workers: 2
 
   build-nix-binaries:
     docker:
