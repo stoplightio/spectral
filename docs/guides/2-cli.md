@@ -31,9 +31,9 @@ Other options include:
       --help                     Show help                                                                     [boolean]
   -e, --encoding                 text encoding to use
           [string] [choices: "utf8", "ascii", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1"] [default: "utf8"]
-  -f, --format                   formatters to use for outputting results, more than one can be given joining them with
-                                 a comma
-        [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty", "github-actions", "sarif"]
+  -f, --format                   formatters to use for outputting results, more than one can be provided by using
+                                 multiple flags
+         [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty", "github-actions", "sarif"]
                                                                                                     [default: "stylish"]
   -o, --output                   where to output results, can be a single file name, multiple "output.<format>" or
                                  missing to print to stdout                                                     [string]
@@ -175,6 +175,27 @@ title: Example
 ```
 
 <!-- type: tab-end -->
+
+### Multiple formatters
+
+If you wish to output results in multiple formats, you can do so by passing multiple `-f` flags.
+In order to output results in multiple formats, you must also pass the `-o` flag with a filename for each format.
+
+```bash
+spectral lint "specs/**/*.yaml" -f json -f junit -o.json results.json -o.junit junit.xml
+```
+
+You can also pipe an output to stdout.
+
+```bash
+spectral lint "specs/**/*.yaml" -f stylish -f junit -o.junit junit.xml -o.stylish "<stdout>"
+```
+
+It's possible to output each format to stdout.
+
+```bash
+spectral lint "specs/**/*.yaml" -f text -f stylish -o.text "<stdout>" -o.stylish "<stdout>"
+```
 
 ## Proxying
 
