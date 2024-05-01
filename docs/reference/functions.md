@@ -245,9 +245,34 @@ unused-definition:
       reusableObjectsLocation: "#/definitions"
 ```
 
+## or
+
+Communicates that one or more of these properties is required to be defined. FunctionOptions must contain any non-zero number of properties, **or** will require that _at least_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
+
+<!-- title: functionOptions -->
+
+| name       | description             | type       | required? |
+| ---------- | ----------------------- | ---------- | --------- |
+| properties | the properties to check | `string[]` | yes       |
+
+<!-- title: example -->
+
+```yaml
+schemas-descriptive-text-exists:
+  description: Defined schemas must have one or more of `title`, `summary` and/or `description` fields.
+  given: "$.components.schemas.*"
+  then:
+    function: or
+    functionOptions:
+      properties:
+        - title
+        - summary
+        - description
+```
+
 ## xor
 
-Communicate that one of these properties is required, and no more than one is allowed to be defined.
+Communicates that one of these properties is required, and no more than one is allowed to be defined. FunctionOptions must contain any non-zero number of properties, **xor** will require that _exactly_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
 
 <!-- title: functionOptions -->
 
@@ -259,7 +284,7 @@ Communicate that one of these properties is required, and no more than one is al
 
 ```yaml
 components-examples-value-or-externalValue:
-  description: Examples should have either a `value` or `externalValue` field.
+  description: Examples should have either a `value` or `externalValue` field, but not both.
   given: "$.components.examples.*"
   then:
     function: xor

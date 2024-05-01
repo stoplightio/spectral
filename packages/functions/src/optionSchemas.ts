@@ -96,6 +96,26 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
       type: `"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }`,
     },
   },
+  or: {
+    type: 'object',
+    properties: {
+      properties: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        minItems: 1, // OR is valid with one item (then it is redundant with 'defined' function)
+        // maxItems: 2, // No maximum limit is necessary, OR is valid for any amount, just one must be defined
+        errorMessage: `"or" requires one or more enumerated "properties", i.e. ["id"], ["default", "example"], ["title", "summary", "description"], etc.`,
+        description: 'The properties to check.',
+      },
+    },
+    additionalProperties: false,
+    required: ['properties'],
+    errorMessage: {
+      type: `"or" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.`,
+    },
+  },
   pattern: {
     type: 'object',
     additionalProperties: false,
@@ -206,16 +226,16 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         items: {
           type: 'string',
         },
-        minItems: 2,
-        maxItems: 2,
-        errorMessage: `"xor" and its "properties" option support 2-item tuples, i.e. ["id", "name"]`,
+        minItems: 1, // XOR is valid with one item (then it is redundant with 'defined' function)
+        // maxItems: 2, // No maximum limit is necessary, XOR is valid for any amount, just one must be defined
+        errorMessage: `"xor" requires one or more enumerated "properties", i.e. ["id"], ["country", "street"], ["one", "two", "three"], etc.`,
         description: 'The properties to check.',
       },
     },
     additionalProperties: false,
     required: ['properties'],
     errorMessage: {
-      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }`,
+      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.`,
     },
   },
 };
