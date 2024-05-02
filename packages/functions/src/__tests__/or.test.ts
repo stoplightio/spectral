@@ -91,6 +91,7 @@ describe('Core Functions / Or', () => {
     expect(
       await runOr(
         {
+          type: 'string',
           format: 'date',
         },
         { properties: ['default', 'pattern', 'format'] },
@@ -102,6 +103,7 @@ describe('Core Functions / Or', () => {
     expect(
       await runOr(
         {
+          type: 'string',
           default: '2024-05-01',
           format: 'date',
         },
@@ -114,6 +116,7 @@ describe('Core Functions / Or', () => {
     expect(
       await runOr(
         {
+          type: 'string',
           default: '2024-05-01',
           pattern: '\\d{4}-\\d{2}-\\d{2}',
           format: 'date',
