@@ -247,7 +247,7 @@ unused-definition:
 
 ## or
 
-Communicates that one or more of these properties is required to be defined. FunctionOptions must contain any non-zero number of properties, **or** will require that _at least_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
+Communicate that one or more of these properties is required to be defined. FunctionOptions must contain any non-zero number of properties, **or** will require that _at least_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
 
 <!-- title: functionOptions -->
 
@@ -272,7 +272,7 @@ schemas-descriptive-text-exists:
 
 ## xor
 
-Communicates that one of these properties is required, and no more than one is allowed to be defined. FunctionOptions must contain any non-zero number of properties, **xor** will require that _exactly_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
+Communicate that one of these properties is required, and no more than one is allowed to be defined. FunctionOptions must contain any non-zero number of properties, **xor** will require that _exactly_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
 
 <!-- title: functionOptions -->
 
