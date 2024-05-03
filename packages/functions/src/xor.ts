@@ -16,16 +16,20 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     options: optionSchemas.xor,
   },
   function xor(targetVal, { properties }) {
-    if (properties.length !== 2) return;
-
     const results: IFunctionResult[] = [];
 
-    const intersection = Object.keys(targetVal).filter(value => -1 !== properties.indexOf(value));
+    const intersection = Object.keys(targetVal).filter(key => properties.includes(key));
+
     if (intersection.length !== 1) {
+      const formattedProperties = properties.map(prop => printValue(prop));
+
+      const lastProperty = formattedProperties.pop();
+      let message = formattedProperties.join(', ') + (lastProperty != undefined ? ` and ${lastProperty}` : '');
+
+      message += ' must not be both defined or both undefined';
+
       results.push({
-        message: `${printValue(properties[0])} and ${printValue(
-          properties[1],
-        )} must not be both defined or both undefined`,
+        message,
       });
     }
 
