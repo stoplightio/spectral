@@ -38,11 +38,26 @@ commands:
             git rev-parse HEAD > /tmp/current-commit-sha
 
   cached-dependencies:
+    parameters:
+      install-corepack:
+        type: boolean
+        default: false
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
             - &yarn-cache-key yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+      - when:
+          condition:
+            equal:
+              - true
+              - << parameters.install-corepack >>
+          steps:
+            - run:
+               name: Enable Corepack
+               command: |
+                 npm install -g corepack
+                 corepack enable
       - run:
           name: Install Dependencies
           command: yarn install --immutable
@@ -279,19 +294,15 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - run:
-          name: Enable Corepack
-          command: |
-            npm install -g corepack
-            corepack enable
-      - cached-dependencies
+      - cached-dependencies:
+          install-corepack: true
       - build
       - test-node:
           max-workers: 3
       - test-harness:
           os: windows
           node-version: *node-active-lts
-          max-workers: 3
+          max-workers: 2
 
   build-nix-binaries:
     docker:
@@ -315,7 +326,8 @@ jobs:
       name: windows/default
     steps:
       - checkout
-      - cached-dependencies
+      - cached-dependencies:
+          install-corepack: true
       - run: yarn build
       - build-binary:
           targets: windows
