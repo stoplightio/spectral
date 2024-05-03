@@ -26,6 +26,24 @@ describe('Core Functions / Xor', () => {
     ]);
   });
 
+  it('given multiple properties that do not match, should return an error message', async () => {
+    expect(
+      await runXor(
+        {
+          version: '1.0.0',
+          title: 'Swagger Petstore',
+          termsOfService: 'http://swagger.io/terms/',
+        },
+        { properties: ['yada-yada', 'whatever', 'foo'] },
+      ),
+    ).toEqual([
+      {
+        message: '"yada-yada", "whatever" and "foo" must not be both defined or both undefined',
+        path: [],
+      },
+    ]);
+  });
+
   it('given both properties, should return an error message', async () => {
     expect(
       await runXor(
@@ -192,7 +210,21 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
+<<<<<<< HEAD
             '"xor" requires one or more enumerated "properties", i.e. ["id"], ["country", "street"], ["one", "two", "three"], etc.',
+=======
+            '"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]',
+            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
+          ),
+        ],
+      ],
+      [
+        { properties: ['foo'] },
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]',
+>>>>>>> af9c742e (feat(rulesets): add multiple xor (#2614))
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
@@ -202,7 +234,11 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
+<<<<<<< HEAD
             '"xor" requires one or more enumerated "properties", i.e. ["id"], ["country", "street"], ["one", "two", "three"], etc.',
+=======
+            '"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]',
+>>>>>>> af9c742e (feat(rulesets): add multiple xor (#2614))
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],

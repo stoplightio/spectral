@@ -14,6 +14,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     options: optionSchemas.xor,
   },
   function xor(targetVal, { properties }) {
+<<<<<<< HEAD
     if (properties.length == 0) return;
     // There need be no maximum limit on number of properties
 
@@ -40,6 +41,22 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
       // List all defined properties in error message
       results.push({
         message: 'Just one of "' + intersection.join('" and "') + '" must be defined',
+=======
+    const results: IFunctionResult[] = [];
+
+    const intersection = Object.keys(targetVal).filter(key => properties.includes(key));
+
+    if (intersection.length !== 1) {
+      const formattedProperties = properties.map(prop => printValue(prop));
+
+      const lastProperty = formattedProperties.pop();
+      let message = formattedProperties.join(', ') + (lastProperty != undefined ? ` and ${lastProperty}` : '');
+
+      message += ' must not be both defined or both undefined';
+
+      results.push({
+        message,
+>>>>>>> af9c742e (feat(rulesets): add multiple xor (#2614))
       });
     }
 
