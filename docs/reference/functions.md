@@ -94,16 +94,26 @@ Regular expressions!
 | match    | if provided, value must match this regex       | `string` | no        |
 | notMatch | if provided, value must _not_ match this regex | `string` | no        |
 
+The regex pattern provided can be just the pattern itself (e.g.: `"[a-z]"`) or you can include start/end delimiters if you would like to use regex modifiers like `/i` (e.g.: `"/[a-z]/i"`).
+
 <!-- title: example -->
 
 ```yaml
+no-x-headers:
+  message: "Header {{property}} should not start with `X-`."
+  given: "$..parameters[?(@.in === 'header')].name"
+  then:
+    function: pattern
+    functionOptions:
+      notMatch: "/^x-/i"
+
 path-no-trailing-slash:
-  description: Paths should not end with `#/`.
+  description: "Paths should not end with `/`."
   given: "$.paths[*]~"
   then:
     function: pattern
     functionOptions:
-      notMatch: ".+\/$"
+      notMatch: "\/$"
 ```
 
 ## casing

@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-parsers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@stoplight/json": "~3.21.0",
-    "@stoplight/types": "^13.6.0",
-    "@stoplight/yaml": "~4.2.3",
+    "@stoplight/types": "^14.1.1",
+    "@stoplight/yaml": "~4.3.0",
     "tslib": "^2.3.1"
   }
 }
