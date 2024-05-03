@@ -226,9 +226,14 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         items: {
           type: 'string',
         },
+<<<<<<< HEAD
         minItems: 1, // XOR is valid with one item (then it is redundant with 'defined' function)
         // maxItems: 2, // No maximum limit is necessary, XOR is valid for any amount, just one must be defined
         errorMessage: `"xor" requires one or more enumerated "properties", i.e. ["id"], ["country", "street"], ["one", "two", "three"], etc.`,
+=======
+        minItems: 2,
+        errorMessage: `"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]`,
+>>>>>>> af9c742e (feat(rulesets): add multiple xor (#2614))
         description: 'The properties to check.',
       },
     },
