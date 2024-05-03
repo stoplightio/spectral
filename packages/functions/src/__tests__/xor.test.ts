@@ -181,6 +181,16 @@ describe('Core Functions / Xor', () => {
         ],
       ],
       [
+        { properties: ['foo'] },
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
+            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
+          ),
+        ],
+      ],
+      [
         { properties: [] },
         [
           new RulesetValidationError(
