@@ -1,99 +1,125 @@
-import type { ErrorObject } from 'ajv';
-import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
-import { schema as schemaFn } from '@stoplight/spectral-functions';
+import { createRulesetFunction } from '@stoplight/spectral-core';
+import type { IFunctionResult } from '@stoplight/spectral-core';
 import { oas2, oas3_1 } from '@stoplight/spectral-formats';
+import { isPlainObject, resolveInlineRef } from '@stoplight/json';
+import type { ErrorObject } from 'ajv';
+import leven from 'leven';
 
-import * as schemaOas2_0 from '../schemas/2.0.json';
-import * as schemaOas3_0 from '../schemas/3.0.json';
-import * as schemaOas3_1 from '../schemas/3.1.json';
-
-const OAS_SCHEMAS = {
-  '2.0': schemaOas2_0,
-  '3.0': schemaOas3_0,
-  '3.1': schemaOas3_1,
-};
-
-function shouldIgnoreError(error: ErrorObject): boolean {
-  return (
-    // oneOf is a fairly error as we have 2 options to choose from for most of the time.
-    error.keyword === 'oneOf' ||
-    // the required $ref is entirely useless, since oas-schema rules operate on resolved content, so there won't be any $refs in the document
-    (error.keyword === 'required' && error.params.missingProperty === '$ref')
-  );
-}
-
-// this is supposed to cover edge cases we need to cover manually, when it's impossible to detect the most appropriate error, i.e. oneOf consisting of more than 3 members, etc.
-// note,  more errors can be included if certain messages reported by AJV are not quite meaningful
-const ERROR_MAP = [
-  {
-    path: /^components\/securitySchemes\/[^/]+$/,
-    message: 'Invalid security scheme',
-  },
-];
-
-// The function removes irrelevant (aka misleading, confusing, useless, whatever you call it) errors.
-// There are a few exceptions, i.e. security components I covered manually,
-// yet apart from them we usually deal with a relatively simple scenario that can be literally expressed as: "either proper value of $ref property".
-// The $ref part is never going to be interesting for us, because both oas-schema rules operate on resolved content, so we won't have any $refs left.
-// As you can see, what we deal here wit is actually not really oneOf anymore - it's always the first member of oneOf we match against.
-// That being said, we always strip both oneOf and $ref, since we are always interested in the first error.
-export function prepareResults(errors: ErrorObject[]): void {
-  // Update additionalProperties errors to make them more precise and prevent them from being treated as duplicates
-  for (const error of errors) {
-    if (error.keyword === 'additionalProperties') {
-      error.instancePath = `${error.instancePath}/${String(error.params['additionalProperty'])}`;
-    }
-  }
-
-  for (let i = 0; i < errors.length; i++) {
-    const error = errors[i];
-
-    if (i + 1 < errors.length && errors[i + 1].instancePath === error.instancePath) {
-      errors.splice(i + 1, 1);
-      i--;
-    } else if (i > 0 && shouldIgnoreError(error) && errors[i - 1].instancePath.startsWith(error.instancePath)) {
-      errors.splice(i, 1);
-      i--;
-    }
-  }
-}
-
-function applyManualReplacements(errors: IFunctionResult[]): void {
-  for (const error of errors) {
-    if (error.path === void 0) continue;
-
-    const joinedPath = error.path.join('/');
-
-    for (const mappedError of ERROR_MAP) {
-      if (mappedError.path.test(joinedPath)) {
-        error.message = mappedError.message;
-        break;
-      }
-    }
-  }
-}
+import * as validators from '../schemas/validators';
 
 export default createRulesetFunction<unknown, null>(
   {
     input: null,
     options: null,
   },
-  function oasDocumentSchema(targetVal, opts, context) {
+  function oasDocumentSchema(input, _opts, context) {
     const formats = context.document.formats;
     if (formats === null || formats === void 0) return;
 
-    const schema = formats.has(oas2)
-      ? OAS_SCHEMAS['2.0']
-      : formats.has(oas3_1)
-      ? OAS_SCHEMAS['3.1']
-      : OAS_SCHEMAS['3.0'];
+    const schema = formats.has(oas2) ? 'oas2_0' : formats.has(oas3_1) ? 'oas3_1' : 'oas3_0';
+    const validator = validators[schema];
 
-    const errors = schemaFn(targetVal, { allErrors: true, schema, prepareResults }, context);
+    validator(input);
 
-    if (Array.isArray(errors)) {
-      applyManualReplacements(errors);
-    }
+    const errors = validator['errors'] as ErrorObject[] | null;
 
-    return errors;
+    return errors?.reduce<IFunctionResult[]>((errors, e) => processError(errors, input, schema, e), []);
   },
 );
+
+function isRelevantError(error: ErrorObject): boolean {
+  return error.keyword !== 'if';
+}
+
+function processError(
+  errors: IFunctionResult[],
+  input: unknown,
+  schema: 'oas2_0' | 'oas3_0' | 'oas3_1',
+  error: ErrorObject,
+): IFunctionResult[] {
+  if (!isRelevantError(error)) {
+    return errors;
+  }
+
+  const path = error.instancePath === '' ? [] : error.instancePath.slice(1).split('/');
+  const property = path.length === 0 ? null : path[path.length - 1];
+
+  let message: string;
+
+  switch (error.keyword) {
+    case 'additionalProperties': {
+      const additionalProperty = error.params['additionalProperty'] as string;
+      path.push(additionalProperty);
+      message = `Property "${additionalProperty}" is not expected to be here`;
+      break;
+    }
+
+    case 'enum': {
+      const allowedValues = error.params['allowedValues'] as unknown[];
+      const printedValues = allowedValues.map(value => JSON.stringify(value)).join(', ');
+      let suggestion: string;
+
+      if (!isPlainObject(input)) {
+        suggestion = '';
+      } else {
+        const value = resolveInlineRef(input, `#${error.instancePath}`);
+        if (typeof value !== 'string') {
+          suggestion = '';
+        } else {
+          const bestMatch = findBestMatch(value, allowedValues);
+
+          if (bestMatch !== null) {
+            suggestion = `. Did you mean "${bestMatch}"?`;
+          } else {
+            suggestion = '';
+          }
+        }
+      }
+
+      message = `${cleanAjvMessage(property, error.message)}: ${printedValues}${suggestion}`;
+      break;
+    }
+
+    case 'errorMessage':
+      message = String(error.message);
+      break;
+
+    default:
+      message = cleanAjvMessage(property, error.message);
+  }
+
+  errors.push({
+    message,
+    path,
+  });
+
+  return errors;
+}
+
+function findBestMatch(value: string, allowedValues: unknown[]): string | null {
+  const matches = allowedValues
+    .filter<string>((value): value is string => typeof value === 'string')
+    .map(allowedValue => ({
+      value: allowedValue,
+      weight: leven(value, allowedValue),
+    }))
+    .sort((x, y) => (x.weight > y.weight ? 1 : x.weight < y.weight ? -1 : 0));
+
+  if (matches.length === 0) {
+    return null;
+  }
+
+  const bestMatch = matches[0];
+
+  return allowedValues.length === 1 || bestMatch.weight < bestMatch.value.length ? bestMatch.value : null;
+}
+
+const QUOTES = /['"]/g;
+const NOT = /NOT/g;
+
+function cleanAjvMessage(prop: string | null, message: string | undefined): string {
+  if (typeof message !== 'string') return '';
+
+  const cleanedMessage = message.replace(QUOTES, '"').replace(NOT, 'not');
+  return prop === null ? cleanedMessage : `"${prop}" property ${cleanedMessage}`;
+}

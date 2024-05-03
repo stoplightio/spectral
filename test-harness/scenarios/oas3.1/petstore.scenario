@@ -135,7 +135,8 @@ paths:
           description: OK
       summary: Create or replace your avatar.
       parameters:
-        - schema:
+        - name: avatar
+          schema:
             type: string
           in: header
 components:
