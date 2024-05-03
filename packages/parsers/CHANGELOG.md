@@ -1,3 +1,10 @@
+## @stoplight/spectral-parsers [1.0.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-parsers-1.0.3...@stoplight/spectral-parsers-1.0.4) (2024-04-04)
+
+
+### Bug Fixes
+
+* **parsers:** update @stoplight/yaml from ~4.2.3 to ~4.3.0 ([91fdded](https://github.com/stoplightio/spectral/commit/91fdded2fcb25880f4ec40091d7d8137f9b64504))
+
 ## @stoplight/spectral-parsers [1.0.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-parsers-v1.0.2...@stoplight/spectral-parsers-1.0.3) (2023-07-14)
 
 

@@ -4,7 +4,7 @@ Requests for $refs are proxied when PROXY env variable is set
 foo:
   $ref: http://localhost:3002/foo.json#/ref
 ====env====
-PROXY=http://localhost:3001
+PROXY=http://127.0.0.1:3001
 ====asset:ruleset====
 module.exports = {
   rules: {}

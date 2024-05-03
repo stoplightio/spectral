@@ -42,7 +42,7 @@ const lintCommand: CommandModule = {
         },
       })
       .middleware((argv: Dictionary<unknown>) => {
-        const formats = argv.format as string[] & { 0: string };
+        const formats = argv.format as [string, ...string[]];
         if (argv.output === void 0) {
           argv.output = { [formats[0]]: '<stdout>' };
         } else if (typeof argv.output === 'string') {
@@ -101,7 +101,8 @@ const lintCommand: CommandModule = {
         },
         format: {
           alias: 'f',
-          description: 'formatters to use for outputting results, more than one can be given joining them with a comma',
+          description:
+            'formatters to use for outputting results, more than one can be provided by using multiple flags',
           choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',

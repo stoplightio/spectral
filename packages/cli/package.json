@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-cli",
-  "version": "6.11.0",
+  "version": "6.11.1",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -52,7 +52,7 @@
     "pony-cause": "^1.0.0",
     "stacktracey": "^2.1.7",
     "tslib": "^2.3.0",
-    "yargs": "17.3.1"
+    "yargs": "~17.7.2"
   },
   "devDependencies": {
     "@types/es-aggregate-error": "^1.0.2",
@@ -65,8 +65,7 @@
   },
   "pkg": {
     "scripts": [
-      "./dist/**/*.js",
-      "../../node_modules/vm2/lib/*.js"
+      "./dist/**/*.js"
     ],
     "assets": [
       "./dist/**/*.json",
