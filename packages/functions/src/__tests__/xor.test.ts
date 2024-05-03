@@ -26,6 +26,24 @@ describe('Core Functions / Xor', () => {
     ]);
   });
 
+  it('given multiple properties that do not match, should return an error message', async () => {
+    expect(
+      await runXor(
+        {
+          version: '1.0.0',
+          title: 'Swagger Petstore',
+          termsOfService: 'http://swagger.io/terms/',
+        },
+        { properties: ['yada-yada', 'whatever', 'foo'] },
+      ),
+    ).toEqual([
+      {
+        message: 'At least one of "yada-yada" or "whatever" or "foo" must be defined',
+        path: [],
+      },
+    ]);
+  });
+
   it('given both properties, should return an error message', async () => {
     expect(
       await runXor(

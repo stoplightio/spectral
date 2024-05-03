@@ -25,4 +25,36 @@ testRule('oas2-schema', [
       },
     ],
   },
+
+  {
+    name: 'validate security definitions',
+    document: {
+      swagger: '2.0',
+      info: {
+        title: 'response example',
+        version: '1.0',
+      },
+      paths: {
+        '/user': {
+          get: {
+            responses: {
+              200: {
+                description: 'dummy description',
+              },
+            },
+          },
+        },
+      },
+      securityDefinitions: {
+        basic: null,
+      },
+    },
+    errors: [
+      {
+        message: 'Invalid basic authentication security definition.',
+        path: ['securityDefinitions', 'basic'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
 ]);

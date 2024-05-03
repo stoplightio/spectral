@@ -11,6 +11,10 @@ export type Options = {
   type: 'media' | 'schema';
 };
 
+type HasRequiredProperties = traverse.SchemaObject & {
+  required?: string[];
+};
+
 type MediaValidationItem = {
   field: string;
   multiple: boolean;
@@ -39,6 +43,22 @@ const MEDIA_VALIDATION_ITEMS: Dictionary<MediaValidationItem[], 2 | 3> = {
   ],
 };
 
+const REQUEST_MEDIA_PATHS: Dictionary<JsonPath[], 2 | 3> = {
+  2: [],
+  3: [
+    ['components', 'requestBodies'],
+    ['paths', '*', '*', 'requestBody'],
+  ],
+};
+
+const RESPONSE_MEDIA_PATHS: Dictionary<JsonPath[], 2 | 3> = {
+  2: [['responses'], ['paths', '*', '*', 'responses']],
+  3: [
+    ['components', 'responses'],
+    ['paths', '*', '*', 'responses'],
+  ],
+};
+
 const SCHEMA_VALIDATION_ITEMS: Dictionary<string[], 2 | 3> = {
   2: ['example', 'x-example', 'default'],
   3: ['example', 'default'],
@@ -48,6 +68,22 @@ type ValidationItem = {
   value: unknown;
   path: JsonPath;
 };
+
+function hasRequiredProperties(schema: traverse.SchemaObject): schema is HasRequiredProperties {
+  return schema.required === undefined || Array.isArray(schema.required);
+}
+
+function isSubpath(path: JsonPath, subPaths: JsonPath[]): boolean {
+  return subPaths.some(subPath => subPath.every((segment, idx) => segment === '*' || segment === path[idx]));
+}
+
+function isMediaRequest(path: JsonPath, oasVersion: 2 | 3): boolean {
+  return isSubpath(path, REQUEST_MEDIA_PATHS[oasVersion]);
+}
+
+function isMediaResponse(path: JsonPath, oasVersion: 2 | 3): boolean {
+  return isSubpath(path, RESPONSE_MEDIA_PATHS[oasVersion]);
+}
 
 function* getMediaValidationItems(
   items: MediaValidationItem[],
@@ -146,6 +182,41 @@ function cleanSchema(schema: Record<string, unknown>): void {
   }));
 }
 
+/**
+ * Modifies 'schema' (and all its sub-schemas) to make all
+ * readOnly or writeOnly properties optional.
+ * In this context, "sub-schemas" refers to all schemas reachable from 'schema'
+ * (e.g. properties, additionalProperties, allOf/anyOf/oneOf, not, items, etc.)
+ * @param schema the schema to be modified
+ * @param readOnlyProperties make readOnly properties optional
+ * @param writeOnlyProperties make writeOnly properties optional
+ */
+function relaxRequired(
+  schema: Record<string, unknown>,
+  readOnlyProperties: boolean,
+  writeOnlyProperties: boolean,
+): void {
+  if (readOnlyProperties || writeOnlyProperties)
+    traverse(schema, {}, <traverse.Callback>((
+      fragment,
+      jsonPtr,
+      rootSchema,
+      parentJsonPtr,
+      parentKeyword,
+      parent,
+      propertyName,
+    ) => {
+      if ((fragment.readOnly === true && readOnlyProperties) || (fragment.writeOnly === true && writeOnlyProperties)) {
+        if (parentKeyword == 'properties' && parent && hasRequiredProperties(parent)) {
+          parent.required = parent.required?.filter(p => p !== propertyName);
+          if (parent.required?.length === 0) {
+            delete parent.required;
+          }
+        }
+      }
+    }));
+}
+
 export default createRulesetFunction<Record<string, unknown>, Options>(
   {
     input: {
@@ -190,6 +261,11 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     schemaOpts.schema = JSON.parse(JSON.stringify(schemaOpts.schema));
     cleanSchema(schemaOpts.schema);
+    relaxRequired(
+      schemaOpts.schema,
+      opts.type === 'media' && isMediaRequest(context.path, opts.oasVersion),
+      opts.type === 'media' && isMediaResponse(context.path, opts.oasVersion),
+    );
 
     for (const validationItem of validationItems) {
       const result = oasSchema(validationItem.value, schemaOpts, {
