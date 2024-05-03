@@ -1,6 +1,6 @@
 # AsyncAPI Rules
 
-Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](https://www.asyncapi.com/docs/specifications/v2.0.0).
+Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](https://v2.asyncapi.com/docs/reference).
 
 In your ruleset file you can add `extends: "spectral:asyncapi"` and you'll get all of the following rules applied.
 
