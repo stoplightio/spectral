@@ -709,5 +709,32 @@ const ruleset = {
         },
       },
     },
+    'oas3-callbacks-in-callbacks': {
+      message: 'Callbacks should not be defined within a callback',
+      formats: [oas3],
+      recommended: true,
+      given: ['#OperationObject.callbacks[*][*][*].callbacks'],
+      then: {
+        function: undefined,
+      },
+    },
+    'oas3_1-servers-in-webhook': {
+      message: 'Servers should not be defined in a webhook.',
+      formats: [oas3_1],
+      recommended: true,
+      given: ['$.webhooks.servers', '$.webhooks[*][*].servers'],
+      then: {
+        function: undefined,
+      },
+    },
+    'oas3_1-callbacks-in-webhook': {
+      message: 'Callbacks should not be defined in a webhook.',
+      formats: [oas3_1],
+      recommended: true,
+      given: ['$.webhooks[*][*].callbacks'],
+      then: {
+        function: undefined,
+      },
+    },
   },
 };
