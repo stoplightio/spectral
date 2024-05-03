@@ -8,7 +8,7 @@ import { fetch } from '@stoplight/spectral-runtime';
 import { migrateRuleset, isBasicRuleset } from '@stoplight/spectral-ruleset-migrator';
 import { bundleRuleset } from '@stoplight/spectral-ruleset-bundler';
 import { node } from '@stoplight/spectral-ruleset-bundler/presets/node';
-import { commonjs } from '@stoplight/spectral-ruleset-bundler/plugins/commonjs';
+import { commonjs } from './commonjs';
 import { stdin } from '@stoplight/spectral-ruleset-bundler/plugins/stdin';
 import { builtins } from '@stoplight/spectral-ruleset-bundler/plugins/builtins';
 import { isError, isObject } from 'lodash';
