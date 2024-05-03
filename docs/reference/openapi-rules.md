@@ -115,7 +115,7 @@ It can be hard to pick a license, so if you don't have a lawyer around you can u
 
 How useful this is in court is not entirely known, but having a license is better than not having a license.
 
-**Recommended:** Yes
+**Recommended:** No
 
 **Good Example**
 
@@ -130,7 +130,7 @@ info:
 
 Mentioning a license is only useful if people know what the license means, so add a link to the full text for those who need it.
 
-**Recommended:** Yes
+**Recommended:** No
 
 **Good Example**
 
@@ -243,8 +243,6 @@ tags:
   - name: "Aardvark"
   - name: "Badger"
 ```
-
-**Recommended:** No
 
 ### operation-description
 
