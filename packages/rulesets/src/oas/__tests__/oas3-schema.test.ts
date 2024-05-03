@@ -4,14 +4,101 @@ import testRule from '../../__tests__/__helpers__/tester';
 testRule('oas3-schema', [
   {
     name: 'human-readable Ajv errors',
-    document: require('./__fixtures__/petstore.invalid-schema.oas3.json'),
+    document: {
+      openapi: '3.0.0',
+      info: {
+        version: '1.0.0',
+        title: 'Swagger Petstore',
+        license: {
+          name: 'MIT',
+        },
+        contact: {
+          email: 'bar@foo',
+        },
+        description: 'test',
+      },
+      servers: [
+        {
+          url: 'http://petstore.swagger.io/v1',
+        },
+      ],
+      paths: {
+        '/pets': {
+          get: {
+            summary: 'List all pets',
+            operationId: 'listPets',
+            description: 'test',
+            tags: ['pets'],
+            parameters: [
+              {
+                name: 'limit',
+                in: 'query',
+                description: 'How many items to return at one time (max 100)',
+                required: false,
+                schema: {
+                  type: 'integer',
+                  format: 'int32',
+                },
+              },
+            ],
+            responses: {
+              '200': {
+                description: 'A paged array of pets',
+                headers: {
+                  'x-next': {
+                    description: 'A link to the next page of responses',
+                    schema: {
+                      type: 'string',
+                    },
+                  },
+                  'header-1': {
+                    type: 'string',
+                    op: 'foo',
+                  },
+                },
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: './models/pet.yaml',
+                    },
+                  },
+                },
+              },
+              default: {
+                description: 'unexpected error',
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '../common/models/error.yaml',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Pets: {
+            type: 'array',
+            items: {
+              $ref: './models/pet.yaml',
+            },
+            'x-tags': ['Pets'],
+            title: 'Pets',
+            description: 'A list of pets.',
+          },
+        },
+      },
+    },
     errors: [
       {
         message: '"email" property must match format "email".',
         path: ['info', 'contact', 'email'],
       },
       {
-        message: '"header-1" property must have required property "schema".',
+        message: '"schema" or "content" must be present.',
         path: ['paths', '/pets', 'get', 'responses', '200', 'headers', 'header-1'],
       },
       {
@@ -26,41 +113,184 @@ testRule('oas3-schema', [
   },
 
   {
-    name: 'sibling additionalProperties errors',
+    name: 'oas3.1: jsonSchemaDialect',
     document: {
-      openapi: '3.0.0',
+      openapi: '3.1.0',
       info: {
-        title: 'Siblings',
+        title: 'Example jsonSchemaDialect error',
+        version: '1.0.0',
+      },
+      paths: {},
+      jsonSchemaDialect: null,
+    },
+    errors: [
+      {
+        message: '"jsonSchemaDialect" property must be string.',
+        path: ['jsonSchemaDialect'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.1: missing webhooks/components/paths',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Missing webhooks/components/paths',
+        version: '1.0.0',
+      },
+    },
+    errors: [
+      {
+        message: 'The document must have either "paths", "webhooks" or "components".',
+        path: [],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.0: validate parameters',
+    document: {
+      openapi: '3.0.1',
+      info: {
+        title: 'response example',
         version: '1.0',
       },
-      servers: [
-        {
-          url: 'http://petstore.swagger.io/v1',
-        },
-      ],
-      tags: [
-        {
-          name: 'pets',
-        },
-      ],
       paths: {
-        '/pets': {
-          post: {
-            description: 'Add a new pet to the store',
-            summary: 'Create pet',
-            operationId: 'create_pet',
-            tags: ['pets'],
-            requestBody: {
-              description: 'Pet object that needs to be added to the store',
-              required: true,
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                  },
-                },
+        '/user': {
+          get: {
+            responses: {
+              200: {
+                description: 'dummy description',
               },
             },
+            parameters: [
+              {
+                name: 'cookie',
+                in: ' cookie',
+                required: true,
+                schema: {
+                  type: ['string', 'number'],
+                },
+              },
+              {
+                name: 'module_id',
+                required: true,
+                schema: {
+                  type: 'string',
+                },
+              },
+              {
+                name: 'size',
+                in: 'query',
+                required: true,
+                schema: {
+                  type: 'numbers',
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message:
+          '"in" property must be equal to one of the allowed values: "path", "query", "header", "cookie". Did you mean "cookie"?.',
+        path: ['paths', '/user', 'get', 'parameters', '0', 'in'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "number", "object", "string".',
+        path: ['paths', '/user', 'get', 'parameters', '0', 'schema', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'Parameter must have a valid "in" property.',
+        path: ['paths', '/user', 'get', 'parameters', '1'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "number", "object", "string". Did you mean "number"?.',
+        path: ['paths', '/user', 'get', 'parameters', '2', 'schema', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.0: validate security schemes',
+    document: {
+      openapi: '3.0.1',
+      info: {
+        title: 'response example',
+        version: '1.0',
+      },
+      paths: {
+        '/user': {
+          get: {
+            responses: {
+              200: {
+                description: 'dummy description',
+              },
+            },
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          basic: {
+            foo: 2,
+          },
+          http: {
+            type: 'https',
+            scheme: 'basic',
+          },
+          apiKey: null,
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Security scheme must have a valid type.',
+        path: ['components', 'securitySchemes', 'basic'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "apiKey", "http", "oauth2", "openIdConnect". Did you mean "http"?.',
+        path: ['components', 'securitySchemes', 'http', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'Invalid security scheme.',
+        path: ['components', 'securitySchemes', 'apiKey'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.0: validate responses',
+    document: {
+      openapi: '3.0.1',
+      info: {
+        title: 'response example',
+        version: '1.0',
+      },
+      paths: {
+        '/user': {
+          get: {
+            operationId: 'd',
+            responses: {
+              200: {},
+            },
+          },
+          post: {
             responses: {
               '204': {
                 description: 'Success',
@@ -87,56 +317,121 @@ testRule('oas3-schema', [
     },
     errors: [
       {
+        message: '"200" property must have required property "description".',
+        path: ['paths', '/user', 'get', 'responses', '200'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
         message: 'Property "42" is not expected to be here.',
-        path: ['paths', '/pets', 'post', 'responses', '42'],
+        path: ['paths', '/user', 'post', 'responses', '42'],
         severity: DiagnosticSeverity.Error,
       },
       {
         message: 'Property "9999" is not expected to be here.',
-        path: ['paths', '/pets', 'post', 'responses', '9999'],
+        path: ['paths', '/user', 'post', 'responses', '9999'],
         severity: DiagnosticSeverity.Error,
       },
       {
         message: 'Property "5xx" is not expected to be here.',
-        path: ['paths', '/pets', 'post', 'responses', '5xx'],
+        path: ['paths', '/user', 'post', 'responses', '5xx'],
         severity: DiagnosticSeverity.Error,
       },
     ],
   },
 
   {
-    name: 'oas3.1: jsonSchemaDialect',
+    name: 'oas3.0: validate schemas',
     document: {
-      openapi: '3.1.0',
+      openapi: '3.0.3',
       info: {
-        title: 'Example jsonSchemaDialect error',
-        version: '1.0.0',
+        title: 'our-api',
+        version: '1.0',
       },
-      paths: {},
-      jsonSchemaDialect: null,
+      paths: {
+        '/config': {
+          parameters: [
+            {
+              schema: null,
+              name: 'id',
+              in: 'query',
+              required: false,
+              description: 'Id of an existing config.',
+            },
+          ],
+          get: {
+            summary: 'Get User Info by User ID',
+            operationId: 'get-users-settings',
+            responses: {
+              '200': {
+                description: 'Settings for User Found',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        key: {
+                          type: 'string,',
+                        },
+                        value: {
+                          type: 'string',
+                        },
+                      },
+                      required: ['key', 'value'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Schema: {
+            type: 'object',
+            additionalProperties: {
+              type: 'int',
+            },
+          },
+          Schema_2: {
+            type: 'object',
+            additionalProperties: 'invalid',
+          },
+        },
+      },
     },
     errors: [
       {
-        message: '"jsonSchemaDialect" property type must be string.',
-        path: ['jsonSchemaDialect'],
+        message: '"schema" property must be object.',
+        path: ['paths', '/config', 'parameters', '0', 'schema'],
         severity: DiagnosticSeverity.Error,
       },
-    ],
-  },
-
-  {
-    name: 'oas3.1: missing webhooks/components/paths',
-    document: {
-      openapi: '3.1.0',
-      info: {
-        title: 'Missing webhooks/components/paths',
-        version: '1.0.0',
-      },
-    },
-    errors: [
       {
-        message: 'The document must have either "paths", "webhooks" or "components".',
-        path: [],
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "number", "object", "string". Did you mean "string"?.',
+        path: [
+          'paths',
+          '/config',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'key',
+          'type',
+        ],
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "number", "object", "string". Did you mean "integer"?.',
+        path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"additionalProperties" property must be a valid Schema Object.',
+        path: ['components', 'schemas', 'Schema_2', 'additionalProperties'],
         severity: DiagnosticSeverity.Error,
       },
     ],
@@ -153,6 +448,104 @@ testRule('oas3-schema', [
       webhooks: {},
     },
     errors: [],
+  },
+
+  {
+    name: 'oas3.1: validate schemas',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'our-api',
+        version: '1.0',
+      },
+      paths: {
+        '/config': {
+          parameters: [
+            {
+              schema: null,
+              name: 'id',
+              in: 'query',
+              required: false,
+              description: 'Id of an existing config.',
+            },
+          ],
+          get: {
+            summary: 'Get User Info by User ID',
+            operationId: 'get-users-settings',
+            responses: {
+              '200': {
+                description: 'Settings for User Found',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        key: {
+                          type: 'string,',
+                        },
+                        value: {
+                          type: 'string',
+                        },
+                      },
+                      required: ['key', 'value'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Schema: {
+            type: 'object',
+            additionalProperties: {
+              type: 'int',
+            },
+          },
+          Schema_2: {
+            type: 'object',
+            additionalProperties: 'invalid',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"schema" property must be a valid Schema Object.',
+        path: ['paths', '/config', 'parameters', '0', 'schema'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "null", "number", "object", "string". Did you mean "string"?.',
+        path: [
+          'paths',
+          '/config',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'key',
+          'type',
+        ],
+      },
+      {
+        message:
+          '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "null", "number", "object", "string". Did you mean "integer"?.',
+        path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"additionalProperties" property must be a valid Schema Object.',
+        path: ['components', 'schemas', 'Schema_2', 'additionalProperties'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
   },
 
   {
