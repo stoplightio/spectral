@@ -96,26 +96,6 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
       type: `"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }`,
     },
   },
-  or: {
-    type: 'object',
-    properties: {
-      properties: {
-        type: 'array',
-        items: {
-          type: 'string',
-        },
-        minItems: 1, // OR is valid with one item (then it is redundant with 'defined' function)
-        // maxItems: 2, // No maximum limit is necessary, OR is valid for any amount, just one must be defined
-        errorMessage: `"or" requires one or more enumerated "properties", i.e. ["id"], ["default", "example"], ["title", "summary", "description"], etc.`,
-        description: 'The properties to check.',
-      },
-    },
-    additionalProperties: false,
-    required: ['properties'],
-    errorMessage: {
-      type: `"or" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.`,
-    },
-  },
   pattern: {
     type: 'object',
     additionalProperties: false,
@@ -228,14 +208,19 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         },
         minItems: 1, // XOR is valid with one item (then it is redundant with 'defined' function)
         // maxItems: 2, // No maximum limit is necessary, XOR is valid for any amount, just one must be defined
-        errorMessage: `"xor" requires one or more enumerated "properties", i.e. ["id"], ["country", "street"], ["one", "two", "three"], etc.`,
+        errorMessage: `"xor" requires one or more enumerated "properties", i.e. ["id"], ["value", "externalValue"], ["title", "summary", "description"], etc.`,
         description: 'The properties to check.',
+      },
+      exclusive: {
+        type: 'boolean',
+        default: true,
+        description: 'Defaults to true. If false, multiple matches are allowed.',
       },
     },
     additionalProperties: false,
     required: ['properties'],
     errorMessage: {
-      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.`,
+      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["value", "externalValue"], "exclusive": true }, { "properties": ["title", "summary", "description"], "exclusive": false }, etc.`,
     },
   },
 };

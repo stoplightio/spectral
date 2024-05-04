@@ -245,50 +245,27 @@ unused-definition:
       reusableObjectsLocation: "#/definitions"
 ```
 
-## or
-
-Communicate that one or more of these properties is required to be defined. FunctionOptions must contain any non-zero number of properties, **or** will require that _at least_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
-
-<!-- title: functionOptions -->
-
-| name       | description             | type       | required? |
-| ---------- | ----------------------- | ---------- | --------- |
-| properties | the properties to check | `string[]` | yes       |
-
-<!-- title: example -->
-
-```yaml
-schemas-descriptive-text-exists:
-  description: Defined schemas must have one or more of `title`, `summary` and/or `description` fields.
-  given: "$.components.schemas.*"
-  then:
-    function: or
-    functionOptions:
-      properties:
-        - title
-        - summary
-        - description
-```
-
 ## xor
 
-Communicate that one of these properties is required, and no more than one is allowed to be defined. FunctionOptions must contain any non-zero number of properties, **xor** will require that _exactly_ one of them is defined. (For only one property specified, this is the same as the `defined` rule for that property.)
+Communicate that one of these properties is required, and exactly one or more than one is allowed to be defined, depending on `exclusive` option. FunctionOptions must contain any non-zero number of properties, `exclusive: true` (the default) requires that _exactly_ one of them is defined, `exclusive: false` requires that _at least_ one but possibly more than one is defined. (For only one property specified, `exclusive` is not relevant and this is the same as the `defined` function for the single property.)
 
 <!-- title: functionOptions -->
 
-| name       | description             | type       | required? |
-| ---------- | ----------------------- | ---------- | --------- |
-| properties | the properties to check | `string[]` | yes       |
+| name       | description                                                                                 | type       | required? |
+| ---------- | ------------------------------------------------------------------------------------------- | ---------- | --------- |
+| properties | the properties to check                                                                     | `string[]` | yes       |
+| exclusive  | `true` by default for `xor`; when not truthy multiple matches are allowed for `or` behavior | `boolean`  | no        |
 
 <!-- title: example -->
 
 ```yaml
 components-examples-value-or-externalValue:
-  description: Examples should have either a `value` or `externalValue` field, but not both.
+  description: Examples should have either a `value` or `externalValue` field, but not both; unless `exclusive` is false
   given: "$.components.examples.*"
   then:
     function: xor
     functionOptions:
+      exclusive: false
       properties:
         - externalValue
         - value
