@@ -63,7 +63,7 @@
     "@stoplight/yaml": "^4.2.2",
     "@types/minimatch": "^3.0.5",
     "@types/treeify": "^1.0.0",
-    "nock": "^13.1.0",
+    "nock": "^13.5.4",
     "treeify": "^1.1.0"
   }
 }
