@@ -4,7 +4,7 @@ import { optionSchemas } from './optionSchemas';
 export type Options = {
   /** test to verify if one (but not all) of the provided keys are present in object */
   properties: string[];
-  exclusive: boolean;
+  exclusive?: boolean;
 };
 
 export default createRulesetFunction<Record<string, unknown>, Options>(
