@@ -22,7 +22,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     const results: IFunctionResult[] = [];
 
     const intersection = Object.keys(targetVal).filter(value => -1 !== properties.indexOf(value));
-    const exclusive = (opts.exclusive == null) || opts.exclusive;
+    const exclusive = (typeof opts.exclusive === 'boolean') ? opts.exclusive : true;
     const exactlyOrAtLeast = exclusive ? "Exactly" : "At least";
 
     // One-must-be-defined validation of both xor and or (non-exclusive) functions
