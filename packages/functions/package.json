@@ -16,7 +16,7 @@
   ],
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=12"
+    "node": ">= 16.20"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.3",

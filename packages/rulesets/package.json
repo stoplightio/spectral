@@ -5,7 +5,7 @@
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
   "engines": {
-    "node": ">=12"
+    "node": ">= 16.20"
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",

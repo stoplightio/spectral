@@ -16,7 +16,7 @@
   ],
   "types": "dist/index.d.ts",
   "engines": {
-    "node": ">=12"
+    "node": ">= 16.20"
   },
   "dependencies": {
     "@stoplight/json": "^3.17.0",
