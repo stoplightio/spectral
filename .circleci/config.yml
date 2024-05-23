@@ -20,10 +20,10 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "16.20"
-    - &node-maintenance-lts "18.20"
-    - &node-active-lts "20.13"
-    - &node-current "22.2"
+    - '16.20'
+    - &node-maintenance-lts '18.20'
+    - &node-active-lts '20.13'
+    - &node-current '22.2'
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
 
@@ -53,10 +53,10 @@ commands:
               - << parameters.install-corepack >>
           steps:
             - run:
-               name: Enable Corepack
-               command: |
-                 npm install -g corepack
-                 corepack enable
+                name: Enable Corepack
+                command: |
+                  npm install -g corepack
+                  corepack enable
       - run:
           name: Install Dependencies
           command: yarn install --immutable
@@ -113,14 +113,14 @@ commands:
                   NODE_VERSION=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
                   TARGETS=$(echo "<< parameters.targets >>" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
                   export ARCH=$(echo << parameters.targets >> | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
-      
+
                   if [ "<< parameters.bytecode >>" = true ]
                   then
                     yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $TARGETS --output binaries/spectral
                   else
                     yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $TARGETS --output binaries/spectral
                   fi
-                  
+
                   (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
       - save_cache:
           name: Retain pkg cache
@@ -266,11 +266,14 @@ jobs:
           condition:
             or:
               - equal:
-                - *node-maintenance-lts
-                - << parameters.node-version >>
+                  - *node-maintenance-lts
+                  - << parameters.node-version >>
               - equal:
-                - *node-active-lts
-                - << parameters.node-version >>
+                  - *node-active-lts
+                  - << parameters.node-version >>
+              - equal:
+                  - *node-current
+                  - << parameters.node-version >>
           steps:
             - test-harness:
                 os: linux
@@ -412,11 +415,13 @@ jobs:
       - attach_workspace:
           at: /tmp/
       - run:
-          name: "Download GitHub Release Utility"
+          name: 'Download GitHub Release Utility'
           command: go get github.com/tcnksm/ghr
       - run:
-          name: "Publish Release artifacts on GitHub"
-          command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
+          name: 'Publish Release artifacts on GitHub'
+          command:
+            ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1}
+            ${CIRCLE_TAG} /tmp/binaries
 
 workflows:
   commit:
@@ -444,7 +449,7 @@ workflows:
   release:
     jobs:
       - build-nix-binaries:
-         filters: *release-tag-filter
+          filters: *release-tag-filter
       - build-windows-binary:
           filters: *release-tag-filter
       - upload-artifacts:
