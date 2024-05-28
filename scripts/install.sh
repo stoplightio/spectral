@@ -20,7 +20,7 @@ if [ "$ARCH" != "aarch64" ] && [ "$ARCH" != "arm64" ] && [ "$ARCH" != "x86_64" ]
 fi
 
 if [ "$ARCH" = "x86_64" ] ; then
-  ARCH="x64"
+  ARCH="amd64"
 fi
 
 if [ "$ARCH" = "aarch64" ] ; then

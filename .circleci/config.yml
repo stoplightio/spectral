@@ -113,7 +113,7 @@ commands:
                 command: |
                   NODE_VERSION=$(echo "<< parameters.node-version >>" | awk -F "." '{ print $1 }')
                   TARGETS=$(echo "<< parameters.targets >>" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
-                  export ARCH=$(echo << parameters.targets >> | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
+                  export ARCH=$(echo << parameters.targets >> | awk 'match($0, /-(arm64|amd64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
       
                   if [ "<< parameters.bytecode >>" = true ]
                   then
