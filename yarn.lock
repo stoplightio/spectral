@@ -2952,9 +2952,15 @@ __metadata:
     hpagent: ~1.2.0
     lodash: ~4.17.21
     nock: ^13.5.4
+<<<<<<< HEAD
     pony-cause: ^1.1.1
     stacktracey: ^2.1.8
     tslib: ^2.8.1
+=======
+    pony-cause: ^1.0.0
+    stacktracey: ^2.1.7
+    tslib: ^2.3.0
+>>>>>>> 9e906eaa (chore(repo): update deps to remove lodash.set (#2629))
     xml2js: ^0.5.0
     yargs: ~17.7.2
   bin:
@@ -2973,7 +2979,11 @@ __metadata:
     "@stoplight/spectral-functions": "*"
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.4
+<<<<<<< HEAD
     "@stoplight/spectral-runtime": ^1.1.2
+=======
+    "@stoplight/spectral-runtime": ^1.0.0
+>>>>>>> 9e906eaa (chore(repo): update deps to remove lodash.set (#2629))
     "@stoplight/types": ~13.6.0
     "@stoplight/yaml": ^4.2.2
     "@types/es-aggregate-error": ^1.0.2
@@ -2988,10 +2998,17 @@ __metadata:
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.1.2
+<<<<<<< HEAD
     nimma: 0.2.3
     nock: ^13.5.4
     pony-cause: ^1.1.1
     simple-eval: 1.0.1
+=======
+    nimma: 0.2.2
+    nock: ^13.5.4
+    pony-cause: ^1.0.0
+    simple-eval: 1.0.0
+>>>>>>> 9e906eaa (chore(repo): update deps to remove lodash.set (#2629))
     treeify: ^1.1.0
     tslib: ^2.8.1
   languageName: unknown
@@ -3086,7 +3103,11 @@ __metadata:
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
     "@stoplight/spectral-ref-resolver": ^1.0.4
+<<<<<<< HEAD
     "@stoplight/spectral-ruleset-migrator": ^1.9.6
+=======
+    "@stoplight/spectral-ruleset-migrator": ^1.7.4
+>>>>>>> 9e906eaa (chore(repo): update deps to remove lodash.set (#2629))
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
@@ -3142,7 +3163,11 @@ __metadata:
     "@stoplight/spectral-functions": ^1.9.1
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.4
+<<<<<<< HEAD
     "@stoplight/spectral-runtime": ^1.1.2
+=======
+    "@stoplight/spectral-runtime": ^1.1.1
+>>>>>>> 9e906eaa (chore(repo): update deps to remove lodash.set (#2629))
     "@stoplight/types": ^13.6.0
     "@types/json-schema": ^7.0.7
     ajv: ^8.17.1
