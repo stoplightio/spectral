@@ -11,11 +11,16 @@ Run `yarn test.harness` from your terminal
 
 ### Running a selected tests
 
-You can run one or selected tests using `TESTS` env variable.
-If you want multiple test files to be run separate them with commas.
-Use paths relative to the `./scenarios` directory.
+Test Harness uses Jest under the hood. You can use all CLI options that Jest supports: https://jestjs.io/docs/cli
 
-E.g. run `TESTS=parameters-ac1.oas2.scenario,validate-body-params/form-byte-format-fail.oas2.scenario yarn test.harness`
+You can run one or multiple tests by passing a path to `test-harness` command.
+All scenarios are converted to `.js` files under the `./tests` directory.
+Hence you must use paths relative to the `./tests` directory, like in the following example:
+
+```bash
+# path to scenario file: `test-harness/scenarios/require-module.scenario`
+yarn test.harness test-harness/tests/require-module
+```
 
 ### Matching test files
 
