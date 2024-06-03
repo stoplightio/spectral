@@ -2663,7 +2663,7 @@ __metadata:
     fast-glob: ~3.2.12
     hpagent: ~1.2.0
     lodash: ~4.17.21
-    nock: ^13.1.3
+    nock: ^13.5.4
     pony-cause: ^1.0.0
     stacktracey: ^2.1.7
     tslib: ^2.3.0
@@ -2684,7 +2684,7 @@ __metadata:
     "@stoplight/spectral-formats": "*"
     "@stoplight/spectral-functions": "*"
     "@stoplight/spectral-parsers": "*"
-    "@stoplight/spectral-ref-resolver": ^1.0.0
+    "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-runtime": ^1.0.0
     "@stoplight/types": ~13.6.0
     "@stoplight/yaml": ^4.2.2
@@ -2701,7 +2701,7 @@ __metadata:
     lodash.topath: ^4.5.2
     minimatch: 3.1.2
     nimma: 0.2.2
-    nock: ^13.1.0
+    nock: ^13.5.4
     pony-cause: ^1.0.0
     simple-eval: 1.0.0
     treeify: ^1.1.0
@@ -2773,7 +2773,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ref-resolver@*, @stoplight/spectral-ref-resolver@>=1, @stoplight/spectral-ref-resolver@^1.0.0, @stoplight/spectral-ref-resolver@^1.0.4, @stoplight/spectral-ref-resolver@workspace:packages/ref-resolver":
+"@stoplight/spectral-ref-resolver@^1.0.4, @stoplight/spectral-ref-resolver@workspace:packages/ref-resolver":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ref-resolver@workspace:packages/ref-resolver"
   dependencies:
@@ -2795,7 +2795,7 @@ __metadata:
     "@stoplight/spectral-formats": ">=1"
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
-    "@stoplight/spectral-ref-resolver": ">=1"
+    "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-migrator": ^1.7.4
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
@@ -2851,7 +2851,7 @@ __metadata:
     "@stoplight/spectral-formats": ^1.5.0
     "@stoplight/spectral-functions": ^1.5.1
     "@stoplight/spectral-parsers": "*"
-    "@stoplight/spectral-ref-resolver": "*"
+    "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-runtime": ^1.1.1
     "@stoplight/types": ^13.6.0
     "@types/json-schema": ^7.0.7
@@ -9133,13 +9133,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.set@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "lodash.set@npm:4.3.2"
-  checksum: a9122f49eef9f2d0fc9061a33d87f8e5b8c6b23d46e8b9e9ce1529d3588d79741bd1145a3abdfa3b13082703e65af27ff18d8a07bfc22b9be32f3fc36f763f70
-  languageName: node
-  linkType: hard
-
 "lodash.sortby@npm:^4.7.0":
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
@@ -9848,15 +9841,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nock@npm:^13.1.0, nock@npm:^13.1.3":
-  version: 13.1.3
-  resolution: "nock@npm:13.1.3"
+"nock@npm:^13.5.4":
+  version: 13.5.4
+  resolution: "nock@npm:13.5.4"
   dependencies:
     debug: ^4.1.0
     json-stringify-safe: ^5.0.1
-    lodash.set: ^4.3.2
     propagate: ^2.0.0
-  checksum: 9e53a1edaa804a4b1c8dfb25c46b85ce5ddda8a1ceaa804d0a7caed0de564e1eaa1ef6c590ac5b013efaf4f009e47cf7f40d96e19f23be1122d39caf619b8df9
+  checksum: d31f924e34c87ae985edfb7b5a56e8a4dcfc3a072334ceb6d686326581f93090b3e23492663a64ce61b8df4f365b113231d926bc300bcfe9e5eb309c3e4b8628
   languageName: node
   linkType: hard
 
