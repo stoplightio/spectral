@@ -1,3 +1,17 @@
+# @stoplight/spectral-rulesets [1.19.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.18.1...@stoplight/spectral-rulesets-1.19.0) (2024-06-07)
+
+
+### Bug Fixes
+
+* **rulesets:** example validation for required readOnly and writeOnly properties ([#2573](https://github.com/stoplightio/spectral/issues/2573)) ([ae1fea5](https://github.com/stoplightio/spectral/commit/ae1fea50bc37faf7bb230e58158c5d490fc8fb42))
+
+
+### Features
+
+* **rulesets:** add new rule that requires sibling items field for type array ([#2632](https://github.com/stoplightio/spectral/issues/2632)) ([24198bc](https://github.com/stoplightio/spectral/commit/24198bcb32eafdeb119ee2432d8488d7a5af14aa))
+* **rulesets:** add oas3_1-servers-in-webhook and oas3_1-callbacks-in… ([#2581](https://github.com/stoplightio/spectral/issues/2581)) ([7a8cc0e](https://github.com/stoplightio/spectral/commit/7a8cc0e62c09aca2d579bb81a2602c17028efb49))
+* **rulesets:** improve {oas2,oas3}-valid-schema rule ([#2574](https://github.com/stoplightio/spectral/issues/2574)) ([8df2c36](https://github.com/stoplightio/spectral/commit/8df2c36d7461a86b3f6fb77fcd1759ed0c3750a0))
+
 ## @stoplight/spectral-rulesets [1.18.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.18.0...@stoplight/spectral-rulesets-1.18.1) (2023-12-13)
 
 
