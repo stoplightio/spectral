@@ -361,6 +361,18 @@ const ruleset = {
         function: refSiblings,
       },
     },
+    'array-items': {
+      formats: [oas3_0],
+      message: 'Schemas with "type: array", require a sibling "items" field',
+      severity: 0,
+      recommended: true,
+      resolved: false,
+      given: "$..[?(@.type === 'array')]",
+      then: {
+        function: truthy,
+        field: 'items',
+      },
+    },
     'typed-enum': {
       description: 'Enum values must respect the specified type.',
       message: '{{error}}',
