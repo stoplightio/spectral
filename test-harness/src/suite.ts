@@ -19,8 +19,14 @@ if (scenario.command === null) {
     // executing Date() before or after spawnNode were constantly leading to occasional mismatches,
     // as the success of that approach was highly bound to the time spent on the actual spawnNode call
     // this is a tad smarter, because instead of naively hoping the date will match, we try to extract the date from the actual output
-    // this regular expression matches "00:43:59" in "Thu Jul 08 2021 00:43:59 GMT+0200 (Central European Summer Time)"
-    const date = RegExp(escapeRegExp(String(Date())).replace(/(\d\d:){2}\d\d/, '(\\d\\d:){2}\\d\\d'));
+    // this regular expression matches "00:43:59" in "Thu Jul 08 2021 00:43:59 GMT+0200 (Central European Summer Time)".
+    // this regular expression is locale agnostic: it will match "Fri May 31 2024 18:26:32 GMT+0300 (за східноєвропейським літнім часом)"
+    const date = RegExp(
+      escapeRegExp(String(Date()))
+        .replace(/(\d\d:){2}\d\d/, '(\\d\\d:){2}\\d\\d')
+        .replace(/\s\\\(.+\\\)/, '\\s+\\([\\w\\s]+\\)'),
+    );
+
     Reflect.defineProperty(env, 'date', {
       configurable: true,
       enumerable: true,
