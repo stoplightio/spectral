@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.19.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.19.0...@stoplight/spectral-rulesets-1.19.1) (2024-06-10)
+
+
+### Bug Fixes
+
+* **rulesets:** fixed array-items type property selector ([#2638](https://github.com/stoplightio/spectral/issues/2638)) ([0845fb5](https://github.com/stoplightio/spectral/commit/0845fb5b27e372161c9dd0454e8176263b042e08))
+
 # @stoplight/spectral-rulesets [1.19.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.18.1...@stoplight/spectral-rulesets-1.19.0) (2024-06-07)
 
 
