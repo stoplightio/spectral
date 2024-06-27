@@ -18,3 +18,7 @@ export const githubActions: Formatter = () => {
 export const sarif: Formatter = () => {
   throw Error('sarif formatter is available only in Node.js');
 };
+
+export const codeClimate: Formatter = () => {
+  throw Error('sarif formatter is available only in Node.js');
+};
