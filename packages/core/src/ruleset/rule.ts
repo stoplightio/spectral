@@ -164,6 +164,7 @@ export class Rule implements IRule {
 
     for (const format of this.formats) {
       if (formats.has(format)) {
+
         return true;
       }
     }
