@@ -1,3 +1,52 @@
+## @stoplight/spectral-rulesets [1.19.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.19.0...@stoplight/spectral-rulesets-1.19.1) (2024-06-10)
+
+
+### Bug Fixes
+
+* **rulesets:** fixed array-items type property selector ([#2638](https://github.com/stoplightio/spectral/issues/2638)) ([0845fb5](https://github.com/stoplightio/spectral/commit/0845fb5b27e372161c9dd0454e8176263b042e08))
+
+# @stoplight/spectral-rulesets [1.19.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.18.1...@stoplight/spectral-rulesets-1.19.0) (2024-06-07)
+
+
+### Bug Fixes
+
+* **rulesets:** example validation for required readOnly and writeOnly properties ([#2573](https://github.com/stoplightio/spectral/issues/2573)) ([ae1fea5](https://github.com/stoplightio/spectral/commit/ae1fea50bc37faf7bb230e58158c5d490fc8fb42))
+
+
+### Features
+
+* **rulesets:** add new rule that requires sibling items field for type array ([#2632](https://github.com/stoplightio/spectral/issues/2632)) ([24198bc](https://github.com/stoplightio/spectral/commit/24198bcb32eafdeb119ee2432d8488d7a5af14aa))
+* **rulesets:** add oas3_1-servers-in-webhook and oas3_1-callbacks-in… ([#2581](https://github.com/stoplightio/spectral/issues/2581)) ([7a8cc0e](https://github.com/stoplightio/spectral/commit/7a8cc0e62c09aca2d579bb81a2602c17028efb49))
+* **rulesets:** improve {oas2,oas3}-valid-schema rule ([#2574](https://github.com/stoplightio/spectral/issues/2574)) ([8df2c36](https://github.com/stoplightio/spectral/commit/8df2c36d7461a86b3f6fb77fcd1759ed0c3750a0))
+
+## @stoplight/spectral-rulesets [1.18.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.18.0...@stoplight/spectral-rulesets-1.18.1) (2023-12-13)
+
+
+### Bug Fixes
+
+* **rulesets:** oasExample should clean id fields from non-schema objects ([#2561](https://github.com/stoplightio/spectral/issues/2561)) ([7f7583e](https://github.com/stoplightio/spectral/commit/7f7583e37e9e7d18bc2d7c9ae50939a540b5d720))
+
+# @stoplight/spectral-rulesets [1.18.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.17.1...@stoplight/spectral-rulesets-1.18.0) (2023-10-03)
+
+
+### Features
+
+* **rulesets:** add scope validation to oas{2,3}-operation-security-defined rules ([#2538](https://github.com/stoplightio/spectral/issues/2538)) ([68aacd6](https://github.com/stoplightio/spectral/commit/68aacd615dc6830ef9d856fcad74f1ec2b2a0ca2))
+
+## @stoplight/spectral-rulesets [1.17.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.17.0...@stoplight/spectral-rulesets-1.17.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* **rulesets:** tweak server variables function ([#2533](https://github.com/stoplightio/spectral/issues/2533)) ([244cbda](https://github.com/stoplightio/spectral/commit/244cbda1256e218d9ab24288e772162b5230323d))
+
+# @stoplight/spectral-rulesets [1.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.16.0...@stoplight/spectral-rulesets-1.17.0) (2023-08-29)
+
+
+### Features
+
+* **rulesets:** add oas3-server-variables rule ([#2526](https://github.com/stoplightio/spectral/issues/2526)) ([4c4de85](https://github.com/stoplightio/spectral/commit/4c4de85f5bfe5a1eb8ecdbfa8b9b9b4d7b8f6031))
+
 # [@stoplight/spectral-rulesets-v1.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-v1.15.1...@stoplight/spectral-rulesets-v1.16.0) (2023-04-25)
 
 

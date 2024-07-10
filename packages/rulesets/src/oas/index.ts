@@ -21,12 +21,13 @@ import {
   oasExample,
   oasUnusedComponent,
   oasDocumentSchema,
-  oasOpSecurityDefined,
+  oasSecurityDefined,
   oasSchema,
   oasDiscriminator,
 } from './functions';
 import { uniquenessTags } from '../shared/functions';
 import runtimeExpression from './functions/runtimeExpression';
+import serverVariables from '../shared/functions/serverVariables';
 
 export { ruleset as default };
 
@@ -36,6 +37,7 @@ const ruleset = {
   aliases: {
     PathItem: ['$.paths[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
+    SecurityRequirementObject: ['$.security[*]', '#OperationObject.security[*]'],
     ResponseObject: {
       targets: [
         {
@@ -45,6 +47,35 @@ const ruleset = {
         {
           formats: [oas3],
           given: ['#OperationObject.responses[*]', '$.components.responses[*]'],
+        },
+      ],
+    },
+    LinkObject: {
+      targets: [
+        {
+          formats: [oas3],
+          given: ['$.components.links[*]', '#ResponseObject.links[*]'],
+        },
+      ],
+    },
+    ArrayProperties: {
+      targets: [
+        {
+          formats: [oas2, oas3_0],
+          given: [
+            // Check for type: 'array'
+            '$..[?(@ && @.type=="array")]',
+          ],
+        },
+        {
+          formats: [oas3_1],
+          given: [
+            // Still check for type: 'array'
+            '$..[?(@ && @.type=="array")]',
+
+            // also check for type: ['array', ...]
+            '$..[?(@ && @.type && @.type.constructor.name === "Array" && @.type.includes("array"))]',
+          ],
         },
       ],
     },
@@ -73,7 +104,7 @@ const ruleset = {
       description: 'Every operation must have unique "operationId".',
       recommended: true,
       severity: 0,
-      given: '$',
+      given: '$.paths',
       then: {
         function: oasOpIdUnique,
       },
@@ -100,7 +131,7 @@ const ruleset = {
       message: '{{error}}',
       severity: 0,
       recommended: true,
-      given: '$',
+      given: '$.paths',
       then: {
         function: oasPathParam,
       },
@@ -352,6 +383,17 @@ const ruleset = {
         function: refSiblings,
       },
     },
+    'array-items': {
+      message: 'Schemas with "type: array", require a sibling "items" field',
+      severity: 0,
+      recommended: true,
+      resolved: false,
+      given: '#ArrayProperties',
+      then: {
+        function: truthy,
+        field: 'items',
+      },
+    },
     'typed-enum': {
       description: 'Enum values must respect the specified type.',
       message: '{{error}}',
@@ -443,11 +485,11 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       formats: [oas2],
-      given: '$',
+      given: '#SecurityRequirementObject',
       then: {
-        function: oasOpSecurityDefined,
+        function: oasSecurityDefined,
         functionOptions: {
-          schemesPath: ['securityDefinitions'],
+          oasVersion: 2,
         },
       },
     },
@@ -513,6 +555,7 @@ const ruleset = {
       recommended: true,
       formats: [oas2],
       severity: 0,
+      resolved: false,
       given: '$',
       then: {
         function: oasDocumentSchema,
@@ -576,11 +619,11 @@ const ruleset = {
       message: '{{error}}',
       recommended: true,
       formats: [oas3],
-      given: '$',
+      given: '#SecurityRequirementObject',
       then: {
-        function: oasOpSecurityDefined,
+        function: oasSecurityDefined,
         functionOptions: {
-          schemesPath: ['components', 'securitySchemes'],
+          oasVersion: 3,
         },
       },
     },
@@ -669,6 +712,7 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       recommended: true,
+      resolved: false,
       given: '$',
       then: {
         function: oasDocumentSchema,
@@ -693,6 +737,47 @@ const ruleset = {
       given: '#ResponseObject.links[*].parameters',
       then: {
         function: runtimeExpression,
+      },
+    },
+    'oas3-server-variables': {
+      description: 'Server variables must be defined and valid and there must be no unused variables.',
+      message: '{{error}}',
+      severity: 0,
+      recommended: true,
+      given: ['$.servers[*]', '#PathItem.servers[*]', '#OperationObject.servers[*]', '#LinkObject.server'],
+      then: {
+        function: serverVariables,
+        functionOptions: {
+          checkSubstitutions: true,
+          requireDefault: true,
+        },
+      },
+    },
+    'oas3-callbacks-in-callbacks': {
+      message: 'Callbacks should not be defined within a callback',
+      formats: [oas3],
+      recommended: true,
+      given: ['#OperationObject.callbacks[*][*][*].callbacks'],
+      then: {
+        function: undefined,
+      },
+    },
+    'oas3_1-servers-in-webhook': {
+      message: 'Servers should not be defined in a webhook.',
+      formats: [oas3_1],
+      recommended: true,
+      given: ['$.webhooks.servers', '$.webhooks[*][*].servers'],
+      then: {
+        function: undefined,
+      },
+    },
+    'oas3_1-callbacks-in-webhook': {
+      message: 'Callbacks should not be defined in a webhook.',
+      formats: [oas3_1],
+      recommended: true,
+      given: ['$.webhooks[*][*].callbacks'],
+      then: {
+        function: undefined,
       },
     },
   },

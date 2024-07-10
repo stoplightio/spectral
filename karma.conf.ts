@@ -21,6 +21,8 @@ module.exports = (config: Config): void => {
     exclude: [
       'packages/cli/**',
       'packages/formatters/src/pretty.ts',
+      'packages/formatters/src/github-actions.ts',
+      'packages/formatters/src/sarif.ts',
       'packages/formatters/src/index.node.ts',
       'packages/ruleset-bundler/src/plugins/commonjs.ts',
       '**/*.jest.test.ts',

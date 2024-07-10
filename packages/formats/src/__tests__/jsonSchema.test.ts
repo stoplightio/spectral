@@ -80,6 +80,15 @@ describe('JSON Schema format', () => {
       expect(jsonSchemaLoose({ not: {} }, null)).toBe(true);
     });
 
+    it('recognizes by the presence of valid "enum"', () => {
+      expect(jsonSchemaLoose({ enum: ['1'] }, null)).toBe(true);
+      expect(jsonSchemaLoose({ enum: [] }, null)).toBe(true);
+
+      expect(jsonSchemaLoose({ enum: 2 }, null)).toBe(false);
+      expect(jsonSchemaLoose({ enum: {} }, null)).toBe(false);
+      expect(jsonSchemaLoose({ enum: null }, null)).toBe(false);
+    });
+
     describe('mixed', () => {
       it('invalid type but valid combiner', () => {
         expect(jsonSchemaLoose({ type: 'foo', allOf: [] }, null)).toBe(true);

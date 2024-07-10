@@ -1,8 +1,13 @@
-import { ISpectralDiagnostic } from '@stoplight/spectral-core';
+import { ISpectralDiagnostic, Ruleset } from '@stoplight/spectral-core';
 import type { DiagnosticSeverity } from '@stoplight/types';
 
 export type FormatterOptions = {
   failSeverity: DiagnosticSeverity;
 };
 
-export type Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions) => string;
+export type FormatterContext = {
+  ruleset: Ruleset;
+  spectralVersion: string;
+};
+
+export type Formatter = (results: ISpectralDiagnostic[], options: FormatterOptions, ctx?: FormatterContext) => string;

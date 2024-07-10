@@ -11,7 +11,9 @@ node_modules
 !.yarn/versions
 
 packages/formatters/src/html/templates.ts
+packages/rulesets/src/oas/schemas/validators.ts
 packages/cli/binaries
+packages/*/src/version.ts
 /test-harness/tmp/
 /test-harness/tests/
 packages/*/dist

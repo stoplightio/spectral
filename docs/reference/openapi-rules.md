@@ -115,7 +115,7 @@ It can be hard to pick a license, so if you don't have a lawyer around you can u
 
 How useful this is in court is not entirely known, but having a license is better than not having a license.
 
-**Recommended:** Yes
+**Recommended:** No
 
 **Good Example**
 
@@ -130,7 +130,7 @@ info:
 
 Mentioning a license is only useful if people know what the license means, so add a link to the full text for those who need it.
 
-**Recommended:** Yes
+**Recommended:** No
 
 **Good Example**
 
@@ -243,8 +243,6 @@ tags:
   - name: "Aardvark"
   - name: "Badger"
 ```
-
-**Recommended:** No
 
 ### operation-description
 
@@ -448,6 +446,37 @@ TheBadModel:
         - 2
         - "a string!"
         - 8
+```
+
+### array-items
+
+Schemas with `type: array`, require a sibling `items` field.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+TheGoodModel:
+  type: object
+  properties:
+    favoriteColorSets:
+      type: array
+      items:
+        type: array
+        items: {}
+```
+
+**Bad Example**
+
+```yaml
+TheBadModel:
+  type: object
+  properties:
+    favoriteColorSets:
+      type: array
+      items:
+        type: array
 ```
 
 ## OpenAPI v2.0-only
@@ -667,6 +696,8 @@ Parameter objects should have a `description`.
 ### oas3-schema
 
 Validate structure of OpenAPI v3 specification.
+If OpenAPI 3.1.0 is used, `jsonSchemaDialect` is not respected and the draft 2020-12 is applied.
+If you define your own `jsonSchemaDialect`, you'll most likely want to disable this rule.
 
 **Recommended:** Yes
 
@@ -845,4 +876,143 @@ schemas:
     required:
       - name
       - petType
+```
+
+### oas3-server-variables
+
+This rule ensures that server variables defined in OpenAPI Specification 3 (OAS3) and 3.1 are valid, not unused, and result in a valid URL. Properly defining and using server variables is crucial for the accurate representation of API endpoints and preventing potential misconfigurations or security issues.
+
+**Recommended**: Yes
+
+**Bad Examples**
+
+1. **Missing definition for a URL variable**:
+
+```yaml
+servers:
+  - url: "https://api.{region}.example.com/v1"
+    variables:
+      version:
+        default: "v1"
+```
+
+In this example, the variable **`{region}`** in the URL is not defined within the **`variables`** object.
+
+2. **Unused URL variable:**
+
+```yaml
+servers:
+  - url: "https://api.example.com/v1"
+    variables:
+      region:
+        default: "us-west"
+```
+
+Here, the variable **`region`** is defined but not used in the server URL.
+
+3. **Invalid default value for an allowed value variable**:
+
+```yaml
+servers:
+  - url: "https://api.{region}.example.com/v1"
+    variables:
+      region:
+        default: "us-south"
+        enum:
+          - "us-west"
+          - "us-east"
+```
+
+The default value 'us-south' isn't one of the allowed values in the **`enum`**.
+
+4. **Invalid resultant URL**:
+
+```yaml
+servers:
+  - url: "https://api.example.com:{port}/v1"
+    variables:
+      port:
+        default: "8o80"
+```
+
+Substituting the default value of **`{port}`** results in an invalid URL.
+
+**Good Example**
+
+```yaml
+servers:
+  - url: "https://api.{region}.example.com/{version}"
+    variables:
+      region:
+        default: "us-west"
+        enum:
+          - "us-west"
+          - "us-east"
+      version:
+        default: "v1"
+```
+
+In this example, both **`{region}`** and **`{version}`** variables are properly defined and used in the server URL. Also, the default value for **`region`** is within the allowed values.
+
+### oas3_callbacks_in_callbacks
+
+A callback should not be defined within another callback.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+paths:
+  /path:
+    get:
+      callbacks:
+        onData:
+          /data:
+            post:
+              callbacks: ...
+```
+
+### oas3_1-servers-in-webhook
+
+Servers should not be defined in a webhook.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+At the path item object level:
+
+```yaml
+webhooks:
+  servers:
+    - url: https://example.com/
+    - url: https://example.com/api/
+```
+
+or
+
+At the operation level:
+
+```yaml
+webhooks:
+  newPet:
+    post:
+      servers:
+        -url: https://example.com/
+```
+
+### oas3_1-callbacks-in-webhook
+
+Callbacks should not be defined in a webhook.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+webhooks:
+  newPet:
+    post:
+      callbacks: ...
 ```

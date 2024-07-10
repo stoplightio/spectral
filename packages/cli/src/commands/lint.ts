@@ -42,7 +42,7 @@ const lintCommand: CommandModule = {
         },
       })
       .middleware((argv: Dictionary<unknown>) => {
-        const formats = argv.format as string[] & { 0: string };
+        const formats = argv.format as [string, ...string[]];
         if (argv.output === void 0) {
           argv.output = { [formats[0]]: '<stdout>' };
         } else if (typeof argv.output === 'string') {
@@ -101,7 +101,8 @@ const lintCommand: CommandModule = {
         },
         format: {
           alias: 'f',
-          description: 'formatters to use for outputting results, more than one can be given joining them with a comma',
+          description:
+            'formatters to use for outputting results, more than one can be provided by using multiple flags',
           choices: formatOptions,
           default: OutputFormat.STYLISH,
           type: 'string',
@@ -182,7 +183,7 @@ const lintCommand: CommandModule = {
     };
 
     try {
-      let results = await lint(documents, {
+      const linterResult = await lint(documents, {
         format,
         output,
         encoding,
@@ -194,18 +195,23 @@ const lintCommand: CommandModule = {
       });
 
       if (displayOnlyFailures) {
-        results = filterResultsBySeverity(results, failSeverity);
+        linterResult.results = filterResultsBySeverity(linterResult.results, failSeverity);
       }
 
       await Promise.all(
         format.map(f => {
-          const formattedOutput = formatOutput(results, f, { failSeverity: getDiagnosticSeverity(failSeverity) });
+          const formattedOutput = formatOutput(
+            linterResult.results,
+            f,
+            { failSeverity: getDiagnosticSeverity(failSeverity) },
+            linterResult.resolvedRuleset,
+          );
           return writeOutput(formattedOutput, output?.[f] ?? '<stdout>');
         }),
       );
 
-      if (results.length > 0) {
-        process.exit(severeEnoughToFail(results, failSeverity) ? 1 : 0);
+      if (linterResult.results.length > 0) {
+        process.exit(severeEnoughToFail(linterResult.results, failSeverity) ? 1 : 0);
       } else if (config.quiet !== true) {
         const isErrorSeverity = getDiagnosticSeverity(failSeverity) === DiagnosticSeverity.Error;
         process.stdout.write(

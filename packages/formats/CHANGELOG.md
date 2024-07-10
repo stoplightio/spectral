@@ -1,3 +1,10 @@
+# @stoplight/spectral-formats [1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.5.0...@stoplight/spectral-formats-1.6.0) (2023-11-07)
+
+
+### Features
+
+* **formats:** jsonSchemaLoose format should search for enum keyword ([#2551](https://github.com/stoplightio/spectral/issues/2551)) ([0835545](https://github.com/stoplightio/spectral/commit/0835545f0b43e7995720bb8a455808f76ef69483))
+
 # [@stoplight/spectral-formats-v1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.4.0...@stoplight/spectral-formats-v1.5.0) (2023-02-03)
 
 
