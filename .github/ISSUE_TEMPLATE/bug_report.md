@@ -4,9 +4,7 @@ about: Create a report to help us improve
 labels: bug
 ---
 
-> For support questions, please use the [Stoplight Discord Community](https://discord.com/invite/stoplight). This repository's issues are reserved for feature requests and bug reports. If you are unsure if you are experiencing a bug, our Discord is a great place to start.
->
-> **Please delete this section, any any sections below that you don't use, before creating the issue.**
+> **Please delete this section, and any sections below that you don't use, before creating the issue.**
 
 **Describe the bug**
 A clear and concise description of what the bug is.

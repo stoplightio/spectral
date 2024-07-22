@@ -2663,7 +2663,7 @@ __metadata:
     fast-glob: ~3.2.12
     hpagent: ~1.2.0
     lodash: ~4.17.21
-    nock: ^13.1.3
+    nock: ^13.5.4
     pony-cause: ^1.0.0
     stacktracey: ^2.1.7
     tslib: ^2.3.0
@@ -2684,7 +2684,7 @@ __metadata:
     "@stoplight/spectral-formats": "*"
     "@stoplight/spectral-functions": "*"
     "@stoplight/spectral-parsers": "*"
-    "@stoplight/spectral-ref-resolver": ^1.0.0
+    "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-runtime": ^1.0.0
     "@stoplight/types": ~13.6.0
     "@stoplight/yaml": ^4.2.2
@@ -2701,7 +2701,7 @@ __metadata:
     lodash.topath: ^4.5.2
     minimatch: 3.1.2
     nimma: 0.2.2
-    nock: ^13.1.0
+    nock: ^13.5.4
     pony-cause: ^1.0.0
     simple-eval: 1.0.0
     treeify: ^1.1.0
@@ -2773,7 +2773,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ref-resolver@*, @stoplight/spectral-ref-resolver@>=1, @stoplight/spectral-ref-resolver@^1.0.0, @stoplight/spectral-ref-resolver@^1.0.4, @stoplight/spectral-ref-resolver@workspace:packages/ref-resolver":
+"@stoplight/spectral-ref-resolver@^1.0.4, @stoplight/spectral-ref-resolver@workspace:packages/ref-resolver":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ref-resolver@workspace:packages/ref-resolver"
   dependencies:
@@ -2795,7 +2795,7 @@ __metadata:
     "@stoplight/spectral-formats": ">=1"
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
-    "@stoplight/spectral-ref-resolver": ">=1"
+    "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-migrator": ^1.7.4
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
@@ -2851,7 +2851,7 @@ __metadata:
     "@stoplight/spectral-formats": ^1.5.0
     "@stoplight/spectral-functions": ^1.5.1
     "@stoplight/spectral-parsers": "*"
-    "@stoplight/spectral-ref-resolver": "*"
+    "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-runtime": ^1.1.1
     "@stoplight/types": ^13.6.0
     "@types/json-schema": ^7.0.7
@@ -4286,11 +4286,11 @@ __metadata:
   linkType: hard
 
 "braces@npm:^3.0.1, braces@npm:^3.0.2, braces@npm:~3.0.2":
-  version: 3.0.2
-  resolution: "braces@npm:3.0.2"
+  version: 3.0.3
+  resolution: "braces@npm:3.0.3"
   dependencies:
-    fill-range: ^7.0.1
-  checksum: e2a8e769a863f3d4ee887b5fe21f63193a891c68b612ddb4b68d82d1b5f3ff9073af066c343e9867a393fe4c2555dcb33e89b937195feb9c1613d259edfcd459
+    fill-range: ^7.1.1
+  checksum: b95aa0b3bd909f6cd1720ffcf031aeaf46154dd88b4da01f9a1d3f7ea866a79eba76a6d01cbc3c422b2ee5cdc39a4f02491058d5df0d7bf6e6a162a832df1f69
   languageName: node
   linkType: hard
 
@@ -6509,12 +6509,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fill-range@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "fill-range@npm:7.0.1"
+"fill-range@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "fill-range@npm:7.1.1"
   dependencies:
     to-regex-range: ^5.0.1
-  checksum: cc283f4e65b504259e64fd969bcf4def4eb08d85565e906b7d36516e87819db52029a76b6363d0f02d0d532f0033c9603b9e2d943d56ee3b0d4f7ad3328ff917
+  checksum: b4abfbca3839a3d55e4ae5ec62e131e2e356bf4859ce8480c64c4876100f4df292a63e5bb1618e1d7460282ca2b305653064f01654474aa35c68000980f17798
   languageName: node
   linkType: hard
 
@@ -9133,13 +9133,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.set@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "lodash.set@npm:4.3.2"
-  checksum: a9122f49eef9f2d0fc9061a33d87f8e5b8c6b23d46e8b9e9ce1529d3588d79741bd1145a3abdfa3b13082703e65af27ff18d8a07bfc22b9be32f3fc36f763f70
-  languageName: node
-  linkType: hard
-
 "lodash.sortby@npm:^4.7.0":
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
@@ -9848,15 +9841,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nock@npm:^13.1.0, nock@npm:^13.1.3":
-  version: 13.1.3
-  resolution: "nock@npm:13.1.3"
+"nock@npm:^13.5.4":
+  version: 13.5.4
+  resolution: "nock@npm:13.5.4"
   dependencies:
     debug: ^4.1.0
     json-stringify-safe: ^5.0.1
-    lodash.set: ^4.3.2
     propagate: ^2.0.0
-  checksum: 9e53a1edaa804a4b1c8dfb25c46b85ce5ddda8a1ceaa804d0a7caed0de564e1eaa1ef6c590ac5b013efaf4f009e47cf7f40d96e19f23be1122d39caf619b8df9
+  checksum: d31f924e34c87ae985edfb7b5a56e8a4dcfc3a072334ceb6d686326581f93090b3e23492663a64ce61b8df4f365b113231d926bc300bcfe9e5eb309c3e4b8628
   languageName: node
   linkType: hard
 

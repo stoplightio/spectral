@@ -1,0 +1,51 @@
+====test====
+Schemas with "type: array", require a sibling "items" field
+====document====
+openapi: 3.0.3
+info:
+  title: test
+  description: Test specification file
+  version: '1.0'
+  contact:
+    name: John Doe
+    url: 'https://example.com'
+    email: john_doe@example.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: list-endpoint
+    description: Endpoint for listing objects
+paths:
+  /users:
+    get:
+      summary: List Users
+      operationId: get-users
+      description: List all Users
+      tags:
+        - list-endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  favoriteColorSets:
+                    type: array
+                    items:
+                      type: array
+
+====asset:ruleset====
+const { oas } = require('@stoplight/spectral-rulesets');
+module.exports = oas;
+====command====
+{bin} lint {document} --ruleset "{asset:ruleset}"
+====stdout====
+{document}
+ 36:27  error  array-items  Schemas with "type: array", require a sibling "items" field  paths./users.get.responses[200].content.application/json.schema.properties.favoriteColorSets.items
+
+✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)
