@@ -43,7 +43,7 @@
     "@stoplight/types": "~13.6.0",
     "@types/es-aggregate-error": "^1.0.2",
     "@types/json-schema": "^7.0.11",
-    "ajv": "^8.6.0",
+    "ajv": "^8.17.1",
     "ajv-errors": "~3.0.0",
     "ajv-formats": "~2.1.0",
     "es-aggregate-error": "^1.0.7",
