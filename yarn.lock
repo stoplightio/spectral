@@ -2736,7 +2736,6 @@ __metadata:
     eol: 0.9.1
     lodash: ^4.17.21
     markdown-escape: ^2.0.0
-    markdown-table-ts: ^1.0.3
     node-html-parser: ^4.1.5
     node-sarif-builder: ^2.0.3
     strip-ansi: 6.0
@@ -9340,13 +9339,6 @@ __metadata:
   version: 2.0.0
   resolution: "markdown-escape@npm:2.0.0"
   checksum: 74c66d817636ac5f6a275fdc79ecb1e208d907ca85289d660b515256fbc3e380eb18d29b6bbbd6a77968ee4fb5872d40ecf31e52bc9f17855bb01bb723569fa0
-  languageName: node
-  linkType: hard
-
-"markdown-table-ts@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "markdown-table-ts@npm:1.0.3"
-  checksum: af684c664f14d628cec0b554d3accc12309be02d25c7fc455bfd962e04484d2d2781c4d58dd1bfe07f5e895962b137ddbdae43e05f95ed3190f31f4035174840
   languageName: node
   linkType: hard
 

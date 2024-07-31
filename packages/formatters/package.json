@@ -43,7 +43,6 @@
     "cliui": "7.0.4",
     "lodash": "^4.17.21",
     "markdown-escape": "^2.0.0",
-    "markdown-table-ts": "^1.0.3",
     "node-sarif-builder": "^2.0.3",
     "strip-ansi": "6.0",
     "text-table": "^0.2.0",
