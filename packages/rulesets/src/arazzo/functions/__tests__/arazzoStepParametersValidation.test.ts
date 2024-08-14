@@ -127,7 +127,7 @@ describe('arazzoStepParametersValidation', () => {
 
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
-      message: `"param1" with "in" value "query" must be unique within the combined parameters.`,
+      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
       path: ['steps', 0, 'parameters', 1],
     });
   });
@@ -144,12 +144,12 @@ describe('arazzoStepParametersValidation', () => {
 
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
-      message: `"param1" with "in" value "query" must be unique within the combined parameters.`,
-      path: ['steps', 0, 'parameters', 0],
+      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
+      path: ['steps', 0, 'parameters', 1],
     });
   });
 
-  test('should report an error for combined duplicate parameters from step and workflow level', () => {
+  test('should handle combined duplicate parameters from step and workflow level (override scenario)', () => {
     const results = runRule({
       steps: [
         {
@@ -161,11 +161,7 @@ describe('arazzoStepParametersValidation', () => {
       components: { parameters: {} },
     });
 
-    expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({
-      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
-      path: ['steps', 0, 'parameters', 1],
-    });
+    expect(results).toHaveLength(0);
   });
 
   test('should report an error for mixed "in" presence when "workflowId" is present', () => {
@@ -224,7 +220,7 @@ describe('arazzoStepParametersValidation', () => {
     });
   });
 
-  test('should report an error for combined duplicate parameters from step and workflow with "in" when "operationId" is specified', () => {
+  test('should handle combined duplicate parameters from step and workflow with "in" when "operationId" is specified (override scenario)', () => {
     const results = runRule({
       steps: [
         {
@@ -236,11 +232,7 @@ describe('arazzoStepParametersValidation', () => {
       components: { parameters: {} },
     });
 
-    expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({
-      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
-      path: ['steps', 0, 'parameters', 1],
-    });
+    expect(results).toHaveLength(0);
   });
 
   test('should handle combined parameters from step and workflow with "in" when "operationId" is specified', () => {
@@ -265,7 +257,7 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(0);
   });
 
-  test('should report an error for combined duplicate parameters from step and workflow with "in" when "operationPath" is specified', () => {
+  test('should handle combined duplicate parameters from step and workflow with "in" when "operationPath" is specified (override scenario)', () => {
     const results = runRule({
       steps: [
         {
@@ -277,10 +269,6 @@ describe('arazzoStepParametersValidation', () => {
       components: { parameters: {} },
     });
 
-    expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({
-      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
-      path: ['steps', 0, 'parameters', 1],
-    });
+    expect(results).toHaveLength(0);
   });
 });
