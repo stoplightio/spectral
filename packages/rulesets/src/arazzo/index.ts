@@ -9,6 +9,8 @@ import arazzoStepFailureActionsValidation from './functions/arazzoStepFailureAct
 import arazzoStepSuccessActionsValidation from './functions/arazzoStepSuccessActionsValidation';
 import arazzoWorkflowDependsOnValidation from './functions/arazzoWorkflowDependsOnValidation';
 import arazzoStepSuccessCriteriaValidation from './functions/arazzoStepSuccessCriteriaValidation';
+import arazzoStepRequestBodyValidation from './functions/arazzoStepRequestBodyValidation';
+import arazzoStepValidation from './functions/arazzoStepValidation';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/arazzo-rules.md',
@@ -93,6 +95,24 @@ export default {
       given: '$.workflows[*]',
       then: {
         function: arazzoStepSuccessCriteriaValidation,
+      },
+    },
+    'arazzo-step-request-body-validation': {
+      description: 'Every step request body must have a valid context, conditions, and types.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflows[*].steps[*]',
+      then: {
+        function: arazzoStepRequestBodyValidation,
+      },
+    },
+    'arazzo-step-validation': {
+      description: 'Every step must have a valid "stepId", "operationId", "operationPath", and "onSuccess" and "onFailure" actions.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflows[*]',
+      then: {
+        function: arazzoStepValidation,
       },
     },
   },
