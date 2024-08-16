@@ -1,5 +1,17 @@
 import type { IFunctionResult } from '@stoplight/spectral-core';
 import getAllSuccessActions from './utils/getAllSuccessActions';
+import arazzoCriterionValidation from './arazzoCriterionValidation';
+
+type CriterionExpressionType = {
+  type: 'jsonpath' | 'xpath';
+  version: 'draft-goessner-dispatch-jsonpath-00' | 'xpath-30' | 'xpath-20' | 'xpath-10';
+};
+
+type Criterion = {
+  context?: string;
+  condition: string;
+  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
+};
 
 type SuccessAction = {
   name: string;
@@ -9,15 +21,12 @@ type SuccessAction = {
   criteria?: Criterion[];
 };
 
-type Criterion = {
-  condition: string;
-};
-
 type ReusableObject = {
   reference: string;
 };
 
 type Step = {
+  stepId: string;
   onSuccess?: (SuccessAction | ReusableObject)[];
   workflowId?: string;
   operationId?: string;
@@ -55,6 +64,17 @@ export default function arazzoStepSuccessActionsValidation(target: Workflow, _op
             path: ['steps', stepIndex, 'onSuccess', actionIndex],
           });
         }
+      }
+
+      if (action.criteria) {
+        action.criteria.forEach((criterion, criterionIndex) => {
+          const criterionResults = arazzoCriterionValidation(
+            criterion,
+            ['steps', stepIndex, 'onSuccess', actionIndex, 'criteria', criterionIndex],
+            target,
+          );
+          results.push(...criterionResults);
+        });
       }
 
       const maskedDuplicates = resolvedActions.filter(action => action.name.startsWith('masked-duplicate-'));
