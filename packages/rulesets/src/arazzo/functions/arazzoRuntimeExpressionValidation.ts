@@ -7,7 +7,7 @@ type Step = {
   outputs?: { [key: string]: string };
 };
 
-function arazzoRuntimeExpressionValidation(expression: string, _workflow: Workflow): boolean {
+function arazzoRuntimeExpressionValidation(expression: string, _workflow?: Workflow): boolean {
   const validPrefixes = [
     '$url',
     '$method',
