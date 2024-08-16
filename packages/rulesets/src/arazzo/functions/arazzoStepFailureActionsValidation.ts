@@ -32,7 +32,7 @@ type Workflow = {
   components?: { failureActions?: Record<string, FailureAction> };
 };
 
-export default function validateFailureActions(target: Workflow, _options: null): IFunctionResult[] {
+export default function arazzoStepFailureActionsValidation(target: Workflow, _options: null): IFunctionResult[] {
   const results: IFunctionResult[] = [];
   const components = target.components?.failureActions ?? {};
 

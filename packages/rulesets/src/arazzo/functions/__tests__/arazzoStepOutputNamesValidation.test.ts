@@ -28,11 +28,11 @@ describe('arazzoStepOutputNamesValidation', () => {
       steps: [
         {
           outputs: [
-            ['output1', 'value1'],
-            ['output2', 'value2'],
+            ['output1', '$url'],
+            ['output2', '$response.body#/status'],
           ],
         },
-        { outputs: [['output3', 'value3']] },
+        { outputs: [['output3', '$steps.foo.outputs.bar']] },
       ],
     });
 
@@ -44,8 +44,8 @@ describe('arazzoStepOutputNamesValidation', () => {
       steps: [
         {
           outputs: [
-            ['invalid name', 'value1'],
-            ['output2', 'value2'],
+            ['invalid name', '$url'],
+            ['output2', '$statusCode'],
           ],
         },
       ],
@@ -63,9 +63,9 @@ describe('arazzoStepOutputNamesValidation', () => {
       steps: [
         {
           outputs: [
-            ['output1', 'value1'],
-            ['output2', 'value2'],
-            ['output1', 'value3'],
+            ['output1', '$statusCode'],
+            ['output2', '$url'],
+            ['output1', '$statusCode'],
           ],
         }, // Duplicate key simulated here
       ],
@@ -81,11 +81,61 @@ describe('arazzoStepOutputNamesValidation', () => {
   test('should not report an error for duplicate output names across different steps', () => {
     const results = runRule({
       steps: [
-        { outputs: [['output1', 'value1']] },
-        { outputs: [['output1', 'value2']] }, // Duplicate output name across different steps
+        { outputs: [['output1', '$response.body']] },
+        { outputs: [['output1', '$response.body']] }, // Duplicate output name across different steps
       ],
     });
 
     expect(results).toHaveLength(0);
+  });
+
+  test('should not report any errors for valid runtime expressions', () => {
+    const results = runRule({
+      steps: [
+        {
+          outputs: [
+            ['output1', '$response.body#/status'],
+            ['output2', '$steps.step1.outputs.value'],
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for invalid runtime expressions', () => {
+    const results = runRule({
+      steps: [
+        {
+          outputs: [['output1', 'invalid expression']],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"invalid expression" is not a valid runtime expression.`,
+      path: ['steps', 0, 'outputs', 'output1'],
+    });
+  });
+
+  test('should handle valid and invalid expressions mixed', () => {
+    const results = runRule({
+      steps: [
+        {
+          outputs: [
+            ['validOutput', '$response.body#/status'],
+            ['invalidOutput', 'invalid expression'],
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"invalid expression" is not a valid runtime expression.`,
+      path: ['steps', 0, 'outputs', 'invalidOutput'],
+    });
   });
 });

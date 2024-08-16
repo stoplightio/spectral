@@ -4,6 +4,9 @@ import arazzoWorkflowIdUniqueness from './functions/arazzoWorkflowIdUniqueness';
 import arazzoStepIdUniqueness from './functions/arazzoStepIdUniqueness';
 import arazzoWorkflowOutputNamesValidation from './functions/arazzoWorkflowOutputNamesValidation';
 import arazzoStepOutputNamesValidation from './functions/arazzoStepOutputNamesValidation';
+import arazzoStepParametersValidation from './functions/arazzoStepParametersValidation';
+import arazzoStepFailureActionsValidation from './functions/arazzoStepFailureActionsValidation';
+import arazzoStepSuccessActionsValidation from './functions/arazzoStepSuccessActionsValidation';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/arazzo-rules.md',
@@ -43,6 +46,33 @@ export default {
       given: '$.steps[*].outputs',
       then: {
         function: arazzoStepOutputNamesValidation,
+      },
+    },
+    'arazzo-step-parameters-validation': {
+      description: 'Step parameters and workflow parameters must be independently unique.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflow[*]',
+      then: {
+        function: arazzoStepParametersValidation,
+      },
+    },
+    'arazzo-step-failure-actions-validation': {
+      description: 'Every failure action must have a unique name and "workflowId" and "stepId" are mutually exclusive.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflows[*]',
+      then: {
+        function: arazzoStepFailureActionsValidation,
+      },
+    },
+    'arazzo-step-success-actions-validation': {
+      description: 'Every success action must have a unique name and "workflowId" and "stepId" are mutually exclusive.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflows[*]',
+      then: {
+        function: arazzoStepSuccessActionsValidation,
       },
     },
   },
