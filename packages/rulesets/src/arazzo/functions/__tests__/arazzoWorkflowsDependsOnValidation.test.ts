@@ -101,4 +101,17 @@ describe('arazzoWorkflowDependsOnValidation', () => {
       path: ['workflows', 1, 'dependsOn', 0],
     });
   });
+
+  test('should report an error for invalid runtime expression in dependsOn', () => {
+    const results = runRule({
+      workflows: [{ workflowId: 'workflow1' }, { workflowId: 'workflow2', dependsOn: ['$invalid.source1.expression'] }],
+      sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
+    });
+
+    expect(results).toHaveLength(2);
+    expect(results[0]).toMatchObject({
+      message: 'Runtime expression "$invalid.source1.expression" is invalid.',
+      path: ['workflows', 1, 'dependsOn', 0],
+    });
+  });
 });

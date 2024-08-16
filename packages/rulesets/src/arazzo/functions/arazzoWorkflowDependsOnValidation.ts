@@ -1,5 +1,6 @@
 import { IFunctionResult } from '@stoplight/spectral-core';
 import { getAllWorkflows } from './utils/getAllWorkflows';
+import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
 
 type SourceDescription = {
   name: string;
@@ -46,6 +47,15 @@ export default function arazzoWorkflowDependsOnValidation(targetVal: Document, _
           return;
         } else {
           seenWorkflows.add(dep);
+        }
+
+        if (dep.startsWith('$')) {
+          if (!arazzoRuntimeExpressionValidation(dep)) {
+            results.push({
+              message: `Runtime expression "${dep}" is invalid.`,
+              path: [...path, 'dependsOn', depIndex],
+            });
+          }
         }
 
         // Check for runtime expression format
