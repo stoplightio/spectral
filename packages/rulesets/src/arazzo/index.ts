@@ -7,6 +7,8 @@ import arazzoStepOutputNamesValidation from './functions/arazzoStepOutputNamesVa
 import arazzoStepParametersValidation from './functions/arazzoStepParametersValidation';
 import arazzoStepFailureActionsValidation from './functions/arazzoStepFailureActionsValidation';
 import arazzoStepSuccessActionsValidation from './functions/arazzoStepSuccessActionsValidation';
+import arazzoWorkflowDependsOnValidation from './functions/arazzoWorkflowDependsOnValidation';
+import arazzoStepSuccessCriteriaValidation from './functions/arazzoStepSuccessCriteriaValidation';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/arazzo-rules.md',
@@ -73,6 +75,24 @@ export default {
       given: '$.workflows[*]',
       then: {
         function: arazzoStepSuccessActionsValidation,
+      },
+    },
+    'arazzo-workflow-depends-on-validation': {
+      description: 'Every workflow dependency must be valid.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflows[*]',
+      then: {
+        function: arazzoWorkflowDependsOnValidation,
+      },
+    },
+    'arazzo-step-success-criteria-validation': {
+      description: 'Every success criteria must have a valid context, conditions, and types.',
+      recommended: true,
+      severity: 0,
+      given: '$.workflows[*]',
+      then: {
+        function: arazzoStepSuccessCriteriaValidation,
       },
     },
   },

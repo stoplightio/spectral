@@ -6,6 +6,9 @@ import { default as arazzoStepParametersValidation } from './arazzoStepParameter
 import { default as arazzoStepFailureActionsValidation } from './arazzoStepFailureActionsValidation';
 import { default as arazzoStepSuccessActionsValidation } from './arazzoStepSuccessActionsValidation';
 import { default as arazzoRuntimeExpressionValidation } from './arazzoRuntimeExpressionValidation';
+import { default as arazzoWorkflowDependsOnValidation } from './arazzoWorkflowDependsOnValidation';
+import { default as arazzoCriterionValidation } from './arazzoCriterionValidation';
+import { default as arazzoStepSuccessCriteriaValidation } from './arazzoStepSuccessCriteriaValidation';
 
 export {
   arazzoWorkflowIdUniqueness,
@@ -16,4 +19,7 @@ export {
   arazzoStepFailureActionsValidation,
   arazzoStepSuccessActionsValidation,
   arazzoRuntimeExpressionValidation,
+  arazzoWorkflowDependsOnValidation,
+  arazzoCriterionValidation,
+  arazzoStepSuccessCriteriaValidation,
 };
