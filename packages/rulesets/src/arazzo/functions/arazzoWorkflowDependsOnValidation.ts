@@ -55,7 +55,7 @@ export default function arazzoWorkflowDependsOnValidation(targetVal: Document, _
           const workflowId = parts[2] as string | undefined;
 
           const sourceType = sourceDescriptionNames.get(sourceName);
-          if (!sourceType) {
+          if (sourceType == null) {
             results.push({
               message: `Source description "${sourceName}" not found for workflowId "${dep}".`,
               path: [...path, 'dependsOn', depIndex],
