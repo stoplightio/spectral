@@ -93,27 +93,27 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
     customShorthands: {},
   });
 
-  try {
-    nimma.query(
-      input,
-      Object.entries(callbacks).reduce<Record<string, Callback>>((mapped, [key, cbs]) => {
-        mapped[key] = scope => {
+  nimma.query(
+    input,
+    Object.entries(callbacks).reduce<Record<string, Callback>>((mapped, [key, cbs]) => {
+      mapped[key] = scope => {
+        try {
           for (const cb of cbs) {
             cb(scope);
           }
-        };
-
-        return mapped;
-      }, {}),
-    );
-  } catch (e) {
-    /* eslint-disable no-console */
-    const log = process.argv.includes('--quiet')
-      ? (): void => {
-          /* no-op */
+        } catch (e) {
+          /* eslint-disable no-console */
+          const log = process.argv.includes('--quiet')
+            ? (): void => {
+                /* no-op */
+              }
+            : console.log.bind(console);
+          log(e);
+          return e;
         }
-      : console.log.bind(console);
-    log(e);
-    throw e;
-  }
+      };
+
+      return mapped;
+    }, {}),
+  );
 }
