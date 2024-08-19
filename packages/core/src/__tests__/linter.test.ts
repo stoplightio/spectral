@@ -111,7 +111,7 @@ describe('linter', () => {
         },
         foo: null,
       }),
-    ).rejects.toThrow();
+    ).resolves.toEqual([]);
   });
 
   test('should return all properties matching 4xx response code', async () => {

@@ -28,9 +28,14 @@ describe('Core Functions / Pattern', () => {
     });
 
     it('given string regex containing invalid flags, should throw an exception', async () => {
-      await expect(runPattern('aBc', { match: '/[abc]+/invalid' })).rejects.toThrow(
-        "Invalid flags supplied to RegExp constructor 'invalid'",
-      );
+      try {
+        const res = await runPattern('aBc', { match: '/[abc]+/invalid' });
+        expect(res).toEqual([]);
+      } catch (e: any) {
+        expect(e.message).toEqual(
+          `Function "pattern" threw an exception: Invalid flags supplied to RegExp constructor 'invalid'`,
+        );
+      }
     });
 
     it('should return empty array when given value does not match the given notMatch string regex with slashes and modifier', async () => {

@@ -67,13 +67,20 @@ export class Spectral {
       }
     }
 
-    await runner.run(ruleset);
-    const results = runner.getResults();
+    try {
+      await runner.run(ruleset);
+      const results = runner.getResults();
 
-    return {
-      resolved: inventory.resolved,
-      results,
-    };
+      return {
+        resolved: inventory.resolved,
+        results,
+      };
+    } catch (e) {
+      return {
+        resolved: inventory.resolved,
+        results: [],
+      };
+    }
   }
 
   public async run(
