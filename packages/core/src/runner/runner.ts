@@ -93,16 +93,26 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
     customShorthands: {},
   });
 
-  nimma.query(
-    input,
-    Object.entries(callbacks).reduce<Record<string, Callback>>((mapped, [key, cbs]) => {
-      mapped[key] = scope => {
-        for (const cb of cbs) {
-          cb(scope);
-        }
-      };
+  try {
+    nimma.query(
+      input,
+      Object.entries(callbacks).reduce<Record<string, Callback>>((mapped, [key, cbs]) => {
+        mapped[key] = scope => {
+          for (const cb of cbs) {
+            cb(scope);
+          }
+        };
 
-      return mapped;
-    }, {}),
-  );
+        return mapped;
+      }, {}),
+    );
+  } catch (e) {
+    /* eslint-disable no-console */
+    const log = process.argv.includes('--quiet')
+      ? (): void => {
+          /* no-op */
+        }
+      : console.log.bind(console);
+    log(e);
+  }
 }
