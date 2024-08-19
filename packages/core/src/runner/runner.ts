@@ -114,5 +114,6 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
         }
       : console.log.bind(console);
     log(e);
+    throw e;
   }
 }
