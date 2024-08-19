@@ -93,6 +93,7 @@ function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPath
     customShorthands: {},
   });
 
+  
   try {
     nimma.query(
       input,
