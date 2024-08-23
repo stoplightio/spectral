@@ -2,10 +2,65 @@ import arazzoWorkflowOutputNamesValidation from '../arazzoWorkflowOutputNamesVal
 import { DeepPartial } from '@stoplight/types';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
 
-const runRule = (
-  target: { workflows: Array<{ outputs?: [string, string][] }> },
-  contextOverrides: Partial<RulesetFunctionContext> = {},
-) => {
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  sourceDescriptions?: SourceDescription[];
+  components?: {
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type SourceDescription = {
+  name: string;
+  url: string;
+  type?: string;
+};
+
+type SuccessAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type Workflow = {
+  workflowId: string;
+  steps: Step[];
+  outputs?: { [key: string]: string };
+};
+
+type Step = {
+  stepId: string;
+  operationId?: string;
+  workflowId?: string;
+  operationPath?: string;
+  parameters?: Record<string, unknown>;
+  outputs?: { [key: string]: string };
+};
+
+type Criterion = {
+  context?: string;
+  condition: string;
+  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
+};
+
+type CriterionExpressionType = {
+  type: 'jsonpath' | 'xpath';
+  version: string;
+};
+
+const runRule = (target: ArazzoSpecification, contextOverrides: Partial<RulesetFunctionContext> = {}) => {
   const context: DeepPartial<RulesetFunctionContext> = {
     path: [],
     documentInventory: {
@@ -27,12 +82,18 @@ describe('arazzoWorkflowOutputNamesValidation', () => {
     const results = runRule({
       workflows: [
         {
-          outputs: [
-            ['output1', 'value1'],
-            ['output2', 'value2'],
-          ],
+          outputs: {
+            output1: '$url',
+            output2: '$statusCode',
+          },
+          workflowId: 'workflow§',
+          steps: [],
         },
-        { outputs: [['output3', 'value3']] },
+        {
+          outputs: { output3: '$statusCode' },
+          workflowId: 'workflow2',
+          steps: [],
+        },
       ],
     });
 
@@ -43,49 +104,262 @@ describe('arazzoWorkflowOutputNamesValidation', () => {
     const results = runRule({
       workflows: [
         {
-          outputs: [
-            ['invalid name', 'value1'],
-            ['output2', 'value2'],
-          ],
+          outputs: {
+            'invalid name': 'value1',
+            output2: 'value2',
+          },
+          workflowId: 'workflow1',
+          steps: [],
         },
       ],
     });
 
-    expect(results).toHaveLength(1);
+    expect(results).toHaveLength(3);
     expect(results[0]).toMatchObject({
       message: `"invalid name" does not match the required pattern "^[a-zA-Z0-9.\\-_]+$".`,
-      path: ['workflows', 0, 'outputs', 'invalid name'],
-    });
-  });
-
-  test('should report an error for duplicate output names within the same workflow', () => {
-    const results = runRule({
-      workflows: [
-        {
-          outputs: [
-            ['output1', 'value1'],
-            ['output2', 'value2'],
-            ['output1', 'value3'],
-          ],
-        }, // Duplicate key simulated here
-      ],
-    });
-
-    expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({
-      message: `"output1" must be unique within the workflow outputs.`,
-      path: ['workflows', 0, 'outputs', 'output1'],
+      path: ['workflows', 0, 'outputs', 'invalid name', 0],
     });
   });
 
   test('should not report an error for duplicate output names across different workflows', () => {
     const results = runRule({
       workflows: [
-        { outputs: [['output1', 'value1']] },
-        { outputs: [['output1', 'value2']] }, // Duplicate output name across different workflows
+        {
+          outputs: { output1: '$statusCode' },
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          outputs: { output1: '$statusCode' },
+          workflowId: 'workflow2',
+          steps: [],
+        }, // Duplicate output name across different workflows
       ],
     });
 
     expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for invalid runtime expressions', () => {
+    const results = runRule({
+      workflows: [
+        {
+          outputs: {
+            output1: 'invalid expression',
+            output2: '$statusCode',
+          },
+          workflowId: 'workflow1',
+          steps: [],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"invalid expression" is not a valid runtime expression.`,
+      path: ['workflows', 0, 'outputs', 'output1', 0],
+    });
+  });
+
+  test('should report an error for runtime expression referencing step that does not exist', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$steps.non-existing.outputs.output1',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"$steps.non-existing.outputs.output1" is not a valid runtime expression.`,
+      path: ['workflows', 0, 'outputs', 'output1', 0],
+    });
+  });
+
+  test('should handle runtime expression referencing step that exists', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [{ stepId: 'step-1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$steps.step-1.outputs.output1',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should handle runtime expression referencing a step within a different workflow', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'place-order1',
+          steps: [
+            {
+              stepId: 'place-order',
+              operationId: 'placeOrder',
+              outputs: { step_order_id: '$statusCode' },
+            },
+          ],
+          outputs: {
+            workflow_order_id: '$steps.place-order.outputs.step_order_id',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should handle runtime expression referencing step that exists within different workflow', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$steps.step1.outputs.output1',
+          },
+        },
+        {
+          workflowId: 'workflow2',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$workflows.workflow1.steps.step1.outputs.output1',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for runtime expression referencing a workflow that does not exist', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$statusCode',
+          },
+        },
+        {
+          workflowId: 'workflow2',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$workflows.non-existing-workflow.steps.foo.outputs.output1',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"$workflows.non-existing-workflow.steps.foo.outputs.output1" is not a valid runtime expression.`,
+      path: ['workflows', 1, 'outputs', 'output1', 0],
+    });
+  });
+
+  test('should report an error for runtime expression referencing a separate existing workflow but with non-existing step', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$statusCode',
+          },
+        },
+        {
+          workflowId: 'workflow2',
+          steps: [{ stepId: 'step1', outputs: { output1: '$statusCode' } }],
+          outputs: {
+            output1: '$workflows.workflow1.steps.non-existing.outputs.output1',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"$workflows.workflow1.steps.non-existing.outputs.output1" is not a valid runtime expression.`,
+      path: ['workflows', 1, 'outputs', 'output1', 0],
+    });
+  });
+
+  test('should handle runtime expression referencing a step within the same workflow', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'buy-available-pet',
+          steps: [
+            {
+              stepId: 'find-pet',
+              operationId: 'findPetsByStatus',
+              outputs: { my_pet_id: '$response.outputs[0].id' },
+            },
+            {
+              stepId: 'place-order',
+              workflowId: 'place-order1',
+              outputs: { my_order_id: '$workflows.place-order1.outputs.workflow_order_id' },
+            },
+          ],
+          outputs: {
+            buy_pet_order_id: '$steps.place-order.outputs.my_order_id',
+          },
+        },
+        {
+          workflowId: 'place-order',
+          steps: [
+            {
+              stepId: 'place-order',
+              operationId: 'placeOrder',
+              outputs: { step_order_id: '$statusCode' },
+            },
+          ],
+          outputs: {
+            workflow_order_id: '$steps.place-order.outputs.step_order_id',
+          },
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report error if workflow or step does not exist', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'buy-available-pet',
+          steps: [
+            {
+              stepId: 'find-pet',
+              operationId: 'findPetsByStatus',
+              outputs: { my_pet_id: '$response.outputs[0].id' },
+            },
+            {
+              stepId: 'place-order',
+              workflowId: 'non-existing-workflow',
+              outputs: { my_order_id: '$workflows.place-order.outputs.workflow_order_id' },
+            },
+          ],
+          outputs: {
+            buy_pet_order_id: '$steps.non-existing-step.outputs.non_existing',
+          },
+        },
+      ],
+    });
+
+    expect(results).not.toHaveLength(0);
   });
 });

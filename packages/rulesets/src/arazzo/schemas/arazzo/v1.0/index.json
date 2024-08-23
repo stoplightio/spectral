@@ -122,7 +122,7 @@
               },
               "inputs": {
                   "description": "A JSON Schema 2020-12 object representing the input parameters used by this workflow",
-                  "$dynamicRef": "#meta"
+                  "$ref": "https://json-schema.org/draft/2020-12/schema"
               },
               "dependsOn": {
                   "description": "A list of workflows that MUST be completed before this workflow can be processed",
@@ -713,6 +713,22 @@
                   }
               }
           ],
+          "dependentSchemas": {
+            "workflowId": {
+              "properties": {
+                "type": {
+                  "enum": ["goto"]
+                }
+              }
+            },
+            "stepId": {
+              "properties": {
+                "type": {
+                  "enum": ["goto"]
+                }
+              }
+            }
+          },
           "required": [
               "name",
               "type"
@@ -770,8 +786,7 @@
                       "properties": {
                           "type": {
                               "enum": [
-                                  "goto",
-                                  "retry"
+                                  "goto"
                               ]
                           }
                       }
@@ -806,6 +821,22 @@
                   }
               }
           ],
+          "dependentSchemas": {
+            "workflowId": {
+              "properties": {
+                "type": {
+                  "enum": ["goto", "retry"]
+                }
+              }
+            },
+            "stepId": {
+              "properties": {
+                "type": {
+                  "enum": ["goto", "retry"]
+                }
+              }
+            }
+          },
           "required": [
               "name",
               "type"
@@ -908,7 +939,7 @@
                   "type": "object",
                   "patternProperties": {
                       "^[a-zA-Z0-9\\.\\-_]+$": {
-                          "$dynamicRef": "#meta"
+                          "$ref": "https://json-schema.org/draft/2020-12/schema"
                       }
                   }
               },

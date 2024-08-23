@@ -51,6 +51,7 @@ Promise.all(schemas)
     ajvErrors(ajv);
 
     const target = path.join(cwd, 'oas/schemas/validators.ts');
+    const arazzoTarget = path.join(cwd, 'arazzo/schemas/validators.ts');
     const basename = path.basename(target);
     const code = standaloneCode(ajv, {
       oas2_0: 'http://swagger.io/v2/schema.json',
@@ -81,6 +82,16 @@ Promise.all(schemas)
     );
 
     await fs.promises.writeFile(path.join(target, '..', basename), ['// @ts-nocheck', minified].join('\n'));
+
+    log(
+      'writing %s size is %dKB (original), %dKB (minified) %dKB (minified + gzipped)',
+      path.join(arazzoTarget, '..', basename),
+      Math.round((code.length / 1024) * 100) / 100,
+      Math.round((minified.length / 1024) * 100) / 100,
+      Math.round((sync(minified) / 1024) * 100) / 100,
+    );
+
+    await fs.promises.writeFile(path.join(arazzoTarget, '..', basename), ['// @ts-nocheck', minified].join('\n'));
   })
   .then(() => {
     log(chalk.green('Validators generated.'));

@@ -9,22 +9,70 @@ type SourceDescription = {
 
 type Workflow = {
   workflowId: string;
+  steps: Step[];
   dependsOn?: string[];
 };
 
-type Document = {
-  workflows: Workflow[];
-  sourceDescriptions: SourceDescription[];
+type Step = {
+  stepId: string;
+  outputs?: { [key: string]: string };
 };
 
-const runRule = (target: Document): IFunctionResult[] => {
+type ArazzoSpecification = {
+  sourceDescriptions?: SourceDescription[];
+  workflows: Workflow[];
+  components?: {
+    parameters?: Record<string, unknown>;
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type SuccessAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type Criterion = {
+  context?: string;
+  condition: string;
+  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
+};
+
+type CriterionExpressionType = {
+  type: 'jsonpath' | 'xpath';
+  version: string;
+};
+const runRule = (target: ArazzoSpecification): IFunctionResult[] => {
   return arazzoWorkflowDependsOnValidation(target, null);
 };
 
 describe('arazzoWorkflowDependsOnValidation', () => {
   test('should not report any errors for valid dependsOn references', () => {
     const results = runRule({
-      workflows: [{ workflowId: 'workflow1' }, { workflowId: 'workflow2', dependsOn: ['workflow1'] }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['workflow1'],
+          steps: [],
+        },
+      ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
     });
 
@@ -33,7 +81,17 @@ describe('arazzoWorkflowDependsOnValidation', () => {
 
   test('should report an error for duplicate workflowId in dependsOn', () => {
     const results = runRule({
-      workflows: [{ workflowId: 'workflow1' }, { workflowId: 'workflow2', dependsOn: ['workflow1', 'workflow1'] }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['workflow1', 'workflow1'],
+          steps: [],
+        },
+      ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
     });
 
@@ -46,7 +104,17 @@ describe('arazzoWorkflowDependsOnValidation', () => {
 
   test('should report an error for non-existent local workflowId in dependsOn', () => {
     const results = runRule({
-      workflows: [{ workflowId: 'workflow1' }, { workflowId: 'workflow2', dependsOn: ['workflow3'] }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['workflow3'],
+          steps: [],
+        },
+      ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
     });
 
@@ -60,8 +128,15 @@ describe('arazzoWorkflowDependsOnValidation', () => {
   test('should report an error for non-existent source description in dependsOn', () => {
     const results = runRule({
       workflows: [
-        { workflowId: 'workflow1' },
-        { workflowId: 'workflow2', dependsOn: ['$sourceDescriptions.nonExistent.workflow3'] },
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['$sourceDescriptions.nonExistent.workflow3'],
+          steps: [],
+        },
       ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
     });
@@ -75,7 +150,17 @@ describe('arazzoWorkflowDependsOnValidation', () => {
 
   test('should report an error for missing workflowId part in runtime expression', () => {
     const results = runRule({
-      workflows: [{ workflowId: 'workflow1' }, { workflowId: 'workflow2', dependsOn: ['$sourceDescriptions.source1'] }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['$sourceDescriptions.source1'],
+          steps: [],
+        },
+      ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
     });
 
@@ -89,8 +174,15 @@ describe('arazzoWorkflowDependsOnValidation', () => {
   test('should report an error for non-arazzo type in source description', () => {
     const results = runRule({
       workflows: [
-        { workflowId: 'workflow1' },
-        { workflowId: 'workflow2', dependsOn: ['$sourceDescriptions.source1.workflow3'] },
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['$sourceDescriptions.source1.workflow3'],
+          steps: [],
+        },
       ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'openapi' }],
     });
@@ -104,7 +196,17 @@ describe('arazzoWorkflowDependsOnValidation', () => {
 
   test('should report an error for invalid runtime expression in dependsOn', () => {
     const results = runRule({
-      workflows: [{ workflowId: 'workflow1' }, { workflowId: 'workflow2', dependsOn: ['$invalid.source1.expression'] }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [],
+        },
+        {
+          workflowId: 'workflow2',
+          dependsOn: ['$invalid.source1.expression'],
+          steps: [],
+        },
+      ],
       sourceDescriptions: [{ name: 'source1', url: 'http://example.com', type: 'arazzo' }],
     });
 

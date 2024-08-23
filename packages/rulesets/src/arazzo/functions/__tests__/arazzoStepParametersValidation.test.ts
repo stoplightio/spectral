@@ -5,6 +5,7 @@ import type { RulesetFunctionContext } from '@stoplight/spectral-core';
 type Parameter = {
   name: string;
   in?: string;
+  value: string;
 };
 
 type ReusableObject = {
@@ -44,8 +45,8 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           parameters: [
-            { name: 'param1', in: 'query' },
-            { name: 'param2', in: 'header' },
+            { name: 'param1', in: 'query', value: 'value1' },
+            { name: 'param2', in: 'header', value: 'value2' },
           ],
         },
       ],
@@ -60,12 +61,12 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           parameters: [
-            { name: 'param1', in: 'query' },
-            { name: 'param2', in: 'header' },
+            { name: 'param1', in: 'query', value: 'value1' },
+            { name: 'param2', in: 'header', value: 'value2' },
           ],
         },
       ],
-      components: { parameters: { param1: { name: 'param3', in: 'cookie' } } },
+      components: { parameters: { param1: { name: 'param3', in: 'cookie', value: 'value3' } } },
     });
 
     expect(results).toHaveLength(0);
@@ -76,14 +77,17 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           workflowId: 'workflow1',
-          parameters: [{ name: 'param1' }],
+          parameters: [{ name: 'param1', value: 'value1' }],
         },
         {
           workflowId: 'workflow1',
-          parameters: [{ name: 'param2' }],
+          parameters: [{ name: 'param2', value: 'value2' }],
         },
       ],
-      parameters: [{ name: 'param3' }, { name: 'param4' }],
+      parameters: [
+        { name: 'param3', value: 'value3' },
+        { name: 'param4', value: 'value4' },
+      ],
       components: { parameters: {} },
     });
 
@@ -95,16 +99,16 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           operationPath: '/path1',
-          parameters: [{ name: 'param1', in: 'query' }],
+          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
         },
         {
           operationPath: '/path2',
-          parameters: [{ name: 'param2', in: 'header' }],
+          parameters: [{ name: 'param2', in: 'header', value: 'value2' }],
         },
       ],
       parameters: [
-        { name: 'param1', in: 'cookie' },
-        { name: 'param2', in: 'cookie' },
+        { name: 'param1', in: 'cookie', value: 'value3' },
+        { name: 'param2', in: 'cookie', value: 'value4' },
       ],
       components: { parameters: {} },
     });
@@ -117,8 +121,8 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           parameters: [
-            { name: 'param1', in: 'query' },
-            { name: 'param1', in: 'query' },
+            { name: 'param1', in: 'query', value: 'value1' },
+            { name: 'param1', in: 'query', value: 'value2' },
           ],
         }, // Duplicate parameter
       ],
@@ -139,7 +143,15 @@ describe('arazzoStepParametersValidation', () => {
           parameters: [{ reference: '$components.parameters.param1' }, { reference: '$components.parameters.param1' }],
         },
       ],
-      components: { parameters: { param1: { name: 'param1', in: 'query' } } },
+      components: {
+        parameters: {
+          param1: {
+            name: 'param1',
+            in: 'query',
+            value: 'value1',
+          },
+        },
+      },
     });
 
     expect(results).toHaveLength(1);
@@ -154,10 +166,10 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           workflowId: 'workflow1',
-          parameters: [{ name: 'param1' }],
+          parameters: [{ name: 'param1', value: 'value1' }],
         },
       ],
-      parameters: [{ name: 'param1' }],
+      parameters: [{ name: 'param1', value: 'value2' }],
       components: { parameters: {} },
     });
 
@@ -169,7 +181,10 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           workflowId: 'workflow1',
-          parameters: [{ name: 'param1' }, { name: 'param2', in: 'query' }],
+          parameters: [
+            { name: 'param1', value: 'value1' },
+            { name: 'param2', in: 'query', value: 'value2' },
+          ],
         },
       ],
       components: { parameters: {} },
@@ -188,8 +203,8 @@ describe('arazzoStepParametersValidation', () => {
         {
           workflowId: 'workflow1',
           parameters: [
-            { name: 'param1', in: 'header' },
-            { name: 'param2', in: 'query' },
+            { name: 'param1', in: 'header', value: 'value1' },
+            { name: 'param2', in: 'query', value: 'value2' },
           ],
         },
       ],
@@ -207,7 +222,10 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           operationId: 'operation1',
-          parameters: [{ name: 'param1' }, { name: 'param2' }],
+          parameters: [
+            { name: 'param1', value: 'value1' },
+            { name: 'param2', value: 'value2' },
+          ],
         },
       ],
       components: { parameters: {} },
@@ -225,10 +243,10 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           operationId: 'operation1',
-          parameters: [{ name: 'param1', in: 'query' }],
+          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
         },
       ],
-      parameters: [{ name: 'param1', in: 'query' }],
+      parameters: [{ name: 'param1', in: 'query', value: 'value2' }],
       components: { parameters: {} },
     });
 
@@ -240,16 +258,16 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           operationId: 'operation1',
-          parameters: [{ name: 'param1', in: 'query' }],
+          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
         },
         {
           operationId: 'operation2',
-          parameters: [{ name: 'param2', in: 'header' }],
+          parameters: [{ name: 'param2', in: 'header', value: 'value2' }],
         },
       ],
       parameters: [
-        { name: 'param1', in: 'header' },
-        { name: 'param2', in: 'query' },
+        { name: 'param1', in: 'header', value: 'value3' },
+        { name: 'param2', in: 'query', value: 'value4' },
       ],
       components: { parameters: {} },
     });
@@ -262,10 +280,10 @@ describe('arazzoStepParametersValidation', () => {
       steps: [
         {
           operationPath: '/path1',
-          parameters: [{ name: 'param1', in: 'query' }],
+          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
         },
       ],
-      parameters: [{ name: 'param1', in: 'query' }],
+      parameters: [{ name: 'param1', in: 'query', value: 'value2' }],
       components: { parameters: {} },
     });
 

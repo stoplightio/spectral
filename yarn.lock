@@ -2649,9 +2649,9 @@ __metadata:
     "@stoplight/spectral-formatters": ^1.3.0
     "@stoplight/spectral-parsers": ^1.0.3
     "@stoplight/spectral-ref-resolver": ^1.0.4
-    "@stoplight/spectral-ruleset-bundler": ^1.5.2
+    "@stoplight/spectral-ruleset-bundler": ^1.5.4
     "@stoplight/spectral-ruleset-migrator": ^1.9.5
-    "@stoplight/spectral-rulesets": ">=1"
+    "@stoplight/spectral-rulesets": ^1.20.1
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
     "@types/es-aggregate-error": ^1.0.2
@@ -2709,7 +2709,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formats@*, @stoplight/spectral-formats@>=1, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.7.0, @stoplight/spectral-formats@workspace:packages/formats":
+"@stoplight/spectral-formats@*, @stoplight/spectral-formats@^1.0.0, @stoplight/spectral-formats@^1.7.0, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
@@ -2785,19 +2785,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ruleset-bundler@^1.5.2, @stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler":
+"@stoplight/spectral-ruleset-bundler@^1.5.4, @stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler"
   dependencies:
     "@rollup/plugin-commonjs": ~22.0.2
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": ">=1"
-    "@stoplight/spectral-formats": ">=1"
+    "@stoplight/spectral-formats": ^1.7.0
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-migrator": ^1.7.4
-    "@stoplight/spectral-rulesets": ">=1"
+    "@stoplight/spectral-rulesets": ^1.20.1
     "@stoplight/spectral-runtime": ^1.1.0
     "@stoplight/types": ^13.6.0
     "@types/node": "*"
@@ -2839,7 +2839,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-rulesets@*, @stoplight/spectral-rulesets@>=1, @stoplight/spectral-rulesets@workspace:packages/rulesets":
+"@stoplight/spectral-rulesets@*, @stoplight/spectral-rulesets@^1.20.1, @stoplight/spectral-rulesets@workspace:packages/rulesets":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:

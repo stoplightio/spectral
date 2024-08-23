@@ -1,3 +1,4 @@
+import { default as arazzoDocumentSchema } from './arazzoDocumentSchema';
 import { default as arazzoWorkflowIdUniqueness } from './arazzoWorkflowIdUniqueness';
 import { default as arazzoStepIdUniqueness } from './arazzoStepIdUniqueness';
 import { default as arazzoWorkflowOutputNamesValidation } from './arazzoWorkflowOutputNamesValidation';
@@ -13,6 +14,7 @@ import { default as arazzoStepRequestBodyValidation } from './arazzoStepRequestB
 import { default as arazzoStepValidation } from './arazzoStepValidation';
 
 export {
+  arazzoDocumentSchema,
   arazzoWorkflowIdUniqueness,
   arazzoWorkflowOutputNamesValidation,
   arazzoStepIdUniqueness,

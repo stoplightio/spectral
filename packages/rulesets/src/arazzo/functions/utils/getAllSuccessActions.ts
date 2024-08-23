@@ -1,10 +1,38 @@
 import { isPlainObject } from '@stoplight/json';
+import arazzoRuntimeExpressionValidation from '../arazzoRuntimeExpressionValidation';
+
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  sourceDescriptions?: SourceDescription[];
+  components?: {
+    parameters?: Record<string, unknown>;
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type SourceDescription = {
+  name: string;
+  url: string;
+  type?: string;
+};
 
 type SuccessAction = {
   name: string;
   type: string;
   workflowId?: string;
   stepId?: string;
+  criteria?: Criterion[];
+};
+
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  retryAfter?: number;
+  retryLimit?: number;
   criteria?: Criterion[];
 };
 
@@ -17,105 +45,91 @@ type ReusableObject = {
 };
 
 type Step = {
+  stepId: string;
   onSuccess?: (SuccessAction | ReusableObject)[];
 };
 
 type Workflow = {
+  workflowId: string;
   steps: Step[];
   successActions?: (SuccessAction | ReusableObject)[];
-  components?: { successActions?: Record<string, SuccessAction> };
 };
 
 const resolveReusableSuccessActions = (
   reusableObject: ReusableObject,
-  components: Record<string, SuccessAction>,
+  arazzoSpec: ArazzoSpecification,
 ): SuccessAction | undefined => {
-  const refPath = reusableObject.reference.split('.').slice(1).join('.');
-  return components[refPath];
+  const refPath = reusableObject.reference.replace('$components.successActions.', '');
+  return arazzoSpec.components?.successActions?.[refPath];
 };
 
 function isSuccessAction(action: unknown): action is SuccessAction {
-  if (typeof action === 'object' && action !== null) {
-    const obj = action as Record<string, unknown>;
-    return typeof obj.name === 'string' && typeof obj.type === 'string';
-  }
-  return false;
+  return typeof action === 'object' && action !== null && 'name' in action && 'type' in action;
 }
 
 export default function getAllSuccessActions(
   step: Step,
   workflow: Workflow,
-  components: Record<string, SuccessAction>,
+  arazzoSpec: ArazzoSpecification,
 ): SuccessAction[] {
   const resolvedSuccessActions: SuccessAction[] = [];
   const resolvedStepSuccessActions: SuccessAction[] = [];
 
+  const processReusableAction = (action: ReusableObject): SuccessAction => {
+    const actionName = action.reference;
+
+    if (!arazzoRuntimeExpressionValidation(action.reference, arazzoSpec)) {
+      return { name: `masked-invalid-reusable-success-action-reference-${actionName}`, type: '' };
+    }
+
+    const resolvedAction = resolveReusableSuccessActions(action, arazzoSpec);
+    if (!resolvedAction) {
+      return { name: `masked-non-existing-success-action-reference-${actionName}`, type: '' };
+    }
+
+    return resolvedAction;
+  };
+
+  const resolveActions = (actions: (SuccessAction | ReusableObject)[], targetArray: SuccessAction[]): void => {
+    actions.forEach(action => {
+      let actionToPush: SuccessAction;
+
+      if (isPlainObject(action) && 'reference' in action) {
+        actionToPush = processReusableAction(action);
+      } else {
+        actionToPush = action;
+      }
+
+      if (isSuccessAction(actionToPush)) {
+        const isDuplicate = targetArray.some(existingAction => existingAction.name === actionToPush.name);
+
+        if (isDuplicate) {
+          actionToPush = {
+            ...actionToPush,
+            name: `masked-duplicate-${actionToPush.name}`,
+          };
+        }
+
+        targetArray.push(actionToPush);
+      }
+    });
+  };
+
+  // Process workflow-level success actions
   if (workflow.successActions) {
-    workflow.successActions.forEach(action => {
-      let actionToPush = action;
-
-      if (isPlainObject(action) && 'reference' in action) {
-        const resolvedAction = resolveReusableSuccessActions(action, components);
-        if (resolvedAction) {
-          actionToPush = resolvedAction;
-        }
-      }
-
-      if (isSuccessAction(actionToPush)) {
-        const isDuplicate = resolvedSuccessActions.some(
-          existingAction =>
-            isSuccessAction(existingAction) &&
-            isSuccessAction(actionToPush) &&
-            existingAction.name === actionToPush.name,
-        );
-
-        if (isDuplicate) {
-          actionToPush = {
-            ...actionToPush,
-            name: `masked-duplicate-${actionToPush.name}`,
-          };
-        }
-
-        resolvedSuccessActions.push(actionToPush);
-      }
-    });
+    resolveActions(workflow.successActions, resolvedSuccessActions);
   }
 
+  // Process step-level success actions
   if (step.onSuccess) {
-    step.onSuccess.forEach(action => {
-      let actionToPush = action;
-
-      if (isPlainObject(action) && 'reference' in action) {
-        const resolvedAction = resolveReusableSuccessActions(action, components);
-        if (resolvedAction) {
-          actionToPush = resolvedAction;
-        }
-      }
-
-      if (isSuccessAction(actionToPush)) {
-        const isDuplicate = resolvedStepSuccessActions.some(
-          existingAction =>
-            isSuccessAction(existingAction) &&
-            isSuccessAction(actionToPush) &&
-            existingAction.name === actionToPush.name,
-        );
-
-        if (isDuplicate) {
-          actionToPush = {
-            ...actionToPush,
-            name: `masked-duplicate-${actionToPush.name}`,
-          };
-        }
-
-        resolvedStepSuccessActions.push(actionToPush);
-      }
-    });
+    resolveActions(step.onSuccess, resolvedStepSuccessActions);
   }
 
+  // Merge step actions into workflow actions, overriding duplicates
   resolvedStepSuccessActions.forEach(action => {
     const existingActionIndex = resolvedSuccessActions.findIndex(a => a.name === action.name);
     if (existingActionIndex !== -1) {
-      resolvedSuccessActions[existingActionIndex] = action;
+      resolvedSuccessActions[existingActionIndex] = action; // Override workflow action with step action
     } else {
       resolvedSuccessActions.push(action);
     }

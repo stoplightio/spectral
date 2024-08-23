@@ -4,35 +4,80 @@ import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidati
 
 const OUTPUT_NAME_PATTERN = /^[a-zA-Z0-9.\-_]+$/;
 
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  sourceDescriptions?: SourceDescription[];
+  components?: {
+    parameters?: Record<string, unknown>;
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type SourceDescription = {
+  name: string;
+  url: string;
+  type?: string;
+};
+
+type SuccessAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
 type Workflow = {
+  workflowId: string;
   steps: Step[];
+  outputs?: Record<string, string>;
 };
 
 type Step = {
   stepId: string;
-  outputs?: { [key: string]: string };
+  outputs?: Record<string, string>;
 };
 
-export default createRulesetFunction<
-  { steps: Array<{ outputs?: [string, string][] }> }, // Updated type to accept array of entries
-  null
->(
+type Criterion = {
+  context?: string;
+  condition: string;
+  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
+};
+
+type CriterionExpressionType = {
+  type: 'jsonpath' | 'xpath';
+  version: string;
+};
+
+export default createRulesetFunction<ArazzoSpecification, null>(
   {
     input: {
       type: 'object',
       properties: {
-        steps: {
+        workflows: {
           type: 'array',
           items: {
             type: 'object',
             properties: {
-              outputs: {
-                type: 'array', // Updated type to array
+              steps: {
+                type: 'array',
                 items: {
-                  type: 'array',
-                  minItems: 2,
-                  maxItems: 2,
-                  items: [{ type: 'string' }, { type: 'string' }],
+                  type: 'object',
+                  properties: {
+                    outputs: {
+                      type: 'object',
+                      additionalProperties: { type: 'string' },
+                    },
+                  },
                 },
               },
             },
@@ -42,41 +87,53 @@ export default createRulesetFunction<
     },
     options: null,
   },
-  function arazzoStepOutputNamesValidation(targetVal, _opts, context) {
+  function arazzoStepOutputNamesValidation(targetVal, _opts) {
     const results: IFunctionResult[] = [];
 
-    targetVal.steps.forEach((step, stepIndex) => {
-      if (step.outputs) {
-        const seenOutputNames = new Set<string>();
+    if (!Array.isArray(targetVal.workflows)) {
+      return results;
+    }
 
-        step.outputs.forEach(([outputName, outputValue]) => {
-          // Validate output name
-          if (!OUTPUT_NAME_PATTERN.test(outputName)) {
-            results.push({
-              message: `"${outputName}" does not match the required pattern "^[a-zA-Z0-9.\\-_]+$".`,
-              path: ['steps', stepIndex, 'outputs', outputName] as JsonPath,
-            });
-          }
+    targetVal.workflows.forEach((workflow, workflowIndex) => {
+      workflow.steps.forEach((step, stepIndex) => {
+        if (step.outputs && typeof step.outputs === 'object') {
+          const seenOutputNames = new Set<string>();
 
-          // Check for uniqueness within the step
-          if (seenOutputNames.has(outputName)) {
-            results.push({
-              message: `"${outputName}" must be unique within the step outputs.`,
-              path: ['steps', stepIndex, 'outputs', outputName] as JsonPath,
-            });
-          } else {
-            seenOutputNames.add(outputName);
-          }
+          Object.entries(step.outputs).forEach(([outputName, outputValue], outputIndex) => {
+            // Validate output name
+            if (!OUTPUT_NAME_PATTERN.test(outputName)) {
+              results.push({
+                message: `"${outputName}" does not match the required pattern "^[a-zA-Z0-9.\\-_]+$".`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'outputs', outputName, outputIndex] as JsonPath,
+              });
+            }
 
-          // Validate runtime expression
-          if (!arazzoRuntimeExpressionValidation(outputValue, context.document as unknown as Workflow)) {
-            results.push({
-              message: `"${outputValue}" is not a valid runtime expression.`,
-              path: ['steps', stepIndex, 'outputs', outputName] as JsonPath,
-            });
-          }
-        });
-      }
+            // Check for uniqueness within the step
+            if (seenOutputNames.has(outputName)) {
+              results.push({
+                message: `"${outputName}" must be unique within the step outputs.`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'outputs', outputName, outputIndex] as JsonPath,
+              });
+            } else {
+              seenOutputNames.add(outputName);
+            }
+
+            // Validate runtime expression
+            if (
+              !arazzoRuntimeExpressionValidation(
+                outputValue,
+                targetVal as unknown as ArazzoSpecification,
+                workflowIndex,
+              )
+            ) {
+              results.push({
+                message: `"${outputValue}" is not a valid runtime expression.`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'outputs', outputName, outputIndex] as JsonPath,
+              });
+            }
+          });
+        }
+      });
     });
 
     return results;

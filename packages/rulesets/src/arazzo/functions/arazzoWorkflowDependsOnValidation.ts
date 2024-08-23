@@ -10,29 +10,72 @@ type SourceDescription = {
 
 type Workflow = {
   workflowId: string;
+  steps: Step[];
   dependsOn?: string[];
 };
 
-type Document = {
-  workflows: Workflow[];
-  sourceDescriptions: SourceDescription[];
+type Step = {
+  stepId: string;
+  outputs?: { [key: string]: string };
 };
 
-export default function arazzoWorkflowDependsOnValidation(targetVal: Document, _options: null): IFunctionResult[] {
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  sourceDescriptions?: SourceDescription[];
+  components?: {
+    parameters?: Record<string, unknown>;
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type SuccessAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type Criterion = {
+  context?: string;
+  condition: string;
+  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
+};
+
+type CriterionExpressionType = {
+  type: 'jsonpath' | 'xpath';
+  version: string;
+};
+
+export default function arazzoWorkflowDependsOnValidation(
+  targetVal: ArazzoSpecification,
+  _options: null,
+): IFunctionResult[] {
   const results: IFunctionResult[] = [];
   const localWorkflowIds = new Set<string>();
-  const sourceDescriptionNames = new Map(targetVal.sourceDescriptions.map(sd => [sd.name, sd.type]));
+  const sourceDescriptionNames = new Map((targetVal.sourceDescriptions ?? []).map(sd => [sd.name, sd.type]));
 
-  for (const { workflow } of getAllWorkflows(targetVal)) {
+  const workflows = targetVal.workflows ?? [];
+  for (const { workflow } of getAllWorkflows({ workflows })) {
     if ('workflowId' in workflow && typeof workflow.workflowId === 'string') {
       localWorkflowIds.add(workflow.workflowId);
     }
   }
 
-  for (const { workflow, path } of getAllWorkflows(targetVal)) {
+  for (const { workflow, path } of getAllWorkflows({ workflows })) {
     const seenWorkflows = new Set<string>();
 
-    if (Boolean(workflow.dependsOn) && Array.isArray(workflow.dependsOn)) {
+    if (Array.isArray(workflow.dependsOn)) {
       workflow.dependsOn.forEach((dep: string | unknown, depIndex: number) => {
         if (typeof dep !== 'string') {
           return; // Skip non-string dependencies
@@ -50,7 +93,7 @@ export default function arazzoWorkflowDependsOnValidation(targetVal: Document, _
         }
 
         if (dep.startsWith('$')) {
-          if (!arazzoRuntimeExpressionValidation(dep)) {
+          if (!arazzoRuntimeExpressionValidation(dep, targetVal)) {
             results.push({
               message: `Runtime expression "${dep}" is invalid.`,
               path: [...path, 'dependsOn', depIndex],

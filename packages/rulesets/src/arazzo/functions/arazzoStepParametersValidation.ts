@@ -126,15 +126,15 @@ export default createRulesetFunction<
       const stepParams = getAllParameters(step, workflow, components.parameters ?? {});
 
       // Check for duplicate parameters within the step
-      const paramSet = new Set();
-      for (const param of stepParams) {
+      const paramSet = new Set<string>();
+      for (const [paramIndex, param] of stepParams.entries()) {
         const key = `${param.name}-${param.in ?? ''}`;
         if (paramSet.has(key)) {
           results.push({
             message: `"${param.name}" with "in" value "${
               param.in ?? ''
             }" must be unique within the combined parameters.`,
-            path: ['steps', stepIndex, 'parameters', stepParams.indexOf(param)],
+            path: ['steps', stepIndex, 'parameters', paramIndex],
           });
         } else {
           paramSet.add(key);

@@ -1,5 +1,7 @@
 import { arazzo1_0 } from '@stoplight/spectral-formats';
+import { truthy, falsy, pattern } from '@stoplight/spectral-functions';
 
+import arazzoDocumentSchema from './functions/arazzoDocumentSchema';
 import arazzoWorkflowIdUniqueness from './functions/arazzoWorkflowIdUniqueness';
 import arazzoStepIdUniqueness from './functions/arazzoStepIdUniqueness';
 import arazzoWorkflowOutputNamesValidation from './functions/arazzoWorkflowOutputNamesValidation';
@@ -16,65 +18,83 @@ export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/arazzo-rules.md',
   formats: [arazzo1_0],
   rules: {
+    'arazzo-document-schema': {
+      description: 'Arazzo Document must be valid against the Arazzo schema.',
+      message: '{{error}}',
+      recommended: true,
+      severity: 0,
+      given: '$',
+      then: {
+        function: arazzoDocumentSchema,
+      },
+    },
     'arazzo-workflowId-unique': {
       description: 'Every workflow must have unique "workflowId".',
       recommended: true,
       severity: 0,
-      given: '$.workflows',
+      given: '$',
       then: {
         function: arazzoWorkflowIdUniqueness,
       },
     },
     'arazzo-workflow-output-names-validation': {
-      description: 'Every workflow output must have unique name.',
+      description: 'Every workflow output must have unique name and its value must be a valid runtime expression.',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.workflows[*].outputs',
+      given: '$',
       then: {
         function: arazzoWorkflowOutputNamesValidation,
       },
     },
     'arazzo-workflow-stepId-unique': {
       description: 'Every step must have unique "stepId".',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.steps',
+      given: '$.workflows[*]',
       then: {
         function: arazzoStepIdUniqueness,
       },
     },
     'arazzo-step-output-names-validation': {
-      description: 'Every step output must have unique name.',
+      description: 'Every step output must have unique name and its value must be a valid runtime expression.',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.steps[*].outputs',
+      given: '$',
       then: {
         function: arazzoStepOutputNamesValidation,
       },
     },
     'arazzo-step-parameters-validation': {
       description: 'Step parameters and workflow parameters must be independently unique.',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.workflow[*]',
+      given: '$.workflows[*]',
       then: {
         function: arazzoStepParametersValidation,
       },
     },
     'arazzo-step-failure-actions-validation': {
-      description: 'Every failure action must have a unique name and "workflowId" and "stepId" are mutually exclusive.',
+      description:
+        'Every failure action must have a unique "name", and the fields "workflowId" and "stepId" are mutually exclusive.',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.workflows[*]',
+      given: '$',
       then: {
         function: arazzoStepFailureActionsValidation,
       },
     },
     'arazzo-step-success-actions-validation': {
-      description: 'Every success action must have a unique name and "workflowId" and "stepId" are mutually exclusive.',
+      description:
+        'Every success action must have a unique "name", and the fields "workflowId" and "stepId" are mutually exclusive.',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.workflows[*]',
+      given: '$',
       then: {
         function: arazzoStepSuccessActionsValidation,
       },
@@ -83,13 +103,14 @@ export default {
       description: 'Every workflow dependency must be valid.',
       recommended: true,
       severity: 0,
-      given: '$.workflows[*]',
+      given: '$',
       then: {
         function: arazzoWorkflowDependsOnValidation,
       },
     },
     'arazzo-step-success-criteria-validation': {
       description: 'Every success criteria must have a valid context, conditions, and types.',
+      message: `{{error}}`,
       recommended: true,
       severity: 0,
       given: '$.workflows[*]',
@@ -107,12 +128,130 @@ export default {
       },
     },
     'arazzo-step-validation': {
-      description: 'Every step must have a valid "stepId", "operationId", "operationPath", and "onSuccess" and "onFailure" actions.',
+      description:
+        'Every step must have a valid "stepId" and an valid "operationId" or "operationPath" or "workflowId".',
       recommended: true,
       severity: 0,
-      given: '$.workflows[*]',
+      given: '$',
       then: {
         function: arazzoStepValidation,
+      },
+    },
+    'arazzo-no-script-tags-in-markdown': {
+      description: 'Markdown descriptions must not have "<script>" tags.',
+      recommended: true,
+      given: '$..[description,title]',
+      then: {
+        function: pattern,
+        functionOptions: {
+          notMatch: '<script',
+        },
+      },
+    },
+    'arazzo-info-description': {
+      description: 'Info "description" should be present and non-empty string.',
+      recommended: true,
+      severity: 'warn',
+      given: '$',
+      then: {
+        field: 'info.description',
+        function: truthy,
+      },
+    },
+    'arazzo-info-summary': {
+      description: 'Info "summary" should be present and non-empty string.',
+      recommended: true,
+      severity: 'hint',
+      given: '$',
+      then: {
+        field: 'info.summary',
+        function: truthy,
+      },
+    },
+    'arazzo-source-descriptions-type': {
+      description: 'Source Description "type" should be present.',
+      recommended: true,
+      severity: 'warn',
+      given: '$.sourceDescriptions[*]',
+      then: {
+        field: 'type',
+        function: truthy,
+      },
+    },
+    'arazzo-workflow-workflowId': {
+      description: 'Workflow "workflowId" should follow the pattern "^[A-Za-z0-9_\\-]+$".',
+      recommended: true,
+      severity: 'warn',
+      given: '$.workflows[*]',
+      then: {
+        field: 'workflowId',
+        function: pattern,
+        functionOptions: {
+          match: '^[A-Za-z0-9_\\-]+$',
+        },
+      },
+    },
+    'arazzo-workflow-description': {
+      description: 'Workflow "description" should be present and non-empty string.',
+      recommended: true,
+      severity: 'warn',
+      given: '$.workflows[*]',
+      then: {
+        field: 'description',
+        function: truthy,
+      },
+    },
+    'arazzo-workflow-summary': {
+      description: 'Workflow "summary" should be present and non-empty string.',
+      recommended: true,
+      severity: 'hint',
+      given: '$.workflows[*]',
+      then: {
+        field: 'summary',
+        function: truthy,
+      },
+    },
+    'arazzo-step-description': {
+      description: 'Step "description" should be present and non-empty string.',
+      recommended: true,
+      severity: 'warn',
+      given: '$.workflows[*].steps[*]',
+      then: {
+        field: 'description',
+        function: truthy,
+      },
+    },
+    'arazzo-step-summary': {
+      description: 'Step "summary" should be present and non-empty string.',
+      recommended: true,
+      severity: 'hint',
+      given: '$.workflows[*].steps[*]',
+      then: {
+        field: 'summary',
+        function: truthy,
+      },
+    },
+    'arazzo-step-stepId': {
+      description: 'Step "stepId" should follow the pattern "^[A-Za-z0-9_\\-]+$".',
+      recommended: true,
+      severity: 'warn',
+      given: '$.workflows[*].steps[*]',
+      then: {
+        field: 'stepId',
+        function: pattern,
+        functionOptions: {
+          match: '^[A-Za-z0-9_\\-]+$',
+        },
+      },
+    },
+    'arazzo-step-operationPath': {
+      description: 'It is recommended to use "operationId" rather than "operationPath".',
+      recommended: true,
+      severity: 'hint',
+      given: '$.workflows[*].steps[*]',
+      then: {
+        field: 'operationPath',
+        function: falsy,
       },
     },
   },

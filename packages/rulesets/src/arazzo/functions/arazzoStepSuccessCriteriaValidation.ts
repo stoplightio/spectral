@@ -18,24 +18,39 @@ type Step = {
 };
 
 type Workflow = {
+  workflowId: string;
   steps: Step[];
 };
 
-export default function validateSuccessCriteria(targetVal: Workflow, _options: null): IFunctionResult[] {
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  components?: object;
+};
+
+export default function arazzoStepSuccessCriteriaValidation(
+  targetVal: ArazzoSpecification,
+  _options: null,
+): IFunctionResult[] {
   const results: IFunctionResult[] = [];
 
-  targetVal.steps.forEach((step, stepIndex) => {
-    if (step.successCriteria) {
-      step.successCriteria.forEach((criterion, criterionIndex) => {
-        const criterionResults = arazzoCriterionValidation(
-          criterion,
-          ['steps', stepIndex, 'successCriteria', criterionIndex],
-          targetVal,
-        );
-        results.push(...criterionResults);
-      });
-    }
-  });
+  if (Array.isArray(targetVal.workflows)) {
+    targetVal.workflows.forEach((workflow, workflowIndex) => {
+      if (Array.isArray(workflow.steps)) {
+        workflow.steps.forEach((step, stepIndex) => {
+          if (Array.isArray(step.successCriteria)) {
+            step.successCriteria.forEach((criterion, criterionIndex) => {
+              const criterionResults = arazzoCriterionValidation(
+                criterion,
+                ['workflows', workflowIndex, 'steps', stepIndex, 'successCriteria', criterionIndex],
+                targetVal,
+              );
+              results.push(...criterionResults);
+            });
+          }
+        });
+      }
+    });
+  }
 
   return results;
 }

@@ -1,4 +1,4 @@
-import { IFunctionResult } from '@stoplight/spectral-core';
+import type { IFunctionResult } from '@stoplight/spectral-core';
 import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
 
 type SourceDescription = {
@@ -7,89 +7,153 @@ type SourceDescription = {
   type?: string;
 };
 
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  sourceDescriptions?: SourceDescription[];
+  components?: {
+    parameters?: Record<string, unknown>;
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type Workflow = {
+  workflowId: string;
+  steps: Step[];
+  successActions?: (SuccessAction | ReusableObject)[];
+  failureActions?: (FailureAction | ReusableObject)[];
+  outputs?: Record<string, string>;
+};
+
 type Step = {
   stepId: string;
   operationId?: string;
   operationPath?: string;
   workflowId?: string;
+  outputs?: Record<string, string>;
+  onSuccess?: (SuccessAction | ReusableObject)[];
+  onFailure?: (FailureAction | ReusableObject)[];
 };
 
-type Workflow = {
-  steps: Step[];
-  sourceDescriptions: SourceDescription[];
+type SuccessAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
 };
 
-const OPERATION_PATH_REGEX = /^\{\$sourceDescriptions\.[a-zA-Z0-9_-]+\.(url)\}$/;
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
 
-export default function arazzoStepValidation(targetVal: Workflow, _options: null): IFunctionResult[] {
+type Criterion = {
+  context?: string;
+  condition: string;
+  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
+};
+
+type CriterionExpressionType = {
+  type: 'jsonpath' | 'xpath';
+  version: string;
+};
+
+type ReusableObject = {
+  reference: string;
+};
+
+const OPERATION_PATH_REGEX = /^\{\$sourceDescriptions\.[a-zA-Z0-9_-]+\.(url)\}#.+$/;
+
+export default function arazzoStepValidation(targetVal: ArazzoSpecification, _options: null): IFunctionResult[] {
   const results: IFunctionResult[] = [];
+
+  if (!Array.isArray(targetVal.sourceDescriptions) || targetVal.sourceDescriptions.length === 0) {
+    results.push({
+      message: 'sourceDescriptions is missing in the Arazzo Specification.',
+      path: ['sourceDescriptions'],
+    });
+    return results;
+  }
+
   const sourceDescriptionNames = new Set(targetVal.sourceDescriptions.map(sd => sd.name));
 
-  targetVal.steps.forEach((step, stepIndex) => {
-    const { operationId, operationPath, workflowId } = step;
-
-    // Validate operationId
-    if (operationId != null) {
-      if (operationId.startsWith('$')) {
-        if (!arazzoRuntimeExpressionValidation(operationId)) {
-          results.push({
-            message: `Runtime expression "${operationId}" is invalid in step "${step.stepId}".`,
-            path: ['steps', stepIndex, 'operationId'],
-          });
-        }
-
-        const parts = operationId.split('.');
-        const sourceName = parts[1];
-
-        if (!sourceDescriptionNames.has(sourceName)) {
-          results.push({
-            message: `Source description "${sourceName}" not found for operationId "${operationId}" in step "${step.stepId}".`,
-            path: ['steps', stepIndex, 'operationId'],
-          });
-        }
-      }
+  targetVal.workflows.forEach((workflow, workflowIndex) => {
+    if (!Array.isArray(workflow.steps)) {
+      // If the steps array is not defined or is not an array, skip this workflow
+      return;
     }
 
-    // Validate operationPath as JSON Pointer with correct format
-    if (operationPath != null) {
-      if (!OPERATION_PATH_REGEX.test(operationPath)) {
-        results.push({
-          message: `OperationPath "${operationPath}" must be a valid runtime expression following the format "{$sourceDescriptions.<name>.url}".`,
-          path: ['steps', stepIndex, 'operationPath'],
-        });
-      } else {
-        const sourceName = operationPath.split('.')[1];
+    workflow.steps.forEach((step, stepIndex) => {
+      const { operationId, operationPath, workflowId } = step;
 
-        if (!sourceDescriptionNames.has(sourceName)) {
-          results.push({
-            message: `Source description "${sourceName}" not found for operationPath "${operationPath}" in step "${step.stepId}".`,
-            path: ['steps', stepIndex, 'operationPath'],
-          });
+      // Validate operationId
+      if (operationId != null) {
+        if (operationId.startsWith('$')) {
+          if (!arazzoRuntimeExpressionValidation(operationId, targetVal)) {
+            results.push({
+              message: `Runtime expression "${operationId}" is invalid in step "${step.stepId}".`,
+              path: ['workflows', workflowIndex, 'steps', stepIndex, 'operationId'],
+            });
+          }
+
+          const parts = operationId.split('.');
+          const sourceName = parts[1];
+
+          if (!sourceDescriptionNames.has(sourceName)) {
+            results.push({
+              message: `Source description "${sourceName}" not found for operationId "${operationId}" in step "${step.stepId}".`,
+              path: ['workflows', workflowIndex, 'steps', stepIndex, 'operationId'],
+            });
+          }
         }
       }
-    }
 
-    // Validate workflowId
-    if (workflowId != null) {
-      if (workflowId.startsWith('$')) {
-        if (!arazzoRuntimeExpressionValidation(workflowId)) {
+      // Validate operationPath as JSON Pointer with correct format
+      if (operationPath != null) {
+        if (!OPERATION_PATH_REGEX.test(operationPath)) {
           results.push({
-            message: `Runtime expression "${workflowId}" is invalid in step "${step.stepId}".`,
-            path: ['steps', stepIndex, 'workflowId'],
+            message: `OperationPath "${operationPath}" must be a valid runtime expression following the format "{$sourceDescriptions.<name>.url}#<json-pointer>".`,
+            path: ['workflows', workflowIndex, 'steps', stepIndex, 'operationPath'],
           });
-        }
+        } else {
+          const sourceName = operationPath.split('.')[1];
 
-        const parts = workflowId.split('.');
-        const sourceName = parts[1];
-
-        if (!sourceDescriptionNames.has(sourceName)) {
-          results.push({
-            message: `Source description "${sourceName}" not found for workflowId "${workflowId}" in step "${step.stepId}".`,
-            path: ['steps', stepIndex, 'workflowId'],
-          });
+          if (!sourceDescriptionNames.has(sourceName)) {
+            results.push({
+              message: `Source description "${sourceName}" not found for operationPath "${operationPath}" in step "${step.stepId}".`,
+              path: ['workflows', workflowIndex, 'steps', stepIndex, 'operationPath'],
+            });
+          }
         }
       }
-    }
+
+      // Validate workflowId
+      if (workflowId != null) {
+        if (workflowId.startsWith('$')) {
+          if (!arazzoRuntimeExpressionValidation(workflowId)) {
+            results.push({
+              message: `Runtime expression "${workflowId}" is invalid in step "${step.stepId}".`,
+              path: ['workflows', workflowIndex, 'steps', stepIndex, 'workflowId'],
+            });
+          }
+
+          const parts = workflowId.split('.');
+          const sourceName = parts[1];
+
+          if (!sourceDescriptionNames.has(sourceName)) {
+            results.push({
+              message: `Source description "${sourceName}" not found for workflowId "${workflowId}" in step "${step.stepId}".`,
+              path: ['workflows', workflowIndex, 'steps', stepIndex, 'workflowId'],
+            });
+          }
+        }
+      }
+    });
   });
 
   return results;

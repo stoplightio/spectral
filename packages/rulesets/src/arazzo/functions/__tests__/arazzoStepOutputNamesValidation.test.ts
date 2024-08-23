@@ -3,7 +3,16 @@ import { DeepPartial } from '@stoplight/types';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
 
 const runRule = (
-  target: { steps: Array<{ outputs?: [string, string][] }> },
+  target: {
+    workflows: Array<{
+      workflowId: string;
+      steps: Array<{
+        stepId: string;
+        outputs?: { [key: string]: string };
+      }>;
+    }>;
+    components?: Record<string, unknown>;
+  },
   contextOverrides: Partial<RulesetFunctionContext> = {},
 ) => {
   const context: DeepPartial<RulesetFunctionContext> = {
@@ -25,14 +34,23 @@ const runRule = (
 describe('arazzoStepOutputNamesValidation', () => {
   test('should not report any errors for valid and unique output names', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          outputs: [
-            ['output1', '$url'],
-            ['output2', '$response.body#/status'],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              outputs: {
+                output1: '$url',
+                output2: '$response.body#/status',
+              },
+              stepId: 'step1',
+            },
+            {
+              outputs: { output3: '$steps.step1.outputs.output1' },
+              stepId: 'step2',
+            },
           ],
         },
-        { outputs: [['output3', '$steps.foo.outputs.bar']] },
       ],
     });
 
@@ -41,11 +59,17 @@ describe('arazzoStepOutputNamesValidation', () => {
 
   test('should report an error for invalid output names', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          outputs: [
-            ['invalid name', '$url'],
-            ['output2', '$statusCode'],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              outputs: {
+                'invalid name': '$url',
+                output2: '$statusCode',
+              },
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -54,35 +78,50 @@ describe('arazzoStepOutputNamesValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `"invalid name" does not match the required pattern "^[a-zA-Z0-9.\\-_]+$".`,
-      path: ['steps', 0, 'outputs', 'invalid name'],
+      path: ['workflows', 0, 'steps', 0, 'outputs', 'invalid name', 0],
     });
   });
 
-  test('should report an error for duplicate output names within the same step', () => {
+  test('should report an error for invalid step name in output expression', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          outputs: [
-            ['output1', '$statusCode'],
-            ['output2', '$url'],
-            ['output1', '$statusCode'],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              outputs: {
+                output1: '$statusCode',
+              },
+              stepId: 'step1',
+            },
+            {
+              outputs: {
+                foo: '$steps.non-existing-step.outputs.output1',
+              },
+              stepId: 'step2',
+            },
           ],
-        }, // Duplicate key simulated here
+        },
       ],
     });
 
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
-      message: `"output1" must be unique within the step outputs.`,
-      path: ['steps', 0, 'outputs', 'output1'],
+      message: `"$steps.non-existing-step.outputs.output1" is not a valid runtime expression.`,
+      path: ['workflows', 0, 'steps', 1, 'outputs', 'foo', 0],
     });
   });
 
   test('should not report an error for duplicate output names across different steps', () => {
     const results = runRule({
-      steps: [
-        { outputs: [['output1', '$response.body']] },
-        { outputs: [['output1', '$response.body']] }, // Duplicate output name across different steps
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            { outputs: { output1: '$response.body' }, stepId: 'step1' },
+            { outputs: { output1: '$response.body' }, stepId: 'step2' }, // Duplicate output name across different steps
+          ],
+        },
       ],
     });
 
@@ -91,11 +130,17 @@ describe('arazzoStepOutputNamesValidation', () => {
 
   test('should not report any errors for valid runtime expressions', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          outputs: [
-            ['output1', '$response.body#/status'],
-            ['output2', '$steps.step1.outputs.value'],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              outputs: {
+                output1: '$response.body#/status',
+                output2: '$steps.step1.outputs.value',
+              },
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -106,27 +151,14 @@ describe('arazzoStepOutputNamesValidation', () => {
 
   test('should report an error for invalid runtime expressions', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          outputs: [['output1', 'invalid expression']],
-        },
-      ],
-    });
-
-    expect(results).toHaveLength(1);
-    expect(results[0]).toMatchObject({
-      message: `"invalid expression" is not a valid runtime expression.`,
-      path: ['steps', 0, 'outputs', 'output1'],
-    });
-  });
-
-  test('should handle valid and invalid expressions mixed', () => {
-    const results = runRule({
-      steps: [
-        {
-          outputs: [
-            ['validOutput', '$response.body#/status'],
-            ['invalidOutput', 'invalid expression'],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              outputs: { output1: 'invalid expression' },
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -135,7 +167,32 @@ describe('arazzoStepOutputNamesValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `"invalid expression" is not a valid runtime expression.`,
-      path: ['steps', 0, 'outputs', 'invalidOutput'],
+      path: ['workflows', 0, 'steps', 0, 'outputs', 'output1', 0],
+    });
+  });
+
+  test('should handle valid and invalid expressions mixed', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              outputs: {
+                validOutput: '$response.body#/status',
+                invalidOutput: 'invalid expression',
+              },
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `"invalid expression" is not a valid runtime expression.`,
+      path: ['workflows', 0, 'steps', 0, 'outputs', 'invalidOutput', 1],
     });
   });
 });

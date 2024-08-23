@@ -14,17 +14,24 @@ type Criterion = {
 
 type Step = {
   stepId: string;
-  successCriteria?: Criterion[];
+  outputs?: { [key: string]: string };
 };
 
 type Workflow = {
+  workflowId: string;
   steps: Step[];
+  outputs?: { [key: string]: string };
+};
+
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  components?: { [key: string]: any };
 };
 
 export default function arazzoCriterionValidation(
   criterion: Criterion,
   contextPath: (string | number)[],
-  workflow: Workflow, // Assuming you have access to the Workflow or document object
+  arazzoSpec: ArazzoSpecification, // Updated from Workflow to ArazzoSpecification
 ): IFunctionResult[] {
   const results: IFunctionResult[] = [];
 
@@ -54,6 +61,7 @@ export default function arazzoCriterionValidation(
       });
     }
   }
+
   // Validate regex pattern
   if (criterion.type === 'regex') {
     try {
@@ -67,7 +75,7 @@ export default function arazzoCriterionValidation(
   }
 
   // Validate context using arazzoRuntimeExpressionValidation
-  if (criterion.context != null && !validateRuntimeExpression(criterion.context, workflow)) {
+  if (criterion.context != null && !validateRuntimeExpression(criterion.context, arazzoSpec)) {
     results.push({
       message: `"context" contains an invalid runtime expression.`,
       path: [...contextPath, 'context'],
