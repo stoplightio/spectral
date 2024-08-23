@@ -133,7 +133,7 @@ export default function arazzoStepFailureActionsValidation(
                   }
                 }
 
-                if (action.stepId) {
+                if (action.stepId != null) {
                   if (!workflow.steps.some(s => s.stepId === action.stepId)) {
                     results.push({
                       message: `"stepId" "${action.stepId}" does not exist within the current workflow.`,
