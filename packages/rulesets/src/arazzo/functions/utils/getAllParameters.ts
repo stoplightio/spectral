@@ -1,8 +1,56 @@
 import { isPlainObject } from '@stoplight/json';
+import arazzoRuntimeExpressionValidation from '../arazzoRuntimeExpressionValidation';
 
 type Parameter = {
   name: string;
   in?: string;
+  value?: unknown;
+};
+
+type Workflow = {
+  workflowId: string;
+  steps: Step[];
+  parameters?: (Parameter | ReusableObject)[];
+  components?: { parameters?: Record<string, Parameter> };
+};
+
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  sourceDescriptions?: SourceDescription[];
+  components?: {
+    parameters?: Record<string, Parameter>;
+    successActions?: Record<string, SuccessAction>;
+    failureActions?: Record<string, FailureAction>;
+    [key: string]: unknown;
+  };
+};
+
+type SourceDescription = {
+  name: string;
+  url: string;
+  type?: string;
+};
+
+type FailureAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  retryAfter?: number;
+  retryLimit?: number;
+  criteria?: Criterion[];
+};
+
+type SuccessAction = {
+  name: string;
+  type: string;
+  workflowId?: string;
+  stepId?: string;
+  criteria?: Criterion[];
+};
+
+type Criterion = {
+  condition: string;
 };
 
 type ReusableObject = {
@@ -10,20 +58,17 @@ type ReusableObject = {
 };
 
 type Step = {
+  stepId: string;
   parameters?: (Parameter | ReusableObject)[];
+  onFailure?: (FailureAction | ReusableObject)[];
 };
 
-type Workflow = {
-  parameters?: (Parameter | ReusableObject)[];
-  components?: { parameters?: Record<string, Parameter> };
-};
-
-const resolveReusableParameters = (
+const resolveReusableParameter = (
   reusableObject: ReusableObject,
-  components: Record<string, Parameter>,
+  arazzoSpec: ArazzoSpecification,
 ): Parameter | undefined => {
   const refPath = reusableObject.reference.replace('$components.parameters.', '');
-  return components[refPath];
+  return arazzoSpec.components?.parameters?.[refPath];
 };
 
 function isParameter(param: unknown): param is Parameter {
@@ -34,27 +79,38 @@ function isParameter(param: unknown): param is Parameter {
   return false;
 }
 
-export default function getAllParameters(
-  step: Step,
-  workflow: Workflow,
-  components: Record<string, Parameter>,
-): Parameter[] {
+export default function getAllParameters(step: Step, workflow: Workflow, arazzoSpec: ArazzoSpecification): Parameter[] {
   const resolvedParameters: Parameter[] = [];
   const resolvedStepParameters: Parameter[] = [];
 
-  if (workflow.parameters) {
-    workflow.parameters.forEach(param => {
-      let paramToPush = param;
+  const processReusableParameter = (param: ReusableObject): Parameter => {
+    const paramName = param.reference;
+
+    if (!arazzoRuntimeExpressionValidation(param.reference, arazzoSpec)) {
+      return { name: `masked-invalid-reusable-parameter-reference-${paramName}` };
+    }
+
+    const resolvedParam = resolveReusableParameter(param, arazzoSpec);
+
+    if (!resolvedParam) {
+      return { name: `masked-unresolved-parameter-reference-${paramName}` };
+    }
+
+    return resolvedParam;
+  };
+
+  const resolveParameters = (params: (Parameter | ReusableObject)[], targetArray: Parameter[]): void => {
+    params.forEach(param => {
+      let paramToPush: Parameter;
 
       if (isPlainObject(param) && 'reference' in param) {
-        const resolvedParam = resolveReusableParameters(param, components);
-        if (resolvedParam) {
-          paramToPush = resolvedParam;
-        }
+        paramToPush = processReusableParameter(param);
+      } else {
+        paramToPush = param;
       }
 
       if (isParameter(paramToPush)) {
-        const isDuplicate = resolvedParameters.some(
+        const isDuplicate = targetArray.some(
           existingParam =>
             isParameter(existingParam) &&
             isParameter(paramToPush) &&
@@ -69,43 +125,22 @@ export default function getAllParameters(
           };
         }
 
-        resolvedParameters.push(paramToPush);
+        targetArray.push(paramToPush);
       }
     });
+  };
+
+  // Process workflow-level parameters
+  if (workflow.parameters != null) {
+    resolveParameters(workflow.parameters, resolvedParameters);
   }
 
-  if (step.parameters) {
-    step.parameters.forEach(param => {
-      let paramToPush = param;
-
-      if (isPlainObject(param) && 'reference' in param) {
-        const resolvedParam = resolveReusableParameters(param, components);
-        if (resolvedParam) {
-          paramToPush = resolvedParam;
-        }
-      }
-
-      if (isParameter(paramToPush)) {
-        const isDuplicate = resolvedStepParameters.some(
-          existingParam =>
-            isParameter(existingParam) &&
-            isParameter(paramToPush) &&
-            existingParam.name === paramToPush.name &&
-            (existingParam.in ?? '') === (paramToPush.in ?? ''),
-        );
-
-        if (isDuplicate) {
-          paramToPush = {
-            ...paramToPush,
-            name: `masked-duplicate-${String(paramToPush.name)}`,
-          };
-        }
-
-        resolvedStepParameters.push(paramToPush);
-      }
-    });
+  // Process step-level parameters
+  if (step.parameters != null) {
+    resolveParameters(step.parameters, resolvedStepParameters);
   }
 
+  // Merge step parameters into workflow parameters, overriding duplicates
   resolvedStepParameters.forEach(param => {
     const existingParamIndex = resolvedParameters.findIndex(
       p => isParameter(p) && p.name === param.name && (p.in ?? '') === (param.in ?? ''),

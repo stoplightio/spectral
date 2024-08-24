@@ -1,4 +1,3 @@
-import { DeepPartial } from '@stoplight/types';
 import arazzoStepParametersValidation from '../arazzoStepParametersValidation';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
 
@@ -13,40 +12,51 @@ type ReusableObject = {
 };
 
 type Step = {
+  stepId: string;
   parameters?: (Parameter | ReusableObject)[];
   workflowId?: string;
   operationId?: string;
   operationPath?: string;
 };
 
-const runRule = (
-  target: { steps: Step[]; parameters?: Parameter[]; components?: { parameters?: Record<string, Parameter> } },
-  contextOverrides: Partial<RulesetFunctionContext> = {},
-) => {
-  const context: DeepPartial<RulesetFunctionContext> = {
-    path: [],
-    documentInventory: {
-      graph: {} as any, // Mock the graph property
-      referencedDocuments: {} as any, // Mock the referencedDocuments property as a Dictionary
-      findAssociatedItemForPath: jest.fn(), // Mock the findAssociatedItemForPath function
-    },
-    document: {
-      formats: new Set(), // Mock the formats property correctly
-    },
-    ...contextOverrides,
-  };
+type Workflow = {
+  workflowId: string;
+  steps: Step[];
+  inputs?: Record<string, unknown>;
+};
 
-  return arazzoStepParametersValidation(target, null, context as RulesetFunctionContext);
+type SourceDescription = {
+  name: string;
+  url: string;
+  type?: string;
+};
+
+type ArazzoSpecification = {
+  workflows: Workflow[];
+  components?: {
+    parameters?: Record<string, Parameter>;
+  };
+  sourceDescriptions?: SourceDescription[];
+};
+
+const runRule = (target: ArazzoSpecification, _contextOverrides: Partial<RulesetFunctionContext> = {}) => {
+  return arazzoStepParametersValidation(target, null);
 };
 
 describe('arazzoStepParametersValidation', () => {
   test('should not report any errors for valid and unique parameters', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          parameters: [
-            { name: 'param1', in: 'query', value: 'value1' },
-            { name: 'param2', in: 'header', value: 'value2' },
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [
+                { name: 'param1', in: 'query', value: 'value1' },
+                { name: 'param2', in: 'header', value: 'value2' },
+              ],
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -58,11 +68,17 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should not report any errors for valid and unique parameters at step and workflow level', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          parameters: [
-            { name: 'param1', in: 'query', value: 'value1' },
-            { name: 'param2', in: 'header', value: 'value2' },
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [
+                { name: 'param1', in: 'query', value: 'value1' },
+                { name: 'param2', in: 'header', value: 'value2' },
+              ],
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -74,19 +90,22 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should handle combined parameters from step and workflow without "in" when "workflowId" is specified', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
           workflowId: 'workflow1',
-          parameters: [{ name: 'param1', value: 'value1' }],
+          steps: [
+            {
+              workflowId: 'workflow1',
+              parameters: [{ name: 'param1', value: 'value1' }],
+              stepId: 'step1',
+            },
+            {
+              workflowId: 'workflow1',
+              parameters: [{ name: 'param2', value: 'value2' }],
+              stepId: 'step2',
+            },
+          ],
         },
-        {
-          workflowId: 'workflow1',
-          parameters: [{ name: 'param2', value: 'value2' }],
-        },
-      ],
-      parameters: [
-        { name: 'param3', value: 'value3' },
-        { name: 'param4', value: 'value4' },
       ],
       components: { parameters: {} },
     });
@@ -96,19 +115,22 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should handle combined parameters from step and workflow with "in" when "operationPath" is specified', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          operationPath: '/path1',
-          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              operationPath: '/path1',
+              parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+              stepId: 'step1',
+            },
+            {
+              operationPath: '/path2',
+              parameters: [{ name: 'param2', in: 'header', value: 'value2' }],
+              stepId: 'step2',
+            },
+          ],
         },
-        {
-          operationPath: '/path2',
-          parameters: [{ name: 'param2', in: 'header', value: 'value2' }],
-        },
-      ],
-      parameters: [
-        { name: 'param1', in: 'cookie', value: 'value3' },
-        { name: 'param2', in: 'cookie', value: 'value4' },
       ],
       components: { parameters: {} },
     });
@@ -118,29 +140,44 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should report an error for duplicate parameters within the same step', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          parameters: [
-            { name: 'param1', in: 'query', value: 'value1' },
-            { name: 'param1', in: 'query', value: 'value2' },
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [
+                { name: 'param1', in: 'query', value: 'value1' },
+                { name: 'param1', in: 'query', value: 'value2' },
+              ],
+              stepId: 'step1',
+            },
           ],
-        }, // Duplicate parameter
+        },
       ],
       components: { parameters: {} },
     });
 
-    expect(results).toHaveLength(1);
+    expect(results).toHaveLength(2);
     expect(results[0]).toMatchObject({
-      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
-      path: ['steps', 0, 'parameters', 1],
+      message: `"param1" must be unique within the combined parameters.`,
+      path: ['workflows', 0, 'steps', 0, 'parameters', 1],
     });
   });
 
   test('should report an error for duplicate reusable parameters', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          parameters: [{ reference: '$components.parameters.param1' }, { reference: '$components.parameters.param1' }],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [
+                { reference: '$components.parameters.param1' },
+                { reference: '$components.parameters.param1' },
+              ],
+              stepId: 'step1',
+            },
+          ],
         },
       ],
       components: {
@@ -154,22 +191,27 @@ describe('arazzoStepParametersValidation', () => {
       },
     });
 
-    expect(results).toHaveLength(1);
+    expect(results).toHaveLength(2);
     expect(results[0]).toMatchObject({
-      message: `Duplicate parameter: "param1" must be unique within the combined parameters.`,
-      path: ['steps', 0, 'parameters', 1],
+      message: `"param1" must be unique within the combined parameters.`,
+      path: ['workflows', 0, 'steps', 0, 'parameters', 1],
     });
   });
 
   test('should handle combined duplicate parameters from step and workflow level (override scenario)', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
           workflowId: 'workflow1',
-          parameters: [{ name: 'param1', value: 'value1' }],
+          steps: [
+            {
+              workflowId: 'workflow1',
+              parameters: [{ name: 'param1', value: 'value1' }],
+              stepId: 'step1',
+            },
+          ],
         },
       ],
-      parameters: [{ name: 'param1', value: 'value2' }],
       components: { parameters: {} },
     });
 
@@ -178,12 +220,18 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should report an error for mixed "in" presence when "workflowId" is present', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
           workflowId: 'workflow1',
-          parameters: [
-            { name: 'param1', value: 'value1' },
-            { name: 'param2', in: 'query', value: 'value2' },
+          steps: [
+            {
+              workflowId: 'workflow1',
+              parameters: [
+                { name: 'param1', value: 'value1' },
+                { name: 'param2', in: 'query', value: 'value2' },
+              ],
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -193,18 +241,24 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(2);
     expect(results[0]).toMatchObject({
       message: `Parameters must not mix "in" field presence.`,
-      path: ['steps', 0, 'parameters'],
+      path: ['workflows', 0, 'steps', 0, 'parameters'],
     });
   });
 
   test('should report an error for parameters containing "in" when "workflowId" is present', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
           workflowId: 'workflow1',
-          parameters: [
-            { name: 'param1', in: 'header', value: 'value1' },
-            { name: 'param2', in: 'query', value: 'value2' },
+          steps: [
+            {
+              workflowId: 'workflow1',
+              parameters: [
+                { name: 'param1', in: 'header', value: 'value1' },
+                { name: 'param2', in: 'query', value: 'value2' },
+              ],
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -213,18 +267,24 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `Step with "workflowId" must not have parameters with an "in" field.`,
-      path: ['steps', 0, 'parameters'],
+      path: ['workflows', 0, 'steps', 0, 'parameters'],
     });
   });
 
   test('should report an error for parameters missing "in" when "operationId" is present', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          operationId: 'operation1',
-          parameters: [
-            { name: 'param1', value: 'value1' },
-            { name: 'param2', value: 'value2' },
+          workflowId: 'workflow1',
+          steps: [
+            {
+              operationId: 'operation1',
+              parameters: [
+                { name: 'param1', value: 'value1' },
+                { name: 'param2', value: 'value2' },
+              ],
+              stepId: 'step1',
+            },
           ],
         },
       ],
@@ -234,19 +294,24 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `Step with "operationId" or "operationPath" must have parameters with an "in" field.`,
-      path: ['steps', 0, 'parameters'],
+      path: ['workflows', 0, 'steps', 0, 'parameters'],
     });
   });
 
   test('should handle combined duplicate parameters from step and workflow with "in" when "operationId" is specified (override scenario)', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          operationId: 'operation1',
-          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              operationId: 'operation1',
+              parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+              stepId: 'step1',
+            },
+          ],
         },
       ],
-      parameters: [{ name: 'param1', in: 'query', value: 'value2' }],
       components: { parameters: {} },
     });
 
@@ -255,19 +320,22 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should handle combined parameters from step and workflow with "in" when "operationId" is specified', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          operationId: 'operation1',
-          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              operationId: 'operation1',
+              parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+              stepId: 'step1',
+            },
+            {
+              operationId: 'operation2',
+              parameters: [{ name: 'param2', in: 'header', value: 'value2' }],
+              stepId: 'step2',
+            },
+          ],
         },
-        {
-          operationId: 'operation2',
-          parameters: [{ name: 'param2', in: 'header', value: 'value2' }],
-        },
-      ],
-      parameters: [
-        { name: 'param1', in: 'header', value: 'value3' },
-        { name: 'param2', in: 'query', value: 'value4' },
       ],
       components: { parameters: {} },
     });
@@ -277,14 +345,237 @@ describe('arazzoStepParametersValidation', () => {
 
   test('should handle combined duplicate parameters from step and workflow with "in" when "operationPath" is specified (override scenario)', () => {
     const results = runRule({
-      steps: [
+      workflows: [
         {
-          operationPath: '/path1',
-          parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+          workflowId: 'workflow1',
+          steps: [
+            {
+              operationPath: '/path1',
+              parameters: [{ name: 'param1', in: 'query', value: 'value1' }],
+              stepId: 'step1',
+            },
+          ],
         },
       ],
-      parameters: [{ name: 'param1', in: 'query', value: 'value2' }],
       components: { parameters: {} },
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  // New Tests for Runtime Expressions
+
+  test('should report an error for invalid $steps expression in parameter value', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [{ name: 'foo', in: 'query', value: '$steps.invalidStep.outputs.param' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `Invalid runtime expression: "$steps.invalidStep.outputs.param" for parameter.`,
+      path: ['steps', 0, 'parameters', 0],
+    });
+  });
+
+  test('should not report errors for valid $steps expression in parameter name', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [{ name: '$steps.validStep.outputs.param', in: 'query', value: 'value1' }],
+              stepId: 'step1',
+            },
+            {
+              stepId: 'validStep',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for invalid $workflows expression in parameter value', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [{ name: 'foo', in: 'query', value: '$workflows.invalidWorkflow.steps.step1.outputs.param' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+        {
+          workflowId: 'validWorkflow',
+          steps: [
+            {
+              stepId: 'step1',
+              parameters: [{ name: 'param', in: 'query', value: 'value2' }],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `Invalid runtime expression: "$workflows.invalidWorkflow.steps.step1.outputs.param" for parameter.`,
+      path: ['steps', 0, 'parameters', 0],
+    });
+  });
+
+  test('should not report errors for valid $workflows expression in parameter name', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [
+                { name: '$workflows.validWorkflow.steps.step1.outputs.param', in: 'query', value: 'value1' },
+              ],
+              stepId: 'step1',
+            },
+          ],
+        },
+        {
+          workflowId: 'validWorkflow',
+          steps: [
+            {
+              stepId: 'step1',
+              parameters: [{ name: 'param', in: 'query', value: 'value2' }],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for invalid $inputs expression in parameter value', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [{ name: 'foo', in: 'query', value: '$inputs.invalidInput' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            validInput: 'value2',
+          },
+          steps: [
+            {
+              stepId: 'step1',
+              parameters: [{ name: 'param', in: 'query', value: 'value3' }],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `Invalid runtime expression: "$inputs.invalidInput" for parameter.`,
+      path: ['steps', 0, 'parameters', 0],
+    });
+  });
+
+  test('should not report errors for valid $inputs expression in parameter name', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            validInput: 'value2',
+          },
+          steps: [
+            {
+              stepId: 'step1',
+              parameters: [{ name: '$inputs.validInput', in: 'query', value: 'value1' }],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for invalid $components.parameters expression in parameter reference', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [{ reference: '$components.parameters.invalidParam' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+      components: {
+        parameters: {
+          validParam: {
+            name: 'param1',
+            in: 'query',
+            value: 'hello',
+          },
+        },
+      },
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `Invalid runtime expression for reusable parameter reference: "$components.parameters.invalidParam".`,
+      path: ['workflows', 0, 'steps', 0, 'parameters', 0],
+    });
+  });
+
+  test('should not report errors for valid $components.parameters expression in parameter reference', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              parameters: [{ reference: '$components.parameters.validParam' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+      components: {
+        parameters: {
+          validParam: {
+            name: 'param1',
+            in: 'query',
+            value: 'value1',
+          },
+        },
+      },
     });
 
     expect(results).toHaveLength(0);

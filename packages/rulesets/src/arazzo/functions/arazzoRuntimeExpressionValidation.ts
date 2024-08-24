@@ -2,7 +2,7 @@ type ArazzoSpecification = {
   workflows: Workflow[];
   sourceDescriptions?: SourceDescription[];
   components?: {
-    parameters?: Record<string, unknown>;
+    parameters?: Record<string, Parameter>;
     successActions?: Record<string, SuccessAction>;
     failureActions?: Record<string, FailureAction>;
     [key: string]: unknown;
@@ -18,14 +18,23 @@ type SourceDescription = {
 type Workflow = {
   workflowId: string;
   steps: Step[];
+  inputs?: Record<string, unknown>;
+  parameters?: (Parameter | ReusableObject)[];
   successActions?: (SuccessAction | ReusableObject)[];
   failureActions?: (FailureAction | ReusableObject)[];
   outputs?: Record<string, string>;
 };
 
+type Parameter = {
+  name: string;
+  in?: string;
+  value?: unknown;
+};
+
 type Step = {
   stepId: string;
   outputs?: Record<string, string>;
+  parameters?: (Parameter | ReusableObject)[];
   onSuccess?: (SuccessAction | ReusableObject)[];
   onFailure?: (FailureAction | ReusableObject)[];
 };
@@ -61,6 +70,23 @@ type ReusableObject = {
   reference: string;
 };
 
+function validateReusableParameterExpression(expression: string, arazzoSpec: ArazzoSpecification): boolean {
+  const parametersRegex = /^\$components\.parameters\.([A-Za-z0-9_\\-]+)$/;
+  const match = parametersRegex.exec(expression);
+
+  if (!match) {
+    return false; // The expression didn't match the expected pattern
+  }
+
+  const [, paramName] = match;
+
+  if (arazzoSpec.components?.parameters && paramName in arazzoSpec.components.parameters) {
+    return true; // The parameter exists in the components.parameters
+  }
+
+  return false; // The parameter does not exist
+}
+
 function validateStepsExpression(
   stepsExpression: string,
   arazzoSpec: ArazzoSpecification,
@@ -75,12 +101,10 @@ function validateStepsExpression(
 
   const [, stepId] = match;
 
-  // Ensure that arazzoSpec and its workflows are defined and not null
   if (arazzoSpec == null || !Array.isArray(arazzoSpec.workflows) || arazzoSpec.workflows.length === 0) {
-    return false; // The ArazzoSpecification or workflows are not properly defined
+    return false;
   }
 
-  // Get the relevant steps to search in the current workflow or all workflows
   let stepsToSearch: Step[] = [];
   if (
     currentWorkflowIndex !== undefined &&
@@ -93,15 +117,15 @@ function validateStepsExpression(
   }
 
   if (stepsToSearch == null || stepsToSearch.length === 0) {
-    return false; // No steps available to search
+    return false;
   }
 
   const step = stepsToSearch.find(step => step.stepId === stepId);
   if (!step) {
-    return false; // The step does not exist
+    return false;
   }
 
-  return true; // The path resolves correctly
+  return true;
 }
 
 function validateWorkflowsExpression(workflowsExpression: string, arazzoSpec: ArazzoSpecification): boolean {
@@ -109,28 +133,55 @@ function validateWorkflowsExpression(workflowsExpression: string, arazzoSpec: Ar
   const match = workflowsRegex.exec(workflowsExpression);
 
   if (!match) {
-    return false; // The expression didn't match the expected pattern
+    return false;
   }
 
   const [, workflowId, remainingPath] = match;
 
-  // Ensure that arazzoSpec and its workflows are defined and not null
   if (arazzoSpec == null || !Array.isArray(arazzoSpec.workflows) || arazzoSpec.workflows.length === 0) {
     return false;
   }
 
-  // Find the specified workflow
   const workflowIndex = arazzoSpec.workflows.findIndex(workflow => workflow.workflowId === workflowId);
   if (workflowIndex === -1) {
     return false;
   }
 
-  // If the remaining path refers to steps, validate the steps expression
   if (remainingPath.startsWith('steps.')) {
     return validateStepsExpression(`$steps.${remainingPath.slice(6)}`, arazzoSpec, workflowIndex);
   }
 
-  // If the remaining path is empty or does not refer to steps, consider it valid
+  return true;
+}
+
+function validateInputsExpression(
+  inputsExpression: string,
+  arazzoSpec: ArazzoSpecification,
+  currentWorkflowIndex?: number,
+): boolean {
+  const inputsRegex = /^\$inputs\.([A-Za-z0-9_\\-]+)$/;
+  const match = inputsRegex.exec(inputsExpression);
+
+  if (!match) {
+    return false;
+  }
+
+  const [, inputName] = match;
+
+  if (
+    arazzoSpec == null ||
+    !Array.isArray(arazzoSpec.workflows) ||
+    arazzoSpec.workflows.length === 0 ||
+    currentWorkflowIndex === undefined
+  ) {
+    return false;
+  }
+
+  const currentWorkflow = arazzoSpec.workflows[currentWorkflowIndex];
+  if (!currentWorkflow.inputs || !(inputName in currentWorkflow.inputs)) {
+    return false;
+  }
+
   return true;
 }
 
@@ -139,16 +190,16 @@ function validateReusableSuccessActionExpression(expression: string, arazzoSpec:
   const match = successActionsRegex.exec(expression);
 
   if (!match) {
-    return false; // The expression didn't match the expected pattern
+    return false;
   }
 
   const [, actionName] = match;
 
   if (arazzoSpec.components?.successActions && actionName in arazzoSpec.components.successActions) {
-    return true; // The action exists in the components.successActions
+    return true;
   }
 
-  return false; // The action does not exist
+  return false;
 }
 
 function validateReusableFailureActionExpression(expression: string, arazzoSpec: ArazzoSpecification): boolean {
@@ -156,16 +207,16 @@ function validateReusableFailureActionExpression(expression: string, arazzoSpec:
   const match = failureActionsRegex.exec(expression);
 
   if (!match) {
-    return false; // The expression didn't match the expected pattern
+    return false;
   }
 
   const [, actionName] = match;
 
   if (arazzoSpec.components?.failureActions && actionName in arazzoSpec.components.failureActions) {
-    return true; // The action exists in the components.failureActions
+    return true;
   }
 
-  return false; // The action does not exist
+  return false;
 }
 
 function arazzoRuntimeExpressionValidation(
@@ -197,32 +248,36 @@ function arazzoRuntimeExpressionValidation(
 
   const isValidPrefix = validPrefixes.some(prefix => expression.startsWith(prefix));
 
-  // Early return if no valid prefix found
   if (!isValidPrefix) {
     return false;
   }
 
-  // Basic validation of $steps expressions
   if (expression.startsWith('$steps.') && arazzoSpec) {
     return validateStepsExpression(expression, arazzoSpec, currentWorkflowIndex);
   }
 
-  // Basic validation for $workflows expressions
   if (expression.startsWith('$workflows.') && arazzoSpec) {
     return validateWorkflowsExpression(expression, arazzoSpec);
   }
 
-  // Basic validation for $components.failureActions expressions
+  if (expression.startsWith('$inputs.') && arazzoSpec) {
+    return validateInputsExpression(expression, arazzoSpec, currentWorkflowIndex);
+  }
+
   if (expression.startsWith('$components.failureActions.') && arazzoSpec) {
     return validateReusableFailureActionExpression(expression, arazzoSpec);
   }
 
-  // Basic validation for $components.successActions expressions
   if (expression.startsWith('$components.successActions.') && arazzoSpec) {
     return validateReusableSuccessActionExpression(expression, arazzoSpec);
   }
 
-  // ToDo: Add any other advanced validation here
+  // Validation for $components.parameters expressions
+  if (expression.startsWith('$components.parameters.') && arazzoSpec) {
+    return validateReusableParameterExpression(expression, arazzoSpec);
+  }
+
+  // ToDo - add more validations for other prefixes and combos
 
   return true;
 }

@@ -11,7 +11,7 @@ type ArazzoSpecification = {
   workflows: Workflow[];
   sourceDescriptions?: SourceDescription[];
   components?: {
-    parameters?: Record<string, unknown>;
+    parameters?: Record<string, Parameter>;
     successActions?: Record<string, SuccessAction>;
     failureActions?: Record<string, FailureAction>;
     [key: string]: unknown;
@@ -21,6 +21,7 @@ type ArazzoSpecification = {
 type Workflow = {
   workflowId: string;
   steps: Step[];
+  parameters?: (Parameter | ReusableObject)[];
   successActions?: (SuccessAction | ReusableObject)[];
   failureActions?: (FailureAction | ReusableObject)[];
   outputs?: Record<string, string>;
@@ -32,8 +33,15 @@ type Step = {
   operationPath?: string;
   workflowId?: string;
   outputs?: Record<string, string>;
+  parameters?: (Parameter | ReusableObject)[];
   onSuccess?: (SuccessAction | ReusableObject)[];
   onFailure?: (FailureAction | ReusableObject)[];
+};
+
+type Parameter = {
+  name: string;
+  in?: string;
+  value?: unknown;
 };
 
 type SuccessAction = {

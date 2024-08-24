@@ -72,7 +72,7 @@ export default {
       message: `{{error}}`,
       recommended: true,
       severity: 0,
-      given: '$.workflows[*]',
+      given: '$',
       then: {
         function: arazzoStepParametersValidation,
       },

@@ -11,11 +11,17 @@ type ArazzoSpecification = {
   workflows: Workflow[];
   sourceDescriptions?: SourceDescription[];
   components?: {
-    parameters?: Record<string, unknown>;
+    parameters?: Record<string, Parameter>;
     successActions?: Record<string, SuccessAction>;
     failureActions?: Record<string, FailureAction>;
     [key: string]: unknown;
   };
+};
+
+type Parameter = {
+  name: string;
+  in?: string;
+  value?: unknown;
 };
 
 type Workflow = {

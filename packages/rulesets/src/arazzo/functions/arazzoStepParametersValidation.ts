@@ -1,10 +1,11 @@
-import { createRulesetFunction } from '@stoplight/spectral-core';
 import type { IFunctionResult } from '@stoplight/spectral-core';
 import getAllParameters from './utils/getAllParameters';
+import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
 
 type Parameter = {
   name: string;
   in?: string;
+  value?: unknown;
 };
 
 type ReusableObject = {
@@ -12,176 +13,138 @@ type ReusableObject = {
 };
 
 type Step = {
+  stepId: string;
   parameters?: (Parameter | ReusableObject)[];
   workflowId?: string;
   operationId?: string;
   operationPath?: string;
 };
 
-export default createRulesetFunction<
-  { steps: Step[]; parameters?: Parameter[]; components?: { parameters?: Record<string, Parameter> } },
-  null
->(
-  {
-    input: {
-      type: 'object',
-      properties: {
-        steps: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              parameters: {
-                type: 'array',
-                items: {
-                  oneOf: [
-                    {
-                      type: 'object',
-                      properties: {
-                        name: {
-                          type: 'string',
-                        },
-                        in: {
-                          type: 'string',
-                        },
-                      },
-                      required: ['name'],
-                    },
-                    {
-                      type: 'object',
-                      properties: {
-                        reference: {
-                          type: 'string',
-                        },
-                      },
-                      required: ['reference'],
-                    },
-                  ],
-                },
-              },
-              workflowId: {
-                type: 'string',
-              },
-              operationId: {
-                type: 'string',
-              },
-              operationPath: {
-                type: 'string',
-              },
-            },
-          },
-        },
-        parameters: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              name: {
-                type: 'string',
-              },
-              in: {
-                type: 'string',
-              },
-            },
-            required: ['name'],
-          },
-        },
-        components: {
-          type: 'object',
-          properties: {
-            parameters: {
-              type: 'object',
-              additionalProperties: {
-                type: 'object',
-                properties: {
-                  name: {
-                    type: 'string',
-                  },
-                  in: {
-                    type: 'string',
-                  },
-                },
-                required: ['name'],
-              },
-            },
-          },
-        },
-      },
-      required: ['steps'],
-    },
-    options: null,
-  },
-  function arazzoStepParametersValidation(targetVal, _) {
-    const results: IFunctionResult[] = [];
-    const { steps, parameters = [], components = { parameters: {} } } = targetVal;
+type SourceDescription = {
+  name: string;
+  url: string;
+  type?: string;
+};
 
-    // Convert the workflow parameters to the expected format for getAllParameters
-    const workflow = { parameters };
+type Workflow = {
+  workflowId: string;
+  steps: Step[];
+  parameters?: (Parameter | ReusableObject)[];
+};
 
-    // Process steps
-    for (const [stepIndex, step] of steps.entries()) {
-      if (!step.parameters) continue;
+type ArazzoSpecification = {
+  sourceDescriptions?: SourceDescription[];
+  workflows: Workflow[];
+  components?: { parameters?: Record<string, Parameter> };
+};
 
-      const { workflowId, operationId, operationPath } = step;
-      const stepParams = getAllParameters(step, workflow, components.parameters ?? {});
+export default function arazzoStepParametersValidation(target: ArazzoSpecification, _options: null): IFunctionResult[] {
+  const results: IFunctionResult[] = [];
 
-      // Check for duplicate parameters within the step
-      const paramSet = new Set<string>();
-      for (const [paramIndex, param] of stepParams.entries()) {
-        const key = `${param.name}-${param.in ?? ''}`;
-        if (paramSet.has(key)) {
-          results.push({
-            message: `"${param.name}" with "in" value "${
-              param.in ?? ''
-            }" must be unique within the combined parameters.`,
-            path: ['steps', stepIndex, 'parameters', paramIndex],
+  // Process each workflow
+  if (Array.isArray(target.workflows)) {
+    target.workflows.forEach((workflow, workflowIndex) => {
+      // Process steps in the workflow
+      workflow.steps.forEach((step, stepIndex) => {
+        if (!step.parameters) return;
+
+        const { workflowId, operationId, operationPath } = step;
+        const stepParams = getAllParameters(step, workflow, target);
+
+        if (Array.isArray(stepParams)) {
+          const seenNames: Set<string> = new Set();
+          stepParams.forEach((param, paramIndex) => {
+            const originalName = param.name
+              .replace('masked-invalid-reusable-parameter-reference-', '')
+              .replace('masked-unresolved-parameter-reference-', '')
+              .replace('masked-duplicate-', '');
+
+            if (seenNames.has(originalName)) {
+              results.push({
+                message: `"${originalName}" must be unique within the combined parameters.`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters', paramIndex],
+              });
+            } else {
+              seenNames.add(originalName);
+            }
+
+            if (param.name.startsWith('masked-invalid-reusable-parameter-reference-')) {
+              results.push({
+                message: `Invalid runtime expression for reusable parameter reference: "${originalName}".`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters', paramIndex],
+              });
+            }
+
+            if (param.name.startsWith('masked-unresolved-parameter-reference-')) {
+              results.push({
+                message: `Unresolved reusable parameter reference: "${originalName}".`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters', paramIndex],
+              });
+            }
+
+            if (param.name.startsWith('masked-duplicate-')) {
+              results.push({
+                message: `Duplicate parameter: "${originalName}" must be unique within the combined parameters.`,
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters', paramIndex],
+              });
+            }
           });
-        } else {
-          paramSet.add(key);
         }
-      }
 
-      // Check for masked duplicates
-      const maskedDuplicates = stepParams.filter(param => param.name.startsWith('masked-duplicate-'));
-      if (maskedDuplicates.length > 0) {
-        maskedDuplicates.forEach(param => {
+        // Validate no mix of `in` presence
+        const hasInField = stepParams.some(param => 'in' in param && param.in !== undefined);
+        const noInField = stepParams.some(param => !('in' in param) || param.in === undefined);
+
+        if (hasInField && noInField) {
           results.push({
-            message: `Duplicate parameter: "${param.name.replace(
-              'masked-duplicate-',
-              '',
-            )}" must be unique within the combined parameters.`,
-            path: ['steps', stepIndex, 'parameters', stepParams.indexOf(param)],
+            message: `Parameters must not mix "in" field presence.`,
+            path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters'],
           });
-        });
-      }
+        }
 
-      // Validate no mix of `in` presence
-      const hasInField = stepParams.some(param => 'in' in param);
-      const noInField = stepParams.some(param => !('in' in param));
+        // if workflowId is present, there should be no `in` field
+        if (workflowId != null && hasInField) {
+          results.push({
+            message: `Step with "workflowId" must not have parameters with an "in" field.`,
+            path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters'],
+          });
+        }
 
-      if (hasInField && noInField) {
-        results.push({
-          message: `Parameters must not mix "in" field presence.`,
-          path: ['steps', stepIndex, 'parameters'],
-        });
-      }
+        // if operationId or operationPath is present, all parameters should have an `in` field
+        if ((operationId != null || operationPath != null) && noInField) {
+          results.push({
+            message: `Step with "operationId" or "operationPath" must have parameters with an "in" field.`,
+            path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters'],
+          });
+        }
 
-      // if workflowId is present, there should be no `in` field
-      if (workflowId != null && hasInField) {
-        results.push({
-          message: `Step with "workflowId" must not have parameters with an "in" field.`,
-          path: ['steps', stepIndex, 'parameters'],
-        });
-      }
+        // Perform runtime expression validation for parameter values
+        stepParams.forEach((param, paramIndex) => {
+          if (typeof param.value === 'string' && param.value.startsWith('$')) {
+            const validPatterns = [
+              /^\$inputs\./, // Matches $inputs.
+              /^\$steps\.[A-Za-z0-9_-]+\./, // Matches $steps.name.*
+              /^\$workflows\.[A-Za-z0-9_-]+\.steps\.[A-Za-z0-9_-]+\./, // Matches $workflows.name.steps.stepname.*
+            ];
 
-      // if operationId or operationPath is present, all parameters should have an `in` field
-      if ((operationId != null || operationPath != null) && noInField) {
-        results.push({
-          message: `Step with "operationId" or "operationPath" must have parameters with an "in" field.`,
-          path: ['steps', stepIndex, 'parameters'],
+            const isValidPattern = validPatterns.some(pattern => pattern.test(param.value as string));
+
+            if (!isValidPattern) {
+              results.push({
+                message: `Invalid runtime expression: "${param.value}" for parameter.`,
+                path: ['steps', stepIndex, 'parameters', paramIndex],
+              });
+            } else if (!arazzoRuntimeExpressionValidation(param.value, target, workflowIndex)) {
+              results.push({
+                message: `Invalid runtime expression: "${param.value}" for parameter.`,
+                path: ['steps', stepIndex, 'parameters', paramIndex],
+              });
+            }
+          }
         });
-      }
-    }
-    return results;
-  },
-);
+      });
+    });
+  }
+
+  return results;
+}
