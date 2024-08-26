@@ -37,7 +37,7 @@ export default {
         function: arazzoWorkflowIdUniqueness,
       },
     },
-    'arazzo-workflow-output-names-validation': {
+    'arazzo-workflow-output-validation': {
       description: 'Every workflow output must have unique name and its value must be a valid runtime expression.',
       message: `{{error}}`,
       recommended: true,
@@ -57,7 +57,7 @@ export default {
         function: arazzoStepIdUniqueness,
       },
     },
-    'arazzo-step-output-names-validation': {
+    'arazzo-step-output-validation': {
       description: 'Every step output must have unique name and its value must be a valid runtime expression.',
       message: `{{error}}`,
       recommended: true,
@@ -68,7 +68,7 @@ export default {
       },
     },
     'arazzo-step-parameters-validation': {
-      description: 'Step parameters and workflow parameters must be independently unique.',
+      description: 'Step parameters and workflow parameters must valid.',
       message: `{{error}}`,
       recommended: true,
       severity: 0,
@@ -119,10 +119,10 @@ export default {
       },
     },
     'arazzo-step-request-body-validation': {
-      description: 'Every step request body must have a valid context, conditions, and types.',
+      description: 'Every step request body must have a valid `contentType` and use of runtime expressions.',
       recommended: true,
       severity: 0,
-      given: '$.workflows[*].steps[*]',
+      given: '$',
       then: {
         function: arazzoStepRequestBodyValidation,
       },
