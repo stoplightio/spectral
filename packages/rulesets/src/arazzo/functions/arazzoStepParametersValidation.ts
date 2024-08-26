@@ -132,12 +132,12 @@ export default function arazzoStepParametersValidation(target: ArazzoSpecificati
             if (!isValidPattern) {
               results.push({
                 message: `Invalid runtime expression: "${param.value}" for parameter.`,
-                path: ['steps', stepIndex, 'parameters', paramIndex],
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters', paramIndex],
               });
             } else if (!arazzoRuntimeExpressionValidation(param.value, target, workflowIndex)) {
               results.push({
                 message: `Invalid runtime expression: "${param.value}" for parameter.`,
-                path: ['steps', stepIndex, 'parameters', paramIndex],
+                path: ['workflows', workflowIndex, 'steps', stepIndex, 'parameters', paramIndex],
               });
             }
           }

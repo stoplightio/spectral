@@ -35,6 +35,7 @@ type ArazzoSpecification = {
   workflows: Workflow[];
   components?: {
     parameters?: Record<string, Parameter>;
+    inputs?: Record<string, unknown>;
   };
   sourceDescriptions?: SourceDescription[];
 };
@@ -383,7 +384,7 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `Invalid runtime expression: "$steps.invalidStep.outputs.param" for parameter.`,
-      path: ['steps', 0, 'parameters', 0],
+      path: ['workflows', 0, 'steps', 0, 'parameters', 0],
     });
   });
 
@@ -435,7 +436,7 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `Invalid runtime expression: "$workflows.invalidWorkflow.steps.step1.outputs.param" for parameter.`,
-      path: ['steps', 0, 'parameters', 0],
+      path: ['workflows', 0, 'steps', 0, 'parameters', 0],
     });
   });
 
@@ -498,7 +499,7 @@ describe('arazzoStepParametersValidation', () => {
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
       message: `Invalid runtime expression: "$inputs.invalidInput" for parameter.`,
-      path: ['steps', 0, 'parameters', 0],
+      path: ['workflows', 0, 'steps', 0, 'parameters', 0],
     });
   });
 
@@ -508,12 +509,15 @@ describe('arazzoStepParametersValidation', () => {
         {
           workflowId: 'workflow1',
           inputs: {
-            validInput: 'value2',
+            type: 'object',
+            properties: {
+              validInput: { type: 'string' },
+            },
           },
           steps: [
             {
               stepId: 'step1',
-              parameters: [{ name: '$inputs.validInput', in: 'query', value: 'value1' }],
+              parameters: [{ name: 'value1', in: 'query', value: '$inputs.validInput' }],
             },
           ],
         },
@@ -579,5 +583,71 @@ describe('arazzoStepParametersValidation', () => {
     });
 
     expect(results).toHaveLength(0);
+  });
+
+  test('should not report errors for valid $ref in workflow inputs', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            $ref: '#/components/inputs/myInputRef',
+          },
+          steps: [
+            {
+              stepId: 'step1',
+              parameters: [{ name: 'foo', in: 'query', value: '$inputs.validInput' }],
+            },
+          ],
+        },
+      ],
+      components: {
+        inputs: {
+          myInputRef: {
+            type: 'object',
+            properties: {
+              validInput: { type: 'string' },
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for invalid $ref in workflow inputs', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            $ref: '#/components/inputs/myInputRef',
+          },
+          steps: [
+            {
+              stepId: 'step1',
+              parameters: [{ name: 'foo', in: 'query', value: '$inputs.invalidInput' }],
+            },
+          ],
+        },
+      ],
+      components: {
+        inputs: {
+          myInputRef: {
+            type: 'object',
+            properties: {
+              validInput: { type: 'string' },
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `Invalid runtime expression: "$inputs.invalidInput" for parameter.`,
+      path: ['workflows', 0, 'steps', 0, 'parameters', 0],
+    });
   });
 });

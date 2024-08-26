@@ -70,6 +70,10 @@ type ReusableObject = {
   reference: string;
 };
 
+function isNonNullObject(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object';
+}
+
 function validateReusableParameterExpression(expression: string, arazzoSpec: ArazzoSpecification): boolean {
   const parametersRegex = /^\$components\.parameters\.([A-Za-z0-9_\\-]+)$/;
   const match = parametersRegex.exec(expression);
@@ -163,7 +167,7 @@ function validateInputsExpression(
   const match = inputsRegex.exec(inputsExpression);
 
   if (!match) {
-    return false;
+    return false; // The expression didn't match the expected pattern
   }
 
   const [, inputName] = match;
@@ -178,11 +182,35 @@ function validateInputsExpression(
   }
 
   const currentWorkflow = arazzoSpec.workflows[currentWorkflowIndex];
-  if (!currentWorkflow.inputs || !(inputName in currentWorkflow.inputs)) {
+
+  if (!currentWorkflow.inputs) {
     return false;
   }
 
-  return true;
+  // If inputs are defined directly
+  if ('properties' in currentWorkflow.inputs) {
+    const properties = (currentWorkflow.inputs as { properties?: Record<string, unknown> }).properties;
+    return properties ? inputName in properties : false;
+  }
+
+  // If inputs are referenced via $ref
+  if ('$ref' in currentWorkflow.inputs) {
+    const refPath = (currentWorkflow.inputs as { $ref: string }).$ref.replace(/^#\//, '').split('/');
+    let refObject: unknown = arazzoSpec;
+
+    for (const part of refPath) {
+      if (isNonNullObject(refObject) && part in refObject) {
+        refObject = refObject[part];
+      } else {
+        return false; // The reference could not be resolved
+      }
+    }
+
+    const properties = (refObject as { properties?: Record<string, unknown> })?.properties;
+    return properties ? inputName in properties : false;
+  }
+
+  return false; // The input does not exist in the workflow inputs or referenced schema
 }
 
 function validateReusableSuccessActionExpression(expression: string, arazzoSpec: ArazzoSpecification): boolean {
