@@ -43,7 +43,7 @@ Spectral, being a generic YAML/JSON linter, **needs a ruleset** to lint files. A
 To get started, run this command in your terminal to create a `.spectral.yaml` file that uses the Spectral predefined rulesets based on OpenAPI or AsyncAPI:
 
 ```bash
-echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
+echo 'extends: ["spectral:oas", "spectral:asyncapi", "spectral:arazzo"]' > .spectral.yaml
 ```
 
 If you would like to create your own rules, check out the [Custom Rulesets](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets) page.
