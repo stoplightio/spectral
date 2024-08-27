@@ -1,56 +1,6 @@
 import arazzoStepRequestBodyValidation from '../arazzoStepRequestBodyValidation';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
-
-type PayloadReplacement = {
-  target: string;
-  value: unknown | string;
-};
-
-type RequestBody = {
-  contentType?: string;
-  payload?: unknown | string;
-  replacements?: PayloadReplacement[];
-};
-
-type Parameter = {
-  name: string;
-  in?: string;
-  value?: unknown;
-};
-
-type Step = {
-  stepId: string;
-  outputs?: Record<string, string>;
-  requestBody?: RequestBody;
-  parameters?: (Parameter | ReusableObject)[];
-};
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  sourceDescriptions?: SourceDescription[];
-  components?: {
-    parameters?: Record<string, Parameter>;
-    [key: string]: unknown;
-  };
-};
-
-type ReusableObject = {
-  reference: string;
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  inputs?: Record<string, unknown>;
-  parameters?: (Parameter | ReusableObject)[];
-  outputs?: Record<string, string>;
-};
+import { ArazzoSpecification } from '../types/arazzoTypes';
 
 const runRule = (target: ArazzoSpecification, _contextOverrides: Partial<RulesetFunctionContext> = {}) => {
   return arazzoStepRequestBodyValidation(target, null);

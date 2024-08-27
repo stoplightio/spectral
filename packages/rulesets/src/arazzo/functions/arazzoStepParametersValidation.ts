@@ -1,42 +1,7 @@
 import type { IFunctionResult } from '@stoplight/spectral-core';
 import getAllParameters from './utils/getAllParameters';
 import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
-
-type Parameter = {
-  name: string;
-  in?: string;
-  value?: unknown;
-};
-
-type ReusableObject = {
-  reference: string;
-};
-
-type Step = {
-  stepId: string;
-  parameters?: (Parameter | ReusableObject)[];
-  workflowId?: string;
-  operationId?: string;
-  operationPath?: string;
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  parameters?: (Parameter | ReusableObject)[];
-};
-
-type ArazzoSpecification = {
-  sourceDescriptions?: SourceDescription[];
-  workflows: Workflow[];
-  components?: { parameters?: Record<string, Parameter> };
-};
+import { ArazzoSpecification } from './types/arazzoTypes';
 
 export default function arazzoStepParametersValidation(target: ArazzoSpecification, _options: null): IFunctionResult[] {
   const results: IFunctionResult[] = [];

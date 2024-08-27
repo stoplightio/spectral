@@ -1,13 +1,10 @@
 import { isPlainObject } from '@stoplight/json';
 import type { JsonPath } from '@stoplight/types';
+import { ArazzoSpecification, Workflow } from '../types/arazzoTypes';
 
-type WorkflowObject = Record<string, unknown>;
-type ArazzoDocument = {
-  workflows?: WorkflowObject[];
-};
-type Result = { path: JsonPath; workflow: WorkflowObject };
+type Result = { path: JsonPath; workflow: Workflow };
 
-export function* getAllWorkflows(arazzo: ArazzoDocument): IterableIterator<Result> {
+export function* getAllWorkflows(arazzo: ArazzoSpecification): IterableIterator<Result> {
   const workflows = arazzo?.workflows;
   if (!Array.isArray(workflows)) {
     return;

@@ -1,21 +1,9 @@
-import { DeepPartial } from '@stoplight/types';
+import { IFunctionResult } from '@stoplight/spectral-core';
 import arazzoWorkflowIdUniqueness from '../arazzoWorkflowIdUniqueness';
-import type { RulesetFunctionContext } from '@stoplight/spectral-core';
+import { ArazzoSpecification } from '../types/arazzoTypes';
 
-const runRule = (target: { workflows: Record<string, unknown>[] }) => {
-  const context: DeepPartial<RulesetFunctionContext> = {
-    path: [],
-    documentInventory: {
-      graph: {} as any, // Mock the graph property
-      referencedDocuments: {}, // Mock the referencedDocuments property as a Dictionary
-      findAssociatedItemForPath: jest.fn(), // Mock the findAssociatedItemForPath function
-    },
-    document: {
-      formats: new Set(), // Mock the formats property correctly
-    },
-  };
-
-  return arazzoWorkflowIdUniqueness(target, null, context as RulesetFunctionContext);
+const runRule = (target: ArazzoSpecification): IFunctionResult[] => {
+  return arazzoWorkflowIdUniqueness(target, null);
 };
 
 describe('arazzoWorkflowIdUniqueness', () => {

@@ -1,32 +1,6 @@
 import { IFunctionResult } from '@stoplight/spectral-core';
 import validateRuntimeExpression from './arazzoRuntimeExpressionValidation';
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: 'draft-goessner-dispatch-jsonpath-00' | 'xpath-30' | 'xpath-20' | 'xpath-10';
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type Step = {
-  stepId: string;
-  outputs?: { [key: string]: string };
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  outputs?: { [key: string]: string };
-};
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  components?: { [key: string]: any };
-};
+import { Criterion, ArazzoSpecification } from './types/arazzoTypes';
 
 export default function arazzoCriterionValidation(
   criterion: Criterion,

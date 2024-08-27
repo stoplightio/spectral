@@ -1,69 +1,9 @@
 import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core';
 import type { JsonPath } from '@stoplight/types';
 import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
+import { ArazzoSpecification } from './types/arazzoTypes';
 
 const OUTPUT_NAME_PATTERN = /^[a-zA-Z0-9.\-_]+$/;
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  sourceDescriptions?: SourceDescription[];
-  components?: {
-    parameters?: Record<string, Parameter>;
-    successActions?: Record<string, SuccessAction>;
-    failureActions?: Record<string, FailureAction>;
-    [key: string]: unknown;
-  };
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type Parameter = {
-  name: string;
-  in?: string;
-  value?: unknown;
-};
-
-type SuccessAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type FailureAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  outputs?: { [key: string]: string };
-};
-
-type Step = {
-  stepId: string;
-  outputs?: { [key: string]: string };
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: string;
-};
 
 export default createRulesetFunction<ArazzoSpecification, null>(
   {

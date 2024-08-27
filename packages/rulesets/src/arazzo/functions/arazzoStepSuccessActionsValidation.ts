@@ -2,55 +2,7 @@ import type { IFunctionResult } from '@stoplight/spectral-core';
 import getAllSuccessActions from './utils/getAllSuccessActions';
 import arazzoCriterionValidation from './arazzoCriterionValidation';
 import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: 'draft-goessner-dispatch-jsonpath-00' | 'xpath-30' | 'xpath-20' | 'xpath-10';
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type SuccessAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type ReusableObject = {
-  reference: string;
-};
-
-type Step = {
-  stepId: string;
-  onSuccess?: (SuccessAction | ReusableObject)[];
-  workflowId?: string;
-  operationId?: string;
-  operationPath?: string;
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  successActions?: (SuccessAction | ReusableObject)[];
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type ArazzoSpecification = {
-  sourceDescriptions?: SourceDescription[];
-  workflows: Workflow[];
-  components?: { successActions?: Record<string, SuccessAction> };
-};
+import { ArazzoSpecification } from './types/arazzoTypes';
 
 export default function arazzoStepSuccessActionsValidation(
   target: ArazzoSpecification,

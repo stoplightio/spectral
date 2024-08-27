@@ -1,53 +1,6 @@
 import arazzoStepFailureActionsValidation from '../arazzoStepFailureActionsValidation';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
-
-type FailureAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  retryAfter?: number;
-  retryLimit?: number;
-  criteria?: Criterion[];
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: 'draft-goessner-dispatch-jsonpath-00' | 'xpath-30' | 'xpath-20' | 'xpath-10';
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type ReusableObject = {
-  reference: string;
-};
-
-type Step = {
-  stepId: string;
-  onFailure?: (FailureAction | ReusableObject)[];
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  failureActions?: (FailureAction | ReusableObject)[];
-};
-
-type ArazzoSpecification = {
-  sourceDescriptions?: SourceDescription[];
-  workflows: Workflow[];
-  components?: { failureActions?: Record<string, FailureAction> };
-};
+import { ArazzoSpecification } from '../types/arazzoTypes';
 
 const runRule = (target: ArazzoSpecification, _contextOverrides: Partial<RulesetFunctionContext> = {}) => {
   return arazzoStepFailureActionsValidation(target, null);

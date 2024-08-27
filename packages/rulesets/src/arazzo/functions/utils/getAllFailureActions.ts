@@ -1,65 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import arazzoRuntimeExpressionValidation from '../arazzoRuntimeExpressionValidation';
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  sourceDescriptions?: SourceDescription[];
-  components?: {
-    parameters?: Record<string, Parameter>;
-    successActions?: Record<string, SuccessAction>;
-    failureActions?: Record<string, FailureAction>;
-    [key: string]: unknown;
-  };
-};
-
-type Parameter = {
-  name: string;
-  in?: string;
-  value?: unknown;
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type FailureAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  retryAfter?: number;
-  retryLimit?: number;
-  criteria?: Criterion[];
-};
-
-type SuccessAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type Criterion = {
-  condition: string;
-};
-
-type ReusableObject = {
-  reference: string;
-};
-
-type Step = {
-  stepId: string;
-  onFailure?: (FailureAction | ReusableObject)[];
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  failureActions?: (FailureAction | ReusableObject)[];
-};
+import { ArazzoSpecification, Workflow, Step, ReusableObject, FailureAction } from '../types/arazzoTypes';
 
 function isFailureAction(action: unknown): action is FailureAction {
   return typeof action === 'object' && action !== null && 'name' in action && 'type' in action;

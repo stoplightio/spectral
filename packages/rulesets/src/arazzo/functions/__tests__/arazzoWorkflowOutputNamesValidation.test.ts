@@ -1,64 +1,7 @@
 import arazzoWorkflowOutputNamesValidation from '../arazzoWorkflowOutputNamesValidation';
 import { DeepPartial } from '@stoplight/types';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  sourceDescriptions?: SourceDescription[];
-  components?: {
-    successActions?: Record<string, SuccessAction>;
-    failureActions?: Record<string, FailureAction>;
-    [key: string]: unknown;
-  };
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type SuccessAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type FailureAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  outputs?: { [key: string]: string };
-};
-
-type Step = {
-  stepId: string;
-  operationId?: string;
-  workflowId?: string;
-  operationPath?: string;
-  parameters?: Record<string, unknown>;
-  outputs?: { [key: string]: string };
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: string;
-};
+import { ArazzoSpecification } from '../types/arazzoTypes';
 
 const runRule = (target: ArazzoSpecification, contextOverrides: Partial<RulesetFunctionContext> = {}) => {
   const context: DeepPartial<RulesetFunctionContext> = {

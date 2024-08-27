@@ -1,67 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 import arazzoRuntimeExpressionValidation from '../arazzoRuntimeExpressionValidation';
-
-type Parameter = {
-  name: string;
-  in?: string;
-  value?: unknown;
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  parameters?: (Parameter | ReusableObject)[];
-  components?: { parameters?: Record<string, Parameter> };
-};
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  sourceDescriptions?: SourceDescription[];
-  components?: {
-    parameters?: Record<string, Parameter>;
-    successActions?: Record<string, SuccessAction>;
-    failureActions?: Record<string, FailureAction>;
-    [key: string]: unknown;
-  };
-};
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type FailureAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  retryAfter?: number;
-  retryLimit?: number;
-  criteria?: Criterion[];
-};
-
-type SuccessAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type Criterion = {
-  condition: string;
-};
-
-type ReusableObject = {
-  reference: string;
-};
-
-type Step = {
-  stepId: string;
-  parameters?: (Parameter | ReusableObject)[];
-  onFailure?: (FailureAction | ReusableObject)[];
-};
+import { ArazzoSpecification, Workflow, Step, ReusableObject, Parameter } from '../types/arazzoTypes';
 
 const resolveReusableParameter = (
   reusableObject: ReusableObject,

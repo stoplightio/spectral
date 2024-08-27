@@ -1,67 +1,7 @@
 import { IFunctionResult } from '@stoplight/spectral-core';
 import { getAllWorkflows } from './utils/getAllWorkflows';
 import arazzoRuntimeExpressionValidation from './arazzoRuntimeExpressionValidation';
-
-type SourceDescription = {
-  name: string;
-  url: string;
-  type?: string;
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-  dependsOn?: string[];
-};
-
-type Step = {
-  stepId: string;
-  outputs?: { [key: string]: string };
-};
-
-type Parameter = {
-  name: string;
-  in?: string;
-  value?: unknown;
-};
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  sourceDescriptions?: SourceDescription[];
-  components?: {
-    parameters?: Record<string, Parameter>;
-    successActions?: Record<string, SuccessAction>;
-    failureActions?: Record<string, FailureAction>;
-    [key: string]: unknown;
-  };
-};
-
-type SuccessAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type FailureAction = {
-  name: string;
-  type: string;
-  workflowId?: string;
-  stepId?: string;
-  criteria?: Criterion[];
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: string;
-};
+import { ArazzoSpecification } from './types/arazzoTypes';
 
 export default function arazzoWorkflowDependsOnValidation(
   targetVal: ArazzoSpecification,

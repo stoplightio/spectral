@@ -1,31 +1,6 @@
 import arazzoStepSuccessCriteriaValidation from '../arazzoStepSuccessCriteriaValidation';
 import type { RulesetFunctionContext } from '@stoplight/spectral-core';
-
-type CriterionExpressionType = {
-  type: 'jsonpath' | 'xpath';
-  version: 'draft-goessner-dispatch-jsonpath-00' | 'xpath-30' | 'xpath-20' | 'xpath-10';
-};
-
-type Criterion = {
-  context?: string;
-  condition: string;
-  type?: 'simple' | 'regex' | 'jsonpath' | 'xpath' | CriterionExpressionType;
-};
-
-type Step = {
-  stepId: string;
-  successCriteria?: Criterion[];
-};
-
-type Workflow = {
-  workflowId: string;
-  steps: Step[];
-};
-
-type ArazzoSpecification = {
-  workflows: Workflow[];
-  components?: object;
-};
+import { ArazzoSpecification } from '../types/arazzoTypes';
 
 const runRule = (target: ArazzoSpecification, _contextOverrides: Partial<RulesetFunctionContext> = {}) => {
   return arazzoStepSuccessCriteriaValidation(target, null);
