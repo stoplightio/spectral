@@ -28,7 +28,7 @@ describe('arazzoWorkflowIdUniqueness', () => {
 
     expect(results).toHaveLength(1);
     expect(results[0]).toMatchObject({
-      message: `"workflowId" must be unique across all workflows.`,
+      message: `"workflowId" must be unique across all workflows. "workflow1" is duplicated.`,
       path: ['workflows', 1, 'workflowId'],
     });
   });

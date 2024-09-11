@@ -21,7 +21,6 @@ export default {
     'arazzo-document-schema': {
       description: 'Arazzo Document must be valid against the Arazzo schema.',
       message: '{{error}}',
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -30,7 +29,7 @@ export default {
     },
     'arazzo-workflowId-unique': {
       description: 'Every workflow must have unique "workflowId".',
-      recommended: true,
+      message: `{{error}}`,
       severity: 0,
       given: '$',
       then: {
@@ -40,7 +39,6 @@ export default {
     'arazzo-workflow-output-validation': {
       description: 'Every workflow output must have unique name and its value must be a valid runtime expression.',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -50,7 +48,6 @@ export default {
     'arazzo-workflow-stepId-unique': {
       description: 'Every step must have unique "stepId".',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$.workflows[*]',
       then: {
@@ -60,7 +57,6 @@ export default {
     'arazzo-step-output-validation': {
       description: 'Every step output must have unique name and its value must be a valid runtime expression.',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -70,7 +66,6 @@ export default {
     'arazzo-step-parameters-validation': {
       description: 'Step parameters and workflow parameters must valid.',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -81,7 +76,6 @@ export default {
       description:
         'Every failure action must have a unique "name", and the fields "workflowId" and "stepId" are mutually exclusive.',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -92,7 +86,6 @@ export default {
       description:
         'Every success action must have a unique "name", and the fields "workflowId" and "stepId" are mutually exclusive.',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -101,7 +94,6 @@ export default {
     },
     'arazzo-workflow-depends-on-validation': {
       description: 'Every workflow dependency must be valid.',
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -111,7 +103,6 @@ export default {
     'arazzo-step-success-criteria-validation': {
       description: 'Every success criteria must have a valid context, conditions, and types.',
       message: `{{error}}`,
-      recommended: true,
       severity: 0,
       given: '$.workflows[*]',
       then: {
@@ -120,7 +111,6 @@ export default {
     },
     'arazzo-step-request-body-validation': {
       description: 'Every step request body must have a valid `contentType` and use of runtime expressions.',
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -130,7 +120,6 @@ export default {
     'arazzo-step-validation': {
       description:
         'Every step must have a valid "stepId" and an valid "operationId" or "operationPath" or "workflowId".',
-      recommended: true,
       severity: 0,
       given: '$',
       then: {
@@ -139,7 +128,6 @@ export default {
     },
     'arazzo-no-script-tags-in-markdown': {
       description: 'Markdown descriptions must not have "<script>" tags.',
-      recommended: true,
       given: '$..[description,title]',
       then: {
         function: pattern,
@@ -150,7 +138,6 @@ export default {
     },
     'arazzo-info-description': {
       description: 'Info "description" should be present and non-empty string.',
-      recommended: true,
       severity: 'warn',
       given: '$',
       then: {
@@ -159,8 +146,7 @@ export default {
       },
     },
     'arazzo-info-summary': {
-      description: 'Info "summary" should be present and non-empty string.',
-      recommended: true,
+      description: 'Info "summary" is recommended be present and be a non-empty string.',
       severity: 'hint',
       given: '$',
       then: {
@@ -170,7 +156,6 @@ export default {
     },
     'arazzo-source-descriptions-type': {
       description: 'Source Description "type" should be present.',
-      recommended: true,
       severity: 'warn',
       given: '$.sourceDescriptions[*]',
       then: {
@@ -180,7 +165,6 @@ export default {
     },
     'arazzo-workflow-workflowId': {
       description: 'Workflow "workflowId" should follow the pattern "^[A-Za-z0-9_\\-]+$".',
-      recommended: true,
       severity: 'warn',
       given: '$.workflows[*]',
       then: {
@@ -193,7 +177,6 @@ export default {
     },
     'arazzo-workflow-description': {
       description: 'Workflow "description" should be present and non-empty string.',
-      recommended: true,
       severity: 'warn',
       given: '$.workflows[*]',
       then: {
@@ -203,7 +186,6 @@ export default {
     },
     'arazzo-workflow-summary': {
       description: 'Workflow "summary" should be present and non-empty string.',
-      recommended: true,
       severity: 'hint',
       given: '$.workflows[*]',
       then: {
@@ -213,7 +195,6 @@ export default {
     },
     'arazzo-step-description': {
       description: 'Step "description" should be present and non-empty string.',
-      recommended: true,
       severity: 'warn',
       given: '$.workflows[*].steps[*]',
       then: {
@@ -222,8 +203,7 @@ export default {
       },
     },
     'arazzo-step-summary': {
-      description: 'Step "summary" should be present and non-empty string.',
-      recommended: true,
+      description: 'Step "summary" is recommended to be present and a non-empty string.',
       severity: 'hint',
       given: '$.workflows[*].steps[*]',
       then: {
@@ -233,7 +213,6 @@ export default {
     },
     'arazzo-step-stepId': {
       description: 'Step "stepId" should follow the pattern "^[A-Za-z0-9_\\-]+$".',
-      recommended: true,
       severity: 'warn',
       given: '$.workflows[*].steps[*]',
       then: {
@@ -246,7 +225,6 @@ export default {
     },
     'arazzo-step-operationPath': {
       description: 'It is recommended to use "operationId" rather than "operationPath".',
-      recommended: true,
       severity: 'hint',
       given: '$.workflows[*].steps[*]',
       then: {

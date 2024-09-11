@@ -11,7 +11,7 @@ export default function arazzoWorkflowIdUniqueness(targetVal: ArazzoSpecificatio
     const workflowId = workflow.workflowId;
     if (seenIds.has(workflowId)) {
       results.push({
-        message: `"workflowId" must be unique across all workflows.`,
+        message: `"workflowId" must be unique across all workflows. "${workflowId}" is duplicated.`,
         path: [...path, 'workflowId'],
       });
     } else {
