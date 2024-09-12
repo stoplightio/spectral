@@ -35,11 +35,11 @@ Additionally, if output values use expressions like `$workflows.foo.steps.bar`, 
 **Bad Example**
 
 ```yaml
-  outputs:
-    access_token: $foo
+outputs:
+  access_token: $foo
 ```
 
- ### arazzo-workflow-stepId-unique
+### arazzo-workflow-stepId-unique
 
 Every `stepId` defined within a workflow must be unique
 
@@ -104,6 +104,7 @@ Then validating the expression the rule checks against known prefixes described 
 Parameters must be unique based on their combination of `name` and `in` properties when defined at the workflow level or within a step. Step parameters can override workflow level parameters.
 
 Additionally rule checks:
+
 - reusable parameter references must be a valid Arazzo runtime expression (e.g. `$components.parameters.<name>`) and the referenced parameter must be existing within the components parameters
 - parameter values using expressions, must be a valid Arazzo Specification Runtime Expressions](https://spec.openapis.org/arazzo/v1.0.0.html#runtime-expressions). Additionally, if parameter values use expressions like `$workflows.foo.steps.bar`, the rule will verify the existence of workflow `foo` and step `bar`.
 
@@ -113,18 +114,18 @@ Additionally rule checks:
 
 ```yaml
 parameters:
- - name: username
-   in: query
-   value: $inputs.username
+  - name: username
+    in: query
+    value: $inputs.username
 ```
 
 **Bad Example**
 
 ```yaml
 parameters:
- - name: username
-   in: query
-   value: $foo
+  - name: username
+    in: query
+    value: $foo
 ```
 
 ### arazzo-step-failure-actions-validation
@@ -132,6 +133,7 @@ parameters:
 Every failure action must have a unique `name`, and the fields `workflowId` and `stepId` are mutually exclusive. Any runtime expressions used for `workflowId` or `stepId` must be valid and resolve to a defined workflow or step respectively.
 
 Additionally rule checks:
+
 - reusable failure action references must be a valid Arazzo runtime expression (e.g. `$components.failureActions.<name>`) and the referenced action must be existing within the components parameters
 
 **Recommended:** Yes
@@ -141,6 +143,7 @@ Additionally rule checks:
 Every success action must have a unique `name`, and the fields `workflowId` and `stepId` are mutually exclusive. Any runtime expressions used for `workflowId` or `stepId` must be valid and resolve to a defined workflow or step respectively.
 
 Additionally rule checks:
+
 - reusable success action references must be a valid Arazzo runtime expression (e.g. `$components.successActions.<name>`) and the referenced action must be existing within the components parameters
 
 **Recommended:** Yes
@@ -156,6 +159,7 @@ The list of defined workflows within the `dependsOn` property must be unique and
 Every success criteria must have a valid context, conditions, and types.
 
 Rule checks:
+
 - `condition` must be specified
 - if `type` is defined then a `context` must be provided
 - if `type` is an object then it must conform to an [Arazzo Specification Criterion Expression Type Object](https://spec.openapis.org/arazzo/v1.0.0.html#criterion-expression-type-object)
@@ -168,16 +172,15 @@ Rule checks:
 
 ```yaml
 - context: $statusCode
-  condition: '^200$'
+  condition: "^200$"
   type: regex
 ```
 
 **Bad Example**
 
 ```yaml
-
 - context: hello
-  condition: '^200$'
+  condition: "^200$"
   type: regex
 ```
 
@@ -202,6 +205,7 @@ info:
 ```
 
 ### arazzo-info-description
+
 Arazzo object info `description` must be present and non-empty string.
 
 Examples can contain Markdown so you can really go to town with them, implementing getting started information like what the workflows contained can do and how you can get up and running.
@@ -224,7 +228,6 @@ info:
     - **Multi-step Loan Application:** The workflow includes multiple steps to check product eligibility, retrieve terms and conditions, create customer profiles, initiate the loan, and finalize the payment plan.
     - **Dynamic Decision Making:** Based on the API responses, the workflow adapts the flow, for example, skipping customer creation if the customer is already registered or ending the workflow if no eligible products are found.
     - **User-Centric:** The workflow handles both existing and new customers, providing a flexible approach to customer onboarding and loan authorization.
-
 ```
 
 ### arazzo-source-descriptions-type
@@ -278,7 +281,6 @@ In order to improve consumer experience, Step `summary` should be present and a 
 
 **Recommend:** Yes
 
-
 ### arazzo-step-operationPath
 
 It is recommended to use `operationId` rather than `operationPath` within a step to reference an API operation.
@@ -290,22 +292,16 @@ It is recommended to use `operationId` rather than `operationPath` within a step
 Every step request body must have an expected `contentType` and expected use of runtime expressions.
 
 The contentType value will be checked against the following regex:
+
 ```regex
 /^(application|audio|font|example|image|message|model|multipart|text|video)\/[a-zA-Z0-9!#$&^_.+-]{1,127}$/
 ```
 
 Rule Checks:
+
 - if `payload` uses full runtime expression (e.g. $steps.steps1.outputs.responseBody) then it must be a valid/expected runtime expression
 - If `replacements` are specified, then if a `value` uses a runtime expression it must be valid.
 
-> _inline use of runtime expressions within `payload` are not yet validated
-
+> \_inline use of runtime expressions within `payload` are not yet validated
 
 **Recommended:** Yes
-
-
-
-
-
-
-
