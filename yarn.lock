@@ -2815,7 +2815,7 @@ __metadata:
     "@stoplight/spectral-parsers": ">=1"
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-migrator": ^1.9.6
-    "@stoplight/spectral-rulesets": ^1.20.1
+    "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.0
     "@stoplight/types": ^13.6.0
     "@types/node": "*"
@@ -2857,7 +2857,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-rulesets@*, @stoplight/spectral-rulesets@1.20.2, @stoplight/spectral-rulesets@^1.20.1, @stoplight/spectral-rulesets@workspace:packages/rulesets":
+"@stoplight/spectral-rulesets@*, @stoplight/spectral-rulesets@1.20.2, @stoplight/spectral-rulesets@>=1, @stoplight/spectral-rulesets@workspace:packages/rulesets":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
