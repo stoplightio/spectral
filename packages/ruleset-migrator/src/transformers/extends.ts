@@ -9,6 +9,7 @@ import { isBasicRuleset } from '../utils/isBasicRuleset';
 const REPLACEMENTS = {
   'spectral:oas': 'oas',
   'spectral:asyncapi': 'asyncapi',
+  'spectral:arazzo': 'arazzo',
 };
 
 export { transformer as default };
