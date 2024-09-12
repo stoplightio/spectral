@@ -30,7 +30,7 @@ export default function arazzoWorkflowDependsOnValidation(
         // Check for uniqueness
         if (seenWorkflows.has(dep)) {
           results.push({
-            message: `Duplicate workflowId "${dep}" in dependsOn for workflow "${workflow.workflowId as string}".`,
+            message: `Duplicate workflowId "${dep}" in dependsOn for workflow "${workflow.workflowId}".`,
             path: [...path, 'dependsOn', depIndex],
           });
           return;
@@ -74,7 +74,7 @@ export default function arazzoWorkflowDependsOnValidation(
           // Check against locally defined workflows
           if (!localWorkflowIds.has(dep)) {
             results.push({
-              message: `WorkflowId "${dep}" not found in local Arazzo workflows "${workflow.workflowId as string}".`,
+              message: `WorkflowId "${dep}" not found in local Arazzo workflows "${workflow.workflowId}".`,
               path: [...path, 'dependsOn', depIndex],
             });
           }
