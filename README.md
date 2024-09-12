@@ -40,10 +40,10 @@ There are also [additional installation options](https://meta.stoplight.io/docs/
 
 Spectral, being a generic YAML/JSON linter, **needs a ruleset** to lint files. A ruleset is a JSON, YAML, or JavaScript/TypeScript file (often the file is called `.spectral.yaml` for a YAML ruleset) that contains a collection of rules, which can be used to lint other JSON or YAML files such as an API description.
 
-To get started, run this command in your terminal to create a `.spectral.yaml` file that uses the Spectral predefined rulesets based on OpenAPI or AsyncAPI:
+To get started, run this command in your terminal to create a `.spectral.yaml` file that uses the Spectral predefined rulesets based on OpenAPI, Arazzo or AsyncAPI:
 
 ```bash
-echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
+echo 'extends: ["spectral:oas", "spectral:asyncapi", "spectral:arazzo"]' > .spectral.yaml
 ```
 
 If you would like to create your own rules, check out the [Custom Rulesets](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets) page.
