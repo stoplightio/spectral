@@ -57,7 +57,7 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@stoplight/spectral-formats": "^1.7.0",
+    "@stoplight/spectral-formats": "*",
     "@stoplight/spectral-functions": "*",
     "@stoplight/spectral-parsers": "*",
     "@stoplight/yaml": "^4.2.2",
