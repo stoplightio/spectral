@@ -1,3 +1,10 @@
+# @stoplight/spectral-core [1.19.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.3...@stoplight/spectral-core-1.19.0) (2024-09-12)
+
+
+### Features
+
+* **rulesets:** initial rulesets for the Arazzo Specification ([#2672](https://github.com/stoplightio/spectral/issues/2672)) ([8443232](https://github.com/stoplightio/spectral/commit/84432325cd9eb87c4ce32897bd4a23e83aabb856))
+
 ## @stoplight/spectral-core [1.18.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.2...@stoplight/spectral-core-1.18.3) (2023-07-18)
 
 
