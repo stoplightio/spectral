@@ -98,7 +98,7 @@
     "@types/node-fetch": "^2.5.12",
     "@types/node-powershell": "^3.1.1",
     "@types/text-table": "^0.2.2",
-    "@typescript-eslint/eslint-plugin": "^5.34.0",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.34.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
