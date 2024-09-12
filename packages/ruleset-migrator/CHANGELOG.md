@@ -1,3 +1,10 @@
+# @stoplight/spectral-ruleset-migrator [1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.9.5...@stoplight/spectral-ruleset-migrator-1.10.0) (2024-09-12)
+
+
+### Features
+
+* **rulesets:** initial rulesets for the Arazzo Specification ([#2672](https://github.com/stoplightio/spectral/issues/2672)) ([8443232](https://github.com/stoplightio/spectral/commit/84432325cd9eb87c4ce32897bd4a23e83aabb856))
+
 ## @stoplight/spectral-ruleset-migrator [1.9.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.9.4...@stoplight/spectral-ruleset-migrator-1.9.5) (2023-07-26)
 
 
