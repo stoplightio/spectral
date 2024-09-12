@@ -1,3 +1,11 @@
+# @stoplight/spectral-formats [1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.6.0...@stoplight/spectral-formats-1.7.0) (2024-09-12)
+
+
+### Features
+
+* **formats:** add arazzo format ([#2663](https://github.com/stoplightio/spectral/issues/2663)) ([dc1a8ef](https://github.com/stoplightio/spectral/commit/dc1a8ef003e198ab9943bf50ee17cd64ca2b6307))
+* **rulesets:** initial rulesets for the Arazzo Specification ([#2672](https://github.com/stoplightio/spectral/issues/2672)) ([8443232](https://github.com/stoplightio/spectral/commit/84432325cd9eb87c4ce32897bd4a23e83aabb856))
+
 # @stoplight/spectral-formats [1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-v1.5.0...@stoplight/spectral-formats-1.6.0) (2023-11-07)
 
 
