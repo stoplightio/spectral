@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.20.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.0...@stoplight/spectral-rulesets-1.20.1) (2024-09-13)
+
+
+### Bug Fixes
+
+* **rulesets:** use uri-reference for oauth security schemes ([#2652](https://github.com/stoplightio/spectral/issues/2652)) ([c411e63](https://github.com/stoplightio/spectral/commit/c411e63f5fd1bc13c55ee83da0bd0b3120c2a87d))
+
 # @stoplight/spectral-rulesets [1.20.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.19.1...@stoplight/spectral-rulesets-1.20.0) (2024-09-12)
 
 
