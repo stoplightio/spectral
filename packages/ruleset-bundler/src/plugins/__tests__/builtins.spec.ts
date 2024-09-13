@@ -75,6 +75,7 @@ const xor = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@s
 
 const oas = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['oas'];
 const asyncapi = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['asyncapi'];
+const arazzo = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['arazzo'];
 
 var input = {
   extends: [oas],

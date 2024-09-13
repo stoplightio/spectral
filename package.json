@@ -7,6 +7,8 @@
     "validator",
     "OpenAPI",
     "Swagger",
+    "Arazzo",
+    "AsyncAPI",
     "schema",
     "API"
   ],
@@ -32,7 +34,7 @@
     "lint": "yarn prelint && yarn lint.prettier && yarn lint.eslint",
     "lint.fix": "yarn lint.prettier --write && yarn lint.eslint --fix",
     "lint.eslint": "eslint --cache --cache-location .cache/.eslintcache --ext=.js,.mjs,.ts packages test-harness",
-    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/ruleset/meta/*.json packages/rulesets/src/{asyncapi,oas}/schemas/**/*.json docs/**/*.md README.md",
+    "lint.prettier": "prettier --ignore-path .eslintignore --ignore-unknown --check packages/core/src/ruleset/meta/*.json packages/rulesets/src/{asyncapi,oas,arazzo}/schemas/**/*.json docs/**/*.md README.md",
     "pretest": "yarn workspaces foreach run pretest",
     "test": "yarn pretest && yarn test.karma && yarn test.jest",
     "pretest.harness": "ts-node -T test-harness/scripts/generate-tests.ts",
@@ -96,7 +98,7 @@
     "@types/node-fetch": "^2.5.12",
     "@types/node-powershell": "^3.1.1",
     "@types/text-table": "^0.2.2",
-    "@typescript-eslint/eslint-plugin": "^5.34.0",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@typescript-eslint/parser": "^5.34.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
@@ -138,7 +140,7 @@
     "packages/core/src/ruleset/meta/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ],
-    "packages/rulesets/src/{asyncapi,oas}/schemas/**/*.json": [
+    "packages/rulesets/src/{asyncapi,oas,arazzo}/schemas/**/*.json": [
       "prettier --ignore-path .eslintignore --write"
     ]
   },
