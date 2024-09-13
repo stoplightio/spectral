@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.19.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.0...@stoplight/spectral-core-1.19.1) (2024-09-13)
+
+
+### Bug Fixes
+
+* **core:** fix for TypeError "this.formats.has is not a function" ([#2664](https://github.com/stoplightio/spectral/issues/2664)) ([75d642d](https://github.com/stoplightio/spectral/commit/75d642dae6200136839a8ab67d8860b2e781a8d2))
+
 # @stoplight/spectral-core [1.19.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.18.3...@stoplight/spectral-core-1.19.0) (2024-09-12)
 
 
