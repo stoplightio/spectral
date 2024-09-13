@@ -3,6 +3,7 @@ import { IRuleResult, Spectral, Document, RulesetDefinition } from '@stoplight/s
 import { httpAndFileResolver } from '@stoplight/spectral-ref-resolver';
 import oasRuleset from '../../oas/index';
 import aasRuleset from '../../asyncapi/index';
+import arazzoRuleset from '../../arazzo/index';
 
 type Ruleset = typeof oasRuleset & typeof aasRuleset;
 export type RuleName = keyof Ruleset['rules'];
@@ -43,6 +44,7 @@ export function createWithRules(rules: (keyof Ruleset['rules'])[]): Spectral {
     extends: [
       [aasRuleset as RulesetDefinition, 'off'],
       [oasRuleset as RulesetDefinition, 'off'],
+      [arazzoRuleset as RulesetDefinition, 'off'],
     ],
     rules: rules.reduce((obj, name) => {
       obj[name] = true;
