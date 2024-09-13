@@ -1,3 +1,10 @@
+# @stoplight/spectral-ruleset-bundler [1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.5.2...@stoplight/spectral-ruleset-bundler-1.6.0) (2024-09-12)
+
+
+### Features
+
+* **rulesets:** initial rulesets for the Arazzo Specification ([#2672](https://github.com/stoplightio/spectral/issues/2672)) ([8443232](https://github.com/stoplightio/spectral/commit/84432325cd9eb87c4ce32897bd4a23e83aabb856))
+
 # [@stoplight/spectral-ruleset-bundler-v1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.5.1...@stoplight/spectral-ruleset-bundler-v1.5.2) (2023-05-17)
 
 

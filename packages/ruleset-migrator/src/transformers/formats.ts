@@ -12,6 +12,8 @@ const FORMATS = [
   'oas3',
   'oas3.0',
   'oas3.1',
+  'arazzo1',
+  'arazzo1.0',
   'asyncapi2',
   'json-schema',
   'json-schema-loose',
