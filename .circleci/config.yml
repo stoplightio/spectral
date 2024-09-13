@@ -167,7 +167,7 @@ commands:
       - run:
           name: Install ldid
           working_directory: /tmp/ldid
-          command: make install
+          command: sudo make install
 
   lint-code:
     steps:
