@@ -1,3 +1,11 @@
+# @stoplight/spectral-formatters [1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.3.0...@stoplight/spectral-formatters-1.4.0) (2024-09-13)
+
+
+### Features
+
+* **formatters:** add code climate (GitLab) formatter ([#2648](https://github.com/stoplightio/spectral/issues/2648)) ([41eca61](https://github.com/stoplightio/spectral/commit/41eca612d292520142ace3bd97cde630c33366f1))
+* **formatters:** add markdown formatter ([#2662](https://github.com/stoplightio/spectral/issues/2662)) ([b5edf5e](https://github.com/stoplightio/spectral/commit/b5edf5e9b61c986097e6d77988489ed12a48611f))
+
 # @stoplight/spectral-formatters [1.3.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.2.0...@stoplight/spectral-formatters-1.3.0) (2023-09-14)
 
 
