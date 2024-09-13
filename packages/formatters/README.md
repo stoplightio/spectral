@@ -35,3 +35,5 @@ console.error(output);
 - pretty
 - github-actions
 - sarif
+- gitlab
+- code-climate
