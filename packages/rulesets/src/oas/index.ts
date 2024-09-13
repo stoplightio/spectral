@@ -57,6 +57,27 @@ const ruleset = {
         },
       ],
     },
+    ArrayProperties: {
+      targets: [
+        {
+          formats: [oas2, oas3_0],
+          given: [
+            // Check for type: 'array'
+            '$..[?(@ && @.type=="array")]',
+          ],
+        },
+        {
+          formats: [oas3_1],
+          given: [
+            // Still check for type: 'array'
+            '$..[?(@ && @.type=="array")]',
+
+            // also check for type: ['array', ...]
+            '$..[?(@ && @.type && @.type.constructor.name === "Array" && @.type.includes("array"))]',
+          ],
+        },
+      ],
+    },
   },
   rules: {
     'operation-success-response': {
@@ -359,6 +380,17 @@ const ruleset = {
       given: "$..[?(@property === '$ref')]",
       then: {
         function: refSiblings,
+      },
+    },
+    'array-items': {
+      message: 'Schemas with "type: array", require a sibling "items" field',
+      severity: 0,
+      recommended: true,
+      resolved: false,
+      given: '#ArrayProperties',
+      then: {
+        function: truthy,
+        field: 'items',
       },
     },
     'typed-enum': {

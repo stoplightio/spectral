@@ -28,6 +28,7 @@ console.error(output);
 - html
 - text
 - teamcity
+- markdown (example: [markdown_example.md](markdown_example.md))
 
 ### Node.js only
 

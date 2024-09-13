@@ -4,6 +4,7 @@ export * from './junit';
 export * from './html';
 export * from './text';
 export * from './teamcity';
+export * from './markdown';
 import type { Formatter } from './types';
 export type { Formatter, FormatterOptions } from './types';
 
