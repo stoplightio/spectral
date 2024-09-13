@@ -1138,11 +1138,11 @@
           "properties": {
             "authorizationUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "refreshUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "scopes": {
               "$ref": "#/$defs/map-of-strings"
@@ -1157,11 +1157,11 @@
           "properties": {
             "tokenUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "refreshUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "scopes": {
               "$ref": "#/$defs/map-of-strings"
@@ -1176,11 +1176,11 @@
           "properties": {
             "tokenUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "refreshUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "scopes": {
               "$ref": "#/$defs/map-of-strings"
@@ -1195,15 +1195,15 @@
           "properties": {
             "authorizationUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "tokenUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "refreshUrl": {
               "type": "string",
-              "format": "uri"
+              "format": "uri-reference"
             },
             "scopes": {
               "$ref": "#/$defs/map-of-strings"
