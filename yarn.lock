@@ -2746,12 +2746,14 @@ __metadata:
     "@stoplight/spectral-core": ^1.15.1
     "@stoplight/spectral-runtime": ^1.1.0
     "@stoplight/types": ^13.15.0
+    "@types/markdown-escape": ^1.1.3
     ast-types: ^0.14.2
     astring: ^1.8.4
     chalk: 4.1.2
     cliui: 7.0.4
     eol: 0.9.1
     lodash: ^4.17.21
+    markdown-escape: ^2.0.0
     node-html-parser: ^4.1.5
     node-sarif-builder: ^2.0.3
     strip-ansi: 6.0
@@ -3320,6 +3322,13 @@ __metadata:
   version: 4.14.176
   resolution: "@types/lodash@npm:4.14.176"
   checksum: 9e949704dfffab60365b5cdca0477926af6eabe82c64b7be8f74b3a117bb373d58371be962c2b159dd0cf8fad49a7dcacc748564aea4ce6b6883c197a6f0bfa8
+  languageName: node
+  linkType: hard
+
+"@types/markdown-escape@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@types/markdown-escape@npm:1.1.3"
+  checksum: cb2e410993271f0ccc526190391a08344f4f602be69e06fee989d36d5886866ba9ba2184054895d0ad2a12d57b02f3ccf86d7a1fe8904be48bcc1ee61b98e32f
   languageName: node
   linkType: hard
 
@@ -9505,6 +9514,13 @@ __metadata:
   version: 4.1.0
   resolution: "map-obj@npm:4.1.0"
   checksum: c62b22f23e58d742a093a0935fa904c92cc788d56132b75666160ac0c5704d3c677d28794594c7adf7ed0c177a96579e781dbf06e0a1b5d574c992a5c13877a3
+  languageName: node
+  linkType: hard
+
+"markdown-escape@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "markdown-escape@npm:2.0.0"
+  checksum: 74c66d817636ac5f6a275fdc79ecb1e208d907ca85289d660b515256fbc3e380eb18d29b6bbbd6a77968ee4fb5872d40ecf31e52bc9f17855bb01bb723569fa0
   languageName: node
   linkType: hard
 

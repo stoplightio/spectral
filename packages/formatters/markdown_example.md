@@ -1,0 +1,5 @@
+| Code                                                                   | Path                         | Message                                      | Severity | Start | End  | Source                                              |
+| ---------------------------------------------------------------------- | ---------------------------- | -------------------------------------------- | -------- | ----- | ---- | --------------------------------------------------- |
+| [operation-description](https://rule-documentation-url.com)            | paths.\/pets.get.description | paths.\/pets.get.description is not truthy   | Error    | 1:0   | 10:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
+| [operation-tags](https://ruleset-documentation-url.com#operation-tags) | paths.\/pets.get.tags        | paths.\/pets.get.tags is not truthy          | Warning  | 11:0  | 20:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
+| rule-from-other-ruleset                                                | paths                        | i should not have any documentation url link | Warning  | 21:0  | 30:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
