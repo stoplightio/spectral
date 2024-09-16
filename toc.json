@@ -31,12 +31,17 @@
     },
     {
       "type": "item",
+      "title": "Arazzo Support",
+      "uri": "/docs/getting-started/6-arazzo.md"
+    },
+    {
+      "type": "item",
       "title": "AsyncAPI Support",
       "uri": "/docs/getting-started/5-asyncapi.md"
     },
     {
       "type": "divider",
-      "title": "Guides"
+      "title": "guides"
     },
     {
       "type": "item",
@@ -69,7 +74,7 @@
         },
         {
           "type": "item",
-          "title": "Extends",
+          "title": "Extending Rulesets",
           "uri": "/docs/guides/4b-extends.md"
         },
         {
@@ -92,7 +97,7 @@
           "title": "JavaScript Ruleset Format",
           "uri": "/docs/guides/4f-js-rulesets.md"
         }
-      ]
+       ]    
     },
     {
       "type": "item",
@@ -120,11 +125,6 @@
     },
     {
       "type": "item",
-      "title": "Spectral v2/v3 to v4 Migration Guide",
-      "uri": "/docs/migration-guides/4.0.md"
-    },
-    {
-      "type": "item",
       "title": "Spectral v4 to v5 Migration Guide",
       "uri": "/docs/migration-guides/5.0.md"
     },
@@ -144,18 +144,23 @@
     },
     {
       "type": "item",
+      "title": "Arazzo Rules",
+      "uri": "/docs/reference/arazzo-rules.md"
+    },
+    {
+      "type": "item",
       "title": "AsyncAPI Rules",
       "uri": "/docs/reference/asyncapi-rules.md"
     },
     {
       "type": "item",
-      "title": "Core Functions",
-      "uri": "/docs/reference/functions.md"
+      "title": "Error Handling",
+      "uri": "/docs/reference/error-handling.md"
     },
     {
       "type": "item",
-      "title": "Error Handling",
-      "uri": "/docs/reference/error-handling.md"
+      "title": "Core Functions",
+      "uri": "/docs/reference/functions.md"
     },
     {
       "type": "item",
