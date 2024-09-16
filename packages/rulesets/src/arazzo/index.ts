@@ -202,15 +202,6 @@ export default {
         function: truthy,
       },
     },
-    'arazzo-step-summary': {
-      description: 'Step "summary" is recommended to be present and a non-empty string.',
-      severity: 'hint',
-      given: '$.workflows[*].steps[*]',
-      then: {
-        field: 'summary',
-        function: truthy,
-      },
-    },
     'arazzo-step-stepId': {
       description: 'Step "stepId" should follow the pattern "^[A-Za-z0-9_\\-]+$".',
       severity: 'warn',

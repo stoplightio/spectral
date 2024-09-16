@@ -275,12 +275,6 @@ In order to improve consumer experience, Step `description` should be present an
 
 **Recommend:** Yes
 
-### arazzo-step-summary
-
-In order to improve consumer experience, Step `summary` should be present and a non-empty string.
-
-**Recommend:** Yes
-
 ### arazzo-step-operationPath
 
 It is recommended to use `operationId` rather than `operationPath` within a step to reference an API operation.
