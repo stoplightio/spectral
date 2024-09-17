@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.20.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.1...@stoplight/spectral-rulesets-1.20.2) (2024-09-17)
+
+
+### Bug Fixes
+
+* **rulesets:** remove step summary rule ([#2692](https://github.com/stoplightio/spectral/issues/2692)) ([d5a566f](https://github.com/stoplightio/spectral/commit/d5a566f13d831bed76c69c2efe3de7b7a111d6d0))
+
 ## @stoplight/spectral-rulesets [1.20.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.0...@stoplight/spectral-rulesets-1.20.1) (2024-09-13)
 
 
