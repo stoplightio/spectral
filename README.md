@@ -114,7 +114,7 @@ Check out some additional style guides here:
 
 ## 🏁 Help Others Utilize Spectral
 
-If you're using Spectral for an interesting use case, [contact Stoplight](mailto:growth@stoplight.io) for a case study. 🎉
+If you're using Spectral for an interesting use case, create an issue with details on how you're using it. We'll add it to a list here. Spread the goodness 🎉
 
 ## 👏 Contributing
 
