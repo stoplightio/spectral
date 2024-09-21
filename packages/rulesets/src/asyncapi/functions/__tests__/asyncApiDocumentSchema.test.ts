@@ -1,11 +1,11 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import { Spectral } from '@stoplight/spectral-core';
-import { prepareResults } from '../asyncApi2DocumentSchema';
+import { prepareResults } from '../asyncApiDocumentSchema';
 
 import { ErrorObject } from 'ajv';
 import { createWithRules } from '../../__tests__/__helpers__/tester';
 
-describe('asyncApi2DocumentSchema', () => {
+describe('asyncApiDocumentSchema', () => {
   let s: Spectral;
 
   beforeEach(async () => {
@@ -291,6 +291,44 @@ describe('asyncApi2DocumentSchema', () => {
                       email: {
                         type: 'string',
                         format: 'email',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }),
+      ).toEqual([]);
+    });
+  });
+
+  describe('given AsyncAPI 3.0.0 document', () => {
+    test('validate valid spec', async () => {
+      expect(
+        await s.run({
+          asyncapi: '3.0.0',
+          info: {
+            title: 'Account Service',
+            version: '1.0.0',
+            description: 'This service is in charge of processing user signups',
+          },
+          channels: {
+            userSignedup: {
+              address: 'user/signedup',
+              messages: {
+                UserSignedUp: {
+                  payload: {
+                    type: 'object',
+                    properties: {
+                      displayName: {
+                        type: 'string',
+                        description: 'Name of the user',
+                      },
+                      email: {
+                        type: 'string',
+                        format: 'email',
+                        description: 'Email of the user',
                       },
                     },
                   },

@@ -1,80 +1,18 @@
 # AsyncAPI Rules
 
-Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](https://v2.asyncapi.com/docs/reference).
+Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](https://asyncapi.com).
 
 In your ruleset file you can add `extends: "spectral:asyncapi"` and you'll get all of the following rules applied.
 
-These rules will only apply to AsyncAPI v2 documents.
+For simplicity, the rules are split up into v2 and v3 compliant rules to make it easier to know which apply when.
 
-### asyncapi-channel-no-empty-parameter
+## AsyncAPI v2 and v3
 
-Channel parameter declarations cannot be empty, ex.`/given/{}` is invalid.
-
-**Recommended:** Yes
-
-### asyncapi-channel-no-query-nor-fragment
-
-Query parameters and fragments shouldn't be used in channel names. Instead, use bindings to define them.
-
-**Recommended:** Yes
-
-### asyncapi-channel-no-trailing-slash
-
-Keep trailing slashes off of channel names, as it can cause some confusion. Most messaging protocols will treat `example/foo` and `example/foo/` as different things. Keep in mind that tooling may replace slashes (`/`) with protocol-specific notation (e.g.: `.` for AMQP), therefore, a trailing slash may result in an invalid channel name in some protocols.
-
-**Recommended:** Yes
+The following rules apply to both AsyncAPI v2 and v3 documents.
 
 ### asyncapi-channel-parameters
 
 All channel parameters should be defined in the `parameters` object of the channel. They should also not contain redundant parameters that do not exist in the channel address.
-
-**Recommended:** Yes
-
-### asyncapi-channel-servers
-
-Channel servers must be defined in the `servers` object.
-
-**Bad Example**
-
-```yaml
-asyncapi: "2.0.0"
-info:
-  title: Awesome API
-  description: A very well-defined API
-  version: "1.0"
-servers:
-  production:
-    url: "stoplight.io"
-    protocol: "https"
-channels:
-  hello:
-    servers:
-      - development
-```
-
-**Good Example**
-
-```yaml
-asyncapi: "2.0.0"
-info:
-  title: Awesome API
-  description: A very well-defined API
-  version: "1.0"
-servers:
-  production:
-    url: "stoplight.io"
-    protocol: "https"
-channels:
-  hello:
-    servers:
-      - production
-```
-
-**Recommended:** Yes
-
-### asyncapi-headers-schema-type-object
-
-The schema definition of the application headers must be of type “object”.
 
 **Recommended:** Yes
 
@@ -177,6 +115,152 @@ info:
 ### asyncapi-latest-version
 
 Checking if the AsyncAPI document is using the latest version.
+
+**Recommended:** Yes
+
+### asyncapi-parameter-description
+
+Parameter objects should have a `description`.
+
+**Recommended:** No
+
+### asyncapi-servers
+
+A non-empty `servers` object is expected to be located at the root of the document.
+
+**Recommended:** Yes
+
+### asyncapi-unused-components-schema
+
+Potential unused reusable `schema` entry has been detected.
+
+<!-- theme: warning -->
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
+
+### asyncapi-unused-components-server
+
+Potential unused reusable `server` entry has been detected.
+
+<!-- theme: warning -->
+
+_Warning:_ This rule may identify false positives when linting a specification
+that acts as a library (a container storing reusable objects, leveraged by other
+specifications that reference those objects).
+
+**Recommended:** Yes
+
+## AsyncAPI v2
+
+The following rules ONLY apply to AsyncAPI v2 documents.
+
+### asyncapi-schema
+
+Validate structure of AsyncAPI specification.
+
+**Recommended:** Yes
+
+### asyncapi-server-security
+
+Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+asyncapi: 2.0.0
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - petstore_auth: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+**Bad Example**
+
+```yaml
+asyncapi: 2.0.0
+servers:
+  production:
+    url: test.mosquitto.org
+    security:
+      - not_defined: []
+components:
+  securitySchemes:
+    petstore_auth: ...
+```
+
+### asyncapi-channel-no-empty-parameter
+
+Channel parameter declarations cannot be empty, ex.`/given/{}` is invalid.
+
+**Recommended:** Yes
+
+### asyncapi-channel-no-query-nor-fragment
+
+Query parameters and fragments shouldn't be used in channel names. Instead, use bindings to define them.
+
+**Recommended:** Yes
+
+### asyncapi-channel-no-trailing-slash
+
+Keep trailing slashes off of channel names, as it can cause some confusion. Most messaging protocols will treat `example/foo` and `example/foo/` as different things. Keep in mind that tooling may replace slashes (`/`) with protocol-specific notation (e.g.: `.` for AMQP), therefore, a trailing slash may result in an invalid channel name in some protocols.
+
+**Recommended:** Yes
+
+### asyncapi-channel-servers
+
+Channel servers must be defined in the `servers` object.
+
+**Bad Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well-defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - development
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "2.0.0"
+info:
+  title: Awesome API
+  description: A very well-defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - production
+```
+
+**Recommended:** Yes
+
+### asyncapi-headers-schema-type-object
+
+The schema definition of the application headers must be of type “object”.
 
 **Recommended:** Yes
 
@@ -333,12 +417,6 @@ components:
     petstore_auth: ...
 ```
 
-### asyncapi-parameter-description
-
-Parameter objects should have a `description`.
-
-**Recommended:** No
-
 ### asyncapi-payload-default
 
 `default` objects should be valid against the `payload` they decorate.
@@ -425,7 +503,7 @@ Other formats such as OpenAPI Schema Object, JSON Schema Draft 07, and Avro will
 
 ### asyncapi-payload
 
-When `schemaFormat` is undefined, the `payload` object should be valid against the AsyncAPI 2 Schema Object definition.
+When `schemaFormat` is undefined, the `payload` object should be valid against the AsyncAPI v2 Schema Object definition.
 
 **Recommended:** Yes
 
@@ -438,12 +516,6 @@ When `schemaFormat` is undefined, the `payload` object should be valid against t
 ### asyncapi-schema-examples
 
 Values of the `examples` array should be valid against the `schema` they decorate.
-
-**Recommended:** Yes
-
-### asyncapi-schema
-
-Validate structure of AsyncAPI v2 specification.
 
 **Recommended:** Yes
 
@@ -483,47 +555,9 @@ Server URL should not point to example.com.
 
 **Recommended:** No
 
-### asyncapi-server-security
-
-Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
-
-**Recommended:** Yes
-
-**Good Example**
-
-```yaml
-servers:
-  production:
-    url: test.mosquitto.org
-    security:
-      - petstore_auth: []
-components:
-  securitySchemes:
-    petstore_auth: ...
-```
-
-**Bad Example**
-
-```yaml
-servers:
-  production:
-    url: test.mosquitto.org
-    security:
-      - not_defined: []
-components:
-  securitySchemes:
-    petstore_auth: ...
-```
-
 ### asyncapi-server-variables
 
 All server URL variables should be defined in the `variables` object of the server. They should also not contain redundant variables that do not exist in the server address.
-
-**Recommended:** Yes
-
-### asyncapi-servers
-
-A non-empty `servers` object is expected to be located at the root of the document.
 
 **Recommended:** Yes
 
@@ -598,41 +632,245 @@ tags:
 
 ### asyncapi-tags
 
-AsyncAPI object should have non-empty `tags` array.
+AsyncAPI root object should have non-empty `tags` array.
 
 Why? Well, you _can_ reference tags arbitrarily in operations, and definition is optional...
 
 ```yaml
 /invoices/{id}/items:
-  get:
-    tags:
-      - Invoice Items
+  tags:
+    - Invoice Items
 ```
 
 Defining tags allows you to add more information like a `description`. For more information see [asyncapi-tag-description](#asyncapi-tag-description).
 
 **Recommended:** Yes
 
-### asyncapi-unused-components-schema
+## AsyncAPI v3
 
-Potential unused reusable `schema` entry has been detected.
+The following rules ONLY apply to AsyncAPI v3 documents.
 
-<!-- theme: warning -->
+### asyncapi-3-channel-no-empty-parameter
 
-_Warning:_ This rule may identify false positives when linting a specification
-that acts as a library (a container storing reusable objects, leveraged by other
-specifications that reference those objects).
+Channel address parameter declarations cannot be empty, ex.`/given/{}` is invalid.
 
 **Recommended:** Yes
 
-### asyncapi-unused-components-server
+### asyncapi-3-channel-no-query-nor-fragment
 
-Potential unused reusable `server` entry has been detected.
+Query parameters and fragments shouldn't be used in channel address. Instead, use bindings to define them, ex.`/given?test` is invalid.
 
-<!-- theme: warning -->
+**Recommended:** Yes
 
-_Warning:_ This rule may identify false positives when linting a specification
-that acts as a library (a container storing reusable objects, leveraged by other
-specifications that reference those objects).
+### asyncapi-3-channel-no-trailing-slash
+
+Keep trailing slashes off of channel address, as it can cause some confusion. Most messaging protocols will treat `example/foo` and `example/foo/` as different things. Keep in mind that tooling may replace slashes (`/`) with protocol-specific notation (e.g.: `.` for AMQP), therefore, a trailing slash may result in an invalid channel address in some protocols.
+
+**Recommended:** Yes
+
+### asyncapi-3-channel-servers
+
+Channel servers must be defined in the `servers` object.
+
+**Bad Example**
+
+```yaml
+asyncapi: "3.0.0"
+info:
+  title: Awesome API
+  description: A very well-defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - $ref: #/servers/development
+```
+
+**Good Example**
+
+```yaml
+asyncapi: "3.0.0"
+info:
+  title: Awesome API
+  description: A very well-defined API
+  version: "1.0"
+servers:
+  production:
+    url: "stoplight.io"
+    protocol: "https"
+channels:
+  hello:
+    servers:
+      - $ref: #/servers/production
+```
+
+**Recommended:** Yes
+
+### asyncapi-3-headers-schema-type-object
+
+The schema definition of the application headers must be of type “object”.
+
+**Recommended:** Yes
+
+### asyncapi-3-operation-description
+
+Operation objects should have a description.
+
+**Recommended:** Yes
+
+### asyncapi-3-payload-unsupported-schemaFormat
+
+AsyncAPI can support various `schemaFormat` values. When unspecified, one of the following will be assumed:
+
+application/vnd.aai.asyncapi;version=2.0.0
+application/vnd.aai.asyncapi+json;version=2.0.0
+application/vnd.aai.asyncapi+yaml;version=2.0.0
+
+At this point, explicitly setting `schemaFormat` is not supported by Spectral, so if you use it this rule will emit an info message and skip validating the payload.
+
+Other formats such as OpenAPI Schema Object, JSON Schema Draft 07, and Avro will be added in various upcoming versions.
+
+**Recommended:** Yes
+
+### asyncapi-3-server-no-empty-variable
+
+Server host and pathname variable declarations cannot be empty, ex.`gigantic-server.com{}` is invalid.
+
+**Recommended:** Yes
+
+### asyncapi-3-server-no-trailing-slash
+
+Server host should not have a trailing slash.
+
+Some tooling forgets to strip trailing slashes off when it's joining the `servers.host` with `channels`, and you can get awkward URLs like `mqtt://example.com//pets`. Best to just strip them off yourself.
+
+**Recommended:** Yes
+
+**Good Example**
+
+```yaml
+servers:
+  - host: mqtt://example.com
+```
+
+**Bad Example**
+
+```yaml
+servers:
+  - host: mqtt://example.com/
+  - host: mqtt://example.com/broker/
+```
+
+### asyncapi-3-server-not-example-com
+
+Server host should not point to example.com.
+
+**Recommended:** No
+
+### asyncapi-3-tag-description
+
+Tags alone are not very descriptive. Give folks a bit more information to work with.
+
+```yaml
+info:
+  tags:
+    - name: "Aardvark"
+      description: Funny-nosed pig-head raccoon.
+    - name: "Badger"
+      description: Angry short-legged omnivores.
+```
+
+If your tags are business objects then you can use the term to explain them a bit. An 'Account' could be a user account, company information, bank account, potential sales lead, or anything. What is clear to the folks writing the document is probably not as clear to others.
+
+```yaml
+info:
+  tags:
+    - name: Invoice Items
+      description: |+
+        Giant long explanation about what this business concept is, because other people _might_ not have a clue!
+```
+
+**Recommended:** No
+
+### asyncapi-3-tags-alphabetical
+
+AsyncAPI object should have alphabetical `tags`. This will be sorted by the `name` property.
+
+**Recommended:** No
+
+**Bad Example**
+
+```yaml
+info:
+  tags:
+    - name: "Badger"
+    - name: "Aardvark"
+```
+
+**Good Example**
+
+```yaml
+info:
+  tags:
+    - name: "Aardvark"
+    - name: "Badger"
+```
+
+**Recommended:** No
+
+### asyncapi-3-tags-uniqueness
+
+Tags must not have duplicate names (identifiers).
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+info:
+  tags:
+    - name: "Badger"
+    - name: "Badger"
+```
+
+**Good Example**
+
+```yaml
+info:
+  tags:
+    - name: "Aardvark"
+    - name: "Badger"
+```
+
+### asyncapi-3-tags
+
+AsyncAPI object should have non-empty `tags` array.
+
+Why? Well, you _can_ reference tags arbitrarily in operations, and definition is optional...
+
+```yaml
+invoicedItems:
+  address: /invoices/{id}/items
+  tags:
+    - Invoice Items
+```
+
+Defining tags allows you to add more information like a `description`. For more information see [asyncapi-3-tag-description](#asyncapi-3-tag-description).
+
+**Recommended:** Yes
+
+### asyncapi-3-document-resolved
+
+Validate structure of AsyncAPI specification when references have been resolved.
+
+**Recommended:** Yes
+
+### asyncapi-3-document-unresolved
+
+Validate structure of AsyncAPI specification before references have been resolved.
 
 **Recommended:** Yes

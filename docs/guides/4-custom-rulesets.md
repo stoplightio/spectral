@@ -30,6 +30,8 @@ Formats are an optional way to specify which API description formats a rule, or 
 - `aas2_4` (AsyncAPI v2.4.0)
 - `aas2_5` (AsyncAPI v2.5.0)
 - `aas2_6` (AsyncAPI v2.6.0)
+- `aas3` (AsyncAPI v3.x)
+- `aas3_0` (AsyncAPI v3.0.0)
 - `oas2` (OpenAPI v2.0)
 - `oas3` (OpenAPI v3.x)
 - `oas3_0` (OpenAPI v3.0.x)

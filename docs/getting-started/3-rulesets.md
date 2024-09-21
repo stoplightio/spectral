@@ -13,7 +13,7 @@ The fastest way to create a ruleset is to use the `extends` property to leverage
 Spectral comes with two built-in rulesets:
 
 - `spectral:oas` - [OpenAPI v2/v3 rules](./4-openapi.md)
-- `spectral:asyncapi` - [AsyncAPI v2 rules](./5-asyncapi.md)
+- `spectral:asyncapi` - [AsyncAPI v2/v3 rules](./5-asyncapi.md)
 
 To create a ruleset that extends both rulesets, open your terminal and run:
 
@@ -21,7 +21,7 @@ To create a ruleset that extends both rulesets, open your terminal and run:
 echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
 ```
 
-The newly created ruleset file can then be used to lint any OpenAPI v2/v3 or AsyncAPI descriptions using the `spectral lint` command:
+The newly created ruleset file can then be used to lint any OpenAPI v2/v3 or AsyncAPI v2/v3 descriptions using the `spectral lint` command:
 
 ```bash
 spectral lint myapifile.yaml

@@ -8,7 +8,7 @@ To achieve this, Spectral has three key concepts:
 - **Functions** accept a value and return issues if the value is incorrect.
 - **Rulesets** act as a container for rules and functions.
 
-Spectral comes bundled with a [set of core functions](../reference/functions.md) and rulesets for working with [OpenAPI v2 and v3](./4-openapi.md) and [AsyncAPI v2](./5-asyncapi.md) that you can chose to use or extend, but Spectral is about far more than just checking your OpenAPI/AsyncAPI documents are valid.
+Spectral comes bundled with a [set of core functions](../reference/functions.md) and rulesets for working with [OpenAPI v2 and v3](./4-openapi.md) and [AsyncAPI v2 and v3](./5-asyncapi.md) that you can chose to use or extend, but Spectral is about far more than just checking your OpenAPI/AsyncAPI documents are valid.
 
 By far the most popular use-case of Spectral is automating [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices?utm_source=github&utm_medium=spectral&utm_campaign=docs), implementing rules that your Architecture, DevOps, API Governance or "Center of Excellence" teams have decided upon. Companies generally write these style guides as wiki pages, and several can be found on [API Stylebook](http://apistylebook.com/), but most of these rules could be automated with Spectral. For example:
 
