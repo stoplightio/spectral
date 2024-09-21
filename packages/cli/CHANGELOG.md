@@ -1,3 +1,10 @@
+## @stoplight/spectral-cli [6.13.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.13.0...@stoplight/spectral-cli-6.13.1) (2024-09-21)
+
+
+### Bug Fixes
+
+* **deps:** fix package.json ([0161072](https://github.com/stoplightio/spectral/commit/016107250f88420d224d798c327910faed250d36))
+
 # @stoplight/spectral-cli [6.13.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.12.0...@stoplight/spectral-cli-6.13.0) (2024-09-13)
 
 
