@@ -13,6 +13,9 @@ export enum OutputFormat {
   PRETTY = 'pretty',
   GITHUB_ACTIONS = 'github-actions',
   SARIF = 'sarif',
+  CODE_CLIMATE = 'code-climate',
+  GITLAB = 'gitlab',
+  MARKDOWN = 'markdown',
 }
 
 export interface ILintConfig {

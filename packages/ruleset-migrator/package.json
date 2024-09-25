@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.9.5",
+  "version": "1.10.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -29,7 +29,7 @@
     "@stoplight/types": "^13.6.0",
     "@stoplight/yaml": "~4.2.3",
     "@types/node": "*",
-    "ajv": "^8.6.0",
+    "ajv": "^8.17.1",
     "ast-types": "0.14.2",
     "astring": "^1.7.5",
     "reserved": "0.1.2",

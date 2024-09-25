@@ -2,7 +2,7 @@
 [![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/develop)](https://circleci.com/gh/stoplightio/spectral) [![npm Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-core?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-core) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
-- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x** and **AsyncAPI** Documents
+- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x**, **AsyncAPI**, and **Arazzo v1** Documents
 - **API Style Guides**: Automated [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices?utm_source=github.com&utm_medium=referral&utm_campaign=github_repo_spectral) using rulesets improve consistency across all your APIs
 - **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/e5b9616d6d50c-custom-rulesets#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - **Custom Functions**: Create custom functions for advanced use cases
@@ -40,10 +40,10 @@ There are also [additional installation options](https://meta.stoplight.io/docs/
 
 Spectral, being a generic YAML/JSON linter, **needs a ruleset** to lint files. A ruleset is a JSON, YAML, or JavaScript/TypeScript file (often the file is called `.spectral.yaml` for a YAML ruleset) that contains a collection of rules, which can be used to lint other JSON or YAML files such as an API description.
 
-To get started, run this command in your terminal to create a `.spectral.yaml` file that uses the Spectral predefined rulesets based on OpenAPI or AsyncAPI:
+To get started, run this command in your terminal to create a `.spectral.yaml` file that uses the Spectral predefined rulesets based on OpenAPI, Arazzo or AsyncAPI:
 
 ```bash
-echo 'extends: ["spectral:oas", "spectral:asyncapi"]' > .spectral.yaml
+echo 'extends: ["spectral:oas", "spectral:asyncapi", "spectral:arazzo"]' > .spectral.yaml
 ```
 
 If you would like to create your own rules, check out the [Custom Rulesets](https://meta.stoplight.io/docs/spectral/01baf06bdd05a-rulesets) page.
@@ -114,7 +114,7 @@ Check out some additional style guides here:
 
 ## 🏁 Help Others Utilize Spectral
 
-If you're using Spectral for an interesting use case, [contact Stoplight](mailto:growth@stoplight.io) for a case study. 🎉
+If you're using Spectral for an interesting use case, create an issue with details on how you're using it. We'll add it to a list here. Spread the goodness 🎉
 
 ## 👏 Contributing
 

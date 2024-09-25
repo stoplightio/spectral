@@ -167,7 +167,7 @@ commands:
       - run:
           name: Install ldid
           working_directory: /tmp/ldid
-          command: make install
+          command: sudo make install
 
   lint-code:
     steps:
@@ -193,7 +193,7 @@ commands:
     parameters:
       max-workers:
         type: integer
-        default: 2
+        default: 3
     steps:
       - run: yarn pretest
       - run:
@@ -212,7 +212,7 @@ commands:
         type: string
       max-workers:
         type: integer
-        default: 2
+        default: 3
     steps:
       - compute-hashes
       - restore_cache:
@@ -276,7 +276,7 @@ jobs:
             - test-harness:
                 os: linux
                 node-version: << parameters.node-version >>
-                max-workers: 2
+                max-workers: 3
 
   test-browser:
     docker:
@@ -302,7 +302,7 @@ jobs:
       - test-harness:
           os: windows
           node-version: *node-active-lts
-          max-workers: 2
+          max-workers: 3
 
   build-nix-binaries:
     docker:
