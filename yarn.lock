@@ -2826,7 +2826,7 @@ __metadata:
     memfs: ^3.3.0
     pony-cause: 1.1.1
     prettier: ^2.4.1
-    rollup: ~2.79.0
+    rollup: ~2.79.2
     tslib: ^2.3.1
     validate-npm-package-name: 3.0.0
   languageName: unknown
@@ -11792,9 +11792,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:~2.79.0":
-  version: 2.79.0
-  resolution: "rollup@npm:2.79.0"
+"rollup@npm:~2.79.2":
+  version: 2.79.2
+  resolution: "rollup@npm:2.79.2"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -11802,7 +11802,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 166f1ffea1898e157003920065b3a328e7012ea6808860ee8fe5d1ce94804fcce9985c95a3c0f7fe9c611aff0d09a70f073f1d6f715c8faba28e4e40f71ee3bb
+  checksum: df7aa4c8b95245dede157b06ab71e1921de6080757d30e9bf31f8fb142064d12dda865e2bafbab4349588f43425b2965a290c9a5da1c048246a70fc21734ebd7
   languageName: node
   linkType: hard
 
