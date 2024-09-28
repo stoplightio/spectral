@@ -60,6 +60,7 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 
 - [OpenAPI ruleset](../reference/openapi-rules.md)
 - [AsyncAPI ruleset](../reference/asyncapi-rules.md)
+- [Arazzo ruleset](../reference/arazzo-rules.md)
 
 > If you use rules created or updated in a hosted [Stoplight API project](https://docs.stoplight.io/docs/platform/branches/pam-716-updated-landing-page/c433d678d027a-create-rules) with the Spectral CLI, you must publish the project from Stoplight before rule updates are used for linting.
 
