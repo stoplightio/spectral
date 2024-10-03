@@ -22,7 +22,7 @@ defaults:
   node-versions: &node-versions
     - "12.22"
     - "14.21"
-    - &node-maintenance-lts "16.20"
+    - &node-maintenance-lts "16.10"
     - &node-active-lts "18.20"
     - &node-current "20.17"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
