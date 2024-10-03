@@ -193,7 +193,7 @@ commands:
     parameters:
       max-workers:
         type: integer
-        default: 1
+        default: 3
     steps:
       - run: yarn pretest
       - run:
@@ -276,7 +276,7 @@ jobs:
             - test-harness:
                 os: linux
                 node-version: << parameters.node-version >>
-                max-workers: 1
+                max-workers: 3
 
   test-browser:
     docker:
