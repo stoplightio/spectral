@@ -72,6 +72,7 @@ export const stylish: Formatter = results => {
       result.code ?? '',
       result.message,
       printPath(result.path, PrintStyle.Dot),
+      result.documentationUrl ?? '',
     ]);
 
     output += `${table(pathTableData, {

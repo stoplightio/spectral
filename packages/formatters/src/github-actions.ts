@@ -41,7 +41,9 @@ export const githubActions: Formatter = results => {
       // FIXME: Use replaceAll instead after removing Node.js 14 support.
       const message = result.message.replace(/\n/g, '%0A');
 
-      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${message}`;
+      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${message}${
+        result.documentationUrl ? `::${result.documentationUrl}` : ''
+      }`;
     })
     .join('\n');
 };
