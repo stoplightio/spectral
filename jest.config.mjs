@@ -1,5 +1,5 @@
 /*eslint-env node*/
-import { pathsToModuleNameMapper } from 'ts-jest';
+import { ConfigSet, pathsToModuleNameMapper } from 'ts-jest';
 import * as path from 'path';
 import * as fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -18,6 +18,10 @@ const projectDefault = {
   transform: {
     '^.+\\.ts$': ['@swc/jest'],
   },
+};
+
+const config = {
+  workerIdleMemoryLimit: '1024MB',
 };
 
 export default {
@@ -111,4 +115,6 @@ export default {
     },
   ],
   collectCoverageFrom: ['<rootDir>/packages/*/src/**/*.ts', '!<rootDir>/packages/*/src/**/__*__/**/*.ts'],
+  ...config,
 };
+
