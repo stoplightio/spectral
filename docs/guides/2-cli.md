@@ -27,13 +27,13 @@ spectral lint ./reference/**/*.oas*.{json,yml,yaml}
 Other options include:
 
 ```
-      --version                  Show version number                                                           [boolean]
-      --help                     Show help                                                                     [boolean]
+      --version                  Show version number                                                                              [boolean]
+      --help                     Show help                                                                                        [boolean]
   -e, --encoding                 text encoding to use
           [string] [choices: "utf8", "ascii", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1"] [default: "utf8"]
   -f, --format                   formatters to use for outputting results, more than one can be provided by using
                                  multiple flags
-         [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty", "github-actions", "sarif"]
+         [string] [choices: "json", "stylish", "junit", "html", "text", "teamcity", "pretty", "github-actions", "sarif", "markdown","gitlab"]
                                                                                                     [default: "stylish"]
   -o, --output                   where to output results, can be a single file name, multiple "output.<format>" or
                                  missing to print to stdout                                                     [string]
@@ -61,6 +61,7 @@ Here you can build a [custom ruleset](../getting-started/3-rulesets.md), or exte
 
 - [OpenAPI ruleset](../reference/openapi-rules.md)
 - [AsyncAPI ruleset](../reference/asyncapi-rules.md)
+- [Arazzo ruleset](../reference/arazzo-rules.md)
 
 > If you use rules created or updated in a hosted [Stoplight API project](https://docs.stoplight.io/docs/platform/branches/pam-716-updated-landing-page/c433d678d027a-create-rules) with the Spectral CLI, you must publish the project from Stoplight before rule updates are used for linting.
 

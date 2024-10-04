@@ -11,6 +11,8 @@ import {
   pretty,
   githubActions,
   sarif,
+  codeClimate,
+  markdown,
 } from '@stoplight/spectral-formatters';
 import type { Formatter, FormatterOptions } from '@stoplight/spectral-formatters';
 import type { OutputFormat } from './config';
@@ -26,6 +28,9 @@ const formatters: Record<OutputFormat, Formatter> = {
   teamcity,
   'github-actions': githubActions,
   sarif,
+  'code-climate': codeClimate,
+  gitlab: codeClimate,
+  markdown,
 };
 
 export function formatOutput(
