@@ -24,7 +24,7 @@
     "@stoplight/json": "~3.21.0",
     "@stoplight/ordered-object-literal": "~1.0.4",
     "@stoplight/path": "1.3.2",
-    "@stoplight/spectral-functions": "^1.9.0",
+    "@stoplight/spectral-functions": "^1.0.0",
     "@stoplight/spectral-runtime": "^1.1.0",
     "@stoplight/types": "^13.6.0",
     "@stoplight/yaml": "~4.2.3",
