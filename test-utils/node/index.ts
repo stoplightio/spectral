@@ -14,13 +14,21 @@ const fs = new Proxy(nodeFs, {
   },
 });
 
-afterEach(() => {
+const cleanup = () => {
   nock.cleanAll();
   try {
     fs.rmdirSync(__dirname, { recursive: true });
   } catch {
-    //
+    // Handle error if necessary
   }
+};
+
+afterEach(() => {
+  cleanup();
+});
+
+afterAll(() => {
+  cleanup();
 });
 
 type Body = string | Record<string, unknown>;
