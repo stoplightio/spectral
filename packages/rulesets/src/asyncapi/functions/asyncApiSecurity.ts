@@ -46,7 +46,7 @@ export default createRulesetFunction<Record<string, string[]>, { objectType: 'Se
       },
     },
   },
-  function asyncApi2Security(targetVal = {}, { objectType }, ctx) {
+  function asyncApiSecurity(targetVal = {}, { objectType }, ctx) {
     const results: IFunctionResult[] = [];
     const spec = ctx.document.data as {
       components: { securitySchemes: Record<string, { type: string; flows?: OAuth2Security }> };

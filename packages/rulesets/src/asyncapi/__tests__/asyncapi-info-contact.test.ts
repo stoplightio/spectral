@@ -16,11 +16,38 @@ testRule('asyncapi-info-contact', [
     },
     errors: [],
   },
-
+  {
+    name: 'valid v3 case',
+    document: {
+      asyncapi: '3.0.0',
+      info: {
+        contact: {
+          name: 'stoplight',
+          url: 'stoplight.io',
+          email: 'support@stoplight.io',
+        },
+      },
+    },
+    errors: [],
+  },
   {
     name: 'contact property is missing',
     document: {
       asyncapi: '2.0.0',
+      info: {},
+    },
+    errors: [
+      {
+        message: 'Info object must have "contact" object.',
+        path: ['info'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+  {
+    name: 'v3 contact property is missing',
+    document: {
+      asyncapi: '3.0.0',
       info: {},
     },
     errors: [

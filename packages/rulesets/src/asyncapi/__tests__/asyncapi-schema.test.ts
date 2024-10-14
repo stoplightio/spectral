@@ -15,7 +15,7 @@ testRule('asyncapi-schema', [
     errors: [],
   },
   {
-    name: 'channels property is missing',
+    name: 'invalid AsyncAPI 2 channels property is missing',
     document: {
       asyncapi: '2.0.0',
       info: {
