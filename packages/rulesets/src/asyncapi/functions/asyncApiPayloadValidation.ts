@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5 } from '@stoplight/spectral-formats';
+import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6, aas3_0 } from '@stoplight/spectral-formats';
 import betterAjvErrors from '@stoplight/better-ajv-errors';
 
 import { getCopyOfSchema } from './utils/specs';
@@ -52,6 +52,10 @@ function getValidator(version: AsyncAPISpecVersion): ValidateFunction {
 
 function getSchemaValidator(formats: Set<Format>): ValidateFunction | void {
   switch (true) {
+    case formats.has(aas3_0):
+      return getValidator('3.0.0');
+    case formats.has(aas2_6):
+      return getValidator('2.6.0');
     case formats.has(aas2_5):
       return getValidator('2.5.0');
     case formats.has(aas2_4):
@@ -74,7 +78,7 @@ export default createRulesetFunction<unknown, null>(
     input: null,
     options: null,
   },
-  function asyncApi2PayloadValidation(targetVal, _, context) {
+  function asyncApiPayloadValidation(targetVal, _, context) {
     const formats = context.document?.formats;
     if (formats === null || formats === void 0) return;
 

@@ -16,7 +16,42 @@ testRule('asyncapi-channel-parameters', [
     },
     errors: [],
   },
-
+  {
+    name: 'valid v3 case',
+    document: {
+      asyncapi: '3.0.0',
+      channels: {
+        SomeChannel: {
+          address: 'users/{userId}/signedUp',
+          parameters: {
+            userId: {},
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+  {
+    name: 'channel for v3 has not defined definition for one of the parameters',
+    document: {
+      asyncapi: '2.0.0',
+      channels: {
+        SomeChannel: {
+          address: 'users/{userId}/{anotherParam}/signedUp',
+          parameters: {
+            userId: {},
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Not all channel\'s parameters are described with "parameters" object. Missed: anotherParam.',
+        path: ['channels', 'SomeChannel', 'parameters'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
   {
     name: 'channel has not defined definition for one of the parameters',
     document: {
@@ -84,7 +119,7 @@ testRule('asyncapi-channel-parameters', [
   },
 
   {
-    name: 'channel has redundant paramaters',
+    name: 'channel has redundant parameters',
     document: {
       asyncapi: '2.0.0',
       channels: {
@@ -112,7 +147,7 @@ testRule('asyncapi-channel-parameters', [
   },
 
   {
-    name: 'channel has redundant paramaters (in the components.channels)',
+    name: 'channel has redundant parameters (in the components.channels)',
     document: {
       asyncapi: '2.3.0',
       components: {

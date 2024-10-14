@@ -13,9 +13,33 @@ testRule('asyncapi-info-description', [
     errors: [],
   },
   {
+    name: 'valid v3 case',
+    document: {
+      asyncapi: '3.0.0',
+      info: {
+        description: 'Very descriptive list of self explaining consecutive characters.',
+      },
+    },
+    errors: [],
+  },
+  {
     name: 'description property is missing',
     document: {
       asyncapi: '2.0.0',
+      info: {},
+    },
+    errors: [
+      {
+        message: 'Info "description" must be present and non-empty string.',
+        path: ['info'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+  {
+    name: 'v3 description property is missing',
+    document: {
+      asyncapi: '3.0.0',
       info: {},
     },
     errors: [
