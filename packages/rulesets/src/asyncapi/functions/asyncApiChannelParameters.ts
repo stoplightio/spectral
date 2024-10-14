@@ -5,7 +5,7 @@ import { parseUrlVariables } from '../../shared/functions/serverVariables/utils/
 import { getMissingProps } from '../../shared/utils/getMissingProps';
 import { getRedundantProps } from '../../shared/utils/getRedundantProps';
 
-export default createRulesetFunction<{ parameters: Record<string, unknown> }, null>(
+export default createRulesetFunction<{ address?: string; parameters: Record<string, unknown> }, null>(
   {
     input: {
       type: 'object',
@@ -18,10 +18,14 @@ export default createRulesetFunction<{ parameters: Record<string, unknown> }, nu
     },
     options: null,
   },
-  function asyncApi2ChannelParameters(targetVal, _, ctx) {
-    const path = ctx.path[ctx.path.length - 1] as string;
+  function asyncApiChannelParameters(targetVal, _, ctx) {
+    let path = ctx.path[ctx.path.length - 1] as string;
     const results: IFunctionResult[] = [];
-
+    // If v3 using address, use that.
+    if (targetVal.address !== null && targetVal.address !== undefined) {
+      path = targetVal.address;
+    }
+    // Ignore v3 reply channels with no address, id of v3 contain no variable substitutions.
     const parameters = parseUrlVariables(path);
     if (parameters.length === 0) return;
 

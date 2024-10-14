@@ -9,6 +9,7 @@ rules:
     given: $
     formats:
       - asyncapi2
+      - asyncapi3
       - oas3
       - oas3.0
       - oas3.1

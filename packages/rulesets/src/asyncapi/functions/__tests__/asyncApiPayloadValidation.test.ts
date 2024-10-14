@@ -1,14 +1,14 @@
 import { aas2_0 } from '@stoplight/spectral-formats';
-import asyncApi2PayloadValidation from '../asyncApi2PayloadValidation';
+import asyncApiPayloadValidation from '../asyncApiPayloadValidation';
 
 function runPayloadValidation(targetVal: any) {
-  return asyncApi2PayloadValidation(targetVal, null, {
+  return asyncApiPayloadValidation(targetVal, null, {
     path: ['components', 'messages', 'aMessage'],
     document: { formats: new Set([aas2_0]) },
   } as any);
 }
 
-describe('asyncApi2PayloadValidation', () => {
+describe('asyncApiPayloadValidation', () => {
   test('Properly identify payload that do not fit the AsyncApi2 schema object definition', () => {
     const payload = {
       type: 'object',
