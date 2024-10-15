@@ -206,15 +206,21 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         items: {
           type: 'string',
         },
-        minItems: 2,
-        errorMessage: `"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]`,
+        minItems: 1, // XOR is valid with one item (then it is redundant with 'defined' function)
+        // maxItems: 2, // No maximum limit is necessary, XOR is valid for any amount, just one must be defined
+        errorMessage: `"xor" requires one or more enumerated "properties", i.e. ["id"], ["value", "externalValue"], ["title", "summary", "description"], etc.`,
         description: 'The properties to check.',
+      },
+      exclusive: {
+        type: 'boolean',
+        default: true,
+        description: 'Defaults to true. If false, multiple matches are allowed.',
       },
     },
     additionalProperties: false,
     required: ['properties'],
     errorMessage: {
-      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }`,
+      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["value", "externalValue"], "exclusive": true }, { "properties": ["title", "summary", "description"], "exclusive": false }, etc.`,
     },
   },
 };
