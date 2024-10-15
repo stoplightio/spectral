@@ -2945,7 +2945,7 @@ __metadata:
     "@types/es-aggregate-error": ^1.0.2
     "@types/xml2js": ^0.4.9
     "@types/yargs": ^17.0.8
-    "@yao-pkg/pkg": ^5.15.0
+    "@yao-pkg/pkg": 5.13.0
     chalk: 4.1.2
     es-aggregate-error: ^1.0.7
     fast-glob: ~3.2.12
@@ -3928,9 +3928,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yao-pkg/pkg-fetch@npm:3.5.13":
-  version: 3.5.13
-  resolution: "@yao-pkg/pkg-fetch@npm:3.5.13"
+"@yao-pkg/pkg-fetch@npm:3.5.10":
+  version: 3.5.10
+  resolution: "@yao-pkg/pkg-fetch@npm:3.5.10"
   dependencies:
     chalk: ^4.1.2
     fs-extra: ^9.1.0
@@ -3942,18 +3942,18 @@ __metadata:
     yargs: ^16.2.0
   bin:
     pkg-fetch: lib-es5/bin.js
-  checksum: e63331055a209895c2e4b28aae6525dd7926e2f85b14088da6005f591cd5fd157f4915b8fada5fcd8699d92f1120e440c8c33799af370627b651fff5c9e91d4d
+  checksum: ca19d9ca25f133feff8fc502e965bf6b4fd101b8b4c9bf631c7969b29af0d05744923138abe50bea1f076cc850b69cc1b33e5a26c7e8a7a21eda5dae12606f46
   languageName: node
   linkType: hard
 
-"@yao-pkg/pkg@npm:^5.15.0":
-  version: 5.15.0
-  resolution: "@yao-pkg/pkg@npm:5.15.0"
+"@yao-pkg/pkg@npm:5.13.0":
+  version: 5.13.0
+  resolution: "@yao-pkg/pkg@npm:5.13.0"
   dependencies:
     "@babel/generator": 7.23.0
     "@babel/parser": 7.23.0
     "@babel/types": 7.23.0
-    "@yao-pkg/pkg-fetch": 3.5.13
+    "@yao-pkg/pkg-fetch": 3.5.10
     chalk: ^4.1.2
     fs-extra: ^9.1.0
     globby: ^11.1.0
@@ -3966,7 +3966,7 @@ __metadata:
     stream-meter: ^1.0.4
   bin:
     pkg: lib-es5/bin.js
-  checksum: b2f3f63f12bf5709a6f44c1fd75983f7971a9c5dee838837ef6925ffc3ceffcc72e063c8c28bbc4a3244dbf6b19eb2eff857a9fd1dcd7e2411ff1085642d3818
+  checksum: c48e38fdf37b9e03773d476a6ffeb789ff72b8903e5cde7fad00fe2c3f28cf043634b1e891f54c03beedd268abde3f7cd0bae8af0de5fa7838a5e34d8d143464
   languageName: node
   linkType: hard
 
