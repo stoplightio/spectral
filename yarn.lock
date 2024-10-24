@@ -2936,7 +2936,7 @@ __metadata:
     "@types/es-aggregate-error": ^1.0.2
     "@types/xml2js": ^0.4.9
     "@types/yargs": ^17.0.8
-    "@yao-pkg/pkg": ^5.11.1
+    "@yao-pkg/pkg": 5.13.0
     chalk: 4.1.2
     es-aggregate-error: ^1.0.7
     fast-glob: ~3.2.12
@@ -3919,9 +3919,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yao-pkg/pkg-fetch@npm:3.5.7":
-  version: 3.5.7
-  resolution: "@yao-pkg/pkg-fetch@npm:3.5.7"
+"@yao-pkg/pkg-fetch@npm:3.5.10":
+  version: 3.5.10
+  resolution: "@yao-pkg/pkg-fetch@npm:3.5.10"
   dependencies:
     chalk: ^4.1.2
     fs-extra: ^9.1.0
@@ -3933,23 +3933,23 @@ __metadata:
     yargs: ^16.2.0
   bin:
     pkg-fetch: lib-es5/bin.js
-  checksum: df339cabeef44ce7d9edeea18fa6313686d2ad864a0e67c715ee293bd9ee982e3dc7055c40559e5d6b905468c93a1c630b6f1d694d7c1322b6f7f8bbe7a59f1b
+  checksum: ca19d9ca25f133feff8fc502e965bf6b4fd101b8b4c9bf631c7969b29af0d05744923138abe50bea1f076cc850b69cc1b33e5a26c7e8a7a21eda5dae12606f46
   languageName: node
   linkType: hard
 
-"@yao-pkg/pkg@npm:^5.11.1":
-  version: 5.11.1
-  resolution: "@yao-pkg/pkg@npm:5.11.1"
+"@yao-pkg/pkg@npm:5.13.0":
+  version: 5.13.0
+  resolution: "@yao-pkg/pkg@npm:5.13.0"
   dependencies:
     "@babel/generator": 7.23.0
     "@babel/parser": 7.23.0
     "@babel/types": 7.23.0
-    "@yao-pkg/pkg-fetch": 3.5.7
+    "@yao-pkg/pkg-fetch": 3.5.10
     chalk: ^4.1.2
     fs-extra: ^9.1.0
     globby: ^11.1.0
     into-stream: ^6.0.0
-    is-core-module: 2.9.0
+    minimatch: 9.0.4
     minimist: ^1.2.6
     multistream: ^4.1.0
     prebuild-install: 7.1.1
@@ -3957,7 +3957,7 @@ __metadata:
     stream-meter: ^1.0.4
   bin:
     pkg: lib-es5/bin.js
-  checksum: aba36e68411953169f7bf29229f7e18835b671fa25ff12c72d899e6a18b33f2e8edc40f762cad1ef3e331ccbea4dceb807a6adf7d3dcfeb4b09a6819054c9a92
+  checksum: c48e38fdf37b9e03773d476a6ffeb789ff72b8903e5cde7fad00fe2c3f28cf043634b1e891f54c03beedd268abde3f7cd0bae8af0de5fa7838a5e34d8d143464
   languageName: node
   linkType: hard
 
@@ -8175,7 +8175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:2.9.0, is-core-module@npm:^2.5.0, is-core-module@npm:^2.8.1, is-core-module@npm:^2.9.0":
+"is-core-module@npm:^2.5.0, is-core-module@npm:^2.8.1, is-core-module@npm:^2.9.0":
   version: 2.9.0
   resolution: "is-core-module@npm:2.9.0"
   dependencies:
@@ -10171,6 +10171,15 @@ __metadata:
   dependencies:
     brace-expansion: ^1.1.7
   checksum: c154e566406683e7bcb746e000b84d74465b3a832c45d59912b9b55cd50dee66e5c4b1e5566dba26154040e51672f9aa450a9aef0c97cfc7336b78b7afb9540a
+  languageName: node
+  linkType: hard
+
+"minimatch@npm:9.0.4":
+  version: 9.0.4
+  resolution: "minimatch@npm:9.0.4"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: cf717f597ec3eed7dabc33153482a2e8d49f4fd3c26e58fd9c71a94c5029a0838728841b93f46bf1263b65a8010e2ee800d0dc9b004ab8ba8b6d1ec07cc115b5
   languageName: node
   linkType: hard
 
