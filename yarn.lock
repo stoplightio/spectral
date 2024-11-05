@@ -2975,7 +2975,7 @@ __metadata:
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.0
     es-aggregate-error: ^1.0.7
-    jsonpath-plus: 10.0.0
+    jsonpath-plus: 10.1.0
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.1.2
@@ -9279,21 +9279,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonpath-plus@npm:10.0.0":
-  version: 10.0.0
-  resolution: "jsonpath-plus@npm:10.0.0"
-  dependencies:
-    "@jsep-plugin/assignment": ^1.2.1
-    "@jsep-plugin/regex": ^1.0.3
-    jsep: ^1.3.9
-  bin:
-    jsonpath: bin/jsonpath-cli.js
-    jsonpath-plus: bin/jsonpath-cli.js
-  checksum: 992a62a0a5d2b96b40389de0608943840db39b466f9d3c1d71b4801e34b8d397c74811213e24e33c833b74aa83d9ce7860c1e7e0bc29980161489ea4a3962ecf
-  languageName: node
-  linkType: hard
-
-"jsonpath-plus@npm:^6.0.1 || ^10.1.0":
+"jsonpath-plus@npm:10.1.0, jsonpath-plus@npm:^6.0.1 || ^10.1.0":
   version: 10.1.0
   resolution: "jsonpath-plus@npm:10.1.0"
   dependencies:
