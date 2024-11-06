@@ -1,5 +1,6 @@
 import { Dictionary } from '@stoplight/types';
 import { HumanReadableDiagnosticSeverity } from '@stoplight/spectral-core';
+import * as Parsers from "@stoplight/spectral-parsers"
 
 export type FailSeverity = HumanReadableDiagnosticSeverity;
 
@@ -29,4 +30,5 @@ export interface ILintConfig {
   failOnUnmatchedGlobs: boolean;
   verbose?: boolean;
   quiet?: boolean;
+  parser?: keyof typeof Parsers
 }

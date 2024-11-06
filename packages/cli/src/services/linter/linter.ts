@@ -44,7 +44,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
       console.info(`Linting ${targetUri}`);
     }
 
-    const document = await createDocument(targetUri, { encoding: flags.encoding }, flags.stdinFilepath ?? '<STDIN>');
+    const document = await createDocument(targetUri, { encoding: flags.encoding }, flags.stdinFilepath ?? '<STDIN>', flags.parser);
 
     results.push(
       ...(await spectral.run(document, {
@@ -63,10 +63,13 @@ const createDocument = async (
   identifier: string | number,
   opts: IFileReadOptions,
   source: string,
+  parser: keyof typeof Parsers = "Yaml"
 ): Promise<Document<unknown, Parsers.YamlParserResult<unknown>>> => {
+  const parserImpl = Parsers[parser]
+
   if (typeof identifier === 'string') {
-    return new Document(await readParsable(identifier, opts), Parsers.Yaml, identifier);
+    return new Document(await readParsable(identifier, opts), parserImpl, identifier);
   }
 
-  return new Document(await readFileDescriptor(identifier, opts), Parsers.Yaml, source);
+  return new Document(await readFileDescriptor(identifier, opts), parserImpl, source);
 };
