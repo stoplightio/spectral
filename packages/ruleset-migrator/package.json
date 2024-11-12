@@ -5,7 +5,7 @@
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
   "engines": {
-    "node": ">=12"
+    "node": "^16.20 || ^18.18 || >= 20.17"
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -31,7 +31,7 @@
     "@types/node": "*",
     "ajv": "^8.17.1",
     "ast-types": "0.14.2",
-    "astring": "^1.7.5",
+    "astring": "^1.9.0",
     "reserved": "0.1.2",
     "tslib": "^2.3.1",
     "validate-npm-package-name": "3.0.0"
