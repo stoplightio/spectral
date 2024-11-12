@@ -413,7 +413,7 @@ jobs:
           at: /tmp/
       - run:
           name: "Download GitHub Release Utility"
-          command: go get github.com/tcnksm/ghr
+          command: go install github.com/tcnksm/ghr@latest
       - run:
           name: "Publish Release artifacts on GitHub"
           command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries
