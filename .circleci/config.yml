@@ -289,8 +289,7 @@ jobs:
 
   test-windows:
     executor:
-      name: windows/default
-    resource_class: large
+      name: windows/large
     steps:
       - checkout
       - cached-dependencies:
