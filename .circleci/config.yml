@@ -407,7 +407,7 @@ jobs:
 
   upload-artifacts:
     docker:
-      - image: circleci/golang:1-stretch
+      - image: cimg/go:1.23
     steps:
       - attach_workspace:
           at: /tmp/
