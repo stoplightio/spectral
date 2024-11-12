@@ -27,7 +27,7 @@
     "prelint": "node ../../scripts/inline-version.mjs",
     "prepare": "node ../../scripts/inline-version.mjs",
     "prebuild": "node ../../scripts/inline-version.mjs",
-    "build.binary": "pkg . --options \"--experimental-default-type=commonjs\" --output ./binaries/spectral",
+    "build.binary": "pkg . --output ./binaries/spectral",
     "build.windows": "pkg . --targets windows --out-path ./binaries",
     "build.nix": "pkg . --targets linux-x64,linux-arm64,macos-x64,macos-arm64,alpine-x64,alpine-arm64 --out-path ./binaries",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
