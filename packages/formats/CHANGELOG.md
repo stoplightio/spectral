@@ -1,3 +1,10 @@
+## @stoplight/spectral-formats [1.8.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.0...@stoplight/spectral-formats-1.8.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **formats:** update spectral core version ([6b196da](https://github.com/stoplightio/spectral/commit/6b196dac0a91f433aaf8cff3bbf889f23c31b0ab))
+
 # @stoplight/spectral-formats [1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.7.0...@stoplight/spectral-formats-1.8.0) (2024-11-12)
 
 
