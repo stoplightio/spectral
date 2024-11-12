@@ -2953,7 +2953,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -3030,7 +3030,7 @@ __metadata:
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.1
-    "@stoplight/spectral-core": ^1.7.0
+    "@stoplight/spectral-core": ^1.19.2
     "@stoplight/spectral-formats": ^1.7.0
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-runtime": ^1.1.0
