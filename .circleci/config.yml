@@ -21,7 +21,7 @@ defaults:
       only: /^v.*/
   node-versions: &node-versions
     - &node-maintenance-lts "16.20"
-    - &node-active-lts "18.20"
+    - &node-active-lts "18.18"
     - &node-current "20.17"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid

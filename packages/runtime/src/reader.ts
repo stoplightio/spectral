@@ -29,7 +29,7 @@ export async function readFile(name: string, opts: IReadOptions): Promise<string
         timeout = setTimeout(() => {
           controller.abort();
         }, opts.timeout);
-        requestOpts.signal = controller.signal;
+        requestOpts.signal = controller.signal as AbortSignal;
       }
 
       response = await request(name, requestOpts);
