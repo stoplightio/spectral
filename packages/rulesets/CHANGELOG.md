@@ -1,3 +1,15 @@
+# @stoplight/spectral-rulesets [1.21.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.2...@stoplight/spectral-rulesets-1.21.0) (2024-11-12)
+
+
+### Bug Fixes
+
+* **rulesets:** always allow string examples in asyncapi schema ([#2625](https://github.com/stoplightio/spectral/issues/2625)) ([4e2f797](https://github.com/stoplightio/spectral/commit/4e2f7974b623afa51221d426f975e2592a14f963))
+
+
+### Features
+
+* **rulesets:** add AsyncAPI v3 support ([#2697](https://github.com/stoplightio/spectral/issues/2697)) ([3d69be7](https://github.com/stoplightio/spectral/commit/3d69be7058e8f25f0697b69fd8317a2aefe313c1))
+
 ## @stoplight/spectral-rulesets [1.20.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.1...@stoplight/spectral-rulesets-1.20.2) (2024-09-17)
 
 
