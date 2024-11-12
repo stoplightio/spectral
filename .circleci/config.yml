@@ -289,7 +289,7 @@ jobs:
 
   test-windows:
     executor:
-      name: windows/
+      name: windows/default
     resource_class: large
     steps:
       - checkout
