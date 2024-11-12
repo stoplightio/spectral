@@ -2953,7 +2953,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.15.1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.0, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.15.1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.7.0, @stoplight/spectral-core@^1.8.1, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -2993,7 +2993,7 @@ __metadata:
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
     "@stoplight/json": ^3.17.0
-    "@stoplight/spectral-core": ^1.8.0
+    "@stoplight/spectral-core": ^1.19.2
     "@types/json-schema": ^7.0.7
     tslib: ^2.3.1
   languageName: unknown
