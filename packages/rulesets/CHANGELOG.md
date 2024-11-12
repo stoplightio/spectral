@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.21.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.0...@stoplight/spectral-rulesets-1.21.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **rulesets:** update spectral core to latest ([d74c2b0](https://github.com/stoplightio/spectral/commit/d74c2b03b41133ff45dde76ccf2551e2c61edf2b))
+
 # @stoplight/spectral-rulesets [1.21.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.2...@stoplight/spectral-rulesets-1.21.0) (2024-11-12)
 
 
