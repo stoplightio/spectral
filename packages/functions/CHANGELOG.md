@@ -1,3 +1,10 @@
+## @stoplight/spectral-functions [1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.0...@stoplight/spectral-functions-1.9.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **functions:** update spectral core to latest ([ede60f3](https://github.com/stoplightio/spectral/commit/ede60f3a99d9fc5ed03747331473dde8b58fa56b))
+
 # @stoplight/spectral-functions [1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.8.0...@stoplight/spectral-functions-1.9.0) (2024-09-12)
 
 
