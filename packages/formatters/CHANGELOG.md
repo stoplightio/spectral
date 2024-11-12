@@ -1,3 +1,10 @@
+## @stoplight/spectral-formatters [1.4.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.4.0...@stoplight/spectral-formatters-1.4.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **formatters:** update spectral core to latest version ([8a382f4](https://github.com/stoplightio/spectral/commit/8a382f4c40cdd2089e3404668c30552300be94eb))
+
 # @stoplight/spectral-formatters [1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.3.0...@stoplight/spectral-formatters-1.4.0) (2024-09-13)
 
 
