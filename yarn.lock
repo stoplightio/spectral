@@ -126,7 +126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.18.9, @babel/generator@npm:^7.23.0, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:7.23.0, @babel/generator@npm:^7.18.9, @babel/generator@npm:^7.23.0, @babel/generator@npm:^7.7.2":
   version: 7.23.0
   resolution: "@babel/generator@npm:7.23.0"
   dependencies:
@@ -508,7 +508,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.18.9, @babel/parser@npm:^7.22.15, @babel/parser@npm:^7.23.0":
+"@babel/parser@npm:7.23.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.18.9, @babel/parser@npm:^7.22.15, @babel/parser@npm:^7.23.0":
   version: 7.23.0
   resolution: "@babel/parser@npm:7.23.0"
   bin:
@@ -1395,7 +1395,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.10.4, @babel/types@npm:^7.10.5, @babel/types@npm:^7.12.1, @babel/types@npm:^7.12.10, @babel/types@npm:^7.12.11, @babel/types@npm:^7.14.5, @babel/types@npm:^7.18.6, @babel/types@npm:^7.18.9, @babel/types@npm:^7.22.15, @babel/types@npm:^7.22.5, @babel/types@npm:^7.23.0, @babel/types@npm:^7.3.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4, @babel/types@npm:^7.8.3":
+"@babel/types@npm:7.23.0, @babel/types@npm:^7.0.0, @babel/types@npm:^7.10.4, @babel/types@npm:^7.10.5, @babel/types@npm:^7.12.1, @babel/types@npm:^7.12.10, @babel/types@npm:^7.12.11, @babel/types@npm:^7.14.5, @babel/types@npm:^7.18.6, @babel/types@npm:^7.18.9, @babel/types@npm:^7.22.15, @babel/types@npm:^7.22.5, @babel/types@npm:^7.23.0, @babel/types@npm:^7.3.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4, @babel/types@npm:^7.8.3":
   version: 7.23.0
   resolution: "@babel/types@npm:7.23.0"
   dependencies:
@@ -2936,7 +2936,7 @@ __metadata:
     "@types/es-aggregate-error": ^1.0.2
     "@types/xml2js": ^0.4.9
     "@types/yargs": ^17.0.8
-    "@yao-pkg/pkg": ^5.13.0
+    "@yao-pkg/pkg": 5.11.0
     chalk: 4.1.2
     es-aggregate-error: ^1.0.7
     fast-glob: ~3.2.12
@@ -3009,7 +3009,7 @@ __metadata:
     "@stoplight/types": ^13.15.0
     "@types/markdown-escape": ^1.1.3
     ast-types: ^0.14.2
-    astring: ^1.8.4
+    astring: ^1.9.0
     chalk: 4.1.2
     cliui: 7.0.4
     eol: 0.9.1
@@ -3109,7 +3109,7 @@ __metadata:
     "@types/node": "*"
     ajv: ^8.17.1
     ast-types: 0.14.2
-    astring: ^1.7.5
+    astring: ^1.9.0
     fetch-mock: ^9.11.0
     json-schema-to-typescript: ^10.1.5
     memfs: ^3.3.0
@@ -3617,12 +3617,12 @@ __metadata:
   linkType: hard
 
 "@types/node-fetch@npm:^2.5.12":
-  version: 2.5.12
-  resolution: "@types/node-fetch@npm:2.5.12"
+  version: 2.6.12
+  resolution: "@types/node-fetch@npm:2.6.12"
   dependencies:
     "@types/node": "*"
-    form-data: ^3.0.0
-  checksum: ad63c85ba6a9477b8e057ec8682257738130d98e8ece4e31141789bd99df9d9147985cc8bc0cb5c8983ed5aa6bb95d46df23d1e055f4ad5cf8b82fc69cf626c7
+    form-data: ^4.0.0
+  checksum: 9647e68f9a125a090220c38d77b3c8e669c488658ae7506f1b4f9568214beba087624b1705bba1dc76649a65281ce3fd5b400e15266cbef8088027fb88777557
   languageName: node
   linkType: hard
 
@@ -3919,43 +3919,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yao-pkg/pkg-fetch@npm:3.5.16":
-  version: 3.5.16
-  resolution: "@yao-pkg/pkg-fetch@npm:3.5.16"
+"@yao-pkg/pkg-fetch@npm:3.5.7":
+  version: 3.5.7
+  resolution: "@yao-pkg/pkg-fetch@npm:3.5.7"
   dependencies:
+    chalk: ^4.1.2
+    fs-extra: ^9.1.0
     https-proxy-agent: ^5.0.0
     node-fetch: ^2.6.6
-    picocolors: ^1.1.0
     progress: ^2.0.3
     semver: ^7.3.5
     tar-fs: ^2.1.1
     yargs: ^16.2.0
   bin:
     pkg-fetch: lib-es5/bin.js
-  checksum: 942b633e9da431778a3527a18647db0feb4d87ceb2487fc025b5ed60a76ca040964f366e187b4d4b3c7f5d49abe86983b395d1753afe0f134a544231c71d1860
+  checksum: df339cabeef44ce7d9edeea18fa6313686d2ad864a0e67c715ee293bd9ee982e3dc7055c40559e5d6b905468c93a1c630b6f1d694d7c1322b6f7f8bbe7a59f1b
   languageName: node
   linkType: hard
 
-"@yao-pkg/pkg@npm:^5.13.0":
-  version: 5.16.1
-  resolution: "@yao-pkg/pkg@npm:5.16.1"
+"@yao-pkg/pkg@npm:5.11.0":
+  version: 5.11.0
+  resolution: "@yao-pkg/pkg@npm:5.11.0"
   dependencies:
-    "@babel/generator": ^7.23.0
-    "@babel/parser": ^7.23.0
-    "@babel/types": ^7.23.0
-    "@yao-pkg/pkg-fetch": 3.5.16
+    "@babel/generator": 7.23.0
+    "@babel/parser": 7.23.0
+    "@babel/types": 7.23.0
+    "@yao-pkg/pkg-fetch": 3.5.7
+    chalk: ^4.1.2
+    fs-extra: ^9.1.0
+    globby: ^11.1.0
     into-stream: ^6.0.0
+    is-core-module: 2.9.0
     minimist: ^1.2.6
     multistream: ^4.1.0
-    picocolors: ^1.1.0
-    picomatch: ^4.0.2
-    prebuild-install: ^7.1.1
+    prebuild-install: 7.1.1
     resolve: ^1.22.0
     stream-meter: ^1.0.4
-    tinyglobby: ^0.2.9
   bin:
     pkg: lib-es5/bin.js
-  checksum: c7627e6d535df22b49476dffd5b73cee185f4a96433f91478a113a0d9c22c9b320fe73196a40246f2a482b696fb6af1ebeae5ff15a8dba36513d0a95490d34be
+  checksum: 3317f9cc9899f45a2f7a7aa6317bfb6574ce25015e3a90398ddc59f7800ccc36754d093a5636a5ca50dbae024930d28e98b3d1f50664aea83f2d1c48de700046
   languageName: node
   linkType: hard
 
@@ -4399,16 +4401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.7.5, astring@npm:^1.8.4":
-  version: 1.8.4
-  resolution: "astring@npm:1.8.4"
-  bin:
-    astring: bin/astring
-  checksum: bc0b98087350c4a0c8a510d491d648cf8b299ec904629d5e0f5ae8d2ccc515cd27475327bb9729c7e92f4a4873adcd05cef15379d0f6f7293f1320319f0d24f0
-  languageName: node
-  linkType: hard
-
-"astring@npm:^1.8.1":
+"astring@npm:^1.8.1, astring@npm:^1.9.0":
   version: 1.9.0
   resolution: "astring@npm:1.9.0"
   bin:
@@ -6967,18 +6960,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fdir@npm:^6.4.2":
-  version: 6.4.2
-  resolution: "fdir@npm:6.4.2"
-  peerDependencies:
-    picomatch: ^3 || ^4
-  peerDependenciesMeta:
-    picomatch:
-      optional: true
-  checksum: 517ad31c495f1c0778238eef574a7818788efaaf2ce1969ffa18c70793e2951a9763dfa2e6720b8fcef615e602a3cbb47f9b8aea9da0b02147579ab36043f22f
-  languageName: node
-  linkType: hard
-
 "fetch-mock@npm:^9.11.0":
   version: 9.11.0
   resolution: "fetch-mock@npm:9.11.0"
@@ -7136,14 +7117,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "form-data@npm:3.0.0"
+"form-data@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "form-data@npm:4.0.1"
   dependencies:
     asynckit: ^0.4.0
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
-  checksum: 60ec3fe7e23154949ab6fef31baedf5afbfb8d6441ea8d19b211b43a5d0448be2918c9bba6218cade56a7cbd43f670d6e75f41f626f8d397d56bf8c60f4a829d
+  checksum: ccee458cd5baf234d6b57f349fe9cc5f9a2ea8fd1af5ecda501a18fd1572a6dd3bf08a49f00568afd995b6a65af34cb8dec083cf9d582c4e621836499498dd84
   languageName: node
   linkType: hard
 
@@ -7204,7 +7185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^9.0.0":
+"fs-extra@npm:^9.0.0, fs-extra@npm:^9.1.0":
   version: 9.1.0
   resolution: "fs-extra@npm:9.1.0"
   dependencies:
@@ -8185,7 +8166,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.5.0, is-core-module@npm:^2.8.1, is-core-module@npm:^2.9.0":
+"is-core-module@npm:2.9.0, is-core-module@npm:^2.5.0, is-core-module@npm:^2.8.1, is-core-module@npm:^2.9.0":
   version: 2.9.0
   resolution: "is-core-module@npm:2.9.0"
   dependencies:
@@ -9090,14 +9071,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsep@npm:^1.2.0, jsep@npm:^1.3.9":
-  version: 1.3.9
-  resolution: "jsep@npm:1.3.9"
-  checksum: d1f3e2cc00209f67a989b73c2a89d2ccbea908d950ec959e2448c6449b134c6367b47eef4e1292767cb490f0b5b72e7309080b93ee4c7398684df2514dbd33a3
-  languageName: node
-  linkType: hard
-
-"jsep@npm:^1.3.6":
+"jsep@npm:1.4.0":
   version: 1.4.0
   resolution: "jsep@npm:1.4.0"
   checksum: 8e7af5ecb91483b227092b87a3e85b5df3e848dbe6f201b19efcb18047567530d21dfeecb0978e09d1f66554fcfaed84176819eeacdfc86f61dc05c40c18f824
@@ -11456,24 +11430,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.2, picomatch@npm:^2.2.3":
+"picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.3":
   version: 2.3.0
   resolution: "picomatch@npm:2.3.0"
   checksum: 16818720ea7c5872b6af110760dee856c8e4cd79aed1c7a006d076b1cc09eff3ae41ca5019966694c33fbd2e1cc6ea617ab10e4adac6df06556168f13be3fca2
   languageName: node
   linkType: hard
 
-"picomatch@npm:^2.3.1":
+"picomatch@npm:^2.2.2, picomatch@npm:^2.3.1":
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 050c865ce81119c4822c45d3c84f1ced46f93a0126febae20737bd05ca20589c564d6e9226977df859ed5e03dc73f02584a2b0faad36e896936238238b0446cf
-  languageName: node
-  linkType: hard
-
-"picomatch@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "picomatch@npm:4.0.2"
-  checksum: a7a5188c954f82c6585720e9143297ccd0e35ad8072231608086ca950bee672d51b0ef676254af0788205e59bd4e4deb4e7708769226bed725bf13370a7d1464
   languageName: node
   linkType: hard
 
@@ -11543,9 +11510,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prebuild-install@npm:^7.1.1":
-  version: 7.1.2
-  resolution: "prebuild-install@npm:7.1.2"
+"prebuild-install@npm:7.1.1":
+  version: 7.1.1
+  resolution: "prebuild-install@npm:7.1.1"
   dependencies:
     detect-libc: ^2.0.0
     expand-template: ^2.0.3
@@ -11561,7 +11528,7 @@ __metadata:
     tunnel-agent: ^0.6.0
   bin:
     prebuild-install: bin.js
-  checksum: 543dadf8c60e004ae9529e6013ca0cbeac8ef38b5f5ba5518cb0b622fe7f8758b34e4b5cb1a791db3cdc9d2281766302df6088bd1a225f206925d6fee17d6c5c
+  checksum: dbf96d0146b6b5827fc8f67f72074d2e19c69628b9a7a0a17d0fad1bf37e9f06922896972e074197fc00a52eae912993e6ef5a0d471652f561df5cb516f3f467
   languageName: node
   linkType: hard
 
@@ -12328,7 +12295,7 @@ __metadata:
     semantic-release: ^19.0.5
     ts-jest: ^29.2.5
     ts-node: ^10.8.2
-    typescript: ^4.4.4
+    typescript: 4.4.4
   languageName: unknown
   linkType: soft
 
@@ -13369,16 +13336,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.9":
-  version: 0.2.10
-  resolution: "tinyglobby@npm:0.2.10"
-  dependencies:
-    fdir: ^6.4.2
-    picomatch: ^4.0.2
-  checksum: 7e2ffe262ebc149036bdef37c56b32d02d52cf09efa7d43dbdab2ea3c12844a4da881058835ce4c74d1891190e5ad5ec5133560a11ec8314849b68ad0d99d3f4
-  languageName: node
-  linkType: hard
-
 "tmp@npm:^0.0.33":
   version: 0.0.33
   resolution: "tmp@npm:0.0.33"
@@ -13716,7 +13673,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.4.3, typescript@npm:^4.4.4":
+"typescript@npm:4.4.4, typescript@npm:^4.4.3":
   version: 4.4.4
   resolution: "typescript@npm:4.4.4"
   bin:
@@ -13726,7 +13683,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.4.4#~builtin<compat/typescript>":
+"typescript@patch:typescript@4.4.4#~builtin<compat/typescript>, typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
   version: 4.4.4
   resolution: "typescript@patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=bbeadb"
   bin:

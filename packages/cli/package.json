@@ -8,7 +8,7 @@
     "spectral": "./dist/index.js"
   },
   "engines": {
-    "node": "^12.20 || >= 14.13"
+    "node": "^16.20 || ^18.18 || >= 20.17"
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
     "prelint": "node ../../scripts/inline-version.mjs",
     "prepare": "node ../../scripts/inline-version.mjs",
     "prebuild": "node ../../scripts/inline-version.mjs",
-    "build.binary": "pkg . --output ./binaries/spectral",
+    "build.binary": "pkg . --options \"--experimental-default-type=commonjs\" --output ./binaries/spectral",
     "build.windows": "pkg . --targets windows --out-path ./binaries",
     "build.nix": "pkg . --targets linux-x64,linux-arm64,macos-x64,macos-arm64,alpine-x64,alpine-arm64 --out-path ./binaries",
     "cli": "node -r ts-node/register/transpile-only -r tsconfig-paths/register src/index.ts",
@@ -58,7 +58,7 @@
     "@types/es-aggregate-error": "^1.0.2",
     "@types/xml2js": "^0.4.9",
     "@types/yargs": "^17.0.8",
-    "@yao-pkg/pkg": "^5.13.0",
+    "@yao-pkg/pkg": "5.11.0",
     "es-aggregate-error": "^1.0.7",
     "nock": "^13.5.4",
     "xml2js": "^0.5.0"
