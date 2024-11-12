@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.19.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.1...@stoplight/spectral-core-1.19.2) (2024-11-12)
+
+
+### Bug Fixes
+
+* **core:** require new formats version ([#2725](https://github.com/stoplightio/spectral/issues/2725)) ([8ec328f](https://github.com/stoplightio/spectral/commit/8ec328fe68e42519cea1d6afedc4eb309a2c121c))
+
 ## @stoplight/spectral-core [1.19.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.0...@stoplight/spectral-core-1.19.1) (2024-09-13)
 
 
