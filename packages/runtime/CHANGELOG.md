@@ -1,3 +1,10 @@
+## @stoplight/spectral-runtime [1.1.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-runtime-v1.1.2...@stoplight/spectral-runtime-1.1.3) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
 # [@stoplight/spectral-runtime-v1.1.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-runtime-v1.1.1...@stoplight/spectral-runtime-v1.1.2) (2022-02-01)
 
 ### Bug Fixes
