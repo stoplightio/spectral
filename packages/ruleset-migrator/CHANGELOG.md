@@ -1,3 +1,10 @@
+## @stoplight/spectral-ruleset-migrator [1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.0...@stoplight/spectral-ruleset-migrator-1.11.1) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
 # @stoplight/spectral-ruleset-migrator [1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.10.0...@stoplight/spectral-ruleset-migrator-1.11.0) (2024-11-12)
 
 
