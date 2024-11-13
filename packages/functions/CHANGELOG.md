@@ -1,3 +1,10 @@
+## @stoplight/spectral-functions [1.9.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.1...@stoplight/spectral-functions-1.9.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
 ## @stoplight/spectral-functions [1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.0...@stoplight/spectral-functions-1.9.1) (2024-11-12)
 
 
