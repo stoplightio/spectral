@@ -2925,7 +2925,7 @@ __metadata:
     "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": ^1.19.2
-    "@stoplight/spectral-formatters": ^1.4.0
+    "@stoplight/spectral-formatters": ^1.4.1
     "@stoplight/spectral-parsers": ^1.0.4
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-bundler": ^1.6.0
@@ -2960,11 +2960,11 @@ __metadata:
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
-    "@stoplight/spectral-formats": ^1.8.0
+    "@stoplight/spectral-formats": ^1.8.1
     "@stoplight/spectral-functions": "*"
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.4
-    "@stoplight/spectral-runtime": ^1.0.0
+    "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ~13.6.0
     "@stoplight/yaml": ^4.2.2
     "@types/es-aggregate-error": ^1.0.2
@@ -2988,7 +2988,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formats@^1.7.0, @stoplight/spectral-formats@^1.8.0, @stoplight/spectral-formats@workspace:packages/formats":
+"@stoplight/spectral-formats@^1.8.1, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
@@ -2999,13 +2999,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-formatters@^1.4.0, @stoplight/spectral-formatters@workspace:packages/formatters":
+"@stoplight/spectral-formatters@^1.4.1, @stoplight/spectral-formatters@workspace:packages/formatters":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formatters@workspace:packages/formatters"
   dependencies:
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.19.2
-    "@stoplight/spectral-runtime": ^1.1.0
+    "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.15.0
     "@types/markdown-escape": ^1.1.3
     ast-types: ^0.14.2
@@ -3024,16 +3024,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-functions@*, @stoplight/spectral-functions@>=1, @stoplight/spectral-functions@^1.0.0, @stoplight/spectral-functions@^1.5.1, @stoplight/spectral-functions@workspace:packages/functions":
+"@stoplight/spectral-functions@*, @stoplight/spectral-functions@>=1, @stoplight/spectral-functions@^1.9.1, @stoplight/spectral-functions@workspace:packages/functions":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-functions@workspace:packages/functions"
   dependencies:
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.1
     "@stoplight/spectral-core": ^1.19.2
-    "@stoplight/spectral-formats": ^1.7.0
+    "@stoplight/spectral-formats": ^1.8.1
     "@stoplight/spectral-parsers": "*"
-    "@stoplight/spectral-runtime": ^1.1.0
+    "@stoplight/spectral-runtime": ^1.1.2
     ajv: ^8.17.1
     ajv-draft-04: ~1.0.0
     ajv-errors: ~3.0.0
@@ -3073,13 +3073,13 @@ __metadata:
     "@rollup/plugin-commonjs": ~22.0.2
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": ">=1"
-    "@stoplight/spectral-formats": ^1.7.0
+    "@stoplight/spectral-formats": ^1.8.1
     "@stoplight/spectral-functions": ">=1"
     "@stoplight/spectral-parsers": ">=1"
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-migrator": ^1.9.6
     "@stoplight/spectral-rulesets": ">=1"
-    "@stoplight/spectral-runtime": ^1.1.0
+    "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
     "@types/node": "*"
     "@types/validate-npm-package-name": ^3.0.3
@@ -3101,9 +3101,9 @@ __metadata:
     "@stoplight/ordered-object-literal": ~1.0.4
     "@stoplight/path": 1.3.2
     "@stoplight/spectral-core": "*"
-    "@stoplight/spectral-functions": ^1.0.0
+    "@stoplight/spectral-functions": ^1.9.1
     "@stoplight/spectral-rulesets": "*"
-    "@stoplight/spectral-runtime": ^1.1.0
+    "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
     "@stoplight/yaml": ~4.2.3
     "@types/node": "*"
@@ -3129,11 +3129,11 @@ __metadata:
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.19.2
-    "@stoplight/spectral-formats": ^1.7.0
-    "@stoplight/spectral-functions": ^1.5.1
+    "@stoplight/spectral-formats": ^1.8.1
+    "@stoplight/spectral-functions": ^1.9.1
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.4
-    "@stoplight/spectral-runtime": ^1.1.1
+    "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
     "@types/json-schema": ^7.0.7
     ajv: ^8.17.1
@@ -3148,7 +3148,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-runtime@^1.0.0, @stoplight/spectral-runtime@^1.1.0, @stoplight/spectral-runtime@^1.1.1, @stoplight/spectral-runtime@^1.1.2, @stoplight/spectral-runtime@workspace:packages/runtime":
+"@stoplight/spectral-runtime@^1.1.2, @stoplight/spectral-runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-runtime@workspace:packages/runtime"
   dependencies:
