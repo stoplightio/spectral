@@ -92,7 +92,7 @@
     "@semantic-release/npm": "^9.0.2",
     "@semantic-release/release-notes-generator": "^10.0.3",
     "@swc/core": "^1.2.210",
-    "@swc/jest": "^0.2.36",
+    "@swc/jest": "^0.2.37",
     "@types/file-entry-cache": "^5.0.2",
     "@types/jest": "^29.5.13",
     "@types/karma": "^6.3.3",

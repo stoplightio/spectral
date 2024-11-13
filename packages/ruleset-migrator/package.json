@@ -33,7 +33,7 @@
     "ast-types": "0.14.2",
     "astring": "^1.9.0",
     "reserved": "0.1.2",
-    "tslib": "^2.3.1",
+    "tslib": "^2.8.1",
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
