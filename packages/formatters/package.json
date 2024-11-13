@@ -46,7 +46,7 @@
     "node-sarif-builder": "^2.0.3",
     "strip-ansi": "6.0",
     "text-table": "^0.2.0",
-    "tslib": "^2.5.0"
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "ast-types": "^0.14.2",
