@@ -49,9 +49,9 @@
     "fast-glob": "~3.2.12",
     "hpagent": "~1.2.0",
     "lodash": "~4.17.21",
-    "pony-cause": "^1.0.0",
-    "stacktracey": "^2.1.7",
-    "tslib": "^2.3.0",
+    "pony-cause": "^1.1.1",
+    "stacktracey": "^2.1.8",
+    "tslib": "^2.8.1",
     "yargs": "~17.7.2"
   },
   "devDependencies": {
