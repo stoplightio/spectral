@@ -1,3 +1,10 @@
+## @stoplight/spectral-ref-resolver [1.0.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ref-resolver-1.0.4...@stoplight/spectral-ref-resolver-1.0.5) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
 ## @stoplight/spectral-ref-resolver [1.0.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ref-resolver-v1.0.3...@stoplight/spectral-ref-resolver-1.0.4) (2023-07-14)
 
 
