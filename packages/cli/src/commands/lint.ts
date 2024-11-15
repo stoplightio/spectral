@@ -164,7 +164,7 @@ const lintCommand: CommandModule = {
         parser: {
           alias: 'p',
           description: 'specify the parser used to read the file',
-          choices: ["JsonParserResult", "parseJson", "Json", "parseYaml", "Yaml"],
+          choices: ["Json", "Yaml"],
           default: 'Yaml',
           type: 'string',
         }

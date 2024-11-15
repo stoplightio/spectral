@@ -47,7 +47,7 @@ Other options include:
       --fail-on-unmatched-globs  fail on unmatched glob patterns                                                 [boolean] [default: false]
   -v, --verbose                  increase verbosity                                                                               [boolean]
   -q, --quiet                    no logging - output only                                                                         [boolean]
-  -p, --parser                   specify the parser used to read the file                                                         ["JsonParserResult", "parseJson", "Json", "parseYaml", "Yaml"]
+  -p, --parser                   specify the parser used to read the file                                                         ["Json", "Yaml"]
 ```
 
 The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via the built-in ruleset. The default parser reads YAML files, when loading JSON documents you should specify `--parser Json`.

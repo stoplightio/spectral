@@ -30,5 +30,5 @@ export interface ILintConfig {
   failOnUnmatchedGlobs: boolean;
   verbose?: boolean;
   quiet?: boolean;
-  parser?: keyof typeof Parsers
+  parser?: keyof Pick<typeof Parsers, "Yaml" | "Json">
 }

@@ -63,13 +63,23 @@ const createDocument = async (
   identifier: string | number,
   opts: IFileReadOptions,
   source: string,
-  parser: keyof typeof Parsers = "Yaml"
-): Promise<Document<unknown, Parsers.YamlParserResult<unknown>>> => {
-  const parserImpl = Parsers[parser]
+  parser: ILintConfig["parser"] = "Yaml"
+) => {
+  // I wanted to dynamically assign the parser using something like this:
+  // const parserImplementation = Parsers[parser]
+  // but I got a type-error on new Document() that I was unable to resolve dynamically (not sure why)
 
-  if (typeof identifier === 'string') {
-    return new Document(await readParsable(identifier, opts), parserImpl, identifier);
+  if (parser === "Json") {
+    if (typeof identifier === 'string') {
+      return new Document(await readParsable(identifier, opts), Parsers.Json, identifier);
+    }
+
+    return new Document(await readFileDescriptor(identifier, opts), Parsers.Json, source);
   }
 
-  return new Document(await readFileDescriptor(identifier, opts), parserImpl, source);
+  if (typeof identifier === 'string') {
+    return new Document(await readParsable(identifier, opts), Parsers.Yaml, identifier);
+  }
+
+  return new Document(await readFileDescriptor(identifier, opts), Parsers.Yaml, source);
 };
