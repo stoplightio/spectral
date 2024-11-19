@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.19.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.3...@stoplight/spectral-core-1.19.4) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** fix CVE related to jsonpath-plus ([169db7a](https://github.com/stoplightio/spectral/commit/169db7abc7bcc41a297c11bb6eee78474615c63b))
+
 ## @stoplight/spectral-core [1.19.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.2...@stoplight/spectral-core-1.19.3) (2024-11-13)
 
 
