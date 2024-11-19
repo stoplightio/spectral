@@ -1,3 +1,10 @@
+## @stoplight/spectral-cli [6.14.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.14.1...@stoplight/spectral-cli-6.14.2) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** bump spectral-core dependents ([#2742](https://github.com/stoplightio/spectral/issues/2742)) ([30c0349](https://github.com/stoplightio/spectral/commit/30c0349d0ca143cadb029661ffcc919b66f8fd49))
+
 ## @stoplight/spectral-cli [6.14.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.14.0...@stoplight/spectral-cli-6.14.1) (2024-11-13)
 
 
