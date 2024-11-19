@@ -21,7 +21,7 @@
     "@asyncapi/specs": "^6.8.0",
     "@stoplight/better-ajv-errors": "1.0.3",
     "@stoplight/json": "^3.17.0",
-    "@stoplight/spectral-core": "^1.19.2",
+    "@stoplight/spectral-core": "^1.19.4",
     "@stoplight/spectral-formats": "^1.8.1",
     "@stoplight/spectral-functions": "^1.9.1",
     "@stoplight/spectral-runtime": "^1.1.2",
