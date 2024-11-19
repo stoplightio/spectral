@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.21.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.2...@stoplight/spectral-rulesets-1.21.3) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** bump spectral-core dependents ([#2742](https://github.com/stoplightio/spectral/issues/2742)) ([30c0349](https://github.com/stoplightio/spectral/commit/30c0349d0ca143cadb029661ffcc919b66f8fd49))
+
 ## @stoplight/spectral-rulesets [1.21.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.1...@stoplight/spectral-rulesets-1.21.2) (2024-11-13)
 
 
