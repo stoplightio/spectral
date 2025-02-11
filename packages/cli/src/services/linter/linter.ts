@@ -40,7 +40,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
   }
 
   const targets = [...targetUris, ...fileDescriptors];
-  if (targetUris.length === 0) {
+  if (targets.length === 0) {
     throw new CLIError(`No files found to lint. Please check your file path and extension and try again`);
   }
 
