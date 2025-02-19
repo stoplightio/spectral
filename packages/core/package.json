@@ -47,7 +47,7 @@
     "ajv-errors": "~3.0.0",
     "ajv-formats": "~2.1.0",
     "es-aggregate-error": "^1.0.7",
-    "jsonpath-plus": "10.2.0",
+    "jsonpath-plus": "^10.3.0",
     "lodash": "~4.17.21",
     "lodash.topath": "^4.5.2",
     "minimatch": "3.1.2",
