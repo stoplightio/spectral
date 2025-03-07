@@ -23,7 +23,7 @@
     "@stoplight/types": "^13.6.0",
     "abort-controller": "^3.0.0",
     "lodash": "^4.17.21",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.7.0",
     "tslib": "^2.8.1"
   }
 }
