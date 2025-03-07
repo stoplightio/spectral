@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.19.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.4...@stoplight/spectral-core-1.19.5) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
 ## @stoplight/spectral-core [1.19.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.3...@stoplight/spectral-core-1.19.4) (2024-11-19)
 
 
