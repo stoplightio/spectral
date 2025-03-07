@@ -56,7 +56,7 @@ describe('Core Functions / Or', () => {
     ).toEqual([]);
   });
 
-  it('given none of 1 property, should return an error message', async () => {
+  it('given one property, should show no error message', async () => {
     expect(
       await runOr(
         {
@@ -64,17 +64,11 @@ describe('Core Functions / Or', () => {
           title: 'Swagger Petstore',
           termsOfService: 'http://swagger.io/terms/',
         },
-        { properties: ['yada-yada'] },
-      ),
-    ).toEqual([
-      {
-        message: 'At least one of "yada-yada" must be defined',
-        path: [],
-      },
-    ]);
+        { properties: ['yada-yada'] })
+      ).toEqual([]);
   });
 
-  it('given only one of 1 property, should return no error message', async () => {
+  it('given no properties, should show no error message', async () => {
     expect(
       await runOr(
         {
@@ -82,7 +76,7 @@ describe('Core Functions / Or', () => {
           title: 'Swagger Petstore',
           termsOfService: 'http://swagger.io/terms/',
         },
-        { properties: ['title'] },
+        null,
       ),
     ).toEqual([]);
   });
@@ -189,7 +183,7 @@ describe('Core Functions / Or', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"or" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.',
+            '"or" function has invalid options specified. Example valid options: { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.',
             ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
@@ -199,7 +193,7 @@ describe('Core Functions / Or', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"or" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.',
+            '"or" function has invalid options specified. Example valid options: { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.',
             ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
@@ -221,7 +215,7 @@ describe('Core Functions / Or', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"or" requires one or more enumerated "properties", i.e. ["id"], ["default", "example"], ["title", "summary", "description"], etc.',
+            '"or" requires one or more enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
@@ -231,7 +225,7 @@ describe('Core Functions / Or', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"or" requires one or more enumerated "properties", i.e. ["id"], ["default", "example"], ["title", "summary", "description"], etc.',
+            '"or" requires one or more enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
