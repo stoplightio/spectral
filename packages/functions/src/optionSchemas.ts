@@ -104,16 +104,15 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         items: {
           type: 'string',
         },
-        minItems: 1, // OR is valid with one item (then it is redundant with 'defined' function)
-        // maxItems: 2, // No maximum limit is necessary, OR is valid for any amount, just one must be defined
-        errorMessage: `"or" requires one or more enumerated "properties", i.e. ["id"], ["default", "example"], ["title", "summary", "description"], etc.`,
+        minItems: 2,
+        errorMessage: `"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.`,
         description: 'The properties to check.',
       },
     },
     additionalProperties: false,
     required: ['properties'],
     errorMessage: {
-      type: `"or" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.`,
+      type: `"or" function has invalid options specified. Example valid options: { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.`,
     },
   },
   pattern: {
@@ -226,21 +225,15 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         items: {
           type: 'string',
         },
-<<<<<<< HEAD
-        minItems: 1, // XOR is valid with one item (then it is redundant with 'defined' function)
-        // maxItems: 2, // No maximum limit is necessary, XOR is valid for any amount, just one must be defined
-        errorMessage: `"xor" requires one or more enumerated "properties", i.e. ["id"], ["country", "street"], ["one", "two", "three"], etc.`,
-=======
         minItems: 2,
-        errorMessage: `"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]`,
->>>>>>> af9c742e (feat(rulesets): add multiple xor (#2614))
+        errorMessage: `"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.`,
         description: 'The properties to check.',
       },
     },
     additionalProperties: false,
     required: ['properties'],
     errorMessage: {
-      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id"] }, { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.`,
+      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.`,
     },
   },
 };

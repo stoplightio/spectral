@@ -2,7 +2,7 @@ import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core
 import { optionSchemas } from './optionSchemas';
 
 export type Options = {
-  /** test to verify if one (but not all) of the provided keys are present in object */
+  /** test to verify at least one of the provided keys are present in object */
   properties: string[];
 };
 
@@ -14,8 +14,8 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     options: optionSchemas.or,
   },
   function or(targetVal, { properties }) {
-    if (properties.length == 0) return;
-    // There need be no maximum limit on number of properties
+    if (properties.length < 2) return;
+    // At least two but no maximum limit on number of properties
 
     const results: IFunctionResult[] = [];
 
@@ -29,7 +29,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
           message: 'At least one of "' + shortprops.join('" or "') + '" or ' + count,
         });
       } else {
-        // List all of one to four properties directly in error message
+        // List all of two to four properties directly in error message
         results.push({
           message: 'At least one of "' + properties.join('" or "') + '" must be defined',
         });
