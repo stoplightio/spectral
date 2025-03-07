@@ -2094,15 +2094,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsep-plugin/assignment@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@jsep-plugin/assignment@npm:1.2.1"
-  peerDependencies:
-    jsep: ^0.4.0||^1.0.0
-  checksum: d56fd7423c59dd269c50b0a9c22ec05f099a789ec8e8980f2307782f496ab3f0740151f1bdc7a1f3a8ee9085cdeb6f5b4def0d6b312e6b93ab160e6489b400f2
-  languageName: node
-  linkType: hard
-
 "@jsep-plugin/assignment@npm:^1.3.0":
   version: 1.3.0
   resolution: "@jsep-plugin/assignment@npm:1.3.0"
@@ -2112,7 +2103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsep-plugin/regex@npm:^1.0.1, @jsep-plugin/regex@npm:^1.0.3":
+"@jsep-plugin/regex@npm:^1.0.1":
   version: 1.0.3
   resolution: "@jsep-plugin/regex@npm:1.0.3"
   peerDependencies:
@@ -2942,7 +2933,7 @@ __metadata:
   dependencies:
     "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
-    "@stoplight/spectral-core": ^1.19.4
+    "@stoplight/spectral-core": ^1.19.5
     "@stoplight/spectral-formatters": ^1.4.1
     "@stoplight/spectral-parsers": ^1.0.4
     "@stoplight/spectral-ref-resolver": ^1.0.4
@@ -2971,7 +2962,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.19.4, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@*, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.19.4, @stoplight/spectral-core@^1.19.5, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -2991,9 +2982,9 @@ __metadata:
     "@types/treeify": ^1.0.0
     ajv: ^8.17.1
     ajv-errors: ~3.0.0
-    ajv-formats: ~2.1.0
+    ajv-formats: ~2.1.1
     es-aggregate-error: ^1.0.7
-    jsonpath-plus: 10.2.0
+    jsonpath-plus: ^10.3.0
     lodash: ~4.17.21
     lodash.topath: ^4.5.2
     minimatch: 3.1.2
@@ -3055,7 +3046,7 @@ __metadata:
     ajv: ^8.17.1
     ajv-draft-04: ~1.0.0
     ajv-errors: ~3.0.0
-    ajv-formats: ~2.1.0
+    ajv-formats: ~2.1.1
     lodash: ~4.17.21
     tslib: ^2.8.1
   languageName: unknown
@@ -3102,7 +3093,7 @@ __metadata:
     "@types/node": "*"
     "@types/validate-npm-package-name": ^3.0.3
     fetch-mock: ^9.11.0
-    memfs: ^3.3.0
+    memfs: ^3.5.3
     pony-cause: 1.1.1
     prettier: ^2.4.1
     rollup: ~2.79.2
@@ -3130,7 +3121,7 @@ __metadata:
     astring: ^1.9.0
     fetch-mock: ^9.11.0
     json-schema-to-typescript: ^10.1.5
-    memfs: ^3.3.0
+    memfs: ^3.5.3
     prettier: ^2.4.1
     reserved: 0.1.2
     tslib: ^2.8.1
@@ -3155,7 +3146,7 @@ __metadata:
     "@stoplight/types": ^13.6.0
     "@types/json-schema": ^7.0.7
     ajv: ^8.17.1
-    ajv-formats: ~2.1.0
+    ajv-formats: ~2.1.1
     gzip-size: ^6.0.0
     immer: ^9.0.6
     json-schema-traverse: ^1.0.0
@@ -3175,7 +3166,7 @@ __metadata:
     "@stoplight/types": ^13.6.0
     abort-controller: ^3.0.0
     lodash: ^4.17.21
-    node-fetch: ^2.6.7
+    node-fetch: ^2.7.0
     tslib: ^2.8.1
   languageName: unknown
   linkType: soft
@@ -4109,7 +4100,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv-formats@npm:~2.1.0":
+"ajv-formats@npm:~2.1.1":
   version: 2.1.1
   resolution: "ajv-formats@npm:2.1.1"
   dependencies:
@@ -6174,8 +6165,8 @@ __metadata:
   linkType: hard
 
 "elliptic@npm:^6.0.0, elliptic@npm:^6.5.4":
-  version: 6.6.0
-  resolution: "elliptic@npm:6.6.0"
+  version: 6.6.1
+  resolution: "elliptic@npm:6.6.1"
   dependencies:
     bn.js: ^4.11.9
     brorand: ^1.1.0
@@ -6184,7 +6175,7 @@ __metadata:
     inherits: ^2.0.4
     minimalistic-assert: ^1.0.1
     minimalistic-crypto-utils: ^1.0.1
-  checksum: e912349b883e694bfe65005214237a470c9a098a6ba36fd24396d0ab07feb399920c0738aeed1aed6cf5dca9c64fd479e212faed3a75c9d81453671ef0de5157
+  checksum: 27b14a52f68bbbc0720da259f712cb73e953f6d2047958cd02fb0d0ade2e83849dc39fb4af630889c67df8817e24237428cf59c4f4c07700f755b401149a7375
   languageName: node
   linkType: hard
 
@@ -6892,7 +6883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.1.1, fast-glob@npm:^3.2.7, fast-glob@npm:^3.2.9":
+"fast-glob@npm:^3.1.1, fast-glob@npm:^3.2.9":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
@@ -6902,6 +6893,19 @@ __metadata:
     merge2: ^1.3.0
     micromatch: ^4.0.4
   checksum: 900e4979f4dbc3313840078419245621259f349950411ca2fa445a2f9a1a6d98c3b5e7e0660c5ccd563aa61abe133a21765c6c0dec8e57da1ba71d8000b05ec1
+  languageName: node
+  linkType: hard
+
+"fast-glob@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "fast-glob@npm:3.3.3"
+  dependencies:
+    "@nodelib/fs.stat": ^2.0.2
+    "@nodelib/fs.walk": ^1.2.3
+    glob-parent: ^5.1.2
+    merge2: ^1.3.0
+    micromatch: ^4.0.8
+  checksum: 0704d7b85c0305fd2cef37777337dfa26230fdd072dce9fb5c82a4b03156f3ffb8ed3e636033e65d45d2a5805a4e475825369a27404c0307f2db0c8eb3366fbd
   languageName: node
   linkType: hard
 
@@ -7224,10 +7228,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-monkey@npm:1.0.3":
-  version: 1.0.3
-  resolution: "fs-monkey@npm:1.0.3"
-  checksum: cf50804833f9b88a476911ae911fe50f61a98d986df52f890bd97e7262796d023698cb2309fa9b74fdd8974f04315b648748a0a8ee059e7d5257b293bfc409c0
+"fs-monkey@npm:^1.0.4":
+  version: 1.0.6
+  resolution: "fs-monkey@npm:1.0.6"
+  checksum: 4e9986acf197581b10b79d3e63e74252681ca215ef82d4afbd98dcfe86b3f09189ac1d7e8064bc433e4e53cdb5c14fdb38773277d41bba18b1ff8bbdcab01a3a
   languageName: node
   linkType: hard
 
@@ -9281,9 +9285,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonpath-plus@npm:10.2.0":
-  version: 10.2.0
-  resolution: "jsonpath-plus@npm:10.2.0"
+"jsonpath-plus@npm:^10.3.0, jsonpath-plus@npm:^6.0.1 || ^10.1.0":
+  version: 10.3.0
+  resolution: "jsonpath-plus@npm:10.3.0"
   dependencies:
     "@jsep-plugin/assignment": ^1.3.0
     "@jsep-plugin/regex": ^1.0.4
@@ -9291,21 +9295,7 @@ __metadata:
   bin:
     jsonpath: bin/jsonpath-cli.js
     jsonpath-plus: bin/jsonpath-cli.js
-  checksum: 862a96a0179f342fa6c012065fa78458d4ae4835f18a6ef580d18807101d8c2c3509dc20c9857474503205bff8f06c309e17d7420b68196262d15ad1e4f22146
-  languageName: node
-  linkType: hard
-
-"jsonpath-plus@npm:^6.0.1 || ^10.1.0":
-  version: 10.1.0
-  resolution: "jsonpath-plus@npm:10.1.0"
-  dependencies:
-    "@jsep-plugin/assignment": ^1.2.1
-    "@jsep-plugin/regex": ^1.0.3
-    jsep: ^1.3.9
-  bin:
-    jsonpath: bin/jsonpath-cli.js
-    jsonpath-plus: bin/jsonpath-cli.js
-  checksum: 9369a9466e3bb3eca064debe3fd87d9cf791b9c8a23be7c00902497cd8f9dd632290d471e3c7bb09da0aa92626204f9c9a27c429940802bc5046cc8c87f3c596
+  checksum: b0f7e9af4d3c586911690c0afc20cbdc3c8af963a739c7f7a62905ed34a25bf5279f2c254e7222aa65f834d2ae3c8cc217986d528c8206896afa008d6619cde7
   languageName: node
   linkType: hard
 
@@ -10018,12 +10008,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "memfs@npm:3.3.0"
+"memfs@npm:^3.5.3":
+  version: 3.5.3
+  resolution: "memfs@npm:3.5.3"
   dependencies:
-    fs-monkey: 1.0.3
-  checksum: 9e9eb71cfc077fd5e14ad2f497f5a8791689b64f307cf379ed6737c5781652a7af0509395c0dfba43c4e413dbc7cd7010e9ca002168ec329e6df178414b96268
+    fs-monkey: ^1.0.4
+  checksum: 18dfdeacad7c8047b976a6ccd58bc98ba76e122ad3ca0e50a21837fe2075fc0d9aafc58ab9cf2576c2b6889da1dd2503083f2364191b695273f40969db2ecc44
   languageName: node
   linkType: hard
 
@@ -10076,7 +10066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2, micromatch@npm:^4.0.4":
+"micromatch@npm:^4.0.0, micromatch@npm:^4.0.2, micromatch@npm:^4.0.4, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
@@ -10545,7 +10535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.6, node-fetch@npm:^2.6.7":
+"node-fetch@npm:^2.6.0, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.6, node-fetch@npm:^2.6.7, node-fetch@npm:^2.7.0":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -12307,7 +12297,7 @@ __metadata:
     eslint-plugin-import: ^2.26.0
     eslint-plugin-prettier: ^4.2.1
     expect: ^27.5.1
-    fast-glob: ^3.2.7
+    fast-glob: ^3.3.3
     fetch-mock: ^9.11.0
     file-entry-cache: ^6.0.1
     husky: ^7.0.4
@@ -12319,7 +12309,7 @@ __metadata:
     karma-typescript: ^5.5.3
     karma-typescript-es6-transform: ^5.5.3
     lint-staged: ^11.2.6
-    memfs: ^3.3.0
+    memfs: ^3.5.3
     multi-semantic-release: ^3.0.2
     node-powershell: ^4.0.0
     patch-package: ^6.4.7

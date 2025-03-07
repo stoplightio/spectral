@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-bundler",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@types/validate-npm-package-name": "^3.0.3",
     "fetch-mock": "^9.11.0",
-    "memfs": "^3.3.0",
+    "memfs": "^3.5.3",
     "prettier": "^2.4.1"
   }
 }
