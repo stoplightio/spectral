@@ -41,7 +41,7 @@
     "@stoplight/spectral-rulesets": "*",
     "fetch-mock": "^9.11.0",
     "json-schema-to-typescript": "^10.1.5",
-    "memfs": "^3.3.0",
+    "memfs": "^3.5.3",
     "prettier": "^2.4.1"
   },
   "scripts": {

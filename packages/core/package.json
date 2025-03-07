@@ -45,7 +45,7 @@
     "@types/json-schema": "^7.0.11",
     "ajv": "^8.17.1",
     "ajv-errors": "~3.0.0",
-    "ajv-formats": "~2.1.0",
+    "ajv-formats": "~2.1.1",
     "es-aggregate-error": "^1.0.7",
     "jsonpath-plus": "^10.3.0",
     "lodash": "~4.17.21",
