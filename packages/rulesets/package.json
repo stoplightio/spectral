@@ -28,7 +28,7 @@
     "@stoplight/types": "^13.6.0",
     "@types/json-schema": "^7.0.7",
     "ajv": "^8.17.1",
-    "ajv-formats": "~2.1.0",
+    "ajv-formats": "~2.1.1",
     "json-schema-traverse": "^1.0.0",
     "leven": "3.1.0",
     "lodash": "~4.17.21",
