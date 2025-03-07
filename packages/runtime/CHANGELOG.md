@@ -1,3 +1,10 @@
+## @stoplight/spectral-runtime [1.1.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-runtime-1.1.3...@stoplight/spectral-runtime-1.1.4) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
 ## @stoplight/spectral-runtime [1.1.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-runtime-v1.1.2...@stoplight/spectral-runtime-1.1.3) (2024-11-13)
 
 
