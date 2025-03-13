@@ -1,3 +1,24 @@
+## @stoplight/spectral-ruleset-migrator [1.11.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.1...@stoplight/spectral-ruleset-migrator-1.11.2) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
+## @stoplight/spectral-ruleset-migrator [1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.0...@stoplight/spectral-ruleset-migrator-1.11.1) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+# @stoplight/spectral-ruleset-migrator [1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.10.0...@stoplight/spectral-ruleset-migrator-1.11.0) (2024-11-12)
+
+
+### Features
+
+* **rulesets:** add AsyncAPI v3 support ([#2697](https://github.com/stoplightio/spectral/issues/2697)) ([3d69be7](https://github.com/stoplightio/spectral/commit/3d69be7058e8f25f0697b69fd8317a2aefe313c1))
+
 # @stoplight/spectral-ruleset-migrator [1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.9.5...@stoplight/spectral-ruleset-migrator-1.10.0) (2024-09-12)
 
 

@@ -1,3 +1,17 @@
+## @stoplight/spectral-ruleset-bundler [1.6.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-1.6.1...@stoplight/spectral-ruleset-bundler-1.6.2) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
+## @stoplight/spectral-ruleset-bundler [1.6.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-1.6.0...@stoplight/spectral-ruleset-bundler-1.6.1) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
 # @stoplight/spectral-ruleset-bundler [1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-v1.5.2...@stoplight/spectral-ruleset-bundler-1.6.0) (2024-09-12)
 
 

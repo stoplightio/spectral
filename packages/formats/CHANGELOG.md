@@ -1,3 +1,24 @@
+## @stoplight/spectral-formats [1.8.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.1...@stoplight/spectral-formats-1.8.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+## @stoplight/spectral-formats [1.8.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.0...@stoplight/spectral-formats-1.8.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **formats:** update spectral core version ([6b196da](https://github.com/stoplightio/spectral/commit/6b196dac0a91f433aaf8cff3bbf889f23c31b0ab))
+
+# @stoplight/spectral-formats [1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.7.0...@stoplight/spectral-formats-1.8.0) (2024-11-12)
+
+
+### Features
+
+* **rulesets:** add AsyncAPI v3 support ([#2697](https://github.com/stoplightio/spectral/issues/2697)) ([3d69be7](https://github.com/stoplightio/spectral/commit/3d69be7058e8f25f0697b69fd8317a2aefe313c1))
+
 # @stoplight/spectral-formats [1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.6.0...@stoplight/spectral-formats-1.7.0) (2024-09-12)
 
 

@@ -1,10 +1,10 @@
-import asyncApi2SchemaValidation from '../asyncApi2SchemaValidation';
+import asyncApiSchemaValidation from '../asyncApiSchemaValidation';
 
 function runPayloadValidation(targetVal: any, opts: { type: 'examples' | 'default' }) {
-  return asyncApi2SchemaValidation(targetVal, opts, { path: [], documentInventory: {} } as any);
+  return asyncApiSchemaValidation(targetVal, opts, { path: [], documentInventory: {} } as any);
 }
 
-describe('asyncApi2SchemaValidation', () => {
+describe('asyncApiSchemaValidation', () => {
   test('validates examples', () => {
     const payload = {
       type: 'object',

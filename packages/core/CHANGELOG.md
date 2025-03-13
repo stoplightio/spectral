@@ -1,3 +1,31 @@
+## @stoplight/spectral-core [1.19.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.4...@stoplight/spectral-core-1.19.5) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
+## @stoplight/spectral-core [1.19.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.3...@stoplight/spectral-core-1.19.4) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** fix CVE related to jsonpath-plus ([169db7a](https://github.com/stoplightio/spectral/commit/169db7abc7bcc41a297c11bb6eee78474615c63b))
+
+## @stoplight/spectral-core [1.19.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.2...@stoplight/spectral-core-1.19.3) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+## @stoplight/spectral-core [1.19.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.1...@stoplight/spectral-core-1.19.2) (2024-11-12)
+
+
+### Bug Fixes
+
+* **core:** require new formats version ([#2725](https://github.com/stoplightio/spectral/issues/2725)) ([8ec328f](https://github.com/stoplightio/spectral/commit/8ec328fe68e42519cea1d6afedc4eb309a2c121c))
+
 ## @stoplight/spectral-core [1.19.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.0...@stoplight/spectral-core-1.19.1) (2024-09-13)
 
 

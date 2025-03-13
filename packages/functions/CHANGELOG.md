@@ -1,3 +1,31 @@
+## @stoplight/spectral-functions [1.9.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.3...@stoplight/spectral-functions-1.9.4) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
+## @stoplight/spectral-functions [1.9.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.2...@stoplight/spectral-functions-1.9.3) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** bump spectral-core dependents ([#2742](https://github.com/stoplightio/spectral/issues/2742)) ([30c0349](https://github.com/stoplightio/spectral/commit/30c0349d0ca143cadb029661ffcc919b66f8fd49))
+
+## @stoplight/spectral-functions [1.9.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.1...@stoplight/spectral-functions-1.9.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+## @stoplight/spectral-functions [1.9.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.0...@stoplight/spectral-functions-1.9.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **functions:** update spectral core to latest ([ede60f3](https://github.com/stoplightio/spectral/commit/ede60f3a99d9fc5ed03747331473dde8b58fa56b))
+
 # @stoplight/spectral-functions [1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.8.0...@stoplight/spectral-functions-1.9.0) (2024-09-12)
 
 

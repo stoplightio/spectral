@@ -1,11 +1,11 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.10.0",
+  "version": "1.11.2",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
   "engines": {
-    "node": ">=12"
+    "node": "^16.20 || ^18.18 || >= 20.17"
   },
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -24,16 +24,16 @@
     "@stoplight/json": "~3.21.0",
     "@stoplight/ordered-object-literal": "~1.0.4",
     "@stoplight/path": "1.3.2",
-    "@stoplight/spectral-functions": "^1.0.0",
-    "@stoplight/spectral-runtime": "^1.1.0",
+    "@stoplight/spectral-functions": "^1.9.1",
+    "@stoplight/spectral-runtime": "^1.1.2",
     "@stoplight/types": "^13.6.0",
     "@stoplight/yaml": "~4.2.3",
     "@types/node": "*",
     "ajv": "^8.17.1",
     "ast-types": "0.14.2",
-    "astring": "^1.7.5",
+    "astring": "^1.9.0",
     "reserved": "0.1.2",
-    "tslib": "^2.3.1",
+    "tslib": "^2.8.1",
     "validate-npm-package-name": "3.0.0"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "@stoplight/spectral-rulesets": "*",
     "fetch-mock": "^9.11.0",
     "json-schema-to-typescript": "^10.1.5",
-    "memfs": "^3.3.0",
+    "memfs": "^3.5.3",
     "prettier": "^2.4.1"
   },
   "scripts": {

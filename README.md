@@ -78,7 +78,7 @@ Once you've had a look through the getting started material, some of these guide
 
 ## ℹ️ Support
 
-If you need help using Spectral or have any questions, you can use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions), or visit the [Stoplight Community Discord](https://discord.com/invite/stoplight). These communities are a great place to share your rulesets, or show off tools that use Spectral.
+If you need help using Spectral or have any questions, you can use [GitHub Discussions](https://github.com/stoplightio/spectral/discussions), or visit the [Stoplight Community Forum](https://community.stoplight.io/). These communities are a great place to share your rulesets, or show off tools that use Spectral.
 
 If you have a bug or feature request, [create an issue for it](https://github.com/stoplightio/spectral/issues).
 

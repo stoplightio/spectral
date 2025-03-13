@@ -20,9 +20,8 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - "14.21"
     - &node-maintenance-lts "16.20"
-    - &node-active-lts "18.20"
+    - &node-active-lts "18.18"
     - &node-current "20.17"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
@@ -291,6 +290,7 @@ jobs:
   test-windows:
     executor:
       name: windows/default
+      size: large
     steps:
       - checkout
       - cached-dependencies:
@@ -341,7 +341,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.2
           docker_layer_caching: true
       - run:
           name: set version in package.json
@@ -407,13 +406,13 @@ jobs:
 
   upload-artifacts:
     docker:
-      - image: circleci/golang:1-stretch
+      - image: cimg/go:1.23
     steps:
       - attach_workspace:
           at: /tmp/
       - run:
           name: "Download GitHub Release Utility"
-          command: go get github.com/tcnksm/ghr
+          command: go install github.com/tcnksm/ghr@latest
       - run:
           name: "Publish Release artifacts on GitHub"
           command: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} /tmp/binaries

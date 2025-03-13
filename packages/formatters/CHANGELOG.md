@@ -1,3 +1,24 @@
+## @stoplight/spectral-formatters [1.4.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.4.2...@stoplight/spectral-formatters-1.4.3) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** bump spectral-core dependents ([#2742](https://github.com/stoplightio/spectral/issues/2742)) ([30c0349](https://github.com/stoplightio/spectral/commit/30c0349d0ca143cadb029661ffcc919b66f8fd49))
+
+## @stoplight/spectral-formatters [1.4.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.4.1...@stoplight/spectral-formatters-1.4.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+## @stoplight/spectral-formatters [1.4.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.4.0...@stoplight/spectral-formatters-1.4.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **formatters:** update spectral core to latest version ([8a382f4](https://github.com/stoplightio/spectral/commit/8a382f4c40cdd2089e3404668c30552300be94eb))
+
 # @stoplight/spectral-formatters [1.4.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.3.0...@stoplight/spectral-formatters-1.4.0) (2024-09-13)
 
 

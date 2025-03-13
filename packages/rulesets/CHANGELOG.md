@@ -1,3 +1,43 @@
+## @stoplight/spectral-rulesets [1.21.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.3...@stoplight/spectral-rulesets-1.21.4) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies ([#2794](https://github.com/stoplightio/spectral/issues/2794)) ([9e6b885](https://github.com/stoplightio/spectral/commit/9e6b885e8b22a350b2a1f7f0c1a5e2fc2365eb9e))
+
+## @stoplight/spectral-rulesets [1.21.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.2...@stoplight/spectral-rulesets-1.21.3) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** bump spectral-core dependents ([#2742](https://github.com/stoplightio/spectral/issues/2742)) ([30c0349](https://github.com/stoplightio/spectral/commit/30c0349d0ca143cadb029661ffcc919b66f8fd49))
+
+## @stoplight/spectral-rulesets [1.21.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.1...@stoplight/spectral-rulesets-1.21.2) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+## @stoplight/spectral-rulesets [1.21.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.0...@stoplight/spectral-rulesets-1.21.1) (2024-11-12)
+
+
+### Bug Fixes
+
+* **rulesets:** update spectral core to latest ([d74c2b0](https://github.com/stoplightio/spectral/commit/d74c2b03b41133ff45dde76ccf2551e2c61edf2b))
+
+# @stoplight/spectral-rulesets [1.21.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.2...@stoplight/spectral-rulesets-1.21.0) (2024-11-12)
+
+
+### Bug Fixes
+
+* **rulesets:** always allow string examples in asyncapi schema ([#2625](https://github.com/stoplightio/spectral/issues/2625)) ([4e2f797](https://github.com/stoplightio/spectral/commit/4e2f7974b623afa51221d426f975e2592a14f963))
+
+
+### Features
+
+* **rulesets:** add AsyncAPI v3 support ([#2697](https://github.com/stoplightio/spectral/issues/2697)) ([3d69be7](https://github.com/stoplightio/spectral/commit/3d69be7058e8f25f0697b69fd8317a2aefe313c1))
+
 ## @stoplight/spectral-rulesets [1.20.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.20.1...@stoplight/spectral-rulesets-1.20.2) (2024-09-17)
 
 

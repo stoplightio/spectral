@@ -1,3 +1,31 @@
+## @stoplight/spectral-cli [6.14.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.14.2...@stoplight/spectral-cli-6.14.3) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update spectral-core in cli ([35687cd](https://github.com/stoplightio/spectral/commit/35687cd4bba4411e716a947984d17806a4784763))
+
+## @stoplight/spectral-cli [6.14.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.14.1...@stoplight/spectral-cli-6.14.2) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** bump spectral-core dependents ([#2742](https://github.com/stoplightio/spectral/issues/2742)) ([30c0349](https://github.com/stoplightio/spectral/commit/30c0349d0ca143cadb029661ffcc919b66f8fd49))
+
+## @stoplight/spectral-cli [6.14.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.14.0...@stoplight/spectral-cli-6.14.1) (2024-11-13)
+
+
+### Bug Fixes
+
+* **cli:** update dependencies and trigger docker release ([c87eacf](https://github.com/stoplightio/spectral/commit/c87eacff7c6d97ec139cc66623e4b0b27158a0cc))
+
+# @stoplight/spectral-cli [6.14.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.13.1...@stoplight/spectral-cli-6.14.0) (2024-11-12)
+
+
+### Features
+
+* **cli:** require new stoplight dependencies ([#2726](https://github.com/stoplightio/spectral/issues/2726)) ([8a736b5](https://github.com/stoplightio/spectral/commit/8a736b557a441e578c498df5af4cf5313c6dc2d5))
+
 ## @stoplight/spectral-cli [6.13.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.13.0...@stoplight/spectral-cli-6.13.1) (2024-09-21)
 
 

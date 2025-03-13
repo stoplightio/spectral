@@ -1,4 +1,15 @@
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6 } from '@stoplight/spectral-formats';
+import {
+  aas2,
+  aas2_0,
+  aas2_1,
+  aas2_2,
+  aas2_3,
+  aas2_4,
+  aas2_5,
+  aas2_6,
+  aas3,
+  aas3_0,
+} from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -8,29 +19,43 @@ import {
   alphabetical,
 } from '@stoplight/spectral-functions';
 
-import asyncApi2ChannelParameters from './functions/asyncApi2ChannelParameters';
+import asyncApiChannelParameters from './functions/asyncApiChannelParameters';
 import asyncApi2ChannelServers from './functions/asyncApi2ChannelServers';
-import asyncApi2DocumentSchema from './functions/asyncApi2DocumentSchema';
+import { asyncApiDocumentSchema } from './functions/asyncApiDocumentSchema';
 import asyncApi2MessageExamplesValidation from './functions/asyncApi2MessageExamplesValidation';
 import asyncApi2MessageIdUniqueness from './functions/asyncApi2MessageIdUniqueness';
 import asyncApi2OperationIdUniqueness from './functions/asyncApi2OperationIdUniqueness';
-import asyncApi2SchemaValidation from './functions/asyncApi2SchemaValidation';
-import asyncApi2PayloadValidation from './functions/asyncApi2PayloadValidation';
+import asyncApiSchemaValidation from './functions/asyncApiSchemaValidation';
+import asyncApiPayloadValidation from './functions/asyncApiPayloadValidation';
 import serverVariables from '../shared/functions/serverVariables';
 import { uniquenessTags } from '../shared/functions';
-import asyncApi2Security from './functions/asyncApi2Security';
+import asyncApiSecurity from './functions/asyncApiSecurity';
 import { latestVersion } from './functions/utils/specs';
 
 export default {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md',
-  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6],
+  formats: [aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6, aas3_0],
   rules: {
     'asyncapi-channel-no-empty-parameter': {
       description: 'Channel path must not have empty parameter substitution pattern.',
       recommended: true,
       given: '$.channels',
+      formats: [aas2],
       then: {
         field: '@key',
+        function: pattern,
+        functionOptions: {
+          notMatch: '{}',
+        },
+      },
+    },
+    'asyncapi-3-channel-no-empty-parameter': {
+      description: 'Channel address must not have empty parameter substitution pattern.',
+      recommended: true,
+      given: '$.channels.*',
+      formats: [aas3],
+      then: {
+        field: 'address',
         function: pattern,
         functionOptions: {
           notMatch: '{}',
@@ -41,8 +66,22 @@ export default {
       description: 'Channel path must not include query ("?") or fragment ("#") delimiter.',
       recommended: true,
       given: '$.channels',
+      formats: [aas2],
       then: {
         field: '@key',
+        function: pattern,
+        functionOptions: {
+          notMatch: '[\\?#]',
+        },
+      },
+    },
+    'asyncapi-3-channel-no-query-nor-fragment': {
+      description: 'Channel address must not include query ("?") or fragment ("#") delimiter.',
+      recommended: true,
+      given: '$.channels.*',
+      formats: [aas3],
+      then: {
+        field: 'address',
         function: pattern,
         functionOptions: {
           notMatch: '[\\?#]',
@@ -53,8 +92,22 @@ export default {
       description: 'Channel path must not end with slash.',
       recommended: true,
       given: '$.channels',
+      formats: [aas2],
       then: {
         field: '@key',
+        function: pattern,
+        functionOptions: {
+          notMatch: '.+\\/$',
+        },
+      },
+    },
+    'asyncapi-3-channel-no-trailing-slash': {
+      description: 'Channel address must not end with slash.',
+      recommended: true,
+      given: '$.channels.*',
+      formats: [aas3],
+      then: {
+        field: 'address',
         function: pattern,
         functionOptions: {
           notMatch: '.+\\/$',
@@ -66,9 +119,10 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2, aas3],
       given: ['$.channels.*', '$.components.channels.*'],
       then: {
-        function: asyncApi2ChannelParameters,
+        function: asyncApiChannelParameters,
       },
     },
     'asyncapi-channel-servers': {
@@ -76,9 +130,25 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: '$',
       then: {
         function: asyncApi2ChannelServers,
+      },
+    },
+    'asyncapi-3-channel-servers': {
+      description: 'Channel servers must be defined in the "servers" object.',
+      severity: 'error',
+      recommended: true,
+      resolved: false, // We use the JSON pointer to match the channel.
+      given: '$.channels.*',
+      formats: [aas3],
+      then: {
+        field: '$.servers.*.$ref',
+        function: pattern,
+        functionOptions: {
+          match: '#\\/servers\\/', // If doesn't match, rule fails.
+        },
       },
     },
     'asyncapi-headers-schema-type-object': {
@@ -86,6 +156,7 @@ export default {
       message: 'Headers schema type must be "object" ({{error}}).',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         '$.components.messageTraits.*.headers',
         '$.components.messages.*.headers',
@@ -108,10 +179,39 @@ export default {
         },
       },
     },
+    'asyncapi-3-headers-schema-type-object': {
+      description: 'Headers schema type must be "object".',
+      message: 'Headers schema type must be "object" ({{error}}).',
+      severity: 'error',
+      recommended: true,
+      formats: [aas3],
+      given: [
+        '$.components.messageTraits.*.headers',
+        '$.components.messages.*.headers',
+        '$.channels.*.messages.*.headers',
+        '$.channels.*.messages.*.traits[*].headers',
+      ],
+      then: {
+        function: schema,
+        functionOptions: {
+          allErrors: true,
+          schema: {
+            type: 'object',
+            properties: {
+              type: {
+                enum: ['object'],
+              },
+            },
+            required: ['type'],
+          },
+        },
+      },
+    },
     'asyncapi-info-contact-properties': {
       description: 'Contact object must have "name", "url" and "email".',
       recommended: true,
       given: '$.info.contact',
+      formats: [aas2, aas3],
       then: [
         {
           field: 'name',
@@ -130,6 +230,7 @@ export default {
     'asyncapi-info-contact': {
       description: 'Info object must have "contact" object.',
       recommended: true,
+      formats: [aas2, aas3],
       given: '$',
       then: {
         field: 'info.contact',
@@ -140,6 +241,7 @@ export default {
       description: 'Info "description" must be present and non-empty string.',
       recommended: true,
       given: '$',
+      formats: [aas2, aas3],
       then: {
         field: 'info.description',
         function: truthy,
@@ -149,6 +251,7 @@ export default {
       description: 'License object must include "url".',
       recommended: false,
       given: '$',
+      formats: [aas2, aas3],
       then: {
         field: 'info.license.url',
         function: truthy,
@@ -158,6 +261,7 @@ export default {
       description: 'Info object must have "license" object.',
       recommended: true,
       given: '$',
+      formats: [aas2, aas3],
       then: {
         field: 'info.license',
         function: truthy,
@@ -169,6 +273,7 @@ export default {
       recommended: true,
       severity: 'info',
       given: '$.asyncapi',
+      formats: [aas2, aas3],
       then: {
         function: schema,
         functionOptions: {
@@ -183,6 +288,7 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         // messages
         '$.channels.*.[publish,subscribe].message',
@@ -207,6 +313,7 @@ export default {
       severity: 'error',
       recommended: true,
       given: '$',
+      formats: [aas2],
       then: {
         function: asyncApi2MessageIdUniqueness,
       },
@@ -214,7 +321,18 @@ export default {
     'asyncapi-operation-description': {
       description: 'Operation "description" must be present and non-empty string.',
       recommended: true,
+      formats: [aas2],
       given: '$.channels[*][publish,subscribe]',
+      then: {
+        field: 'description',
+        function: truthy,
+      },
+    },
+    'asyncapi-3-operation-description': {
+      description: 'Operation "description" must be present and non-empty string.',
+      recommended: true,
+      formats: [aas3],
+      given: '$.operations.*',
       then: {
         field: 'description',
         function: truthy,
@@ -224,6 +342,7 @@ export default {
       description: '"operationId" must be unique across all the operations.',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: '$',
       then: {
         function: asyncApi2OperationIdUniqueness,
@@ -233,6 +352,7 @@ export default {
       description: 'Operation must have "operationId".',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: '$.channels[*][publish,subscribe]',
       then: {
         field: 'operationId',
@@ -244,9 +364,24 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: '$.channels[*][publish,subscribe].security.*',
       then: {
-        function: asyncApi2Security,
+        function: asyncApiSecurity,
+        functionOptions: {
+          objectType: 'Operation',
+        },
+      },
+    },
+    'asyncapi-3-operation-security': {
+      description: 'Operation have to reference a defined security schemes.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      formats: [aas3],
+      given: '$.operations.*.security.*',
+      then: {
+        function: asyncApiSecurity,
         functionOptions: {
           objectType: 'Operation',
         },
@@ -255,6 +390,7 @@ export default {
     'asyncapi-parameter-description': {
       description: 'Parameter objects must have "description".',
       recommended: false,
+      formats: [aas2, aas3],
       given: ['$.components.parameters.*', '$.channels.*.parameters.*'],
       then: {
         field: 'description',
@@ -266,13 +402,14 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload.default^',
         '$.components.messages[?(@.schemaFormat === void 0)].payload.default^',
         "$.channels[*][publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.default^",
       ],
       then: {
-        function: asyncApi2SchemaValidation,
+        function: asyncApiSchemaValidation,
         functionOptions: {
           type: 'default',
         },
@@ -283,13 +420,14 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload.examples^',
         '$.components.messages[?(@.schemaFormat === void 0)].payload.examples^',
         "$.channels[*][publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload.examples^",
       ],
       then: {
-        function: asyncApi2SchemaValidation,
+        function: asyncApiSchemaValidation,
         functionOptions: {
           type: 'examples',
         },
@@ -299,7 +437,19 @@ export default {
       description: 'Message schema validation is only supported with default unspecified "schemaFormat".',
       severity: 'info',
       recommended: true,
+      formats: [aas2],
       given: ['$.components.messageTraits.*', '$.components.messages.*', '$.channels[*][publish,subscribe].message'],
+      then: {
+        field: 'schemaFormat',
+        function: undefined,
+      },
+    },
+    'asyncapi-3-payload-unsupported-schemaFormat': {
+      description: 'Message schema validation is only supported with default unspecified "schemaFormat".',
+      severity: 'info',
+      recommended: true,
+      formats: [aas3],
+      given: ['$.components.messages.*.payload', '$.channels.*.messages.*.payload'],
       then: {
         field: 'schemaFormat',
         function: undefined,
@@ -310,13 +460,14 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         '$.components.messageTraits[?(@.schemaFormat === void 0)].payload',
         '$.components.messages[?(@.schemaFormat === void 0)].payload',
         "$.channels[*][publish,subscribe][?(@property === 'message' && @.schemaFormat === void 0)].payload",
       ],
       then: {
-        function: asyncApi2PayloadValidation,
+        function: asyncApiPayloadValidation,
       },
     },
     'asyncapi-schema-default': {
@@ -324,13 +475,14 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         '$.components.schemas.*.default^',
         '$.components.parameters.*.schema.default^',
         '$.channels.*.parameters.*.schema.default^',
       ],
       then: {
-        function: asyncApi2SchemaValidation,
+        function: asyncApiSchemaValidation,
         functionOptions: {
           type: 'default',
         },
@@ -341,26 +493,31 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         '$.components.schemas.*.examples^',
         '$.components.parameters.*.schema.examples^',
         '$.channels.*.parameters.*.schema.examples^',
       ],
       then: {
-        function: asyncApi2SchemaValidation,
+        function: asyncApiSchemaValidation,
         functionOptions: {
           type: 'examples',
         },
       },
     },
     'asyncapi-schema': {
-      description: 'Validate structure of AsyncAPI v2 specification.',
+      description: 'Validate structure of AsyncAPI specification.',
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: '$',
       then: {
-        function: asyncApi2DocumentSchema,
+        function: asyncApiDocumentSchema,
+        functionOptions: {
+          resolved: true,
+        },
       },
     },
     'asyncapi-server-variables': {
@@ -368,6 +525,7 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: ['$.servers.*', '$.components.servers.*'],
       then: {
         function: serverVariables,
@@ -376,7 +534,20 @@ export default {
     'asyncapi-server-no-empty-variable': {
       description: 'Server URL must not have empty variable substitution pattern.',
       recommended: true,
+      formats: [aas2],
       given: '$.servers[*].url',
+      then: {
+        function: pattern,
+        functionOptions: {
+          notMatch: '{}',
+        },
+      },
+    },
+    'asyncapi-3-server-no-empty-variable': {
+      description: 'Server host and pathname must not have empty variable substitution pattern.',
+      recommended: true,
+      formats: [aas3],
+      given: ['$.servers[*].host', '$.servers[*].pathname'],
       then: {
         function: pattern,
         functionOptions: {
@@ -387,7 +558,20 @@ export default {
     'asyncapi-server-no-trailing-slash': {
       description: 'Server URL must not end with slash.',
       recommended: true,
+      formats: [aas2],
       given: '$.servers[*].url',
+      then: {
+        function: pattern,
+        functionOptions: {
+          notMatch: '/$',
+        },
+      },
+    },
+    'asyncapi-3-server-no-trailing-slash': {
+      description: 'Server host must not end with slash.',
+      recommended: true,
+      formats: [aas3],
+      given: '$.servers.*.host',
       then: {
         function: pattern,
         functionOptions: {
@@ -399,6 +583,19 @@ export default {
       description: 'Server URL must not point at example.com.',
       recommended: false,
       given: '$.servers[*].url',
+      formats: [aas2],
+      then: {
+        function: pattern,
+        functionOptions: {
+          notMatch: 'example\\.com',
+        },
+      },
+    },
+    'asyncapi-3-server-not-example-com': {
+      description: 'Server host must not point at example.com.',
+      recommended: false,
+      given: '$.servers.*.host',
+      formats: [aas3],
       then: {
         function: pattern,
         functionOptions: {
@@ -411,9 +608,10 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: '$.servers.*.security.*',
       then: {
-        function: asyncApi2Security,
+        function: asyncApiSecurity,
         functionOptions: {
           objectType: 'Server',
         },
@@ -422,6 +620,7 @@ export default {
     'asyncapi-servers': {
       description: 'AsyncAPI object must have non-empty "servers" object.',
       recommended: true,
+      formats: [aas2, aas3],
       given: '$',
       then: {
         field: 'servers',
@@ -438,7 +637,18 @@ export default {
     'asyncapi-tag-description': {
       description: 'Tag object must have "description".',
       recommended: false,
+      formats: [aas2],
       given: '$.tags[*]',
+      then: {
+        field: 'description',
+        function: truthy,
+      },
+    },
+    'asyncapi-3-tag-description': {
+      description: 'Tag object must have "description".',
+      recommended: false,
+      formats: [aas3],
+      given: '$.info.tags[*]',
       then: {
         field: 'description',
         function: truthy,
@@ -448,6 +658,20 @@ export default {
       description: 'AsyncAPI object must have alphabetical "tags".',
       recommended: false,
       given: '$',
+      formats: [aas2],
+      then: {
+        field: 'tags',
+        function: alphabetical,
+        functionOptions: {
+          keyedBy: 'name',
+        },
+      },
+    },
+    'asyncapi-3-tags-alphabetical': {
+      description: 'AsyncAPI object must have alphabetical "tags".',
+      recommended: false,
+      given: '$.info',
+      formats: [aas3],
       then: {
         field: 'tags',
         function: alphabetical,
@@ -461,6 +685,7 @@ export default {
       message: '{{error}}',
       severity: 'error',
       recommended: true,
+      formats: [aas2],
       given: [
         // root
         '$.tags',
@@ -492,10 +717,54 @@ export default {
         function: uniquenessTags,
       },
     },
+    'asyncapi-3-tags-uniqueness': {
+      description: 'Each tag must have a unique name.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      formats: [aas3],
+      given: [
+        // root
+        '$.info.tags',
+        // servers
+        '$.servers.*.tags',
+        '$.components.servers.*.tags',
+        // operations
+        '$.operations.*.tags',
+        '$.components.operations.*.tags',
+        // operation traits
+        '$.operations.*.traits.*.tags',
+        '$.components.operations.traits.*.tags',
+        '$.components.operationTraits.*.tags',
+        // messages
+        '$.channels.*.messages.*.tags',
+        '$.components.channels.*.messages.tags',
+        '$.components.messages.*.tags',
+        // message traits
+        '$.channels.*..messages.*.traits.*.tags',
+        '$.components.channels.*.messages.*.traits.*.tags',
+        '$.components.messages.*.traits.*.tags',
+        '$.components.messageTraits.*.tags',
+      ],
+      then: {
+        function: uniquenessTags,
+      },
+    },
     'asyncapi-tags': {
       description: 'AsyncAPI object must have non-empty "tags" array.',
       recommended: true,
+      formats: [aas2],
       given: '$',
+      then: {
+        field: 'tags',
+        function: truthy,
+      },
+    },
+    'asyncapi-3-tags': {
+      description: 'AsyncAPI document must have non-empty "tags" array.',
+      recommended: true,
+      formats: [aas3],
+      given: ['$.info'],
       then: {
         field: 'tags',
         function: truthy,
@@ -505,6 +774,7 @@ export default {
       description: 'Potentially unused components schema has been detected.',
       recommended: true,
       resolved: false,
+      formats: [aas2, aas3],
       given: '$.components.schemas',
       then: {
         function: unreferencedReusableObject,
@@ -517,11 +787,41 @@ export default {
       description: 'Potentially unused components server has been detected.',
       recommended: true,
       resolved: false,
+      formats: [aas2, aas3],
       given: '$.components.servers',
       then: {
         function: unreferencedReusableObject,
         functionOptions: {
           reusableObjectsLocation: '#/components/servers',
+        },
+      },
+    },
+    'asyncapi-3-document-resolved': {
+      description: 'Checking if the AsyncAPI v3 document has valid structure after resolving references.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      given: '$',
+      formats: [aas3],
+      then: {
+        function: asyncApiDocumentSchema,
+        functionOptions: {
+          resolved: true,
+        },
+      },
+    },
+    'asyncapi-3-document-unresolved': {
+      description: 'Checking if the AsyncAPI v3 document has valid structure before resolving references.',
+      message: '{{error}}',
+      severity: 'error',
+      recommended: true,
+      resolved: false,
+      given: '$',
+      formats: [aas3],
+      then: {
+        function: asyncApiDocumentSchema,
+        functionOptions: {
+          resolved: false,
         },
       },
     },
