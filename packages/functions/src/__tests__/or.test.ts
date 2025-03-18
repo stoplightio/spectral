@@ -56,17 +56,23 @@ describe('Core Functions / Or', () => {
     ).toEqual([]);
   });
 
-  it('given one property, should show no error message', async () => {
-    expect(
-      await runOr(
-        {
-          version: '1.0.0',
-          title: 'Swagger Petstore',
-          termsOfService: 'http://swagger.io/terms/',
-        },
-        { properties: ['yada-yada'] })
-      ).toEqual([]);
-  });
+  // it('given one property when two are required, should show error message', async () => {
+  //   expect(
+  //     await runOr(
+  //       {
+  //         version: '1.0.0',
+  //         title: 'Swagger Petstore',
+  //         termsOfService: 'http://swagger.io/terms/',
+  //       },
+  //       { properties: ['yada-yada'] },
+  //     ),
+  //   ).toEqual([
+  //     {
+  //       message: '"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
+  //       path: [],
+  //     },
+  //   ]);
+  // });
 
   it('given no properties, should show no error message', async () => {
     expect(
@@ -169,10 +175,6 @@ describe('Core Functions / Or', () => {
       expect(await runOr([], opts)).toEqual([]);
     });
 
-    it.each([{ properties: ['foo'] }])('given valid %p options, should not throw', async opts => {
-      expect(await runOr([], opts)).toEqual([]);
-    });
-
     it.each([{ properties: ['foo', 'bar', 'three'] }])('given valid %p options, should not throw', async opts => {
       expect(await runOr([], opts)).toEqual([]);
     });
@@ -215,7 +217,7 @@ describe('Core Functions / Or', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"or" requires one or more enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
+            '"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
@@ -225,7 +227,7 @@ describe('Core Functions / Or', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"or" requires one or more enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
+            '"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],

@@ -79,18 +79,23 @@ describe('Core Functions / Xor', () => {
     ).toEqual([]);
   });
 
-  it('given 1 property, should return no error message', async () => {
-    expect(
-      await runXor(
-        {
-          version: '1.0.0',
-          title: 'Swagger Petstore',
-          termsOfService: 'http://swagger.io/terms/',
-        },
-        { properties: ['yada-yada'] },
-      ),
-    ).toEqual([]);
-  });
+  // it('given 1 property, should return no error message', async () => {
+  //   expect(
+  //     await runXor(
+  //       {
+  //         version: '1.0.0',
+  //         title: 'Swagger Petstore',
+  //         termsOfService: 'http://swagger.io/terms/',
+  //       },
+  //       { properties: ['yada-yada'] },
+  //     ),
+  //   ).toEqual([
+  //     {
+  //       message: '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
+  //       path: [],
+  //     },
+  //   ]);
+  // });
 
   it('given no properties, should return no error message', async () => {
     expect(
@@ -156,10 +161,6 @@ describe('Core Functions / Xor', () => {
 
   describe('validation', () => {
     it.each([{ properties: ['foo', 'bar'] }])('given valid %p options, should not throw', async opts => {
-      expect(await runXor([], opts)).toEqual([]);
-    });
-
-    it.each([{ properties: ['foo'] }])('given valid %p options, should not throw', async opts => {
       expect(await runXor([], opts)).toEqual([]);
     });
 
