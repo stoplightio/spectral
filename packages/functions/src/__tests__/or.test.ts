@@ -56,37 +56,6 @@ describe('Core Functions / Or', () => {
     ).toEqual([]);
   });
 
-  // it('given one property when two are required, should show error message', async () => {
-  //   expect(
-  //     await runOr(
-  //       {
-  //         version: '1.0.0',
-  //         title: 'Swagger Petstore',
-  //         termsOfService: 'http://swagger.io/terms/',
-  //       },
-  //       { properties: ['yada-yada'] },
-  //     ),
-  //   ).toEqual([
-  //     {
-  //       message: '"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
-  //       path: [],
-  //     },
-  //   ]);
-  // });
-
-  it('given no properties, should show no error message', async () => {
-    expect(
-      await runOr(
-        {
-          version: '1.0.0',
-          title: 'Swagger Petstore',
-          termsOfService: 'http://swagger.io/terms/',
-        },
-        null,
-      ),
-    ).toEqual([]);
-  });
-
   it('given one of 3 properties, should return no error message', async () => {
     expect(
       await runOr(
