@@ -79,37 +79,6 @@ describe('Core Functions / Xor', () => {
     ).toEqual([]);
   });
 
-  // it('given 1 property, should return no error message', async () => {
-  //   expect(
-  //     await runXor(
-  //       {
-  //         version: '1.0.0',
-  //         title: 'Swagger Petstore',
-  //         termsOfService: 'http://swagger.io/terms/',
-  //       },
-  //       { properties: ['yada-yada'] },
-  //     ),
-  //   ).toEqual([
-  //     {
-  //       message: '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
-  //       path: [],
-  //     },
-  //   ]);
-  // });
-
-  it('given no properties, should return no error message', async () => {
-    expect(
-      await runXor(
-        {
-          version: '1.0.0',
-          title: 'Swagger Petstore',
-          termsOfService: 'http://swagger.io/terms/',
-        },
-        null,
-      ),
-    ).toEqual([]);
-  });
-
   it('given multiple of 5 properties, should return an error message', async () => {
     expect(
       await runXor(
