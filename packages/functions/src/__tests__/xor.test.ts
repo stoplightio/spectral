@@ -38,7 +38,7 @@ describe('Core Functions / Xor', () => {
       ),
     ).toEqual([
       {
-        message: '"yada-yada", "whatever" and "foo" must not be both defined or both undefined',
+        message: 'At least one of "yada-yada" or "whatever" or "foo" must be defined',
         path: [],
       },
     ]);
