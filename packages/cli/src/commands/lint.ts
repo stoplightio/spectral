@@ -151,6 +151,13 @@ const lintCommand: CommandModule = {
           type: 'boolean',
           default: false,
         },
+        parser: {
+          alias: 'p',
+          description: 'which parser should be used to read the file (defaults to Yaml)',
+          type: 'string',
+          choices: ['Yaml', 'Json'],
+          default: 'Yaml',
+        },
         verbose: {
           alias: 'v',
           description: 'increase verbosity',
@@ -175,6 +182,7 @@ const lintCommand: CommandModule = {
       encoding,
       ignoreUnknownFormat,
       failOnUnmatchedGlobs,
+      parser,
       ...config
     } = args as unknown as ILintConfig & {
       documents: Array<number | string>;
@@ -191,6 +199,7 @@ const lintCommand: CommandModule = {
         failOnUnmatchedGlobs,
         ruleset,
         stdinFilepath,
+        parser,
         ...pick<Partial<ILintConfig>, keyof ILintConfig>(config, ['verbose', 'quiet', 'resolver']),
       });
 

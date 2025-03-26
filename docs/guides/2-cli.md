@@ -45,6 +45,8 @@ Other options include:
   -D, --display-only-failures    only output results equal to or greater than --fail-severity                    [boolean] [default: false]
       --ignore-unknown-format    do not warn about unmatched formats                                             [boolean] [default: false]
       --fail-on-unmatched-globs  fail on unmatched glob patterns                                                 [boolean] [default: false]
+  -p, --parser                   which parser should be used to read the file (defaults to Yaml)
+                                                                     [string] [choices: "Yaml", "Json"] [default: "Yaml"]
   -v, --verbose                  increase verbosity                                                                               [boolean]
   -q, --quiet                    no logging - output only                                                                         [boolean]
 ```
