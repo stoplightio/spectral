@@ -9,19 +9,17 @@
 
 # Overview
 
-  - [🧰 Installation](#-installation)
-  - [💻 Usage](#-usage)
-    - [1. Create a local ruleset](#1-create-a-local-ruleset)
-    - [2. Lint](#2-lint)
-  - [📖 Documentation](#-documentation)
-  - [ℹ️ Support](#ℹ️-support)
-  - [🌎 Real-World Rulesets](#-real-world-rulesets)
-  - [⚙️ Integrations](#️-integrations)
-  - [🏁 Help Others Utilize Spectral](#-help-others-utilize-spectral)
-  - [👏 Contributing](#-contributing)
-  - [🎉 Thanks](#-thanks)
-  - [📜 License](#-license)
-  - [🌲 Sponsor Spectral by Planting a Tree](#-sponsor-spectral-by-planting-a-tree)
+- [🧰 Installation](#-installation)
+- [💻 Usage](#-usage)
+- [📖 Documentation](#-documentation)
+- [ℹ️ Support](#ℹ️-support)
+- [🌎 Real-World Rulesets](#-real-world-rulesets)
+- [⚙️ Integrations](#️-integrations)
+- [🏁 Help Others Utilize Spectral](#-help-others-utilize-spectral)
+- [👏 Contributing](#-contributing)
+- [🎉 Thanks](#-thanks)
+- [📜 License](#-license)
+- [🌲 Sponsor Spectral by Planting a Tree](#-sponsor-spectral-by-planting-a-tree)
 
 ## 🧰 Installation
 
