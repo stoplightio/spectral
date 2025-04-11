@@ -2,15 +2,15 @@ import '@stoplight/spectral-test-utils/matchers';
 
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
-import xor from '../xor';
+import or from '../or';
 import AggregateError = require('es-aggregate-error');
 
-const runXor = testFunction.bind(null, xor);
+const runOr = testFunction.bind(null, or);
 
-describe('Core Functions / Xor', () => {
+describe('Core Functions / Or', () => {
   it('given no properties, should return an error message', async () => {
     expect(
-      await runXor(
+      await runOr(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
@@ -26,27 +26,9 @@ describe('Core Functions / Xor', () => {
     ]);
   });
 
-  it('given multiple properties that do not match, should return an error message', async () => {
+  it('given both properties, should return no error message', async () => {
     expect(
-      await runXor(
-        {
-          version: '1.0.0',
-          title: 'Swagger Petstore',
-          termsOfService: 'http://swagger.io/terms/',
-        },
-        { properties: ['yada-yada', 'whatever', 'foo'] },
-      ),
-    ).toEqual([
-      {
-        message: 'At least one of "yada-yada" or "whatever" or "foo" must be defined',
-        path: [],
-      },
-    ]);
-  });
-
-  it('given both properties, should return an error message', async () => {
-    expect(
-      await runXor(
+      await runOr(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
@@ -54,21 +36,16 @@ describe('Core Functions / Xor', () => {
         },
         { properties: ['version', 'title'] },
       ),
-    ).toEqual([
-      {
-        message: 'Just one of "version" and "title" must be defined',
-        path: [],
-      },
-    ]);
+    ).toEqual([]);
   });
 
   it('given invalid input, should show no error message', async () => {
-    return expect(await runXor(null, { properties: ['version', 'title'] })).toEqual([]);
+    return expect(await runOr(null, { properties: ['version', 'title'] })).toEqual([]);
   });
 
   it('given only one of the properties, should return no error message', async () => {
     expect(
-      await runXor(
+      await runOr(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
@@ -79,9 +56,48 @@ describe('Core Functions / Xor', () => {
     ).toEqual([]);
   });
 
-  it('given multiple of 5 properties, should return an error message', async () => {
+  it('given one of 3 properties, should return no error message', async () => {
     expect(
-      await runXor(
+      await runOr(
+        {
+          type: 'string',
+          format: 'date',
+        },
+        { properties: ['default', 'pattern', 'format'] },
+      ),
+    ).toEqual([]);
+  });
+
+  it('given two of 3 properties, should return no error message', async () => {
+    expect(
+      await runOr(
+        {
+          type: 'string',
+          default: '2024-05-01',
+          format: 'date',
+        },
+        { properties: ['default', 'pattern', 'format'] },
+      ),
+    ).toEqual([]);
+  });
+
+  it('given three of 3 properties, should return no error message', async () => {
+    expect(
+      await runOr(
+        {
+          type: 'string',
+          default: '2024-05-01',
+          pattern: '\\d{4}-\\d{2}-\\d{2}',
+          format: 'date',
+        },
+        { properties: ['default', 'pattern', 'format'] },
+      ),
+    ).toEqual([]);
+  });
+
+  it('given multiple of 5 properties, should return no error message', async () => {
+    expect(
+      await runOr(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
@@ -89,17 +105,12 @@ describe('Core Functions / Xor', () => {
         },
         { properties: ['version', 'title', 'termsOfService', 'bar', 'five'] },
       ),
-    ).toEqual([
-      {
-        message: 'Just one of "version" and "title" and "termsOfService" must be defined',
-        path: [],
-      },
-    ]);
+    ).toEqual([]);
   });
 
   it('given none of 5 properties, should return an error message', async () => {
     expect(
-      await runXor(
+      await runOr(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
@@ -117,7 +128,7 @@ describe('Core Functions / Xor', () => {
 
   it('given only one of 4 properties, should return no error message', async () => {
     expect(
-      await runXor(
+      await runOr(
         {
           version: '1.0.0',
           title: 'Swagger Petstore',
@@ -130,11 +141,11 @@ describe('Core Functions / Xor', () => {
 
   describe('validation', () => {
     it.each([{ properties: ['foo', 'bar'] }])('given valid %p options, should not throw', async opts => {
-      expect(await runXor([], opts)).toEqual([]);
+      expect(await runOr([], opts)).toEqual([]);
     });
 
     it.each([{ properties: ['foo', 'bar', 'three'] }])('given valid %p options, should not throw', async opts => {
-      expect(await runXor([], opts)).toEqual([]);
+      expect(await runOr([], opts)).toEqual([]);
     });
 
     it.each<[unknown, RulesetValidationError[]]>([
@@ -143,7 +154,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" function has invalid options specified. Example valid options: { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.',
+            '"or" function has invalid options specified. Example valid options: { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.',
             ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
@@ -153,7 +164,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" function has invalid options specified. Example valid options: { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.',
+            '"or" function has invalid options specified. Example valid options: { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.',
             ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
@@ -161,7 +172,7 @@ describe('Core Functions / Xor', () => {
       [
         { properties: ['foo', 'bar'], foo: true },
         [
-          new RulesetValidationError('invalid-function-options', '"xor" function does not support "foo" option', [
+          new RulesetValidationError('invalid-function-options', '"or" function does not support "foo" option', [
             'rules',
             'my-rule',
             'then',
@@ -175,17 +186,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
-            ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
-          ),
-        ],
-      ],
-      [
-        { properties: ['foo'] },
-        [
-          new RulesetValidationError(
-            'invalid-function-options',
-            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
+            '"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
@@ -195,13 +196,13 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
+            '"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
       ],
     ])('given invalid %p options, should throw', async (opts, errors) => {
-      await expect(runXor({}, opts)).rejects.toThrowAggregateError(new AggregateError(errors));
+      await expect(runOr({}, opts)).rejects.toThrowAggregateError(new AggregateError(errors));
     });
   });
 });

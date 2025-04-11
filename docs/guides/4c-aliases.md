@@ -54,7 +54,7 @@ aliases:
   PathItemObject:
     - $.paths[*]
   OperationObject:
-    - "#PathItem[get,put,post,delete,options,head,patch,trace]"
+    - "#PathItemObject[get,put,post,delete,options,head,patch,trace]"
   ParameterObject:
     description: an optional property describing the purpose of the alias
     targets:

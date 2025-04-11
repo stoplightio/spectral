@@ -2,7 +2,7 @@ import { createRulesetFunction, IFunctionResult } from '@stoplight/spectral-core
 import { optionSchemas } from './optionSchemas';
 
 export type Options = {
-  /** test to verify if exactly one of the provided keys are present in object */
+  /** test to verify at least one of the provided keys are present in object */
   properties: string[];
 };
 
@@ -11,9 +11,9 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     input: {
       type: 'object',
     },
-    options: optionSchemas.xor,
+    options: optionSchemas.or,
   },
-  function xor(targetVal, { properties }) {
+  function or(targetVal, { properties }) {
     if (properties.length < 2) return;
     // At least two but no maximum limit on number of properties
 
@@ -34,13 +34,6 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
           message: 'At least one of "' + properties.join('" or "') + '" must be defined',
         });
       }
-    }
-
-    if (intersection.length > 1) {
-      // List all defined properties in error message
-      results.push({
-        message: 'Just one of "' + intersection.join('" and "') + '" must be defined',
-      });
     }
 
     return results;
