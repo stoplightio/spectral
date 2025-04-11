@@ -9,7 +9,6 @@
 
 # Overview
 
-- [Overview](#overview)
   - [🧰 Installation](#-installation)
   - [💻 Usage](#-usage)
     - [1. Create a local ruleset](#1-create-a-local-ruleset)
