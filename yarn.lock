@@ -3033,7 +3033,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-functions@*, @stoplight/spectral-functions@>=1, @stoplight/spectral-functions@^1.9.1, @stoplight/spectral-functions@workspace:packages/functions":
+"@stoplight/spectral-functions@*, @stoplight/spectral-functions@>=1, @stoplight/spectral-functions@^1.9.1, @stoplight/spectral-functions@^1.9.3, @stoplight/spectral-functions@workspace:packages/functions":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-functions@workspace:packages/functions"
   dependencies:
@@ -3139,7 +3139,7 @@ __metadata:
     "@stoplight/path": ^1.3.2
     "@stoplight/spectral-core": ^1.19.4
     "@stoplight/spectral-formats": ^1.8.1
-    "@stoplight/spectral-functions": ^1.9.1
+    "@stoplight/spectral-functions": ^1.9.3
     "@stoplight/spectral-parsers": "*"
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-runtime": ^1.1.2
