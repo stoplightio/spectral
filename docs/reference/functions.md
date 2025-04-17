@@ -164,12 +164,12 @@ Use JSON Schema (draft 4, 6, 7, 2019-09, or 2020-12) to treat the contents of th
 
 <!-- title: functionOptions -->
 
-| name          | description                                                                      | type                                                                   | required? |
-| ------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------- |
-| schema        | a valid JSON Schema document                                                     | `JSONSchema`                                                           | yes       |
-| dialect       | the JSON Schema draft used by function. "auto" by default                        | `'auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'` | no        |
-| allErrors     | returns all errors when `true`; otherwise only returns the first error           | `boolean`                                                              | no        |
-| unicodeRegExp | uses unicode flag "u" with "pattern" and "patternProperties". "false" by default | `boolean`                                                              | no        |
+| name          | description                                                                                                                       | type                                                                   | required? |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------- |
+| schema        | a valid JSON Schema document                                                                                                      | `JSONSchema`                                                           | yes       |
+| dialect       | the JSON Schema draft used by function. "auto" by default                                                                         | `'auto', 'draft4', 'draft6', 'draft7', 'draft2019-09', 'draft2020-12'` | no        |
+| allErrors     | returns all errors when `true`; otherwise only returns the first error                                                            | `boolean`                                                              | no        |
+| unicodeRegExp | uses unicode flag "u" with "pattern" and "patternProperties" when `true`; otherwise does not use the "u" flag. "false" by default | `boolean`                                                              | no        |
 
 <!-- title: example -->
 
