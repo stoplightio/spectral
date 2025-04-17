@@ -325,12 +325,17 @@ describe('Core Functions / Schema', () => {
       });
 
       it('and the unicodeRegExp option is true triggers a SyntaxError', async () => {
-        expect(await runSchema('\\', { schema, unicodeRegExp: true })).toEqual([
+        const expected = [
           {
             message: expect.stringContaining('Invalid regular expression: /' + schema.pattern + '/'),
             path: [],
           },
-        ]);
+          {
+            message: expect.stringContaining('Invalid escape'),
+            path: [],
+          },
+        ];
+        expect(await runSchema('\\', { schema, unicodeRegExp: true })).toEqual(expect.arrayContaining(expected));
       });
     });
 
