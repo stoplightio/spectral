@@ -274,6 +274,79 @@ describe('Core Functions / Schema', () => {
     });
   });
 
+  describe('when schema defines a string pattern', () => {
+    describe('and contains a unicode character class', () => {
+      const input = 'é';
+      const schema = {
+        type: 'string',
+        pattern: '^[\\p{L}]$',
+      };
+
+      it('and the unicodeRegExp option is false', async () => {
+        expect(await runSchema(input, { schema, unicodeRegExp: false })).toEqual([
+          {
+            message: 'String must match pattern "^[\\p{L}]$"',
+            path: [],
+          },
+        ]);
+      });
+
+      it('and the omitted unicodeRegExp option defaults to false', async () => {
+        expect(await runSchema(input, { schema })).toEqual([
+          {
+            message: 'String must match pattern "^[\\p{L}]$"',
+            path: [],
+          },
+        ]);
+      });
+
+      it('and the unicodeRegExp option is true', async () => {
+        expect(await runSchema(input, { schema, unicodeRegExp: true })).toEqual([]);
+      });
+    });
+
+    describe('and the regular expression contains a questionable escape', () => {
+      const schema = {
+        type: 'string',
+        pattern: '^[\\_-]$',
+      };
+
+      it('and the unicodeRegExp option is defaulted to false', async () => {
+        expect(await runSchema('_', { schema })).toEqual([]);
+      });
+
+      it('and the unicodeRegExp option is defaulted to false so that the backslash is a pattern mismatch', async () => {
+        expect(await runSchema('\\', { schema })).toEqual([
+          {
+            message: 'String must match pattern "^[\\_-]$"',
+            path: [],
+          },
+        ]);
+      });
+
+      it('and the unicodeRegExp option is true', async () => {
+        expect(await runSchema('\\', { schema, unicodeRegExp: true })).toEqual([
+          {
+            message: 'Invalid regular expression: /^[\\_-]$/u: Invalid escape',
+            path: [],
+          },
+        ]);
+      });
+    });
+
+    it('and uses a unicode character class in patternProperties and the unicodeRegExp option is true', async () => {
+      const schema = {
+        type: 'object',
+        patternProperties: {
+          '^[\\p{L}]$': {
+            type: 'string',
+          },
+        },
+      };
+      expect(await runSchema({ [`é`]: 'The letter é' }, { schema, unicodeRegExp: false })).toEqual([]);
+    });
+  });
+
   describe('when schema defines common formats', () => {
     const schema = {
       type: 'string',
@@ -466,6 +539,7 @@ describe('Core Functions / Schema', () => {
       { schema: { type: 'object' } },
       { schema: { type: 'string' }, dialect: 'auto' },
       { schema: { type: 'string' }, allErrors: true },
+      { schema: { type: 'string' }, unicodeRegExp: true },
       { schema: { type: 'string' }, dialect: 'draft2019-09', allErrors: false },
       {
         schema: { type: 'string' },
@@ -543,6 +617,16 @@ describe('Core Functions / Schema', () => {
             'invalid-function-options',
             `"schema" function and its "allErrors" option accepts only the following types: boolean`,
             ['rules', 'my-rule', 'then', 'functionOptions', 'allErrors'],
+          ),
+        ],
+      ],
+      [
+        { schema: { type: 'object' }, unicodeRegExp: null },
+        [
+          new RulesetValidationError(
+            'invalid-function-options',
+            '"schema" function and its "unicodeRegExp" option accepts only the following types: boolean',
+            ['rules', 'my-rule', 'then', 'functionOptions', 'unicodeRegExp'],
           ),
         ],
       ],

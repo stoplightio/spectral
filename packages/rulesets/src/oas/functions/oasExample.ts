@@ -9,6 +9,7 @@ export type Options = {
   oasVersion: 2 | 3;
   schemaField: string;
   type: 'media' | 'schema';
+  unicodeRegExp?: boolean;
 };
 
 type HasRequiredProperties = traverse.SchemaObject & {
@@ -234,6 +235,10 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
         type: {
           enum: ['media', 'schema'],
         },
+        unicodeRegExp: {
+          type: 'boolean',
+          default: false,
+        },
       },
       additionalProperties: false,
     },
@@ -242,6 +247,7 @@ export default createRulesetFunction<Record<string, unknown>, Options>(
     const formats = context.document.formats;
     const schemaOpts: SchemaOptions = {
       schema: opts.schemaField === '$' ? targetVal : (targetVal[opts.schemaField] as SchemaOptions['schema']),
+      unicodeRegExp: opts.unicodeRegExp,
     };
 
     let results: Optional<IFunctionResult[]> = void 0;

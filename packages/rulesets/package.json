@@ -23,7 +23,7 @@
     "@stoplight/json": "^3.17.0",
     "@stoplight/spectral-core": "^1.19.4",
     "@stoplight/spectral-formats": "^1.8.1",
-    "@stoplight/spectral-functions": "^1.9.1",
+    "@stoplight/spectral-functions": "^1.9.3",
     "@stoplight/spectral-runtime": "^1.1.2",
     "@stoplight/types": "^13.6.0",
     "@types/json-schema": "^7.0.7",

@@ -4,13 +4,14 @@ import { detectDialect } from '@stoplight/spectral-formats';
 import { createAjvInstances } from './ajv';
 import MissingRefError from 'ajv/dist/compile/ref_error';
 import { createRulesetFunction, IFunctionResult, JSONSchema, RulesetFunctionContext } from '@stoplight/spectral-core';
-import { isError } from 'lodash';
+import { isError, pick } from 'lodash';
 
 import { optionSchemas } from '../optionSchemas';
 
 export type Options = {
   schema: Record<string, unknown> | JSONSchema;
   allErrors?: boolean;
+  unicodeRegExp?: boolean;
   dialect?: 'auto' | 'draft4' | 'draft6' | 'draft7' | 'draft2019-09' | 'draft2020-12';
   prepareResults?(errors: ErrorObject[]): void;
 };
@@ -40,13 +41,14 @@ export default createRulesetFunction<unknown, Options>(
     const results: IFunctionResult[] = [];
 
     // we already access a resolved object in src/functions/schema-path.ts
-    const { allErrors = false, schema: schemaObj } = opts;
+    const { schema: schemaObj } = opts;
 
     try {
       const dialect =
         (opts.dialect === void 0 || opts.dialect === 'auto' ? detectDialect(schemaObj) : opts?.dialect) ?? 'draft7';
 
-      const validator = assignAjvInstance(schemaObj, dialect, allErrors);
+      const validationOptions = pick(opts, ['allErrors', 'unicodeRegExp']);
+      const validator = assignAjvInstance(schemaObj, dialect, validationOptions);
 
       if (validator?.(targetVal) === false && Array.isArray(validator.errors)) {
         opts.prepareResults?.(validator.errors);
