@@ -84,7 +84,6 @@ info:
               "helpUri": "https://www.example.com/docs/info-description.md"
             }
           ],
-          "version": "6.11.1",
           "informationUri": "https://github.com/stoplightio/spectral"
         }
       },
