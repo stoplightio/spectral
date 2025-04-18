@@ -50,7 +50,7 @@ if (scenario.command === null) {
         // not SARIF or not JSON
       }
       return str;
-    };    
+    };  
 
     if (stderr !== null) {
       expect(output.stderr).toEqual(normalizeLineEndings(applyReplacements(stderr, env)));
