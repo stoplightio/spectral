@@ -20,9 +20,9 @@ defaults:
     tags:
       only: /^v.*/
   node-versions: &node-versions
-    - &node-maintenance-lts "16.20"
-    - &node-active-lts "18.18"
-    - &node-current "20.17"
+    - &node-maintenance-lts "20.19"
+    - &node-active-lts "22.16"
+    - &node-current "24.1"
   pkg-cache-path: &pkg-cache-path /tmp/pkg-node-binaries
   ldid-version: &ldid-version 2.1.5-procursus7 # https://github.com/ProcursusTeam/ldid
 
