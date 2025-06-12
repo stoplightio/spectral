@@ -22,7 +22,7 @@
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": "^16.20 || ^18.18 || >= 20.17"
+    "node": "^20.17 || ^22.16 || >= 24.1"
   },
   "scripts": {
     "preclean": "yarn workspaces foreach run preclean",

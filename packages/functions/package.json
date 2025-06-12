@@ -16,7 +16,7 @@
   ],
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^16.20 || ^18.18 || >= 20.17"
+    "node": "^20.17 || ^22.16 || >= 24.1"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.3",
