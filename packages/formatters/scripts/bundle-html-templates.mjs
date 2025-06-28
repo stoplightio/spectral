@@ -6,11 +6,11 @@ import * as astring from 'astring';
 import { builders as b } from 'ast-types';
 
 import eol from 'eol';
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 
 const cwd = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-fg('src/html/*.html', { cwd, absolute: true })
+glob('src/html/*.html', { cwd, absolute: true, expandDirectories: false })
   .then(files =>
     Promise.all(
       files.map(async file => ({ file: path.basename(file), content: eol.lf(await fs.readFile(file, 'utf8')) })),

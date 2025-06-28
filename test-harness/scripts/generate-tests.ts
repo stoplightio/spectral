@@ -1,6 +1,6 @@
 import * as path from '@stoplight/path';
 import * as swc from '@swc/core';
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 import * as fileEntryCache from 'file-entry-cache';
 import * as _fs from 'fs';
 
@@ -50,9 +50,12 @@ function getChangedScenarios(changedFiles: string[], scenarios: string[]): strin
 (async () => {
   await fs.mkdir(OUT_DIR, { recursive: true });
 
-  const scenarios = await fg('**/*.scenario', { cwd: SCENARIOS_DIR, absolute: true });
+  const scenarios = await glob('**/*.scenario', { cwd: SCENARIOS_DIR, absolute: true, expandDirectories: false });
   const cache = fileEntryCache.create('spectral-test-harness', path.join(__dirname, '../../.cache'), true);
-  const changedFiles = cache.getUpdatedFiles([...scenarios, ...(await fg('**/**', { cwd: OUT_DIR, absolute: true }))]);
+  const changedFiles = cache.getUpdatedFiles([
+    ...scenarios,
+    ...(await glob('**/**', { cwd: OUT_DIR, absolute: true, expandDirectories: false })),
+  ]);
   const changedScenarios = getChangedScenarios(changedFiles, scenarios);
 
   await Promise.all(
