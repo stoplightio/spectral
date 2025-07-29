@@ -166,6 +166,11 @@ const lintCommand: CommandModule = {
           description: 'no logging - output only',
           type: 'boolean',
         },
+        'html-include-json-path': {
+          description: 'add json path in html format report',
+          type: 'boolean',
+          default: false,
+        },
       }),
 
   async handler(args) {
@@ -181,11 +186,13 @@ const lintCommand: CommandModule = {
       ignoreUnknownFormat,
       failOnUnmatchedGlobs,
       showDocumentationUrl,
+      htmlIncludeJsonPath,
       ...config
     } = args as unknown as ILintConfig & {
       documents: Array<number | string>;
       failSeverity: FailSeverity;
       displayOnlyFailures: boolean;
+      htmlIncludeJsonPath: boolean;
     };
 
     try {
@@ -211,12 +218,11 @@ const lintCommand: CommandModule = {
 
       await Promise.all(
         format.map(f => {
-          const formattedOutput = formatOutput(
-            linterResult.results,
-            f,
-            { failSeverity: getDiagnosticSeverity(failSeverity) },
-            linterResult.resolvedRuleset,
-          );
+          const formatterOptions = {
+            failSeverity: getDiagnosticSeverity(failSeverity),
+            ...(f === OutputFormat.HTML && { htmlFormatterOptions: { includeJsonPath: htmlIncludeJsonPath } }),
+          };
+          const formattedOutput = formatOutput(linterResult.results, f, formatterOptions, linterResult.resolvedRuleset);
           return writeOutput(formattedOutput, output?.[f] ?? '<stdout>');
         }),
       );

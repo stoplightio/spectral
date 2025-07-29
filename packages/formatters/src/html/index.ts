@@ -28,6 +28,7 @@ import type { IRuleResult } from '@stoplight/spectral-core';
 import { Formatter } from '../types';
 import { getHighestSeverity, getSeverityName, getSummary, getSummaryForSource, groupBySource } from '../utils';
 import templates from './templates';
+import { printPath, PrintStyle } from '@stoplight/spectral-runtime';
 
 // ------------------------------------------------------------------------------
 // Helpers
@@ -37,7 +38,7 @@ const pageTemplate = template(templates['html-template-page.html']);
 const messageTemplate = template(templates['html-template-message.html']);
 const resultTemplate = template(templates['html-template-result.html']);
 
-function renderMessages(messages: IRuleResult[], parentIndex: number): string {
+function renderMessages(messages: IRuleResult[], parentIndex: number, includeJsonPath: boolean): string {
   return messages
     .map(message => {
       const line = message.range.start.line + 1;
@@ -50,13 +51,14 @@ function renderMessages(messages: IRuleResult[], parentIndex: number): string {
         severity: getSeverityName(message.severity),
         message: message.message,
         code: message.code,
+        jsonpath: includeJsonPath ? printPath(message.path, PrintStyle.Dot) : '',
         documentationUrl: message.documentationUrl,
       });
     })
     .join('\n');
 }
 
-function renderResults(groupedResults: Dictionary<IRuleResult[]>): string {
+function renderResults(groupedResults: Dictionary<IRuleResult[]>, includeJsonPath = false): string {
   return Object.keys(groupedResults)
     .map(
       (source, index) =>
@@ -68,7 +70,7 @@ function renderResults(groupedResults: Dictionary<IRuleResult[]>): string {
               : getSeverityName(getHighestSeverity(groupedResults[source])),
           filePath: source,
           summary: getSummaryForSource(groupedResults[source]),
-        }) + renderMessages(groupedResults[source], index),
+        }) + renderMessages(groupedResults[source], index, includeJsonPath),
     )
     .join('\n');
 }
@@ -77,7 +79,7 @@ function renderResults(groupedResults: Dictionary<IRuleResult[]>): string {
 // Public Interface
 // ------------------------------------------------------------------------------
 
-export const html: Formatter = results => {
+export const html: Formatter = (results, options) => {
   const color = results.length === 0 ? 'success' : getSeverityName(getHighestSeverity(results));
   const groupedResults = groupBySource(results);
 
@@ -85,6 +87,6 @@ export const html: Formatter = results => {
     date: new Date(),
     color,
     summary: getSummary(groupedResults),
-    results: renderResults(groupedResults),
+    results: renderResults(groupedResults, options.htmlFormatterOptions?.includeJsonPath),
   });
 };
