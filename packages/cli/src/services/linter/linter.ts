@@ -44,7 +44,7 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
       console.info(`Linting ${targetUri}`);
     }
 
-    const document = await createDocument(targetUri, { encoding: flags.encoding }, flags.stdinFilepath ?? '<STDIN>');
+    const document = await createDocument(targetUri, { encoding: flags.encoding }, flags.stdinFilepath ?? '<STDIN>', flags.parser);
 
     results.push(
       ...(await spectral.run(document, {
@@ -63,7 +63,18 @@ const createDocument = async (
   identifier: string | number,
   opts: IFileReadOptions,
   source: string,
-): Promise<Document<unknown, Parsers.YamlParserResult<unknown>>> => {
+  parser: ILintConfig['parser'] = 'Yaml'
+) => {
+  if (parser === "Json") {
+    // Due to type issues, the parser cannot be dynamically resolved using something like Parsers[parser]
+    // This causes new Document() to fail for Json types.
+    if (typeof identifier === 'string') {
+      return new Document(await readParsable(identifier, opts), Parsers.Json, identifier);
+    }
+
+    return new Document(await readFileDescriptor(identifier, opts), Parsers.Json, source);
+  }
+
   if (typeof identifier === 'string') {
     return new Document(await readParsable(identifier, opts), Parsers.Yaml, identifier);
   }

@@ -1,4 +1,5 @@
 import { Dictionary } from '@stoplight/types';
+import type * as Parsers from '@stoplight/spectral-parsers';
 import { HumanReadableDiagnosticSeverity } from '@stoplight/spectral-core';
 
 export type FailSeverity = HumanReadableDiagnosticSeverity;
@@ -24,6 +25,7 @@ export interface ILintConfig {
   output?: Dictionary<string>;
   resolver?: string;
   ruleset?: string;
+  parser?: keyof Pick<typeof Parsers, 'Json' | 'Yaml'>;
   stdinFilepath?: string;
   ignoreUnknownFormat: boolean;
   failOnUnmatchedGlobs: boolean;
