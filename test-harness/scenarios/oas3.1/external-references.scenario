@@ -1,0 +1,40 @@
+====test====
+OAS 3.1 - External References Validation
+====document====
+openapi: 3.1.0
+info:
+  title: Example API
+  version: 1.0.0
+  description: Example API description
+paths:
+  /greetings:
+    $ref: "{asset:greetings.yaml}"
+tags:
+  - name: User
+    description: Info about users
+servers:
+  - url: https://example-url.com
+    description: Example server
+====asset:greetings.yaml====
+get:
+  description: Get a greeting
+  operationId: getGreeting
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Hello there!
+====asset:ruleset.yaml====
+extends: [[spectral:oas, off]]
+rules:
+  oas3-schema: error
+====command====
+{bin} lint {document} --ruleset {asset:ruleset.yaml} --resolve
+====expected-stdout====
+No results with a severity of 'error' found!
