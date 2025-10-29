@@ -49,6 +49,13 @@ export async function writeOutput(outputStr: string, outputFile: string): Promis
   if (outputFile !== '<stdout>') {
     await fs.writeFile(outputFile, outputStr);
   } else {
-    process.stdout.write(outputStr);
+    // Handle backpressure by using the callback parameter
+    // The callback is invoked when the data is flushed (or an error occurs)
+    return new Promise((resolve, reject) => {
+      process.stdout.write(outputStr, err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
   }
 }
