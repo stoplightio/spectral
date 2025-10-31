@@ -768,5 +768,20 @@ const ruleset = {
         function: undefined,
       },
     },
+    'security-scheme-name': {
+      description: 'Ensure that security scheme should have valid name',
+      message: '{{error}}',
+      severity: 0,
+      formats: [oas2, oas3],
+      recommended: true,
+      resolved: false,
+      given: '$.components.securitySchemes[*].name',
+      then: {
+        function: pattern,
+        functionOptions: {
+          match: '^[a-zA-Z0-9._-]+$',
+        },
+      },
+    },
   },
 };
