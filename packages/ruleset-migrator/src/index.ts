@@ -1,4 +1,4 @@
-import { parseWithPointers as parseJsonWithPointers, safeStringify } from '@stoplight/json';
+import { parseWithPointers as parseJsonWithPointers, pathToPointer, safeStringify } from '@stoplight/json';
 import { parseWithPointers as parseYamlWithPointers } from '@stoplight/yaml';
 import { fetch as defaultFetch } from '@stoplight/spectral-runtime';
 import { dirname, extname, isURL } from '@stoplight/path';
@@ -59,9 +59,13 @@ export async function migrateRuleset(filepath: string, opts: MigrationOptions): 
   return tree.toString();
 }
 
-async function _process(input: unknown, ctx: TransformerCtx, path: string): Promise<ExpressionKind | null> {
+async function _process(input: unknown, ctx: TransformerCtx, path: string[]): Promise<ExpressionKind | null> {
+  // Convert the path to a /a/b/c format, using the JSON Pointer tools to escape '/' properly in keys.
+  // This is needed because rule names can contain '/' characters.
+  const pathStr = pathToPointer(path).slice(1);
+
   for (const [pattern, fn] of ctx.hooks) {
-    if (pattern.test(path)) {
+    if (pattern.test(pathStr)) {
       const output = await fn(input, ctx);
 
       if (output !== void 0) {
@@ -72,7 +76,7 @@ async function _process(input: unknown, ctx: TransformerCtx, path: string): Prom
 
   if (Array.isArray(input)) {
     return b.arrayExpression(
-      (await Promise.all(input.map(async (item, i) => await _process(item, ctx, `${path}/${String(i)}`)))).filter(
+      (await Promise.all(input.map(async (item, i) => await _process(item, ctx, [...path, String(i)])))).filter(
         Boolean,
       ),
     );
@@ -90,7 +94,7 @@ async function _process(input: unknown, ctx: TransformerCtx, path: string): Prom
     (
       await Promise.all(
         Object.entries(input).map(async ([key, value]) => {
-          const propertyValue = await _process(value, ctx, `${path}/${key}`);
+          const propertyValue = await _process(value, ctx, [...path, key]);
 
           if (propertyValue !== null) {
             return b.property('init', b.identifier(JSON.stringify(key)), propertyValue);
@@ -104,5 +108,5 @@ async function _process(input: unknown, ctx: TransformerCtx, path: string): Prom
 }
 
 export async function process(input: Ruleset, ctx: TransformerCtx): Promise<namedTypes.ObjectExpression> {
-  return (await _process(input, ctx, '')) as namedTypes.ObjectExpression;
+  return (await _process(input, ctx, [])) as namedTypes.ObjectExpression;
 }
