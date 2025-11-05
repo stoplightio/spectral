@@ -1,0 +1,52 @@
+name: build-binary
+description: Build the Spectral binary for specified targets
+inputs:
+  targets:
+    description: Comma-separated list of targets (e.g., "linux-x64,macos-arm64,windows-x64")
+    required: false
+  node-version:
+    description: Node.js version to use (e.g., "18.18")
+    required: false
+    default: '18.18'
+  bytecode:
+    description: Whether to include bytecode in the build
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+  - name: restore_cache
+    uses: actions/cache@v3.3.2
+    with:
+      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
+      path: UPDATE_ME
+      restore-keys: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
+  - name: Create the Spectral Binary
+    run: yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
+    env:
+      PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
+    if: "'windows' ==  inputs.targets"
+    shell: bash
+  - name: Create the Spectral Binary
+    run: |-
+      NODE_VERSION=$(echo "${{ inputs.node-version }}" | awk -F "." '{ print $1 }')
+      TARGETS=$(echo "${{ inputs.targets }}" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
+      export ARCH=$(echo ${{ inputs.targets }} | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
+
+      if [ "${{ inputs.bytecode }}" = true ]
+      then
+        yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $TARGETS --output binaries/spectral
+      else
+        yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $TARGETS --output binaries/spectral
+      fi
+
+      (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
+    env:
+      PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
+    if: "!('windows' ==  inputs.targets )"
+    shell: bash
+  - name: save_cache
+    uses: actions/cache@v3.3.2
+    with:
+      path: "/tmp/pkg-node-binaries"
+      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
