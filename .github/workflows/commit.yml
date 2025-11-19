@@ -65,7 +65,7 @@ jobs:
       image: circleci/node:current-browsers
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.1.0
+      uses: actions/checkout@v5.0.1
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
     - name: Build
@@ -80,7 +80,7 @@ jobs:
       image: node:lts
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.1.0
+      uses: actions/checkout@v5.0.1
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
       with:
@@ -108,11 +108,11 @@ jobs:
     - test-browser
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.1.0
+      uses: actions/checkout@v5.0.1
     - name: Prepare release
       uses: "./.github/actions/prepare-release"
     - name: Checkout code
-      uses: actions/checkout@v4.1.0
+      uses: actions/checkout@v5.0.1
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
     - name: Set up NPM auth

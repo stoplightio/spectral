@@ -12,7 +12,7 @@ jobs:
       image: node:lts
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.1.0
+      uses: actions/checkout@v5.0.1
     - name: Install ldid
       uses: "./.github/actions/install-ldid"
     - name: Cached dependencies
@@ -33,7 +33,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.1.0
+      uses: actions/checkout@v5.0.1
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
       with:
@@ -72,7 +72,7 @@ jobs:
     needs:
     - upload-artifacts
     steps:
-    - uses: actions/checkout@v4.1.0
+    - uses: actions/checkout@v5.0.1
     - name: set version in package.json
       run: npm --no-git-tag-version --no-commit-hooks -f version from-git
     - name: docker build
