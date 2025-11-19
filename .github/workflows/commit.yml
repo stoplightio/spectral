@@ -1,246 +1,123 @@
-name: commit
+name: Commit
 on:
   pull_request:
     branches: [develop]
-
 jobs:
   test-node:
-    name: test-node
     runs-on: ubuntu-latest
+    container:
+      image: node:${{ matrix.node-version }}
     strategy:
       matrix:
-        node-version: [16.20, 18.18, 20.17]
+        node-version:
+        - '16.20'
+        - '18.18'
+        - '20.17'
     steps:
-    - uses: actions/checkout@v5
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v6
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Build
+      run: yarn build
       shell: bash
-    - run: yarn pretest
+    - name: Test node
+      run: yarn pretest
       shell: bash
     - name: Run node tests
       run: yarn test.jest --ci --maxWorkers=3
       shell: bash
-
+    - name: Test harness
+      uses: "./.github/actions/test-harness"
+      if: "'16.20' == ${{ matrix.node-version }} || '18.18' == ${{ matrix.node-version }}"
+      with:
+        os: linux
+        node-version: "${{ matrix.node-version }}"
   test-windows:
-    name: test-windows
+    if: github.ref == 'refs/heads/develop'
     runs-on: windows-latest
-    defaults:
-      run:
-        shell: powershell
     steps:
-      - uses: actions/checkout@v5
-      - name: install Chocolatey packages
-        run: |
-          choco install -y nodejs-lts yarn
-      - name: restore nuget cache
-        uses: actions/cache@v4.3.0
-        with:
-          path: ~\appdata\NuGet\Cache
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
-      - name: Build
-        run: ./build.ps1
-      - name: upload artifact
-        uses: actions/upload-artifact@v5
-        with:
-          name: windows-build
-          path: windows-build
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: true
+    - name: Build
+      run: yarn build
+      shell: powershell
+    - name: Test node
+      run: yarn pretest
+      shell: powershell
+    - name: Run node tests
+      run: yarn test.jest --ci --maxWorkers=3
+      shell: powershell
 
+    - name: Test harness
+      uses: "./.github/actions/test-harness"
+      with:
+        os: windows
+        node-version: '18.18'
+        max-workers: 3
   test-browser:
-    name: test-browser
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.20, 18.18, 20.17]
+    container:
+      image: circleci/node:current-browsers
     steps:
-      - name: Compute commit SHAs to be used for caching purposes
-        run: |-
-         git rev-parse HEAD~1 > /tmp/previous-commit-sha
-         git rev-parse HEAD > /tmp/current-commit-sha
-        shell: bash
-      - name: restore_cache
-        uses: actions/cache@v4.3.0
-        with:
-          key: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ runner.os }}-${{ matrix.node-version }}
-          path: UPDATE_ME
-          restore-keys: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ runner.os }}-${{ matrix.node-version }}
-      - name: Build binary
-        uses: "./.github/actions/build-binary"
-        with:
-          targets: "${{ runner.os }}"
-          node-version: "${{ matrix.node-version }}"
-      - name: Run harness tests
-        run: yarn test.harness --maxWorkers=3
-        shell: bash
-      - name: save_cache
-        uses: actions/cache@v4.3.0
-        with:
-          path: |-
-            ./.cache/spectral-test-harness
-            ./test-harness/tests/
-          key: test-harness-{{ checksum "/tmp/current-commit-sha" }}-${{ runner.os }}-${{ inputs.node-version }}
+    - name: Checkout code
+      uses: actions/checkout@v4.1.0
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Build
+      run: yarn build
+      shell: bash
+    - run: yarn pretest
+    - name: Run browser tests
+      run: yarn test.karma
   lint:
-    name: Lint the codebase
     runs-on: ubuntu-latest
+    container:
+      image: node:lts
     steps:
-      - name: Lint code
-        run: |-
-          yarn prelint
-          yarn lint.eslint
-        shell: bash
-      - name: Lint commit messages
-        run: node ./scripts/lint-commit-messages.mjs
-        shell: bash
-      - name: Lint documentation
-        run: yarn lint.prettier
-        shell: bash
-  approve-release:
-    name: Approve Release
-    runs-on: ubuntu-latest
-    needs: 
-          - lint
-          - test-node
-          - test-windows
-          - test-browser
-    steps:
-      - name: Await Manual Approval
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: user1,user2,user3,group1,group2 # Replace with GitHub usernames
-          minimum-approvals: 1
-          issue-title: "Manual Approval Required for Build Binary"
-          issue-body: "Please approve or deny the build."
-  build-binary:
-    name: build-binary
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Linux and MacOS Binaries
-        uses: "./.github/actions/build-binary"
-        with:
-          targets: "linux-x64,linux-arm64,macos-x64,macos-arm64"
-          node-version: "18.18"
-          bytecode: "true"
-      - name: Build Windows Binary
-        uses: "./.github/actions/build-binary"
-        with:
-          targets: "windows-x64"
-          node-version: "18.18"
-          bytecode: "true"
-  upload-artifacts:
-    name: upload-artifacts
-    runs-on: ubuntu-latest
-    needs: build-binary
-    steps:
-      - name: Upload Linux and MacOS Binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: nix-binaries
-          path: ./dist/nix
-      - name: Upload Windows Binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: win-binary
-          path: ./dist/win
-  release-docker:
-    name: release-docker    
-    runs-on: ubuntu-latest
-    needs: upload-artifacts
-    steps:
-      - uses: actions/checkout@v4
-      - name: set version in package.json
-        run: |
-          npm --no-git-tag-version --no-commit-hooks -f version from-git
-      - name: Build Docker Image
-        run: |
-          docker build . --tag stoplight/spectral:${GITHUB_SHA};
-      - name: Push Docker Image
-        run: |
-          shopt -s extglob
-            # Login to DockerHub
-            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-            DOCKER_BRANCH="${GITHUB_REF_NAME//\//-}";
-            if [[ "$DOCKER_BRANCH" == "$DEFAULT_BRANCH" ]]; then
-              DOCKER_BRANCH="latest";
-            fi
-            echo "DOCKER_BRANCH=${DOCKER_BRANCH}";
-            if [[ -n "$DOCKER_BRANCH" ]]; then
-              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${DOCKER_BRANCH};
-            fi
-            if [[ -n "${GITHUB_REF_NAME/v/}" ]]; then
-              FULL_VERSION="${GITHUB_REF_NAME/v/}";
-              MINOR_VERSION="${FULL_VERSION/%.+([0-9])/}";
-              MAJOR_VERSION="${MINOR_VERSION/%.+([0-9])/}";
-              echo "FULL_VERSION=$FULL_VERSION";
-              echo "MINOR_VERSION=$MINOR_VERSION";
-              echo "MAJOR_VERSION=$MAJOR_VERSION";
-              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION};
-              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
-              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
-              docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:latest;
-            fi
-            echo "Docker tags:";
-            docker images stoplight/spectral --format="{{ .Tag }}";
-            docker push stoplight/spectral:${GIT_SHA};
-            echo "Pushed stoplight/spectral:${GIT_SHA}";
-            if [[ -n "${GITHUB_REF_NAME/v/}" ]]; then
-              docker push stoplight/spectral:${FULL_VERSION};
-              docker push stoplight/spectral:${MINOR_VERSION};
-              docker push stoplight/spectral:${MAJOR_VERSION};
-              docker push stoplight/spectral:latest;
-              echo "Pushed stoplight/spectral:${FULL_VERSION}";
-            fi
-            if [[ -n "$DOCKER_BRANCH" ]]; then
-              docker push stoplight/spectral:${DOCKER_BRANCH};
-              echo "Pushed stoplight/spectral:${DOCKER_BRANCH}";
-            fi
-
+    - name: Checkout code
+      uses: actions/checkout@v4.1.0
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: true
+    - name: Build
+      run: yarn build
+      shell: bash
+    - name: Lint commit message
+      run: node ./scripts/lint-commit-messages.mjs
+    - name: Lint code
+      run: |-
+        yarn prelint
+        yarn lint.eslint
+    - name: Lint documentation
+      run: yarn lint.prettier
   release:
-    name: release
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    container:
+      image: node:lts
+    needs:
+    - lint
+    - test-node
+    - test-windows
+    - test-browser
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-      - run: yarn release
-        shell: bash
-  
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out (for metadata only)
-        uses: actions/checkout@v4
-
-      - name: Set up Go 1.23
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.23"
-
-      - name: Ensure Go bin on PATH
-        run: echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
-
-      - name: Download GitHub Release Utility (ghr)
-        run: go install github.com/tcnksm/ghr@latest
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v6
-        with:
-          name: binaries
-          path: /tmp/binaries
-
-      - name: Publish release artifacts on GitHub
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          ghr \
-            -t "${GH_TOKEN}" \
-            -u "${{ github.repository_owner }}" \
-            -r "${{ github.event.repository.name }}" \
-            -c "${{ github.sha }}" \
-            "${{ github.ref_name }}" \
-            /tmp/binaries
-
+    - name: Checkout code
+      uses: actions/checkout@v4.1.0
+    - name: Prepare release
+      uses: "./.github/actions/prepare-release"
+    - name: Checkout code
+      uses: actions/checkout@v4.1.0
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Set up NPM auth
+      run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+    - name: Build
+      run: yarn build
+    - name: Release
+      run: yarn release

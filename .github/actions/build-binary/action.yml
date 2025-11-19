@@ -1,22 +1,22 @@
 name: build-binary
-description: Build the Spectral binary for specified targets
+description: 'Build Spectral binary for specified targets and Node.js version'
 inputs:
   targets:
-    description: Comma-separated list of targets (e.g., "linux-x64,macos-arm64,windows-x64")
     required: false
+    description: 'Comma-separated list of targets (e.g., linux-x64,macos-arm64,windows-x64)'
   node-version:
-    description: Node.js version to use (e.g., "18.18")
+    description: 'Node.js version to build the binary for'
     required: false
     default: '18.18'
   bytecode:
-    description: Whether to include bytecode in the build
+    description: 'Whether to include bytecode in the binary'
     required: false
     default: 'true'
 runs:
   using: composite
   steps:
   - name: restore_cache
-    uses: actions/cache@v3.3.2
+    uses: actions/cache@v4.3.0
     with:
       key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
       path: UPDATE_ME
@@ -25,8 +25,7 @@ runs:
     run: yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
     env:
       PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
-    if: "'windows' ==  inputs.targets"
-    shell: bash
+    shell: ${{ runner.os == 'Windows' && 'powershell' || 'bash' }}
   - name: Create the Spectral Binary
     run: |-
       NODE_VERSION=$(echo "${{ inputs.node-version }}" | awk -F "." '{ print $1 }')
@@ -43,10 +42,9 @@ runs:
       (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
     env:
       PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
-    if: "!('windows' ==  inputs.targets )"
-    shell: bash
+    shell: ${{ runner.os == 'Windows' && 'powershell' || 'bash' }}
   - name: save_cache
-    uses: actions/cache@v3.3.2
+    uses: actions/cache@v4.3.0
     with:
       path: "/tmp/pkg-node-binaries"
       key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
