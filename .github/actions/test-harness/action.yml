@@ -12,7 +12,9 @@ runs:
     uses: actions/cache@v4.3.0
     with:
       key: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ runner.os }}-${{ inputs.node-version }}
-      path: UPDATE_ME
+      path: |-
+        ./.cache/spectral-test-harness
+        ./test-harness/tests/
       restore-keys: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ runner.os }}-${{ inputs.node-version }}
   - uses: "./.github/actions/build-binary"
     with:

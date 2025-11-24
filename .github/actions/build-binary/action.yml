@@ -19,7 +19,7 @@ runs:
     uses: actions/cache@v4.3.0
     with:
       key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
-      path: UPDATE_ME
+      path: "/tmp/pkg-node-binaries"
       restore-keys: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
   - name: Create the Spectral Binary
     run: yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral

@@ -1,33 +1,7 @@
-name: Release
-on:
-  push:
-    branches:
-    - develop
+name: Release Nix
+on: workflow_dispatch
 
 jobs:
-  build-nix-binaries:
-    if: (github.ref == 'refs/tags/"v[0-9].[0-9]+.[0-9]+"') && (github.ref != 'refs/heads/develop')
-    runs-on: ubuntu-latest
-    container:
-      image: node:lts
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v5.0.1
-    - name: Install ldid
-      uses: "./.github/actions/install-ldid"
-    - name: Cached dependencies
-      uses: "./.github/actions/cached-dependencies"
-    - name: Build
-      run: yarn build
-    - name: Build binary
-      uses: "./.github/actions/build-binary"
-      with:
-        targets: macos-arm64,linux-arm64,alpine-arm64
-        bytecode: false
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4.1.0
-      with:
-        path: "./packages/cli//binaries"
   build-windows-binary:
     if: (github.ref == 'refs/tags/"v[0-9].[0-9]+.[0-9]+"') && (github.ref != 'refs/heads/develop')
     runs-on: windows-latest
@@ -45,7 +19,7 @@ jobs:
       with:
         targets: windows
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4.1.0
+      uses: actions/upload-artifact@v5.0.0
       with:
         path: "./packages/cli//binaries"
   upload-artifacts:
@@ -54,10 +28,9 @@ jobs:
     container:
       image: golang:1.23
     needs:
-    - build-nix-binaries
     - build-windows-binary
     steps:
-    - uses: actions/download-artifact@v4.1.0
+    - uses: actions/download-artifact@v6.0.0
       with:
         path: "/tmp/"
     - name: Download GitHub Release Utility

@@ -2,11 +2,15 @@ name: Commit
 on:
   pull_request:
     branches: [develop]
+    paths-ignore:
+    - README.md
+    - .github/**
 jobs:
   test-node:
     runs-on: ubuntu-latest
     container:
       image: node:${{ matrix.node-version }}
+      options: --user root
     strategy:
       matrix:
         node-version:
@@ -62,7 +66,7 @@ jobs:
   test-browser:
     runs-on: ubuntu-latest
     container:
-      image: circleci/node:current-browsers
+      image: node:latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
