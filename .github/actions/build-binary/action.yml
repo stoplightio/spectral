@@ -21,12 +21,14 @@ runs:
       key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
       path: "/tmp/pkg-node-binaries"
       restore-keys: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
-  - name: Create the Spectral Binary
+  - name: Create the Spectral Binary Windows
+    if: ${{ inputs.targets }} == 'windows'
     run: yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
     env:
       PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
-    shell: ${{ runner.os == 'Windows' && 'powershell' || 'bash' }}
-  - name: Create the Spectral Binary
+    shell: powershell
+  - name: Create the Spectral Binary Nix
+    if: ${{ inputs.targets }} != 'windows'
     run: |-
       NODE_VERSION=$(echo "${{ inputs.node-version }}" | awk -F "." '{ print $1 }')
       TARGETS=$(echo "${{ inputs.targets }}" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
@@ -42,7 +44,7 @@ runs:
       (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
     env:
       PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
-    shell: ${{ runner.os == 'Windows' && 'powershell' || 'bash' }}
+    shell: bash
   - name: save_cache
     uses: actions/cache@v4.3.0
     with:
