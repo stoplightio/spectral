@@ -14,9 +14,10 @@ jobs:
     strategy:
       matrix:
         node-version:
-        - '16.20'
-        - '18.18'
-        - '20.17'
+        - '20.19.6' # maintance LTS
+        - '22.21.1' # maintenance LTS
+        - '24.11.1' # active LTS
+        - '25.2.1' # current
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
@@ -33,7 +34,6 @@ jobs:
       shell: bash
     - name: Test harness
       uses: "./.github/actions/test-harness"
-      if: "'16.20' == ${{ matrix.node-version }} || '18.18' == ${{ matrix.node-version }}"
       with:
         os: linux
         node-version: "${{ matrix.node-version }}"
@@ -61,8 +61,7 @@ jobs:
       uses: "./.github/actions/test-harness"
       with:
         os: windows
-        node-version: '18.18'
-        max-workers: 3
+        node-version: "${{ matrix.node-version }}"
   test-browser:
     runs-on: ubuntu-latest
     container:

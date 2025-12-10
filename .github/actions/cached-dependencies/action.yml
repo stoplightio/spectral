@@ -4,7 +4,7 @@ inputs:
   install-corepack:
     description: 'Whether to install and enable Corepack'
     required: false
-    default: 'false'
+    default: 'true'
 runs:
   using: composite
   steps:
@@ -18,7 +18,7 @@ runs:
       restore-keys: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
   - name: Enable Corepack
     run: |-
-      npm install -g corepack
+      npm install -g corepack --force
       corepack enable
     if: true == ${{ inputs.install-corepack }}
     shell: bash
