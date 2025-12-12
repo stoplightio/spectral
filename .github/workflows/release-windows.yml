@@ -1,4 +1,4 @@
-name: Release Nix
+name: Release Windows
 on: workflow_dispatch
 
 jobs:
