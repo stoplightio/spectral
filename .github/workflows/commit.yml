@@ -20,6 +20,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
+    - name: Mark repo as safe for Git
+      run: git config --global --add safe.directory /__w/spectral/spectral
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
     - name: Build
@@ -70,6 +72,12 @@ jobs:
       uses: actions/checkout@v5.0.1
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
+    - name: Install Chrome
+      run: |
+       wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+       sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+       sudo apt-get update
+       sudo apt-get install -y google-chrome-stable
     - name: Build
       run: yarn build
       shell: bash
