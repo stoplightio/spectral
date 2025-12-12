@@ -769,13 +769,13 @@ const ruleset = {
       },
     },
     'security-scheme-name': {
-      description: 'Ensure that security scheme should have valid name',
+      description: 'Security scheme name must not contain whitespace.',
       message: '{{error}}',
       severity: 0,
       formats: [oas2, oas3],
       recommended: true,
       resolved: false,
-      given: '$.components.securitySchemes[*].name',
+      given: ['$.components.securitySchemes[*].name', '$.securityDefinitions[*].name'],
       then: {
         function: pattern,
         functionOptions: {

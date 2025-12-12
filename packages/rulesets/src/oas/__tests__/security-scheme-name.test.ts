@@ -4,7 +4,7 @@ testRule('security-scheme-name', [
   {
     name: 'valid case - simple alphanumeric name',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           apikey: {
@@ -21,7 +21,7 @@ testRule('security-scheme-name', [
   {
     name: 'valid case - name with allowed special characters',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           oauth2: {
@@ -65,9 +65,26 @@ testRule('security-scheme-name', [
   },
 
   {
+    name: 'valid case - OAS 3.1 security scheme',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        securitySchemes: {
+          bearer_token: {
+            type: 'http',
+            scheme: 'bearer',
+            name: 'Bearer-Token_v1',
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'invalid case - name with spaces',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           apikey: {
@@ -88,7 +105,7 @@ testRule('security-scheme-name', [
   {
     name: 'invalid case - name with special characters',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           oauth2: {
@@ -115,7 +132,7 @@ testRule('security-scheme-name', [
   {
     name: 'invalid case - name with parentheses and brackets',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           basic: {
@@ -136,7 +153,7 @@ testRule('security-scheme-name', [
   {
     name: 'mixed case - valid and invalid names',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           validApiKey: {
@@ -167,7 +184,7 @@ testRule('security-scheme-name', [
   {
     name: 'edge case - empty name',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           apikey: {
@@ -188,7 +205,7 @@ testRule('security-scheme-name', [
   {
     name: 'valid case - numeric only name',
     document: {
-      openapi: '3.0.2',
+      openapi: '3.0.0',
       components: {
         securitySchemes: {
           apikey: {
@@ -200,5 +217,24 @@ testRule('security-scheme-name', [
       },
     },
     errors: [],
+  },
+
+  {
+    name: 'invalid case - OAS 2.0 name with spaces',
+    document: {
+      swagger: '2.0',
+      securityDefinitions: {
+        api_key: {
+          type: 'apiKey',
+          name: 'X-API Key',
+          in: 'header',
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"X-API Key" must match the pattern "^[a-zA-Z0-9._-]+$"',
+      },
+    ],
   },
 ]);

@@ -479,6 +479,65 @@ TheBadModel:
         type: array
 ```
 
+### security-scheme-name
+
+Security scheme name must not contain whitespace.
+
+Security scheme names are used as identifiers in OpenAPI documents and should follow a consistent naming pattern. This rule ensures that the `name` property within security scheme definitions only contains alphanumeric characters, dots (.), underscores (_), and hyphens (-), preventing issues with whitespace or special characters.
+
+This rule applies to OpenAPI v2.0, v3.0, and v3.1.
+
+**Recommended:** Yes
+
+**Good Example**
+
+For OpenAPI v3.0 and v3.1:
+
+```yaml
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api-key.v1
+      in: header
+    bearer_auth:
+      type: http
+      scheme: bearer
+```
+
+For OpenAPI v2.0:
+
+```yaml
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+```
+
+**Bad Example**
+
+For OpenAPI v3.0 and v3.1:
+
+```yaml
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api key with spaces
+      in: header
+```
+
+For OpenAPI v2.0:
+
+```yaml
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: X-API Key
+    in: header
+```
+
 ## OpenAPI v2.0-only
 
 These rules will only apply to OpenAPI v2.0 documents.
