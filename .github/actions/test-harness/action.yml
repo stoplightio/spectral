@@ -18,7 +18,7 @@ runs:
       restore-keys: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ runner.os }}-${{ inputs.node-version }}
   - uses: "./.github/actions/build-binary"
     with:
-      targets: "${{ runner.os.os }}"
+      targets: "${{ runner.os }}"
       node-version: "${{ inputs.node-version }}"
   - name: Run harness tests
     run: yarn test.harness --maxWorkers=3
