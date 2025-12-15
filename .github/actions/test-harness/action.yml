@@ -1,5 +1,12 @@
 name: test-harness
-description: 'Run tests.'  
+description: 'Run tests.'
+inputs:
+  os:
+    description: 'Operating system to run the tests on (linux, windows, macos)'
+    required: true
+  node-version:
+    description: 'Node.js version to run the tests with'
+    required: true
 runs:
   using: composite
   steps:

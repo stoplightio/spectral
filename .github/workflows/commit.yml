@@ -38,7 +38,7 @@ jobs:
     - name: Test harness
       uses: "./.github/actions/test-harness"
       with:
-        os: linux
+        os: ${{ runner.os }}
         node-version: "${{ matrix.node-version }}"
   test-windows:
     if: github.ref == 'refs/heads/develop'
@@ -86,6 +86,8 @@ jobs:
     - run: yarn pretest
     - name: Run browser tests
       run: yarn test.karma
+      env:
+        CI: true
   lint:
     runs-on: ubuntu-latest
     container:
