@@ -27,9 +27,14 @@ runs:
     with:
       targets: "${{ inputs.os }}"
       node-version: "${{ inputs.node-version }}"
-  - name: Run harness tests
+  - name: Run harness tests (linux
+    if: ${{ inputs.os == 'linux' }}
     run: yarn test.harness --maxWorkers=3
-    shell: ${{ inputs.os == 'Windows' && 'powershell' || 'bash' }}
+    shell: bash
+  - name: Run harness tests Windows
+    if: ${{ inputs.os == 'Windows' }}
+    run: yarn test.harness --maxWorkers=3
+    shell: pwsh
   - name: save_cache
     uses: actions/cache@v4.3.0
     if: always()

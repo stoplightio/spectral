@@ -74,6 +74,8 @@ jobs:
       uses: "./.github/actions/cached-dependencies"
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1.2.0
+    - name: Install chrome dependencies
+      run: yarn nadd -D karma-chrome-launcher
     - name: Build
       run: yarn build
       shell: bash
