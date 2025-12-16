@@ -63,7 +63,7 @@ jobs:
     - name: Test harness
       uses: "./.github/actions/test-harness"
       with:
-        os: windows
+        os: ${{ runner.os }}
         node-version: "${{ matrix.node-version }}"
   test-browser:
     runs-on: ubuntu-latest
@@ -72,12 +72,8 @@ jobs:
       uses: actions/checkout@v5.0.1
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
-    - name: Install Chrome
-      run: |
-       wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
-       sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
-       apt-get update
-       apt-get install -y google-chrome-stable
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1.2.0
     - name: Build
       run: yarn build
       shell: bash

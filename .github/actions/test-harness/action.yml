@@ -14,7 +14,7 @@ runs:
     run: |-
       git rev-parse HEAD~1 > /tmp/previous-commit-sha
       git rev-parse HEAD > /tmp/current-commit-sha
-    shell: ${{ runner.os == 'Windows' && 'powershell' || 'bash' }}
+    shell: ${{ inputs.os == 'Windows' && 'powershell' || 'bash' }}
   - name: restore_cache
     uses: actions/cache@v4.3.0
     with:
@@ -25,11 +25,11 @@ runs:
       restore-keys: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ runner.os }}-${{ inputs.node-version }}
   - uses: "./.github/actions/build-binary"
     with:
-      targets: "${{ runner.os }}"
+      targets: "${{ inputs.os }}"
       node-version: "${{ inputs.node-version }}"
   - name: Run harness tests
     run: yarn test.harness --maxWorkers=3
-    shell: ${{ runner.os == 'Windows' && 'powershell' || 'bash' }}
+    shell: ${{ inputs.os == 'Windows' && 'powershell' || 'bash' }}
   - name: save_cache
     uses: actions/cache@v4.3.0
     if: always()
