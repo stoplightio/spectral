@@ -52,13 +52,10 @@ jobs:
         install-corepack: true
     - name: Build
       run: yarn build
-      shell: powershell
     - name: Test node
       run: yarn pretest
-      shell: powershell
     - name: Run node tests
       run: yarn test.jest --ci --maxWorkers=3
-      shell: powershell
 
     - name: Test harness
       uses: "./.github/actions/test-harness"
