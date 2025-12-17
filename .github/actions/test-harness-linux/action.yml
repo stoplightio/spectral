@@ -10,14 +10,7 @@ inputs:
 runs:
   using: composite
   steps:
-  - name: Compute commit SHAs to be used for caching purposes windows.
-    if: ${{ inputs.os == 'windows' }}
-    run: |-
-      git rev-parse HEAD~1 > /tmp/previous-commit-sha
-      git rev-parse HEAD > /tmp/current-commit-sha
-    shell: pwsh
-  - name: Compute commit SHAs to be used for caching purposes linux.
-    if: ${{ inputs.os == 'linux' }}
+  - name: Compute commit SHAs to be used for caching purposes.
     run: |-
       git rev-parse HEAD~1 > /tmp/previous-commit-sha
       git rev-parse HEAD > /tmp/current-commit-sha
@@ -32,19 +25,13 @@ runs:
       restore-keys: test-harness-{{ checksum "/tmp/previous-commit-sha" }}-${{ inputs.os }}-${{ inputs.node-version }}
   - uses: "./.github/actions/build-binary"
     with:
-      targets: "${{ inputs.os }}"
+      targets: ${{ inputs.os }}
       node-version: "${{ inputs.node-version }}"
-  - name: Run harness tests Linux
-    if: ${{ inputs.os == 'linux' }}
+  - name: Run harness tests
     run: yarn test.harness --maxWorkers=3
     shell: bash
-  - name: Run harness tests Windows
-    if: ${{ inputs.os == 'windows' }}
-    run: yarn test.harness --maxWorkers=3
-    shell: pwsh
   - name: save_cache
     uses: actions/cache@v4.3.0
-    if: always()
     with:
       path: |-
         ./.cache/spectral-test-harness
