@@ -10,11 +10,18 @@ inputs:
 runs:
   using: composite
   steps:
-  - name: Compute commit SHAs to be used for caching purposes
+  - name: Compute commit SHAs to be used for caching purposes windows.
+    if: ${{ inputs.os == 'windows' }}
     run: |-
       git rev-parse HEAD~1 > /tmp/previous-commit-sha
       git rev-parse HEAD > /tmp/current-commit-sha
-    shell: ${{ inputs.os == 'Windows' && 'powershell' || 'bash' }}
+    shell: pwsh
+  - name: Compute commit SHAs to be used for caching purposes linux.
+    if: ${{ inputs.os == 'linux' }}
+    run: |-
+      git rev-parse HEAD~1 > /tmp/previous-commit-sha
+      git rev-parse HEAD > /tmp/current-commit-sha
+    shell: bash
   - name: restore_cache
     uses: actions/cache@v4.3.0
     with:
