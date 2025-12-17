@@ -38,7 +38,7 @@ jobs:
     - name: Test harness
       uses: "./.github/actions/test-harness"
       with:
-        os: ${{ runner.os }}
+        os: "linux"
         node-version: "${{ matrix.node-version }}"
   test-windows:
     if: github.ref == 'refs/heads/develop'
@@ -63,7 +63,7 @@ jobs:
     - name: Test harness
       uses: "./.github/actions/test-harness"
       with:
-        os: ${{ runner.os }}
+        os: "windows"
         node-version: "${{ matrix.node-version }}"
   test-browser:
     runs-on: ubuntu-latest
@@ -75,7 +75,7 @@ jobs:
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1.2.0
     - name: Install chrome dependencies
-      run: yarn nadd -D karma-chrome-launcher
+      run: yarn add -D karma-chrome-launcher
     - name: Build
       run: yarn build
       shell: bash

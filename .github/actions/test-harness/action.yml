@@ -27,7 +27,7 @@ runs:
     with:
       targets: "${{ inputs.os }}"
       node-version: "${{ inputs.node-version }}"
-  - name: Run harness tests (linux
+  - name: Run harness tests linux
     if: ${{ inputs.os == 'linux' }}
     run: yarn test.harness --maxWorkers=3
     shell: bash
