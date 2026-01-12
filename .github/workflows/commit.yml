@@ -15,8 +15,6 @@ jobs:
       matrix:
         node-version:
         - '20.19.6' # maintenance LTS
-        - '22.21.1' # maintenance LTS
-        - '24.11.1' # active LTS
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
