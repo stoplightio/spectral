@@ -27,6 +27,7 @@ runs:
     with:
       targets: "${{ inputs.os }}"
       node-version: "${{ inputs.node-version }}"
+      bytecode: 'false'
   - name: Run harness tests Windows
     if: ${{ inputs.os == 'windows' }}
     run: yarn test.harness --maxWorkers=3

@@ -27,6 +27,7 @@ runs:
     with:
       targets: ${{ inputs.os }}
       node-version: "${{ inputs.node-version }}"
+      bytecode: 'false'
   - name: Run harness tests
     run: yarn test.harness --maxWorkers=3
     shell: bash
