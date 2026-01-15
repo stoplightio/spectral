@@ -1,14 +1,13 @@
 diff --git a/node_modules/jsep/package.json b/node_modules/jsep/package.json
-index 1234567..abcdefg 100644
+index 1234567..1234567 100644
 --- a/node_modules/jsep/package.json
 +++ b/node_modules/jsep/package.json
-@@ -12,7 +12,7 @@
- 	"repository": {
+@@ -13,7 +13,7 @@
  		"type": "git",
  		"url": "https://github.com/EricSmekens/jsep.git"
- 	},
--	"type": "module",
-+	"type": "commonjs",
- 	"main": "./dist/cjs/jsep.cjs.js",
+	},
+- "type": "module",
++ "type": "commonjs",
+	"main": "./dist/cjs/jsep.cjs.js",
  	"module": "./dist/jsep.js",
  	"exports": {
