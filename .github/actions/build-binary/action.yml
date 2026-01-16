@@ -18,17 +18,12 @@ runs:
   - name: restore_cache
     uses: actions/cache@v4.3.0
     with:
-      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}-${{ inputs.bytecode }}
+      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
       path: "/tmp/pkg-node-binaries"
-      restore-keys: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}-${{ inputs.bytecode }}
+      restore-keys: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
   - name: Create the Spectral Binary Windows
     if: ${{ inputs.targets == 'windows' }}
-    run: |-
-      if ("${{ inputs.bytecode }}" -eq "true") {
-        yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
-      } else {
-        yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
-      }
+    run: yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
     env:
       PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
     shell: powershell
@@ -54,4 +49,4 @@ runs:
     uses: actions/cache@v4.3.0
     with:
       path: "/tmp/pkg-node-binaries"
-      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}-${{ inputs.bytecode }}
+      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}

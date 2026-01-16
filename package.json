@@ -25,7 +25,6 @@
     "node": "^16.20 || ^18.18 || >= 20.17"
   },
   "scripts": {
-    "postinstall": "patch -p1 -N < patches/jsep+1.4.0.patch || true",
     "preclean": "yarn workspaces foreach run preclean",
     "clean": "yarn preclean && rimraf .cache packages/*/{dist,.cache}",
     "prebuild": "yarn workspaces foreach run prebuild",
@@ -80,7 +79,7 @@
     ]
   },
   "resolutions": {
-    "jsep": "1.4.0"
+    "simple-eval/jsep": "1.3.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^14.1.0",
