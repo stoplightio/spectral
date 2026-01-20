@@ -14,7 +14,8 @@ jobs:
     strategy:
       matrix:
         node-version:
-        - '18.20' # maintenance LTS
+        - '18.20.8' # maintenance LTS
+        - '20.20.0' # maintenance LTS
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
@@ -34,6 +35,7 @@ jobs:
       run: yarn test.jest --ci --maxWorkers=3
       shell: bash
     - name: Test harness
+      if: matrix.node-version == '18.20.8'
       uses: "./.github/actions/test-harness-linux"
       with:
         os: "linux"
@@ -54,8 +56,8 @@ jobs:
       run: yarn pretest
     - name: Run node tests
       run: yarn test.jest --ci --maxWorkers=3
-
     - name: Test harness
+      if: matrix.node-version == '18.20.8'
       uses: "./.github/actions/test-harness-windows"
       with:
         os: "windows"

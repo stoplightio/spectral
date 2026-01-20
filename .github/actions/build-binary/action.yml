@@ -7,7 +7,7 @@ inputs:
   node-version:
     description: 'Node.js version to build the binary for'
     required: false
-    default: '18.18'
+    default: '18.20.8'
   bytecode:
     description: 'Whether to include bytecode in the binary'
     required: false
