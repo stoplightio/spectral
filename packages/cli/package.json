@@ -48,7 +48,7 @@
     "chalk": "4.1.2",
     "fast-glob": "~3.2.12",
     "hpagent": "~1.2.0",
-    "lodash": "~4.17.21",
+    "lodash": "~4.17.23",
     "pony-cause": "^1.1.1",
     "stacktracey": "^2.1.8",
     "tslib": "^2.8.1",
