@@ -1,5 +1,6 @@
 name: Commit
 on:
+  workflow_call:
   pull_request:
     branches: [develop]
     paths-ignore:
@@ -106,6 +107,7 @@ jobs:
   release:
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    environment: production
     container:
       image: node:lts
     needs:
