@@ -1,13 +1,13 @@
 import { normalize } from '@stoplight/path';
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 
 const GLOB_OPTIONS = {
   absolute: true,
   dot: true,
 };
 
-async function match(pattern: fg.Pattern | fg.Pattern[]): Promise<string[]> {
-  return (await fg(pattern, GLOB_OPTIONS)).map(normalize);
+async function match(pattern: string | string[]): Promise<string[]> {
+  return (await glob(pattern, GLOB_OPTIONS)).map(normalize);
 }
 
 const compareString = (a: string, b: string): number => a.localeCompare(b);
