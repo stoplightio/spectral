@@ -43,7 +43,7 @@
     "test.karma": "karma start",
     "prepare": "husky install && yarn workspaces foreach run prepare",
     "prerelease": "patch-package",
-    "release": "yarn prerelease && multi-semantic-release --deps.bump=satisfy",
+    "release": "yarn prerelease && multi-semantic-release --deps.bump=satisfy --dry-run",
     "jest": "jest"
   },
   "workspaces": {
