@@ -33,7 +33,10 @@ jobs:
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
     - name: Set up NPM auth
-      run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        echo "✓ .npmrc file created"
+        ls -la ~/.npmrc
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Verify NPM authentication
@@ -43,6 +46,10 @@ jobs:
           echo "✓ NPM authentication successful"
         else
           echo "✗ NPM authentication failed - token may be invalid or expired"
+          echo "Please check:"
+          echo "  1. NPM_TOKEN secret is set in repository settings"
+          echo "  2. Token has not been revoked on npmjs.com"
+          echo "  3. If using 2FA, it's set to 'Authorization only' (not 'Authorization and writes')"
           exit 1
         fi
     - name: Build
