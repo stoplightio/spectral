@@ -33,13 +33,18 @@ jobs:
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
     - name: Set up NPM auth
-      run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+      run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Build
       run: yarn build
     - name: Release
-      run: yarn release
+      run: |
+        if [ "${{ inputs.dry-run }}" = "true" ]; then
+          yarn release --dry-run
+        else
+          yarn release
+        fi
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
