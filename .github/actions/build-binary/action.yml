@@ -1,0 +1,52 @@
+name: build-binary
+description: 'Build Spectral binary for specified targets and Node.js version'
+inputs:
+  targets:
+    required: false
+    description: 'Comma-separated list of targets (e.g., linux-x64,macos-arm64,windows-x64)'
+  node-version:
+    description: 'Node.js version to build the binary for'
+    required: false
+    default: '18.20.8'
+  bytecode:
+    description: 'Whether to include bytecode in the binary'
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+  - name: restore_cache
+    uses: actions/cache@v4.3.0
+    with:
+      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
+      path: "/tmp/pkg-node-binaries"
+      restore-keys: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
+  - name: Create the Spectral Binary Windows
+    if: ${{ inputs.targets == 'windows' }}
+    run: yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets node${{ inputs.node-version }}-windows --output binaries/spectral
+    env:
+      PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
+    shell: powershell
+  - name: Create the Spectral Binary Nix
+    if: ${{ inputs.targets != 'windows' }}
+    run: |-
+      NODE_VERSION=$(echo "${{ inputs.node-version }}" | awk -F "." '{ print $1 }')
+      TARGETS=$(echo "${{ inputs.targets }}" | awk -v node_version="$NODE_VERSION" -F "," '{for (i=1;i<=NF;i++) printf "node" node_version "-" $i "," }' | sed "s/,$/\n/")
+      export ARCH=$(echo ${{ inputs.targets }} | awk 'match($0, /-(arm64|x64)/){ print substr($0, RSTART+1, RLENGTH-1) }')
+
+      if [ "${{ inputs.bytecode }}" = true ]
+      then
+        yarn workspace @stoplight/spectral-cli pkg . --public --public-packages "*" --targets $TARGETS --output binaries/spectral
+      else
+        yarn workspace @stoplight/spectral-cli pkg . --no-bytecode --public --public-packages "*" --targets $TARGETS --output binaries/spectral
+      fi
+
+      (cd packages/cli/binaries && ls . | sed -n -E 's/^(spectral)-(alpine|linux|macos)$/mv "\1-\2" "\1-\2"-$ARCH/p' | sh)
+    env:
+      PKG_CACHE_PATH: "/tmp/pkg-node-binaries"
+    shell: bash
+  - name: save_cache
+    uses: actions/cache@v4.3.0
+    with:
+      path: "/tmp/pkg-node-binaries"
+      key: pkg-cache-${{ inputs.targets }}-${{ inputs.node-version }}
