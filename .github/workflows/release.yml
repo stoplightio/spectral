@@ -26,6 +26,8 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.GH_TOKEN }}
+    - name: Mark repo as safe for Git
+      run: git config --global --add safe.directory /__w/spectral/spectral
     - name: Configure Git
       run: |
         git config --global user.name "github-actions[bot]"
