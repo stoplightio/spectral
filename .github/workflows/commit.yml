@@ -104,29 +104,3 @@ jobs:
         yarn lint.eslint
     - name: Lint documentation
       run: yarn lint.prettier
-  release:
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-    environment: production
-    container:
-      image: node:lts
-    needs:
-    - lint
-    - test-node
-    - test-windows
-    - test-browser
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v5.0.1
-    - name: Prepare release
-      uses: "./.github/actions/prepare-release"
-    - name: Checkout code
-      uses: actions/checkout@v5.0.1
-    - name: Cached dependencies
-      uses: "./.github/actions/cached-dependencies"
-    - name: Set up NPM auth
-      run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-    - name: Build
-      run: yarn build
-    - name: Release
-      run: yarn release
