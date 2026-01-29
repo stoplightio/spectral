@@ -34,9 +34,23 @@ jobs:
       uses: "./.github/actions/cached-dependencies"
     - name: Set up NPM auth
       run: |
+        echo "Checking for existing .npmrc file..."
+        if [ -f ~/.npmrc ]; then
+          echo "⚠️  Found existing .npmrc file (possibly cached)"
+          ls -la ~/.npmrc
+          echo "Contents:"
+          cat ~/.npmrc | head -n 5
+          echo "Removing existing .npmrc..."
+          rm ~/.npmrc
+        else
+          echo "✓ No existing .npmrc file found"
+        fi
+        echo "Creating new .npmrc file..."
         echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
         echo "✓ .npmrc file created"
         ls -la ~/.npmrc
+        echo "First few characters of token in file:"
+        cat ~/.npmrc | sed 's/:_authToken=\(.\{10\}\).*/authToken=\1.../'
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Verify NPM authentication
