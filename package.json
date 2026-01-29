@@ -79,7 +79,8 @@
     ]
   },
   "resolutions": {
-    "jsep": "1.4.0"
+    "jsep": "1.4.0",
+    "sha.js": "2.4.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^14.1.0",
