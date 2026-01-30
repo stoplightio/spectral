@@ -2,4 +2,5 @@
     <td><%= line %>:<%= character %></td>
     <td class="severity clr-<%= severity %>"><%= severity %></td>
     <td><%- message %></td>
+    <td><% if(documentationUrl) { %><a href="<%- documentationUrl %>" target="_blank">documentation</a><% } %></td>
 </tr>

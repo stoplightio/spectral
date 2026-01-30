@@ -74,6 +74,11 @@ export const pretty: Formatter = results => {
         { text: chalk[color].bold(result.code), padding: PAD_TOP0_LEFT2, width: COLUMNS[2] },
         { text: chalk.gray(result.message), padding: PAD_TOP0_LEFT2, width: COLUMNS[3] },
         { text: chalk.cyan(printPath(result.path, PrintStyle.Dot)), padding: PAD_TOP0_LEFT2 },
+        {
+          text: chalk.gray(result.documentationUrl ?? ''),
+          padding: PAD_TOP0_LEFT2,
+          width: result.documentationUrl ? undefined : 0.1,
+        },
       );
       ui.div();
     });

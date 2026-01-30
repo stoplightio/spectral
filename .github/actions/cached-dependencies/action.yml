@@ -1,0 +1,34 @@
+name: 'cached-dependencies'
+description: 'Cache dependencies to speed up workflow runs'
+inputs:
+  install-corepack:
+    description: 'Whether to install and enable Corepack'
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+  - name: restore_cache
+    uses: actions/cache@v4.3.0
+    with:
+      key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+      path: |-
+        ~/.yarn
+        ~/AppData/Local/Yarn/Berry/cache
+      restore-keys: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+  - name: Enable Corepack
+    run: |-
+      npm install -g corepack --force
+      corepack enable
+    if: true == ${{ inputs.install-corepack }}
+    shell: bash
+  - name: Install Dependencies
+    run: yarn install --immutable
+    shell: bash
+  - name: save_cache
+    uses: actions/cache@v4.3.0
+    with:
+      path: |-
+        ~/.yarn
+        ~/AppData/Local/Yarn/Berry/cache
+      key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}

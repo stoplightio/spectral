@@ -13,6 +13,7 @@ import {
   Options as UnreferencedReusableObjectOptions,
 } from './unreferencedReusableObject';
 import { default as xor, Options as XorOptions } from './xor';
+import { default as or, Options as OrOptions } from './or';
 
 export {
   alphabetical,
@@ -27,6 +28,7 @@ export {
   undefined,
   unreferencedReusableObject,
   xor,
+  or,
 };
 
 export type {
@@ -38,4 +40,5 @@ export type {
   SchemaOptions,
   UnreferencedReusableObjectOptions,
   XorOptions,
+  OrOptions,
 };

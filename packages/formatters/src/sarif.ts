@@ -44,7 +44,7 @@ export const sarif: Formatter = (results, _, ctx) => {
     const severity: DiagnosticSeverity = result.severity || DiagnosticSeverity.Error;
     sarifResultBuilder.initSimple({
       level: OUTPUT_TYPES[severity] || 'error',
-      messageText: result.message,
+      messageText: result.documentationUrl ? `${result.message} -- ${result.documentationUrl}` : result.message,
       ruleId: result.code.toString(),
       fileUri: relative(process.cwd(), result.source ?? '').replace(/\\/g, '/'),
       startLine: result.range.start.line + 1,

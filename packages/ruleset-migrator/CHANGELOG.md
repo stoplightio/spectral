@@ -1,3 +1,10 @@
+## @stoplight/spectral-ruleset-migrator [1.11.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.2...@stoplight/spectral-ruleset-migrator-1.11.3) (2025-10-24)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** fix ruleset migrator output when a rule name contains '/' ([#2859](https://github.com/stoplightio/spectral/issues/2859)) ([115d1d0](https://github.com/stoplightio/spectral/commit/115d1d01dc4268cc98083aae34e871b88e94abee))
+
 ## @stoplight/spectral-ruleset-migrator [1.11.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.1...@stoplight/spectral-ruleset-migrator-1.11.2) (2025-03-07)
 
 

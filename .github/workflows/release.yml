@@ -1,0 +1,45 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run release in dry-run mode (no publishing)'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  # Call the commit workflow to run all tests and linting
+  run-tests:
+    uses: ./.github/workflows/commit.yml
+
+  release:
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts
+    needs:
+    - run-tests
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GH_TOKEN }}
+    - name: Configure Git
+      run: |
+        git config --global --add safe.directory /__w/spectral/spectral
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Set up NPM auth
+      run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Build
+      run: yarn build
+    - name: Release
+      run: yarn release
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}

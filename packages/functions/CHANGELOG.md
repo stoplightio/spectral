@@ -1,3 +1,17 @@
+## @stoplight/spectral-functions [1.10.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.0...@stoplight/spectral-functions-1.10.1) (2025-04-23)
+
+
+### Bug Fixes
+
+* **functions:** export or function ([#2812](https://github.com/stoplightio/spectral/issues/2812)) ([03532a5](https://github.com/stoplightio/spectral/commit/03532a5193e52094eb1a11c7ed8337b353be47c8))
+
+# @stoplight/spectral-functions [1.10.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.4...@stoplight/spectral-functions-1.10.0) (2025-04-22)
+
+
+### Features
+
+* **functions:** add or function ([#2798](https://github.com/stoplightio/spectral/issues/2798)) ([d9ef27f](https://github.com/stoplightio/spectral/commit/d9ef27fc03f27c783c32ff8ab338e6c83cbac936))
+
 ## @stoplight/spectral-functions [1.9.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.9.3...@stoplight/spectral-functions-1.9.4) (2025-03-07)
 
 

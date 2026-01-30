@@ -27,6 +27,7 @@ export interface ILintConfig {
   stdinFilepath?: string;
   ignoreUnknownFormat: boolean;
   failOnUnmatchedGlobs: boolean;
+  showDocumentationUrl: boolean;
   verbose?: boolean;
   quiet?: boolean;
 }

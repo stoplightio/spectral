@@ -99,6 +99,7 @@ function processTargetResults(
       severity,
       ...(source !== null ? { source } : null),
       range,
+      documentationUrl: rule.documentationUrl ?? undefined,
     });
   }
 }

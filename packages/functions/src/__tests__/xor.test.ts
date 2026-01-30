@@ -20,7 +20,7 @@ describe('Core Functions / Xor', () => {
       ),
     ).toEqual([
       {
-        message: '"yada-yada" and "whatever" must not be both defined or both undefined',
+        message: 'At least one of "yada-yada" or "whatever" must be defined',
         path: [],
       },
     ]);
@@ -38,7 +38,7 @@ describe('Core Functions / Xor', () => {
       ),
     ).toEqual([
       {
-        message: '"yada-yada", "whatever" and "foo" must not be both defined or both undefined',
+        message: 'At least one of "yada-yada" or "whatever" or "foo" must be defined',
         path: [],
       },
     ]);
@@ -56,13 +56,13 @@ describe('Core Functions / Xor', () => {
       ),
     ).toEqual([
       {
-        message: '"version" and "title" must not be both defined or both undefined',
+        message: 'Just one of "version" and "title" must be defined',
         path: [],
       },
     ]);
   });
 
-  it('given invalid input, should should no error message', async () => {
+  it('given invalid input, should show no error message', async () => {
     return expect(await runXor(null, { properties: ['version', 'title'] })).toEqual([]);
   });
 
@@ -79,8 +79,61 @@ describe('Core Functions / Xor', () => {
     ).toEqual([]);
   });
 
+  it('given multiple of 5 properties, should return an error message', async () => {
+    expect(
+      await runXor(
+        {
+          version: '1.0.0',
+          title: 'Swagger Petstore',
+          termsOfService: 'http://swagger.io/terms/',
+        },
+        { properties: ['version', 'title', 'termsOfService', 'bar', 'five'] },
+      ),
+    ).toEqual([
+      {
+        message: 'Just one of "version" and "title" and "termsOfService" must be defined',
+        path: [],
+      },
+    ]);
+  });
+
+  it('given none of 5 properties, should return an error message', async () => {
+    expect(
+      await runXor(
+        {
+          version: '1.0.0',
+          title: 'Swagger Petstore',
+          termsOfService: 'http://swagger.io/terms/',
+        },
+        { properties: ['yada-yada', 'foo', 'bar', 'four', 'five'] },
+      ),
+    ).toEqual([
+      {
+        message: 'At least one of "yada-yada" or "foo" or "bar" or 2 other properties must be defined',
+        path: [],
+      },
+    ]);
+  });
+
+  it('given only one of 4 properties, should return no error message', async () => {
+    expect(
+      await runXor(
+        {
+          version: '1.0.0',
+          title: 'Swagger Petstore',
+          termsOfService: 'http://swagger.io/terms/',
+        },
+        { properties: ['title', 'foo', 'bar', 'four'] },
+      ),
+    ).toEqual([]);
+  });
+
   describe('validation', () => {
     it.each([{ properties: ['foo', 'bar'] }])('given valid %p options, should not throw', async opts => {
+      expect(await runXor([], opts)).toEqual([]);
+    });
+
+    it.each([{ properties: ['foo', 'bar', 'three'] }])('given valid %p options, should not throw', async opts => {
       expect(await runXor([], opts)).toEqual([]);
     });
 
@@ -90,7 +143,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+            '"xor" function has invalid options specified. Example valid options: { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.',
             ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
@@ -100,7 +153,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }',
+            '"xor" function has invalid options specified. Example valid options: { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.',
             ['rules', 'my-rule', 'then', 'functionOptions'],
           ),
         ],
@@ -122,7 +175,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]',
+            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
@@ -132,7 +185,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]',
+            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
@@ -142,7 +195,7 @@ describe('Core Functions / Xor', () => {
         [
           new RulesetValidationError(
             'invalid-function-options',
-            '"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]',
+            '"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.',
             ['rules', 'my-rule', 'then', 'functionOptions', 'properties'],
           ),
         ],
