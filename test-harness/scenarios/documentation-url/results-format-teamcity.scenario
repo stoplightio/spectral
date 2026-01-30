@@ -1,0 +1,61 @@
+====test====
+Invalid document outputs results when --format=teamcity
+====document====
+---
+info:
+  version: 1.0.0
+  title: Stoplight
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "documentationUrl": "https://www.example.com/docs/api-servers.md",
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    },
+    "info-description": {
+      "documentationUrl": "https://www.example.com/docs/info-description.md",
+      "description": "Info \"description\" must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --format=teamcity --ruleset "{asset:ruleset.json}" --show-documentation-url
+====stdout====
+##teamcity[inspectionType category='openapi' id='api-servers' name='api-servers' description='warning -- "servers" must be present and non-empty array. -- https://www.example.com/docs/api-servers.md']##teamcity[inspection typeId='api-servers' file='{document}' line='1' message='warning -- "servers" must be present and non-empty array.']
+##teamcity[inspectionType category='openapi' id='info-contact' name='info-contact' description='warning -- Info object must have a "contact" object.']
+##teamcity[inspection typeId='info-contact' file='{document}' line='2' message='warning -- Info object must have a "contact" object.']
+##teamcity[inspectionType category='openapi' id='info-description' name='info-description' description='warning -- Info "description" must be present and non-empty string. -- https://www.example.com/docs/info-description.md']
+##teamcity[inspection typeId='info-description' file='{document}' line='2' message='warning -- Info "description" must be present and non-empty string.']

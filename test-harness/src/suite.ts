@@ -35,6 +35,23 @@ if (scenario.command === null) {
       },
     });
 
+    const stripSpectralVersionFromSarif = (str: string): string => {
+      try {
+        const parsed = JSON.parse(str);
+        if (parsed?.$schema?.includes('sarif')) {
+          for (const run of parsed.runs ?? []) {
+            if (run?.tool?.driver?.version) {
+              delete run.tool.driver.version;
+            }
+          }
+          return JSON.stringify(parsed, null, 2);
+        }
+      } catch {
+        // not SARIF or not JSON
+      }
+      return str;
+    };
+
     if (stderr !== null) {
       expect(output.stderr).toEqual(normalizeLineEndings(applyReplacements(stderr, env)));
     } else if (output.stderr !== '') {
@@ -42,7 +59,15 @@ if (scenario.command === null) {
     }
 
     if (stdout !== null) {
-      expect(output.stdout).toEqual(normalizeLineEndings(applyReplacements(stdout, env)));
+      let actual = normalizeLineEndings(output.stdout);
+      let expected = normalizeLineEndings(applyReplacements(stdout, env));
+
+      if (/--format=sarif\b/i.test(scenario.command ?? '')) {
+        actual = stripSpectralVersionFromSarif(actual);
+        expected = stripSpectralVersionFromSarif(expected);
+      }
+
+      expect(actual).toEqual(expected);
     }
 
     if (status !== null) {

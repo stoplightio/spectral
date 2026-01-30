@@ -23,7 +23,8 @@ function inspectionType(result: IRuleResult & { source: string }): string {
   const code = escapeString(result.code);
   const severity = getSeverityName(result.severity);
   const message = escapeString(result.message);
-  return `##teamcity[inspectionType category='openapi' id='${code}' name='${code}' description='${severity} -- ${message}']`;
+  const documentationUrl = result.documentationUrl ? ` -- ${escapeString(result.documentationUrl)}` : '';
+  return `##teamcity[inspectionType category='openapi' id='${code}' name='${code}' description='${severity} -- ${message}${documentationUrl}']`;
 }
 
 function inspection(result: IRuleResult & { source: string }): string {

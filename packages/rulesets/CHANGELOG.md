@@ -1,3 +1,10 @@
+# @stoplight/spectral-rulesets [1.22.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.4...@stoplight/spectral-rulesets-1.22.0) (2025-04-22)
+
+
+### Features
+
+* **core:** add documentUrl to JS api and cli formatters ([#2443](https://github.com/stoplightio/spectral/issues/2443)) ([e787728](https://github.com/stoplightio/spectral/commit/e78772809b5b1fd5fa143d383c3eae957112e134))
+
 ## @stoplight/spectral-rulesets [1.21.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.3...@stoplight/spectral-rulesets-1.21.4) (2025-03-07)
 
 

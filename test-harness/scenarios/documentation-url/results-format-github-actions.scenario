@@ -1,0 +1,59 @@
+====test====
+Invalid document outputs results when --format=github-actions
+====document====
+---
+info:
+  version: 1.0.0
+  title: Stoplight
+====asset:ruleset.json====
+{
+  "rules": {
+    "api-servers": {
+      "documentationUrl": "https://www.example.com/docs/api-servers.md",
+      "description": "\"servers\" must be present and non-empty array.",
+      "recommended": true,
+      "given": "$",
+      "then": {
+        "field": "servers",
+        "function": "schema",
+        "functionOptions": {
+          "dialect": "draft7",
+          "schema": {
+            "items": {
+              "type": "object",
+            },
+            "minItems": 1,
+            "type": "array"
+          }
+        }
+      }
+    },
+    "info-contact": {
+      "description": "Info object must have a \"contact\" object.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.contact",
+        "function": "truthy",
+      }
+    },
+    "info-description": {
+      "documentationUrl": "https://www.example.com/docs/info-description.md",
+      "description": "Info \"description\" must be present and non-empty string.",
+      "recommended": true,
+      "type": "style",
+      "given": "$",
+      "then": {
+        "field": "info.description",
+        "function": "truthy"
+      }
+    }
+  }
+}
+====command====
+{bin} lint {document} --format=github-actions --ruleset "{asset:ruleset.json}" --show-documentation-url
+====stdout====
+::warning title=api-servers,file=document,col=1,endColumn=19,line=1,endLine=4::"servers" must be present and non-empty array.::https://www.example.com/docs/api-servers.md
+::warning title=info-contact,file=document,col=6,endColumn=19,line=2,endLine=4::Info object must have a "contact" object.
+::warning title=info-description,file=document,col=6,endColumn=19,line=2,endLine=4::Info "description" must be present and non-empty string.::https://www.example.com/docs/info-description.md

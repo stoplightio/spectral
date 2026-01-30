@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "1.21.4",
+  "version": "1.22.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -31,7 +31,7 @@
     "ajv-formats": "~2.1.1",
     "json-schema-traverse": "^1.0.0",
     "leven": "3.1.0",
-    "lodash": "~4.17.21",
+    "lodash": "~4.17.23",
     "tslib": "^2.8.1"
   },
   "devDependencies": {

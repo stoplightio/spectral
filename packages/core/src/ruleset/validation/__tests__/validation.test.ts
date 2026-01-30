@@ -4,6 +4,8 @@ import { assertValidRuleset, RulesetValidationError } from '../index';
 import AggregateError = require('es-aggregate-error');
 import invalidRuleset from './__fixtures__/invalid-ruleset';
 import validRuleset from './__fixtures__/valid-flat-ruleset';
+import extendedRuleset from './__fixtures__/aliases/extended-definition';
+import aliasCollisionRuleset from './__fixtures__/aliases/extended-alias-collision';
 
 import type { Format } from '../../format';
 import { RulesetDefinition, RulesetOverridesDefinition } from '../../types';
@@ -61,6 +63,14 @@ describe('JS Ruleset Validation', () => {
 
   it('given valid ruleset should, emits no errors', () => {
     expect(assertValidRuleset.bind(null, validRuleset)).not.toThrow();
+  });
+
+  it('given valid ruleset extending ruleset with alias should, emits no errors', () => {
+    expect(assertValidRuleset.bind(null, extendedRuleset)).not.toThrow();
+  });
+
+  it('given valid ruleset extending rulesets with alias collision should, emits no errors', () => {
+    expect(assertValidRuleset.bind(null, aliasCollisionRuleset)).not.toThrow();
   });
 
   it.each([false, 2, null, 'foo', '12.foo.com'])(

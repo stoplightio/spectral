@@ -1,0 +1,102 @@
+name: Release Nix
+on: workflow_dispatch
+
+jobs:
+  build-nix-binaries:
+    if: (github.ref == 'refs/tags/"v[0-9].[0-9]+.[0-9]+"') && (github.ref != 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Install ldid
+      uses: "./.github/actions/install-ldid"
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Build
+      run: yarn build
+    - name: Build binary
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: macos-arm64,linux-arm64,alpine-arm64
+        bytecode: false
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        path: "./packages/cli//binaries"
+  upload-artifacts:
+    if: (github.ref == 'refs/tags/"v[0-9].[0-9]+.[0-9]+"') && (github.ref != 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.23
+    needs:
+    - build-nix-binaries
+    steps:
+    - uses: actions/download-artifact@v6.0.0
+      with:
+        path: "/tmp/"
+    - name: Download GitHub Release Utility
+      run: go install github.com/tcnksm/ghr@latest
+    - name: Publish Release artifacts on GitHub
+      run: ghr -t ${GH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${{ github.repository }} -c ${{ github.sha }} ${{ github.ref }} /tmp/binaries
+  release-docker:
+    if: (github.ref == 'refs/tags/"v[0-9].[0-9]+.[0-9]+"') && (github.ref != 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts
+    needs:
+    - upload-artifacts
+    steps:
+    - uses: actions/checkout@v5.0.1
+    - name: set version in package.json
+      run: npm --no-git-tag-version --no-commit-hooks -f version from-git
+    - name: docker build
+      run: |-
+        GIT_SHA=${${{ github.sha }}:0:7}
+        echo "GIT_SHA=${GIT_SHA}";
+        docker build . --tag stoplight/spectral:${GIT_SHA};
+    - name: docker push
+      run: |-
+        shopt -s extglob
+        GIT_SHA=${${{ github.sha }}:0:7}
+        echo "GIT_SHA=${GIT_SHA}";
+        # Login to DockerHub
+        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+        DOCKER_BRANCH="${${{ github.ref }}//\//-}";
+        if [[ "$DOCKER_BRANCH" == "$DEFAULT_BRANCH" ]]; then
+          DOCKER_BRANCH="latest";
+        fi
+        echo "DOCKER_BRANCH=${DOCKER_BRANCH}";
+        if [[ -n "$DOCKER_BRANCH" ]]; then
+          docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${DOCKER_BRANCH};
+        fi
+        if [[ -n "${{ github.ref }}" ]]; then
+          FULL_VERSION="${${{ github.ref }}/v/}";
+          MINOR_VERSION="${FULL_VERSION/%.+([0-9])/}";
+          MAJOR_VERSION="${MINOR_VERSION/%.+([0-9])/}";
+          echo "FULL_VERSION=$FULL_VERSION";
+          echo "MINOR_VERSION=$MINOR_VERSION";
+          echo "MAJOR_VERSION=$MAJOR_VERSION";
+          docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION};
+          docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION};
+          docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION};
+          docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:latest;
+        fi
+        echo "Docker tags:";
+        docker images stoplight/spectral --format="{{ .Tag }}";
+        docker push stoplight/spectral:${GIT_SHA};
+        echo "Pushed stoplight/spectral:${GIT_SHA}";
+        if [[ -n "${{ github.ref }}" ]]; then
+          docker push stoplight/spectral:${FULL_VERSION};
+          docker push stoplight/spectral:${MINOR_VERSION};
+          docker push stoplight/spectral:${MAJOR_VERSION};
+          docker push stoplight/spectral:latest;
+          echo "Pushed stoplight/spectral:${FULL_VERSION}";
+        fi
+        if [[ -n "$DOCKER_BRANCH" ]]; then
+          docker push stoplight/spectral:${DOCKER_BRANCH};
+          echo "Pushed stoplight/spectral:${DOCKER_BRANCH}";
+        fi
+      env:
+        DEFAULT_BRANCH: develop

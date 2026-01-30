@@ -41,12 +41,13 @@ Other options include:
       --resolver                 path to custom json-ref-resolver instance                                      [string]
   -r, --ruleset                  path/URL to a ruleset file                                                     [string]
   -F, --fail-severity            results of this level or above will trigger a failure exit code
-                                                                     [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
-  -D, --display-only-failures    only output results equal to or greater than --fail-severity                    [boolean] [default: false]
-      --ignore-unknown-format    do not warn about unmatched formats                                             [boolean] [default: false]
-      --fail-on-unmatched-globs  fail on unmatched glob patterns                                                 [boolean] [default: false]
-  -v, --verbose                  increase verbosity                                                                               [boolean]
-  -q, --quiet                    no logging - output only                                                                         [boolean]
+                                                  [string] [choices: "error", "warn", "info", "hint"] [default: "error"]
+  -D, --display-only-failures    only output results equal to or greater than --fail-severity [boolean] [default: false]
+      --ignore-unknown-format    do not warn about unmatched formats                          [boolean] [default: false]
+      --fail-on-unmatched-globs  fail on unmatched glob patterns                              [boolean] [default: false]
+      --show-documentation-url   show documentation url in output result                      [boolean] [default: false]
+  -v, --verbose                  increase verbosity                                                            [boolean]
+  -q, --quiet                    no logging - output only                                                      [boolean]
 ```
 
 The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via the built-in ruleset.

@@ -96,6 +96,25 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
       type: `"length" function has invalid options specified. Example valid options: { "min": 2 }, { "max": 5 }, { "min": 0, "max": 10 }`,
     },
   },
+  or: {
+    type: 'object',
+    properties: {
+      properties: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        minItems: 2,
+        errorMessage: `"or" requires at least two enumerated "properties", i.e. ["default", "example"], ["title", "summary", "description"], etc.`,
+        description: 'The properties to check.',
+      },
+    },
+    additionalProperties: false,
+    required: ['properties'],
+    errorMessage: {
+      type: `"or" function has invalid options specified. Example valid options: { "properties": ["default", "example"] }, { "properties": ["title", "summary", "description"] }, etc.`,
+    },
+  },
   pattern: {
     type: 'object',
     additionalProperties: false,
@@ -207,14 +226,14 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
           type: 'string',
         },
         minItems: 2,
-        errorMessage: `"xor" and its "properties" option require at least 2-item tuples, i.e. ["id", "name"]`,
+        errorMessage: `"xor" requires at least two enumerated "properties", i.e. ["country", "street"], ["one", "two", "three"], etc.`,
         description: 'The properties to check.',
       },
     },
     additionalProperties: false,
     required: ['properties'],
     errorMessage: {
-      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["id", "name"] }, { "properties": ["country", "street"] }`,
+      type: `"xor" function has invalid options specified. Example valid options: { "properties": ["country", "street"] }, { "properties": ["one", "two", "three"] }, etc.`,
     },
   },
 };
