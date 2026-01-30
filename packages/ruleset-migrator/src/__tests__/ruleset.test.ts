@@ -4,7 +4,7 @@ import * as prettier from 'prettier/standalone';
 import * as parserBabel from 'prettier/parser-babel';
 import { Ruleset } from '@stoplight/spectral-core';
 import { DiagnosticSeverity } from '@stoplight/types';
-import { createSandbox } from 'fetch-mock';
+import fetchMockLib, { FetchMock as FetchMockInstance } from 'fetch-mock';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 
 import { migrateRuleset } from '..';
@@ -18,8 +18,17 @@ afterAll(() => {
   vol.reset();
 });
 
-function createFetchMockSandbox() {
-  return createSandbox();
+type FetchFn = (
+  input: Parameters<typeof globalThis.fetch>[0],
+  init?: Parameters<typeof globalThis.fetch>[1],
+) => ReturnType<typeof globalThis.fetch>;
+
+type FetchMockSandbox = FetchMockInstance & FetchFn;
+
+function createFetchMockSandbox(): FetchMockSandbox {
+  const instance = fetchMockLib.createInstance();
+  const sandbox = instance.fetchHandler as FetchMockSandbox;
+  return Object.assign(sandbox, instance);
 }
 
 const scenarios = Object.keys(fixtures)

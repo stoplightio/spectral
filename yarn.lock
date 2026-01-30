@@ -3092,7 +3092,7 @@ __metadata:
     "@stoplight/types": ^13.6.0
     "@types/node": "*"
     "@types/validate-npm-package-name": ^3.0.3
-    fetch-mock: ^12
+    fetch-mock: ^12.6.0
     memfs: ^3.5.3
     pony-cause: 1.1.1
     prettier: ^2.4.1
@@ -3119,7 +3119,7 @@ __metadata:
     ajv: ^8.17.1
     ast-types: 0.14.2
     astring: ^1.9.0
-    fetch-mock: ^12
+    fetch-mock: ^12.6.0
     json-schema-to-typescript: ^10.1.5
     memfs: ^3.5.3
     prettier: ^2.4.1
@@ -7095,7 +7095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-mock@npm:^12, fetch-mock@npm:^12.6.0":
+"fetch-mock@npm:^12.6.0":
   version: 12.6.0
   resolution: "fetch-mock@npm:12.6.0"
   dependencies:
