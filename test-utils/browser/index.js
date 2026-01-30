@@ -1,11 +1,12 @@
 import { dirname, isURL } from '@stoplight/path';
 import * as fs from 'fs';
+import { createSandbox } from 'fetch-mock';
 
 let fetchMock;
 let fetchDesc;
 
 beforeEach(() => {
-  fetchMock = require('fetch-mock').default.sandbox();
+  fetchMock = createSandbox();
   // fetchMock.config.fetch = fetch;
   fetchMock.config.fallbackToNetwork = false;
   fetchDesc = Object.getOwnPropertyDescriptor(global, 'fetch');
