@@ -1,0 +1,106 @@
+name: Commit
+on:
+  workflow_call:
+  pull_request:
+    branches: [develop]
+    paths-ignore:
+    - README.md
+    - .github/**
+jobs:
+  test-node:
+    runs-on: ubuntu-latest
+    container:
+      image: node:${{ matrix.node-version }}
+      options: --user root
+    strategy:
+      matrix:
+        node-version:
+        - '18.20.8'
+        - '20.20.0' # maintenance LTS
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+      with:
+        fetch-depth: 2
+    - name: Mark repo as safe for Git
+      run: git config --global --add safe.directory /__w/spectral/spectral
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Build
+      run: yarn build
+      shell: bash
+    - name: Test node
+      run: yarn pretest
+      shell: bash
+    - name: Run node tests
+      run: yarn test.jest --ci --maxWorkers=3
+      shell: bash
+    - name: Test harness
+      if: matrix.node-version == '18.20.8'
+      uses: "./.github/actions/test-harness-linux"
+      with:
+        os: "linux"
+        node-version: "${{ matrix.node-version }}"
+  test-windows:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: true
+    - name: Build
+      run: yarn build
+    - name: Test node
+      run: yarn pretest
+    - name: Run node tests
+      run: yarn test.jest --ci --maxWorkers=3
+    - name: Test harness
+      if: matrix.node-version == '18.20.8'
+      uses: "./.github/actions/test-harness-windows"
+      with:
+        os: "windows"
+        node-version: "${{ matrix.node-version }}"
+  test-browser:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1.2.0
+    - name: Install chrome dependencies
+      run: yarn add -D karma-chrome-launcher
+    - name: Build
+      run: yarn build
+      shell: bash
+    - run: yarn pretest
+    - name: Run browser tests
+      run: yarn test.karma
+      env:
+        CI: true
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: true
+    - name: Build
+      run: yarn build
+      shell: bash
+    - name: Lint commit message
+      run: node ./scripts/lint-commit-messages.mjs
+    - name: Lint code
+      run: |-
+        yarn prelint
+        yarn lint.eslint
+    - name: Lint documentation
+      run: yarn lint.prettier
