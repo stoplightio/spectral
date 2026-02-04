@@ -28,7 +28,8 @@ type FetchMockSandbox = FetchMockInstance & FetchFn;
 function createFetchMockSandbox(): FetchMockSandbox {
   const instance = fetchMockLib.createInstance();
   const sandbox = instance.fetchHandler as FetchMockSandbox;
-  return Object.assign(sandbox, instance);
+  Object.setPrototypeOf(sandbox, instance);
+  return sandbox;
 }
 
 const scenarios = Object.keys(fixtures)
