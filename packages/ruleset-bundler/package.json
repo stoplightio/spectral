@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/validate-npm-package-name": "^3.0.3",
-    "fetch-mock": "^9.11.0",
+    "fetch-mock": "^12.6.0",
     "memfs": "^3.5.3",
     "prettier": "^2.4.1"
   }
