@@ -4,7 +4,7 @@ import * as prettier from 'prettier/standalone';
 import * as parserBabel from 'prettier/parser-babel';
 import { Ruleset } from '@stoplight/spectral-core';
 import { DiagnosticSeverity } from '@stoplight/types';
-import * as fetchMock from 'fetch-mock';
+import fetchMockLib, { FetchMock as FetchMockInstance } from 'fetch-mock';
 import { serveAssets } from '@stoplight/spectral-test-utils';
 
 import { migrateRuleset } from '..';
@@ -18,9 +18,18 @@ afterAll(() => {
   vol.reset();
 });
 
-function createFetchMockSandbox() {
-  // something is off with default module interop in Karma :man_shrugging:
-  return ((fetchMock as { default?: typeof import('fetch-mock') }).default ?? fetchMock).sandbox();
+type FetchFn = (
+  input: Parameters<typeof globalThis.fetch>[0],
+  init?: Parameters<typeof globalThis.fetch>[1],
+) => ReturnType<typeof globalThis.fetch>;
+
+type FetchMockSandbox = FetchMockInstance & FetchFn;
+
+function createFetchMockSandbox(): FetchMockSandbox {
+  const instance = fetchMockLib.createInstance();
+  const sandbox = instance.fetchHandler as FetchMockSandbox;
+  Object.setPrototypeOf(sandbox, instance);
+  return sandbox;
 }
 
 const scenarios = Object.keys(fixtures)
