@@ -19,6 +19,7 @@ export class Replacer<V extends Record<string, unknown>> {
 
   public print(input: string, values: V): string {
     const parser = new Parser();
+
     const functions = parser.functions as Record<string, (...args: Value[]) => Value>;
     functions.toUpperCase = (value: Value): Value => {
       return String(value).toUpperCase();
@@ -42,13 +43,29 @@ export class Replacer<V extends Record<string, unknown>> {
       const shouldEvaluate = input[index] === '#';
 
       if (shouldEvaluate) {
-        const expression = identifier
-          .trim()
-          .replace(/(\S+)\.toUpperCase\(\)/g, 'toUpperCase($1)')
-          .replace(/\s*\+\s*/g, ',')
-          .replace(/^(.+)$/, 'concat($1)');
+        let expression = identifier.trim();
 
-        return String(parser.evaluate(expression, context));
+        // Block dangerous patterns
+        if (/constructor|process|require|global|mainModule|fs|child_process/.test(expression)) {
+          // eslint-disable-next-line no-console
+          console.error('Disallowed expression detected:', expression);
+          return '';
+        }
+
+        // Preprocess the expression
+        try {
+          expression = expression
+            .replace(/(\S+)\.toUpperCase\(\)/g, 'toUpperCase($1)')
+            .replace(/\s*\+\s*/g, ',')
+            .replace(/^(.+)$/, 'concat($1)');
+
+          // Evaluate the expression
+          return String(parser.evaluate(expression, context));
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Expression evaluation error:', error);
+          return '';
+        }
       }
 
       if (!(identifier in values)) {
