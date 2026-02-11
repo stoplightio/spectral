@@ -1,4 +1,5 @@
 import { message } from '../message';
+import * as fs from 'fs';
 
 describe('message util', () => {
   test('interpolates correctly', () => {
@@ -66,5 +67,27 @@ describe('message util', () => {
         value: void 0,
       }),
     ).toEqual('missing :(');
+  });
+
+  test('does not allow arbitrary code execution', () => {
+    const template =
+      '#{{property.toString.constructor.constructor("return process")().mainModule.require("fs").writeFileSync("danger.txt", "")}}';
+
+    const result = message(template, {
+      property: 'description',
+      error: 'expected property to be truthy',
+      path: '',
+      description: null,
+      value: void 0,
+    });
+
+    // Ensure the dangerous expression is not evaluated
+    expect(result).toEqual('');
+
+    const fileExists = fs.existsSync('danger.txt');
+    expect(fileExists).toBe(false);
+    if (fileExists) {
+      fs.unlinkSync('danger.txt');
+    }
   });
 });

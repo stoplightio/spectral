@@ -29,8 +29,11 @@ export class Replacer<V extends Record<string, unknown>> {
       return args.map(String).join('');
     };
 
+    // Include custom functions in the whitelist
+    const allowedFunctions = ['toUpperCase', 'concat'];
     Object.entries(this.functions).forEach(([name, fn]) => {
       functions[name] = fn.bind(values) as (...args: Value[]) => Value;
+      allowedFunctions.push(name); // Add custom functions to the whitelist
     });
 
     const context = values as unknown as Record<string, Value>;
@@ -46,20 +49,21 @@ export class Replacer<V extends Record<string, unknown>> {
         let expression = identifier.trim();
 
         // Block dangerous patterns
-        if (/constructor|process|require|global|mainModule|fs|child_process/.test(expression)) {
+        if (
+          /constructor|process|require|global|mainModule|fs|child_process/.test(expression) ||
+          !allowedFunctions.some(fn => expression.includes(fn))
+        ) {
           // eslint-disable-next-line no-console
           console.error('Disallowed expression detected:', expression);
           return '';
         }
 
-        // Preprocess the expression
         try {
           expression = expression
             .replace(/(\S+)\.toUpperCase\(\)/g, 'toUpperCase($1)')
             .replace(/\s*\+\s*/g, ',')
             .replace(/^(.+)$/, 'concat($1)');
 
-          // Evaluate the expression
           return String(parser.evaluate(expression, context));
         } catch (error) {
           // eslint-disable-next-line no-console
