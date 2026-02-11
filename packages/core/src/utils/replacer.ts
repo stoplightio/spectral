@@ -29,11 +29,11 @@ export class Replacer<V extends Record<string, unknown>> {
       return args.map(String).join('');
     };
 
-    // Include custom functions in the whitelist
     const allowedFunctions = ['toUpperCase', 'concat'];
+
     Object.entries(this.functions).forEach(([name, fn]) => {
       functions[name] = fn.bind(values) as (...args: Value[]) => Value;
-      allowedFunctions.push(name); // Add custom functions to the whitelist
+      allowedFunctions.push(name);
     });
 
     const context = values as unknown as Record<string, Value>;
@@ -48,6 +48,10 @@ export class Replacer<V extends Record<string, unknown>> {
       if (shouldEvaluate) {
         let expression = identifier.trim();
 
+        if (/^[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)*$/.test(expression)) {
+          return String(parser.evaluate(expression, context));
+        }
+
         // Block dangerous patterns
         if (
           /constructor|process|require|global|mainModule|fs|child_process/.test(expression) ||
@@ -58,12 +62,14 @@ export class Replacer<V extends Record<string, unknown>> {
           return '';
         }
 
+        // Preprocess the expression
         try {
           expression = expression
             .replace(/(\S+)\.toUpperCase\(\)/g, 'toUpperCase($1)')
             .replace(/\s*\+\s*/g, ',')
             .replace(/^(.+)$/, 'concat($1)');
 
+          // Evaluate the expression
           return String(parser.evaluate(expression, context));
         } catch (error) {
           // eslint-disable-next-line no-console
