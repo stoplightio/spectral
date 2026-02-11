@@ -29,11 +29,8 @@ export class Replacer<V extends Record<string, unknown>> {
       return args.map(String).join('');
     };
 
-    const allowedFunctions = ['toUpperCase', 'concat'];
-
     Object.entries(this.functions).forEach(([name, fn]) => {
       functions[name] = fn.bind(values) as (...args: Value[]) => Value;
-      allowedFunctions.push(name);
     });
 
     const context = values as unknown as Record<string, Value>;
@@ -48,15 +45,8 @@ export class Replacer<V extends Record<string, unknown>> {
       if (shouldEvaluate) {
         let expression = identifier.trim();
 
-        if (/^[a-zA-Z_$][a-zA-Z0-9_$]*(\.[a-zA-Z_$][a-zA-Z0-9_$]*)*$/.test(expression)) {
-          return String(parser.evaluate(expression, context));
-        }
-
         // Block dangerous patterns
-        if (
-          /constructor|process|require|global|mainModule|fs|child_process/.test(expression) ||
-          !allowedFunctions.some(fn => expression.includes(fn))
-        ) {
+        if (/constructor|process|require|global|mainModule|fs|child_process/.test(expression)) {
           // eslint-disable-next-line no-console
           console.error('Disallowed expression detected:', expression);
           return '';
