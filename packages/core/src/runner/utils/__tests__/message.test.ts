@@ -1,10 +1,12 @@
 import { message } from '../message';
-import * as fs from 'fs';
 
-jest.mock('fs', () => ({
+const mockFs = {
   existsSync: jest.fn().mockReturnValue(false),
   unlinkSync: jest.fn(),
-}));
+};
+
+const fs = mockFs;
+
 describe('message util', () => {
   test('interpolates correctly', () => {
     const template = 'oops... "{{property}}" is missing;error: {{error}}';
