@@ -92,6 +92,8 @@ paths:
                 value:
                   lastName: Baker
                   dateOfBirth: '1985-10-02'
+              Example With External Value:
+                externalValue: ./{asset:externalExample.json}
   /users:
     post:
       summary: Create New User
@@ -194,6 +196,10 @@ components:
 extends: [[spectral:oas, off]]
 rules:
   oas3-schema: error
+====asset:externalExample.json====
+{
+  "lastName": "Watson"
+}
 ====command====
 {bin} lint {document} --ruleset {asset:ruleset.yaml}
 ====stdout====
