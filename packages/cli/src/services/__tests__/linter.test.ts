@@ -97,6 +97,12 @@ describe('Linter service', () => {
     );
   });
 
+  it('demands a file to be present', () => {
+    return expect(run('lint -r ./gh-474/ruleset.js ./gh-474/does-not-exist.json')).rejects.toThrow(
+      'No files found to lint. Please check your file path and extension and try again',
+    );
+  });
+
   describe('when document is local file', () => {
     describe('and the file is expected to have no warnings', () => {
       it('outputs no issues', () => {
