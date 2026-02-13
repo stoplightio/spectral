@@ -2984,6 +2984,7 @@ __metadata:
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.1
     es-aggregate-error: ^1.0.7
+    expr-eval-fork: ^3.0.1
     jsonpath-plus: ^10.3.0
     lodash: ~4.17.23
     lodash.topath: ^4.5.2
@@ -2991,7 +2992,6 @@ __metadata:
     nimma: 0.2.3
     nock: ^13.5.4
     pony-cause: ^1.1.1
-    simple-eval: 1.0.1
     treeify: ^1.1.0
     tslib: ^2.8.1
   languageName: unknown
@@ -6954,6 +6954,13 @@ __metadata:
     jest-message-util: ^29.7.0
     jest-util: ^29.7.0
   checksum: 9257f10288e149b81254a0fda8ffe8d54a7061cd61d7515779998b012579d2b8c22354b0eb901daf0145f347403da582f75f359f4810c007182ad3fb318b5c0c
+  languageName: node
+  linkType: hard
+
+"expr-eval-fork@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "expr-eval-fork@npm:3.0.1"
+  checksum: 8841b2a521415cecd15cb860078ffe99678c59ab427a50c033f91426db12dff6450c72bb0a3f8bbe5c7125a83ccfab47209411b46cf0da5acbb4cf97c91eb362
   languageName: node
   linkType: hard
 
@@ -12853,15 +12860,6 @@ __metadata:
   version: 1.0.1
   resolution: "simple-concat@npm:1.0.1"
   checksum: 4d211042cc3d73a718c21ac6c4e7d7a0363e184be6a5ad25c8a1502e49df6d0a0253979e3d50dbdd3f60ef6c6c58d756b5d66ac1e05cda9cacd2e9fc59e3876a
-  languageName: node
-  linkType: hard
-
-"simple-eval@npm:1.0.1":
-  version: 1.0.1
-  resolution: "simple-eval@npm:1.0.1"
-  dependencies:
-    jsep: ^1.3.6
-  checksum: 280207cfe4538c500f6b41e4d88576cf250337b0042bec8f9f5cf025b3a70e07974e522edd01e69d378767dd73068765d4f46ad55db5c94943c8f3585bff95af
   languageName: node
   linkType: hard
 
