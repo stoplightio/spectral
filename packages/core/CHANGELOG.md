@@ -1,3 +1,10 @@
+# @stoplight/spectral-core [1.21.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.20.0...@stoplight/spectral-core-1.21.0) (2026-01-30)
+
+
+### Features
+
+* **core:** allow extending rulesets with aliases ([#2870](https://github.com/stoplightio/spectral/issues/2870)) ([8db9718](https://github.com/stoplightio/spectral/commit/8db97183cf328e7d3057f09219d7d51d9688d88d))
+
 # @stoplight/spectral-core [1.20.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.19.5...@stoplight/spectral-core-1.20.0) (2025-04-22)
 
 

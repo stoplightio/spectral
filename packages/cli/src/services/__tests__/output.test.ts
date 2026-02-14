@@ -53,8 +53,17 @@ describe('Output service', () => {
 
     it('given <stdout>, print output to console', async () => {
       const output = '{}';
+      const writeMock = jest.spyOn(process.stdout, 'write').mockImplementation((chunk: any, callback?: any) => {
+        if (typeof callback === 'function') {
+          callback();
+        }
+        return true;
+      });
+
       expect(await writeOutput(output, '<stdout>')).toBeUndefined();
-      expect(process.stdout.write).toBeCalledWith(output);
+      expect(writeMock).toHaveBeenCalledWith(output, expect.any(Function));
+
+      writeMock.mockRestore();
     });
   });
 });

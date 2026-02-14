@@ -39,7 +39,12 @@ export async function lint(documents: Array<number | string>, flags: ILintConfig
     }
   }
 
-  for (const targetUri of [...targetUris, ...fileDescriptors]) {
+  const targets = [...targetUris, ...fileDescriptors];
+  if (targets.length === 0) {
+    throw new CLIError(`No files found to lint. Please check your file path and extension and try again`);
+  }
+
+  for (const targetUri of targets) {
     if (flags.verbose === true) {
       console.info(`Linting ${targetUri}`);
     }
