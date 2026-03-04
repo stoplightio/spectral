@@ -104,3 +104,18 @@ jobs:
         yarn lint.eslint
     - name: Lint documentation
       run: yarn lint.prettier
+
+  jsonschema-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    - uses: sourcemeta/jsonschema@v6.0.3
+    - run: jsonschema metaschema --verbose packages/core/src/ruleset/meta/*.json
+    - run: jsonschema lint --verbose packages/core/src/ruleset/meta/*.json
+
+    # As a smoke test to ensure the schemas at least reference each other well 
+    - run: >
+        jsonschema bundle --verbose 
+        packages/core/src/ruleset/meta/ruleset.schema.json 
+        --resolve packages/core/src/ruleset/meta 
+        --ignore packages/core/src/ruleset/meta/js-extensions.json
