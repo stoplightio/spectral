@@ -326,7 +326,7 @@ const ruleset = {
       },
     },
     'path-declarations-must-exist': {
-      message: 'Path parameter declarations must not be empty, ex."/given/{}" is invalid.',
+      message: 'Test-Path parameter declarations must not be empty, ex."/given/{}" is invalid.',
       recommended: true,
       given: '$.paths',
       severity: 0,

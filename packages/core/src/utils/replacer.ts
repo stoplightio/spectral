@@ -18,6 +18,8 @@ export class Replacer<V extends Record<string, unknown>> {
   }
 
   public print(input: string, values: V): string {
+    // eslint-disable-next-line no-console
+    console.log('AAAAAA::', input, values);
     const parser = new Parser();
 
     const functions = parser.functions as Record<string, (...args: Value[]) => Value>;
