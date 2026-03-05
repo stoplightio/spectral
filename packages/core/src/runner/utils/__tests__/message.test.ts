@@ -1,5 +1,12 @@
 import { message } from '../message';
 
+const mockFs = {
+  existsSync: jest.fn().mockReturnValue(false),
+  unlinkSync: jest.fn(),
+};
+
+const fs = mockFs;
+
 describe('message util', () => {
   test('interpolates correctly', () => {
     const template = 'oops... "{{property}}" is missing;error: {{error}}';
@@ -66,5 +73,25 @@ describe('message util', () => {
         value: void 0,
       }),
     ).toEqual('missing :(');
+  });
+
+  test('does not allow arbitrary code execution', () => {
+    const template =
+      '#{{property.toString.constructor.constructor("return process")().mainModule.require("fs").writeFileSync("danger.txt", "")}}';
+
+    const result = message(template, {
+      property: 'description',
+      error: 'expected property to be truthy',
+      path: '',
+      description: null,
+      value: void 0,
+    });
+
+    // Ensure the dangerous expression is not evaluated
+    expect(result).toEqual('');
+
+    // Check if the file was created
+    expect(fs.existsSync('danger.txt')).toBe(false);
+    expect(fs.unlinkSync).not.toHaveBeenCalled();
   });
 });
