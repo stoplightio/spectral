@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-core",
-  "version": "1.21.0",
+  "version": "1.21.0-beta-0.1",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -32,6 +32,9 @@
   },
   "engines": {
     "node": "^16.20 || ^18.18 || >= 20.17"
+  },
+  "resolutions": {
+    "@stoplight/spectral-rulesets": "1.22.0-beta-0.1"
   },
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.3",

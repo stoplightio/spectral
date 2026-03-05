@@ -329,6 +329,7 @@ const ruleset = {
       message: 'Path parameter declarations must not be empty, ex."/given/{}" is invalid.',
       recommended: true,
       given: '$.paths',
+      severity: 0,
       then: {
         field: '@key',
         function: pattern,
