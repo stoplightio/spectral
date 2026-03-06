@@ -2933,13 +2933,13 @@ __metadata:
   dependencies:
     "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
-    "@stoplight/spectral-core": 1.21.0-beta-0.7
+    "@stoplight/spectral-core": 1.21.1
     "@stoplight/spectral-formatters": ^1.4.1
     "@stoplight/spectral-parsers": ^1.0.4
     "@stoplight/spectral-ref-resolver": ^1.0.4
-    "@stoplight/spectral-ruleset-bundler": ^1.6.0
-    "@stoplight/spectral-ruleset-migrator": ^1.11.0
-    "@stoplight/spectral-rulesets": 1.22.0-beta-0.7
+    "@stoplight/spectral-ruleset-bundler": 1.6.1
+    "@stoplight/spectral-ruleset-migrator": 1.11.1
+    "@stoplight/spectral-rulesets": 1.22.1
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
     "@types/es-aggregate-error": ^1.0.2
@@ -2962,7 +2962,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-core@1.21.0-beta-0.7, @stoplight/spectral-core@workspace:packages/core":
+"@stoplight/spectral-core@*, @stoplight/spectral-core@1.21.1, @stoplight/spectral-core@>=1, @stoplight/spectral-core@^1.19.2, @stoplight/spectral-core@^1.19.4, @stoplight/spectral-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-core@workspace:packages/core"
   dependencies:
@@ -2996,35 +2996,6 @@ __metadata:
     tslib: ^2.8.1
   languageName: unknown
   linkType: soft
-
-"@stoplight/spectral-core@npm:*, @stoplight/spectral-core@npm:>=1, @stoplight/spectral-core@npm:^1.19.2, @stoplight/spectral-core@npm:^1.19.4":
-  version: 1.21.0
-  resolution: "@stoplight/spectral-core@npm:1.21.0"
-  dependencies:
-    "@stoplight/better-ajv-errors": 1.0.3
-    "@stoplight/json": ~3.21.0
-    "@stoplight/path": 1.3.2
-    "@stoplight/spectral-parsers": ^1.0.0
-    "@stoplight/spectral-ref-resolver": ^1.0.4
-    "@stoplight/spectral-runtime": ^1.1.2
-    "@stoplight/types": ~13.6.0
-    "@types/es-aggregate-error": ^1.0.2
-    "@types/json-schema": ^7.0.11
-    ajv: ^8.17.1
-    ajv-errors: ~3.0.0
-    ajv-formats: ~2.1.1
-    es-aggregate-error: ^1.0.7
-    jsonpath-plus: ^10.3.0
-    lodash: ~4.17.23
-    lodash.topath: ^4.5.2
-    minimatch: 3.1.2
-    nimma: 0.2.3
-    pony-cause: ^1.1.1
-    simple-eval: 1.0.1
-    tslib: ^2.8.1
-  checksum: 1cfac92ada23c967a525d07e6a594bddd7476d9ee6c8bbdbfa55ed822bccba87ac4f456db4b58acc8304d59ec2f85c11151da87c1e12a7a19436d9bb21b2ccc7
-  languageName: node
-  linkType: hard
 
 "@stoplight/spectral-formats@^1.8.1, @stoplight/spectral-formats@workspace:packages/formats":
   version: 0.0.0-use.local
@@ -3081,7 +3052,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-parsers@*, @stoplight/spectral-parsers@>=1, @stoplight/spectral-parsers@^1.0.0, @stoplight/spectral-parsers@^1.0.4, @stoplight/spectral-parsers@workspace:packages/parsers":
+"@stoplight/spectral-parsers@*, @stoplight/spectral-parsers@>=1, @stoplight/spectral-parsers@^1.0.4, @stoplight/spectral-parsers@workspace:packages/parsers":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-parsers@workspace:packages/parsers"
   dependencies:
@@ -3104,9 +3075,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ruleset-bundler@^1.6.0, @stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler":
-  version: 0.0.0-use.local
-  resolution: "@stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler"
+"@stoplight/spectral-ruleset-bundler@npm:1.6.1":
+  version: 1.6.1
+  resolution: "@stoplight/spectral-ruleset-bundler@npm:1.6.1"
   dependencies:
     "@rollup/plugin-commonjs": ~22.0.2
     "@stoplight/path": 1.3.2
@@ -3117,6 +3088,30 @@ __metadata:
     "@stoplight/spectral-ref-resolver": ^1.0.4
     "@stoplight/spectral-ruleset-migrator": ^1.9.6
     "@stoplight/spectral-rulesets": ">=1"
+    "@stoplight/spectral-runtime": ^1.1.2
+    "@stoplight/types": ^13.6.0
+    "@types/node": "*"
+    pony-cause: 1.1.1
+    rollup: ~2.79.2
+    tslib: ^2.8.1
+    validate-npm-package-name: 3.0.0
+  checksum: a0a492d6da755be574412336ebb78cdccfecb20b307ec61dbed88afcb8f98b177daf27de8e911606c5e9ac49528cbc84eeedd30adbfe27b15af236af455d2ba1
+  languageName: node
+  linkType: hard
+
+"@stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler":
+  version: 0.0.0-use.local
+  resolution: "@stoplight/spectral-ruleset-bundler@workspace:packages/ruleset-bundler"
+  dependencies:
+    "@rollup/plugin-commonjs": ~22.0.2
+    "@stoplight/path": 1.3.2
+    "@stoplight/spectral-core": ">=1"
+    "@stoplight/spectral-formats": ^1.8.1
+    "@stoplight/spectral-functions": ">=1"
+    "@stoplight/spectral-parsers": ">=1"
+    "@stoplight/spectral-ref-resolver": ^1.0.4
+    "@stoplight/spectral-ruleset-migrator": 1.11.4
+    "@stoplight/spectral-rulesets": 1.22.1
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
     "@types/node": "*"
@@ -3131,7 +3126,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-ruleset-migrator@^1.11.0, @stoplight/spectral-ruleset-migrator@^1.9.6, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
+"@stoplight/spectral-ruleset-migrator@1.11.4, @stoplight/spectral-ruleset-migrator@^1.9.6, @stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-ruleset-migrator@workspace:packages/ruleset-migrator"
   dependencies:
@@ -3158,7 +3153,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@stoplight/spectral-rulesets@1.22.0-beta-0.7, @stoplight/spectral-rulesets@workspace:packages/rulesets":
+"@stoplight/spectral-ruleset-migrator@npm:1.11.1":
+  version: 1.11.1
+  resolution: "@stoplight/spectral-ruleset-migrator@npm:1.11.1"
+  dependencies:
+    "@stoplight/json": ~3.21.0
+    "@stoplight/ordered-object-literal": ~1.0.4
+    "@stoplight/path": 1.3.2
+    "@stoplight/spectral-functions": ^1.9.1
+    "@stoplight/spectral-runtime": ^1.1.2
+    "@stoplight/types": ^13.6.0
+    "@stoplight/yaml": ~4.2.3
+    "@types/node": "*"
+    ajv: ^8.17.1
+    ast-types: 0.14.2
+    astring: ^1.9.0
+    reserved: 0.1.2
+    tslib: ^2.8.1
+    validate-npm-package-name: 3.0.0
+  checksum: da050a333d7fac615d8b4d40bf73530a26788bbcfb1595fced42fdd9361044787d7f8fb3ed19c77b18ce4a131b163c16dec36b8cc123d4f4a7d10147280c3ae2
+  languageName: node
+  linkType: hard
+
+"@stoplight/spectral-rulesets@*, @stoplight/spectral-rulesets@1.22.1, @stoplight/spectral-rulesets@>=1, @stoplight/spectral-rulesets@workspace:packages/rulesets":
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-rulesets@workspace:packages/rulesets"
   dependencies:
@@ -3166,7 +3183,7 @@ __metadata:
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.0
     "@stoplight/path": ^1.3.2
-    "@stoplight/spectral-core": 1.21.0-beta-0.7
+    "@stoplight/spectral-core": 1.21.1
     "@stoplight/spectral-formats": ^1.8.1
     "@stoplight/spectral-functions": ^1.9.1
     "@stoplight/spectral-parsers": "*"
@@ -3185,29 +3202,6 @@ __metadata:
     tslib: ^2.8.1
   languageName: unknown
   linkType: soft
-
-"@stoplight/spectral-rulesets@npm:*, @stoplight/spectral-rulesets@npm:>=1":
-  version: 1.22.0
-  resolution: "@stoplight/spectral-rulesets@npm:1.22.0"
-  dependencies:
-    "@asyncapi/specs": ^6.8.0
-    "@stoplight/better-ajv-errors": 1.0.3
-    "@stoplight/json": ^3.17.0
-    "@stoplight/spectral-core": ^1.19.4
-    "@stoplight/spectral-formats": ^1.8.1
-    "@stoplight/spectral-functions": ^1.9.1
-    "@stoplight/spectral-runtime": ^1.1.2
-    "@stoplight/types": ^13.6.0
-    "@types/json-schema": ^7.0.7
-    ajv: ^8.17.1
-    ajv-formats: ~2.1.1
-    json-schema-traverse: ^1.0.0
-    leven: 3.1.0
-    lodash: ~4.17.21
-    tslib: ^2.8.1
-  checksum: 8b7f9969f545d897ee619bf9c5b81068d31f107db24e0c52c904b5b1e0aea2a5ed0cc635a4cc707ef0af7d6d803b641f110ecf4181863718887cea0d34e40c4e
-  languageName: node
-  linkType: hard
 
 "@stoplight/spectral-runtime@^1.1.2, @stoplight/spectral-runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
@@ -10058,7 +10052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.23, lodash@npm:^4.17.4, lodash@npm:~4.17.21, lodash@npm:~4.17.23":
+"lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.23, lodash@npm:^4.17.4, lodash@npm:~4.17.23":
   version: 4.17.23
   resolution: "lodash@npm:4.17.23"
   checksum: 7daad39758a72872e94651630fbb54ba76868f904211089721a64516ce865506a759d9ad3d8ff22a2a49a50a09db5d27c36f22762d21766e47e3ba918d6d7bab
@@ -12912,15 +12906,6 @@ __metadata:
   version: 1.0.1
   resolution: "simple-concat@npm:1.0.1"
   checksum: 4d211042cc3d73a718c21ac6c4e7d7a0363e184be6a5ad25c8a1502e49df6d0a0253979e3d50dbdd3f60ef6c6c58d756b5d66ac1e05cda9cacd2e9fc59e3876a
-  languageName: node
-  linkType: hard
-
-"simple-eval@npm:1.0.1":
-  version: 1.0.1
-  resolution: "simple-eval@npm:1.0.1"
-  dependencies:
-    jsep: ^1.3.6
-  checksum: 280207cfe4538c500f6b41e4d88576cf250337b0042bec8f9f5cf025b3a70e07974e522edd01e69d378767dd73068765d4f46ad55db5c94943c8f3585bff95af
   languageName: node
   linkType: hard
 
