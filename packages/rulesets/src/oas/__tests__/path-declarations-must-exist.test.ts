@@ -23,7 +23,7 @@ testRule('path-declarations-must-exist', [
         message: 'Path parameter declarations must not be empty, ex."/given/{}" is invalid.',
         path: ['paths', '/path/{}'],
 
-        severity: DiagnosticSeverity.Warning,
+        severity: DiagnosticSeverity.Error,
       },
     ],
   },
