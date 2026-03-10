@@ -55,6 +55,23 @@ const results: IRuleResult[] = [
       },
     },
   },
+  {
+    code: 'invalid-ref',
+    message: 'i should not have any documentation url link',
+    path: ['paths'],
+    severity: DiagnosticSeverity.Error,
+    source: './src/__tests__/fixtures/petstore.oas2.yaml',
+    range: {
+      start: {
+        line: 21,
+        character: 0,
+      },
+      end: {
+        line: 30,
+        character: 1,
+      },
+    },
+  },
 ];
 
 const context = {
@@ -94,6 +111,7 @@ const expectedMd = String.raw`
 | [operation-description](https://rule-documentation-url.com)            | paths.\/pets.get.description | paths.\/pets.get.description is not truthy   | Error    | 1:0   | 10:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
 | [operation-tags](https://ruleset-documentation-url.com#operation-tags) | paths.\/pets.get.tags        | paths.\/pets.get.tags is not truthy          | Warning  | 11:0  | 20:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
 | rule-from-other-ruleset                                                | paths                        | i should not have any documentation url link | Warning  | 21:0  | 30:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
+| invalid-ref                                                            | paths                        | i should not have any documentation url link | Error    | 21:0  | 30:1 | .\/src\/\_\_tests\_\_\/fixtures\/petstore.oas2.yaml |
 `;
 
 describe('Markdown formatter', () => {
