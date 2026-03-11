@@ -29,7 +29,7 @@
     "@stoplight/types": "^13.6.0",
     "@stoplight/yaml": "~4.2.3",
     "@types/node": "*",
-    "ajv": "^8.17.1",
+    "ajv": "^8.18.0",
     "ast-types": "0.14.2",
     "astring": "^1.9.0",
     "reserved": "0.1.2",
