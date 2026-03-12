@@ -4,7 +4,6 @@ import { oas2 } from '@stoplight/spectral-formats';
 import { pattern, truthy } from '@stoplight/spectral-functions';
 import * as path from '@stoplight/path';
 import { DiagnosticSeverity } from '@stoplight/types';
-import AggregateError = require('es-aggregate-error');
 
 import { Ruleset } from '../ruleset';
 import { RulesetDefinition } from '../types';

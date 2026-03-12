@@ -3,7 +3,6 @@ import '@stoplight/spectral-test-utils/matchers';
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import truthy from '../truthy';
 import testFunction from './__helpers__/tester';
-import AggregateError = require('es-aggregate-error');
 
 const runTruthy = testFunction.bind(null, truthy);
 

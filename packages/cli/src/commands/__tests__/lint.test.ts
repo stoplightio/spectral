@@ -3,7 +3,6 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '@stoplight/spectral-core';
 import * as process from 'process';
 import { ErrorWithCause } from 'pony-cause';
-import AggregateError from 'es-aggregate-error';
 
 import { lint } from '../../services/linter';
 import { formatOutput, writeOutput } from '../../services/output';

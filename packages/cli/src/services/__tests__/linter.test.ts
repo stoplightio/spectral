@@ -6,7 +6,6 @@ import * as yargs from 'yargs';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import '@stoplight/spectral-test-utils/matchers';
-import AggregateError = require('es-aggregate-error');
 import * as process from 'process';
 
 import lintCommand from '../../commands/lint';
