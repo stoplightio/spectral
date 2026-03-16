@@ -102,6 +102,55 @@ describe('Ruleset', () => {
       expect(getEnabledRules(rules)).toEqual([]);
     });
 
+    it('given nested extends with severity set to off and intermediate rule enable', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-with-intermediate-enable'));
+      expect(Object.keys(rules)).toEqual(['my-rule', 'my-rule-2', 'my-rule-3']);
+
+      // parent re-enables my-rule and my-rule-3, but child extends with 'off' so all should be disabled
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
+    it('given deep nesting with off at the end', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-deep-nesting'));
+      expect(Object.keys(rules)).toEqual(['my-rule']);
+
+      // great-grandparent -> grandparent (enables) -> parent (enables) -> child (off)
+      // All should be disabled
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
+    it('given mixed severity modifiers followed by off', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-mixed-severities'));
+      expect(Object.keys(rules)).toEqual(['my-rule']);
+
+      // parent sets severity to 'warn', child extends with 'off' - should be disabled
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
+    it('given object rule modification followed by off', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-object-modification'));
+      expect(Object.keys(rules)).toEqual(['my-rule']);
+
+      // parent modifies rule with object, child extends with 'off' - should be disabled
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
+    it('given non-recommended rule enabled then off', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-non-recommended'));
+      expect(Object.keys(rules)).toEqual(['my-rule']);
+
+      // grandparent has recommended:false, parent enables with true, child extends with 'off'
+      expect(getEnabledRules(rules)).toEqual([]);
+    });
+
+    it('given child re-enables rule after extending with off', async () => {
+      const { rules } = await loadRuleset(import('./__fixtures__/severity/off-then-reenable'));
+      expect(Object.keys(rules)).toEqual(['my-rule', 'my-rule-2']);
+
+      // parent has rules, child extends with 'off' but explicitly re-enables my-rule
+      expect(getEnabledRules(rules)).toEqual(['my-rule']);
+    });
+
     it('given nested extends with severity set to off and explicit override to error', async () => {
       const { rules } = await loadRuleset(import('./__fixtures__/severity/error'));
       expect(Object.keys(rules)).toEqual([

@@ -1,0 +1,37 @@
+name: install-ldid
+description: 'Install ldid binary'
+inputs:
+  version:
+    description: 'Version of ldid to install'
+    required: false
+    default: 2.1.5-procursus7
+runs:
+  using: composite
+  steps:
+  - name: restore_cache
+    uses: actions/cache@v4.3.0
+    with:
+      key: ldid-binary-${{ inputs.version }}-{{ arch }}
+      path: UPDATE_ME
+      restore-keys: ldid-binary-${{ inputs.version }}-{{ arch }}
+  - name: Build ldid
+    run: |-
+      sudo apt-get update -y
+      sudo apt-get -y install libplist-dev
+      if [ ! -d ldid ]
+      then
+        curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v${{ inputs.version }}.tar.gz | tar -xz
+        mv ldid-${{ inputs.version }} ldid
+        make -C ldid
+      fi
+    working-directory: "/tmp"
+    shell: bash
+  - name: save_cache
+    uses: actions/cache@v4.3.0
+    with:
+      path: "/tmp/ldid"
+      key: ldid-binary-${{ inputs.version }}-{{ arch }}
+  - name: Install ldid
+    run: sudo make install
+    working-directory: "/tmp/ldid"
+    shell: bash

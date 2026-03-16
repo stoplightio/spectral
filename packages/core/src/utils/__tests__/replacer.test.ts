@@ -92,3 +92,29 @@ describe('Replacer', () => {
     ).toThrow();
   });
 });
+
+describe('Replacer Security Tests', () => {
+  let replacer: Replacer<Record<string, unknown>>;
+
+  beforeEach(() => {
+    replacer = new Replacer(1);
+  });
+
+  it('should block dangerous patterns', () => {
+    const input = '#{process.mainModule.require("fs").writeFileSync("test.txt", "content")}';
+    const result = replacer.print(input, {});
+    expect(result).toBe('');
+  });
+
+  it('should evaluate safe expressions', () => {
+    const input = '#{toUpperCase("hello")}';
+    const result = replacer.print(input, {});
+    expect(result).toBe('HELLO');
+  });
+
+  it('should handle invalid expressions gracefully', () => {
+    const input = '#{invalidFunction()}';
+    const result = replacer.print(input, {});
+    expect(result).toBe('');
+  });
+});

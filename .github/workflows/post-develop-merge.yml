@@ -1,0 +1,8 @@
+name: Post-merge to develop workflow
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  run-commit-workflow:
+    uses: ./.github/workflows/commit.yml

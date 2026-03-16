@@ -292,7 +292,8 @@ export class Ruleset {
         const rule = mergeRule(rules[name], name, definition, this);
         rules[name] = rule;
 
-        if (rule.owner === this) {
+        // When extending with explicit severity (e.g., "off"), apply it to modified rules too
+        if (rule.owner === this || this.#context[EXPLICIT_SEVERITY] === true) {
           rule.enabled = Rule.isEnabled(rule, this.#context.severity);
         }
 
