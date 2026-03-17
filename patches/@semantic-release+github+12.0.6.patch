@@ -1,0 +1,56 @@
+diff --git a/node_modules/@semantic-release/github/index.js b/node_modules/@semantic-release/github/index.js
+index 2d1aa8b8..8d383a4b 100644
+--- a/node_modules/@semantic-release/github/index.js
++++ b/node_modules/@semantic-release/github/index.js
+@@ -4,7 +4,6 @@ import { defaultTo, castArray } from "lodash-es";
+
+ import verifyGitHub from "./lib/verify.js";
+ import addChannelGitHub from "./lib/add-channel.js";
+-import publishGitHub from "./lib/publish.js";
+ import successGitHub from "./lib/success.js";
+ import failGitHub from "./lib/fail.js";
+ import { SemanticReleaseOctokit } from "./lib/octokit.js";
+@@ -52,19 +51,6 @@ export async function verifyConditions(
+   verified = true;
+ }
+
+-export async function publish(
+-  pluginConfig,
+-  context,
+-  { Octokit = SemanticReleaseOctokit } = {},
+-) {
+-  if (!verified) {
+-    await verifyGitHub(pluginConfig, context, { Octokit });
+-    verified = true;
+-  }
+-
+-  return publishGitHub(pluginConfig, context, { Octokit });
+-}
+-
+ export async function addChannel(
+   pluginConfig,
+   context,
+diff --git a/node_modules/@semantic-release/github/lib/success.js b/node_modules/@semantic-release/github/lib/success.js
+index 48246f29..0aa0a549 100644
+--- a/node_modules/@semantic-release/github/lib/success.js
++++ b/node_modules/@semantic-release/github/lib/success.js
+@@ -16,7 +16,7 @@ const debug = debugFactory("semantic-release:github");
+
+ export default async function success(pluginConfig, context, { Octokit }) {
+   const {
+-    options: { repositoryUrl },
++    options: { repositoryUrl, tagFormat },
+     commits,
+     nextRelease,
+     releases,
+@@ -73,7 +73,9 @@ export default async function success(pluginConfig, context, { Octokit }) {
+       githubUrl ? { hosts: [githubUrl] } : {},
+     );
+     const releaseInfos = releases.filter((release) => Boolean(release.name));
+-    const shas = commits.map(({ hash }) => hash);
++    const pkgName = tagFormat.replace('@stoplight/spectral-', '').replace('-${version}', '');
++    const pkgNameRegexp = RegExp(`^[a-z]+\\(${pkgName}\\):`);
++    const shas = commits.filter(({ subject }) => pkgNameRegexp.test(subject)).map(({ hash }) => hash);
+
+     // Get associatedPRs
+     const associatedPRs = await inChunks(shas, 100, async (chunk) => {
