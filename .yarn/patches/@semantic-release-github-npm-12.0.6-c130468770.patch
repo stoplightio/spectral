@@ -1,0 +1,57 @@
+diff --git a/index.js b/index.js
+index 2d1aa8b82708936ddff5ac2dc16b959b9b3e6300..c6fdfeb6973b6ccba57261a60edfb3d26d52d182 100644
+--- a/index.js
++++ b/index.js
+@@ -4,7 +4,7 @@ import { defaultTo, castArray } from "lodash-es";
+ 
+ import verifyGitHub from "./lib/verify.js";
+ import addChannelGitHub from "./lib/add-channel.js";
+-import publishGitHub from "./lib/publish.js";
++
+ import successGitHub from "./lib/success.js";
+ import failGitHub from "./lib/fail.js";
+ import { SemanticReleaseOctokit } from "./lib/octokit.js";
+@@ -52,19 +52,6 @@ export async function verifyConditions(
+   verified = true;
+ }
+ 
+-export async function publish(
+-  pluginConfig,
+-  context,
+-  { Octokit = SemanticReleaseOctokit } = {},
+-) {
+-  if (!verified) {
+-    await verifyGitHub(pluginConfig, context, { Octokit });
+-    verified = true;
+-  }
+-
+-  return publishGitHub(pluginConfig, context, { Octokit });
+-}
+-
+ export async function addChannel(
+   pluginConfig,
+   context,
+diff --git a/lib/success.js b/lib/success.js
+index 48246f29a2162ce0abc0d044112de94bab39becb..d6616db6e897259ad168b5080a1bb59d56d1805e 100644
+--- a/lib/success.js
++++ b/lib/success.js
+@@ -16,7 +16,7 @@ const debug = debugFactory("semantic-release:github");
+ 
+ export default async function success(pluginConfig, context, { Octokit }) {
+   const {
+-    options: { repositoryUrl },
++    options: { repositoryUrl, tagFormat },
+     commits,
+     nextRelease,
+     releases,
+@@ -73,7 +73,9 @@ export default async function success(pluginConfig, context, { Octokit }) {
+       githubUrl ? { hosts: [githubUrl] } : {},
+     );
+     const releaseInfos = releases.filter((release) => Boolean(release.name));
+-    const shas = commits.map(({ hash }) => hash);
++    const pkgName = tagFormat.replace('@stoplight/spectral-', '').replace('-${version}', '');
++    const pkgNameRegexp =  RegExp(`^[a-z]+\\(${pkgName}\\):`);
++    const shas = commits.filter(({ subject }) => pkgNameRegexp.test(subject)).map(({hash}) => hash);
+ 
+     // Get associatedPRs
+     const associatedPRs = await inChunks(shas, 100, async (chunk) => {
