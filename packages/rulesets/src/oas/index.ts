@@ -159,7 +159,7 @@ const ruleset = {
       severity: 'warn',
       recommended: true,
       message: '{{error}}',
-      given: ["$..[?(@property !== 'properties' && @ && @.enum)]"],
+      given: ["$..[?(@property !== 'properties' && @.enum && @.enum.constructor.name === 'Array')]"],
       then: {
         field: 'enum',
         function: oasSchema,

@@ -105,4 +105,57 @@ testRule('duplicated-entry-in-enum', [
       },
     ],
   },
+
+  {
+    name: 'oas3: enum as discriminator mapping key',
+    document: {
+      openapi: '3.0.2',
+      components: {
+        schemas: {
+          Pet: {
+            type: 'object',
+            discriminator: {
+              propertyName: 'petType',
+              mapping: {
+                enum: '#/components/schemas/Cat',
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'oas3: enum as example value property',
+    document: {
+      openapi: '3.0.2',
+      paths: {
+        '/test': {
+          get: {
+            responses: {
+              '200': {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    examples: {
+                      sample: {
+                        value: {
+                          foo: {
+                            enum: 'someString',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);
