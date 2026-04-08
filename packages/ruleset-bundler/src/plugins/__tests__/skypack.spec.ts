@@ -50,9 +50,9 @@ export default AggregateError;
         plugins: [skypack(), virtualFs(io)],
       });
 
-      expect(code).toEqual(`import upperCase from 'https://cdn.skypack.dev/lodash';
-import fetch from 'https://cdn.skypack.dev/isomorphic-fetch';
-import shim from 'https://cdn.skypack.dev/aggregate-error/polyfill';
+      expect(code).toEqual(`import upperCase from 'https://esm.run/lodash';
+import fetch from 'https://esm.run/isomorphic-fetch';
+import shim from 'https://esm.run/aggregate-error/polyfill';
 
 shim();
 
@@ -76,7 +76,7 @@ export default hooks.useTimeout;`,
         plugins: [skypack(), virtualFs(io)],
       });
 
-      expect(code).toEqual(`import hooks from 'https://cdn.skypack.dev/preact/hooks';
+      expect(code).toEqual(`import hooks from 'https://esm.run/preact/hooks';
 
 var input = hooks.useTimeout;
 
@@ -148,7 +148,7 @@ export default createRulesetFunction({}, input => {
     });
 
     expect(code).toEqual(`import { createRulesetFunction } from '@stoplight/spectral-core/ruleset/validation';
-import { parse } from 'https://cdn.skypack.dev/@stoplight/yaml';
+import { parse } from 'https://esm.run/@stoplight/yaml';
 import { isPlainObject } from '@stoplight/json';
 
 var input = createRulesetFunction({}, input => {

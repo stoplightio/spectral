@@ -19,7 +19,7 @@ describe('Url Plugin', () => {
 
   it('should handle absolute imports/exports', async () => {
     serveAssets({
-      '/p/spectral.js': `import {upperCase} from 'https://cdn.skypack.dev/lodash';
+      '/p/spectral.js': `import {upperCase} from 'https://esm.run/lodash';
 export default {
   rules: {
     'upper-case': {
@@ -31,7 +31,7 @@ export default {
   },
 };`,
 
-      'https://cdn.skypack.dev/lodash': `/*
+      'https://esm.run/lodash': `/*
  * Skypack CDN - lodash@4.17.21
  *
  * Learn more:
@@ -39,15 +39,15 @@ export default {
  *   📘 Skypack Documentation: https://www.skypack.dev/docs
  *
  * Pinned URL: (Optimized for Production)
- *   ▶️ Normal: https://cdn.skypack.dev/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports/optimized/lodash.js
- *   ⏩ Minified: https://cdn.skypack.dev/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports,min/optimized/lodash.js
+ *   ▶️ Normal: https://esm.run/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports/optimized/lodash.js
+ *   ⏩ Minified: https://esm.run/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports,min/optimized/lodash.js
  *
  */
 
 // Browser-Optimized Imports (Don't directly import the URLs below in your application!)
 export * from '/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js';
 export {default} from '/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js';`,
-      'https://cdn.skypack.dev/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js': `export function upperCase() {}
+      'https://esm.run/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js': `export function upperCase() {}
 
 export default {};`,
     });
@@ -69,8 +69,8 @@ var lodash = {};
  *   📘 Skypack Documentation: https://www.skypack.dev/docs
  *
  * Pinned URL: (Optimized for Production)
- *   ▶️ Normal: https://cdn.skypack.dev/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports/optimized/lodash.js
- *   ⏩ Minified: https://cdn.skypack.dev/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports,min/optimized/lodash.js
+ *   ▶️ Normal: https://esm.run/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports/optimized/lodash.js
+ *   ⏩ Minified: https://esm.run/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports,min/optimized/lodash.js
  *
  */
 
@@ -121,7 +121,7 @@ export { isPlainObject };
 
   it('should handle network errors', async () => {
     serveAssets({
-      '/p/spectral.js': `import {upperCase} from 'https://cdn.skypack.dev/lodash';
+      '/p/spectral.js': `import {upperCase} from 'https://esm.run/lodash';
 export default {
   rules: {
     'upper-case': {
@@ -135,7 +135,7 @@ export default {
     });
 
     mockResponses({
-      'https://cdn.skypack.dev/lodash': {
+      'https://esm.run/lodash': {
         404: 'not found',
       },
     });
@@ -145,6 +145,6 @@ export default {
         target: 'node',
         plugins: [url(io), virtualFs(io)],
       }),
-    ).rejects.toThrowError(/Could not load https:\/\/cdn.skypack.dev\/lodash/);
+    ).rejects.toThrowError(/Could not load https:\/\/esm.run\/lodash/);
   });
 });
