@@ -50,7 +50,7 @@ export default AggregateError;
         plugins: [skypack(), virtualFs(io)],
       });
 
-      expect(code).toEqual(`import upperCase from 'https://cdn.jsdelivr.net/npm/lodash/+esm';
+      expect(code).toEqual(`import upperCase from 'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm';
 import fetch from 'https://cdn.jsdelivr.net/npm/isomorphic-fetch/+esm';
 import shim from 'https://cdn.jsdelivr.net/npm/aggregate-error/polyfill/+esm';
 

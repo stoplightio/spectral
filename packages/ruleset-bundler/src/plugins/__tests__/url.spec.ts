@@ -19,7 +19,7 @@ describe('Url Plugin', () => {
 
   it('should handle absolute imports/exports', async () => {
     serveAssets({
-      '/p/spectral.js': `import {upperCase} from 'https://cdn.jsdelivr.net/npm/lodash/+esm';
+      '/p/spectral.js': `import upperCase from 'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm';
 export default {
   rules: {
     'upper-case': {
@@ -31,25 +31,9 @@ export default {
   },
 };`,
 
-      'https://cdn.jsdelivr.net/npm/lodash/+esm': `/*
- * Skypack CDN - lodash@4.17.21
- *
- * Learn more:
- *   📙 Package Documentation: https://www.skypack.dev/view/lodash
- *   📘 Skypack Documentation: https://www.skypack.dev/docs
- *
- * Pinned URL: (Optimized for Production)
- *   ▶️ Normal: https://cdn.jsdelivr.net/npm/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports/optimized/lodash.js
- *   ⏩ Minified: https://cdn.jsdelivr.net/npm/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports,min/optimized/lodash.js
- *
- */
-
-// Browser-Optimized Imports (Don't directly import the URLs below in your application!)
-export * from '/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js';
-export {default} from '/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js';`,
-      'https://cdn.jsdelivr.net/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js': `export function upperCase() {}
-
-export default {};`,
+      'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm': `export * from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';
+export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';`,
+      'https://cdn.jsdelivr.net/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js': `export default function upperCase() {}`,
     });
 
     const code = await bundleRuleset('/p/spectral.js', {
@@ -58,21 +42,6 @@ export default {};`,
     });
 
     expect(code).toEqual(`function upperCase() {}
-
-var lodash = {};
-
-/*
- * Skypack CDN - lodash@4.17.21
- *
- * Learn more:
- *   📙 Package Documentation: https://www.skypack.dev/view/lodash
- *   📘 Skypack Documentation: https://www.skypack.dev/docs
- *
- * Pinned URL: (Optimized for Production)
- *   ▶️ Normal: https://cdn.jsdelivr.net/npm/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports/optimized/lodash.js
- *   ⏩ Minified: https://cdn.jsdelivr.net/npm/pin/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/mode=imports,min/optimized/lodash.js
- *
- */
 
 var spectral = {
   rules: {
@@ -121,7 +90,7 @@ export { isPlainObject };
 
   it('should handle network errors', async () => {
     serveAssets({
-      '/p/spectral.js': `import {upperCase} from 'https://cdn.jsdelivr.net/npm/lodash/+esm';
+      '/p/spectral.js': `import upperCase from 'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm';
 export default {
   rules: {
     'upper-case': {
@@ -135,7 +104,7 @@ export default {
     });
 
     mockResponses({
-      'https://cdn.jsdelivr.net/npm/lodash/+esm': {
+      'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm': {
         404: 'not found',
       },
     });
@@ -145,6 +114,6 @@ export default {
         target: 'node',
         plugins: [url(io), virtualFs(io)],
       }),
-    ).rejects.toThrowError(/Error fetching https:\/\/cdn\.jsdelivr\.net\/npm\/lodash\/\+esm: Not Found/);
+    ).rejects.toThrowError(/Error fetching https:\/\/cdn\.jsdelivr\.net\/npm\/lodash\.uppercase\/\+esm: Not Found/);
   });
 });
