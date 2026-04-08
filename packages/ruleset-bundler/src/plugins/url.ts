@@ -20,8 +20,8 @@ export const url = ({ fetch }: IO): Plugin => ({
 
     if (importer !== void 0 && isURL(importer)) {
       const url = new URL(importer);
-      // we change https://esm.run/{name-of-the-package}
-      // to https://esm.run/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js
+      // we change https://cdn.jsdelivr.net/npm/{name-of-the-package}/+esm
+      // to https://cdn.jsdelivr.net/npm/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js
       if (isAbsolute(id)) {
         url.pathname = id;
       } else {

@@ -14,7 +14,7 @@ describe('isPackageImport util', () => {
     expect(isPackageImport(input)).toBe(true);
   });
 
-  it.each(['', '/nimma/legacy', 'path', 'https://esm.run/@stoplight/spectral-core'])(
+  it.each(['', '/nimma/legacy', 'path', 'https://cdn.jsdelivr.net/npm/@stoplight/spectral-core/+esm'])(
     'given invalid %s import, should return false',
     input => {
       expect(isPackageImport(input)).toBe(false);

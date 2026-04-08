@@ -1,6 +1,6 @@
 import { parse } from '@stoplight/path';
 
-const KNOWN_PROVIDERS = ['unpkg.com', 'esm.run'];
+const KNOWN_PROVIDERS = ['unpkg.com', 'cdn.jsdelivr.net'];
 
 export function isKnownNpmRegistry(uri: string): boolean {
   const { protocol, origin } = parse(uri);
