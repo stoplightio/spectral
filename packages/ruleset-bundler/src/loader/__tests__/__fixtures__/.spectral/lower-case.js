@@ -1,4 +1,4 @@
-import lowerCase from 'https://cdn.jsdelivr.net/npm/lodash.lowercase/+esm';
+import lowerCase from 'https://esm.sh/lodash.lowercase';
 
 export default input => {
   if (lowerCase(input) !== input) {

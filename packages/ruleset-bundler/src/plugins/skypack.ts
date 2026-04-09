@@ -15,7 +15,7 @@ export const skypack = (opts?: { ignoreList?: (string | RegExp)[] }): Plugin => 
         opts.ignoreList.some(ignored => (typeof ignored === 'string' ? ignored === id : ignored.test(id)));
 
       if (!isIgnored && isPackageImport(id)) {
-        return `https://cdn.jsdelivr.net/npm/${id}/+esm`;
+        return `https://esm.sh/${id}`;
       }
 
       return;

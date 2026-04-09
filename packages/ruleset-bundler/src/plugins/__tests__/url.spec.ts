@@ -19,7 +19,7 @@ describe('Url Plugin', () => {
 
   it('should handle absolute imports/exports', async () => {
     serveAssets({
-      '/p/spectral.js': `import upperCase from 'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm';
+      '/p/spectral.js': `import upperCase from 'https://esm.sh/lodash';
 export default {
   rules: {
     'upper-case': {
@@ -31,9 +31,9 @@ export default {
   },
 };`,
 
-      'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm': `export * from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';
+      'https://esm.sh/lodash': `export * from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';
 export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';`,
-      'https://cdn.jsdelivr.net/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js': `export default function upperCase() {}`,
+      'https://esm.sh/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js': `export default function upperCase() {}`,
     });
 
     const code = await bundleRuleset('/p/spectral.js', {
@@ -90,7 +90,7 @@ export { isPlainObject };
 
   it('should handle network errors', async () => {
     serveAssets({
-      '/p/spectral.js': `import upperCase from 'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm';
+      '/p/spectral.js': `import upperCase from 'https://esm.sh/lodash';
 export default {
   rules: {
     'upper-case': {
@@ -104,7 +104,7 @@ export default {
     });
 
     mockResponses({
-      'https://cdn.jsdelivr.net/npm/lodash.uppercase/+esm': {
+      'https://esm.sh/lodash': {
         404: 'not found',
       },
     });
@@ -114,6 +114,7 @@ export default {
         target: 'node',
         plugins: [url(io), virtualFs(io)],
       }),
-    ).rejects.toThrowError(/Error fetching https:\/\/cdn\.jsdelivr\.net\/npm\/lodash\.uppercase\/\+esm: Not Found/);
+    ).rejects.toThrowError(/Could not load https:\/\/esm\.sh\/lodash/);
+
   });
 });
