@@ -1,3 +1,11 @@
+## @stoplight/spectral-cli [6.15.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.15.0...@stoplight/spectral-cli-6.15.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* **cli:** fix bug where output gets truncated when too long ([#2862](https://github.com/stoplightio/spectral/issues/2862)) ([0e6fd33](https://github.com/stoplightio/spectral/commit/0e6fd335f42214045f3c08b3106125f5155d4b97))
+* **cli:** throw error if no file found to lint ([#2778](https://github.com/stoplightio/spectral/issues/2778)) ([3e20072](https://github.com/stoplightio/spectral/commit/3e20072de5849a1372eb242cf71783d4d8503b20))
+
 # @stoplight/spectral-cli [6.15.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.14.3...@stoplight/spectral-cli-6.15.0) (2025-04-22)
 
 
