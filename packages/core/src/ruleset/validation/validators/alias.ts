@@ -24,15 +24,32 @@ function getExtended(extended: Record<string, unknown>, parsedPath: string[]): R
   if (Number.isNaN(index)) return null;
   if (index < 0 && index >= extended.length) return null;
 
-  const actualExtended: Record<string, unknown> = extended[index] as Record<string, unknown>;
+  const item: Record<string, unknown> = extended[index] as Record<string, unknown>;
+  const isTuple = Array.isArray(item);
+  const actualExtended: {
+    aliases?: Record<string, unknown>;
+    overrides?: Record<string, unknown>;
+    extends?: Record<string, unknown>;
+  } = (isTuple ? item[0] : item) as Record<string, unknown>;
   const aliases =
     isPlainObject(actualExtended) && isPlainObject(actualExtended.aliases) ? actualExtended.aliases : null;
 
-  if (parsedPath.length >= 4 && parsedPath[2] === 'overrides') {
+  const overridesPathIndex = isTuple ? 3 : 2;
+  if (parsedPath.length >= overridesPathIndex + 2 && parsedPath[overridesPathIndex] === 'overrides') {
     return {
       ...aliases,
-      ...getOverrides(actualExtended.overrides, parsedPath[3]),
+      ...getOverrides(actualExtended.overrides, parsedPath[overridesPathIndex + 1]),
     };
+  }
+
+  if (parsedPath.length >= overridesPathIndex + 2 && parsedPath[overridesPathIndex] === 'extends') {
+    if (isPlainObject(actualExtended) && Array.isArray(actualExtended.extends)) {
+      const nestedAliases = getExtended(
+        actualExtended.extends as Record<string, unknown>,
+        parsedPath.slice(overridesPathIndex),
+      );
+      return nestedAliases ?? aliases;
+    }
   }
 
   return aliases;

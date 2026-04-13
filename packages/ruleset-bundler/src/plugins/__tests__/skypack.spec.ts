@@ -5,7 +5,7 @@ import { fetch } from '@stoplight/spectral-runtime';
 import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
-import { skypack } from '../skypack';
+import { esmCdn } from '../skypack';
 
 describe('Skypack Plugin', () => {
   let io: IO;
@@ -47,12 +47,12 @@ export default AggregateError;
 
       const code = await bundleRuleset('/tmp/input.js', {
         target,
-        plugins: [skypack(), virtualFs(io)],
+        plugins: [esmCdn(), virtualFs(io)],
       });
 
-      expect(code).toEqual(`import upperCase from 'https://cdn.skypack.dev/lodash';
-import fetch from 'https://cdn.skypack.dev/isomorphic-fetch';
-import shim from 'https://cdn.skypack.dev/aggregate-error/polyfill';
+      expect(code).toEqual(`import upperCase from 'https://esm.sh/lodash';
+import fetch from 'https://esm.sh/isomorphic-fetch';
+import shim from 'https://esm.sh/aggregate-error/polyfill';
 
 shim();
 
@@ -73,10 +73,10 @@ export default hooks.useTimeout;`,
 
       const code = await bundleRuleset('/tmp/input.js', {
         target,
-        plugins: [skypack(), virtualFs(io)],
+        plugins: [esmCdn(), virtualFs(io)],
       });
 
-      expect(code).toEqual(`import hooks from 'https://cdn.skypack.dev/preact/hooks';
+      expect(code).toEqual(`import hooks from 'https://esm.sh/preact/hooks';
 
 var input = hooks.useTimeout;
 
@@ -94,7 +94,7 @@ assert.ok(upperCase('bar'));`,
 
       const code = await bundleRuleset('/tmp/input.js', {
         target,
-        plugins: [skypack(), virtualFs(io)],
+        plugins: [esmCdn(), virtualFs(io)],
       });
 
       expect(code).toEqual(`import upperCase from 'node:lodash';
@@ -114,7 +114,7 @@ fs.writeFileSync(path.join(__dirname, './output.js'), 'export default {}');`,
 
       const code = await bundleRuleset('/tmp/input.js', {
         target,
-        plugins: [skypack(), virtualFs(io)],
+        plugins: [esmCdn(), virtualFs(io)],
       });
 
       expect(code).toEqual(`import * as fs from 'fs';
@@ -140,7 +140,7 @@ export default createRulesetFunction({}, input => {
     const code = await bundleRuleset('/tmp/input.js', {
       target: 'browser',
       plugins: [
-        skypack({
+        esmCdn({
           ignoreList: [/^@stoplight\/spectral-/, '@stoplight/json'],
         }),
         virtualFs(io),
@@ -148,7 +148,7 @@ export default createRulesetFunction({}, input => {
     });
 
     expect(code).toEqual(`import { createRulesetFunction } from '@stoplight/spectral-core/ruleset/validation';
-import { parse } from 'https://cdn.skypack.dev/@stoplight/yaml';
+import { parse } from 'https://esm.sh/@stoplight/yaml';
 import { isPlainObject } from '@stoplight/json';
 
 var input = createRulesetFunction({}, input => {
