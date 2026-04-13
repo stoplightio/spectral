@@ -6,6 +6,7 @@ import invalidRuleset from './__fixtures__/invalid-ruleset';
 import validRuleset from './__fixtures__/valid-flat-ruleset';
 import extendedRuleset from './__fixtures__/aliases/extended-definition';
 import aliasCollisionRuleset from './__fixtures__/aliases/extended-alias-collision';
+import tupleExtendedRuleset from './__fixtures__/aliases/tuple-extended';
 
 import type { Format } from '../../format';
 import { RulesetDefinition, RulesetOverridesDefinition } from '../../types';
@@ -71,6 +72,10 @@ describe('JS Ruleset Validation', () => {
 
   it('given valid ruleset extending rulesets with alias collision should, emits no errors', () => {
     expect(assertValidRuleset.bind(null, aliasCollisionRuleset)).not.toThrow();
+  });
+
+  it('given valid ruleset extending a ruleset with aliases using tuple [ruleset, severity] form, emits no errors', () => {
+    expect(assertValidRuleset.bind(null, tupleExtendedRuleset)).not.toThrow();
   });
 
   it.each([false, 2, null, 'foo', '12.foo.com'])(
@@ -889,6 +894,226 @@ describe('JS Ruleset Validation', () => {
         },
       }),
     ).not.toThrow();
+  });
+
+  describe('nested extends alias validation', () => {
+    it('given a rule in nested extends using an alias defined in that nested ruleset, emits no errors', () => {
+      const innerRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*]'],
+        },
+        rules: {
+          'my-nested-rule': {
+            given: '#ArrayProperties',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        extends: [innerRuleset],
+        rules: {
+          'override-rule': 'error' as const,
+        },
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given a rule in nested extends where alias exists only in a deeper nested ruleset, emits no errors', () => {
+      // Mirrors the OWASP scenario: root → customRules (no aliases) → owaspRuleset (has aliases)
+      const owaspRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*][get,post,put,patch,delete,options,head]'],
+        },
+        rules: {
+          'owasp:api4:2019-array-limit': {
+            given: '#ArrayProperties',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const customRules = {
+        extends: [owaspRuleset],
+        rules: {
+          'owasp:api4:2019-array-limit': 'error' as const,
+        },
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [customRules],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given a rule in nested extends using alias defined in middle ruleset (not nested), emits no errors', () => {
+      // Middle ruleset defines the alias; nested ruleset rule references it via inheritance
+      const innerRuleset = {
+        rules: {
+          'inner-rule': {
+            given: '#SharedAlias',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        aliases: {
+          SharedAlias: ['$.info'],
+        },
+        extends: [innerRuleset],
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given a rule in nested extends (tuple form) using an alias defined in that nested ruleset, emits no errors', () => {
+      const innerRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*]'],
+        },
+        rules: {
+          'my-nested-rule': {
+            given: '#ArrayProperties',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        extends: [[innerRuleset, 'all'] as [object, 'all']],
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given a rule in nested extends using an undefined alias, throws', () => {
+      const innerRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*]'],
+        },
+        rules: {
+          'my-nested-rule': {
+            given: '#UndefinedAlias',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        extends: [innerRuleset],
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('undefined-alias', 'Alias "UndefinedAlias" does not exist', [
+            'extends',
+            '0',
+            'extends',
+            '0',
+            'rules',
+            'my-nested-rule',
+            'given',
+          ]),
+        ]),
+      );
+    });
+
+    it('given three levels of nested extends, resolves aliases from the deepest level without crashing', () => {
+      // Verifies that the recursive getExtended logic handles 3+ levels of nesting
+      // without "Cannot read property of undefined" errors
+      const deepRuleset = {
+        aliases: {
+          DeepAlias: ['$.paths[*]'],
+        },
+        rules: {
+          'deep-rule': {
+            given: '#DeepAlias',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const innerRuleset = {
+        extends: [deepRuleset],
+      };
+
+      const middleRuleset = {
+        extends: [innerRuleset],
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given nested extends item that is not an object, resolves aliases without crashing', () => {
+      // Non-object extend item at the nested level should not cause "Cannot read property of undefined"
+      const innerRuleset = {
+        aliases: {
+          PathItem: ['$.paths[*]'],
+        },
+        rules: {
+          'valid-rule': {
+            given: '#PathItem',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        // Valid item first, then the one being indexed by AJV validation
+        extends: [innerRuleset],
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given extends with empty nested extends array, does not crash when resolving aliases', () => {
+      // Middle ruleset has an empty extends array; accessing aliases from it should return null, not crash
+      const middleRuleset = {
+        extends: [] as object[],
+        aliases: {
+          TopLevelAlias: ['$.info'],
+        },
+        rules: {
+          'top-level-rule': {
+            given: '#TopLevelAlias',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
   });
 });
 
