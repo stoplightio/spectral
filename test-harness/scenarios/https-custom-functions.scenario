@@ -23,7 +23,7 @@ export default {
   }
 };
 ====asset:upper-case.mjs====
-import { upperCase } from 'https://cdn.skypack.dev/lodash?dist=es2018';
+import upperCase  from 'https://esm.sh/lodash.uppercase?dist=es2018';
 
 export default (input) => {
   if (input !== upperCase(input)) {
