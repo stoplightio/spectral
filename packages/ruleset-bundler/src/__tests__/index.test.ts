@@ -210,8 +210,8 @@ export default (input) => {
   }
 };`,
 
-        'https://esm.sh/lodash.uppercase': `export * from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';
-export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';`,
+        'https://esm.sh/lodash.uppercase': `export * from "/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs";
+export { default } from "/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs";`,
 
         'https://esm.sh/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs':
           'export default (a) => a.toUpperCase()',
@@ -318,11 +318,10 @@ export default (input) => {
   }
 };`,
 
-      'https://esm.sh/lodash.uppercase': `export * from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';
-export {default} from '/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js';`,
+      'https://esm.sh/lodash.uppercase': `export * from "/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs";
+export { default } from "/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs";`,
 
-      'https://esm.sh/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js':
-        'export default (a) => a.toUpperCase()',
+      'https://esm.sh/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs': 'export default (a) => a.toUpperCase()',
 
       '/p/.spectral/upper-case.mjs': `import upperCase from 'https://esm.sh/lodash.uppercase';
 
@@ -378,8 +377,8 @@ export default {
       '/p/.spectral/my-fn.mjs',
       '/p/.spectral/upper-case.mjs',
       '/p/spectral.mjs',
-      'https://esm.sh/-/lodash.uppercase@v4.3.0-Ghj8UDzvgbRFVHwnUM53/dist=es2020,mode=imports/optimized/lodash.uppercase.js',
       'https://esm.sh/lodash.uppercase',
+      'https://esm.sh/v135/lodash.uppercase@4.3.0/es2022/lodash.uppercase.mjs',
     ]);
   });
 });
