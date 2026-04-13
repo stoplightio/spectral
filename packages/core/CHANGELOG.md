@@ -1,3 +1,16 @@
+# @stoplight/spectral-core [1.22.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.21.0...@stoplight/spectral-core-1.22.0) (2026-04-13)
+
+
+### Bug Fixes
+
+* **core:** fix security issue of simple-eval package  ([#2886](https://github.com/stoplightio/spectral/issues/2886)) ([8120a76](https://github.com/stoplightio/spectral/commit/8120a7680cc840eb4c89eebb126d89eba774c7f4))
+* **core:** respect off severity in intermediate rulesets ([#2890](https://github.com/stoplightio/spectral/issues/2890)) ([5b99b99](https://github.com/stoplightio/spectral/commit/5b99b9960b61ad54c736ebfb06b867b8752130e8))
+
+
+### Features
+
+* **core:** further adjustments for extending rulesets with aliases ([#2939](https://github.com/stoplightio/spectral/issues/2939)) ([26144bc](https://github.com/stoplightio/spectral/commit/26144bc1334ee65bdb07d03c868f39fdc59ab627))
+
 # @stoplight/spectral-core [1.21.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.20.0...@stoplight/spectral-core-1.21.0) (2026-01-30)
 
 
