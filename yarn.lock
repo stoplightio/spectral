@@ -3772,17 +3772,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.168":
+"@types/lodash@npm:^4.14.168, @types/lodash@npm:^4.14.176":
   version: 4.14.176
   resolution: "@types/lodash@npm:4.14.176"
   checksum: 9e949704dfffab60365b5cdca0477926af6eabe82c64b7be8f74b3a117bb373d58371be962c2b159dd0cf8fad49a7dcacc748564aea4ce6b6883c197a6f0bfa8
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:^4.17.24":
-  version: 4.17.24
-  resolution: "@types/lodash@npm:4.17.24"
-  checksum: 2b254973145ecdf9b052d83f00ebaa111245f319d45b217c78f81cea8892fda81180fc749bd50a99c08f4e5efceb834c774d3f74153a50a9c4a28648343dc9f3
   languageName: node
   linkType: hard
 
@@ -13024,7 +13017,7 @@ __metadata:
     "@types/file-entry-cache": ^5.0.2
     "@types/jest": ^29.5.13
     "@types/karma": ^6.3.3
-    "@types/lodash": ^4.17.24
+    "@types/lodash": ^4.14.176
     "@types/node": ^18.17.7
     "@types/node-fetch": ^2.5.12
     "@types/node-powershell": ^3.1.1

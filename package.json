@@ -102,7 +102,7 @@
     "@types/file-entry-cache": "^5.0.2",
     "@types/jest": "^29.5.13",
     "@types/karma": "^6.3.3",
-    "@types/lodash": "^4.17.24",
+    "@types/lodash": "^4.14.176",
     "@types/node": "^18.17.7",
     "@types/node-fetch": "^2.5.12",
     "@types/node-powershell": "^3.1.1",
