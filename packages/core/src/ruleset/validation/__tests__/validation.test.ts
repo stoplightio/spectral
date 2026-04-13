@@ -924,6 +924,87 @@ describe('JS Ruleset Validation', () => {
       ).not.toThrow();
     });
 
+    it('given a rule in nested extends with severity on first level using an alias defined in that nested ruleset, emits no errors', () => {
+      const innerRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*]'],
+        },
+        rules: {
+          'my-nested-rule': {
+            given: '#ArrayProperties',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        extends: [[innerRuleset, 'all'] as [object, 'all']],
+        rules: {
+          'override-rule': 'error' as const,
+        },
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [middleRuleset],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given a rule in nested extends with severity on second level using an alias defined in that nested ruleset, emits no errors', () => {
+      const innerRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*]'],
+        },
+        rules: {
+          'my-nested-rule': {
+            given: '#ArrayProperties',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        extends: [innerRuleset],
+        rules: {
+          'override-rule': 'error' as const,
+        },
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [[middleRuleset, 'all'] as [object, 'all']],
+        }),
+      ).not.toThrow();
+    });
+
+    it('given a rule in nested extends with severity on all level using an alias defined in that nested ruleset, emits no errors', () => {
+      const innerRuleset = {
+        aliases: {
+          ArrayProperties: ['$.paths[*]'],
+        },
+        rules: {
+          'my-nested-rule': {
+            given: '#ArrayProperties',
+            then: { function: truthy },
+          },
+        },
+      };
+
+      const middleRuleset = {
+        extends: [[innerRuleset, 'all'] as [object, 'all']],
+        rules: {
+          'override-rule': 'error' as const,
+        },
+      };
+
+      expect(
+        assertValidRuleset.bind(null, {
+          extends: [[middleRuleset, 'all'] as [object, 'all']],
+        }),
+      ).not.toThrow();
+    });
+
     it('given a rule in nested extends where alias exists only in a deeper nested ruleset, emits no errors', () => {
       // Mirrors the OWASP scenario: root → customRules (no aliases) → owaspRuleset (has aliases)
       const owaspRuleset = {
@@ -963,7 +1044,7 @@ describe('JS Ruleset Validation', () => {
         },
       };
 
-      const middleRuleset = {
+      const ruleset = {
         aliases: {
           SharedAlias: ['$.info'],
         },
@@ -972,31 +1053,7 @@ describe('JS Ruleset Validation', () => {
 
       expect(
         assertValidRuleset.bind(null, {
-          extends: [middleRuleset],
-        }),
-      ).not.toThrow();
-    });
-
-    it('given a rule in nested extends (tuple form) using an alias defined in that nested ruleset, emits no errors', () => {
-      const innerRuleset = {
-        aliases: {
-          ArrayProperties: ['$.paths[*]'],
-        },
-        rules: {
-          'my-nested-rule': {
-            given: '#ArrayProperties',
-            then: { function: truthy },
-          },
-        },
-      };
-
-      const middleRuleset = {
-        extends: [[innerRuleset, 'all'] as [object, 'all']],
-      };
-
-      expect(
-        assertValidRuleset.bind(null, {
-          extends: [middleRuleset],
+          extends: [ruleset],
         }),
       ).not.toThrow();
     });
@@ -1014,13 +1071,13 @@ describe('JS Ruleset Validation', () => {
         },
       };
 
-      const middleRuleset = {
+      const ruleset = {
         extends: [innerRuleset],
       };
 
       expect(
         assertValidRuleset.bind(null, {
-          extends: [middleRuleset],
+          extends: [ruleset],
         }),
       ).toThrowAggregateError(
         new AggregateError([
@@ -1060,42 +1117,19 @@ describe('JS Ruleset Validation', () => {
         extends: [innerRuleset],
       };
 
-      expect(
-        assertValidRuleset.bind(null, {
-          extends: [middleRuleset],
-        }),
-      ).not.toThrow();
-    });
-
-    it('given nested extends item that is not an object, resolves aliases without crashing', () => {
-      // Non-object extend item at the nested level should not cause "Cannot read property of undefined"
-      const innerRuleset = {
-        aliases: {
-          PathItem: ['$.paths[*]'],
-        },
-        rules: {
-          'valid-rule': {
-            given: '#PathItem',
-            then: { function: truthy },
-          },
-        },
-      };
-
-      const middleRuleset = {
-        // Valid item first, then the one being indexed by AJV validation
-        extends: [innerRuleset],
+      const topRuleset = {
+        extends: [middleRuleset],
       };
 
       expect(
         assertValidRuleset.bind(null, {
-          extends: [middleRuleset],
+          extends: [topRuleset],
         }),
       ).not.toThrow();
     });
 
     it('given extends with empty nested extends array, does not crash when resolving aliases', () => {
-      // Middle ruleset has an empty extends array; accessing aliases from it should return null, not crash
-      const middleRuleset = {
+      const ruleset = {
         extends: [] as object[],
         aliases: {
           TopLevelAlias: ['$.info'],
@@ -1110,7 +1144,7 @@ describe('JS Ruleset Validation', () => {
 
       expect(
         assertValidRuleset.bind(null, {
-          extends: [middleRuleset],
+          extends: [ruleset],
         }),
       ).not.toThrow();
     });
