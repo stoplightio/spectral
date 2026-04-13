@@ -5,7 +5,7 @@
 ### Overriding messages
 
 ```js
-import { oas } from "https://cdn.skypack.dev/@stoplight/spectral-rulesets";
+import { oas } from "https://esm.sh/@stoplight/spectral-rulesets";
 
 const customMessages = {
   "oas3-valid-media-example": "OAS3: Examples must be valid against their defined schema.",
@@ -36,7 +36,7 @@ export default {
 ### Overriding formats
 
 ```js
-import { oas } from "https://cdn.skypack.dev/@stoplight/spectral-rulesets";
+import { oas } from "https://esm.sh/@stoplight/spectral-rulesets";
 
 const myFormat = document => typeof document === "object" && document !== null && "x-lint" in document;
 
