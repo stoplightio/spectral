@@ -21,7 +21,7 @@ export const url = ({ fetch }: IO): Plugin => ({
     if (importer !== void 0 && isURL(importer)) {
       const url = new URL(importer);
       // we change https://esm.sh/{name-of-the-package}
-      // to https://esm.sh/-/lodash@v4.17.21-K6GEbP02mWFnLA45zAmi/dist=es2020,mode=imports/optimized/lodash.js
+      // to https://esm.sh/v135/lodash@4.17.21/es2022/lodash.mjs
       if (isAbsolute(id)) {
         url.pathname = id;
       } else {
