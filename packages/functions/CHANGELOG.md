@@ -1,3 +1,10 @@
+## @stoplight/spectral-functions [1.10.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.1...@stoplight/spectral-functions-1.10.2) (2026-04-14)
+
+
+### Bug Fixes
+
+* **deps:** post lodash update changes for semantic release ([#2942](https://github.com/stoplightio/spectral/issues/2942)) ([bf530dd](https://github.com/stoplightio/spectral/commit/bf530dd3ff7e29a2ba7083c6e2d6ed32d61f64b7))
+
 ## @stoplight/spectral-functions [1.10.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.0...@stoplight/spectral-functions-1.10.1) (2025-04-23)
 
 
