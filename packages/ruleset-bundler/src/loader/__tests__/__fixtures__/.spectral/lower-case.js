@@ -1,4 +1,4 @@
-import lowerCase from 'https://cdn.skypack.dev/lodash.lowercase';
+import lowerCase from 'https://esm.sh/lodash.lowercase';
 
 export default input => {
   if (lowerCase(input) !== input) {

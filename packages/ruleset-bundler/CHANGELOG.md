@@ -1,3 +1,10 @@
+# @stoplight/spectral-ruleset-bundler [1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-1.6.3...@stoplight/spectral-ruleset-bundler-1.7.0) (2026-04-13)
+
+
+### Features
+
+* **repo:** replace skypack usage with esm cdn ([#2940](https://github.com/stoplightio/spectral/issues/2940)) ([0d6a910](https://github.com/stoplightio/spectral/commit/0d6a9102732e7fc676d8359f77ed21073fbcbe87))
+
 ## @stoplight/spectral-ruleset-bundler [1.6.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-1.6.2...@stoplight/spectral-ruleset-bundler-1.6.3) (2025-04-23)
 
 

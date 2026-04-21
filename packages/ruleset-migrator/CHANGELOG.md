@@ -1,3 +1,10 @@
+# @stoplight/spectral-ruleset-migrator [1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.3...@stoplight/spectral-ruleset-migrator-1.12.0) (2026-04-13)
+
+
+### Features
+
+* **repo:** replace skypack usage with esm cdn ([#2940](https://github.com/stoplightio/spectral/issues/2940)) ([0d6a910](https://github.com/stoplightio/spectral/commit/0d6a9102732e7fc676d8359f77ed21073fbcbe87))
+
 ## @stoplight/spectral-ruleset-migrator [1.11.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.2...@stoplight/spectral-ruleset-migrator-1.11.3) (2025-10-24)
 
 

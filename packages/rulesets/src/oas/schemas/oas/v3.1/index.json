@@ -803,7 +803,7 @@
         "value": true,
         "externalValue": {
           "type": "string",
-          "format": "uri"
+          "format": "uri-reference"
         }
       },
       "not": {

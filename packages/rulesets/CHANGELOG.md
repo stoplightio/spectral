@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.22.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.0...@stoplight/spectral-rulesets-1.22.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* **rulesets:** use uri-reference for openIdConnectUrl ([#2796](https://github.com/stoplightio/spectral/issues/2796)) ([c57eb59](https://github.com/stoplightio/spectral/commit/c57eb599d9da101423c68adb3945bb34e9cebc9a))
+
 # @stoplight/spectral-rulesets [1.22.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.21.4...@stoplight/spectral-rulesets-1.22.0) (2025-04-22)
 
 
