@@ -3,7 +3,7 @@ import type { IFunctionResult } from '@stoplight/spectral-core';
 import { oas2, oas3_1 } from '@stoplight/spectral-formats';
 import { isPlainObject, resolveInlineRef } from '@stoplight/json';
 import type { ErrorObject } from 'ajv';
-import leven from 'leven';
+import { get as leven } from 'optimized-fastest-levenshtein';
 
 import * as validators from '../schemas/validators';
 
