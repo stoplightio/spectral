@@ -235,6 +235,26 @@ describe('lint', () => {
     expect(process.stderr.write).nthCalledWith(5, `Error #3: ${chalk.red('original exception')}\n`);
   });
 
+  it('prefixes ruleset errors that carry source and range with file:line:col', async () => {
+    (lint as jest.Mock).mockReset();
+    const errorWithLocation = Object.assign(new Error('invalid severity'), {
+      source: '/tmp/ruleset.yaml',
+      range: { start: { line: 7, character: 14 }, end: { line: 7, character: 22 } },
+    });
+    const errorWithSourceOnly = Object.assign(new Error('missing rule'), {
+      source: '/tmp/ruleset.yaml',
+    });
+    (lint as jest.Mock).mockRejectedValueOnce(new AggregateError([errorWithLocation, errorWithSourceOnly]));
+
+    await run(`lint ./__fixtures__/empty-oas2-document.json`);
+
+    expect(process.stderr.write).nthCalledWith(
+      3,
+      `Error #1: /tmp/ruleset.yaml:8:15 — ${chalk.red('invalid severity')}\n`,
+    );
+    expect(process.stderr.write).nthCalledWith(4, `Error #2: /tmp/ruleset.yaml — ${chalk.red('missing rule')}\n`);
+  });
+
   it('given verbose flag, prints each error together with their stacks', async () => {
     (lint as jest.Mock).mockReset();
     (lint as jest.Mock).mockRejectedValueOnce(
@@ -250,13 +270,13 @@ describe('lint', () => {
     expect(process.stderr.write).nthCalledWith(2, `Error #1: ${chalk.red('some unhandled exception')}\n`);
     expect(process.stderr.write).nthCalledWith(
       3,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:242`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:262`),
     );
 
     expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
     expect(process.stderr.write).nthCalledWith(
       5,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:243`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:263`),
     );
 
     expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);
