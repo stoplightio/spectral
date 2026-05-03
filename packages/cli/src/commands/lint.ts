@@ -223,7 +223,7 @@ const lintCommand: CommandModule = {
 
       if (linterResult.results.length > 0) {
         process.exit(severeEnoughToFail(linterResult.results, failSeverity) ? 1 : 0);
-      } else if (config.quiet !== true) {
+      } else if (config.quiet !== true && !format.includes(OutputFormat.JSON)) {
         const isErrorSeverity = getDiagnosticSeverity(failSeverity) === DiagnosticSeverity.Error;
         process.stdout.write(
           `No results with a severity of '${failSeverity}' ${isErrorSeverity ? '' : 'or higher '}found!\n`,
