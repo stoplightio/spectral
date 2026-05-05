@@ -1,5 +1,4 @@
 import { isURL } from '@stoplight/path';
-import AbortController from 'abort-controller';
 import * as fs from 'fs';
 import { RequestInit } from 'node-fetch';
 import type { Agent } from 'http';
