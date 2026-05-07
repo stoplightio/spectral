@@ -1,5 +1,5 @@
 import type { ErrorObject } from 'ajv';
-import type { IDiagnostic, JsonPath } from '@stoplight/types';
+import type { IDiagnostic, IRange, JsonPath } from '@stoplight/types';
 import { isAggregateError } from '../../guards/isAggregateError';
 
 export type RulesetValidationErrorCode =
@@ -17,24 +17,40 @@ export type RulesetValidationErrorCode =
   | 'undefined-function'
   | 'undefined-alias';
 
+export type RulesetSourceContext = {
+  readonly source: string;
+  getLocationForJsonPath(path: JsonPath): { range: IRange } | undefined;
+};
+
 interface IRulesetValidationSingleError extends Pick<IDiagnostic, 'message' | 'path'> {
   readonly code: RulesetValidationErrorCode;
+  readonly range?: IRange;
+  readonly source?: string;
 }
 
 export class RulesetValidationError extends Error implements IRulesetValidationSingleError {
+  public readonly range?: IRange;
+  public readonly source?: string;
+
   constructor(
     public readonly code: RulesetValidationErrorCode,
     public readonly message: string,
     public readonly path: JsonPath,
+    location?: { range?: IRange; source?: string },
   ) {
     super(message);
+    this.range = location?.range;
+    this.source = location?.source;
   }
 }
 
 const RULE_INSTANCE_PATH = /^\/rules\/[^/]+/;
 const GENERIC_INSTANCE_PATH = /^\/(?:aliases|extends|overrides(?:\/\d+\/extends)?)/;
 
-export function convertAjvErrors(errors: ErrorObject[]): RulesetValidationError[] {
+export function convertAjvErrors(
+  errors: ErrorObject[],
+  sourceContext?: RulesetSourceContext,
+): RulesetValidationError[] {
   const sortedErrors = [...errors]
     .sort((errorA, errorB) => {
       const diff = errorA.instancePath.length - errorB.instancePath.length;
@@ -78,11 +94,18 @@ export function convertAjvErrors(errors: ErrorObject[]): RulesetValidationError[
 
   return filteredErrors.flatMap(error => {
     if (error.keyword === 'x-spectral-runtime') {
-      return flatErrors(error.params.errors);
+      const flat = flatErrors(error.params.errors);
+      const list = Array.isArray(flat) ? flat : [flat];
+      return list.map(e => enrichWithLocation(e, sourceContext));
     }
 
     const path = error.instancePath.slice(1).split('/');
-    return new RulesetValidationError(inferErrorCode(path, error.keyword), error.message ?? 'unknown error', path);
+    return new RulesetValidationError(
+      inferErrorCode(path, error.keyword),
+      error.message ?? 'unknown error',
+      path,
+      resolveLocation(path, sourceContext),
+    );
   });
 }
 
@@ -92,6 +115,31 @@ function flatErrors(error: RulesetValidationError | AggregateError): RulesetVali
   }
 
   return error;
+}
+
+function resolveLocation(
+  path: JsonPath,
+  sourceContext: RulesetSourceContext | undefined,
+): { range?: IRange; source?: string } | undefined {
+  if (sourceContext === undefined) {
+    return undefined;
+  }
+
+  return {
+    source: sourceContext.source,
+    range: sourceContext.getLocationForJsonPath(path)?.range,
+  };
+}
+
+function enrichWithLocation(
+  error: RulesetValidationError,
+  sourceContext: RulesetSourceContext | undefined,
+): RulesetValidationError {
+  if (sourceContext === undefined || error.source !== undefined || error.range !== undefined) {
+    return error;
+  }
+
+  return new RulesetValidationError(error.code, error.message, error.path, resolveLocation(error.path, sourceContext));
 }
 
 function inferErrorCode(path: string[], keyword: string): RulesetValidationErrorCode {
