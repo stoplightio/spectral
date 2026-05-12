@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.22.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.1...@stoplight/spectral-rulesets-1.22.2) (2026-05-12)
+
+
+### Bug Fixes
+
+* **rulesets:** fix handling relative references in externalValue ([#2944](https://github.com/stoplightio/spectral/issues/2944)) ([6666ccc](https://github.com/stoplightio/spectral/commit/6666cccda089a5b3bfc232244d33eabd75854d7a)), closes [#2819](https://github.com/stoplightio/spectral/issues/2819)
+
 ## @stoplight/spectral-rulesets [1.22.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.0...@stoplight/spectral-rulesets-1.22.1) (2026-04-13)
 
 
