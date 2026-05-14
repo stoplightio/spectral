@@ -14,9 +14,7 @@ jobs:
       options: --user root
     strategy:
       matrix:
-        node-version:
-        - '18.20.8'
-        - '20.20.0' # maintenance LTS
+        node-version: [16.x, 18.x, 20.x, 22.x, 24.x, 26.x]
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
