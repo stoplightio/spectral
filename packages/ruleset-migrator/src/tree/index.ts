@@ -138,10 +138,13 @@ export class Tree {
       // <origin>/<pkg-name>/<asset> where asset can be a custom fn, etc.
       resolved = path.join(ctx.filepath, identifier);
     } else if (kind === 'ruleset' && !path.isURL(ctx.filepath) && isPackageImport(identifier)) {
-      resolved =
-        ctx.npmRegistry !== null
-          ? path.join(ctx.npmRegistry, identifier)
-          : requireResolve?.(identifier, { paths: [ctx.cwd] }) ?? path.join(ctx.cwd, identifier);
+      if (ctx.npmRegistry !== null) {
+        resolved = path.join(ctx.npmRegistry, identifier);
+      } else if (typeof requireResolve === 'function') {
+        resolved = requireResolve(identifier, { paths: [ctx.cwd] }) ?? path.join(ctx.cwd, identifier);
+      } else {
+        resolved = path.join(ctx.cwd, identifier);
+      }
     } else {
       resolved = path.join(ctx.filepath, '..', identifier);
       this.#resolvedPaths.add(resolved);

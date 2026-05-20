@@ -11,7 +11,7 @@ import type {
   RulesetOverridesDefinition,
   Stringifable,
 } from './types';
-import { assertValidRuleset } from './validation/index';
+import { assertValidRuleset, RulesetSourceContext } from './validation/index';
 import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
@@ -26,6 +26,7 @@ const DEFAULT_RULESET_FILE = /^\.?spectral\.(ya?ml|json|m?js)$/;
 type RulesetContext = {
   readonly severity?: FileRulesetSeverityDefinition;
   readonly source?: string;
+  readonly sourceContext?: RulesetSourceContext;
   readonly [STACK_SYMBOL]?: Map<RulesetDefinition, Ruleset>;
   readonly [EXPLICIT_SEVERITY]?: boolean;
 };
@@ -63,10 +64,10 @@ export class Ruleset {
     if (isPlainObject(maybeDefinition) && 'extends' in maybeDefinition) {
       const { extends: _, ...def } = maybeDefinition;
       // we don't want to validate extends - this is going to happen later on (line 29)
-      assertValidRuleset({ extends: [], ...def }, 'js');
+      assertValidRuleset({ extends: [], ...def }, 'js', context?.sourceContext);
       definition = maybeDefinition as RulesetDefinition;
     } else {
-      assertValidRuleset(maybeDefinition, 'js');
+      assertValidRuleset(maybeDefinition, 'js', context?.sourceContext);
       definition = maybeDefinition;
     }
 
