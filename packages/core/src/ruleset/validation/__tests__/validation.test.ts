@@ -1295,3 +1295,80 @@ describe('JSON Ruleset Validation', () => {
     ).toThrowAggregateError(new AggregateError(errors));
   });
 });
+
+describe('Ruleset Validation source context', () => {
+  it('attaches range and source to validation errors when sourceContext is provided', () => {
+    const sourceContext = {
+      source: '/tmp/ruleset.yaml',
+      getLocationForJsonPath(jsonPath: ReadonlyArray<string | number>) {
+        if (jsonPath.join('/') === 'rules/rule-with-invalid-enum/severity') {
+          return { range: { start: { line: 7, character: 14 }, end: { line: 7, character: 22 } } };
+        }
+        return undefined;
+      },
+    };
+
+    let caught: AggregateError | undefined;
+    try {
+      assertValidRuleset(invalidRuleset, 'js', sourceContext);
+    } catch (e) {
+      caught = e as AggregateError;
+    }
+
+    expect(caught).toBeInstanceOf(AggregateError);
+
+    const severityError = (caught as AggregateError).errors.find(
+      (e: RulesetValidationError) => e.code === 'invalid-severity',
+    ) as RulesetValidationError;
+    expect(severityError.source).toBe('/tmp/ruleset.yaml');
+    expect(severityError.range).toEqual({
+      start: { line: 7, character: 14 },
+      end: { line: 7, character: 22 },
+    });
+
+    const otherError = (caught as AggregateError).errors.find(
+      (e: RulesetValidationError) => e.code !== 'invalid-severity',
+    ) as RulesetValidationError;
+    expect(otherError.source).toBe('/tmp/ruleset.yaml');
+    expect(otherError.range).toBeUndefined();
+  });
+
+  it('attaches source to early-throw errors when sourceContext is provided', () => {
+    const sourceContext = {
+      source: '/tmp/ruleset.yaml',
+      getLocationForJsonPath() {
+        return { range: { start: { line: 0, character: 0 }, end: { line: 0, character: 0 } } };
+      },
+    };
+
+    expect(() => assertValidRuleset(null, 'js', sourceContext)).toThrow(
+      expect.objectContaining({
+        code: 'invalid-ruleset-definition',
+        source: '/tmp/ruleset.yaml',
+      }),
+    );
+
+    expect(() => assertValidRuleset({}, 'js', sourceContext)).toThrow(
+      expect.objectContaining({
+        code: 'invalid-ruleset-definition',
+        source: '/tmp/ruleset.yaml',
+        range: { start: { line: 0, character: 0 }, end: { line: 0, character: 0 } },
+      }),
+    );
+  });
+
+  it('leaves range and source undefined when sourceContext is omitted', () => {
+    let caught: AggregateError | undefined;
+    try {
+      assertValidRuleset(invalidRuleset, 'js');
+    } catch (e) {
+      caught = e as AggregateError;
+    }
+
+    expect(caught).toBeInstanceOf(AggregateError);
+    for (const e of (caught as AggregateError).errors as RulesetValidationError[]) {
+      expect(e.source).toBeUndefined();
+      expect(e.range).toBeUndefined();
+    }
+  });
+});

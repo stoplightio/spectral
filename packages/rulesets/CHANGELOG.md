@@ -1,3 +1,17 @@
+## @stoplight/spectral-rulesets [1.22.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.2...@stoplight/spectral-rulesets-1.22.3) (2026-05-21)
+
+
+### Bug Fixes
+
+* **rulesets:** exclude non-schema enum properties from duplicated-entry-in-enum rule ([#2934](https://github.com/stoplightio/spectral/issues/2934)) ([a7822fa](https://github.com/stoplightio/spectral/commit/a7822fa92b39b822e5e5333086a1ad294d32005c)), closes [stoplightio/spectral#2199](https://github.com/stoplightio/spectral/issues/2199)
+
+## @stoplight/spectral-rulesets [1.22.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.1...@stoplight/spectral-rulesets-1.22.2) (2026-05-12)
+
+
+### Bug Fixes
+
+* **rulesets:** fix handling relative references in externalValue ([#2944](https://github.com/stoplightio/spectral/issues/2944)) ([6666ccc](https://github.com/stoplightio/spectral/commit/6666cccda089a5b3bfc232244d33eabd75854d7a)), closes [#2819](https://github.com/stoplightio/spectral/issues/2819)
+
 ## @stoplight/spectral-rulesets [1.22.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.0...@stoplight/spectral-rulesets-1.22.1) (2026-04-13)
 
 

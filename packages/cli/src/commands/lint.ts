@@ -252,10 +252,11 @@ const fail = (error: Error | ErrorWithCause<unknown> | AggregateError, verbose: 
   for (const [i, error] of errors.entries()) {
     const actualError: unknown = isError(error) && 'cause' in error ? (error as ErrorWithCause<unknown>).cause : error;
     const message = isError(actualError) ? actualError.message : String(actualError);
+    const location = formatErrorLocation(actualError);
 
     const info = `Error #${i + 1}: `;
 
-    process.stderr.write(`${info}${chalk.red(message)}\n`);
+    process.stderr.write(`${info}${location}${chalk.red(message)}\n`);
 
     if (verbose && isError(actualError)) {
       process.stderr.write(`${chalk.red(printErrorStacks(actualError, info.length))}\n`);
@@ -264,6 +265,19 @@ const fail = (error: Error | ErrorWithCause<unknown> | AggregateError, verbose: 
 
   process.exit(2);
 };
+
+function formatErrorLocation(error: unknown): string {
+  if (typeof error !== 'object' || error === null) return '';
+  const source = (error as { source?: unknown }).source;
+  if (typeof source !== 'string') return '';
+
+  const range = (error as { range?: { start?: { line?: unknown; character?: unknown } } }).range;
+  if (typeof range?.start?.line === 'number' && typeof range.start.character === 'number') {
+    return `${source}:${range.start.line + 1}:${range.start.character + 1} — `;
+  }
+
+  return `${source} — `;
+}
 
 function getWidth(ratio: number): number {
   return Math.min(20, Math.floor(ratio * process.stderr.columns));

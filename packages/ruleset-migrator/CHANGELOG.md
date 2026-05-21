@@ -1,3 +1,10 @@
+## @stoplight/spectral-ruleset-migrator [1.12.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.12.0...@stoplight/spectral-ruleset-migrator-1.12.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* **ruleset-migrator:** handle non function objects returned by requireResolve ([#2957](https://github.com/stoplightio/spectral/issues/2957)) ([60c6c56](https://github.com/stoplightio/spectral/commit/60c6c56ec498d770be24db12211ae324ba5e489d))
+
 # @stoplight/spectral-ruleset-migrator [1.12.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.11.3...@stoplight/spectral-ruleset-migrator-1.12.0) (2026-04-13)
 
 
