@@ -1,5 +1,6 @@
 import { Optional } from '@stoplight/types';
-import { Ruleset, RulesetDefinition } from '@stoplight/spectral-core';
+import { Ruleset, RulesetDefinition, RulesetSourceContext } from '@stoplight/spectral-core';
+import { Json, Yaml } from '@stoplight/spectral-parsers';
 import * as fs from 'fs';
 import * as path from '@stoplight/path';
 import * as process from 'process';
@@ -43,9 +44,13 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   }
 
   let ruleset: string;
+  let sourceContext: RulesetSourceContext | undefined;
+  const originalRulesetFile = rulesetFile;
 
   try {
     if (await isBasicRuleset(rulesetFile)) {
+      sourceContext = await buildSourceContext(originalRulesetFile);
+
       const migratedRuleset = await migrateRuleset(rulesetFile, {
         format: 'esm',
         fs,
@@ -76,7 +81,34 @@ export async function getRuleset(rulesetFile: Optional<string>): Promise<Ruleset
   return new Ruleset(load(ruleset, rulesetFile), {
     severity: 'recommended',
     source: rulesetFile,
+    sourceContext,
   });
+}
+
+async function buildSourceContext(rulesetFile: string): Promise<RulesetSourceContext | undefined> {
+  try {
+    const input = await fs.promises.readFile(rulesetFile, 'utf8');
+
+    if (path.extname(rulesetFile) === '.json') {
+      const parserResult = Json.parse(input);
+      return {
+        source: rulesetFile,
+        getLocationForJsonPath(jsonPath) {
+          return Json.getLocationForJsonPath(parserResult, jsonPath);
+        },
+      };
+    }
+
+    const parserResult = Yaml.parse(input);
+    return {
+      source: rulesetFile,
+      getLocationForJsonPath(jsonPath) {
+        return Yaml.getLocationForJsonPath(parserResult, jsonPath);
+      },
+    };
+  } catch {
+    return undefined;
+  }
 }
 
 function load(source: string, uri: string): RulesetDefinition {

@@ -1,3 +1,11 @@
+## @stoplight/spectral-formatters [1.5.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.5.0...@stoplight/spectral-formatters-1.5.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* **formatters:** Fix rendering of github actions documentationUrl ([#2895](https://github.com/stoplightio/spectral/issues/2895)) ([df27b06](https://github.com/stoplightio/spectral/commit/df27b0647f77705a6fe609c27da3243e1533c66b))
+* **formatters:** markdown formatter with invalid-ref crashes spectral ([#2905](https://github.com/stoplightio/spectral/issues/2905)) ([59728e4](https://github.com/stoplightio/spectral/commit/59728e48e475664f1c9c19a2942bbd0cbfee3099))
+
 # @stoplight/spectral-formatters [1.5.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.4.3...@stoplight/spectral-formatters-1.5.0) (2025-04-22)
 
 

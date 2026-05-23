@@ -8,12 +8,12 @@ export function getRuleDocumentationUrl(ruleCode: string | number, ctx?: Formatt
 
   const rule = ctx.ruleset.rules[ruleCode.toString()];
   //if rule.documentationUrl is not null and not empty and not undefined, return it
-  if (rule.documentationUrl != null && rule.documentationUrl) {
+  if (rule?.documentationUrl != null && rule.documentationUrl) {
     return rule.documentationUrl;
   }
 
   //otherwise use the ruleset documentationUrl and append the rulecode as an anchor
-  const rulesetDocumentationUrl = rule.owner?.definition.documentationUrl;
+  const rulesetDocumentationUrl = rule?.owner?.definition.documentationUrl;
   if (rulesetDocumentationUrl != null && rulesetDocumentationUrl) {
     return `${rulesetDocumentationUrl}#${ruleCode}`;
   }

@@ -42,7 +42,7 @@ export const githubActions: Formatter = results => {
       const message = result.message.replace(/\n/g, '%0A');
 
       return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${message}${
-        result.documentationUrl ? `::${result.documentationUrl}` : ''
+        result.documentationUrl ? `%0ADocumentation: ${result.documentationUrl}` : ''
       }`;
     })
     .join('\n');

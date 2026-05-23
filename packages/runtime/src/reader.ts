@@ -1,5 +1,4 @@
 import { isURL } from '@stoplight/path';
-import AbortController from 'abort-controller';
 import * as fs from 'fs';
 import { RequestInit } from 'node-fetch';
 import type { Agent } from 'http';
@@ -29,7 +28,7 @@ export async function readFile(name: string, opts: IReadOptions): Promise<string
         timeout = setTimeout(() => {
           controller.abort();
         }, opts.timeout);
-        requestOpts.signal = controller.signal as AbortSignal;
+        requestOpts.signal = controller.signal;
       }
 
       response = await request(name, requestOpts);

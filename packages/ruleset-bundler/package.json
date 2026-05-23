@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-bundler",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -48,7 +48,7 @@
     "@stoplight/types": "^13.6.0",
     "@types/node": "*",
     "pony-cause": "1.1.1",
-    "rollup": "~2.79.2",
+    "rollup": "~2.80.0",
     "tslib": "^2.8.1",
     "validate-npm-package-name": "3.0.0"
   },
