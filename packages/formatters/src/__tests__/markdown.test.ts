@@ -126,4 +126,16 @@ describe('Markdown formatter', () => {
 
     expect(normalizedMd).toEqual(normalizedExpectedMd);
   });
+
+  test('renders warnings regardless of failSeverity (#2928)', () => {
+    const CRLF = '\r\n';
+    // failSeverity defaults to "error"; warnings must still be rendered, since
+    // display-only-failures filtering already happens in the CLI before formatting.
+    const md = markdown(results, { failSeverity: DiagnosticSeverity.Error }, context);
+
+    const normalizedMd = md.replace(new RegExp(CRLF, 'g'), '\n').trim();
+    const normalizedExpectedMd = expectedMd.replace(new RegExp(CRLF, 'g'), '\n').trim();
+
+    expect(normalizedMd).toEqual(normalizedExpectedMd);
+  });
 });

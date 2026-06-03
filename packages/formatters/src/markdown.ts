@@ -5,7 +5,7 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import markdownEscape from 'markdown-escape';
 import { getRuleDocumentationUrl } from './utils/getDocumentationUrl';
 
-export const markdown: Formatter = (results, { failSeverity }, ctx?: FormatterContext) => {
+export const markdown: Formatter = (results, _options, ctx?: FormatterContext) => {
   const groupedResults = groupBySource(results);
 
   const lines: string[][] = [];
@@ -13,9 +13,7 @@ export const markdown: Formatter = (results, { failSeverity }, ctx?: FormatterCo
     validationResults.sort((a, b) => a.range.start.line - b.range.start.line);
 
     if (validationResults.length > 0) {
-      const filteredValidationResults = validationResults.filter(result => result.severity <= failSeverity);
-
-      for (const result of filteredValidationResults) {
+      for (const result of validationResults) {
         const ruleDocumentationUrl = getRuleDocumentationUrl(result.code, ctx);
         const codeWithOptionalLink =
           ruleDocumentationUrl != null
