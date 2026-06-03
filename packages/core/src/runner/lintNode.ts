@@ -46,11 +46,11 @@ export const lintNode = (context: IRunnerInternalContext, node: IGivenNode, rule
         const _fnContext = { ...fnContext };
         context.promises.push(
           targetResults.then(results =>
-            results === void 0 ? void 0 : processTargetResults(context, _fnContext, results),
+            results === void 0 ? void 0 : processTargetResults(context, _fnContext, results, then.field),
           ),
         );
       } else {
-        processTargetResults(context, fnContext, targetResults);
+        processTargetResults(context, fnContext, targetResults, then.field);
       }
     }
   }
@@ -60,6 +60,7 @@ function processTargetResults(
   context: IRunnerInternalContext,
   fnContext: RulesetFunctionContext & { rule: Rule },
   results: IFunctionResult[],
+  field: string | undefined,
 ): void {
   const { rule, path: targetPath } = fnContext;
   for (const result of results) {
@@ -70,7 +71,15 @@ function processTargetResults(
 
     const document = associatedItem?.document ?? context.documentInventory.document;
     const range = document.getRangeForJsonPath(path, true) ?? Document.DEFAULT_RANGE;
-    const value: unknown = path.length === 0 ? document.data : get(document.data, path);
+    // For `field: '@key'` the linted value is the property key itself, not the
+    // value stored at that path; reading the document at `path` would yield that
+    // value (e.g. an object), so `{{value}}` would interpolate to `Object{}`.
+    const value: unknown =
+      field === '@key' && result.path === void 0
+        ? path[path.length - 1]
+        : path.length === 0
+        ? document.data
+        : get(document.data, path);
 
     const vars: MessageVars = {
       property:

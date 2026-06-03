@@ -1,4 +1,4 @@
-import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
+import { enumeration, falsy, pattern, truthy } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import * as Parsers from '@stoplight/spectral-parsers';
@@ -28,6 +28,38 @@ describe('linter', () => {
 
   beforeEach(() => {
     spectral = new Spectral();
+  });
+
+  test('interpolates {{value}} with the property key for `field: "@key"` (#2922)', async () => {
+    spectral.setRuleset({
+      rules: {
+        rule1: {
+          given: '$.responses',
+          then: {
+            field: '@key',
+            function: enumeration,
+            functionOptions: { values: ['200', '400'] },
+          },
+        },
+      },
+    });
+
+    const document = new Document(
+      `responses:\n  "200":\n    description: "ok"\n  "404":\n    description: "not found"`,
+      Parsers.Yaml,
+    );
+
+    const results = await spectral.run(document);
+
+    expect(results).toEqual([
+      expect.objectContaining({
+        code: 'rule1',
+        // before the fix this interpolated to `Object{}` instead of the key
+        message: '"404" must be equal to one of the allowed values: "200", "400"',
+        severity: DiagnosticSeverity.Warning,
+        path: ['responses', '404'],
+      }),
+    ]);
   });
 
   test('should demand some result', () => {
