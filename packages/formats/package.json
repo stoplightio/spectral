@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-formats",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@stoplight/json": "^3.17.0",
-    "@stoplight/spectral-core": "^1.19.2",
+    "@stoplight/spectral-core": "1.23.0",
     "@types/json-schema": "^7.0.7",
     "tslib": "^2.8.1"
   }

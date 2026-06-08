@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-functions",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "sideEffects": false,
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@stoplight/better-ajv-errors": "1.0.3",
     "@stoplight/json": "^3.17.1",
-    "@stoplight/spectral-core": "^1.19.4",
+    "@stoplight/spectral-core": "1.23.0",
     "@stoplight/spectral-formats": "^1.8.1",
     "@stoplight/spectral-runtime": "^1.1.2",
     "ajv": "^8.18.0",
