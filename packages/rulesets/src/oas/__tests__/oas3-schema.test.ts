@@ -580,4 +580,33 @@ testRule('oas3-schema', [
     },
     errors: [],
   },
+  {
+    name: 'oas3.1: document with external references',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example API',
+        version: '1.0.0',
+        description: 'Example API description',
+      },
+      paths: {
+        '/greetings': {
+          $ref: 'greetings.yaml',
+        },
+      },
+      tags: [
+        {
+          name: 'User',
+          description: 'Info about users',
+        },
+      ],
+      servers: [
+        {
+          url: 'https://example-url.com',
+          description: 'Example server',
+        },
+      ],
+    },
+    errors: [], // No errors expected
+  },
 ]);
