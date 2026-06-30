@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.23.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.23.0...@stoplight/spectral-core-1.23.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* fixed version of core package ([#2989](https://github.com/stoplightio/spectral/issues/2989)) ([5f0e6c6](https://github.com/stoplightio/spectral/commit/5f0e6c6494af5bbb1e748a271bef4752003f8b65))
+
 # @stoplight/spectral-core [1.23.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.22.0...@stoplight/spectral-core-1.23.0) (2026-05-12)
 
 
