@@ -1,3 +1,10 @@
+## @stoplight/spectral-functions [1.10.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.4...@stoplight/spectral-functions-1.10.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* unpinned versions of spectral-core ([#2990](https://github.com/stoplightio/spectral/issues/2990)) ([966b665](https://github.com/stoplightio/spectral/commit/966b6653ec353928e83145bd8d2759cd2810c6c6))
+
 ## @stoplight/spectral-functions [1.10.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.3...@stoplight/spectral-functions-1.10.4) (2026-06-30)
 
 
