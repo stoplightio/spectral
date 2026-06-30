@@ -3342,6 +3342,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-functions@workspace:packages/functions"
   dependencies:
+    "@scarf/scarf": ^1.4.0
     "@stoplight/better-ajv-errors": 1.0.3
     "@stoplight/json": ^3.17.1
     "@stoplight/spectral-core": 1.23.0
