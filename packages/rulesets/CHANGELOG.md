@@ -1,4 +1,12 @@
+## @stoplight/spectral-rulesets [1.22.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.4...@stoplight/spectral-rulesets-1.22.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* fixed version of rulesets package ([#2988](https://github.com/stoplightio/spectral/issues/2988)) ([cd4f0f6](https://github.com/stoplightio/spectral/commit/cd4f0f6c8acd8b0c5aa7afd8148cda60ce265369))
+
 ## @stoplight/spectral-rulesets [1.22.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.2...@stoplight/spectral-rulesets-1.22.3) (2026-05-21)
+
 
 
 ### Bug Fixes
