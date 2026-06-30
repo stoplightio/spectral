@@ -89,6 +89,8 @@ SwaggerUI uses [Scarf](https://scarf.sh/) to collect [anonymized installation an
 
 Alternatively, you can set the environment variable `SCARF_ANALYTICS` to `false` as part of the environment that installs your npm packages, e.g., `SCARF_ANALYTICS=false npm install`.
 
+<img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=6d942d93-f7b2-4dd7-9664-6153414304e9&page=README.md" />
+
 ## 🏁 Help Others Utilize Spectral
 
 If you're using Spectral for an interesting use case, create an issue with details on how you're using it. We'll add it to a list here. Spread the goodness 🎉
