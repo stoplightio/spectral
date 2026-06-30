@@ -1,3 +1,10 @@
+## @stoplight/spectral-cli [6.16.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.0...@stoplight/spectral-cli-6.16.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* added scarf ([#2980](https://github.com/stoplightio/spectral/issues/2980)) ([9db5703](https://github.com/stoplightio/spectral/commit/9db570316d3de899be2dcd8835e95d1817e49997))
+
 # @stoplight/spectral-cli [6.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.15.1...@stoplight/spectral-cli-6.16.0) (2026-05-12)
 
 
