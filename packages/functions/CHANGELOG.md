@@ -1,3 +1,10 @@
+## @stoplight/spectral-functions [1.10.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.2...@stoplight/spectral-functions-1.10.3) (2026-06-30)
+
+
+### Bug Fixes
+
+* added scarf to functions ([#2984](https://github.com/stoplightio/spectral/issues/2984)) ([b16373e](https://github.com/stoplightio/spectral/commit/b16373edb36c10d2d47c9ca846b9ed2bb0ce5a14))
+
 ## @stoplight/spectral-functions [1.10.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.1...@stoplight/spectral-functions-1.10.2) (2026-04-14)
 
 
