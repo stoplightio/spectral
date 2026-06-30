@@ -19,6 +19,7 @@
     "node": "^16.20 || ^18.18 || >= 20.17"
   },
   "dependencies": {
+    "@scarf/scarf": "^1.4.0",
     "@stoplight/json": "^3.17.0",
     "@stoplight/spectral-core": "1.23.0",
     "@types/json-schema": "^7.0.7",

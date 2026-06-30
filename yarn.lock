@@ -3305,6 +3305,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@stoplight/spectral-formats@workspace:packages/formats"
   dependencies:
+    "@scarf/scarf": ^1.4.0
     "@stoplight/json": ^3.17.0
     "@stoplight/spectral-core": 1.23.0
     "@types/json-schema": ^7.0.7
