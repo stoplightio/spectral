@@ -1,6 +1,7 @@
 ## @stoplight/spectral-formats [1.8.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.2...@stoplight/spectral-formats-1.8.3) (2026-06-30)
 
 
+
 ### Bug Fixes
 
 * added scarf to formats ([#2982](https://github.com/stoplightio/spectral/issues/2982)) ([d9f8066](https://github.com/stoplightio/spectral/commit/d9f8066d3ce59872a15b00f65c7d91bae16303b6))
