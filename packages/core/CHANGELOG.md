@@ -1,6 +1,7 @@
 # @stoplight/spectral-core [1.23.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.22.0...@stoplight/spectral-core-1.23.0) (2026-05-12)
 
 
+
 ### Features
 
 * **core:** add error line number for yaml and json ruleset validation ([#2945](https://github.com/stoplightio/spectral/issues/2945)) ([04c1db3](https://github.com/stoplightio/spectral/commit/04c1db355f05db33ca22f546bbe80f5b28fb8e4b))
