@@ -36,6 +36,50 @@ testRule('oas3-operation-security-defined', [
   },
 
   {
+    name: 'valid OpenAPI 3.1 operation with optional security alternatives',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        securitySchemes: {
+          apiKey: {
+            type: 'apiKey',
+            name: 'x-api-key',
+            in: 'header',
+          },
+          oauthBearer: {
+            type: 'http',
+            scheme: 'bearer',
+          },
+        },
+      },
+      security: [
+        {
+          apiKey: [],
+        },
+        {
+          oauthBearer: [],
+        },
+      ],
+      paths: {
+        '/tweets/search': {
+          get: {
+            security: [
+              {
+                apiKey: [],
+              },
+              {
+                oauthBearer: [],
+              },
+              {},
+            ],
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
     name: 'valid and invalid object',
     document: {
       openapi: '3.0.2',
