@@ -1,4 +1,4 @@
-name: Release Nix
+name: Release Docker Images
 on: workflow_dispatch
 
 jobs:
@@ -24,7 +24,53 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.1.0
       with:
-        path: "./packages/cli//binaries"
+        name: nix-binaries
+        path: "./packages/cli/binaries"
+  build-nix-binaries-x64:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Install ldid
+      uses: "./.github/actions/install-ldid"
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Build
+      run: yarn build
+    - name: Build binary
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: macos-x64,linux-x64,alpine-x64
+        bytecode: false
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: nix-binaries-x64
+        path: "./packages/cli/binaries"
+  build-windows-binary:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: true
+    - name: Build
+      run: yarn build
+    - name: Build binary
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: windows
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: windows-binaries
+        path: "./packages/cli/binaries"
   upload-artifacts:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -32,10 +78,13 @@ jobs:
       image: golang:1.23
     needs:
     - build-nix-binaries
+    - build-nix-binaries-x64
+    - build-windows-binary
     steps:
-    - uses: actions/download-artifact@v6.0.0
+    - uses: actions/download-artifact@v4
       with:
-        path: "/tmp/"
+        path: "/tmp/binaries"
+        merge-multiple: true
     - name: Download GitHub Release Utility
       run: go install github.com/tcnksm/ghr@latest
     - name: Publish Release artifacts on GitHub
