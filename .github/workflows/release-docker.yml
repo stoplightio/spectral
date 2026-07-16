@@ -86,7 +86,7 @@ jobs:
         path: "/tmp/binaries"
         merge-multiple: true
     - name: Download GitHub Release Utility
-      run: go install github.com/tcnksm/ghr@latest
+      run: go install github.com/tcnksm/ghr@v0.18.3
     - name: Publish Release artifacts on GitHub
       run: ghr -t ${GH_TOKEN} -u ${{ github.repository_owner }} -r ${{ github.event.repository.name }} -c ${{ github.sha }} ${{ github.ref_name }} /tmp/binaries
       env:
