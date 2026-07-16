@@ -52,18 +52,21 @@ jobs:
         targets: macos-arm64
         bytecode: false
         node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-macos-arm64
     - name: Build binary linux-arm64
       uses: "./.github/actions/build-binary"
       with:
         targets: linux-arm64
         bytecode: false
         node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-linux-arm64
     - name: Build binary alpine-arm64
       uses: "./.github/actions/build-binary"
       with:
         targets: alpine-arm64
         bytecode: false
         node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-alpine-arm64
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.1.0
       with:
@@ -95,18 +98,21 @@ jobs:
         targets: macos-x64
         bytecode: false
         node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-macos-x64
     - name: Build binary linux-x64
       uses: "./.github/actions/build-binary"
       with:
         targets: linux-x64
         bytecode: false
         node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-linux-x64
     - name: Build binary alpine-x64
       uses: "./.github/actions/build-binary"
       with:
         targets: alpine-x64
         bytecode: false
         node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-alpine-x64
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.1.0
       with:
