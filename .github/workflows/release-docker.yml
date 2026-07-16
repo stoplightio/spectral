@@ -39,7 +39,7 @@ jobs:
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
       with:
-        install-corepack: false
+        install-corepack: 'false'
     - name: Build
       run: yarn build
     - name: Build binary
@@ -65,7 +65,7 @@ jobs:
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
       with:
-        install-corepack: false
+        install-corepack: 'false'
     - name: Build
       run: yarn build
     - name: Build binary
