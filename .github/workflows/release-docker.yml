@@ -124,7 +124,7 @@ jobs:
         ref: ${{ inputs.tag }}
     - name: docker build
       run: |-
-        GIT_SHA="${GITHUB_SHA:0:7}"
+        GIT_SHA="$(git rev-parse --short HEAD)"
         docker build . --tag stoplight/spectral:${GIT_SHA}
     - name: docker login
       uses: docker/login-action@v4
@@ -133,7 +133,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: docker push
       run: |-
-        GIT_SHA="${GITHUB_SHA:0:7}"
+        GIT_SHA="$(git rev-parse --short HEAD)"
         FULL_VERSION="${{ inputs.tag }}"
         FULL_VERSION="${FULL_VERSION#v}"
         MINOR_VERSION="${FULL_VERSION%.*}"
