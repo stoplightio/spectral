@@ -94,8 +94,6 @@ jobs:
   release-docker:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
-    container:
-      image: node:lts
     needs:
     - upload-artifacts
     steps:
