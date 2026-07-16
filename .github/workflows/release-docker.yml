@@ -46,11 +46,24 @@ jobs:
         install-corepack: 'false'
     - name: Build
       run: yarn build
-    - name: Build binary
+    - name: Build binary macos-arm64
       uses: "./.github/actions/build-binary"
       with:
-        targets: macos-arm64,linux-arm64,alpine-arm64
+        targets: macos-arm64
         bytecode: false
+        node-version: '18'
+    - name: Build binary linux-arm64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: linux-arm64
+        bytecode: false
+        node-version: '18'
+    - name: Build binary alpine-arm64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: alpine-arm64
+        bytecode: false
+        node-version: '18'
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.1.0
       with:
@@ -76,11 +89,24 @@ jobs:
         install-corepack: 'false'
     - name: Build
       run: yarn build
-    - name: Build binary
+    - name: Build binary macos-x64
       uses: "./.github/actions/build-binary"
       with:
-        targets: macos-x64,linux-x64,alpine-x64
+        targets: macos-x64
         bytecode: false
+        node-version: '18'
+    - name: Build binary linux-x64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: linux-x64
+        bytecode: false
+        node-version: '18'
+    - name: Build binary alpine-x64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: alpine-x64
+        bytecode: false
+        node-version: '18'
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.1.0
       with:
