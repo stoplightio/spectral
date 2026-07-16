@@ -20,7 +20,7 @@ runs:
     run: |-
       npm install -g corepack --force
       corepack enable
-    if: ${{ inputs.install-corepack == 'true' }}
+    if: true == ${{ inputs.install-corepack }}
     shell: bash
   - name: Install Dependencies
     run: yarn install --immutable
