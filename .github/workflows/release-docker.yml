@@ -29,11 +29,15 @@ jobs:
   build-nix-binaries:
     runs-on: ubuntu-latest
     needs: validate
+    container:
+      image: node:lts
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
       with:
         ref: ${{ inputs.tag }}
+    - name: Install sudo
+      run: apt-get update -y && apt-get install -y sudo
     - name: Install ldid
       uses: "./.github/actions/install-ldid"
     - name: Cached dependencies
@@ -55,11 +59,15 @@ jobs:
   build-nix-binaries-x64:
     runs-on: ubuntu-latest
     needs: validate
+    container:
+      image: node:lts
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
       with:
         ref: ${{ inputs.tag }}
+    - name: Install sudo
+      run: apt-get update -y && apt-get install -y sudo
     - name: Install ldid
       uses: "./.github/actions/install-ldid"
     - name: Cached dependencies
@@ -88,8 +96,6 @@ jobs:
         ref: ${{ inputs.tag }}
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
-      with:
-        install-corepack: true
     - name: Build
       run: yarn build
     - name: Build binary
