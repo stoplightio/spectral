@@ -29,6 +29,8 @@ jobs:
   build-nix-binaries:
     runs-on: ubuntu-latest
     needs: validate
+    container:
+      image: node:lts
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
@@ -53,6 +55,8 @@ jobs:
   build-nix-binaries-x64:
     runs-on: ubuntu-latest
     needs: validate
+    container:
+      image: node:lts
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
