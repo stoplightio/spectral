@@ -37,6 +37,7 @@ There are also [additional installation options](https://meta.stoplight.io/docs/
 ### Docker
 
 <!-- make sure to update the value of `--ruleset` according to the actual location of your ruleset -->
+
 ```bash
 docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.yaml" "/tmp/file.yaml"
 ```
