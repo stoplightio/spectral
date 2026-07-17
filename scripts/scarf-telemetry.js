@@ -10,7 +10,7 @@ function reportToScarf() {
   const url = `https://smartbear.gateway.scarf.sh/docker-runtime/${version}/${platform}`;
 
   const req = https.get(url, { timeout: 2000 }, (res) => {
-    res.resume(); // consume response, don't block
+    res.resume();
   });
   req.on('error', () => {});
   req.on('timeout', () => req.destroy());
