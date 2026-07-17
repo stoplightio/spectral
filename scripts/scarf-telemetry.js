@@ -1,9 +1,6 @@
-'use strict';
-
 const https = require('https');
 
 function reportToScarf() {
-  // Opt-out per Scarf convention
   if (process.env.DO_NOT_TRACK || process.env.SCARF_NO_ANALYTICS === 'true') {
     return;
   }
