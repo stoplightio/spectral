@@ -129,7 +129,7 @@
     "memfs": "^3.5.3",
     "multi-semantic-release": "^3.1.0",
     "node-powershell": "^4.0.0",
-    "patch-package": "^6.4.7",
+    "patch-package": "^8.0.0",
     "prettier": "^2.4.1",
     "semantic-release": "^25.0.3",
     "ts-jest": "^29.2.5",
