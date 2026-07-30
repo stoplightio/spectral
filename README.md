@@ -34,6 +34,20 @@ yarn global add @stoplight/spectral-cli
 
 There are also [additional installation options](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation).
 
+### Docker
+
+<!-- make sure to update the value of `--ruleset` according to the actual location of your ruleset -->
+
+```bash
+docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.yaml" "/tmp/file.yaml"
+```
+
+The Docker image sends a lightweight anonymous telemetry ping on startup (version + platform) to help us understand adoption. To opt out, set `DO_NOT_TRACK=1` or `SCARF_NO_ANALYTICS=true`:
+
+```bash
+docker run --rm -it -e DO_NOT_TRACK=1 -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.yaml" "/tmp/file.yaml"
+```
+
 ## 💻 Usage
 
 ### 1. Create a local ruleset
