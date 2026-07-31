@@ -2,6 +2,7 @@ import tseslint from 'typescript-eslint';
 import prettierConfig from 'eslint-plugin-prettier/recommended';
 import importPlugin from 'eslint-plugin-import-x';
 import globals from 'globals';
+import { fileURLToPath } from 'node:url';
 
 export default tseslint.config(
   // Global ignores (replaces .eslintignore)
@@ -49,7 +50,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         project: './tsconfig.eslint.json',
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: fileURLToPath(new URL('.', import.meta.url)),
       },
     },
     rules: {
