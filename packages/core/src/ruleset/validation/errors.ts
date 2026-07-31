@@ -111,7 +111,7 @@ export function convertAjvErrors(
 
 function flatErrors(error: RulesetValidationError | AggregateError): RulesetValidationError | RulesetValidationError[] {
   if (isAggregateError(error)) {
-    return error.errors.flatMap(flatErrors);
+    return (error.errors as (RulesetValidationError | AggregateError)[]).flatMap(flatErrors);
   }
 
   return error;

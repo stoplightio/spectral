@@ -9,10 +9,10 @@ export async function readFileDescriptor(fd: number, opts: IFileReadOptions): Pr
   stream.setEncoding(opts.encoding);
 
   stream.on('readable', () => {
-    let chunk: unknown;
+    let chunk: string | Buffer;
 
-    while ((chunk = stream.read()) !== null) {
-      result += chunk;
+    while ((chunk = stream.read() as string | Buffer) !== null) {
+      result += typeof chunk === 'string' ? chunk : chunk.toString();
     }
   });
 

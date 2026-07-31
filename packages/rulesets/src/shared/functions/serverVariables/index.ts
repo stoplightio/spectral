@@ -12,10 +12,10 @@ type Input = {
   variables?: Record<
     string,
     {
-      enum: string[] | never;
-      default: string | never;
-      description: string | never;
-      examples: string | never;
+      enum?: string[];
+      default?: string;
+      description?: string;
+      examples?: string;
       [key: string]: unknown; // ^x-
     }
   >;
@@ -103,11 +103,11 @@ export default createRulesetFunction<Input, Options>(
       const variable = variables[key];
 
       if ('enum' in variable) {
-        variablePairs.push([key, variable.enum]);
+        variablePairs.push([key, variable.enum!]);
 
-        checkVariableEnumValues(results, ctx.path, key, variable.enum, variable.default);
+        checkVariableEnumValues(results, ctx.path, key, variable.enum!, variable.default);
       } else if ('default' in variable) {
-        variablePairs.push([key, [variable.default]]);
+        variablePairs.push([key, [variable.default!]]);
       } else {
         variablePairs.push([key, []]);
       }
