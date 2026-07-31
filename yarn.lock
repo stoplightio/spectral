@@ -3493,7 +3493,7 @@ __metadata:
     fetch-mock: ^12.6.0
     memfs: ^3.5.3
     pony-cause: 1.1.1
-    prettier: ^2.4.1
+    prettier: ^3.0.0
     rollup: ~2.80.0
     tslib: ^2.8.1
     validate-npm-package-name: 3.0.0
@@ -12556,7 +12556,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.2.0, prettier@npm:^2.4.1":
+"prettier@npm:^2.2.0":
   version: 2.4.1
   resolution: "prettier@npm:2.4.1"
   bin:
