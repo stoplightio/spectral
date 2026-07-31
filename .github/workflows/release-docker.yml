@@ -12,19 +12,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Validate tag format
+      env:
+        TAG: ${{ inputs.tag }}
       run: |
-        if ! echo "${{ inputs.tag }}" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
-          echo "::error::Tag '${{ inputs.tag }}' does not match required format vX.Y.Z (e.g. v6.16.1)"
+        if ! echo "$TAG" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+          echo "::error::Tag '$TAG' does not match required format vX.Y.Z (e.g. v6.16.1)"
           exit 1
         fi
     - name: Check tag exists
-      run: |
-        if ! gh api repos/${{ github.repository }}/git/refs/tags/${{ inputs.tag }} --silent; then
-          echo "::error::Tag '${{ inputs.tag }}' does not exist in the repository"
-          exit 1
-        fi
       env:
         GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        TAG: ${{ inputs.tag }}
+      run: |
+        if ! gh api repos/$REPO/git/refs/tags/$TAG --silent; then
+          echo "::error::Tag '$TAG' does not exist in the repository"
+          exit 1
+        fi
 
   build-nix-binaries:
     runs-on: ubuntu-latest
@@ -156,9 +160,13 @@ jobs:
         go install github.com/tcnksm/ghr@v0.18.3
         echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
     - name: Publish Release artifacts on GitHub
-      run: ghr -t ${GH_TOKEN} -u ${{ github.repository_owner }} -r ${{ github.event.repository.name }} -c ${{ github.sha }} ${{ inputs.tag }} /tmp/binaries
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        REPO_OWNER: ${{ github.repository_owner }}
+        REPO_NAME: ${{ github.event.repository.name }}
+        COMMIT_SHA: ${{ github.sha }}
+        TAG: ${{ inputs.tag }}
+      run: ghr -t ${GH_TOKEN} -u ${REPO_OWNER} -r ${REPO_NAME} -c ${COMMIT_SHA} ${TAG} /tmp/binaries
   release-docker:
     runs-on: ubuntu-latest
     needs:
@@ -177,9 +185,11 @@ jobs:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: docker push
+      env:
+        TAG: ${{ inputs.tag }}
       run: |-
         GIT_SHA="$(git rev-parse --short HEAD)"
-        FULL_VERSION="${{ inputs.tag }}"
+        FULL_VERSION="${TAG}"
         FULL_VERSION="${FULL_VERSION#v}"
         MINOR_VERSION="${FULL_VERSION%.*}"
         MAJOR_VERSION="${MINOR_VERSION%.*}"
