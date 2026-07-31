@@ -18,7 +18,7 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "dependencies": {
-    "@asyncapi/specs": "^6.8.0",
+    "@asyncapi/specs": "6.11.1",
     "@scarf/scarf": "^1.4.0",
     "@stoplight/better-ajv-errors": "1.0.3",
     "@stoplight/json": "^3.17.0",
