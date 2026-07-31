@@ -3066,6 +3066,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sigstore/core@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "@sigstore/core@npm:3.2.1"
+  checksum: 7123bb904b2e79f6521ede79a5f026267fb4c83e15088d02971833fad45bcbc976417ac0d697c0806e2826546a836b36357b17a322cf7ec307ff29fdd8eda326
+  languageName: node
+  linkType: hard
+
 "@sigstore/protobuf-specs@npm:^0.5.0":
   version: 0.5.0
   resolution: "@sigstore/protobuf-specs@npm:0.5.0"
@@ -3098,13 +3105,13 @@ __metadata:
   linkType: hard
 
 "@sigstore/verify@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@sigstore/verify@npm:3.1.0"
+  version: 3.1.1
+  resolution: "@sigstore/verify@npm:3.1.1"
   dependencies:
     "@sigstore/bundle": ^4.0.0
-    "@sigstore/core": ^3.1.0
+    "@sigstore/core": ^3.2.1
     "@sigstore/protobuf-specs": ^0.5.0
-  checksum: fdb1e008fe346eeaf31ee58bfb5b7e1db1b292fe14f3eaf001e2d67eb3aa3af1637c2e17d87ceaf62d5fcee599a0ec30198480c91559b694bfe963e81d09879e
+  checksum: 0e94527b3f2b8fddbcf0d3476f15cacf4381c36ceb0bcae799af246bf3b8f8c74234291267c6a993c8a377efa1858e7ad6138efb00e920f7db7072b3eea8864c
   languageName: node
   linkType: hard
 
