@@ -3520,7 +3520,7 @@ __metadata:
     fetch-mock: ^12.6.0
     json-schema-to-typescript: ^10.1.5
     memfs: ^3.5.3
-    prettier: ^2.4.1
+    prettier: ^3.0.0
     reserved: 0.1.2
     tslib: ^2.8.1
     validate-npm-package-name: 3.0.0
