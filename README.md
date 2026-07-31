@@ -152,5 +152,3 @@ Spectral is 100% free and open-source, under [Apache License 2.0](LICENSE).
 If you would like to thank Stoplight for creating Spectral, [**buy the world a tree**][stoplight_forest].
 
 [stoplight_forest]: https://ecologi.com/stoplightinc
-
-trigger me
