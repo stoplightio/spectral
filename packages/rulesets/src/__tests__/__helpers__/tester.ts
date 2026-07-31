@@ -11,7 +11,7 @@ export type RuleName = keyof Ruleset['rules'];
 type Scenario = ReadonlyArray<
   Readonly<{
     name: string;
-    document: Record<string, unknown> | Document<unknown, unknown>;
+    document: Record<string, unknown> | Document<any, any>;
     errors: ReadonlyArray<Partial<IRuleResult>>;
     mocks?: Record<string, Record<string, unknown>>;
   }>

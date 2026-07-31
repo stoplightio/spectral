@@ -75,7 +75,7 @@ export default tseslint.config(
 
   // Test files: relax strict rules
   {
-    files: ['packages/*/src/**/__tests__/*.ts', 'test-harness/**/*.{ts,js}'],
+    files: ['packages/*/src/**/__tests__/**/*.ts', 'test-harness/**/*.{ts,js}'],
     rules: {
       '@typescript-eslint/strict-boolean-expressions': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
