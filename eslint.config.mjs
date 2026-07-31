@@ -46,10 +46,11 @@ export default tseslint.config(
     files: ['packages/*/src/**/*.ts'],
     extends: [tseslint.configs.eslintRecommended, tseslint.configs.recommendedTypeChecked],
     plugins: { import: importPlugin },
+    languageOptions: {
       parserOptions: {
         project: './tsconfig.eslint.json',
-        tsconfigRootDir: new URL('.', import.meta.url).pathname,
-      }
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     rules: {
       '@typescript-eslint/prefer-optional-chain': 'error',
