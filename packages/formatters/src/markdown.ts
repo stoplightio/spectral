@@ -13,8 +13,9 @@ export const markdown: Formatter = (results, { failSeverity }, ctx?: FormatterCo
     validationResults.sort((a, b) => a.range.start.line - b.range.start.line);
 
     if (validationResults.length > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-      const filteredValidationResults = validationResults.filter(result => result.severity <= failSeverity);
+      const filteredValidationResults = validationResults.filter(
+        result => Number(result.severity) <= Number(failSeverity),
+      );
 
       for (const result of filteredValidationResults) {
         const ruleDocumentationUrl = getRuleDocumentationUrl(result.code, ctx);
