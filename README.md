@@ -1,6 +1,5 @@
 [![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
 [![Github release](https://img.shields.io/github/v/release/stoplightio/spectral.svg?sort=semver)](https://github.com/stoplightio/spectral/releases)
-[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/develop)](https://circleci.com/gh/stoplightio/spectral) 
 [![npm Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-core?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-core) 
 [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
