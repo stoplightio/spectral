@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: stoplightio/.github/.github/workflows/jira-issue-label-added.yaml@master
+    uses: stoplightio/.github/.github/workflows/jira-issue-label-added.yaml@6aa5c56e3ddc56017e2e4e7ad34f9cd5f7ac09fb # master branch commit, fetched 2026-07-31
     with:
       team-name: ${{ contains(github.event.pull_request.labels.*.name, 'team/bad-news-bears') && 'Bad News Bears' || contains(github.event.pull_request.labels.*.name, 'team/maintenance') && 'Maintenance' || '' }}
     secrets: inherit
