@@ -216,4 +216,23 @@ testRule('duplicated-entry-in-enum', [
       },
     ],
   },
+
+  {
+    name: 'oas3: null nodes in example values do not crash (regression #2959)',
+    document: {
+      openapi: '3.0.2',
+      info: { title: 'Test', version: '1.0' },
+      paths: {},
+      components: {
+        examples: {
+          test: {
+            value: {
+              foo: null,
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);
