@@ -62,6 +62,7 @@ export default tseslint.config(
       '@typescript-eslint/strict-boolean-expressions': 'warn',
       '@typescript-eslint/only-throw-error': 'error',
       '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-empty-function': 'error',
       'import/no-extraneous-dependencies': [
         'error',
