@@ -1,0 +1,28 @@
+====test====
+OAS 3.2 - oas3_2-no-deprecated-xml-attribute
+====document====
+openapi: 3.2.0
+info:
+  title: Deprecated XML attribute example
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+          xml:
+            attribute: true
+====asset:ruleset.yaml====
+extends: [[spectral:oas, off]]
+rules:
+  oas3_2-no-deprecated-xml-attribute: error
+====command====
+{bin} lint {document} --ruleset {asset:ruleset.yaml}
+====stdout====
+{document}
+13:15  error  oas3_2-no-deprecated-xml-attribute  "xml.attribute" is deprecated in OAS 3.2; use "xml.nodeType: attribute" instead.  components.schemas.Pet.properties.name.xml
+
+✖ 1 problem (1 error, 0 warnings, 0 infos, 0 hints)

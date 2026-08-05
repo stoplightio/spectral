@@ -1025,6 +1025,9 @@ These rules will only be applied to OpenAPI v3.2 documents.
 
 The `xml.attribute` field is deprecated in OpenAPI v3.2. Use `xml.nodeType: attribute` instead.
 
+Only `xml.attribute: true` is flagged. `xml.attribute: false` is not flagged, since it matches the
+default `nodeType` behavior and has no corresponding migration action.
+
 **Recommended:** Yes
 
 **Bad Example**

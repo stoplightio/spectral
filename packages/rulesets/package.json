@@ -41,7 +41,7 @@
     "@stoplight/spectral-ref-resolver": "^1.0.4",
     "gzip-size": "^6.0.0",
     "immer": "^9.0.6",
-    "terser": "^5.46.0"
+    "terser": "^5.26.0"
   },
   "scripts": {
     "compile-schemas": "ts-node -T ./scripts/compile-schemas.ts",

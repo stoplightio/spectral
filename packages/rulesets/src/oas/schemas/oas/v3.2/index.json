@@ -62,14 +62,20 @@
     }
   },
   "required": ["openapi", "info"],
+  "errorMessage": {
+    "anyOf": "The document must have either \"paths\", \"webhooks\" or \"components\""
+  },
   "anyOf": [
     {
+      "errorMessage": "The document must have either \"paths\", \"webhooks\" or \"components\"",
       "required": ["paths"]
     },
     {
+      "errorMessage": "The document must have either \"paths\", \"webhooks\" or \"components\"",
       "required": ["components"]
     },
     {
+      "errorMessage": "The document must have either \"paths\", \"webhooks\" or \"components\"",
       "required": ["webhooks"]
     }
   ],
@@ -205,7 +211,7 @@
         "schemas": {
           "type": "object",
           "additionalProperties": {
-            "$dynamicRef": "#meta"
+            "$ref": "https://spec.openapis.org/oas/3.2/dialect/2025-09-17"
           }
         },
         "responses": {
@@ -496,7 +502,7 @@
           "type": "boolean"
         },
         "schema": {
-          "$dynamicRef": "#meta"
+          "$ref": "https://spec.openapis.org/oas/3.2/dialect/2025-09-17"
         },
         "content": {
           "$ref": "#/$defs/content",
@@ -749,10 +755,10 @@
           "type": "string"
         },
         "schema": {
-          "$dynamicRef": "#meta"
+          "$ref": "https://spec.openapis.org/oas/3.2/dialect/2025-09-17"
         },
         "itemSchema": {
-          "$dynamicRef": "#meta"
+          "$ref": "https://spec.openapis.org/oas/3.2/dialect/2025-09-17"
         },
         "encoding": {
           "type": "object",
@@ -1081,7 +1087,7 @@
           "type": "boolean"
         },
         "schema": {
-          "$dynamicRef": "#meta"
+          "$ref": "https://spec.openapis.org/oas/3.2/dialect/2025-09-17"
         },
         "content": {
           "$ref": "#/$defs/content",
