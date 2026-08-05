@@ -5,7 +5,7 @@ import {
   unreferencedReusableObject,
   schema,
   xor,
-  undefined,
+  undefined, // eslint-disable-line no-shadow-restricted-names
   alphabetical,
   length,
 } from '@stoplight/spectral-functions';

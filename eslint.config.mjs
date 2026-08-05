@@ -9,7 +9,6 @@ export default tseslint.config(
   {
     ignores: [
       '**/__fixtures__/**',
-      'test-harness/tests/**',
       'packages/*/dist/**',
       'packages/rulesets/src/oas/schemas/validators.ts',
       'packages/rulesets/src/arazzo/schemas/validators.ts',
@@ -27,6 +26,8 @@ export default tseslint.config(
     },
     rules: {
       'no-console': 'error',
+      'no-control-regex': 'error',
+      'no-shadow-restricted-names': 'error',
       '@typescript-eslint/prefer-for-of': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -61,6 +62,7 @@ export default tseslint.config(
       '@typescript-eslint/strict-boolean-expressions': 'warn',
       '@typescript-eslint/only-throw-error': 'error',
       '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/no-empty-function': 'error',
       'import/no-extraneous-dependencies': [
         'error',
         { devDependencies: ['**/*.{test,spec}.ts', '**/__tests__/__helpers__/*.ts'] },
@@ -83,6 +85,7 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/require-await': 'off',
       '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/no-require-imports': 'off',

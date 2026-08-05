@@ -8,6 +8,7 @@ export default createRulesetFunction(
     options: optionSchemas.undefined,
   },
 
+  // eslint-disable-next-line no-shadow-restricted-names
   function undefined(targetVal) {
     if (typeof targetVal !== 'undefined') {
       return [

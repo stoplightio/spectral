@@ -102,17 +102,17 @@ export default createRulesetFunction<Input, Options>(
 
       const variable = variables[key];
 
-      if ('enum' in variable) {
-        variablePairs.push([key, variable.enum!]);
+      if (variable.enum !== undefined) {
+        variablePairs.push([key, variable.enum]);
 
-        checkVariableEnumValues(results, ctx.path, key, variable.enum!, variable.default);
-      } else if ('default' in variable) {
-        variablePairs.push([key, [variable.default!]]);
+        checkVariableEnumValues(results, ctx.path, key, variable.enum, variable.default);
+      } else if (variable.default !== undefined) {
+        variablePairs.push([key, [variable.default]]);
       } else {
         variablePairs.push([key, []]);
       }
 
-      if (!('default' in variable) && opts?.requireDefault === true) {
+      if (variable.default === undefined && opts?.requireDefault === true) {
         results.push({
           message: `Server Variable "${key}" has a missing default.`,
           path: [...ctx.path, 'variables', key],
