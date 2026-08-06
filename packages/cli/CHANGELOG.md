@@ -1,3 +1,24 @@
+## @stoplight/spectral-cli [6.16.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.2...@stoplight/spectral-cli-6.16.3) (2026-08-03)
+
+
+### Bug Fixes
+
+* format md file ([#3027](https://github.com/stoplightio/spectral/issues/3027)) ([39d522a](https://github.com/stoplightio/spectral/commit/39d522aed60eaa7aed27f11c0a7c0ad0466c5833))
+
+## @stoplight/spectral-cli [6.16.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.1...@stoplight/spectral-cli-6.16.2) (2026-07-20)
+
+
+### Bug Fixes
+
+* updates cli readme ([#2998](https://github.com/stoplightio/spectral/issues/2998)) ([dbcb26e](https://github.com/stoplightio/spectral/commit/dbcb26e18b2c5cc04eeea6a121b151ec75787704))
+
+## @stoplight/spectral-cli [6.16.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.0...@stoplight/spectral-cli-6.16.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* added scarf ([#2980](https://github.com/stoplightio/spectral/issues/2980)) ([9db5703](https://github.com/stoplightio/spectral/commit/9db570316d3de899be2dcd8835e95d1817e49997))
+
 # @stoplight/spectral-cli [6.16.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.15.1...@stoplight/spectral-cli-6.16.0) (2026-05-12)
 
 
