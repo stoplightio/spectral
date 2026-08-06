@@ -1,0 +1,206 @@
+name: Release Docker Images
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v6.16.1)'
+        required: true
+        type: string
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Validate tag format
+      env:
+        TAG: ${{ inputs.tag }}
+      run: |
+        if ! echo "$TAG" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+          echo "::error::Tag '$TAG' does not match required format vX.Y.Z (e.g. v6.16.1)"
+          exit 1
+        fi
+    - name: Check tag exists
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        TAG: ${{ inputs.tag }}
+      run: |
+        if ! gh api repos/$REPO/git/refs/tags/$TAG --silent; then
+          echo "::error::Tag '$TAG' does not exist in the repository"
+          exit 1
+        fi
+
+  build-nix-binaries:
+    runs-on: ubuntu-latest
+    needs: validate
+    container:
+      image: node:lts
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+      with:
+        ref: ${{ inputs.tag }}
+    - name: Install sudo
+      run: apt-get update -y && apt-get install -y sudo
+    - name: Install ldid
+      uses: "./.github/actions/install-ldid"
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: 'false'
+    - name: Build
+      run: yarn build
+    - name: Build binary macos-arm64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: macos-arm64
+        bytecode: false
+        node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-macos-arm64
+    - name: Build binary linux-arm64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: linux-arm64
+        bytecode: false
+        node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-linux-arm64
+    - name: Build binary alpine-arm64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: alpine-arm64
+        bytecode: false
+        node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-alpine-arm64
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: nix-binaries
+        path: "./packages/cli/binaries"
+  build-nix-binaries-x64:
+    runs-on: ubuntu-latest
+    needs: validate
+    container:
+      image: node:lts
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+      with:
+        ref: ${{ inputs.tag }}
+    - name: Install sudo
+      run: apt-get update -y && apt-get install -y sudo
+    - name: Install ldid
+      uses: "./.github/actions/install-ldid"
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+      with:
+        install-corepack: 'false'
+    - name: Build
+      run: yarn build
+    - name: Build binary macos-x64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: macos-x64
+        bytecode: false
+        node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-macos-x64
+    - name: Build binary linux-x64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: linux-x64
+        bytecode: false
+        node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-linux-x64
+    - name: Build binary alpine-x64
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: alpine-x64
+        bytecode: false
+        node-version: '18'
+    - run: mv packages/cli/binaries/spectral packages/cli/binaries/spectral-alpine-x64
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: nix-binaries-x64
+        path: "./packages/cli/binaries"
+  build-windows-binary:
+    runs-on: windows-latest
+    needs: validate
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5.0.1
+      with:
+        ref: ${{ inputs.tag }}
+    - name: Cached dependencies
+      uses: "./.github/actions/cached-dependencies"
+    - name: Build
+      run: yarn build
+    - name: Build binary
+      uses: "./.github/actions/build-binary"
+      with:
+        targets: windows
+        node-version: '18'
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.1.0
+      with:
+        name: windows-binaries
+        path: "./packages/cli/binaries"
+  upload-artifacts:
+    runs-on: ubuntu-latest
+    needs:
+    - build-nix-binaries
+    - build-nix-binaries-x64
+    - build-windows-binary
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        path: "/tmp/binaries"
+        merge-multiple: true
+    - name: Download GitHub Release Utility
+      run: |
+        go install github.com/tcnksm/ghr@v0.18.3
+        echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+    - name: Publish Release artifacts on GitHub
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        REPO_OWNER: ${{ github.repository_owner }}
+        REPO_NAME: ${{ github.event.repository.name }}
+        COMMIT_SHA: ${{ github.sha }}
+        TAG: ${{ inputs.tag }}
+      run: ghr -t ${GH_TOKEN} -u ${REPO_OWNER} -r ${REPO_NAME} -c ${COMMIT_SHA} ${TAG} /tmp/binaries
+  release-docker:
+    runs-on: ubuntu-latest
+    needs:
+    - upload-artifacts
+    steps:
+    - uses: actions/checkout@v5.0.1
+      with:
+        ref: ${{ inputs.tag }}
+    - name: docker build
+      run: |-
+        GIT_SHA="$(git rev-parse --short HEAD)"
+        docker build . --tag stoplight/spectral:${GIT_SHA}
+    - name: docker login
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: docker push
+      env:
+        TAG: ${{ inputs.tag }}
+      run: |-
+        GIT_SHA="$(git rev-parse --short HEAD)"
+        FULL_VERSION="${TAG}"
+        FULL_VERSION="${FULL_VERSION#v}"
+        MINOR_VERSION="${FULL_VERSION%.*}"
+        MAJOR_VERSION="${MINOR_VERSION%.*}"
+
+        docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${FULL_VERSION}
+        docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MINOR_VERSION}
+        docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:${MAJOR_VERSION}
+        docker tag stoplight/spectral:${GIT_SHA} stoplight/spectral:latest
+
+        docker push stoplight/spectral:${GIT_SHA}
+        docker push stoplight/spectral:${FULL_VERSION}
+        docker push stoplight/spectral:${MINOR_VERSION}
+        docker push stoplight/spectral:${MAJOR_VERSION}
+        docker push stoplight/spectral:latest
