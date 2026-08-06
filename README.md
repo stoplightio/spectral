@@ -1,5 +1,7 @@
 [![Demo of Spectral linting an OpenAPI document from the CLI](./docs/img/readme-header.svg)](https://stoplight.io/api-governance?utm_source=github&utm_medium=spectral&utm_campaign=readme)
-[![CircleCI](https://img.shields.io/circleci/build/github/stoplightio/spectral/develop)](https://circleci.com/gh/stoplightio/spectral) [![npm Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-core?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-core) [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
+[![Github release](https://img.shields.io/github/v/release/stoplightio/spectral.svg?sort=semver)](https://github.com/stoplightio/spectral/releases)
+[![npm Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-core?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-core)
+[![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x**, **AsyncAPI**, and **Arazzo v1** Documents
@@ -33,6 +35,20 @@ yarn global add @stoplight/spectral-cli
 ```
 
 There are also [additional installation options](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation).
+
+### Docker
+
+<!-- make sure to update the value of `--ruleset` according to the actual location of your ruleset -->
+
+```bash
+docker run --rm -it -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.yaml" "/tmp/file.yaml"
+```
+
+The Docker image sends a lightweight anonymous telemetry ping on startup (version + platform) to help us understand adoption. To opt out, set `DO_NOT_TRACK=1` or `SCARF_NO_ANALYTICS=true`:
+
+```bash
+docker run --rm -it -e DO_NOT_TRACK=1 -v $(pwd):/tmp stoplight/spectral lint --ruleset "/tmp/.spectral.yaml" "/tmp/file.yaml"
+```
 
 ## 💻 Usage
 

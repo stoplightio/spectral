@@ -1,3 +1,10 @@
+## @stoplight/spectral-ruleset-migrator [1.12.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.12.1...@stoplight/spectral-ruleset-migrator-1.12.2) (2026-08-03)
+
+
+### Bug Fixes
+
+* **repo:** fix ruleset test ([#3016](https://github.com/stoplightio/spectral/issues/3016)) ([0d46443](https://github.com/stoplightio/spectral/commit/0d46443fca70ce0c6296680e23eeeda51eb640cd))
+
 ## @stoplight/spectral-ruleset-migrator [1.12.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.12.0...@stoplight/spectral-ruleset-migrator-1.12.1) (2026-05-21)
 
 
