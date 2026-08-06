@@ -1,3 +1,10 @@
+## @stoplight/spectral-runtime [1.1.6](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-runtime-1.1.5...@stoplight/spectral-runtime-1.1.6) (2026-06-30)
+
+
+### Bug Fixes
+
+* remove `abort-controller` ([#2948](https://github.com/stoplightio/spectral/issues/2948)) ([682295a](https://github.com/stoplightio/spectral/commit/682295abde6e705a41bde11cc7f1f1d454a0e3b2))
+
 ## @stoplight/spectral-runtime [1.1.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-runtime-1.1.4...@stoplight/spectral-runtime-1.1.5) (2026-04-14)
 
 

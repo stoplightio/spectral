@@ -1,3 +1,25 @@
+## @stoplight/spectral-formats [1.8.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.4...@stoplight/spectral-formats-1.8.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* unpinned versions of spectral-core ([#2990](https://github.com/stoplightio/spectral/issues/2990)) ([966b665](https://github.com/stoplightio/spectral/commit/966b6653ec353928e83145bd8d2759cd2810c6c6))
+
+## @stoplight/spectral-formats [1.8.4](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.3...@stoplight/spectral-formats-1.8.4) (2026-06-30)
+
+
+### Bug Fixes
+
+* fixed version of formats package ([#2987](https://github.com/stoplightio/spectral/issues/2987)) ([b6952ec](https://github.com/stoplightio/spectral/commit/b6952eceffb9bffbc6b94835cdb76e1bbb20cfd4))
+
+## @stoplight/spectral-formats [1.8.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.2...@stoplight/spectral-formats-1.8.3) (2026-06-30)
+
+
+
+### Bug Fixes
+
+* added scarf to formats ([#2982](https://github.com/stoplightio/spectral/issues/2982)) ([d9f8066](https://github.com/stoplightio/spectral/commit/d9f8066d3ce59872a15b00f65c7d91bae16303b6))
+
 ## @stoplight/spectral-formats [1.8.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.1...@stoplight/spectral-formats-1.8.2) (2024-11-13)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "1.22.3",
+  "version": "1.22.7",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -18,10 +18,11 @@
     "url": "https://github.com/stoplightio/spectral.git"
   },
   "dependencies": {
-    "@asyncapi/specs": "^6.8.0",
+    "@asyncapi/specs": "6.11.1",
+    "@scarf/scarf": "^1.4.0",
     "@stoplight/better-ajv-errors": "1.0.3",
     "@stoplight/json": "^3.17.0",
-    "@stoplight/spectral-core": "^1.19.4",
+    "@stoplight/spectral-core": "^1.23.0",
     "@stoplight/spectral-formats": "^1.8.1",
     "@stoplight/spectral-functions": "^1.9.1",
     "@stoplight/spectral-runtime": "^1.1.2",
