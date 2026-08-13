@@ -3419,7 +3419,7 @@ __metadata:
     memfs: ^3.5.3
     pony-cause: 1.1.1
     prettier: ^2.4.1
-    rollup: ~2.80.0
+    rollup: ^2.80.0
     tslib: ^2.8.1
     validate-npm-package-name: 3.0.0
   languageName: unknown
@@ -13084,7 +13084,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:~2.80.0":
+"rollup@npm:^2.80.0":
   version: 2.80.0
   resolution: "rollup@npm:2.80.0"
   dependencies:
