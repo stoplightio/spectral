@@ -14087,16 +14087,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:7.5.11":
-  version: 7.5.11
-  resolution: "tar@npm:7.5.11"
+"tar@npm:7.5.21":
+  version: 7.5.21
+  resolution: "tar@npm:7.5.21"
   dependencies:
     "@isaacs/fs-minipass": ^4.0.0
     chownr: ^3.0.0
     minipass: ^7.1.2
     minizlib: ^3.1.0
     yallist: ^5.0.0
-  checksum: 7f6785a85dd571b88985e493ec86f692962cbfa7b4017961fddfd2241e0ff3bcd89ed347f4c02b5433aa22b30cca5566e8711543df054fda8fd12425f505378f
+  checksum: 339cab1cd6a9ce7201866a8e96db7b95d2ecf5b5249eb69780c09ef14e9c466c898ffed286e9116a1fd7835c8150e4e65d0cf555ed2857a65c30ff989c32025f
   languageName: node
   linkType: hard
 
