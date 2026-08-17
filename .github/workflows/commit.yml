@@ -16,7 +16,10 @@ jobs:
       matrix:
         node-version:
         - '18.20.8'
-        - '20.20.0' # maintenance LTS
+        - '20.20.2'
+        - '22.23.2'
+        - '24.18.1'
+        - '26.5.1'
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1

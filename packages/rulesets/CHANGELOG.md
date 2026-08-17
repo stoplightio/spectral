@@ -1,3 +1,10 @@
+## @stoplight/spectral-rulesets [1.22.7](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.6...@stoplight/spectral-rulesets-1.22.7) (2026-08-03)
+
+
+### Bug Fixes
+
+* **rulesets:** duplicated-entry-in-enum - support null values in enums when checking for duplicates ([#2960](https://github.com/stoplightio/spectral/issues/2960)) ([eabe7f5](https://github.com/stoplightio/spectral/commit/eabe7f57256371aa0b09fc2211bfc70689dcf495))
+
 ## @stoplight/spectral-rulesets [1.22.6](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.5...@stoplight/spectral-rulesets-1.22.6) (2026-06-30)
 
 
