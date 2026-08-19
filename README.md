@@ -2,6 +2,7 @@
 [![Github release](https://img.shields.io/github/v/release/stoplightio/spectral.svg?sort=semver)](https://github.com/stoplightio/spectral/releases)
 [![npm Downloads](https://img.shields.io/npm/dw/@stoplight/spectral-core?color=blue)](https://www.npmjs.com/package/@stoplight/spectral-core)
 [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
+[![inspect.software](https://raw.githubusercontent.com/inspect-software/badges/main/v1/s/stoplightio/spectral.svg)](https://inspect.software/software/stoplightio/spectral)
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
 - **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x**, **AsyncAPI**, and **Arazzo v1** Documents
