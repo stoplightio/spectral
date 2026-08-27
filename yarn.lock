@@ -3262,12 +3262,10 @@ __metadata:
     "@stoplight/spectral-rulesets": ">=1"
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ^13.6.0
-    "@types/es-aggregate-error": ^1.0.2
     "@types/xml2js": ^0.4.9
     "@types/yargs": ^17.0.8
     "@yao-pkg/pkg": 5.11.0
     chalk: 4.1.2
-    es-aggregate-error: ^1.0.7
     fast-glob: ~3.2.12
     hpagent: ~1.2.0
     lodash: ^4.18.1
@@ -3297,14 +3295,12 @@ __metadata:
     "@stoplight/spectral-runtime": ^1.1.2
     "@stoplight/types": ~13.6.0
     "@stoplight/yaml": ^4.2.2
-    "@types/es-aggregate-error": ^1.0.2
     "@types/json-schema": ^7.0.11
     "@types/minimatch": ^3.0.5
     "@types/treeify": ^1.0.0
     ajv: ^8.18.0
     ajv-errors: ~3.0.0
     ajv-formats: ~2.1.1
-    es-aggregate-error: ^1.0.7
     expr-eval-fork: ^3.0.1
     jsonpath-plus: ^10.3.0
     lodash: ^4.18.1
@@ -3803,15 +3799,6 @@ __metadata:
   version: 2.8.12
   resolution: "@types/cors@npm:2.8.12"
   checksum: 8c45f112c7d1d2d831b4b266f2e6ed33a1887a35dcbfe2a18b28370751fababb7cd045e745ef84a523c33a25932678097bf79afaa367c6cb3fa0daa7a6438257
-  languageName: node
-  linkType: hard
-
-"@types/es-aggregate-error@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@types/es-aggregate-error@npm:1.0.2"
-  dependencies:
-    "@types/node": "*"
-  checksum: 076fd59b595f33c8c7e7eb68ec55bd43cf8b2cf7bbc6778e25d7ae1a5fa0538a0a56f149015f403d7bbcefe59f1d8182351685b59c1fe719fd46d0dd8a9737fa
   languageName: node
   linkType: hard
 
@@ -6753,20 +6740,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"es-aggregate-error@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "es-aggregate-error@npm:1.0.7"
-  dependencies:
-    define-properties: ^1.1.3
-    es-abstract: ^1.19.0
-    function-bind: ^1.1.1
-    functions-have-names: ^1.2.2
-    get-intrinsic: ^1.1.1
-    globalthis: ^1.0.2
-  checksum: 16b89fefdf56c0478cd21577249156cf83e44c2220c057cbfddd99c01e15e03d6d90a85ce73dece4728a5bfcb022dc160e04a66b1f83a620f140842c6f8325f9
-  languageName: node
-  linkType: hard
-
 "es-define-property@npm:^1.0.0":
   version: 1.0.0
   resolution: "es-define-property@npm:1.0.0"
@@ -7816,13 +7789,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"functions-have-names@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "functions-have-names@npm:1.2.2"
-  checksum: 25f44b6d1c41ac86ffdf41f25d1de81c0a5b4a3fcf4307a33cdfb23b9d4bd5d0d8bf312eaef5ad368c6500c8a9e19f692b8ce9f96aaab99db9dd936554165558
-  languageName: node
-  linkType: hard
-
 "generator-function@npm:^2.0.0":
   version: 2.0.1
   resolution: "generator-function@npm:2.0.1"
@@ -8147,15 +8113,6 @@ __metadata:
   dependencies:
     type-fest: ^0.20.2
   checksum: e571b28462b8922a29ac78c8df89848cfd5dc9bdd5d8077440c022864f512a4aae82e7561a2f366337daa86fd4b366aec16fd3f08686de387e4089b01be6cb14
-  languageName: node
-  linkType: hard
-
-"globalthis@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "globalthis@npm:1.0.2"
-  dependencies:
-    define-properties: ^1.1.3
-  checksum: 5a5f3c7ab94708260a98106b35946b74bb57f6b2013e39668dc9e8770b80a3418103b63a2b4aa01c31af15fdf6a2940398ffc0a408573c34c2304f928895adff
   languageName: node
   linkType: hard
 

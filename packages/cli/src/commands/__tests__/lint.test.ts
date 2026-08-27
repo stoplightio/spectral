@@ -3,7 +3,6 @@ import { DiagnosticSeverity } from '@stoplight/types';
 import { IRuleResult } from '@stoplight/spectral-core';
 import * as process from 'process';
 import { ErrorWithCause } from 'pony-cause';
-import AggregateError from 'es-aggregate-error';
 
 import { lint } from '../../services/linter';
 import { formatOutput, writeOutput } from '../../services/output';
@@ -270,13 +269,13 @@ describe('lint', () => {
     expect(process.stderr.write).nthCalledWith(2, `Error #1: ${chalk.red('some unhandled exception')}\n`);
     expect(process.stderr.write).nthCalledWith(
       3,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:262`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:261`),
     );
 
     expect(process.stderr.write).nthCalledWith(4, `Error #2: ${chalk.red('another one')}\n`);
     expect(process.stderr.write).nthCalledWith(
       5,
-      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:263`),
+      expect.stringContaining(`packages/cli/src/commands/__tests__/lint.test.ts:262`),
     );
 
     expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);

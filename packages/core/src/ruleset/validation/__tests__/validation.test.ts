@@ -1,7 +1,6 @@
 import '@stoplight/spectral-test-utils/matchers';
 
 import { assertValidRuleset, RulesetValidationError } from '../index';
-import AggregateError = require('es-aggregate-error');
 import invalidRuleset from './__fixtures__/invalid-ruleset';
 import validRuleset from './__fixtures__/valid-flat-ruleset';
 import extendedRuleset from './__fixtures__/aliases/extended-definition';

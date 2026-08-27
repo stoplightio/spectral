@@ -2,7 +2,6 @@ import '@stoplight/spectral-test-utils/matchers';
 import { RulesetValidationError } from '@stoplight/spectral-core';
 import casing, { CasingType } from '../casing';
 import testFunction from './__helpers__/tester';
-import AggregateError = require('es-aggregate-error');
 
 const runCasing = testFunction.bind(null, casing);
 

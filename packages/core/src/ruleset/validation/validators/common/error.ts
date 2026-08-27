@@ -1,5 +1,4 @@
 import { isError } from 'lodash';
-import AggregateError from 'es-aggregate-error';
 
 import { RulesetValidationError } from '../../errors';
 import { isAggregateError } from '../../../../guards/isAggregateError';

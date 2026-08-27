@@ -2,7 +2,6 @@ import { RulesetValidationError } from '@stoplight/spectral-core';
 import testFunction from './__helpers__/tester';
 import length from '../length';
 import '@stoplight/spectral-test-utils/matchers';
-import AggregateError = require('es-aggregate-error');
 
 const runLength = testFunction.bind(null, length);
 

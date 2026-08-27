@@ -2,7 +2,6 @@ import { isPlainObject } from '@stoplight/json';
 import { createValidator } from './ajv';
 import { convertAjvErrors, RulesetSourceContext, RulesetValidationError } from './errors';
 import type { FileRuleDefinition, RuleDefinition, RulesetDefinition } from '../types';
-import AggregateError from 'es-aggregate-error';
 
 export function assertValidRuleset(
   ruleset: unknown,
