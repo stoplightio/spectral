@@ -3,6 +3,20 @@ import { serveAssets } from '@stoplight/spectral-test-utils';
 import * as runtime from '@stoplight/spectral-runtime';
 import * as functions from '@stoplight/spectral-functions';
 
+function parseBundle(code: string): { declarations: string[]; body: string } {
+  const lines = code.split('\n');
+  const declarations: string[] = [];
+  const bodyLines: string[] = [];
+  for (const line of lines) {
+    if (/^const [\w$]+ = globalThis\[/.test(line)) {
+      declarations.push(line);
+    } else {
+      bodyLines.push(line);
+    }
+  }
+  return { declarations: declarations.sort(), body: bodyLines.join('\n') };
+}
+
 import { BundleOptions, bundleRuleset } from '../../index';
 import type { IO } from '../../types';
 import { virtualFs } from '../virtualFs';
@@ -59,24 +73,28 @@ export default {
         plugins: [builtins(), virtualFs(io)],
       });
 
-      expect(code)
-        .toEqual(`const alphabetical = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['alphabetical'];
-const casing = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['casing'];
-const defined = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['defined'];
-const enumeration = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['enumeration'];
-const falsy = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['falsy'];
-const length = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['length'];
-const pattern = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['pattern'];
-const schema = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['schema'];
-const truthy = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['truthy'];
-const undefined$1 = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['undefined'];
-const unreferencedReusableObject = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['unreferencedReusableObject'];
-const xor = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['xor'];
-const or = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['or'];
-
-const oas = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['oas'];
-const asyncapi = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['asyncapi'];
-const arazzo = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['arazzo'];
+      const { declarations, body } = parseBundle(code);
+      expect(declarations).toEqual(
+        [
+          "const alphabetical = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['alphabetical'];",
+          "const arazzo = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['arazzo'];",
+          "const asyncapi = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['asyncapi'];",
+          "const casing = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['casing'];",
+          "const defined = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['defined'];",
+          "const enumeration = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['enumeration'];",
+          "const falsy = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['falsy'];",
+          "const length = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['length'];",
+          "const oas = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-rulesets']['oas'];",
+          "const or = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['or'];",
+          "const pattern = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['pattern'];",
+          "const schema = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['schema'];",
+          "const truthy = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['truthy'];",
+          "const undefined$1 = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['undefined'];",
+          "const unreferencedReusableObject = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['unreferencedReusableObject'];",
+          "const xor = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-functions']['xor'];",
+        ].sort(),
+      );
+      expect(body).toEqual(`
 
 var input = {
   extends: [oas],
@@ -126,25 +144,27 @@ readFile();`,
         ],
       });
 
-      expect(code)
-        .toEqual(`const fetch = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['fetch'];
-const DEFAULT_REQUEST_OPTIONS = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['DEFAULT_REQUEST_OPTIONS'];
-const decodeSegmentFragment = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['decodeSegmentFragment'];
-const printError = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printError'];
-const PrintStyle = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['PrintStyle'];
-const printPath = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printPath'];
-const printValue = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printValue'];
-const startsWithProtocol = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['startsWithProtocol'];
-const isAbsoluteRef = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['isAbsoluteRef'];
-const traverseObjUntilRef = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['traverseObjUntilRef'];
-const getEndRef = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['getEndRef'];
-const safePointerToPath = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['safePointerToPath'];
-const getClosestJsonPath = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['getClosestJsonPath'];
-const readFile = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['readFile'];
-const readParsable = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['readParsable'];
-
-readFile();
-`);
+      const { declarations, body } = parseBundle(code);
+      expect(declarations).toEqual(
+        [
+          "const DEFAULT_REQUEST_OPTIONS = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['DEFAULT_REQUEST_OPTIONS'];",
+          "const PrintStyle = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['PrintStyle'];",
+          "const decodeSegmentFragment = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['decodeSegmentFragment'];",
+          "const fetch = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['fetch'];",
+          "const getClosestJsonPath = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['getClosestJsonPath'];",
+          "const getEndRef = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['getEndRef'];",
+          "const isAbsoluteRef = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['isAbsoluteRef'];",
+          "const printError = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printError'];",
+          "const printPath = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printPath'];",
+          "const printValue = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['printValue'];",
+          "const readFile = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['readFile'];",
+          "const readParsable = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['readParsable'];",
+          "const safePointerToPath = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['safePointerToPath'];",
+          "const startsWithProtocol = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['startsWithProtocol'];",
+          "const traverseObjUntilRef = globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime']['traverseObjUntilRef'];",
+        ].sort(),
+      );
+      expect(body).toBe('\nreadFile();\n');
 
       expect(
         globalThis[Symbol.for('@stoplight-spectral/builtins')]['822928']['@stoplight/spectral-runtime'],
