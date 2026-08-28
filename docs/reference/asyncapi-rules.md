@@ -677,7 +677,7 @@ Channel servers must be defined in the `servers` object.
 **Bad Example**
 
 ```yaml
-asyncapi: "3.0.0"
+asyncapi: "3.1.0"
 info:
   title: Awesome API
   description: A very well-defined API
@@ -695,7 +695,7 @@ channels:
 **Good Example**
 
 ```yaml
-asyncapi: "3.0.0"
+asyncapi: "3.1.0"
 info:
   title: Awesome API
   description: A very well-defined API

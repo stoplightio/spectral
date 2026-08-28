@@ -1,4 +1,4 @@
-import { aas2, aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6, aas3, aas3_0 } from '../asyncapi';
+import { aas2, aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6, aas3, aas3_0, aas3_1 } from '../asyncapi';
 
 describe('AsyncAPI format', () => {
   describe('AsyncAPI 2.x', () => {
@@ -126,29 +126,41 @@ describe('AsyncAPI format', () => {
     });
   });
   describe('AsyncAPI 3.0', () => {
-    it.each(['3.0.0'])('recognizes %s version correctly', version => {
+    it.each(['3.0.0', '3.0.3'])('recognizes %s version correctly', version => {
       expect(aas3({ asyncapi: version }, null)).toBe(true);
     });
-    it.each(['3.0.0'])('recognizes %s version correctly', version => {
+    it.each(['3.0.0', '3.0.3'])('recognizes %s version correctly', version => {
       expect(aas3_0({ asyncapi: version }, null)).toBe(true);
     });
+  });
 
-    it.each([
-      '2',
-      '2.3',
-      '2.0.0',
-      '2.1.0',
-      '2.1.37',
-      '2.2.0',
-      '2.3.0',
-      '2.4.0',
-      '2.4.3',
-      '2.5.0',
-      '2.5.4',
-      '2.7.0',
-      '2.7.4',
-    ])('does not recognize %s version', version => {
-      expect(aas3({ asyncapi: version }, null)).toBe(false);
+  describe('AsyncAPI 3.1', () => {
+    it.each(['3.1.0', '3.1.3'])('recognizes %s version correctly', version => {
+      expect(aas3({ asyncapi: version }, null)).toBe(true);
+      expect(aas3_1({ asyncapi: version }, null)).toBe(true);
+    });
+
+    it.each(['3.0.0', '3.0.3', '3.2.0', '3', '3.1', '3.1.', '3.1.01'])('does not recognize %s version', version => {
+      expect(aas3_1({ asyncapi: version }, null)).toBe(false);
+    });
+  });
+
+  describe('AsyncAPI 3.x', () => {
+    it.each(['3.2.0', '3.27.4'])('recognizes future %s versions correctly', version => {
+      expect(aas3({ asyncapi: version }, null)).toBe(true);
+      expect(aas3_0({ asyncapi: version }, null)).toBe(false);
+      expect(aas3_1({ asyncapi: version }, null)).toBe(false);
+    });
+
+    it.each(['2', '2.3', '2.0.0', '2.7.4', '3', '3.0', '3.1', '3.1.01', '4.0.0'])(
+      'does not recognize %s version',
+      version => {
+        expect(aas3({ asyncapi: version }, null)).toBe(false);
+      },
+    );
+
+    it('does not recognize an AsyncAPI 3.1 document as AsyncAPI 3.0', () => {
+      expect(aas3_0({ asyncapi: '3.1.0' }, null)).toBe(false);
     });
   });
 });
