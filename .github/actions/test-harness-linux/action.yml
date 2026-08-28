@@ -31,8 +31,6 @@ runs:
   - name: Run harness tests
     run: yarn test.harness --maxWorkers=3
     shell: bash
-    env:
-      NODE_OPTIONS: --no-deprecation
   - name: save_cache
     uses: actions/cache@v4.3.0
     with:
