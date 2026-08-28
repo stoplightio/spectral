@@ -2,7 +2,7 @@ import Shell from 'node-powershell';
 import { isError } from 'lodash';
 import type { SpawnFn } from '@stoplight/spectral-test-harness';
 
-import { normalizeLineEndings } from '../utils';
+import { normalizeLineEndings, stripDeprecationWarnings } from '../utils';
 
 export { normalizeLineEndings, applyReplacements } from '../utils';
 
@@ -32,12 +32,12 @@ export const spawnNode: SpawnFn = async (command, env, cwd) => {
 
     return {
       stderr: '',
-      stdout: normalizeLineEndings(splitted[1].trim()),
+      stdout: normalizeLineEndings(stripDeprecationWarnings(splitted[1])),
       status: Number.parseInt(splitted[2]),
     };
   } catch (err) {
     return {
-      stderr: normalizeLineEndings(isError(err) ? err.message.replace(r, '$1').trim() : String(err)),
+      stderr: normalizeLineEndings(stripDeprecationWarnings(isError(err) ? err.message.replace(r, '$1') : String(err))),
       stdout: '',
       status: 1,
     };
