@@ -12,7 +12,6 @@ import {
   aas3_0,
   aas3_1,
 } from '@stoplight/spectral-formats';
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const specs = allSchemas.schemas;
 
 export type AsyncAPISpecVersion = keyof typeof specs;
