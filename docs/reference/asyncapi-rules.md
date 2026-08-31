@@ -85,6 +85,7 @@ info:
   title: Descriptive API
   description: >+
     Some description about the general point of this API, and why it exists when another similar but different API also exists.
+
 ```
 
 ### asyncapi-info-license-url
@@ -650,6 +651,7 @@ tags:
   - name: Invoice Items
     description: |+
       Giant long explanation about what this business concept is, because other people _might_ not have a clue!
+
 ```
 
 **Recommended:** No
@@ -898,6 +900,7 @@ info:
     - name: Invoice Items
       description: |+
         Giant long explanation about what this business concept is, because other people _might_ not have a clue!
+
 ```
 
 **Recommended:** No
