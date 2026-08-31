@@ -41,7 +41,7 @@ export function formatOutput(
 ): string {
   return formatters[format](results, formatOptions, {
     ruleset,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
     spectralVersion: VERSION,
   });
 }
