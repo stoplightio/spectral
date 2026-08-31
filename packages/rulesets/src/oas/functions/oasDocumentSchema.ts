@@ -18,13 +18,10 @@ export default createRulesetFunction<unknown, null>(
 
     const schema = formats.has(oas2) ? 'oas2_0' : formats.has(oas3_1) ? 'oas3_1' : 'oas3_0';
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     const validator = validators[schema];
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     validator(input);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const errors = validator['errors'] as ErrorObject[] | null;
 
     return errors?.reduce<IFunctionResult[]>((errors, e) => processError(errors, input, schema, e), []);
