@@ -1,7 +1,7 @@
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isPlainObject } from '@stoplight/json';
 import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
-import { difference, isError, pick } from 'lodash';
+import { camelCase, difference, isError, pick } from 'lodash';
 import type { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
 import * as process from 'process';
@@ -114,6 +114,22 @@ const lintCommand: CommandModule = {
           alias: 'o',
           description: `where to output results, can be a single file name, multiple "output.<format>" or missing to print to stdout`,
           type: 'string',
+          // yargs camel-cases dotted keys, so `--output.github-actions` becomes
+          // `githubActions` (and may duplicate the original). Re-key the object by
+          // the canonical format names so dashed formats line up with `--format`.
+          coerce(value: unknown): unknown {
+            if (!isPlainObject(value)) return value;
+            const raw = value as Dictionary<unknown>;
+            const normalized: Dictionary<unknown> = {};
+            for (const format of formatOptions) {
+              if (format in raw) {
+                normalized[format] = raw[format];
+              } else if (camelCase(format) in raw) {
+                normalized[format] = raw[camelCase(format)];
+              }
+            }
+            return normalized;
+          },
         },
         'stdin-filepath': {
           description: 'path to a file to pretend that stdin comes from',
