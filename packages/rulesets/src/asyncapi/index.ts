@@ -16,7 +16,7 @@ import {
   pattern,
   unreferencedReusableObject,
   schema,
-  undefined,
+  undefined, // eslint-disable-line no-shadow-restricted-names
   alphabetical,
 } from '@stoplight/spectral-functions';
 

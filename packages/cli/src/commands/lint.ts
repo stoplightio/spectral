@@ -2,7 +2,6 @@ import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { isPlainObject } from '@stoplight/json';
 import { getDiagnosticSeverity, IRuleResult } from '@stoplight/spectral-core';
 import { difference, isError, pick } from 'lodash';
-import type { ReadStream } from 'tty';
 import type { CommandModule } from 'yargs';
 import * as process from 'process';
 import chalk from 'chalk';
@@ -38,7 +37,7 @@ const lintCommand: CommandModule = {
             return [];
           }
 
-          return [(process.stdin as ReadStream & { fd: 0 }).fd];
+          return [process.stdin.fd];
         },
       })
       .middleware((argv: Dictionary<unknown>) => {
