@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import allSchemas from '@asyncapi/specs';
 import type { Format } from '@stoplight/spectral-core';
 import {
@@ -14,7 +12,6 @@ import {
   aas3_0,
   aas3_1,
 } from '@stoplight/spectral-formats';
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const specs = allSchemas.schemas;
 
 export type AsyncAPISpecVersion = keyof typeof specs;

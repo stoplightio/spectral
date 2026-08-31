@@ -128,7 +128,6 @@ export { input as default };
 readFile();`,
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       function readFile(): void {}
 
       const code = await bundleRuleset('/tmp/input.js', {
@@ -181,9 +180,8 @@ readFile();`,
 readFile();`,
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       function readFile(): void {}
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
+
       function readFile2(): void {}
 
       await bundleRuleset('/tmp/input.js', {

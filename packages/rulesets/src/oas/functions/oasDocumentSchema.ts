@@ -17,6 +17,7 @@ export default createRulesetFunction<unknown, null>(
     if (formats === null || formats === void 0) return;
 
     const schema = formats.has(oas2) ? 'oas2_0' : formats.has(oas3_1) ? 'oas3_1' : 'oas3_0';
+
     const validator = validators[schema];
 
     validator(input);
