@@ -1,6 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import type { IFunctionResult } from '@stoplight/spectral-core';
-import { oas2, oas3_1 } from '@stoplight/spectral-formats';
+import { oas2, oas3_1, oas3_2 } from '@stoplight/spectral-formats';
 import { isPlainObject, resolveInlineRef } from '@stoplight/json';
 import type { ErrorObject } from 'ajv';
 import leven from 'leven';
@@ -16,7 +16,13 @@ export default createRulesetFunction<unknown, null>(
     const formats = context.document.formats;
     if (formats === null || formats === void 0) return;
 
-    const schema = formats.has(oas2) ? 'oas2_0' : formats.has(oas3_1) ? 'oas3_1' : 'oas3_0';
+    const schema = formats.has(oas2)
+      ? 'oas2_0'
+      : formats.has(oas3_2)
+      ? 'oas3_2'
+      : formats.has(oas3_1)
+      ? 'oas3_1'
+      : 'oas3_0';
     const validator = validators[schema];
 
     validator(input);
@@ -34,7 +40,7 @@ function isRelevantError(error: ErrorObject): boolean {
 function processError(
   errors: IFunctionResult[],
   input: unknown,
-  schema: 'oas2_0' | 'oas3_0' | 'oas3_1',
+  schema: 'oas2_0' | 'oas3_0' | 'oas3_1' | 'oas3_2',
   error: ErrorObject,
 ): IFunctionResult[] {
   if (!isRelevantError(error)) {

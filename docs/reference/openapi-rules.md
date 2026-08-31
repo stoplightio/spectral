@@ -8,7 +8,7 @@ In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of
 
 ## OpenAPI v2 & v3
 
-These rules apply to both OpenAPI v2.0, v3.0, and most likely v3.1, although there are some differences.
+These rules apply to OpenAPI v2.0, v3.0, v3.1, and v3.2, although there are some differences.
 
 ### contact-properties
 
@@ -729,7 +729,7 @@ Examples must be valid against their defined schema.
 
 ## OpenAPI v3-only
 
-These rules will only be applied to OpenAPI v3.0 documents.
+These rules will only be applied to OpenAPI v3.0, v3.1, and v3.2 documents.
 
 ### oas3-api-servers
 
@@ -798,7 +798,7 @@ Parameter objects should have a `description`.
 ### oas3-schema
 
 Validate structure of OpenAPI v3 specification.
-If OpenAPI 3.1.0 is used, `jsonSchemaDialect` is not respected and the draft 2020-12 is applied.
+If OpenAPI 3.1 or 3.2 is used, `jsonSchemaDialect` is not respected and the draft 2020-12 is applied.
 If you define your own `jsonSchemaDialect`, you'll most likely want to disable this rule.
 
 **Recommended:** Yes
@@ -994,7 +994,7 @@ schemas:
 
 ### oas3-server-variables
 
-This rule ensures that server variables defined in OpenAPI Specification 3 (OAS3) and 3.1 are valid, not unused, and result in a valid URL. Properly defining and using server variables is crucial for the accurate representation of API endpoints and preventing potential misconfigurations or security issues.
+This rule ensures that server variables defined in OpenAPI Specification 3 (OAS3), 3.1, and 3.2 are valid, not unused, and result in a valid URL. Properly defining and using server variables is crucial for the accurate representation of API endpoints and preventing potential misconfigurations or security issues.
 
 **Recommended:** Yes
 
@@ -1093,7 +1093,7 @@ paths:
 
 ### oas3_1-servers-in-webhook
 
-Servers should not be defined in a webhook.
+Servers should not be defined in a webhook. Applies to OpenAPI v3.1 and v3.2.
 
 **Recommended:** Yes
 
@@ -1124,7 +1124,7 @@ webhooks:
 
 ### oas3_1-callbacks-in-webhook
 
-Callbacks should not be defined in a webhook.
+Callbacks should not be defined in a webhook. Applies to OpenAPI v3.1 and v3.2.
 
 **Recommended:** Yes
 
@@ -1137,4 +1137,40 @@ webhooks:
   newPet:
     post:
       callbacks: ...
+```
+
+## OpenAPI v3.2-only
+
+These rules will only be applied to OpenAPI v3.2 documents.
+
+### oas3_2-no-deprecated-xml-attribute
+
+The `xml.attribute` field is deprecated in OpenAPI v3.2. Use `xml.nodeType: attribute` instead.
+
+**Recommended:** Yes
+
+**Bad Example**
+
+```yaml
+components:
+  schemas:
+    Pet:
+      properties:
+        name:
+          type: string
+          xml:
+            attribute: true
+```
+
+**Good Example**
+
+```yaml
+components:
+  schemas:
+    Pet:
+      properties:
+        name:
+          type: string
+          xml:
+            nodeType: attribute
 ```
