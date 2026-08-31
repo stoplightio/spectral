@@ -41,6 +41,7 @@ export function formatOutput(
 ): string {
   return formatters[format](results, formatOptions, {
     ruleset,
+
     spectralVersion: VERSION,
   });
 }

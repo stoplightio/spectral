@@ -4,6 +4,8 @@ Spectral has a built-in "asyncapi" ruleset for the [AsyncAPI Specification](http
 
 In your ruleset file you can add `extends: "spectral:asyncapi"` and you'll get all of the following rules applied.
 
+`Recommended` indicates whether a rule is enabled by default. `Default severity when enabled` is the severity the rule reports when active.
+
 For simplicity, the rules are split up into v2 and v3 compliant rules to make it easier to know which apply when.
 
 ## AsyncAPI v2 and v3
@@ -16,6 +18,8 @@ All channel parameters should be defined in the `parameters` object of the chann
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-info-contact-properties
 
 The [asyncapi-info-contact](#asyncapi-info-contact) rule will ask you to put in a contact object, and this rule will make sure it's full of the most useful properties: `name`, `url`, and `email`.
@@ -23,6 +27,8 @@ The [asyncapi-info-contact](#asyncapi-info-contact) rule will ask you to put in 
 Putting in the name of the developer/team/department/company responsible for the API, along with the support email and help-desk/GitHub Issues/whatever URL means people know where to go for help. This can mean more money in the bank, instead of developers just wandering off or complaining online.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -46,6 +52,8 @@ Hopefully, your API description document is so good that nobody ever needs to co
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Good Example**
 
 ```yaml
@@ -66,6 +74,8 @@ Examples can contain Markdown so you can really go to town with them, implementi
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Good Example**
 
 ```yaml
@@ -75,6 +85,7 @@ info:
   title: Descriptive API
   description: >+
     Some description about the general point of this API, and why it exists when another similar but different API also exists.
+
 ```
 
 ### asyncapi-info-license-url
@@ -82,6 +93,8 @@ info:
 Mentioning a license is only useful if people know what the license means, so add a link to the full text for those who need it.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -103,6 +116,8 @@ How useful this is in court is not entirely known, but having a license is bette
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Good Example**
 
 ```yaml
@@ -118,17 +133,23 @@ Checking if the AsyncAPI document is using the latest version.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** info
+
 ### asyncapi-parameter-description
 
 Parameter objects should have a `description`.
 
 **Recommended:** No
 
+**Default severity when enabled:** warn
+
 ### asyncapi-servers
 
 A non-empty `servers` object is expected to be located at the root of the document.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### asyncapi-unused-components-schema
 
@@ -142,6 +163,8 @@ specifications that reference those objects).
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-unused-components-server
 
 Potential unused reusable `server` entry has been detected.
@@ -154,6 +177,8 @@ specifications that reference those objects).
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ## AsyncAPI v2
 
 The following rules ONLY apply to AsyncAPI v2 documents.
@@ -164,11 +189,15 @@ Validate structure of AsyncAPI specification.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-server-security
 
 Server `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Good Example**
 
@@ -204,17 +233,23 @@ Channel parameter declarations cannot be empty, ex.`/given/{}` is invalid.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-channel-no-query-nor-fragment
 
 Query parameters and fragments shouldn't be used in channel names. Instead, use bindings to define them.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-channel-no-trailing-slash
 
 Keep trailing slashes off of channel names, as it can cause some confusion. Most messaging protocols will treat `example/foo` and `example/foo/` as different things. Keep in mind that tooling may replace slashes (`/`) with protocol-specific notation (e.g.: `.` for AMQP), therefore, a trailing slash may result in an invalid channel name in some protocols.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### asyncapi-channel-servers
 
@@ -258,11 +293,15 @@ channels:
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-headers-schema-type-object
 
 The schema definition of the application headers must be of type “object”.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 ### asyncapi-message-examples
 
@@ -309,11 +348,15 @@ components:
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-message-messageId-uniqueness
 
 `messageId` must be unique across all the messages (except those one defined in the components).
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Bad Example**
 
@@ -349,11 +392,15 @@ Operation objects should have a description.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-operation-operationId-uniqueness
 
 `operationId` must be unique across all the operations (except the ones defined in the components).
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Bad Example**
 
@@ -385,11 +432,15 @@ This operation ID is essentially a reference for the operation. Tools may use it
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-operation-security
 
 Operation `security` values must match a scheme defined in the `components.securitySchemes` object. It also checks if there are `oauth2` scopes that have been defined for the given security.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Good Example**
 
@@ -422,6 +473,8 @@ components:
 `default` objects should be valid against the `payload` they decorate.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Good Example**
 
@@ -456,6 +509,8 @@ payload:
 Values of the `examples` array should be valid against the `payload` they decorate.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Good Example**
 
@@ -501,11 +556,15 @@ Other formats such as OpenAPI Schema Object, JSON Schema Draft 07, and Avro will
 
 **Recommended:** Yes
 
+**Default severity when enabled:** info
+
 ### asyncapi-payload
 
 When `schemaFormat` is undefined, the `payload` object should be valid against the AsyncAPI v2 Schema Object definition.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 ### asyncapi-schema-default
 
@@ -513,17 +572,23 @@ When `schemaFormat` is undefined, the `payload` object should be valid against t
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-schema-examples
 
 Values of the `examples` array should be valid against the `schema` they decorate.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-server-no-empty-variable
 
 Server URL variable declarations cannot be empty, ex.`gigantic-server.com/{}` is invalid.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### asyncapi-server-no-trailing-slash
 
@@ -532,6 +597,8 @@ Server URL should not have a trailing slash.
 Some tooling forgets to strip trailing slashes off when it's joining the `servers.url` with `channels`, and you can get awkward URLs like `mqtt://example.com/broker//pets`. Best to just strip them off yourself.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -555,11 +622,15 @@ Server URL should not point to example.com.
 
 **Recommended:** No
 
+**Default severity when enabled:** warn
+
 ### asyncapi-server-variables
 
 All server URL variables should be defined in the `variables` object of the server. They should also not contain redundant variables that do not exist in the server address.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 ### asyncapi-tag-description
 
@@ -580,15 +651,20 @@ tags:
   - name: Invoice Items
     description: |+
       Giant long explanation about what this business concept is, because other people _might_ not have a clue!
+
 ```
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 ### asyncapi-tags-alphabetical
 
 AsyncAPI object should have alphabetical `tags`. This will be sorted by the `name` property.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -613,6 +689,8 @@ tags:
 Tags must not have duplicate names (identifiers).
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Bad Example**
 
@@ -646,6 +724,8 @@ Defining tags allows you to add more information like a `description`. For more 
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ## AsyncAPI v3
 
 The following rules ONLY apply to AsyncAPI v3 documents.
@@ -656,17 +736,23 @@ Channel address parameter declarations cannot be empty, ex.`/given/{}` is invali
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-3-channel-no-query-nor-fragment
 
 Query parameters and fragments shouldn't be used in channel address. Instead, use bindings to define them, ex.`/given?test` is invalid.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-3-channel-no-trailing-slash
 
 Keep trailing slashes off of channel address, as it can cause some confusion. Most messaging protocols will treat `example/foo` and `example/foo/` as different things. Keep in mind that tooling may replace slashes (`/`) with protocol-specific notation (e.g.: `.` for AMQP), therefore, a trailing slash may result in an invalid channel address in some protocols.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### asyncapi-3-channel-servers
 
@@ -710,17 +796,31 @@ channels:
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-3-headers-schema-type-object
 
 The schema definition of the application headers must be of type “object”.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
+### asyncapi-3-operation-security
+
+Operations must reference a defined security scheme.
+
+**Recommended:** Yes
+
+**Default severity when enabled:** error
+
 ### asyncapi-3-operation-description
 
 Operation objects should have a description.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### asyncapi-3-payload-unsupported-schemaFormat
 
@@ -736,11 +836,15 @@ Other formats such as OpenAPI Schema Object, JSON Schema Draft 07, and Avro will
 
 **Recommended:** Yes
 
+**Default severity when enabled:** info
+
 ### asyncapi-3-server-no-empty-variable
 
 Server host and pathname variable declarations cannot be empty, ex.`gigantic-server.com{}` is invalid.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### asyncapi-3-server-no-trailing-slash
 
@@ -749,6 +853,8 @@ Server host should not have a trailing slash.
 Some tooling forgets to strip trailing slashes off when it's joining the `servers.host` with `channels`, and you can get awkward URLs like `mqtt://example.com//pets`. Best to just strip them off yourself.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -771,6 +877,8 @@ Server host should not point to example.com.
 
 **Recommended:** No
 
+**Default severity when enabled:** warn
+
 ### asyncapi-3-tag-description
 
 Tags alone are not very descriptive. Give folks a bit more information to work with.
@@ -792,15 +900,20 @@ info:
     - name: Invoice Items
       description: |+
         Giant long explanation about what this business concept is, because other people _might_ not have a clue!
+
 ```
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 ### asyncapi-3-tags-alphabetical
 
 AsyncAPI object should have alphabetical `tags`. This will be sorted by the `name` property.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -827,6 +940,8 @@ info:
 Tags must not have duplicate names (identifiers).
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Bad Example**
 
@@ -863,14 +978,20 @@ Defining tags allows you to add more information like a `description`. For more 
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### asyncapi-3-document-resolved
 
 Validate structure of AsyncAPI specification when references have been resolved.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### asyncapi-3-document-unresolved
 
 Validate structure of AsyncAPI specification before references have been resolved.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error

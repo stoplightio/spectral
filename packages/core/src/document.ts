@@ -30,7 +30,11 @@ export class Document<D = unknown, R extends IParserResult<D> = IParserResult<D>
   public readonly diagnostics: IRuleResult[];
   public formats?: Set<Format> | null;
 
-  constructor(protected readonly input: string, protected readonly parser: IParser<R>, source?: string) {
+  constructor(
+    protected readonly input: string,
+    protected readonly parser: IParser<R>,
+    source?: string,
+  ) {
     this.parserResult = parser.parse(input);
     // we need to normalize the path in case path with forward slashes is given
     this.source = normalizeSource(source);

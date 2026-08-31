@@ -4,6 +4,8 @@ Spectral has a built-in "oas" ruleset, with OAS being shorthand for the [OpenAPI
 
 In your ruleset file you can add `extends: "spectral:oas"` and you'll get all of the following rules applied, depending on the appropriate OpenAPI version used (detected through [formats](../getting-started/3-rulesets.md#formats)).
 
+`Recommended` indicates whether a rule is enabled by default. `Default severity when enabled` is the severity the rule reports when active.
+
 ## OpenAPI v2 & v3
 
 These rules apply to both OpenAPI v2.0, v3.0, and most likely v3.1, although there are some differences.
@@ -15,6 +17,8 @@ The [info-contact](#info-contact) rule will ask you to put in a contact object, 
 Putting in the name of the developer/team/department/company responsible for the API, along with the support email and help-desk/GitHub Issues/whatever URL means people know where to go for help. This can mean more money in the bank, instead of developers just wandering off or complaining online.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -35,6 +39,8 @@ info:
 Each value of an `enum` must be different from one another.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -76,6 +82,8 @@ Hopefully, your API description document is so good that nobody ever needs to co
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Good Example**
 
 ```yaml
@@ -96,6 +104,8 @@ Examples can contain Markdown so you can really go to town with them, implementi
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Good Example**
 
 ```yaml
@@ -105,6 +115,7 @@ info:
   title: Descriptive API
   description: >+
     Some description about the general point of this API, and why it exists when another similar but different API also exists.## AuthenticationThis API uses OAuth2 and tokens can be requested from [Dev Portal: Tokens](https://example.org/developers/tokens).
+
 ```
 
 ### info-license
@@ -116,6 +127,8 @@ It can be hard to pick a license, so if you don't have a lawyer around you can u
 How useful this is in court is not entirely known, but having a license is better than not having a license.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -131,6 +144,8 @@ info:
 Mentioning a license is only useful if people know what the license means, so add a link to the full text for those who need it.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -148,6 +163,8 @@ Before OpenAPI v3.1, keywords next to `$ref` were ignored by most tooling, but n
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 **Bad Example**
 
 ```yaml
@@ -163,6 +180,8 @@ This rule protects against an edge case, for anyone bringing in description docu
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Bad Example**
 
 ```yaml
@@ -176,6 +195,8 @@ info:
 This rule protects against a potential hack, for anyone bringing in description documents from third parties and then generating HTML documentation. If one of those third parties does something shady like injecting `<script>` tags, they could easily execute arbitrary code on your domain, which if it's the same as your main application could be all sorts of terrible.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -200,11 +221,17 @@ Why? Well, you _can_ reference tags arbitrarily in operations, and definition is
 
 Defining tags allows you to add more information like a `description`. For more information see [tag-description](#tag-description).
 
+**Recommended:** No
+
+**Default severity when enabled:** warn
+
 ### openapi-tags-alphabetical
 
 OpenAPI object should have alphabetical `tags`. This will be sorted by the `name` property.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -228,6 +255,8 @@ OpenAPI object must not have duplicated tag names (identifiers).
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 **Bad Example**
 
 ```yaml
@@ -248,6 +277,8 @@ tags:
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### operation-operationId
 
 This operation ID is essentially a reference for the operation, which can be used to visually suggest a connection to other operations. This is like some theoretical static HATEOAS-style referencing, but it's also used for the URL in some documentation systems.
@@ -256,6 +287,8 @@ Make the value `lower-hyphen-case`, and try and think of a name for the action w
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### operation-operationId-unique
 
 Every operation must have a unique `operationId`.
@@ -263,6 +296,8 @@ Every operation must have a unique `operationId`.
 Why? A lot of documentation systems use this as an identifier, some SDK generators convert them to a method name, among other things.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Bad Example**
 
@@ -304,6 +339,8 @@ Seeing as operationId is often used for unique URLs in documentation systems, it
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Bad Example**
 
 ```yaml
@@ -323,17 +360,23 @@ Operation parameters are unique and non-repeating.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### operation-singular-tag
 
 Use just one tag for an operation, which is helpful for some documentation systems which use tags to avoid duplicate content.
 
 **Recommended:** No
 
+**Default severity when enabled:** warn
+
 ### operation-success-response
 
 Operation must have at least one `2xx` or `3xx` response. Any API operation (endpoint) can fail, but presumably, it is also meant to do something constructive at some point. If you forget to write out a success case for this API, then this rule will let you know.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -352,11 +395,15 @@ Operation should have non-empty `tags` array.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### operation-tag-defined
 
 Operation tags should be defined in global tags.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### path-declarations-must-exist
 
@@ -364,17 +411,23 @@ Path parameter declarations cannot be empty, ex.`/given/{}` is invalid.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### path-keys-no-trailing-slash
 
 Keep trailing slashes off of paths, as it can cause some confusion. Some web tooling (like mock servers, real servers, code generators, application frameworks, etc.) will treat `example.com/foo` and `example.com/foo/` as the same thing, but other tooling will not. Avoid any confusion by just documenting them without the slash, and maybe some tooling will let people shove a / on there when they're using it, or maybe not, but at least the docs are suggesting how it should be done properly.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### path-not-include-query
 
 Don't put query string items in the path, they belong in parameters with `in: query`.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### path-params
 
@@ -386,6 +439,8 @@ Path parameters are correct and valid.
 2. every `path.parameters` and `operation.parameters` parameter must be used in the path string.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 ### tag-description
 
@@ -406,15 +461,20 @@ tags:
   - name: Invoice Items
     description: |+
       Giant long explanation about what this business concept is, because other people _might_ not have a clue!
+
 ```
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 ### typed-enum
 
 Enum values should respect the `type` specifier.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -454,6 +514,8 @@ Schemas with `type: array`, require a sibling `items` field.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 **Good Example**
 
 ```yaml
@@ -489,11 +551,15 @@ OpenAPI v3 keyword `anyOf` detected in OpenAPI v2 document.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas2-api-host
 
 OpenAPI `host` must be present and non-empty string.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### oas2-api-schemes
 
@@ -501,11 +567,15 @@ OpenAPI host `schemes` must be present and non-empty array.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas2-discriminator
 
 The discriminator property MUST be defined at this schema and it MUST be in the required property list.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 ### oas2-host-not-example
 
@@ -513,11 +583,15 @@ Server URL should not point to example.com.
 
 **Recommended:** No
 
+**Default severity when enabled:** warn
+
 ### oas2-host-trailing-slash
 
 Server URL should not have a trailing slash.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### oas2-oneOf
 
@@ -525,11 +599,15 @@ OpenAPI v3 keyword `oneOf` detected in OpenAPI v2 document.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas2-operation-formData-consume-check
 
 Operations with an `in: formData` parameter must include `application/x-www-form-urlencoded` or `multipart/form-data` in their `consumes` property.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 ### oas2-operation-security-defined
 
@@ -538,17 +616,23 @@ Ignores empty `security` values for cases where authentication is explicitly not
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas2-parameter-description
 
 Parameter objects should have a `description`.
 
 **Recommended:** No
 
+**Default severity when enabled:** warn
+
 ### oas2-schema
 
 Validate structure of OpenAPI v2 specification.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 ### oas2-unused-definition
 
@@ -564,6 +648,8 @@ Potential unused reusable `definition` entry has been detected.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas2-valid-media-example
 
 Examples must be valid against their defined schema. Common reasons you may see errors are:
@@ -572,6 +658,8 @@ Examples must be valid against their defined schema. Common reasons you may see 
 - Examples contain properties not included in the schema.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 For example, if you have a Pet object with an `id` property as type `integer`, and `name` and `petType` properties as type `string`, the `examples` properties type should match the schema:
 
@@ -633,6 +721,14 @@ paths:
               petType: 123
 ```
 
+### oas2-valid-schema-example
+
+Examples must be valid against their defined schema.
+
+**Recommended:** Yes
+
+**Default severity when enabled:** error
+
 ## OpenAPI v3-only
 
 These rules will only be applied to OpenAPI v3.0 documents.
@@ -642,6 +738,8 @@ These rules will only be applied to OpenAPI v3.0 documents.
 OpenAPI `servers` must be present and non-empty array.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 Share links to any servers that people might care about. If this is going to be given to internal people then usually that is localhost (so they know the right port number), staging, and production.
 
@@ -662,6 +760,8 @@ If this is going out to the world, maybe have production and a general sandbox p
 Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -687,11 +787,15 @@ Operation `security` values must match a scheme defined in the `components.secur
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas3-parameter-description
 
 Parameter objects should have a `description`.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 ### oas3-schema
 
@@ -701,11 +805,15 @@ If you define your own `jsonSchemaDialect`, you'll most likely want to disable t
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 ### oas3-server-not-example.com
 
 Server URL should not point to example.com.
 
 **Recommended:** No
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -728,6 +836,8 @@ Server URL should not have a trailing slash.
 Some tooling forgets to strip trailing slashes off when it's joining the `servers.url` with `paths`, and you can get awkward URLs like `https://example.com/api//pets`. Best to just strip them off yourself.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Good Example**
 
@@ -759,11 +869,15 @@ Potential unused reusable `components` entry has been detected.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 ### oas3-valid-media-example
 
 Examples must be valid against their defined schema. This rule is applied to Media Type objects.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** error
 
 For example, if you have a Pet object with an `id` property as type `integer`, and `name` and `petType` properties as type `string`, the examples properties type should match the schema:
 
@@ -831,6 +945,8 @@ Examples must be valid against their defined schema. This rule is applied to Sch
 
 **Recommended:** Yes
 
+**Default severity when enabled:** error
+
 **Good Example**
 
 ```yaml
@@ -882,7 +998,9 @@ schemas:
 
 This rule ensures that server variables defined in OpenAPI Specification 3 (OAS3) and 3.1 are valid, not unused, and result in a valid URL. Properly defining and using server variables is crucial for the accurate representation of API endpoints and preventing potential misconfigurations or security issues.
 
-**Recommended**: Yes
+**Recommended:** Yes
+
+**Default severity when enabled:** error
 
 **Bad Examples**
 
@@ -960,6 +1078,8 @@ A callback should not be defined within another callback.
 
 **Recommended:** Yes
 
+**Default severity when enabled:** warn
+
 **Bad Example**
 
 ```yaml
@@ -978,6 +1098,8 @@ paths:
 Servers should not be defined in a webhook.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
@@ -1007,6 +1129,8 @@ webhooks:
 Callbacks should not be defined in a webhook.
 
 **Recommended:** Yes
+
+**Default severity when enabled:** warn
 
 **Bad Example**
 
