@@ -48,6 +48,7 @@ Other options include:
       --show-documentation-url   show documentation url in output result                      [boolean] [default: false]
   -v, --verbose                  increase verbosity                                                            [boolean]
   -q, --quiet                    no logging - output only                                                      [boolean]
+      --html-include-json-path   add json path in html format result                          [boolean] [default: false]
 ```
 
 The Spectral CLI supports loading documents as YAML or JSON, and validation of OpenAPI v2/v3 documents via the built-in ruleset.
