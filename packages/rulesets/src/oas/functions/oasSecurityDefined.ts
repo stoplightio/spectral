@@ -33,6 +33,8 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
 
     if (!isPlainObject(document.data)) return;
 
+    const openapiVersion = typeof document.data.openapi === 'string' ? document.data.openapi : '';
+
     const allDefs =
       oasVersion === 2
         ? document.data.securityDefinitions
@@ -58,7 +60,7 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
       const scope = input[schemeName];
       for (let i = 0; i < scope.length; i++) {
         const scopeName = scope[i];
-        if (!isScopeDefined(oasVersion, scopeName, allDefs[schemeName])) {
+        if (!isScopeDefined(oasVersion, scopeName, allDefs[schemeName], openapiVersion)) {
           results ??= [];
           results.push({
             message: `"${scopeName}" must be listed among scopes.`,
@@ -72,8 +74,18 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
   },
 );
 
-function isScopeDefined(oasVersion: 2 | 3, scopeName: string, securityScheme: unknown): boolean {
+function isScopeDefined(oasVersion: 2 | 3, scopeName: string, securityScheme: unknown, openapiVersion = ''): boolean {
   if (!isPlainObject(securityScheme)) return false;
+
+  // OpenAPI 3.1 allows scope lists on http bearer requirements without scheme-level scope definitions
+  if (
+    oasVersion === 3 &&
+    openapiVersion.startsWith('3.1') &&
+    securityScheme.type === 'http' &&
+    securityScheme.scheme === 'bearer'
+  ) {
+    return true;
+  }
 
   if (oasVersion === 2) {
     return isPlainObject(securityScheme.scopes) && scopeName in securityScheme.scopes;
