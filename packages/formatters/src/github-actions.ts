@@ -1,6 +1,7 @@
 import { relative } from '@stoplight/path';
 import { DiagnosticSeverity, Dictionary } from '@stoplight/types';
 import { Formatter } from './types';
+import { getRuleDocumentationUrl } from './utils/getDocumentationUrl';
 
 const OUTPUT_TYPES: Dictionary<string, DiagnosticSeverity> = {
   [DiagnosticSeverity.Error]: 'error',
@@ -18,7 +19,7 @@ type OutputParams = {
   endLine?: number;
 };
 
-export const githubActions: Formatter = results => {
+export const githubActions: Formatter = (results, _options, ctx?: FormatterContext) => {
   return results
     .map(result => {
       // GitHub Actions requires relative path for annotations, determining from working directory here
@@ -41,9 +42,13 @@ export const githubActions: Formatter = results => {
       // FIXME: Use replaceAll instead after removing Node.js 14 support.
       const message = result.message.replace(/\n/g, '%0A');
 
-      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${message}${
-        result.documentationUrl ? `%0ADocumentation: ${result.documentationUrl}` : ''
-      }`;
+      // Resolve the documentation URL from rule or ruleset,
+      // and omit the documentation message entirely if
+      // no documentation URL was found
+      const documentationUrl = getRuleDocumentationUrl(result.code, ctx);
+      const documentationUrlMessage = documentationUrl ? `%0ADocumentation: ${documentationUrl}` : '';
+
+      return `::${OUTPUT_TYPES[result.severity]} ${paramsString}::${message}${documentationUrlMessage}`;
     })
     .join('\n');
 };
