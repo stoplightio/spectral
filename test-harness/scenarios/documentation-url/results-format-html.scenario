@@ -156,7 +156,7 @@ info:
 <table>
     <tbody>
     <tr class="bg-warning" data-group="f-0">
-    <th colspan="4">
+    <th colspan="5">
         [+] {document}
         <span>3 problems (0 errors, 3 warnings, 0 infos, 0 hints)</span>
     </th>
@@ -165,6 +165,7 @@ info:
     <td>1:1</td>
     <td class="severity clr-warning">warning</td>
     <td>&quot;servers&quot; must be present and non-empty array.</td>
+    <td></td>
     <td><a href="https://www.example.com/docs/api-servers.md" target="_blank">documentation</a></td>
 </tr>
 
@@ -173,12 +174,14 @@ info:
     <td class="severity clr-warning">warning</td>
     <td>Info object must have a &quot;contact&quot; object.</td>
     <td></td>
+    <td></td>
 </tr>
 
 <tr style="display:none" class="f-0">
     <td>2:6</td>
     <td class="severity clr-warning">warning</td>
     <td>Info &quot;description&quot; must be present and non-empty string.</td>
+    <td></td>
     <td><a href="https://www.example.com/docs/info-description.md" target="_blank">documentation</a></td>
 </tr>
 
