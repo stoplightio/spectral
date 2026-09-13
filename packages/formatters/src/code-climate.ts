@@ -50,8 +50,8 @@ export const codeClimate: Formatter = results => {
       location: {
         path: relPath,
         positions: {
-          begin: { line: result.range.start.line, column: result.range.start.character },
-          end: { line: result.range.end.line, column: result.range.end.character },
+          begin: { line: result.range.start.line + 1, column: result.range.start.character },
+          end: { line: result.range.end.line + 1, column: result.range.end.character },
         },
       },
       severity: severityMap[result.severity],
