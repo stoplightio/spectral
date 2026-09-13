@@ -1,0 +1,24 @@
+diff --git a/node_modules/@semantic-release/npm/lib/publish.js b/node_modules/@semantic-release/npm/lib/publish.js
+index c983be89..66ec8ae0 100644
+--- a/node_modules/@semantic-release/npm/lib/publish.js
++++ b/node_modules/@semantic-release/npm/lib/publish.js
+@@ -27,7 +27,18 @@ export default async function (npmrc, { npmPublish, pkgRoot }, pkg, context) {
+     );
+     result.stdout.pipe(stdout, { end: false });
+     result.stderr.pipe(stderr, { end: false });
+-    await result;
++    try {
++      await result;
++    } catch (error) {
++      const output = `${error?.stdout ?? ""}\n${error?.stderr ?? ""}`;
++      if (/cannot publish over the previously published versions/i.test(output)) {
++        logger.log(
++          `Skipped publishing ${pkg.name}@${version} because it is already present on ${registry}`
++        );
++        return false;
++      }
++      throw error;
++    }
+ 
+     logger.log(`Published ${pkg.name}@${version} to dist-tag @${distTag} on ${registry}`);
+ 
