@@ -17,7 +17,10 @@
 - [ℹ️ Support](#ℹ️-support)
 - [🌎 Real-World Rulesets](#-real-world-rulesets)
 - [⚙️ Integrations](#️-integrations)
+- [🏁 Help Others Utilize Spectral](#-help-others-utilize-spectral)
 - [👏 Contributing](#-contributing)
+- [🎉 Thanks](#-thanks)
+- [📜 License](#-license)
 - [🌲 Sponsor Spectral by Planting a Tree](#-sponsor-spectral-by-planting-a-tree)
 
 ## 🧰 Installation
@@ -131,6 +134,8 @@ Check out some additional style guides here:
 ## 🏁 Help Others Utilize Spectral
 
 If you're using Spectral for an interesting use case, create an issue with details on how you're using it. We'll add it to a list here. Spread the goodness 🎉
+
+- [Bank API 🏦](https://github.com/erwinkramer/bank-api?tab=readme-ov-file#bank-api) - The Bank API is a design reference project suitable to bootstrap development for a compliant and modern API. Built in ASP.NET Core and fully complies to multiple Spectral rulesets, such as "OWASP Top 10", "Dutch Public Sector (NLGov) REST API Design Rules" and more. Built by [Erwin Kramer](https://github.com/erwinkramer).
 
 ## 👏 Contributing
 
