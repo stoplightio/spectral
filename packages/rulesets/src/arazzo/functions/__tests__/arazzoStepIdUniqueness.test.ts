@@ -6,8 +6,8 @@ const runRule = (target: { steps: Array<{ stepId: string }> }) => {
   const context: DeepPartial<RulesetFunctionContext> = {
     path: [],
     documentInventory: {
-      graph: {} as any, // Mock the graph property
-      referencedDocuments: {} as any, // Mock the referencedDocuments property as a Dictionary
+      graph: {}, // Mock the graph property
+      referencedDocuments: {}, // Mock the referencedDocuments property as a Dictionary
       findAssociatedItemForPath: jest.fn(), // Mock the findAssociatedItemForPath function
     },
     document: {

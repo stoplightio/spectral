@@ -94,9 +94,7 @@ export function convertAjvErrors(
 
   return filteredErrors.flatMap(error => {
     if (error.keyword === 'x-spectral-runtime') {
-      const flat = flatErrors(error.params.errors);
-      const list = Array.isArray(flat) ? flat : [flat];
-      return list.map(e => enrichWithLocation(e, sourceContext));
+      return flatErrors(error.params.errors).map(e => enrichWithLocation(e, sourceContext));
     }
 
     const path = error.instancePath.slice(1).split('/');
@@ -109,12 +107,16 @@ export function convertAjvErrors(
   });
 }
 
-function flatErrors(error: RulesetValidationError | AggregateError): RulesetValidationError | RulesetValidationError[] {
+function flatErrors(error: unknown): RulesetValidationError[] {
   if (isAggregateError(error)) {
     return error.errors.flatMap(flatErrors);
   }
 
-  return error;
+  if (error instanceof RulesetValidationError) {
+    return [error];
+  }
+
+  return [];
 }
 
 function resolveLocation(

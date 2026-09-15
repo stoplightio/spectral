@@ -51,9 +51,10 @@ export async function bundleRuleset(
       target === 'runtime'
         ? []
         : target === 'browser'
-        ? id => isURL(id)
-        : (id, importer) =>
-            id.startsWith('node:') || (!isURL(id) && isPackageImport(id) && (importer === void 0 || !isURL(importer))),
+          ? id => isURL(id)
+          : (id, importer) =>
+              id.startsWith('node:') ||
+              (!isURL(id) && isPackageImport(id) && (importer === void 0 || !isURL(importer))),
   });
 
   const chunks = (await bundle.generate({ format: format ?? (target === 'runtime' ? 'iife' : 'esm'), exports: 'auto' }))

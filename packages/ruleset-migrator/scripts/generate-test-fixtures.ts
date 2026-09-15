@@ -38,7 +38,9 @@ function sortKeys<T>(input: T): T {
 
 function assign(bundled: Record<string, string>, name: string) {
   return async (input: string): Promise<void> => {
-    bundled[name] = /\.[mc]js$/.test(name) ? prettier.format(input as string, { parser: 'babel' }) : (input as string);
+    bundled[name] = /\.[mc]js$/.test(name)
+      ? await prettier.format(input as string, { parser: 'babel' })
+      : (input as string);
   };
 }
 

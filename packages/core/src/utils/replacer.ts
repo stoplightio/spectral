@@ -22,6 +22,7 @@ export class Replacer<V extends Record<string, unknown>> {
 
     const functions = parser.functions as Record<string, (...args: Value[]) => Value>;
     functions.toUpperCase = (value: Value): Value => {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       return String(value).toUpperCase();
     };
 
@@ -30,7 +31,7 @@ export class Replacer<V extends Record<string, unknown>> {
     };
 
     Object.entries(this.functions).forEach(([name, fn]) => {
-      functions[name] = fn.bind(values) as (...args: Value[]) => Value;
+      functions[name] = fn.bind(values);
     });
 
     const context = values as unknown as Record<string, Value>;

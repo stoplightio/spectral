@@ -1,10 +1,9 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import { aas2_0, aas2_1, aas2_2, aas2_3, aas2_4, aas2_5, aas2_6, aas3_0 } from '@stoplight/spectral-formats';
 import betterAjvErrors from '@stoplight/better-ajv-errors';
 
-import { getCopyOfSchema } from './utils/specs';
+import { getCopyOfSchema, selectAsyncAPISchema } from './utils/specs';
 
 import type { ValidateFunction } from 'ajv';
 import type { Format } from '@stoplight/spectral-core';
@@ -51,26 +50,12 @@ function getValidator(version: AsyncAPISpecVersion): ValidateFunction {
 }
 
 function getSchemaValidator(formats: Set<Format>): ValidateFunction | void {
-  switch (true) {
-    case formats.has(aas3_0):
-      return getValidator('3.0.0');
-    case formats.has(aas2_6):
-      return getValidator('2.6.0');
-    case formats.has(aas2_5):
-      return getValidator('2.5.0');
-    case formats.has(aas2_4):
-      return getValidator('2.4.0');
-    case formats.has(aas2_3):
-      return getValidator('2.3.0');
-    case formats.has(aas2_2):
-      return getValidator('2.2.0');
-    case formats.has(aas2_1):
-      return getValidator('2.1.0');
-    case formats.has(aas2_0):
-      return getValidator('2.0.0');
-    default:
-      return;
+  const selection = selectAsyncAPISchema(formats);
+  if (selection === void 0) {
+    return;
   }
+
+  return getValidator(selection.version);
 }
 
 export default createRulesetFunction<unknown, null>(

@@ -33,9 +33,10 @@ import templates from './templates';
 // Helpers
 // ------------------------------------------------------------------------------
 
-const pageTemplate = template(templates['html-template-page.html']);
-const messageTemplate = template(templates['html-template-message.html']);
-const resultTemplate = template(templates['html-template-result.html']);
+const templateMap = templates as Record<string, string>;
+const pageTemplate = template(templateMap['html-template-page.html']);
+const messageTemplate = template(templateMap['html-template-message.html']);
+const resultTemplate = template(templateMap['html-template-result.html']);
 
 function renderMessages(messages: IRuleResult[], parentIndex: number): string {
   return messages

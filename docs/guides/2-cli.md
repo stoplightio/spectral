@@ -73,6 +73,8 @@ Changing the fail severity wont' affect output. To change the results Spectral C
 
 ## Formatters
 
+The `github-actions` formatter was introduced in Spectral v6.10.0. If you are using an older release, upgrade the CLI before using `-f github-actions`.
+
 ### JSON Formatter
 
 Spectral's JSON formatter outputs the results of a Spectral analysis in a JSON format that is easily parsable and human-readable. The output can be used to programmatically access and process the results of the analysis. You can enable this by adding `-f json --quiet` to the cli command.

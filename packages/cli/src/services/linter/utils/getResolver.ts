@@ -7,7 +7,7 @@ import { CLIError } from '../../../errors';
 export const getResolver = (resolver: Optional<string>): Resolver => {
   if (resolver !== void 0) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-return
       return require(isAbsolute(resolver) ? resolver : join(process.cwd(), resolver));
     } catch (ex) {
       throw new CLIError(isError(ex) ? formatMessage(ex.message) : String(ex));

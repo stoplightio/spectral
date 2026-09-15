@@ -14,6 +14,109 @@ testRule('asyncapi-3-document-resolved', [
     errors: [],
   },
   {
+    name: 'valid AsyncAPI 3.1 document with resolved references and ROS 2 bindings',
+    document: {
+      asyncapi: '3.1.0',
+      info: {
+        title: 'Turtle telemetry',
+        version: '1.0.0',
+      },
+      servers: {
+        development: {
+          host: 'localhost',
+          protocol: 'ros2',
+          bindings: {
+            ros2: {
+              domainId: 0,
+              rmwImplementation: 'rmw_fastrtps_cpp',
+            },
+          },
+        },
+      },
+      channels: {
+        turtlePose: {
+          address: 'turtle/pose',
+          messages: {
+            TurtlePose: {
+              payload: {
+                type: 'object',
+              },
+            },
+          },
+        },
+      },
+      operations: {
+        publishPose: {
+          action: 'send',
+          channel: {
+            $ref: '#/channels/turtlePose',
+          },
+          messages: [{ $ref: '#/channels/turtlePose/messages/TurtlePose' }],
+          bindings: {
+            ros2: {
+              node: '/turtlesim',
+              role: 'publisher',
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+  {
+    name: 'AsyncAPI 3.0 rejects ROS 2 bindings that are introduced in 3.1',
+    document: {
+      asyncapi: '3.0.0',
+      info: {
+        title: 'Turtle telemetry',
+        version: '1.0.0',
+      },
+      servers: {
+        development: {
+          host: 'localhost',
+          protocol: 'ros2',
+          bindings: {
+            ros2: {
+              domainId: 0,
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Property "ros2" is not expected to be here',
+        path: ['servers', 'development', 'bindings', 'ros2'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+  {
+    name: 'invalid AsyncAPI 3.1 info property is missing',
+    document: {
+      asyncapi: '3.1.0',
+    },
+    errors: [{ message: 'Object must have required property "info"', severity: DiagnosticSeverity.Error }],
+  },
+  {
+    name: 'valid future AsyncAPI 3.x document uses the latest known schema as fallback',
+    document: {
+      asyncapi: '3.2.0',
+      info: {
+        title: 'Future AsyncAPI document',
+        version: '1.0.0',
+      },
+    },
+    errors: [],
+  },
+  {
+    name: 'invalid future AsyncAPI 3.x document is validated by the fallback schema',
+    document: {
+      asyncapi: '3.2.0',
+    },
+    errors: [{ message: 'Object must have required property "info"', severity: DiagnosticSeverity.Error }],
+  },
+  {
     name: 'valid case resolved case message',
     document: {
       asyncapi: '3.0.0',

@@ -48,7 +48,9 @@ export const junit: Formatter = (results, { failSeverity }) => {
     const classname = source.replace(new RegExp(`${escapeRegExp(extname(source))}$`), '');
 
     if (validationResults.length > 0) {
-      const filteredValidationResults = validationResults.filter(result => result.severity <= failSeverity);
+      const filteredValidationResults = validationResults.filter(
+        result => Number(result.severity) <= Number(failSeverity),
+      );
 
       output += `<testsuite package="org.spectral" time="0" tests="${filteredValidationResults.length}" errors="0" failures="${filteredValidationResults.length}" name="${source}">\n`;
 

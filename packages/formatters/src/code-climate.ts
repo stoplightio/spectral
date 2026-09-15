@@ -18,14 +18,7 @@ interface CodeClimateIssue {
   fingerprint?: string;
 }
 type CodeClimateIssueCategory =
-  | 'Bug Risk'
-  | 'Clarity'
-  | 'Compatibility'
-  | 'Complexity'
-  | 'Duplication'
-  | 'Performance'
-  | 'Security'
-  | 'Style';
+  'Bug Risk' | 'Clarity' | 'Compatibility' | 'Complexity' | 'Duplication' | 'Performance' | 'Security' | 'Style';
 interface CodeClimateIssueLocation {
   path: string;
   positions: {

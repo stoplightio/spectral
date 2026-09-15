@@ -77,8 +77,8 @@ function processTargetResults(
         associatedItem?.missingPropertyPath !== void 0 && associatedItem.missingPropertyPath.length > path.length
           ? printPath(associatedItem.missingPropertyPath.slice(path.length - 1), PrintStyle.Dot)
           : path.length > 0
-          ? path[path.length - 1]
-          : '',
+            ? path[path.length - 1]
+            : '',
       error: result.message,
       path: printPath(path, PrintStyle.EscapedPointer),
       description: rule.description,
@@ -94,7 +94,7 @@ function processTargetResults(
 
     context.results.push({
       code: rule.name,
-      message: (rule.message === null ? rule.description ?? resultMessage : message(rule.message, vars)).trim(),
+      message: (rule.message === null ? (rule.description ?? resultMessage) : message(rule.message, vars)).trim(),
       path,
       severity,
       ...(source !== null ? { source } : null),

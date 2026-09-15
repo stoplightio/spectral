@@ -5,7 +5,7 @@ import {
   unreferencedReusableObject,
   schema,
   xor,
-  undefined,
+  undefined, // eslint-disable-line no-shadow-restricted-names
   alphabetical,
   length,
 } from '@stoplight/spectral-functions';
@@ -286,7 +286,7 @@ const ruleset = {
       },
     },
     'operation-operationId-valid-in-url': {
-      message: 'operationId must not characters that are invalid when used in URL.',
+      message: 'operationId must not contain characters that are invalid when used in URL.',
       recommended: true,
       given: '#OperationObject',
       then: {

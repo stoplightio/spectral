@@ -1462,7 +1462,7 @@ describe('Ruleset', () => {
     describe('scoped aliases', () => {
       const createStubFormat =
         (): Format<unknown> =>
-        (input): input is unknown =>
+        (_input): _input is unknown =>
           true;
 
       it('should resolve locally defined aliases according to their targets', () => {

@@ -66,13 +66,7 @@ export default createRulesetFunction<ArazzoSpecification, null>(
             }
 
             // Validate runtime expression
-            if (
-              !arazzoRuntimeExpressionValidation(
-                outputValue,
-                targetVal as unknown as ArazzoSpecification,
-                workflowIndex,
-              )
-            ) {
+            if (!arazzoRuntimeExpressionValidation(outputValue, targetVal, workflowIndex)) {
               results.push({
                 message: `"${outputValue}" is not a valid runtime expression.`,
                 path: ['workflows', workflowIndex, 'steps', stepIndex, 'outputs', outputName, outputIndex] as JsonPath,

@@ -15,8 +15,6 @@ jobs:
     strategy:
       matrix:
         node-version:
-        - '18.20.8'
-        - '20.20.2'
         - '22.23.2'
         - '24.18.1'
         - '26.5.1'
@@ -39,7 +37,7 @@ jobs:
       run: yarn test.jest --ci --maxWorkers=3
       shell: bash
     - name: Test harness
-      if: matrix.node-version == '18.20.8'
+      if: matrix.node-version == '22.23.2'
       uses: "./.github/actions/test-harness-linux"
       with:
         os: "linux"
@@ -61,11 +59,10 @@ jobs:
     - name: Run node tests
       run: yarn test.jest --ci --maxWorkers=3
     - name: Test harness
-      if: matrix.node-version == '18.20.8'
       uses: "./.github/actions/test-harness-windows"
       with:
         os: "windows"
-        node-version: "${{ matrix.node-version }}"
+        node-version: "22.23.2"
   test-browser:
     runs-on: ubuntu-latest
     steps:
@@ -107,3 +104,18 @@ jobs:
         yarn lint.eslint
     - name: Lint documentation
       run: yarn lint.prettier
+
+  jsonschema-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5.0.1
+    - uses: sourcemeta/jsonschema@v7.0.2
+    - run: jsonschema metaschema --verbose packages/core/src/ruleset/meta/*.json
+    - run: jsonschema lint --verbose packages/core/src/ruleset/meta/*.json
+
+    # As a smoke test to ensure the schemas at least reference each other well 
+    - run: >
+        jsonschema bundle --verbose 
+        packages/core/src/ruleset/meta/ruleset.schema.json 
+        --resolve packages/core/src/ruleset/meta 
+        --ignore packages/core/src/ruleset/meta/js-extensions.json

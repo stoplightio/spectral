@@ -1,7 +1,7 @@
 import type { SpawnFn } from '@stoplight/spectral-test-harness';
 import * as child_process from 'child_process';
 import { Transform } from 'stream';
-import { normalizeLineEndings } from '../utils';
+import { normalizeLineEndings, stripDeprecationWarnings } from '../utils';
 
 export { normalizeLineEndings, applyReplacements } from '../utils';
 
@@ -48,7 +48,7 @@ export const spawnNode: SpawnFn = async (script, env, cwd) => {
   handle.stderr.pipe(stderr);
   handle.stdout.pipe(stdout);
 
-  const stderrText = (await stringifyStream(stderr)).trim();
+  const stderrText = stripDeprecationWarnings(await stringifyStream(stderr));
   const stdoutText = (await stringifyStream(stdout)).trim();
 
   const status = await new Promise<number>(resolve => {
