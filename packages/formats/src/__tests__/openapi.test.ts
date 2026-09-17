@@ -1,4 +1,4 @@
-import { oas2, oas3, oas3_0, oas3_1 } from '../openapi';
+import { oas2, oas3, oas3_0, oas3_1, oas3_2 } from '../openapi';
 
 describe('OpenAPI format', () => {
   describe('OpenAPI 2.0 aka Swagger', () => {
@@ -38,7 +38,7 @@ describe('OpenAPI format', () => {
       expect(oas3_0({ openapi: version }, null)).toBe(true);
     });
 
-    it.each(['3', '3.1', '3.1.0', '3.1.3'])('does not recognize %s version', version => {
+    it.each(['3', '3.1', '3.1.0', '3.1.3', '3.2', '3.2.0'])('does not recognize %s version', version => {
       expect(oas3_0({ openapi: version }, null)).toBe(false);
     });
   });
@@ -48,8 +48,18 @@ describe('OpenAPI format', () => {
       expect(oas3_1({ openapi: version }, null)).toBe(true);
     });
 
-    it.each(['3', '3.0', '3.0.3', '3.0.0'])('does not recognize %s version', version => {
+    it.each(['3', '3.0', '3.0.3', '3.0.0', '3.2', '3.2.0'])('does not recognize %s version', version => {
       expect(oas3_1({ openapi: version }, null)).toBe(false);
+    });
+  });
+
+  describe('OpenAPI 3.2', () => {
+    it.each(['3.2.0', '3.2', '3.2.1'])('recognizes %s version correctly', version => {
+      expect(oas3_2({ openapi: version }, null)).toBe(true);
+    });
+
+    it.each(['3', '3.0', '3.0.3', '3.0.0', '3.1', '3.1.0'])('does not recognize %s version', version => {
+      expect(oas3_2({ openapi: version }, null)).toBe(false);
     });
   });
 });

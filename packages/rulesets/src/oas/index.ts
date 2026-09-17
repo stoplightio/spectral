@@ -1,4 +1,4 @@
-import { oas2, oas3, oas3_0, oas3_1 } from '@stoplight/spectral-formats';
+import { oas2, oas3, oas3_0, oas3_1, oas3_2 } from '@stoplight/spectral-formats';
 import {
   truthy,
   pattern,
@@ -32,7 +32,7 @@ export { ruleset as default };
 
 const ruleset = {
   documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/openapi-rules.md',
-  formats: [oas2, oas3, oas3_0, oas3_1],
+  formats: [oas2, oas3, oas3_0, oas3_1, oas3_2],
   aliases: {
     PathItem: ['$.paths[*]'],
     OperationObject: ['#PathItem[get,put,post,delete,options,head,patch,trace]'],
@@ -67,7 +67,7 @@ const ruleset = {
           ],
         },
         {
-          formats: [oas3_1],
+          formats: [oas3_1, oas3_2],
           given: [
             // Still check for type: 'array'
             '$..[?(@ && @.type=="array")]',
@@ -752,7 +752,7 @@ const ruleset = {
     },
     'oas3_1-servers-in-webhook': {
       message: 'Servers should not be defined in a webhook.',
-      formats: [oas3_1],
+      formats: [oas3_1, oas3_2],
       recommended: true,
       given: ['$.webhooks.servers', '$.webhooks[*][*].servers'],
       then: {
@@ -761,11 +761,28 @@ const ruleset = {
     },
     'oas3_1-callbacks-in-webhook': {
       message: 'Callbacks should not be defined in a webhook.',
-      formats: [oas3_1],
+      formats: [oas3_1, oas3_2],
       recommended: true,
       given: ['$.webhooks[*][*].callbacks'],
       then: {
         function: undefined,
+      },
+    },
+    'oas3_2-no-deprecated-xml-attribute': {
+      message: '"xml.attribute" is deprecated in OAS 3.2; use "xml.nodeType: attribute" instead.',
+      formats: [oas3_2],
+      recommended: true,
+      given: ['$..[?(@ && @.xml)].xml'],
+      then: {
+        function: schema,
+        functionOptions: {
+          schema: {
+            not: {
+              properties: { attribute: { const: true } },
+              required: ['attribute'],
+            },
+          },
+        },
       },
     },
   },
