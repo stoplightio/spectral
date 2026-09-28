@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 export interface Ruleset {
   aliases?: {
     [k: string]: unknown;
