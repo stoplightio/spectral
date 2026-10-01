@@ -17,8 +17,8 @@ export const spawnNode: SpawnFn = async (command, env, cwd) => {
   });
 
   const winCommand = command.replace(/\/binaries\/(spectral\.exe|spectral)/, '/binaries/spectral.exe');
-  const wrappedCommand = `cd '${cwd}';$env:NODE_NO_WARNINGS=1;${winCommand};echo LASTEXITCODE=$LASTEXITCODE`;
-  const finalCommand = `powershell -Command "& { ${wrappedCommand} }"`;
+  const wrappedCommand = `cd '${cwd}';${winCommand};echo LASTEXITCODE=$LASTEXITCODE`;
+  const finalCommand = `$env:NODE_NO_WARNINGS=1; powershell -Command "& { ${wrappedCommand} }"`;
 
   await ps.addCommand(finalCommand);
 
