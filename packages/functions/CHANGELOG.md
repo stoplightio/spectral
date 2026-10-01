@@ -195,3 +195,4 @@
 ### Features
 
 - **core:** use double quotes in errors reported by Ajv ([#1718](https://github.com/stoplightio/spectral/issues/1718)) ([dd2a166](https://github.com/stoplightio/spectral/commit/dd2a166eff5e11c830d44f33bfc928e06a5c33f7))
+

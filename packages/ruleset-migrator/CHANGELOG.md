@@ -239,3 +239,4 @@
 
 - implement ruleset migrator ([#1698](https://github.com/stoplightio/spectral/issues/1698)) ([efa5c50](https://github.com/stoplightio/spectral/commit/efa5c50ace565df089707a5196643d52cc82bad6))
 - inline external rulesets & support exceptions ([#1711](https://github.com/stoplightio/spectral/issues/1711)) ([2a1d2d3](https://github.com/stoplightio/spectral/commit/2a1d2d3696b54bc009ec7f020185a88c32391c56))
+
