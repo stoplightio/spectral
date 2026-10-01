@@ -1,3 +1,10 @@
+# @stoplight/spectral-formats [1.9.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.5...@stoplight/spectral-formats-1.9.0) (2026-10-01)
+
+
+### Features
+
+* **asyncapi:** add 3.1 support and future minor fallback ([#3019](https://github.com/stoplightio/spectral/issues/3019)) ([23e2afa](https://github.com/stoplightio/spectral/commit/23e2afa3fd01112a86f246a1f4019bb6edb3c74d))
+
 ## @stoplight/spectral-formats [1.8.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formats-1.8.4...@stoplight/spectral-formats-1.8.5) (2026-06-30)
 
 
