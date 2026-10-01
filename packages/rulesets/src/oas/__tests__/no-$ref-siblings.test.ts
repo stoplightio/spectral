@@ -176,3 +176,138 @@ testRule('no-$ref-siblings', [
     ],
   },
 ]);
+
+testRule('no-$ref-siblings', [
+  ...['3.1.0', '3.2.0'].flatMap(openapi => [
+    {
+      name: `$ref siblings within schemas are allowed in an oas ${openapi} document`,
+      document: {
+        openapi,
+        paths: {
+          '/path': {
+            get: {
+              parameters: [
+                {
+                  name: 'id',
+                  in: 'query',
+                  schema: {
+                    $ref: '#/components/schemas/Id',
+                    description: 'an id',
+                    minLength: 1,
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: 'ok',
+                  content: {
+                    'application/json': {
+                      schema: {
+                        type: 'object',
+                        properties: {
+                          foo: {
+                            $ref: '#/components/schemas/Id',
+                            example: 'abc',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        components: {
+          schemas: {
+            Id: {
+              type: 'string',
+            },
+            Foo: {
+              $ref: '#/components/schemas/Id',
+              maxLength: 10,
+            },
+          },
+        },
+      },
+      errors: [],
+    },
+    {
+      name: `$ref summary and description siblings are allowed in an oas ${openapi} document`,
+      document: {
+        openapi,
+        paths: {
+          '/path': {
+            get: {
+              parameters: [
+                {
+                  $ref: '#/components/parameters/Id',
+                  summary: 'a summary',
+                  description: 'a description',
+                },
+              ],
+              responses: {
+                200: {
+                  $ref: '#/components/responses/Ok',
+                  description: 'ok',
+                },
+              },
+            },
+          },
+        },
+      },
+      errors: [],
+    },
+    {
+      name: `$ref siblings outside of schemas in an oas ${openapi} document`,
+      document: {
+        openapi,
+        paths: {
+          '/path': {
+            get: {
+              parameters: [
+                {
+                  $ref: '#/components/parameters/Id',
+                  description: 'a description',
+                  required: true,
+                },
+              ],
+              responses: {
+                200: {
+                  $ref: '#/components/responses/Ok',
+                  summary: 'a summary',
+                  headers: {},
+                },
+              },
+            },
+          },
+        },
+        components: {
+          responses: {
+            NotFound: {
+              $ref: '#/components/responses/Ok',
+              content: {},
+            },
+          },
+        },
+      },
+      errors: [
+        {
+          message: '$ref must not be placed next to any properties other than "summary" and "description"',
+          path: ['paths', '/path', 'get', 'parameters', '0', 'required'],
+          severity: DiagnosticSeverity.Error,
+        },
+        {
+          message: '$ref must not be placed next to any properties other than "summary" and "description"',
+          path: ['paths', '/path', 'get', 'responses', '200', 'headers'],
+          severity: DiagnosticSeverity.Error,
+        },
+        {
+          message: '$ref must not be placed next to any properties other than "summary" and "description"',
+          path: ['components', 'responses', 'NotFound', 'content'],
+          severity: DiagnosticSeverity.Error,
+        },
+      ],
+    },
+  ]),
+]);
