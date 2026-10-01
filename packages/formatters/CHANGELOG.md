@@ -1,3 +1,10 @@
+# @stoplight/spectral-formatters [1.6.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.5.2...@stoplight/spectral-formatters-1.6.0) (2026-10-01)
+
+
+### Features
+
+* **repo:** minor release trigger ([#3079](https://github.com/stoplightio/spectral/issues/3079)) ([eabafec](https://github.com/stoplightio/spectral/commit/eabafec22729529074aba1b392043c9f22a995a3))
+
 ## @stoplight/spectral-formatters [1.5.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-formatters-1.5.1...@stoplight/spectral-formatters-1.5.2) (2026-10-01)
 
 
@@ -76,4 +83,3 @@
 ### Features
 
 - initial release ([#2468](https://github.com/stoplightio/spectral/issues/2468)) ([664e259](https://github.com/stoplightio/spectral/commit/664e25927f31ca24beebecf78ac373668328de23))
-
