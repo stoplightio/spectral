@@ -1,3 +1,10 @@
+# @stoplight/spectral-ruleset-migrator [1.13.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.12.3...@stoplight/spectral-ruleset-migrator-1.13.0) (2026-10-01)
+
+
+### Features
+
+* **repo:** minor release trigger ([#3079](https://github.com/stoplightio/spectral/issues/3079)) ([eabafec](https://github.com/stoplightio/spectral/commit/eabafec22729529074aba1b392043c9f22a995a3))
+
 ## @stoplight/spectral-ruleset-migrator [1.12.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-migrator-1.12.2...@stoplight/spectral-ruleset-migrator-1.12.3) (2026-10-01)
 
 
@@ -239,4 +246,3 @@
 
 - implement ruleset migrator ([#1698](https://github.com/stoplightio/spectral/issues/1698)) ([efa5c50](https://github.com/stoplightio/spectral/commit/efa5c50ace565df089707a5196643d52cc82bad6))
 - inline external rulesets & support exceptions ([#1711](https://github.com/stoplightio/spectral/issues/1711)) ([2a1d2d3](https://github.com/stoplightio/spectral/commit/2a1d2d3696b54bc009ec7f020185a88c32391c56))
-
