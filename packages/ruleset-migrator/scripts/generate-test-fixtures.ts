@@ -32,7 +32,7 @@ fs.promises.readdir(cwd).then(async ls => {
   await fs.promises.writeFile(path.join(cwd, '.cache/index.json'), JSON.stringify(sortKeys(bundled), null, 2));
 });
 
-function sortKeys<T>(input: T): T {
+function sortKeys<T extends object>(input: T): T {
   return Object.fromEntries(Object.entries(input).sort(([a], [b]) => a.localeCompare(b))) as T;
 }
 

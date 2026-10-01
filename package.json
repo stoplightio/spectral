@@ -145,7 +145,7 @@
     "semantic-release": "^25.0.3",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.8.2",
-    "typescript": "4.7.4",
+    "typescript": "4.9.5",
     "typescript-eslint": "^8.0.0"
   },
   "lint-staged": {
