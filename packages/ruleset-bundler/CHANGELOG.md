@@ -1,3 +1,10 @@
+# @stoplight/spectral-ruleset-bundler [1.8.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-1.7.0...@stoplight/spectral-ruleset-bundler-1.8.0) (2026-10-01)
+
+
+### Features
+
+* **repo:** minor release trigger ([#3079](https://github.com/stoplightio/spectral/issues/3079)) ([eabafec](https://github.com/stoplightio/spectral/commit/eabafec22729529074aba1b392043c9f22a995a3))
+
 # @stoplight/spectral-ruleset-bundler [1.7.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-ruleset-bundler-1.6.3...@stoplight/spectral-ruleset-bundler-1.7.0) (2026-04-13)
 
 
@@ -133,4 +140,3 @@
 ### Features
 
 - initial release ([#1819](https://github.com/stoplightio/spectral/issues/1819)) ([f8a58f7](https://github.com/stoplightio/spectral/commit/f8a58f71f45d00a32cedb17ab7eb9c27e8e13e09))
-
