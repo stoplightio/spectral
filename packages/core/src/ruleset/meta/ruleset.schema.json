@@ -66,6 +66,9 @@
           "type": "object",
           "properties": {
             "files": true,
+            "formats": {
+              "$ref": "shared#formats"
+            },
             "rules": {
               "type": "object",
               "additionalProperties": {
@@ -99,9 +102,10 @@
                   "errorMessage": "must be an non-empty array of glob patterns"
                 }
               },
-              "required": ["files"],
+              "anyOf": [{ "required": ["files"] }, { "required": ["formats"] }],
               "errorMessage": {
-                "type": "must be an override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }"
+                "type": "must be an override, i.e. { \"files\": [\"v2/**/*.json\"], \"rules\": {} }",
+                "anyOf": "must state files or formats"
               }
             },
             {
