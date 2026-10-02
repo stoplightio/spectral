@@ -47,24 +47,30 @@ export class Spectral {
     }
 
     const document = this.parseDocument(target);
-    const ruleset = this.ruleset.fromSource(document.source);
 
     const inventory = new DocumentInventory(document, this._resolver);
     await inventory.resolve();
 
-    const runner = new Runner(inventory);
-    runner.results.push(...this._filterParserErrors(document.diagnostics, ruleset.parserOptions));
+    const candidateFormats = this.ruleset.formats;
+    let unrecognizedFormat = false;
 
     if (document.formats === void 0) {
-      const foundFormats = [...ruleset.formats].filter(format => format(inventory.resolved, document.source));
+      const foundFormats = [...candidateFormats].filter(format => format(inventory.resolved, document.source));
       if (foundFormats.length === 0 && opts.ignoreUnknownFormat !== true) {
         document.formats = null;
-        if (ruleset.formats.size > 0) {
-          runner.addResult(this._generateUnrecognizedFormatError(document, Array.from(ruleset.formats)));
-        }
+        unrecognizedFormat = candidateFormats.size > 0;
       } else {
         document.formats = new Set(foundFormats);
       }
+    }
+
+    const ruleset = this.ruleset.fromSource(document.source, document.formats ?? null);
+
+    const runner = new Runner(inventory);
+    runner.results.push(...this._filterParserErrors(document.diagnostics, ruleset.parserOptions));
+
+    if (unrecognizedFormat) {
+      runner.addResult(this._generateUnrecognizedFormatError(document, Array.from(candidateFormats)));
     }
 
     await runner.run(ruleset);
