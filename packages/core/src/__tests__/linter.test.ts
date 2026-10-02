@@ -1757,4 +1757,233 @@ responses:: !!foo
       }),
     );
   });
+
+  describe('Format selectors in overrides', () => {
+    const draftA: Format = obj => typeof obj === 'object' && obj !== null && 'draft-a' in obj;
+    const draftB: Format = obj => typeof obj === 'object' && obj !== null && 'draft-b' in obj;
+    const rulesetSource = path.join(__dirname, './__fixtures__/ruleset.json');
+
+    const createSpectral = (overrides: RulesetDefinition['overrides']): Spectral => {
+      const spectral = new Spectral();
+      spectral.setRuleset(
+        new Ruleset(
+          {
+            formats: [draftA, draftB],
+            rules: {
+              'no-type': {
+                given: '$..type',
+                formats: [draftA, draftB],
+                then: {
+                  function: falsy,
+                },
+              },
+            },
+            overrides,
+          },
+          { source: rulesetSource },
+        ),
+      );
+      return spectral;
+    };
+
+    const createDocument = (format: string, uri?: string) =>
+      new Document(JSON.stringify({ [format]: true, type: 'string' }), Parsers.Json, uri);
+
+    test('should apply an override stating formats only to documents of that format', async () => {
+      const spectral = createSpectral([
+        {
+          formats: [draftB],
+          rules: {
+            'no-type': 'info',
+          },
+        },
+      ]);
+
+      await expect(spectral.run(createDocument('draft-a', '/docs/a.json'))).resolves.toEqual([
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Warning }),
+      ]);
+
+      await expect(spectral.run(createDocument('draft-b', '/docs/b.json'))).resolves.toEqual([
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Information }),
+      ]);
+    });
+
+    test('should not leak a format-scoped override to other documents linted by the same instance', async () => {
+      const spectral = createSpectral([
+        {
+          formats: [draftB],
+          rules: {
+            'no-type': 'off',
+          },
+        },
+      ]);
+
+      await expect(spectral.run(createDocument('draft-b', '/docs/b.json'))).resolves.toEqual([]);
+      await expect(spectral.run(createDocument('draft-a', '/docs/a.json'))).resolves.toEqual([
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Warning }),
+      ]);
+      await expect(spectral.run(createDocument('draft-b', '/docs/b.json'))).resolves.toEqual([]);
+    });
+
+    test('should apply an override stating both files and formats only where both match', async () => {
+      const spectral = createSpectral([
+        {
+          files: ['**/legacy/*.json'],
+          formats: [draftB],
+          rules: {
+            'no-type': 'error',
+          },
+        },
+      ]);
+
+      await expect(
+        spectral.run(createDocument('draft-b', path.join(path.dirname(rulesetSource), 'legacy/b.json'))),
+      ).resolves.toEqual([expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Error })]);
+
+      await expect(
+        spectral.run(createDocument('draft-a', path.join(path.dirname(rulesetSource), 'legacy/a.json'))),
+      ).resolves.toEqual([expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Warning })]);
+
+      await expect(
+        spectral.run(createDocument('draft-b', path.join(path.dirname(rulesetSource), 'current/b.json'))),
+      ).resolves.toEqual([expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Warning })]);
+    });
+
+    test('should let a later override win over an earlier one', async () => {
+      const spectral = createSpectral([
+        {
+          formats: [draftA, draftB],
+          rules: {
+            'no-type': 'error',
+          },
+        },
+        {
+          formats: [draftB],
+          rules: {
+            'no-type': 'hint',
+          },
+        },
+      ]);
+
+      await expect(spectral.run(createDocument('draft-a', '/docs/a.json'))).resolves.toEqual([
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Error }),
+      ]);
+
+      await expect(spectral.run(createDocument('draft-b', '/docs/b.json'))).resolves.toEqual([
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Hint }),
+      ]);
+    });
+
+    test('should detect a format that is mentioned in an override only', async () => {
+      const spectral = new Spectral();
+      spectral.setRuleset(
+        new Ruleset(
+          {
+            rules: {
+              'no-type': {
+                given: '$..type',
+                then: {
+                  function: falsy,
+                },
+              },
+            },
+            overrides: [
+              {
+                formats: [draftB],
+                rules: {
+                  'no-type': 'off',
+                },
+              },
+            ],
+          },
+          { source: rulesetSource },
+        ),
+      );
+
+      await expect(spectral.run(createDocument('draft-b', '/docs/b.json'))).resolves.toEqual([]);
+      await expect(
+        spectral.run(createDocument('draft-a', '/docs/a.json'), { ignoreUnknownFormat: true }),
+      ).resolves.toEqual([expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Warning })]);
+    });
+
+    test('should not apply an override stating formats to a document of an unknown format', async () => {
+      const spectral = new Spectral();
+      spectral.setRuleset(
+        new Ruleset(
+          {
+            rules: {
+              'no-type': {
+                given: '$..type',
+                then: {
+                  function: falsy,
+                },
+              },
+            },
+            overrides: [
+              {
+                formats: [draftA],
+                rules: {
+                  'no-type': 'off',
+                },
+              },
+              {
+                files: ['**/*.json'],
+                rules: {
+                  'no-type': 'error',
+                },
+              },
+            ],
+          },
+          { source: rulesetSource },
+        ),
+      );
+
+      const document = new Document(
+        JSON.stringify({ type: 'string' }),
+        Parsers.Json,
+        path.join(path.dirname(rulesetSource), 'unknown.json'),
+      );
+
+      await expect(spectral.run(document)).resolves.toEqual([
+        expect.objectContaining({ code: 'unrecognized-format' }),
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Error }),
+      ]);
+    });
+
+    test('should lint a document without a source when every override selects by format', async () => {
+      const spectral = createSpectral([
+        {
+          formats: [draftB],
+          rules: {
+            'no-type': 'error',
+          },
+        },
+      ]);
+
+      await expect(spectral.run(createDocument('draft-b'))).resolves.toEqual([
+        expect.objectContaining({ code: 'no-type', severity: DiagnosticSeverity.Error }),
+      ]);
+    });
+
+    test('should refuse a document without a source when some override states files', async () => {
+      const spectral = createSpectral([
+        {
+          formats: [draftB],
+          rules: {
+            'no-type': 'error',
+          },
+        },
+        {
+          files: ['**/*.json'],
+          rules: {
+            'no-type': 'info',
+          },
+        },
+      ]);
+
+      await expect(spectral.run(createDocument('draft-b'))).rejects.toThrow(
+        'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
+      );
+    });
+  });
 });

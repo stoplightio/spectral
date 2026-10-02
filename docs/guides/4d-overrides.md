@@ -9,24 +9,40 @@ Overrides can be used to apply rulesets on:
 - Particular elements of files `files: ['**#/components/schemas/Item']`
 - Override particular rules
 
+An override must state `files`, `formats`, or both. When it states both, it applies only to documents that match both. Documents whose format cannot be detected are never matched by an override that states `formats`.
+
 **Example**
 
 ```yaml
 overrides:
-  formats:
-    - json-schema-draft7
-  files:
-    - schemas/**/*.draft7.json
-  rules:
-    valid-number-validation:
-      given:
-        - $..exclusiveMinimum
-        - $..exclusiveMaximum
-      then:
-        function: schema
-        functionOptions:
-          type: number
+  - formats:
+      - json-schema-draft7
+    files:
+      - schemas/**/*.draft7.json
+    rules:
+      valid-number-validation:
+        given:
+          - $..exclusiveMinimum
+          - $..exclusiveMaximum
+        then:
+          function: schema
+          functionOptions:
+            schema:
+              type: number
 ```
+
+To change a rule for every document of a given format, regardless of where the document lives, leave `files` out:
+
+```yaml
+extends: [spectral:oas, spectral:asyncapi]
+overrides:
+  - formats:
+      - oas3_0
+    rules:
+      operation-description: info
+```
+
+Here `operation-description` is reported as `info` for OpenAPI 3.0 documents, and keeps its usual severity for every other document linted with the same ruleset.
 
 To apply an override to particular elements of files, combine a glob for a filepath with a [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) after the anchor, i.e.:
 
@@ -37,6 +53,8 @@ overrides:
     rules:
       some-inherited-rule: "off"
 ```
+
+Overrides that use JSON Pointers can state `formats` too, and as before they can contain nothing but `rules` with severities.
 
 JSON Pointers have a different syntax than JSON Paths used in the `given` component of a rule.
 

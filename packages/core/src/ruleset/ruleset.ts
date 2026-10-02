@@ -16,8 +16,30 @@ import { mergeRule } from './mergers/rules';
 import { DEFAULT_PARSER_OPTIONS, getDiagnosticSeverity } from '..';
 import { mergeRulesets } from './mergers/rulesets';
 import { Formats } from './formats';
+import type { Format } from './format';
 import { isSimpleAliasDefinition } from './utils/guards';
 import type { Stringified } from './types';
+
+function matchesDocumentFormats(
+  entryFormats: Formats | Format[] | undefined,
+  documentFormats: Set<Format> | null | undefined,
+): boolean {
+  if (entryFormats === void 0 || documentFormats === void 0) {
+    return true;
+  }
+
+  if (documentFormats === null) {
+    return false;
+  }
+
+  for (const format of entryFormats) {
+    if (documentFormats.has(format)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 const STACK_SYMBOL = Symbol('@stoplight/spectral/ruleset/#stack');
 const EXPLICIT_SEVERITY = Symbol('@stoplight/spectral/ruleset/#explicit-severity');
@@ -165,6 +187,16 @@ export class Ruleset {
       }
     }
 
+    if (this.overrides !== null) {
+      for (const { formats } of this.overrides) {
+        if (formats !== void 0) {
+          for (const format of formats) {
+            this.formats.add(format);
+          }
+        }
+      }
+    }
+
     this.rules = this.#getRules();
   }
 
@@ -172,14 +204,14 @@ export class Ruleset {
     return this.#context.source ?? null;
   }
 
-  public fromSource(source: string | null): Ruleset {
+  public fromSource(source: string | null, documentFormats?: Set<Format> | null): Ruleset {
     if (this.overrides === null) {
       return this;
     }
 
     const { source: rulesetSource } = this;
 
-    if (source === null) {
+    if (source === null && this.overrides.some(override => override.files !== void 0)) {
       throw new Error(
         'Document must have some source assigned. If you use Spectral programmatically make sure to pass the source to Document',
       );
@@ -191,7 +223,7 @@ export class Ruleset {
       );
     }
 
-    const relativeSource = relative(dirname(rulesetSource), source);
+    const relativeSource = source === null ? null : relative(dirname(rulesetSource), source);
     const pointerOverrides: Record<
       string, // ruleName
       {
@@ -201,6 +233,18 @@ export class Ruleset {
     > = {};
 
     const overrides = this.overrides.flatMap(({ files, ...ruleset }) => {
+      if (!matchesDocumentFormats(ruleset.formats, documentFormats)) {
+        return [];
+      }
+
+      if (files === void 0) {
+        return ruleset;
+      }
+
+      if (relativeSource === null) {
+        return [];
+      }
+
       const filteredFiles: string[] = [];
 
       for (const pattern of files) {
