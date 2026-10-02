@@ -133,7 +133,7 @@ testRule('oas3-unused-component', [
                 $ref: '#/components/schemas/HookedAsWell',
               },
               {
-                $ref: `${definitionDocument}#/components/schemas/ExternalFs`,
+                $ref: `${definitionDocument.source}#/components/schemas/ExternalFs`,
               },
               {
                 $ref: 'https://oas3.library.com/defs.json#/components/schemas/ExternalHttp',

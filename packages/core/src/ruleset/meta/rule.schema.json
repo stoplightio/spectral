@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "@stoplight/spectral-core/meta/rule.schema",
   "$defs": {
     "Then": {
@@ -75,7 +75,6 @@
       },
       "type": {
         "enum": ["style", "validation"],
-        "type": "string",
         "errorMessage": "allowed types are \"style\" and \"validation\""
       },
       "extensions": {

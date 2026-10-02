@@ -33,7 +33,7 @@ export const sarif: Formatter = (results, _, ctx) => {
     const sarifRuleBuilder = new SarifRuleBuilder().initSimple({
       ruleId: rule.name,
       shortDescriptionText: rule.description ?? 'No description.',
-      helpUri: rule.documentationUrl !== null ? rule.documentationUrl : undefined,
+      helpUri: rule.documentationUrl ?? undefined,
     });
     sarifRunBuilder.addRule(sarifRuleBuilder);
   }

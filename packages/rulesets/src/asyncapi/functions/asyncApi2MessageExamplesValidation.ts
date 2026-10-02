@@ -17,7 +17,7 @@ interface MessageExample {
 export interface MessageFragment {
   payload: unknown;
   headers: unknown;
-  traits?: any[];
+  traits?: unknown[];
   examples?: MessageExample[];
 }
 

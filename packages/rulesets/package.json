@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-rulesets",
-  "version": "1.22.7",
+  "version": "1.23.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -41,7 +41,7 @@
     "@stoplight/spectral-ref-resolver": "^1.0.4",
     "gzip-size": "^6.0.0",
     "immer": "^9.0.6",
-    "terser": "^5.26.0"
+    "terser": "^5.46.0"
   },
   "scripts": {
     "compile-schemas": "ts-node -T ./scripts/compile-schemas.ts",

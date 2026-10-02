@@ -45,7 +45,10 @@ export class DocumentInventory implements IDocumentInventory {
     return this.document.formats ?? null;
   }
 
-  constructor(public readonly document: IDocument, protected resolver: Resolver) {
+  constructor(
+    public readonly document: IDocument,
+    protected resolver: Resolver,
+  ) {
     this.graph = null;
     this.errors = null;
 
@@ -204,7 +207,6 @@ export class DocumentInventory implements IDocumentInventory {
       this.diagnostics.push(...formatParserDiagnostics(document.diagnostics, document.source));
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.referencedDocuments[source] = document;
 
     return Promise.resolve(resolveOpts);

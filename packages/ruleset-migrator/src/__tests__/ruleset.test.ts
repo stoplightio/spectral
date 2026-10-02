@@ -1,7 +1,8 @@
 import { vol } from 'memfs';
 import * as path from '@stoplight/path';
-import * as prettier from 'prettier/standalone';
-import * as parserBabel from 'prettier/parser-babel';
+import { format as prettierFormat } from 'prettier/standalone';
+import * as parserBabel from 'prettier/plugins/babel';
+import * as parserEstree from 'prettier/plugins/estree';
 import { Ruleset } from '@stoplight/spectral-core';
 import { DiagnosticSeverity } from '@stoplight/types';
 import fetchMockLib, { FetchMock as FetchMockInstance } from 'fetch-mock';
@@ -46,12 +47,12 @@ describe('migrator', () => {
       ['esm', '.mjs'],
     ])('given %s format, should generate a valid bundle', async (format, ext) => {
       expect(
-        prettier.format(
+        await prettierFormat(
           await migrateRuleset(ruleset, {
             format,
             fs: vol as any,
           }),
-          { parser: 'babel', plugins: [parserBabel] },
+          { parser: 'babel', plugins: [parserEstree, parserBabel] },
         ),
       ).toEqual(await vol.promises.readFile(path.join(dir, `output${ext}`), 'utf8'));
     });

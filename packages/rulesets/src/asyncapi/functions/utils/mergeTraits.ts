@@ -1,5 +1,6 @@
 import { isPlainObject } from '@stoplight/json';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type HaveTraits = { traits?: any[] } & Record<string, any>;
 
 /**

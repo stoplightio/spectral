@@ -1,12 +1,11 @@
 import { DiagnosticSeverity } from '@stoplight/types';
-import { latestVersion } from '../functions/utils/specs';
 import testRule from './__helpers__/tester';
 
 testRule('asyncapi-latest-version', [
   {
     name: 'valid case',
     document: {
-      asyncapi: latestVersion,
+      asyncapi: '3.1.0',
     },
     errors: [],
   },
@@ -18,7 +17,7 @@ testRule('asyncapi-latest-version', [
     },
     errors: [
       {
-        message: `The latest version is not used. You should update to the "${latestVersion}" version.`,
+        message: 'The latest version is not used. You should update to the "3.1.0" version.',
         path: ['asyncapi'],
         severity: DiagnosticSeverity.Information,
       },

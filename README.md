@@ -4,7 +4,7 @@
 [![Stoplight Forest](https://img.shields.io/ecologi/trees/stoplightinc)][stoplight_forest]
 
 - **Custom Rulesets**: Create custom rules to lint JSON or YAML objects
-- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2 & v3.x**, **AsyncAPI**, and **Arazzo v1** Documents
+- **Ready-to-use Rulesets**: Validate and lint **OpenAPI v2, v3.0, v3.1 & v3.2**, **AsyncAPI**, and **Arazzo v1** Documents
 - **API Style Guides**: Automated [API Style Guides](https://stoplight.io/api-style-guides-guidelines-and-best-practices?utm_source=github.com&utm_medium=referral&utm_campaign=github_repo_spectral) using rulesets improve consistency across all your APIs
 - **Ready-to-use Functions**: Built-in set of functions to help [create custom rules](https://meta.stoplight.io/docs/spectral/e5b9616d6d50c-custom-rulesets#adding-rules). Functions include pattern checks, parameter checks, alphabetical ordering, a specified number of characters, provided keys are present in an object, etc.
 - **Custom Functions**: Create custom functions for advanced use cases
@@ -17,7 +17,10 @@
 - [ℹ️ Support](#ℹ️-support)
 - [🌎 Real-World Rulesets](#-real-world-rulesets)
 - [⚙️ Integrations](#️-integrations)
+- [🏁 Help Others Utilize Spectral](#-help-others-utilize-spectral)
 - [👏 Contributing](#-contributing)
+- [🎉 Thanks](#-thanks)
+- [📜 License](#-license)
 - [🌲 Sponsor Spectral by Planting a Tree](#-sponsor-spectral-by-planting-a-tree)
 
 ## 🧰 Installation
@@ -131,6 +134,8 @@ Check out some additional style guides here:
 ## 🏁 Help Others Utilize Spectral
 
 If you're using Spectral for an interesting use case, create an issue with details on how you're using it. We'll add it to a list here. Spread the goodness 🎉
+
+- [Bank API 🏦](https://github.com/erwinkramer/bank-api?tab=readme-ov-file#bank-api) - The Bank API is a design reference project suitable to bootstrap development for a compliant and modern API. Built in ASP.NET Core and fully complies to multiple Spectral rulesets, such as "OWASP Top 10", "Dutch Public Sector (NLGov) REST API Design Rules" and more. Built by [Erwin Kramer](https://github.com/erwinkramer).
 
 ## 👏 Contributing
 

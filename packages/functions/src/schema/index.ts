@@ -34,7 +34,6 @@ export default createRulesetFunction<unknown, Options>(
 
     const assignAjvInstance =
       instances.get(documentInventory) ??
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       instances.set(documentInventory, createAjvInstances()).get(documentInventory)!;
 
     const results: IFunctionResult[] = [];

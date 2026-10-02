@@ -1,3 +1,16 @@
+# @stoplight/spectral-rulesets [1.23.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.7...@stoplight/spectral-rulesets-1.23.0) (2026-10-01)
+
+
+### Bug Fixes
+
+* **rulesets:** clarify operationId URL validation message ([#3035](https://github.com/stoplightio/spectral/issues/3035)) ([4fb7331](https://github.com/stoplightio/spectral/commit/4fb7331e1970a2eb71bdc27c63c14486f541ef8a))
+* **rulesets:** restore null guard in duplicated-entry-in-enum JSONPath ([#2963](https://github.com/stoplightio/spectral/issues/2963)) ([c6e46d0](https://github.com/stoplightio/spectral/commit/c6e46d040493987c9b6f57637b5cc4ce5af72150)), closes [#2959](https://github.com/stoplightio/spectral/issues/2959)
+
+
+### Features
+
+* **asyncapi:** add 3.1 support and future minor fallback ([#3019](https://github.com/stoplightio/spectral/issues/3019)) ([23e2afa](https://github.com/stoplightio/spectral/commit/23e2afa3fd01112a86f246a1f4019bb6edb3c74d))
+
 ## @stoplight/spectral-rulesets [1.22.7](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.6...@stoplight/spectral-rulesets-1.22.7) (2026-08-03)
 
 

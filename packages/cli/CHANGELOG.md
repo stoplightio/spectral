@@ -1,3 +1,10 @@
+# @stoplight/spectral-cli [6.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.3...@stoplight/spectral-cli-6.17.0) (2026-10-01)
+
+
+### Features
+
+* **repo:** minor release trigger ([#3079](https://github.com/stoplightio/spectral/issues/3079)) ([eabafec](https://github.com/stoplightio/spectral/commit/eabafec22729529074aba1b392043c9f22a995a3))
+
 ## @stoplight/spectral-cli [6.16.3](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.2...@stoplight/spectral-cli-6.16.3) (2026-08-03)
 
 

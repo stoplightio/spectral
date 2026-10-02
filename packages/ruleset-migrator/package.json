@@ -1,6 +1,6 @@
 {
   "name": "@stoplight/spectral-ruleset-migrator",
-  "version": "1.12.2",
+  "version": "1.13.0",
   "homepage": "https://github.com/stoplightio/spectral",
   "bugs": "https://github.com/stoplightio/spectral/issues",
   "author": "Stoplight <support@stoplight.io>",
@@ -42,7 +42,7 @@
     "fetch-mock": "^12.6.0",
     "json-schema-to-typescript": "^10.1.5",
     "memfs": "^3.5.3",
-    "prettier": "^2.4.1"
+    "prettier": "^3.0.0"
   },
   "scripts": {
     "pretest": "ts-node -T ./scripts/generate-test-fixtures.ts && yarn prebuild",

@@ -86,10 +86,8 @@ export function createAjvInstances(): AssignAjvInstance {
       return ajv.getSchema($id) ?? ajv.compile(schema);
     } else {
       const actualCompiledSchemas =
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         compiledSchemas.get(ajv) ?? compiledSchemas.set(ajv, new WeakMap<SchemaObject, ValidateFunction>()).get(ajv)!;
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return actualCompiledSchemas.get(schema) ?? actualCompiledSchemas.set(schema, ajv.compile(schema)).get(schema)!;
     }
   };

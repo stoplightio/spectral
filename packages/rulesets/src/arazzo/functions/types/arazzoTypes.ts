@@ -40,12 +40,12 @@ export type ReusableObject = {
 
 export type PayloadReplacement = {
   target: string;
-  value: unknown | string;
+  value: unknown;
 };
 
 export type RequestBody = {
   contentType?: string;
-  payload?: unknown | string;
+  payload?: unknown;
   replacements?: PayloadReplacement[];
 };
 

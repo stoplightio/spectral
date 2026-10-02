@@ -50,13 +50,13 @@ fi
 SRC="$(pwd)/${FILENAME}"
 DEST=/usr/local/bin/spectral
 
-STATUS=$(curl -sL -w %{http_code} -o "$SRC" "$URL")
-if [ $STATUS -ge 200 ] & [ $STATUS -le 308 ]; then
+STATUS=$(curl -sL -w "%{http_code}" -o "$SRC" "$URL") || STATUS=000
+if [ "$STATUS" -ge 200 ] && [ "$STATUS" -le 308 ]; then
   mv "$SRC" "$DEST"
   chmod +x "$DEST"
   echo "Spectral was installed to: ${DEST}"
 else
-  rm "$SRC"
+  rm -f "$SRC"
   echo "Error requesting. Download binary from ${URL}"
   exit 1
 fi
