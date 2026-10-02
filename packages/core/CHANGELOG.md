@@ -1,3 +1,17 @@
+# @stoplight/spectral-core [1.24.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.23.2...@stoplight/spectral-core-1.24.0) (2026-10-01)
+
+
+### Features
+
+* **repo:** minor release trigger ([#3079](https://github.com/stoplightio/spectral/issues/3079)) ([eabafec](https://github.com/stoplightio/spectral/commit/eabafec22729529074aba1b392043c9f22a995a3))
+
+## @stoplight/spectral-core [1.23.2](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.23.1...@stoplight/spectral-core-1.23.2) (2026-10-01)
+
+
+### Bug Fixes
+
+* **core:** make JSON Schemas at `packages/core/src/ruleset/meta` valid ([#2788](https://github.com/stoplightio/spectral/issues/2788)) ([e5143e7](https://github.com/stoplightio/spectral/commit/e5143e77e22d8d2bfecf43914f3d6f43998e943e))
+
 ## @stoplight/spectral-core [1.23.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.23.0...@stoplight/spectral-core-1.23.1) (2026-06-30)
 
 

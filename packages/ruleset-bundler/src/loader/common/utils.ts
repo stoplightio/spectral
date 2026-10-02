@@ -5,5 +5,5 @@ export function isBasicRuleset(filepath: string): boolean {
 }
 
 export function isErrorWithCode(error: unknown): error is Error & { code: string } {
-  return error instanceof Error && 'code' in error && typeof (error as Error & { code: unknown }).code === 'string';
+  return error instanceof Error && 'code' in error && typeof (error as { code: unknown }).code === 'string';
 }

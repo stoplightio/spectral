@@ -1,3 +1,10 @@
+# @stoplight/spectral-functions [1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.5...@stoplight/spectral-functions-1.11.0) (2026-10-01)
+
+
+### Features
+
+* **repo:** minor release trigger ([#3079](https://github.com/stoplightio/spectral/issues/3079)) ([eabafec](https://github.com/stoplightio/spectral/commit/eabafec22729529074aba1b392043c9f22a995a3))
+
 ## @stoplight/spectral-functions [1.10.5](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.4...@stoplight/spectral-functions-1.10.5) (2026-06-30)
 
 
