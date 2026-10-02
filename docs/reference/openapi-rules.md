@@ -74,6 +74,40 @@ TheBadModel:
         - 2
 ```
 
+
+### object-with-properties-requires-type-object
+
+Schemas that define `properties` must also declare `type: object`. Without it, JSON Schema validation does not restrict instances to objects, so strings and other primitives can pass unexpectedly.
+
+**Recommended:** No
+
+**Good Example**
+
+```yaml
+Address:
+  type: object
+  properties:
+    number:
+      type: number
+    street_name:
+      type: string
+  required:
+    - number
+```
+
+**Bad Example**
+
+```yaml
+Address:
+  properties:
+    number:
+      type: number
+    street_name:
+      type: string
+  required:
+    - number
+```
+
 ### info-contact
 
 Info object should contain `contact` object.
