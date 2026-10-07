@@ -194,7 +194,13 @@ function checkSubstitutions(
   for (const substitutedUrl of applyUrlVariables(url, variables)) {
     let validUrl = !disallowQueryAndFragment || !/[?#]/.test(substitutedUrl);
     try {
-      new URL(substitutedUrl, /^[a-z][a-z\d+.-]*:/i.test(substitutedUrl) ? undefined : 'https://example.com');
+      const normalizedUrl = substitutedUrl.replace(/[\t\n\r]/g, '');
+      let start = 0;
+      while (normalizedUrl.charCodeAt(start) <= 32) start++;
+      new URL(
+        substitutedUrl,
+        /^[a-z][a-z\d+.-]*:/i.test(normalizedUrl.slice(start)) ? undefined : 'https://example.com',
+      );
     } catch {
       validUrl = false;
     }
