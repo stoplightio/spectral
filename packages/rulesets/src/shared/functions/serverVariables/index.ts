@@ -1,5 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import type { IFunctionResult } from '@stoplight/spectral-core';
+import { oas3_2 } from '@stoplight/spectral-formats';
 
 import { parseUrlVariables } from './utils/parseUrlVariables';
 import { getMissingProps } from '../../utils/getMissingProps';
@@ -121,7 +122,7 @@ export default createRulesetFunction<Input, Options>(
     }
 
     if (opts?.checkSubstitutions === true) {
-      checkSubstitutions(results, ctx.path, url, variablePairs);
+      checkSubstitutions(results, ctx.path, url, variablePairs, ctx.document.formats?.has(oas3_2) === true);
     }
 
     return results;
@@ -184,15 +185,20 @@ function checkSubstitutions(
   path: JsonPath,
   url: string,
   variables: [key: string, values: string[]][],
+  disallowQueryAndFragment: boolean,
 ): void {
   if (variables.length === 0) return;
 
   const invalidUrls: string[] = [];
 
   for (const substitutedUrl of applyUrlVariables(url, variables)) {
+    let validUrl = !disallowQueryAndFragment || !/[?#]/.test(substitutedUrl);
     try {
-      new URL(substitutedUrl);
+      new URL(substitutedUrl, /^[a-z][a-z\d+.-]*:/i.test(substitutedUrl) ? undefined : 'https://example.com');
     } catch {
+      validUrl = false;
+    }
+    if (!validUrl) {
       invalidUrls.push(substitutedUrl);
       if (invalidUrls.length === 5) {
         break;
