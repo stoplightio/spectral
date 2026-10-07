@@ -331,7 +331,7 @@ testRule('oas3-server-variables', [
           },
         },
         {
-          url: '{username}',
+          url: openapi === '3.0.3' ? ' \u0000\t{username}' : '{username}',
           variables: {
             username: {
               enum: ['https:', 'https:/', ...(openapi === '3.2.0' ? ['/api?q=1', '/api#fragment'] : [])],
@@ -365,8 +365,10 @@ testRule('oas3-server-variables', [
       },
       {
         message:
-          'A few substitutions of server variables resulted in invalid URLs: https:, https:/' +
-          (openapi === '3.2.0' ? ', /api?q=1, /api#fragment' : ''),
+          'A few substitutions of server variables resulted in invalid URLs: ' +
+          ['https:', 'https:/', ...(openapi === '3.2.0' ? ['/api?q=1', '/api#fragment'] : [])]
+            .map(url => (openapi === '3.0.3' ? ` \u0000\t${url}` : url))
+            .join(', '),
         path: ['servers', '1', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
