@@ -63,6 +63,33 @@ testRule('oas3-server-variables', [
     errors: [],
   },
 
+  ...['3.0.3', '3.1.0', '3.2.0'].map(openapi => ({
+    name: `server has relative urls with variables in OpenAPI ${openapi}`,
+    document: {
+      openapi,
+      servers: [
+        '/example/{version}',
+        '//{version}.example.com/api',
+        'example/{version}',
+        './{version}',
+        '../{version}',
+        '{version}',
+        '{version}.test',
+        ...(openapi === '3.2.0' ? [] : ['?version={version}', '#{version}']),
+      ].map(url => ({
+        url,
+        variables: {
+          version: {
+            enum: ['v1', 'v2', ''],
+            default: 'v1',
+          },
+        },
+      })),
+      paths: {},
+    },
+    errors: [],
+  })),
+
   {
     name: 'server has not defined definition for one of the url variables',
     document: {
@@ -289,10 +316,10 @@ testRule('oas3-server-variables', [
     ],
   },
 
-  {
-    name: 'server has a server variable resulting in broken URL',
+  ...['3.0.3', '3.1.0', '3.2.0'].map(openapi => ({
+    name: `server has variables resulting in broken URLs in OpenAPI ${openapi}`,
     document: {
-      openapi: '3.1.0',
+      openapi,
       servers: [
         {
           url: 'https://stoplight.io:{port}',
@@ -307,8 +334,8 @@ testRule('oas3-server-variables', [
           url: '{username}',
           variables: {
             username: {
-              enum: ['stoplight', 'io'],
-              default: 'stoplight',
+              enum: ['https:', 'https:/', ...(openapi === '3.2.0' ? ['/api?q=1', '/api#fragment'] : [])],
+              default: 'https:',
             },
           },
         },
@@ -317,9 +344,9 @@ testRule('oas3-server-variables', [
         '/': {
           servers: [
             {
-              url: '{base}.test',
+              url: 'https://stoplight.io:{port}',
               variables: {
-                base: {
+                port: {
                   enum: ['http', 'https', 'ftp', 'ftps', 'ssh', 'smtp'],
                   default: 'https',
                 },
@@ -337,16 +364,18 @@ testRule('oas3-server-variables', [
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: 'A few substitutions of server variables resulted in invalid URLs: stoplight, io',
+        message:
+          'A few substitutions of server variables resulted in invalid URLs: https:, https:/' +
+          (openapi === '3.2.0' ? ', /api?q=1, /api#fragment' : ''),
         path: ['servers', '1', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
       {
         message:
-          'At least 5 substitutions of server variables resulted in invalid URLs: http.test, https.test, ftp.test, ftps.test, ssh.test and more',
+          'At least 5 substitutions of server variables resulted in invalid URLs: https://stoplight.io:http, https://stoplight.io:https, https://stoplight.io:ftp, https://stoplight.io:ftps, https://stoplight.io:ssh and more',
         path: ['paths', '/', 'servers', '0', 'variables'],
         severity: DiagnosticSeverity.Error,
       },
     ],
-  },
+  })),
 ]);
