@@ -46,12 +46,15 @@ export class Rule implements IRule {
   public extensions: Record<string, unknown> | null;
   #then!: IRuleThen[];
   #given!: string[];
+  #aliasSource: Ruleset;
 
   constructor(
     public readonly name: string,
     public readonly definition: RuleDefinition,
     public readonly owner: Ruleset,
+    aliasSource: Ruleset = owner,
   ) {
+    this.#aliasSource = aliasSource;
     this.recommended = definition.recommended !== false;
     this.#enabled = this.recommended;
     this.description = definition.description ?? null;
@@ -136,20 +139,28 @@ export class Rule implements IRule {
     this.#then = Array.isArray(then) ? then : [then];
   }
 
+  public get aliasSource(): Ruleset {
+    return this.#aliasSource;
+  }
+
+  public set aliasSource(aliasSource: Ruleset) {
+    this.#aliasSource = aliasSource;
+  }
+
   public get given(): string[] {
     return this.#given;
   }
 
   public set given(given: RuleDefinition['given']) {
     const actualGiven = Array.isArray(given) ? given : [given];
-    this.#given = this.owner.hasComplexAliases
+    this.#given = this.#aliasSource.hasComplexAliases
       ? actualGiven
-      : actualGiven.flatMap(expr => resolveAlias(this.owner.aliases, expr, null)).filter(isString);
+      : actualGiven.flatMap(expr => resolveAlias(this.#aliasSource.aliases, expr, null)).filter(isString);
   }
 
   public getGivenForFormats(formats: Set<Format> | null): string[] {
-    return this.owner.hasComplexAliases
-      ? this.#given.flatMap(expr => resolveAlias(this.owner.aliases, expr, formats))
+    return this.#aliasSource.hasComplexAliases
+      ? this.#given.flatMap(expr => resolveAlias(this.#aliasSource.aliases, expr, formats))
       : this.#given;
   }
 
@@ -172,6 +183,7 @@ export class Rule implements IRule {
   }
 
   public clone(): Rule {
+    // the clone is rebuilt from the original definition, whose `given` was written by the owner
     return new Rule(this.name, this.definition, this.owner);
   }
 

@@ -39,6 +39,12 @@ export function mergeRule(
       break;
     case 'object':
       if (existingRule !== void 0) {
+        // `given` is resolved against the aliases of the ruleset that redefines the rule,
+        // so it must be reassigned before the `given` setter picks the new value up below
+        if (rule.given !== void 0) {
+          existingRule.aliasSource = ruleset;
+        }
+
         Object.assign(existingRule, rule, {
           enabled: true,
           owner: existingRule.owner,
