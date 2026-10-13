@@ -26,6 +26,7 @@ import {
   oasDiscriminator,
 } from './functions';
 import { uniquenessTags } from '../shared/functions';
+import runtimeExpression from './functions/runtimeExpression';
 import serverVariables from '../shared/functions/serverVariables';
 
 export { ruleset as default };
@@ -725,6 +726,17 @@ const ruleset = {
       given: '$',
       then: {
         function: oasUnusedComponent,
+      },
+    },
+    'oas3-links-parameters-expression': {
+      description: "The links.parameters object's values should be valid runtime expressions.",
+      message: '{{error}}',
+      severity: 0,
+      formats: [oas3],
+      recommended: true,
+      given: '#ResponseObject.links[*].parameters',
+      then: {
+        function: runtimeExpression,
       },
     },
     'oas3-server-variables': {
