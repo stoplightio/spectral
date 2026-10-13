@@ -1,8 +1,13 @@
 import { ISpectralDiagnostic, Ruleset } from '@stoplight/spectral-core';
 import type { DiagnosticSeverity } from '@stoplight/types';
 
+export type HtmlFormatterOptions = {
+  includeJsonPath: boolean;
+};
+
 export type FormatterOptions = {
   failSeverity: DiagnosticSeverity;
+  htmlFormatterOptions?: HtmlFormatterOptions;
 };
 
 export type FormatterContext = {
