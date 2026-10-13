@@ -1,4 +1,4 @@
-import { Dictionary, Optional } from '@stoplight/types';
+import { DiagnosticSeverity, Dictionary, Optional } from '@stoplight/types';
 import { IRuleResult } from '@stoplight/spectral-core';
 import { Formatter } from './types';
 import { getSeverityName, groupBySource } from './utils';
@@ -27,12 +27,20 @@ function inspectionType(result: IRuleResult & { source: string }): string {
   return `##teamcity[inspectionType category='openapi' id='${code}' name='${code}' description='${severity} -- ${message}${documentationUrl}']`;
 }
 
+const SEVERITY_TEAMCITY_NAMES: Dictionary<string, DiagnosticSeverity> = {
+  [DiagnosticSeverity.Error]: 'ERROR',
+  [DiagnosticSeverity.Warning]: 'WARNING',
+  [DiagnosticSeverity.Information]: 'INFO',
+  [DiagnosticSeverity.Hint]: 'HINT',
+};
+
 function inspection(result: IRuleResult & { source: string }): string {
   const code = escapeString(result.code);
   const severity = getSeverityName(result.severity);
+  const teamCitySeverity = SEVERITY_TEAMCITY_NAMES[result.severity];
   const message = escapeString(result.message);
   const line = result.range.start.line + 1;
-  return `##teamcity[inspection typeId='${code}' file='${result.source}' line='${line}' message='${severity} -- ${message}']`;
+  return `##teamcity[inspection typeId='${code}' file='${result.source}' line='${line}' message='${severity} -- ${message}' SEVERITY='${teamCitySeverity}']`;
 }
 
 function renderResults(results: IRuleResult[]): string {
