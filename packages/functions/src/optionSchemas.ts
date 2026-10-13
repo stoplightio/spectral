@@ -190,6 +190,15 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
       prepareResults: {
         'x-internal': true,
       },
+      nestedResultCache: {
+        type: 'boolean',
+        default: false,
+        description:
+          'When true, wraps compiled recursive sub-schema validators with a per-run ' +
+          'identity cache. Reduces repeated nested AJV calls when the resolved document ' +
+          'contains shared objects (multiple $refs to the same definition). ' +
+          'Intended for rules with given:"$" that validate large recursive schemas.',
+      },
     },
     required: ['schema'],
     type: 'object',

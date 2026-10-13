@@ -1,7 +1,7 @@
 import type { ErrorObject } from 'ajv';
 import betterAjvErrors from '@stoplight/better-ajv-errors';
 import { detectDialect } from '@stoplight/spectral-formats';
-import { createAjvInstances } from './ajv';
+import { createAjvInstances, createAjvInstancesWithNestedCache } from './ajv';
 import MissingRefError from 'ajv/dist/compile/ref_error';
 import { createRulesetFunction, IFunctionResult, JSONSchema, RulesetFunctionContext } from '@stoplight/spectral-core';
 import { isError } from 'lodash';
@@ -13,9 +13,33 @@ export type Options = {
   allErrors?: boolean;
   dialect?: 'auto' | 'draft4' | 'draft6' | 'draft7' | 'draft2019-09' | 'draft2020-12';
   prepareResults?(errors: ErrorObject[]): void;
+  // When true, wraps compiled recursive sub-schema validators with a per-run
+  // identity cache. Each time the root AJV validator is called (i.e. once per
+  // spectral.run() when given:'$'), a fresh WeakMap is created. Subsequent calls
+  // within that root invocation that target the same JS object (from shared $ref
+  // resolution) return cached raw errors instead of re-running AJV.
+  //
+  // Designed for rules that:
+  //   - validate the entire resolved document: given:'$', resolved:true
+  //   - use a schema with recursive definitions (e.g. OAS Schema object)
+  //   - run against documents where $ref resolution produces shared object identity
+  //
+  // prepareResults is called normally on the per-use-site error array before
+  // betterAjvErrors conversion, exactly as in the unoptimized path.
+  //
+  // Safe because Spectral's AJV configuration does not enable $data, unevaluated,
+  // dynamicRef, or async validation. Schemas relying on parentData/rootData context
+  // for sub-validator correctness are not supported and should not set this flag.
+  nestedResultCache?: boolean;
 };
 
+// Separate WeakMap-keyed caches for regular and nested-cache AJV instances,
+// both scoped to documentInventory (new object per spectral.run()).
 const instances = new WeakMap<RulesetFunctionContext['documentInventory'], ReturnType<typeof createAjvInstances>>();
+const cachedInstances = new WeakMap<
+  RulesetFunctionContext['documentInventory'],
+  ReturnType<typeof createAjvInstancesWithNestedCache>
+>();
 
 export default createRulesetFunction<unknown, Options>(
   {
@@ -32,9 +56,13 @@ export default createRulesetFunction<unknown, Options>(
       ];
     }
 
-    const assignAjvInstance =
-      instances.get(documentInventory) ??
-      instances.set(documentInventory, createAjvInstances()).get(documentInventory)!;
+    const useCache = opts.nestedResultCache === true;
+
+    const assignAjvInstance = useCache
+      ? (cachedInstances.get(documentInventory) ??
+        cachedInstances.set(documentInventory, createAjvInstancesWithNestedCache()).get(documentInventory)!)
+      : (instances.get(documentInventory) ??
+        instances.set(documentInventory, createAjvInstances()).get(documentInventory)!);
 
     const results: IFunctionResult[] = [];
 
