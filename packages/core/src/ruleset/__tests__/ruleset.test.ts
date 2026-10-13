@@ -888,6 +888,154 @@ describe('Ruleset', () => {
 `);
     });
 
+    describe('format selectors', () => {
+      const getSeverities = (ruleset: Ruleset) =>
+        Object.fromEntries(
+          Object.entries(ruleset.rules).map(([name, rule]) => [name, rule.enabled ? rule.severity : 'off']),
+        );
+
+      it('should collect formats that are mentioned in overrides only', async () => {
+        const { draftA, draftB } = await import('./__fixtures__/overrides/format-selectors');
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/format-selectors'),
+          path.join(cwd, 'format-selectors'),
+        );
+
+        expect([...ruleset.formats]).toEqual([draftA, draftB]);
+      });
+
+      it('should apply an entry without files to documents of the listed format only', async () => {
+        const { draftA, draftB } = await import('./__fixtures__/overrides/format-selectors');
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/format-selectors'),
+          path.join(cwd, 'format-selectors'),
+        );
+
+        expect(getSeverities(ruleset.fromSource(path.join(cwd, 'spec.json'), new Set([draftA])))).toEqual({
+          'description-matches-stoplight': DiagnosticSeverity.Error,
+          'title-matches-stoplight': 'off',
+          'contact-name-matches-stoplight': 'off',
+        });
+
+        expect(getSeverities(ruleset.fromSource(path.join(cwd, 'spec.json'), new Set([draftB])))).toEqual({
+          'description-matches-stoplight': DiagnosticSeverity.Information,
+          'title-matches-stoplight': DiagnosticSeverity.Warning,
+          'contact-name-matches-stoplight': 'off',
+        });
+      });
+
+      it('should apply an entry when any of the document formats is listed', async () => {
+        const { draftA, draftB } = await import('./__fixtures__/overrides/format-selectors');
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/format-selectors'),
+          path.join(cwd, 'format-selectors'),
+        );
+
+        expect(getSeverities(ruleset.fromSource(path.join(cwd, 'spec.json'), new Set([draftA, draftB])))).toEqual({
+          'description-matches-stoplight': DiagnosticSeverity.Information,
+          'title-matches-stoplight': 'off',
+          'contact-name-matches-stoplight': 'off',
+        });
+      });
+
+      it('should require both files and formats to match when both are stated', async () => {
+        const { draftA, draftB } = await import('./__fixtures__/overrides/format-selectors');
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/format-selectors'),
+          path.join(cwd, 'format-selectors'),
+        );
+
+        expect(
+          getSeverities(ruleset.fromSource(path.join(cwd, 'legacy/spec.json'), new Set([draftB])))[
+            'description-matches-stoplight'
+          ],
+        ).toBe(DiagnosticSeverity.Hint);
+
+        expect(
+          getSeverities(ruleset.fromSource(path.join(cwd, 'legacy/spec.json'), new Set([draftA])))[
+            'description-matches-stoplight'
+          ],
+        ).toBe(DiagnosticSeverity.Error);
+
+        expect(
+          getSeverities(ruleset.fromSource(path.join(cwd, 'v2/spec.json'), new Set([draftB])))[
+            'description-matches-stoplight'
+          ],
+        ).toBe(DiagnosticSeverity.Information);
+      });
+
+      it('should not apply entries with formats to a document of an unknown format', async () => {
+        const ruleset = await loadRuleset(
+          import('./__fixtures__/overrides/format-selectors'),
+          path.join(cwd, 'format-selectors'),
+        );
+
+        expect(ruleset.fromSource(path.join(cwd, 'legacy/spec.json'), null)).toBe(ruleset);
+      });
+
+      it('should keep entries that state only files eligible for a document of an unknown format', () => {
+        const ruleset = new Ruleset(
+          {
+            rules: {
+              'my-rule': {
+                given: '$',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+            overrides: [
+              {
+                files: ['*.json'],
+                rules: {
+                  'my-rule': 'off',
+                },
+              },
+              {
+                formats: [oas2],
+                rules: {
+                  'my-rule': 'error',
+                },
+              },
+            ],
+          },
+          { source: path.join(cwd, 'ruleset.json') },
+        );
+
+        expect(getSeverities(ruleset.fromSource(path.join(cwd, 'spec.json'), null))).toEqual({
+          'my-rule': 'off',
+        });
+      });
+
+      it('should not require a document source when every entry selects by format', () => {
+        const ruleset = new Ruleset(
+          {
+            rules: {
+              'my-rule': {
+                given: '$',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+            overrides: [
+              {
+                formats: [oas2],
+                rules: {
+                  'my-rule': 'off',
+                },
+              },
+            ],
+          },
+          { source: path.join(cwd, 'ruleset.json') },
+        );
+
+        expect(getSeverities(ruleset.fromSource(null, new Set([oas2])))).toEqual({
+          'my-rule': 'off',
+        });
+      });
+    });
+
     describe('aliases', () => {
       const cwd = path.join(__dirname, './__fixtures__/overrides/aliases');
 

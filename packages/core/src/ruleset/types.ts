@@ -79,7 +79,10 @@ export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'par
       }
   );
 
-export type RulesetOverridesDefinition = ReadonlyArray<{ files: string[] } & RulesetOverrideDefinition>;
+export type RulesetOverridesDefinition = ReadonlyArray<
+  ({ files: string[]; formats?: Formats | Format[] } | { files?: string[]; formats: Formats | Format[] }) &
+    RulesetOverrideDefinition
+>;
 export type RulesetScopedAliasDefinition = {
   description?: string;
   targets: {
