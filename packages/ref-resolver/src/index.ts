@@ -4,6 +4,7 @@ import type { IGraphNodeData } from '@stoplight/json-ref-resolver/types';
 import type { Agent } from 'http';
 import { DEFAULT_REQUEST_OPTIONS } from '@stoplight/spectral-runtime';
 import { DepGraph } from 'dependency-graph';
+import { RootRunnerCache } from './cache';
 
 export interface IHttpAndFileResolverOptions {
   agent?: Agent;
@@ -22,6 +23,7 @@ export function createHttpAndFileResolver(opts?: IHttpAndFileResolverOptions): R
   const resolveHttp = createResolveHttp({ ...DEFAULT_REQUEST_OPTIONS, ...opts });
 
   return new Resolver({
+    uriCache: new RootRunnerCache(),
     resolvers: {
       https: { resolve: resolveHttp },
       http: { resolve: resolveHttp },
