@@ -159,7 +159,9 @@ info:
 
 ### no-\$ref-siblings
 
-Before OpenAPI v3.1, keywords next to `$ref` were ignored by most tooling, but not all. This leads to inconsistent experiences depending on what combinations of tools are used. As of v3.1 $ref siblings are allowed, so this rule will not be applied.
+Before OpenAPI v3.1, keywords next to `$ref` were ignored by most tooling, but not all. This leads to inconsistent experiences depending on what combinations of tools are used.
+
+As of v3.1, Schema Objects follow JSON Schema 2020-12, where `$ref` siblings are allowed, so this rule is not applied within schemas (anything under a `schema` or `itemSchema` keyword, or under `components.schemas`). Everywhere else, a Reference Object may only have `summary` and `description` as siblings of `$ref`.
 
 **Recommended:** Yes
 
