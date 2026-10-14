@@ -281,4 +281,15 @@ describe('lint', () => {
 
     expect(process.stderr.write).nthCalledWith(6, `Error #3: ${chalk.red('original exception')}\n`);
   });
+
+  it('writes output for dashed formats via --output.<format> (#2926)', async () => {
+    (formatOutput as jest.Mock).mockReturnValue('<formatted output>');
+
+    await run(
+      `lint --format github-actions --format code-climate --output.github-actions ga.txt --output.code-climate cc.json ./__fixtures__/empty-oas2-document.json`,
+    );
+    expect(writeOutput).toBeCalledTimes(2);
+    expect(writeOutput).toHaveBeenCalledWith('<formatted output>', 'ga.txt');
+    expect(writeOutput).toHaveBeenCalledWith('<formatted output>', 'cc.json');
+  });
 });
