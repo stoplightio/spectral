@@ -810,4 +810,28 @@ testRule('oas3-schema', [
     },
     errors: [], // No errors expected
   },
+  {
+    name: 'oas3.1: path item with $ref validates sibling operations',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example API',
+        version: '1.0.0',
+      },
+      paths: {
+        '/greetings': {
+          $ref: 'greetings.yaml',
+          get: {
+            responses: 'not-an-object',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"responses" property must be object.',
+        path: ['paths', '/greetings', 'get', 'responses'],
+      },
+    ],
+  },
 ]);

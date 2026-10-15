@@ -276,7 +276,7 @@
       "type": "object",
       "patternProperties": {
         "^/": {
-          "$ref": "#/$defs/path-item-or-reference"
+          "$ref": "#/$defs/path-item"
         }
       },
       "$ref": "#/$defs/specification-extensions",
@@ -286,6 +286,10 @@
       "$comment": "https://spec.openapis.org/oas/v3.1.0#path-item-object",
       "type": "object",
       "properties": {
+        "$ref": {
+          "type": "string",
+          "format": "uri-reference"
+        },
         "summary": {
           "type": "string"
         },
