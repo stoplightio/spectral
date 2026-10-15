@@ -7,6 +7,7 @@ import { default as length, Options as LengthOptions } from './length';
 import { default as pattern, Options as PatternOptions } from './pattern';
 import { default as schema, Options as SchemaOptions } from './schema';
 import { default as truthy } from './truthy';
+// eslint-disable-next-line no-shadow-restricted-names
 import { default as undefined } from './undefined';
 import {
   default as unreferencedReusableObject,

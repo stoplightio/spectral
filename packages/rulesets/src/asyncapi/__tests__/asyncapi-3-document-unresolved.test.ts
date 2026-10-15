@@ -14,6 +14,48 @@ testRule('asyncapi-3-document-unresolved', [
     errors: [],
   },
   {
+    name: 'invalid AsyncAPI 3.1 reference for info object is not allowed',
+    document: {
+      asyncapi: '3.1.0',
+      info: {
+        $ref: '#/components/x-titles/someTitle',
+      },
+      components: {
+        'x-titles': {
+          someTitle: 'some-title',
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Referencing in this place is not allowed',
+        path: ['info'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+  {
+    name: 'invalid reference in a future AsyncAPI 3.x document is validated by the fallback schema',
+    document: {
+      asyncapi: '3.2.0',
+      info: {
+        $ref: '#/components/x-titles/someTitle',
+      },
+      components: {
+        'x-titles': {
+          someTitle: 'some-title',
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Referencing in this place is not allowed',
+        path: ['info'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+  {
     name: 'valid case unresolved case message',
     document: {
       asyncapi: '3.0.0',

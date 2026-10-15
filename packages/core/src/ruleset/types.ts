@@ -63,8 +63,7 @@ export interface IRuleThen {
 export type GivenDefinition = string | string[];
 
 export type RulesetExtendsDefinition =
-  | RulesetDefinition
-  | (RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition])[];
+  RulesetDefinition | (RulesetDefinition | [RulesetDefinition, FileRulesetSeverityDefinition])[];
 
 export type RulesetOverrideDefinition = Pick<RulesetDefinition, 'formats' | 'parserOptions' | 'aliases'> &
   (

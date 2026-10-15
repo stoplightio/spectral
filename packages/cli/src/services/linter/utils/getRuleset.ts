@@ -123,7 +123,7 @@ function load(source: string, uri: string): RulesetDefinition {
 
   const _require = (id: string): unknown => req(req.resolve(id, { paths }));
 
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/no-unsafe-call
   Function('module, require', source)(m, _require);
 
   if (!isObject(m.exports)) {

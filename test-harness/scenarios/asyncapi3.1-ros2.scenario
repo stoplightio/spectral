@@ -1,0 +1,52 @@
+====test====
+Validate an AsyncAPI 3.1 document with ROS 2 bindings
+====document====
+asyncapi: "3.1.0"
+info:
+  title: Turtle telemetry
+  version: "1.0.0"
+  description: Publishes turtle telemetry over ROS 2.
+  contact:
+    name: API Support
+    url: https://example.org/support
+    email: support@example.org
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  tags:
+    - name: telemetry
+      description: Turtle telemetry operations.
+servers:
+  development:
+    host: localhost
+    protocol: ros2
+    bindings:
+      ros2:
+        domainId: 0
+        rmwImplementation: rmw_fastrtps_cpp
+channels:
+  turtlePose:
+    address: turtle/pose
+    messages:
+      TurtlePose:
+        payload:
+          type: object
+operations:
+  publishPose:
+    action: send
+    description: Publishes the current turtle pose.
+    channel:
+      $ref: "#/channels/turtlePose"
+    messages:
+      - $ref: "#/channels/turtlePose/messages/TurtlePose"
+    bindings:
+      ros2:
+        node: /turtlesim
+        role: publisher
+====asset:ruleset====
+const { asyncapi } = require('@stoplight/spectral-rulesets');
+module.exports = asyncapi;
+====command====
+{bin} lint {document} --ruleset "{asset:ruleset}"
+====stdout====
+No results with a severity of 'error' found!

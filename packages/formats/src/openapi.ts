@@ -22,3 +22,7 @@ oas3_0.displayName = 'OpenAPI 3.0.x';
 export const oas3_1: Format = (document: unknown): boolean =>
   isOas3(document) && /^3\.1(?:\.[0-9]*)?$/.test(String(document.openapi));
 oas3_1.displayName = 'OpenAPI 3.1.x';
+
+export const oas3_2: Format = (document: unknown): boolean =>
+  isOas3(document) && /^3\.2(?:\.[0-9]*)?$/.test(String(document.openapi));
+oas3_2.displayName = 'OpenAPI 3.2.x';

@@ -5,7 +5,7 @@ import { isURL } from '@stoplight/path';
 const DATA_URIS = /^(?:data|node|file):/;
 
 export const esmCdn = (opts?: { ignoreList?: (string | RegExp)[] }): Plugin => {
-  return <Plugin>{
+  return {
     name: '@stoplight-spectral/esmCdn',
     resolveId(id) {
       if (DATA_URIS.test(id) || isURL(id)) return;

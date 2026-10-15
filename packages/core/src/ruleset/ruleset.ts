@@ -59,7 +59,10 @@ export class Ruleset {
 
   readonly #context: RulesetContext & { severity: FileRulesetSeverityDefinition };
 
-  constructor(readonly maybeDefinition: unknown, context?: RulesetContext) {
+  constructor(
+    readonly maybeDefinition: unknown,
+    context?: RulesetContext,
+  ) {
     let definition: RulesetDefinition;
     if (isPlainObject(maybeDefinition) && 'extends' in maybeDefinition) {
       const { extends: _, ...def } = maybeDefinition;
@@ -248,16 +251,16 @@ export class Ruleset {
       overrides.length === 0
         ? null
         : overrides.length > 1
-        ? overrides
-            .slice(1)
-            .reduce<RulesetDefinition>(
-              (left, right) => mergeRulesets(left, right, true),
-              overrides[0] as RulesetDefinition,
-            )
-        : overrides[0];
+          ? overrides
+              .slice(1)
+              .reduce<RulesetDefinition>(
+                (left, right) => mergeRulesets(left, right, true),
+                overrides[0] as RulesetDefinition,
+              )
+          : overrides[0];
 
     const ruleset = new Ruleset(
-      mergedOverrides === null ? (definition as RulesetDefinition) : mergeRulesets(definition, mergedOverrides, false),
+      mergedOverrides === null ? definition : mergeRulesets(definition, mergedOverrides, false),
       {
         severity: 'recommended',
         source: rulesetSource,

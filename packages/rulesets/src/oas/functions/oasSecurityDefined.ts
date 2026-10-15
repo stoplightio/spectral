@@ -37,8 +37,8 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
       oasVersion === 2
         ? document.data.securityDefinitions
         : isPlainObject(document.data.components)
-        ? document.data.components.securitySchemes
-        : null;
+          ? document.data.components.securitySchemes
+          : null;
 
     let results: IFunctionResult[] | undefined;
 

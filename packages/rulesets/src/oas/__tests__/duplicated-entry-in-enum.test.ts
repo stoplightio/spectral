@@ -85,7 +85,7 @@ testRule('duplicated-entry-in-enum', [
   },
 
   {
-    name: 'osa3: enum with duplicated entries',
+    name: 'oas3: enum with duplicated entries',
     document: {
       openapi: '3.0.0',
       components: {
@@ -151,6 +151,83 @@ testRule('duplicated-entry-in-enum', [
                   },
                 },
               },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+  {
+    name: 'oas3.1: valid model',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        schemas: {
+          Test: {
+            type: 'integer',
+            enum: [1, 2, 3, null],
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'oas3.1: enum with duplicated entries',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        schemas: {
+          Test: {
+            type: 'integer',
+            enum: [1, 2, 3, 4, 5, 2],
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: `"enum" property must not have duplicate items (items ## 1 and 5 are identical)`,
+        path: ['components', 'schemas', 'Test', 'enum'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+  {
+    name: 'oas3.1: enum with duplicated null entries',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        schemas: {
+          Test: {
+            type: 'integer',
+            enum: [null, 1, 3, 4, 5, 2, null],
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: `"enum" property must not have duplicate items (items ## 0 and 6 are identical)`,
+        path: ['components', 'schemas', 'Test', 'enum'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3: null nodes in example values do not crash (regression #2959)',
+    document: {
+      openapi: '3.0.2',
+      info: { title: 'Test', version: '1.0' },
+      paths: {},
+      components: {
+        examples: {
+          test: {
+            value: {
+              foo: null,
             },
           },
         },

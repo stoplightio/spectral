@@ -15,7 +15,7 @@ export const bundleAndLoadRuleset: Loader = async (rulesetFile, io, plugins = []
     io,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/no-unsafe-call
   return new Ruleset(Function(`return ${ruleset}`)(), {
     severity: 'recommended',
     source: rulesetFile,

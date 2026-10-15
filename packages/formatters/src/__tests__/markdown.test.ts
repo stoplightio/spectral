@@ -126,4 +126,12 @@ describe('Markdown formatter', () => {
 
     expect(normalizedMd).toEqual(normalizedExpectedMd);
   });
+
+  test('should include results below the configured fail severity', () => {
+    const md = markdown(results, { failSeverity: DiagnosticSeverity.Error }, context);
+
+    expect(md).toContain('operation-description');
+    expect(md).toContain('operation-tags');
+    expect(md.match(/Warning/g)).toHaveLength(2);
+  });
 });

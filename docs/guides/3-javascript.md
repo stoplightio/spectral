@@ -122,6 +122,27 @@ const spectral = new Spectral();
 spectral.setRuleset(ruleset);
 ```
 
+### Extend a Built-in Ruleset
+
+You can also pass a ruleset object directly to `setRuleset` and extend one of
+the published rulesets (`oas`, `asyncapi`, or `arazzo`):
+
+```ts lineNumbers
+import { Spectral, type RulesetDefinition } from "@stoplight/spectral-core";
+import { oas } from "@stoplight/spectral-rulesets";
+
+const ruleset: RulesetDefinition = {
+  extends: [oas],
+};
+
+const spectral = new Spectral();
+spectral.setRuleset(ruleset);
+```
+
+`oas` is an actual ruleset object rather than a ruleset name, so this works
+without the YAML loading or bundling path. The same pattern works for
+`asyncapi` and `arazzo`.
+
 ### Browser
 
 Here's an example script of how you could run Spectral in the browser:
