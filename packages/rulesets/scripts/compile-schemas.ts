@@ -33,10 +33,36 @@ const log = process.argv.includes('--quiet')
     }
   : console.log.bind(console);
 
+// Ajv does not resolve `$dynamicRef: "#meta"` to the dialect when index.json is the root schema, rejecting
+// valid Schema Objects with "unevaluated properties". Pointing those references statically at the dialect
+// validates the same way while keeping index.json identical to upstream.
+function replaceDynamicMetaRefs(node: unknown): unknown {
+  if (Array.isArray(node)) {
+    return node.map(replaceDynamicMetaRefs);
+  }
+
+  if (node === null || typeof node !== 'object') {
+    return node;
+  }
+
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node)) {
+    if (key === '$dynamicRef' && value === '#meta') {
+      result.$ref = 'https://spec.openapis.org/oas/3.1/dialect/2024-11-10';
+    } else {
+      result[key] = replaceDynamicMetaRefs(value);
+    }
+  }
+
+  return result;
+}
+
 Promise.all(schemas)
   .then(async schemas => {
     const ajv = new Ajv2020({
-      schemas,
+      schemas: schemas.map(schema =>
+        schema.$id === 'https://spec.openapis.org/oas/3.1/schema/2026-08-03' ? replaceDynamicMetaRefs(schema) : schema,
+      ),
       allErrors: true,
       messages: true,
       strict: false,
@@ -59,7 +85,7 @@ Promise.all(schemas)
     const code = standaloneCode(ajv, {
       oas2_0: 'http://swagger.io/v2/schema.json',
       oas3_0: 'https://spec.openapis.org/oas/3.0/schema/2019-04-02',
-      oas3_1: 'https://spec.openapis.org/oas/3.1/schema/2021-09-28',
+      oas3_1: 'https://spec.openapis.org/oas/3.1/schema/2026-08-03',
       oas3_2: 'https://spec.openapis.org/oas/3.2/schema/2025-11-23',
       arazzo1_0: 'https://spec.openapis.org/arazzo/1.0/schema/2024-08-01',
     });
