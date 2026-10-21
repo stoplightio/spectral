@@ -11,16 +11,18 @@ runs:
   - name: restore_cache
     uses: actions/cache@v4.3.0
     with:
-      key: ldid-binary-${{ inputs.version }}-{{ arch }}
-      path: UPDATE_ME
-      restore-keys: ldid-binary-${{ inputs.version }}-{{ arch }}
+      # Fully determined by version/os/arch, so an exact hit is the only correct
+      # hit -- a prefix fallback could restore a binary built for another arch.
+      key: ldid-binary-${{ inputs.version }}-${{ runner.os }}-${{ runner.arch }}
+      path: "/tmp/ldid"
   - name: Build ldid
     run: |-
       SUDO="$(command -v sudo || true)"
       ${SUDO} apt-get update -y
       ${SUDO} apt-get -y install libplist-dev
-      if [ ! -d ldid ]
+      if [ ! -x ldid/ldid ]
       then
+        rm -rf ldid
         curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v${{ inputs.version }}.tar.gz | tar -xz
         mv ldid-${{ inputs.version }} ldid
         make -C ldid
@@ -31,7 +33,7 @@ runs:
     uses: actions/cache@v4.3.0
     with:
       path: "/tmp/ldid"
-      key: ldid-binary-${{ inputs.version }}-{{ arch }}
+      key: ldid-binary-${{ inputs.version }}-${{ runner.os }}-${{ runner.arch }}
   - name: Install ldid
     run: |-
       SUDO="$(command -v sudo || true)"

@@ -11,11 +11,11 @@ runs:
   - name: restore_cache
     uses: actions/cache@v4.3.0
     with:
-      key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock') }}
       path: |-
         ~/.yarn
         ~/AppData/Local/Yarn/Berry/cache
-      restore-keys: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+      restore-keys: yarn-packages-${{ runner.os }}-${{ runner.arch }}-
   - name: Enable Corepack
     run: |-
       npm install -g corepack --force
@@ -31,4 +31,4 @@ runs:
       path: |-
         ~/.yarn
         ~/AppData/Local/Yarn/Berry/cache
-      key: yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+      key: yarn-packages-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock') }}
