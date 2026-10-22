@@ -206,6 +206,39 @@ info:
   title: 'some title with <script>alert("You are Hacked");</script>',
 ```
 
+### object-with-properties-requires-type-object
+
+Schemas that define `properties` must also declare `type: object`. Without it, JSON Schema validation does not restrict instances to objects, so strings and other primitives can pass unexpectedly. In OpenAPI 3.1, a `type` array that includes `object` (for example `[object, "null"]`) also passes.
+
+**Recommended:** No
+
+**Good Example**
+
+```yaml
+Address:
+  type: object
+  properties:
+    number:
+      type: number
+    street_name:
+      type: string
+  required:
+    - number
+```
+
+**Bad Example**
+
+```yaml
+Address:
+  properties:
+    number:
+      type: number
+    street_name:
+      type: string
+  required:
+    - number
+```
+
 ### openapi-tags
 
 OpenAPI object should have non-empty `tags` array.
