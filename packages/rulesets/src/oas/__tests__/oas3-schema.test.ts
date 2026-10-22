@@ -143,7 +143,22 @@ testRule('oas3-schema', [
     },
     errors: [
       {
-        message: 'The document must have either "paths", "webhooks" or "components".',
+        message: 'must have required property "paths".',
+        path: [],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'must have required property "components".',
+        path: [],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'must have required property "webhooks".',
+        path: [],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: 'must match a schema in anyOf.',
         path: [],
         severity: DiagnosticSeverity.Error,
       },
@@ -513,7 +528,7 @@ testRule('oas3-schema', [
     },
     errors: [
       {
-        message: '"schema" property must be a valid Schema Object.',
+        message: '"schema" property must be object,boolean.',
         path: ['paths', '/config', 'parameters', '0', 'schema'],
         severity: DiagnosticSeverity.Error,
       },
@@ -535,13 +550,57 @@ testRule('oas3-schema', [
         ],
       },
       {
+        message: '"type" property must be array.',
+        path: [
+          'paths',
+          '/config',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'key',
+          'type',
+        ],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"type" property must match a schema in anyOf.',
+        path: [
+          'paths',
+          '/config',
+          'get',
+          'responses',
+          '200',
+          'content',
+          'application/json',
+          'schema',
+          'properties',
+          'key',
+          'type',
+        ],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
         message:
           '"type" property must be equal to one of the allowed values: "array", "boolean", "integer", "null", "number", "object", "string". Did you mean "integer"?.',
         path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
         severity: DiagnosticSeverity.Error,
       },
       {
-        message: '"additionalProperties" property must be a valid Schema Object.',
+        message: '"type" property must be array.',
+        path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"type" property must match a schema in anyOf.',
+        path: ['components', 'schemas', 'Schema', 'additionalProperties', 'type'],
+        severity: DiagnosticSeverity.Error,
+      },
+      {
+        message: '"additionalProperties" property must be object,boolean.',
         path: ['components', 'schemas', 'Schema_2', 'additionalProperties'],
         severity: DiagnosticSeverity.Error,
       },
@@ -778,6 +837,94 @@ testRule('oas3-schema', [
           },
         },
       ],
+    },
+    errors: [],
+  },
+  {
+    name: 'oas3.1: document with external references',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example API',
+        version: '1.0.0',
+        description: 'Example API description',
+      },
+      paths: {
+        '/greetings': {
+          $ref: 'greetings.yaml',
+        },
+      },
+      tags: [
+        {
+          name: 'User',
+          description: 'Info about users',
+        },
+      ],
+      servers: [
+        {
+          url: 'https://example-url.com',
+          description: 'Example server',
+        },
+      ],
+    },
+    errors: [], // No errors expected
+  },
+  {
+    name: 'oas3.1: path item with $ref validates sibling operations',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example API',
+        version: '1.0.0',
+      },
+      paths: {
+        '/greetings': {
+          $ref: 'greetings.yaml',
+          get: {
+            responses: 'not-an-object',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"responses" property must be object.',
+        path: ['paths', '/greetings', 'get', 'responses'],
+      },
+    ],
+  },
+  {
+    name: 'oas3.1: component schemas with unevaluatedProperties are accepted',
+    document: {
+      openapi: '3.1.0',
+      info: {
+        title: 'Example API',
+        version: '1.0.0',
+      },
+      paths: {},
+      components: {
+        schemas: {
+          Pet: {
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+              },
+            },
+            required: ['name'],
+            unevaluatedProperties: false,
+          },
+          Dog: {
+            allOf: [{ $ref: '#/components/schemas/Pet' }],
+            properties: {
+              breed: {
+                type: 'string',
+              },
+            },
+            unevaluatedProperties: false,
+          },
+        },
+      },
     },
     errors: [],
   },
