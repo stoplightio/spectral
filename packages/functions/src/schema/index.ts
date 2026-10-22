@@ -15,6 +15,35 @@ export type Options = {
   prepareResults?(errors: ErrorObject[]): void;
 };
 
+// better-ajv-errors names array items after their index, e.g. `"1" property must ...`
+function describeArrayItem(message: string, errorPath: string): string {
+  const index = errorPath.split('/').pop();
+  if (index === void 0 || !/^\d+$/.test(index)) return message;
+
+  const typePrefix = `"${index}" property type`;
+  if (message.startsWith(typePrefix)) return `Item at index ${index}${message.slice(typePrefix.length)}`;
+
+  const prefix = `"${index}" property`;
+  return message.startsWith(prefix) ? `Item at index ${index}${message.slice(prefix.length)}` : message;
+}
+
+// instancePath -> keyword, for oneOf/anyOf errors where no subschema matched
+function findUnmatchedCombinators(errors: ErrorObject[]): Map<string, string> {
+  const unmatched = new Map<string, string>();
+  for (const { keyword, instancePath, params } of errors) {
+    if ((keyword === 'oneOf' || keyword === 'anyOf') && !Array.isArray(params.passingSchemas)) {
+      unmatched.set(instancePath, keyword);
+    }
+  }
+  return unmatched;
+}
+
+function describeCombinator(message: string, keyword: string | undefined): string {
+  return keyword !== void 0 && message.endsWith(` in ${keyword}`)
+    ? `${message}. None of the schemas matched, see the other errors reported for this value`
+    : message;
+}
+
 const instances = new WeakMap<RulesetFunctionContext['documentInventory'], ReturnType<typeof createAjvInstances>>();
 
 export default createRulesetFunction<unknown, Options>(
@@ -50,12 +79,17 @@ export default createRulesetFunction<unknown, Options>(
       if (validator?.(targetVal) === false && Array.isArray(validator.errors)) {
         opts.prepareResults?.(validator.errors);
 
+        const unmatched = findUnmatchedCombinators(validator.errors);
+
         results.push(
           ...betterAjvErrors(schemaObj, validator.errors, {
             propertyPath: path,
             targetValue: targetVal,
           }).map(({ suggestion, error, path: errorPath }) => ({
-            message: suggestion !== void 0 ? `${error}. ${suggestion}` : error,
+            message: describeCombinator(
+              describeArrayItem(suggestion !== void 0 ? `${error}. ${suggestion}` : error, errorPath),
+              unmatched.get(errorPath),
+            ),
             path: [...path, ...(errorPath !== '' ? errorPath.replace(/^\//, '').split('/') : [])],
           })),
         );
