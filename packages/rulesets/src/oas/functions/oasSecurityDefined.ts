@@ -1,6 +1,7 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import type { IFunctionResult } from '@stoplight/spectral-core';
 import { isPlainObject } from '@stoplight/json';
+import { oas3_1 } from '@stoplight/spectral-formats';
 
 type Options = {
   oasVersion: 2 | 3;
@@ -33,6 +34,8 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
 
     if (!isPlainObject(document.data)) return;
 
+    const isOas3_1 = document.formats?.has(oas3_1) === true;
+
     const allDefs =
       oasVersion === 2
         ? document.data.securityDefinitions
@@ -58,7 +61,7 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
       const scope = input[schemeName];
       for (let i = 0; i < scope.length; i++) {
         const scopeName = scope[i];
-        if (!isScopeDefined(oasVersion, scopeName, allDefs[schemeName])) {
+        if (!isScopeDefined(oasVersion, scopeName, allDefs[schemeName], isOas3_1)) {
           results ??= [];
           results.push({
             message: `"${scopeName}" must be listed among scopes.`,
@@ -72,8 +75,13 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
   },
 );
 
-function isScopeDefined(oasVersion: 2 | 3, scopeName: string, securityScheme: unknown): boolean {
+function isScopeDefined(oasVersion: 2 | 3, scopeName: string, securityScheme: unknown, isOas3_1: boolean): boolean {
   if (!isPlainObject(securityScheme)) return false;
+
+  // In OpenAPI 3.1, requirements for non-OAuth2 schemes may list role names that are not declared anywhere in the document
+  if (oasVersion === 3 && isOas3_1 && securityScheme.type !== 'oauth2') {
+    return true;
+  }
 
   if (oasVersion === 2) {
     return isPlainObject(securityScheme.scopes) && scopeName in securityScheme.scopes;
