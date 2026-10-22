@@ -343,6 +343,58 @@ describe('JS Ruleset Validation', () => {
       );
     });
 
+    it('given an override with neither files nor formats, throws', () => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: [
+            {
+              rules: {
+                'my-rule': 'error',
+              },
+            },
+          ],
+        }),
+      ).toThrowAggregateError(
+        new AggregateError([
+          new RulesetValidationError('invalid-override-definition', 'must state files or formats', ['overrides', '0']),
+        ]),
+      );
+    });
+
+    it.each<RulesetOverridesDefinition>([
+      [
+        {
+          formats: [formatA],
+          rules: {
+            'my-rule': 'error',
+          },
+        },
+      ],
+      [
+        {
+          files: ['*.json'],
+          formats: [formatA, formatB],
+          rules: {
+            'my-rule': 'error',
+          },
+        },
+      ],
+      [
+        {
+          files: ['*.json'],
+          rules: {
+            'my-rule': 'error',
+          },
+        },
+      ],
+    ])('recognizes a valid %p override', (...ruleset) => {
+      expect(
+        assertValidRuleset.bind(null, {
+          overrides: ruleset,
+        }),
+      ).not.toThrow();
+    });
+
     describe('pointers', () => {
       const rulesetA = {
         rules: {},
@@ -362,14 +414,6 @@ describe('JS Ruleset Validation', () => {
           new RulesetValidationError(
             'invalid-override-definition',
             'must contain rules when JSON Pointers are defined',
-            ['overrides', '0'],
-          ),
-        ],
-        [
-          { rules: {}, formats: [formatB] },
-          new RulesetValidationError(
-            'invalid-override-definition',
-            'must not override any other property than rules when JSON Pointers are defined',
             ['overrides', '0'],
           ),
         ],
@@ -424,6 +468,15 @@ describe('JS Ruleset Validation', () => {
           {
             files: ['*.json#/test'],
             rules: {},
+          },
+        ],
+        [
+          {
+            files: ['*.json#/test'],
+            formats: [formatA],
+            rules: {
+              'my-rule': 'error',
+            },
           },
         ],
       ])('recognizes a valid %p override', (...ruleset) => {
