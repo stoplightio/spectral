@@ -1,6 +1,8 @@
 import { DiagnosticSeverity } from '@stoplight/types';
 import testRule from '../../__tests__/__helpers__/tester';
 
+const MSG = '$ref must not be placed next to any properties other than "summary" and "description"';
+
 testRule('no-$ref-siblings', [
   {
     name: 'valid case',
@@ -308,6 +310,76 @@ testRule('no-$ref-siblings', [
           severity: DiagnosticSeverity.Error,
         },
       ],
+    },
+    {
+      name: `$ref siblings under components named like OAS keywords in an oas ${openapi} document`,
+      document: {
+        openapi,
+        components: {
+          responses: {
+            schema: { $ref: '#/components/responses/Ok', content: {} },
+          },
+          examples: {
+            example: { $ref: '#/components/examples/Other', value: 1 },
+          },
+        },
+        paths: {
+          '/schema': {
+            get: {
+              callbacks: {
+                cb: { $ref: '#/components/callbacks/Cb', description: 'ok', extra: true },
+              },
+            },
+          },
+        },
+      },
+      errors: [
+        { message: MSG, path: ['components', 'responses', 'schema', 'content'], severity: DiagnosticSeverity.Error },
+        { message: MSG, path: ['components', 'examples', 'example', 'value'], severity: DiagnosticSeverity.Error },
+        {
+          message: MSG,
+          path: ['paths', '/schema', 'get', 'callbacks', 'cb', 'extra'],
+          severity: DiagnosticSeverity.Error,
+        },
+      ],
+    },
+    {
+      name: `$ref siblings in Path Items and example data in an oas ${openapi} document`,
+      document: {
+        openapi,
+        paths: {
+          '/pets': { $ref: '#/components/pathItems/Pets', parameters: [], servers: [] },
+          '/a': {
+            get: {
+              callbacks: {
+                cb: { '{$request.body#/url}': { $ref: '#/components/pathItems/Pet', post: {} } },
+              },
+              responses: {
+                200: {
+                  description: 'ok',
+                  content: {
+                    'application/json': {
+                      example: { $ref: 'https://example.com/base.json', type: 'object' },
+                      examples: {
+                        user: { value: { $ref: 'https://example.com/base.json', title: 'User', type: 'object' } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        webhooks: {
+          newPet: { $ref: '#/components/pathItems/NewPet', post: {} },
+        },
+        components: {
+          pathItems: {
+            Pet: { $ref: 'other.yaml', get: {} },
+          },
+        },
+      },
+      errors: [],
     },
   ]),
 ]);

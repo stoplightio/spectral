@@ -161,7 +161,7 @@ info:
 
 Before OpenAPI v3.1, keywords next to `$ref` were ignored by most tooling, but not all. This leads to inconsistent experiences depending on what combinations of tools are used.
 
-As of v3.1, Schema Objects follow JSON Schema 2020-12, where `$ref` siblings are allowed, so this rule is not applied within schemas (anything under a `schema` or `itemSchema` keyword, or under `components.schemas`). Everywhere else, a Reference Object may only have `summary` and `description` as siblings of `$ref`.
+As of v3.1, Schema Objects follow JSON Schema 2020-12, where `$ref` siblings are allowed, so this rule is not applied within schemas (anything under a `schema` or `itemSchema` keyword, or under `components.schemas`). It is also not applied to example data (`example` and `examples.*.value`) or to Path Item Objects (which may have fields next to `$ref`). Everywhere else, a Reference Object may only have `summary` and `description` as siblings of `$ref`.
 
 **Recommended:** Yes
 
