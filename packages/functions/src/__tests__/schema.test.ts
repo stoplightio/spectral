@@ -8,6 +8,39 @@ import AggregateError = require('es-aggregate-error');
 const runSchema = testFunction.bind(null, schema);
 
 describe('Core Functions / Schema', () => {
+  it('explains oneOf failures', async () => {
+    const result = await runSchema(
+      { slug: 'a' },
+      {
+        schema: {
+          oneOf: [
+            { type: 'object', required: ['url'] },
+            { type: 'object', required: ['id'] },
+          ],
+        },
+      },
+    );
+
+    expect(result).toContainEqual({
+      message:
+        'Object must match exactly one schema in oneOf. None of the schemas matched, see the other errors reported for this value',
+      path: [],
+    });
+  });
+
+  it('describes array items by index rather than as properties', async () => {
+    const result = await runSchema([{ a: 1 }, {}], {
+      schema: { type: 'array', items: { type: 'object', required: ['a'] } },
+    });
+
+    expect(result).toStrictEqual([
+      {
+        message: 'Item at index 1 must have required property "a"',
+        path: ['1'],
+      },
+    ]);
+  });
+
   it('validates draft 4', async () => {
     const schema = {
       $schema: 'http://json-schema.org/draft-04/schema#',
