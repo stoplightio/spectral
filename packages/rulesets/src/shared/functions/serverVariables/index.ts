@@ -90,7 +90,16 @@ export default createRulesetFunction<Input, Options>(
 
     accumulateRedundantVariables(results, ctx.path, foundVariables, definedVariablesKeys);
 
-    if (foundVariables.length === 0) return results;
+    if (foundVariables.length === 0) {
+      if (opts?.checkSubstitutions === true && ctx.document.formats?.has(oas3_2) === true && /[?#]/.test(url)) {
+        results.push({
+          message: `Server URL must not contain a query or fragment: ${url}`,
+          path: [...ctx.path, 'url'],
+        });
+      }
+
+      return results;
+    }
 
     accumulateMissingVariables(results, ctx.path, foundVariables, definedVariablesKeys);
 

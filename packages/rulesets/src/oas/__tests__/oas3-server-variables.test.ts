@@ -64,6 +64,30 @@ testRule('oas3-server-variables', [
   },
 
   ...['3.0.3', '3.1.0', '3.2.0'].map(openapi => ({
+    name: `server has urls without variables with a query or fragment in OpenAPI ${openapi}`,
+    document: {
+      openapi,
+      servers: [{ url: '/api' }, { url: '/api?q=1' }, { url: '/api#fragment' }],
+      paths: {},
+    },
+    errors:
+      openapi === '3.2.0'
+        ? [
+            {
+              message: 'Server URL must not contain a query or fragment: /api?q=1',
+              path: ['servers', '1', 'url'],
+              severity: DiagnosticSeverity.Error,
+            },
+            {
+              message: 'Server URL must not contain a query or fragment: /api#fragment',
+              path: ['servers', '2', 'url'],
+              severity: DiagnosticSeverity.Error,
+            },
+          ]
+        : [],
+  })),
+
+  ...['3.0.3', '3.1.0', '3.2.0'].map(openapi => ({
     name: `server has relative urls with variables in OpenAPI ${openapi}`,
     document: {
       openapi,
