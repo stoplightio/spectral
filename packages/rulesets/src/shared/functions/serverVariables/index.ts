@@ -1,5 +1,6 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import type { IFunctionResult } from '@stoplight/spectral-core';
+import { oas3_2 } from '@stoplight/spectral-formats';
 
 import { parseUrlVariables } from './utils/parseUrlVariables';
 import { getMissingProps } from '../../utils/getMissingProps';
@@ -89,7 +90,16 @@ export default createRulesetFunction<Input, Options>(
 
     accumulateRedundantVariables(results, ctx.path, foundVariables, definedVariablesKeys);
 
-    if (foundVariables.length === 0) return results;
+    if (foundVariables.length === 0) {
+      if (opts?.checkSubstitutions === true && ctx.document.formats?.has(oas3_2) === true && /[?#]/.test(url)) {
+        results.push({
+          message: `Server URL must not contain a query or fragment: ${url}`,
+          path: [...ctx.path, 'url'],
+        });
+      }
+
+      return results;
+    }
 
     accumulateMissingVariables(results, ctx.path, foundVariables, definedVariablesKeys);
 
@@ -121,7 +131,7 @@ export default createRulesetFunction<Input, Options>(
     }
 
     if (opts?.checkSubstitutions === true) {
-      checkSubstitutions(results, ctx.path, url, variablePairs);
+      checkSubstitutions(results, ctx.path, url, variablePairs, ctx.document.formats?.has(oas3_2) === true);
     }
 
     return results;
@@ -184,15 +194,26 @@ function checkSubstitutions(
   path: JsonPath,
   url: string,
   variables: [key: string, values: string[]][],
+  disallowQueryAndFragment: boolean,
 ): void {
   if (variables.length === 0) return;
 
   const invalidUrls: string[] = [];
 
   for (const substitutedUrl of applyUrlVariables(url, variables)) {
+    let validUrl = !disallowQueryAndFragment || !/[?#]/.test(substitutedUrl);
     try {
-      new URL(substitutedUrl);
+      const normalizedUrl = substitutedUrl.replace(/[\t\n\r]/g, '');
+      let start = 0;
+      while (normalizedUrl.charCodeAt(start) <= 32) start++;
+      new URL(
+        substitutedUrl,
+        /^[a-z][a-z\d+.-]*:/i.test(normalizedUrl.slice(start)) ? undefined : 'https://example.com',
+      );
     } catch {
+      validUrl = false;
+    }
+    if (!validUrl) {
       invalidUrls.push(substitutedUrl);
       if (invalidUrls.length === 5) {
         break;
