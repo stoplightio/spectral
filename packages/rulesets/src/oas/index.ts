@@ -438,7 +438,7 @@ const ruleset = {
       formats: [oas2],
       severity: 0,
       message: '{{error}}',
-      given: '$.definitions[?(@.discriminator)]',
+      given: '$.definitions[?(@ && @.discriminator)]',
       then: {
         function: oasDiscriminator,
       },

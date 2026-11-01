@@ -91,4 +91,15 @@ testRule('oas2-discriminator', [
       },
     ],
   },
+
+  {
+    name: 'null definition does not crash',
+    document: {
+      swagger: '2.0',
+      definitions: {
+        Pet: null,
+      },
+    },
+    errors: [],
+  },
 ]);
