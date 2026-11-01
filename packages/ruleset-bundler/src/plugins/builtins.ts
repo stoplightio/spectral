@@ -55,9 +55,7 @@ export const builtins = (overrides: Partial<Overrides> = {}): Plugin => {
       if (typeof external === 'function') {
         return {
           ...rawOptions,
-          external: <typeof external>(
-            ((id, importer, isResolved) => !(id in modules) && external(id, importer, isResolved))
-          ),
+          external: (id, importer, isResolved) => !(id in modules) && external(id, importer, isResolved),
         };
       }
 

@@ -16,8 +16,9 @@ runs:
       restore-keys: ldid-binary-${{ inputs.version }}-{{ arch }}
   - name: Build ldid
     run: |-
-      sudo apt-get update -y
-      sudo apt-get -y install libplist-dev
+      SUDO="$(command -v sudo || true)"
+      ${SUDO} apt-get update -y
+      ${SUDO} apt-get -y install libplist-dev
       if [ ! -d ldid ]
       then
         curl -L https://github.com/ProcursusTeam/ldid/archive/refs/tags/v${{ inputs.version }}.tar.gz | tar -xz
@@ -32,6 +33,8 @@ runs:
       path: "/tmp/ldid"
       key: ldid-binary-${{ inputs.version }}-{{ arch }}
   - name: Install ldid
-    run: sudo make install
+    run: |-
+      SUDO="$(command -v sudo || true)"
+      ${SUDO} make install
     working-directory: "/tmp/ldid"
     shell: bash

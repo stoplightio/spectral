@@ -1,4 +1,4 @@
-import Ajv, { _, ValidateFunction } from 'ajv';
+import Ajv, { _, ValidateFunction } from 'ajv/dist/2020';
 import names from 'ajv/dist/compile/names';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';

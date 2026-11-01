@@ -2,7 +2,7 @@ import type { SchemaObject, ErrorObject } from 'ajv';
 import traverse from 'json-schema-traverse';
 import { schema as schemaFn, SchemaOptions } from '@stoplight/spectral-functions';
 import { createRulesetFunction } from '@stoplight/spectral-core';
-import { oas2, oas3_1, extractDraftVersion, oas3_0 } from '@stoplight/spectral-formats';
+import { oas2, oas3_1, oas3_2, extractDraftVersion, oas3_0 } from '@stoplight/spectral-formats';
 import { isPlainObject, pointerToPath } from '@stoplight/json';
 
 export type Options = {
@@ -42,7 +42,7 @@ export default createRulesetFunction<unknown, Options>(
 
     if (!formats) {
       dialect = 'auto';
-    } else if (formats.has(oas3_1)) {
+    } else if (formats.has(oas3_2) || formats.has(oas3_1)) {
       if (isPlainObject(context.document.data) && typeof context.document.data.jsonSchemaDialect === 'string') {
         dialect =
           (extractDraftVersion(context.document.data.jsonSchemaDialect) as SchemaOptions['dialect']) ?? 'draft2020-12';

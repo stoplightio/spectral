@@ -10,11 +10,7 @@ function assertRulesetFunction(
   }
 }
 
-export function validateFunction(
-  fn: unknown | RulesetFunction | RulesetFunctionWithValidator,
-  opts: unknown,
-  path: string,
-): Error | void {
+export function validateFunction(fn: unknown, opts: unknown, path: string): Error | void {
   try {
     assertRulesetFunction(fn);
 

@@ -9,9 +9,9 @@ export async function readFileDescriptor(fd: number, opts: IFileReadOptions): Pr
   stream.setEncoding(opts.encoding);
 
   stream.on('readable', () => {
-    let chunk: unknown;
+    let chunk: string;
 
-    while ((chunk = stream.read()) !== null) {
+    while ((chunk = stream.read() as string) !== null) {
       result += chunk;
     }
   });

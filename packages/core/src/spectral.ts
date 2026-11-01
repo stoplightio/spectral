@@ -31,11 +31,11 @@ export class Spectral {
     return target instanceof Document
       ? target
       : isParsedResult(target)
-      ? new ParsedDocument(target)
-      : new Document<unknown, Parsers.YamlParserResult<unknown>>(
-          typeof target === 'string' ? target : stringify(target, void 0, 2),
-          Parsers.Yaml,
-        );
+        ? new ParsedDocument(target)
+        : new Document<unknown, Parsers.YamlParserResult<unknown>>(
+            typeof target === 'string' ? target : stringify(target, void 0, 2),
+            Parsers.Yaml,
+          );
   }
 
   public async runWithResolved(

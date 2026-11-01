@@ -549,4 +549,85 @@ testRule('oas3-valid-media-example', [
       },
     ],
   },
+
+  {
+    name: 'Keep required readOnly parameters inside "not" schemas on requests',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/foos': {
+          post: {
+            requestBody: {
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/FooPrototype',
+                  },
+                  example: {
+                    name: 'my-foo',
+                  },
+                },
+              },
+            },
+            responses: {
+              '201': {
+                description: 'Created',
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: '#/components/schemas/Foo',
+                    },
+                    example: {
+                      id: '1',
+                      name: 'my-foo',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          FooID: {
+            type: 'object',
+            required: ['id'],
+            properties: {
+              id: {
+                type: 'string',
+                readOnly: true,
+              },
+            },
+          },
+          FooPrototype: {
+            type: 'object',
+            not: {
+              $ref: '#/components/schemas/FooID',
+            },
+            required: ['name'],
+            properties: {
+              name: {
+                type: 'string',
+              },
+            },
+          },
+          Foo: {
+            type: 'object',
+            required: ['id', 'name'],
+            properties: {
+              id: {
+                type: 'string',
+                readOnly: true,
+              },
+              name: {
+                type: 'string',
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);

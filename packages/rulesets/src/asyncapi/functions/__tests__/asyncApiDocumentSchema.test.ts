@@ -133,7 +133,7 @@ describe('asyncApiDocumentSchema', () => {
         {
           code: 'asyncapi-schema',
           documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md#asyncapi-schema',
-          message: '"0" property type must be string',
+          message: 'Item at index 0 must be string',
           path: ['channels', '/user/signedup', 'servers', '0'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),
@@ -141,7 +141,7 @@ describe('asyncApiDocumentSchema', () => {
         {
           code: 'asyncapi-schema',
           documentationUrl: 'https://meta.stoplight.io/docs/spectral/docs/reference/asyncapi-rules.md#asyncapi-schema',
-          message: '"2" property type must be string',
+          message: 'Item at index 2 must be string',
           path: ['channels', '/user/signedup', 'servers', '2'],
           severity: DiagnosticSeverity.Error,
           range: expect.any(Object),

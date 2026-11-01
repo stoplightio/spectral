@@ -1757,4 +1757,68 @@ responses:: !!foo
       }),
     );
   });
+
+  test('given a ruleset redefining an extended rule with a locally defined alias, should resolve the alias', async () => {
+    const oas3: Format = (_input): _input is unknown => true;
+
+    spectral.setRuleset({
+      extends: {
+        aliases: {
+          OperationObject: {
+            targets: [
+              {
+                formats: [oas3],
+                given: ['$.paths[*][*]'],
+              },
+            ],
+          },
+        },
+        rules: {
+          'typed-enum': {
+            given: '#OperationObject',
+            then: {
+              function: truthy,
+            },
+          },
+        },
+      },
+      aliases: {
+        MyAlias: {
+          targets: [
+            {
+              formats: [oas3],
+              given: ['$.info'],
+            },
+          ],
+        },
+      },
+      formats: [oas3],
+      rules: {
+        'typed-enum': {
+          given: '#MyAlias',
+          severity: 'warn',
+          then: {
+            function: falsy,
+          },
+        },
+      },
+    });
+
+    await expect(
+      spectral.run({
+        info: {
+          title: 't',
+          version: '1.0.0',
+        },
+      }),
+    ).resolves.toEqual([
+      {
+        code: 'typed-enum',
+        message: '"info" property must be falsy',
+        path: ['info'],
+        range: expect.any(Object),
+        severity: DiagnosticSeverity.Warning,
+      },
+    ]);
+  });
 });

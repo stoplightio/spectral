@@ -83,9 +83,8 @@ ${chalk.red.bold('1 Unique Issue(s)')}\n`);
   test('should display proper severity level', () => {
     setColumnWidth(185, function (): void {
       const result = pretty(mixedErrors, { failSeverity: DiagnosticSeverity.Error });
-      expect(
-        result,
-      ).toContain(`${chalk.white('3:10')}        ${chalk.white.inverse('HINT')}         ${chalk.white.bold('info-contact')}                    ${chalk.gray('Info object should contain `contact` object.')}                     ${chalk.cyan('info')}
+      expect(result)
+        .toContain(`${chalk.white('3:10')}        ${chalk.white.inverse('HINT')}         ${chalk.white.bold('info-contact')}                    ${chalk.gray('Info object should contain `contact` object.')}                     ${chalk.cyan('info')}
 
 ${chalk.yellow(
   '3:10',

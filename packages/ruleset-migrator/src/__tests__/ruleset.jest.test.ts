@@ -34,7 +34,7 @@ describe('migrator', () => {
     });
 
     afterAll(async () => {
-      await fs.promises.rmdir(cwd, { recursive: true });
+      await fs.promises.rm(cwd, { recursive: true });
     });
 
     it('should be supported', async () => {

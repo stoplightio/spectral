@@ -21,6 +21,9 @@ const schemas = [
   'oas/schemas/oas/v3.1/dialect.schema.json',
   'oas/schemas/oas/v3.1/meta.schema.json',
   'oas/schemas/oas/v3.1/index.json',
+  'oas/schemas/oas/v3.2/dialect.schema.json',
+  'oas/schemas/oas/v3.2/meta.schema.json',
+  'oas/schemas/oas/v3.2/index.json',
   'arazzo/schemas/arazzo/v1.0/index.json',
 ].map(async schema => JSON.parse(await fs.promises.readFile(path.join(cwd, schema), 'utf8')));
 
@@ -57,6 +60,7 @@ Promise.all(schemas)
       oas2_0: 'http://swagger.io/v2/schema.json',
       oas3_0: 'https://spec.openapis.org/oas/3.0/schema/2019-04-02',
       oas3_1: 'https://spec.openapis.org/oas/3.1/schema/2021-09-28',
+      oas3_2: 'https://spec.openapis.org/oas/3.2/schema/2025-11-23',
       arazzo1_0: 'https://spec.openapis.org/arazzo/1.0/schema/2024-08-01',
     });
 

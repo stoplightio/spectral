@@ -22,7 +22,7 @@ export default function arazzoWorkflowDependsOnValidation(
     const seenWorkflows = new Set<string>();
 
     if (Array.isArray(workflow.dependsOn)) {
-      workflow.dependsOn.forEach((dep: string | unknown, depIndex: number) => {
+      workflow.dependsOn.forEach((dep: unknown, depIndex: number) => {
         if (typeof dep !== 'string') {
           return; // Skip non-string dependencies
         }

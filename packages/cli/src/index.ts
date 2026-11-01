@@ -6,7 +6,7 @@ import { DEFAULT_REQUEST_OPTIONS } from '@stoplight/spectral-runtime';
 import lintCommand from './commands/lint';
 
 if (typeof process.env.PROXY === 'string') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent') as typeof import('hpagent');
   const httpAgent = new HttpProxyAgent({ proxy: process.env.PROXY });
   const httpsAgent = new HttpsProxyAgent({ proxy: process.env.PROXY });

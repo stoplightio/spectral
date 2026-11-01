@@ -186,7 +186,7 @@ function cleanSchema(schema: Record<string, unknown>): void {
  * Modifies 'schema' (and all its sub-schemas) to make all
  * readOnly or writeOnly properties optional.
  * In this context, "sub-schemas" refers to all schemas reachable from 'schema'
- * (e.g. properties, additionalProperties, allOf/anyOf/oneOf, not, items, etc.)
+ * (e.g. properties, additionalProperties, allOf/anyOf/oneOf, items, etc.), except "not" sub-schemas
  * @param schema the schema to be modified
  * @param readOnlyProperties make readOnly properties optional
  * @param writeOnlyProperties make writeOnly properties optional
@@ -196,7 +196,8 @@ function relaxRequired(
   readOnlyProperties: boolean,
   writeOnlyProperties: boolean,
 ): void {
-  if (readOnlyProperties || writeOnlyProperties)
+  if (readOnlyProperties || writeOnlyProperties) {
+    const notJsonPtrs: string[] = [];
     traverse(schema, {}, <traverse.Callback>((
       fragment,
       jsonPtr,
@@ -206,6 +207,21 @@ function relaxRequired(
       parent,
       propertyName,
     ) => {
+      // "not" schemas are negative constraints: relaxing their "required" would
+      // make them match (and therefore reject) documents they should not match.
+      // parentKeyword is "not" only for the keyword itself, not for a property named "not".
+      if (parentKeyword === 'not') {
+        notJsonPtrs.push(jsonPtr);
+        return;
+      }
+
+      if (
+        parentJsonPtr !== void 0 &&
+        notJsonPtrs.some(notJsonPtr => parentJsonPtr === notJsonPtr || parentJsonPtr.startsWith(`${notJsonPtr}/`))
+      ) {
+        return;
+      }
+
       if ((fragment.readOnly === true && readOnlyProperties) || (fragment.writeOnly === true && writeOnlyProperties)) {
         if (parentKeyword == 'properties' && parent && hasRequiredProperties(parent)) {
           parent.required = parent.required?.filter(p => p !== propertyName);
@@ -215,6 +231,7 @@ function relaxRequired(
         }
       }
     }));
+  }
 }
 
 export default createRulesetFunction<Record<string, unknown>, Options>(

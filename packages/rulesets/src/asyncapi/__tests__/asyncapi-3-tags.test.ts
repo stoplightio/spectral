@@ -26,4 +26,18 @@ testRule('asyncapi-3-tags', [
       },
     ],
   },
+  {
+    name: 'info tags property is missing in AsyncAPI 3.1',
+    document: {
+      asyncapi: '3.1.0',
+      info: {},
+    },
+    errors: [
+      {
+        message: 'AsyncAPI document must have non-empty "tags" array.',
+        path: ['info'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
 ]);
