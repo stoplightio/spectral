@@ -1,13 +1,40 @@
 import { normalize } from '@stoplight/path';
 import fg from 'fast-glob';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const GLOB_OPTIONS = {
   absolute: true,
   dot: true,
 };
 
-async function match(pattern: fg.Pattern | fg.Pattern[]): Promise<string[]> {
-  return (await fg(pattern, GLOB_OPTIONS)).map(normalize);
+function isFile(pattern: string): boolean {
+  try {
+    return fs.statSync(pattern).isFile();
+  } catch {
+    return false;
+  }
+}
+
+// A pattern that is the path of an existing file is used as is, so that characters
+// such as ( ) [ ] { } in a file name are not read as glob syntax.
+async function match(patterns: fg.Pattern[]): Promise<string[]> {
+  const literalFiles: string[] = [];
+  const globs: fg.Pattern[] = [];
+  for (const pattern of patterns) {
+    if (isFile(pattern)) {
+      literalFiles.push(normalize(path.resolve(pattern)));
+    } else {
+      globs.push(pattern);
+    }
+  }
+
+  if (globs.length === 0) {
+    return literalFiles;
+  }
+
+  const globbed = (await fg(globs.length === 1 ? globs[0] : globs, GLOB_OPTIONS)).map(normalize);
+  return [...new Set([...literalFiles, ...globbed])];
 }
 
 const compareString = (a: string, b: string): number => a.localeCompare(b);
@@ -41,7 +68,7 @@ export async function listFiles(patterns: string[], ignoreUnmatchedGlobs: boolea
   } else {
     await Promise.all(
       files.map(async pattern => {
-        const resultFg = await match(pattern);
+        const resultFg = await match([pattern]);
         if (resultFg.length === 0) {
           fileSearchWithoutResult.push(pattern);
         }
