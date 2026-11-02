@@ -630,4 +630,99 @@ testRule('oas3-valid-media-example', [
     },
     errors: [],
   },
+
+  {
+    name: 'OpenAPI 3.2: valid dataValue in examples',
+    document: {
+      openapi: '3.2.0',
+      content: {
+        xoxo: {
+          schema: {
+            type: 'string',
+          },
+          examples: {
+            test1: {
+              dataValue: 'doggie',
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'OpenAPI 3.2: invalid dataValue in examples',
+    document: {
+      openapi: '3.2.0',
+      content: {
+        xoxo: {
+          schema: {
+            type: 'string',
+          },
+          examples: {
+            test1: {
+              dataValue: 123,
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        code: 'oas3-valid-media-example',
+        message: '"dataValue" property type must be string',
+        path: ['content', 'xoxo', 'examples', 'test1', 'dataValue'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
+
+  {
+    name: 'OpenAPI 3.2: serializedValue is the wire form and is not validated against the schema',
+    document: {
+      openapi: '3.2.0',
+      content: {
+        xoxo: {
+          schema: {
+            type: 'integer',
+          },
+          examples: {
+            test1: {
+              serializedValue: 'not-an-integer',
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'OpenAPI 3.2: dataValue is validated even when serializedValue is also present',
+    document: {
+      openapi: '3.2.0',
+      content: {
+        xoxo: {
+          schema: {
+            type: 'string',
+          },
+          examples: {
+            test1: {
+              dataValue: 123,
+              serializedValue: '123',
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        code: 'oas3-valid-media-example',
+        message: '"dataValue" property type must be string',
+        path: ['content', 'xoxo', 'examples', 'test1', 'dataValue'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
+  },
 ]);

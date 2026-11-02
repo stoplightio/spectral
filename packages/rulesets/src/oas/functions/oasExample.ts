@@ -103,20 +103,44 @@ function* getMediaValidationItems(
 
       for (const exampleKey of Object.keys(value)) {
         const exampleValue = value[exampleKey];
-        if (oasVersion === 3 && keyed && (!isObject(exampleValue) || 'externalValue' in exampleValue)) {
-          // should be covered by oas3-examples-value-or-externalValue
+
+        if (oasVersion === 3 && keyed) {
+          if (!isObject(exampleValue)) {
+            // should be covered by oas3-examples-value-or-externalValue
+            continue;
+          }
+
+          // OpenAPI 3.2 renamed the schema-validated example field from `value` to
+          // `dataValue`, and carries the serialized (wire) form in `serializedValue`.
+          // Like `externalValue`, `serializedValue` is not validated against the Schema
+          // Object, so only `dataValue` (3.2) or `value` (3.0/3.1) is checked here.
+          if ('dataValue' in exampleValue) {
+            yield {
+              value: exampleValue.dataValue,
+              path: [...givenPath, field, exampleKey, 'dataValue'],
+            };
+
+            continue;
+          }
+
+          if (!('value' in exampleValue) || 'externalValue' in exampleValue) {
+            // Nothing to validate against the schema (e.g. a serializedValue- or
+            // externalValue-only example); presence is covered by
+            // oas3-examples-value-or-externalValue.
+            continue;
+          }
+
+          yield {
+            value: exampleValue.value,
+            path: [...givenPath, field, exampleKey, 'value'],
+          };
+
           continue;
         }
 
-        const targetPath = [...givenPath, field, exampleKey];
-
-        if (keyed) {
-          targetPath.push('value');
-        }
-
         yield {
-          value: keyed && isObject(exampleValue) ? exampleValue.value : exampleValue,
-          path: targetPath,
+          value: exampleValue,
+          path: [...givenPath, field, exampleKey],
         };
       }
 
