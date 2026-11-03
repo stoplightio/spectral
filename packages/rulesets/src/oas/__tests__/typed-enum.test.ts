@@ -154,4 +154,24 @@ testRule('typed-enum', [
     },
     errors: [],
   },
+
+  {
+    name: 'oas3.1: null in a type array and enum does not crash',
+    document: {
+      openapi: '3.1.0',
+      info: { title: 't', version: '1' },
+      paths: {},
+      components: {
+        schemas: {
+          S: {
+            type: 'object',
+            properties: {
+              k: { type: ['string', 'null'], enum: ['a', 'b', null] },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
 ]);
