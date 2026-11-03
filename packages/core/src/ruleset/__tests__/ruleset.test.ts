@@ -1459,6 +1459,72 @@ describe('Ruleset', () => {
       );
     });
 
+    it('given a redefined rule referencing a locally defined alias, should resolve the alias against the extending ruleset', () => {
+      const ruleset = new Ruleset({
+        extends: {
+          aliases: {
+            PathItem: ['$.paths[*][*]'],
+          },
+          rules: {
+            'valid-path': {
+              given: '#PathItem',
+              then: {
+                function: truthy,
+              },
+            },
+          },
+        },
+        aliases: {
+          Info: ['$.info'],
+        },
+        rules: {
+          'valid-path': {
+            given: '#Info',
+            severity: 'warn',
+            then: {
+              function: truthy,
+            },
+          },
+        },
+      });
+
+      expect(ruleset.rules['valid-path'].given).toEqual(['$.info']);
+    });
+
+    it('given an inherited rule with severity modified only, should keep resolving its given against the base ruleset aliases', () => {
+      const ruleset = new Ruleset({
+        extends: {
+          aliases: {
+            PathItem: ['$.paths[*][*]'],
+            Description: ['$..description'],
+          },
+          rules: {
+            'valid-path': {
+              given: '#PathItem',
+              then: {
+                function: truthy,
+              },
+            },
+
+            'valid-description': {
+              given: '#Description',
+              then: {
+                function: truthy,
+              },
+            },
+          },
+        },
+        rules: {
+          'valid-path': 'warn',
+
+          'valid-description': true,
+        },
+      });
+
+      expect(ruleset.rules['valid-path'].given).toEqual(['$.paths[*][*]']);
+      expect(ruleset.rules['valid-description'].given).toEqual(['$..description']);
+    });
+
     describe('scoped aliases', () => {
       const createStubFormat =
         (): Format<unknown> =>
@@ -1626,6 +1692,102 @@ describe('Ruleset', () => {
 
         expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([draft7]))).toStrictEqual([]);
         expect(ruleset.rules['valid-id'].getGivenForFormats(new Formats([]))).toStrictEqual([]);
+      });
+
+      it('given a redefined rule referencing a locally defined scoped alias, should resolve the alias against the extending ruleset', () => {
+        const oas2 = createStubFormat();
+        const oas3 = createStubFormat();
+
+        const ruleset = new Ruleset({
+          extends: {
+            aliases: {
+              ResponseObject: {
+                targets: [
+                  {
+                    formats: [oas2],
+                    given: ['$.responses[*]'],
+                  },
+                  {
+                    formats: [oas3],
+                    given: ['$.components.responses[*]'],
+                  },
+                ],
+              },
+            },
+            rules: {
+              'valid-response': {
+                given: '#ResponseObject',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          },
+          aliases: {
+            MyAlias: {
+              targets: [
+                {
+                  formats: [oas2, oas3],
+                  given: ['$.info'],
+                },
+              ],
+            },
+          },
+          rules: {
+            'valid-response': {
+              given: '#MyAlias',
+              severity: 'warn',
+              then: {
+                function: truthy,
+              },
+            },
+          },
+        });
+
+        expect(ruleset.rules['valid-response'].getGivenForFormats(new Formats([oas2]))).toStrictEqual(['$.info']);
+        expect(ruleset.rules['valid-response'].getGivenForFormats(new Formats([oas3]))).toStrictEqual(['$.info']);
+      });
+
+      it('given an inherited rule using a scoped alias, with severity modified only, should keep resolving the alias against the base ruleset', () => {
+        const oas2 = createStubFormat();
+        const oas3 = createStubFormat();
+
+        const ruleset = new Ruleset({
+          extends: {
+            aliases: {
+              ResponseObject: {
+                targets: [
+                  {
+                    formats: [oas2],
+                    given: ['$.responses[*]'],
+                  },
+                  {
+                    formats: [oas3],
+                    given: ['$.components.responses[*]'],
+                  },
+                ],
+              },
+            },
+            rules: {
+              'valid-response': {
+                given: '#ResponseObject',
+                then: {
+                  function: truthy,
+                },
+              },
+            },
+          },
+          rules: {
+            'valid-response': 'warn',
+          },
+        });
+
+        expect(ruleset.rules['valid-response'].getGivenForFormats(new Formats([oas2]))).toStrictEqual([
+          '$.responses[*]',
+        ]);
+        expect(ruleset.rules['valid-response'].getGivenForFormats(new Formats([oas3]))).toStrictEqual([
+          '$.components.responses[*]',
+        ]);
       });
 
       it('should be serializable', () => {
