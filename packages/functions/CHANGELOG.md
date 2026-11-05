@@ -1,10 +1,3 @@
-## @stoplight/spectral-functions [1.11.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.11.0...@stoplight/spectral-functions-1.11.1) (2026-11-05)
-
-
-### Bug Fixes
-
-* **functions:** clearer schema errors for array items and oneOf/anyOf ([#3095](https://github.com/stoplightio/spectral/issues/3095)) ([5c566df](https://github.com/stoplightio/spectral/commit/5c566dfce9d20764a5960a56df7e0c694200eb81)), closes [#1072](https://github.com/stoplightio/spectral/issues/1072)
-
 # @stoplight/spectral-functions [1.11.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-functions-1.10.5...@stoplight/spectral-functions-1.11.0) (2026-10-01)
 
 
