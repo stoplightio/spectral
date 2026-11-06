@@ -1,5 +1,32 @@
 import { DiagnosticSeverity } from '@stoplight/types';
+import * as path from '@stoplight/path';
+import * as Parsers from '@stoplight/spectral-parsers';
+import { Document } from '@stoplight/spectral-core';
+
 import testRule from './__helpers__/tester';
+
+const sharedDefsSource = path.join(__dirname, './__fixtures__/sharedSecurityDefinitions/common.json');
+const sharedDefsDocument = new Document<any, any>(
+  JSON.stringify({
+    swagger: '2.0',
+    securityDefinitions: {
+      oauth2: { $ref: './common.json#/securityDefinitions/oauth2' },
+      SharedOauth: {
+        type: 'oauth2',
+        flow: 'accessCode',
+        authorizationUrl: 'https://example.com/api/oauth/dialog',
+        tokenUrl: 'https://example.com/api/oauth/token',
+        scopes: {
+          'write:pets': 'modify pets in your account',
+          'read:pets': 'read your pets',
+        },
+      },
+    },
+    paths: { '/path': { get: { security: [{ oauth2: ['write:pets'] }] } } },
+  }),
+  Parsers.Json,
+  path.join(__dirname, './__fixtures__/sharedSecurityDefinitions/api.json'),
+);
 
 testRule('oas2-operation-security-defined', [
   {
@@ -190,5 +217,47 @@ testRule('oas2-operation-security-defined', [
         severity: DiagnosticSeverity.Warning,
       },
     ],
+  },
+
+  {
+    name: 'valid scopes in a security scheme defined in an external file',
+    document: sharedDefsDocument,
+    errors: [],
+    mocks: {
+      [sharedDefsSource]: {
+        securityDefinitions: {
+          oauth2: sharedDefsDocument.data.securityDefinitions.SharedOauth,
+        },
+      },
+    },
+  },
+
+  {
+    name: 'valid scopes through a local $ref without a document source',
+    document: {
+      ...sharedDefsDocument.data,
+      securityDefinitions: {
+        ...sharedDefsDocument.data.securityDefinitions,
+        oauth2: { $ref: '#/securityDefinitions/SharedOauth' },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'valid scopes in a security scheme at an external document root',
+    document: new Document(
+      JSON.stringify({
+        ...sharedDefsDocument.data,
+        securityDefinitions: { oauth2: { $ref: './common.json' } },
+      }),
+      Parsers.Json,
+      path.join(__dirname, './__fixtures__/sharedSecurityDefinitions/root/api.json'),
+    ),
+    errors: [],
+    mocks: {
+      [path.join(__dirname, './__fixtures__/sharedSecurityDefinitions/root/common.json')]:
+        sharedDefsDocument.data.securityDefinitions.SharedOauth,
+    },
   },
 ]);
