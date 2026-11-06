@@ -31,5 +31,6 @@ Options:
       --show-documentation-url   show documentation url in output result  [boolean] [default: false]
   -v, --verbose                  increase verbosity  [boolean]
   -q, --quiet                    no logging - output only  [boolean]
+      --html-include-json-path   add json path in html format report  [boolean] [default: false]
 
 The number of outputs must match the number of formats
