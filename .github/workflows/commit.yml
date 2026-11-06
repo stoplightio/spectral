@@ -48,6 +48,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5.0.1
+      with:
+        # The test-harness cache key is derived from HEAD~1, which a depth-1 clone lacks.
+        fetch-depth: 2
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
       with:
