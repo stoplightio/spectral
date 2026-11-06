@@ -1,3 +1,12 @@
+## @stoplight/spectral-rulesets [1.23.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.23.0...@stoplight/spectral-rulesets-1.23.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **functions:** clearer schema errors for array items and oneOf/anyOf ([#3095](https://github.com/stoplightio/spectral/issues/3095)) ([5c566df](https://github.com/stoplightio/spectral/commit/5c566dfce9d20764a5960a56df7e0c694200eb81)), closes [#1072](https://github.com/stoplightio/spectral/issues/1072)
+* **rulesets:** guard null definitions in oas2-discriminator given ([#3098](https://github.com/stoplightio/spectral/issues/3098)) ([74a5fe0](https://github.com/stoplightio/spectral/commit/74a5fe0db604d39adf0b8d896ff1201591dc0f88))
+* **rulesets:** relaxRequired does not traverse "not" schemas ([#3083](https://github.com/stoplightio/spectral/issues/3083)) ([95ab37e](https://github.com/stoplightio/spectral/commit/95ab37eeea1f69ee9ae1a43b88f3ed1df007f190)), closes [#3068](https://github.com/stoplightio/spectral/issues/3068)
+
 # @stoplight/spectral-rulesets [1.23.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-rulesets-1.22.7...@stoplight/spectral-rulesets-1.23.0) (2026-10-01)
 
 
