@@ -1,3 +1,10 @@
+## @stoplight/spectral-cli [6.17.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.17.0...@stoplight/spectral-cli-6.17.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **cli:** lint files whose names contain glob characters ([#3101](https://github.com/stoplightio/spectral/issues/3101)) ([bf782be](https://github.com/stoplightio/spectral/commit/bf782be719dd870ea21c9aa82c103f5354db1290)), closes [#2814](https://github.com/stoplightio/spectral/issues/2814)
+
 # @stoplight/spectral-cli [6.17.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-cli-6.16.3...@stoplight/spectral-cli-6.17.0) (2026-10-01)
 
 
