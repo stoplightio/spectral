@@ -1821,4 +1821,59 @@ responses:: !!foo
       },
     ]);
   });
+
+  describe('given expressions throwing exceptions', () => {
+    const document = new Document(
+      JSON.stringify({ info: { title: 'foo' }, schema: { example: null, format: 'date' } }),
+      Parsers.Json,
+      'document.json',
+    );
+
+    test('should not abort the run and should report the faulty rule', async () => {
+      const spectral = new Spectral();
+      spectral.setRuleset({
+        rules: {
+          'unguarded-filter': {
+            given: "$..[?(@.format == 'date')]",
+            then: { function: truthy },
+          },
+          'title-required': {
+            given: '$.info',
+            then: { field: 'description', function: truthy },
+          },
+        },
+      });
+
+      const results = await spectral.run(document);
+
+      expect(results).toEqual([
+        expect.objectContaining({
+          code: 'unguarded-filter',
+          severity: DiagnosticSeverity.Error,
+          source: 'document.json',
+          message: expect.stringContaining('Cannot read properties of null'),
+        }),
+        expect.objectContaining({
+          code: 'title-required',
+          path: ['info'],
+        }),
+      ]);
+    });
+
+    test('should not report anything for a guarded expression', async () => {
+      const spectral = new Spectral();
+      spectral.setRuleset({
+        rules: {
+          'guarded-filter': {
+            given: "$..[?(@ && @.format == 'date')]",
+            then: { function: falsy },
+          },
+        },
+      });
+
+      const results = await spectral.run(document);
+
+      expect(results).toEqual([expect.objectContaining({ code: 'guarded-filter', path: ['schema'] })]);
+    });
+  });
 });
