@@ -1,6 +1,7 @@
 import { createRulesetFunction } from '@stoplight/spectral-core';
 import type { IFunctionResult } from '@stoplight/spectral-core';
 import { isPlainObject } from '@stoplight/json';
+import { get } from 'lodash';
 
 type Options = {
   oasVersion: 2 | 3;
@@ -27,7 +28,7 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
       additionalProperties: false,
     },
   },
-  function oasSecurityDefined(input, { oasVersion }, { document, path }) {
+  function oasSecurityDefined(input, { oasVersion }, { document, documentInventory, path }) {
     const schemeNames = Object.keys(input);
     if (schemeNames.length === 0) return;
 
@@ -39,6 +40,8 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
         : isPlainObject(document.data.components)
           ? document.data.components.securitySchemes
           : null;
+
+    const securitySchemesPath = oasVersion === 2 ? ['securityDefinitions'] : ['components', 'securitySchemes'];
 
     let results: IFunctionResult[] | undefined;
 
@@ -55,10 +58,14 @@ export default createRulesetFunction<Record<string, string[]>, Options>(
         continue;
       }
 
+      // the definition may live behind a local or remote $ref, so let's look it up in the resolved document
+      const securityScheme: unknown =
+        get(documentInventory, ['resolved', ...securitySchemesPath, schemeName]) ?? allDefs[schemeName];
+
       const scope = input[schemeName];
       for (let i = 0; i < scope.length; i++) {
         const scopeName = scope[i];
-        if (!isScopeDefined(oasVersion, scopeName, allDefs[schemeName])) {
+        if (!isScopeDefined(oasVersion, scopeName, securityScheme)) {
           results ??= [];
           results.push({
             message: `"${scopeName}" must be listed among scopes.`,
