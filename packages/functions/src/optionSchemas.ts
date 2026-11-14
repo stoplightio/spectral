@@ -187,6 +187,12 @@ export const optionSchemas: Record<string, CustomFunctionOptionsSchema> = {
         default: false,
         description: 'Returns all errors when true; otherwise only returns the first error.',
       },
+      unicodeRegExp: {
+        type: 'boolean',
+        default: false,
+        description:
+          'Use unicode flag "u" with "pattern" and "patternProperties" when true; otherwise do not use flag "u". Defaults to false.',
+      },
       prepareResults: {
         'x-internal': true,
       },

@@ -7,6 +7,7 @@ import { isPlainObject, pointerToPath } from '@stoplight/json';
 
 export type Options = {
   schema: Record<string, unknown>;
+  unicodeRegExp?: boolean;
 };
 
 function rewriteNullable(schema: SchemaObject, errors: ErrorObject[]): void {
@@ -27,6 +28,10 @@ export default createRulesetFunction<unknown, Options>(
       properties: {
         schema: {
           type: 'object',
+        },
+        unicodeRegExp: {
+          type: 'boolean',
+          default: false,
         },
       },
       additionalProperties: false,
