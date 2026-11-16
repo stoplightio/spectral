@@ -29,12 +29,41 @@ export default createRulesetFunction<unknown, null>(
 
     const errors = validator['errors'] as ErrorObject[] | null;
 
-    return errors?.reduce<IFunctionResult[]>((errors, e) => processError(errors, input, schema, e), []);
+    return errors?.reduce<IFunctionResult[]>(
+      (results, error) =>
+        isRelevantError(error) && !isRedundantCombinatorError(error, errors)
+          ? processError(results, input, schema, error)
+          : results,
+      [],
+    );
   },
 );
 
 function isRelevantError(error: ErrorObject): boolean {
   return error.keyword !== 'if';
+}
+
+function isRedundantCombinatorError(error: ErrorObject, errors: ErrorObject[]): boolean {
+  const combinator =
+    error.keyword === 'anyOf'
+      ? error
+      : errors.find(
+          candidate =>
+            candidate.keyword === 'anyOf' &&
+            candidate.instancePath === error.instancePath &&
+            error.schemaPath.startsWith(`${candidate.schemaPath}/`),
+        );
+
+  if (combinator === undefined) {
+    return false;
+  }
+
+  return errors.some(
+    candidate =>
+      candidate !== combinator &&
+      candidate.instancePath === error.instancePath &&
+      !candidate.schemaPath.startsWith(`${combinator.schemaPath}/`),
+  );
 }
 
 function processError(
