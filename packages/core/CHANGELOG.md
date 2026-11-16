@@ -1,3 +1,10 @@
+## @stoplight/spectral-core [1.24.1](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.24.0...@stoplight/spectral-core-1.24.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **core:** resolve a redefined rule's given against the aliases of its ruleset ([#3089](https://github.com/stoplightio/spectral/issues/3089)) ([6497ddd](https://github.com/stoplightio/spectral/commit/6497dddd6d1abb22ab4385ac132e1b72de4c9a2a)), closes [#3085](https://github.com/stoplightio/spectral/issues/3085)
+
 # @stoplight/spectral-core [1.24.0](https://github.com/stoplightio/spectral/compare/@stoplight/spectral-core-1.23.2...@stoplight/spectral-core-1.24.0) (2026-10-01)
 
 

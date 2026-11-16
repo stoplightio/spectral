@@ -46,8 +46,6 @@ jobs:
       uses: "./.github/actions/install-ldid"
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
-      with:
-        install-corepack: 'false'
     - name: Build
       run: yarn build
     - name: Build binary macos-arm64
@@ -92,8 +90,6 @@ jobs:
       uses: "./.github/actions/install-ldid"
     - name: Cached dependencies
       uses: "./.github/actions/cached-dependencies"
-      with:
-        install-corepack: 'false'
     - name: Build
       run: yarn build
     - name: Build binary macos-x64
