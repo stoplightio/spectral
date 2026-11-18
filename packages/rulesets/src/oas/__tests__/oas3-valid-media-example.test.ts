@@ -468,8 +468,8 @@ testRule('oas3-valid-media-example', [
     name: 'parameters: will fail when complex example is used',
     document: {
       openapi: '3.0.0',
-      parameters: [
-        {
+      components: {
+        parameters: {
           Heh: {
             schema: {
               type: 'number',
@@ -500,7 +500,7 @@ testRule('oas3-valid-media-example', [
             },
           },
         },
-      ],
+      },
     },
     errors: [
       {
@@ -629,5 +629,110 @@ testRule('oas3-valid-media-example', [
       },
     },
     errors: [],
+  },
+
+  // A media type example can be any JSON value, including an object that has its own
+  // `schema` and `example` fields (for example an API that returns a form definition
+  // together with a sample submission). That value is data, not a Media Type Object.
+  {
+    name: 'does not treat an example value with schema and example fields as a media type',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/forms/{code}': {
+          get: {
+            responses: {
+              '200': {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    schema: { type: 'object' },
+                    example: {
+                      schema: {
+                        description: { dataType: 'string', required: true },
+                      },
+                      example: {
+                        description: 'Equipment is disconnecting.',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'does not treat an examples value with schema and example fields as a media type',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/forms/{code}': {
+          get: {
+            responses: {
+              '200': {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    schema: { type: 'object' },
+                    examples: {
+                      form: {
+                        value: {
+                          schema: { type: 5 },
+                          example: 1,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'still validates the media type that holds such an example',
+    document: {
+      openapi: '3.0.3',
+      paths: {
+        '/forms/{code}': {
+          get: {
+            responses: {
+              '200': {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      required: ['code'],
+                      properties: { code: { type: 'string' } },
+                    },
+                    example: {
+                      schema: { type: 5 },
+                      example: 1,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"example" property must have required property "code"',
+        path: ['paths', '/forms/{code}', 'get', 'responses', '200', 'content', 'application/json', 'example'],
+        severity: DiagnosticSeverity.Error,
+      },
+    ],
   },
 ]);
