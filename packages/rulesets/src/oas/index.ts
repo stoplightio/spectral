@@ -671,9 +671,9 @@ const ruleset = {
       severity: 0,
       formats: [oas3],
       given: [
-        '$..content..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
-        '$..headers..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
-        '$..parameters..[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..content[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..headers[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
+        '$..parameters[?(@ && @.schema && (@.example !== void 0 || @.examples))]',
       ],
       then: {
         function: oasExample,
