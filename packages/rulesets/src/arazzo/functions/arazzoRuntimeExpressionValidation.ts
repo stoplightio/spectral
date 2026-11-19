@@ -93,14 +93,14 @@ function validateInputsExpression(
   arazzoSpec: ArazzoSpecification,
   currentWorkflowIndex?: number,
 ): boolean {
-  const inputsRegex = /^\$inputs\.([A-Za-z0-9_\\-]+)$/;
+  const inputsRegex = /^\$inputs\.([A-Za-z0-9_\\-]+(?:\.[A-Za-z0-9_\\-]+)*)$/;
   const match = inputsRegex.exec(inputsExpression);
 
   if (!match) {
     return false; // The expression didn't match the expected pattern
   }
 
-  const [, inputName] = match;
+  const [, inputsPath] = match;
 
   if (
     arazzoSpec == null ||
@@ -117,14 +117,13 @@ function validateInputsExpression(
     return false;
   }
 
+  let properties: Record<string, unknown> | undefined;
+
   // If inputs are defined directly
   if ('properties' in currentWorkflow.inputs) {
-    const properties = (currentWorkflow.inputs as { properties?: Record<string, unknown> }).properties;
-    return properties ? inputName in properties : false;
-  }
-
-  // If inputs are referenced via $ref
-  if ('$ref' in currentWorkflow.inputs) {
+    properties = (currentWorkflow.inputs as { properties?: Record<string, unknown> }).properties;
+  } else if ('$ref' in currentWorkflow.inputs) {
+    // If inputs are referenced via $ref
     const refPath = (currentWorkflow.inputs as { $ref: string }).$ref.replace(/^#\//, '').split('/');
     let refObject: unknown = arazzoSpec;
 
@@ -136,8 +135,38 @@ function validateInputsExpression(
       }
     }
 
-    const properties = (refObject as { properties?: Record<string, unknown> })?.properties;
-    return properties ? inputName in properties : false;
+    properties = (refObject as { properties?: Record<string, unknown> })?.properties;
+  }
+
+  if (!isNonNullObject(properties)) {
+    return false;
+  }
+
+  const segments = inputsPath.split('.');
+  let currentProperties = properties;
+
+  for (let index = 0; index < segments.length; index++) {
+    const segment = segments[index];
+
+    if (!(segment in currentProperties)) {
+      return false;
+    }
+
+    if (index === segments.length - 1) {
+      return true;
+    }
+
+    const propertySchema = currentProperties[segment];
+    if (!isNonNullObject(propertySchema)) {
+      return false;
+    }
+
+    const nestedProperties = propertySchema.properties;
+    if (!isNonNullObject(nestedProperties)) {
+      return false;
+    }
+
+    currentProperties = nestedProperties;
   }
 
   return false; // The input does not exist in the workflow inputs or referenced schema
