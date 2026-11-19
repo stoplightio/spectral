@@ -282,3 +282,56 @@ describe('arazzoDocumentSchema', () => {
     );
   });
 });
+  test('should fail when step parameter "in" property is "body"', () => {
+    const invalidParameterDocument = {
+      arazzo: '1.0.0',
+      info: { title: 'Arazzo with Invalid Parameter In', version: '1.0.0' },
+      sourceDescriptions: [{ name: 'source1', url: 'https://example.com', type: 'arazzo' }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [
+            {
+              stepId: 'step1',
+              operationId: 'operation1',
+              parameters: [{ name: 'param1', in: 'body', value: 'value1' }],
+            },
+          ],
+        },
+      ],
+    };
+
+    const results = runSchema(invalidParameterDocument);
+    const enumError = results.find(result => result.message.includes('"in" property'));
+    expect(enumError).toBeDefined();
+    expect(enumError?.message).toContain(
+      'allowed values: "path", "query", "header", "cookie"',
+    );
+    expect(enumError?.message).not.toContain('"body"');
+  });
+
+  test('should fail when reusable parameter "in" property is "body"', () => {
+    const invalidParameterDocument = {
+      arazzo: '1.0.0',
+      info: { title: 'Arazzo with Invalid Reusable Parameter In', version: '1.0.0' },
+      sourceDescriptions: [{ name: 'source1', url: 'https://example.com', type: 'arazzo' }],
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          steps: [{ stepId: 'step1', operationId: 'operation1' }],
+        },
+      ],
+      components: {
+        parameters: {
+          param1: { name: 'param1', in: 'body', value: 'value1' },
+        },
+      },
+    };
+
+    const results = runSchema(invalidParameterDocument);
+    expect(results).toHaveLength(1);
+    expect(results[0].message).toContain(
+      'allowed values: "path", "query", "header", "cookie"',
+    );
+    expect(results[0].message).not.toContain('"body"');
+  });
