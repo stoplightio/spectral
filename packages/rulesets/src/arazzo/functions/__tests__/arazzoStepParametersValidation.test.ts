@@ -613,3 +613,108 @@ describe('arazzoStepParametersValidation', () => {
     });
   });
 });
+  test('should not report errors for a nested $inputs expression in parameter value', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            type: 'object',
+            properties: {
+              searchCriteria: {
+                type: 'object',
+                properties: {
+                  breed: { type: 'string' },
+                },
+              },
+            },
+          },
+          steps: [
+            {
+              operationId: 'operation1',
+              parameters: [{ name: 'id', in: 'path', value: '$inputs.searchCriteria.breed' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should not report errors for a nested $inputs expression with $ref inputs', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            $ref: '#/components/inputs/myInputRef',
+          },
+          steps: [
+            {
+              operationId: 'operation1',
+              parameters: [{ name: 'email', in: 'query', value: '$inputs.adopterDetails.contactInformation.email' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+      components: {
+        inputs: {
+          myInputRef: {
+            type: 'object',
+            properties: {
+              adopterDetails: {
+                type: 'object',
+                properties: {
+                  contactInformation: {
+                    type: 'object',
+                    properties: {
+                      email: { type: 'string', format: 'email' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(results).toHaveLength(0);
+  });
+
+  test('should report an error for an unknown nested $inputs segment', () => {
+    const results = runRule({
+      workflows: [
+        {
+          workflowId: 'workflow1',
+          inputs: {
+            type: 'object',
+            properties: {
+              searchCriteria: {
+                type: 'object',
+                properties: {
+                  breed: { type: 'string' },
+                },
+              },
+            },
+          },
+          steps: [
+            {
+              operationId: 'operation1',
+              parameters: [{ name: 'id', in: 'path', value: '$inputs.searchCriteria.unknown' }],
+              stepId: 'step1',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({
+      message: `Invalid runtime expression: "$inputs.searchCriteria.unknown" for parameter.`,
+      path: ['workflows', 0, 'steps', 0, 'parameters', 0],
+    });
+  });
