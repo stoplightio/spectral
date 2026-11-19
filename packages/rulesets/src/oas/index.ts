@@ -691,10 +691,10 @@ const ruleset = {
       formats: [oas3],
       recommended: true,
       given: [
-        "$.components.schemas..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..content..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..headers..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
-        "$..parameters..[?(@property !== 'properties' && @ && (@ && @.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$.components.schemas..[?(!@path.includes(\"['example']\") || @path.includes(\"['properties']['example']\")) && (!@path.includes(\"['examples']\") || @path.includes(\"['properties']['examples']\")) && (!@path.includes(\"['default']\") || @path.includes(\"['properties']['default']\")) && @property !== 'properties' && @ && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..content..[?(!@path.includes(\"['example']\") || @path.includes(\"['properties']['example']\")) && (!@path.includes(\"['examples']\") || @path.includes(\"['properties']['examples']\")) && (!@path.includes(\"['default']\") || @path.includes(\"['properties']['default']\")) && @property !== 'properties' && @ && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..headers..[?(!@path.includes(\"['example']\") || @path.includes(\"['properties']['example']\")) && (!@path.includes(\"['examples']\") || @path.includes(\"['properties']['examples']\")) && (!@path.includes(\"['default']\") || @path.includes(\"['properties']['default']\")) && @property !== 'properties' && @ && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
+        "$..parameters..[?(!@path.includes(\"['example']\") || @path.includes(\"['properties']['example']\")) && (!@path.includes(\"['examples']\") || @path.includes(\"['properties']['examples']\")) && (!@path.includes(\"['default']\") || @path.includes(\"['properties']['default']\")) && @property !== 'properties' && @ && (@.example !== void 0 || @.default !== void 0) && (@.enum || @.type || @.format || @.$ref || @.properties || @.items))]",
       ],
       then: {
         function: oasExample,
