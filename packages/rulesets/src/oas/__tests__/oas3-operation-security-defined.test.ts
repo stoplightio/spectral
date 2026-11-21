@@ -210,4 +210,138 @@ testRule('oas3-operation-security-defined', [
       },
     ],
   },
+
+  {
+    name: 'oas3.1: bearer http scopes on operation without scheme-level scopes',
+    document: {
+      openapi: '3.1.0',
+      info: { title: 'test', version: '1.0.0' },
+      paths: {
+        '/users': {
+          get: {
+            security: [
+              {
+                bearerAuth: ['read:users', 'public'],
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'jwt',
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'oas3.1: role names on a non-OAuth2 scheme',
+    document: {
+      openapi: '3.1.0',
+      info: { title: 'test', version: '1.0.0' },
+      paths: {
+        '/users': {
+          get: {
+            security: [
+              {
+                apikey: ['admin'],
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          apikey: {
+            type: 'apiKey',
+            name: 'api_key',
+            in: 'header',
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'oas3.1: undeclared OAuth2 scope is still reported',
+    document: {
+      openapi: '3.1.0',
+      info: { title: 'test', version: '1.0.0' },
+      paths: {
+        '/users': {
+          get: {
+            security: [
+              {
+                oauth2: ['write:users'],
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          oauth2: {
+            type: 'oauth2',
+            flows: {
+              clientCredentials: {
+                tokenUrl: 'https://example.com/api/oauth/token',
+                scopes: {
+                  'read:users': 'read users',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"write:users" must be listed among scopes.',
+        path: ['paths', '/users', 'get', 'security', '0', 'oauth2', '0'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'oas3.0: role names on a non-OAuth2 scheme are still reported',
+    document: {
+      openapi: '3.0.3',
+      info: { title: 'test', version: '1.0.0' },
+      paths: {
+        '/users': {
+          get: {
+            security: [
+              {
+                apikey: ['admin'],
+              },
+            ],
+          },
+        },
+      },
+      components: {
+        securitySchemes: {
+          apikey: {
+            type: 'apiKey',
+            name: 'api_key',
+            in: 'header',
+          },
+        },
+      },
+    },
+    errors: [
+      {
+        message: '"admin" must be listed among scopes.',
+        path: ['paths', '/users', 'get', 'security', '0', 'apikey', '0'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
 ]);
