@@ -171,6 +171,30 @@ const ruleset = {
         },
       },
     },
+    'object-with-properties-requires-type-object': {
+      description: 'Schemas with "properties" must declare "type: object".',
+      message: 'Schemas with "properties" must declare "type: object".',
+      severity: 0,
+      recommended: false,
+      resolved: false,
+      given: '$..[?(@ && @.properties)]',
+      then: {
+        function: schema,
+        functionOptions: {
+          dialect: 'draft7',
+          schema: {
+            required: ['type'],
+            properties: {
+              type: {
+                if: { type: 'array' },
+                then: { contains: { const: 'object' } },
+                else: { const: 'object' },
+              },
+            },
+          },
+        },
+      },
+    },
     'info-contact': {
       description: 'Info object must have "contact" object.',
       recommended: true,
