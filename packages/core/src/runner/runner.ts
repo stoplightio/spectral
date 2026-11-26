@@ -9,6 +9,8 @@ import Nimma, { Callback } from 'nimma/legacy'; // legacy = Node v12, nimma with
 import { jsonPathPlus } from 'nimma/fallbacks';
 import { isPlainObject } from '@stoplight/json';
 
+const SOURCE_PROPERTY = 'x-spectral-source';
+
 export class Runner {
   public readonly results: IRuleResult[];
 
@@ -57,11 +59,19 @@ export class Runner {
     const unresolvedJsonPaths = Object.keys(callbacks.unresolved);
 
     if (resolvedJsonPaths.length > 0) {
-      execute(runnerContext.documentInventory.resolved, callbacks.resolved, resolvedJsonPaths);
+      execute(
+        exposeSource(runnerContext.documentInventory.resolved, this.document.source),
+        callbacks.resolved,
+        resolvedJsonPaths,
+      );
     }
 
     if (unresolvedJsonPaths.length > 0) {
-      execute(runnerContext.documentInventory.unresolved, callbacks.unresolved, unresolvedJsonPaths);
+      execute(
+        exposeSource(runnerContext.documentInventory.unresolved, this.document.source),
+        callbacks.unresolved,
+        unresolvedJsonPaths,
+      );
     }
 
     if (runnerContext.promises.length > 0) {
@@ -72,6 +82,16 @@ export class Runner {
   public getResults(): IRuleResult[] {
     return prepareResults(this.results);
   }
+}
+
+function exposeSource(input: unknown, source: string | null): unknown {
+  if (source === null || !isPlainObject(input)) {
+    return input;
+  }
+
+  // Not enumerable, so that the traversal skips it and functions don't find it in the document: a JSONPath expression reads it through @root.
+  // Configurable, because nimma's proxy leaves it out of ownKeys, which a proxy may not do for a non-configurable property.
+  return Object.defineProperty({ ...input }, SOURCE_PROPERTY, { value: source, configurable: true });
 }
 
 function execute(input: unknown, callbacks: Record<string, Callback[]>, jsonPathExpressions: string[]): void {

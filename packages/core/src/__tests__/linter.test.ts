@@ -1,4 +1,4 @@
-import { falsy, pattern, truthy } from '@stoplight/spectral-functions';
+import { falsy, pattern, schema, truthy } from '@stoplight/spectral-functions';
 import { DiagnosticSeverity } from '@stoplight/types';
 import { parse } from '@stoplight/yaml';
 import * as Parsers from '@stoplight/spectral-parsers';
@@ -1820,5 +1820,67 @@ responses:: !!foo
         severity: DiagnosticSeverity.Warning,
       },
     ]);
+  });
+
+  describe('document source', () => {
+    const lint = (source?: string): Promise<unknown> =>
+      spectral.run(new Document(JSON.stringify({ info: { version: '1.0.0' } }), Parsers.Json, source));
+
+    test('should be readable through @root in a JSONPath expression', async () => {
+      spectral.setRuleset({
+        rules: {
+          'version-matches-filename': {
+            given: "$.info[?(@property === 'version' && !@root['x-spectral-source'].endsWith('_' + @ + '.json'))]",
+            then: {
+              function: falsy,
+            },
+          },
+        },
+      });
+
+      await expect(lint('/schemas/pet_1.0.0.json')).resolves.toEqual([]);
+      await expect(lint('/schemas/pet_2.0.0.json')).resolves.toEqual([
+        expect.objectContaining({
+          code: 'version-matches-filename',
+          path: ['info', 'version'],
+          source: '/schemas/pet_2.0.0.json',
+        }),
+      ]);
+    });
+
+    test('should not be a part of the document', async () => {
+      spectral.setRuleset({
+        rules: {
+          'no-unknown-properties': {
+            given: ['$', '$.*~'],
+            then: {
+              function: schema,
+              functionOptions: {
+                schema: {
+                  oneOf: [{ const: 'info' }, { type: 'object', additionalProperties: false, properties: { info: {} } }],
+                },
+              },
+            },
+          },
+        },
+      });
+
+      await expect(lint('/schemas/pet_1.0.0.json')).resolves.toEqual([]);
+    });
+
+    test('should not be set when the document has no source', async () => {
+      spectral.setRuleset({
+        rules: {
+          'has-source': {
+            given: "$[?(@root['x-spectral-source'] !== void 0)]",
+            then: {
+              function: falsy,
+            },
+          },
+        },
+      });
+
+      await expect(lint()).resolves.toEqual([]);
+    });
   });
 });
