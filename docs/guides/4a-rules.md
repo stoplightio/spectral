@@ -43,6 +43,20 @@ You can also consume your [aliases](4c-aliases.md) here if you have some defined
 
 Use the [JSONPath Online Evaluator](http://jsonpath.com/) to determine what `given` path you want.
 
+#### Document Source
+
+A filter expression can read the location of the document being linted, such as its file path or URL, through `@root['x-spectral-source']`. Use it to check that a document agrees with its filename.
+
+```yaml
+version-matches-filename:
+  description: The version must be the one in the filename.
+  given: "$.info[?(@property === 'version' && !@root['x-spectral-source'].endsWith('_' + @ + '.yaml'))]"
+  then:
+    function: falsy
+```
+
+The property isn't enumerable, so no JSONPath expression matches it and functions such as `schema` don't see it in the document. It's only set when the source of the document is known, which isn't the case when you lint a string or an object through the JavaScript API without wrapping it in a `Document` with a source.
+
 ### Then
 
 The `then` part of the rule explains which function to apply to the `given` JSONPath. The function you apply [may be one of the core functions](../reference/functions.md) or it may be [a custom function](./5-custom-functions.md).
