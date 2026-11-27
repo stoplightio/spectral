@@ -371,7 +371,7 @@ const ruleset = {
       },
     },
     'no-$ref-siblings': {
-      formats: [oas2, oas3_0],
+      formats: [oas2, oas3_0, oas3_1, oas3_2],
       description: 'Property must not be placed among $ref',
       message: '{{error}}',
       severity: 0,
