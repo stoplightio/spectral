@@ -4,6 +4,7 @@ import { default as oasDocumentSchema } from './oasDocumentSchema';
 import { default as oasOpFormDataConsumeCheck } from './oasOpFormDataConsumeCheck';
 import { default as oasOpSuccessResponse } from './oasOpSuccessResponse';
 import { default as oasExample } from './oasExample';
+import { default as oasExampleValueOrExternalValue } from './oasExampleValueOrExternalValue';
 import { default as oasSecurityDefined } from './oasSecurityDefined';
 import { default as typedEnum } from './typedEnum';
 import { default as refSiblings } from './refSiblings';
@@ -20,6 +21,7 @@ export {
   oasOpFormDataConsumeCheck,
   oasOpSuccessResponse,
   oasExample,
+  oasExampleValueOrExternalValue,
   oasSecurityDefined,
   typedEnum,
   refSiblings,

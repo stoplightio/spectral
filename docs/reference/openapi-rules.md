@@ -759,6 +759,8 @@ If this is going out to the world, maybe have production and a general sandbox p
 
 Examples for `requestBody` or response examples can have an `externalValue` or a `value`, but they cannot have both.
 
+In OpenAPI 3.2, an example can also use `dataValue` or `serializedValue`, so any one of `value`, `dataValue`, `serializedValue` or `externalValue` satisfies this rule. Which combinations of these fields are allowed is checked by `oas3-schema`.
+
 **Recommended:** Yes
 
 **Default severity when enabled:** warn
