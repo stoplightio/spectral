@@ -4,7 +4,6 @@ import {
   pattern,
   unreferencedReusableObject,
   schema,
-  xor,
   undefined, // eslint-disable-line no-shadow-restricted-names
   alphabetical,
   length,
@@ -19,6 +18,7 @@ import {
   refSiblings,
   typedEnum,
   oasExample,
+  oasExampleValueOrExternalValue,
   oasUnusedComponent,
   oasDocumentSchema,
   oasSecurityDefined,
@@ -595,6 +595,7 @@ const ruleset = {
     },
     'oas3-examples-value-or-externalValue': {
       description: 'Examples must have either "value" or "externalValue" field.',
+      message: '{{error}}',
       recommended: true,
       formats: [oas3],
       given: [
@@ -606,10 +607,7 @@ const ruleset = {
         '$.components.headers[*].examples[*]',
       ],
       then: {
-        function: xor,
-        functionOptions: {
-          properties: ['externalValue', 'value'],
-        },
+        function: oasExampleValueOrExternalValue,
       },
     },
     'oas3-operation-security-defined': {

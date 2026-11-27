@@ -261,4 +261,135 @@ testRule('oas3-examples-value-or-externalValue', [
       },
     ],
   },
+
+  {
+    name: 'OpenAPI 3.2 - dataValue, serializedValue, value or externalValue',
+    document: {
+      openapi: '3.2.0',
+      components: {
+        examples: {
+          first: { dataValue: { name: 'Rex' } },
+          second: { serializedValue: '{"name":"Rex"}' },
+          third: { value: { name: 'Rex' } },
+          fourth: { externalValue: 'https://example.com/rex.json' },
+          fifth: { dataValue: { name: 'Rex' }, serializedValue: '{"name":"Rex"}' },
+          sixth: { dataValue: { name: 'Rex' }, externalValue: 'https://example.com/rex.json' },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'OpenAPI 3.2 - dataValue in content examples',
+    document: {
+      openapi: '3.2.0',
+      paths: {
+        '/pets': {
+          get: {
+            responses: {
+              '200': {
+                description: 'ok',
+                content: {
+                  'application/json': {
+                    examples: {
+                      rex: {
+                        summary: 'a valid 3.2 example using dataValue',
+                        dataValue: { name: 'Rex' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
+  {
+    name: 'OpenAPI 3.2 - none of dataValue, serializedValue, value or externalValue',
+    document: {
+      openapi: '3.2.0',
+      components: {
+        examples: {
+          first: { dataValue: { name: 'Rex' } },
+          second: { summary: 'no value at all' },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Examples must have either "value", "dataValue", "serializedValue" or "externalValue" field.',
+        path: ['components', 'examples', 'second'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'OpenAPI 3.1 - dataValue and serializedValue do not count',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        examples: {
+          first: { dataValue: { name: 'Rex' } },
+          second: { serializedValue: '{"name":"Rex"}' },
+          third: { value: { name: 'Rex' } },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Examples must have either "value" or "externalValue" field.',
+        path: ['components', 'examples', 'first'],
+        severity: DiagnosticSeverity.Warning,
+      },
+      {
+        message: 'Examples must have either "value" or "externalValue" field.',
+        path: ['components', 'examples', 'second'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'OpenAPI 3.1 - both externalValue and value',
+    document: {
+      openapi: '3.1.0',
+      components: {
+        examples: {
+          first: { value: 'value1', externalValue: 'external-value1' },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Examples must have either "value" or "externalValue" field.',
+        path: ['components', 'examples', 'first'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
+
+  {
+    name: 'OpenAPI 3.0 - dataValue does not count',
+    document: {
+      openapi: '3.0.3',
+      components: {
+        examples: {
+          first: { dataValue: { name: 'Rex' } },
+        },
+      },
+    },
+    errors: [
+      {
+        message: 'Examples must have either "value" or "externalValue" field.',
+        path: ['components', 'examples', 'first'],
+        severity: DiagnosticSeverity.Warning,
+      },
+    ],
+  },
 ]);
