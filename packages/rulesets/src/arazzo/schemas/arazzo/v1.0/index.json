@@ -300,7 +300,7 @@
                         },
                         "in": {
                           "description": "The named location of the parameter",
-                          "enum": ["path", "query", "header", "cookie", "body"]
+                          "enum": ["path", "query", "header", "cookie"]
                         },
                         "value": {
                           "description": "The value to pass in the parameter",
@@ -345,7 +345,7 @@
                         },
                         "in": {
                           "description": "The named location of the parameter",
-                          "enum": ["path", "query", "header", "cookie", "body"]
+                          "enum": ["path", "query", "header", "cookie"]
                         },
                         "value": {
                           "description": "The value to pass in the parameter",
@@ -722,7 +722,7 @@
         },
         "in": {
           "description": "The named location of the parameter",
-          "enum": ["path", "query", "header", "cookie", "body"]
+          "enum": ["path", "query", "header", "cookie"]
         },
         "value": {
           "description": "The value to pass in the parameter",
