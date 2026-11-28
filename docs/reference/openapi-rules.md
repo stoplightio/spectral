@@ -1072,6 +1072,16 @@ servers:
 
 In this example, both **`{region}`** and **`{version}`** variables are properly defined and used in the server URL. Also, the default value for **`region`** is within the allowed values.
 
+A relative server URL is valid as well:
+
+```yaml
+servers:
+  - url: "/example/{version}"
+    variables:
+      version:
+        default: "v1"
+```
+
 ### oas3_callbacks_in_callbacks
 
 A callback should not be defined within another callback.
