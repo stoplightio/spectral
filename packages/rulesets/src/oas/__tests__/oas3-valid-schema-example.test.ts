@@ -481,6 +481,47 @@ testRule('oas3-valid-schema-example', [
     errors: [],
   },
 
+
+  {
+    name: 'schema-level example containing an object with a type property is not treated as a schema',
+    document: {
+      openapi: '3.0.0',
+      components: {
+        schemas: {
+          Template: {
+            type: 'object',
+            properties: {
+              components: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string',
+                      enum: ['HEADER', 'BODY', 'BUTTONS', 'FOOTER'],
+                      example: 'BODY',
+                    },
+                  },
+                },
+              },
+            },
+            example: {
+              components: [
+                {
+                  type: 'HEADER',
+                  example: {
+                    month: 'June',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    errors: [],
+  },
+
   {
     name: 'parameter containing invalid simple example',
     document: {
